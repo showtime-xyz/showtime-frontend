@@ -115,9 +115,10 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   };
 };
 
+export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string }) => {
   const { data, error } = useSWR<{ data: UserProfile }>(
-    address ? "/v4/profile_server/" + address : null,
+    address ? USER_PROFILE_KEY + address : null,
     fetcher
   );
 
@@ -292,7 +293,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/follow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Followed profile");
         } catch (err) {
           console.error(err);
@@ -321,7 +326,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/unfollow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Unfollowed profile");
         } catch (err) {
           console.error(err);
@@ -366,6 +375,7 @@ export const useMyInfo = () => {
           await axios({
             url: `/v3/like/${nftId}`,
             method: "POST",
+            data: {},
           });
 
           mutate(queryKey);
@@ -398,6 +408,7 @@ export const useMyInfo = () => {
           await axios({
             url: `/v3/unlike/${nftId}`,
             method: "POST",
+            data: {},
           });
 
           mutate(queryKey);

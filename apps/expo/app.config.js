@@ -60,6 +60,7 @@ export default {
     config: {
       usesNonExemptEncryption: false,
     },
+    bitcode: false, // or "Debug"
   },
   android: {
     package: config.scheme,
@@ -123,8 +124,8 @@ export default {
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
+    "./plugins/react-native-cronet.js",
   ],
-
   hooks: {
     postPublish: [
       {

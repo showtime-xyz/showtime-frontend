@@ -21,7 +21,12 @@ export type ButtonProps = {
   children?: React.ReactNode | string;
   asChild?: boolean;
 } & PressableScaleProps &
-  Partial<Pick<BaseButtonProps, "tw" | "labelTW" | "iconOnly" | "size">>;
+  Partial<
+    Pick<
+      BaseButtonProps,
+      "tw" | "labelTW" | "iconOnly" | "size" | "accentColor"
+    >
+  >;
 
 export type BaseButtonProps = {
   /**
@@ -54,6 +59,11 @@ export type BaseButtonProps = {
    * @default false
    */
   iconOnly: boolean;
+  /**
+   * Defines the button icon and text colors.
+   * @default [black, white]
+   */
+  accentColor?: string | string[];
   /**
    * Defines the button size.
    * @default small

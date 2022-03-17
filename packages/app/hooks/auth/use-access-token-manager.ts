@@ -52,9 +52,9 @@ export function useAccessTokenManager() {
     } catch (error: any) {
       isRefreshing.current = false;
 
-      accessTokenStorage.deleteAccessToken();
-      refreshTokenStorage.deleteRefreshToken();
-      setLogout(Date.now().toString());
+      // accessTokenStorage.deleteAccessToken();
+      // refreshTokenStorage.deleteRefreshToken();
+      // setLogout(Date.now().toString());
 
       captureException(error, {
         tags: {

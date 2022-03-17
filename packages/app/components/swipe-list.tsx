@@ -1,12 +1,21 @@
-import React, { useCallback, useMemo, useRef } from "react";
-import { Dimensions, FlatList, Pressable, RefreshControl } from "react-native";
+import { useCallback, useMemo, useRef, memo } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  Platform,
+} from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
-import { Collection } from "app/components/feed/collection";
+import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -25,7 +34,7 @@ import { View } from "design-system/view";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
-const mediaMaxHeightRelativeToScreen = 0.6;
+const mediaMaxHeightRelativeToScreen = 1;
 
 export const SwipeList = ({
   data,
@@ -34,14 +43,19 @@ export const SwipeList = ({
   refresh,
   initialScrollIndex = 0,
   isLoadingMore,
-  bottomBarHeight = 0,
-  headerHeight = 0,
+  bottomPadding = 0,
 }: any) => {
   const listRef = useRef<FlatList>(null);
-
+  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
 
-  const itemHeight = screenHeight - headerHeight;
+  const itemHeight =
+    Platform.OS === "android"
+      ? screenHeight -
+        headerHeight -
+        (Device.modelName === "LE2113" ? 16 : safeAreaBottom)
+      : screenHeight;
 
   let dataProvider = useMemo(
     () =>
@@ -70,12 +84,12 @@ export const SwipeList = ({
       return (
         <FeedItem
           itemHeight={itemHeight}
-          bottomBarHeight={bottomBarHeight}
+          bottomPadding={bottomPadding}
           nft={item}
         />
       );
     },
-    [itemHeight]
+    [itemHeight, bottomPadding]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -100,11 +114,13 @@ export const SwipeList = ({
 
   const videoConfig = useMemo(
     () => ({
-      isMuted: false,
-      useNativeControls: true,
+      isMuted: true,
+      useNativeControls: false,
     }),
     []
   );
+
+  const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
@@ -119,19 +135,20 @@ export const SwipeList = ({
         onEndReached={fetchMore}
         onEndReachedThreshold={screenHeight}
         scrollViewProps={scrollViewProps}
+        extendedState={extendedState}
       />
     </VideoConfigContext.Provider>
   );
 };
 
-export const FeedItem = React.memo(
+export const FeedItem = memo(
   ({
     nft,
-    bottomBarHeight = 0,
+    bottomPadding = 0,
     itemHeight,
   }: {
     nft: NFT;
-    bottomBarHeight: number;
+    bottomPadding: number;
     itemHeight: number;
   }) => {
     const feedItemStyle = {
@@ -152,10 +169,11 @@ export const FeedItem = React.memo(
 
     mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
 
-    const descriptionHeight = feedItemStyle.height - mediaContainerHeight;
+    const isDark = useIsDarkMode();
+    const tint = isDark ? "dark" : "light";
 
     return (
-      <View style={feedItemStyle}>
+      <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
         <View tw="absolute w-full h-full">
           {nft.blurhash ? (
             <Blurhash
@@ -173,7 +191,9 @@ export const FeedItem = React.memo(
           )}
         </View>
         <View
-          tw={`w-full items-center justify-end bg-black h-[${mediaContainerHeight}px]`}
+          tw={`absolute h-[${
+            itemHeight - bottomPadding - 50
+          }px] justify-center`}
         >
           <Media
             item={nft}
@@ -182,43 +202,48 @@ export const FeedItem = React.memo(
             resizeMode="contain"
           />
         </View>
-        <View tw={`w-full h-[${descriptionHeight}px]`}>
-          <NFTDetails nft={nft} bottomBarHeight={bottomBarHeight} />
+        <View tw="z-1 absolute bottom-0 right-0 left-0">
+          <BlurView tint={tint} intensity={85}>
+            <NFTDetails nft={nft} />
+            <View
+              tw={`${
+                bottomPadding && bottomPadding !== 0
+                  ? `h-[${bottomPadding - 1}px]`
+                  : "h-0"
+              }`}
+            />
+          </BlurView>
         </View>
-      </View>
+      </BlurView>
     );
   }
 );
 
-const NFTDetails = ({
-  nft,
-  bottomBarHeight = 0,
-}: {
-  nft: NFT;
-  bottomBarHeight: number;
-}) => {
-  const isDark = useIsDarkMode();
-  const tint = isDark ? "dark" : "light";
-
+const NFTDetails = ({ nft }: { nft: NFT }) => {
   return (
-    <BlurView style={tw.style(`p-4 flex-1 w-full`)} tint={tint} intensity={85}>
+    <View tw="px-4">
+      <View tw="h-4" />
+
+      <Creator nft={nft} />
+
+      <View tw="h-4" />
+
+      <Text
+        variant="text-2xl"
+        tw="dark:text-white"
+        numberOfLines={3}
+        sx={{ fontSize: 17, lineHeight: 22 }}
+      >
+        {nft.token_name}
+      </Text>
+
+      <View tw="h-4" />
+
       <View tw="flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
-
-          <View tw="flex-row items-center ml-4">
-            {/* Comments here */}
-
-            {/* <Message
-              height={24}
-              width={24}
-              //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-            <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
-              240
-            </Text> */}
-          </View>
+          <View tw="w-6" />
+          <CommentButton nft={nft} />
         </View>
 
         <View tw="flex-row">
@@ -226,32 +251,16 @@ const NFTDetails = ({
             <Share
               height={22}
               width={22}
-              //@ts-ignore
+              // @ts-ignore
               color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
             />
           </Pressable>
-
           <View tw="w-8" />
           <NFTDropdown nft={nft} />
         </View>
       </View>
-      <View tw="flex-row mt-4">
-        <Creator nft={nft} />
-      </View>
-      <View tw="mt-4">
-        <Text
-          variant="text-2xl"
-          tw="text-gray-900 dark:text-white"
-          numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
-        >
-          {nft.token_name}
-        </Text>
-      </View>
 
-      <View tw={`mt-auto pb-[${bottomBarHeight}px]`}>
-        <Collection nft={nft} />
-      </View>
-    </BlurView>
+      <View tw="h-4" />
+    </View>
   );
 };

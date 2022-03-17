@@ -1,11 +1,12 @@
-import React, { Suspense, useMemo } from "react";
+import React, { Suspense } from "react";
 import { Dimensions, StatusBar } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SwipeList } from "app/components/swipe-list";
-import { useActivity } from "app/hooks/api-hooks";
+import { useFeed } from "app/hooks/use-feed";
+import { useUser } from "app/hooks/use-user";
 
 import { View, Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
@@ -43,24 +44,16 @@ export const Feed = () => {
 };
 
 export const FeedList = () => {
-  const queryState = useActivity({ typeId: 0 });
+  const queryState = useFeed();
   const bottomBarHeight = useBottomTabBarHeight();
-
-  const newData: any = useMemo(() => {
-    if (queryState.data && Array.isArray(queryState.data)) {
-      return queryState.data.filter((d) => d.nfts[0]).map((d) => d.nfts[0]);
-    }
-    return [];
-  }, [queryState.data]);
-
-  const headerHeight = useHeaderHeight();
+  const { isAuthenticated } = useUser();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
     <SwipeList
       {...queryState}
-      bottomBarHeight={bottomBarHeight}
-      headerHeight={headerHeight}
-      data={newData}
+      bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
+      data={queryState.data}
     />
   );
 };

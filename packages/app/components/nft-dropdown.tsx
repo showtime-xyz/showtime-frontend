@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
-import { Share } from "react-native";
 
+import { useSWRConfig } from "swr";
+
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
-import { track } from "app/lib/analytics";
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
-import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
+import {
+  findListingItemByOwner,
+  isUserAnOwner,
+  handleShareNFT,
+} from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -23,19 +28,19 @@ import {
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
-import { handleShareNFT } from "../utilities";
-
 type Props = {
   nft?: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
+  const { mutate } = useSWRConfig();
   const userId = useCurrentUserId();
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const [isOwner, setIsOwner] = useState(false);
-
   const { report } = useReport();
+  const { unfollow } = useMyInfo();
+  const { block } = useBlock();
   const router = useRouter();
 
   useEffect(() => {
@@ -55,10 +60,6 @@ function NFTDropdown({ nft }: Props) {
     nft?.contract_address
   );
 
-  const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
-    (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
-  );
-
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -73,6 +74,18 @@ function NFTDropdown({ nft }: Props) {
         loop
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
+        <DropdownMenuItem
+          onSelect={() => router.push(`/nft/${nft?.nft_id}/details`)}
+          key="details"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Details
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
         <DropdownMenuItem
           onSelect={() => handleShareNFT(nft)}
           key="copy-link"
@@ -94,6 +107,44 @@ function NFTDropdown({ nft }: Props) {
             Refresh Metadata
           </DropdownMenuItemTitle>
         </DropdownMenuItem> */}
+
+        {isAuthenticated && (
+          <DropdownMenuItem
+            onSelect={async () => {
+              await unfollow(nft?.owner_id);
+              mutate(null);
+            }}
+            key="unfollow"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Unfollow User
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
+
+        {isAuthenticated && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
+
+        {!isOwner && (
+          <DropdownMenuItem
+            onSelect={async () => {
+              if (isAuthenticated) {
+                await block(nft?.owner_id);
+                mutate(null);
+              } else {
+                router.push("/login");
+              }
+            }}
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            key="block"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Block User
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
         {!isOwner && (
           <DropdownMenuItem
@@ -133,6 +184,7 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
+
         {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => {}}
@@ -144,6 +196,7 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
+
         {isOwner && (
           <DropdownMenuItem
             destructive

@@ -11,21 +11,11 @@ import { View } from "design-system/view";
 const getImageUrl = (tokenAspectRatio: string, imgUrl?: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
     if (tokenAspectRatio && Number(tokenAspectRatio) > 1) {
-      imgUrl = imgUrl.split("=")[0] + "=h660";
+      imgUrl = imgUrl.split("=")[0] + "=h1328";
     } else {
-      imgUrl = imgUrl.split("=")[0] + "=w660";
+      imgUrl = imgUrl.split("=")[0] + "=w1328";
     }
   }
-  return imgUrl;
-};
-
-const getImageUrlLarge = (tokenAspectRatio: string, imgUrl?: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    if (tokenAspectRatio && Number(tokenAspectRatio) > 1)
-      imgUrl = imgUrl.split("=")[0] + "=h1328";
-    else imgUrl = imgUrl.split("=")[0] + "=w1328";
-  }
-
   return imgUrl;
 };
 
@@ -41,7 +31,7 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
 
   const imageUri =
     numColumns === 1
-      ? getImageUrlLarge(
+      ? getImageUrl(
           item?.token_aspect_ratio,
           item?.still_preview_url
             ? item?.still_preview_url
@@ -81,9 +71,9 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
     <View
       tw={[
         numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
-        item?.token_background_color
-          ? `bg-[#${item?.token_background_color}]`
-          : "bg-black",
+        // item?.token_background_color
+        //   ? `bg-[#${item?.token_background_color}]`
+        //   : "bg-black",
       ]}
     >
       {imageUri &&

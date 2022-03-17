@@ -13,7 +13,8 @@ export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
   const queryState = useSWR(
     `/v2/token/${params.contractAddress}/${params.tokenId}${
       params.chainName
-        ? `?chain_identifier=${CHAIN_IDENTIFIERS[params.chainName]}`
+        ? //@ts-ignore
+          `?chain_identifier=${CHAIN_IDENTIFIERS[params.chainName]}`
         : ""
     }`,
     (url) => axios({ url, method: "GET" }),

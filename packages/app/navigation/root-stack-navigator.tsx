@@ -4,8 +4,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
+import { DetailsScreen } from "app/screens/details";
+import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
@@ -13,7 +16,7 @@ import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { SwipeListScreen } from "app/screens/swipe-list";
-import { TransferNftScreen } from "app/screens/transfer-nft";
+import { TransferScreen } from "app/screens/transfer";
 
 import { useIsDarkMode } from "design-system/hooks";
 
@@ -57,7 +60,7 @@ export function RootStackNavigator() {
           component={SwipeListScreen}
           getId={({ params }) => params?.type}
         />
-
+        <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
       </Stack.Group>
 
@@ -71,11 +74,12 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
-
-        <Stack.Screen name="transferNft" component={TransferNftScreen} />
+        <Stack.Screen name="comments" component={CommentsScreen} />
+        <Stack.Screen name="transfer" component={TransferScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
         <Stack.Screen name="list" component={ListScreen} />
+        <Stack.Screen name="details" component={DetailsScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

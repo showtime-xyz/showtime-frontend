@@ -4,6 +4,8 @@ import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useUser } from "app/hooks/use-user";
+
 import { View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
@@ -12,8 +14,8 @@ import {
   HomeTabBarIcon,
   TrendingTabBarIcon,
   CameraTabBarIcon,
-  MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
+  ProfileTabBarIcon,
 } from "./tab-bar-icons";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -22,8 +24,8 @@ import { useNavigationElements } from "./use-navigation-elements";
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CameraNavigator = dynamic(() => import("../pages/camera"));
-const MarketplaceNavigator = dynamic(() => import("../pages/marketplace"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
+const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
 const BottomTab = createNextTabNavigator();
 
@@ -34,6 +36,7 @@ export function NextTabNavigator({
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
   const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { isAuthenticated } = useUser();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
@@ -64,8 +67,7 @@ export function NextTabNavigator({
             left: width / 2 - 100,
             maxWidth: 200,
           },
-          isTabBarHidden && {
-            display: "none",
+          (!isAuthenticated || isTabBarHidden) && {
             bottom: -100,
           },
         ],
@@ -114,19 +116,21 @@ export function NextTabNavigator({
           }}
         />
       )}
-      <BottomTab.Screen
-        name="marketplaceTab"
-        component={MarketplaceNavigator}
-        options={{
-          tabBarIcon: MarketplaceTabBarIcon,
-        }}
-      />
       {width < 768 && (
         <BottomTab.Screen
           name="notificationsTab"
           component={NotificationsNavigator}
           options={{
             tabBarIcon: NotificationsTabBarIcon,
+          }}
+        />
+      )}
+      {width < 768 && (
+        <BottomTab.Screen
+          name="profileTab"
+          component={ProfileNavigator}
+          options={{
+            tabBarIcon: ProfileTabBarIcon,
           }}
         />
       )}

@@ -76,7 +76,10 @@ export function BaseButton({
 
       // @ts-ignore
       return cloneElement(child, {
-        color: iconColor[isDarkMode ? 1 : 0],
+        color:
+          typeof iconColor === "string"
+            ? iconColor
+            : iconColor[isDarkMode ? 1 : 0],
         ...iconSize,
         ...child.props,
         tw: [

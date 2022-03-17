@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -105,6 +106,7 @@ const Profile = ({ address }: { address?: string }) => {
   );
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
+  const headerHeight = useHeaderHeight();
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -115,6 +117,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
+          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
           <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         {data?.data.lists ? (
@@ -228,19 +231,22 @@ const TabList = ({
     [dispatch]
   );
 
+  const onItemPress = useCallback(
+    (index: number) => {
+      router.push(
+        `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+      );
+    },
+    [list.id, profileId, filter.collectionId, filter.sortId]
+  );
+
   const renderItem = useCallback(
     ({ item, index }) => (
-      <Pressable
-        onPress={() => {
-          router.push(
-            `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
-          );
-        }}
-      >
+      <Pressable onPress={() => onItemPress(index)}>
         <Media item={item} numColumns={3} />
       </Pressable>
     ),
-    []
+    [onItemPress]
   );
 
   const ListFooterComponent = useCallback(
@@ -419,27 +425,35 @@ const ProfileTop = ({
                   Unblock
                 </Button>
               </View>
-            ) : (
-              profileId &&
-              userId !== profileId && (
-                <View tw="flex-row items-center" pointerEvents="box-none">
-                  <ProfileDropdown user={profileData?.data.profile} />
-                  <View tw="w-2" />
-                  <Button
-                    size="regular"
-                    onPress={() => {
-                      if (isFollowingUser) {
-                        unfollow(profileId);
-                      } else {
-                        follow(profileId);
-                      }
-                    }}
-                  >
-                    {isFollowingUser ? "Following" : "Follow"}
-                  </Button>
-                </View>
-              )
-            )}
+            ) : profileId && userId !== profileId ? (
+              <View tw="flex-row items-center" pointerEvents="box-none">
+                <ProfileDropdown user={profileData?.data.profile} />
+                <View tw="w-2" />
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    if (isFollowingUser) {
+                      unfollow(profileId);
+                    } else {
+                      follow(profileId);
+                    }
+                  }}
+                >
+                  {isFollowingUser ? "Following" : "Follow"}
+                </Button>
+              </View>
+            ) : userId === profileId ? (
+              <View tw="flex-row items-center" pointerEvents="box-none">
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    router.push("/editProfile");
+                  }}
+                >
+                  Edit profile
+                </Button>
+              </View>
+            ) : null}
           </View>
 
           <View tw="px-2 py-3" pointerEvents="box-none">

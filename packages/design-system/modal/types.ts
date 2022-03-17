@@ -54,6 +54,10 @@ export interface ModalProps {
    */
   keyboardVerticalOffset?: number;
   /**
+   * Defines if the modal body is scrollable or not.
+   */
+  scrollable?: boolean;
+  /**
    * Defines the action to be fried to close
    * the modal.
    *

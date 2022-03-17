@@ -9,7 +9,7 @@
     "start:dev-client:clear": "yarn start:dev-client -c",
     "eject": "expo eject",
     "expo:prebuild": "expo prebuild --skip-dependency-update react && yarn react-native link",
-    "ios": "EXPO_USE_APPLE_DEVICE=1 yarn expo:prebuild && expo run:ios",
+    "ios": "yarn expo:prebuild && EXPO_USE_APPLE_DEVICE=0 expo run:ios",
     "android": "yarn expo:prebuild && expo run:android",
     "postinstall": "cd ../.. && yarn patch-package",
     "update:development": "STAGE=development eas update --branch default",

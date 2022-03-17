@@ -2,6 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 import { FlatList } from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
+
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
@@ -19,6 +21,7 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
 export const Search = () => {
+  const headerHeight = useHeaderHeight();
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
   const inputRef = useRef<TextInput>();
@@ -40,6 +43,7 @@ export const Search = () => {
 
   return (
     <>
+      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <View tw="p-4">
         <Input
           placeholder="Search..."

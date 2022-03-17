@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 
 import { captureException } from "@sentry/nextjs";
 import axios from "axios";
-import type { Method } from "axios";
+import type { Method, AxiosRequestHeaders } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 import { accessTokenManager } from "app/lib/access-token-manager";
@@ -33,9 +33,9 @@ if (Platform.OS === "web") {
           console.error(error);
         }
 
-        accessTokenManager.deleteAccessToken();
-        deleteRefreshToken();
-        setLogout(Date.now().toString());
+        // accessTokenManager.deleteAccessToken();
+        // deleteRefreshToken();
+        // setLogout(Date.now().toString());
 
         captureException(error, {
           tags: {
@@ -61,6 +61,7 @@ export type AxiosParams = {
   data?: any;
   unmountSignal?: AbortSignal;
   overrides?: AxiosOverrides;
+  headers?: AxiosRequestHeaders;
 };
 
 const axiosAPI = async ({
@@ -68,6 +69,7 @@ const axiosAPI = async ({
   method,
   data,
   unmountSignal,
+  headers,
   overrides,
 }: AxiosParams) => {
   const accessToken = accessTokenManager.getAccessToken();
@@ -96,6 +98,7 @@ const axiosAPI = async ({
       ? {
           headers: {
             Authorization: authorizationHeader,
+            ...headers,
           },
         }
       : {}),
