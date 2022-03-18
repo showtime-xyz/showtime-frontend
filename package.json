@@ -10,6 +10,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
+    "react-native-fast-image": "^8.5.11",
     "sentry-expo": "^4.1.0",
     "turbo": "^1.0.16"
   },
