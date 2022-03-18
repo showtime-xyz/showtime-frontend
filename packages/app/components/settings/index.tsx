@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { Dimensions, Platform } from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
+
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
@@ -47,6 +49,7 @@ const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
 const SettingsTabs = () => {
   const [selected, setSelected] = useState(0);
   const { user, isAuthenticated } = useUser();
+  const headerHeight = useHeaderHeight();
   const router = useRouter();
   const emailWallets = useMemo(
     () =>
@@ -74,6 +77,7 @@ const SettingsTabs = () => {
         lazy
       >
         <Tabs.Header>
+          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text
               variant="text-2xl"
