@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Remove other apps
+        run: rm -rf ../apps/next-react ../apps/next-react-native ../storybook-react ../storybook-react-native
+
       - name: Find yarn cache
         id: yarn-cache-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
