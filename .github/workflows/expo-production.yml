@@ -47,6 +47,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
 
+      - name: Decrypt service_account_key.json
+        env:
+          SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE }}
+        run: |
+          cd ../../scripts
+          sh ./decrypt_secret.sh
+          cd ../apps/expo
+
       - name: Application Version Bump
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: yarn bump-application-version
