@@ -47,7 +47,9 @@ jobs:
       # - name: Install dependencies
       #   run: yarn install --frozen-lockfile --check-files
 
-      - name: Invoke Decrypt Script
+      - name: Decrypt service_account_key.json
+        env:
+          SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE }}
         run: |
           cd ../../scripts
           sh ./decrypt_secret.sh
