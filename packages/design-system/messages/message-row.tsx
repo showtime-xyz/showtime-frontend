@@ -4,7 +4,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 
 import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
-import { HeartFilled, Heart } from "design-system/icon";
+import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
 import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
@@ -38,10 +38,15 @@ interface MessageRowProps {
    */
   hasReplies?: boolean;
   /**
-   * Defines whether the message liked by customer or not.
+   * Defines whether the message liked by the customer or not.
    * @default undefined
    */
   likedByMe?: boolean;
+  /**
+   * Defines whether the message replied by the customer or not.
+   * @default undefined
+   */
+  repliedByMe?: boolean;
   /**
    * Defines the message content.
    * @default undefined
@@ -91,6 +96,7 @@ export function MessageRow({
   hasParent,
   hasReplies,
   likedByMe,
+  repliedByMe,
   onLikePress,
   onDeletePress,
 }: MessageRowProps) {
@@ -131,11 +137,11 @@ export function MessageRow({
       borderBottomWidth: position === "last" ? 1 : 0,
       borderLeftWidth: position === "last" ? 1 : 0,
       top: position !== "last" ? 12 : 0,
-      height: position === "last" ? 12 : 1,
+      height: position === "last" ? 12 : hasParent ? 1 : 0,
       backgroundColor: position !== "last" ? "#27272A" : undefined,
       borderColor: "#27272A",
     }),
-    [position]
+    [position, hasParent]
   );
   //#region
   return (
@@ -183,11 +189,19 @@ export function MessageRow({
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
           </TextButton>
-          {/* TODO: re-enable when replies pagination is implemented {replayCount != undefined && (
-            <TextButton tw="px-2">
-              <MessageFilled /> {replayCount}
+          {replayCount != undefined && (
+            <TextButton
+              tw="px-2"
+              accentColor={
+                repliedByMe
+                  ? ["black", "white"]
+                  : [colors.gray[500], colors.gray[500]]
+              }
+            >
+              {repliedByMe ? <MessageFilled /> : <Message />}
+              {` ${replayCount}`}
             </TextButton>
-          )} */}
+          )}
           <View
             tw={[
               "flex-1 flex-row items-center justify-end",

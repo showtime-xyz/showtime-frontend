@@ -5,6 +5,7 @@ import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 import { getRoundedCount } from "app/utilities";
 
+import { MessageMore } from "design-system/messages/message-more";
 import { MessageRow } from "design-system/messages/message-row";
 
 interface CommentRowProps {
@@ -16,6 +17,8 @@ interface CommentRowProps {
   deleteComment: (id: number) => Promise<void>;
 }
 
+const REPLIES_PER_BATCH = 2;
+
 function CommentRowComponent({
   comment,
   isLastReply,
@@ -25,22 +28,35 @@ function CommentRowComponent({
 }: CommentRowProps) {
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
+  const [displayedRepliesCount, setDisplayedRepliesCount] =
+    useState(REPLIES_PER_BATCH);
   //#endregion
 
   //#region hooks
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
-  //#region
+  //#endregion
 
   //#region variables
+  const repliesCount = comment.replies?.length ?? 0;
+  const replies = useMemo(
+    () =>
+      repliesCount > 0 ? comment.replies!.slice(0, displayedRepliesCount) : [],
+    [comment.replies, repliesCount, displayedRepliesCount]
+  );
   const isMyComment = useMemo(
     () => user?.data.profile.profile_id === comment.commenter_profile_id,
     [user, comment.commenter_profile_id]
+  );
+  const isRepliedByMe = useMemo(
+    () => user?.data.comments.includes(comment.comment_id),
+    [user]
   );
   const isLikedByMe = useMemo(
     () => user?.data.likes_comment.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+  const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
   //#region callbacks
@@ -73,9 +89,11 @@ function CommentRowComponent({
     },
     [comment.comment_id]
   );
+  const handelOnLoadMoreRepliesPress = useCallback(() => {
+    setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
+  }, []);
   //#endregion
 
-  const isReply = comment.parent_id !== undefined;
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
@@ -96,23 +114,31 @@ function CommentRowComponent({
         }
         hasParent={isReply}
         likedByMe={isLikedByMe}
+        repliedByMe={isRepliedByMe}
         createdAt={comment.added}
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
       />
-      {!isReply && (comment.replies?.length ?? 0) > 0
-        ? comment.replies?.map((reply, index) => (
+      {!isReply
+        ? replies.map((reply, index) => (
             <CommentRowComponent
               key={`comment-reply-${reply.comment_id}`}
               comment={reply}
-              isLastReply={index === (comment.replies?.length ?? 0) - 1}
+              isLastReply={index === (replies.length ?? 0) - 1}
               likeComment={likeComment}
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}
             />
           ))
         : null}
+
+      {!isReply && repliesCount > displayedRepliesCount ? (
+        <MessageMore
+          count={repliesCount - displayedRepliesCount}
+          onPress={handelOnLoadMoreRepliesPress}
+        />
+      ) : null}
     </Fragment>
   );
 }
