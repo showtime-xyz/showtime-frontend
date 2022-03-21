@@ -54,6 +54,7 @@ export const SwipeList = ({
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
+  const navigation = useNavigation();
 
   const itemHeight =
     Platform.OS === "android"
@@ -84,6 +85,40 @@ export const SwipeList = ({
     [screenWidth, itemHeight]
   );
 
+  const opacity = useSharedValue(1);
+
+  const detailStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  const hideHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+      });
+      opacity.value = withTiming(0);
+    }
+  }, [navigation, opacity]);
+
+  const showHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+      opacity.value = withTiming(1);
+    }
+  }, [navigation, opacity]);
+
+  const toggleHeader = useCallback(() => {
+    if (opacity.value === 1) {
+      hideHeader();
+    } else {
+      showHeader();
+    }
+  }, [hideHeader, showHeader, opacity]);
+
   const _rowRenderer = useCallback(
     (_type: any, item: any) => {
       return (
@@ -91,10 +126,14 @@ export const SwipeList = ({
           itemHeight={itemHeight}
           bottomPadding={bottomPadding}
           nft={item}
+          detailStyle={detailStyle}
+          toggleHeader={toggleHeader}
+          hideHeader={hideHeader}
+          showHeader={showHeader}
         />
       );
     },
-    [itemHeight, bottomPadding]
+    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -110,11 +149,12 @@ export const SwipeList = ({
     () => ({
       pagingEnabled: true,
       showsVerticalScrollIndicator: false,
+      onMomentumScrollEnd: showHeader,
       refreshControl: (
         <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
       ),
     }),
-    [isRefreshing, refresh]
+    [isRefreshing, refresh, showHeader]
   );
 
   const videoConfig = useMemo(
@@ -151,8 +191,16 @@ export const FeedItem = memo(
     nft,
     bottomPadding = 0,
     itemHeight,
+    hideHeader,
+    showHeader,
+    toggleHeader,
+    detailStyle,
   }: {
     nft: NFT;
+    detailStyle: any;
+    showHeader: any;
+    hideHeader: any;
+    toggleHeader: any;
     bottomPadding: number;
     itemHeight: number;
   }) => {
@@ -176,41 +224,6 @@ export const FeedItem = memo(
 
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
-    const navigation = useNavigation();
-
-    const opacity = useSharedValue(1);
-
-    const style = useAnimatedStyle(() => {
-      return {
-        opacity: opacity.value,
-      };
-    }, []);
-
-    const hideHeader = useCallback(() => {
-      if (Platform.OS === "ios") {
-        navigation.setOptions({
-          headerShown: false,
-        });
-        opacity.value = withTiming(0);
-      }
-    }, [navigation, opacity]);
-
-    const showHeader = useCallback(() => {
-      if (Platform.OS === "ios") {
-        navigation.setOptions({
-          headerShown: true,
-        });
-        opacity.value = withTiming(1);
-      }
-    }, [navigation, opacity]);
-
-    const toggleHeader = useCallback(() => {
-      if (opacity.value === 1) {
-        hideHeader();
-      } else {
-        showHeader();
-      }
-    }, [hideHeader, showHeader, opacity]);
 
     return (
       <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
@@ -248,7 +261,10 @@ export const FeedItem = memo(
         </Pressable>
 
         <Reanimated.View
-          style={[tw.style("z-1 absolute bottom-0 right-0 left-0"), style]}
+          style={[
+            tw.style("z-1 absolute bottom-0 right-0 left-0"),
+            detailStyle,
+          ]}
         >
           <BlurView tint={tint} intensity={85}>
             <NFTDetails nft={nft} />
