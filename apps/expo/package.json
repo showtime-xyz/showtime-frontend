@@ -40,7 +40,7 @@
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link",
-    "test": "node_modules/.bin/jest ./component-tests",
+    "test": "jest ./component-tests",
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
