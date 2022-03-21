@@ -40,7 +40,8 @@
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link",
-    "test": "node_modules/.bin/jest ./component-tests"
+    "test": "node_modules/.bin/jest ./component-tests",
+    "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
     "@capsizecss/core": "^3.0.0",
@@ -187,8 +188,10 @@
     "metro-minify-esbuild": "^0.1.0",
     "react-test-renderer": "18.0.0-rc.0",
     "semver": "^7.3.5",
+    "simple-git": "^3.3.0",
     "ts-jest": "^27.1.2",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "zx": "4.3.0"
   },
   "private": true,
   "version": "1.0.0",

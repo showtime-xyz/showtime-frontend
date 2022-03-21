@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.event_name }}-${{ github.ref }}
@@ -20,12 +21,20 @@ jobs:
 
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
 
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
+
+      - name: Remove other apps
+        run: rm -rf ../apps/next-react ../apps/next-react-native ../storybook-react ../storybook-react-native
 
       - name: Find yarn cache
         id: yarn-cache-path
@@ -40,6 +49,18 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Decrypt service_account_key.json
+        env:
+          SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE }}
+        run: |
+          cd ../../scripts
+          sh ./decrypt_secret.sh
+          cd ../apps/expo
+
+      - name: Application Version Bump
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: yarn bump-application-version
 
       - name: Set up Expo
         uses: expo/expo-github-action@v6

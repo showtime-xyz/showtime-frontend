@@ -130,21 +130,12 @@ const HeaderCenter = () => {
       // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
       // }, [])}
     >
-      {isDark ? (
-        <ShowtimeGradient
-          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-          width={24}
-          height={24}
-        />
-      ) : (
-        <Showtime
-          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-          width={24}
-          height={24}
-        />
-      )}
+      <Showtime
+        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        width={24}
+        height={24}
+      />
     </Pressable>
   );
 };

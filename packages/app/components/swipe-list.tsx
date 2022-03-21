@@ -8,10 +8,15 @@ import {
 } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useScrollToTop } from "@react-navigation/native";
+import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
+import Reanimated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
@@ -49,6 +54,7 @@ export const SwipeList = ({
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
+  const navigation = useNavigation();
 
   const itemHeight =
     Platform.OS === "android"
@@ -79,6 +85,40 @@ export const SwipeList = ({
     [screenWidth, itemHeight]
   );
 
+  const opacity = useSharedValue(1);
+
+  const detailStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  const hideHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+      });
+      opacity.value = withTiming(0);
+    }
+  }, [navigation, opacity]);
+
+  const showHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+      opacity.value = withTiming(1);
+    }
+  }, [navigation, opacity]);
+
+  const toggleHeader = useCallback(() => {
+    if (opacity.value === 1) {
+      hideHeader();
+    } else {
+      showHeader();
+    }
+  }, [hideHeader, showHeader, opacity]);
+
   const _rowRenderer = useCallback(
     (_type: any, item: any) => {
       return (
@@ -86,10 +126,14 @@ export const SwipeList = ({
           itemHeight={itemHeight}
           bottomPadding={bottomPadding}
           nft={item}
+          detailStyle={detailStyle}
+          toggleHeader={toggleHeader}
+          hideHeader={hideHeader}
+          showHeader={showHeader}
         />
       );
     },
-    [itemHeight, bottomPadding]
+    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -105,11 +149,12 @@ export const SwipeList = ({
     () => ({
       pagingEnabled: true,
       showsVerticalScrollIndicator: false,
+      onMomentumScrollEnd: showHeader,
       refreshControl: (
         <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
       ),
     }),
-    [isRefreshing, refresh]
+    [isRefreshing, refresh, showHeader]
   );
 
   const videoConfig = useMemo(
@@ -146,8 +191,16 @@ export const FeedItem = memo(
     nft,
     bottomPadding = 0,
     itemHeight,
+    hideHeader,
+    showHeader,
+    toggleHeader,
+    detailStyle,
   }: {
     nft: NFT;
+    detailStyle: any;
+    showHeader: any;
+    hideHeader: any;
+    toggleHeader: any;
     bottomPadding: number;
     itemHeight: number;
   }) => {
@@ -190,19 +243,29 @@ export const FeedItem = memo(
             />
           )}
         </View>
-        <View
-          tw={`absolute h-[${
-            itemHeight - bottomPadding - 50
-          }px] justify-center`}
+        <Pressable onPress={toggleHeader}>
+          <View
+            tw={`absolute h-[${
+              itemHeight - bottomPadding - 50
+            }px] justify-center`}
+          >
+            <Media
+              item={nft}
+              numColumns={1}
+              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+              resizeMode="contain"
+              onPinchStart={hideHeader}
+              onPinchEnd={showHeader}
+            />
+          </View>
+        </Pressable>
+
+        <Reanimated.View
+          style={[
+            tw.style("z-1 absolute bottom-0 right-0 left-0"),
+            detailStyle,
+          ]}
         >
-          <Media
-            item={nft}
-            numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-            resizeMode="contain"
-          />
-        </View>
-        <View tw="z-1 absolute bottom-0 right-0 left-0">
           <BlurView tint={tint} intensity={85}>
             <NFTDetails nft={nft} />
             <View
@@ -213,7 +276,7 @@ export const FeedItem = memo(
               }`}
             />
           </BlurView>
-        </View>
+        </Reanimated.View>
       </BlurView>
     );
   }
