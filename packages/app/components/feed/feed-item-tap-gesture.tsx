@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 
 import { TapGestureHandler } from "react-native-gesture-handler";
 
@@ -7,9 +7,11 @@ import { useLike } from "app/context/like-context";
 export const FeedItemTapGesture = ({
   children,
   toggleHeader,
+  showHeader,
 }: {
   children: any;
   toggleHeader: any;
+  showHeader: any;
 }) => {
   const { toggleLike } = useLike();
   const doubleTapRef = useRef();
@@ -19,7 +21,10 @@ export const FeedItemTapGesture = ({
       <TapGestureHandler
         ref={doubleTapRef}
         numberOfTaps={2}
-        onActivated={toggleLike}
+        onActivated={useCallback(() => {
+          toggleLike();
+          showHeader();
+        }, [toggleLike, showHeader])}
       >
         {children}
       </TapGestureHandler>

@@ -246,7 +246,10 @@ export const FeedItem = memo(
               />
             )}
           </View>
-          <FeedItemTapGesture toggleHeader={toggleHeader}>
+          <FeedItemTapGesture
+            toggleHeader={toggleHeader}
+            showHeader={showHeader}
+          >
             <View
               tw={`absolute h-[${
                 itemHeight - bottomPadding - 50

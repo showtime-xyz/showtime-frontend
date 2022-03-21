@@ -45,7 +45,7 @@ export const LikeContextProvider = ({
         setLikeCount((l) => l + 1);
       }
     } else {
-      Haptics.selectionAsync();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
       if (isAuthenticated) setLikeCount((l) => l + 1);
 
