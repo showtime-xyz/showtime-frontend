@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Platform, ScrollView, View, Text } from "react-native";
+import { Platform, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -7,7 +7,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
-// import { ListingCard } from "./listing-card";
+import { UnlistingCard } from "./unlisting-card";
 import { UnlistingModal } from "./unlisting-modal";
 
 type Props = {
@@ -35,9 +35,12 @@ const Unlist = (props: Props) => {
   return (
     <BottomSheetModalProvider>
       <UnlistingModal>
-        <UnlistingScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-          <Text>Hi unlist</Text>
-          {/* <ListingCard nftId={nftId} /> */}
+        <UnlistingScrollView
+          contentContainerStyle={{
+            paddingBottom: 80,
+          }}
+        >
+          <UnlistingCard nftId={nftId} />
         </UnlistingScrollView>
       </UnlistingModal>
     </BottomSheetModalProvider>
