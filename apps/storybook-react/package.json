@@ -20,13 +20,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@storybook/addon-actions": "~6.3.12",
-    "@storybook/addon-essentials": "~6.3.12",
-    "@storybook/addon-links": "~6.3.12",
-    "@storybook/addon-react-native-web": "^0.0.14",
-    "@storybook/builder-webpack5": "~6.3.12",
-    "@storybook/manager-webpack5": "~6.3.12",
-    "@storybook/react": "~6.3.12",
+    "@storybook/addon-actions": "~6.4.19",
+    "@storybook/addon-essentials": "~6.4.19",
+    "@storybook/addon-links": "~6.4.19",
+    "@storybook/addon-react-native-web": "^0.0.18",
+    "@storybook/builder-webpack5": "~6.4.19",
+    "@storybook/manager-webpack5": "~6.4.19",
+    "@storybook/react": "~6.4.19",
     "@types/node": "16.11.9",
     "@types/react": "17.0.36",
     "babel-loader": "^8.2.3",
@@ -34,6 +34,7 @@
     "chromatic": "^6.0.6",
     "eslint": "7",
     "eslint-config-next": "^12.0.7",
+    "storybook-addon-next": "^1.6.2",
     "typescript": "4.5.2"
   }
 }
