@@ -22,8 +22,10 @@ import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import type { NFT } from "app/types";
 import { handleShareNFT } from "app/utilities";
@@ -226,58 +228,63 @@ export const FeedItem = memo(
     const tint = isDark ? "dark" : "light";
 
     return (
-      <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
-        <View tw="absolute w-full h-full">
-          {nft.blurhash ? (
-            <Blurhash
-              blurhash={nft.blurhash}
-              decodeWidth={16}
-              decodeHeight={16}
-              decodeAsync={true}
-              style={tw.style("w-full h-full")}
-            />
-          ) : (
-            <Image
-              source={{ uri: nft.still_preview_url }}
-              style={tw.style("w-full h-full")}
-            />
-          )}
-        </View>
-        <Pressable onPress={toggleHeader}>
-          <View
-            tw={`absolute h-[${
-              itemHeight - bottomPadding - 50
-            }px] justify-center`}
-          >
-            <Media
-              item={nft}
-              numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-              resizeMode="contain"
-              onPinchStart={hideHeader}
-              onPinchEnd={showHeader}
-            />
+      <LikeContextProvider nft={nft}>
+        <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
+          <View tw="absolute w-full h-full">
+            {nft.blurhash ? (
+              <Blurhash
+                blurhash={nft.blurhash}
+                decodeWidth={16}
+                decodeHeight={16}
+                decodeAsync={true}
+                style={tw.style("w-full h-full")}
+              />
+            ) : (
+              <Image
+                source={{ uri: nft.still_preview_url }}
+                style={tw.style("w-full h-full")}
+              />
+            )}
           </View>
-        </Pressable>
-
-        <Reanimated.View
-          style={[
-            tw.style("z-1 absolute bottom-0 right-0 left-0"),
-            detailStyle,
-          ]}
-        >
-          <BlurView tint={tint} intensity={85}>
-            <NFTDetails nft={nft} />
+          <FeedItemTapGesture
+            toggleHeader={toggleHeader}
+            showHeader={showHeader}
+          >
             <View
-              tw={`${
-                bottomPadding && bottomPadding !== 0
-                  ? `h-[${bottomPadding - 1}px]`
-                  : "h-0"
-              }`}
-            />
-          </BlurView>
-        </Reanimated.View>
-      </BlurView>
+              tw={`absolute h-[${
+                itemHeight - bottomPadding - 50
+              }px] justify-center`}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+                resizeMode="contain"
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
+            </View>
+          </FeedItemTapGesture>
+
+          <Reanimated.View
+            style={[
+              tw.style("z-1 absolute bottom-0 right-0 left-0"),
+              detailStyle,
+            ]}
+          >
+            <BlurView tint={tint} intensity={85}>
+              <NFTDetails nft={nft} />
+              <View
+                tw={`${
+                  bottomPadding && bottomPadding !== 0
+                    ? `h-[${bottomPadding - 1}px]`
+                    : "h-0"
+                }`}
+              />
+            </BlurView>
+          </Reanimated.View>
+        </BlurView>
+      </LikeContextProvider>
     );
   }
 );

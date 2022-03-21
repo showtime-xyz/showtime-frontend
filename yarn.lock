@@ -5431,6 +5431,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@shopify/react-native-skia@https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz":
+  version: 0.1.107
+  resolution: "@shopify/react-native-skia@https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz"
+  dependencies:
+    react-reconciler: ^0.26.2
+  peerDependencies:
+    react: ">=16.8.1"
+    react-native: ">=0.63.0-rc.0 <1.0.x"
+    react-native-reanimated: ">=2.0.0"
+  checksum: b74fd958e78786e850b24721a1f3736ec7bed378b944d9dafdfa9b80ca05f1ea49a3f1655f3da19c9e25aa2b009db9e9012c66ad72ef1824f98a9862bd77090a
+  languageName: node
+  linkType: hard
+
 "@showtime/expo@workspace:apps/expo":
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
@@ -5458,6 +5471,7 @@ __metadata:
     "@react-navigation/stack": ^6.1.0
     "@rudderstack/rudder-sdk-react-native": ^1.2.0
     "@sentry/react-native": ^3.3.0
+    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz"
     "@storybook/addon-actions": ^6.3.12
     "@storybook/addon-controls": ^6.3.12
     "@storybook/addon-ondevice-actions": ^6.0.1-alpha.6
@@ -5760,6 +5774,7 @@ __metadata:
     "@react-native-segmented-control/segmented-control": ^2.4.0
     "@react-navigation/native": ^6.0.7
     "@react-navigation/native-stack": ^6.3.0
+    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz"
     "@storybook/addon-actions": ^6.3.12
     "@storybook/addon-controls": ^6.3.12
     "@storybook/addon-ondevice-actions": ^6.0.1-alpha.6
@@ -25833,6 +25848,19 @@ __metadata:
     "@popperjs/core": ^2.0.0
     react: ^16.8.0 || ^17
   checksum: 915fcf08e1da4fd48a200074fcdd936f601ee2173f1e730cfed8a54fd47716aa8bf9cce2392463e3bcbe64a096d0baf463809ed2874b94d3a9d430ae6d817b5d
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.26.2":
+  version: 0.26.2
+  resolution: "react-reconciler@npm:0.26.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    scheduler: ^0.20.2
+  peerDependencies:
+    react: ^17.0.2
+  checksum: 2ebceace56f547f51eaf142becefef9cca980eae4f42d90ee5a966f54a375f5082d78b71b00c40bbd9bca69e0e0f698c7d4e81cc7373437caa19831fddc1d01b
   languageName: node
   linkType: hard
 
