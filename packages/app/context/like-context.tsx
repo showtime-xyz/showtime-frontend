@@ -16,9 +16,10 @@ type LikeContextType = {
   isLiked: boolean;
   likeCount: number;
   toggleLike: () => void;
+  like: () => void;
 };
 
-export const LikeContext = createContext(null as LikeContextType);
+export const LikeContext = createContext(null as unknown as LikeContextType);
 
 export const LikeContextProvider = ({
   nft,
@@ -36,6 +37,18 @@ export const LikeContextProvider = ({
     typeof nft.like_count === "number" ? nft.like_count : 0
   );
 
+  const likeImpl = useCallback(async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (!isLikedNft) {
+      if (isAuthenticated) setLikeCount((l) => l + 1);
+
+      const isSuccessfullyLiked = await like(nft.nft_id);
+      if (!isSuccessfullyLiked && isAuthenticated) {
+        setLikeCount((l) => l - 1);
+      }
+    }
+  }, [isAuthenticated, like, nft, isLikedNft]);
+
   const toggleLike = useCallback(async () => {
     if (isLikedNft) {
       if (isAuthenticated) setLikeCount((l) => l - 1);
@@ -45,20 +58,13 @@ export const LikeContextProvider = ({
         setLikeCount((l) => l + 1);
       }
     } else {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-      if (isAuthenticated) setLikeCount((l) => l + 1);
-
-      const isSuccessfullyLiked = await like(nft.nft_id);
-      if (!isSuccessfullyLiked && isAuthenticated) {
-        setLikeCount((l) => l - 1);
-      }
+      likeImpl();
     }
-  }, [like, isAuthenticated, isLikedNft, unlike]);
+  }, [like, isAuthenticated, isLikedNft, unlike, likeImpl, nft]);
 
   const likeContextValue = useMemo(
-    () => ({ isLiked: isLikedNft, likeCount, toggleLike }),
-    [isLikedNft, likeCount, toggleLike]
+    () => ({ isLiked: isLikedNft, likeCount, toggleLike, like: likeImpl }),
+    [isLikedNft, likeCount, toggleLike, likeImpl]
   );
 
   return (
