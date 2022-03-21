@@ -48,7 +48,7 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --check-files
+        run: yarn install --immutable
 
       - name: Decrypt service_account_key.json
         env:

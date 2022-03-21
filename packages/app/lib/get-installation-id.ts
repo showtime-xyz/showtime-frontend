@@ -2,8 +2,8 @@
 import { Platform } from "react-native";
 
 import * as Application from "expo-application";
-import uuidv4 from "uuid/v4";
-import uuidv5 from "uuid/v5";
+import { v4 as uuidv4 } from "uuid";
+import { v5 as uuidv5 } from "uuid";
 
 const UUID_NAMESPACE = "29cc8a0d-747c-5f85-9ff9-f2f16636d963";
 

@@ -7,12 +7,13 @@
     "build": "next build",
     "build:analyze": "ANALYZE=true yarn build",
     "start": "next start",
-    "postinstall": "cd ../.. && yarn patch-package"
+    "postinstall": "cd ../.. && yarn patch-package",
+    "lint": "eslint  --output-file eslint_report.json --format json"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@biconomy/mexa": "^2.0.22",
+    "@biconomy/mexa": "2.0.24",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -50,7 +51,7 @@
     "libsodium-wrappers": "^0.7.9",
     "magic-sdk": "^7.0.0",
     "mixpanel-browser": "^2.42.0",
-    "next": "12.0.7",
+    "next": "12.1.0",
     "next-connect": "^0.11.0",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.2",
