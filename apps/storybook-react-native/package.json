@@ -68,7 +68,7 @@
     "react-native-pager-view": "^5.4.9",
     "react-native-quick-base64": "^2.0.2",
     "react-native-randombytes": "^3.6.1",
-    "react-native-reanimated": "^2.3.1",
+    "react-native-reanimated": "2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
