@@ -8,10 +8,15 @@ import {
 } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useScrollToTop } from "@react-navigation/native";
+import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
+import Reanimated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
@@ -171,6 +176,41 @@ export const FeedItem = memo(
 
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
+    const navigation = useNavigation();
+
+    const opacity = useSharedValue(1);
+
+    const style = useAnimatedStyle(() => {
+      return {
+        opacity: opacity.value,
+      };
+    }, []);
+
+    const hideHeader = useCallback(() => {
+      if (Platform.OS === "ios") {
+        navigation.setOptions({
+          headerShown: false,
+        });
+        opacity.value = withTiming(0);
+      }
+    }, [navigation, opacity]);
+
+    const showHeader = useCallback(() => {
+      if (Platform.OS === "ios") {
+        navigation.setOptions({
+          headerShown: true,
+        });
+        opacity.value = withTiming(1);
+      }
+    }, [navigation, opacity]);
+
+    const toggleHeader = useCallback(() => {
+      if (opacity.value === 1) {
+        hideHeader();
+      } else {
+        showHeader();
+      }
+    }, [hideHeader, showHeader, opacity]);
 
     return (
       <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
@@ -190,19 +230,26 @@ export const FeedItem = memo(
             />
           )}
         </View>
-        <View
-          tw={`absolute h-[${
-            itemHeight - bottomPadding - 50
-          }px] justify-center`}
+        <Pressable onPress={toggleHeader}>
+          <View
+            tw={`absolute h-[${
+              itemHeight - bottomPadding - 50
+            }px] justify-center`}
+          >
+            <Media
+              item={nft}
+              numColumns={1}
+              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+              resizeMode="contain"
+              onPinchStart={hideHeader}
+              onPinchEnd={showHeader}
+            />
+          </View>
+        </Pressable>
+
+        <Reanimated.View
+          style={[tw.style("z-1 absolute bottom-0 right-0 left-0"), style]}
         >
-          <Media
-            item={nft}
-            numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-            resizeMode="contain"
-          />
-        </View>
-        <View tw="z-1 absolute bottom-0 right-0 left-0">
           <BlurView tint={tint} intensity={85}>
             <NFTDetails nft={nft} />
             <View
@@ -213,7 +260,7 @@ export const FeedItem = memo(
               }`}
             />
           </BlurView>
-        </View>
+        </Reanimated.View>
       </BlurView>
     );
   }
