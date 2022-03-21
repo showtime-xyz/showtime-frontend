@@ -6,6 +6,7 @@ import {
 } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -13,74 +14,80 @@ import Animated, {
 
 import { useLayout } from "../hooks";
 
-export const PinchToZoom = ({ children }) => {
+export const PinchToZoom = ({ children, onPinchStart, onPinchEnd }) => {
   const scale = useSharedValue(1);
   const zIndex = useSharedValue(1);
   const origin = { x: useSharedValue(0), y: useSharedValue(0) };
   const translation = { x: useSharedValue(0), y: useSharedValue(0) };
   const { onLayout, layout } = useLayout();
 
-  const handler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
-    onStart(e, ctx: any) {
-      // On android, we get focalX and focalY 0 in onStart callback. So, use a flag and set initial focalX and focalY in onActive
-      // 😢 https://github.com/software-mansion/react-native-gesture-handler/issues/546
-      ctx.start = true;
-    },
+  const handler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>(
+    {
+      onStart(e, ctx: any) {
+        // On android, we get focalX and focalY 0 in onStart callback. So, use a flag and set initial focalX and focalY in onActive
+        // 😢 https://github.com/software-mansion/react-native-gesture-handler/issues/546
+        ctx.start = true;
+        if (onPinchStart) runOnJS(onPinchStart)();
+      },
 
-    onActive(e, ctx: any) {
-      if (ctx.start) {
-        origin.x.value = e.focalX;
-        origin.y.value = e.focalY;
+      onActive(e, ctx: any) {
+        if (ctx.start) {
+          origin.x.value = e.focalX;
+          origin.y.value = e.focalY;
 
-        ctx.offsetFromFocalX = origin.x.value;
-        ctx.offsetFromFocalY = origin.y.value;
-        ctx.prevTranslateOriginX = origin.x.value;
-        ctx.prevTranslateOriginY = origin.y.value;
+          ctx.offsetFromFocalX = origin.x.value;
+          ctx.offsetFromFocalY = origin.y.value;
+          ctx.prevTranslateOriginX = origin.x.value;
+          ctx.prevTranslateOriginY = origin.y.value;
+          ctx.prevPointers = e.numberOfPointers;
+
+          ctx.start = false;
+        }
+
+        scale.value = e.scale;
+
+        if (ctx.prevPointers !== e.numberOfPointers) {
+          ctx.offsetFromFocalX = e.focalX;
+          ctx.offsetFromFocalY = e.focalY;
+          ctx.prevTranslateOriginX = ctx.translateOriginX;
+          ctx.prevTranslateOriginY = ctx.translateOriginY;
+        }
+
+        ctx.translateOriginX =
+          ctx.prevTranslateOriginX + e.focalX - ctx.offsetFromFocalX;
+        ctx.translateOriginY =
+          ctx.prevTranslateOriginY + e.focalY - ctx.offsetFromFocalY;
+
+        if (scale.value > 1) {
+          translation.x.value = ctx.translateOriginX - origin.x.value;
+          translation.y.value = ctx.translateOriginY - origin.y.value;
+        }
+
         ctx.prevPointers = e.numberOfPointers;
 
-        ctx.start = false;
-      }
+        zIndex.value = 10;
+      },
+      onEnd() {
+        scale.value = withSpring(1, {
+          stiffness: 60,
+          overshootClamping: true,
+        });
+        translation.x.value = withSpring(0, {
+          stiffness: 60,
+          overshootClamping: true,
+        });
+        translation.y.value = withSpring(0, {
+          stiffness: 60,
+          overshootClamping: true,
+        });
 
-      scale.value = e.scale;
+        zIndex.value = 1;
 
-      if (ctx.prevPointers !== e.numberOfPointers) {
-        ctx.offsetFromFocalX = e.focalX;
-        ctx.offsetFromFocalY = e.focalY;
-        ctx.prevTranslateOriginX = ctx.translateOriginX;
-        ctx.prevTranslateOriginY = ctx.translateOriginY;
-      }
-
-      ctx.translateOriginX =
-        ctx.prevTranslateOriginX + e.focalX - ctx.offsetFromFocalX;
-      ctx.translateOriginY =
-        ctx.prevTranslateOriginY + e.focalY - ctx.offsetFromFocalY;
-
-      if (scale.value > 1) {
-        translation.x.value = ctx.translateOriginX - origin.x.value;
-        translation.y.value = ctx.translateOriginY - origin.y.value;
-      }
-
-      ctx.prevPointers = e.numberOfPointers;
-
-      zIndex.value = 10;
+        if (onPinchEnd) runOnJS(onPinchEnd)();
+      },
     },
-    onEnd() {
-      scale.value = withSpring(1, {
-        stiffness: 60,
-        overshootClamping: true,
-      });
-      translation.x.value = withSpring(0, {
-        stiffness: 60,
-        overshootClamping: true,
-      });
-      translation.y.value = withSpring(0, {
-        stiffness: 60,
-        overshootClamping: true,
-      });
-
-      zIndex.value = 1;
-    },
-  });
+    [onPinchStart, onPinchEnd]
+  );
 
   const imageLeftForSettingTransformOrigin = layout ? -layout.height / 2 : 0;
   const imageTopForSettingTransformOrigin = layout ? -layout.width / 2 : 0;
