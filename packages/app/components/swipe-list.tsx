@@ -17,7 +17,7 @@ import Reanimated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
@@ -54,16 +54,14 @@ export const SwipeList = ({
 }: any) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
   const navigation = useNavigation();
+  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
 
   const itemHeight =
     Platform.OS === "android"
-      ? screenHeight -
-        headerHeight -
-        (Device.modelName === "LE2113" ? 16 : safeAreaBottom)
-      : screenHeight;
+      ? safeAreaFrameHeight - headerHeight
+      : safeAreaFrameHeight;
 
   let dataProvider = useMemo(
     () =>
