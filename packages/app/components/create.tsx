@@ -123,21 +123,26 @@ function Create({ uri, state, startMinting }: CreateProps) {
     <View tw="flex-1">
       <CreateScrollView keyboardShouldPersistTaps="handled">
         <View tw="px-3 py-4">
-          <View tw="flex-row items-center" testID="data-private">
-            <Preview
-              source={{
-                uri,
-              }}
-              tw="w-20 h-20 rounded-2xl"
-            />
-            <View tw="ml-2 flex-1">
+          <View
+            tw="flex-row items-center bg-gray-100 dark:bg-gray-900 rounded-4"
+            testID="data-private"
+          >
+            <View tw="z-1">
+              <Preview
+                source={{
+                  uri,
+                }}
+                tw="w-20 h-20 rounded-2xl"
+              />
+            </View>
+            <View tw="ml--2 flex-1">
               <Controller
                 control={control}
                 name="title"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Fieldset
-                    label="Add a title"
-                    placeholder="What's the title of your nft?"
+                    label="Title"
+                    placeholder="Add a title"
                     value={value}
                     errorText={errors.title?.message}
                     onBlur={onBlur}
@@ -190,7 +195,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
             /> */}
           </View>
 
-          <View tw="mt-4">
+          <View tw="mt-4 border-2 border-gray-200 dark:border-gray-800 rounded-2xl">
             <Accordion.Root>
               <Accordion.Item value="options">
                 <Accordion.Trigger>
@@ -267,7 +272,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
             name="hasAcceptedTerms"
             render={({ field: { onChange, value } }) => (
               <View>
-                <View tw="mt-8 flex-row">
+                <View tw="mt-8 flex-row justify-center items-center">
                   <Checkbox
                     onChange={(v) => onChange(v)}
                     checked={value}
@@ -291,22 +296,21 @@ function Create({ uri, state, startMinting }: CreateProps) {
 
         <View tw="mt-8 px-4 w-full">
           <Button
+            variant="primary"
+            size="regular"
             onPress={handleSubmit(handleSubmitForm)}
-            tw="h-12 rounded-full"
             disabled={!enable}
           >
-            <Text tw="text-white dark:text-gray-900 text-sm">
-              {state.status === "idle"
-                ? "Create"
-                : state.status === "mediaUpload" ||
-                  state.status === "nftJSONUpload"
-                ? "Uploading..."
-                : state.status === "mintingSuccess"
-                ? "Success!"
-                : isError
-                ? "Failed. Retry"
-                : "Minting..."}
-            </Text>
+            {state.status === "idle"
+              ? "Create"
+              : state.status === "mediaUpload" ||
+                state.status === "nftJSONUpload"
+              ? "Uploading..."
+              : state.status === "mintingSuccess"
+              ? "Success!"
+              : isError
+              ? "Failed. Retry"
+              : "Minting..."}
           </Button>
 
           <View tw="h-12 mt-4">

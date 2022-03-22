@@ -4,7 +4,7 @@ import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
 
-import { TextButton } from "design-system/button";
+import { Button } from "design-system/button";
 import { Message } from "design-system/icon";
 
 interface CommentButtonProps {
@@ -23,9 +23,14 @@ export function CommentButton({ nft }: CommentButtonProps) {
   }
 
   return (
-    <TextButton size="regular" tw="p-0 h-auto" onPress={handleOnPress}>
+    <Button
+      variant="text"
+      size="regular"
+      tw="p-0 h-auto"
+      onPress={handleOnPress}
+    >
       <Message height={24} width={24} />{" "}
       {nft?.comment_count > 0 ? getRoundedCount(nft.comment_count) : ""}
-    </TextButton>
+    </Button>
   );
 }
