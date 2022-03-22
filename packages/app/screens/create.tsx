@@ -75,10 +75,12 @@ const CreateScreen = () => {
 
   return (
     <CreateModal
-      title="Create"
+      title="Add details"
       close={router.pop}
       snapPoints={snapPoints}
       height="h-[90vh]"
+      bodyTW="bg-white dark:bg-black"
+      bodyContentTW="p-0"
     >
       <Create uri={uri} state={state} startMinting={startMinting} />
     </CreateModal>

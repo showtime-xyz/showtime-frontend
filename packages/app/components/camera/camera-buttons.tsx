@@ -99,7 +99,7 @@ export function CameraButtons({
           style={{ zIndex: 1 }}
         >
           <View tw="h-12 w-12 justify-center items-center">
-            <View tw="absolute">
+            {/* <View tw="absolute">
               <CircularProgress
                 size={50}
                 strokeWidth={1.5}
@@ -107,7 +107,7 @@ export function CameraButtons({
                 showOverlay={false}
                 strokeColor="black"
               />
-            </View>
+            </View> */}
 
             <Pressable
               tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
