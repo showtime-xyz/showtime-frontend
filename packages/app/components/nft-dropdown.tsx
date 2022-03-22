@@ -63,8 +63,8 @@ function NFTDropdown({ nft }: Props) {
   );
 
   const isFollowingUser = useMemo(
-    () => nft?.owner_id && isFollowing(nft?.owner_id),
-    [nft?.owner_id, isFollowing]
+    () => nft?.owner_id && isFollowing(nft?.creator_id),
+    [nft?.creator_id, isFollowing]
   );
 
   return (
@@ -119,7 +119,7 @@ function NFTDropdown({ nft }: Props) {
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
-                await unfollow(nft?.owner_id);
+                await unfollow(nft?.creator_id);
                 refresh();
               } else {
                 router.push("/login");
@@ -140,7 +140,7 @@ function NFTDropdown({ nft }: Props) {
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
-                await block(nft?.owner_id);
+                await block(nft?.creator_id);
                 refresh();
               } else {
                 router.push("/login");
