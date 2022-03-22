@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
@@ -50,14 +51,21 @@ import { FollowersList, FollowingList } from "./following-user-list";
 
 const COVER_IMAGE_HEIGHT = 104;
 
-const Footer = ({ isLoading }: { isLoading: boolean }) => {
+const Footer = ({
+  isLoading,
+  isMyProfile,
+}: {
+  isLoading: boolean;
+  isMyProfile: boolean;
+}) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const squareSize = width / 3;
+  const tabBarHeight = isMyProfile ? useBottomTabBarHeight() : 0;
 
   if (isLoading) {
     return (
-      <View tw="flex-row">
+      <View tw={`flex-row mb-[${tabBarHeight}px]`}>
         <View tw="mt-[1px] mr-[1px]">
           <Skeleton
             colorMode={colorMode}
@@ -86,7 +94,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
     );
   }
 
-  return null;
+  return <View tw={`h-[${tabBarHeight}px]`} />;
 };
 
 const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
@@ -109,72 +117,70 @@ const Profile = ({ address }: { address?: string }) => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <View tw="bg-white dark:bg-black flex-1">
-      <Tabs.Root
-        onIndexChange={setSelected}
-        initialIndex={selected}
-        tabListHeight={TAB_LIST_HEIGHT}
-        lazy
-      >
-        <Tabs.Header>
-          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
-          <ProfileTop address={address} isBlocked={isBlocked} />
-        </Tabs.Header>
-        {data?.data.lists ? (
-          <>
-            <Tabs.List
-              style={tw.style(
-                `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
-              )}
-            >
-              {data?.data.lists.map((list, index) => (
-                <Tabs.Trigger key={list.id}>
-                  <TabItem name={list.name} selected={selected === index} />
-                </Tabs.Trigger>
-              ))}
-              <SelectedTabIndicator />
-            </Tabs.List>
-
-            <Tabs.Pager>
-              {data?.data.lists.map((list) => {
-                return (
-                  <Suspense fallback={<Spinner size="small" />} key={list.id}>
-                    <TabList
-                      username={profileData?.data.profile.username}
-                      profileId={profileData?.data.profile.profile_id}
-                      isBlocked={isBlocked}
-                      list={list}
-                    />
-                  </Suspense>
-                );
-              })}
-            </Tabs.Pager>
-          </>
-        ) : tabsLoading ? (
+    <Tabs.Root
+      onIndexChange={setSelected}
+      initialIndex={selected}
+      tabListHeight={TAB_LIST_HEIGHT}
+      lazy
+    >
+      <Tabs.Header>
+        {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+        <ProfileTop address={address} isBlocked={isBlocked} />
+      </Tabs.Header>
+      {data?.data.lists ? (
+        <>
           <Tabs.List
             style={tw.style(
-              `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 ml-4 mt-4`
+              `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
             )}
           >
-            <Tabs.Trigger>
-              <View tw="w-22">
-                <Skeleton colorMode={colorScheme} width={74} height={20} />
-              </View>
-            </Tabs.Trigger>
-            <Tabs.Trigger>
-              <View tw="w-22">
-                <Skeleton colorMode={colorScheme} width={74} height={20} />
-              </View>
-            </Tabs.Trigger>
-            <Tabs.Trigger>
-              <View tw="w-20">
-                <Skeleton colorMode={colorScheme} width={70} height={20} />
-              </View>
-            </Tabs.Trigger>
+            {data?.data.lists.map((list, index) => (
+              <Tabs.Trigger key={list.id}>
+                <TabItem name={list.name} selected={selected === index} />
+              </Tabs.Trigger>
+            ))}
+            <SelectedTabIndicator />
           </Tabs.List>
-        ) : null}
-      </Tabs.Root>
-    </View>
+
+          <Tabs.Pager>
+            {data?.data.lists.map((list) => {
+              return (
+                <Suspense fallback={<Spinner size="small" />} key={list.id}>
+                  <TabList
+                    username={profileData?.data.profile.username}
+                    profileId={profileData?.data.profile.profile_id}
+                    isBlocked={isBlocked}
+                    list={list}
+                  />
+                </Suspense>
+              );
+            })}
+          </Tabs.Pager>
+        </>
+      ) : tabsLoading ? (
+        <Tabs.List
+          style={tw.style(
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 ml-4 mt-4`
+          )}
+        >
+          <Tabs.Trigger>
+            <View tw="w-22">
+              <Skeleton colorMode={colorScheme} width={74} height={20} />
+            </View>
+          </Tabs.Trigger>
+          <Tabs.Trigger>
+            <View tw="w-22">
+              <Skeleton colorMode={colorScheme} width={74} height={20} />
+            </View>
+          </Tabs.Trigger>
+          <Tabs.Trigger>
+            <View tw="w-20">
+              <Skeleton colorMode={colorScheme} width={70} height={20} />
+            </View>
+          </Tabs.Trigger>
+        </Tabs.List>
+      ) : null}
+    </Tabs.Root>
   );
 };
 
@@ -192,6 +198,8 @@ const TabList = ({
   isBlocked?: boolean;
   list: List;
 }) => {
+  const userId = useCurrentUserId();
+  const isMyProfile = userId === profileId;
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
@@ -250,8 +258,8 @@ const TabList = ({
   );
 
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
+    () => <Footer isLoading={isLoadingMore} isMyProfile={isMyProfile} />,
+    [isLoadingMore, isMyProfile]
   );
 
   const getItemLayout = useCallback((_data, index) => {
@@ -299,26 +307,25 @@ const TabList = ({
   const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={isBlocked ? null : data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={3}
-        getItemLayout={getItemLayout}
-        windowSize={6}
-        initialNumToRender={9}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        style={listStyle}
-      />
-    </View>
+    <Tabs.FlatList
+      data={isBlocked ? null : data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      ListHeaderComponent={ListHeaderComponent}
+      numColumns={3}
+      getItemLayout={getItemLayout}
+      windowSize={6}
+      initialNumToRender={9}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+      style={listStyle}
+      minHeight={0}
+    />
   );
 };
 
