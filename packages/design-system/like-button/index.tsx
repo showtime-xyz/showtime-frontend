@@ -1,6 +1,6 @@
 import { getRoundedCount } from "app/utilities";
 
-import { TextButton } from "design-system/button";
+import { Button } from "design-system/button";
 import { Heart, HeartFilled } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
@@ -14,7 +14,7 @@ export function LikeButton({
   likeCount: number;
 }) {
   return (
-    <TextButton size="regular" tw="p-0 h-auto" onPress={onPress}>
+    <Button variant="text" size="regular" tw="p-0 h-auto" onPress={onPress}>
       {isLiked ? (
         // <Animated.View key="liked" exiting={ZoomOut} entering={ZoomIn}>
         <HeartFilled height={24} width={24} color={tw.color("red-500")} />
@@ -30,6 +30,6 @@ export function LikeButton({
         // </Animated.View>
       )}{" "}
       {likeCount > 0 ? getRoundedCount(likeCount) : ""}
-    </TextButton>
+    </Button>
   );
 }
