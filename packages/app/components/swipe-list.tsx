@@ -61,7 +61,7 @@ export const SwipeList = ({
   const itemHeight =
     Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
-      : safeAreaFrameHeight;
+      : screenHeight;
 
   let dataProvider = useMemo(
     () =>
