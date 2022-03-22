@@ -196,9 +196,9 @@ function Create({ uri, state, startMinting }: CreateProps) {
                 <Accordion.Trigger>
                   <Accordion.Label>Options</Accordion.Label>
                   <Accordion.Chevron>
-                    <Button variant="tertiary" tw="rounded-full h-8 w-8">
+                    <View tw="rounded-full h-8 w-8 bg-gray-100 dark:bg-gray-900 items-center justify-center">
                       <ChevronUp color={isDark ? "#fff" : "#000"} />
-                    </Button>
+                    </View>
                   </Accordion.Chevron>
                 </Accordion.Trigger>
                 <Accordion.Content>
