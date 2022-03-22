@@ -5,10 +5,14 @@ import {
   useReducer,
   useRef,
   useState,
+  useContext,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
@@ -51,17 +55,13 @@ import { FollowersList, FollowingList } from "./following-user-list";
 
 const COVER_IMAGE_HEIGHT = 104;
 
-const Footer = ({
-  isLoading,
-  isMyProfile,
-}: {
-  isLoading: boolean;
-  isMyProfile: boolean;
-}) => {
+const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const squareSize = width / 3;
-  const tabBarHeight = isMyProfile ? useBottomTabBarHeight() : 0;
+  const tabBarHeight = useContext(BottomTabBarHeightContext)
+    ? useBottomTabBarHeight()
+    : 0;
 
   if (isLoading) {
     return (
@@ -200,8 +200,6 @@ const TabList = ({
   isBlocked?: boolean;
   list: List;
 }) => {
-  const userId = useCurrentUserId();
-  const isMyProfile = userId === profileId;
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
@@ -260,8 +258,8 @@ const TabList = ({
   );
 
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} isMyProfile={isMyProfile} />,
-    [isLoadingMore, isMyProfile]
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
   );
 
   const getItemLayout = useCallback((_data, index) => {
