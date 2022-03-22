@@ -5,9 +5,14 @@ import {
   useReducer,
   useRef,
   useState,
+  useContext,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
@@ -54,10 +59,13 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const squareSize = width / 3;
+  const tabBarHeight = useContext(BottomTabBarHeightContext)
+    ? useBottomTabBarHeight()
+    : 0;
 
   if (isLoading) {
     return (
-      <View tw="flex-row">
+      <View tw={`flex-row mb-[${tabBarHeight}px]`}>
         <View tw="mt-[1px] mr-[1px]">
           <Skeleton
             colorMode={colorMode}
@@ -86,7 +94,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
     );
   }
 
-  return null;
+  return <View tw={`h-[${tabBarHeight}px]`} />;
 };
 
 const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
@@ -299,26 +307,25 @@ const TabList = ({
   const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={isBlocked ? null : data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={3}
-        getItemLayout={getItemLayout}
-        windowSize={6}
-        initialNumToRender={9}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        style={listStyle}
-      />
-    </View>
+    <Tabs.FlatList
+      data={isBlocked ? null : data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      ListHeaderComponent={ListHeaderComponent}
+      numColumns={3}
+      getItemLayout={getItemLayout}
+      windowSize={6}
+      initialNumToRender={9}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+      style={listStyle}
+      minHeight={0}
+    />
   );
 };
 
