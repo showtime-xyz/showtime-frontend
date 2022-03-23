@@ -186,24 +186,26 @@ const CreatorsList = ({
   );
 
   return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      ListHeaderComponent={ListHeaderComponent}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={4}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-      ItemSeparatorComponent={ItemSeparatorComponent}
-      getItemLayout={getItemLayout}
-    />
+    <View tw="flex-1 bg-white dark:bg-black">
+      <Tabs.FlatList
+        data={data}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.6}
+        removeClippedSubviews={Platform.OS !== "web"}
+        ListHeaderComponent={ListHeaderComponent}
+        numColumns={1}
+        windowSize={4}
+        initialNumToRender={4}
+        alwaysBounceVertical={false}
+        ListFooterComponent={ListFooterComponent}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        getItemLayout={getItemLayout}
+      />
+    </View>
   );
 };
 
@@ -274,7 +276,7 @@ const NFTSList = ({
   );
 
   return (
-    <View tw="flex-1">
+    <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.FlatList
         data={data}
         keyExtractor={keyExtractor}
