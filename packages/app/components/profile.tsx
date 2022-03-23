@@ -404,7 +404,7 @@ const ProfileTop = ({
         <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
           <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
             <View tw="flex-row items-end" pointerEvents="none">
-              <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
+              <View tw="bg-white dark:bg-black rounded-full mt-[-72px] p-2">
                 <Skeleton
                   height={128}
                   width={128}
@@ -425,7 +425,7 @@ const ProfileTop = ({
             {isBlocked ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     unblock(profileId);
                   }}
@@ -438,7 +438,7 @@ const ProfileTop = ({
                 <ProfileDropdown user={profileData?.data.profile} />
                 <View tw="w-2" />
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     if (isFollowingUser) {
                       unfollow(profileId);
@@ -453,7 +453,7 @@ const ProfileTop = ({
             ) : userId === profileId ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     router.push("/editProfile");
                   }}

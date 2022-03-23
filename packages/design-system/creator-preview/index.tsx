@@ -68,8 +68,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
         </Link>
         <View tw="flex-row justify-center items-center">
           <Button
-            variant="tertiary"
-            tw="h-8"
+            variant="primary"
             onPress={() => {
               if (isFollowingCreator) {
                 unfollow(creatorId);
@@ -78,9 +77,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
               }
             }}
           >
-            <Text tw="text-gray-900 font-bold text-sm dark:text-white">
-              {isFollowingCreator ? "Following" : "Follow"}
-            </Text>
+            {isFollowingCreator ? "Following" : "Follow"}
           </Button>
         </View>
       </View>
