@@ -32,7 +32,7 @@ function ProfileDropdown({ user }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="regular" asChild>
+        <Button variant="tertiary" iconOnly={true} size="small" asChild>
           <MoreHorizontal
             color={
               tw.style("bg-black dark:bg-white")?.backgroundColor as string
