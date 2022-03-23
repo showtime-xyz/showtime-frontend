@@ -346,6 +346,7 @@ const ProfileTop = ({
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
+  const bottomBarHeight = useBottomTabBarHeight();
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
@@ -557,7 +558,7 @@ const ProfileTop = ({
         </View>
       </View>
       <ModalSheet
-        snapPoints={["90%"]}
+        snapPoints={["85%"]}
         title={showBottomSheet === "followers" ? "Followers" : "Following"}
         visible={
           showBottomSheet === "followers" || showBottomSheet === "following"
@@ -565,25 +566,22 @@ const ProfileTop = ({
         close={() => setShowBottomSheet(null)}
         onClose={() => setShowBottomSheet(null)}
       >
-        {showBottomSheet === "followers" ? (
-          <FollowersList
-            profileId={profileId}
-            isFollowingUser={isFollowing}
-            follow={follow}
-            unFollow={unfollow}
-            hideSheet={() => setShowBottomSheet(null)}
-          />
-        ) : showBottomSheet === "following" ? (
-          <FollowingList
-            profileId={profileId}
-            isFollowingUser={isFollowing}
-            follow={follow}
-            unFollow={unfollow}
-            hideSheet={() => setShowBottomSheet(null)}
-          />
-        ) : (
-          <></>
-        )}
+        <>
+          {showBottomSheet === "followers" ? (
+            <FollowersList
+              profileId={profileId}
+              hideSheet={() => setShowBottomSheet(null)}
+            />
+          ) : showBottomSheet === "following" ? (
+            <FollowingList
+              profileId={profileId}
+              hideSheet={() => setShowBottomSheet(null)}
+            />
+          ) : (
+            <></>
+          )}
+          <View tw={`h-[${bottomBarHeight}px]`} />
+        </>
       </ModalSheet>
     </>
   );
