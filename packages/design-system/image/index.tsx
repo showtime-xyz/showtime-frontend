@@ -67,11 +67,11 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
             decodeWidth={16}
             decodeHeight={16}
             decodeAsync={true}
-            style={[style, tailwind.style(tw, "bg-white dark:bg-black")]}
+            style={[style, tailwind.style(tw)]}
           />
         </View>
         <Img
-          style={[style, tailwind.style(tw, "bg-white dark:bg-black")]}
+          style={[style, tailwind.style(tw)]}
           width={width}
           height={height}
           {...props}
