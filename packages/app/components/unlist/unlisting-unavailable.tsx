@@ -37,7 +37,7 @@ const UnlistingUnavailable = (props: Props) => {
                 tw="font-medium text-black dark:text-white mb-2"
                 key={`${ownerListItem.address}`}
               >
-                Please connect {displayAddress} address
+                Please connect with address {displayAddress}
               </Text>
             );
           })}

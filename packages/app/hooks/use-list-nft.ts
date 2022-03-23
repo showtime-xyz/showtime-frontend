@@ -168,9 +168,11 @@ export const useListNFT = () => {
           },
         ]);
 
+        console.log("transaction", transaction);
+
         provider.once(transaction, () => {
           dispatch({ type: "status", status: "listingSuccess" });
-
+          console.log("good");
           resolve(true);
         });
       } catch (error) {

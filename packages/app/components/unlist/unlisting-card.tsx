@@ -15,7 +15,7 @@ import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
 import { Video } from "design-system/video";
 
-import { ListingForm } from "./listing-form";
+import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";
 import { UnlistingUnavailable } from "./unlisting-unavailable";
 
@@ -30,13 +30,16 @@ type NFT_Detail = {
 const UnlistingCard = (props: Props) => {
   const nftId = props.nftId;
   const endpoint = nftId ? `/v2/nft_detail/${nftId}` : undefined;
+
   const { userAddress: address } = useCurrentUserAddress();
 
   const { data, error } = useSWR<NFT_Detail>(endpoint, (url) =>
     axios({ url, method: "GET" })
   );
-  const nft = data?.data;
+
   const isLoading = !data;
+  const nft = data?.data;
+  const listingId = nft?.listing?.sale_identifier;
 
   if (error) {
     console.log(`Error in Unlisting Card From Endpoint ${endpoint}:`, error);
@@ -107,10 +110,9 @@ const UnlistingCard = (props: Props) => {
           price={!hasMultipleOwners}
           tw="px-0 my-4"
         />
-        {isActiveAddressAnOwner ? null : (
-          // <>
-          //   <ListingForm nft={nft} />
-          // </>
+        {isActiveAddressAnOwner ? (
+          <UnlistingSubmit listingID={listingId} />
+        ) : (
           <UnlistingUnavailable nft={nft} />
         )}
       </View>
