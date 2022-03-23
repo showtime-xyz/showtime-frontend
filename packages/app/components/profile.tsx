@@ -346,7 +346,9 @@ const ProfileTop = ({
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
-  const bottomBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useContext(BottomTabBarHeightContext)
+    ? useBottomTabBarHeight()
+    : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
@@ -580,7 +582,7 @@ const ProfileTop = ({
           ) : (
             <></>
           )}
-          <View tw={`h-[${bottomBarHeight}px]`} />
+          <View tw={`h-[${tabBarHeight}px]`} />
         </>
       </ModalSheet>
     </>

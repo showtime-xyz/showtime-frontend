@@ -4,11 +4,9 @@ import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Header } from "app/components/header";
 import { useUser } from "app/hooks/use-user";
 
 import { View } from "design-system";
-import { BlurredBackground } from "design-system/blurred-background";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
