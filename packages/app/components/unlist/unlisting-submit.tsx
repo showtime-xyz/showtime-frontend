@@ -50,9 +50,7 @@ const UnlistingSubmit = (props: Props) => {
         tw="h-12 rounded-full"
         variant="primary"
       >
-        <>
-          <Text tw="text-white dark:text-gray-900 text-sm pl-1">{ctaCopy}</Text>
-        </>
+        <Text tw="text-white dark:text-gray-900 text-sm pl-1">{ctaCopy}</Text>
       </Button>
       <View tw=" h-36 w-full mt-4">
         {showSigningOption ? (
