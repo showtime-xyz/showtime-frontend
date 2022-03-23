@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useSWRConfig } from "swr";
 
@@ -6,6 +6,7 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useFeed } from "app/hooks/use-feed";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
@@ -39,9 +40,10 @@ function NFTDropdown({ nft }: Props) {
   const { userAddress } = useCurrentUserAddress();
   const [isOwner, setIsOwner] = useState(false);
   const { report } = useReport();
-  const { unfollow } = useMyInfo();
+  const { unfollow, isFollowing } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
+  const { refresh } = useFeed();
 
   useEffect(() => {
     if (nft?.owner_address) {
@@ -58,6 +60,11 @@ function NFTDropdown({ nft }: Props) {
   // Prevent web3 actions on incorrect contracts caused by environment syncs
   const usableContractAddress = SHOWTIME_CONTRACTS.includes(
     nft?.contract_address
+  );
+
+  const isFollowingUser = useMemo(
+    () => nft?.owner_id && isFollowing(nft?.creator_id),
+    [nft?.creator_id, isFollowing]
   );
 
   return (
@@ -108,11 +115,15 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem> */}
 
-        {isAuthenticated && (
+        {!isOwner && isFollowingUser && (
           <DropdownMenuItem
             onSelect={async () => {
-              await unfollow(nft?.owner_id);
-              mutate(null);
+              if (isAuthenticated) {
+                await unfollow(nft?.creator_id);
+                refresh();
+              } else {
+                router.push("/login");
+              }
             }}
             key="unfollow"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -123,16 +134,14 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isAuthenticated && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
-        )}
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
-                await block(nft?.owner_id);
-                mutate(null);
+                await block(nft?.creator_id);
+                refresh();
               } else {
                 router.push("/login");
               }

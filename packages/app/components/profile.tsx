@@ -5,9 +5,14 @@ import {
   useReducer,
   useRef,
   useState,
+  useContext,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
@@ -54,10 +59,13 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const squareSize = width / 3;
+  const tabBarHeight = useContext(BottomTabBarHeightContext)
+    ? useBottomTabBarHeight()
+    : 0;
 
   if (isLoading) {
     return (
-      <View tw="flex-row">
+      <View tw={`flex-row mb-[${tabBarHeight}px]`}>
         <View tw="mt-[1px] mr-[1px]">
           <Skeleton
             colorMode={colorMode}
@@ -86,7 +94,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
     );
   }
 
-  return null;
+  return <View tw={`h-[${tabBarHeight}px]`} />;
 };
 
 const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
@@ -299,26 +307,25 @@ const TabList = ({
   const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={isBlocked ? null : data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={3}
-        getItemLayout={getItemLayout}
-        windowSize={6}
-        initialNumToRender={9}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        style={listStyle}
-      />
-    </View>
+    <Tabs.FlatList
+      data={isBlocked ? null : data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      ListHeaderComponent={ListHeaderComponent}
+      numColumns={3}
+      getItemLayout={getItemLayout}
+      windowSize={6}
+      initialNumToRender={9}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+      style={listStyle}
+      minHeight={0}
+    />
   );
 };
 
@@ -339,6 +346,9 @@ const ProfileTop = ({
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
+  const tabBarHeight = useContext(BottomTabBarHeightContext)
+    ? useBottomTabBarHeight()
+    : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
@@ -396,7 +406,7 @@ const ProfileTop = ({
         <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
           <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
             <View tw="flex-row items-end" pointerEvents="none">
-              <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
+              <View tw="bg-white dark:bg-black rounded-full mt-[-72px] p-2">
                 <Skeleton
                   height={128}
                   width={128}
@@ -417,7 +427,7 @@ const ProfileTop = ({
             {isBlocked ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     unblock(profileId);
                   }}
@@ -430,7 +440,7 @@ const ProfileTop = ({
                 <ProfileDropdown user={profileData?.data.profile} />
                 <View tw="w-2" />
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     if (isFollowingUser) {
                       unfollow(profileId);
@@ -445,7 +455,7 @@ const ProfileTop = ({
             ) : userId === profileId ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
                 <Button
-                  size="regular"
+                  size="small"
                   onPress={() => {
                     router.push("/editProfile");
                   }}
@@ -550,7 +560,7 @@ const ProfileTop = ({
         </View>
       </View>
       <ModalSheet
-        snapPoints={["90%"]}
+        snapPoints={["85%"]}
         title={showBottomSheet === "followers" ? "Followers" : "Following"}
         visible={
           showBottomSheet === "followers" || showBottomSheet === "following"
@@ -558,25 +568,22 @@ const ProfileTop = ({
         close={() => setShowBottomSheet(null)}
         onClose={() => setShowBottomSheet(null)}
       >
-        {showBottomSheet === "followers" ? (
-          <FollowersList
-            profileId={profileId}
-            isFollowingUser={isFollowing}
-            follow={follow}
-            unFollow={unfollow}
-            hideSheet={() => setShowBottomSheet(null)}
-          />
-        ) : showBottomSheet === "following" ? (
-          <FollowingList
-            profileId={profileId}
-            isFollowingUser={isFollowing}
-            follow={follow}
-            unFollow={unfollow}
-            hideSheet={() => setShowBottomSheet(null)}
-          />
-        ) : (
-          <></>
-        )}
+        <>
+          {showBottomSheet === "followers" ? (
+            <FollowersList
+              profileId={profileId}
+              hideSheet={() => setShowBottomSheet(null)}
+            />
+          ) : showBottomSheet === "following" ? (
+            <FollowingList
+              profileId={profileId}
+              hideSheet={() => setShowBottomSheet(null)}
+            />
+          ) : (
+            <></>
+          )}
+          <View tw={`h-[${tabBarHeight}px]`} />
+        </>
       </ModalSheet>
     </>
   );

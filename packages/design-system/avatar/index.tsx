@@ -13,9 +13,9 @@ export type AvatarProps = {
   children?: ReactNode;
 };
 
-const getAvatarImageUrl = (imgUrl?: string) => {
+const getAvatarImageUrl = (imgUrl: string, size: number) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s112";
+    imgUrl = imgUrl.split("=")[0] + "=s" + size * 2;
   }
   return imgUrl;
 };
@@ -28,7 +28,7 @@ export const Avatar = ({
   children,
 }: AvatarProps) => {
   const imageSource = useMemo(
-    () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC) }),
+    () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
     [url]
   );
 

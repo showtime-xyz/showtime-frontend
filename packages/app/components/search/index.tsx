@@ -46,7 +46,7 @@ export const Search = () => {
       {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <View tw="p-4">
         <Input
-          placeholder="Search..."
+          placeholder="Search for @username or name.eth"
           value={term}
           ref={inputRef}
           autoFocus

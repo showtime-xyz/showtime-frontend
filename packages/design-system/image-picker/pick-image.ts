@@ -22,8 +22,6 @@ export async function pickImage({
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes,
       allowsMultipleSelection: false,
-      allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
     });
 

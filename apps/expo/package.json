@@ -40,7 +40,8 @@
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link",
-    "test": "node_modules/.bin/jest ./component-tests"
+    "test": "jest ./component-tests",
+    "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
     "@capsizecss/core": "^3.0.0",
@@ -63,6 +64,7 @@
     "@react-three/fiber": "^8.0.0-beta.3",
     "@rudderstack/rudder-sdk-react-native": "^1.2.0",
     "@sentry/react-native": "^3.3.0",
+    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz",
     "@testing-library/jest-native": "^4.0.4",
     "@testing-library/react-native": "^9.0.0",
     "@tradle/react-native-http": "^2.0.0",
@@ -139,7 +141,7 @@
     "react-native-quick-base64": "^2.0.2",
     "react-native-random-values-jsi-helper": "^1.0.2",
     "react-native-randombytes": "^3.6.1",
-    "react-native-reanimated": "^2.3.1",
+    "react-native-reanimated": "2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-svg": "^12.1.1",
@@ -192,8 +194,10 @@
     "metro-minify-esbuild": "^0.1.0",
     "react-test-renderer": "18.0.0-rc.0",
     "semver": "^7.3.5",
+    "simple-git": "^3.3.0",
     "ts-jest": "^27.1.2",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "zx": "4.3.0"
   },
   "private": true,
   "version": "1.0.0",
@@ -223,28 +227,28 @@
     "tls": false
   },
   "browser": {
-    "zlib": "browserify-zlib",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_writable": "readable-stream/writable",
     "console": "console-browserify",
     "constants": "constants-browserify",
     "crypto": "react-native-crypto",
     "dns": "dns.js",
     "domain": "domain-browser",
+    "fs": "react-native-level-fs",
     "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
     "path": "path-browserify",
     "querystring": "querystring-es3",
-    "fs": "react-native-level-fs",
-    "_stream_transform": "readable-stream/transform",
-    "_stream_readable": "readable-stream/readable",
-    "_stream_writable": "readable-stream/writable",
-    "_stream_duplex": "readable-stream/duplex",
-    "_stream_passthrough": "readable-stream/passthrough",
     "stream": "stream-browserify",
     "timers": "timers-browserify",
+    "tls": false,
     "tty": "tty-browserify",
     "vm": "vm-browserify",
-    "tls": false
+    "zlib": "browserify-zlib"
   },
   "jest": {
     "preset": "jest-expo",

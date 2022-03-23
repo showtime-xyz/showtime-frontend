@@ -24,9 +24,18 @@ type Props = {
   numColumns: number;
   tw?: string;
   resizeMode?: "contain";
+  onPinchStart?: () => void;
+  onPinchEnd?: () => void;
 };
 
-function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
+function Media({
+  item,
+  numColumns,
+  tw,
+  resizeMode: propResizeMode,
+  onPinchStart,
+  onPinchEnd,
+}: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
   const imageUri =
@@ -78,7 +87,7 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
     >
       {imageUri &&
       (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
-        <PinchToZoom>
+        <PinchToZoom onPinchEnd={onPinchEnd} onPinchStart={onPinchStart}>
           <Image
             source={{
               uri: `${
@@ -94,7 +103,7 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
 
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/svg+xml" ? (
-        <PinchToZoom>
+        <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
           {numColumns > 1 && item?.mime_type === "image/gif" && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
               <Play height={24} width={24} color="white" />
@@ -118,16 +127,18 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
               <Play height={24} width={24} color="white" />
             </View>
           )}
-          <Video
-            source={{
-              uri: videoUri,
-            }}
-            posterSource={{
-              uri: item?.still_preview_url,
-            }}
-            tw={size}
-            resizeMode={resizeMode}
-          />
+          <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
+            <Video
+              source={{
+                uri: videoUri,
+              }}
+              posterSource={{
+                uri: item?.still_preview_url,
+              }}
+              tw={size}
+              resizeMode={resizeMode}
+            />
+          </PinchToZoom>
         </View>
       ) : null}
 

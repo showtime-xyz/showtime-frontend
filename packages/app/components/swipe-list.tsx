@@ -8,17 +8,24 @@ import {
 } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useScrollToTop } from "@react-navigation/native";
+import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Reanimated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import type { NFT } from "app/types";
 import { handleShareNFT } from "app/utilities";
@@ -47,14 +54,13 @@ export const SwipeList = ({
 }: any) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
+  const navigation = useNavigation();
+  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
 
   const itemHeight =
     Platform.OS === "android"
-      ? screenHeight -
-        headerHeight -
-        (Device.modelName === "LE2113" ? 16 : safeAreaBottom)
+      ? safeAreaFrameHeight - headerHeight
       : screenHeight;
 
   let dataProvider = useMemo(
@@ -79,6 +85,40 @@ export const SwipeList = ({
     [screenWidth, itemHeight]
   );
 
+  const opacity = useSharedValue(1);
+
+  const detailStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  const hideHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+      });
+      opacity.value = withTiming(0);
+    }
+  }, [navigation, opacity]);
+
+  const showHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+      opacity.value = withTiming(1);
+    }
+  }, [navigation, opacity]);
+
+  const toggleHeader = useCallback(() => {
+    if (opacity.value === 1) {
+      hideHeader();
+    } else {
+      showHeader();
+    }
+  }, [hideHeader, showHeader, opacity]);
+
   const _rowRenderer = useCallback(
     (_type: any, item: any) => {
       return (
@@ -86,10 +126,14 @@ export const SwipeList = ({
           itemHeight={itemHeight}
           bottomPadding={bottomPadding}
           nft={item}
+          detailStyle={detailStyle}
+          toggleHeader={toggleHeader}
+          hideHeader={hideHeader}
+          showHeader={showHeader}
         />
       );
     },
-    [itemHeight, bottomPadding]
+    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -105,11 +149,12 @@ export const SwipeList = ({
     () => ({
       pagingEnabled: true,
       showsVerticalScrollIndicator: false,
+      onMomentumScrollEnd: showHeader,
       refreshControl: (
         <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
       ),
     }),
-    [isRefreshing, refresh]
+    [isRefreshing, refresh, showHeader]
   );
 
   const videoConfig = useMemo(
@@ -146,8 +191,16 @@ export const FeedItem = memo(
     nft,
     bottomPadding = 0,
     itemHeight,
+    hideHeader,
+    showHeader,
+    toggleHeader,
+    detailStyle,
   }: {
     nft: NFT;
+    detailStyle: any;
+    showHeader: any;
+    hideHeader: any;
+    toggleHeader: any;
     bottomPadding: number;
     itemHeight: number;
   }) => {
@@ -173,48 +226,63 @@ export const FeedItem = memo(
     const tint = isDark ? "dark" : "light";
 
     return (
-      <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
-        <View tw="absolute w-full h-full">
-          {nft.blurhash ? (
-            <Blurhash
-              blurhash={nft.blurhash}
-              decodeWidth={16}
-              decodeHeight={16}
-              decodeAsync={true}
-              style={tw.style("w-full h-full")}
-            />
-          ) : (
-            <Image
-              source={{ uri: nft.still_preview_url }}
-              style={tw.style("w-full h-full")}
-            />
-          )}
-        </View>
-        <View
-          tw={`absolute h-[${
-            itemHeight - bottomPadding - 50
-          }px] justify-center`}
-        >
-          <Media
-            item={nft}
-            numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-            resizeMode="contain"
-          />
-        </View>
-        <View tw="z-1 absolute bottom-0 right-0 left-0">
-          <BlurView tint={tint} intensity={85}>
-            <NFTDetails nft={nft} />
+      <LikeContextProvider nft={nft}>
+        <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
+          <View tw="absolute w-full h-full">
+            {nft.blurhash ? (
+              <Blurhash
+                blurhash={nft.blurhash}
+                decodeWidth={16}
+                decodeHeight={16}
+                decodeAsync={true}
+                style={tw.style("w-full h-full")}
+              />
+            ) : (
+              <Image
+                source={{ uri: nft.still_preview_url }}
+                style={tw.style("w-full h-full")}
+              />
+            )}
+          </View>
+          <FeedItemTapGesture
+            toggleHeader={toggleHeader}
+            showHeader={showHeader}
+          >
             <View
-              tw={`${
-                bottomPadding && bottomPadding !== 0
-                  ? `h-[${bottomPadding - 1}px]`
-                  : "h-0"
-              }`}
-            />
-          </BlurView>
-        </View>
-      </BlurView>
+              tw={`absolute h-[${
+                itemHeight - bottomPadding - 50
+              }px] justify-center`}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+                resizeMode="contain"
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
+            </View>
+          </FeedItemTapGesture>
+
+          <Reanimated.View
+            style={[
+              tw.style("z-1 absolute bottom-0 right-0 left-0"),
+              detailStyle,
+            ]}
+          >
+            <BlurView tint={tint} intensity={85}>
+              <NFTDetails nft={nft} />
+              <View
+                tw={`${
+                  bottomPadding && bottomPadding !== 0
+                    ? `h-[${bottomPadding - 1}px]`
+                    : "h-0"
+                }`}
+              />
+            </BlurView>
+          </Reanimated.View>
+        </BlurView>
+      </LikeContextProvider>
     );
   }
 );
