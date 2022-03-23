@@ -101,7 +101,7 @@ const TabListContainer = ({ days }: { days: number }) => {
   const SelectionControl = useMemo(
     () => (
       <SegmentedControl
-        values={["CREATORS", "NFTS"]}
+        values={["CREATOR", "NFT"]}
         onChange={setSelected}
         selectedIndex={selected}
       />
