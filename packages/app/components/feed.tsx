@@ -68,16 +68,18 @@ const HeaderFeed = () => {
   const { selected, pagerRef } = useContext(FeedContext);
 
   const animatedStyleFirstTab = useAnimatedStyle(() => {
+    const scale = selected.value === 0 ? 1 : 0.95;
     return {
       opacity: selected.value === 0 ? 1 : 0.5,
-      scale: selected.value === 0 ? 1 : 0.95,
+      transform: [{ scaleX: scale }, { scaleY: scale }],
     };
   });
 
   const animatedStyleSecondTab = useAnimatedStyle(() => {
+    const scale = selected.value === 1 ? 1 : 0.95;
     return {
       opacity: selected.value === 1 ? 1 : 0.5,
-      scale: selected.value === 1 ? 1 : 0.95,
+      transform: [{ scaleX: scale }, { scaleY: scale }],
     };
   });
 
