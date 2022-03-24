@@ -1,0 +1,67 @@
+diff --git a/node_modules/patch-package/dist/getPackageResolution.js b/node_modules/patch-package/dist/getPackageResolution.js
+index bc7ffaa..969414a 100644
+--- a/node_modules/patch-package/dist/getPackageResolution.js
++++ b/node_modules/patch-package/dist/getPackageResolution.js
+@@ -9,6 +9,7 @@ const PackageDetails_1 = require("./PackageDetails");
+ const detectPackageManager_1 = require("./detectPackageManager");
+ const fs_extra_1 = require("fs-extra");
+ const lockfile_1 = require("@yarnpkg/lockfile");
++const yaml_1 = require("yaml");
+ const find_yarn_workspace_root_1 = __importDefault(require("find-yarn-workspace-root"));
+ const getPackageVersion_1 = require("./getPackageVersion");
+ function getPackageResolution({ packageDetails, packageManager, appPath, }) {
+@@ -24,12 +25,25 @@ function getPackageResolution({ packageDetails, packageManager, appPath, }) {
+         if (!fs_extra_1.existsSync(lockFilePath)) {
+             throw new Error("Can't find yarn.lock file");
+         }
+-        const appLockFile = lockfile_1.parse(fs_extra_1.readFileSync(lockFilePath).toString());
+-        if (appLockFile.type !== "success") {
+-            throw new Error("Can't parse lock file");
++        const lockFileString = fs_extra_1.readFileSync(lockFilePath).toString();
++        let appLockFile;
++        if (lockFileString.includes("yarn lockfile v1")) {
++          const parsedYarnLockFile = lockfile_1.parse(lockFileString)
++          if (parsedYarnLockFile.type !== "success") {
++            throw new Error("Can't parse lock file")
++          } else {
++            appLockFile = parsedYarnLockFile.object
++          }
++        } else {
++          try {
++            appLockFile = yaml_1.parse(lockFileString)
++          } catch (e) {
++            console.error(e)
++            throw new Error("Can't parse lock file")
++          }
+         }
+         const installedVersion = getPackageVersion_1.getPackageVersion(path_1.join(path_1.resolve(appPath, packageDetails.path), "package.json"));
+-        const entries = Object.entries(appLockFile.object).filter(([k, v]) => k.startsWith(packageDetails.name + "@") &&
++        const entries = Object.entries(appLockFile).filter(([k, v]) => k.startsWith(packageDetails.name + "@") &&
+             v.version === installedVersion);
+         const resolutions = entries.map(([_, v]) => {
+             return v.resolved;
+@@ -49,6 +63,9 @@ function getPackageResolution({ packageDetails, packageManager, appPath, }) {
+         if (resolution.startsWith("file:.")) {
+             return `file:${path_1.resolve(appPath, resolution.slice("file:".length))}`;
+         }
++        if (resolution.startsWith("npm:")) {
++          return resolution.replace("npm:", "")
++        }
+         return resolution;
+     }
+     else {
+diff --git a/node_modules/patch-package/dist/makePatch.js b/node_modules/patch-package/dist/makePatch.js
+index 985589e..e8704dd 100644
+--- a/node_modules/patch-package/dist/makePatch.js
++++ b/node_modules/patch-package/dist/makePatch.js
+@@ -67,6 +67,10 @@ function makePatch({ packagePathSpecifier, appPath, packageManager, includePaths
+         if (packageManager === "yarn") {
+             console.info(chalk_1.default.grey("•"), `Installing ${packageDetails.name}@${packageVersion} with yarn`);
+             try {
++              spawnSafe_1.spawnSafeSync(`yarn`, ["set", "version", "classic"], {
++                  cwd: tmpRepoNpmRoot,
++                  logStdErrOnError: false,
++              });
+                 // try first without ignoring scripts in case they are required
+                 // this works in 99.99% of cases
+                 spawnSafe_1.spawnSafeSync(`yarn`, ["install", "--ignore-engines"], {
