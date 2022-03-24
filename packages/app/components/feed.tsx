@@ -102,7 +102,9 @@ const HeaderFeed = () => {
         </Animated.View>
       </Pressable>
 
-      <View tw="w-6" />
+      <View tw="w-3" />
+      <View tw="w-[1px] h-4 bg-black dark:bg-white opacity-50" />
+      <View tw="w-3" />
 
       <Pressable
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
