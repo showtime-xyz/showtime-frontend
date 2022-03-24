@@ -51,7 +51,7 @@ export const FeedList = () => {
       <PagerView
         ref={pagerRef}
         style={{ flex: 1 }}
-        initialPage={0} // TODO: check if the user is following some people, otherwise default to 1
+        initialPage={1}
         onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
       >
         <View key="following-feed">
@@ -124,7 +124,7 @@ const HeaderFeed = () => {
 };
 
 const FollowingFeed = () => {
-  const queryState = useFeed("following");
+  const queryState = useFeed("/following");
   const bottomBarHeight = useBottomTabBarHeight();
 
   return (
@@ -137,7 +137,7 @@ const FollowingFeed = () => {
 };
 
 const AlgorithmicFeed = () => {
-  const queryState = useFeed("algorithmic");
+  const queryState = useFeed("");
   const bottomBarHeight = useBottomTabBarHeight();
 
   return (
@@ -150,7 +150,7 @@ const AlgorithmicFeed = () => {
 };
 
 const CuratedFeed = () => {
-  const queryState = useFeed("curated");
+  const queryState = useFeed("/curated");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (

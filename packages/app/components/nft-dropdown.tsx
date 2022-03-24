@@ -43,7 +43,7 @@ function NFTDropdown({ nft }: Props) {
   const { unfollow, isFollowing } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
-  const { refresh } = useFeed();
+  const { refresh } = useFeed("");
 
   useEffect(() => {
     if (nft?.owner_address) {
