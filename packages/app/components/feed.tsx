@@ -2,8 +2,8 @@ import { Suspense, useEffect, useContext } from "react";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { MotiView } from "moti";
 import PagerView from "react-native-pager-view";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HeaderCenter } from "app/components/header";
@@ -67,6 +67,20 @@ export const FeedList = () => {
 const HeaderFeed = () => {
   const { selected, pagerRef } = useContext(FeedContext);
 
+  const animatedStyleFirstTab = useAnimatedStyle(() => {
+    return {
+      opacity: selected.value === 0 ? 1 : 0.5,
+      scale: selected.value === 0 ? 1 : 0.95,
+    };
+  });
+
+  const animatedStyleSecondTab = useAnimatedStyle(() => {
+    return {
+      opacity: selected.value === 1 ? 1 : 0.5,
+      scale: selected.value === 1 ? 1 : 0.95,
+    };
+  });
+
   return (
     <View tw="flex-row justify-center items-center">
       <Pressable
@@ -76,16 +90,11 @@ const HeaderFeed = () => {
           pagerRef?.current?.setPage(0);
         }}
       >
-        <MotiView
-          animate={{
-            opacity: selected.value === 0 ? 1 : 0.5,
-            scale: selected.value === 0 ? 1 : 0.95,
-          }}
-        >
+        <Animated.View style={animatedStyleFirstTab}>
           <Text variant="text-lg" tw="font-bold text-black dark:text-white">
             Following
           </Text>
-        </MotiView>
+        </Animated.View>
       </Pressable>
 
       <View tw="w-6" />
@@ -97,16 +106,11 @@ const HeaderFeed = () => {
           pagerRef?.current?.setPage(1);
         }}
       >
-        <MotiView
-          animate={{
-            opacity: selected.value === 1 ? 1 : 0.5,
-            scale: selected.value === 1 ? 1 : 0.95,
-          }}
-        >
+        <Animated.View style={animatedStyleSecondTab}>
           <Text variant="text-lg" tw="font-bold text-black dark:text-white">
             For You
           </Text>
-        </MotiView>
+        </Animated.View>
       </Pressable>
     </View>
   );
