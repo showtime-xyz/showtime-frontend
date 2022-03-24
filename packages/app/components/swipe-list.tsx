@@ -175,9 +175,9 @@ export const SwipeList = ({
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
         style={tw.style("dark:bg-gray-900 bg-gray-100")}
-        renderAheadOffset={screenHeight}
+        renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
-        onEndReachedThreshold={screenHeight}
+        onEndReachedThreshold={itemHeight}
         scrollViewProps={scrollViewProps}
         extendedState={extendedState}
       />
@@ -323,7 +323,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
             />
           </Pressable>
           <View tw="w-8" />
-          <NFTDropdown nft={nft} />
+          <NFTDropdown nftId={nft?.nft_id} />
         </View>
       </View>
 

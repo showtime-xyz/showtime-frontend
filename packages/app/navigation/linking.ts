@@ -10,6 +10,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       comments: "comments",
       transfer: "nft/:id/transfer",
       list: "nft/:id/list",
+      unlist: "nft/:id/unlist",
       details: "nft/:id/details",
       create: "create",
       burn: "burn",
