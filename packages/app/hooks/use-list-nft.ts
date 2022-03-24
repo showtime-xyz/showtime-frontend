@@ -170,7 +170,6 @@ export const useListNFT = () => {
 
         provider.once(transaction, () => {
           dispatch({ type: "status", status: "listingSuccess" });
-
           resolve(true);
         });
       } catch (error) {

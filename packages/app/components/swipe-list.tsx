@@ -324,7 +324,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
             />
           </Pressable>
           <View tw="w-8" />
-          <NFTDropdown nft={nft} />
+          <NFTDropdown nftId={nft?.nft_id} />
         </View>
       </View>
 
