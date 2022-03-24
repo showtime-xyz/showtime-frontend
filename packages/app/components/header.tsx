@@ -112,16 +112,13 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 };
 
 const HeaderCenter = () => {
-  const router = useRouter();
-  const isDark = useIsDarkMode();
-
   return (
     <Pressable
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="w-12 h-12 rounded-full items-center justify-center"
-      onPress={() => {
-        router.push("/");
-      }}
+      // onPress={() => {
+      //   router.push("/");
+      // }}
       // animate={useCallback(({ hovered }) => {
       // 	'worklet'
 
