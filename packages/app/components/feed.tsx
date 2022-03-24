@@ -3,7 +3,10 @@ import { Suspense, useEffect, useContext } from "react";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HeaderCenter } from "app/components/header";
@@ -68,17 +71,17 @@ const HeaderFeed = () => {
   const { selected, pagerRef } = useContext(FeedContext);
 
   const animatedStyleFirstTab = useAnimatedStyle(() => {
-    const scale = selected.value === 0 ? 1 : 0.95;
+    const scale = withTiming(selected.value === 0 ? 1 : 0.95);
     return {
-      opacity: selected.value === 0 ? 1 : 0.5,
+      opacity: withTiming(selected.value === 0 ? 1 : 0.5),
       transform: [{ scaleX: scale }, { scaleY: scale }],
     };
   });
 
   const animatedStyleSecondTab = useAnimatedStyle(() => {
-    const scale = selected.value === 1 ? 1 : 0.95;
+    const scale = withTiming(selected.value === 1 ? 1 : 0.95);
     return {
-      opacity: selected.value === 1 ? 1 : 0.5,
+      opacity: withTiming(selected.value === 1 ? 1 : 0.5),
       transform: [{ scaleX: scale }, { scaleY: scale }],
     };
   });
