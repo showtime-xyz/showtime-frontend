@@ -70,7 +70,7 @@ export const Trending = () => {
             }),
             [isDark]
           )}
-          contentContainerStyle={tw.style("space-between w-full")}
+          contentContainerStyle={tw.style("w-full")}
         >
           <Tabs.Trigger style={{ flex: 1 }}>
             <TabItem name="Today" selected={selected === 0} />
