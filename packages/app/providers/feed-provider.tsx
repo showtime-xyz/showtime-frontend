@@ -10,7 +10,7 @@ type FeedProviderProps = {
 };
 
 export function FeedProvider({ children }: FeedProviderProps) {
-  const selected = useSharedValue(0);
+  const selected = useSharedValue(1);
   const pagerRef = useRef<PagerView>(null);
 
   return (
