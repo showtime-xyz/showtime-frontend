@@ -10,7 +10,6 @@ import {
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
 import Reanimated, {
   useAnimatedStyle,

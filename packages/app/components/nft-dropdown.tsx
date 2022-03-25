@@ -44,7 +44,7 @@ function NFTDropdown({ nftId }: Props) {
   const { unfollow, isFollowing } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
-  const { refresh } = useFeed();
+  const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
 
   useEffect(() => {
