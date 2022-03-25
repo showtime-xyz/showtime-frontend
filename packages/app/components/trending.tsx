@@ -70,16 +70,17 @@ export const Trending = () => {
             }),
             [isDark]
           )}
+          contentContainerStyle={tw.style("w-full")}
         >
-          <Tabs.Trigger>
+          <Tabs.Trigger style={{ flex: 1 }}>
             <TabItem name="Today" selected={selected === 0} />
           </Tabs.Trigger>
 
-          <Tabs.Trigger>
+          <Tabs.Trigger style={{ flex: 1 }}>
             <TabItem name="This week" selected={selected === 1} />
           </Tabs.Trigger>
 
-          <Tabs.Trigger>
+          <Tabs.Trigger style={{ flex: 1 }}>
             <TabItem name="This month" selected={selected === 2} />
           </Tabs.Trigger>
 
