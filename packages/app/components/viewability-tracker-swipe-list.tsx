@@ -9,7 +9,8 @@ import {
   ViewabilityItemsContext,
 } from "./viewability-tracker-flatlist";
 
-type ViewabilityItemsContextType = Array<number | undefined>;
+type ViewabilityItemsContextType = number[];
+const MAX_VISIBLE_ITEM = 1;
 
 export const ViewabilityTrackerRecyclerList = forwardRef(
   (props: React.ComponentProps<typeof RecyclerListView>, ref: any) => {
@@ -30,20 +31,27 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
       (indices: number[]) => {
         // android sends 2 indices. Will work on adding viewability config in recyclyerlist
         // TODO: https://github.com/Flipkart/recyclerlistview/issues/551
-        if (Platform.OS === "ios" && indices.length === 1) {
-          const visibleIndex = indices[0];
-          const prevIndex = props.dataProvider.getDataForIndex(visibleIndex - 1)
-            ? visibleIndex - 1
-            : undefined;
-          const nextIndex = props.dataProvider.getDataForIndex(visibleIndex + 1)
-            ? visibleIndex + 1
-            : undefined;
+        const visibleIndex = indices[0];
+        if (visibleIndex !== visibleItems.value[1]) {
+          if (Platform.OS === "ios") {
+            if (indices.length === 1) {
+              const prevIndex = props.dataProvider.getDataForIndex(
+                visibleIndex - 1
+              )
+                ? visibleIndex - 1
+                : undefined;
+              const nextIndex = props.dataProvider.getDataForIndex(
+                visibleIndex + 1
+              )
+                ? visibleIndex + 1
+                : undefined;
 
-          const newWindow = [prevIndex, visibleIndex, nextIndex];
-
-          visibleItems.value = newWindow;
-        } else {
-          visibleItems.value = [undefined, indices[0], undefined];
+              const newWindow = [prevIndex, visibleIndex, nextIndex];
+              visibleItems.value = newWindow;
+            }
+          } else {
+            visibleItems.value = [undefined, visibleIndex, undefined];
+          }
         }
       },
       [props.dataProvider]

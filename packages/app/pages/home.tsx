@@ -1,3 +1,5 @@
+import { View } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useUser } from "app/hooks/use-user";
@@ -12,11 +14,29 @@ import { useIsDarkMode } from "design-system/hooks";
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 
+const HeaderRight = () => {
+  const router = useRouter();
+  const { isLoading, isAuthenticated } = useUser();
+
+  if (isAuthenticated || isLoading) return <View />;
+
+  return (
+    <Button
+      onPress={() => {
+        router.push("/login");
+      }}
+      variant="primary"
+      size="small"
+      labelTW="font-semibold"
+    >
+      Sign&nbsp;In
+    </Button>
+  );
+};
+
 function HomeNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
-  const { isLoading, isAuthenticated } = useUser();
-  const router = useRouter();
 
   return (
     <HomeStack.Navigator
@@ -24,21 +44,7 @@ function HomeNavigator() {
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
-        headerRight:
-          !isLoading && !isAuthenticated
-            ? () => (
-                <Button
-                  onPress={() => {
-                    router.push("/login");
-                  }}
-                  variant="primary"
-                  size="small"
-                  labelTW="font-semibold"
-                >
-                  Sign&nbsp;In
-                </Button>
-              )
-            : null,
+        headerRight: HeaderRight,
       })}
     >
       <HomeStack.Screen name="home" component={HomeScreen} />
