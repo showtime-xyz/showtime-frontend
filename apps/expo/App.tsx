@@ -31,6 +31,7 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { Sentry } from "app/lib/sentry";
 import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
@@ -46,11 +47,10 @@ import { ToastProvider } from "design-system/toast";
 enableScreens(true);
 // enableFreeze(true)
 
-// Sentry.init({
-// 	dsn: 'https://a0b390d1d15543a8a85ab594eb4b0c50@o614247.ingest.sentry.io/5860034',
-// 	enableInExpoDevelopment: true,
-// 	debug: process.env.STAGE === 'development',
-// })
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.STAGE,
+});
 
 LogBox.ignoreLogs([
   "Constants.deviceYearClass",
