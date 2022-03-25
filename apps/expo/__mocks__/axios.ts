@@ -46,6 +46,10 @@ module.exports = jest.fn(async (params: AxiosRequestConfig) => {
     return Promise.resolve({ data: [] });
   }
 
+  if (params.url === "/v3/feed/following?offset=1&limit=5") {
+    return Promise.resolve({ data: [] });
+  }
+
   if (params.url === "/v1/jwt/refresh") {
     return Promise.resolve({
       data: { access: "token", refresh: "new-refresh-token" },
