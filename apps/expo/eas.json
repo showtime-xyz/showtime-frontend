@@ -11,6 +11,7 @@
         "STAGE": "production"
       },
       "node": "14.18.1",
+      "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-2"
       }
@@ -26,6 +27,7 @@
         "STAGE": "staging"
       },
       "node": "14.18.1",
+      "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-2"
       }
@@ -40,6 +42,7 @@
         "STAGE": "development"
       },
       "node": "14.18.1",
+      "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-2"
       }
@@ -58,6 +61,6 @@
     }
   },
   "cli": {
-    "version": ">= 0.34.0"
+    "version": ">= 0.48.2"
   }
 }

@@ -22,7 +22,7 @@ describe("app mount - unauthenticated user", () => {
     expect(axios).toBeCalledWith(
       expect.objectContaining({
         method: "GET",
-        url: "/v3/feed/default?offset=1&limit=5",
+        url: "/v3/feed/curated?offset=1&limit=5",
       })
     );
   });

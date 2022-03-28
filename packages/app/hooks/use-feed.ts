@@ -6,12 +6,14 @@ import { NFT } from "app/types";
 
 type FeedAPIResponse = Array<NFT>;
 
-export const useFeed = () => {
+type FeedType = "/following" | "/curated" | "";
+
+export const useFeed = (type: FeedType) => {
   const { accessToken } = useAuth();
 
   const feedUrlFn = useCallback(
     (index) => {
-      const url = `/v3/feed${accessToken ? "" : "/default"}?offset=${
+      const url = `/v3/feed${accessToken ? type : "/curated"}?offset=${
         index + 1
       }&limit=5`;
       return url;

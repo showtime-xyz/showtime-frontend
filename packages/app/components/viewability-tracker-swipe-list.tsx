@@ -1,4 +1,5 @@
 import { forwardRef, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 import { RecyclerListView } from "recyclerlistview";
@@ -26,9 +27,35 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
       [_rowRenderer]
     );
 
-    const onVisibleIndicesChanged = useCallback((indices: number[]) => {
-      visibleItems.value = indices.slice(0, MAX_VISIBLE_ITEM);
-    }, []);
+    const onVisibleIndicesChanged = useCallback(
+      (indices: number[]) => {
+        // android sends 2 indices. Will work on adding viewability config in recyclyerlist
+        // TODO: https://github.com/Flipkart/recyclerlistview/issues/551
+        const visibleIndex = indices[0];
+        if (visibleIndex !== visibleItems.value[1]) {
+          if (Platform.OS === "ios") {
+            if (indices.length === 1) {
+              const prevIndex = props.dataProvider.getDataForIndex(
+                visibleIndex - 1
+              )
+                ? visibleIndex - 1
+                : undefined;
+              const nextIndex = props.dataProvider.getDataForIndex(
+                visibleIndex + 1
+              )
+                ? visibleIndex + 1
+                : undefined;
+
+              const newWindow = [prevIndex, visibleIndex, nextIndex];
+              visibleItems.value = newWindow;
+            }
+          } else {
+            visibleItems.value = [undefined, visibleIndex, undefined];
+          }
+        }
+      },
+      [props.dataProvider]
+    );
 
     return (
       <ViewabilityItemsContext.Provider value={visibleItems}>

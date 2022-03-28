@@ -117,7 +117,12 @@ export default {
     [
       "./plugins/with-pick-first.js",
       {
-        paths: ["lib/**/libreactnativejni.so"],
+        paths: [
+          "lib/**/libreactnativejni.so",
+          "lib/**/libreact_nativemodule_core.so",
+          "lib/**/libfbjni.so",
+          "lib/**/libturbomodulejsijni.so",
+        ],
       },
     ],
     "expo-community-flipper",
@@ -125,6 +130,9 @@ export default {
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
     "./plugins/react-native-cronet.js",
+    "./plugins/with-animated-webp-support.js",
+    "./plugins/with-fast-image-webp-support-android.js",
+    "./plugins/with-fast-image-webp-support-ios.js",
   ],
   hooks: {
     postPublish: [

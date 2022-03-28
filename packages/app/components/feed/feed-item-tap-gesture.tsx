@@ -6,6 +6,7 @@ import Animated, {
   useAnimatedStyle,
   withSequence,
   withSpring,
+  withDelay,
 } from "react-native-reanimated";
 
 import { useLike } from "app/context/like-context";
@@ -39,6 +40,15 @@ export const FeedItemTapGesture = ({
     return {
       opacity: heartAnimation.value,
       transform: [{ scale: heartAnimation.value }],
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.32,
+      shadowRadius: 5.46,
+
+      elevation: 9,
     };
   });
 
@@ -49,7 +59,10 @@ export const FeedItemTapGesture = ({
           ref={doubleTapRef}
           numberOfTaps={2}
           onActivated={useCallback(() => {
-            heartAnimation.value = withSequence(withSpring(1), withSpring(0));
+            heartAnimation.value = withSequence(
+              withSpring(1),
+              withDelay(200, withSpring(0))
+            );
 
             like();
             showHeader();
@@ -63,7 +76,7 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={100} height={100} color={tw.color("white")} />
+        <HeartFilled width={90} height={90} color={tw.color("white")} />
       </Animated.View>
     </>
   );

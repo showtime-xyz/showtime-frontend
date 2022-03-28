@@ -7,6 +7,7 @@ import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFeed } from "app/hooks/use-feed";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
@@ -30,10 +31,10 @@ import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
 type Props = {
-  nft?: NFT;
+  nftId?: NFT["nft_id"];
 };
 
-function NFTDropdown({ nft }: Props) {
+function NFTDropdown({ nftId }: Props) {
   const { mutate } = useSWRConfig();
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
@@ -43,7 +44,8 @@ function NFTDropdown({ nft }: Props) {
   const { unfollow, isFollowing } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
-  const { refresh } = useFeed();
+  const { refresh } = useFeed("");
+  const { data: nft } = useNFTDetails(nftId);
 
   useEffect(() => {
     if (nft?.owner_address) {
@@ -82,7 +84,7 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => router.push(`/nft/${nft?.nft_id}/details`)}
+          onSelect={() => router.push(`/nft/${nftId}/details`)}
           key="details"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
@@ -172,7 +174,7 @@ function NFTDropdown({ nft }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nft?.nft_id}/transfer`)}
+            onSelect={() => router.push(`/nft/${nftId}/transfer`)}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -184,7 +186,7 @@ function NFTDropdown({ nft }: Props) {
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nft?.nft_id}/list`)}
+            onSelect={() => router.push(`/nft/${nftId}/list`)}
             key="list"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -196,7 +198,7 @@ function NFTDropdown({ nft }: Props) {
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => {}}
+            onSelect={() => router.push(`/nft/${nftId}/unlist`)}
             key="unlist"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -209,7 +211,7 @@ function NFTDropdown({ nft }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => router.push(`/burn?nftId=${nft?.nft_id}`)}
+            onSelect={() => router.push(`/burn?nftId=${nftId}`)}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
