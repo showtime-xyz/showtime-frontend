@@ -2,7 +2,6 @@ import { ComponentProps } from "react";
 import {
   // Image as ReactNativeImage,
   ImageProps as ReactNativeImageProps,
-  Platform,
 } from "react-native";
 
 import { Blurhash } from "react-native-blurhash";
@@ -10,6 +9,7 @@ import FastImage from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+import { View } from "design-system/view";
 
 function Img({ source, height, width, ...props }: ReactNativeImageProps) {
   return (
@@ -58,23 +58,25 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
 
   // <View sx={{ borderRadius, overflow: 'hidden' }}>
 
-  // TODO: fix Blurhash on Android
-  if (blurhash && Platform.OS === "ios") {
+  if (blurhash) {
     return (
-      <Blurhash
-        blurhash={blurhash}
-        decodeWidth={16}
-        decodeHeight={16}
-        decodeAsync={true}
-        // resizeMode={props.resizeMode}
-      >
+      <View>
+        <View tw="absolute">
+          <Blurhash
+            blurhash={blurhash}
+            decodeWidth={16}
+            decodeHeight={16}
+            decodeAsync={true}
+            style={[style, tailwind.style(tw)]}
+          />
+        </View>
         <Img
-          style={[style, tailwind.style(tw, "bg-white dark:bg-black")]}
+          style={[style, tailwind.style(tw)]}
           width={width}
           height={height}
           {...props}
         />
-      </Blurhash>
+      </View>
     );
   }
 

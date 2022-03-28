@@ -39,7 +39,15 @@ const mockUserProfile: Profile = {
 
 module.exports = jest.fn(async (params: AxiosRequestConfig) => {
   if (params.url === "/v3/feed/default?offset=1&limit=5") {
-    return Promise.resolve({ data: { data: [] } });
+    return Promise.resolve({ data: [] });
+  }
+
+  if (params.url === "/v3/feed/curated?offset=1&limit=5") {
+    return Promise.resolve({ data: [] });
+  }
+
+  if (params.url === "/v3/feed/following?offset=1&limit=5") {
+    return Promise.resolve({ data: [] });
   }
 
   if (params.url === "/v1/jwt/refresh") {
@@ -73,7 +81,7 @@ module.exports = jest.fn(async (params: AxiosRequestConfig) => {
   }
 
   if (params.url === "/v3/feed?offset=1&limit=5") {
-    return Promise.resolve({ data: { data: [] } });
+    return Promise.resolve({ data: [] });
   }
 
   return axios(params);

@@ -3,7 +3,7 @@ import { FlatList, FlatListProps, ViewToken } from "react-native";
 
 import Animated, { useSharedValue } from "react-native-reanimated";
 
-const MAX_VIEWABLE_ITEMS = 4;
+const MAX_VIEWABLE_ITEMS = 2;
 
 type ViewabilityItemsContextType = any[];
 

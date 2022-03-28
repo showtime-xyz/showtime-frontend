@@ -17,6 +17,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
+import { UnlistScreen } from "app/screens/unlist";
 
 import { useIsDarkMode } from "design-system/hooks";
 
@@ -79,6 +80,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
         <Stack.Screen name="list" component={ListScreen} />
+        <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
       </Stack.Group>
     </Stack.Navigator>

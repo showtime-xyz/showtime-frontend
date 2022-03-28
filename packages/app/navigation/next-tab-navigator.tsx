@@ -73,6 +73,7 @@ export function NextTabNavigator({
         ],
         tabBarBackground: () =>
           width >= 768 ? null : (
+            // <BlurredBackground isDark={isDark} width={width} height={50} />
             <>
               {Platform.OS === "android" ? (
                 <View

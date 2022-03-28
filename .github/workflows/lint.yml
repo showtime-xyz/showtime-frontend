@@ -29,25 +29,25 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --check-files
+        run: yarn install --immutable
         env:
           CI: TRUE
 
       - name: Run ESLint
-        run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn eslint --output-file eslint_report.json --format json "apps/next-react/*.{js,jsx,ts,tsx}"
+        run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn lint
         continue-on-error: true
 
       - name: Annotate Code Linting Results
         uses: ataylorme/eslint-annotate-action@1.2.0
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: "eslint_report.json"
+          report-json: "apps/next-react/eslint_report.json"
 
       - name: Upload ESLint report
         uses: actions/upload-artifact@v2
         with:
           name: eslint_report.json
-          path: eslint_report.json
+          path: apps/next-react/eslint_report.json
 
       - name: Run Tests
         run: yarn test:expo

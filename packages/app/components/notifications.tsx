@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
   NotificationType,
@@ -16,7 +17,7 @@ import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { TextLink, Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { Skeleton, Text, View } from "design-system";
+import { ModalSheet, Skeleton, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   HeartFilled,
@@ -26,18 +27,21 @@ import {
 } from "design-system/icon";
 import { colors } from "design-system/tailwind/colors";
 
-type NotificationCardProp = { notification: NotificationType };
+type NotificationCardProp = { notification: NotificationType; setUsers: any };
 
 export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
 
+  const [users, setUsers] = useState([]);
+
   const renderItem = useCallback(({ item }: { item: NotificationType }) => {
-    return <NotificationCard notification={item} />;
+    return <NotificationCard notification={item} setUsers={setUsers} />;
   }, []);
 
   const keyExtractor = useCallback((item: NotificationType) => {
+    // console.log("item ", item.id);
     return item.id.toString();
   }, []);
 
@@ -80,22 +84,34 @@ export const Notifications = () => {
   useScrollToTop(listRef);
 
   return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      ItemSeparatorComponent={Separator}
-      onEndReached={fetchMore}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      ListFooterComponent={ListFooter}
-      ListEmptyComponent={ListEmptyComponent}
-      ref={listRef}
-    />
+    <>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={Separator}
+        onEndReached={fetchMore}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        ListFooterComponent={ListFooter}
+        ListEmptyComponent={ListEmptyComponent}
+        ref={listRef}
+      />
+
+      <ModalSheet
+        snapPoints={["85%"]}
+        title="People"
+        visible={users.length > 0}
+        close={() => setUsers([])}
+        onClose={() => setUsers([])}
+      >
+        <UserList onClose={() => setUsers([])} users={users} loading={false} />
+      </ModalSheet>
+    </>
   );
 };
 
-const NotificationCard = ({ notification }: NotificationCardProp) => {
+const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   const notificationInfo = useNotificationInfo(notification);
 
   return (
@@ -109,6 +125,7 @@ const NotificationCard = ({ notification }: NotificationCardProp) => {
       <NotificationDescription
         notificationInfo={notificationInfo}
         notification={notification}
+        setUsers={setUsers}
       />
     </View>
   );
@@ -117,9 +134,11 @@ const NotificationCard = ({ notification }: NotificationCardProp) => {
 const NotificationDescription = ({
   notification,
   notificationInfo,
+  setUsers,
 }: {
   notification: NotificationType;
   notificationInfo: any;
+  setUsers: any;
 }) => {
   const actors = notification.actors;
 
@@ -153,8 +172,14 @@ const NotificationDescription = ({
           {actors.length > 3 ? (
             <>
               <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
-              and {actors.length - 2} other{" "}
-              {actors.length - 2 == 1 ? "person " : "people "}
+              and{" "}
+              <Text
+                tw="text-black dark:text-white font-bold"
+                onPress={() => setUsers(actors.slice(2, actors.length))}
+              >
+                {actors.length - 2} other{" "}
+                {actors.length - 2 == 1 ? "person " : "people "}
+              </Text>
             </>
           ) : null}
 

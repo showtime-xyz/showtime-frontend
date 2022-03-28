@@ -105,3 +105,12 @@ storybook-static
 
 # Secrets
 apps/expo/service-account-key.json
+
+# Yarn Berry
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

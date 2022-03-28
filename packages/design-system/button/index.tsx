@@ -1,12 +1,7 @@
 import { useMemo } from "react";
 
-import { tw } from "../tailwind";
 import { BaseButton } from "./button-base";
-import {
-  ACCENT_COLOR,
-  CONTAINER_BACKGROUND_MAPPER,
-  ICON_COLOR_TW_MAPPER,
-} from "./constants";
+import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
 export { ButtonLabel } from "./button-label";

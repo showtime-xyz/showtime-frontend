@@ -4,6 +4,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 
 import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
+import { Button } from "design-system/button";
 import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
 import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
@@ -177,7 +178,8 @@ export function MessageRow({
         </Text>
 
         <View tw="flex-row ml--2 mt-2 mb--2">
-          <TextButton
+          <Button
+            variant="text"
             tw="px-2"
             accentColor={
               likedByMe
@@ -188,7 +190,7 @@ export function MessageRow({
           >
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
-          </TextButton>
+          </Button>
           {replayCount != undefined && (
             <TextButton
               tw="px-2"
@@ -214,9 +216,9 @@ export function MessageRow({
               </Text>
             )}
             {onDeletePress && (
-              <TextButton tw="ml--1.5" onPress={onDeletePress}>
+              <Button variant="text" tw="ml--1.5" onPress={onDeletePress}>
                 Delete
-              </TextButton>
+              </Button>
             )}
           </View>
         </View>

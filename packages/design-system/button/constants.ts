@@ -61,11 +61,11 @@ const ICON_SIZE_TW = {
 };
 
 const ICON_COLOR_TW_MAPPER = {
-  primary: ["white", colors.gray[900]],
-  secondary: [colors.gray[900], "white"],
-  tertiary: [colors.gray[900], "white"],
-  danger: ["white", "white"],
-  text: [colors.gray[900], "white"],
+  primary: ["#FFF", colors.gray[900]],
+  secondary: [colors.gray[900], "#FFF"],
+  tertiary: [colors.gray[900], "#FFF"],
+  danger: ["#FFF", "#FFF"],
+  text: [colors.gray[900], "#FFF"],
 };
 
 const ACCENT_COLOR = ["white", "black"];
