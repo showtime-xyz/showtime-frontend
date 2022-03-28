@@ -324,7 +324,6 @@ const TabList = ({
       alwaysBounceVertical={false}
       ListFooterComponent={ListFooterComponent}
       style={listStyle}
-      minHeight={0}
     />
   );
 };
