@@ -37,9 +37,9 @@ export const useViewabilityMount = ({
       }
 
       if (shouldPlay) {
-        videoRef.current.playAsync();
+        videoRef.current?.playAsync();
       } else {
-        videoRef.current.pauseAsync();
+        videoRef.current?.pauseAsync();
       }
 
       loaded.current = true;
