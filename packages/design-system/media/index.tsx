@@ -120,7 +120,7 @@ function Media({
         </PinchToZoom>
       ) : null}
 
-      {item?.mime_type?.startsWith("video") ? (
+      {/* {item?.mime_type?.startsWith("video") ? (
         <View>
           {numColumns > 1 && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
@@ -140,17 +140,17 @@ function Media({
             />
           </PinchToZoom>
         </View>
-      ) : null}
+      ) : null} */}
 
       {item?.mime_type?.startsWith("model") ? (
         <View tw={size}>
-          <Model
+          {/* <Model
             url={item?.source_url}
             fallbackUrl={item?.still_preview_url}
             numColumns={numColumns}
             blurhash={item?.blurhash}
             // {...mediaProps}
-          />
+          /> */}
         </View>
       ) : null}
     </View>

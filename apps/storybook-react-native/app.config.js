@@ -45,7 +45,8 @@ export default {
     favicon: "./assets/favicon.png",
   },
   plugins: [
-    "@config-plugins/detox",
+    // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
+    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
       "react-native-vision-camera",
       {
@@ -67,11 +68,20 @@ export default {
     [
       "./plugins/with-pick-first.js",
       {
-        paths: ["lib/**/libreactnativejni.so"],
+        paths: [
+          "lib/**/libreactnativejni.so",
+          "lib/**/libreact_nativemodule_core.so",
+          "lib/**/libfbjni.so",
+          "lib/**/libturbomodulejsijni.so",
+        ],
       },
     ],
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
+    "./plugins/react-native-cronet.js",
+    "./plugins/with-animated-webp-support.js",
+    "./plugins/with-fast-image-webp-support-android.js",
+    "./plugins/with-fast-image-webp-support-ios.js",
   ],
 };
