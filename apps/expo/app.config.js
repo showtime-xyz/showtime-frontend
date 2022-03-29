@@ -1,6 +1,7 @@
 const path = require("path");
 const STAGE = process.env.STAGE ?? "development";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
+const { withInfoPlist } = require("@expo/config-plugins");
 
 require("dotenv").config({
   path: envPath,
@@ -133,6 +134,20 @@ export default {
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
+    [
+      withInfoPlist,
+      (config) => {
+        if (!config.modResults) {
+          config.modResults = {};
+        }
+        config.modResults = {
+          ...config.modResults,
+          // Enable 120 FPS animations
+          CADisableMinimumFrameDurationOnPhone: true,
+        };
+        return config;
+      },
+    ],
   ],
   hooks: {
     postPublish: [
