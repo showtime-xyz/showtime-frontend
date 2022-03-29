@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useRef } from "react";
+import { useEffect, useContext, useRef } from "react";
 import { Alert } from "react-native";
 
 import axios from "axios";
@@ -7,15 +7,16 @@ import * as FileSystem from "expo-file-system";
 import { v4 as uuid } from "uuid";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
+import { MintContext } from "app/context/mint-context";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useWalletConnect } from "app/lib/walletconnect";
+import { getBiconomy } from "app/utilities";
 
-import { getBiconomy } from "../utilities";
 import { useWeb3 } from "./use-web3";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
-type MintNFTStatus =
+export type MintNFTStatus =
   | "idle"
   | "mediaUpload"
   | "mediaUploadError"
@@ -37,7 +38,7 @@ export type MintNFTType = {
   isMagic?: boolean;
 };
 
-const initialMintNFTState: MintNFTType = {
+export const initialMintNFTState: MintNFTType = {
   status: "idle" as MintNFTStatus,
   mediaIPFSHash: undefined,
   nftIPFSHash: undefined,
@@ -46,7 +47,7 @@ const initialMintNFTState: MintNFTType = {
   isMagic: undefined,
 };
 
-type ActionPayload = {
+export type ActionPayload = {
   mediaIPFSHash?: string;
   tokenId?: string;
   transaction?: string;
@@ -54,7 +55,7 @@ type ActionPayload = {
   isMagic?: boolean;
 };
 
-const mintNFTReducer = (
+export const mintNFTReducer = (
   state: MintNFTType,
   action: { type: MintNFTStatus; payload?: ActionPayload }
 ): MintNFTType => {
@@ -162,7 +163,7 @@ const getPinataToken = () => {
 };
 
 export const useMintNFT = () => {
-  const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
+  const { state, dispatch } = useContext(MintContext);
   const biconomyRef = useRef<any>();
   const { web3 } = useWeb3();
 

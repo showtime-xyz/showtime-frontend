@@ -17,6 +17,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
+import { MintContext } from "app/context/mint-context";
 import {
   Collection,
   defaultFilters,
@@ -115,6 +116,9 @@ const Profile = ({ address }: { address?: string }) => {
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
+  const { state: mintingState } = useContext(MintContext);
+
+  console.log(mintingState);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -214,7 +218,8 @@ const TabList = ({
           return { ...state, sortId: action.payload };
       }
     },
-    { ...defaultFilters, sortId: list.sort_id }
+    // { ...defaultFilters, sortId: list.sort_id }
+    { ...defaultFilters }
   );
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
@@ -223,6 +228,7 @@ const TabList = ({
       profileId,
       collectionId: filter.collectionId,
       sortId: filter.sortId,
+      refreshInterval: 1000,
     });
 
   const onCollectionChange = useCallback(

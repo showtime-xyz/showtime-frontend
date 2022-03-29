@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { MintContext } from "app/context/mint-context";
 import {
-  MintNFTType,
+  useMintNFT,
   supportedVideoExtensions,
   UseMintNFT,
 } from "app/hooks/use-mint-nft";
@@ -60,14 +61,14 @@ const createNFTValidationSchema = yup.object({
 
 interface CreateProps {
   uri: string;
-  state: MintNFTType;
-  startMinting: (params: UseMintNFT) => Promise<void>;
 }
 
-function Create({ uri, state, startMinting }: CreateProps) {
+function Create({ uri }: CreateProps) {
   const router = useRouter();
   const { user } = useUser();
   const { web3 } = useWeb3();
+  const { state } = useContext(MintContext);
+  const { startMinting } = useMintNFT();
 
   const isNotMagic = !web3;
 
@@ -106,8 +107,8 @@ function Create({ uri, state, startMinting }: CreateProps) {
   const enable = state.status === "idle" || isError;
 
   useEffect(
-    function redirectAfterSuccess() {
-      if (state.status === "mintingSuccess") {
+    function redirectAfterMintingStarted() {
+      if (state.status === "minting") {
         setTimeout(() => {
           router.pop();
           router.push(

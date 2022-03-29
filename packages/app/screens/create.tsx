@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Alert, Platform } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { Create } from "app/components/create";
-import { useMintNFT } from "app/hooks/use-mint-nft";
+import { MintContext } from "app/context/mint-context";
 import { mixpanel } from "app/lib/mixpanel";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
@@ -24,8 +24,7 @@ const CreateScreen = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const [uri] = useParam("uri");
-
-  const { startMinting, state } = useMintNFT();
+  const { state } = useContext(MintContext);
   //#endregion
 
   //#region variables
@@ -39,7 +38,7 @@ const CreateScreen = () => {
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      if (state.status === "mintingSuccess") {
+      if (state.status === "minting" || state.status === "mintingSuccess") {
         return;
       }
 
@@ -82,7 +81,7 @@ const CreateScreen = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <Create uri={uri} state={state} startMinting={startMinting} />
+      <Create uri={uri} />
     </CreateModal>
   );
 };
