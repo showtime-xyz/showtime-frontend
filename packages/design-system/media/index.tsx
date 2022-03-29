@@ -45,6 +45,8 @@ function Media({
           item?.still_preview_url
             ? item?.still_preview_url
             : item?.token_img_url
+            ? item?.token_img_url
+            : item?.source_url
         )
       : getImageUrl(
           item?.token_aspect_ratio,
@@ -59,6 +61,8 @@ function Media({
             : item?.still_preview_url
             ? item?.still_preview_url
             : item?.token_img_url
+            ? item?.token_img_url
+            : item?.source_url
         );
 
   const videoUri =
