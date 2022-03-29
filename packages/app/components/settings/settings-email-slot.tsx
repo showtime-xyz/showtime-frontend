@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import { AppContext } from "app/context/app-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useWeb3 } from "app/hooks/use-web3";
 import { magic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
@@ -16,23 +17,31 @@ import { SettingSubTitle } from "./settings-subtitle";
 
 export type EmailSlotProps = {
   email: WalletAddressesV2["email"];
+  address: WalletAddressesV2["address"];
 };
 
-export const SettingEmailSlotHeader = () => {
+export type EmailHeaderProps = {
+  hasEmail: boolean;
+};
+
+export const SettingEmailSlotHeader = (props: EmailHeaderProps) => {
+  const noEmailConnected = !props.hasEmail;
   const [viewAddEmail, setViewAddEmail] = useState(false);
   return (
     <View>
       <SettingSubTitle>
         <Text tw="text-gray-900 dark:text-white font-bold text-xl">
-          Manage your emails
+          Manage your email
         </Text>
-        <Button
-          variant="primary"
-          size="small"
-          onPress={() => setViewAddEmail(true)}
-        >
-          Add Email
-        </Button>
+        {noEmailConnected ? (
+          <Button
+            variant="primary"
+            size="small"
+            onPress={() => setViewAddEmail(true)}
+          >
+            Add Email
+          </Button>
+        ) : null}
       </SettingSubTitle>
       <AddEmail
         visibility={viewAddEmail}
@@ -80,24 +89,25 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
-  const [magicAddress, setMagicAddress] = useState<string>();
-  const context = useContext(AppContext);
+  const { web3 } = useWeb3();
+  const { userAddress } = useCurrentUserAddress();
+
   const email = props.email;
-  const isMagic = !!context.web3;
+  const isMagic = !!web3;
+
+  const backendAddress = props.address;
 
   const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
       const magicMetaData = await magic?.user?.getMetadata();
       const currentEmail = magicMetaData.email;
       const currentMagicAddress = magicMetaData.publicAddress;
-      const isMatchingMagic =
+      const isMatchingMagicEmail =
         currentEmail?.toLowerCase() === email?.toLowerCase();
-      if (isMatchingMagic) {
+      const isMatchingMagicAddress =
+        currentMagicAddress?.toLowerCase() === userAddress?.toLowerCase();
+      if (isMatchingMagicEmail && isMatchingMagicAddress) {
         setIsCurrentEmail(true);
-      }
-
-      if (isMatchingMagic && currentMagicAddress) {
-        setMagicAddress(currentMagicAddress);
       }
     }
   }, [isMagic, email]);
@@ -117,7 +127,11 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         ) : null}
       </View>
       <View tw="flex justify-center">
-        <AddressMenu address={magicAddress} ctaCopy="Delete Email Address" />
+        <AddressMenu
+          address={backendAddress}
+          ctaCopy="Delete Email Address"
+          isCurrent={isCurrentEmail}
+        />
       </View>
     </View>
   );

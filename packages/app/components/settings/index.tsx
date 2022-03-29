@@ -29,7 +29,8 @@ import { SlotSeparator } from "./slot-separator";
 
 const renderEmail = ({ item }: { item: EmailSlotProps }) => {
   const email = item.email;
-  return <SettingsEmailSlot email={email} />;
+  const backendAddress = item.address;
+  return <SettingsEmailSlot email={email} address={backendAddress} />;
 };
 
 const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
@@ -51,6 +52,8 @@ const SettingsTabs = () => {
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+
+  // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
@@ -132,7 +135,11 @@ const SettingsTabs = () => {
               }
               return <SettingsEmailSkeletonSlot />;
             }}
-            ListHeaderComponent={<SettingEmailSlotHeader />}
+            ListHeaderComponent={
+              <SettingEmailSlotHeader
+                hasEmail={Boolean(emailWallets?.length)}
+              />
+            }
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
