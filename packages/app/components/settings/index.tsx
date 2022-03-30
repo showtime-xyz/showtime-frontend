@@ -13,6 +13,7 @@ import { View, Text } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
+import packageJson from "../../../../package.json";
 import {
   EmailSlotProps,
   SettingsEmailSlot,
@@ -90,7 +91,7 @@ const SettingsTabs = () => {
               variant="text-2xl"
               tw="text-gray-100 dark:text-gray-900 font-extrabold"
             >
-              v{Constants.manifest.version}
+              v{Constants?.manifest?.version ?? packageJson?.version}
             </Text>
           </View>
         </Tabs.Header>
