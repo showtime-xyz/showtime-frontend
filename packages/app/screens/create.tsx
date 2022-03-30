@@ -38,7 +38,12 @@ const CreateScreen = () => {
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      if (state.status === "minting" || state.status === "mintingSuccess") {
+      if (
+        state.status === "mediaUpload" ||
+        state.status === "nftJSONUpload" ||
+        state.status === "minting" ||
+        state.status === "mintingSuccess"
+      ) {
         return;
       }
 

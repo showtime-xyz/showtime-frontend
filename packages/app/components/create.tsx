@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { MintContext } from "app/context/mint-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import {
   useMintNFT,
   supportedVideoExtensions,
@@ -69,6 +70,7 @@ function Create({ uri }: CreateProps) {
   const { web3 } = useWeb3();
   const { state } = useContext(MintContext);
   const { startMinting } = useMintNFT();
+  const { userAddress: address } = useCurrentUserAddress();
 
   const isNotMagic = !web3;
 
@@ -107,17 +109,15 @@ function Create({ uri }: CreateProps) {
   const enable = state.status === "idle" || isError;
 
   useEffect(
-    function redirectAfterMintingStarted() {
-      if (state.status === "minting") {
+    function redirect() {
+      if (state.status === "mediaUpload" || state.status === "nftJSONUpload") {
         setTimeout(() => {
           router.pop();
-          router.push(
-            `/profile/${user?.data?.profile?.wallet_addresses_v2?.[0]?.address}`
-          );
+          router.push(`/profile/${address}`);
         }, 1000);
       }
     },
-    [state.status, user]
+    [state.status, address]
   );
 
   return (

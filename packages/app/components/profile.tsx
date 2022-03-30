@@ -124,7 +124,11 @@ const Profile = ({ address }: { address?: string }) => {
   useEffect(() => {
     console.log(mintingState);
 
-    if (mintingState.status === "minting") {
+    if (
+      mintingState.status === "mediaUpload" ||
+      mintingState.status === "nftJSONUpload" ||
+      mintingState.status === "minting"
+    ) {
       toast?.show({
         element: (
           <View tw="flex-row items-center p-5">
@@ -133,7 +137,7 @@ const Profile = ({ address }: { address?: string }) => {
             <Text tw="dark:text-white text-black">Creating...</Text>
           </View>
         ),
-        hideAfter: 2000,
+        hideAfter: 4000,
       });
     }
 
