@@ -133,6 +133,7 @@ const Profile = ({ address }: { address?: string }) => {
             <Text tw="dark:text-white text-black">Creating...</Text>
           </View>
         ),
+        hideAfter: 2000,
       });
     }
 
