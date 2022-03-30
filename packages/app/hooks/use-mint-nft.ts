@@ -36,6 +36,8 @@ export type MintNFTType = {
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
+  filePath?: string;
+  fileType?: string;
 };
 
 export const initialMintNFTState: MintNFTType = {
@@ -45,6 +47,8 @@ export const initialMintNFTState: MintNFTType = {
   tokenId: undefined,
   transaction: undefined,
   isMagic: undefined,
+  filePath: undefined,
+  fileType: undefined,
 };
 
 export type ActionPayload = {
@@ -53,6 +57,8 @@ export type ActionPayload = {
   transaction?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
+  filePath?: string;
+  fileType?: string;
 };
 
 export const mintNFTReducer = (
@@ -67,6 +73,8 @@ export const mintNFTReducer = (
         mediaIPFSHash: undefined,
         tokenId: undefined,
         transaction: undefined,
+        filePath: action.payload?.filePath,
+        fileType: action.payload?.fileType,
       };
     case "mediaUploadSuccess":
       return {
@@ -154,6 +162,7 @@ const getFileNameAndType = (filePath: string) => {
     };
   }
 };
+
 const getPinataToken = () => {
   return showtimeAPIAxios({
     url: "/v1/pinata/key",
@@ -193,7 +202,10 @@ export const useMintNFT = () => {
       console.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData) {
-        dispatch({ type: "mediaUpload" });
+        dispatch({
+          type: "mediaUpload",
+          payload: { filePath: params.filePath, fileType: fileMetaData.type },
+        });
 
         const pinataToken = await getPinataToken();
         const formData = new FormData();
@@ -366,7 +378,7 @@ export const useMintNFT = () => {
           payload: {
             tokenId: contract.interface
               .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-              .toNumber(),
+              .toString(),
             transaction: transaction,
           },
         });

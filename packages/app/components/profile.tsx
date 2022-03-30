@@ -145,8 +145,6 @@ const Profile = ({ address }: { address?: string }) => {
         message: "Created 🎉 Your NFT will appear in a minute!",
         hideAfter: 4000,
       });
-
-      // TODO: create link to NFT page based on chain name + contract id + token id
     }
   }, [mintingState]);
 
@@ -238,6 +236,7 @@ const TabList = ({
     return item.nft_id;
   }, []);
   const router = useRouter();
+  const { state: mintingState } = useContext(MintContext);
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -344,7 +343,24 @@ const TabList = ({
 
   return (
     <Tabs.FlatList
-      data={isBlocked ? null : data}
+      data={
+        isBlocked
+          ? null
+          : mintingState.status !== "idle" &&
+            mintingState.tokenId !== data?.[0]?.token_id
+          ? [
+              {
+                loading: true,
+                chain_name: "polygon",
+                contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+                token_id: mintingState.tokenId ?? "1",
+                source_url: mintingState.filePath ?? "",
+                mime_type: mintingState.fileType ?? "image/jpeg",
+              },
+              ...data,
+            ]
+          : data
+      }
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       refreshing={isRefreshing}
