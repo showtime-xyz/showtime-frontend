@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   useContext,
+  useEffect,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
@@ -49,6 +50,7 @@ import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
+import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
@@ -103,6 +105,7 @@ const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
+  const toast = useToast();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -118,7 +121,31 @@ const Profile = ({ address }: { address?: string }) => {
   const headerHeight = useHeaderHeight();
   const { state: mintingState } = useContext(MintContext);
 
-  console.log(mintingState);
+  useEffect(() => {
+    console.log(mintingState);
+
+    if (mintingState.status === "minting") {
+      toast?.show({
+        element: (
+          <View tw="flex-row items-center p-5">
+            <Spinner size={20} />
+            <View tw="mx-1" />
+            <Text tw="dark:text-white text-black">Creating...</Text>
+          </View>
+        ),
+      });
+    }
+
+    if (mintingState.status === "transactionCompleted") {
+      toast?.show({ message: "Transaction completed", hideAfter: 2000 });
+    }
+
+    if (mintingState.status === "mintingSuccess") {
+      toast?.show({ message: "Created 🎉", hideAfter: 4000 });
+
+      // TODO: create link to NFT page based on chain name + contract id + token id
+    }
+  }, [mintingState]);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
