@@ -122,12 +122,11 @@ const Profile = ({ address }: { address?: string }) => {
   const { state: mintingState } = useContext(MintContext);
 
   useEffect(() => {
-    console.log(mintingState);
-
     if (
       mintingState.status === "mediaUpload" ||
       mintingState.status === "nftJSONUpload" ||
-      mintingState.status === "minting"
+      mintingState.status === "minting" ||
+      mintingState.status === "transactionCompleted"
     ) {
       toast?.show({
         element: (
@@ -141,12 +140,11 @@ const Profile = ({ address }: { address?: string }) => {
       });
     }
 
-    if (mintingState.status === "transactionCompleted") {
-      toast?.show({ message: "Transaction completed", hideAfter: 2000 });
-    }
-
     if (mintingState.status === "mintingSuccess") {
-      toast?.show({ message: "Created 🎉", hideAfter: 4000 });
+      toast?.show({
+        message: "Created 🎉 Your NFT will appear in a minute!",
+        hideAfter: 4000,
+      });
 
       // TODO: create link to NFT page based on chain name + contract id + token id
     }
