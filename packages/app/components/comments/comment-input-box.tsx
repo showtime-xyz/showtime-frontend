@@ -10,7 +10,8 @@ import { Alert, ViewStyle } from "react-native";
 import { CommentType } from "app/hooks/api/use-comments";
 import { formatAddressShort } from "app/utilities";
 
-import { Text, View } from "design-system";
+import { Button, Text, View } from "design-system";
+import { Close } from "design-system/icon";
 import {
   MessageBox,
   MessageBoxMethods,
@@ -69,6 +70,11 @@ export const CommentInputBox = forwardRef<
     [submit, selectedComment]
   );
 
+  const handleOnClearPress = useCallback(() => {
+    setSelectedComment(null);
+    inputRef.current?.setValue("");
+  }, []);
+
   const handleReply = (comment: CommentType) => {
     setSelectedComment(comment);
     inputRef.current?.setValue(`@${getUsername(comment)} `);
@@ -83,11 +89,18 @@ export const CommentInputBox = forwardRef<
   return (
     <View pointerEvents="box-none" style={style} collapsable={true}>
       {selectedComment && (
-        <View tw="bg-gray-900 dark:bg-white">
-          <Text
-            variant="text-xs"
-            tw="font-bold	px-4 py-2"
-          >{`Reply to @${getUsername(selectedComment)}`}</Text>
+        <View tw="bg-gray-900 dark:bg-white flex-row justify-between items-center px-4">
+          <Text variant="text-xs" tw="font-bold py-2">{`Reply to @${getUsername(
+            selectedComment
+          )}`}</Text>
+          <Button
+            variant="text"
+            size="small"
+            tw="mr--4"
+            onPress={handleOnClearPress}
+          >
+            <Close color={"black"} width={16} height={16} />
+          </Button>
         </View>
       )}
       <MessageBox
