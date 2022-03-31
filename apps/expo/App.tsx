@@ -327,16 +327,16 @@ function App() {
                     <AppContextProvider>
                       <AuthProvider>
                         <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <MintProvider>
+                          <MintProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
                                   <StatusBar style="auto" />
                                   <RootStackNavigator />
-                                </MintProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </MintProvider>
                         </UserProvider>
                       </AuthProvider>
                     </AppContextProvider>
