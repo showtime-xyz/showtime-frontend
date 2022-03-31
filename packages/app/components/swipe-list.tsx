@@ -238,7 +238,9 @@ export const FeedItem = memo(
               />
             ) : (
               <Image
-                source={{ uri: nft.still_preview_url }}
+                source={{
+                  uri: `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}?still_preview`,
+                }}
                 style={tw.style("w-full h-full")}
               />
             )}
