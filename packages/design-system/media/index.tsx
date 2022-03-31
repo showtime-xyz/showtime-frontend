@@ -27,7 +27,9 @@ function Media({
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
-  const mediaUri = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${item?.chain_name}/${item?.contract_address}/${item?.token_id}`;
+  const mediaUri = item?.loading
+    ? item?.source_url
+    : `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${item?.chain_name}/${item?.contract_address}/${item?.token_id}`;
   const mediaStillPreviewUri = mediaUri + "?still_preview";
 
   const size = tw
