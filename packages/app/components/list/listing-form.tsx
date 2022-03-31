@@ -84,7 +84,7 @@ export const ListingForm = (props: Props) => {
         router.push(`/profile/${address}`);
       }, 1000);
     }
-  }, [state.status]);
+  }, [state.status, address]);
 
   const createListValidationSchema = useMemo(
     () =>

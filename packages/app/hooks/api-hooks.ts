@@ -139,6 +139,7 @@ type UserProfileNFTs = {
   showDuplicates?: number;
   showHidden?: number;
   collectionId?: number;
+  refreshInterval?: number;
 };
 
 type UseProfileNFTs = {
@@ -152,7 +153,7 @@ export const defaultFilters = {
   showDuplicates: 0,
   showHidden: 0,
   collectionId: 0,
-  sortId: 1,
+  sortId: 2,
 };
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
@@ -163,6 +164,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     showDuplicates = defaultFilters.showDuplicates,
     showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
+    refreshInterval,
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
@@ -176,7 +178,8 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   );
 
   const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params.profileId ? trendingCreatorsUrlFn : null
+    params.profileId ? trendingCreatorsUrlFn : null,
+    refreshInterval
   );
 
   const newData = useMemo(() => {

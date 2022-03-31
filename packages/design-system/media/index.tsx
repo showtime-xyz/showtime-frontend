@@ -20,7 +20,7 @@ const getImageUrl = (tokenAspectRatio: string, imgUrl?: string) => {
 };
 
 type Props = {
-  item: NFT;
+  item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
   resizeMode?: "contain";
@@ -45,6 +45,8 @@ function Media({
           item?.still_preview_url
             ? item?.still_preview_url
             : item?.token_img_url
+            ? item?.token_img_url
+            : item?.source_url
         )
       : getImageUrl(
           item?.token_aspect_ratio,
@@ -59,6 +61,8 @@ function Media({
             : item?.still_preview_url
             ? item?.still_preview_url
             : item?.token_img_url
+            ? item?.token_img_url
+            : item?.source_url
         );
 
   const videoUri =
@@ -80,9 +84,7 @@ function Media({
     <View
       tw={[
         numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
-        // item?.token_background_color
-        //   ? `bg-[#${item?.token_background_color}]`
-        //   : "bg-black",
+        item?.loading ? "opacity-50" : "opacity-100",
       ]}
     >
       {imageUri &&

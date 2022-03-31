@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import dynamic from "next/dynamic";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
