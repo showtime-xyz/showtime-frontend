@@ -8,8 +8,9 @@ import {
 import { Alert, ViewStyle } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
+import { formatAddressShort } from "app/utilities";
 
-import { Spinner, Text, View } from "design-system";
+import { Text, View } from "design-system";
 import {
   MessageBox,
   MessageBoxMethods,
@@ -26,7 +27,7 @@ export interface CommentInputBoxMethods {
 }
 
 const getUsername = (comment?: CommentType) =>
-  comment?.username ?? comment?.address.substring(0, 8) ?? "";
+  comment?.username ?? formatAddressShort(comment?.address) ?? "";
 
 export const CommentInputBox = forwardRef<
   CommentInputBoxMethods,

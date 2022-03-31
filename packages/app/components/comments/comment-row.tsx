@@ -3,7 +3,7 @@ import { Fragment, memo, useCallback, useMemo, useState } from "react";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
-import { getRoundedCount } from "app/utilities";
+import { formatAddressShort, getRoundedCount } from "app/utilities";
 
 import { MessageMore } from "design-system/messages/message-more";
 import { MessageRow } from "design-system/messages/message-row";
@@ -100,8 +100,6 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment]);
-
-  console.log("comment", comment);
   //#endregion
 
   return (
@@ -110,7 +108,7 @@ function CommentRowComponent({
         username={
           comment.username && comment.username.length > 0
             ? comment.username
-            : comment.address.substring(0, 8)
+            : formatAddressShort(comment.address)
         }
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
