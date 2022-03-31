@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   useContext,
+  useEffect,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
@@ -17,6 +18,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
+import { MintContext } from "app/context/mint-context";
 import {
   Collection,
   defaultFilters,
@@ -48,6 +50,7 @@ import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
+import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
@@ -102,6 +105,7 @@ const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
+  const toast = useToast();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -115,6 +119,34 @@ const Profile = ({ address }: { address?: string }) => {
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
+  const { state: mintingState } = useContext(MintContext);
+
+  useEffect(() => {
+    if (
+      mintingState.status === "mediaUpload" ||
+      mintingState.status === "nftJSONUpload" ||
+      mintingState.status === "minting" ||
+      mintingState.status === "transactionCompleted"
+    ) {
+      toast?.show({
+        element: (
+          <View tw="flex-row items-center p-5">
+            <Spinner size={20} />
+            <View tw="mx-1" />
+            <Text tw="dark:text-white text-black">Creating...</Text>
+          </View>
+        ),
+        hideAfter: 4000,
+      });
+    }
+
+    if (mintingState.status === "mintingSuccess") {
+      toast?.show({
+        message: "Created 🎉 Your NFT will appear in a minute!",
+        hideAfter: 4000,
+      });
+    }
+  }, [mintingState]);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -204,6 +236,7 @@ const TabList = ({
     return item.nft_id;
   }, []);
   const router = useRouter();
+  const { state: mintingState } = useContext(MintContext);
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -214,7 +247,8 @@ const TabList = ({
           return { ...state, sortId: action.payload };
       }
     },
-    { ...defaultFilters, sortId: list.sort_id }
+    // { ...defaultFilters, sortId: list.sort_id }
+    { ...defaultFilters }
   );
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
@@ -223,6 +257,7 @@ const TabList = ({
       profileId,
       collectionId: filter.collectionId,
       sortId: filter.sortId,
+      refreshInterval: 1000,
     });
 
   const onCollectionChange = useCallback(
@@ -308,7 +343,24 @@ const TabList = ({
 
   return (
     <Tabs.FlatList
-      data={isBlocked ? null : data}
+      data={
+        isBlocked
+          ? null
+          : mintingState.status !== "idle" &&
+            mintingState.tokenId !== data?.[0]?.token_id
+          ? [
+              {
+                loading: true,
+                chain_name: "polygon",
+                contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+                token_id: mintingState.tokenId ?? "1",
+                source_url: mintingState.filePath ?? "",
+                mime_type: mintingState.fileType ?? "image/jpeg",
+              },
+              ...data,
+            ]
+          : data
+      }
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       refreshing={isRefreshing}

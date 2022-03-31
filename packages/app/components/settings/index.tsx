@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { Dimensions, Platform } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
+import Constants from "expo-constants";
 
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -12,6 +13,7 @@ import { View, Text } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
+import packageJson from "../../../../package.json";
 import {
   EmailSlotProps,
   SettingsEmailSlot,
@@ -29,7 +31,8 @@ import { SlotSeparator } from "./slot-separator";
 
 const renderEmail = ({ item }: { item: EmailSlotProps }) => {
   const email = item.email;
-  return <SettingsEmailSlot email={email} />;
+  const backendAddress = item.address;
+  return <SettingsEmailSlot email={email} address={backendAddress} />;
 };
 
 const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
@@ -51,6 +54,8 @@ const SettingsTabs = () => {
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+
+  // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
@@ -78,12 +83,18 @@ const SettingsTabs = () => {
       >
         <Tabs.Header>
           {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
-          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
+          <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between">
             <Text
               variant="text-2xl"
               tw="text-gray-900 dark:text-white font-extrabold"
             >
               Settings
+            </Text>
+            <Text
+              variant="text-2xl"
+              tw="text-gray-100 dark:text-gray-900 font-extrabold"
+            >
+              v{Constants?.manifest?.version ?? packageJson?.version}
             </Text>
           </View>
         </Tabs.Header>
@@ -132,7 +143,11 @@ const SettingsTabs = () => {
               }
               return <SettingsEmailSkeletonSlot />;
             }}
-            ListHeaderComponent={<SettingEmailSlotHeader />}
+            ListHeaderComponent={
+              <SettingEmailSlotHeader
+                hasEmail={Boolean(emailWallets?.length)}
+              />
+            }
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}

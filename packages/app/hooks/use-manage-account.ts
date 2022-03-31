@@ -2,8 +2,8 @@ import { useCallback } from "react";
 
 import { useSWRConfig } from "swr";
 
-import { USER_API_KEY } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { useToast } from "design-system/toast";
 
@@ -23,7 +23,7 @@ export function useManageAccount() {
           },
         });
 
-        mutate(USER_API_KEY);
+        mutate(MY_INFO_ENDPOINT);
 
         toast?.show({
           message: "Email added and will soon appear on your profile",
@@ -49,7 +49,7 @@ export function useManageAccount() {
           data: { address },
         });
 
-        mutate(USER_API_KEY);
+        mutate(MY_INFO_ENDPOINT);
 
         toast?.show({
           message: "Account removed and will disappear from your profile soon",

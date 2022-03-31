@@ -36,6 +36,7 @@ import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
+import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
@@ -329,8 +330,10 @@ function App() {
                           <BottomSheetModalProvider>
                             <GrowthBookProvider growthbook={growthbook}>
                               <FeedProvider>
-                                <StatusBar style="auto" />
-                                <RootStackNavigator />
+                                <MintProvider>
+                                  <StatusBar style="auto" />
+                                  <RootStackNavigator />
+                                </MintProvider>
                               </FeedProvider>
                             </GrowthBookProvider>
                           </BottomSheetModalProvider>

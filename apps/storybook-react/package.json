@@ -14,8 +14,8 @@
   "dependencies": {
     "design-system": "*",
     "next": "12.1.0",
-    "react": "18.0.0-rc.0",
-    "react-dom": "18.0.0-rc.0",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-native-web": "0.17.5"
   },
   "devDependencies": {

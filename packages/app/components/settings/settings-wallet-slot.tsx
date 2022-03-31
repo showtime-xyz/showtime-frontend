@@ -1,10 +1,7 @@
-import { useContext } from "react";
-
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import { AppContext } from "app/context/app-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
-import { useWalletConnect } from "app/lib/walletconnect";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";
@@ -104,18 +101,17 @@ export const SettingsWalletSlotPlaceholder = () => {
 };
 
 export const SettingsWalletSlot = (props: Props) => {
-  const context = useContext(AppContext);
-  const connector = useWalletConnect();
-  const notMagic = !!context.web3 === false;
   const address = props.address;
   const ensDomain = props.ensDomain;
+
+  const { userAddress } = useCurrentUserAddress();
+
   const mintingEnabled = props.mintingEnabled;
   const display = ensDomain ? ensDomain : formatAddressShort(address);
   const isEthereumAddress = address.startsWith("0x");
-  const [connectedAddress] = connector?.session?.accounts;
 
   const isConnectedAddress =
-    notMagic && connectedAddress?.toLowerCase() === address?.toLowerCase();
+    userAddress.toLowerCase() === address?.toLowerCase();
   const multiplePills = isConnectedAddress && mintingEnabled;
 
   return (
@@ -141,7 +137,11 @@ export const SettingsWalletSlot = (props: Props) => {
         <Text tw="text-gray-900 dark:text-white text-xs pb-3">{address}</Text>
       </View>
       <View tw="flex justify-center">
-        <AddressMenu address={address} ctaCopy="Delete Wallet" />
+        <AddressMenu
+          address={address}
+          ctaCopy="Delete Wallet"
+          isCurrent={isConnectedAddress}
+        />
       </View>
     </View>
   );
