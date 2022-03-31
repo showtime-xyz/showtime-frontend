@@ -1,4 +1,4 @@
-import { ActivityIndicator, Spinner, Text, View } from "design-system";
+import { Spinner, Text, View } from "design-system";
 
 interface CommentsStatusProps {
   isLoading?: boolean;

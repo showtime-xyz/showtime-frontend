@@ -1,0 +1,100 @@
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import { Alert, ViewStyle } from "react-native";
+
+import { CommentType } from "app/hooks/api/use-comments";
+
+import { Spinner, Text, View } from "design-system";
+import {
+  MessageBox,
+  MessageBoxMethods,
+} from "design-system/messages/message-box-new";
+
+interface CommentInputBoxProps {
+  submitting?: boolean;
+  style?: ViewStyle;
+  submit: (message: string, parentId?: number | null) => Promise<void>;
+}
+
+export interface CommentInputBoxMethods {
+  reply: (comment: CommentType) => void;
+}
+
+const getUsername = (comment?: CommentType) =>
+  comment?.username ?? comment?.address.substring(0, 8) ?? "";
+
+export const CommentInputBox = forwardRef<
+  CommentInputBoxMethods,
+  CommentInputBoxProps
+>(function CommentInputBox({ submitting, style, submit }, ref) {
+  //#region variables
+  const inputRef = useRef<MessageBoxMethods>(null);
+  const [selectedComment, setSelectedComment] = useState<CommentType | null>(
+    null
+  );
+  //#endregion
+
+  //#region callbacks
+  const handleOnSubmitComment = useCallback(
+    async function handleOnSubmitComment(text: string) {
+      const _newComment = async () => {
+        try {
+          await submit(text, selectedComment?.comment_id);
+          inputRef.current?.reset();
+        } catch (error) {
+          Alert.alert("Error", "Cannot add comment.", [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Try Again",
+              style: "default",
+              onPress: _newComment,
+            },
+          ]);
+        }
+      };
+
+      await _newComment();
+
+      setSelectedComment(null);
+    },
+    [submit, selectedComment]
+  );
+
+  const handleReply = (comment: CommentType) => {
+    setSelectedComment(comment);
+    inputRef.current?.setValue(`@${getUsername(comment)} `);
+    inputRef.current?.focus();
+  };
+  //#endregion
+
+  useImperativeHandle(ref, () => ({
+    reply: handleReply,
+  }));
+
+  return (
+    <View pointerEvents="box-none" style={style} collapsable={true}>
+      {selectedComment && (
+        <View tw="bg-gray-900 dark:bg-white">
+          <Text
+            variant="text-xs"
+            tw="font-bold	px-4 py-2"
+          >{`Reply to @${getUsername(selectedComment)}`}</Text>
+        </View>
+      )}
+      <MessageBox
+        ref={inputRef}
+        submitting={submitting}
+        style={{ paddingHorizontal: 16 }}
+        onSubmit={handleOnSubmitComment}
+      />
+    </View>
+  );
+});

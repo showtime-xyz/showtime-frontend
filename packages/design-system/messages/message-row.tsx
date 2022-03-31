@@ -83,6 +83,11 @@ interface MessageRowProps {
    * @default undefined
    */
   onDeletePress?: () => void;
+  /**
+   * Defines the reply press callback
+   * @default undefined
+   */
+  onReplyPress?: () => void;
 }
 
 export function MessageRow({
@@ -100,6 +105,7 @@ export function MessageRow({
   repliedByMe,
   onLikePress,
   onDeletePress,
+  onReplyPress,
 }: MessageRowProps) {
   //#region variables
   const createdAtText = useMemo(
@@ -183,7 +189,7 @@ export function MessageRow({
             tw="px-2"
             accentColor={
               likedByMe
-                ? ["black", "white"]
+                ? [colors.black, colors.white]
                 : [colors.gray[500], colors.gray[500]]
             }
             onPress={onLikePress}
@@ -195,12 +201,17 @@ export function MessageRow({
             <TextButton
               tw="px-2"
               accentColor={
-                repliedByMe
-                  ? ["black", "white"]
+                // TODO: use `repliedByMe` when this is available.
+                replayCount > 0
+                  ? [colors.black, colors.white]
                   : [colors.gray[500], colors.gray[500]]
               }
+              onPress={onReplyPress}
             >
-              {repliedByMe ? <MessageFilled /> : <Message />}
+              {
+                // TODO: use `repliedByMe` when this is available.
+                replayCount > 0 ? <MessageFilled /> : <Message />
+              }
               {` ${replayCount}`}
             </TextButton>
           )}

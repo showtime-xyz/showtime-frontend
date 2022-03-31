@@ -15,6 +15,8 @@ interface CommentRowProps {
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  reply?: (comment: CommentType) => void;
 }
 
 const REPLIES_PER_BATCH = 2;
@@ -25,6 +27,7 @@ function CommentRowComponent({
   likeComment,
   unlikeComment,
   deleteComment,
+  reply,
 }: CommentRowProps) {
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
@@ -69,7 +72,7 @@ function CommentRowComponent({
 
       if (isLikedByMe) {
         await unlikeComment(comment.comment_id);
-        setLikeCount((state) => state - 1);
+        setLikeCount((state) => Math.max(state - 1, 0));
       } else {
         await likeComment(comment.comment_id);
         setLikeCount((state) => state + 1);
@@ -92,6 +95,13 @@ function CommentRowComponent({
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
   }, []);
+  const handleOnReplyPress = useCallback(() => {
+    if (reply) {
+      reply(comment);
+    }
+  }, [reply, comment]);
+
+  console.log("comment", comment);
   //#endregion
 
   return (
@@ -119,6 +129,7 @@ function CommentRowComponent({
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
+        onReplyPress={handleOnReplyPress}
       />
       {!isReply
         ? replies.map((reply, index) => (
