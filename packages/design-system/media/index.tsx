@@ -94,6 +94,7 @@ function Media({
         <View tw={size}>
           <Model
             url={item?.source_url}
+            // TODO: update this to get a preview from CDN v2
             fallbackUrl={item?.still_preview_url}
             numColumns={numColumns}
             blurhash={item?.blurhash}

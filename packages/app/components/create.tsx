@@ -111,6 +111,7 @@ function Create({ uri }: CreateProps) {
   useEffect(
     function redirect() {
       if (state.status === "mediaUpload" || state.status === "nftJSONUpload") {
+        // TODO: save the file in the user gallery (if taken from camera)
         setTimeout(() => {
           router.pop();
           router.push(`/profile/${address}`);
