@@ -23,7 +23,10 @@ interface MessageBoxProps {
 }
 
 export interface MessageBoxMethods {
+  focus: () => void;
   reset: () => void;
+  // eslint-disable-next-line no-unused-vars
+  setValue: (value: string) => void;
 }
 
 export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
@@ -39,6 +42,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       // @ts-ignore
       inputRef.current.blur();
     };
+    const handleFocus = useCallback(() => {
+      // @ts-ignore
+      inputRef.current.focus();
+    }, []);
     const handleTextChange = (text: string) => setValue(text);
     const handleSubmit = async function handleSubmit() {
       await onSubmit?.(value);
@@ -49,8 +56,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       ref,
       () => ({
         reset: handleReset,
+        focus: handleFocus,
+        setValue,
       }),
-      [handleReset]
+      [handleReset, handleFocus]
     );
     return (
       <View

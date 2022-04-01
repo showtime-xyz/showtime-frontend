@@ -16,11 +16,8 @@ import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
 import { View } from "design-system";
-import {
-  MessageBox,
-  MessageBoxMethods,
-} from "design-system/messages/message-box-new";
 
+import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
 interface CommentsProps {
@@ -30,7 +27,9 @@ interface CommentsProps {
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
 export function Comments({ nftId }: CommentsProps) {
-  const inputRef = useRef<MessageBoxMethods>(null);
+  //#region refs
+  const inputRef = useRef<CommentInputBoxMethods>(null);
+  //#endregion
 
   //#region hooks
   const { isAuthenticated } = useUser();
@@ -62,33 +61,6 @@ export function Comments({ nftId }: CommentsProps) {
       Keyboard.dismiss();
     }
   }, [keyboardHeight]);
-
-  const handleOnSubmitComment = useCallback(
-    async function handleOnSubmitComment(text: string) {
-      const _newComment = async () => {
-        try {
-          await newComment(text);
-          inputRef.current?.reset();
-        } catch (error) {
-          Alert.alert("Error", "Cannot add comment.", [
-            {
-              text: "Cancel",
-              style: "cancel",
-            },
-            {
-              text: "Try Again",
-              style: "default",
-              onPress: _newComment,
-            },
-          ]);
-        }
-      };
-
-      await _newComment();
-    },
-    [newComment]
-  );
-
   const handleOnDeleteComment = useCallback(
     async function handleOnDeleteComment(commentId: number) {
       const _deleteComment = async () => {
@@ -127,6 +99,9 @@ export function Comments({ nftId }: CommentsProps) {
     },
     [deleteComment]
   );
+  const handleOnReply = useCallback((comment: CommentType) => {
+    inputRef.current?.reply(comment);
+  }, []);
   //#endregion
 
   //#region rendering
@@ -138,9 +113,10 @@ export function Comments({ nftId }: CommentsProps) {
         likeComment={likeComment}
         unlikeComment={unlikeComment}
         deleteComment={handleOnDeleteComment}
+        reply={handleOnReply}
       />
     ),
-    [likeComment, unlikeComment, handleOnDeleteComment]
+    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
   const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
@@ -162,14 +138,14 @@ export function Comments({ nftId }: CommentsProps) {
             onTouchMove={handleOnTouchMove}
           />
           {isAuthenticated && (
-            <MessageBox
+            <CommentInputBox
               ref={inputRef}
               submitting={isSubmitting}
+              submit={newComment}
               style={{
                 marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
-                paddingHorizontal: 16,
+                backgroundColor: "red",
               }}
-              onSubmit={handleOnSubmitComment}
             />
           )}
         </>
