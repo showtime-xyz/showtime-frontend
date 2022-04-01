@@ -8,17 +8,6 @@ import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { Video } from "design-system/video";
 import { View } from "design-system/view";
 
-const getImageUrl = (tokenAspectRatio: string, imgUrl?: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    if (tokenAspectRatio && Number(tokenAspectRatio) > 1) {
-      imgUrl = imgUrl.split("=")[0] + "=h1328";
-    } else {
-      imgUrl = imgUrl.split("=")[0] + "=w1328";
-    }
-  }
-  return imgUrl;
-};
-
 type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
@@ -38,39 +27,10 @@ function Media({
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
-  const imageUri =
-    numColumns === 1
-      ? getImageUrl(
-          item?.token_aspect_ratio,
-          item?.still_preview_url
-            ? item?.still_preview_url
-            : item?.token_img_url
-            ? item?.token_img_url
-            : item?.source_url
-        )
-      : getImageUrl(
-          item?.token_aspect_ratio,
-          item?.mime_type === "image/gif"
-            ? // Would be cool if this was handled on the backend
-              // `still_preview_url` should be a still image
-              `${
-                process.env.NEXT_PUBLIC_BACKEND_URL
-              }/v1/media/format/img?url=${encodeURIComponent(
-                item?.still_preview_url
-              )}`
-            : item?.still_preview_url
-            ? item?.still_preview_url
-            : item?.token_img_url
-            ? item?.token_img_url
-            : item?.source_url
-        );
-
-  const videoUri =
-    item?.animation_preview_url && numColumns > 1
-      ? item?.animation_preview_url
-      : item?.source_url
-      ? item?.source_url
-      : item?.token_animation_url;
+  const mediaUri = item?.loading
+    ? item?.source_url
+    : `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${item?.chain_name}/${item?.contract_address}/${item?.token_id}`;
+  const mediaStillPreviewUri = mediaUri + "?still_preview";
 
   const size = tw
     ? tw
@@ -87,24 +47,7 @@ function Media({
         item?.loading ? "opacity-50" : "opacity-100",
       ]}
     >
-      {imageUri &&
-      (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
-        <PinchToZoom onPinchEnd={onPinchEnd} onPinchStart={onPinchStart}>
-          <Image
-            source={{
-              uri: `${
-                process.env.NEXT_PUBLIC_BACKEND_URL
-              }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
-            }}
-            tw={size}
-            blurhash={item?.blurhash}
-            resizeMode={resizeMode}
-          />
-        </PinchToZoom>
-      ) : null}
-
-      {item?.mime_type?.startsWith("image") &&
-      item?.mime_type !== "image/svg+xml" ? (
+      {item?.mime_type?.startsWith("image") ? (
         <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
           {numColumns > 1 && item?.mime_type === "image/gif" && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
@@ -113,7 +56,10 @@ function Media({
           )}
           <Image
             source={{
-              uri: imageUri,
+              uri:
+                numColumns > 1 && item?.mime_type === "image/gif"
+                  ? mediaStillPreviewUri
+                  : mediaUri,
             }}
             tw={size}
             blurhash={item?.blurhash}
@@ -132,10 +78,10 @@ function Media({
           <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
             <Video
               source={{
-                uri: videoUri,
+                uri: mediaUri,
               }}
               posterSource={{
-                uri: item?.still_preview_url,
+                uri: mediaStillPreviewUri,
               }}
               tw={size}
               resizeMode={resizeMode}
@@ -148,6 +94,7 @@ function Media({
         <View tw={size}>
           <Model
             url={item?.source_url}
+            // TODO: update this to get a preview from CDN v2
             fallbackUrl={item?.still_preview_url}
             numColumns={numColumns}
             blurhash={item?.blurhash}

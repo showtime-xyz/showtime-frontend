@@ -1,5 +1,5 @@
 const path = require("path");
-const STAGE = process.env.STAGE ?? "development";
+const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 const { withInfoPlist } = require("@expo/config-plugins");
 
@@ -34,7 +34,7 @@ const envConfig = {
   },
 };
 
-const config = envConfig[STAGE ?? "development"];
+const config = envConfig[STAGE];
 const version = packageJSON.version;
 const majorVersion = semver.major(version);
 
@@ -89,7 +89,7 @@ export default {
   // Learn more: https://docs.expo.dev/eas-update/runtime-versions
   runtimeVersion: majorVersion.toString(),
   extra: {
-    STAGE: process.env.STAGE,
+    STAGE: STAGE,
     eas: {
       projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
     },
