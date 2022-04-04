@@ -69,25 +69,23 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("video") ? (
-        <View>
+        <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
           {numColumns > 1 && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
               <Play height={24} width={24} color="white" />
             </View>
           )}
-          <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
-            <Video
-              source={{
-                uri: mediaUri,
-              }}
-              posterSource={{
-                uri: mediaStillPreviewUri,
-              }}
-              tw={size}
-              resizeMode={resizeMode}
-            />
-          </PinchToZoom>
-        </View>
+          <Video
+            source={{
+              uri: mediaUri,
+            }}
+            posterSource={{
+              uri: mediaStillPreviewUri,
+            }}
+            tw={size}
+            resizeMode={resizeMode}
+          />
+        </PinchToZoom>
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
