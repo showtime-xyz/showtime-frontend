@@ -104,7 +104,7 @@ function CommentRowComponent({
     if (reply) {
       reply(comment);
     }
-  }, [reply, comment]);
+  }, [reply, comment, isAuthenticated]);
   //#endregion
 
   return (
