@@ -96,10 +96,15 @@ function CommentRowComponent({
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
   }, []);
   const handleOnReplyPress = useCallback(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
     if (reply) {
       reply(comment);
     }
-  }, [reply, comment]);
+  }, [reply, comment, isAuthenticated]);
   //#endregion
 
   return (
