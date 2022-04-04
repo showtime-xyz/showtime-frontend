@@ -48,7 +48,11 @@ function Media({
       ]}
     >
       {item?.mime_type?.startsWith("image") ? (
-        <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
+        <PinchToZoom
+          onPinchStart={onPinchStart}
+          onPinchEnd={onPinchEnd}
+          disabled={numColumns > 1}
+        >
           {numColumns > 1 && item?.mime_type === "image/gif" && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
               <Play height={24} width={24} color="white" />
@@ -69,7 +73,11 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("video") ? (
-        <PinchToZoom onPinchStart={onPinchStart} onPinchEnd={onPinchEnd}>
+        <PinchToZoom
+          onPinchStart={onPinchStart}
+          onPinchEnd={onPinchEnd}
+          disabled={numColumns > 1}
+        >
           {numColumns > 1 && (
             <View tw="bg-transparent absolute z-1 bottom-1 right-1">
               <Play height={24} width={24} color="white" />
