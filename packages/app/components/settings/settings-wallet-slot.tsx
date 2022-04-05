@@ -1,7 +1,12 @@
+import { useEffect } from "react";
+import { Alert } from "react-native";
+
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
+import { useWalletConnect } from "app/lib/walletconnect";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";
@@ -19,12 +24,43 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
+  const walletConnector = useWalletConnect();
+  const { state, addWallet } = useAddWallet();
+  console.log("add wallet state", state);
+  console.log("from slot", walletConnector.connected);
+
+  useEffect(() => {
+    if (state.status === "error") {
+      console.log("TODO: Enforce logout");
+    }
+  }, [state.status]);
+
+  const triggerAddWallet = async () => {
+    Alert.alert(
+      "Showcase all your NFTs",
+      "If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Select Wallet",
+          style: "default",
+          onPress: async () => {
+            await addWallet();
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SettingSubTitle>
       <Text tw="text-gray-900 dark:text-white font-bold text-xl">
         Your Wallets
       </Text>
-      <Button variant="primary" size="small">
+      <Button variant="primary" size="small" onPress={triggerAddWallet}>
         Add Wallet
       </Button>
     </SettingSubTitle>
