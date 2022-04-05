@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 
 import { formatDistanceToNowStrict } from "date-fns";
+import reactStringReplace from "react-string-replace";
 
 import { Avatar } from "design-system/avatar";
-import { TextButton } from "design-system/button";
-import { Button } from "design-system/button";
+import { Button, TextButton } from "design-system/button";
 import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
-import { Text } from "design-system/text";
+import { Text, linkify } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
@@ -88,6 +88,11 @@ interface MessageRowProps {
    * @default undefined
    */
   onReplyPress?: () => void;
+  /**
+   * Defines the content tag press callback
+   * @default undefined
+   */
+  onTagPress?: (tag: string) => void;
 }
 
 export function MessageRow({
@@ -106,6 +111,7 @@ export function MessageRow({
   onLikePress,
   onDeletePress,
   onReplyPress,
+  onTagPress,
 }: MessageRowProps) {
   //#region variables
   const createdAtText = useMemo(
@@ -116,6 +122,21 @@ export function MessageRow({
           })
         : undefined,
     [createdAt]
+  );
+  const contentWithTags = useMemo(
+    () =>
+      onTagPress
+        ? linkify(content, (text: string, link: string) => (
+            <Text
+              key={`link-${link}`}
+              tw="font-bold text-black dark:text-white"
+              onPress={() => onTagPress(link)}
+            >
+              {`@${text} `}
+            </Text>
+          ))
+        : content,
+    [content, onTagPress]
   );
   //#endregion
 
@@ -150,7 +171,7 @@ export function MessageRow({
     }),
     [position, hasParent]
   );
-  //#region
+  //#endregion
   return (
     <View tw="flex flex-row py-4 bg-white dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
@@ -180,7 +201,7 @@ export function MessageRow({
           tw="text-gray-900 dark:text-gray-100"
           sx={{ fontSize: 13, lineHeight: 15 }}
         >
-          {content}
+          {contentWithTags}
         </Text>
 
         <View tw="flex-row ml--2 mt-2 mb--2">
