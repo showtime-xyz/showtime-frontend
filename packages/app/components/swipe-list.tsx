@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, memo } from "react";
+import { useCallback, useMemo, useRef, memo, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
@@ -30,7 +30,7 @@ import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
-import { handleShareNFT } from "app/utilities";
+import { handleShareNFT, getMediaUrl } from "app/utilities";
 
 import { Button } from "design-system/button";
 import { useIsDarkMode } from "design-system/hooks";
@@ -46,6 +46,16 @@ import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 
+type Props = {
+  data: NFT[];
+  fetchMore: () => void;
+  isRefreshing: boolean;
+  refresh: () => void;
+  initialScrollIndex?: number;
+  isLoadingMore: boolean;
+  bottomPadding?: number;
+};
+
 export const SwipeList = ({
   data,
   fetchMore,
@@ -54,7 +64,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
-}: any) => {
+}: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -243,7 +253,7 @@ export const FeedItem = memo(
             ) : (
               <Image
                 source={{
-                  uri: `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}?still_preview`,
+                  uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
                 style={tw.style("w-full h-full")}
               />

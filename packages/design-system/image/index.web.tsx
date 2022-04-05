@@ -108,4 +108,6 @@ function StyledImage({ tw, ...props }: ImageProps) {
   );
 }
 
-export { StyledImage as Image };
+const preload = () => {};
+
+export { StyledImage as Image, preload };
