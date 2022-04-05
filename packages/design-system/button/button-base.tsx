@@ -81,7 +81,7 @@ export function BaseButton({
             ? iconColor
             : iconColor[isDarkMode ? 1 : 0],
         ...iconSize,
-        ...child.props,
+        ...child?.props,
         tw: [
           ...labelStyle,
           child?.props?.tw

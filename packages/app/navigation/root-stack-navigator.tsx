@@ -69,7 +69,7 @@ export function RootStackNavigator() {
       <Stack.Group
         screenOptions={{
           headerShown: false,
-          animation: Platform.OS === "ios" ? "default" : "fade",
+          animation: Platform.OS === "ios" ? "default" : "none",
           presentation:
             Platform.OS === "ios" ? "formSheet" : "transparentModal",
         }}
