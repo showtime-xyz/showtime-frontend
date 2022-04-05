@@ -106,13 +106,12 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         {/* Analytics */}
-        <script
+        <Script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
-        {/* <Partytown debug={true} forward={["dataLayer.push"]} /> */}
         <Script
-          // type="text/partytown"
-          strategy="lazyOnload"
+          // strategy="lazyOnload"
+          strategy="worker"
           dangerouslySetInnerHTML={{
             __html: renderAnalyticsSnippet(),
           }}
