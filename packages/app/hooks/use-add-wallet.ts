@@ -3,9 +3,13 @@ import { useReducer } from "react";
 import { useSWRConfig } from "swr";
 
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
+import { magic } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+
+import { useToast } from "design-system/toast";
 
 export type AddWallet = {
   status: "idle" | "connecting" | "connected" | "disconnected" | "error";
@@ -36,96 +40,103 @@ const addWalletReducer = (
 };
 
 export const useAddWallet = () => {
+  const toast = useToast();
   const walletConnector = useWalletConnect();
-  const { mutate } = useSWRConfig();
   const { user } = useUser();
+  const { setWeb3 } = useWeb3();
+  const { mutate } = useSWRConfig();
+
   const [state, dispatch] = useReducer(
     addWalletReducer,
     initialState,
     (): AddWallet => {
       const connectionStatus = walletConnector.connected;
-      // TODO: If disconnected, It can be a magic user. It's not an automatic error (logout) event.
-      return { status: connectionStatus ? "connected" : "disconnected" };
+      // A disconnected status can imply a magic user. It's not an automatic error event.
+      return {
+        ...initialState,
+        status: connectionStatus ? "connected" : "disconnected",
+      };
     }
   );
 
   const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
 
+  const addWalletToBackend = async (address: string) => {
+    await axios({
+      url: "/v1/addwallet",
+      method: "POST",
+      data: { address },
+    });
+  };
+
+  const disconnectMagic = async () => {
+    const isMagicActive = await magic.user.isLoggedIn();
+
+    if (isMagicActive) {
+      await magic.user.logout();
+      setWeb3(undefined);
+    }
+  };
+
+  const checkNewAddress = (address: string) => {
+    return !wallets?.find(
+      (addedWallet) =>
+        addedWallet.address.toLowerCase() === address.toLowerCase()
+    );
+  };
+
   const addWallet = async () => {
     try {
+      let toastMessage = "";
       const connectionStatus = state.status;
-      console.log("in add wallet is it connected?", walletConnector.connected);
-      console.log("in add wallet connectionStatus", connectionStatus);
-
-      // Disconnect, Attempt Connection, Validate Success Or failure
-      if (
+      const shouldKillSession =
         walletConnector.connected &&
-        (connectionStatus === "connected" || connectionStatus === "connecting")
-      ) {
-        console.log(
-          "Connection value before killsession",
-          walletConnector.connected
-        );
+        (connectionStatus === "connected" || connectionStatus === "connecting");
+
+      if (shouldKillSession) {
         await walletConnector.killSession();
-        console.log(
-          "Connection value after killsession",
-          walletConnector.connected
-        );
         dispatch({ type: "status", status: "disconnected" });
       }
 
       dispatch({ type: "status", status: "connecting" });
-      // use res to test if connected
+
       const connectionResponse = await walletConnector.connect();
+      // walletConnector.connected has a race condition and may return false even if connected
       const validResponse = Boolean(connectionResponse?.accounts);
-      console.log("after connection connect response", connectionResponse);
-      console.log(
-        "after connection connect connected value",
-        walletConnector.connected
-      );
-      // walletConnector.connected is still false right after, race condition
+
       if (validResponse) {
-        console.log(
-          "after connected validResponse response is truthy value is",
-          walletConnector.connected
-        );
-        if (!walletConnector.connected) {
-          // does not trigger modal, just connects
+        const connectionIsFalsy = !walletConnector.connected;
+
+        if (connectionIsFalsy) {
+          // Does not retrigger wallet connect modal, only updates current connection
           await walletConnector.connect();
         }
-        dispatch({ type: "status", status: "connected" });
+
         const [newAddress] = connectionResponse.accounts;
 
-        // if its not a wallet you already have!
-        const isNewAddress = !wallets?.find(
-          (addedWallet) =>
-            addedWallet.address.toLowerCase() === newAddress.toLowerCase()
-        );
+        const isNewAddress = checkNewAddress(newAddress);
 
         if (isNewAddress) {
-          await axios({
-            url: "/v1/addwallet",
-            method: "POST",
-            data: { address: newAddress },
-          });
+          await addWalletToBackend(newAddress);
+          await disconnectMagic();
 
-          mutate(MY_INFO_ENDPOINT);
+          toastMessage = "Address added and will soon appear on your profile";
         } else {
-          console.log("already known address, not invoking addWallet");
+          toastMessage = "Address already connected to your profile";
         }
 
-        // now we add to the backend
-      } else {
-        console.log(
-          "after connected value was not truthy and is",
-          walletConnector.connected
-        );
+        dispatch({ type: "status", status: "connected" });
+        mutate(MY_INFO_ENDPOINT);
+
+        toast?.show({
+          message: toastMessage,
+          hideAfter: 4000,
+        });
       }
     } catch (error) {
-      console.log("In error connected value", walletConnector.connected);
-      console.log("Error: In use add wallet hook", error);
-      if (!walletConnector.connected) {
-        // To not leave the user authenticated but in an "inactive state" this triggers force logout
+      const isDisconnected = !walletConnector.connected;
+
+      if (isDisconnected) {
         dispatch({ type: "status", status: "error" });
       }
     }

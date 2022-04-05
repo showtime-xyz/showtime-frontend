@@ -6,13 +6,13 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
-import { useWalletConnect } from "app/lib/walletconnect";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 import { Ethereum, Tezos } from "design-system/icon";
+import { useToast } from "design-system/toast";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
@@ -24,14 +24,19 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
-  const walletConnector = useWalletConnect();
+  const toast = useToast();
   const { state, addWallet } = useAddWallet();
-  console.log("add wallet state", state);
-  console.log("from slot", walletConnector.connected);
+
+  const connectionError = state.status === "error";
+  const walletCTA = connectionError ? "Connect Lost, Retry" : "Add Wallet";
 
   useEffect(() => {
-    if (state.status === "error") {
-      console.log("TODO: Enforce logout");
+    if (connectionError) {
+      // TODO: Possible force logout
+      toast?.show({
+        message: "Wallet connection lost please try again",
+        hideAfter: 4000,
+      });
     }
   }, [state.status]);
 
@@ -61,7 +66,7 @@ export const SettingsWalletSlotHeader = () => {
         Your Wallets
       </Text>
       <Button variant="primary" size="small" onPress={triggerAddWallet}>
-        Add Wallet
+        {walletCTA}
       </Button>
     </SettingSubTitle>
   );
