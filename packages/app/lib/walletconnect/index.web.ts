@@ -1,5 +1,7 @@
 const useWalletConnect = () => {
-  return null;
+  return {
+    connector: null,
+  };
 };
 
 export { useWalletConnect };

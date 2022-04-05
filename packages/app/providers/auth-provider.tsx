@@ -78,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         mixpanel.track("Logout");
         track("User Logged Out");
       }
-      await rudder.reset();
+      await rudder?.reset();
 
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
