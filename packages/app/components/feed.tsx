@@ -132,6 +132,7 @@ const FollowingFeed = () => {
       {...queryState}
       bottomPadding={bottomBarHeight}
       data={queryState.data}
+      shouldPreloadImages={true}
     />
   );
 };
@@ -145,6 +146,7 @@ const AlgorithmicFeed = () => {
       {...queryState}
       bottomPadding={bottomBarHeight}
       data={queryState.data}
+      shouldPreloadImages={true}
     />
   );
 };
@@ -158,6 +160,7 @@ const CuratedFeed = () => {
       {...queryState}
       bottomPadding={safeAreaBottom}
       data={queryState.data}
+      shouldPreloadImages={true}
     />
   );
 };

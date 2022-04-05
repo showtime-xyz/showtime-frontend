@@ -50,6 +50,7 @@ type Props = {
   initialScrollIndex?: number;
   isLoadingMore: boolean;
   bottomPadding?: number;
+  shouldPreloadImages?: boolean;
 };
 
 export const SwipeList = ({
@@ -60,6 +61,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
+  shouldPreloadImages = false,
 }: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
@@ -177,7 +179,7 @@ export const SwipeList = ({
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (shouldPreloadImages && data.length > 0) {
       const imagesUrl = data
         .map((nft) =>
           // Note that we don't preload still previews for videos or gifs
@@ -192,7 +194,7 @@ export const SwipeList = ({
         preload(imagesUrl as string[]);
       }
     }
-  }, [data]);
+  }, [shouldPreloadImages, data]);
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
