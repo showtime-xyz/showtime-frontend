@@ -90,4 +90,8 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
   );
 }
 
-export { StyledImage as Image };
+const preload = (sources: string[]) => {
+  FastImage.preload(sources.map((source) => ({ uri: source })));
+};
+
+export { StyledImage as Image, preload };

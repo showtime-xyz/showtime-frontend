@@ -1,5 +1,6 @@
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
+import { getMediaUrl } from "app/utilities";
 
 import { Play } from "design-system/icon";
 import { Image } from "design-system/image";
@@ -29,8 +30,8 @@ function Media({
 
   const mediaUri = item?.loading
     ? item?.source_url
-    : `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${item?.chain_name}/${item?.contract_address}/${item?.token_id}`;
-  const mediaStillPreviewUri = mediaUri + "?still_preview";
+    : getMediaUrl({ nft: item, stillPreview: false });
+  const mediaStillPreviewUri = getMediaUrl({ nft: item, stillPreview: true });
 
   const size = tw
     ? tw
@@ -47,23 +48,16 @@ function Media({
         item?.loading ? "opacity-50" : "opacity-100",
       ]}
     >
-      {item?.mime_type?.startsWith("image") ? (
+      {item?.mime_type?.startsWith("image") &&
+      item?.mime_type !== "image/gif" ? (
         <PinchToZoom
           onPinchStart={onPinchStart}
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {numColumns > 1 && item?.mime_type === "image/gif" && (
-            <View tw="bg-transparent absolute z-1 bottom-1 right-1">
-              <Play height={24} width={24} color="white" />
-            </View>
-          )}
           <Image
             source={{
-              uri:
-                numColumns > 1 && item?.mime_type === "image/gif"
-                  ? mediaStillPreviewUri
-                  : mediaUri,
+              uri: mediaUri,
             }}
             tw={size}
             blurhash={item?.blurhash}
@@ -72,7 +66,8 @@ function Media({
         </PinchToZoom>
       ) : null}
 
-      {item?.mime_type?.startsWith("video") ? (
+      {item?.mime_type?.startsWith("video") ||
+      item?.mime_type === "image/gif" ? (
         <PinchToZoom
           onPinchStart={onPinchStart}
           onPinchEnd={onPinchEnd}

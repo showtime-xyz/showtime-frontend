@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, memo } from "react";
+import { useCallback, useMemo, useRef, memo, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
@@ -27,11 +27,11 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import type { NFT } from "app/types";
-import { handleShareNFT } from "app/utilities";
+import { handleShareNFT, getMediaUrl } from "app/utilities";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
-import { Image } from "design-system/image";
+import { Image, preload } from "design-system/image";
 import { Media } from "design-system/media";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -42,6 +42,16 @@ import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 
+type Props = {
+  data: NFT[];
+  fetchMore: () => void;
+  isRefreshing: boolean;
+  refresh: () => void;
+  initialScrollIndex?: number;
+  isLoadingMore: boolean;
+  bottomPadding?: number;
+};
+
 export const SwipeList = ({
   data,
   fetchMore,
@@ -50,7 +60,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
-}: any) => {
+}: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -166,6 +176,24 @@ export const SwipeList = ({
 
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
+  useEffect(() => {
+    if (data.length > 0) {
+      const imagesUrl = data
+        .map((nft) =>
+          // Note that we don't preload still previews for videos or gifs
+          // because videos are not using `react-native-fast-image`
+          nft.mime_type?.startsWith("image") && nft.mime_type !== "image/gif"
+            ? getMediaUrl({ nft, stillPreview: false })
+            : null
+        )
+        .filter((url) => url !== null);
+
+      if (imagesUrl.length > 0) {
+        preload(imagesUrl as string[]);
+      }
+    }
+  }, [data]);
+
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <ViewabilityTrackerRecyclerList
@@ -239,7 +267,7 @@ export const FeedItem = memo(
             ) : (
               <Image
                 source={{
-                  uri: `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}?still_preview`,
+                  uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
                 style={tw.style("w-full h-full")}
               />
