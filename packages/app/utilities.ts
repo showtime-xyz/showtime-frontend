@@ -315,3 +315,17 @@ export const parseBalance = (
 
   return parseUnits(balance, 18);
 };
+
+export const getMediaUrl = ({
+  nft,
+  stillPreview,
+}: {
+  nft: NFT;
+  stillPreview: boolean;
+}) => {
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+    nft.chain_name
+  }/${nft.contract_address}/${nft.token_id}?cache_key=1${
+    stillPreview ? "&still_preview=true" : ""
+  }`;
+};

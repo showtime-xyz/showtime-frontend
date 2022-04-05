@@ -3,6 +3,9 @@ import { useCallback, useMemo } from "react";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { NFT } from "app/types";
+import { getMediaUrl } from "app/utilities";
+
+import { preload } from "design-system/image";
 
 type FeedAPIResponse = Array<NFT>;
 
@@ -41,6 +44,22 @@ export const useFeed = (type: FeedType) => {
 
         newData = newData.concat(uniquePage);
       });
+    }
+
+    if (newData.length > 0) {
+      const imagesUrl = newData
+        .map((nft) =>
+          // Note that we don't preload still previews for videos or gifs
+          // because videos are not using `react-native-fast-image`
+          nft.mime_type?.startsWith("image") && nft.mime_type !== "image/gif"
+            ? getMediaUrl({ nft, stillPreview: false })
+            : null
+        )
+        .filter((url) => url !== null);
+
+      if (imagesUrl.length > 0) {
+        preload(imagesUrl as string[]);
+      }
     }
     return newData;
   }, [queryState.data]);
