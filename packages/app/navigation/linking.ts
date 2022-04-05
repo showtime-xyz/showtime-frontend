@@ -13,6 +13,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       unlist: "nft/:id/unlist",
       details: "nft/:id/details",
       create: "create",
+      claim: "claim/:nftId",
       burn: "burn",
       search: "search",
       profile: "profile/:walletAddress",

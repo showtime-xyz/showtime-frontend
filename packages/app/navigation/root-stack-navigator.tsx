@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { ClaimScreen } from "app/screens/claim";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -82,6 +83,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
+        <Stack.Screen name="claim" component={ClaimScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

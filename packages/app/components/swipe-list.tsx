@@ -26,9 +26,13 @@ import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useUser } from "app/hooks/use-user";
+import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { handleShareNFT } from "app/utilities";
 
+import { Button } from "design-system/button";
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
@@ -289,6 +293,16 @@ export const FeedItem = memo(
 );
 
 const NFTDetails = ({ nft }: { nft: NFT }) => {
+  const router = useRouter();
+  const user = useUser();
+  const { data: nftDetails } = useNFTDetails(nft.nft_id);
+
+  const isListedByMe =
+    user.user?.data?.profile?.profile_id === nftDetails?.listing?.profile_id &&
+    typeof user.user?.data?.profile?.profile_id === "number";
+
+  const freeItem = nftDetails?.listing?.min_price === 0;
+
   return (
     <View tw="px-4">
       <View tw="h-4" />
@@ -296,6 +310,15 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
       <Creator nft={nft} />
 
       <View tw="h-4" />
+
+      {!isListedByMe && nftDetails?.listing && freeItem ? (
+        <Button
+          onPress={() => router.push("/claim/" + nft.nft_id)}
+          variant="text"
+        >
+          Claim for free
+        </Button>
+      ) : null}
 
       <Text
         variant="text-2xl"

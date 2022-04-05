@@ -315,3 +315,9 @@ export const parseBalance = (
 
   return parseUnits(balance, 18);
 };
+
+export const getPolygonScanUrl = (transactionHash: string) => {
+  return `https://${
+    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+  }polygonscan.com/tx/${transactionHash}`;
+};
