@@ -105,8 +105,8 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment, isAuthenticated]);
-  const handleOnTagPress = useCallback((link: string) => {
-    router.push(`/profile/${link}`);
+  const handleOnUserPress = useCallback((username: string) => {
+    router.push(`/profile/${username}`);
   }, []);
   //#endregion
 
@@ -136,7 +136,8 @@ function CommentRowComponent({
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
         onReplyPress={handleOnReplyPress}
-        onTagPress={handleOnTagPress}
+        onTagPress={handleOnUserPress}
+        onUserPress={handleOnUserPress}
       />
       {!isReply
         ? replies.map((reply, index) => (

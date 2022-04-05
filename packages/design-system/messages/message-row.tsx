@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 
 import { formatDistanceToNowStrict } from "date-fns";
-import reactStringReplace from "react-string-replace";
 
 import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
@@ -93,10 +92,15 @@ interface MessageRowProps {
    * @default undefined
    */
   onTagPress?: (tag: string) => void;
+  /**
+   * Defines the user press callback
+   * @default undefined
+   */
+  onUserPress?: (username: string) => void;
 }
 
 export function MessageRow({
-  username,
+  username = "",
   userAvatar,
   userVerified = false,
   content = "",
@@ -112,6 +116,7 @@ export function MessageRow({
   onDeletePress,
   onReplyPress,
   onTagPress,
+  onUserPress,
 }: MessageRowProps) {
   //#region variables
   const createdAtText = useMemo(
@@ -182,13 +187,22 @@ export function MessageRow({
             <View tw={replyVerticalLineTW} />
           </>
         )}
-        <Avatar url={userAvatar} size={24} />
+        <Button
+          variant="secondary"
+          size="small"
+          tw="h-[24px] w-[24px]"
+          onPress={onUserPress ? () => onUserPress(username) : undefined}
+          iconOnly
+        >
+          <Avatar url={userAvatar} size={24} />
+        </Button>
       </View>
       <View tw="flex-1 ml-2">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
             sx={{ fontSize: 13, lineHeight: 15 }}
             tw="text-gray-900 dark:text-white font-semibold"
+            onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
             @{username}
           </Text>
