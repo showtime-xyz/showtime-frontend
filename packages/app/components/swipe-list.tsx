@@ -31,7 +31,7 @@ import { handleShareNFT, getMediaUrl } from "app/utilities";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
-import { Image, preload } from "design-system/image";
+import { Image } from "design-system/image";
 import { Media } from "design-system/media";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -50,7 +50,6 @@ type Props = {
   initialScrollIndex?: number;
   isLoadingMore: boolean;
   bottomPadding?: number;
-  shouldPreloadImages?: boolean;
 };
 
 export const SwipeList = ({
@@ -61,7 +60,6 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
-  shouldPreloadImages = false,
 }: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
@@ -177,24 +175,6 @@ export const SwipeList = ({
   );
 
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
-
-  useEffect(() => {
-    if (shouldPreloadImages && data.length > 0) {
-      const imagesUrl = data
-        .map((nft) =>
-          // Note that we don't preload still previews for videos or gifs
-          // because videos are not using `react-native-fast-image`
-          nft.mime_type?.startsWith("image") && nft.mime_type !== "image/gif"
-            ? getMediaUrl({ nft, stillPreview: false })
-            : null
-        )
-        .filter((url) => url !== null);
-
-      if (imagesUrl.length > 0) {
-        preload(imagesUrl as string[]);
-      }
-    }
-  }, [shouldPreloadImages, data]);
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
