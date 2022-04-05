@@ -10,14 +10,12 @@ import {
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import { Blurhash } from "react-native-blurhash";
 import Reanimated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
@@ -26,6 +24,8 @@ import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { Blurhash } from "app/lib/blurhash";
+import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 import { handleShareNFT, getMediaUrl } from "app/utilities";
 
