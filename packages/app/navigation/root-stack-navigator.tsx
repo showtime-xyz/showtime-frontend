@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";

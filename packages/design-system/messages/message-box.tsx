@@ -7,10 +7,9 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { Button } from "design-system/button";
 import { useIsDarkMode } from "design-system/hooks";

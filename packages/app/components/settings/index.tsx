@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { Dimensions, Platform } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
 import Constants from "expo-constants";
 
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 

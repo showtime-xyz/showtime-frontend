@@ -1,10 +1,9 @@
 import { Suspense } from "react";
 import { Dimensions } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { FeedItem } from "app/components/swipe-list";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 
 import { Skeleton, View } from "design-system";

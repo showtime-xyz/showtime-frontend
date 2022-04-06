@@ -1,7 +1,6 @@
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { HeaderRight } from "app/components/header";
 import { useUser } from "app/hooks/use-user";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ProfileStackParams } from "app/navigation/types";

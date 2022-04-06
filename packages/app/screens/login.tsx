@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { Login } from "app/components/login";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 

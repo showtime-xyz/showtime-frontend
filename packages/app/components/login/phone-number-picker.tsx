@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal, Platform } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
+import { SafeAreaView } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
 import { CountryCodePicker, View, Text, Pressable } from "design-system";

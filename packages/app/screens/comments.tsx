@@ -1,10 +1,8 @@
 import { Suspense, useCallback, useRef } from "react";
 import { Platform } from "react-native";
 
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { Comments } from "app/components/comments";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 

@@ -21,7 +21,6 @@ import {
   LayoutRectangle,
 } from "react-native";
 
-import { useIsFocused, useScrollToTop } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
   useSharedValue,
@@ -38,6 +37,7 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
+import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
 import { flattenChildren } from "app/utilities";
 
 import { tw } from "design-system/tailwind";

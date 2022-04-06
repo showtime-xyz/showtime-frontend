@@ -2,9 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 import { FlatList } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
-
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 

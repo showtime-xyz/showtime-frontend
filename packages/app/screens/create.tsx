@@ -1,11 +1,10 @@
 import { useContext, useEffect, useMemo } from "react";
 import { Alert, Platform } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 import { Create } from "app/components/create";
 import { MintContext } from "app/context/mint-context";
 import { mixpanel } from "app/lib/mixpanel";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";

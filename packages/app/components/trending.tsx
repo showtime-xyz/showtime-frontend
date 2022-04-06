@@ -1,11 +1,10 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
-
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 
 import {

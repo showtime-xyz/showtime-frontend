@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { Dimensions, Pressable } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";

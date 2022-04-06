@@ -1,13 +1,13 @@
 import { useWindowDimensions, Platform, StyleSheet } from "react-native";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useUser } from "app/hooks/use-user";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { View } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
 import {
@@ -18,7 +18,6 @@ import {
   ProfileTabBarIcon,
 } from "./tab-bar-icons";
 import { NextNavigationProps } from "./types";
-import { createNextTabNavigator } from "./universal-tab-navigator";
 import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
@@ -27,7 +26,7 @@ const CameraNavigator = dynamic(() => import("../pages/camera"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
-const BottomTab = createNextTabNavigator();
+const BottomTab = createBottomTabNavigator();
 
 export function NextTabNavigator({
   pageProps,
@@ -40,7 +39,6 @@ export function NextTabNavigator({
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
-  const isDark = useIsDarkMode();
 
   return (
     <BottomTab.Navigator
@@ -54,7 +52,6 @@ export function NextTabNavigator({
         tabBarHideOnKeyboard: true,
         tabBarStyle: [
           {
-            // backgroundColor: isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(228, 228, 231, 0.95)',
             height: 64 + safeAreaBottom,
             backgroundColor: "transparent",
             borderTopColor: "transparent",
@@ -69,6 +66,7 @@ export function NextTabNavigator({
           },
           (!isAuthenticated || isTabBarHidden) && {
             bottom: -100,
+            display: Platform.OS === "web" ? "none" : "flex",
           },
         ],
         tabBarBackground: () =>

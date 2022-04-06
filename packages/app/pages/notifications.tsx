@@ -1,8 +1,4 @@
-import { Platform } from "react-native";
-
-import dynamic from "next/dynamic";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { NotificationsStackParams } from "app/navigation/types";

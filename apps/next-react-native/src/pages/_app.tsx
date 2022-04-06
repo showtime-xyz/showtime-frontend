@@ -1,23 +1,24 @@
+import "raf/polyfill";
+
 import { useEffect } from "react";
 
-// import { Partytown } from "@builder.io/partytown/react";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
-import "raf/polyfill";
-// import { enableFreeze } from 'react-native-screens'
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
-import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
+// import { enableFreeze } from 'react-native-screens'
+import { SafeAreaProvider } from "app/lib/safe-area";
 import { AuthProvider } from "app/providers/auth-provider";
+import { FeedProvider } from "app/providers/feed-provider";
+import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
@@ -117,34 +118,32 @@ export default function App({ Component, pageProps }: AppProps) {
           }}
         />
       </Head>
-      <DripsyProvider theme={theme}>
+      <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <NavigationProvider>
-              <SWRConfig
-                value={{
-                  provider: isServer ? () => new Map() : localStorageProvider,
-                }}
-              >
-                <Web3Provider>
-                  <AppContextProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <GrowthBookProvider growthbook={growthbook}>
-                          {
-                            // TODO: use RootStackNavigator instead?
-                          }
-                          <NextTabNavigator
-                            Component={Component}
-                            pageProps={pageProps}
-                          />
-                        </GrowthBookProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContextProvider>
-                </Web3Provider>
-              </SWRConfig>
-            </NavigationProvider>
+            <SWRConfig
+              value={{
+                provider: isServer ? () => new Map() : localStorageProvider,
+              }}
+            >
+              <Web3Provider>
+                <AppContextProvider>
+                  <AuthProvider>
+                    <UserProvider>
+                      <MintProvider>
+                        <BottomSheetModalProvider>
+                          <GrowthBookProvider growthbook={growthbook}>
+                            <FeedProvider>
+                              <Component {...pageProps} />
+                            </FeedProvider>
+                          </GrowthBookProvider>
+                        </BottomSheetModalProvider>
+                      </MintProvider>
+                    </UserProvider>
+                  </AuthProvider>
+                </AppContextProvider>
+              </Web3Provider>
+            </SWRConfig>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>

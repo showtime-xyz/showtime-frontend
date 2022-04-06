@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 
 import { Camera } from "app/components/camera";
 import { useUser } from "app/hooks/use-user";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { useRouter } from "app/navigation/use-router";
 
 function CameraScreen() {

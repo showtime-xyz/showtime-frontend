@@ -1,9 +1,8 @@
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 export const SwipeListScreen = withColorScheme(({ route }) => {
   const type = route.params.type;

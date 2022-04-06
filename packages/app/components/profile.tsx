@@ -10,11 +10,6 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import {
-  useBottomTabBarHeight,
-  BottomTabBarHeightContext,
-} from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -31,6 +26,11 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
