@@ -9,6 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
 import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
@@ -22,9 +23,11 @@ import { View } from "design-system/view";
 export const Feed = () => {
   return (
     <View tw="flex-1" testID="homeFeed">
-      <Suspense fallback={<View />}>
-        <FeedList />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<View />}>
+          <FeedList />
+        </Suspense>
+      </ErrorBoundary>
     </View>
   );
 };
