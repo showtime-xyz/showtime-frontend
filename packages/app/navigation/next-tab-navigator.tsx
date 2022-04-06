@@ -1,9 +1,12 @@
-import { useWindowDimensions, Platform, StyleSheet } from "react-native";
+import { useEffect } from "react";
+import { useWindowDimensions, Platform, StyleSheet, Alert } from "react-native";
 
 import { BlurView } from "expo-blur";
+import * as Updates from "expo-updates";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useIsForeground } from "app/hooks/use-is-foreground";
 import { useUser } from "app/hooks/use-user";
 
 import { View } from "design-system";
@@ -37,10 +40,43 @@ export function NextTabNavigator({
   const { isTabBarHidden } = useNavigationElements();
   const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isAuthenticated } = useUser();
+  const isForeground = useIsForeground();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
-  const isDark = useIsDarkMode();
+
+  useEffect(() => {
+    const checkUpdate = async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+
+          Alert.alert(
+            "New update available 🎉",
+            "Press 'Reload' to update the app.",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Reload",
+                style: "default",
+                onPress: () => Updates.reloadAsync(),
+              },
+            ]
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (Platform.OS !== "web" && !isForeground) {
+      checkUpdate();
+    }
+  }, [isForeground]);
 
   return (
     <BottomTab.Navigator
