@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Comments } from "app/components/comments";
+import { ErrorBoundary } from "app/components/error-boundary";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
@@ -67,11 +68,13 @@ export function CommentsScreen() {
       bodyContentTW="p-0"
       scrollable={false}
     >
-      <Suspense
-        fallback={<CommentsStatus isLoading={true} error={undefined} />}
-      >
-        <Comments nftId={nftId!} />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense
+          fallback={<CommentsStatus isLoading={true} error={undefined} />}
+        >
+          <Comments nftId={nftId!} />
+        </Suspense>
+      </ErrorBoundary>
     </CommentsModal>
   );
 }

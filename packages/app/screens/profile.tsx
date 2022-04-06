@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
 import { mixpanel } from "app/lib/mixpanel";
@@ -22,7 +23,9 @@ const ProfileScreen = withColorScheme(() => {
 
   return (
     <BottomSheetModalProvider>
-      <Profile walletAddress={walletAddress as string} />
+      <ErrorBoundary>
+        <Profile walletAddress={walletAddress as string} />
+      </ErrorBoundary>
     </BottomSheetModalProvider>
   );
 });
