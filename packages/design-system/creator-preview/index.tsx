@@ -85,6 +85,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           return (
             <Pressable
               onPress={() =>
+                // TODO: change to `useRouter`
                 navigation.navigate("swipeList", {
                   initialScrollIndex: idx,
                   data: props.creator.top_items,

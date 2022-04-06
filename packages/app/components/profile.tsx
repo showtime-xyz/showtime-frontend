@@ -277,7 +277,7 @@ const TabList = ({
   const onItemPress = useCallback(
     (index: number) => {
       router.push(
-        `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+        `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
     },
     [list.id, profileId, filter.collectionId, filter.sortId]

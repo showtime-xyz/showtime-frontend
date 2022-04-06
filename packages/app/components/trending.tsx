@@ -235,7 +235,7 @@ const NFTSList = ({
       <Pressable
         onPress={() =>
           router.push(
-            `/swipeList?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+            `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
           )
         }
       >
