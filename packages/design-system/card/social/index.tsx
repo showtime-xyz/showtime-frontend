@@ -19,7 +19,7 @@ function Social({ nft }: { nft?: NFT }) {
   const [likeCount, setLikeCount] = useState(nft.like_count);
 
   const handleCommentPress = useCallback(() => {
-    router.push(`/comments?nftId=${nft.nft_id}`);
+    router.push(`/nft/${nft.nft_id}/comments`);
   }, [router, nft.nft_id]);
 
   return (

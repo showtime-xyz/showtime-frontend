@@ -10,7 +10,7 @@ import { useRouter } from "app/navigation/use-router";
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  nftId: number;
+  id: number;
 };
 
 const { useParam } = createParam<Query>();
@@ -18,8 +18,7 @@ const { useParam } = createParam<Query>();
 const DeleteScreen = () => {
   useHideHeader();
   const router = useRouter();
-  //@TODO: Why is Typescript complaining about a missing argument here? None of the other uses with the exact same code have the same warning
-  const [nftId, setNftId] = useParam("nftId");
+  const [nftId] = useParam("id");
 
   useEffect(() => {
     mixpanel.track("Delete nft view");

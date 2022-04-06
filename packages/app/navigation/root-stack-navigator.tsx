@@ -78,7 +78,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="transfer" component={TransferScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
-        <Stack.Screen name="burn" component={DeleteScreen} />
+        <Stack.Screen name="delete" component={DeleteScreen} />
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />

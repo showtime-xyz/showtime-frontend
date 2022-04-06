@@ -15,7 +15,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
 
   const handleOnPress = useCallback(() => {
-    router.push(`/comments?nftId=${nft?.nft_id}`);
+    router.push(`/nft/${nft?.nft_id}/comments`);
   }, [router, nft?.nft_id]);
 
   if (!nft) {

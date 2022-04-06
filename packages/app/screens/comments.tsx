@@ -11,7 +11,7 @@ import { Modal, ModalSheet } from "design-system";
 import { CommentsStatus } from "../components/comments/comments-status";
 
 type Query = {
-  nftId: number;
+  id: number;
 };
 
 const { useParam } = createParam<Query>();
@@ -35,7 +35,7 @@ export function CommentsScreen() {
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();
   // @ts-ignore
-  const [nftId, _] = useParam("nftId");
+  const [nftId, _] = useParam("id");
   //#endregion
 
   //#region callbacks

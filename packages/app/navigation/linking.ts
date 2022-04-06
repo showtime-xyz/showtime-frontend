@@ -3,23 +3,23 @@ import * as Linking from "expo-linking";
 import type { LinkingOptions } from "app/lib/react-navigation/native";
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
-  prefixes: [Linking.makeUrl("/")],
+  prefixes: [Linking.createURL("/")],
   config: {
     screens: {
       login: "login",
       nft: "nft/:chainName/:contractAddress/:tokenId",
-      comments: "comments",
+      comments: "nft/:id/comments",
       transfer: "nft/:id/transfer",
       list: "nft/:id/list",
       unlist: "nft/:id/unlist",
       details: "nft/:id/details",
+      delete: "nft/:id/delete",
       create: "create",
-      burn: "burn",
       search: "search",
       profile: "profile/:walletAddress",
-      settings: "settings/:walletAddress",
+      settings: "profile/:walletAddress/settings",
+      editProfile: "profile/:walletAddress/edit",
       swipeList: "swipeList",
-      editProfile: "editProfile",
       bottomTabs: {
         screens: {
           // Bottom Tab Navigator

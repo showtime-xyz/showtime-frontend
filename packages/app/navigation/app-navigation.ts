@@ -28,7 +28,7 @@ export const useSettingsNavigation = (address?: string) => {
   const router = useRouter();
   return useCallback(() => {
     if (address) {
-      const as = `/settings/${address}`;
+      const as = `/profile/${address}/settings`;
 
       const href = Router.router
         ? {

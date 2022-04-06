@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Unlist } from "app/components/unlist";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
