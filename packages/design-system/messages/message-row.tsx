@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  differenceInSeconds,
+  formatDistance,
+} from "date-fns";
 
 import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
@@ -119,15 +123,19 @@ export function MessageRow({
   onUserPress,
 }: MessageRowProps) {
   //#region variables
-  const createdAtText = useMemo(
-    () =>
-      createdAt
-        ? formatDistanceToNowStrict(new Date(createdAt), {
-            addSuffix: true,
-          })
-        : undefined,
-    [createdAt]
-  );
+  const createdAtText = useMemo(() => {
+    if (!createdAt) return undefined;
+
+    const createdAtDate = new Date(createdAt);
+
+    if (differenceInSeconds(new Date(), createdAtDate) < 10) {
+      return "now";
+    }
+
+    return formatDistanceToNowStrict(new Date(createdAt), {
+      addSuffix: true,
+    });
+  }, [createdAt]);
   const contentWithTags = useMemo(
     () =>
       onTagPress
