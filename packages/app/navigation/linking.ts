@@ -25,11 +25,11 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       bottomTabs: {
         screens: {
           // Bottom Tab Navigator
-          homeTab: "",
-          trendingTab: "trending",
-          cameraTab: "camera",
-          marketplaceTab: "marketplace",
-          notificationsTab: "notifications",
+          home: "",
+          trending: "trending",
+          camera: "camera",
+          marketplace: "marketplace",
+          notifications: "notifications",
         },
       },
     },

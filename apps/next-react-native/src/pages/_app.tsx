@@ -16,6 +16,9 @@ import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "app/lib/safe-area";
+import { NavigationProvider } from "app/navigation";
+import { NextTabNavigator } from "app/navigation/next-tab-navigator";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MintProvider } from "app/providers/mint-provider";
@@ -121,29 +124,39 @@ export default function App({ Component, pageProps }: AppProps) {
       <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <SWRConfig
-              value={{
-                provider: isServer ? () => new Map() : localStorageProvider,
-              }}
-            >
-              <Web3Provider>
-                <AppContextProvider>
-                  <AuthProvider>
-                    <UserProvider>
-                      <MintProvider>
-                        <BottomSheetModalProvider>
-                          <GrowthBookProvider growthbook={growthbook}>
-                            <FeedProvider>
-                              <Component {...pageProps} />
-                            </FeedProvider>
-                          </GrowthBookProvider>
-                        </BottomSheetModalProvider>
-                      </MintProvider>
-                    </UserProvider>
-                  </AuthProvider>
-                </AppContextProvider>
-              </Web3Provider>
-            </SWRConfig>
+            <NavigationProvider>
+              <SWRConfig
+                value={{
+                  provider: isServer ? () => new Map() : localStorageProvider,
+                }}
+              >
+                <Web3Provider>
+                  <AppContextProvider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <MintProvider>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                {/* <Component {...pageProps} /> */}
+                                {/* <RootStackNavigator
+                                  Component={Component}
+                                  pageProps={pageProps}
+                                /> */}
+                                <NextTabNavigator
+                                  Component={Component}
+                                  pageProps={pageProps}
+                                />
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </MintProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContextProvider>
+                </Web3Provider>
+              </SWRConfig>
+            </NavigationProvider>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>

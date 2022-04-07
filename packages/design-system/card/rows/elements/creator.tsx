@@ -36,7 +36,7 @@ export function Creator({ nft, toggleCreatorName }: Props) {
       <Image
         tw="w-[32px] h-[32px] rounded-full"
         source={{
-          uri: getProfileImageUrl(nft.creator_img_url ?? DEFAULT_PROFILE_PIC),
+          uri: getProfileImageUrl(nft?.creator_img_url ?? DEFAULT_PROFILE_PIC),
         }}
       />
       <View tw="ml-2 justify-center">

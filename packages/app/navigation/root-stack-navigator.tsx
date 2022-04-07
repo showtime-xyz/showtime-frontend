@@ -19,17 +19,21 @@ import { UnlistScreen } from "app/screens/unlist";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-import { createStackNavigator } from "./create-stack-navigator";
 import { NextTabNavigator } from "./next-tab-navigator";
+import { NextNavigationProps } from "./types";
+import { createNextNavigator } from "./universal-navigator/stack-navigator";
 
-const Stack = createStackNavigator();
+const Stack = createNextNavigator();
 
-export function RootStackNavigator() {
+export function RootStackNavigator({
+  pageProps,
+  Component,
+}: NextNavigationProps) {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator Component={Component} pageProps={pageProps}>
       {/* Bottom tab navigator */}
       <Stack.Screen
         name="bottomTabs"

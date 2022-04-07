@@ -48,6 +48,7 @@ const nextConfig = {
       "cloudflare-ipfs.com",
       "cdn.tryshowtime.com",
       "storage.googleapis.com",
+      "testingservice-dot-showtimenft.wl.r.appspot.com",
     ],
   },
   async headers() {

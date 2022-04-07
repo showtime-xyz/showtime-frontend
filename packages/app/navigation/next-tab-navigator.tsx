@@ -1,6 +1,5 @@
 import { useWindowDimensions, Platform, StyleSheet } from "react-native";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 
@@ -18,6 +17,8 @@ import {
   ProfileTabBarIcon,
 } from "./tab-bar-icons";
 import { NextNavigationProps } from "./types";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNextTabNavigator } from "./universal-navigator/bottom-tab";
 import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
@@ -26,7 +27,8 @@ const CameraNavigator = dynamic(() => import("../pages/camera"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
-const BottomTab = createBottomTabNavigator();
+// const BottomTab = createBottomTabNavigator();
+const BottomTab = createNextTabNavigator();
 
 export function NextTabNavigator({
   pageProps,
@@ -42,7 +44,7 @@ export function NextTabNavigator({
 
   return (
     <BottomTab.Navigator
-      initialRouteName="homeTab"
+      initialRouteName="home"
       screenOptions={{
         lazy: Platform.OS === "android" ? false : true,
         headerShown: false,
@@ -64,10 +66,10 @@ export function NextTabNavigator({
             left: width / 2 - 100,
             maxWidth: 200,
           },
-          (!isAuthenticated || isTabBarHidden) && {
-            bottom: -100,
-            display: Platform.OS === "web" ? "none" : "flex",
-          },
+          // (!isAuthenticated || isTabBarHidden) && {
+          //   bottom: -100,
+          //   display: Platform.OS === "web" ? "none" : "flex",
+          // },
         ],
         tabBarBackground: () =>
           width >= 768 ? null : (
@@ -92,14 +94,14 @@ export function NextTabNavigator({
       pageProps={pageProps}
     >
       <BottomTab.Screen
-        name="homeTab"
+        name="home"
         component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}
       />
       <BottomTab.Screen
-        name="trendingTab"
+        name="trending"
         component={TrendingNavigator}
         options={{
           tabBarIcon: TrendingTabBarIcon,
@@ -107,7 +109,7 @@ export function NextTabNavigator({
       />
       {width < 768 && (
         <BottomTab.Screen
-          name="cameraTab"
+          name="camera"
           component={CameraNavigator}
           options={{
             tabBarIcon: CameraTabBarIcon,
@@ -117,7 +119,7 @@ export function NextTabNavigator({
       )}
       {width < 768 && (
         <BottomTab.Screen
-          name="notificationsTab"
+          name="notifications"
           component={NotificationsNavigator}
           options={{
             tabBarIcon: NotificationsTabBarIcon,
@@ -126,7 +128,7 @@ export function NextTabNavigator({
       )}
       {width < 768 && (
         <BottomTab.Screen
-          name="profileTab"
+          name="profile"
           component={ProfileNavigator}
           options={{
             tabBarIcon: ProfileTabBarIcon,

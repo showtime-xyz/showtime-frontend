@@ -49,11 +49,11 @@ type NextNavigationProps = {
 };
 
 type BottomTabNavigatorParams = {
-  homeTab: NavigatorScreenParams<HomeStackParams>;
-  trendingTab: NavigatorScreenParams<TrendingStackParams>;
-  cameraTab: NavigatorScreenParams<CameraStackParams>;
-  notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
-  profileTab: NavigatorScreenParams<ProfileStackParams>;
+  home: NavigatorScreenParams<HomeStackParams>;
+  trending: NavigatorScreenParams<TrendingStackParams>;
+  camera: NavigatorScreenParams<CameraStackParams>;
+  notifications: NavigatorScreenParams<NotificationsStackParams>;
+  profile: NavigatorScreenParams<ProfileStackParams>;
 };
 
 declare global {

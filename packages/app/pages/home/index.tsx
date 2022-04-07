@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
-import createStackNavigator from "app/navigation/create-stack-navigator";
+import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeStackParams } from "app/navigation/types";
 import { useRouter } from "app/navigation/use-router";

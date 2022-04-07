@@ -1,5 +1,5 @@
 import { useSafeAreaInsets } from "app/lib/safe-area";
-import createStackNavigator from "app/navigation/create-stack-navigator";
+import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { MarketplaceStackParams } from "app/navigation/types";
 import { MarketplaceScreen } from "app/screens/marketplace";
