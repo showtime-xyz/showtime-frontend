@@ -1,12 +1,15 @@
 import { useMemo } from "react";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  differenceInSeconds,
+  formatDistance,
+} from "date-fns";
 
 import { Avatar } from "design-system/avatar";
-import { TextButton } from "design-system/button";
-import { Button } from "design-system/button";
+import { Button, TextButton } from "design-system/button";
 import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
-import { Text } from "design-system/text";
+import { Text, linkify } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
@@ -88,10 +91,20 @@ interface MessageRowProps {
    * @default undefined
    */
   onReplyPress?: () => void;
+  /**
+   * Defines the content tag press callback
+   * @default undefined
+   */
+  onTagPress?: (tag: string) => void;
+  /**
+   * Defines the user press callback
+   * @default undefined
+   */
+  onUserPress?: (username: string) => void;
 }
 
 export function MessageRow({
-  username,
+  username = "",
   userAvatar,
   userVerified = false,
   content = "",
@@ -106,16 +119,37 @@ export function MessageRow({
   onLikePress,
   onDeletePress,
   onReplyPress,
+  onTagPress,
+  onUserPress,
 }: MessageRowProps) {
   //#region variables
-  const createdAtText = useMemo(
+  const createdAtText = useMemo(() => {
+    if (!createdAt) return undefined;
+
+    const createdAtDate = new Date(createdAt);
+
+    if (differenceInSeconds(new Date(), createdAtDate) < 10) {
+      return "now";
+    }
+
+    return formatDistanceToNowStrict(new Date(createdAt), {
+      addSuffix: true,
+    });
+  }, [createdAt]);
+  const contentWithTags = useMemo(
     () =>
-      createdAt
-        ? formatDistanceToNowStrict(new Date(createdAt), {
-            addSuffix: true,
-          })
-        : undefined,
-    [createdAt]
+      onTagPress
+        ? linkify(content, (text: string, link: string) => (
+            <Text
+              key={`link-${link}`}
+              tw="font-bold text-black dark:text-white"
+              onPress={() => onTagPress(link)}
+            >
+              {`@${text} `}
+            </Text>
+          ))
+        : content,
+    [content, onTagPress]
   );
   //#endregion
 
@@ -150,7 +184,7 @@ export function MessageRow({
     }),
     [position, hasParent]
   );
-  //#region
+  //#endregion
   return (
     <View tw="flex flex-row py-4 bg-white dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
@@ -161,13 +195,22 @@ export function MessageRow({
             <View tw={replyVerticalLineTW} />
           </>
         )}
-        <Avatar url={userAvatar} size={24} />
+        <Button
+          variant="secondary"
+          size="small"
+          tw="h-[24px] w-[24px]"
+          onPress={onUserPress ? () => onUserPress(username) : undefined}
+          iconOnly
+        >
+          <Avatar url={userAvatar} size={24} />
+        </Button>
       </View>
       <View tw="flex-1 ml-2">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
             sx={{ fontSize: 13, lineHeight: 15 }}
             tw="text-gray-900 dark:text-white font-semibold"
+            onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
             @{username}
           </Text>
@@ -180,7 +223,7 @@ export function MessageRow({
           tw="text-gray-900 dark:text-gray-100"
           sx={{ fontSize: 13, lineHeight: 15 }}
         >
-          {content}
+          {contentWithTags}
         </Text>
 
         <View tw="flex-row ml--2 mt-2 mb--2">

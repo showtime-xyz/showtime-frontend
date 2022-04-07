@@ -95,3 +95,5 @@ export const Text = forwardRef<TextType, Props>(
 );
 
 Text.displayName = "Text";
+
+export { linkify } from "./linkify";
