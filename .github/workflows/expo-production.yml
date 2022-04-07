@@ -63,7 +63,7 @@ jobs:
         run: yarn bump-application-version
 
       - name: Set up Expo
-        uses: expo/expo-github-action@v6
+        uses: expo/expo-github-action@v7
         with:
           eas-version: latest
           eas-cache: true
