@@ -134,7 +134,7 @@ export default {
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
-    "@logrocket/react-native"
+    "@logrocket/react-native",
     [
       withInfoPlist,
       (config) => {
