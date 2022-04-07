@@ -7,6 +7,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   config: {
     screens: {
       login: "login",
+      // TODO: change this to use `nft/:id`
       nft: "nft/:chainName/:contractAddress/:tokenId",
       comments: "nft/:id/comments",
       transfer: "nft/:id/transfer",
@@ -14,6 +15,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       unlist: "nft/:id/unlist",
       details: "nft/:id/details",
       delete: "nft/:id/delete",
+      token: "token/:chainName/:contractAddress/:tokenId",
       create: "create",
       search: "search",
       profile: "profile/:walletAddress",

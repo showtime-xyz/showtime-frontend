@@ -1,7 +1,5 @@
 import { Platform } from "react-native";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CommentsScreen } from "app/screens/comments";
@@ -21,9 +19,10 @@ import { UnlistScreen } from "app/screens/unlist";
 
 import { useIsDarkMode } from "design-system/hooks";
 
+import { createStackNavigator } from "./create-stack-navigator";
 import { NextTabNavigator } from "./next-tab-navigator";
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export function RootStackNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
