@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { ListScreen } from "app/screens/list";
+
+export default ListScreen;

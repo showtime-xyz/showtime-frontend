@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { DetailsScreen } from "app/screens/details";
+
+export default DetailsScreen;

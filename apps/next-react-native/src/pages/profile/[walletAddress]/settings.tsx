@@ -1,1 +1,3 @@
-export { default } from "app/pages/profile";
+import { SettingsScreen } from "app/screens/settings";
+
+export default SettingsScreen;

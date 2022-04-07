@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { CommentsScreen } from "app/screens/comments";
+
+export default CommentsScreen;

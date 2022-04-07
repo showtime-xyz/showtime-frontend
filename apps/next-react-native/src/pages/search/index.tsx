@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { SearchScreen } from "app/screens/search";
+
+export default SearchScreen;

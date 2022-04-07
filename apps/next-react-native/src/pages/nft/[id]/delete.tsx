@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { DeleteScreen } from "app/screens/delete";
+
+export default DeleteScreen;

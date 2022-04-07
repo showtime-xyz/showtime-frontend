@@ -1,1 +1,3 @@
-export { default } from "app/pages/home";
+import { TransferScreen } from "app/screens/transfer";
+
+export default TransferScreen;
