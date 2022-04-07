@@ -83,12 +83,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     // Load feature definitions from API
-    fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
-      .then((res) => res.json())
-      .then((json) => {
-        growthbook.setFeatures(json.features);
-      });
-
+    // TODO: fix bug with `.json()` on web
+    // fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     growthbook.setFeatures(json.features);
+    //   });
     // growthbook.setAttributes({
     //   "id": "foo",
     // })
