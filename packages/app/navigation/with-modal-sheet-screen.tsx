@@ -15,7 +15,7 @@ function withModalSheetScreen<P>(Screen: FC<P>, title?: string) {
     const close = useCallback(() => setVisible(false), []);
     const onClose = useCallback(() => {
       pop();
-    }, []);
+    }, [pop]);
 
     // TODO: extract title from navigation descriptor
     return (

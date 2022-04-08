@@ -6080,6 +6080,7 @@ __metadata:
     semver: ^7.3.5
     sentry-expo: ^4.1.0
     simple-git: ^3.3.0
+    solito: ^0.0.24
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     timers-browserify: ^2.0.12
@@ -28305,6 +28306,13 @@ __metadata:
     ip: ^1.1.5
     smart-buffer: ^4.2.0
   checksum: dd9194293059d737759d5c69273850ad4149f448426249325c4bea0e340d1cf3d266c3b022694b0dcf5d31f759de23657244c481fc1e8322add80b7985c36b5e
+  languageName: node
+  linkType: hard
+
+"solito@npm:^0.0.24":
+  version: 0.0.24
+  resolution: "solito@npm:0.0.24"
+  checksum: 484cc67222cf557bf05cb191a1028cb457ff7573a9201282d7f05cf2213565796761aeaf7f9bc236afd1d6a97ec1e235c2e38829b9839c1a222c664ee1c2c06d
   languageName: node
   linkType: hard
 

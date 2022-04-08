@@ -422,9 +422,7 @@ const ProfileTop = ({
           hasLinksInBio.current = true;
           return (
             <TextLink
-              href={`${
-                router.pathname.startsWith("/trending") ? "/trending" : ""
-              }/profile/${username}`}
+              href={`/profile/${username}`}
               tw="font-bold text-black dark:text-white"
               key={i}
             >
