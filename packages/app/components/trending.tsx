@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
@@ -112,12 +113,16 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <Suspense fallback={<Spinner size="small" />}>
-          <CreatorsList days={days} SelectionControl={SelectionControl} />
-        </Suspense>,
-        <Suspense fallback={<Spinner size="small" />}>
-          <NFTSList days={days} SelectionControl={SelectionControl} />
-        </Suspense>,
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner size="small" />}>
+            <CreatorsList days={days} SelectionControl={SelectionControl} />
+          </Suspense>
+        </ErrorBoundary>,
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner size="small" />}>
+            <NFTSList days={days} SelectionControl={SelectionControl} />
+          </Suspense>
+        </ErrorBoundary>,
       ][selected],
     [selected, days, SelectionControl]
   );

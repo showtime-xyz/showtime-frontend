@@ -13,27 +13,6 @@ import { NavigationElementsProvider } from "app/navigation/navigation-elements-c
 
 import { useIsDarkMode } from "design-system/hooks";
 
-function LinkTo() {
-  const linkTo = useLinkTo();
-  const router = useRouter();
-
-  useEffect(function trigger() {
-    if (Platform.OS === "web" && router) {
-      const handler = (path: string) => {
-        linkTo(path);
-      };
-
-      router.events.on("routeChangeComplete", handler);
-
-      return () => {
-        router.events.off("routeChangeComplete", handler);
-      };
-    }
-  }, []);
-
-  return null;
-}
-
 function useLinkingConfig(
   trackedLinking: React.MutableRefObject<
     LinkingOptions<ReactNavigation.RootParamList>
@@ -87,7 +66,6 @@ export function NavigationProvider({
           options?.title ? `${options.title} | Showtime` : "Showtime",
       }}
     >
-      <LinkTo />
       <NavigationElementsProvider
         value={{
           isHeaderHidden,

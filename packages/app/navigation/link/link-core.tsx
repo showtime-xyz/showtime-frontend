@@ -4,7 +4,6 @@ import NextLink from "next/link";
 
 import { useLinkProps } from "app/lib/react-navigation/native";
 import { parseNextPath } from "app/navigation/parse-next-path";
-import { useRouter } from "app/navigation/use-router";
 
 type Props = {
   children: React.ReactNode;
@@ -24,7 +23,6 @@ function LinkCore({
   Component: ComponentType<any>;
   componentProps?: any;
 }) {
-  const router = useRouter();
   const linkProps = useLinkProps({
     to: parseNextPath(href),
   });
@@ -37,9 +35,6 @@ function LinkCore({
         onPress?.();
         // If we are currently in NFT modal,
         // we need to close it before navigating to new page
-        if (router?.pathname?.includes("/nft/")) {
-          router.pop();
-        }
         linkProps.onPress();
       }}
     >

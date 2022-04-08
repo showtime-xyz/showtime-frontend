@@ -31,10 +31,6 @@ function TabBarIcon({ tab, children }) {
       tw={[
         "md:bg-white md:dark:bg-gray-800 rounded-[20] w-12 h-12 items-center justify-center",
       ]}
-      // @ts-expect-error web only
-      onMouseEnter={() => {
-        router.prefetch(tab);
-      }}
       onPress={() => {
         router.push(tab);
       }}

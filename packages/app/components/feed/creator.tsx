@@ -29,12 +29,7 @@ export function Creator({ nft }: Props) {
   if (!nft) return null;
 
   return (
-    <Link
-      href={`${
-        router.pathname.startsWith("/trending") ? "/trending" : ""
-      }/profile/${nft.creator_address}`}
-      tw="flex flex-row"
-    >
+    <Link href={`/profile/${nft.creator_address}`} tw="flex flex-row">
       <Image
         tw="w-[32px] h-[32px] rounded-full"
         source={{

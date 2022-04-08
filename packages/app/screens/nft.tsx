@@ -1,15 +1,15 @@
 import { Suspense } from "react";
 import { Dimensions } from "react-native";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 
 import { Skeleton, View } from "design-system";
 import { useColorScheme } from "design-system/hooks";
-
-import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
   tokenId: string;
@@ -24,21 +24,27 @@ function NftScreen() {
   const colorScheme = useColorScheme();
 
   return (
-    <Suspense
-      fallback={
-        <View tw="items-center">
-          <Skeleton
-            colorMode={colorScheme}
-            height={screenHeight - 300}
-            width={screenWidth}
-          />
-          <View tw="h-2" />
-          <Skeleton colorMode={colorScheme} height={300} width={screenWidth} />
-        </View>
-      }
-    >
-      <NFTDetail />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense
+        fallback={
+          <View tw="items-center">
+            <Skeleton
+              colorMode={colorScheme}
+              height={screenHeight - 300}
+              width={screenWidth}
+            />
+            <View tw="h-2" />
+            <Skeleton
+              colorMode={colorScheme}
+              height={300}
+              width={screenWidth}
+            />
+          </View>
+        }
+      >
+        <NFTDetail />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

@@ -174,7 +174,7 @@ export const EditProfile = () => {
       mutate(MY_INFO_ENDPOINT);
       mutate(USER_PROFILE_KEY + user?.data.profile.wallet_addresses[0]);
 
-      router.replace(`/profile/${user?.data.profile.wallet_addresses[0]}`);
+      router.pop();
     } catch (e) {
       setError("submitError", { message: "Something went wrong" });
       console.error("edit profile failed ", e);

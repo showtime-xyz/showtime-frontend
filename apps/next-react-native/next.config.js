@@ -24,6 +24,7 @@ const withTM = require("next-transpile-modules")([
   "expo-next-react-navigation",
   "@zeego/menu",
   "@zeego/dropdown-menu",
+  "solito",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";

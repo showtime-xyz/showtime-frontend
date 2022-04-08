@@ -8,6 +8,7 @@ import {
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import LogRocket from "@logrocket/react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
@@ -284,6 +285,14 @@ function AppContextProvider({
 }
 
 function App() {
+  useEffect(() => {
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const initAnalytics = async () => {
       await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);

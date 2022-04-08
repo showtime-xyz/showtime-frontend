@@ -12,6 +12,7 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import reactStringReplace from "react-string-replace";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MintContext } from "app/context/mint-context";
 import {
@@ -178,14 +179,16 @@ const Profile = ({ address }: { address?: string }) => {
             <Tabs.Pager>
               {data?.data.lists.map((list) => {
                 return (
-                  <Suspense fallback={<Spinner size="small" />} key={list.id}>
-                    <TabList
-                      username={profileData?.data.profile.username}
-                      profileId={profileData?.data.profile.profile_id}
-                      isBlocked={isBlocked}
-                      list={list}
-                    />
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="small" />} key={list.id}>
+                      <TabList
+                        username={profileData?.data.profile.username}
+                        profileId={profileData?.data.profile.profile_id}
+                        isBlocked={isBlocked}
+                        list={list}
+                      />
+                    </Suspense>
+                  </ErrorBoundary>
                 );
               })}
             </Tabs.Pager>
@@ -419,9 +422,7 @@ const ProfileTop = ({
           hasLinksInBio.current = true;
           return (
             <TextLink
-              href={`${
-                router.pathname.startsWith("/trending") ? "/trending" : ""
-              }/profile/${username}`}
+              href={`/profile/${username}`}
               tw="font-bold text-black dark:text-white"
               key={i}
             >
