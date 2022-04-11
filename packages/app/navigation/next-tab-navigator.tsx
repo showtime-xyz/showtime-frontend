@@ -81,7 +81,7 @@ export function NextTabNavigator({
 
   return (
     <BottomTab.Navigator
-      initialRouteName="home"
+      initialRouteName="homeTab"
       screenOptions={{
         lazy: Platform.OS === "android" ? false : true,
         headerShown: false,
@@ -131,14 +131,14 @@ export function NextTabNavigator({
       pageProps={pageProps}
     >
       <BottomTab.Screen
-        name="home"
+        name="homeTab"
         component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}
       />
       <BottomTab.Screen
-        name="trending"
+        name="trendingTab"
         component={TrendingNavigator}
         options={{
           tabBarIcon: TrendingTabBarIcon,
@@ -146,7 +146,7 @@ export function NextTabNavigator({
       />
       {width < 768 && (
         <BottomTab.Screen
-          name="camera"
+          name="cameraTab"
           component={CameraNavigator}
           options={{
             tabBarIcon: CameraTabBarIcon,
@@ -156,7 +156,7 @@ export function NextTabNavigator({
       )}
       {width < 768 && (
         <BottomTab.Screen
-          name="notifications"
+          name="notificationsTab"
           component={NotificationsNavigator}
           options={{
             tabBarIcon: NotificationsTabBarIcon,
@@ -165,7 +165,7 @@ export function NextTabNavigator({
       )}
       {width < 768 && (
         <BottomTab.Screen
-          name="profile"
+          name="profileTab"
           component={ProfileNavigator}
           options={{
             tabBarIcon: ProfileTabBarIcon,
