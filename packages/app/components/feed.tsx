@@ -1,6 +1,5 @@
 import { Suspense, useEffect, useContext } from "react";
 
-// import PagerView from "react-native-pager-view";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -12,6 +11,7 @@ import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
+import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
@@ -51,20 +51,19 @@ export const FeedList = () => {
 
   if (isAuthenticated) {
     return (
-      // <PagerView
-      //   ref={pagerRef}
-      //   style={{ flex: 1 }}
-      //   initialPage={1}
-      //   onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
-      // >
-      //   <View key="following-feed">
-      //     <FollowingFeed />
-      //   </View>
-      //   <View key="algorithmic-feed">
-      //     <AlgorithmicFeed />
-      //   </View>
-      // </PagerView>
-      <AlgorithmicFeed />
+      <PagerView
+        ref={pagerRef}
+        style={{ flex: 1 }}
+        initialPage={1}
+        onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
+      >
+        <View key="following-feed">
+          <FollowingFeed />
+        </View>
+        <View key="algorithmic-feed">
+          <AlgorithmicFeed />
+        </View>
+      </PagerView>
     );
   }
 
