@@ -1,3 +1,4 @@
+// TODO: rework this
 import { useCallback } from "react";
 
 import Router from "next/router";
@@ -28,7 +29,7 @@ export const useSettingsNavigation = (address?: string) => {
   const router = useRouter();
   return useCallback(() => {
     if (address) {
-      const as = `/profile/${address}/settings`;
+      const as = `/settings`;
 
       const href = Router.router
         ? {
