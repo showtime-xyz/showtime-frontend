@@ -509,7 +509,7 @@ const ProfileTop = ({
                 <Button
                   size="small"
                   onPress={() => {
-                    router.push(`/profile/${profileId}/edit`);
+                    router.push(`/profile/edit`);
                   }}
                 >
                   Edit profile
