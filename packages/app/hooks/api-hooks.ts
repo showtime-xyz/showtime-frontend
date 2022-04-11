@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo } from "react";
+import { Platform } from "react-native";
 
 import useSWR, { useSWRConfig } from "swr";
 
@@ -279,7 +280,17 @@ export const useMyInfo = () => {
     async (profileId: number) => {
       if (!accessToken) {
         mixpanel.track("Follow but logged out");
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         return;
       }
 
@@ -357,7 +368,17 @@ export const useMyInfo = () => {
   const like = useCallback(
     async (nftId: number) => {
       if (!accessToken) {
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         // TODO: perform the action post login
         return false;
       }

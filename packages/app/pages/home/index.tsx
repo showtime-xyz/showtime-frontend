@@ -22,6 +22,8 @@ const HeaderRight = () => {
   return (
     <Button
       onPress={() => {
+        // This component is native-only so we don't need to
+        // worry about the web router.
         router.push("/login");
       }}
       variant="primary"

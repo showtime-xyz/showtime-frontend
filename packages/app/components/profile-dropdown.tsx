@@ -1,4 +1,4 @@
-import { Share } from "react-native";
+import { Share, Platform } from "react-native";
 
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
@@ -77,7 +77,17 @@ function ProfileDropdown({ user }: Props) {
               await block(user.profile_id);
               router.pop();
             } else {
-              router.push("/login");
+              router.push(
+                Platform.select({
+                  native: "/login",
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, login: true },
+                  },
+                }),
+                "/login",
+                { shallow: true }
+              );
             }
           }}
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
