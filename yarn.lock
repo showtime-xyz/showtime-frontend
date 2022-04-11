@@ -5985,7 +5985,7 @@ __metadata:
     "@tradle/react-native-http": ^2.0.0
     "@types/jest": ^27.4.0
     "@types/uuid": ^8.3.4
-    "@walletconnect/react-native-dapp": ^1.7.7
+    "@walletconnect/react-native-dapp": ^1.7.4
     "@zeego/dropdown-menu": 0.0.2-alpha.28
     app: "*"
     array-to-image: ^1.0.0
@@ -8947,19 +8947,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/browser-utils@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/browser-utils@npm:1.7.7"
-  dependencies:
-    "@walletconnect/safe-json": 1.0.0
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/window-getters": 1.0.0
-    "@walletconnect/window-metadata": 1.0.0
-    detect-browser: 5.2.0
-  checksum: 868f83e81f96704b72b9921a55d58f64481adc27560974a8948d233efe3b139cb88f9f98c5e5bb529085e0a0bc32e2b6047a80aa4bce0ceea8c26d8a13a61d69
-  languageName: node
-  linkType: hard
-
 "@walletconnect/client@npm:^1.7.5":
   version: 1.7.5
   resolution: "@walletconnect/client@npm:1.7.5"
@@ -8972,18 +8959,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/client@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/client@npm:1.7.7"
-  dependencies:
-    "@walletconnect/core": ^1.7.7
-    "@walletconnect/iso-crypto": ^1.7.7
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/utils": ^1.7.7
-  checksum: 12d25945c1ec3fd2227302b56d0b35e805226da04beabc274aa1e93b9c1cd18ee5c22b7fdbdde33993f20b9c0f8a8e1622d5651f592001a93ba14d7df43d3784
-  languageName: node
-  linkType: hard
-
 "@walletconnect/core@npm:^1.7.5":
   version: 1.7.5
   resolution: "@walletconnect/core@npm:1.7.5"
@@ -8992,17 +8967,6 @@ __metadata:
     "@walletconnect/types": ^1.7.5
     "@walletconnect/utils": ^1.7.5
   checksum: fd9f8fab73a639ff2ac39923ae50bdc14c932261b09f7716b781cf9771a2f671503a86bc5aedb96f6bd7b0afc478b90a8aef8ec0c6d737ad9b3a703397e4266e
-  languageName: node
-  linkType: hard
-
-"@walletconnect/core@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/core@npm:1.7.7"
-  dependencies:
-    "@walletconnect/socket-transport": ^1.7.7
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/utils": ^1.7.7
-  checksum: 53b4195fd3a54fe7eab9312a4c61119b8a65f3fe082752c22092adcda4b4667451e39d059a7c13a2f0a71ce8e6913c9fd4982d1db72cbc9c84bf5983bc57f477
   languageName: node
   linkType: hard
 
@@ -9059,17 +9023,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/iso-crypto@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/iso-crypto@npm:1.7.7"
-  dependencies:
-    "@walletconnect/crypto": ^1.0.2
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/utils": ^1.7.7
-  checksum: c00cd358c97424d68c6e85a428929ce9b37d28c5015271d6a25c1dc61acd421c4e216e4da0f5016be60726f19475e280165527ee9c2e09b1efcbfe0fc869fda9
-  languageName: node
-  linkType: hard
-
 "@walletconnect/jsonrpc-types@npm:^1.0.0":
   version: 1.0.0
   resolution: "@walletconnect/jsonrpc-types@npm:1.0.0"
@@ -9121,18 +9074,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/react-native-dapp@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/react-native-dapp@npm:1.7.7"
+"@walletconnect/react-native-dapp@npm:^1.7.4":
+  version: 1.7.5
+  resolution: "@walletconnect/react-native-dapp@npm:1.7.5"
   dependencies:
-    "@walletconnect/client": ^1.7.7
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/utils": ^1.7.7
+    "@walletconnect/client": ^1.7.5
+    "@walletconnect/types": ^1.7.5
+    "@walletconnect/utils": ^1.7.5
     keyvaluestorage: 0.7.1
     react-native-qrcode-svg: 6.0.6
     react-native-svg: 9.6.4
     use-deep-compare-effect: 1.6.1
-  checksum: db153f0b3c0f7bf6e1b78e7ee2ac3870d4dd5c01e1ab3e5c129730dfecbf1124bc2c3a6030053bf9b2ab3c172c97f0a47d6ad6cb026e6b505a3f859055085228
+  checksum: dfbe37c30f63c371e61baecbf407d58b2aaab3bdcfff89963600a110f7672541030069408c787d94139c6365b66132dab88ef7b95d56dc81934dbfd8185df936
   languageName: node
   linkType: hard
 
@@ -9154,28 +9107,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/socket-transport@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/socket-transport@npm:1.7.7"
-  dependencies:
-    "@walletconnect/types": ^1.7.7
-    "@walletconnect/utils": ^1.7.7
-    ws: 7.5.3
-  checksum: 4a64dfb70f7866a3ab70e562a3c6881bdc29b086f10f119cc715e3a6669f995e91ee92b05ed4e1d91cfa9faf85a36b8fe965cc607192ab70a1ce25ea3a666185
-  languageName: node
-  linkType: hard
-
 "@walletconnect/types@npm:^1.7.5":
   version: 1.7.5
   resolution: "@walletconnect/types@npm:1.7.5"
   checksum: 30b663f47c522bb6a9d635ec707705fee41200cfde86a74e33434b58ff0543b8936cc24928b9a4b59573883771ec3362981016750703cc22174441d2e3aa2878
-  languageName: node
-  linkType: hard
-
-"@walletconnect/types@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/types@npm:1.7.7"
-  checksum: cbdb3f45c553a7994e0c3d816a1bd3280fb79dbefccbb8d126d8f770c0d771728600124707ef23d511951ef023e37ea1f9a84bd61497c09fc4c538f0835e0c00
   languageName: node
   linkType: hard
 
@@ -9191,21 +9126,6 @@ __metadata:
     js-sha3: 0.8.0
     query-string: 6.13.5
   checksum: 7ff7d098089d11121dd824f613044a47adb41075af1d1c2f3c41d9540fd18ad3d71eafa544a75f0dbb2b4934c1124c0548498654d5ee2192f00b79145d4ea90e
-  languageName: node
-  linkType: hard
-
-"@walletconnect/utils@npm:^1.7.7":
-  version: 1.7.7
-  resolution: "@walletconnect/utils@npm:1.7.7"
-  dependencies:
-    "@walletconnect/browser-utils": ^1.7.7
-    "@walletconnect/encoding": ^1.0.1
-    "@walletconnect/jsonrpc-utils": ^1.0.0
-    "@walletconnect/types": ^1.7.7
-    bn.js: 4.11.8
-    js-sha3: 0.8.0
-    query-string: 6.13.5
-  checksum: 5a96d7ba094665f7713fe5ef5f80aaa43692bacae859ebc0479f788ba745bad8f2ca390f0f9d2b7bcf9bca18f861daef9b4e972a119238bebe6f55c93beaa29b
   languageName: node
   linkType: hard
 
