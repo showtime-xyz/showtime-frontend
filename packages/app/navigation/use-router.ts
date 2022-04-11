@@ -1,8 +1,9 @@
 import {
-  useNavigation as useNativeRouter,
+  useNavigation,
   NavigationState,
+  StackActions,
 } from "@react-navigation/native";
-import { useRouter as SolitoRouter } from "solito/router";
+import { useRouter as useSolitoRouter } from "solito/router";
 
 const getPath = (navigationState: NavigationState) => {
   return (
@@ -13,12 +14,13 @@ const getPath = (navigationState: NavigationState) => {
 };
 
 export function useRouter() {
-  const { getState } = useNativeRouter();
-  const solitoRouter = SolitoRouter();
+  const { dispatch, getState } = useNavigation();
+  const solitoRouter = useSolitoRouter();
+
   return {
     ...solitoRouter,
     pop: () => {
-      solitoRouter.back();
+      dispatch(StackActions.pop());
     },
     pathname: getPath(getState()),
     query: [],
