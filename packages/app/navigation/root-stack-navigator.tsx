@@ -1,8 +1,6 @@
 import { Platform } from "react-native";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
@@ -22,15 +20,20 @@ import { UnlistScreen } from "app/screens/unlist";
 import { useIsDarkMode } from "design-system/hooks";
 
 import { NextTabNavigator } from "./next-tab-navigator";
+import { NextNavigationProps } from "./types";
+import { createNextNavigator } from "./universal-navigator/stack-navigator";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNextNavigator();
 
-export function RootStackNavigator() {
+export function RootStackNavigator({
+  pageProps,
+  Component,
+}: NextNavigationProps) {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator Component={Component} pageProps={pageProps}>
       {/* Bottom tab navigator */}
       <Stack.Screen
         name="bottomTabs"
@@ -78,7 +81,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="transfer" component={TransferScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
-        <Stack.Screen name="burn" component={DeleteScreen} />
+        <Stack.Screen name="delete" component={DeleteScreen} />
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />

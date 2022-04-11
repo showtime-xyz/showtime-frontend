@@ -1,8 +1,8 @@
 import type { ComponentProps, ComponentType } from "react";
 
-import { useLinkProps } from "@react-navigation/native";
 import NextLink from "next/link";
 
+import { useLinkProps } from "app/lib/react-navigation/native";
 import { parseNextPath } from "app/navigation/parse-next-path";
 
 type Props = {

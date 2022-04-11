@@ -211,7 +211,7 @@ function NFTDropdown({ nftId }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => router.push(`/burn?nftId=${nftId}`)}
+            onSelect={() => router.push(`/nft/${nftId}/delete`)}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

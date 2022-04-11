@@ -9,6 +9,7 @@ export interface Analytics {
   ) => void;
   identify: (userId: number, traits: Record<string, any>) => void;
   ready: (callback: () => void) => void;
+  reset: () => void;
 }
 
 export interface AnalyticsWindow extends Window {

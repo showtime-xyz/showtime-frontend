@@ -21,7 +21,6 @@ import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { enableScreens } from "react-native-screens";
 import { SWRConfig } from "swr";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
@@ -32,6 +31,7 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { SafeAreaProvider } from "app/lib/safe-area";
 import { Sentry } from "app/lib/sentry";
 import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";

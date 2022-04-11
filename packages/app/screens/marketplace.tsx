@@ -1,6 +1,5 @@
-import { useHeaderHeight } from "@react-navigation/elements";
-
 import { withColorScheme } from "app/components/memo-with-theme";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { View, Text } from "design-system";
 

@@ -1,20 +1,19 @@
-import { Suspense, useCallback, useEffect, useRef } from "react";
+import { Suspense, useCallback, useRef } from "react";
 import { Platform } from "react-native";
 
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { Comments } from "app/components/comments";
+import { CommentsStatus } from "app/components/comments/comments-status";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useIsFocused } from "app/lib/react-navigation/native";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
-import { CommentsStatus } from "../components/comments/comments-status";
-
 type Query = {
-  nftId: number;
+  id: number;
 };
 
 const { useParam } = createParam<Query>();
@@ -31,7 +30,7 @@ const modalPresentationHeight = Platform.isPad
   ? 12
   : 0;
 
-export function CommentsScreen() {
+export function CommentsModal() {
   const wasClosedByUserAction = useRef<boolean | undefined>(undefined);
 
   //#region hooks
@@ -39,7 +38,7 @@ export function CommentsScreen() {
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();
   // @ts-ignore
-  const [nftId, _] = useParam("nftId");
+  const [nftId, _] = useParam("id");
   //#endregion
 
   //#region callbacks
@@ -59,9 +58,9 @@ export function CommentsScreen() {
   }, [router, isModalFocused]);
   //#endregion
 
-  const CommentsModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
   return (
-    <CommentsModal
+    <ModalComponent
       title="Comments"
       snapPoints={snapPoints}
       height="h-[90vh]"
@@ -80,6 +79,12 @@ export function CommentsScreen() {
           <Comments nftId={nftId!} />
         </Suspense>
       </ErrorBoundary>
-    </CommentsModal>
+    </ModalComponent>
   );
 }
+
+export const CommentsScreen = withModalScreen(
+  CommentsModal,
+  "/nft/[id]/comments",
+  "comments"
+);

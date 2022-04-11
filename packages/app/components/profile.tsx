@@ -10,11 +10,6 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import {
-  useBottomTabBarHeight,
-  BottomTabBarHeightContext,
-} from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -32,6 +27,11 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -280,7 +280,7 @@ const TabList = ({
   const onItemPress = useCallback(
     (index: number) => {
       router.push(
-        `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+        `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
     },
     [list.id, profileId, filter.collectionId, filter.sortId]
@@ -509,7 +509,7 @@ const ProfileTop = ({
                 <Button
                   size="small"
                   onPress={() => {
-                    router.push("/editProfile");
+                    router.push(`/profile/edit`);
                   }}
                 >
                   Edit profile

@@ -1,8 +1,7 @@
 import { Platform } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
-
 import { EditProfile } from "app/components/edit-profile";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { View } from "design-system";
 

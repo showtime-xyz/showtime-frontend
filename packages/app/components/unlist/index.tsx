@@ -19,18 +19,6 @@ const UnlistingScrollView =
 
 const Unlist = (props: Props) => {
   const nftId = props.nftId;
-  const router = useRouter();
-  const { isAuthenticated } = useUser();
-
-  /**
-   * Redirect on log out
-   */
-  useEffect(() => {
-    const isUnauthenticated = !isAuthenticated;
-    if (isUnauthenticated) {
-      router.pop();
-    }
-  }, [isAuthenticated]);
 
   return (
     <BottomSheetModalProvider>

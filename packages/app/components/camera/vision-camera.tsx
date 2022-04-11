@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useIsFocused } from "@react-navigation/native";
-import * as Haptics from "expo-haptics";
 import { AnimatePresence, View as MotiView } from "moti";
 import {
   PinchGestureHandler,
@@ -31,6 +28,9 @@ import {
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { track } from "app/lib/analytics";
+import { Haptics } from "app/lib/haptics";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useIsFocused } from "app/lib/react-navigation/native";
 import { useRouter } from "app/navigation/use-router";
 
 import { Flash, FlashOff } from "design-system/icon";

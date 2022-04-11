@@ -1,25 +1,36 @@
+import "raf/polyfill";
+
 import { useEffect } from "react";
 
-// import { Partytown } from "@builder.io/partytown/react";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
-import "raf/polyfill";
-// import { enableFreeze } from 'react-native-screens'
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
+import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
+// import { enableFreeze } from 'react-native-screens'
+import { SafeAreaProvider } from "app/lib/safe-area";
 import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
+import { FeedProvider } from "app/providers/feed-provider";
+import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+import { CommentsScreen } from "app/screens/comments";
+import { CreateScreen } from "app/screens/create";
+import { DeleteScreen } from "app/screens/delete";
+import { DetailsScreen } from "app/screens/details";
+import { ListScreen } from "app/screens/list";
+import { LoginScreen } from "app/screens/login";
+import { TransferScreen } from "app/screens/transfer";
+import { UnlistScreen } from "app/screens/unlist";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -82,12 +93,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     // Load feature definitions from API
-    fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
-      .then((res) => res.json())
-      .then((json) => {
-        growthbook.setFeatures(json.features);
-      });
-
+    // TODO: fix bug with `.json()` on web
+    // fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     growthbook.setFeatures(json.features);
+    //   });
     // growthbook.setAttributes({
     //   "id": "foo",
     // })
@@ -106,46 +117,60 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         {/* Analytics */}
-        <script
+        <Script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
-        {/* <Partytown debug={true} forward={["dataLayer.push"]} /> */}
         <Script
-          // type="text/partytown"
-          strategy="lazyOnload"
+          // strategy="lazyOnload"
+          strategy="worker"
           dangerouslySetInnerHTML={{
             __html: renderAnalyticsSnippet(),
           }}
         />
       </Head>
-      <DripsyProvider theme={theme}>
+      <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <NavigationProvider>
-              <SWRConfig
-                value={{
-                  provider: isServer ? () => new Map() : localStorageProvider,
-                }}
-              >
-                <Web3Provider>
-                  <AppContextProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <GrowthBookProvider growthbook={growthbook}>
-                          {
-                            // TODO: use RootStackNavigator instead?
-                          }
-                          <NextTabNavigator
-                            Component={Component}
-                            pageProps={pageProps}
-                          />
-                        </GrowthBookProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContextProvider>
-                </Web3Provider>
-              </SWRConfig>
-            </NavigationProvider>
+            <SWRConfig
+              value={{
+                provider: isServer ? () => new Map() : localStorageProvider,
+              }}
+            >
+              <Web3Provider>
+                <AppContextProvider>
+                  <AuthProvider>
+                    <UserProvider>
+                      <MintProvider>
+                        <BottomSheetModalProvider>
+                          <GrowthBookProvider growthbook={growthbook}>
+                            <FeedProvider>
+                              <NavigationProvider>
+                                {/* TODO: canGoBack */}
+                                <Header canGoBack={false} />
+
+                                <Component {...pageProps} />
+
+                                {/* <Footer /> */}
+
+                                {/* Modals */}
+                                <LoginScreen />
+                                <CommentsScreen />
+                                <TransferScreen />
+                                <CreateScreen />
+                                <DeleteScreen />
+                                <ListScreen />
+                                <UnlistScreen />
+                                <DetailsScreen />
+                              </NavigationProvider>
+                            </FeedProvider>
+                          </GrowthBookProvider>
+                        </BottomSheetModalProvider>
+                      </MintProvider>
+                    </UserProvider>
+                  </AuthProvider>
+                </AppContextProvider>
+              </Web3Provider>
+            </SWRConfig>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>

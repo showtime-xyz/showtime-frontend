@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Dimensions, Pressable } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
@@ -45,7 +45,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
         >
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
             <Image
-              source={{ uri: props.creator.img_url }}
+              source={{ uri: props.creator?.img_url ?? DEFAULT_PROFILE_PIC }}
               tw="h-8 w-8 rounded-full"
             />
           </View>
@@ -86,6 +86,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           return (
             <Pressable
               onPress={() =>
+                // TODO: change to `useRouter`
                 navigation.navigate("swipeList", {
                   initialScrollIndex: idx,
                   data: props.creator.top_items,

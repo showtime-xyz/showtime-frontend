@@ -1,13 +1,9 @@
 import { Suspense, useEffect, useContext } from "react";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
-import PagerView from "react-native-pager-view";
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
@@ -15,6 +11,10 @@ import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
+import { PagerView } from "app/lib/pager-view";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useNavigation } from "app/lib/react-navigation/native";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { Pressable } from "design-system/pressable-scale";
 import { Text } from "design-system/text";

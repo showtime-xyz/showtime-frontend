@@ -21,5 +21,7 @@ export function useRouter() {
       solitoRouter.back();
     },
     pathname: getPath(getState()),
+    query: [],
+    asPath: getPath(getState()),
   };
 }
