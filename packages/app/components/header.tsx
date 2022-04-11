@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
@@ -7,14 +7,7 @@ import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Pressable, Button, ButtonLabel } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
-import {
-  Showtime,
-  ShowtimeGradient,
-  Plus,
-  Search,
-  ArrowLeft,
-} from "design-system/icon";
+import { Showtime, Plus, Search, ArrowLeft } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useToast } from "design-system/toast";
 
@@ -61,7 +54,17 @@ const HeaderRight = () => {
             ) : (
               <Button
                 onPress={() => {
-                  router.push("/login");
+                  router.push(
+                    Platform.select({
+                      native: "/login",
+                      web: {
+                        pathname: router.pathname,
+                        query: { ...router.query, login: true },
+                      },
+                    }),
+                    "/login",
+                    { shallow: true }
+                  );
                 }}
                 variant="primary"
                 size="small"
@@ -137,4 +140,20 @@ const HeaderCenter = () => {
   );
 };
 
-export { HeaderLeft, HeaderCenter, HeaderRight };
+const Header = ({ canGoBack }: { canGoBack: boolean }) => {
+  return (
+    <View tw="sticky top-0 right-0 left-0 z-50 h-14 flex-row items-center justify-between px-4 py-2">
+      <View tw="w-20 items-start">
+        <HeaderLeft canGoBack={canGoBack} />
+      </View>
+      <View tw="w-20 items-center">
+        <HeaderCenter />
+      </View>
+      <View tw="w-20 items-end">
+        <HeaderRight />
+      </View>
+    </View>
+  );
+};
+
+export { Header, HeaderLeft, HeaderCenter, HeaderRight };

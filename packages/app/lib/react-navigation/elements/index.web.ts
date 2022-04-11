@@ -1,7 +1,5 @@
-// const useHeaderHeight = () => {
-//   return 0;
-// };
+const useHeaderHeight = () => {
+  return 0;
+};
 
-// export { useHeaderHeight };
-
-export { useHeaderHeight } from "@react-navigation/elements";
+export { useHeaderHeight };

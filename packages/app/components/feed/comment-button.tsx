@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { Platform } from "react-native";
 
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
@@ -15,7 +16,19 @@ export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
 
   const handleOnPress = useCallback(() => {
-    router.push(`/nft/${nft?.nft_id}/comments`);
+    const as = `/nft/${nft?.nft_id}/comments`;
+
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: { ...router.query, comments: true, id: nft?.nft_id },
+        },
+      }),
+      as,
+      { shallow: true }
+    );
   }, [router, nft?.nft_id]);
 
   if (!nft) {

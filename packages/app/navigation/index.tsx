@@ -1,11 +1,8 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "next/router";
-
 import {
   NavigationContainer,
-  useLinkTo,
   LinkingOptions,
 } from "app/lib/react-navigation/native";
 import { linking } from "app/navigation/linking";

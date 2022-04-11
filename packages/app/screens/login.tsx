@@ -5,6 +5,7 @@ import { Login } from "app/components/login";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal } from "design-system";
 
@@ -24,7 +25,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-export function LoginScreen() {
+function LoginModal() {
   //#region hooks
   const [redirect_url] = useParam("redirect_url");
   const router = useRouter();
@@ -57,3 +58,5 @@ export function LoginScreen() {
     </Modal>
   );
 }
+
+export const LoginScreen = withModalScreen(LoginModal, "/login", "login");

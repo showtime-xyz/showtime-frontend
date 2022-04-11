@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 import useUnmountSignal from "use-unmount-signal";
@@ -97,7 +98,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
 
-      router.push("/");
+      if (Platform.OS !== "web") {
+        router.push("/");
+      }
     },
     [connector]
   );

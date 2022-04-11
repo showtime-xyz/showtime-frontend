@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { mixpanel } from "app/lib/mixpanel";
-import { withColorScheme } from "app/components/memo-with-theme";
+
 import { List } from "app/components/list";
+import { withColorScheme } from "app/components/memo-with-theme";
+import { mixpanel } from "app/lib/mixpanel";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 type Query = {
   id: string;
@@ -11,7 +13,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const ListScreen = withColorScheme(() => {
+const ListModal = withColorScheme(() => {
   useHideHeader();
   const [nftId] = useParam("id");
   useEffect(() => {
@@ -21,4 +23,4 @@ const ListScreen = withColorScheme(() => {
   return <List nftId={nftId} />;
 });
 
-export { ListScreen };
+export const ListScreen = withModalScreen(ListModal, "/nft/[id]/list", "list");

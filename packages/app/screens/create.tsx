@@ -8,6 +8,7 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
@@ -17,7 +18,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const CreateScreen = () => {
+const CreateModal = () => {
   useHideHeader();
   //#region hooks
   const router = useRouter();
@@ -28,7 +29,7 @@ const CreateScreen = () => {
 
   //#region variables
   const snapPoints = useMemo(() => ["90%"], []);
-  const CreateModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
   //#endregion
 
   //#region effects
@@ -77,7 +78,7 @@ const CreateScreen = () => {
   }
 
   return (
-    <CreateModal
+    <ModalComponent
       title="Add details"
       close={router.pop}
       snapPoints={snapPoints}
@@ -86,8 +87,8 @@ const CreateScreen = () => {
       bodyContentTW="p-0"
     >
       <Create uri={uri} />
-    </CreateModal>
+    </ModalComponent>
   );
 };
 
-export { CreateScreen };
+export const CreateScreen = withModalScreen(CreateModal, "/create", "create");

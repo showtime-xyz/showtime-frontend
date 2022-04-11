@@ -2,7 +2,7 @@ import { useRouter as useNextRouter } from "next/router";
 import { useRouter as SolitoRouter } from "solito/router";
 
 export function useRouter() {
-  const { pathname } = useNextRouter();
+  const { pathname, query, asPath } = useNextRouter();
   const solitoRouter = SolitoRouter();
 
   return {
@@ -11,5 +11,7 @@ export function useRouter() {
       solitoRouter.back();
     },
     pathname,
+    query,
+    asPath,
   };
 }

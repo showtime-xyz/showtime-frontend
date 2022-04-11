@@ -11,19 +11,26 @@ import Script from "next/script";
 import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
+import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "app/lib/safe-area";
 import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+import { CommentsScreen } from "app/screens/comments";
+import { CreateScreen } from "app/screens/create";
+import { DeleteScreen } from "app/screens/delete";
+import { DetailsScreen } from "app/screens/details";
+import { ListScreen } from "app/screens/list";
+import { LoginScreen } from "app/screens/login";
+import { TransferScreen } from "app/screens/transfer";
+import { UnlistScreen } from "app/screens/unlist";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -124,39 +131,46 @@ export default function App({ Component, pageProps }: AppProps) {
       <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <NavigationProvider>
-              <SWRConfig
-                value={{
-                  provider: isServer ? () => new Map() : localStorageProvider,
-                }}
-              >
-                <Web3Provider>
-                  <AppContextProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <MintProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                {/* <Component {...pageProps} /> */}
-                                {/* <RootStackNavigator
-                                  Component={Component}
-                                  pageProps={pageProps}
-                                /> */}
-                                <NextTabNavigator
-                                  Component={Component}
-                                  pageProps={pageProps}
-                                />
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </MintProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContextProvider>
-                </Web3Provider>
-              </SWRConfig>
-            </NavigationProvider>
+            <SWRConfig
+              value={{
+                provider: isServer ? () => new Map() : localStorageProvider,
+              }}
+            >
+              <Web3Provider>
+                <AppContextProvider>
+                  <AuthProvider>
+                    <UserProvider>
+                      <MintProvider>
+                        <BottomSheetModalProvider>
+                          <GrowthBookProvider growthbook={growthbook}>
+                            <FeedProvider>
+                              <NavigationProvider>
+                                {/* TODO: canGoBack */}
+                                <Header canGoBack={false} />
+
+                                <Component {...pageProps} />
+
+                                {/* <Footer /> */}
+
+                                {/* Modals */}
+                                <LoginScreen />
+                                <CommentsScreen />
+                                <TransferScreen />
+                                <CreateScreen />
+                                <DeleteScreen />
+                                <ListScreen />
+                                <UnlistScreen />
+                                <DetailsScreen />
+                              </NavigationProvider>
+                            </FeedProvider>
+                          </GrowthBookProvider>
+                        </BottomSheetModalProvider>
+                      </MintProvider>
+                    </UserProvider>
+                  </AuthProvider>
+                </AppContextProvider>
+              </Web3Provider>
+            </SWRConfig>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
