@@ -1,8 +1,8 @@
-apps/next-react @TatisLois
-apps/next-react-native @TatisLois
+apps/next-react @axeldelafosse
+apps/next-react-native @axeldelafosse @intergalacticspacehighway
 apps/expo @intergalacticspacehighway
 apps/storybook-react @axeldelafosse
 apps/storybook-react-native @axeldelafosse
-packages/app @axeldelafosse @intergalacticspacehighway @TatisLois
+packages/app @axeldelafosse @intergalacticspacehighway
 packages/design-system @axeldelafosse
 .github/workflows @axeldelafosse
