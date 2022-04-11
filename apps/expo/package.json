@@ -68,7 +68,7 @@
     "@testing-library/jest-native": "^4.0.4",
     "@testing-library/react-native": "^9.0.0",
     "@tradle/react-native-http": "^2.0.0",
-    "@walletconnect/react-native-dapp": "^1.7.4",
+    "@walletconnect/react-native-dapp": "^1.7.7",
     "@zeego/dropdown-menu": "0.0.2-alpha.28",
     "app": "*",
     "array-to-image": "^1.0.0",
