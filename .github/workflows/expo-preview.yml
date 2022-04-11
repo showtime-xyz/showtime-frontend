@@ -68,12 +68,13 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
+        working-directory: apps/expo
         if: success() && steps.PR.outputs.number != ''
         run: STAGE=staging eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
       - name: Preview Deep Link
         id: publish-url
-        run: echo "::set-output name=url::exp+io.showtime.development://expo-development-client/?url=https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd?channel-name=pr-${{ steps.PR.outputs.number }}"
+        run: echo "::set-output name=url::exp+io.showtime.development://expo-development-client/?url=https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd&channel-name=pr-${{ steps.PR.outputs.number }}"
 
       - name: Find PR Comment
         uses: peter-evans/find-comment@v1

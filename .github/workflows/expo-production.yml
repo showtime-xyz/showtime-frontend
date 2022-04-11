@@ -72,6 +72,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
+        working-directory: apps/expo
         run: STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build on EAS
