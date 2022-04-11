@@ -28080,6 +28080,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "showtime@workspace:."
   dependencies:
+    "@react-native-menu/menu": ^0.5.2
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@types/react": ~17.0.36
     "@types/react-native": ~0.66.5
