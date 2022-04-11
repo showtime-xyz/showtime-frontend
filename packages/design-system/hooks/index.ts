@@ -19,8 +19,9 @@ export const useColorScheme = () => {
 export const useIsDarkMode = () => {
   const userColorScheme = useUserColorScheme();
   const deviceColorScheme = useDeviceColorScheme();
-
-  return userColorScheme === "dark" ?? deviceColorScheme === "dark";
+  return userColorScheme
+    ? userColorScheme === "dark"
+    : deviceColorScheme === "dark";
 };
 
 export const useOnFocus = () => {
