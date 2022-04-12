@@ -14,6 +14,7 @@ import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
+import LogRocket from "app/lib/logrocket";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "app/lib/safe-area";
 import { NavigationProvider } from "app/navigation";
@@ -90,6 +91,11 @@ export default function App({ Component, pageProps }: AppProps) {
     // growthbook.setAttributes({
     //   "id": "foo",
     // })
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
   }, []);
 
   return (

@@ -6153,6 +6153,7 @@ __metadata:
     fortmatic: ^2.2.1
     jwt-decode: ^3.1.2
     libsodium-wrappers: ^0.7.9
+    logrocket: ^2.2.1
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
     next: 12.1.5-canary.1
@@ -21432,6 +21433,13 @@ __metadata:
   bin:
     logkitty: bin/logkitty.js
   checksum: f1af990ff09564ef5122597a52bba6d233302c49865e6ddea1343d2a0e2efe3005127e58e93e25c98b6b1f192731fc5c52e3204876a15fc9a52abc8b4f1af931
+  languageName: node
+  linkType: hard
+
+"logrocket@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "logrocket@npm:2.2.1"
+  checksum: 23d2880b921e940a17bc711bdd7eef2a87cd607decb98c1e5659bea017baf1ac8225dda7cde9e45ab9b02fcf7a205faed9693db0dc79d77780c45ba4bdd23122
   languageName: node
   linkType: hard
 
