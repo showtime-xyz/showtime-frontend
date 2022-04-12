@@ -12,7 +12,6 @@ const useNFTActivities = ({ nftId }: { nftId: number }) => {
         url: NFT.ACTIVITIES(id),
         method: "GET",
       });
-      console.log(response);
       setNftActivities(response?.data?.history || []);
     } catch (error) {}
   };
