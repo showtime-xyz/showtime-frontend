@@ -26,8 +26,48 @@ type Props = {
 function ProfileDropdown({ user }: Props) {
   const { isAuthenticated } = useUser();
   const { report } = useReport();
-  const { block } = useBlock();
+  const { block, unblock, getIsBlocked } = useBlock();
   const router = useRouter();
+
+  const isBlocked = getIsBlocked(user.profile_id);
+  //#region callbacks
+  const handleOnBlockPress = async () => {
+    if (isAuthenticated) {
+      await block(user.profile_id);
+      router.pop();
+    } else {
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
+    }
+  };
+  const handleOnUnblockPress = async () => {
+    if (isAuthenticated) {
+      await unblock(user.profile_id);
+      router.pop();
+    } else {
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
+    }
+  };
+  //#endregion
 
   return (
     <DropdownMenuRoot>
@@ -71,32 +111,27 @@ function ProfileDropdown({ user }: Props) {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        <DropdownMenuItem
-          onSelect={async () => {
-            if (isAuthenticated) {
-              await block(user.profile_id);
-              router.pop();
-            } else {
-              router.push(
-                Platform.select({
-                  native: "/login",
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, login: true },
-                  },
-                }),
-                "/login",
-                { shallow: true }
-              );
-            }
-          }}
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-          key="block"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Block
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {!isBlocked ? (
+          <DropdownMenuItem
+            key="block"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            onSelect={handleOnBlockPress}
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Block
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem
+            key="block"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            onSelect={handleOnUnblockPress}
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Unblock User
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
