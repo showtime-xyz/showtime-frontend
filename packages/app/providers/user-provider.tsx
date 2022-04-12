@@ -37,11 +37,12 @@ export function UserProvider({ children }: UserProviderProps) {
   const userContextValue = useMemo(
     () => ({
       user: data,
+      mutate,
       error,
       isLoading,
       isAuthenticated: accessToken != undefined,
     }),
-    [isLoading, data, accessToken]
+    [isLoading, data, accessToken, mutate]
   );
   //#endregion
 
