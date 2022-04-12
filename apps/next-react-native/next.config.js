@@ -34,7 +34,7 @@ const nextConfig = {
     optimizeCss: true,
     esmExternals: "loose",
     reactRoot: true,
-    nextScriptWorkers: true,
+    // nextScriptWorkers: true,
     // TODO: enable `concurrentFeatures: true`
   },
   typescript: {

@@ -295,7 +295,10 @@ function App() {
 
   useEffect(() => {
     const initAnalytics = async () => {
-      await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
+      await rudderClient.setup(
+        process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
+        rudderConfig
+      );
     };
 
     initAnalytics();

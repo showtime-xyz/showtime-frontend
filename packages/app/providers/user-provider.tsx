@@ -1,4 +1,5 @@
 import { useEffect, useMemo, ReactNode } from "react";
+import { Platform } from "react-native";
 
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
@@ -71,7 +72,9 @@ export function UserProvider({ children }: UserProviderProps) {
         });
 
         // Handle registration for push notification
-        await registerForPushNotificationsAsync();
+        if (Platform.OS !== "web") {
+          await registerForPushNotificationsAsync();
+        }
       }
     };
 
