@@ -70,7 +70,7 @@ jobs:
       - name: EAS Update
         working-directory: apps/expo
         if: success() && steps.PR.outputs.number != ''
-        run: STAGE=staging eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
+        run: EXPO_DEBUG=true STAGE=staging npx @bycedric/some-cli-test update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
       - name: Preview Deep Link
         id: publish-url
