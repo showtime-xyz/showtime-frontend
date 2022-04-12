@@ -65,6 +65,7 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
           rowRenderer={rowRenderer}
           ref={ref}
           onVisibleIndicesChanged={onVisibleIndicesChanged}
+          useWindowScroll={Platform.OS === "web"}
         />
       </ViewabilityItemsContext.Provider>
     );
