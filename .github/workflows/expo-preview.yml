@@ -68,9 +68,8 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
-        working-directory: apps/expo
         if: success() && steps.PR.outputs.number != ''
-        run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=staging npx @bycedric/some-cli-test update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
+        run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=staging eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
       - name: Preview Deep Link
         id: publish-url
