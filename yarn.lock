@@ -6153,6 +6153,7 @@ __metadata:
     fortmatic: ^2.2.1
     jwt-decode: ^3.1.2
     libsodium-wrappers: ^0.7.9
+    logrocket: ^2.2.1
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
     next: 12.1.5-canary.1
@@ -6178,6 +6179,7 @@ __metadata:
     react-string-replace: ^0.4.4
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
+    rudder-sdk-js: ^2.3.6
     sortablejs: ^1.14.0
     sotez: ^10.0.0
     swr: ^1.1.0-beta.9
@@ -21434,6 +21436,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"logrocket@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "logrocket@npm:2.2.1"
+  checksum: 23d2880b921e940a17bc711bdd7eef2a87cd607decb98c1e5659bea017baf1ac8225dda7cde9e45ab9b02fcf7a205faed9693db0dc79d77780c45ba4bdd23122
+  languageName: node
+  linkType: hard
+
 "loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.3.1, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -27468,6 +27477,13 @@ __metadata:
   version: 4.8.5
   resolution: "rsvp@npm:4.8.5"
   checksum: 2d8ef30d8febdf05bdf856ccca38001ae3647e41835ca196bc1225333f79b94ae44def733121ca549ccc36209c9b689f6586905e2a043873262609744da8efc1
+  languageName: node
+  linkType: hard
+
+"rudder-sdk-js@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "rudder-sdk-js@npm:2.3.6"
+  checksum: ea7b7a4a815179d06b87efa558b3c0baf7b8a4ebf78169caa50ed4ef350fb1855868074883624aadce5748d06dd4d61aa899b33c1e30b5b7095416faf138f123
   languageName: node
   linkType: hard
 

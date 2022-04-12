@@ -1,1 +1,3 @@
-export default {};
+import LogRocket from "logrocket";
+
+export default LogRocket;
