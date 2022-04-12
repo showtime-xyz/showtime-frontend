@@ -21,6 +21,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       // TODO: change this to use `nft/:id`
       nft: "nft/:chainName/:contractAddress/:tokenId",
       comments: "nft/:id/comments",
+      nftActivities: "nft/:id/activities",
       transfer: "nft/:id/transfer",
       list: "nft/:id/list",
       unlist: "nft/:id/unlist",
