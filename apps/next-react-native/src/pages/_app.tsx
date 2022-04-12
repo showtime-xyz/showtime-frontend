@@ -7,6 +7,7 @@ import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
@@ -39,6 +40,17 @@ import { ToastProvider } from "design-system/toast";
 import "../styles/styles.css";
 
 // enableFreeze(true)
+
+const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
+const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
+
+function renderEmptyAnalyticsSnippet() {
+  return `rudderanalytics=window.rudderanalytics=[];for(var methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],i=0;i<methods.length;i++){var method=methods[i];rudderanalytics[method]=function(d){return function(){rudderanalytics.push([d,...arguments])}}(method)}rudderanalytics.load("${RUDDERSTACK_WRITE_KEY}","${RUDDERSTACK_DATA_PLANE_URL}",{sendAdblockPage:!1,sendAdblockPageOptions:{integrations:{All:!1,Amplitude:!1}},logLevel:"ERROR"});`;
+}
+
+function renderAnalyticsSnippet() {
+  return `!function(){var e=window.rudderanalytics=window.rudderanalytics||[];e.methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],e.factory=function(t){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(t),e.push(r),e}};for(var t=0;t<e.methods.length;t++){var r=e.methods[t];e[r]=e.factory(r)}e.loadJS=function(e,t){var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.rudderlabs.com/v1/rudder-analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a)},e.loadJS(),e.load(${RUDDERSTACK_WRITE_KEY},${RUDDERSTACK_DATA_PLANE_URL}),e.page()}();`;
+}
 
 // Create a GrowthBook instance
 const growthbook = new GrowthBook({
@@ -109,6 +121,15 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
           name="viewport"
         />
+        {/* Analytics */}
+        {/* <Script
+          dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
+        />
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: renderAnalyticsSnippet(),
+          }}
+        /> */}
       </Head>
       <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
