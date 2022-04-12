@@ -155,6 +155,16 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
+        <DropdownMenuItem
+          onSelect={() => router.push(`/nft/${nftId}/activities`)}
+          key="nftActivities"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Activity
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
