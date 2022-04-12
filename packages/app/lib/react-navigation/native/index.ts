@@ -10,4 +10,5 @@ export {
   NavigationContainer,
   LinkingOptions,
   useLinkProps,
+  getStateFromPath,
 } from "@react-navigation/native";

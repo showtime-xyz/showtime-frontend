@@ -228,7 +228,7 @@ const NotificationDescription = ({
 const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   return (
     <TextLink
-      href={`/profile/${actor.wallet_address}`}
+      href={`/@${actor.username ?? actor.wallet_address}`}
       variant="text-sm"
       tw="text-black dark:text-white font-bold"
     >
@@ -253,7 +253,7 @@ const NOTIFICATION_TYPES = {
 export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
   const profileLink =
-    "/profile/" +
+    "/@" +
     (notification.link_to_profile__address
       ? `${
           notification.link_to_profile__username ||

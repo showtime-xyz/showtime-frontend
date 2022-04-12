@@ -1,4 +1,5 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
@@ -66,7 +67,17 @@ function CommentRowComponent({
   const handleOnLikePress = useCallback(
     async function handleOnLikePress() {
       if (!isAuthenticated) {
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         return;
       }
 
@@ -97,7 +108,17 @@ function CommentRowComponent({
   }, []);
   const handleOnReplyPress = useCallback(() => {
     if (!isAuthenticated) {
-      router.push("/login");
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
       return;
     }
 
@@ -106,7 +127,7 @@ function CommentRowComponent({
     }
   }, [reply, comment, isAuthenticated]);
   const handleOnUserPress = useCallback((username: string) => {
-    router.push(`/profile/${username}`);
+    router.push(`/@${username}`);
   }, []);
   //#endregion
 

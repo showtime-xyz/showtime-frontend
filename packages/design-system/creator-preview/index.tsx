@@ -40,7 +40,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     >
       <View tw="flex-row justify-between items-center">
         <Link
-          href={`/profile/${props.creator.address}`}
+          href={`/@${props.creator.username ?? props.creator.address}`}
           tw="flex-row items-center"
         >
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">

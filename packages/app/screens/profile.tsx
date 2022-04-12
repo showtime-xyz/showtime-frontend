@@ -9,7 +9,7 @@ import { mixpanel } from "app/lib/mixpanel";
 import { createParam } from "app/navigation/use-param";
 
 type Query = {
-  walletAddress: string;
+  username: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -19,12 +19,13 @@ const ProfileScreen = withColorScheme(() => {
     mixpanel.track("Profile view");
   }, []);
 
-  const [walletAddress, setWalletAddress] = useParam("walletAddress");
+  const [username] = useParam("username");
+  const cleanedUsername = username?.replace(/@/g, "");
 
   return (
     <BottomSheetModalProvider>
       <ErrorBoundary>
-        <Profile walletAddress={walletAddress as string} />
+        <Profile username={cleanedUsername as string} />
       </ErrorBoundary>
     </BottomSheetModalProvider>
   );

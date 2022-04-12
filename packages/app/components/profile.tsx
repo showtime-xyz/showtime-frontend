@@ -101,8 +101,8 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View tw={`h-[${tabBarHeight}px]`} />;
 };
 
-const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
-  return <Profile address={walletAddress} />;
+const ProfileScreen = ({ username }: { username: string }) => {
+  return <Profile address={username} />;
 };
 
 const Profile = ({ address }: { address?: string }) => {
@@ -279,6 +279,7 @@ const TabList = ({
 
   const onItemPress = useCallback(
     (index: number) => {
+      // TODO:
       router.push(
         `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
@@ -422,7 +423,7 @@ const ProfileTop = ({
           hasLinksInBio.current = true;
           return (
             <TextLink
-              href={`/profile/${username}`}
+              href={`/@${username}`}
               tw="font-bold text-black dark:text-white"
               key={i}
             >
@@ -447,11 +448,13 @@ const ProfileTop = ({
             show={loading}
             colorMode={colorMode as any}
           >
-            <Image
-              source={{ uri: profileData?.data.profile.cover_url }}
-              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-              alt="Cover image"
-            />
+            {profileData?.data.profile.cover_url && (
+              <Image
+                source={{ uri: profileData?.data.profile.cover_url }}
+                tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+                alt="Cover image"
+              />
+            )}
           </Skeleton>
         </View>
 

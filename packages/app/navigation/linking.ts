@@ -1,6 +1,17 @@
 import * as Linking from "expo-linking";
 
+import { getStateFromPath } from "app/lib/react-navigation/native";
 import type { LinkingOptions } from "app/lib/react-navigation/native";
+
+const withRewrites = (unparsedPath: string): string => {
+  if (unparsedPath.startsWith("/@")) {
+    const username = unparsedPath.replace("/@", "");
+
+    return `/profile/${username}`;
+  }
+
+  return unparsedPath;
+};
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.createURL("/")],
@@ -18,7 +29,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       token: "token/:chainName/:contractAddress/:tokenId",
       create: "create",
       search: "search",
-      profile: "profile/:walletAddress",
+      profile: "profile/:username",
       editProfile: "profile/edit",
       settings: "settings",
       swipeList: "list",
@@ -34,6 +45,11 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
         },
       },
     },
+  },
+  getStateFromPath(path, config) {
+    const finalPath = withRewrites(path);
+
+    return getStateFromPath(finalPath, config);
   },
 };
 

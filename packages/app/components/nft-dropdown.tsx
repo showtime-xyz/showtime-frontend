@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
@@ -84,7 +85,21 @@ function NFTDropdown({ nftId }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => router.push(`/nft/${nftId}/details`)}
+          onSelect={() => {
+            const as = `/nft/${nftId}/details`;
+
+            router.push(
+              Platform.select({
+                native: as,
+                web: {
+                  pathname: router.pathname,
+                  query: { ...router.query, details: true, id: nftId },
+                },
+              }),
+              as,
+              { shallow: true }
+            );
+          }}
           key="details"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
@@ -124,7 +139,17 @@ function NFTDropdown({ nftId }: Props) {
                 await unfollow(nft?.creator_id);
                 refresh();
               } else {
-                router.push("/login");
+                router.push(
+                  Platform.select({
+                    native: "/login",
+                    web: {
+                      pathname: router.pathname,
+                      query: { ...router.query, login: true },
+                    },
+                  }),
+                  "/login",
+                  { shallow: true }
+                );
               }
             }}
             key="unfollow"
@@ -145,7 +170,17 @@ function NFTDropdown({ nftId }: Props) {
                 await block(nft?.creator_id);
                 refresh();
               } else {
-                router.push("/login");
+                router.push(
+                  Platform.select({
+                    native: "/login",
+                    web: {
+                      pathname: router.pathname,
+                      query: { ...router.query, login: true },
+                    },
+                  }),
+                  "/login",
+                  { shallow: true }
+                );
               }
             }}
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -174,7 +209,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/transfer`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/transfer`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, transfer: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -186,7 +235,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/list`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/list`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, list: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="list"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -198,7 +261,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/unlist`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/unlist`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, unlist: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="unlist"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -211,7 +288,21 @@ function NFTDropdown({ nftId }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => router.push(`/nft/${nftId}/delete`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/delete`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, delete: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

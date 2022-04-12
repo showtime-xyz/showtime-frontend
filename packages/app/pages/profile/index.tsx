@@ -29,9 +29,11 @@ function ProfileNavigator() {
         name="profile"
         component={ProfileScreen}
         initialParams={{
-          walletAddress: user?.data?.profile?.wallet_addresses_v2?.[0]?.address,
+          username:
+            user?.data?.profile?.username ??
+            user?.data?.profile?.wallet_addresses_v2?.[0]?.address,
         }}
-        getId={({ params }) => params?.walletAddress}
+        getId={({ params }) => params?.username}
       />
     </ProfileStack.Navigator>
   );

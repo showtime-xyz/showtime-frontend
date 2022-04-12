@@ -88,7 +88,7 @@ function AppContextProvider({
   );
 }
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
   useDeviceContext(tw, { withDeviceColorScheme: false });
 
   useEffect(() => {
@@ -145,8 +145,12 @@ export default function App({ Component, pageProps }: AppProps) {
                           <GrowthBookProvider growthbook={growthbook}>
                             <FeedProvider>
                               <NavigationProvider>
-                                {/* TODO: canGoBack */}
-                                <Header canGoBack={false} />
+                                <Header
+                                  canGoBack={
+                                    router.pathname === "/search" ||
+                                    router.pathname.split("/").length - 1 >= 2
+                                  }
+                                />
 
                                 <Component {...pageProps} />
 

@@ -23,7 +23,9 @@ function Transfer({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/profile/${act.counterparty?.wallet_address}`}
+            href={`/@${
+              act.counterparty?.username ?? act.counterparty?.wallet_address
+            }`}
           >
             {act.counterparty?.name}
           </TextLink>

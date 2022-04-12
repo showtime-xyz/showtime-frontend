@@ -21,7 +21,7 @@ function Sell({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/profile/${act.buyer?.wallet_address}`}
+              href={`/@${act.buyer?.username ?? act.buyer?.wallet_address}`}
             >
               {act.buyer?.name}
             </TextLink>

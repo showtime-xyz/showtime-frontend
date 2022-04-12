@@ -239,6 +239,7 @@ const NFTSList = ({
     ({ item, index }) => (
       <Pressable
         onPress={() =>
+          // TODO:
           router.push(
             `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
           )

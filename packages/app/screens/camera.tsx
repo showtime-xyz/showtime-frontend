@@ -23,9 +23,33 @@ function CameraScreen() {
     (photoURI: string) => {
       const createPostURL = `/create?uri=${photoURI}`;
       if (isAuthenticated) {
-        router.push(createPostURL);
+        router.push(
+          Platform.select({
+            native: createPostURL,
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, create: true, uri: photoURI },
+            },
+          }),
+          createPostURL,
+          { shallow: true }
+        );
       } else {
-        router.push(`/login?redirect_url=${encodeURIComponent(createPostURL)}`);
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                login: true,
+                redirect_url: encodeURIComponent(createPostURL),
+              },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
       }
     },
     [router, isAuthenticated]

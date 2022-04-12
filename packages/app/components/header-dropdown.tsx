@@ -2,8 +2,7 @@ import { useContext } from "react";
 
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
-import { useUser } from "app/hooks/use-user";
-import { useSettingsNavigation } from "app/navigation/app-navigation";
+import { useRouter } from "app/navigation/use-router";
 
 import { View } from "design-system";
 import {
@@ -19,12 +18,9 @@ import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
 function HeaderDropdown() {
-  const { user } = useUser();
   const { logout } = useAuth();
+  const router = useRouter();
   const context = useContext(AppContext);
-  const openSettings = useSettingsNavigation(
-    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
-  );
 
   return (
     <DropdownMenuRoot>
@@ -57,7 +53,7 @@ function HeaderDropdown() {
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" /> */}
 
         <DropdownMenuItem
-          onSelect={openSettings}
+          onSelect={() => router.push("/settings")}
           key="your-settings"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
