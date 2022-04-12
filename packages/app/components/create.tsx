@@ -114,11 +114,11 @@ function Create({ uri }: CreateProps) {
         // TODO: save the file in the user gallery (if taken from camera)
         setTimeout(() => {
           router.pop();
-          router.push(`/profile/${address}`);
+          router.push(`/@${user?.data?.profile?.username ?? address}`);
         }, 1000);
       }
     },
-    [state.status, address]
+    [state.status, user, address]
   );
 
   return (

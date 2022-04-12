@@ -127,7 +127,7 @@ function CommentRowComponent({
     }
   }, [reply, comment, isAuthenticated]);
   const handleOnUserPress = useCallback((username: string) => {
-    router.push(`/profile/${username}`);
+    router.push(`/@${username}`);
   }, []);
   //#endregion
 

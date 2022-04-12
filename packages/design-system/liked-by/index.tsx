@@ -47,9 +47,7 @@ export function LikedBy({ nft }: Props) {
               <Fragment key={`liked-by-user-${like.profile_id}`}>
                 <TextLink
                   variant="text-xs"
-                  href={`${
-                    router.pathname.startsWith("/trending") ? "/trending" : ""
-                  }/profile/${like.wallet_address}`}
+                  href={`/@${like.username ?? like.wallet_address}`}
                   tw="font-bold	text-black dark:text-white"
                 >
                   {like.username ? (

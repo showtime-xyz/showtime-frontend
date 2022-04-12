@@ -35,7 +35,7 @@ function Activity({ activity }: Props) {
   return (
     <View tw="px-4 py-2">
       <View tw="flex-row justify-between">
-        <Link href={`/profile/${actor.wallet_address}`}>
+        <Link href={`/@${actor.username ?? actor.wallet_address}`}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
             // icon={type}
@@ -50,7 +50,7 @@ function Activity({ activity }: Props) {
             ellipsizeMode="tail"
           >
             <TextLink
-              href={`/profile/${actor.wallet_address}`}
+              href={`/@${actor.username ?? actor.wallet_address}`}
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
             >

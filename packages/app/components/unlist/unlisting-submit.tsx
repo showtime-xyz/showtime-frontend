@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useListNFT, UnlistNFT } from "app/hooks/use-unlist-nft";
+import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRouter } from "app/navigation/use-router";
 
@@ -27,6 +28,7 @@ const UnlistingSubmit = (props: Props) => {
   const { unlistNFT, state } = useListNFT();
   const router = useRouter();
   const { web3 } = useWeb3();
+  const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const isNotMagic = !web3;
 
@@ -34,10 +36,10 @@ const UnlistingSubmit = (props: Props) => {
     if (state.status === "unlistingSuccess") {
       setTimeout(() => {
         router.pop();
-        router.push(`/profile/${address}`);
+        router.push(`/@${user?.data?.profile?.username ?? address}`);
       }, 1000);
     }
-  }, [state.status]);
+  }, [state.status, user, address]);
 
   const ctaCopy = statusCopyMapping[state.status];
 

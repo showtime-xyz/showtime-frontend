@@ -17,6 +17,7 @@ const LinkingOptions = () => {};
 const useLinkProps = () => {};
 const StackActions = {};
 const NavigationState = {};
+const getStateFromPath = () => {};
 
 export {
   useLinkTo,
@@ -30,4 +31,5 @@ export {
   useLinkProps,
   StackActions,
   NavigationState,
+  getStateFromPath,
 };

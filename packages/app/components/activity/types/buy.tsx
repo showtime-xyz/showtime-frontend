@@ -20,7 +20,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/profile/${act.seller?.wallet_address}`}
+            href={`/@${act.seller?.username ?? act.seller?.wallet_address}`}
           >
             {act.seller?.name}
           </TextLink>

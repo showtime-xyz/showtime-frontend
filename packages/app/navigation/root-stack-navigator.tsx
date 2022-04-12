@@ -49,7 +49,7 @@ export function RootStackNavigator({
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
-          getId={({ params }) => params?.walletAddress}
+          getId={({ params }) => params?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
