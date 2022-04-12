@@ -43,3 +43,5 @@ export { Accordion } from "design-system/accordion";
 export { CountryCodePicker } from "design-system/country-code-picker";
 
 export { LikeButton } from "design-system/like-button";
+
+export { VerificationBadge } from "design-system/verification-badge";
