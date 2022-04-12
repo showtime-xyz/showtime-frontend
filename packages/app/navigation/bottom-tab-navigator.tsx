@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useWindowDimensions, Platform, StyleSheet, Alert } from "react-native";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import * as Updates from "expo-updates";
 import dynamic from "next/dynamic";
@@ -19,9 +20,6 @@ import {
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
 } from "./tab-bar-icons";
-import { NextNavigationProps } from "./types";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNextTabNavigator } from "./universal-navigator/bottom-tab";
 import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
@@ -30,13 +28,9 @@ const CameraNavigator = dynamic(() => import("../pages/camera"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
-// const BottomTab = createBottomTabNavigator();
-const BottomTab = createNextTabNavigator();
+const BottomTab = createBottomTabNavigator();
 
-export function NextTabNavigator({
-  pageProps,
-  Component,
-}: NextNavigationProps) {
+export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
   const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
@@ -103,10 +97,9 @@ export function NextTabNavigator({
             left: width / 2 - 100,
             maxWidth: 200,
           },
-          // (!isAuthenticated || isTabBarHidden) && {
-          //   bottom: -100,
-          //   display: Platform.OS === "web" ? "none" : "flex",
-          // },
+          (!isAuthenticated || isTabBarHidden) && {
+            bottom: -100,
+          },
         ],
         tabBarBackground: () =>
           width >= 768 ? null : (
@@ -127,8 +120,6 @@ export function NextTabNavigator({
             </>
           ),
       }}
-      Component={Component}
-      pageProps={pageProps}
     >
       <BottomTab.Screen
         name="homeTab"

@@ -11,6 +11,7 @@ import Head from "next/head";
 import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
+import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
@@ -158,7 +159,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
                                 <Component {...pageProps} />
 
-                                {/* <Footer /> */}
+                                <Footer />
 
                                 {/* Modals */}
                                 <LoginScreen />
