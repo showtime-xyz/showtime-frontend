@@ -3,7 +3,7 @@ import { FlatList } from "react-native";
 
 import { View } from "design-system";
 
-import { TableProps } from "./nft-activity.types";
+import type { TableProps } from "./nft-activity.types";
 import TableHead from "./table-head";
 import TableRow from "./table-row";
 
