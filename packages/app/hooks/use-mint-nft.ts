@@ -1,5 +1,5 @@
-import { useEffect, useContext, useRef } from "react";
-import { Alert } from "react-native";
+import { useContext, useEffect, useRef } from "react";
+import { Alert, Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -10,6 +10,8 @@ import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useWalletConnect } from "app/lib/walletconnect";
+//@ts-ignore
+import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
 
 import { useWeb3 } from "./use-web3";
@@ -72,7 +74,7 @@ export const mintNFTReducer = (
   switch (action.type) {
     case "setMedia": {
       return {
-        ...state,
+        ...initialMintNFTState,
         filePath: action.payload?.filePath,
         fileType: action.payload?.fileType,
         fileObject: action.payload?.fileObject,
@@ -155,8 +157,11 @@ export type UseMintNFT = {
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getFileMeta = async (file: File | string) => {
-  console.log("dude ", file);
+const getFileMeta = async (file?: File | string) => {
+  if (!file) {
+    return;
+  }
+
   if (typeof file === "string") {
     // Web Camera -  Data URI
     if (file.startsWith("data")) {
@@ -221,7 +226,7 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const { state, dispatch } = useContext(MintContext);
   const biconomyRef = useRef<any>();
-  const { web3 } = useWeb3();
+  let { web3 } = useWeb3();
 
   const isMagic = !!web3;
   const connector = useWalletConnect();
@@ -235,12 +240,15 @@ export const useMintNFT = () => {
     }
   }, [connector.connected]);
 
-  async function uploadMedia(params: UseMintNFT) {
+  async function uploadMedia() {
     // Media Upload
     try {
       const fileMetaData = await getFileMeta(
         state.fileObject ? state.fileObject : state.filePath
       );
+
+      if (!fileMetaData) return;
+
       if (
         typeof fileMetaData.size === "number" &&
         fileMetaData.size > MAX_FILE_SIZE
@@ -265,7 +273,7 @@ export const useMintNFT = () => {
           formData.append("file", state.fileObject);
         }
         // Web Camera -  Data URI
-        else if (state.filePath.startsWith("data")) {
+        else if (state.filePath?.startsWith("data")) {
           const file = dataURLtoFile(state.filePath, "unknown");
 
           formData.append("file", file);
@@ -310,7 +318,7 @@ export const useMintNFT = () => {
     if (state.mediaIPFSHash) {
       mediaIpfsHash = state.mediaIPFSHash;
     } else {
-      mediaIpfsHash = await uploadMedia(params);
+      mediaIpfsHash = await uploadMedia();
     }
     try {
       if (mediaIpfsHash) {
@@ -359,23 +367,27 @@ export const useMintNFT = () => {
 
     let userAddress;
     try {
-      const isMagic = !!web3;
-      if (isMagic) {
+      if (web3) {
         const signer = web3.getSigner();
         const addr = await signer.getAddress();
         userAddress = addr;
         params.royaltiesPercentage = 0;
+      } else if (Platform.OS === "web") {
+        const Web3Provider = (await import("@ethersproject/providers"))
+          .Web3Provider;
+        const web3Modal = await getWeb3Modal();
+        web3 = new Web3Provider(await web3Modal.connect());
+        const addr = await web3.getSigner().getAddress();
+        userAddress = addr;
+      } else if (connector.connected) {
+        [userAddress] = connector.accounts.filter((addr) =>
+          addr.startsWith("0x")
+        );
       } else {
-        if (connector.connected) {
-          [userAddress] = connector.accounts.filter((addr) =>
-            addr.startsWith("0x")
-          );
-        } else {
-          await connector.connect();
-          console.log("Not connected to wallet, sending connect request");
-          mintNftParams.current = params;
-          return;
-        }
+        await connector.connect();
+        console.log("Not connected to wallet, sending connect request");
+        mintNftParams.current = params;
+        return;
       }
 
       console.log("user address for minting ", userAddress);
@@ -469,8 +481,8 @@ export const useMintNFT = () => {
   return { state, startMinting: mintNFT, setMedia };
 };
 
-function dataURLtoFile(dataurl, filename) {
-  var arr = dataurl.split(","),
+function dataURLtoFile(dataurl: string, filename: string) {
+  let arr = dataurl.split(","),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,

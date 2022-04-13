@@ -62,17 +62,19 @@ export function ImagePickerButton({
         </View>
       )}*/}
 
-      <input
-        type="file"
-        hidden
-        //@ts-ignore
-        ref={filePickerRef}
-        multiple={false}
-        onChange={(e) => {
+      {Platform.OS === "web" ? (
+        <input
+          type="file"
+          hidden
           //@ts-ignore
-          onPick({ file: e.target.files[0] });
-        }}
-      />
+          ref={filePickerRef}
+          multiple={false}
+          onChange={(e) => {
+            //@ts-ignore
+            onPick({ file: e.target.files[0] });
+          }}
+        />
+      ) : null}
 
       <Image
         color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
