@@ -2,9 +2,11 @@ import { useContext } from "react";
 
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
-import { View } from "design-system";
+import { Avatar } from "design-system/avatar";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -16,23 +18,30 @@ import {
 } from "design-system/dropdown-menu";
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
 
-function HeaderDropdown() {
+function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
   const router = useRouter();
   const context = useContext(AppContext);
+  const { user } = useUser();
+  const { userAddress } = useCurrentUserAddress();
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <View tw="h-8 w-8 items-center justify-center rounded-full">
-          <Settings
-            width={24}
-            height={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          {type === "profile" ? (
+            <Avatar url={user?.data?.profile?.img_url} />
+          ) : (
+            <Settings
+              width={24}
+              height={24}
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+            />
+          )}
         </View>
       </DropdownMenuTrigger>
 
@@ -40,17 +49,23 @@ function HeaderDropdown() {
         loop
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
-        {/* <DropdownMenuItem
-          onSelect={openProfile}
-          key="your-profile"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Profile
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {type === "profile" && (
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/@${user?.data?.profile?.username ?? userAddress}`);
+            }}
+            key="your-profile"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Profile
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" /> */}
+        {type === "profile" && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
 
         <DropdownMenuItem
           onSelect={() => router.push("/settings")}

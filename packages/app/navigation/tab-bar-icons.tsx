@@ -5,11 +5,9 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
-import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { formatAddressShort } from "app/lib/utilities";
 import { Link } from "app/navigation/link";
 
-import { View, Image } from "design-system";
+import { Avatar } from "design-system/avatar";
 import {
   Home,
   HomeFilled,
@@ -22,6 +20,7 @@ import {
   Plus,
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type TabBarIconProps = {
   color: string;
@@ -160,33 +159,8 @@ export const ProfileTabBarIcon = () => {
   return (
     <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
       <View tw="h-8 w-8 items-center justify-center rounded-full">
-        <Image
-          tw="h-8 w-8 rounded-full"
-          source={{
-            uri: getSmallImageUrl(
-              user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
-            ),
-          }}
-          alt={
-            user?.data?.profile?.name ||
-            user?.data?.profile?.username ||
-            user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-              ?.ens_domain ||
-            formatAddressShort(
-              user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-                ?.address
-            ) ||
-            "Profile"
-          }
-        />
+        <Avatar url={user?.data?.profile?.img_url} />
       </View>
     </TabBarIcon>
   );
-};
-
-const getSmallImageUrl = (imgUrl: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s64";
-  }
-  return imgUrl;
 };

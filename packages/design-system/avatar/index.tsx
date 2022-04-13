@@ -20,6 +20,7 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   return imgUrl;
 };
 
+// TODO: alt
 export const Avatar = ({
   url,
   borderWidth = 0,
