@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useContext } from "react";
+import { Platform } from "react-native";
 
 import Animated, {
   useAnimatedStyle,
@@ -16,6 +17,7 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
+import { Tabs } from "design-system";
 import { Pressable } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
@@ -50,6 +52,10 @@ export const FeedList = () => {
   }, [isAuthenticated, navigation]);
 
   if (isAuthenticated) {
+    if (Platform.OS === "web") {
+      return <WebFeed />;
+    }
+
     return (
       <PagerView
         ref={pagerRef}
@@ -162,5 +168,29 @@ const CuratedFeed = () => {
       bottomPadding={safeAreaBottom}
       data={queryState.data}
     />
+  );
+};
+
+const WebFeed = () => {
+  return (
+    <Tabs.Root>
+      <Tabs.List
+        contentContainerStyle={{
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Tabs.Trigger>
+          <Text>Following</Text>
+        </Tabs.Trigger>
+        <Tabs.Trigger>
+          <Text>For you</Text>
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Pager>
+        <FollowingFeed />
+        <AlgorithmicFeed />
+      </Tabs.Pager>
+    </Tabs.Root>
   );
 };
