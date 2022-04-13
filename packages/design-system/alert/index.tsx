@@ -11,6 +11,7 @@ import {
   AlertStatic,
   Platform,
   StyleSheet,
+  Modal,
 } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
@@ -35,9 +36,6 @@ export const AlertProvider: React.FC = ({ children }) => {
 
   const closeAlert = useCallback(() => {
     setShow(false);
-    setTitle("");
-    setMessage("");
-    setButtons([]);
   }, []);
 
   const value = useMemo(
@@ -49,8 +47,13 @@ export const AlertProvider: React.FC = ({ children }) => {
         params[2] && setButtons(params[2]);
       },
     }),
-    [show, setShow]
+    []
   );
+  const onModalDismiss = useCallback(() => {
+    setTitle("");
+    setMessage("");
+    setButtons([]);
+  }, []);
 
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
@@ -81,14 +84,13 @@ export const AlertProvider: React.FC = ({ children }) => {
     <AlertContext.Provider value={value}>
       {children}
       <AnimatePresence>
-        {show ? (
-          <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-            <MotiView
-              style={[StyleSheet.absoluteFillObject, tw.style("bg-black")]}
-              from={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-            />
+        <Modal
+          animationType="fade"
+          transparent
+          visible={show}
+          onDismiss={onModalDismiss}
+        >
+          <View tw={"w-full h-full bg-opacity-60 bg-black"}>
             <View tw="items-center justify-center w-full h-full">
               <MotiView
                 style={tw.style(
@@ -123,9 +125,10 @@ export const AlertProvider: React.FC = ({ children }) => {
                 <Divider tw="my-4" />
                 {renderBtns}
               </MotiView>
+              )
             </View>
           </View>
-        ) : null}
+        </Modal>
       </AnimatePresence>
     </AlertContext.Provider>
   );
