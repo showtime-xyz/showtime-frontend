@@ -34,40 +34,43 @@ const Root = ({
   const offset = React.useRef(new Animated.Value(0)).current;
 
   const onIndexChange = (v) => {
-    onIndexChangeProp(parseInt(v));
+    onIndexChangeProp?.(parseInt(v));
     setSelected(v);
 
     position.setValue(parseInt(v));
   };
 
-  const { tabTriggers, tabContents, headerChild } = React.useMemo(() => {
-    let tabTriggers = [];
-    let tabContents = [];
-    let headerChild;
-    React.Children.forEach(children, (c) => {
-      if (React.isValidElement(c)) {
-        //@ts-ignore
-        if (c.type === List) {
+  const { tabTriggers, tabContents, headerChild, listChild } =
+    React.useMemo(() => {
+      let tabTriggers = [];
+      let tabContents = [];
+      let headerChild;
+      let listChild = {};
+      React.Children.forEach(children, (c) => {
+        if (React.isValidElement(c)) {
           //@ts-ignore
-          React.Children.map(c.props.children, (c) => {
-            if (React.isValidElement(c) && c && c.type === Trigger) {
-              tabTriggers.push(c);
-            }
-          });
-          //@ts-ignore
-        } else if (c.type === Header) {
-          headerChild = c;
-          //@ts-ignore
-        } else if (c.type === Pager) {
-          //@ts-ignore
-          React.Children.map(c.props.children, (c) => {
-            tabContents.push(c);
-          });
+          if (c.type === List) {
+            listChild = c;
+            //@ts-ignore
+            React.Children.map(c.props.children, (c) => {
+              if (React.isValidElement(c) && c && c.type === Trigger) {
+                tabTriggers.push(c);
+              }
+            });
+            //@ts-ignore
+          } else if (c.type === Header) {
+            headerChild = c;
+            //@ts-ignore
+          } else if (c.type === Pager) {
+            //@ts-ignore
+            React.Children.map(c.props.children, (c) => {
+              tabContents.push(c);
+            });
+          }
         }
-      }
-    });
-    return { tabTriggers, headerChild, tabContents };
-  }, [children]);
+      });
+      return { tabTriggers, headerChild, tabContents, listChild };
+    }, [children]);
 
   return (
     <TabsContext.Provider value={{ position, offset }}>
@@ -79,6 +82,7 @@ const Root = ({
       >
         <RadixTabs.List aria-label={accessibilityLabel} asChild>
           <ScrollView
+            {...listChild.props}
             contentContainerStyle={[
               {
                 flexDirection: "row",
@@ -87,6 +91,7 @@ const Root = ({
                 paddingHorizontal: 10,
               },
               tw.style(`bg-white dark:bg-gray-900 px-2`),
+              listChild.props?.contentContainerStyle,
             ]}
           >
             {tabTriggers.map((t, index) => {

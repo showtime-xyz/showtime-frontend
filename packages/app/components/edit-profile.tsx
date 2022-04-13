@@ -174,7 +174,7 @@ export const EditProfile = () => {
       mutate(MY_INFO_ENDPOINT);
       mutate(USER_PROFILE_KEY + user?.data.profile.wallet_addresses[0]);
 
-      router.replace(`/profile/${user?.data.profile.wallet_addresses[0]}`);
+      router.pop();
     } catch (e) {
       setError("submitError", { message: "Something went wrong" });
       console.error("edit profile failed ", e);
@@ -216,7 +216,7 @@ export const EditProfile = () => {
                     Cover
                   </Text>
                 </View>
-                <Image source={{ uri: value }} tw="flex-1" />
+                {value && <Image source={{ uri: value }} tw="flex-1" />}
               </Pressable>
             )}
           />
@@ -239,7 +239,7 @@ export const EditProfile = () => {
                     "w-20 h-20 rounded-full overflow-hidden border-2"
                   )}
                 >
-                  <Image source={{ uri: value }} tw="flex-1" />
+                  {value && <Image source={{ uri: value }} tw="flex-1" />}
                   <View tw="absolute z-10 flex-1 w-full h-full items-center justify-center">
                     <Upload
                       height={20}

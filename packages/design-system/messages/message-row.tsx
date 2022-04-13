@@ -1,11 +1,15 @@
 import { useMemo } from "react";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  differenceInSeconds,
+  formatDistance,
+} from "date-fns";
 
 import { Avatar } from "design-system/avatar";
-import { Button } from "design-system/button";
-import { HeartFilled, Heart } from "design-system/icon";
-import { Text } from "design-system/text";
+import { Button, TextButton } from "design-system/button";
+import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
+import { Text, linkify } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
@@ -38,10 +42,15 @@ interface MessageRowProps {
    */
   hasReplies?: boolean;
   /**
-   * Defines whether the message liked by customer or not.
+   * Defines whether the message liked by the customer or not.
    * @default undefined
    */
   likedByMe?: boolean;
+  /**
+   * Defines whether the message replied by the customer or not.
+   * @default undefined
+   */
+  repliedByMe?: boolean;
   /**
    * Defines the message content.
    * @default undefined
@@ -77,10 +86,25 @@ interface MessageRowProps {
    * @default undefined
    */
   onDeletePress?: () => void;
+  /**
+   * Defines the reply press callback
+   * @default undefined
+   */
+  onReplyPress?: () => void;
+  /**
+   * Defines the content tag press callback
+   * @default undefined
+   */
+  onTagPress?: (tag: string) => void;
+  /**
+   * Defines the user press callback
+   * @default undefined
+   */
+  onUserPress?: (username: string) => void;
 }
 
 export function MessageRow({
-  username,
+  username = "",
   userAvatar,
   userVerified = false,
   content = "",
@@ -91,18 +115,41 @@ export function MessageRow({
   hasParent,
   hasReplies,
   likedByMe,
+  repliedByMe,
   onLikePress,
   onDeletePress,
+  onReplyPress,
+  onTagPress,
+  onUserPress,
 }: MessageRowProps) {
   //#region variables
-  const createdAtText = useMemo(
+  const createdAtText = useMemo(() => {
+    if (!createdAt) return undefined;
+
+    const createdAtDate = new Date(createdAt);
+
+    if (differenceInSeconds(new Date(), createdAtDate) < 10) {
+      return "now";
+    }
+
+    return formatDistanceToNowStrict(new Date(createdAt), {
+      addSuffix: true,
+    });
+  }, [createdAt]);
+  const contentWithTags = useMemo(
     () =>
-      createdAt
-        ? formatDistanceToNowStrict(new Date(createdAt), {
-            addSuffix: true,
-          })
-        : undefined,
-    [createdAt]
+      onTagPress
+        ? linkify(content, (text: string, link: string) => (
+            <Text
+              key={`link-${link}`}
+              tw="font-bold text-black dark:text-white"
+              onPress={() => onTagPress(link)}
+            >
+              {`@${text} `}
+            </Text>
+          ))
+        : content,
+    [content, onTagPress]
   );
   //#endregion
 
@@ -131,13 +178,13 @@ export function MessageRow({
       borderBottomWidth: position === "last" ? 1 : 0,
       borderLeftWidth: position === "last" ? 1 : 0,
       top: position !== "last" ? 12 : 0,
-      height: position === "last" ? 12 : 1,
+      height: position === "last" ? 12 : hasParent ? 1 : 0,
       backgroundColor: position !== "last" ? "#27272A" : undefined,
       borderColor: "#27272A",
     }),
-    [position]
+    [position, hasParent]
   );
-  //#region
+  //#endregion
   return (
     <View tw="flex flex-row py-4 bg-white dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
@@ -148,13 +195,22 @@ export function MessageRow({
             <View tw={replyVerticalLineTW} />
           </>
         )}
-        <Avatar url={userAvatar} size={24} />
+        <Button
+          variant="secondary"
+          size="small"
+          tw="h-[24px] w-[24px]"
+          onPress={onUserPress ? () => onUserPress(username) : undefined}
+          iconOnly
+        >
+          <Avatar url={userAvatar} size={24} />
+        </Button>
       </View>
       <View tw="flex-1 ml-2">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
             sx={{ fontSize: 13, lineHeight: 15 }}
             tw="text-gray-900 dark:text-white font-semibold"
+            onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
             @{username}
           </Text>
@@ -167,7 +223,7 @@ export function MessageRow({
           tw="text-gray-900 dark:text-gray-100"
           sx={{ fontSize: 13, lineHeight: 15 }}
         >
-          {content}
+          {contentWithTags}
         </Text>
 
         <View tw="flex-row ml--2 mt-2 mb--2">
@@ -176,7 +232,7 @@ export function MessageRow({
             tw="px-2"
             accentColor={
               likedByMe
-                ? ["black", "white"]
+                ? [colors.black, colors.white]
                 : [colors.gray[500], colors.gray[500]]
             }
             onPress={onLikePress}
@@ -184,11 +240,24 @@ export function MessageRow({
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
           </Button>
-          {/* TODO: re-enable when replies pagination is implemented {replayCount != undefined && (
-            <TextButton tw="px-2">
-              <MessageFilled /> {replayCount}
+          {replayCount != undefined && (
+            <TextButton
+              tw="px-2"
+              accentColor={
+                // TODO: use `repliedByMe` when this is available.
+                replayCount > 0
+                  ? [colors.black, colors.white]
+                  : [colors.gray[500], colors.gray[500]]
+              }
+              onPress={onReplyPress}
+            >
+              {
+                // TODO: use `repliedByMe` when this is available.
+                replayCount > 0 ? <MessageFilled /> : <Message />
+              }
+              {` ${replayCount}`}
             </TextButton>
-          )} */}
+          )}
           <View
             tw={[
               "flex-1 flex-row items-center justify-end",

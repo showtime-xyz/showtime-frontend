@@ -5,6 +5,7 @@ import { Details } from "app/components/details";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
@@ -14,7 +15,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const DetailsScreen = () => {
+const DetailsModal = () => {
   useHideHeader();
 
   //#region hooks
@@ -24,11 +25,11 @@ const DetailsScreen = () => {
 
   //#region variables
   const snapPoints = useMemo(() => ["90%"], []);
-  const DetailsModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
   //#endregion
 
   return (
-    <DetailsModal
+    <ModalComponent
       title="Details"
       close={router.pop}
       snapPoints={snapPoints}
@@ -37,8 +38,12 @@ const DetailsScreen = () => {
       bodyContentTW="p-0"
     >
       <Details nftId={Number(nftId)} />
-    </DetailsModal>
+    </ModalComponent>
   );
 };
 
-export { DetailsScreen };
+export const DetailsScreen = withModalScreen(
+  DetailsModal,
+  "/nft/[id]/details",
+  "details"
+);

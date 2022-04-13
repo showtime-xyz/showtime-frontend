@@ -2,6 +2,7 @@
   "bracketSpacing": true,
   "importOrder": [
     "./shim",
+    "raf/polyfill",
     "^(react|react-native)$",
     "<THIRD_PARTY_MODULES>",
     "^app/(.*)$",

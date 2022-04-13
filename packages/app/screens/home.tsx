@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { Feed } from "app/components/feed";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { mixpanel } from "app/lib/mixpanel";
@@ -9,7 +10,11 @@ const HomeScreen = withColorScheme(() => {
     mixpanel.track("Home page view");
   }, []);
 
-  return <Feed />;
+  return (
+    <ErrorBoundary>
+      <Feed />
+    </ErrorBoundary>
+  );
 });
 
 export { HomeScreen };

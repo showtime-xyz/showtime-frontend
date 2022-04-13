@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo } from "react";
+import { Platform } from "react-native";
 
 import useSWR, { useSWRConfig } from "swr";
 
@@ -139,6 +140,7 @@ type UserProfileNFTs = {
   showDuplicates?: number;
   showHidden?: number;
   collectionId?: number;
+  refreshInterval?: number;
 };
 
 type UseProfileNFTs = {
@@ -152,7 +154,7 @@ export const defaultFilters = {
   showDuplicates: 0,
   showHidden: 0,
   collectionId: 0,
-  sortId: 1,
+  sortId: 2,
 };
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
@@ -163,6 +165,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     showDuplicates = defaultFilters.showDuplicates,
     showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
+    refreshInterval,
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
@@ -176,7 +179,8 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   );
 
   const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params.profileId ? trendingCreatorsUrlFn : null
+    params.profileId ? trendingCreatorsUrlFn : null,
+    refreshInterval
   );
 
   const newData = useMemo(() => {
@@ -276,7 +280,17 @@ export const useMyInfo = () => {
     async (profileId: number) => {
       if (!accessToken) {
         mixpanel.track("Follow but logged out");
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         return;
       }
 
@@ -354,7 +368,17 @@ export const useMyInfo = () => {
   const like = useCallback(
     async (nftId: number) => {
       if (!accessToken) {
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         // TODO: perform the action post login
         return false;
       }

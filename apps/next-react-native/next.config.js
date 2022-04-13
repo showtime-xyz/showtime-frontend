@@ -24,6 +24,7 @@ const withTM = require("next-transpile-modules")([
   "expo-next-react-navigation",
   "@zeego/menu",
   "@zeego/dropdown-menu",
+  "solito",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
@@ -33,6 +34,7 @@ const nextConfig = {
     optimizeCss: true,
     esmExternals: "loose",
     reactRoot: true,
+    // nextScriptWorkers: true,
     // TODO: enable `concurrentFeatures: true`
   },
   typescript: {
@@ -47,6 +49,7 @@ const nextConfig = {
       "cloudflare-ipfs.com",
       "cdn.tryshowtime.com",
       "storage.googleapis.com",
+      "testingservice-dot-showtimenft.wl.r.appspot.com",
     ],
   },
   async headers() {
@@ -69,6 +72,14 @@ const nextConfig = {
         source: "/feedback",
         destination: "https://showtime.nolt.io",
         permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/@:username",
+        destination: "/profile/:username",
       },
     ];
   },

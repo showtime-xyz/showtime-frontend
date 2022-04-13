@@ -2,9 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 import { FlatList } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
-
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -101,11 +100,13 @@ export const Search = () => {
 
 const SearchItem = ({ item }: { item: SearchResponseItem }) => {
   return (
-    <Link href={`/profile/${item.address0}`} tw="p-4">
+    <Link href={`/@${item.username ?? item.address0}`} tw="p-4">
       <View tw="flex-row justify-between items-center">
         <View tw="flex-row">
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
-            <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
+            {item.img_url && (
+              <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
+            )}
           </View>
           <View tw="mr-1 justify-center">
             {item.name ? (

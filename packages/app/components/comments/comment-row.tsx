@@ -1,10 +1,12 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
-import { getRoundedCount } from "app/utilities";
+import { formatAddressShort, getRoundedCount } from "app/utilities";
 
+import { MessageMore } from "design-system/messages/message-more";
 import { MessageRow } from "design-system/messages/message-row";
 
 interface CommentRowProps {
@@ -14,7 +16,11 @@ interface CommentRowProps {
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  reply?: (comment: CommentType) => void;
 }
+
+const REPLIES_PER_BATCH = 2;
 
 function CommentRowComponent({
   comment,
@@ -22,38 +28,62 @@ function CommentRowComponent({
   likeComment,
   unlikeComment,
   deleteComment,
+  reply,
 }: CommentRowProps) {
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
+  const [displayedRepliesCount, setDisplayedRepliesCount] =
+    useState(REPLIES_PER_BATCH);
   //#endregion
 
   //#region hooks
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
-  //#region
+  //#endregion
 
   //#region variables
+  const repliesCount = comment.replies?.length ?? 0;
+  const replies = useMemo(
+    () =>
+      repliesCount > 0 ? comment.replies!.slice(0, displayedRepliesCount) : [],
+    [comment.replies, repliesCount, displayedRepliesCount]
+  );
   const isMyComment = useMemo(
     () => user?.data.profile.profile_id === comment.commenter_profile_id,
     [user, comment.commenter_profile_id]
+  );
+  const isRepliedByMe = useMemo(
+    () => user?.data.comments.includes(comment.comment_id),
+    [user]
   );
   const isLikedByMe = useMemo(
     () => user?.data.likes_comment.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+  const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
   //#region callbacks
   const handleOnLikePress = useCallback(
     async function handleOnLikePress() {
       if (!isAuthenticated) {
-        router.push("/login");
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, login: true },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
         return;
       }
 
       if (isLikedByMe) {
         await unlikeComment(comment.comment_id);
-        setLikeCount((state) => state - 1);
+        setLikeCount((state) => Math.max(state - 1, 0));
       } else {
         await likeComment(comment.comment_id);
         setLikeCount((state) => state + 1);
@@ -73,16 +103,41 @@ function CommentRowComponent({
     },
     [comment.comment_id]
   );
+  const handelOnLoadMoreRepliesPress = useCallback(() => {
+    setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
+  }, []);
+  const handleOnReplyPress = useCallback(() => {
+    if (!isAuthenticated) {
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
+      return;
+    }
+
+    if (reply) {
+      reply(comment);
+    }
+  }, [reply, comment, isAuthenticated]);
+  const handleOnUserPress = useCallback((username: string) => {
+    router.push(`/@${username}`);
+  }, []);
   //#endregion
 
-  const isReply = comment.parent_id !== undefined;
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
         username={
           comment.username && comment.username.length > 0
             ? comment.username
-            : comment.address.substring(0, 8)
+            : formatAddressShort(comment.address)
         }
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
@@ -96,23 +151,34 @@ function CommentRowComponent({
         }
         hasParent={isReply}
         likedByMe={isLikedByMe}
+        repliedByMe={isRepliedByMe}
         createdAt={comment.added}
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
+        onReplyPress={handleOnReplyPress}
+        onTagPress={handleOnUserPress}
+        onUserPress={handleOnUserPress}
       />
-      {!isReply && (comment.replies?.length ?? 0) > 0
-        ? comment.replies?.map((reply, index) => (
+      {!isReply
+        ? replies.map((reply, index) => (
             <CommentRowComponent
               key={`comment-reply-${reply.comment_id}`}
               comment={reply}
-              isLastReply={index === (comment.replies?.length ?? 0) - 1}
+              isLastReply={index === (replies.length ?? 0) - 1}
               likeComment={likeComment}
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}
             />
           ))
         : null}
+
+      {!isReply && repliesCount > displayedRepliesCount ? (
+        <MessageMore
+          count={repliesCount - displayedRepliesCount}
+          onPress={handelOnLoadMoreRepliesPress}
+        />
+      ) : null}
     </Fragment>
   );
 }

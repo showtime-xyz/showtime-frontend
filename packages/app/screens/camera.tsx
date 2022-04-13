@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 
 import { Camera } from "app/components/camera";
 import { useUser } from "app/hooks/use-user";
+import { useNavigation } from "app/lib/react-navigation/native";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 function CameraScreen() {
+  useHideHeader();
   const { isAuthenticated } = useUser();
   const router = useRouter();
   const navigation = useNavigation();
@@ -23,9 +25,33 @@ function CameraScreen() {
     (photoURI: string) => {
       const createPostURL = `/create?uri=${photoURI}`;
       if (isAuthenticated) {
-        router.push(createPostURL);
+        router.push(
+          Platform.select({
+            native: createPostURL,
+            web: {
+              pathname: router.pathname,
+              query: { ...router.query, create: true, uri: photoURI },
+            },
+          }),
+          createPostURL,
+          { shallow: true }
+        );
       } else {
-        router.push(`/login?redirect_url=${encodeURIComponent(createPostURL)}`);
+        router.push(
+          Platform.select({
+            native: "/login",
+            web: {
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                login: true,
+                redirect_url: encodeURIComponent(createPostURL),
+              },
+            },
+          }),
+          "/login",
+          { shallow: true }
+        );
       }
     },
     [router, isAuthenticated]

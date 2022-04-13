@@ -6,10 +6,9 @@ import React, {
   useState,
 } from "react";
 
-import * as Haptics from "expo-haptics";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
+import { Haptics } from "app/lib/haptics";
 import { NFT } from "app/types";
 
 type LikeContextType = {

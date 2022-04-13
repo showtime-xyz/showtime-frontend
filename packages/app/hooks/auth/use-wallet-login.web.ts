@@ -38,8 +38,8 @@ export function useWalletLogin() {
         const _web3 = new Web3Provider(await web3Modal.connect());
 
         setWeb3(_web3);
-
-        walletName = web3Modal.selectedWallet.name;
+        //TODO: couldn't find a way to get wallet name
+        walletName = "wallet";
         walletAddress = await _web3.getSigner().getAddress();
 
         dispatch("CONNECT_TO_WALLET_SUCCESS", {

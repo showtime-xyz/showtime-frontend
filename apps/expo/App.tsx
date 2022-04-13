@@ -8,6 +8,7 @@ import {
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import LogRocket from "@logrocket/react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
@@ -20,7 +21,6 @@ import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { enableScreens } from "react-native-screens";
 import { SWRConfig } from "swr";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
@@ -31,11 +31,13 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { SafeAreaProvider } from "app/lib/safe-area";
 import { Sentry } from "app/lib/sentry";
 import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
+import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
@@ -284,8 +286,19 @@ function AppContextProvider({
 
 function App() {
   useEffect(() => {
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const initAnalytics = async () => {
-      await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
+      await rudderClient.setup(
+        process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
+        rudderConfig
+      );
     };
 
     initAnalytics();
@@ -326,14 +339,16 @@ function App() {
                     <AppContextProvider>
                       <AuthProvider>
                         <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <StatusBar style="auto" />
-                                <RootStackNavigator />
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
+                          <MintProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <StatusBar style="auto" />
+                                  <RootStackNavigator />
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </MintProvider>
                         </UserProvider>
                       </AuthProvider>
                     </AppContextProvider>

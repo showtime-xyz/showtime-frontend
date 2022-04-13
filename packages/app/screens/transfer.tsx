@@ -5,6 +5,7 @@ import { Transfer } from "app/components/transfer";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
@@ -14,7 +15,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const TransferScreen = () => {
+const TransferModal = () => {
   useHideHeader();
 
   //#region hooks
@@ -24,11 +25,11 @@ const TransferScreen = () => {
 
   //#region variables
   const snapPoints = useMemo(() => ["90%"], []);
-  const TransferModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
   //#endregion
 
   return (
-    <TransferModal
+    <ModalComponent
       title="Transfer NFT"
       close={router.pop}
       snapPoints={snapPoints}
@@ -43,8 +44,12 @@ const TransferScreen = () => {
       >
         <Transfer nftId={nftId} />
       </KeyboardAvoidingView>
-    </TransferModal>
+    </ModalComponent>
   );
 };
 
-export { TransferScreen };
+export const TransferScreen = withModalScreen(
+  TransferModal,
+  "/nft/[id]/transfer",
+  "transfer"
+);

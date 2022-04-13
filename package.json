@@ -1,9 +1,10 @@
 {
   "name": "showtime",
-  "version": "17.0.0",
+  "version": "19.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@react-native-menu/menu": "^0.5.2",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/react": "~17.0.36",
     "@types/react-native": "~0.66.5",
@@ -55,8 +56,8 @@
   },
   "resolutions": {
     "babel-preset-expo": "^8.5.1",
-    "react": "18.0.0-rc.0",
-    "react-dom": "18.0.0-rc.0",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-native-svg": "^12.1.1",
     "@jest/create-cache-key-function": "^27.0.1",
     "expo-linear-gradient": "~11.0.2",

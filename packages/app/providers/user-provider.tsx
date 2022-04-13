@@ -1,4 +1,5 @@
 import { useEffect, useMemo, ReactNode } from "react";
+import { Platform } from "react-native";
 
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
@@ -6,6 +7,7 @@ import useUnmountSignal from "use-unmount-signal";
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { axios } from "app/lib/axios";
+import LogRocket from "app/lib/logrocket";
 import { mixpanel } from "app/lib/mixpanel";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { rudder } from "app/lib/rudderstack";
@@ -35,11 +37,12 @@ export function UserProvider({ children }: UserProviderProps) {
   const userContextValue = useMemo(
     () => ({
       user: data,
+      mutate,
       error,
       isLoading,
       isAuthenticated: accessToken != undefined,
     }),
-    [isLoading, data, accessToken]
+    [isLoading, data, accessToken, mutate]
   );
   //#endregion
 
@@ -58,10 +61,21 @@ export function UserProvider({ children }: UserProviderProps) {
       if (data) {
         // Identify user
         mixpanel.identify(data.data.profile.profile_id.toString());
+        LogRocket.identify(data.data.profile.profile_id.toString());
         rudder.identify(data.data.profile.profile_id.toString(), {});
 
+        LogRocket.getSessionURL((sessionURL: string) => {
+          mixpanel.track("LogRocket", { sessionURL: sessionURL });
+          rudder.track("LogRocket", { sessionURL: sessionURL });
+          // Sentry.configureScope(scope => {
+          //   scope.setExtra("sessionURL", sessionURL);
+          // });
+        });
+
         // Handle registration for push notification
-        await registerForPushNotificationsAsync();
+        if (Platform.OS !== "web") {
+          await registerForPushNotificationsAsync();
+        }
       }
     };
 

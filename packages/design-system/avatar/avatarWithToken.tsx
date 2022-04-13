@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import { View } from "../view";
-import { Image } from "../image";
+
 import { Avatar, AvatarProps } from ".";
+import { Image } from "../image";
+import { View } from "../view";
 import {
   CONTAINER_TW,
   MASKED_CONTAINER_TW,

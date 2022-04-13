@@ -1,7 +1,16 @@
 diff --git a/node_modules/@react-native-menu/menu/ios/MenuView.swift b/node_modules/@react-native-menu/menu/ios/MenuView.swift
-index 4400f47..3b9b4d5 100644
+index 4400f47..af8e6a9 100644
 --- a/node_modules/@react-native-menu/menu/ios/MenuView.swift
 +++ b/node_modules/@react-native-menu/menu/ios/MenuView.swift
+@@ -17,7 +17,7 @@ class MenuView: UIButton {
+                 return
+             }
+             _actions.removeAll()
+-            actions.forEach { menuAction in
++            actions.reversed().forEach { menuAction in
+                 _actions.append(RCTMenuAction(details: menuAction).createUIMenuElement({action in self.sendButtonAction(action)}))
+             }
+             self.setup()
 @@ -34,6 +34,20 @@ class MenuView: UIButton {
              self.setup()
          }

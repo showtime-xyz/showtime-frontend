@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useListNFT, ListNFT, ListingValues } from "app/hooks/use-list-nft";
+import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
@@ -59,6 +60,7 @@ export const ListingForm = (props: Props) => {
   const isDark = useIsDarkMode();
   const { web3 } = useWeb3();
   const { listNFT, state } = useListNFT();
+  const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const [currentCurrencyAddress, setCurrentCurrency] = useState<string>(
     LIST_CURRENCIES[defaultListingValues.currency]
@@ -81,10 +83,10 @@ export const ListingForm = (props: Props) => {
     if (state.status === "listingSuccess") {
       setTimeout(() => {
         router.pop();
-        router.push(`/profile/${address}`);
+        router.push(`/@${user?.data?.profile?.username ?? address}`);
       }, 1000);
     }
-  }, [state.status]);
+  }, [state.status, user, address]);
 
   const createListValidationSchema = useMemo(
     () =>

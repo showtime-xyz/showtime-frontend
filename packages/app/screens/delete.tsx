@@ -6,20 +6,20 @@ import { mixpanel } from "app/lib/mixpanel";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  nftId: number;
+  id: string;
 };
 
 const { useParam } = createParam<Query>();
 
-const DeleteScreen = () => {
+const DeleteModal = () => {
   useHideHeader();
   const router = useRouter();
-  //@TODO: Why is Typescript complaining about a missing argument here? None of the other uses with the exact same code have the same warning
-  const [nftId, setNftId] = useParam("nftId");
+  const [nftId] = useParam("id");
 
   useEffect(() => {
     mixpanel.track("Delete nft view");
@@ -27,10 +27,10 @@ const DeleteScreen = () => {
 
   const snapPoints = useMemo(() => ["90%"], []);
 
-  const DeleteModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
 
   return (
-    <DeleteModal
+    <ModalComponent
       title="Delete"
       close={router.pop}
       snapPoints={snapPoints}
@@ -38,8 +38,12 @@ const DeleteScreen = () => {
       bodyTW="bg-white dark:bg-black"
     >
       <Delete nftId={nftId} />
-    </DeleteModal>
+    </ModalComponent>
   );
 };
 
-export { DeleteScreen };
+export const DeleteScreen = withModalScreen(
+  DeleteModal,
+  "/nft/[id]/delete",
+  "delete"
+);

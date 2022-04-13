@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Alert, Platform } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 import { Create } from "app/components/create";
-import { useMintNFT } from "app/hooks/use-mint-nft";
+import { MintContext } from "app/context/mint-context";
 import { mixpanel } from "app/lib/mixpanel";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
 
@@ -18,19 +18,18 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const CreateScreen = () => {
+const CreateModal = () => {
   useHideHeader();
   //#region hooks
   const router = useRouter();
   const navigation = useNavigation();
   const [uri] = useParam("uri");
-
-  const { startMinting, state } = useMintNFT();
+  const { state } = useContext(MintContext);
   //#endregion
 
   //#region variables
   const snapPoints = useMemo(() => ["90%"], []);
-  const CreateModal = Platform.OS === "android" ? ModalSheet : Modal;
+  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
   //#endregion
 
   //#region effects
@@ -39,7 +38,12 @@ const CreateScreen = () => {
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      if (state.status === "mintingSuccess") {
+      if (
+        state.status === "mediaUpload" ||
+        state.status === "nftJSONUpload" ||
+        state.status === "minting" ||
+        state.status === "mintingSuccess"
+      ) {
         return;
       }
 
@@ -74,7 +78,7 @@ const CreateScreen = () => {
   }
 
   return (
-    <CreateModal
+    <ModalComponent
       title="Add details"
       close={router.pop}
       snapPoints={snapPoints}
@@ -82,9 +86,9 @@ const CreateScreen = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <Create uri={uri} state={state} startMinting={startMinting} />
-    </CreateModal>
+      <Create uri={uri} />
+    </ModalComponent>
   );
 };
 
-export { CreateScreen };
+export const CreateScreen = withModalScreen(CreateModal, "/create", "create");

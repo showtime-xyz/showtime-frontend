@@ -1,7 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
 
-import { useIsFocused } from "@react-navigation/native";
 import { View } from "dripsy";
 import { Camera as ExpoCamera } from "expo-camera";
 import { AnimatePresence, View as MotiView } from "moti";
@@ -9,6 +8,7 @@ import { AnimatePresence, View as MotiView } from "moti";
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { track } from "app/lib/analytics";
+import { useIsFocused } from "app/lib/react-navigation/native";
 
 type Props = {
   photos: { uri: string }[];

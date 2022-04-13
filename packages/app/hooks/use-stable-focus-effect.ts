@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "app/lib/react-navigation/native";
 
 type Callback = (...args: any[]) => void;
 

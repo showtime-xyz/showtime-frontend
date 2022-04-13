@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useRouter } from "app/navigation/use-router";
@@ -19,7 +20,19 @@ function Social({ nft }: { nft?: NFT }) {
   const [likeCount, setLikeCount] = useState(nft.like_count);
 
   const handleCommentPress = useCallback(() => {
-    router.push(`/comments?nftId=${nft.nft_id}`);
+    const as = `/nft/${nft?.nft_id}/comments`;
+
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: { ...router.query, comments: true, id: nft?.nft_id },
+        },
+      }),
+      as,
+      { shallow: true }
+    );
   }, [router, nft.nft_id]);
 
   return (

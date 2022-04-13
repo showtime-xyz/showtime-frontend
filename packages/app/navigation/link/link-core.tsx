@@ -1,10 +1,9 @@
 import type { ComponentProps, ComponentType } from "react";
 
-import { useLinkProps } from "@react-navigation/native";
 import NextLink from "next/link";
+import { parseNextPath } from "solito/router";
 
-import { parseNextPath } from "app/navigation/parse-next-path";
-import { useRouter } from "app/navigation/use-router";
+import { useLinkTo } from "app/lib/react-navigation/native";
 
 type Props = {
   children: React.ReactNode;
@@ -24,23 +23,18 @@ function LinkCore({
   Component: ComponentType<any>;
   componentProps?: any;
 }) {
-  const router = useRouter();
-  const linkProps = useLinkProps({
-    to: parseNextPath(href),
-  });
+  const linkTo = useLinkTo();
 
   return (
     <Component
-      {...linkProps}
+      accessibilityRole="link"
+      hitSlop={hitSlop}
       {...componentProps}
-      onPress={() => {
-        onPress?.();
-        // If we are currently in NFT modal,
-        // we need to close it before navigating to new page
-        if (router?.pathname?.includes("/nft/")) {
-          router.pop();
+      onPress={(e?: any) => {
+        componentProps?.onPress?.(e);
+        if (!e?.defaultPrevented) {
+          linkTo(parseNextPath(as || href));
         }
-        linkProps.onPress();
       }}
     >
       {children}

@@ -33,8 +33,8 @@ export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
         title={props.title}
         close={() => {
           // TODO: extract `onClose` to a proper unmount transition completion event.
-          props.close();
-          props.onClose();
+          props.close?.();
+          props.onClose?.();
         }}
       >
         {props.children}

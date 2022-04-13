@@ -6,17 +6,15 @@ import {
   useRef,
   useState,
   useContext,
+  useEffect,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import {
-  useBottomTabBarHeight,
-  BottomTabBarHeightContext,
-} from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { ProfileDropdown } from "app/components/profile-dropdown";
+import { MintContext } from "app/context/mint-context";
 import {
   Collection,
   defaultFilters,
@@ -29,6 +27,11 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+} from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -48,6 +51,7 @@ import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
+import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
@@ -97,24 +101,49 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View tw={`h-[${tabBarHeight}px]`} />;
 };
 
-const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
-  return <Profile address={walletAddress} />;
+const ProfileScreen = ({ username }: { username: string }) => {
+  return <Profile address={username} />;
 };
 
 const Profile = ({ address }: { address?: string }) => {
+  const toast = useToast();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  const { data: myInfoData } = useMyInfo();
-  const isBlocked = Boolean(
-    myInfoData?.data?.blocked_profile_ids?.find(
-      (id) => id === profileData?.data?.profile.profile_id
-    )
-  );
+  const { getIsBlocked } = useBlock();
+  const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
+  const { state: mintingState } = useContext(MintContext);
+
+  useEffect(() => {
+    if (
+      mintingState.status === "mediaUpload" ||
+      mintingState.status === "nftJSONUpload" ||
+      mintingState.status === "minting" ||
+      mintingState.status === "transactionCompleted"
+    ) {
+      toast?.show({
+        element: (
+          <View tw="flex-row items-center p-5">
+            <Spinner size={20} />
+            <View tw="mx-1" />
+            <Text tw="dark:text-white text-black">Creating...</Text>
+          </View>
+        ),
+        hideAfter: 4000,
+      });
+    }
+
+    if (mintingState.status === "mintingSuccess") {
+      toast?.show({
+        message: "Created 🎉 Your NFT will appear in a minute!",
+        hideAfter: 4000,
+      });
+    }
+  }, [mintingState]);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -146,14 +175,16 @@ const Profile = ({ address }: { address?: string }) => {
             <Tabs.Pager>
               {data?.data.lists.map((list) => {
                 return (
-                  <Suspense fallback={<Spinner size="small" />} key={list.id}>
-                    <TabList
-                      username={profileData?.data.profile.username}
-                      profileId={profileData?.data.profile.profile_id}
-                      isBlocked={isBlocked}
-                      list={list}
-                    />
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="small" />} key={list.id}>
+                      <TabList
+                        username={profileData?.data.profile.username}
+                        profileId={profileData?.data.profile.profile_id}
+                        isBlocked={isBlocked}
+                        list={list}
+                      />
+                    </Suspense>
+                  </ErrorBoundary>
                 );
               })}
             </Tabs.Pager>
@@ -204,6 +235,7 @@ const TabList = ({
     return item.nft_id;
   }, []);
   const router = useRouter();
+  const { state: mintingState } = useContext(MintContext);
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -214,7 +246,8 @@ const TabList = ({
           return { ...state, sortId: action.payload };
       }
     },
-    { ...defaultFilters, sortId: list.sort_id }
+    // { ...defaultFilters, sortId: list.sort_id }
+    { ...defaultFilters }
   );
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
@@ -223,6 +256,7 @@ const TabList = ({
       profileId,
       collectionId: filter.collectionId,
       sortId: filter.sortId,
+      refreshInterval: 1000,
     });
 
   const onCollectionChange = useCallback(
@@ -241,8 +275,9 @@ const TabList = ({
 
   const onItemPress = useCallback(
     (index: number) => {
+      // TODO:
       router.push(
-        `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+        `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
     },
     [list.id, profileId, filter.collectionId, filter.sortId]
@@ -308,7 +343,24 @@ const TabList = ({
 
   return (
     <Tabs.FlatList
-      data={isBlocked ? null : data}
+      data={
+        isBlocked
+          ? null
+          : mintingState.status !== "idle" &&
+            mintingState.tokenId !== data?.[0]?.token_id
+          ? [
+              {
+                loading: true,
+                chain_name: "polygon",
+                contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+                token_id: mintingState.tokenId ?? "1",
+                source_url: mintingState.filePath ?? "",
+                mime_type: mintingState.fileType ?? "image/jpeg",
+              },
+              ...data,
+            ]
+          : data
+      }
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       refreshing={isRefreshing}
@@ -367,9 +419,7 @@ const ProfileTop = ({
           hasLinksInBio.current = true;
           return (
             <TextLink
-              href={`${
-                router.pathname.startsWith("/trending") ? "/trending" : ""
-              }/profile/${username}`}
+              href={`/@${username}`}
               tw="font-bold text-black dark:text-white"
               key={i}
             >
@@ -394,11 +444,13 @@ const ProfileTop = ({
             show={loading}
             colorMode={colorMode as any}
           >
-            <Image
-              source={{ uri: profileData?.data.profile.cover_url }}
-              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-              alt="Cover image"
-            />
+            {profileData?.data.profile.cover_url && (
+              <Image
+                source={{ uri: profileData?.data.profile.cover_url }}
+                tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+                alt="Cover image"
+              />
+            )}
           </Skeleton>
         </View>
 
@@ -456,7 +508,7 @@ const ProfileTop = ({
                 <Button
                   size="small"
                   onPress={() => {
-                    router.push("/editProfile");
+                    router.push(`/profile/edit`);
                   }}
                 >
                   Edit profile

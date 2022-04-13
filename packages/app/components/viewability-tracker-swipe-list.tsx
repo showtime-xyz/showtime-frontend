@@ -2,7 +2,8 @@ import { forwardRef, useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { RecyclerListView } from "recyclerlistview";
+
+import { RecyclerListView } from "app/lib/recyclerlistview";
 
 import {
   ItemKeyContext,
@@ -64,6 +65,7 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
           rowRenderer={rowRenderer}
           ref={ref}
           onVisibleIndicesChanged={onVisibleIndicesChanged}
+          useWindowScroll={Platform.OS === "web"}
         />
       </ViewabilityItemsContext.Provider>
     );

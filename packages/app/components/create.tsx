@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { MintContext } from "app/context/mint-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import {
-  MintNFTType,
+  useMintNFT,
   supportedVideoExtensions,
   UseMintNFT,
 } from "app/hooks/use-mint-nft";
@@ -60,14 +62,15 @@ const createNFTValidationSchema = yup.object({
 
 interface CreateProps {
   uri: string;
-  state: MintNFTType;
-  startMinting: (params: UseMintNFT) => Promise<void>;
 }
 
-function Create({ uri, state, startMinting }: CreateProps) {
+function Create({ uri }: CreateProps) {
   const router = useRouter();
   const { user } = useUser();
   const { web3 } = useWeb3();
+  const { state } = useContext(MintContext);
+  const { startMinting } = useMintNFT();
+  const { userAddress: address } = useCurrentUserAddress();
 
   const isNotMagic = !web3;
 
@@ -106,17 +109,16 @@ function Create({ uri, state, startMinting }: CreateProps) {
   const enable = state.status === "idle" || isError;
 
   useEffect(
-    function redirectAfterSuccess() {
-      if (state.status === "mintingSuccess") {
+    function redirect() {
+      if (state.status === "mediaUpload" || state.status === "nftJSONUpload") {
+        // TODO: save the file in the user gallery (if taken from camera)
         setTimeout(() => {
           router.pop();
-          router.push(
-            `/profile/${user?.data?.profile?.wallet_addresses_v2?.[0]?.address}`
-          );
+          router.push(`/@${user?.data?.profile?.username ?? address}`);
         }, 1000);
       }
     },
-    [state.status, user]
+    [state.status, user, address]
   );
 
   return (

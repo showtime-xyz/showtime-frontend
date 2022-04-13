@@ -1,22 +1,18 @@
 import { isServer } from "app/lib/is-server";
 
-export interface Analytics {
-  page: (url: string) => void;
-  track: (
-    action: string,
-    props?: Record<string, any>,
-    options?: Record<string, any>
-  ) => void;
-  identify: (userId: number, traits: Record<string, any>) => void;
-  ready: (callback: () => void) => void;
+let rudderanalytics = {};
+if (!isServer) {
+  rudderanalytics = require("rudder-sdk-js");
+
+  const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
+
+  //@ts-ignore
+  rudderanalytics.load(
+    process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
+    RUDDERSTACK_DATA_PLANE_URL
+  );
 }
 
-export interface AnalyticsWindow extends Window {
-  rudderanalytics: Analytics;
-}
-
-const rudder = isServer
-  ? {}
-  : (window as Window as AnalyticsWindow).rudderanalytics;
+const rudder = isServer ? {} : rudderanalytics;
 
 export { rudder };

@@ -1,16 +1,18 @@
-import { useContext } from "react";
+import { useEffect } from "react";
+import { Alert } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import { AppContext } from "app/context/app-context";
+import { useAddWallet } from "app/hooks/use-add-wallet";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
-import { useWalletConnect } from "app/lib/walletconnect";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 import { Ethereum, Tezos } from "design-system/icon";
+import { useToast } from "design-system/toast";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
@@ -22,13 +24,49 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
+  const toast = useToast();
+  const { state, addWallet } = useAddWallet();
+
+  const connectionError = state.status === "error";
+  const walletCTA = connectionError ? "Connect Lost, Retry" : "Add Wallet";
+
+  useEffect(() => {
+    if (connectionError) {
+      // TODO: Possible force logout
+      toast?.show({
+        message: "Wallet connection lost please try again",
+        hideAfter: 4000,
+      });
+    }
+  }, [state.status]);
+
+  const triggerAddWallet = async () => {
+    Alert.alert(
+      "Showcase all your NFTs",
+      "If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Select Wallet",
+          style: "default",
+          onPress: async () => {
+            await addWallet();
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SettingSubTitle>
       <Text tw="text-gray-900 dark:text-white font-bold text-xl">
         Your Wallets
       </Text>
-      <Button variant="primary" size="small">
-        Add Wallet
+      <Button variant="primary" size="small" onPress={triggerAddWallet}>
+        {walletCTA}
       </Button>
     </SettingSubTitle>
   );
@@ -104,18 +142,17 @@ export const SettingsWalletSlotPlaceholder = () => {
 };
 
 export const SettingsWalletSlot = (props: Props) => {
-  const context = useContext(AppContext);
-  const connector = useWalletConnect();
-  const notMagic = !!context.web3 === false;
   const address = props.address;
   const ensDomain = props.ensDomain;
+
+  const { userAddress } = useCurrentUserAddress();
+
   const mintingEnabled = props.mintingEnabled;
   const display = ensDomain ? ensDomain : formatAddressShort(address);
   const isEthereumAddress = address.startsWith("0x");
-  const [connectedAddress] = connector?.session?.accounts;
 
   const isConnectedAddress =
-    notMagic && connectedAddress?.toLowerCase() === address?.toLowerCase();
+    userAddress.toLowerCase() === address?.toLowerCase();
   const multiplePills = isConnectedAddress && mintingEnabled;
 
   return (
@@ -141,7 +178,11 @@ export const SettingsWalletSlot = (props: Props) => {
         <Text tw="text-gray-900 dark:text-white text-xs pb-3">{address}</Text>
       </View>
       <View tw="flex justify-center">
-        <AddressMenu address={address} ctaCopy="Delete Wallet" />
+        <AddressMenu
+          address={address}
+          ctaCopy="Delete Wallet"
+          isCurrent={isConnectedAddress}
+        />
       </View>
     </View>
   );

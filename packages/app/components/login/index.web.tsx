@@ -9,7 +9,11 @@ import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { useLogin } from "./use-login";
 
-export function Login() {
+interface LoginProps {
+  onLogin?: () => void;
+}
+
+export function Login({ onLogin }: LoginProps) {
   //#region hooks
   const {
     walletStatus,
@@ -18,7 +22,7 @@ export function Login() {
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
-  } = useLogin();
+  } = useLogin(onLogin);
   //#endregion
 
   //#region variables

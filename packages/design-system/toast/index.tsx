@@ -8,7 +8,8 @@ import {
 } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";

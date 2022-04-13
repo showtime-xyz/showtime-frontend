@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, memo } from "react";
+import { useCallback, useMemo, useRef, memo, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
@@ -7,17 +7,12 @@ import {
   Platform,
 } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
-import { useScrollToTop, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import { Blurhash } from "react-native-blurhash";
 import Reanimated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
@@ -26,8 +21,13 @@ import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { Blurhash } from "app/lib/blurhash";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useScrollToTop, useNavigation } from "app/lib/react-navigation/native";
+import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
+import { useSafeAreaFrame } from "app/lib/safe-area";
 import type { NFT } from "app/types";
-import { handleShareNFT } from "app/utilities";
+import { handleShareNFT, getMediaUrl } from "app/utilities";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
@@ -42,6 +42,16 @@ import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 
+type Props = {
+  data: NFT[];
+  fetchMore: () => void;
+  isRefreshing: boolean;
+  refresh: () => void;
+  initialScrollIndex?: number;
+  isLoadingMore: boolean;
+  bottomPadding?: number;
+};
+
 export const SwipeList = ({
   data,
   fetchMore,
@@ -50,7 +60,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
-}: any) => {
+}: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -238,7 +248,9 @@ export const FeedItem = memo(
               />
             ) : (
               <Image
-                source={{ uri: nft.still_preview_url }}
+                source={{
+                  uri: getMediaUrl({ nft, stillPreview: true }),
+                }}
                 style={tw.style("w-full h-full")}
               />
             )}

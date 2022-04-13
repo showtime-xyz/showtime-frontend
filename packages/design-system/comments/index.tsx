@@ -1,11 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { useComments } from "app/hooks/api/use-comments";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { usePanResponder } from "app/hooks/use-pan-responder";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { useIsDarkMode } from "design-system/hooks";
 import {
@@ -13,7 +12,6 @@ import {
   SCROLL_HEIGHT,
   PADDING_HEIGHT,
 } from "design-system/messages";
-import { MessageRow } from "design-system/messages/message-row";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 

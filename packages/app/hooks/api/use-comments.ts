@@ -168,8 +168,21 @@ export const useComments = (nftId: number) => {
           }),
         });
 
-        // refresh comments
+        // mutate comments
         mutateComments();
+
+        // mutate user info
+        // TODO: add parent id to user comments list
+        // mutate(
+        //   MY_INFO_ENDPOINT,
+        //   (data: UserType): UserType => ({
+        //     data: {
+        //       ...data.data,
+        //       comments: [...data.data.comments],
+        //     },
+        //   }),
+        //   true
+        // );
         setIsSubmitting(false);
       } catch (error) {
         setIsSubmitting(false);

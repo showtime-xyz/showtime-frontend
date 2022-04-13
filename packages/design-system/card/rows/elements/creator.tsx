@@ -28,15 +28,13 @@ export function Creator({ nft, toggleCreatorName }: Props) {
 
   return (
     <Link
-      href={`${
-        router.pathname.startsWith("/trending") ? "/trending" : ""
-      }/profile/${nft.creator_address}`}
+      href={`/@${nft.creator_username ?? nft.creator_address}`}
       tw="flex flex-row"
     >
       <Image
         tw="w-[32px] h-[32px] rounded-full"
         source={{
-          uri: getProfileImageUrl(nft.creator_img_url ?? DEFAULT_PROFILE_PIC),
+          uri: getProfileImageUrl(nft?.creator_img_url ?? DEFAULT_PROFILE_PIC),
         }}
       />
       <View tw="ml-2 justify-center">

@@ -63,7 +63,7 @@ jobs:
         run: yarn bump-application-version
 
       - name: Set up Expo
-        uses: expo/expo-github-action@v6
+        uses: expo/expo-github-action@v7
         with:
           eas-version: latest
           eas-cache: true
@@ -72,7 +72,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
-        run: STAGE=production eas update --branch production --message "Deploy to production"
+        run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build on EAS
         run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit

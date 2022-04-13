@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
@@ -35,6 +36,7 @@ type Props = {
 };
 
 function NFTDropdown({ nftId }: Props) {
+  //#region hooks
   const { mutate } = useSWRConfig();
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
@@ -42,17 +44,13 @@ function NFTDropdown({ nftId }: Props) {
   const [isOwner, setIsOwner] = useState(false);
   const { report } = useReport();
   const { unfollow, isFollowing } = useMyInfo();
-  const { block } = useBlock();
+  const { getIsBlocked, unblock, block } = useBlock();
   const router = useRouter();
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
+  //#endregion
 
-  useEffect(() => {
-    if (nft?.owner_address) {
-      setIsOwner(nft.owner_address.toLowerCase() === userAddress.toLowerCase());
-    }
-  }, [nft, userAddress]);
-
+  //#region variables
   const hasMatchingListing = findListingItemByOwner(nft, userId);
   const hasOwnership = isUserAnOwner(
     user?.data.profile.wallet_addresses_v2,
@@ -68,6 +66,56 @@ function NFTDropdown({ nftId }: Props) {
     () => nft?.owner_id && isFollowing(nft?.creator_id),
     [nft?.creator_id, isFollowing]
   );
+  const isBlocked = useMemo(
+    () => getIsBlocked(nft?.creator_id),
+    [nft?.creator_id, getIsBlocked]
+  );
+  //#endregion
+
+  //#region callback
+  const handleOnBlockPress = async () => {
+    if (isAuthenticated) {
+      await block(nft?.creator_id);
+    } else {
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
+    }
+  };
+  const handleOnUnblockPress = async () => {
+    if (isAuthenticated) {
+      await unblock(nft?.creator_id);
+    } else {
+      router.push(
+        Platform.select({
+          native: "/login",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, login: true },
+          },
+        }),
+        "/login",
+        { shallow: true }
+      );
+    }
+  };
+  //#endregion
+
+  //#region effects
+  useEffect(() => {
+    if (nft?.owner_address) {
+      setIsOwner(nft.owner_address.toLowerCase() === userAddress.toLowerCase());
+    }
+  }, [nft, userAddress]);
+  //#endregion
 
   return (
     <DropdownMenuRoot>
@@ -84,7 +132,21 @@ function NFTDropdown({ nftId }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => router.push(`/nft/${nftId}/details`)}
+          onSelect={() => {
+            const as = `/nft/${nftId}/details`;
+
+            router.push(
+              Platform.select({
+                native: as,
+                web: {
+                  pathname: router.pathname,
+                  query: { ...router.query, details: true, id: nftId },
+                },
+              }),
+              as,
+              { shallow: true }
+            );
+          }}
           key="details"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
@@ -124,7 +186,17 @@ function NFTDropdown({ nftId }: Props) {
                 await unfollow(nft?.creator_id);
                 refresh();
               } else {
-                router.push("/login");
+                router.push(
+                  Platform.select({
+                    native: "/login",
+                    web: {
+                      pathname: router.pathname,
+                      query: { ...router.query, login: true },
+                    },
+                  }),
+                  "/login",
+                  { shallow: true }
+                );
               }
             }}
             key="unfollow"
@@ -138,24 +210,29 @@ function NFTDropdown({ nftId }: Props) {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        {!isOwner && (
-          <DropdownMenuItem
-            onSelect={async () => {
-              if (isAuthenticated) {
-                await block(nft?.creator_id);
-                refresh();
-              } else {
-                router.push("/login");
-              }
-            }}
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-            key="block"
-          >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
-              Block User
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
+        {!isOwner ? (
+          !isBlocked ? (
+            <DropdownMenuItem
+              key="block"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              onSelect={handleOnBlockPress}
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Block User
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              key="unblock"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              onSelect={handleOnUnblockPress}
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Unblock User
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )
+        ) : null}
 
         {!isOwner && (
           <DropdownMenuItem
@@ -174,7 +251,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/transfer`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/transfer`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, transfer: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -186,7 +277,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/list`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/list`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, list: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="list"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -198,7 +303,21 @@ function NFTDropdown({ nftId }: Props) {
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nftId}/unlist`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/unlist`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, unlist: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="unlist"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -211,7 +330,21 @@ function NFTDropdown({ nftId }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => router.push(`/burn?nftId=${nftId}`)}
+            onSelect={() => {
+              const as = `/nft/${nftId}/delete`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: { ...router.query, delete: true, id: nftId },
+                  },
+                }),
+                as,
+                { shallow: true }
+              );
+            }}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

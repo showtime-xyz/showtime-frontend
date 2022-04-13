@@ -1,12 +1,15 @@
 import { Suspense } from "react";
+import { Platform } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
-import { useRouter } from "app/navigation/use-router";
+import { Link } from "app/navigation/link";
 
-import { View, Pressable, Image } from "design-system";
+import { View, Image } from "design-system";
 import {
   Home,
   HomeFilled,
@@ -20,49 +23,39 @@ import {
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
-import { useNotifications } from "../hooks/use-notifications";
+type TabBarIconProps = {
+  color: string;
+  focused: boolean;
+};
 
-function TabBarIcon({ tab, children }) {
-  const router = useRouter();
+function TabBarIcon({
+  tab,
+  children,
+}: {
+  tab: string;
+  children: React.ReactNode;
+}) {
+  if (Platform.OS === "web") {
+    return (
+      <Link href={tab}>
+        <View tw="w-12 h-12 items-center justify-center">{children}</View>
+      </Link>
+    );
+  }
 
-  return children;
-  return (
-    <Pressable
-      tw={[
-        "md:bg-white md:dark:bg-gray-800 rounded-[20] w-12 h-12 items-center justify-center",
-      ]}
-      // @ts-expect-error web only
-      onMouseEnter={() => {
-        router.prefetch(tab);
-      }}
-      onPress={() => {
-        router.push(tab);
-      }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
-
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-800 md:dark:bg-gray-700')
-      // 		: tw.style('bg-white dark:bg-gray-900 md:dark:bg-gray-800')
-      // }, [])}
-    >
-      {children}
-    </Pressable>
-  );
+  return <View tw="w-12 h-12 items-center justify-center">{children}</View>;
 }
 
-export const HomeTabBarIcon = ({ color, focused }) => {
+export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/">
       {focused ? (
-        <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <HomeFilled
-            style={tw.style("z-1")}
-            width={24}
-            height={24}
-            color={color}
-          />
-        </View>
+        <HomeFilled
+          style={tw.style("z-1")}
+          width={24}
+          height={24}
+          color={color}
+        />
       ) : (
         <Home style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
@@ -70,18 +63,16 @@ export const HomeTabBarIcon = ({ color, focused }) => {
   );
 };
 
-export const MarketplaceTabBarIcon = ({ color, focused }) => {
+export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/marketplace">
       {focused ? (
-        <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <CompassFilled
-            style={tw.style("z-1")}
-            width={24}
-            height={24}
-            color={color}
-          />
-        </View>
+        <CompassFilled
+          style={tw.style("z-1")}
+          width={24}
+          height={24}
+          color={color}
+        />
       ) : (
         <Compass style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
@@ -89,7 +80,7 @@ export const MarketplaceTabBarIcon = ({ color, focused }) => {
   );
 };
 
-export const CameraTabBarIcon = ({ color, focused }) => {
+export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/camera">
       <View
@@ -112,18 +103,16 @@ export const CameraTabBarIcon = ({ color, focused }) => {
   );
 };
 
-export const TrendingTabBarIcon = ({ color, focused }) => {
+export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/trending">
       {focused ? (
-        <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <HotFilled
-            style={tw.style("z-1")}
-            width={24}
-            height={24}
-            color={color}
-          />
-        </View>
+        <HotFilled
+          style={tw.style("z-1")}
+          width={24}
+          height={24}
+          color={color}
+        />
       ) : (
         <Hot style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
@@ -131,18 +120,19 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
   );
 };
 
-export const NotificationsTabBarIcon = ({ color, focused }) => {
+export const NotificationsTabBarIcon = ({
+  color,
+  focused,
+}: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/notifications">
       {focused ? (
-        <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <BellFilled
-            style={tw.style("z-1")}
-            width={24}
-            height={24}
-            color={color}
-          />
-        </View>
+        <BellFilled
+          style={tw.style("z-1")}
+          width={24}
+          height={24}
+          color={color}
+        />
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
@@ -165,29 +155,32 @@ const UnreadNotificationIndicator = () => {
 
 export const ProfileTabBarIcon = () => {
   const { user } = useUser();
+  const { userAddress } = useCurrentUserAddress();
 
   return (
-    <View tw="h-8 w-8 items-center justify-center rounded-full">
-      <Image
-        tw="h-8 w-8 rounded-full"
-        source={{
-          uri: getSmallImageUrl(
-            user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
-          ),
-        }}
-        alt={
-          user?.data?.profile?.name ||
-          user?.data?.profile?.username ||
-          user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-            ?.ens_domain ||
-          formatAddressShort(
+    <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
+      <View tw="h-8 w-8 items-center justify-center rounded-full">
+        <Image
+          tw="h-8 w-8 rounded-full"
+          source={{
+            uri: getSmallImageUrl(
+              user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
+            ),
+          }}
+          alt={
+            user?.data?.profile?.name ||
+            user?.data?.profile?.username ||
             user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-              ?.address
-          ) ||
-          "Profile"
-        }
-      />
-    </View>
+              ?.ens_domain ||
+            formatAddressShort(
+              user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+                ?.address
+            ) ||
+            "Profile"
+          }
+        />
+      </View>
+    </TabBarIcon>
   );
 };
 

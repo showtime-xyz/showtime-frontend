@@ -14,7 +14,19 @@ import Animated, {
 
 import { useLayout } from "../hooks";
 
-export const PinchToZoom = ({ children, onPinchStart, onPinchEnd }) => {
+type Props = {
+  children: React.ReactNode;
+  onPinchStart?: () => void;
+  onPinchEnd?: () => void;
+  disabled?: boolean;
+};
+
+export const PinchToZoom = ({
+  children,
+  onPinchStart,
+  onPinchEnd,
+  disabled,
+}: Props) => {
   const scale = useSharedValue(1);
   const zIndex = useSharedValue(1);
   const origin = { x: useSharedValue(0), y: useSharedValue(0) };
@@ -113,7 +125,7 @@ export const PinchToZoom = ({ children, onPinchStart, onPinchEnd }) => {
   }, [imageTopForSettingTransformOrigin, imageLeftForSettingTransformOrigin]);
 
   return (
-    <PinchGestureHandler onGestureEvent={handler}>
+    <PinchGestureHandler onGestureEvent={handler} enabled={!disabled}>
       <Animated.View onLayout={onLayout} style={animatedStyles}>
         {children}
       </Animated.View>

@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList } from "react-native";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useScrollToTop } from "@react-navigation/native";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import { UserList } from "app/components/user-list";
@@ -14,6 +12,8 @@ import {
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { TextLink, Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -228,7 +228,7 @@ const NotificationDescription = ({
 const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   return (
     <TextLink
-      href={`/profile/${actor.wallet_address}`}
+      href={`/@${actor.username ?? actor.wallet_address}`}
       variant="text-sm"
       tw="text-black dark:text-white font-bold"
     >
@@ -253,7 +253,7 @@ const NOTIFICATION_TYPES = {
 export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
   const profileLink =
-    "/profile/" +
+    "/@" +
     (notification.link_to_profile__address
       ? `${
           notification.link_to_profile__username ||
