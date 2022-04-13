@@ -142,7 +142,11 @@ const HeaderCenter = () => {
 
 const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   return (
-    <View tw="sticky top-0 right-0 left-0 z-50 h-14 flex-row items-center justify-between px-4 py-2">
+    <View
+      // @ts-expect-error
+      style={{ position: "sticky", backdropFilter: "blur(20px)" }}
+      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+    >
       <View tw="w-20 items-start">
         <HeaderLeft canGoBack={canGoBack} />
       </View>
