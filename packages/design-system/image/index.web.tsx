@@ -57,7 +57,7 @@ function Img({
   ...props
 }: Props) {
   const actualHeight =
-    !isNaN(width) && typeof width === "number" ? width : undefined;
+    !isNaN(width) && typeof height === "number" ? height : undefined;
   const actualWidth =
     !isNaN(width) && typeof width === "number" ? width : undefined;
 
