@@ -56,14 +56,21 @@ function Img({
   resizeMode,
   ...props
 }: Props) {
+  const actualHeight =
+    !isNaN(height) && typeof height === "number" ? height : undefined;
+  const actualWidth =
+    !isNaN(width) && typeof width === "number" ? width : undefined;
+
+  const hasHeightOrWidth = actualHeight || actualWidth;
+
   if (source?.uri && typeof source?.uri === "string") {
     return (
       // @ts-ignore
       <Image
         src={source.uri}
         loading={loading}
-        width={width}
-        height={height}
+        width={actualWidth}
+        height={actualHeight}
         layout={layout}
         objectFit={resizeModeToObjectFit(
           resizeMode ??
@@ -77,6 +84,7 @@ function Img({
             ? getBase64Blurhash(props.blurhash)
             : null
         }
+        layout={!hasHeightOrWidth ? "fill" : undefined}
         {...props}
       />
     );
@@ -87,8 +95,9 @@ function Img({
     <Image
       src={source as string}
       loading={loading}
-      width={width}
-      height={height}
+      width={actualWidth}
+      height={actualHeight}
+      layout={!hasHeightOrWidth ? "fill" : undefined}
       {...props}
     />
   );
