@@ -45,7 +45,7 @@ const Root = ({
       let tabTriggers = [];
       let tabContents = [];
       let headerChild;
-      let listChild;
+      let listChild = {};
       React.Children.forEach(children, (c) => {
         if (React.isValidElement(c)) {
           //@ts-ignore
@@ -91,7 +91,7 @@ const Root = ({
                 paddingHorizontal: 10,
               },
               tw.style(`bg-white dark:bg-gray-900 px-2`),
-              listChild.props.contentContainerStyle,
+              listChild.props?.contentContainerStyle,
             ]}
           >
             {tabTriggers.map((t, index) => {
