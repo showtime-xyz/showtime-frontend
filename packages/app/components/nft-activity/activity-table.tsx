@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { FlatList } from "react-native";
+import { FlatList, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "design-system";
 
@@ -18,15 +18,28 @@ const ActivityTable = ({ data }: TableProps) => {
 
   return (
     <>
-      <TableHead />
-      <FlatList
-        data={data}
-        renderItem={handleRenderItem}
-        ItemSeparatorComponent={handleRenderSeparator}
-        keyExtractor={(_, index) => index.toString()}
-      />
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        <TableHead />
+        <FlatList
+          data={data}
+          renderItem={handleRenderItem}
+          ItemSeparatorComponent={handleRenderSeparator}
+          keyExtractor={(_, index) => index.toString()}
+        />
+      </ScrollView>
     </>
   );
 };
 
 export default ActivityTable;
+
+const styles = StyleSheet.create({
+  scrollView: {
+    display: "flex",
+    flexDirection: "column",
+  },
+});
