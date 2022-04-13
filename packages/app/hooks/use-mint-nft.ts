@@ -262,7 +262,7 @@ export const useMintNFT = () => {
 
         const pinataToken = await getPinataToken();
         const formData = new FormData();
-        // Web File Picker - File Object
+
         if (typeof state.file === "string") {
           // Web Camera -  Data URI
           if (state.file?.startsWith("data")) {
@@ -270,8 +270,7 @@ export const useMintNFT = () => {
 
             formData.append("file", file);
           }
-
-          // Native - File path
+          // Native - File path string
           else {
             formData.append("file", {
               //@ts-ignore
