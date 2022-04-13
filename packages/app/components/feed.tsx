@@ -22,8 +22,6 @@ import { Pressable } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-import { TAB_LIST_HEIGHT } from "../lib/constants";
-
 export const Feed = () => {
   return (
     <View tw="flex-1" testID="homeFeed">
