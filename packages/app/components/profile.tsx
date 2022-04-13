@@ -111,12 +111,8 @@ const Profile = ({ address }: { address?: string }) => {
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  const { data: myInfoData } = useMyInfo();
-  const isBlocked = Boolean(
-    myInfoData?.data?.blocked_profile_ids?.find(
-      (id) => id === profileData?.data?.profile.profile_id
-    )
-  );
+  const { getIsBlocked } = useBlock();
+  const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();

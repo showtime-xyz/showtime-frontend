@@ -115,6 +115,7 @@ export type UserType = {
     likes_nft: number[];
     likes_comment: number[];
     comments: number[];
+    blocked_profile_ids: number[];
   };
 };
 
