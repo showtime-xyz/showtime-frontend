@@ -104,7 +104,12 @@ const FollowingListUser = memo(
         >
           <View tw="flex-row">
             <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
-              <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
+              {item?.img_url && (
+                <Image
+                  source={{ uri: item.img_url }}
+                  tw="h-8 w-8 rounded-full"
+                />
+              )}
             </View>
             <View tw="mr-1 justify-center">
               {item.name ? (
