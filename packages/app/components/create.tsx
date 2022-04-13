@@ -135,6 +135,13 @@ function Create() {
                   }}
                   tw="w-20 h-20 rounded-2xl"
                 />
+              ) : state.fileObject ? (
+                <Preview
+                  source={{
+                    uri: URL.createObjectURL(state.fileObject),
+                  }}
+                  tw="w-20 h-20 rounded-2xl"
+                />
               ) : null}
             </View>
             <View tw="ml--2 flex-1">
