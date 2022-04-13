@@ -11,6 +11,7 @@ import {
   AlertStatic,
   Platform,
   StyleSheet,
+  Modal,
 } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
@@ -35,9 +36,6 @@ export const AlertProvider: React.FC = ({ children }) => {
 
   const closeAlert = useCallback(() => {
     setShow(false);
-    setTitle("");
-    setMessage("");
-    setButtons([]);
   }, []);
 
   const value = useMemo(
@@ -49,8 +47,13 @@ export const AlertProvider: React.FC = ({ children }) => {
         params[2] && setButtons(params[2]);
       },
     }),
-    [show, setShow]
+    []
   );
+  const onModalDismiss = useCallback(() => {
+    setTitle("");
+    setMessage("");
+    setButtons([]);
+  }, []);
 
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
@@ -80,16 +83,15 @@ export const AlertProvider: React.FC = ({ children }) => {
   return (
     <AlertContext.Provider value={value}>
       {children}
-      <AnimatePresence>
-        {show ? (
-          <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-            <MotiView
-              style={[StyleSheet.absoluteFillObject, tw.style("bg-black")]}
-              from={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-            />
-            <View tw="items-center justify-center w-full h-full">
+      <Modal
+        animationType="fade"
+        transparent
+        visible={show}
+        onDismiss={onModalDismiss}
+      >
+        <View tw={"w-full h-full bg-opacity-60 bg-black"}>
+          <View tw="items-center justify-center w-full h-full">
+            <AnimatePresence>
               <MotiView
                 style={tw.style(
                   "max-w-xs w-3/5 blur-sm bg-white dark:bg-black rounded-2xl px-4 py-4"
@@ -99,19 +101,12 @@ export const AlertProvider: React.FC = ({ children }) => {
                 exit={{ opacity: 0 }}
                 transition={{ type: "timing", duration: 300 }}
               >
-                {/* Maybe used. */}
-                {/* <BlurView
-                  tint={isDark ? "dark" : "light"}
-                  intensity={85}
-                  style={tw.style("w-fll h-full rounded-2xl")}
-                /> */}
                 <Text
                   tw="text-gray-900 dark:text-white text-center font-bold"
                   variant="text-lg"
                 >
                   {title}
                 </Text>
-
                 {Boolean(message) && (
                   <Text
                     tw="text-gray-900 dark:text-white text-xs mt-4 text-center"
@@ -123,10 +118,10 @@ export const AlertProvider: React.FC = ({ children }) => {
                 <Divider tw="my-4" />
                 {renderBtns}
               </MotiView>
-            </View>
+            </AnimatePresence>
           </View>
-        ) : null}
-      </AnimatePresence>
+        </View>
+      </Modal>
     </AlertContext.Provider>
   );
 };
