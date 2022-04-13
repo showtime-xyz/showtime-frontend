@@ -145,7 +145,6 @@ export const mintNFTReducer = (
 };
 
 export type UseMintNFT = {
-  filePath: string;
   title: string;
   description: string;
   notSafeForWork: boolean;
@@ -156,21 +155,57 @@ export type UseMintNFT = {
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getFileNameAndType = (filePath: string) => {
-  const fileName = filePath.split("/").pop();
-  const fileExtension = fileName?.split(".").pop();
-  if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+const getFileMeta = async (file: File | string) => {
+  console.log("dude ", file);
+  if (typeof file === "string") {
+    // Web Camera -  Data URI
+    if (file.startsWith("data")) {
+      const fileExtension = file.substring(
+        file.indexOf(":") + 1,
+        file.indexOf(";")
+      );
+
+      const contentWithoutMime = file.split(",")[1];
+      const sizeInBytes = window.atob(contentWithoutMime).length;
+
+      return {
+        name: "unknown",
+        type: fileExtension,
+        size: sizeInBytes,
+      };
+    }
+
+    // Native - File path
+    else {
+      const fileName = file.split("/").pop();
+      const fileExtension = fileName?.split(".").pop();
+      const fileInfo = await FileSystem.getInfoAsync(file);
+
+      if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+        return {
+          name: fileName,
+          type: "image/" + fileExtension,
+          size: fileInfo.size,
+        };
+      } else if (
+        fileExtension &&
+        supportedVideoExtensions.includes(fileExtension)
+      ) {
+        return {
+          name: fileName,
+          type: "video/" + fileExtension,
+          size: fileInfo.size,
+        };
+      }
+    }
+  }
+
+  // Web File Picker - File Object
+  else {
     return {
-      name: fileName,
-      type: "image/" + fileExtension,
-    };
-  } else if (
-    fileExtension &&
-    supportedVideoExtensions.includes(fileExtension)
-  ) {
-    return {
-      name: fileName,
-      type: "video/" + fileExtension,
+      name: file.name,
+      type: file.type,
+      size: file.size,
     };
   }
 };
@@ -203,9 +238,13 @@ export const useMintNFT = () => {
   async function uploadMedia(params: UseMintNFT) {
     // Media Upload
     try {
-      const fileMetaData = getFileNameAndType(params.filePath);
-      const fileInfo = await FileSystem.getInfoAsync(params.filePath);
-      if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
+      const fileMetaData = await getFileMeta(
+        state.fileObject ? state.fileObject : state.filePath
+      );
+      if (
+        typeof fileMetaData.size === "number" &&
+        fileMetaData.size > MAX_FILE_SIZE
+      ) {
         // TODO: improve alert
         Alert.alert("File too big! Please use a file smaller than 50MB.");
         return;
@@ -216,18 +255,30 @@ export const useMintNFT = () => {
       if (fileMetaData) {
         dispatch({
           type: "mediaUpload",
-          payload: { filePath: params.filePath, fileType: fileMetaData.type },
+          payload: { filePath: state.filePath, fileType: fileMetaData.type },
         });
 
         const pinataToken = await getPinataToken();
         const formData = new FormData();
+        // Web File Picker - File Object
+        if (state.fileObject) {
+          formData.append("file", state.fileObject);
+        }
+        // Web Camera -  Data URI
+        else if (state.filePath.startsWith("data")) {
+          const file = dataURLtoFile(state.filePath, "unknown");
 
-        formData.append("file", {
-          //@ts-ignore
-          uri: params.filePath,
-          name: fileMetaData.name,
-          type: fileMetaData.type,
-        });
+          formData.append("file", file);
+        }
+        // Native - File path
+        else {
+          formData.append("file", {
+            //@ts-ignore
+            uri: state.filePath,
+            name: fileMetaData.name,
+            type: fileMetaData.type,
+          });
+        }
 
         formData.append(
           "pinataMetadata",
@@ -417,3 +468,17 @@ export const useMintNFT = () => {
 
   return { state, startMinting: mintNFT, setMedia };
 };
+
+function dataURLtoFile(dataurl, filename) {
+  var arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}

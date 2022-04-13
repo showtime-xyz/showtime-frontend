@@ -72,10 +72,7 @@ function Create() {
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
-    if (state.filePath) {
-      const valuesWithFilePath = { ...values, filePath: state.filePath };
-      startMinting(valuesWithFilePath);
-    }
+    startMinting(values);
   };
 
   const {
