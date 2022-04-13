@@ -50,7 +50,7 @@ const IconsGrid = (args) => {
       <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" {...args} />
       <IconItem icon={Icon.ArrowRight} title="ArrowRight" {...args} />
       <IconItem icon={Icon.Badge} title="Badge" {...args} />
-      <IconItem icon={Icon.Basket} title="Basket" {...args} />
+      {/* <IconItem icon={Icon.Basket} title="Basket" {...args} /> */}
       <IconItem icon={Icon.Bell} title="Bell" {...args} />
       <IconItem icon={Icon.BellFilled} title="BellFilled" {...args} />
       <IconItem icon={Icon.Bookmark} title="Bookmark" {...args} />
