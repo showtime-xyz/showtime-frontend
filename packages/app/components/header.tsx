@@ -143,6 +143,7 @@ const HeaderCenter = () => {
 const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   return (
     <View
+      // @ts-expect-error
       style={{ position: "sticky", backdropFilter: "blur(20px)" }}
       tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
     >
