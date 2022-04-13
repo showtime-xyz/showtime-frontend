@@ -13,17 +13,16 @@ import { withModalScreen } from "app/navigation/with-modal-screen";
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  uri: string;
+  form: string;
 };
 
 const { useParam } = createParam<Query>();
-
 const CreateModal = () => {
   useHideHeader();
   //#region hooks
   const router = useRouter();
   const navigation = useNavigation();
-  const [uri] = useParam("uri");
+  const [form] = useParam("form");
   const { state } = useContext(MintContext);
   //#endregion
 
@@ -73,7 +72,7 @@ const CreateModal = () => {
   }, [navigation, router]);
   //#endregion
 
-  if (!uri) {
+  if (!form) {
     return null;
   }
 
@@ -86,7 +85,7 @@ const CreateModal = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <Create uri={uri} />
+      <Create />
     </ModalComponent>
   );
 };

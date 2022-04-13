@@ -5,6 +5,7 @@ import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 
 import { Camera } from "app/components/camera";
+import { useMintNFT } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useRouter } from "app/navigation/use-router";
@@ -18,17 +19,20 @@ function CameraScreen() {
   const [photos, setPhotos] = useState([]);
   const [canPop, setCanPop] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { setMedia } = useMintNFT();
 
   const postPhoto = useCallback(
     (photoURI: string) => {
-      const createPostURL = `/create?uri=${photoURI}`;
+      setMedia({ filePath: photoURI });
+
+      const createPostURL = `/create?form=true`;
       if (isAuthenticated) {
         router.push(
           Platform.select({
             native: createPostURL,
             web: {
               pathname: router.pathname,
-              query: { ...router.query, create: true, uri: photoURI },
+              query: { ...router.query, create: true, form: true },
             },
           }),
           createPostURL,

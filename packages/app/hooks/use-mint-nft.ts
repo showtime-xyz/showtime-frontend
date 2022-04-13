@@ -19,6 +19,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 export type MintNFTStatus =
   | "idle"
   | "mediaUpload"
+  | "setMedia"
   | "mediaUploadError"
   | "mediaUploadSuccess"
   | "nftJSONUpload"
@@ -38,6 +39,7 @@ export type MintNFTType = {
   isMagic?: boolean;
   filePath?: string;
   fileType?: string;
+  fileObject?: File;
 };
 
 export const initialMintNFTState: MintNFTType = {
@@ -59,6 +61,8 @@ export type ActionPayload = {
   isMagic?: boolean;
   filePath?: string;
   fileType?: string;
+  // web-only
+  fileObject?: File;
 };
 
 export const mintNFTReducer = (
@@ -66,6 +70,14 @@ export const mintNFTReducer = (
   action: { type: MintNFTStatus; payload?: ActionPayload }
 ): MintNFTType => {
   switch (action.type) {
+    case "setMedia": {
+      return {
+        ...state,
+        filePath: action.payload?.filePath,
+        fileType: action.payload?.fileType,
+        fileObject: action.payload?.fileObject,
+      };
+    }
     case "mediaUpload":
       return {
         ...state,
@@ -393,5 +405,15 @@ export const useMintNFT = () => {
 
   console.log("minting state ", state);
 
-  return { state, startMinting: mintNFT };
+  const setMedia = ({
+    filePath,
+    fileObject,
+  }: {
+    filePath?: string;
+    fileObject?: File;
+  }) => {
+    dispatch({ type: "setMedia", payload: { filePath, fileObject } });
+  };
+
+  return { state, startMinting: mintNFT, setMedia };
 };
