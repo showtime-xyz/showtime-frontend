@@ -18,14 +18,14 @@ if (parameters) {
 
 const getStories = () => {
   return [
-    require("../../../packages/design-system/accordion/accordion.stories.tsx"),
+    // require("../../../packages/design-system/accordion/accordion.stories.tsx"),
     // require("../../../packages/design-system/avatar/avatar.stories.tsx"),
     // require("../../../packages/design-system/bottom-sheet/bottom-sheet.stories.tsx"),
     // require("../../../packages/design-system/checkbox/checkbox.stories.tsx"),
     // require("../../../packages/design-system/data-pill/data-pill.stories.tsx"),
     // require("../../../packages/design-system/fieldset/fieldset.stories.tsx"),
     // require("../../../packages/design-system/input/input.stories.tsx"),
-    require("../../../packages/design-system/media/media.stories.tsx"),
+    // require("../../../packages/design-system/media/media.stories.tsx"),
     // require("../../../packages/design-system/messages/message-box.stories.tsx"),
     // require("../../../packages/design-system/messages/message-row.stories.tsx"),
     // require("../../../packages/design-system/modal-sheet/modal-sheet.stories.tsx"),
@@ -37,7 +37,7 @@ const getStories = () => {
     // require("../../../packages/design-system/spinner/spinner.stories.tsx"),
     // require("../../../packages/design-system/switch/switch.stories.tsx"),
     // require("../../../packages/design-system/tabs/tabs.stories.tsx"),
-    // require("../../../packages/design-system/text/text.stories.tsx"),
+    require("../../../packages/design-system/text/text.stories.tsx"),
     // require("../../../packages/design-system/toast/toast.stories.tsx"),
     // require("../../../packages/design-system/verification-badge/badge.stories.tsx"),
   ];
