@@ -60,11 +60,7 @@ const createNFTValidationSchema = yup.object({
   description: yup.string(),
 });
 
-interface CreateProps {
-  uri: string;
-}
-
-function Create({ uri }: CreateProps) {
+function Create() {
   const router = useRouter();
   const { user } = useUser();
   const { web3 } = useWeb3();
@@ -76,8 +72,10 @@ function Create({ uri }: CreateProps) {
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
-    const valuesWithFilePath = { ...values, filePath: uri };
-    startMinting(valuesWithFilePath);
+    if (state.filePath) {
+      const valuesWithFilePath = { ...values, filePath: state.filePath };
+      startMinting(valuesWithFilePath);
+    }
   };
 
   const {
@@ -93,7 +91,7 @@ function Create({ uri }: CreateProps) {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const fileExtension = uri.split(".").pop();
+  const fileExtension = state.filePath?.split(".").pop();
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
   const Preview = isVideo ? Video : Image;
@@ -130,12 +128,14 @@ function Create({ uri }: CreateProps) {
             testID="data-private"
           >
             <View tw="z-1">
-              <Preview
-                source={{
-                  uri,
-                }}
-                tw="w-20 h-20 rounded-2xl"
-              />
+              {state.filePath ? (
+                <Preview
+                  source={{
+                    uri: state.filePath,
+                  }}
+                  tw="w-20 h-20 rounded-2xl"
+                />
+              ) : null}
             </View>
             <View tw="ml--2 flex-1">
               <Controller
