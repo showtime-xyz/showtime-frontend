@@ -1,4 +1,5 @@
 import { HeaderRight } from "app/components/header";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
@@ -14,6 +15,7 @@ function ProfileNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const { user } = useUser();
+  const { userAddress } = useCurrentUserAddress();
 
   return (
     <ProfileStack.Navigator
@@ -29,9 +31,7 @@ function ProfileNavigator() {
         name="profile"
         component={ProfileScreen}
         initialParams={{
-          username:
-            user?.data?.profile?.username ??
-            user?.data?.profile?.wallet_addresses_v2?.[0]?.address,
+          username: user?.data?.profile?.username ?? userAddress,
         }}
         getId={({ params }) => params?.username}
       />
