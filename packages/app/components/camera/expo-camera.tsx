@@ -148,7 +148,10 @@ export function Camera({
             style={{ height: "100%" }}
             tw="w-screen bg-gray-100 dark:bg-gray-900 opacity-95"
           >
-            <Image source={{ uri: photoUri }} tw="w-screen h-screen" />
+            <img
+              src={photoUri}
+              style={{ height: "100%", objectFit: "contain" }}
+            />
           </View>
         )}
       </View>
