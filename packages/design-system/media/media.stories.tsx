@@ -7,18 +7,18 @@ export default {
   title: "Components/Media",
 } as Meta;
 
-export const ImageWEBP: React.VFC<{}> = () => (
-  <Media
-    item={{
-      mime_type: "image",
-      token_aspect_ratio: "1",
-      still_preview_url:
-        "https://cloudflare-ipfs.com/ipfs/QmSFwEAPgLbW2arpt44mco9SA7qN55Pu6GJ6wdivZyA6Wv",
-    }}
-    tw="w-100 h-100"
-    numColumns={1}
-  />
-);
+// export const ImageWEBP: React.VFC<{}> = () => (
+//   <Media
+//     item={{
+//       mime_type: "image",
+//       token_aspect_ratio: "1",
+//       still_preview_url:
+//         "https://cloudflare-ipfs.com/ipfs/QmSFwEAPgLbW2arpt44mco9SA7qN55Pu6GJ6wdivZyA6Wv",
+//     }}
+//     tw="w-100 h-100"
+//     numColumns={1}
+//   />
+// );
 
 // export const ModelGLTF: React.VFC<{}> = () => (
 //   <Media
