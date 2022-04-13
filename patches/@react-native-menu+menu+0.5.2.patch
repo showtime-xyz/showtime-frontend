@@ -1,5 +1,5 @@
 diff --git a/node_modules/@react-native-menu/menu/ios/MenuView.swift b/node_modules/@react-native-menu/menu/ios/MenuView.swift
-index 4400f47..52833ed 100644
+index 4400f47..a130fab 100644
 --- a/node_modules/@react-native-menu/menu/ios/MenuView.swift
 +++ b/node_modules/@react-native-menu/menu/ios/MenuView.swift
 @@ -17,12 +17,23 @@ class MenuView: UIButton {
@@ -27,23 +27,10 @@ index 4400f47..52833ed 100644
  
      private var _title: String = "";
      @objc var title: NSString? {
-@@ -34,6 +45,20 @@ class MenuView: UIButton {
+@@ -34,6 +45,7 @@ class MenuView: UIButton {
              self.setup()
          }
      }
-+    
-+    
-+    @objc var colorMode: NSString? {
-+        didSet {
-+            if (colorMode == "dark") {
-+                self.overrideUserInterfaceStyle = .dark
-+            } else if (colorMode == "light") {
-+                self.overrideUserInterfaceStyle = .light
-+            }
-+            
-+            self.setup()
-+        }
-+    }
 +    
      @objc var onPressAction: RCTDirectEventBlock?
      
