@@ -3,56 +3,56 @@ import { useWindowDimensions, Platform } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
-import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
+import {
+  CameraTabBarIcon,
+  TrendingTabBarIcon,
+  NotificationsTabBarIcon,
+} from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Pressable, Button, ButtonLabel } from "design-system";
+import { View, Pressable, Button } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { useBlurredBackgroundColor } from "design-system/hooks";
-import { Showtime, Plus, Search, ArrowLeft } from "design-system/icon";
+import { Showtime, Search, ArrowLeft } from "design-system/icon";
 import { tw } from "design-system/tailwind";
-import { useToast } from "design-system/toast";
 
 const HeaderRight = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
+  const isDark = useIsDarkMode();
 
   return (
     <View>
       {!isLoading && (
         <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
-          {isAuthenticated && (
-            <View tw="hidden md:flex">
-              <NotificationsTabBarIcon color="white" focused={false} />
-            </View>
-          )}
-          <View tw="min-w-20 items-end">
-            {isAuthenticated && width > 768 && (
+          {isAuthenticated && width > 768 && (
+            <>
               <View tw="mx-3">
-                <Button
-                  onPress={() => {}}
-                  variant="primary"
-                  tw="p-2.5 md:px-3.5 md:py-1.5 rounded-full h-10 w-10 md:w-auto"
-                >
-                  <ButtonLabel tw="hidden md:flex">Create</ButtonLabel>
-                  <Plus
-                    style={tw.style("md:hidden")}
-                    width={20}
-                    height={20}
-                    color={
-                      tw.style("bg-white dark:bg-black")
-                        ?.backgroundColor as string
-                    }
-                  />
-                </Button>
+                <CameraTabBarIcon
+                  color={isDark ? "white" : "black"}
+                  focused={false}
+                />
               </View>
-            )}
+              <View tw="mx-3">
+                <TrendingTabBarIcon
+                  color={isDark ? "white" : "black"}
+                  focused={router.pathname === "/trending"}
+                />
+              </View>
+              <View tw="mx-3">
+                <NotificationsTabBarIcon
+                  color={isDark ? "white" : "black"}
+                  focused={router.pathname === "/notifications"}
+                />
+              </View>
+            </>
+          )}
+          <View tw="md:mx-3">
             {isAuthenticated ? (
-              <View tw="w-20 items-end">
-                <HeaderDropdown />
-              </View>
+              <HeaderDropdown type={width > 768 ? "profile" : "settings"} />
             ) : (
               <Button
                 onPress={() => {
@@ -69,7 +69,7 @@ const HeaderRight = () => {
                   );
                 }}
                 variant="primary"
-                size="small"
+                size={width > 768 ? "regular" : "small"}
                 labelTW="font-semibold"
               >
                 Sign&nbsp;In
@@ -83,7 +83,6 @@ const HeaderRight = () => {
 };
 
 const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
-  const toast = useToast();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
 
@@ -117,13 +116,17 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 };
 
 const HeaderCenter = () => {
+  const router = useRouter();
+
   return (
     <Pressable
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="w-12 h-12 rounded-full items-center justify-center"
-      // onPress={() => {
-      //   router.push("/");
-      // }}
+      onPress={() => {
+        if (Platform.OS === "web") {
+          router.push("/");
+        }
+      }}
       // animate={useCallback(({ hovered }) => {
       // 	'worklet'
 
@@ -143,8 +146,28 @@ const HeaderCenter = () => {
 };
 
 const Header = ({ canGoBack }: { canGoBack: boolean }) => {
-  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
+  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+
+  if (width >= 768) {
+    return (
+      <View
+        // @ts-expect-error
+        style={{
+          position: "sticky",
+        }}
+        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+      >
+        <View tw="items-start">
+          <HeaderCenter />
+        </View>
+        <View tw="items-end">
+          <HeaderRight />
+        </View>
+      </View>
+    );
+  }
 
   if (isHeaderHidden) {
     return null;
