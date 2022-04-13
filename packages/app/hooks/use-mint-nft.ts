@@ -39,9 +39,8 @@ export type MintNFTType = {
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
-  filePath?: string;
+  file?: string | File;
   fileType?: string;
-  fileObject?: File;
 };
 
 export const initialMintNFTState: MintNFTType = {
@@ -51,7 +50,7 @@ export const initialMintNFTState: MintNFTType = {
   tokenId: undefined,
   transaction: undefined,
   isMagic: undefined,
-  filePath: undefined,
+  file: undefined,
   fileType: undefined,
 };
 
@@ -61,10 +60,8 @@ export type ActionPayload = {
   transaction?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
-  filePath?: string;
+  file?: string | File;
   fileType?: string;
-  // web-only
-  fileObject?: File;
 };
 
 export const mintNFTReducer = (
@@ -75,9 +72,8 @@ export const mintNFTReducer = (
     case "setMedia": {
       return {
         ...initialMintNFTState,
-        filePath: action.payload?.filePath,
+        file: action.payload?.file,
         fileType: action.payload?.fileType,
-        fileObject: action.payload?.fileObject,
       };
     }
     case "mediaUpload":
@@ -87,7 +83,7 @@ export const mintNFTReducer = (
         mediaIPFSHash: undefined,
         tokenId: undefined,
         transaction: undefined,
-        filePath: action.payload?.filePath,
+        file: action.payload?.file,
         fileType: action.payload?.fileType,
       };
     case "mediaUploadSuccess":
@@ -243,9 +239,7 @@ export const useMintNFT = () => {
   async function uploadMedia() {
     // Media Upload
     try {
-      const fileMetaData = await getFileMeta(
-        state.fileObject ? state.fileObject : state.filePath
-      );
+      const fileMetaData = await getFileMeta(state.file);
 
       if (!fileMetaData) return;
 
@@ -263,29 +257,34 @@ export const useMintNFT = () => {
       if (fileMetaData) {
         dispatch({
           type: "mediaUpload",
-          payload: { filePath: state.filePath, fileType: fileMetaData.type },
+          payload: { file: state.file, fileType: fileMetaData.type },
         });
 
         const pinataToken = await getPinataToken();
         const formData = new FormData();
         // Web File Picker - File Object
-        if (state.fileObject) {
-          formData.append("file", state.fileObject);
-        }
-        // Web Camera -  Data URI
-        else if (state.filePath?.startsWith("data")) {
-          const file = dataURLtoFile(state.filePath, "unknown");
+        if (typeof state.file === "string") {
+          // Web Camera -  Data URI
+          if (state.file?.startsWith("data")) {
+            const file = dataURLtoFile(state.file, "unknown");
 
-          formData.append("file", file);
+            formData.append("file", file);
+          }
+
+          // Native - File path
+          else {
+            formData.append("file", {
+              //@ts-ignore
+              uri: state.file,
+              name: fileMetaData.name,
+              type: fileMetaData.type,
+            });
+          }
         }
-        // Native - File path
-        else {
-          formData.append("file", {
-            //@ts-ignore
-            uri: state.filePath,
-            name: fileMetaData.name,
-            type: fileMetaData.type,
-          });
+
+        // Web File Picker - File Object
+        else if (state.file) {
+          formData.append("file", state.file);
         }
 
         formData.append(
@@ -468,14 +467,8 @@ export const useMintNFT = () => {
 
   console.log("minting state ", state);
 
-  const setMedia = ({
-    filePath,
-    fileObject,
-  }: {
-    filePath?: string;
-    fileObject?: File;
-  }) => {
-    dispatch({ type: "setMedia", payload: { filePath, fileObject } });
+  const setMedia = (file: string | File) => {
+    dispatch({ type: "setMedia", payload: { file } });
   };
 
   return { state, startMinting: mintNFT, setMedia };

@@ -25,11 +25,7 @@ function CameraScreen() {
 
   const postPhoto = useCallback(
     (param: any) => {
-      if (typeof param === "string") {
-        setMedia({ filePath: param });
-      } else {
-        setMedia({ fileObject: param });
-      }
+      setMedia(param);
 
       const createPostURL = `/create?form=true`;
       if (isAuthenticated) {
