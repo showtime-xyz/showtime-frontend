@@ -80,7 +80,7 @@ const Root = ({
 
   const onIndexChange = (newIndex) => {
     index.value = newIndex;
-    onIndexChangeProp(newIndex);
+    onIndexChangeProp?.(newIndex);
   };
 
   // We need to put both header and TabBar in absolute view so filter here, bad for composition, maybe improve later
