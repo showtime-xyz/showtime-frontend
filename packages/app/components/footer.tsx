@@ -29,7 +29,7 @@ const Footer = () => {
   return (
     <View
       // @ts-expect-error
-      style={{ position: "sticky", backdropFilter: "blur(20px)" }}
+      style={{ position: "fixed", backdropFilter: "blur(20px)" }}
       tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
     >
       <HomeTabBarIcon
