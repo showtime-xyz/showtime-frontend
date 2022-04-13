@@ -24,8 +24,8 @@ function CameraScreen() {
   const { setMedia } = useMintNFT();
 
   const postPhoto = useCallback(
-    (photoURI: string) => {
-      setMedia({ filePath: photoURI });
+    (param: any) => {
+      setMedia(param);
 
       const createPostURL = `/create?form=true`;
       if (isAuthenticated) {
@@ -58,7 +58,7 @@ function CameraScreen() {
         );
       }
     },
-    [router, isAuthenticated]
+    [router, isAuthenticated, setMedia]
   );
 
   const burstCaptureTimer = useTimer({

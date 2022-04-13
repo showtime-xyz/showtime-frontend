@@ -23,7 +23,7 @@ type Props = {
   takePhoto: () => void;
   cameraPosition: "front" | "back";
   setCameraPosition: (cameraPosition: "front" | "back") => void;
-  postPhoto: (uri: string) => void;
+  postPhoto: (param?: File | string) => void;
 };
 
 export function CameraButtons({
@@ -72,7 +72,7 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            postPhoto(photo.uri);
+            postPhoto(photo.file ? photo.file : photo.uri);
           }}
           type="camera"
         />

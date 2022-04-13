@@ -1,5 +1,5 @@
-import { useEffect, useContext, useRef } from "react";
-import { Alert } from "react-native";
+import { useContext, useEffect, useRef } from "react";
+import { Alert, Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -10,6 +10,8 @@ import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useWalletConnect } from "app/lib/walletconnect";
+//@ts-ignore
+import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
 
 import { useWeb3 } from "./use-web3";
@@ -37,9 +39,8 @@ export type MintNFTType = {
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
-  filePath?: string;
+  file?: string | File;
   fileType?: string;
-  fileObject?: File;
 };
 
 export const initialMintNFTState: MintNFTType = {
@@ -49,7 +50,7 @@ export const initialMintNFTState: MintNFTType = {
   tokenId: undefined,
   transaction: undefined,
   isMagic: undefined,
-  filePath: undefined,
+  file: undefined,
   fileType: undefined,
 };
 
@@ -59,10 +60,8 @@ export type ActionPayload = {
   transaction?: string;
   nftIPFSHash?: string;
   isMagic?: boolean;
-  filePath?: string;
+  file?: string | File;
   fileType?: string;
-  // web-only
-  fileObject?: File;
 };
 
 export const mintNFTReducer = (
@@ -72,10 +71,9 @@ export const mintNFTReducer = (
   switch (action.type) {
     case "setMedia": {
       return {
-        ...state,
-        filePath: action.payload?.filePath,
+        ...initialMintNFTState,
+        file: action.payload?.file,
         fileType: action.payload?.fileType,
-        fileObject: action.payload?.fileObject,
       };
     }
     case "mediaUpload":
@@ -85,7 +83,7 @@ export const mintNFTReducer = (
         mediaIPFSHash: undefined,
         tokenId: undefined,
         transaction: undefined,
-        filePath: action.payload?.filePath,
+        file: action.payload?.file,
         fileType: action.payload?.fileType,
       };
     case "mediaUploadSuccess":
@@ -145,7 +143,6 @@ export const mintNFTReducer = (
 };
 
 export type UseMintNFT = {
-  filePath: string;
   title: string;
   description: string;
   notSafeForWork: boolean;
@@ -156,21 +153,60 @@ export type UseMintNFT = {
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getFileNameAndType = (filePath: string) => {
-  const fileName = filePath.split("/").pop();
-  const fileExtension = fileName?.split(".").pop();
-  if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+const getFileMeta = async (file?: File | string) => {
+  if (!file) {
+    return;
+  }
+
+  if (typeof file === "string") {
+    // Web Camera -  Data URI
+    if (file.startsWith("data")) {
+      const fileExtension = file.substring(
+        file.indexOf(":") + 1,
+        file.indexOf(";")
+      );
+
+      const contentWithoutMime = file.split(",")[1];
+      const sizeInBytes = window.atob(contentWithoutMime).length;
+
+      return {
+        name: "unknown",
+        type: fileExtension,
+        size: sizeInBytes,
+      };
+    }
+
+    // Native - File path
+    else {
+      const fileName = file.split("/").pop();
+      const fileExtension = fileName?.split(".").pop();
+      const fileInfo = await FileSystem.getInfoAsync(file);
+
+      if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+        return {
+          name: fileName,
+          type: "image/" + fileExtension,
+          size: fileInfo.size,
+        };
+      } else if (
+        fileExtension &&
+        supportedVideoExtensions.includes(fileExtension)
+      ) {
+        return {
+          name: fileName,
+          type: "video/" + fileExtension,
+          size: fileInfo.size,
+        };
+      }
+    }
+  }
+
+  // Web File Picker - File Object
+  else {
     return {
-      name: fileName,
-      type: "image/" + fileExtension,
-    };
-  } else if (
-    fileExtension &&
-    supportedVideoExtensions.includes(fileExtension)
-  ) {
-    return {
-      name: fileName,
-      type: "video/" + fileExtension,
+      name: file.name,
+      type: file.type,
+      size: file.size,
     };
   }
 };
@@ -186,7 +222,7 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const { state, dispatch } = useContext(MintContext);
   const biconomyRef = useRef<any>();
-  const { web3 } = useWeb3();
+  let { web3 } = useWeb3();
 
   const isMagic = !!web3;
   const connector = useWalletConnect();
@@ -200,12 +236,17 @@ export const useMintNFT = () => {
     }
   }, [connector.connected]);
 
-  async function uploadMedia(params: UseMintNFT) {
+  async function uploadMedia() {
     // Media Upload
     try {
-      const fileMetaData = getFileNameAndType(params.filePath);
-      const fileInfo = await FileSystem.getInfoAsync(params.filePath);
-      if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
+      const fileMetaData = await getFileMeta(state.file);
+
+      if (!fileMetaData) return;
+
+      if (
+        typeof fileMetaData.size === "number" &&
+        fileMetaData.size > MAX_FILE_SIZE
+      ) {
         // TODO: improve alert
         Alert.alert("File too big! Please use a file smaller than 50MB.");
         return;
@@ -216,18 +257,34 @@ export const useMintNFT = () => {
       if (fileMetaData) {
         dispatch({
           type: "mediaUpload",
-          payload: { filePath: params.filePath, fileType: fileMetaData.type },
+          payload: { file: state.file, fileType: fileMetaData.type },
         });
 
         const pinataToken = await getPinataToken();
         const formData = new FormData();
 
-        formData.append("file", {
-          //@ts-ignore
-          uri: params.filePath,
-          name: fileMetaData.name,
-          type: fileMetaData.type,
-        });
+        if (typeof state.file === "string") {
+          // Web Camera -  Data URI
+          if (state.file?.startsWith("data")) {
+            const file = dataURLtoFile(state.file, "unknown");
+
+            formData.append("file", file);
+          }
+          // Native - File path string
+          else {
+            formData.append("file", {
+              //@ts-ignore
+              uri: state.file,
+              name: fileMetaData.name,
+              type: fileMetaData.type,
+            });
+          }
+        }
+
+        // Web File Picker - File Object
+        else if (state.file) {
+          formData.append("file", state.file);
+        }
 
         formData.append(
           "pinataMetadata",
@@ -259,7 +316,7 @@ export const useMintNFT = () => {
     if (state.mediaIPFSHash) {
       mediaIpfsHash = state.mediaIPFSHash;
     } else {
-      mediaIpfsHash = await uploadMedia(params);
+      mediaIpfsHash = await uploadMedia();
     }
     try {
       if (mediaIpfsHash) {
@@ -308,23 +365,27 @@ export const useMintNFT = () => {
 
     let userAddress;
     try {
-      const isMagic = !!web3;
-      if (isMagic) {
+      if (web3) {
         const signer = web3.getSigner();
         const addr = await signer.getAddress();
         userAddress = addr;
         params.royaltiesPercentage = 0;
+      } else if (Platform.OS === "web") {
+        const Web3Provider = (await import("@ethersproject/providers"))
+          .Web3Provider;
+        const web3Modal = await getWeb3Modal();
+        web3 = new Web3Provider(await web3Modal.connect());
+        const addr = await web3.getSigner().getAddress();
+        userAddress = addr;
+      } else if (connector.connected) {
+        [userAddress] = connector.accounts.filter((addr) =>
+          addr.startsWith("0x")
+        );
       } else {
-        if (connector.connected) {
-          [userAddress] = connector.accounts.filter((addr) =>
-            addr.startsWith("0x")
-          );
-        } else {
-          await connector.connect();
-          console.log("Not connected to wallet, sending connect request");
-          mintNftParams.current = params;
-          return;
-        }
+        await connector.connect();
+        console.log("Not connected to wallet, sending connect request");
+        mintNftParams.current = params;
+        return;
       }
 
       console.log("user address for minting ", userAddress);
@@ -405,15 +466,23 @@ export const useMintNFT = () => {
 
   console.log("minting state ", state);
 
-  const setMedia = ({
-    filePath,
-    fileObject,
-  }: {
-    filePath?: string;
-    fileObject?: File;
-  }) => {
-    dispatch({ type: "setMedia", payload: { filePath, fileObject } });
+  const setMedia = (file: string | File) => {
+    dispatch({ type: "setMedia", payload: { file } });
   };
 
   return { state, startMinting: mintNFT, setMedia };
 };
+
+function dataURLtoFile(dataurl: string, filename: string) {
+  let arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}

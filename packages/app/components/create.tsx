@@ -72,10 +72,7 @@ function Create() {
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
-    if (state.filePath) {
-      const valuesWithFilePath = { ...values, filePath: state.filePath };
-      startMinting(valuesWithFilePath);
-    }
+    startMinting(values);
   };
 
   const {
@@ -91,7 +88,8 @@ function Create() {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const fileExtension = state.filePath?.split(".").pop();
+  const fileExtension =
+    typeof state.file === "string" ? state.file?.split(".").pop() : undefined;
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
   const Preview = isVideo ? Video : Image;
@@ -128,14 +126,15 @@ function Create() {
             testID="data-private"
           >
             <View tw="z-1">
-              {state.filePath ? (
-                <Preview
-                  source={{
-                    uri: state.filePath,
-                  }}
-                  tw="w-20 h-20 rounded-2xl"
-                />
-              ) : null}
+              <Preview
+                source={{
+                  uri:
+                    typeof state.file === "string"
+                      ? state.file
+                      : URL.createObjectURL(state.file),
+                }}
+                tw="w-20 h-20 rounded-2xl"
+              />
             </View>
             <View tw="ml--2 flex-1">
               <Controller
