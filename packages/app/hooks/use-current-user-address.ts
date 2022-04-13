@@ -17,7 +17,7 @@ function useCurrentUserAddress() {
   const connectedAddress = connector?.session?.accounts[0];
 
   useEffect(() => {
-    if (connector.connected && connectedAddress) {
+    if (connector?.connected && connectedAddress) {
       setUserAddress(connectedAddress);
     } else if (web3) {
       const signer = web3.getSigner();

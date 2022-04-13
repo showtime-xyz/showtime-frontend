@@ -2,7 +2,7 @@ diff --git a/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m b/node
 index b8c13e2..ff59642 100644
 --- a/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m
 +++ b/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m
-@@ -76,7 +76,11 @@ - (void)didMoveToWindow
+@@ -76,7 +76,11 @@
  {
    if (self.window == nil) {
      [self hide];

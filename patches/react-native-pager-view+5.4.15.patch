@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-native-pager-view/ios/ReactNativePageView.m b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
-index bebfb39..a9a8d3a 100644
+index 8f20bf8..33fd260 100644
 --- a/node_modules/react-native-pager-view/ios/ReactNativePageView.m
 +++ b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
 @@ -1,6 +1,6 @@
@@ -10,7 +10,7 @@ index bebfb39..a9a8d3a 100644
  #import <React/RCTViewManager.h>
  
  #import "UIViewController+CreateExtension.h"
-@@ -167,6 +167,12 @@ - (void)setupInitialController {
+@@ -167,6 +167,12 @@
                              direction:UIPageViewControllerNavigationDirectionForward
                               animated:YES
               shouldCallOnPageSelected:YES];

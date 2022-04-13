@@ -1,8 +1,10 @@
 import React, { Suspense } from "react";
 
-// import { Canvas, useFrame } from "./react-three-fiber";
-// import { useGLTF } from "./use-gltf";
+import { Canvas, useFrame } from "./react-three-fiber";
+import { useGLTF } from "./use-gltf";
 import { Image } from "design-system/image";
+
+// import iphoneModelPath from "./iphone.glb";
 
 type Props = {
   url: string;
@@ -11,12 +13,12 @@ type Props = {
   numColumns: number;
 };
 
-// function Model({ url }: { url: string }) {
-//   const { scene } = useGLTF(url);
-//   // useFrame(() => (scene.rotation.y += 0.01));
+function Model({ url }: { url: string }) {
+  const { scene } = useGLTF(url);
+  useFrame(() => (scene.rotation.y += 0.01));
 
-//   return <primitive object={scene} />;
-// }
+  return <primitive object={scene} />;
+}
 
 // TODO: implement touch events à la `OrbitControls`
 // Event (prop)	Description	Implementation
@@ -28,30 +30,34 @@ type Props = {
 // onPointerMove	called when press moves	onPressMove
 
 function ModelViewer({ url, fallbackUrl, blurhash, numColumns }: Props) {
-  return (
-    <Image
-      source={{
-        uri: fallbackUrl,
-      }}
-      tw={
-        numColumns === 3
-          ? "w-[33vw] h-[33vw]"
-          : numColumns === 2
-          ? "w-[50vw] h-[50vw]"
-          : "w-[100vw] h-[100vw]"
-      }
-      blurhash={blurhash}
-      resizeMode="cover"
-    />
-  );
+  // TODO: fix remote `.gltf` loading
+  if (url.endsWith(".gltf")) {
+    return (
+      <Image
+        source={{
+          uri: fallbackUrl,
+        }}
+        tw={numColumns > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+        blurhash={blurhash}
+        resizeMode="cover"
+      />
+    );
+  }
 
-  // return (
-  //   <Canvas gl={{ physicallyCorrectLights: true }}>
-  //     <Suspense fallback={null}>
-  //       <Model url={url} />
-  //     </Suspense>
-  //   </Canvas>
-  // );
+  console.log(url);
+
+  return (
+    <Canvas>
+      <color attach="background" args={[0xe2f4df]} />
+      <ambientLight />
+      <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
+      <directionalLight intensity={0.8} position={[-6, 2, 2]} />
+      <Suspense fallback={null}>
+        <Model url={url} />
+        {/* <Model url={iphoneModelPath} /> */}
+      </Suspense>
+    </Canvas>
+  );
 }
 
 export { ModelViewer as Model };

@@ -93,14 +93,14 @@ function Media({
 
       {item?.mime_type?.startsWith("model") ? (
         <View tw={size}>
-          <Model
+          {/* <Model
             url={item?.source_url}
             // TODO: update this to get a preview from CDN v2
             fallbackUrl={item?.still_preview_url}
             numColumns={numColumns}
             blurhash={item?.blurhash}
             // {...mediaProps}
-          />
+          /> */}
         </View>
       ) : null}
     </View>
