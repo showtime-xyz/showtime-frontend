@@ -124,3 +124,26 @@ export const useLayout = () => {
 
   return { onLayout, layout };
 };
+
+type BlurTint = "light" | "dark" | "default";
+
+function getBackgroundColor(intensity: number, tint: BlurTint): string {
+  const opacity = intensity / 100;
+  switch (tint) {
+    case "dark":
+      // From Apple iOS 14 Sketch Kit - https://developer.apple.com/design/resources/
+      return `rgba(25,25,25,${opacity * 0.78})`;
+    case "light":
+      // From Apple iOS 14 Sketch Kit - https://developer.apple.com/design/resources/
+      return `rgba(249,249,249,${opacity * 0.78})`;
+    case "default":
+      // From xcode composition
+      return `rgba(255,255,255,${opacity * 0.3})`;
+  }
+}
+
+export function useBlurredBackgroundColor(intensity: number): string {
+  const isDark = useIsDarkMode();
+
+  return getBackgroundColor(intensity, isDark ? "dark" : "light");
+}

@@ -7,9 +7,11 @@ import { useTimer } from "use-timer";
 import { Camera } from "app/components/camera";
 import { useUser } from "app/hooks/use-user";
 import { useNavigation } from "app/lib/react-navigation/native";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 function CameraScreen() {
+  useHideHeader();
   const { isAuthenticated } = useUser();
   const router = useRouter();
   const navigation = useNavigation();

@@ -4,9 +4,11 @@ import { useWindowDimensions, Platform } from "react-native";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
+import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Pressable, Button, ButtonLabel } from "design-system";
+import { useBlurredBackgroundColor } from "design-system/hooks";
 import { Showtime, Plus, Search, ArrowLeft } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useToast } from "design-system/toast";
@@ -141,10 +143,21 @@ const HeaderCenter = () => {
 };
 
 const Header = ({ canGoBack }: { canGoBack: boolean }) => {
+  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const { isHeaderHidden } = useNavigationElements();
+
+  if (isHeaderHidden) {
+    return null;
+  }
+
   return (
     <View
       // @ts-expect-error
-      style={{ position: "sticky", backdropFilter: "blur(20px)" }}
+      style={{
+        position: "sticky",
+        backdropFilter: "blur(20px)",
+        backgroundColor: blurredBackgroundColor,
+      }}
       tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
     >
       <View tw="w-20 items-start">

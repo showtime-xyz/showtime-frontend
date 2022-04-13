@@ -1,6 +1,7 @@
 import "raf/polyfill";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
@@ -9,12 +10,16 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
-import { useDeviceContext } from "twrnc";
+import { useDeviceContext, useAppColorScheme } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "app/lib/color-scheme";
 import { isServer } from "app/lib/is-server";
 import LogRocket from "app/lib/logrocket";
 // import { enableFreeze } from 'react-native-screens'
@@ -37,6 +42,7 @@ import { UnlistScreen } from "app/screens/unlist";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
+import { View } from "design-system/view";
 
 import "../styles/styles.css";
 
@@ -79,9 +85,39 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  // TODO: color scheme
+  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // Default to device color scheme
+  const deviceColorScheme = useDeviceColorScheme();
+  // User can override color scheme
+  const userColorScheme = useUserColorScheme();
+  // Use the user color scheme if it's set
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+    tw,
+    userColorScheme ?? deviceColorScheme
+  );
 
-  const injectedGlobalContext = {};
+  // setting it before useEffect or else we'll see a flash of white paint before
+  useState(() => setColorScheme(colorScheme));
+  const isDark = colorScheme === "dark";
+
+  useEffect(() => {
+    if (isDark) {
+      tw.setColorScheme("dark");
+    } else {
+      tw.setColorScheme("light");
+    }
+  }, [isDark]);
+
+  const injectedGlobalContext = {
+    colorScheme,
+    setColorScheme: (newColorScheme: "light" | "dark") => {
+      setColorScheme(newColorScheme);
+      setUserColorScheme(newColorScheme);
+      // This is needed to force a re-render of the app
+      // TODO: find out why the app doesn't re-render like on native
+      window.location.reload();
+    },
+  };
 
   return (
     <AppContext.Provider value={injectedGlobalContext}>
@@ -91,8 +127,6 @@ function AppContextProvider({
 }
 
 export default function App({ Component, pageProps, router }: AppProps) {
-  useDeviceContext(tw, { withDeviceColorScheme: false });
-
   useEffect(() => {
     // Load feature definitions from API
     // TODO: fix bug with `.json()` on web
@@ -150,16 +184,18 @@ export default function App({ Component, pageProps, router }: AppProps) {
                           <GrowthBookProvider growthbook={growthbook}>
                             <FeedProvider>
                               <NavigationProvider>
-                                <Header
-                                  canGoBack={
-                                    router.pathname === "/search" ||
-                                    router.pathname.split("/").length - 1 >= 2
-                                  }
-                                />
+                                <View tw="bg-white dark:bg-black flex-1">
+                                  <Header
+                                    canGoBack={
+                                      router.pathname === "/search" ||
+                                      router.pathname.split("/").length - 1 >= 2
+                                    }
+                                  />
 
-                                <Component {...pageProps} />
+                                  <Component {...pageProps} />
 
-                                <Footer />
+                                  <Footer />
+                                </View>
 
                                 {/* Modals */}
                                 <LoginScreen />
