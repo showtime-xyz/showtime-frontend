@@ -117,6 +117,20 @@ function NFTDropdown({ nftId }: Props) {
   }, [nft, userAddress]);
   //#endregion
 
+  const handleNavigateRoute = (as: string, matchingRoute: string) => {
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: { ...router.query, id: nftId, [matchingRoute]: true },
+        },
+      }),
+      as,
+      { shallow: true }
+    );
+  };
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -133,19 +147,7 @@ function NFTDropdown({ nftId }: Props) {
       >
         <DropdownMenuItem
           onSelect={() => {
-            const as = `/nft/${nftId}/details`;
-
-            router.push(
-              Platform.select({
-                native: as,
-                web: {
-                  pathname: router.pathname,
-                  query: { ...router.query, details: true, id: nftId },
-                },
-              }),
-              as,
-              { shallow: true }
-            );
+            handleNavigateRoute(`/nft/${nftId}/details`, "details");
           }}
           key="details"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -156,7 +158,9 @@ function NFTDropdown({ nftId }: Props) {
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          onSelect={() => router.push(`/nft/${nftId}/activities`)}
+          onSelect={() => {
+            handleNavigateRoute(`/nft/${nftId}/activities`, "nftActivities");
+          }}
           key="nftActivities"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
