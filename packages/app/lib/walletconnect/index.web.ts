@@ -1,6 +1,7 @@
 const useWalletConnect = () => {
   return {
     connector: null,
+    connect: () => {},
   };
 };
 
