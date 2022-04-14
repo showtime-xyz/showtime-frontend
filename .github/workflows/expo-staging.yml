@@ -8,9 +8,10 @@ on:
   push:
     branches:
       - staging
+  workflow_dispatch:
 
 concurrency:
-  group: ${{ github.event_name }}-${{ github.ref }}
+  group: staging-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -19,15 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 👈 Required to retrieve git history
 
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-
-      # - name: Remove other apps
-      #   run: rm -rf ../apps/next-react ../apps/next-react-native ../storybook-react ../storybook-react-native
 
       - name: Find yarn cache
         id: yarn-cache-path

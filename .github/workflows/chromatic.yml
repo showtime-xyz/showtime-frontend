@@ -3,7 +3,7 @@ name: Chromatic
 on: push
 
 concurrency:
-  group: ${{ github.event_name }}-${{ github.ref }}
+  group: chromatic-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # 👈 Required to retrieve git history
 

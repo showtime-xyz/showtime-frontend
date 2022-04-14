@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.event_name }}-${{ github.ref }}
+  group: production-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -23,7 +23,8 @@ jobs:
       - name: Set up repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # 👈 Required to retrieve git history
+
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -32,9 +33,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-
-      # - name: Remove other apps
-      #   run: rm -rf ../apps/next-react ../apps/next-react-native ../storybook-react ../storybook-react-native
 
       - name: Find yarn cache
         id: yarn-cache-path
