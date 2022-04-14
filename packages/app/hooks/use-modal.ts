@@ -1,19 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Platform } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { modalPresentationHeight } from "app/constants/modal";
+import { useIsFocused } from "app/lib/react-navigation/native";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { useRouter } from "app/navigation/use-router";
 
 import { Modal, ModalSheet } from "design-system";
-import { useIsTabFocused } from "design-system/tabs/tablib";
 
 const snapPoints = ["90%"];
 
 export const useModal = () => {
   const wasClosedByUserAction = useRef<boolean | undefined>(undefined);
-  const isModalFocused = useIsTabFocused();
+  const isModalFocused = useIsFocused();
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();
 
