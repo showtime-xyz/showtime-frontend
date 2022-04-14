@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
+import { useSafeAreaInsets } from "app/lib/safe-area";
+
 import { View } from "design-system/view";
 
 import { ModalBackdrop } from "./backdrop";
@@ -45,13 +47,15 @@ export function Modal({
   modalWrapper,
   children,
 }: ModalProps) {
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
   const ModalContainer = useMemo(
     () => createModalContainer(modalWrapper),
     [modalWrapper]
   );
   return (
     <ModalContainer onDismiss={onDismiss}>
-      <View tw={CONTAINER_TW}>
+      <View tw={`${CONTAINER_TW} mb-[${safeAreaBottom}px]`}>
         <ModalBackdrop close={close} />
         <ModalKeyboardAvoidingView
           style={{

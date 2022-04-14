@@ -15,6 +15,8 @@ import {
   BottomSheetTextInput as BottomSheetInput,
 } from "@gorhom/bottom-sheet";
 
+import { useSafeAreaInsets } from "app/lib/safe-area";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
@@ -37,8 +39,8 @@ export const BottomSheet = (props: BottomSheetProps) => {
     snapPoints,
     bodyContentTW = "",
   } = props;
-
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
@@ -76,7 +78,9 @@ export const BottomSheet = (props: BottomSheetProps) => {
       )}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw={["flex-1 pt-6 px-4", bodyContentTW]}>{children}</View>
+      <View tw={[`flex-1 pt-6 px-4 mb-[${safeAreaBottom}px]`, bodyContentTW]}>
+        {children}
+      </View>
     </BottomSheetModal>
   );
 };
