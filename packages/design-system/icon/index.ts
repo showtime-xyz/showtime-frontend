@@ -1,6 +1,7 @@
 export { default as ArrowLeft } from "./ArrowLeft";
 export { default as ArrowRight } from "./ArrowRight";
 export { default as Badge } from "./Badge";
+export { default as Basket } from "./Basket";
 export { default as Bell } from "./Bell";
 export { default as BellFilled } from "./BellFilled";
 export { default as Bookmark } from "./Bookmark";

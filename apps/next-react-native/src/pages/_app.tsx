@@ -30,6 +30,7 @@ import { FeedProvider } from "app/providers/feed-provider";
 import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+import { ActivitiesScreen } from "app/screens/activities";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -198,6 +199,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                 </View>
 
                                 {/* Modals */}
+                                <ActivitiesScreen />
                                 <LoginScreen />
                                 <CommentsScreen />
                                 <TransferScreen />

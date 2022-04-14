@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { ActivitiesScreen } from "app/screens/activities";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -81,6 +82,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
+        <Stack.Screen name="activities" component={ActivitiesScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
