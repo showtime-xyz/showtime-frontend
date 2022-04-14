@@ -1,0 +1,17 @@
+diff --git a/node_modules/recyclerlistview/dist/web/platform/web/scrollcomponent/ScrollViewer.js b/node_modules/recyclerlistview/dist/web/platform/web/scrollcomponent/ScrollViewer.js
+index bdfd4e8..534b711 100644
+--- a/node_modules/recyclerlistview/dist/web/platform/web/scrollcomponent/ScrollViewer.js
++++ b/node_modules/recyclerlistview/dist/web/platform/web/scrollcomponent/ScrollViewer.js
+@@ -85,10 +85,10 @@ var ScrollViewer = /** @class */ (function (_super) {
+             }
+             else {
+                 if (_this.props.horizontal) {
+-                    window.scrollTo(offset, 0);
++                    window.scrollTo({left:offset, top: 0, behavior:"instant"});
+                 }
+                 else {
+-                    window.scrollTo(0, offset);
++                    window.scrollTo({left:0,top: offset, behavior:"instant"});
+                 }
+             }
+         };
