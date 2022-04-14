@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useContext } from "react";
+import { Suspense, useEffect, useContext, useMemo } from "react";
 import { Platform } from "react-native";
 
 import Animated, {
@@ -12,13 +12,16 @@ import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
-import { Tabs } from "design-system";
+import { TabItem, Tabs } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { Pressable } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -175,16 +178,16 @@ const WebFeed = () => {
   return (
     <Tabs.Root>
       <Tabs.List
-        contentContainerStyle={{
-          alignItems: "center",
-          justifyContent: "center",
+        style={{
+          height: TAB_LIST_HEIGHT,
         }}
+        contentContainerStyle={tw.style("w-full justify-center")}
       >
         <Tabs.Trigger>
-          <Text>Following</Text>
+          <TabItem name="Following" />
         </Tabs.Trigger>
         <Tabs.Trigger>
-          <Text>For you</Text>
+          <TabItem name="For you" />
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Pager>

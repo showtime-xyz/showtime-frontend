@@ -3,6 +3,8 @@ import { ScrollView, FlatList, SectionList, Animated } from "react-native";
 
 import * as RadixTabs from "@radix-ui/react-tabs";
 
+import { Text } from "design-system/text";
+
 import { flattenChildren } from "app/utilities";
 
 import { tw } from "../../tailwind";
@@ -92,6 +94,7 @@ const Root = ({
                 flexWrap: "nowrap",
                 alignItems: "center",
                 paddingHorizontal: 10,
+                height: "100%",
               },
               tw.style(`bg-white dark:bg-gray-900 px-2`),
               listChild.props?.contentContainerStyle,
@@ -110,7 +113,8 @@ const Root = ({
                       sx={{
                         alignItems: "center",
                         borderBottomWidth: 2,
-                        paddingY: 8,
+                        height: "100%",
+                        justifyContent: "center",
                       }}
                       tw={
                         selected === value
@@ -118,27 +122,7 @@ const Root = ({
                           : "border-b-transparent"
                       }
                     >
-                      <View
-                        style={{
-                          backgroundColor:
-                            selected === value
-                              ? "rgba(0,0, 0, 0.1)"
-                              : undefined,
-                          borderRadius: 999,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          paddingHorizontal: 12,
-                          paddingVertical: 12,
-                        }}
-                        tw={
-                          selected === value
-                            ? "bg-gray-200 dark:bg-gray-800"
-                            : "bg-transparent"
-                        }
-                      >
-                        {t}
-                      </View>
+                      {t}
                     </View>
                   </TabIndexContext.Provider>
                 </RadixTabs.Trigger>
