@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Platform } from "react-native";
 
-import { modalPresentationHeight } from "app/constants/modal";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { useRouter } from "app/navigation/use-router";
@@ -9,6 +8,16 @@ import { useRouter } from "app/navigation/use-router";
 import { Modal, ModalSheet } from "design-system";
 
 const snapPoints = ["90%"];
+
+/**
+ * extracted these number from react-navigation
+ */
+// @ts-ignore
+export const modalPresentationHeight = Platform.isPad
+  ? 6
+  : Platform.OS === "ios"
+  ? 12
+  : 0;
 
 export const useModal = () => {
   const wasClosedByUserAction = useRef<boolean | undefined>(undefined);

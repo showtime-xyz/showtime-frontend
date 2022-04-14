@@ -1,7 +1,5 @@
 import useSWR from "swr";
 
-import { NFT } from "app/constants/endpoints";
-
 import { Activity } from "../components/nft-activity/nft-activity.types";
 import { fetcher } from "./use-infinite-list-query";
 
@@ -13,7 +11,7 @@ export interface NFTDetailsPayload {
 
 const useNFTActivities = ({ nftId }: { nftId: number }) => {
   const { data, error } = useSWR<NFTDetailsPayload>(
-    NFT.ACTIVITIES(nftId),
+    `/v1/nft_history/${nftId}`,
     fetcher
   );
 
