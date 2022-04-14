@@ -25,7 +25,7 @@ type BottomSheetProps = {
   visible?: boolean;
   onDismiss?: () => void;
   snapPoints?: string[];
-  bodyContentTW?: TW;
+  bodyContentTW?: string;
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {

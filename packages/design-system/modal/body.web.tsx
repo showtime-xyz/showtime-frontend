@@ -10,7 +10,7 @@ interface ModalBodyProps extends Pick<ModalProps, "children"> {
   tw?: string;
 }
 
-export function ModalBody({ tw, children }: ModalBodyProps) {
+export function ModalBody({ tw = "", children }: ModalBodyProps) {
   return (
     <View tw={[BODY_CONTAINER_TW, BODY_TW, tw]} sx={stylesX.container}>
       {children}

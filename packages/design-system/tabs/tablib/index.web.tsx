@@ -5,6 +5,8 @@ import * as RadixTabs from "@radix-ui/react-tabs";
 
 import { Text } from "design-system/text";
 
+import { flattenChildren } from "app/utilities";
+
 import { tw } from "../../tailwind";
 import { View } from "../../view";
 import { TabRootProps } from "./types";
@@ -48,13 +50,14 @@ const Root = ({
       let tabContents = [];
       let headerChild;
       let listChild = {};
-      React.Children.forEach(children, (c) => {
+
+      flattenChildren(children).forEach((c) => {
         if (React.isValidElement(c)) {
           //@ts-ignore
           if (c.type === List) {
             listChild = c;
             //@ts-ignore
-            React.Children.map(c.props.children, (c) => {
+            flattenChildren(c.props.children).forEach((c) => {
               if (React.isValidElement(c) && c && c.type === Trigger) {
                 tabTriggers.push(c);
               }
@@ -65,7 +68,7 @@ const Root = ({
             //@ts-ignore
           } else if (c.type === Pager) {
             //@ts-ignore
-            React.Children.map(c.props.children, (c) => {
+            flattenChildren(c.props.children).forEach((c) => {
               tabContents.push(c);
             });
           }

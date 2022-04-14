@@ -1,3 +1,3 @@
-type TW = string | string[] | TW[];
+type TW = string | string[];
 
 export { TW };
