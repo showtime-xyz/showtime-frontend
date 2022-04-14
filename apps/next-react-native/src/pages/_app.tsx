@@ -36,6 +36,7 @@ import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
+import { NFTActivitiesScreen } from "app/screens/nft-activities";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
 
@@ -198,6 +199,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                 </View>
 
                                 {/* Modals */}
+                                <NFTActivitiesScreen />
                                 <LoginScreen />
                                 <CommentsScreen />
                                 <TransferScreen />
