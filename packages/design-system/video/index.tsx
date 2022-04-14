@@ -23,19 +23,28 @@ function Video({ tw, style, ...props }: VideoProps) {
   return (
     <>
       <View style={[style, tailwind.style(tw)]}>
-        <FastImage
-          //@ts-ignore
-          source={props.posterSource}
-          style={StyleSheet.absoluteFill}
-        />
+        {videoConfig?.previewOnly ? (
+          <FastImage
+            style={StyleSheet.absoluteFill}
+            source={props.posterSource}
+          />
+        ) : (
+          <>
+            <FastImage
+              //@ts-ignore
+              source={props.posterSource}
+              style={StyleSheet.absoluteFill}
+            />
 
-        <ExpoVideo
-          ref={videoRef}
-          style={StyleSheet.absoluteFill}
-          useNativeControls={videoConfig?.useNativeControls}
-          resizeMode="cover"
-          posterSource={props.posterSource}
-        />
+            <ExpoVideo
+              ref={videoRef}
+              style={StyleSheet.absoluteFill}
+              useNativeControls={videoConfig?.useNativeControls}
+              resizeMode="cover"
+              posterSource={props.posterSource}
+            />
+          </>
+        )}
 
         {__DEV__ ? (
           <Text

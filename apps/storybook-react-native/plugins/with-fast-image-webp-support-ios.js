@@ -12,8 +12,11 @@ const RNFI_EXPO_WEBP_DID_FINISH_LAUNCHING_IDENTIFIER = `- (BOOL)application:(UIA
 {`;
 
 const RNFI_EXPO_WEBP_DID_FINISH_LAUNCHING_CODE = `
-[SDImageCodersManager.sharedManager addCoder:SDImageWebPCoder.sharedCoder];
-[[SDWebImageDownloader sharedDownloader] setValue:@"image/webp,image/*,*/*;q=0.8" forHTTPHeaderField:@"Accept"];
+if (@available(iOS 14, *)) {
+} else {
+  [SDImageCodersManager.sharedManager addCoder:SDImageWebPCoder.sharedCoder];
+  [[SDWebImageDownloader sharedDownloader] setValue:@"image/webp,image/*,*/*;q=0.8" forHTTPHeaderField:@"Accept"];
+}
 `;
 
 function modifyAppDelegate(appDelegate) {
