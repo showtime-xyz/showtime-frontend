@@ -1,9 +1,9 @@
 import { createContext, forwardRef, useCallback, useMemo } from "react";
-import { FlatList, FlatListProps, ViewToken } from "react-native";
+import { FlatList, FlatListProps } from "react-native";
 
 import Animated, { useSharedValue } from "react-native-reanimated";
 
-const MAX_VIEWABLE_ITEMS = 2;
+import { VideoConfigContext } from "app/context/video-config-context";
 
 type ViewabilityItemsContextType = any[];
 
@@ -30,28 +30,21 @@ export const ViewabilityTrackerFlatlist = forwardRef(
       [_renderItem, keyExtractor]
     );
 
-    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-      visibleItems.value = viewableItems
-        .slice(0, MAX_VIEWABLE_ITEMS)
-        .map((item: any) => item.key);
-    }, []);
+    const videoConfig = useMemo(
+      () => ({
+        isMuted: true,
+        useNativeControls: false,
+        previewOnly: true,
+      }),
+      []
+    );
 
     return (
-      <ViewabilityItemsContext.Provider value={visibleItems}>
-        <FlatList
-          {...props}
-          onViewableItemsChanged={onViewableItemsChanged}
-          ref={ref}
-          viewabilityConfig={useMemo(
-            () => ({
-              itemVisiblePercentThreshold: 50,
-              minimumViewTime: 100,
-            }),
-            []
-          )}
-          renderItem={renderItem}
-        />
-      </ViewabilityItemsContext.Provider>
+      <VideoConfigContext.Provider value={videoConfig}>
+        <ViewabilityItemsContext.Provider value={visibleItems}>
+          <FlatList {...props} ref={ref} renderItem={renderItem} />
+        </ViewabilityItemsContext.Provider>
+      </VideoConfigContext.Provider>
     );
   }
 );
