@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 import { NFT } from "app/constants/endpoints";
-import { axios } from "app/lib/axios";
+
+import { Activity } from "../components/nft-activity/nft-activity.types";
+import { fetcher } from "./use-infinite-list-query";
+
+export interface NFTDetailsPayload {
+  data: {
+    history: Activity[];
+  };
+}
 
 const useNFTActivities = ({ nftId }: { nftId: number }) => {
-  const [nftActivities, setNftActivities] = useState([]);
+  const { data, error } = useSWR<NFTDetailsPayload>(
+    NFT.ACTIVITIES(nftId),
+    fetcher
+  );
 
-  const handleGetHistory = async (id: number) => {
-    try {
-      const response = await axios({
-        url: NFT.ACTIVITIES(id),
-        method: "GET",
-      });
-      setNftActivities(response?.data?.history || []);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    handleGetHistory(nftId);
-  }, []);
-
-  return { nftActivities };
+  return { activities: data?.data?.history, loading: !data, error };
 };
 
 export default useNFTActivities;

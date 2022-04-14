@@ -159,9 +159,9 @@ function NFTDropdown({ nftId }: Props) {
 
         <DropdownMenuItem
           onSelect={() => {
-            handleNavigateRoute(`/nft/${nftId}/activities`, "nftActivities");
+            handleNavigateRoute(`/nft/${nftId}/activities`, "activities");
           }}
-          key="nftActivities"
+          key="activities"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">

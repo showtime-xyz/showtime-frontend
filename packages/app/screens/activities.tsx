@@ -8,15 +8,13 @@ import { withModalScreen } from "app/navigation/with-modal-screen";
 import NFTActivities from "../components/nft-activity";
 
 type Query = {
-  nftId: number;
+  id: string;
 };
 
 const { useParam } = createParam<Query>();
 
-export function NFTActivitiesModal() {
+export function ActivitiesModal() {
   const [ModalComponent, modalProps] = useModal();
-
-  // @ts-ignore
   const [nftId, _] = useParam("id");
 
   return (
@@ -30,8 +28,8 @@ export function NFTActivitiesModal() {
   );
 }
 
-export const NFTActivitiesScreen = withModalScreen(
-  NFTActivitiesModal,
+export const ActivitiesScreen = withModalScreen(
+  ActivitiesModal,
   "/nft/[id]/activities",
-  "nftActivities"
+  "activities"
 );

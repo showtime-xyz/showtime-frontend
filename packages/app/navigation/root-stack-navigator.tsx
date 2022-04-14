@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { ActivitiesScreen } from "app/screens/activities";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -10,7 +11,6 @@ import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
-import { NFTActivitiesScreen } from "app/screens/nft-activities";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
@@ -82,7 +82,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
-        <Stack.Screen name="nftActivities" component={NFTActivitiesScreen} />
+        <Stack.Screen name="activities" component={ActivitiesScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

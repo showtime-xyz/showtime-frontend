@@ -1,3 +1,3 @@
-import { NFTActivitiesScreen } from "app/screens/nft-activities";
+import { ActivitiesScreen } from "app/screens/activities";
 
-export default NFTActivitiesScreen;
+export default ActivitiesScreen;

@@ -33,7 +33,6 @@ export const useModal = () => {
   }, [router, isModalFocused]);
 
   const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
-  useEffect(() => {}, []);
 
   return [
     ModalComponent,

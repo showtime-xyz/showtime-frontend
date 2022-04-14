@@ -1,4 +1,4 @@
-export type NftActivity = {
+export type Activity = {
   event_type: "Created" | "Sale" | "Transfer" | "List" | "Minted";
   from_address: string | null;
   from_img_url: string | null;
@@ -18,10 +18,10 @@ export type NftActivity = {
 };
 
 export type TableProps = {
-  data: Array<NftActivity>;
+  data: Array<Activity>;
 };
 
-export type TableRowProps = NftActivity;
+export type TableRowProps = Activity;
 
 export type UserItemProps = {
   imageUrl: string | null;
@@ -29,6 +29,6 @@ export type UserItemProps = {
   verified: number | null;
 };
 
-export type NFTActivitiesProps = {
+export type ActivitiesProps = {
   nftId: number;
 };
