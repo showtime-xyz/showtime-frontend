@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useModal } from "app/hooks/use-modal";
 import { createParam } from "app/navigation/use-param";
+import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import NFTActivities from "../components/nft-activity";
 
@@ -12,19 +13,25 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-export function NFTActivitiesScreen() {
-  const [NFTActivityModal, modalProps] = useModal();
+export function NFTActivitiesModal() {
+  const [ModalComponent, modalProps] = useModal();
 
   // @ts-ignore
   const [nftId, _] = useParam("id");
 
   return (
-    <NFTActivityModal title="Activity" {...modalProps}>
+    <ModalComponent title="Activity" {...modalProps}>
       <ErrorBoundary>
         <Suspense fallback={() => null}>
           <NFTActivities {...{ nftId }} />
         </Suspense>
       </ErrorBoundary>
-    </NFTActivityModal>
+    </ModalComponent>
   );
 }
+
+export const NFTActivitiesScreen = withModalScreen(
+  NFTActivitiesModal,
+  "/nft/[id]/activities",
+  "nftActivities"
+);
