@@ -58,7 +58,7 @@ try {
   const rootPath = "./apps/expo"
   const monorepoRootPath = "../.."
   const dirtyPath = "apps/expo/package.json";
-  const reactNativeConfigPath = "./node_modules/.bin/react-native"
+  const reactNativeConfigPath = "../../node_modules/.bin/react-native"
   const currentApplicationVersion = applicationPackage.version
 
   // As a monorepo the version must be bumped from the root directory not the working project.
@@ -104,7 +104,7 @@ try {
       console.log(`Since last release there have ${chalk.green("been")} changes to ${chalk.green(dirtyPath)}`)
       
       // Returns the string diff of the package.json with just the lines added and removed 
-      const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId}  --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
+      const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId} --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
       // Sanitizes the diff string into an array of strings that are the "keys" for just added lines
       const fileDiffSanitized = fileDiffResponse.stdout
         .split('\n')
