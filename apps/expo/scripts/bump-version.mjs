@@ -104,7 +104,7 @@ try {
       console.log(`Since last release there have ${chalk.green("been")} changes to ${chalk.green(dirtyPath)}`)
       
       // Returns the string diff of the package.json with just the lines added and removed 
-      const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId}  --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
+      const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId} --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
       // Sanitizes the diff string into an array of strings that are the "keys" for just added lines
       const fileDiffSanitized = fileDiffResponse.stdout
         .split('\n')
