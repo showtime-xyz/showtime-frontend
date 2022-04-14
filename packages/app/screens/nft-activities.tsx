@@ -16,7 +16,7 @@ export function NFTActivitiesScreen() {
   const [NFTActivityModal, modalProps] = useModal();
 
   // @ts-ignore
-  const [nftId, _] = useParam("nftId");
+  const [nftId, _] = useParam("id");
 
   return (
     <NFTActivityModal title="Activity" {...modalProps}>

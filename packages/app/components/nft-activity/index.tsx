@@ -6,7 +6,7 @@ import ActivityTable from "./activity-table";
 import type { NFTActivitiesProps } from "./nft-activity.types";
 
 export default function NFTActivities({ nftId }: NFTActivitiesProps) {
-  const { nftActivities } = useNFTActivities({ nftId: 266535951 });
+  const { nftActivities } = useNFTActivities({ nftId });
 
   return <ActivityTable data={nftActivities} />;
 }
