@@ -44,7 +44,10 @@ function ProfileDropdown({ user }: Props) {
             query: { ...router.query, login: true },
           },
         }),
-        "/login",
+        Platform.select({
+          native: "/login",
+          web: router.asPath,
+        }),
         { shallow: true }
       );
     }
@@ -62,7 +65,10 @@ function ProfileDropdown({ user }: Props) {
             query: { ...router.query, login: true },
           },
         }),
-        "/login",
+        Platform.select({
+          native: "/login",
+          web: router.asPath,
+        }),
         { shallow: true }
       );
     }

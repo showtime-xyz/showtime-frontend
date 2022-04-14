@@ -288,7 +288,10 @@ export const useMyInfo = () => {
               query: { ...router.query, login: true },
             },
           }),
-          "/login",
+          Platform.select({
+            native: "/login",
+            web: router.asPath,
+          }),
           { shallow: true }
         );
         return;
@@ -320,7 +323,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [accessToken, data]
+    [accessToken, data, router]
   );
 
   const unfollow = useCallback(
