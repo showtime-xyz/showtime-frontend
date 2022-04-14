@@ -3,9 +3,21 @@ import { SwipeList } from "app/components/swipe-list";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
 import { useSafeAreaInsets } from "app/lib/safe-area";
+import { createParam } from "app/navigation/use-param";
+
+type Query = {
+  type: string;
+  listId: any;
+  profileId: any;
+  collectionId: any;
+  sortId: any;
+  initialScrollIndex: any;
+  days: any;
+};
 
 export const SwipeListScreen = withColorScheme(({ route }) => {
-  const type = route.params.type;
+  const { useParam } = createParam<Query>();
+  const [type] = useParam("type");
 
   switch (type) {
     case "profile":
@@ -20,8 +32,12 @@ export const SwipeListScreen = withColorScheme(({ route }) => {
 });
 
 const ProfileSwipeList = ({ route }: any) => {
-  const { listId, profileId, collectionId, sortId, initialScrollIndex } =
-    route.params;
+  const { useParam } = createParam<Query>();
+  const [listId] = useParam("listId");
+  const [profileId] = useParam("profileId");
+  const [collectionId] = useParam("collectionId");
+  const [sortId] = useParam("sortId");
+  const [initialScrollIndex] = useParam("initialScrollIndex");
 
   const { data, fetchMore, isRefreshing, refresh, isLoadingMore } =
     useProfileNFTs({
@@ -45,8 +61,10 @@ const ProfileSwipeList = ({ route }: any) => {
   );
 };
 
-const TrendingNFTsSwipeList = ({ route }) => {
-  const { days, initialScrollIndex } = route.params;
+const TrendingNFTsSwipeList = () => {
+  const { useParam } = createParam<Query>();
+  const [days] = useParam("days");
+  const [initialScrollIndex] = useParam("initialScrollIndex");
 
   const { data, isLoadingMore, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
@@ -68,6 +86,7 @@ const TrendingNFTsSwipeList = ({ route }) => {
 };
 
 export const TrendingCreatorSwipeList = withColorScheme(({ route }) => {
+  // TODO: get data from swr instead of route object!
   const { data, initialScrollIndex } = route.params;
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
