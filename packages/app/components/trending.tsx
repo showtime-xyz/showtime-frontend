@@ -146,9 +146,12 @@ const CreatorsList = ({
     return item.profile_id;
   }, []);
 
-  const renderItem = useCallback(({ item }) => {
-    return <CreatorPreview creator={item} />;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }) => {
+      return <CreatorPreview creator={item} days={days} />;
+    },
+    [days]
+  );
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,

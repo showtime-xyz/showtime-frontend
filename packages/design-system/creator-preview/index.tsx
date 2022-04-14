@@ -4,8 +4,8 @@ import { Dimensions, Pressable } from "react-native";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { useNavigation } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
@@ -18,6 +18,7 @@ import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;
+  days: any;
 };
 
 const mediaDimension = Dimensions.get("window").width / 3 - 16;
@@ -30,8 +31,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     () => isFollowing(creatorId),
     [creatorId, isFollowing]
   );
-
-  const navigation = useNavigation();
+  const router = useRouter();
 
   return (
     <View
@@ -86,12 +86,9 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           return (
             <Pressable
               onPress={() =>
-                // TODO: change to `useRouter`
-                navigation.navigate("swipeList", {
-                  initialScrollIndex: idx,
-                  data: props.creator.top_items,
-                  type: "trendingCreator",
-                })
+                router.push(
+                  `/list?initialScrollIndex=${idx}&type=trendingCreator&days=${props.days}&creatorId=${props.creator.profile_id}`
+                )
               }
             >
               <Media key={item.nft_id} item={item} numColumns={3} />
