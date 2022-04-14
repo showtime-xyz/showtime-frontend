@@ -58,7 +58,7 @@ try {
   const rootPath = "./apps/expo"
   const monorepoRootPath = "../.."
   const dirtyPath = "apps/expo/package.json";
-  const reactNativeConfigPath = "./node_modules/.bin/react-native"
+  const reactNativeConfigPath = "../../node_modules/.bin/react-native"
   const currentApplicationVersion = applicationPackage.version
 
   // As a monorepo the version must be bumped from the root directory not the working project.
