@@ -1,17 +1,62 @@
-import { ArrowRight, Basket, Globe, Tag } from "design-system/icon";
+import {
+  ArrowRight,
+  Basket,
+  Globe,
+  Tag,
+  PolygonScan,
+} from "design-system/icon";
 
-export const getNftActivityEventIcon = (event: string) => {
+import { BLOCKCHAIN_TYPES, EVENT_TYPES } from "./nft-activity.constants";
+
+type EventIconHelperProps = {
+  event: string;
+  color: string;
+};
+
+type BlockchainIconHelperProps = {
+  blockchain: string;
+  color: string;
+};
+
+export const getNftActivityEventIcon = ({
+  event,
+  color,
+}: EventIconHelperProps) => {
+  const iconProps = {
+    width: 16,
+    height: 16,
+    color,
+  };
+
   switch (event) {
-    case "Created":
-      return <Globe width={16} height={16} fill="#A1A1AA" />;
-    case "Sale":
-      return <Basket width={16} height={16} fill="#A1A1AA" />;
-    case "Transfer":
-      return <ArrowRight width={16} height={16} fill="#A1A1AA" />;
-    case "List":
-      return <Tag width={16} height={16} fill="#A1A1AA" />;
-    case "Minted":
-      return <Globe width={16} height={16} fill="#A1A1AA" />;
+    case EVENT_TYPES.CREATED:
+      return <Globe {...iconProps} />;
+    case EVENT_TYPES.SALE:
+      return <Basket {...iconProps} />;
+    case EVENT_TYPES.TRANSFER:
+      return <ArrowRight {...iconProps} />;
+    case EVENT_TYPES.LIST:
+      return <Tag {...iconProps} />;
+    case EVENT_TYPES.MINTED:
+      return <Globe {...iconProps} />;
+    default:
+      return null;
+  }
+};
+
+export const getNftBlockchainIcon = ({
+  blockchain,
+  color,
+}: BlockchainIconHelperProps) => {
+  const iconProps = {
+    width: 16,
+    height: 16,
+    color,
+  };
+
+  switch (blockchain) {
+    case BLOCKCHAIN_TYPES.POLYGONSCAN:
+      return <PolygonScan {...iconProps} />;
     default:
       return null;
   }
