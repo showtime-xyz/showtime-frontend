@@ -81,6 +81,10 @@ const nextConfig = {
         source: "/@:username",
         destination: "/profile/:username",
       },
+      {
+        source: "/login",
+        destination: "/?login=true",
+      },
     ];
   },
 };
