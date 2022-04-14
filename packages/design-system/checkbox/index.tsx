@@ -63,7 +63,7 @@ export const Checkbox = ({
       hitSlop={hitSlop}
       //@ts-ignore - web only - checkbox toggle on spacebar press
       onKeyDown={Platform.select({
-        web: (e) => {
+        web: (e: any) => {
           if (e.code === "Space") handleChange();
         },
         default: undefined,

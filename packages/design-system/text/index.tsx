@@ -72,6 +72,7 @@ export const Text = forwardRef<TextType, Props>(
     return (
       <DripsyText
         nativeID={nativeID}
+        // @ts-ignore Dripsy‘s Text component issue
         ref={ref}
         variant={variant}
         selectable={selectable}
