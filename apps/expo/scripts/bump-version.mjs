@@ -52,7 +52,8 @@ const bumpVersion = async (versionType) => {
     const gitPushResponse = await $`git push`
     console.log(gitPushResponse.stdout)
 
-    await $`echo "::set-output name=type::${versionType}"`
+    // await $`echo "::set-output name=type::${versionType}"`
+    console.log(`::set-output name=type::${versionType}`)
   } else {
     console.log('Not running in CI, script will by default skip bumping, commits and pushes')
   }
