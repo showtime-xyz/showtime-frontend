@@ -42,9 +42,9 @@ const hasPlatform = (fileDiffList, reactNativeConfig, configuration) => {
 const bumpVersion = async (versionType) => {
   const inCI = process.env.CI;
   if (inCI) {
-    const versionUpdateResponse = await $`yarn version ${versionType}`
-    const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
-    console.log(`${chalk.green(newVersion)}`)
+    // const versionUpdateResponse = await $`yarn version ${versionType}`
+    // const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
+    // console.log(`${chalk.green(newVersion)}`)
 
     // const gitCommitResponse = await $`git commit -am "v${newVersion}"`
     // console.log(gitCommitResponse.stdout)

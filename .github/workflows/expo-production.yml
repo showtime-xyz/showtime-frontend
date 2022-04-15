@@ -25,7 +25,8 @@ jobs:
         with:
           fetch-depth: 0 # 👈 Required to retrieve git history
 
-      - run: |
+      - name: Set up git user
+        run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
 
