@@ -46,7 +46,7 @@ const bumpVersion = async (versionType) => {
     const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
     console.log(`${chalk.green(newVersion)}`)
 
-    const gitCommitResponse = await $`git commit -m "v${newVersion}"`
+    const gitCommitResponse = await $`git commit -am "v${newVersion}"`
     console.log(gitCommitResponse.stdout)
 
     const gitPushResponse = await $`git push`
