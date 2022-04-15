@@ -1,0 +1,8 @@
+undecided:
+  - "@showtime/expo"
+  - "@showtime/next-react"
+  - "@showtime/next-react-native"
+  - "@showtime/storybook-react"
+  - "@showtime/storybook-react-native"
+  - app
+  - design-system

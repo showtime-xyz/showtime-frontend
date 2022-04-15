@@ -42,10 +42,13 @@ const hasPlatform = (fileDiffList, reactNativeConfig, configuration) => {
 const bumpVersion = async (versionType) => {
   const inCI = process.env.CI;
   if (inCI) {
-    await $`yarn config set version-git-message "chore: version ${versionType} update v%s"`
-    const versionUpdateResponse = await $`yarn version --${versionType}`
-    console.log(`${chalk.green(versionUpdateResponse.stdout)}`)
-  
+    const versionUpdateResponse = await $`yarn version ${versionType}`
+    const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
+    console.log(`${chalk.green(newVersion)}`)
+
+    const gitCommitResponse = await $`git commit -m "v${newVersion}"`
+    console.log(gitCommitResponse.stdout)
+
     const gitPushResponse = await $`git push`
     console.log(gitPushResponse.stdout)
   } else {
@@ -61,7 +64,7 @@ try {
   const reactNativeConfigPath = "../../node_modules/.bin/react-native"
   const currentApplicationVersion = applicationPackage.version
 
-  // As a monorepo the version must be bumped from the root directory not the working project.
+  // As a monorepo the version must be bumped from the root directory not the working project
   const startingWorkingDirectory = await $`pwd`
   cd(monorepoRootPath)
   const currentWorkingDirectory = await $`pwd`
@@ -69,7 +72,7 @@ try {
   console.log(`The starting working directory is ${chalk.blue(startingWorkingDirectory)}`)
   console.log(`The current working directory is ${chalk.blue(currentWorkingDirectory)}`)
 
-  // TODO: After initial release, update the grep specificity to match auto generated commit 
+  // TODO: After initial release, update the grep specificity to match auto generated commit
   const lastReleaseCommitIdResponse = await $`git log -1 --grep=version --pretty=format:%h`
   const lastReleaseCommitId = lastReleaseCommitIdResponse.stdout
 
@@ -83,7 +86,7 @@ try {
 
   if (sameCommit) {
     console.log("No new commits since the last release, no action needed")
-    // Exit code 1 to fail the github action and prevent an unnecessary deployment
+    // Exit code 1 to fail the GitHub Action and prevent an unnecessary deployment
     await $`exit 1`
   }
 
@@ -140,4 +143,5 @@ try {
 } catch (error) {
   console.log(`Exit code: ${error.exitCode}`);
   console.log(`Error: ${error.stderr}`);
+  await $`exit ${error.exitCode}`
 }
