@@ -51,6 +51,8 @@ const bumpVersion = async (versionType) => {
 
     const gitPushResponse = await $`git push`
     console.log(gitPushResponse.stdout)
+
+    await $`echo "::set-output name=type::${versionType}"`
   } else {
     console.log('Not running in CI, script will by default skip bumping, commits and pushes')
   }
@@ -103,38 +105,38 @@ try {
   const fileNameDiff = fileNameDiffResponse.stdout.split("\n");
   const hasPossiblePackageChanges = Boolean(fileNameDiff.find((fileName) => fileName === dirtyPath))
 
-    if (hasPossiblePackageChanges) {
-      console.log(`Since last release there have ${chalk.green("been")} changes to ${chalk.green(dirtyPath)}`)
-      
-      // Returns the string diff of the package.json with just the lines added and removed 
-      const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId} --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
-      // Sanitizes the diff string into an array of strings that are the "keys" for just added lines
-      const fileDiffSanitized = fileDiffResponse.stdout
-        .split('\n')
-        .filter((diff) => diff.charAt(0) === "+")
-        .map((diff) => diff.substring(diff.indexOf('"') + 1))
-        .map((diff) => diff.substring(0, diff.indexOf('"')))
+  if (hasPossiblePackageChanges) {
+    console.log(`Since last release there have ${chalk.green("been")} changes to ${chalk.green(dirtyPath)}`)
+    
+    // Returns the string diff of the package.json with just the lines added and removed 
+    const fileDiffResponse = await $`git diff ${lastReleaseCommitId} ${currentCommitHeadId} --unified=0 ${dirtyPath} | grep '^[+|-][^+|-]'`
+    // Sanitizes the diff string into an array of strings that are the "keys" for just added lines
+    const fileDiffSanitized = fileDiffResponse.stdout
+      .split('\n')
+      .filter((diff) => diff.charAt(0) === "+")
+      .map((diff) => diff.substring(diff.indexOf('"') + 1))
+      .map((diff) => diff.substring(0, diff.indexOf('"')))
 
-      console.log(`Keys added in ${dirtyPath} since last release are: \n${chalk.green(fileDiffSanitized.join('\n'))}`)
+    console.log(`Keys added in ${dirtyPath} since last release are: \n${chalk.green(fileDiffSanitized.join('\n'))}`)
 
-      // React Native config has to be invoked within the expo directory
-      cd(rootPath)
+    // React Native config has to be invoked within the expo directory
+    cd(rootPath)
 
-      const reactNativeConfigResponse = await $`${reactNativeConfigPath} config`
-      const reactNativeConfig = JSON.parse(reactNativeConfigResponse.stdout)
+    const reactNativeConfigResponse = await $`${reactNativeConfigPath} config`
+    const reactNativeConfig = JSON.parse(reactNativeConfigResponse.stdout)
 
-      const hasIos = hasPlatform(fileDiffSanitized, reactNativeConfig, { ios: true })  
-      const hasAndroid = hasPlatform(fileDiffSanitized, reactNativeConfig, { android: true })
+    const hasIos = hasPlatform(fileDiffSanitized, reactNativeConfig, { ios: true })  
+    const hasAndroid = hasPlatform(fileDiffSanitized, reactNativeConfig, { android: true })
 
-      cd(monorepoRootPath)
+    cd(monorepoRootPath)
 
-      if (hasIos || hasAndroid) {
-        console.log(`The application will update as a major from version ${chalk.green(currentApplicationVersion)}`)
-        await bumpVersion("major")
-      } else {
-        console.log(`The application will update as a patch from version ${chalk.green(currentApplicationVersion)}`)
-        await bumpVersion("patch")
-      }
+    if (hasIos || hasAndroid) {
+      console.log(`The application will update as a major from version ${chalk.green(currentApplicationVersion)}`)
+      await bumpVersion("major")
+    } else {
+      console.log(`The application will update as a patch from version ${chalk.green(currentApplicationVersion)}`)
+      await bumpVersion("patch")
+    }
   } else {
     console.log(`The last release had no changes to ${dirtyPath}`)
     console.log(`The application will update as a patch from version ${chalk.green(currentApplicationVersion)}`)

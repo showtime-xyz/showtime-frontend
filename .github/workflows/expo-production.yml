@@ -57,6 +57,7 @@ jobs:
           cd ../apps/expo
 
       - name: Application Version Bump
+        id: version
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: yarn bump-application-version
 
@@ -70,7 +71,9 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
+        if: steps.version.outputs.type == 'patch'
         run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build on EAS
+        if: steps.version.outputs.type == 'major'
         run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit
