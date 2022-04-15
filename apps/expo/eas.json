@@ -59,5 +59,9 @@
         "appleId": "axeldelafosse@gmail.com"
       }
     }
+  },
+  "cli": {
+    "version": ">= 0.50.0",
+    "requireCommit": true
   }
 }
