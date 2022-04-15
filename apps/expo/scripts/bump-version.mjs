@@ -42,17 +42,17 @@ const hasPlatform = (fileDiffList, reactNativeConfig, configuration) => {
 const bumpVersion = async (versionType) => {
   const inCI = process.env.CI;
   if (inCI) {
-    // const versionUpdateResponse = await $`yarn version ${versionType}`
-    // const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
-    // console.log(`${chalk.green(newVersion)}`)
+    const versionUpdateResponse = await $`yarn version ${versionType}`
+    const newVersion = versionUpdateResponse.stdout.split('➤ ')[1].replace('YN0000: showtime@workspace:.: Bumped to ', '').trim()
 
-    // const gitCommitResponse = await $`git commit -am "v${newVersion}"`
-    // console.log(gitCommitResponse.stdout)
+    const gitCommitResponse = await $`git commit -am "v${newVersion}"`
+    console.log(gitCommitResponse.stdout)
 
-    // const gitPushResponse = await $`git push`
-    // console.log(gitPushResponse.stdout)
+    const gitPushResponse = await $`git push`
+    console.log(gitPushResponse.stdout)
 
-    // await $`echo "::set-output name=type::${versionType}"`
+    // Use the version type in the GitHub Action to trigger
+    // an EAS Update (patch) or an EAS Build (major)
     console.log(`::set-output name=type::${versionType}`)
   } else {
     console.log('Not running in CI, script will by default skip bumping, commits and pushes')
@@ -75,23 +75,22 @@ try {
   console.log(`The starting working directory is ${chalk.blue(startingWorkingDirectory)}`)
   console.log(`The current working directory is ${chalk.blue(currentWorkingDirectory)}`)
 
-  // TODO: After initial release, update the grep specificity to match auto generated commit
-  const lastReleaseCommitIdResponse = await $`git log -1 --grep=version --pretty=format:%h`
-  const lastReleaseCommitId = lastReleaseCommitIdResponse.stdout
+  // const lastReleaseCommitIdResponse = await $`git log -1 --grep=version --pretty=format:%h`
+  // const lastReleaseCommitId = lastReleaseCommitIdResponse.stdout
 
-  const currentCommitHeadIdResponse = await $`git log -1 --pretty=format:%h`
-  const currentCommitHeadId = currentCommitHeadIdResponse.stdout
+  // const currentCommitHeadIdResponse = await $`git log -1 --pretty=format:%h`
+  // const currentCommitHeadId = currentCommitHeadIdResponse.stdout
 
-  const sameCommit = lastReleaseCommitId === currentCommitHeadId
+  // const sameCommit = lastReleaseCommitId === currentCommitHeadId
 
-  console.log(`Current Commit ID: ${chalk.blue(currentCommitHeadId)}`)
-  console.log(`Last Release Commit ID: ${chalk.blue(lastReleaseCommitId)}`)
+  // console.log(`Current Commit ID: ${chalk.blue(currentCommitHeadId)}`)
+  // console.log(`Last Release Commit ID: ${chalk.blue(lastReleaseCommitId)}`)
 
-  if (sameCommit) {
-    console.log("No new commits since the last release, no action needed")
-    // Exit code 1 to fail the GitHub Action and prevent an unnecessary deployment
-    await $`exit 1`
-  }
+  // if (sameCommit) {
+  //   console.log("No new commits since the last release, no action needed")
+  //   // Exit code 1 to fail the GitHub Action and prevent an unnecessary deployment
+  //   await $`exit 1`
+  // }
 
   /**
    * If file at path "apps/expo/package.json" has been modified within the commit range then it's possible

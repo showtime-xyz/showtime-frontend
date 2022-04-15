@@ -57,7 +57,7 @@ jobs:
           sh ./decrypt_secret.sh
           cd ../apps/expo
 
-      - name: Application Version Bump
+      - name: Bump the version
         id: version
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: yarn bump-application-version
