@@ -7,5 +7,13 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": false
   },
-  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "tw"]
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "tw"],
+  "tailwindCSS.experimental.classRegex": [
+    "tw`([^`]*)", // tw`...`
+    "tw=\"([^\"]*)", // <View tw="..." />
+    "tw={\"([^\"}]*)", // <View tw={"..."} />
+    "tw\\.\\w+`([^`]*)", // tw.xxx`...`
+    "tw\\(.*?\\)`([^`]*)", // tw(Component)`...`
+    "tw\\.style\\(([^)]*)\\)" // tw.style("...")
+  ]
 }
