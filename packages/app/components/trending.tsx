@@ -1,11 +1,12 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
 import {
@@ -24,14 +25,17 @@ import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
-const Footer = ({ isLoading }: { isLoading: boolean }) => {
+const LIST_HEADER_HEIGHT = 64;
+const LIST_FOOTER_HEIGHT = 80;
+
+const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
 
   if (isLoading) {
     return (
       <View
-        tw="h-16 items-center justify-center mt-6 px-3"
-        sx={{ marginBottom: tabBarHeight }}
+        tw={`items-center justify-center mt-6 px-3`}
+        sx={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
       >
         <Spinner size="small" />
       </View>
@@ -40,6 +44,24 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 
   return <View sx={{ marginBottom: tabBarHeight }}></View>;
 };
+
+const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
+  <View
+    tw="dark:border-gray-900 border-gray-100 justify-center"
+    style={{ height: LIST_HEADER_HEIGHT }}
+  >
+    {SelectionControl}
+    {data.length === 0 && !isLoading ? (
+      <View tw="items-center justify-center mt-20">
+        <Text tw="text-gray-900 dark:text-white">No results found</Text>
+      </View>
+    ) : isLoading ? (
+      <View tw="items-center justify-center mt-20">
+        <Spinner />
+      </View>
+    ) : null}
+  </View>
+);
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
@@ -50,9 +72,12 @@ export const Trending = () => {
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
-          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+          {Platform.OS !== "android" && (
+            <View tw={`h-[${headerHeight}px] bg-black`} />
+          )}
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text
+              //@ts-ignore
               variant="text-2xl"
               tw="text-gray-900 dark:text-white font-extrabold"
             >
@@ -142,19 +167,8 @@ const CreatorsList = ({
   const isDark = useIsDarkMode();
   const separatorHeight = 8;
 
-  const keyExtractor = useCallback((item) => {
-    return item.profile_id;
-  }, []);
-
-  const renderItem = useCallback(
-    ({ item }) => {
-      return <CreatorPreview creator={item} days={days} />;
-    },
-    [days]
-  );
-
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
+    () => <ListFooter isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
 
@@ -163,62 +177,98 @@ const CreatorsList = ({
     [isDark]
   );
 
-  const getItemLayout = useCallback((_data, index) => {
-    const cardHeight = cardSize + separatorHeight;
-    return {
-      length: cardHeight,
-      offset: cardHeight * index,
-      index,
-    };
-  }, []);
-
-  const ListHeaderComponent = useMemo(
+  const ListHeaderComponent = useCallback(
     () => (
-      <View
-        tw="p-4 dark:border-gray-900 border-gray-100"
-        style={{ borderBottomWidth: 1 }}
-      >
-        {SelectionControl}
-        {data.length === 0 && !isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Text tw="text-gray-900 dark:text-white">No results found</Text>
-          </View>
-        ) : isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Spinner />
-          </View>
-        ) : null}
-      </View>
+      <ListHeader
+        isLoading={isLoading}
+        SelectionControl={SelectionControl}
+        data={data}
+      />
     ),
     [SelectionControl, data, isLoading, isDark]
   );
 
+  const { width } = useWindowDimensions();
+
+  const newData = useMemo(() => ["header", ...data, "footer"], [data]);
+
+  let dataProvider = useMemo(
+    () =>
+      new DataProvider((r1, r2) => {
+        return typeof r1 === "string" && typeof r2 === "string"
+          ? r1 !== r2
+          : r1.profile_id !== r2.profile_id;
+      }).cloneWithRows(newData),
+    [newData]
+  );
+
+  const cardHeight = cardSize + separatorHeight;
+
+  const bottomBarHeight = useBottomTabBarHeight();
+
+  const _layoutProvider = useMemo(
+    () =>
+      new LayoutProvider(
+        (index) => {
+          if (newData[index] === "header") {
+            return "header";
+          } else if (newData[index] === "footer") {
+            return "footer";
+          }
+
+          return "item";
+        },
+        (_type, dim) => {
+          if (_type === "item") {
+            dim.width = width;
+            dim.height = cardHeight;
+          } else if (_type === "header") {
+            dim.width = width;
+            dim.height = LIST_HEADER_HEIGHT;
+          } else if (_type === "footer") {
+            dim.width = width;
+            dim.height = LIST_FOOTER_HEIGHT;
+          }
+        }
+      ),
+    [width, cardHeight, newData, isLoading]
+  );
+
+  const _rowRenderer = useCallback(
+    (_type: any, item: any) => {
+      if (_type === "header") {
+        return <ListHeaderComponent />;
+      } else if (_type === "footer") {
+        return <ListFooterComponent />;
+      }
+
+      return (
+        <>
+          <CreatorPreview creator={item} days={days} />
+          <ItemSeparatorComponent />
+        </>
+      );
+    },
+    [ListHeaderComponent, ListFooterComponent, days]
+  );
+
   return (
     <View tw="flex-1 bg-white dark:bg-black">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
+      <Tabs.RecyclerList
+        //@ts-ignore
+        layoutProvider={_layoutProvider}
+        dataProvider={dataProvider}
+        rowRenderer={_rowRenderer}
+        onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={1}
-        windowSize={4}
-        initialNumToRender={4}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        getItemLayout={getItemLayout}
+        style={{ flex: 1 }}
       />
     </View>
   );
 };
 
 const GAP_BETWEEN_ITEMS = 1;
-const ITEM_SIZE = Dimensions.get("window").width / 3;
 
 const NFTSList = ({
   days,
@@ -234,75 +284,94 @@ const NFTSList = ({
       days,
     });
 
-  const keyExtractor = useCallback((item) => {
-    return item.nft_id.toString();
-  }, []);
+  const ListFooterComponent = useCallback(() => null, [isLoadingMore]);
+  const newData = useMemo(() => ["header", ...data, "footer"], [data]);
 
-  const renderItem = useCallback(
-    ({ item, index }) => (
-      <Pressable
-        onPress={() =>
-          // TODO:
-          router.push(
-            `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
-          )
-        }
-      >
-        <Media item={item} numColumns={3} />
-      </Pressable>
-    ),
-    []
-  );
+  const numColumns = 3;
+  const { width } = useWindowDimensions();
 
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  const getItemLayout = useCallback((_data, index) => {
-    return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
-  }, []);
-
-  const ListHeaderComponent = useMemo(
+  const ListHeaderComponent = useCallback(
     () => (
-      <View
-        tw="p-4 dark:border-gray-900 border-gray-100"
-        style={{ borderBottomWidth: 1 }}
-      >
-        {SelectionControl}
-        {data.length === 0 && !isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Text tw="text-gray-900 dark:text-white">No results found</Text>
-          </View>
-        ) : isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Spinner />
-          </View>
-        ) : null}
-      </View>
+      <ListHeader
+        isLoading={isLoading}
+        SelectionControl={SelectionControl}
+        data={data}
+      />
     ),
     [SelectionControl, data, isLoading]
   );
 
+  let dataProvider = useMemo(
+    () =>
+      new DataProvider((r1, r2) => {
+        return r1.profile_id !== r2.profile_id;
+      }).cloneWithRows(newData),
+    [newData]
+  );
+
+  const _layoutProvider = useMemo(
+    () =>
+      new LayoutProvider(
+        (index) => {
+          if (newData[index] === "header") {
+            return "header";
+          } else if (newData[index] === "footer") {
+            return "footer";
+          }
+
+          return "item";
+        },
+        (_type, dim) => {
+          if (_type === "item") {
+            dim.width = width / numColumns;
+            dim.height = width / numColumns;
+          } else if (_type === "header") {
+            dim.width = width;
+            dim.height = LIST_HEADER_HEIGHT;
+          } else if (_type === "footer") {
+            dim.width = width;
+            dim.height = LIST_FOOTER_HEIGHT;
+          }
+        }
+      ),
+    [width, numColumns, newData]
+  );
+
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index) => {
+      if (_type === "header") {
+        return <ListHeaderComponent />;
+      } else if (_type === "footer") {
+        return <ListFooterComponent />;
+      }
+
+      return (
+        <Pressable
+          onPress={() =>
+            // TODO:
+            router.push(
+              `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+            )
+          }
+        >
+          <Media item={item} numColumns={numColumns} />
+        </Pressable>
+      );
+    },
+    [ListHeaderComponent, ListFooterComponent, router, days]
+  );
+
   return (
     <View tw="flex-1 bg-white dark:bg-black">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
+      <Tabs.RecyclerList
+        //@ts-ignore
+        layoutProvider={_layoutProvider}
+        dataProvider={dataProvider}
+        rowRenderer={_rowRenderer}
+        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
+        onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={3}
-        getItemLayout={getItemLayout}
-        windowSize={6}
-        initialNumToRender={9}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
       />
     </View>
   );
