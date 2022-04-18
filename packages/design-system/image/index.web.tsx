@@ -3,6 +3,7 @@ import {
   ImageProps as ReactNativeImageProps,
   ImageURISource,
   ImageResizeMode,
+  Image as RNImage,
 } from "react-native";
 
 import { getImgFromArr } from "array-to-image";
@@ -106,13 +107,14 @@ function Img({
 type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;
 
 function StyledImage({ tw, ...props }: ImageProps) {
-  const width = Number(tailwind.style(tw).width);
-  const height = Number(tailwind.style(tw).height);
+  // const width = Number(tailwind.style(tw).width);
+  // const height = Number(tailwind.style(tw).height);
   const borderRadius = Number(tailwind.style(tw).borderRadius);
 
   return (
     <View sx={{ borderRadius, overflow: "hidden" }}>
-      <Img className={tw} width={width} height={height} {...props} />
+      {/* <Img className={tw} width={width} height={height} {...props} /> */}
+      <RNImage {...props} style={[tailwind.style(tw), props.style]} />
     </View>
   );
 }
