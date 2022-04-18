@@ -204,8 +204,6 @@ const CreatorsList = ({
 
   const cardHeight = cardSize + separatorHeight;
 
-  const bottomBarHeight = useBottomTabBarHeight();
-
   const _layoutProvider = useMemo(
     () =>
       new LayoutProvider(
@@ -231,7 +229,7 @@ const CreatorsList = ({
           }
         }
       ),
-    [width, cardHeight, newData, isLoading]
+    [width, cardHeight, newData]
   );
 
   const _rowRenderer = useCallback(

@@ -32,6 +32,7 @@ import {
   BottomTabBarHeightContext,
 } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -58,6 +59,7 @@ import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
 
 const COVER_IMAGE_HEIGHT = 104;
+const LIST_HEADER_HEIGHT = 80;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
@@ -236,6 +238,7 @@ const TabList = ({
   }, []);
   const router = useRouter();
   const { state: mintingState } = useContext(MintContext);
+  const { width: windowWidth } = useWindowDimensions();
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -301,7 +304,7 @@ const TabList = ({
     return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
   }, []);
 
-  const ListHeaderComponent = useMemo(
+  const ListHeaderComponent = useCallback(
     () => (
       <View tw="p-4">
         <Filter
@@ -340,42 +343,104 @@ const TabList = ({
   );
 
   const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
+  const newData = useMemo(
+    () => [
+      "header",
+      isBlocked
+        ? null
+        : mintingState.status !== "idle" &&
+          mintingState.tokenId !== data?.[0]?.token_id
+        ? [
+            {
+              loading: true,
+              chain_name: "polygon",
+              contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+              token_id: mintingState.tokenId ?? "1",
+              source_url:
+                typeof mintingState.file === "string" ? mintingState.file : "",
+              mime_type: mintingState.fileType ?? "image/jpeg",
+            },
+            ...data,
+          ]
+        : data,
+      ...data,
+      "footer",
+    ],
+    [
+      data,
+      mintingState.status,
+      mintingState.tokenId,
+      mintingState.file,
+      mintingState.fileType,
+      isBlocked,
+    ]
+  );
+
+  const _layoutProvider = useMemo(
+    () =>
+      new LayoutProvider(
+        (index) => {
+          if (newData[index] === "header") {
+            return "header";
+          } else if (newData[index] === "footer") {
+            return "footer";
+          }
+
+          return "item";
+        },
+        (_type, dim) => {
+          if (_type === "item") {
+            dim.width = ITEM_SIZE;
+            dim.height = ITEM_SIZE;
+          } else if (_type === "header") {
+            dim.width = windowWidth;
+            dim.height = LIST_HEADER_HEIGHT;
+          } else if (_type === "footer") {
+            dim.width = windowWidth;
+            dim.height = ITEM_SIZE;
+          }
+        }
+      ),
+    [windowWidth, newData]
+  );
+
+  const dataProvider = useMemo(
+    () =>
+      new DataProvider((r1, r2) => {
+        return typeof r1 === "string" && typeof r2 === "string"
+          ? r1 !== r2
+          : r1.nft_id !== r2.nft_id;
+      }).cloneWithRows(newData),
+    [newData]
+  );
+
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index) => {
+      if (_type === "header") {
+        return <ListHeaderComponent />;
+      } else if (_type === "footer") {
+        return <ListFooterComponent />;
+      }
+
+      return (
+        <Pressable onPress={() => onItemPress(index)}>
+          <Media item={item} numColumns={3} />
+        </Pressable>
+      );
+    },
+    [ListHeaderComponent, ListFooterComponent, onItemPress, isLoadingMore]
+  );
 
   return (
-    <Tabs.FlatList
-      data={
-        isBlocked
-          ? null
-          : mintingState.status !== "idle" &&
-            mintingState.tokenId !== data?.[0]?.token_id
-          ? [
-              {
-                loading: true,
-                chain_name: "polygon",
-                contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
-                token_id: mintingState.tokenId ?? "1",
-                source_url: mintingState.filePath ?? "",
-                mime_type: mintingState.fileType ?? "image/jpeg",
-              },
-              ...data,
-            ]
-          : data
-      }
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
+    <Tabs.RecyclerList
+      //@ts-ignore
+      layoutProvider={_layoutProvider}
+      dataProvider={dataProvider}
+      rowRenderer={_rowRenderer}
+      onEndReached={fetchMore}
       refreshing={isRefreshing}
       onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      ListHeaderComponent={ListHeaderComponent}
-      numColumns={3}
-      getItemLayout={getItemLayout}
-      windowSize={6}
-      initialNumToRender={9}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-      style={listStyle}
+      style={[{ flex: 1 }, listStyle]}
     />
   );
 };

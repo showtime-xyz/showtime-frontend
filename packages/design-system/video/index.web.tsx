@@ -36,6 +36,7 @@ function Video({ tw, style, ...props }: VideoProps) {
             resizeMode="cover"
             posterSource={props.posterSource}
             source={props.source}
+            isMuted
             {...props}
           />
         </>
