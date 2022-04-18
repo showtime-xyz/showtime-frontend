@@ -342,47 +342,44 @@ const TabList = ({
     ]
   );
 
-  const newData = useMemo(
-    () => [
-      "header",
-      isBlocked
-        ? null
-        : mintingState.status !== "idle" &&
-          mintingState.tokenId !== data?.[0]?.token_id
-        ? [
-            {
-              loading: true,
-              chain_name: "polygon",
-              contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
-              token_id: mintingState.tokenId ?? "1",
-              source_url:
-                typeof mintingState.file === "string" ? mintingState.file : "",
-              mime_type: mintingState.fileType ?? "image/jpeg",
-            },
-            ...data,
-          ]
-        : data,
-      ...data,
-      "footer",
-    ],
-    [
-      data,
-      mintingState.status,
-      mintingState.tokenId,
-      mintingState.file,
-      mintingState.fileType,
-      isBlocked,
-    ]
-  );
+  const newData = useMemo(() => {
+    let newData: any = ["header"];
+    if (isBlocked) return newData;
+
+    if (
+      mintingState.status !== "idle" &&
+      mintingState.tokenId !== data?.[0]?.token_id
+    ) {
+      //@ts-ignore
+      newData.push({
+        loading: true,
+        chain_name: "polygon",
+        contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+        token_id: mintingState.tokenId ?? "1",
+        source_url:
+          typeof mintingState.file === "string" ? mintingState.file : "",
+        mime_type: mintingState.fileType ?? "image/jpeg",
+      });
+    }
+
+    newData = newData.concat(data);
+
+    return newData;
+  }, [
+    data,
+    mintingState.status,
+    mintingState.tokenId,
+    mintingState.file,
+    mintingState.fileType,
+    isBlocked,
+  ]);
 
   const _layoutProvider = useMemo(
     () =>
       new LayoutProvider(
         (index) => {
-          if (newData[index] === "header") {
+          if (index === 0) {
             return "header";
-          } else if (newData[index] === "footer") {
-            return "footer";
           }
 
           return "item";
@@ -394,13 +391,10 @@ const TabList = ({
           } else if (_type === "header") {
             dim.width = windowWidth;
             dim.height = LIST_HEADER_HEIGHT;
-          } else if (_type === "footer") {
-            dim.width = windowWidth;
-            dim.height = ITEM_SIZE;
           }
         }
       ),
-    [windowWidth, newData]
+    [windowWidth]
   );
 
   const dataProvider = useMemo(
@@ -417,17 +411,21 @@ const TabList = ({
     (_type: any, item: any, index) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
-      } else if (_type === "footer") {
-        return <ListFooterComponent />;
+      }
+
+      // currently minting nft
+      if (item.loading) {
+        return <Media item={item} numColumns={3} />;
       }
 
       return (
-        <Pressable onPress={() => onItemPress(index)}>
+        // index - 1 because header takes the initial index!
+        <Pressable onPress={() => onItemPress(index - 1)}>
           <Media item={item} numColumns={3} />
         </Pressable>
       );
     },
-    [ListHeaderComponent, ListFooterComponent, onItemPress, isLoadingMore]
+    [ListHeaderComponent, onItemPress, isLoadingMore]
   );
 
   return (
@@ -440,6 +438,7 @@ const TabList = ({
       refreshing={isRefreshing}
       onRefresh={refresh}
       style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
+      renderFooter={ListFooterComponent}
     />
   );
 };

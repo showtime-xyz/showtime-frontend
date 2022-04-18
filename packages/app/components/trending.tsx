@@ -190,7 +190,7 @@ const CreatorsList = ({
 
   const { width } = useWindowDimensions();
 
-  const newData = useMemo(() => ["header", ...data, "footer"], [data]);
+  const newData = useMemo(() => ["header", ...data], [data]);
 
   let dataProvider = useMemo(
     () =>
@@ -208,10 +208,8 @@ const CreatorsList = ({
     () =>
       new LayoutProvider(
         (index) => {
-          if (newData[index] === "header") {
+          if (index === 0) {
             return "header";
-          } else if (newData[index] === "footer") {
-            return "footer";
           }
 
           return "item";
@@ -223,21 +221,16 @@ const CreatorsList = ({
           } else if (_type === "header") {
             dim.width = width;
             dim.height = LIST_HEADER_HEIGHT;
-          } else if (_type === "footer") {
-            dim.width = width;
-            dim.height = LIST_FOOTER_HEIGHT;
           }
         }
       ),
-    [width, cardHeight, newData]
+    [width, cardHeight]
   );
 
   const _rowRenderer = useCallback(
     (_type: any, item: any) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
-      } else if (_type === "footer") {
-        return <ListFooterComponent />;
       }
 
       return (
@@ -247,7 +240,7 @@ const CreatorsList = ({
         </>
       );
     },
-    [ListHeaderComponent, ListFooterComponent, days]
+    [ListHeaderComponent, days]
   );
 
   return (
@@ -261,6 +254,7 @@ const CreatorsList = ({
         refreshing={isRefreshing}
         onRefresh={refresh}
         style={{ flex: 1 }}
+        renderFooter={ListFooterComponent}
       />
     </View>
   );
@@ -282,8 +276,11 @@ const NFTSList = ({
       days,
     });
 
-  const ListFooterComponent = useCallback(() => null, [isLoadingMore]);
-  const newData = useMemo(() => ["header", ...data, "footer"], [data]);
+  const ListFooterComponent = useCallback(
+    () => <ListFooter isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+  const newData = useMemo(() => ["header", ...data], [data]);
 
   const numColumns = 3;
   const { width } = useWindowDimensions();
@@ -313,8 +310,6 @@ const NFTSList = ({
         (index) => {
           if (newData[index] === "header") {
             return "header";
-          } else if (newData[index] === "footer") {
-            return "footer";
           }
 
           return "item";
@@ -326,9 +321,6 @@ const NFTSList = ({
           } else if (_type === "header") {
             dim.width = width;
             dim.height = LIST_HEADER_HEIGHT;
-          } else if (_type === "footer") {
-            dim.width = width;
-            dim.height = LIST_FOOTER_HEIGHT;
           }
         }
       ),
@@ -339,8 +331,6 @@ const NFTSList = ({
     (_type: any, item: any, index) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
-      } else if (_type === "footer") {
-        return <ListFooterComponent />;
       }
 
       return (
@@ -348,7 +338,10 @@ const NFTSList = ({
           onPress={() =>
             // TODO:
             router.push(
-              `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+              `/list?initialScrollIndex=${
+                // index - 1 because header takes the initial index!
+                index - 1
+              }&days=${days}&type=trendingNFTs`
             )
           }
         >
@@ -356,7 +349,7 @@ const NFTSList = ({
         </Pressable>
       );
     },
-    [ListHeaderComponent, ListFooterComponent, router, days]
+    [ListHeaderComponent, router, days]
   );
 
   return (
@@ -370,6 +363,7 @@ const NFTSList = ({
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
+        renderFooter={ListFooterComponent}
       />
     </View>
   );
