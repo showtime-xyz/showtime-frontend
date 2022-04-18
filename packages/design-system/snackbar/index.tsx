@@ -29,7 +29,7 @@ import { PRESET_TRANSITION_MAP, SnackbarTransitionType } from "./constants";
 
 export type SnackbarStateType = "default" | "waiting" | "done";
 
-export type SnackBarShowParams = {
+export type SnackbarShowParams = {
   /** snackbar text */
   text: string;
   /** snackbar icon */
@@ -57,8 +57,8 @@ export type SnackBarShowParams = {
 };
 
 type SnackbarContextType = {
-  show: (params: SnackBarShowParams) => void;
-  update: (params: SnackBarShowParams) => void;
+  show: (params: SnackbarShowParams) => void;
+  update: (params: SnackbarShowParams) => void;
   hide: () => void;
   isVisible: boolean;
   iconStatus?: SnackbarStateType;
@@ -82,7 +82,7 @@ export const SnackbarContext = createContext<SnackbarContextType | undefined>(
 //     },
 //   });
 // };
-const initSnakbar: SnackBarShowParams = {
+const initSnakbar: SnackbarShowParams = {
   text: "",
   iconStatus: "default",
   bottom: 0,
@@ -94,7 +94,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
   const { isMobileWeb } = useIsMobileWeb();
 
   const [show, setShow] = useState(false);
-  const [snackbar, setSnackbar] = useState<SnackBarShowParams>(initSnakbar);
+  const [snackbar, setSnackbar] = useState<SnackbarShowParams>(initSnakbar);
 
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>();
 
@@ -107,7 +107,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      show: ({ hideAfter, ...rest }: SnackBarShowParams) => {
+      show: ({ hideAfter, ...rest }: SnackbarShowParams) => {
         if (show) return;
         setShow(true);
         setSnackbar({
@@ -117,7 +117,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
         setHideAfter(hideAfter);
         rest.text && AccessibilityInfo.announceForAccessibility(rest.text);
       },
-      update: ({ hideAfter, ...rest }: SnackBarShowParams) => {
+      update: ({ hideAfter, ...rest }: SnackbarShowParams) => {
         rest.text && AccessibilityInfo.announceForAccessibility(rest.text);
         setSnackbar({
           ...snackbar,
@@ -175,7 +175,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
     [snackbar]
   );
 
-  const transition = useMemo<SnackBarShowParams["transitionConfig"]>(
+  const transition = useMemo<SnackbarShowParams["transitionConfig"]>(
     () =>
       snackbar?.transitionConfig ?? {
         type: "timing",
@@ -229,7 +229,6 @@ export const SnackbarProvider: React.FC = ({ children }) => {
                   style={{ marginLeft: "auto" }}
                 >
                   <Pressable
-                    accessible
                     accessibilityLabel="View"
                     accessibilityRole="button"
                     onPress={snackbar.action?.onPress}
@@ -258,7 +257,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useSnackBar = () => {
+export const useSnackbar = () => {
   const snackbar = useContext(SnackbarContext);
   if (snackbar === null) {
     console.error("Trying to use useSnackbar without a SnackbarProvider");

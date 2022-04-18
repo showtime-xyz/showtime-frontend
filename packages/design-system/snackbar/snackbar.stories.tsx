@@ -9,14 +9,14 @@ import { colors } from "../tailwind/colors";
 import { Text } from "../text";
 import { useToast } from "../toast";
 import { View } from "../view";
-import { SnackbarProvider, useSnackBar } from "./index";
+import { SnackbarProvider, useSnackbar } from "./index";
 
 export default {
   component: SnackbarProvider,
   title: "Components/Snackbar",
 } as Meta;
 const Snackbar = () => {
-  const snackbar = useSnackBar();
+  const snackbar = useSnackbar();
   const toast = useToast();
   const isDark = useIsDarkMode();
   const toggleSnackbar = (cb: () => void) => {
