@@ -170,6 +170,7 @@ export const SwipeList = ({
     () => ({
       isMuted: true,
       useNativeControls: false,
+      previewOnly: false,
     }),
     []
   );
