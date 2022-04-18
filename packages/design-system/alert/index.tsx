@@ -10,7 +10,6 @@ import {
   AlertButton,
   AlertStatic,
   Platform,
-  StyleSheet,
   Modal,
 } from "react-native";
 
@@ -74,7 +73,7 @@ export const AlertProvider: React.FC = ({ children }) => {
       );
     }
     return buttons.map((btn, i) => (
-      <View key={`alert-option-${btn.text ?? i}`} tw="flex-1 mb-4 last:mb-0">
+      <View key={`alert-option-${btn.text ?? i}`} tw="mb-4 last:mb-0">
         <AlertOption {...btn} hide={closeAlert} />
       </View>
     ));
@@ -94,7 +93,7 @@ export const AlertProvider: React.FC = ({ children }) => {
             <AnimatePresence>
               <MotiView
                 style={tw.style(
-                  "max-w-xs w-3/5 blur-sm bg-white dark:bg-black rounded-2xl px-4 py-4"
+                  "max-w-xs w-4/5 bg-white dark:bg-black rounded-2xl px-4 py-4"
                 )}
                 from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
                 animate={{ transform: [{ scale: 1 }], opacity: 1 }}
