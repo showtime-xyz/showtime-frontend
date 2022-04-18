@@ -14,13 +14,21 @@ import { useIsDarkMode } from "../hooks";
 
 type SpinnerProps = {
   size?: "large" | "medium" | "small";
+  сolor?: string;
+  secondaryColor?: string;
 };
 
 const duration = 750;
 const defaultSize = 32;
 
 export const Spinner = (props: SpinnerProps) => {
-  const { size = "medium" } = props;
+  const isDark = useIsDarkMode();
+
+  const {
+    size = "medium",
+    сolor = "#8B5CF6",
+    secondaryColor = isDark ? "#3F3F46" : "#F4F4F5",
+  } = props;
   const transition = useSharedValue(0);
   let actualSize = defaultSize;
 
@@ -38,8 +46,6 @@ export const Spinner = (props: SpinnerProps) => {
       break;
     }
   }
-
-  const isDark = useIsDarkMode();
 
   useEffect(() => {
     transition.value = withRepeat(
@@ -86,7 +92,7 @@ export const Spinner = (props: SpinnerProps) => {
           fill="none"
           r={14}
           strokeWidth={4}
-          stroke={isDark ? "#3F3F46" : "#F4F4F5"}
+          stroke={secondaryColor}
         />
         <Circle
           cx={16}
@@ -94,7 +100,7 @@ export const Spinner = (props: SpinnerProps) => {
           fill="none"
           r={14}
           strokeWidth={4}
-          stroke="#8B5CF6"
+          stroke={сolor}
           strokeDasharray={80}
           strokeDashoffset={56}
         />
