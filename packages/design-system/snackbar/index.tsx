@@ -240,7 +240,6 @@ export const SnackbarProvider: React.FC = ({ children }) => {
                         tw="font-bold"
                         variant="text-xs"
                         numberOfLines={1}
-                        onPress={snackbar.action?.onPress}
                         sx={{ color: textColor }}
                       >
                         {snackbar.action?.text}
