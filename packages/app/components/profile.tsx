@@ -342,7 +342,6 @@ const TabList = ({
     ]
   );
 
-  const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
   const newData = useMemo(
     () => [
       "header",
@@ -440,7 +439,7 @@ const TabList = ({
       onEndReached={fetchMore}
       refreshing={isRefreshing}
       onRefresh={refresh}
-      style={[{ flex: 1 }, listStyle]}
+      style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
     />
   );
 };
