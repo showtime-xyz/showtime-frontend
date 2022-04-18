@@ -6325,6 +6325,7 @@ __metadata:
     expo: ^44.0.5
     expo-asset: ~8.4.4
     expo-av: ~10.2.0
+    expo-blur: ~11.0.0
     expo-community-flipper: ^44.0.1
     expo-constants: ~13.0.1
     expo-dev-client: ~0.8.4
