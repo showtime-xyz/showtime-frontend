@@ -21,6 +21,7 @@ import {
   LayoutRectangle,
 } from "react-native";
 
+import { GestureDetector } from "react-native-gesture-handler";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
   useSharedValue,
@@ -42,6 +43,7 @@ import { flattenChildren } from "app/utilities";
 
 import { tw } from "design-system/tailwind";
 
+import { SCREEN_WIDTH } from "./constants";
 import {
   TabListProps,
   TabRootProps,
@@ -49,6 +51,7 @@ import {
   ExtendObject,
 } from "./types";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
+import useSwipeableProvider from "./useSwipeableProvider";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -250,6 +253,41 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
 
 const TabIndexContext = React.createContext({} as { index: number });
 
+const HorizontalSwipeView = ({ pages = [{}, {}] }) => {
+  const {
+    swipeableProviderGesture,
+    animatedContainerStyles,
+    animatedTabStyles,
+  } = useSwipeableProvider();
+
+  return (
+    <GestureDetector gesture={swipeableProviderGesture}>
+      <Reanimated.View
+        style={[
+          {
+            width: SCREEN_WIDTH,
+            height: 200,
+            display: "flex",
+            flexDirection: "row",
+          },
+          animatedContainerStyles,
+        ]}
+      >
+        {pages.map((c, i) => {
+          // const shouldLoad = mountedIndices.includes(i);
+          return (
+            <Reanimated.View
+              style={[{ width: SCREEN_WIDTH }, animatedTabStyles]}
+            >
+              {c}
+            </Reanimated.View>
+          );
+        })}
+      </Reanimated.View>
+    </GestureDetector>
+  );
+};
+
 const Pager = ({ children }) => {
   const {
     initialIndex,
@@ -266,26 +304,8 @@ const Pager = ({ children }) => {
   );
 
   const newChildren = React.useMemo(
-    () =>
-      flattenChildren(children).map((c, i) => {
-        const shouldLoad = mountedIndices.includes(i);
-        return (
-          // why use context if we can clone the children. do we need better composition here?
-          <TabIndexContext.Provider value={{ index: i }} key={c.key ?? i}>
-            {
-              <View
-                style={[
-                  utilStyles.b,
-                  shouldLoad ? StyleSheet.absoluteFill : undefined,
-                ]}
-              >
-                {shouldLoad ? c : null}
-              </View>
-            }
-          </TabIndexContext.Provider>
-        );
-      }),
-    [children, mountedIndices]
+    () => flattenChildren(children),
+    [children]
   );
 
   useAnimatedReaction(
@@ -300,26 +320,15 @@ const Pager = ({ children }) => {
     [mountedIndices]
   );
 
-  const handler = usePageScrollHandler({
-    onPageScroll: (e: any) => {
-      "worklet";
-      offset.value = e.offset;
-      position.value = e.position;
-    },
-  });
+  // const handler = usePageScrollHandler({
+  //   onPageScroll: (e: any) => {
+  //     "worklet";
+  //     offset.value = e.offset;
+  //     position.value = e.position;
+  //   },
+  // });
 
-  return (
-    <AnimatedPagerView
-      style={{ flex: 1 }}
-      ref={pagerRef}
-      // Todo - make this work with reanimated event handlers
-      onPageScroll={handler}
-      initialPage={initialIndex}
-      onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}
-    >
-      {newChildren}
-    </AnimatedPagerView>
-  );
+  return <HorizontalSwipeView pages={newChildren} />;
 };
 
 const Content = React.forwardRef(
