@@ -1,9 +1,10 @@
-import { ComponentProps } from "react";
+import { ComponentProps, useRef } from "react";
 import { StyleSheet } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 
 import { useVideoConfig } from "app/context/video-config-context";
+import { useItemVisible } from "app/hooks/use-viewability-mount";
 
 import { Image } from "design-system/image";
 import { tw as tailwind } from "design-system/tailwind";
@@ -16,6 +17,9 @@ type VideoProps = {
 
 function Video({ tw, style, ...props }: VideoProps) {
   const videoConfig = useVideoConfig();
+
+  const videoRef = useRef<ExpoVideo>();
+  useItemVisible({ videoRef });
 
   return (
     <View style={[style, tailwind.style(tw)]}>
@@ -32,11 +36,11 @@ function Video({ tw, style, ...props }: VideoProps) {
           <ExpoVideo
             style={StyleSheet.absoluteFill}
             useNativeControls={videoConfig?.useNativeControls}
-            shouldPlay
             resizeMode="cover"
             posterSource={props.posterSource}
             source={props.source}
-            isMuted
+            ref={videoRef}
+            isMuted={videoConfig?.isMuted}
             {...props}
           />
         </>
