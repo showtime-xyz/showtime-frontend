@@ -15,6 +15,12 @@ import { tw } from "design-system/tailwind";
 
 import packageJson from "../../../../package.json";
 import {
+  SettingAccountSlotHeader,
+  SettingAccountSlotFooter,
+  AccountSettingItem,
+  AccountSettingItemProps,
+} from "./settings-account-slot";
+import {
   EmailSlotProps,
   SettingsEmailSlot,
   SettingEmailSlotHeader,
@@ -28,6 +34,10 @@ import {
   SettingsWalletSlotPlaceholder,
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
+
+const renderSetting = ({ item }: { item: AccountSettingItemProps }) => {
+  return <AccountSettingItem {...item} />;
+};
 
 const renderEmail = ({ item }: { item: EmailSlotProps }) => {
   const email = item.email;
@@ -62,6 +72,17 @@ const SettingsTabs = () => {
         (wallet) => wallet.is_email
       ),
     [user?.data.profile.wallet_addresses_v2]
+  );
+  const accountSettings = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Privacy & Security",
+        icon: "lock",
+        subRoute: "privacy-and-security",
+      },
+    ],
+    []
   );
   const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
@@ -110,6 +131,9 @@ const SettingsTabs = () => {
           <Tabs.Trigger>
             <TabItem name="Email Addresses" selected={selected === 1} />
           </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="Account" selected={selected === 2} />
+          </Tabs.Trigger>
           <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
@@ -148,6 +172,18 @@ const SettingsTabs = () => {
                 hasEmail={Boolean(emailWallets?.length)}
               />
             }
+            alwaysBounceVertical={false}
+            minHeight={Dimensions.get("window").height}
+            ItemSeparatorComponent={() => <SlotSeparator />}
+          />
+
+          <Tabs.FlatList
+            data={accountSettings}
+            keyExtractor={keyExtractor}
+            renderItem={renderSetting}
+            removeClippedSubviews={Platform.OS !== "web"}
+            ListHeaderComponent={<SettingAccountSlotHeader />}
+            ListFooterComponent={<SettingAccountSlotFooter />}
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
