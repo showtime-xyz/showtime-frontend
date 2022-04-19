@@ -41,7 +41,7 @@ function ProfileDropdown({ user }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         Platform.select({
@@ -62,7 +62,7 @@ function ProfileDropdown({ user }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         Platform.select({

@@ -31,5 +31,5 @@ export function ActivitiesModal() {
 export const ActivitiesScreen = withModalScreen(
   ActivitiesModal,
   "/nft/[id]/activities",
-  "activities"
+  "activitiesModal"
 );

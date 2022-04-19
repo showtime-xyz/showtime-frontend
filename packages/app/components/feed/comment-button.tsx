@@ -23,7 +23,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, comments: true, id: nft?.nft_id },
+          query: { ...router.query, commentsModal: true, id: nft?.nft_id },
         },
       }),
       as,

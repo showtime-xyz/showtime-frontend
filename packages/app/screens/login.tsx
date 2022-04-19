@@ -59,4 +59,4 @@ function LoginModal() {
   );
 }
 
-export const LoginScreen = withModalScreen(LoginModal, "/login", "login");
+export const LoginScreen = withModalScreen(LoginModal, "/login", "loginModal");

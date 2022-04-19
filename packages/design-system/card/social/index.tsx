@@ -27,10 +27,13 @@ function Social({ nft }: { nft?: NFT }) {
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, comments: true, id: nft?.nft_id },
+          query: { ...router.query, commentsModal: true, id: nft?.nft_id },
         },
       }),
-      as,
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
       { shallow: true }
     );
   }, [router, nft.nft_id]);
