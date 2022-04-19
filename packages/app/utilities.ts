@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Share } from "react-native";
+import { Platform, Share } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
@@ -334,3 +334,5 @@ export const getMediaUrl = ({
     stillPreview ? "&still_preview=true" : ""
   }`;
 };
+
+export const isWeb = Platform.OS === "web";
