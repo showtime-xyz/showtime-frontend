@@ -233,9 +233,6 @@ const TabList = ({
   isBlocked?: boolean;
   list: List;
 }) => {
-  const keyExtractor = useCallback((item) => {
-    return item.nft_id;
-  }, []);
   const router = useRouter();
   const { state: mintingState } = useContext(MintContext);
   const { width: windowWidth } = useWindowDimensions();
@@ -286,23 +283,10 @@ const TabList = ({
     [list.id, profileId, filter.collectionId, filter.sortId]
   );
 
-  const renderItem = useCallback(
-    ({ item, index }) => (
-      <Pressable onPress={() => onItemPress(index)}>
-        <Media item={item} numColumns={3} />
-      </Pressable>
-    ),
-    [onItemPress]
-  );
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
-
-  const getItemLayout = useCallback((_data, index) => {
-    return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
-  }, []);
 
   const ListHeaderComponent = useCallback(
     () => (
@@ -333,6 +317,7 @@ const TabList = ({
     ),
     [
       data,
+      username,
       isLoading,
       filter,
       onCollectionChange,
@@ -425,7 +410,7 @@ const TabList = ({
         </Pressable>
       );
     },
-    [ListHeaderComponent, onItemPress, isLoadingMore]
+    [ListHeaderComponent, onItemPress]
   );
 
   return (
