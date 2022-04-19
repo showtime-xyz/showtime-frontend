@@ -12,8 +12,8 @@ export const useShare = () => {
           url,
         });
       } else {
-        const { Clipboard } = require("@react-native-clipboard/clipboard");
-        Clipboard.setString(url);
+        navigator.clipboard.writeText(url);
+
         toast?.show({ message: "Copied!", hideAfter: 5000 });
       }
       return {

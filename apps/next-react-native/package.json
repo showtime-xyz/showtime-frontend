@@ -19,7 +19,6 @@
     "@hapi/iron": "^6.0.0",
     "@magic-sdk/admin": "^1.3.2",
     "@next/bundle-analyzer": "^12.0.4",
-    "@react-native-clipboard/clipboard": "^1.8.5",
     "@react-native-menu/menu": "^0.5.2",
     "@sentry/integrations": "7.0.0-alpha.0",
     "@sentry/nextjs": "7.0.0-alpha.0",

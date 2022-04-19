@@ -25,7 +25,6 @@ const withTM = require("next-transpile-modules")([
   "@zeego/menu",
   "@zeego/dropdown-menu",
   "solito",
-  "@react-native-clipboard/clipboard",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
