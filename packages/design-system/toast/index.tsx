@@ -78,7 +78,15 @@ export const ToastProvider = ({ children }: any) => {
       {children}
       <AnimatePresence>
         {show ? (
-          <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              //@ts-ignore
+              // TODO: improve toast to attach to react portal!
+              Platform.OS === "web" ? { position: "fixed" } : {},
+            ]}
+            pointerEvents="box-none"
+          >
             <MotiView
               style={[
                 styles.toastContainer,

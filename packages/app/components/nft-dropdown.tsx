@@ -10,15 +10,12 @@ import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useReport } from "app/hooks/use-report";
+import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
-import {
-  findListingItemByOwner,
-  isUserAnOwner,
-  handleShareNFT,
-} from "app/utilities";
+import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -48,6 +45,7 @@ function NFTDropdown({ nftId }: Props) {
   const router = useRouter();
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
+  const shareNFT = useShareNFT();
   //#endregion
 
   //#region variables
@@ -172,7 +170,7 @@ function NFTDropdown({ nftId }: Props) {
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
-          onSelect={() => handleShareNFT(nft)}
+          onSelect={() => shareNFT(nft)}
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
