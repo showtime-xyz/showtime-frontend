@@ -41,6 +41,7 @@ const getStories = () => {
     require("../../../packages/design-system/alert/alert.stories.tsx"),
     require("../../../packages/design-system/toast/toast.stories.tsx"),
     require("../../../packages/design-system/verification-badge/badge.stories.tsx"),
+    require("../../../packages/design-system/modal-new/modal.stories"),
   ];
 };
 

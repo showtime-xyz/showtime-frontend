@@ -6096,7 +6096,7 @@ __metadata:
     react-native-safe-area-context: 3.3.2
     react-native-screens: ~3.10.1
     react-native-svg: ^12.1.1
-    react-native-vision-camera: ^2.12.0
+    react-native-vision-camera: 2.13.0
     react-native-web: 0.17.5
     react-native-webview: 11.15.0
     react-string-replace: ^0.4.4
@@ -26506,6 +26506,16 @@ __metadata:
   version: 1.0.5
   resolution: "react-native-swipe-gestures@npm:1.0.5"
   checksum: d637bc40baa50fa0ce3b6cf2b494efeceaea03cc3875cb7cf7d76922914a21d5e6b098d4a084fb291ce61bfbb0a241c03cff24b15bebf0cfae1c146f4ad10d92
+  languageName: node
+  linkType: hard
+
+"react-native-vision-camera@npm:2.13.0":
+  version: 2.13.0
+  resolution: "react-native-vision-camera@npm:2.13.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 7b904f3b147a0b4c188c3938dd9403db546a1d4dccaf92ddf6224fe0010eac7e3b218290615ae2eeebbd9450451a781d12012fac9d2e420c8f3ab7e7045c54e4
   languageName: node
   linkType: hard
 
