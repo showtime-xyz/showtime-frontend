@@ -47,8 +47,8 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
 
 const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
   <View
-    tw="dark:border-gray-900 border-gray-100 justify-center"
-    style={{ height: LIST_HEADER_HEIGHT }}
+    tw="p-4 dark:border-gray-900 border-gray-100"
+    style={{ borderBottomWidth: 1 }}
   >
     {SelectionControl}
     {data.length === 0 && !isLoading ? (
