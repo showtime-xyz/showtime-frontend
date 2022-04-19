@@ -14,7 +14,7 @@ export function useRouter() {
           key.toLowerCase().includes("modal")
         )
       ) {
-        replace(pathname, asPath, { shallow: true });
+        replace(asPath, asPath, { shallow: true });
       } else {
         back();
       }
