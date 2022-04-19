@@ -31,8 +31,6 @@ import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 
-import { isWeb } from "../utilities";
-
 const defaultValues = {
   editionCount: 1,
   royaltiesPercentage: 10,
@@ -113,7 +111,9 @@ function Create() {
         setTimeout(() => {
           router.pop();
           router.replace(
-            isWeb ? `/@${user?.data?.profile?.username ?? address}` : `/profile`
+            Platform.OS === "web"
+              ? `/@${user?.data?.profile?.username ?? address}`
+              : `/profile`
           );
         }, 1000);
       }
