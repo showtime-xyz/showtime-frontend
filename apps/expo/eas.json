@@ -61,7 +61,6 @@
     }
   },
   "cli": {
-    "version": ">= 0.50.0",
-    "requireCommit": true
+    "version": ">= 0.50.0"
   }
 }
