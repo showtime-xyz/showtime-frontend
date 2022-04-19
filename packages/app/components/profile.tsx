@@ -53,8 +53,6 @@ import { Pressable } from "design-system/pressable-scale";
 import { useSnackbar } from "design-system/snackbar";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
-import { colors } from "design-system/tailwind/colors";
-import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { useSnackbarBottom } from "../hooks/use-snackbar-bottom";
@@ -170,7 +168,7 @@ const Profile = ({ address }: { address?: string }) => {
         //       />
         //     </View>
         //   ),
-        },
+        // },
       });
     }
   }, [mintingState]);
