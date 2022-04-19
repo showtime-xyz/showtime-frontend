@@ -110,7 +110,7 @@ function Create() {
         // TODO: save the file in the user gallery (if taken from camera)
         setTimeout(() => {
           router.pop();
-          router.push(`/@${user?.data?.profile?.username ?? address}`);
+          router.replace(`/profile`);
         }, 1000);
       }
     },

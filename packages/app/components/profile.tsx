@@ -45,15 +45,19 @@ import {
   Select,
 } from "design-system";
 import { Avatar } from "design-system/avatar";
-import { useColorScheme } from "design-system/hooks";
+import { useColorScheme, useIsDarkMode } from "design-system/hooks";
+import { ArrowRight } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
+import { useSnackbar } from "design-system/snackbar";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
+import { useSnackbarBottom } from "../hooks/use-snackbar-bottom";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
 
@@ -106,18 +110,20 @@ const ProfileScreen = ({ username }: { username: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
-  const toast = useToast();
+  const snakbar = useSnackbar();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+  // const router = useRouter();
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
   const { state: mintingState } = useContext(MintContext);
-
+  const snackBarHeight = useSnackbarBottom();
+  const isDark = useIsDarkMode();
   useEffect(() => {
     if (
       mintingState.status === "mediaUpload" ||
@@ -125,22 +131,46 @@ const Profile = ({ address }: { address?: string }) => {
       mintingState.status === "minting" ||
       mintingState.status === "transactionCompleted"
     ) {
-      toast?.show({
-        element: (
-          <View tw="flex-row items-center p-5">
-            <Spinner size={20} />
-            <View tw="mx-1" />
-            <Text tw="dark:text-white text-black">Creating...</Text>
-          </View>
-        ),
-        hideAfter: 4000,
+      /**
+       * TODO: replaced `Creating...` text, waiting for copywriting.
+       * https://linear.app/showtime/issue/SHOW2-651#comment-0e19621c
+       * */
+      snakbar?.show({
+        text: "Creating...",
+        iconStatus: "waiting",
+        bottom: snackBarHeight,
       });
     }
 
     if (mintingState.status === "mintingSuccess") {
-      toast?.show({
-        message: "Created 🎉 Your NFT will appear in a minute!",
+      snakbar?.show({
+        text: "Created 🎉 Your NFT will appear in a minute!",
+        iconStatus: "done",
+        bottom: snackBarHeight,
         hideAfter: 4000,
+        // Todo: navigate to NFT's detail, display placeholder
+        // action: {
+        //   text: "View",
+        //   onPress: () => {
+        //     snakbar?.hide();
+        //   },
+        //   element: (
+        //     <View tw="flex-row items-center justify-center">
+        //       <Text
+        //         tw="text-white dark:text-gray-900 font-bold"
+        //         variant="text-xs"
+        //         numberOfLines={1}
+        //       >
+        //         View
+        //       </Text>
+        //       <ArrowRight
+        //         width={14}
+        //         height={14}
+        //         color={isDark ? colors.gray[900] : colors.white}
+        //       />
+        //     </View>
+        //   ),
+        },
       });
     }
   }, [mintingState]);
