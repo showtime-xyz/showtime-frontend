@@ -35,7 +35,7 @@ import {
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
 
-const renderSetting = ({ item }: { item: AccountSettingItemProps }) => {
+const renderSettingRoutes = ({ item }: { item: AccountSettingItemProps }) => {
   return <AccountSettingItem {...item} />;
 };
 
@@ -179,8 +179,8 @@ const SettingsTabs = () => {
 
           <Tabs.FlatList
             data={accountSettings}
-            keyExtractor={keyExtractor}
-            renderItem={renderSetting}
+            keyExtractor={(item) => item.id}
+            renderItem={renderSettingRoutes}
             removeClippedSubviews={Platform.OS !== "web"}
             ListHeaderComponent={<SettingAccountSlotHeader />}
             ListFooterComponent={<SettingAccountSlotFooter />}

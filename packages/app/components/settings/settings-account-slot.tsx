@@ -21,7 +21,7 @@ export const SettingAccountSlotHeader = () => {
 export const SettingAccountSlotFooter = () => {
   return (
     <View tw="px-4 mt-4">
-      <View style="flex flex-col items-start">
+      <View tw="flex flex-col items-start">
         <Text tw="text-gray-900 dark:text-white font-bold text-base">
           Delete Account
         </Text>
