@@ -1,23 +1,17 @@
 import type { NFT } from "app/types";
 
-import { Button } from "design-system/button";
-import { MoreHorizontal } from "design-system/icon";
-import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
-import { Creator } from "./elements/creator";
 import { Ownership } from "./elements/ownership";
 import { Price } from "./elements/price";
 
 type Props = {
   nft?: NFT;
-  options?: boolean;
   price?: boolean;
-  tw?: TW;
-  toggleCreatorName?: boolean;
+  tw?: string;
 };
 
-function Owner({ options, price, nft, tw = "", toggleCreatorName }: Props) {
+function Owner({ price, nft, tw = "" }: Props) {
   if (!nft) return null;
 
   return (
@@ -27,17 +21,9 @@ function Owner({ options, price, nft, tw = "", toggleCreatorName }: Props) {
         tw,
       ]}
     >
-      <Creator nft={nft} toggleCreatorName={toggleCreatorName} />
+      <Ownership nft={nft} />
 
-      {options ? (
-        <Button variant="tertiary" size="small" iconOnly={true}>
-          <MoreHorizontal />
-        </Button>
-      ) : price ? (
-        <Price nft={nft} />
-      ) : (
-        <Ownership nft={nft} />
-      )}
+      {price ? <Price nft={nft} /> : null}
     </View>
   );
 }

@@ -18,9 +18,9 @@ import {
   SelectedTabIndicator,
   CreatorPreview,
   SegmentedControl,
-  Media,
   Pressable,
 } from "design-system";
+import { Card } from "design-system/card";
 import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
@@ -57,7 +57,7 @@ const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
       </View>
     ) : isLoading ? (
       <View tw="items-center justify-center mt-20">
-        <Spinner />
+        <Spinner size="small" />
       </View>
     ) : null}
   </View>
@@ -139,12 +139,28 @@ const TabListContainer = ({ days }: { days: number }) => {
     () =>
       [
         <ErrorBoundary>
-          <Suspense fallback={<Spinner size="small" />}>
+          <Suspense
+            fallback={
+              <ListHeader
+                isLoading={true}
+                SelectionControl={SelectionControl}
+                data={{}}
+              />
+            }
+          >
             <CreatorsList days={days} SelectionControl={SelectionControl} />
           </Suspense>
         </ErrorBoundary>,
         <ErrorBoundary>
-          <Suspense fallback={<Spinner size="small" />}>
+          <Suspense
+            fallback={
+              <ListHeader
+                isLoading={true}
+                SelectionControl={SelectionControl}
+                data={{}}
+              />
+            }
+          >
             <NFTSList days={days} SelectionControl={SelectionControl} />
           </Suspense>
         </ErrorBoundary>,
@@ -345,7 +361,7 @@ const NFTSList = ({
             )
           }
         >
-          <Media item={item} numColumns={numColumns} />
+          <Card nft={item} numColumns={numColumns} />
         </Pressable>
       );
     },

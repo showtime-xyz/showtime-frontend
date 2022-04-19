@@ -3,6 +3,7 @@ import { useWindowDimensions, Platform } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
 import {
   CameraTabBarIcon,
   TrendingTabBarIcon,
@@ -50,30 +51,43 @@ const HeaderRight = () => {
               </View>
             </>
           )}
-          <View tw="md:mx-3">
+          <View tw="md:mx-3 flex-row items-center">
             {isAuthenticated ? (
-              <HeaderDropdown type={width > 768 ? "profile" : "settings"} />
+              <HeaderDropdown type={width >= 768 ? "profile" : "settings"} />
             ) : (
-              <Button
-                onPress={() => {
-                  router.push(
-                    Platform.select({
-                      native: "/login",
-                      web: {
-                        pathname: router.pathname,
-                        query: { ...router.query, login: true },
-                      },
-                    }),
-                    "/login",
-                    { shallow: true }
-                  );
-                }}
-                variant="primary"
-                size={width > 768 ? "regular" : "small"}
-                labelTW="font-semibold"
-              >
-                Sign&nbsp;In
-              </Button>
+              <>
+                {width >= 768 && (
+                  <View tw="mx-3">
+                    <TrendingTabBarIcon
+                      color={isDark ? "white" : "black"}
+                      focused={router.pathname === "/trending"}
+                    />
+                  </View>
+                )}
+                <Button
+                  onPress={() => {
+                    router.push(
+                      Platform.select({
+                        native: "/login",
+                        web: {
+                          pathname: router.pathname,
+                          query: { ...router.query, loginModal: true },
+                        },
+                      }),
+                      Platform.select({
+                        native: "/login",
+                        web: router.asPath === "/" ? "/login" : router.asPath,
+                      }),
+                      { shallow: true }
+                    );
+                  }}
+                  variant="primary"
+                  size={width >= 768 ? "regular" : "small"}
+                  labelTW="font-semibold"
+                >
+                  Sign&nbsp;In
+                </Button>
+              </>
             )}
           </View>
         </View>
@@ -161,7 +175,9 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
       >
         <View tw="items-start">
-          <HeaderCenter />
+          <Link href="/">
+            <HeaderCenter />
+          </Link>
         </View>
         <View tw="items-end">
           <HeaderRight />

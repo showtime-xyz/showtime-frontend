@@ -1,25 +1,17 @@
-import React from "react";
-
 import { useNFTDetails } from "app/hooks/use-nft-details";
-import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 
+import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
-import { Image } from "design-system/image";
 import { Skeleton } from "design-system/skeleton";
 import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;
   options?: boolean;
-};
-
-const getProfileImageUrl = (imgUrl: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s112";
-  }
-  return imgUrl;
 };
 
 function OwnershipContainer({
@@ -67,19 +59,6 @@ export function Ownership({ nft }: Props) {
     );
   }
 
-  // if (nft.owner_count === 1) {
-  //   return (
-  //     <Image
-  //       tw="w-[32px] h-[32px] rounded-full"
-  //       source={{
-  //         uri: getProfileImageUrl(
-  //           data?.multiple_owners_list[0].img_url ?? DEFAULT_PROFILE_PIC
-  //         ),
-  //       }}
-  //     />
-  //   );
-  // }
-
   if (
     data?.owner_count &&
     data.owner_count > 1 &&
@@ -88,32 +67,66 @@ export function Ownership({ nft }: Props) {
   ) {
     return (
       <View tw="flex flex-row">
-        <View tw="mr-2">
+        <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
+          {data?.multiple_owners_list?.slice(0, 4).map((owner) => (
+            <Avatar
+              key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
+              tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+              size={14}
+              url={owner.img_url}
+            />
+          ))}
+        </OwnershipContainer>
+        <View tw="w-2" />
+        <View tw="">
           <Text
-            sx={{ fontSize: 12 }}
-            tw="mb-1 text-right text-gray-600 dark:text-gray-400 font-semibold"
+            variant="text-xs"
+            tw="mb-1 text-gray-600 dark:text-gray-400 font-semibold"
           >
             Owners
           </Text>
           <Text
-            sx={{ fontSize: 13, lineHeight: 13 }}
-            tw="text-right text-gray-900 dark:text-white font-semibold"
+            variant="text-13"
+            tw="text-gray-900 dark:text-white font-semibold"
           >
             Multiple
           </Text>
         </View>
-        <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
-          {data?.multiple_owners_list?.slice(0, 4).map((owner) => (
-            <Image
-              key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-              tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
-              source={{
-                uri: getProfileImageUrl(owner.img_url ?? DEFAULT_PROFILE_PIC),
-              }}
-            />
-          ))}
-        </OwnershipContainer>
       </View>
+    );
+  }
+
+  if (data?.owner_count && data.owner_count === 1) {
+    return (
+      <Link
+        href={`/@${nft.owner_username ?? nft.owner_address}`}
+        tw="flex flex-row"
+      >
+        <Avatar url={nft.owner_img_url} />
+        <View tw="ml-2 justify-center">
+          <Text
+            sx={{ fontSize: 12, lineHeight: 12 }}
+            tw={`${
+              nft.owner_username ? "mb-1" : ""
+            } text-gray-600 dark:text-gray-400 font-semibold`}
+          >
+            Owner
+          </Text>
+          {nft.owner_username && (
+            <View tw="h-[12px] flex flex-row items-center">
+              <Text
+                sx={{ fontSize: 13, lineHeight: 15 }}
+                tw="text-gray-900 dark:text-white font-semibold"
+              >
+                @{nft.owner_username}
+              </Text>
+              {nft.owner_verified ? (
+                <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+              ) : null}
+            </View>
+          )}
+        </View>
+      </Link>
     );
   }
 

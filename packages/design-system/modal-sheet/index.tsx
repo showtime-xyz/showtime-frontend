@@ -26,7 +26,7 @@ export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
     [props.title, props.close]
   );
 
-  if (width >= 1024) {
+  if (width >= 768) {
     return visible ? (
       <Modal
         key={`modalsheet-${props.title}-lg`}

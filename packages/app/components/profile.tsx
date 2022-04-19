@@ -46,6 +46,7 @@ import {
   Select,
 } from "design-system";
 import { Avatar } from "design-system/avatar";
+import { Card } from "design-system/card";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
@@ -400,13 +401,13 @@ const TabList = ({
 
       // currently minting nft
       if (item.loading) {
-        return <Media item={item} numColumns={3} />;
+        return <Card nft={item} numColumns={3} />;
       }
 
       return (
         // index - 1 because header takes the initial index!
         <Pressable onPress={() => onItemPress(index - 1)}>
-          <Media item={item} numColumns={3} />
+          <Card nft={item} numColumns={3} />
         </Pressable>
       );
     },
