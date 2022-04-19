@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
+import { BlockedListScreen } from "app/screens/blocked-list";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -11,6 +12,8 @@ import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
+import { NotificationSettingsScreen } from "app/screens/notification-settings";
+import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
@@ -49,6 +52,15 @@ export function RootStackNavigator() {
           getId={({ params }) => params?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen
+          name="privacySecuritySettings"
+          component={PrivacySecuritySettingsScreen}
+        />
+        <Stack.Screen
+          name="notificationSettings"
+          component={NotificationSettingsScreen}
+        />
+        <Stack.Screen name="blockedList" component={BlockedListScreen} />
         <Stack.Screen
           name="search"
           component={SearchScreen}
