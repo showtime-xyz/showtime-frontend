@@ -1,10 +1,15 @@
-import React, { useContext } from "react";
-import { ScrollView, FlatList, SectionList, Animated } from "react-native";
+import React, { forwardRef, useContext } from "react";
+import {
+  ScrollView,
+  FlatList,
+  SectionList,
+  Animated,
+  Platform,
+} from "react-native";
 
 import * as RadixTabs from "@radix-ui/react-tabs";
 
-import { Text } from "design-system/text";
-
+import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
 
 import { tw } from "../../tailwind";
@@ -159,6 +164,20 @@ const Trigger = React.forwardRef((props: any, ref: any) => {
   return <View {...props} ref={ref} />;
 });
 
+const TabRecyclerListView = React.memo(
+  React.forwardRef((props, ref) => {
+    return (
+      <RecyclerListView
+        {...props}
+        ref={ref}
+        useWindowScroll={Platform.OS === "web"}
+      />
+    );
+  })
+);
+
+TabRecyclerListView.displayName = "TabRecyclerListView";
+
 export const Tabs = {
   Root,
   Header,
@@ -169,6 +188,7 @@ export const Tabs = {
   Trigger,
   View,
   List,
+  RecyclerList: TabRecyclerListView as any,
 };
 
 export const useTabsContext = () => {

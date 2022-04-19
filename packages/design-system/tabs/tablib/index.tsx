@@ -1,4 +1,4 @@
-//@ts-nocheck- Todo fix typings
+//@ts-nocheck
 import React, {
   useContext,
   ForwardedRef,
@@ -19,6 +19,7 @@ import {
   Dimensions,
   FlatListProps,
   LayoutRectangle,
+  RefreshControl,
 } from "react-native";
 
 import PagerView from "react-native-pager-view";
@@ -38,6 +39,7 @@ import Reanimated, {
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
+import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
 
 import { tw } from "design-system/tailwind";
@@ -375,124 +377,158 @@ const Trigger = React.forwardRef(
   }
 );
 
+function useTabScrollViewProps(props: any, ref: any) {
+  const {
+    headerHeight,
+    requestOtherViewsToSyncTheirScrollPosition,
+    tabListHeight,
+    translateY,
+    index,
+  } = useContext(TabsContext);
+  const elementIndex = React.useContext(TabIndexContext).index;
+  const aref = useAnimatedRef<Reanimated.ScrollView>();
+  const scrollY = useSharedValue(0);
+  const topHeight = headerHeight + tabListHeight;
+  const translateYOffset = Platform.OS === "ios" ? topHeight : 0;
+  const minHeight = props.minHeight ?? windowHeight + topHeight;
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onBeginDrag() {
+      requestOtherViewsToSyncTheirScrollPosition.value = false;
+    },
+    onMomentumBegin() {
+      requestOtherViewsToSyncTheirScrollPosition.value = false;
+    },
+    onScroll(e) {
+      // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accommodate header
+      if (index.value === elementIndex) {
+        scrollY.value = e.contentOffset.y;
+        if (Platform.OS === "ios") {
+          translateY.value = interpolate(
+            scrollY.value,
+            [-translateYOffset, -tabListHeight],
+            [0, -headerHeight],
+            Extrapolate.CLAMP
+          );
+        } else {
+          translateY.value = interpolate(
+            scrollY.value,
+            [0, headerHeight],
+            [0, -headerHeight],
+            Extrapolate.CLAMP
+          );
+        }
+      }
+    },
+    onEndDrag() {
+      requestOtherViewsToSyncTheirScrollPosition.value = true;
+    },
+    onMomentumEnd() {
+      requestOtherViewsToSyncTheirScrollPosition.value = true;
+    },
+  });
+
+  // sync other flatlist's scroll position if header is translated
+  useDerivedValue(() => {
+    if (
+      index.value !== elementIndex &&
+      requestOtherViewsToSyncTheirScrollPosition.value
+    ) {
+      const absTranslateY = -1 * translateY.value;
+      if (
+        absTranslateY < headerHeight ||
+        scrollY.value + translateYOffset < absTranslateY
+      ) {
+        scrollTo(aref, 0, absTranslateY - translateYOffset, false);
+        // manually set scrollY because onScroll of other lists's won't be triggered
+        scrollY.value = absTranslateY - translateYOffset;
+      }
+    }
+  }, [translateYOffset]);
+
+  const _ref = useRef<FlatList>(null);
+
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        runOnUI(scrollTo)(aref, 0, -translateYOffset, true);
+      },
+    })
+  );
+
+  return {
+    ...props,
+    scrollEventThrottle: 16,
+    onScroll: scrollHandler,
+    alwaysBounceHorizontal: false,
+    automaticallyAdjustContentInsets: false,
+    ref: mergeRef([ref, aref, _ref]),
+    contentOffset: useMemo(
+      () => ({
+        y:
+          Platform.OS === "ios"
+            ? -topHeight + -1 * translateY.value
+            : -1 * translateY.value,
+      }),
+      [topHeight, translateY.value]
+    ),
+    contentInset: useMemo(
+      () => ({
+        top: Platform.OS === "ios" ? topHeight : 0,
+      }),
+      [topHeight]
+    ),
+    contentContainerStyle: useMemo(
+      () => ({
+        paddingTop: Platform.OS === "android" ? topHeight : 0,
+        minHeight,
+      }),
+      [topHeight]
+    ),
+    progressViewOffset: topHeight,
+  };
+}
+
 function makeScrollableComponent<K extends ExtendObject, T extends any>(
   Comp: T
 ) {
-  return React.forwardRef((props: K, ref: ForwardedRef<T>) => {
-    const {
-      headerHeight,
-      requestOtherViewsToSyncTheirScrollPosition,
-      tabListHeight,
-      translateY,
-      index,
-    } = useContext(TabsContext);
-    const elementIndex = React.useContext(TabIndexContext).index;
-    const aref = useAnimatedRef<Reanimated.ScrollView>();
-    const scrollY = useSharedValue(0);
-    const topHeight = headerHeight + tabListHeight;
-    const translateYOffset = Platform.OS === "ios" ? topHeight : 0;
-    const minHeight = props.minHeight ?? windowHeight + topHeight;
-
-    const scrollHandler = useAnimatedScrollHandler({
-      onBeginDrag() {
-        requestOtherViewsToSyncTheirScrollPosition.value = false;
-      },
-      onMomentumBegin() {
-        requestOtherViewsToSyncTheirScrollPosition.value = false;
-      },
-      onScroll(e) {
-        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accommodate header
-        if (index.value === elementIndex) {
-          scrollY.value = e.contentOffset.y;
-          if (Platform.OS === "ios") {
-            translateY.value = interpolate(
-              scrollY.value,
-              [-translateYOffset, -tabListHeight],
-              [0, -headerHeight],
-              Extrapolate.CLAMP
-            );
-          } else {
-            translateY.value = interpolate(
-              scrollY.value,
-              [0, headerHeight],
-              [0, -headerHeight],
-              Extrapolate.CLAMP
-            );
-          }
-        }
-      },
-      onEndDrag() {
-        requestOtherViewsToSyncTheirScrollPosition.value = true;
-      },
-      onMomentumEnd() {
-        requestOtherViewsToSyncTheirScrollPosition.value = true;
-      },
-    });
-
-    // sync other flatlist's scroll position if header is translated
-    useDerivedValue(() => {
-      if (
-        index.value !== elementIndex &&
-        requestOtherViewsToSyncTheirScrollPosition.value
-      ) {
-        const absTranslateY = -1 * translateY.value;
-        if (
-          absTranslateY < headerHeight ||
-          scrollY.value + translateYOffset < absTranslateY
-        ) {
-          scrollTo(aref, 0, absTranslateY - translateYOffset, false);
-          // manually set scrollY because onScroll of other lists's won't be triggered
-          scrollY.value = absTranslateY - translateYOffset;
-        }
-      }
-    }, [translateYOffset]);
-
-    const _ref = useRef<FlatList>(null);
-
-    useScrollToTop(
-      React.useRef({
-        scrollToTop: () => {
-          runOnUI(scrollTo)(aref, 0, -translateYOffset, true);
-        },
-      })
-    );
-
-    return (
-      // @ts-ignore
-      <Comp
-        scrollEventThrottle={16}
-        onScroll={scrollHandler}
-        alwaysBounceHorizontal={false}
-        automaticallyAdjustContentInsets={false}
-        ref={mergeRef([ref, aref, _ref])}
-        contentOffset={useMemo(
-          () => ({
-            y:
-              Platform.OS === "ios"
-                ? -topHeight + -1 * translateY.value
-                : -1 * translateY.value,
-          }),
-          [topHeight]
-        )}
-        contentInset={useMemo(
-          () => ({
-            top: Platform.OS === "ios" ? topHeight : 0,
-          }),
-          [topHeight]
-        )}
-        contentContainerStyle={useMemo(
-          () => ({
-            paddingTop: Platform.OS === "android" ? topHeight : 0,
-            minHeight,
-          }),
-          [topHeight]
-        )}
-        progressViewOffset={topHeight}
-        {...props}
-      />
-    );
+  return React.forwardRef<K, T>(function TabViewScrollable(props, ref) {
+    const scrollViewProps = useTabScrollViewProps(props, ref);
+    return <Comp {...scrollViewProps} />;
   });
 }
+
+const ReanimatedRecyclerList =
+  Reanimated.createAnimatedComponent(RecyclerListView);
+
+const TabRecyclerListView = React.memo(
+  React.forwardRef((props, ref) => {
+    const { onScroll, ...restProps } = useTabScrollViewProps(props, ref);
+
+    const scrollViewProps = useMemo(() => {
+      return {
+        refreshControl: (
+          <RefreshControl
+            refreshing={props.refreshing}
+            onRefresh={props.onRefresh}
+          />
+        ),
+        ...restProps,
+      };
+    }, [restProps, props.refreshing, props.onRefresh]);
+
+    return (
+      <ReanimatedRecyclerList
+        {...props}
+        ref={ref}
+        onScroll={onScroll}
+        scrollViewProps={scrollViewProps}
+      />
+    );
+  })
+);
+
+TabRecyclerListView.displayName = "TabRecyclerListView";
 
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
@@ -523,6 +559,7 @@ export const Tabs = {
   Header,
   ScrollView: TabScrollView,
   FlatList: TabFlatList,
+  RecyclerList: TabRecyclerListView,
 };
 
 export const useTabsContext = () => {
