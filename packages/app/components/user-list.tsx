@@ -1,4 +1,5 @@
 import { memo, useCallback } from "react";
+import { FlatList, Platform } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
@@ -55,17 +56,30 @@ export const UserList = ({
   );
 
   if (users && users?.length > 0) {
-    return (
-      <BottomSheetFlatList
-        data={users}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        windowSize={10}
-        initialNumToRender={10}
-        getItemLayout={getItemLayout}
-        ItemSeparatorComponent={Separator}
-      />
-    );
+    return Platform.select({
+      default: (
+        <BottomSheetFlatList
+          data={users}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          windowSize={10}
+          initialNumToRender={10}
+          getItemLayout={getItemLayout}
+          ItemSeparatorComponent={Separator}
+        />
+      ),
+      web: (
+        <FlatList
+          data={users}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          windowSize={10}
+          initialNumToRender={10}
+          getItemLayout={getItemLayout}
+          ItemSeparatorComponent={Separator}
+        />
+      ),
+    });
   } else if (loading) {
     return <FollowingUserItemLoadingIndicator />;
   } else if (users?.length === 0) {

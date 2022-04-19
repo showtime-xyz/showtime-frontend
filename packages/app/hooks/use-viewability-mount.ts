@@ -86,3 +86,30 @@ export const useViewabilityMount = ({
     id,
   };
 };
+
+// web only
+export const useItemVisible = ({ videoRef }: { videoRef: any }) => {
+  const id = useContext(ItemKeyContext);
+  const context = useContext(ViewabilityItemsContext);
+  const isItemInList = typeof id !== "undefined";
+
+  const play = () => {
+    videoRef.current?._nativeRef?.current._video?.play();
+  };
+
+  const pause = () => {
+    videoRef.current?._nativeRef.current._video?.pause();
+  };
+
+  useAnimatedReaction(
+    () => context.value,
+    (ctx) => {
+      if (isItemInList && ctx[1] === id) {
+        runOnJS(play)();
+      } else {
+        runOnJS(pause)();
+      }
+    },
+    [id, isItemInList]
+  );
+};
