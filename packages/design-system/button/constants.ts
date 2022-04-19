@@ -34,8 +34,8 @@ const CONTAINER_BACKGROUND_MAPPER = {
     pressed: [colors.gray[300], colors.gray[700]],
   },
   danger: {
-    default: [colors.red[500], colors.gray[300]],
-    pressed: [colors.red[700], colors.gray[300]],
+    default: [colors.red[500], colors.red[500]],
+    pressed: [colors.red[700], colors.red[700]],
   },
 };
 
