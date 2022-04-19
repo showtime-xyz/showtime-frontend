@@ -26,6 +26,7 @@ import {
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useSnackbarBottom } from "app/hooks/use-snackbar-bottom";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import {
   useBottomTabBarHeight,
@@ -55,7 +56,6 @@ import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
-import { useSnackbarBottom } from "../hooks/use-snackbar-bottom";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
 
@@ -108,7 +108,7 @@ const ProfileScreen = ({ username }: { username: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
-  const snakbar = useSnackbar();
+  const snackbar = useSnackbar();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -133,7 +133,7 @@ const Profile = ({ address }: { address?: string }) => {
        * TODO: replaced `Creating...` text, waiting for copywriting.
        * https://linear.app/showtime/issue/SHOW2-651#comment-0e19621c
        * */
-      snakbar?.show({
+      snackbar?.show({
         text: "Creating...",
         iconStatus: "waiting",
         bottom: snackBarHeight,
@@ -141,7 +141,7 @@ const Profile = ({ address }: { address?: string }) => {
     }
 
     if (mintingState.status === "mintingSuccess") {
-      snakbar?.show({
+      snackbar?.show({
         text: "Created 🎉 Your NFT will appear in a minute!",
         iconStatus: "done",
         bottom: snackBarHeight,
@@ -150,7 +150,7 @@ const Profile = ({ address }: { address?: string }) => {
         // action: {
         //   text: "View",
         //   onPress: () => {
-        //     snakbar?.hide();
+        //     snackbar?.hide();
         //   },
         //   element: (
         //     <View tw="flex-row items-center justify-center">
