@@ -42,6 +42,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
@@ -61,6 +62,7 @@ LogBox.ignoreLogs([
   "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
+  "[react-native-gesture-handler] Seems like you're using an old API with gesture components",
 ]);
 
 const rudderConfig = {
@@ -257,8 +259,6 @@ function AppContextProvider({
             ? response?.notification?.request?.content?.data?.body?.path
             : response?.notification?.request?.content?.data?.path;
 
-        console.log(content);
-
         // Notifications.dismissNotificationAsync(
         //   response?.notification?.request?.identifier
         // );
@@ -325,37 +325,37 @@ function App() {
       : ""
   }`;
 
-  console.log("App", scheme);
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DripsyProvider theme={theme}>
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
           <ToastProvider>
-            <NavigationProvider>
-              <SWRProvider>
-                <WalletConnectProvider>
-                  <Web3Provider>
-                    <AppContextProvider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <MintProvider>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <StatusBar style="auto" />
-                                  <RootStackNavigator />
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </MintProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </AppContextProvider>
-                  </Web3Provider>
-                </WalletConnectProvider>
-              </SWRProvider>
-            </NavigationProvider>
+            <SnackbarProvider>
+              <NavigationProvider>
+                <SWRProvider>
+                  <WalletConnectProvider>
+                    <Web3Provider>
+                      <AppContextProvider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <MintProvider>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <StatusBar style="auto" />
+                                    <RootStackNavigator />
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </MintProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </AppContextProvider>
+                    </Web3Provider>
+                  </WalletConnectProvider>
+                </SWRProvider>
+              </NavigationProvider>
+            </SnackbarProvider>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>

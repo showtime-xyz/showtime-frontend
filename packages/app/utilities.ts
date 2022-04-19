@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform, Share } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
