@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef, memo, useEffect, Suspense } from "react";
-import { Dimensions, useWindowDimensions } from "react-native";
+import { useCallback, useMemo } from "react";
+import { useWindowDimensions } from "react-native";
 
 import { Collection } from "app/components/feed/collection";
 import { CommentButton } from "app/components/feed/comment-button";
@@ -11,16 +11,23 @@ import { RecyclerListView } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
 import { Avatar } from "design-system/avatar";
-import { Divider } from "design-system/divider";
 import { Media } from "design-system/media";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
+const CARD_HEIGHT = 764;
+const CARD_WIDTH = 600;
+const CARD_SEPARATOR = 16;
+
 export const NFTCard = ({ nft }: { nft: NFT }) => {
   return (
     <LikeContextProvider nft={nft}>
-      <View tw="ml-150 mb-4">
-        <View tw="w-[540px] bg-white dark:bg-black shadow-lg rounded-lg">
+      <View tw="flex-1 flex-row">
+        <View
+          tw={`w-[${CARD_WIDTH}px] h-[${
+            CARD_HEIGHT - CARD_SEPARATOR
+          }px] bg-white dark:bg-black shadow-lg rounded-lg`}
+        >
           <View tw="flex-row p-4">
             <Avatar
               url="https://cdn.tryshowtime.com/profile_placeholder2.jpg"
@@ -74,8 +81,8 @@ export const NFTCard = ({ nft }: { nft: NFT }) => {
             <Collection nft={nft} />
           </View>
         </View>
-        {/* <Divider /> */}
       </View>
+      <View tw={`h-[${CARD_SEPARATOR}px]`} />
     </LikeContextProvider>
   );
 };
@@ -104,6 +111,7 @@ const CuratedFeed = () => {
         },
         (_type, dim) => {
           dim.width = screenWidth;
+          dim.height = CARD_HEIGHT;
         }
       ),
     [screenWidth]
@@ -124,16 +132,16 @@ const CuratedFeed = () => {
 
   return (
     <View tw="flex-row">
-      <View style={{ height: Dimensions.get("screen").height }}>
-        <RecyclerListView
-          dataProvider={dataProvider}
-          layoutProvider={_layoutProvider}
-          useWindowScroll
-          forceNonDeterministicRendering
-          rowRenderer={_rowRenderer}
-          onEndReached={fetchMore}
-        />
+      <View tw="bg-white dark:bg-black p-4">
+        <Text>Suggested</Text>
       </View>
+      <RecyclerListView
+        dataProvider={dataProvider}
+        layoutProvider={_layoutProvider}
+        useWindowScroll
+        rowRenderer={_rowRenderer}
+        onEndReached={fetchMore}
+      />
     </View>
   );
 };
