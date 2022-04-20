@@ -21,13 +21,14 @@ import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { useShareNFT } from "app/hooks/use-share-nft";
 import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop, useNavigation } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useSafeAreaFrame } from "app/lib/safe-area";
 import type { NFT } from "app/types";
-import { handleShareNFT, getMediaUrl } from "app/utilities";
+import { getMediaUrl } from "app/utilities";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
@@ -300,6 +301,8 @@ export const FeedItem = memo(
 );
 
 const NFTDetails = ({ nft }: { nft: NFT }) => {
+  const shareNFT = useShareNFT();
+
   return (
     <View tw="px-4">
       <View tw="h-4" />
@@ -327,7 +330,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
         </View>
 
         <View tw="flex-row">
-          <Pressable onPress={() => handleShareNFT(nft)}>
+          <Pressable onPress={() => shareNFT(nft)}>
             <Share
               height={22}
               width={22}
