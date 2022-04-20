@@ -17,8 +17,9 @@ import { View } from "design-system/view";
 type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
+  onPress: () => void;
   tw?: string;
-  variant: "nft" | "activity" | "market";
+  variant?: "nft" | "activity" | "market";
 };
 
 function Card({ nft, numColumns, tw, onPress }: Props) {
@@ -44,7 +45,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
     <View
       tw={[
         size,
-        // numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
+        numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
         nft?.loading ? "opacity-50" : "opacity-100",
         "shadow-md rounded-2xl overflow-hidden",
         "self-center justify-self-center",

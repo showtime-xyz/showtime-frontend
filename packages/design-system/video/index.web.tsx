@@ -7,30 +7,39 @@ import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
 
 import { Image } from "design-system/image";
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
 type VideoProps = {
   tw?: TW;
+  blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, style, ...props }: VideoProps) {
+function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
   const videoConfig = useVideoConfig();
 
   const videoRef = useRef<ExpoVideo>();
   useItemVisible({ videoRef });
 
   return (
-    <View style={[style, tailwind.style(tw)]}>
+    <View>
       {videoConfig?.previewOnly ? (
-        <Image style={StyleSheet.absoluteFill} source={props.posterSource} />
+        <Image
+          //@ts-ignore
+          source={props.posterSource}
+          tw={tw}
+          resizeMode={resizeMode}
+          blurhash={blurhash}
+        />
       ) : (
         <>
           <Image
-            //@ts-ignore
+            // @ts-ignore
             source={props.posterSource}
             style={StyleSheet.absoluteFill}
+            tw={tw}
+            resizeMode={resizeMode}
+            blurhash={blurhash}
           />
 
           <ExpoVideo

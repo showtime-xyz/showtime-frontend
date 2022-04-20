@@ -2,19 +2,20 @@ import { ComponentProps, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
-import FastImage from "react-native-fast-image";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 
+import { Image } from "design-system/image";
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
 type VideoProps = {
   tw?: TW;
+  blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, style, ...props }: VideoProps) {
+function Video({ tw, blurhash, style, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const videoConfig = useVideoConfig();
 
@@ -24,16 +25,19 @@ function Video({ tw, style, ...props }: VideoProps) {
     <>
       <View style={[style, tailwind.style(tw)]}>
         {videoConfig?.previewOnly ? (
-          <FastImage
+          <Image
             style={StyleSheet.absoluteFill}
+            // @ts-ignore
             source={props.posterSource}
+            blurhash={blurhash}
           />
         ) : (
           <>
-            <FastImage
-              //@ts-ignore
+            <Image
+              // @ts-ignore
               source={props.posterSource}
               style={StyleSheet.absoluteFill}
+              blurhash={blurhash}
             />
 
             <ExpoVideo
