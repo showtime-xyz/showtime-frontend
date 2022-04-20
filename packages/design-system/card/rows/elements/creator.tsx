@@ -1,5 +1,8 @@
+import { formatDistanceToNowStrict } from "date-fns";
+
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { Text } from "design-system/text";
@@ -8,10 +11,15 @@ import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;
-  options?: boolean;
+  shouldShowCreatorIndicator?: boolean;
+  shouldShowDateCreated?: boolean;
 };
 
-export function Creator({ nft }: Props) {
+export function Creator({
+  nft,
+  shouldShowCreatorIndicator = true,
+  shouldShowDateCreated = true,
+}: Props) {
   if (!nft) return null;
 
   return (
@@ -21,24 +29,57 @@ export function Creator({ nft }: Props) {
     >
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">
-        <Text
-          variant="text-xs"
-          tw={`${
-            nft.creator_username ? "mb-1" : ""
-          } text-gray-600 dark:text-gray-400 font-semibold`}
-        >
-          Creator
-        </Text>
-        {nft.creator_username && (
-          <View tw="h-[12px] flex flex-row items-center">
+        {shouldShowCreatorIndicator && (
+          <Text
+            variant="text-xs"
+            tw={`${
+              nft.creator_username ? "mb-1" : ""
+            } text-gray-600 dark:text-gray-400 font-semibold`}
+          >
+            Creator
+          </Text>
+        )}
+        {nft.creator_username ? (
+          <View>
+            <View tw="h-[12px] flex flex-row items-center">
+              <Text
+                variant="text-13"
+                tw="text-gray-900 dark:text-white font-semibold"
+              >
+                @{nft.creator_username}
+              </Text>
+              {nft.creator_verified ? (
+                <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+              ) : null}
+            </View>
+            {shouldShowDateCreated && nft.token_created ? (
+              <Text
+                variant="text-xs"
+                tw="text-gray-900 dark:text-white mt-1 font-semibold"
+              >
+                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                  addSuffix: true,
+                })}
+              </Text>
+            ) : null}
+          </View>
+        ) : (
+          <View>
             <Text
               variant="text-13"
-              tw="text-gray-900 dark:text-white font-semibold"
+              tw="text-gray-900 dark:text-white font-bold"
             >
-              @{nft.creator_username}
+              {formatAddressShort(nft.creator_address)}
             </Text>
-            {nft.creator_verified ? (
-              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            {shouldShowDateCreated && nft.token_created ? (
+              <Text
+                variant="text-xs"
+                tw="text-gray-900 dark:text-white mt-1 font-semibold"
+              >
+                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                  addSuffix: true,
+                })}
+              </Text>
             ) : null}
           </View>
         )}
