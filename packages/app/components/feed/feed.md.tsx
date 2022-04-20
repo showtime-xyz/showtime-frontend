@@ -1,22 +1,26 @@
 import { useCallback, useMemo } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { Collection } from "app/components/feed/collection";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Like } from "app/components/feed/like";
 import { LikeContextProvider } from "app/context/like-context";
+import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
+import { useUser } from "app/hooks/use-user";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
+import { TabItem, Tabs } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Media } from "design-system/media";
+import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-const CARD_HEIGHT = 764;
-const CARD_WIDTH = 600;
+const CARD_HEIGHT = 750;
+const CARD_WIDTH = 540;
 const CARD_SEPARATOR = 16;
 
 export const NFTCard = ({ nft }: { nft: NFT }) => {
@@ -37,7 +41,10 @@ export const NFTCard = ({ nft }: { nft: NFT }) => {
               <Text tw="text-gray-600 dark:text-gray-400 text-xs font-semibold">
                 Creator
               </Text>
-              <Text tw="text-black dark:text-white text-xs font-semibold">
+              <Text
+                tw="text-black dark:text-white text-xs font-semibold"
+                numberOfLines={1}
+              >
                 @{nft.creator_username}
               </Text>
             </View>
@@ -45,7 +52,11 @@ export const NFTCard = ({ nft }: { nft: NFT }) => {
           <Media item={nft} />
 
           <View tw="p-4">
-            <Text tw="text-black dark:text-white" variant="text-xl">
+            <Text
+              tw="text-black dark:text-white"
+              variant="text-xl"
+              numberOfLines={1}
+            >
               {nft.token_name}
             </Text>
 
@@ -77,23 +88,60 @@ export const NFTCard = ({ nft }: { nft: NFT }) => {
             </View>
           </View> */}
           </View>
-          <View tw="px-4 py-2">
+          <View tw="h-[1px] bg-gray-100" />
+          <View tw="p-3">
             <Collection nft={nft} />
           </View>
         </View>
       </View>
-      <View tw={`h-[${CARD_SEPARATOR}px]`} />
     </LikeContextProvider>
   );
 };
 
 export const Feed = () => {
+  const { isAuthenticated } = useUser();
+
+  if (isAuthenticated) {
+    return (
+      <Tabs.Root>
+        <Tabs.List contentContainerStyle={tw.style("justify-center")}>
+          <Tabs.Trigger>
+            <TabItem name="Following" />
+          </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="For you" />
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Pager>
+          <FollowingFeed />
+          <AlgorithmicFeed />
+        </Tabs.Pager>
+      </Tabs.Root>
+    );
+  }
+
   return <CuratedFeed />;
 };
 
+const FollowingFeed = () => {
+  const queryState = useFeed("/following");
+
+  return <FeedList {...queryState} data={queryState.data} />;
+};
+
+const AlgorithmicFeed = () => {
+  const queryState = useFeed("");
+
+  return <FeedList {...queryState} data={queryState.data} />;
+};
+
 const CuratedFeed = () => {
-  //   const { data, fetchMore } = useFeed("/curated");
-  const { data, fetchMore } = useFeed("");
+  const queryState = useFeed("/curated");
+
+  return <FeedList {...queryState} data={queryState.data} />;
+};
+
+const FeedList = ({ data, fetchMore }: { data: NFT[]; fetchMore: any }) => {
   const { width: screenWidth } = useWindowDimensions();
 
   let dataProvider = useMemo(
@@ -131,17 +179,25 @@ const CuratedFeed = () => {
   );
 
   return (
-    <View tw="flex-row">
-      <View tw="bg-white dark:bg-black p-4">
-        <Text>Suggested</Text>
+    <VideoConfigContext.Provider value={videoConfig}>
+      <View
+        tw="flex-row"
+        //@ts-ignore
+        style={{ overflowX: Platform.OS === "web" ? "hidden" : undefined }}
+      >
+        <View tw="bg-white dark:bg-black p-4 shadow-xl md:mx-10 flex-1">
+          <Text>Suggested</Text>
+        </View>
+        <View tw="flex-2">
+          <RecyclerListView
+            dataProvider={dataProvider}
+            layoutProvider={_layoutProvider}
+            useWindowScroll
+            rowRenderer={_rowRenderer}
+            onEndReached={fetchMore}
+          />
+        </View>
       </View>
-      <RecyclerListView
-        dataProvider={dataProvider}
-        layoutProvider={_layoutProvider}
-        useWindowScroll
-        rowRenderer={_rowRenderer}
-        onEndReached={fetchMore}
-      />
-    </View>
+    </VideoConfigContext.Provider>
   );
 };
