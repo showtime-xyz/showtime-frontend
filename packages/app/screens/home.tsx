@@ -14,7 +14,7 @@ const HomeScreen = withColorScheme(() => {
 
   const { width } = useWindowDimensions();
   return (
-    <ErrorBoundary>{width <= 768 ? <Feed /> : <FeedDesktop />}</ErrorBoundary>
+    <ErrorBoundary>{width < 768 ? <Feed /> : <FeedDesktop />}</ErrorBoundary>
   );
 });
 
