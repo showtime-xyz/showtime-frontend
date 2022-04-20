@@ -1,6 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { Collection } from "app/components/feed/collection";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Like } from "app/components/feed/like";
@@ -99,6 +100,18 @@ export const NFTCard = ({ nft }: { nft: NFT }) => {
 };
 
 export const Feed = () => {
+  return (
+    <View tw="flex-1" testID="homeFeed">
+      <ErrorBoundary>
+        <Suspense fallback={<View />}>
+          <FeedList />
+        </Suspense>
+      </ErrorBoundary>
+    </View>
+  );
+};
+
+export const FeedList = () => {
   const { isAuthenticated } = useUser();
 
   if (isAuthenticated) {
@@ -126,22 +139,28 @@ export const Feed = () => {
 const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
-  return <FeedList {...queryState} data={queryState.data} />;
+  return <NFTScrollList {...queryState} data={queryState.data} />;
 };
 
 const AlgorithmicFeed = () => {
   const queryState = useFeed("");
 
-  return <FeedList {...queryState} data={queryState.data} />;
+  return <NFTScrollList {...queryState} data={queryState.data} />;
 };
 
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <FeedList {...queryState} data={queryState.data} />;
+  return <NFTScrollList {...queryState} data={queryState.data} />;
 };
 
-const FeedList = ({ data, fetchMore }: { data: NFT[]; fetchMore: any }) => {
+const NFTScrollList = ({
+  data,
+  fetchMore,
+}: {
+  data: NFT[];
+  fetchMore: any;
+}) => {
   const { width: screenWidth } = useWindowDimensions();
 
   let dataProvider = useMemo(

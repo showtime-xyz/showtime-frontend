@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -14,11 +14,7 @@ const HomeScreen = withColorScheme(() => {
 
   const { width } = useWindowDimensions();
   return (
-    <ErrorBoundary>
-      <Suspense fallback={null}>
-        {width < 768 ? <Feed /> : <FeedDesktop />}
-      </Suspense>
-    </ErrorBoundary>
+    <ErrorBoundary>{width < 768 ? <Feed /> : <FeedDesktop />}</ErrorBoundary>
   );
 });
 
