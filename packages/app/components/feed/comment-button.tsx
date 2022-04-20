@@ -26,7 +26,10 @@ export function CommentButton({ nft }: CommentButtonProps) {
           query: { ...router.query, commentsModal: true, id: nft?.nft_id },
         },
       }),
-      as,
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
       { shallow: true }
     );
   }, [router, nft?.nft_id]);
