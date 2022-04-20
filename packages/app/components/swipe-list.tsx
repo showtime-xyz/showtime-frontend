@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useRef, memo, useEffect } from "react";
+import { useCallback, useMemo, useRef, memo } from "react";
 import {
   Dimensions,
   FlatList,
   Pressable,
   RefreshControl,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 
 import { BlurView } from "expo-blur";
@@ -15,7 +16,6 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { CommentButton } from "app/components/feed/comment-button";
-import { Creator } from "app/components/feed/creator";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -30,9 +30,17 @@ import { useSafeAreaFrame } from "app/lib/safe-area";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { Collection } from "design-system/card/rows/collection";
+import { Description } from "design-system/card/rows/description";
+import { Creator } from "design-system/card/rows/elements/creator";
+import { Owner } from "design-system/card/rows/owner";
+import { Title } from "design-system/card/rows/title";
+import { Social } from "design-system/card/social";
+import { Divider } from "design-system/divider";
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
+import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -49,7 +57,6 @@ type Props = {
   isRefreshing: boolean;
   refresh: () => void;
   initialScrollIndex?: number;
-  isLoadingMore: boolean;
   bottomPadding?: number;
 };
 
@@ -59,7 +66,6 @@ export const SwipeList = ({
   isRefreshing,
   refresh,
   initialScrollIndex = 0,
-  isLoadingMore,
   bottomPadding = 0,
 }: Props) => {
   const listRef = useRef<FlatList>(null);
@@ -67,9 +73,12 @@ export const SwipeList = ({
   useScrollToTop(listRef);
   const navigation = useNavigation();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
   const itemHeight =
-    Platform.OS === "android"
+    Platform.OS === "web"
+      ? windowHeight - headerHeight - bottomPadding
+      : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
 
@@ -133,9 +142,9 @@ export const SwipeList = ({
     (_type: any, item: any) => {
       return (
         <FeedItem
+          nft={item}
           itemHeight={itemHeight}
           bottomPadding={bottomPadding}
-          nft={item}
           detailStyle={detailStyle}
           toggleHeader={toggleHeader}
           hideHeader={hideHeader}
@@ -143,7 +152,15 @@ export const SwipeList = ({
         />
       );
     },
-    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
+    [
+      itemHeight,
+      bottomPadding,
+      hideHeader,
+      showHeader,
+      toggleHeader,
+      opacity,
+      // windowWidth,
+    ]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -215,6 +232,8 @@ export const FeedItem = memo(
     bottomPadding: number;
     itemHeight: number;
   }) => {
+    const { width: windowWidth } = useWindowDimensions();
+
     const feedItemStyle = {
       height: itemHeight,
       width: screenWidth,
@@ -235,6 +254,32 @@ export const FeedItem = memo(
 
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
+
+    if (windowWidth >= 768) {
+      return (
+        <View tw="w-full h-full flex-row">
+          <View tw="flex-3 bg-gray-100 dark:bg-black justify-center items-center">
+            <Media
+              item={nft}
+              numColumns={1}
+              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+              resizeMode="contain"
+            />
+          </View>
+          <View tw="flex-1 bg-white dark:bg-black shadow-md">
+            <Collection nft={nft} />
+            <Divider tw="my-2" />
+            <Social nft={nft} />
+            <LikedBy nft={nft} />
+            <Title nft={nft} />
+            <Description nft={nft} />
+            <Creator nft={nft} />
+            <Owner nft={nft} price={Platform.OS !== "ios"} />
+            {/* Comments */}
+          </View>
+        </View>
+      );
+    }
 
     return (
       <LikeContextProvider nft={nft}>
@@ -304,42 +349,44 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
   const shareNFT = useShareNFT();
 
   return (
-    <View tw="px-4">
+    <View>
       <View tw="h-4" />
 
-      <Creator nft={nft} />
-
-      <View tw="h-4" />
-
-      <Text
-        variant="text-2xl"
-        tw="dark:text-white"
-        numberOfLines={3}
-        sx={{ fontSize: 17, lineHeight: 22 }}
-      >
-        {nft.token_name}
-      </Text>
+      <Creator nft={nft} shouldShowCreatorIndicator={false} />
 
       <View tw="h-4" />
 
-      <View tw="flex-row justify-between">
-        <View tw="flex-row">
-          <Like nft={nft} />
-          <View tw="w-6" />
-          <CommentButton nft={nft} />
-        </View>
+      <View tw="px-4">
+        <Text
+          variant="text-2xl"
+          tw="dark:text-white"
+          numberOfLines={3}
+          sx={{ fontSize: 17, lineHeight: 22 }}
+        >
+          {nft.token_name}
+        </Text>
 
-        <View tw="flex-row">
-          <Pressable onPress={() => shareNFT(nft)}>
-            <Share
-              height={22}
-              width={22}
-              // @ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-          </Pressable>
-          <View tw="w-8" />
-          <NFTDropdown nftId={nft?.nft_id} />
+        <View tw="h-4" />
+
+        <View tw="flex-row justify-between">
+          <View tw="flex-row">
+            <Like nft={nft} />
+            <View tw="w-6" />
+            <CommentButton nft={nft} />
+          </View>
+
+          <View tw="flex-row">
+            <Pressable onPress={() => shareNFT(nft)}>
+              <Share
+                height={22}
+                width={22}
+                // @ts-ignore
+                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+              />
+            </Pressable>
+            <View tw="w-8" />
+            <NFTDropdown nftId={nft?.nft_id} />
+          </View>
         </View>
       </View>
 

@@ -18,7 +18,7 @@ const links = [
 
   {
     link: "/assets/Showtime-Assets.zip",
-    title: "FeedbBrand Assetsack",
+    title: "Brand Assets",
   },
 ];
 const social = [

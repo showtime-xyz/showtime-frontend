@@ -53,7 +53,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
     >
       <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
         {/* {variant === "activity" && <Activity activity={act} />} */}
-        <Creator nft={nft} />
+        <Creator nft={nft} shouldShowDateCreated={false} />
 
         <View tw="py-2">
           <Pressable onPress={onPress}>
@@ -73,7 +73,6 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
         <View tw="h-[1px] mx-4 bg-gray-100 dark:bg-gray-900" />
         <Collection nft={nft} />
       </View>
-      {/* <View tw="bg-gray-200 dark:bg-gray-800 h-4 lg:hidden" /> */}
     </View>
   );
 }
