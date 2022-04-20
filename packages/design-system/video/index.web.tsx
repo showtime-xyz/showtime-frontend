@@ -19,7 +19,7 @@ function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
   const videoConfig = useVideoConfig();
 
   const videoRef = useRef<ExpoVideo>();
-  useItemVisible({ videoRef });
+  // useItemVisible({ videoRef });
 
   return (
     <View>
@@ -49,6 +49,7 @@ function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
             posterSource={props.posterSource}
             source={props.source}
             ref={videoRef}
+            shouldPlay
             isMuted={videoConfig?.isMuted}
             {...props}
           />
