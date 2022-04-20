@@ -8,7 +8,7 @@ import ShowtimeWordmark from "design-system/icon/ShowtimeWordmark";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
-const Footer = () => {
+export const WebFooter = () => {
   const {} = useWindowDimensions();
   const { social, links } = useFooter();
   return (
@@ -75,5 +75,3 @@ const Footer = () => {
     </View>
   );
 };
-
-export { Footer };
