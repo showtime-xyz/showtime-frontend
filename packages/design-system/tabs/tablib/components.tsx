@@ -47,7 +47,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           height: "100%",
           paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
         },
-        animatedStyle,
+        Platform.OS === "web" ? { opacity: 1 } : animatedStyle,
       ]}
     >
       <RNText
