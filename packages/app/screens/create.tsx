@@ -90,4 +90,8 @@ const CreateModal = () => {
   );
 };
 
-export const CreateScreen = withModalScreen(CreateModal, "/create", "create");
+export const CreateScreen = withModalScreen(
+  CreateModal,
+  "/create",
+  "createModal"
+);

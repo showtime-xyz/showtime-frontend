@@ -51,5 +51,5 @@ const TransferModal = () => {
 export const TransferScreen = withModalScreen(
   TransferModal,
   "/nft/[id]/transfer",
-  "transfer"
+  "transferModal"
 );

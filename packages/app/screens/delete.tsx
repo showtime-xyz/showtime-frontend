@@ -45,5 +45,5 @@ const DeleteModal = () => {
 export const DeleteScreen = withModalScreen(
   DeleteModal,
   "/nft/[id]/delete",
-  "delete"
+  "deleteModal"
 );

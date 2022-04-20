@@ -20,5 +20,5 @@ const UnlistModal = withColorScheme(() => {
 export const UnlistScreen = withModalScreen(
   UnlistModal,
   "/nft/[id]/unlist",
-  "unlist"
+  "unlistModal"
 );

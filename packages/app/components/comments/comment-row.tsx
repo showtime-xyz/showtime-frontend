@@ -72,10 +72,13 @@ function CommentRowComponent({
             native: "/login",
             web: {
               pathname: router.pathname,
-              query: { ...router.query, login: true },
+              query: { ...router.query, loginModal: true },
             },
           }),
-          "/login",
+          Platform.select({
+            native: "/login",
+            web: router.asPath,
+          }),
           { shallow: true }
         );
         return;
@@ -113,10 +116,13 @@ function CommentRowComponent({
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
-        "/login",
+        Platform.select({
+          native: "/login",
+          web: router.asPath,
+        }),
         { shallow: true }
       );
       return;

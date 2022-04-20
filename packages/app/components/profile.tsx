@@ -26,6 +26,7 @@ import {
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useSnackbarBottom } from "app/hooks/use-snackbar-bottom";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import {
@@ -33,7 +34,7 @@ import {
   BottomTabBarHeightContext,
 } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
+import { DataProvider } from "app/lib/recyclerlistview";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -47,10 +48,10 @@ import {
   Select,
 } from "design-system";
 import { Avatar } from "design-system/avatar";
+import { Card } from "design-system/card";
 import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { ArrowRight } from "design-system/icon";
 import { Image } from "design-system/image";
-import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
 import { useSnackbar } from "design-system/snackbar";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
@@ -263,7 +264,6 @@ const TabList = ({
 }) => {
   const router = useRouter();
   const { state: mintingState } = useContext(MintContext);
-  const { width: windowWidth } = useWindowDimensions();
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -387,28 +387,7 @@ const TabList = ({
     isBlocked,
   ]);
 
-  const _layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        (index) => {
-          if (index === 0) {
-            return "header";
-          }
-
-          return "item";
-        },
-        (_type, dim) => {
-          if (_type === "item") {
-            dim.width = ITEM_SIZE;
-            dim.height = ITEM_SIZE;
-          } else if (_type === "header") {
-            dim.width = windowWidth;
-            dim.height = LIST_HEADER_HEIGHT;
-          }
-        }
-      ),
-    [windowWidth]
-  );
+  const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
 
   const dataProvider = useMemo(
     () =>
@@ -428,14 +407,16 @@ const TabList = ({
 
       // currently minting nft
       if (item.loading) {
-        return <Media item={item} numColumns={3} />;
+        return <Card nft={item} numColumns={3} />;
       }
 
       return (
         // index - 1 because header takes the initial index!
-        <Pressable onPress={() => onItemPress(index - 1)}>
-          <Media item={item} numColumns={3} />
-        </Pressable>
+        <Card
+          nft={item}
+          numColumns={3}
+          onPress={() => onItemPress(index - 1)}
+        />
       );
     },
     [ListHeaderComponent, onItemPress]

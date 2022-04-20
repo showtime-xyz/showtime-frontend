@@ -86,11 +86,11 @@ function Button({
       />
       <Text
         variant="text-13"
-        tw="ml-1 font-bold"
+        tw={["font-bold", count > 0 ? "ml-1" : ""]}
         // @ts-ignore
         sx={textStyle}
       >
-        {count > 0 ? formatNumber(count) : formatString(variant)}
+        {count > 0 ? formatNumber(count) : ""}
       </Text>
     </Pressable>
   );
@@ -105,11 +105,6 @@ function formatNumber(number: number) {
   } else {
     return number;
   }
-}
-
-// Capitalize first letter of string
-function formatString(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 // Get background hover color

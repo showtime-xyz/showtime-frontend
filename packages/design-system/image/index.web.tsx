@@ -85,6 +85,7 @@ function Img({
             : null
         }
         layout={!hasHeightOrWidth ? "fill" : undefined}
+        unoptimized // We already optimize the images with our CDN
         {...props}
       />
     );

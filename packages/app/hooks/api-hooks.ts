@@ -285,7 +285,7 @@ export const useMyInfo = () => {
             native: "/login",
             web: {
               pathname: router.pathname,
-              query: { ...router.query, login: true },
+              query: { ...router.query, loginModal: true },
             },
           }),
           Platform.select({
@@ -376,10 +376,13 @@ export const useMyInfo = () => {
             native: "/login",
             web: {
               pathname: router.pathname,
-              query: { ...router.query, login: true },
+              query: { ...router.query, loginModal: true },
             },
           }),
-          "/login",
+          Platform.select({
+            native: "/login",
+            web: router.asPath,
+          }),
           { shallow: true }
         );
         // TODO: perform the action post login

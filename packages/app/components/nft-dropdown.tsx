@@ -80,7 +80,7 @@ function NFTDropdown({ nftId }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         "/login",
@@ -97,7 +97,7 @@ function NFTDropdown({ nftId }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         "/login",
@@ -115,13 +115,13 @@ function NFTDropdown({ nftId }: Props) {
   }, [nft, userAddress]);
   //#endregion
 
-  const handleNavigateRoute = (as: string, matchingRoute: string) => {
+  const handleNavigateRoute = (as: string, matchingQueryParam: string) => {
     router.push(
       Platform.select({
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, id: nftId, [matchingRoute]: true },
+          query: { ...router.query, id: nftId, [matchingQueryParam]: true },
         },
       }),
       as,
@@ -145,7 +145,7 @@ function NFTDropdown({ nftId }: Props) {
       >
         <DropdownMenuItem
           onSelect={() => {
-            handleNavigateRoute(`/nft/${nftId}/details`, "details");
+            handleNavigateRoute(`/nft/${nftId}/details`, "detailsModal");
           }}
           key="details"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -157,7 +157,7 @@ function NFTDropdown({ nftId }: Props) {
 
         <DropdownMenuItem
           onSelect={() => {
-            handleNavigateRoute(`/nft/${nftId}/activities`, "activities");
+            handleNavigateRoute(`/nft/${nftId}/activities`, "activitiesModal");
           }}
           key="activities"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -203,10 +203,13 @@ function NFTDropdown({ nftId }: Props) {
                     native: "/login",
                     web: {
                       pathname: router.pathname,
-                      query: { ...router.query, login: true },
+                      query: { ...router.query, loginModal: true },
                     },
                   }),
-                  "/login",
+                  Platform.select({
+                    native: "/login",
+                    web: router.asPath,
+                  }),
                   { shallow: true }
                 );
               }
@@ -271,7 +274,7 @@ function NFTDropdown({ nftId }: Props) {
                   native: as,
                   web: {
                     pathname: router.pathname,
-                    query: { ...router.query, transfer: true, id: nftId },
+                    query: { ...router.query, transferModal: true, id: nftId },
                   },
                 }),
                 as,
@@ -297,7 +300,7 @@ function NFTDropdown({ nftId }: Props) {
                   native: as,
                   web: {
                     pathname: router.pathname,
-                    query: { ...router.query, list: true, id: nftId },
+                    query: { ...router.query, listModal: true, id: nftId },
                   },
                 }),
                 as,
@@ -323,7 +326,7 @@ function NFTDropdown({ nftId }: Props) {
                   native: as,
                   web: {
                     pathname: router.pathname,
-                    query: { ...router.query, unlist: true, id: nftId },
+                    query: { ...router.query, unlistModal: true, id: nftId },
                   },
                 }),
                 as,
@@ -350,7 +353,7 @@ function NFTDropdown({ nftId }: Props) {
                   native: as,
                   web: {
                     pathname: router.pathname,
-                    query: { ...router.query, delete: true, id: nftId },
+                    query: { ...router.query, deleteModal: true, id: nftId },
                   },
                 }),
                 as,
