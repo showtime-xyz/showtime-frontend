@@ -15,6 +15,8 @@ import { useBlurredBackgroundColor } from "design-system/hooks";
 import { useIsDarkMode } from "design-system/hooks";
 import { View } from "design-system/view";
 
+import { WebFooter } from "./links-footer.web";
+
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -24,9 +26,9 @@ const Footer = () => {
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
   const { isTabBarHidden } = useNavigationElements();
 
+  // Todo: on small screens, only 'marketing' page display this.
   if (width >= 768) {
-    // TODO: "web" desktop footer
-    return null;
+    return <WebFooter />;
   }
 
   if (!isAuthenticated || isTabBarHidden) {
