@@ -1,13 +1,12 @@
 import { useWindowDimensions } from "react-native";
 
+import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
 
 import { Text } from "design-system";
 import ShowtimeWordmark from "design-system/icon/ShowtimeWordmark";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
-
-import { useFooter } from "../hooks/use-footer";
 
 const Footer = () => {
   const {} = useWindowDimensions();
