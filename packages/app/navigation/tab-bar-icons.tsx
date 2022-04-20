@@ -146,14 +146,10 @@ export const NotificationsTabBarIcon = ({
 
 const UnreadNotificationIndicator = () => {
   const { hasUnreadNotification } = useNotifications();
-  const isWeb = Platform.OS === "web";
 
-  return hasUnreadNotification ? (
-    <View
-      tw="w-2 h-2 absolute rounded-full top-2 right-2"
-      style={tw.style(isWeb ? "bg-violet-500" : "bg-amber-500")}
-    />
-  ) : null;
+  return (
+    <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
+  );
 };
 
 export const ProfileTabBarIcon = () => {
