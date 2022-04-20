@@ -11,6 +11,7 @@ import { Owner } from "design-system/card/rows/owner";
 import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
 import { Media } from "design-system/media";
+import { Pressable } from "design-system/pressable-scale";
 import { View } from "design-system/view";
 
 type Props = {
@@ -20,11 +21,15 @@ type Props = {
   variant: "nft" | "activity" | "market";
 };
 
-function Card({ nft, numColumns, tw }: Props) {
+function Card({ nft, numColumns, tw, onPress }: Props) {
   const { width } = useWindowDimensions();
 
   if (width < 768) {
-    return <Media item={nft} numColumns={numColumns} />;
+    return (
+      <Pressable onPress={onPress}>
+        <Media item={nft} numColumns={numColumns} />
+      </Pressable>
+    );
   }
 
   const size = tw
@@ -42,6 +47,7 @@ function Card({ nft, numColumns, tw }: Props) {
         // numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
         nft?.loading ? "opacity-50" : "opacity-100",
         "shadow-md rounded-2xl overflow-hidden",
+        "self-center justify-self-center",
       ]}
     >
       <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
@@ -49,11 +55,15 @@ function Card({ nft, numColumns, tw }: Props) {
         <Creator nft={nft} />
 
         <View tw="py-2">
-          <Media item={nft} numColumns={numColumns} />
+          <Pressable onPress={onPress}>
+            <Media item={nft} numColumns={numColumns} />
+          </Pressable>
           {/* <Grid nfts={nfts ?? []} /> */}
         </View>
 
-        <Title nft={nft} />
+        <Pressable onPress={onPress}>
+          <Title nft={nft} />
+        </Pressable>
 
         <Social nft={nft} />
 

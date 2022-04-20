@@ -17,12 +17,12 @@ export function Creator({ nft }: Props) {
   return (
     <Link
       href={`/@${nft.creator_username ?? nft.creator_address}`}
-      tw="flex flex-row"
+      tw="flex flex-row px-4 py-2"
     >
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">
         <Text
-          sx={{ fontSize: 12, lineHeight: 12 }}
+          variant="text-xs"
           tw={`${
             nft.creator_username ? "mb-1" : ""
           } text-gray-600 dark:text-gray-400 font-semibold`}
@@ -32,7 +32,7 @@ export function Creator({ nft }: Props) {
         {nft.creator_username && (
           <View tw="h-[12px] flex flex-row items-center">
             <Text
-              sx={{ fontSize: 13, lineHeight: 15 }}
+              variant="text-13"
               tw="text-gray-900 dark:text-white font-semibold"
             >
               @{nft.creator_username}

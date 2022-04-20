@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -299,7 +300,6 @@ const NFTSList = ({
   const newData = useMemo(() => ["header", ...data], [data]);
 
   const numColumns = 3;
-  const { width } = useWindowDimensions();
 
   const ListHeaderComponent = useCallback(
     () => (
@@ -320,28 +320,7 @@ const NFTSList = ({
     [newData]
   );
 
-  const _layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        (index) => {
-          if (newData[index] === "header") {
-            return "header";
-          }
-
-          return "item";
-        },
-        (_type, dim) => {
-          if (_type === "item") {
-            dim.width = width / numColumns;
-            dim.height = width / numColumns;
-          } else if (_type === "header") {
-            dim.width = width;
-            dim.height = LIST_HEADER_HEIGHT;
-          }
-        }
-      ),
-    [width, numColumns, newData]
-  );
+  const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
 
   const _rowRenderer = useCallback(
     (_type: any, item: any, index) => {
@@ -350,7 +329,9 @@ const NFTSList = ({
       }
 
       return (
-        <Pressable
+        <Card
+          nft={item}
+          numColumns={numColumns}
           onPress={() =>
             // TODO:
             router.push(
@@ -360,9 +341,7 @@ const NFTSList = ({
               }&days=${days}&type=trendingNFTs`
             )
           }
-        >
-          <Card nft={item} numColumns={numColumns} />
-        </Pressable>
+        />
       );
     },
     [ListHeaderComponent, router, days]
