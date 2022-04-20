@@ -214,6 +214,7 @@ const NFTScrollList = ({
             useWindowScroll
             rowRenderer={_rowRenderer}
             onEndReached={fetchMore}
+            onEndReachedThreshold={CARD_HEIGHT}
           />
         </View>
       </View>
