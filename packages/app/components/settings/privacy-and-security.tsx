@@ -1,26 +1,11 @@
-import { useCallback } from "react";
-import { FlatList, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Pressable } from "design-system";
+import { View, Text, Pressable, ScrollView } from "design-system";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
-
-import { SettingSubTitle } from "./settings-subtitle";
-
-export const SettingAccountSlotHeader = () => {
-  return (
-    <View>
-      <SettingSubTitle>
-        <Text tw="text-gray-900 dark:text-white font-bold text-xl">
-          Privacy & Security
-        </Text>
-      </SettingSubTitle>
-    </View>
-  );
-};
 
 export type SettingItemProps = {
   id: number | string;
@@ -37,6 +22,19 @@ const list = [
     route: "blocked-list",
   },
 ];
+
+export const HeaderSection = () => {
+  return (
+    <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
+      <Text
+        variant="text-2xl"
+        tw="text-gray-900 dark:text-white font-extrabold"
+      >
+        Privacy & Security
+      </Text>
+    </View>
+  );
+};
 
 export const AccountSettingItem = (props: SettingItemProps) => {
   const router = useRouter();
@@ -63,22 +61,20 @@ export const AccountSettingItem = (props: SettingItemProps) => {
 export const PrivacyAndSecuritySettings = () => {
   const headerHeight = useHeaderHeight();
 
-  const renderSetting = useCallback(({ item }) => {
-    return <AccountSettingItem {...item} />;
-  }, []);
+  const renderSetting = (item: SettingItemProps) => {
+    return (
+      <AccountSettingItem
+        key={`privacy-and-security-setting-${item.id}`}
+        {...item}
+      />
+    );
+  };
 
   return (
-    <View tw="bg-white dark:bg-black h-[100vh]">
+    <ScrollView>
       {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
-      <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
-        <Text
-          variant="text-2xl"
-          tw="text-gray-900 dark:text-white font-extrabold"
-        >
-          Privacy & Security
-        </Text>
-      </View>
-      <FlatList data={list} renderItem={renderSetting} />
-    </View>
+      <HeaderSection />
+      {list.map(renderSetting)}
+    </ScrollView>
   );
 };

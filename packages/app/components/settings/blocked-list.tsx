@@ -4,21 +4,14 @@ import { FlatList, Platform } from "react-native";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Button, ButtonLabel, Image } from "design-system";
-
-import { SettingSubTitle } from "./settings-subtitle";
-
-export const SettingAccountSlotHeader = () => {
-  return (
-    <View>
-      <SettingSubTitle>
-        <Text tw="text-gray-900 dark:text-white font-bold text-xl">
-          Privacy & Security
-        </Text>
-      </SettingSubTitle>
-    </View>
-  );
-};
+import {
+  View,
+  Text,
+  Button,
+  ButtonLabel,
+  Image,
+  ScrollView,
+} from "design-system";
 
 export type UserItemProps = {
   id: number | string;
@@ -46,6 +39,19 @@ const list = [
       "http://lh3.googleusercontent.com/HoSAPydLhYadm-jdgAE83mou5Fi5qbwbhv9UqcQuaHHfZreVsykcbFNLBuQhawIWLEa883DeBDprMM76oTHTAvPIrACxBHRK05h5Dw",
   },
 ];
+
+const HeaderSection = () => {
+  return (
+    <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
+      <Text
+        variant="text-2xl"
+        tw="text-gray-900 dark:text-white font-extrabold"
+      >
+        Blocked List
+      </Text>
+    </View>
+  );
+};
 
 export const UserItem = (props: UserItemProps) => {
   const router = useRouter();
@@ -77,22 +83,15 @@ export const UserItem = (props: UserItemProps) => {
 export const BlockedList = () => {
   const headerHeight = useHeaderHeight();
 
-  const renderUserItem = useCallback(({ item }) => {
+  const renderUserItem = (item: UserItemProps) => {
     return <UserItem {...item} />;
-  }, []);
+  };
 
   return (
-    <View tw="bg-white dark:bg-black h-[100vh]">
+    <ScrollView>
       {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
-      <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
-        <Text
-          variant="text-2xl"
-          tw="text-gray-900 dark:text-white font-extrabold"
-        >
-          Blocked List
-        </Text>
-      </View>
-      <FlatList data={list} renderItem={renderUserItem} />
-    </View>
+      <HeaderSection />
+      {list.map(renderUserItem)}
+    </ScrollView>
   );
 };
