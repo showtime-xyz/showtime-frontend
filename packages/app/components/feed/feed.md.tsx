@@ -14,7 +14,7 @@ import { Card } from "design-system/card";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
-const CARD_HEIGHT = 750;
+const CARD_HEIGHT = 790;
 
 export const Feed = () => {
   return (
@@ -42,7 +42,7 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      <View tw="flex-1">
+      <View tw="flex-1 absolute">
         <SuggestedUsers />
       </View>
       <View tw="flex-2">
@@ -126,7 +126,13 @@ const NFTScrollList = ({
   );
 
   const _rowRenderer = useCallback((_type: any, item: any) => {
-    return <Card nft={item} tw={`w-60% mb-4`} />;
+    return (
+      <View tw="w-full flex-row" nativeID="334343">
+        <View tw="flex-2" />
+        <Card nft={item} tw={`w-35% mb-4 ml-auto`} />
+        <View tw="flex-1" />
+      </View>
+    );
   }, []);
 
   const videoConfig = useMemo(
@@ -149,7 +155,6 @@ const NFTScrollList = ({
           layoutProvider={_layoutProvider}
           useWindowScroll
           rowRenderer={_rowRenderer}
-          forceNonDeterministicRendering
           onEndReached={fetchMore}
           onEndReachedThreshold={300}
         />
