@@ -14,7 +14,8 @@ import { Card } from "design-system/card";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
-const CARD_HEIGHT = 790;
+const CARD_HEIGHT = 740;
+const CARD_WIDTH = 490;
 
 export const Feed = () => {
   return (
@@ -129,7 +130,10 @@ const NFTScrollList = ({
     return (
       <View tw="w-full flex-row" nativeID="334343">
         <View tw="flex-2" />
-        <Card nft={item} tw={`w-35% mb-4 ml-auto`} />
+        <Card
+          nft={item}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT}px] mb-4 ml-auto`}
+        />
         <View tw="flex-1" />
       </View>
     );
