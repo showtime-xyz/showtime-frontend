@@ -147,9 +147,9 @@ export const NotificationsTabBarIcon = ({
 const UnreadNotificationIndicator = () => {
   const { hasUnreadNotification } = useNotifications();
 
-  return (
+  return hasUnreadNotification ? (
     <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
-  );
+  ) : null;
 };
 
 export const ProfileTabBarIcon = () => {
