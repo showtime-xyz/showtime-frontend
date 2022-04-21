@@ -119,9 +119,13 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   );
 };
 
-const HeaderCenter = ({ isWideScreen }: { isWideScreen: boolean }) => {
-  const isDark = useIsDarkMode();
-
+const HeaderCenter = ({
+  isDark,
+  isWideScreen,
+}: {
+  isDark: boolean;
+  isWideScreen: boolean;
+}) => {
   return (
     <View tw="flex flex-row">
       <ShowtimeTabBarIcon color={isDark ? "black" : "white"} customTw="mr-4" />
@@ -151,6 +155,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const isDark = useIsDarkMode();
   const isWideScreen = width >= 768;
 
   if (isWideScreen) {
@@ -164,7 +169,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="items-start">
           <Link href="/">
-            <HeaderCenter isWideScreen />
+            <HeaderCenter {...{ isDark, isWideScreen }} />
           </Link>
         </View>
         <View tw="items-end">
