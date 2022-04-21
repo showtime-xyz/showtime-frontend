@@ -130,18 +130,10 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 };
 
 const HeaderCenter = () => {
-  // TODO: why is this crashing the native header?
-  // const router = useRouter();
-
   return (
     <Pressable
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="w-12 h-12 rounded-full items-center justify-center"
-      onPress={() => {
-        if (Platform.OS === "web") {
-          // router.push("/");
-        }
-      }}
       // animate={useCallback(({ hovered }) => {
       // 	'worklet'
 

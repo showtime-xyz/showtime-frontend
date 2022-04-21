@@ -2,10 +2,6 @@ import removeMd from "remove-markdown";
 
 import { CONTRACTS } from "./constants";
 
-export const classNames = (...classes) => {
-  return classes.filter(Boolean).join(" ");
-};
-
 export const removeTags = (str) => {
   if (str === null || str === "") return false;
   else str = str.toString();
@@ -92,7 +88,6 @@ export const getBidLink = (item) => {
       } else {
         return `https://kalamint.io/token/${item.token_id}`;
       }
-
     case CONTRACTS.HICETNUNC:
       return `https://www.hicetnunc.xyz/objkt/${item.token_id}`;
     default:

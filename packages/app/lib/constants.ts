@@ -1,14 +1,3 @@
-import {
-  faComment,
-  faHeart,
-  faUser,
-  faStore,
-  faShoppingCart,
-  faArrowLeft,
-  faArrowRight,
-  faFingerprint,
-} from "@fortawesome/free-solid-svg-icons";
-
 export const colors = {
   green: "#6bd464",
   red: "#ff5151",
@@ -18,6 +7,7 @@ export const colors = {
   pink: "#e45cff",
   teal: "#1dd4e0",
 };
+
 export const CONTRACTS = {
   ZORA: "0xabefbc9fd2f806065b4f3c237d4b59d9a97bcac7",
   RARIBLE_V2: "0x60f80121c31a0d46b5279700f9df786054aa5ee5",
@@ -131,17 +121,6 @@ export const ACTIVITY_TYPES = {
   FOLLOW: "follow",
   SEND: "send",
   RECEIVE: "receive",
-};
-
-export const activityIconObjects = {
-  [ACTIVITY_TYPES.COMMENT]: { icon: faComment, color: colors.blue },
-  [ACTIVITY_TYPES.LIKE]: { icon: faHeart, color: colors.red },
-  [ACTIVITY_TYPES.FOLLOW]: { icon: faUser, color: colors.green },
-  [ACTIVITY_TYPES.SEND]: { icon: faArrowRight, color: colors.teal },
-  [ACTIVITY_TYPES.RECEIVE]: { icon: faArrowLeft, color: colors.teal },
-  [ACTIVITY_TYPES.SELL]: { icon: faStore, color: colors.teal },
-  [ACTIVITY_TYPES.BUY]: { icon: faShoppingCart, color: colors.teal },
-  [ACTIVITY_TYPES.CREATE]: { icon: faFingerprint, color: colors.purple },
 };
 
 export const PROFILE_TABS = [null, "created", "owned", "liked"]; // first  item blank due to tabs being 1-indexed
