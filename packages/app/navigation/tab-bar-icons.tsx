@@ -135,22 +135,22 @@ export const NotificationsTabBarIcon = ({
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      <ErrorBoundary>
+      {/* <ErrorBoundary>
         <Suspense fallback={null}>
           <UnreadNotificationIndicator />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
     </TabBarIcon>
   );
 };
 
-const UnreadNotificationIndicator = () => {
-  const { hasUnreadNotification } = useNotifications();
+// const UnreadNotificationIndicator = () => {
+//   const { hasUnreadNotification } = useNotifications();
 
-  return hasUnreadNotification ? (
-    <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
-  ) : null;
-};
+//   return hasUnreadNotification ? (
+//     <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
+//   ) : null;
+// };
 
 export const ProfileTabBarIcon = () => {
   const { user } = useUser();

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "STAGE=development NODE_OPTIONS='--inspect' next dev",
+    "build": "STAGE=production next build",
     "build:turbo": "cd ../.. && yarn build",
     "build:analyze": "ANALYZE=true yarn build",
     "start": "next start",
