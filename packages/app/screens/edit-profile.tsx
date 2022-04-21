@@ -10,7 +10,7 @@ export const EditProfileScreen = () => {
 
   return (
     <>
-      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+      {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       <EditProfile />
     </>
   );

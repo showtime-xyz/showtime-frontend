@@ -1,5 +1,4 @@
-// TODO: Approx header height on web!
-const HEADER_HEIGHT = 100;
+const HEADER_HEIGHT = 64;
 
 const useHeaderHeight = () => {
   return HEADER_HEIGHT;
