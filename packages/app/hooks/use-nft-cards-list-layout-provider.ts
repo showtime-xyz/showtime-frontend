@@ -13,7 +13,7 @@ const useNFTCardDimensions = () => {
   }
 
   return {
-    height: 600,
+    height: 604,
     width: width / 3,
   };
 };

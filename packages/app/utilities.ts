@@ -315,3 +315,8 @@ export const getMediaUrl = ({
     stillPreview ? "&still_preview=true" : ""
   }`;
 };
+
+export const CARD_DARK_SHADOW =
+  Platform.OS === "web"
+    ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
+    : undefined;
