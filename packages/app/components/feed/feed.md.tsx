@@ -14,6 +14,7 @@ import type { NFT } from "app/types";
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
 import { useIsDarkMode } from "design-system/hooks";
+import { Show } from "design-system/show";
 import { tw } from "design-system/tailwind";
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
@@ -39,7 +40,7 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      {width > breakpoints["xl"] ? (
+      <Show from="xl">
         <View
           style={{
             position: Platform.OS === "web" ? "fixed" : null,
@@ -50,7 +51,7 @@ export const FeedList = () => {
         >
           <SuggestedUsers />
         </View>
-      ) : null}
+      </Show>
 
       <View tw="flex-2">
         {isAuthenticated ? (
