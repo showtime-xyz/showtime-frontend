@@ -169,7 +169,6 @@ const NFTScrollList = ({
         //@ts-ignore
         style={{
           overflowX: Platform.OS === "web" ? "hidden" : undefined,
-          // backgroundColor: "pink",
         }}
       >
         <RecyclerListView
@@ -202,11 +201,7 @@ const SuggestedUsers = () => {
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
-        <Text
-          tw="dark:text-white p-4"
-          //@ts-ignore
-          variant="text-lg"
-        >
+        <Text tw="dark:text-white p-4" variant="text-lg">
           Suggested
         </Text>
         {loading ? (
