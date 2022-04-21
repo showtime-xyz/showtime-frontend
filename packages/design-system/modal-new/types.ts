@@ -4,18 +4,38 @@ import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
 import type { TW } from "../tailwind/types";
 
-export interface ModalProps
-  extends Partial<Pick<BottomSheetProps, "snapPoints">> {
+export interface ModalProps {
   /**
    * Defines the modal title.
    * @default ""
    */
   title?: string;
   /**
-   * Defines the modal presentation type.
+   * Defines if the modal is presenting as
+   * a screen.
    * @default false
    */
   isScreen?: boolean;
+  /**
+   * **MOBILE ONLY**: Defines the points for the bottom sheet
+   * to snap to. It accepts array of number, string or mix.
+   * @default ["50%"]
+   */
+  mobile_snapPoints?: BottomSheetProps["snapPoints"];
+
+  /**
+   * **WEB ONLY**: Defines the modal container height.
+   * It could be static value or responsive.
+   * @default "max-h-280px"
+   */
+  web_height?: string;
+
+  /**
+   * Defines the modal container
+   * tailwind style.
+   * @default undefined
+   */
+  tw?: string;
 
   //#region components
   modalContainer?: FC<ModalContainerProps>;
@@ -52,6 +72,14 @@ export interface ModalHeaderProps
 }
 
 export interface ModalContainerProps
-  extends Pick<ModalProps, "isScreen" | "onClose" | "children" | "snapPoints"> {
-  headerComponent?: FC<any>;
-}
+  extends Pick<
+    ModalProps,
+    | "title"
+    | "isScreen"
+    | "onClose"
+    | "children"
+    | "mobile_snapPoints"
+    | "web_height"
+  > {}
+
+export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}

@@ -10,19 +10,23 @@ import {
 import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 
 import { tw as tailwind } from "../tailwind";
+import { ModalHeader } from "./modal.header";
+import { ModalHeaderBar } from "./modal.header-bar";
 import type { ModalContainerProps } from "./types";
 
 function ModalContainerComponent({
-  isScreen,
-  snapPoints,
+  title,
+  mobile_snapPoints,
   onClose,
-  headerComponent,
   children,
 }: ModalContainerProps) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const backgroundStyle = useMemo(
-    () => tailwind.style("bg-white dark:bg-black rounded-t-[32px]"),
+    () =>
+      tailwind.style(
+        "bg-white dark:bg-black rounded-t-[32px] pointer-events-auto"
+      ),
     []
   );
 
@@ -33,7 +37,7 @@ function ModalContainerComponent({
   //#endregion
 
   //#region render
-  const renderBackdrop = useCallback(
+  const renderBackdropComponent = useCallback(
     (props) => (
       <BottomSheetBackdrop
         appearsOnIndex={0}
@@ -44,15 +48,24 @@ function ModalContainerComponent({
     ),
     []
   );
+  const renderHandleComponent = useCallback(
+    (props) => (
+      <>
+        <ModalHeaderBar />
+        <ModalHeader title={title} onClose={onClose} {...props} />
+      </>
+    ),
+    [title, onClose]
+  );
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       index={0}
-      snapPoints={snapPoints!}
+      snapPoints={mobile_snapPoints!}
       backgroundStyle={backgroundStyle}
       onDismiss={onClose}
-      handleComponent={headerComponent}
-      backdropComponent={renderBackdrop}
+      handleComponent={renderHandleComponent}
+      backdropComponent={renderBackdropComponent}
     >
       {children}
     </BottomSheetModal>

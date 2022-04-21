@@ -1,22 +1,14 @@
-import {
-  memo,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { memo, useCallback, useRef } from "react";
 
-import { SNAP_POINTS } from "./constants";
+import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
 import { ModalContainer as BaseModalContainer } from "./modal.container";
-import { ModalHeader } from "./modal.header";
-import { ModalHeaderBar } from "./modal.header-bar";
 import type { ModalProps } from "./types";
 
 function ModalComponent({
   title,
   isScreen = false,
-  snapPoints = SNAP_POINTS,
+  web_height = WEB_HEIGHT,
+  mobile_snapPoints = MOBILE_SNAP_POINTS,
   modalContainer: ModalContainer = BaseModalContainer,
   children,
   onClose,
@@ -34,20 +26,12 @@ function ModalComponent({
   //#endregion
 
   //#region render
-  const renderHeaderComponent = useCallback(
-    (props) => (
-      <>
-        <ModalHeaderBar />
-        <ModalHeader title={title} onClose={handleClose} {...props} />
-      </>
-    ),
-    [title, handleClose]
-  );
   return (
     <ModalContainer
+      title={title}
       isScreen={isScreen}
-      snapPoints={snapPoints}
-      headerComponent={renderHeaderComponent}
+      web_height={web_height}
+      mobile_snapPoints={mobile_snapPoints}
       onClose={handleClose}
     >
       {children}
