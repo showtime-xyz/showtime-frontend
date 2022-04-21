@@ -8,7 +8,6 @@ import {
   ShowtimeTabBarIcon,
   CameraTabBarIcon,
   TrendingTabBarIcon,
-  NotificationsTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
@@ -19,6 +18,7 @@ import { useBlurredBackgroundColor } from "design-system/hooks";
 import { Search, ArrowLeft } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
+import { breakpoints } from "design-system/theme";
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -26,12 +26,13 @@ const HeaderRight = () => {
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
+  const isMdWidth = width >= breakpoints["md"];
 
   return (
     <View>
       {!isLoading && (
         <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
-          {isAuthenticated && width > 768 && (
+          {isAuthenticated && isMdWidth && (
             <>
               <View tw="mx-2">
                 <TrendingTabBarIcon
@@ -49,10 +50,10 @@ const HeaderRight = () => {
           )}
           <View tw="md:mx-2 flex-row items-center">
             {isAuthenticated ? (
-              <HeaderDropdown type={width >= 768 ? "profile" : "settings"} />
+              <HeaderDropdown type={isMdWidth ? "profile" : "settings"} />
             ) : (
               <>
-                {width >= 768 && (
+                {isMdWidth && (
                   <View tw="mx-3">
                     <TrendingTabBarIcon
                       color={isDark ? "white" : "black"}
@@ -78,7 +79,7 @@ const HeaderRight = () => {
                     );
                   }}
                   variant="primary"
-                  size={width >= 768 ? "regular" : "small"}
+                  size={isMdWidth ? "regular" : "small"}
                   labelTW="font-semibold"
                 >
                   Sign&nbsp;In
@@ -120,15 +121,15 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
 const HeaderCenter = ({
   isDark,
-  isWideScreen,
+  isMdWidth,
 }: {
-  isDark: boolean;
-  isWideScreen: boolean;
+  isDark?: boolean;
+  isMdWidth?: boolean;
 }) => {
   return (
     <View tw="flex flex-row">
       <ShowtimeTabBarIcon color={isDark ? "black" : "white"} customTw="mr-4" />
-      {isWideScreen ? (
+      {isMdWidth ? (
         <Input
           placeholder="Search by name or wallet"
           leftElement={
@@ -155,9 +156,9 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const { isHeaderHidden } = useNavigationElements();
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
   const isDark = useIsDarkMode();
-  const isWideScreen = width >= 768;
+  const isMdWidth = width >= breakpoints["md"];
 
-  if (isWideScreen) {
+  if (isMdWidth) {
     return (
       <View
         // @ts-expect-error
@@ -168,7 +169,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="items-start">
           <Link href="/">
-            <HeaderCenter {...{ isDark, isWideScreen }} />
+            <HeaderCenter {...{ isDark, isMdWidth }} />
           </Link>
         </View>
         <View tw="items-end">

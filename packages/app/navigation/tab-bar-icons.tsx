@@ -22,6 +22,7 @@ import {
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { TW } from "design-system/tailwind/types";
+import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
 
 type TabBarIconProps = {
@@ -38,6 +39,7 @@ type TabBarButtonProps = {
 function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
   const isWeb = Platform.OS === "web";
   const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
 
   if (isWeb) {
     return (
@@ -46,7 +48,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
           tw="w-12 h-12 rounded-full items-center justify-center"
           style={tw.style(
             `${
-              isWeb && width >= 768 ? "bg-gray-100 dark:bg-gray-900" : ""
+              isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
             } ${customTw}`
           )}
         >

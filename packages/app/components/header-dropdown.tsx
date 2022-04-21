@@ -20,6 +20,7 @@ import {
 } from "design-system/dropdown-menu";
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
@@ -30,6 +31,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
+  const isMdWidth = width >= breakpoints["md"];
 
   return (
     <DropdownMenuRoot>
@@ -40,7 +42,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             style={tw.style(isWeb ? "bg-gray-100 dark:bg-gray-900" : "")}
           >
             <Avatar url={user?.data?.profile?.img_url} />
-            {isWeb && width >= 768 && user?.data?.profile?.username ? (
+            {isWeb && isMdWidth && user?.data?.profile?.username ? (
               <Text tw="font-semibold ml-2 mr-1">
                 {user.data.profile.username}
               </Text>
