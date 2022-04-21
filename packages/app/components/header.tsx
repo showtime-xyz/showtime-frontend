@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
@@ -19,7 +19,6 @@ import { useBlurredBackgroundColor } from "design-system/hooks";
 import { Search, ArrowLeft } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
 
 const HeaderRight = () => {
   const router = useRouter();

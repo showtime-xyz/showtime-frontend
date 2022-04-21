@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -28,6 +28,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const context = useContext(AppContext);
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
+  const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
 
   return (
@@ -39,8 +40,10 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             style={tw.style(isWeb ? "bg-gray-100 dark:bg-gray-900" : "")}
           >
             <Avatar url={user?.data?.profile?.img_url} />
-            {user?.data?.profile?.username ? (
-              <Text tw="font-semibold ml-2 mr-1">@enesozturk</Text>
+            {isWeb && width >= 768 && user?.data?.profile?.username ? (
+              <Text tw="font-semibold ml-2 mr-1">
+                {user.data.profile.username}
+              </Text>
             ) : null}
           </View>
         ) : (

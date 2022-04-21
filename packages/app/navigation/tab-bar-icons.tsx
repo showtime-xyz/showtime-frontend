@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -37,13 +37,17 @@ type TabBarButtonProps = {
 
 function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
   const isWeb = Platform.OS === "web";
+  const { width } = useWindowDimensions();
+
   if (isWeb) {
     return (
       <Link href={tab}>
         <View
           tw="w-12 h-12 rounded-full items-center justify-center"
           style={tw.style(
-            `${isWeb ? "bg-gray-100 dark:bg-gray-900" : ""} ${customTw}`
+            `${
+              isWeb && width >= 768 ? "bg-gray-100 dark:bg-gray-900" : ""
+            } ${customTw}`
           )}
         >
           {children}
