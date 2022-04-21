@@ -61,14 +61,14 @@ export const FeedList = () => {
             >
               <Tabs.Trigger>
                 <View tw="p-4">
-                  <Text variant="text-lg" tw="dark:text-white text-black">
+                  <Text variant="text-lg" tw="dark:text-gray-400 text-gray-600">
                     Following
                   </Text>
                 </View>
               </Tabs.Trigger>
               <Tabs.Trigger>
                 <View tw="p-4 ml-2">
-                  <Text variant="text-lg" tw="dark:text-white text-black">
+                  <Text variant="text-lg" tw="dark:text-gray-400 text-gray-600">
                     For you
                   </Text>
                 </View>
