@@ -40,6 +40,7 @@ const theme = makeTheme({
     SpaceGrotesk: {
       default: webFont("SpaceGrotesk-Regular"),
       bold: webFont("SpaceGrotesk-Bold"),
+      700: webFont("SpaceGrotesk-Bold"),
     },
   },
   text: {
