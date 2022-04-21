@@ -26,18 +26,20 @@ function Video({ tw, blurhash, style, ...props }: VideoProps) {
       <View style={[style, tailwind.style(tw)]}>
         {videoConfig?.previewOnly ? (
           <Image
+            tw={tw}
             style={StyleSheet.absoluteFill}
+            blurhash={blurhash}
             // @ts-ignore
             source={props.posterSource}
-            blurhash={blurhash}
           />
         ) : (
           <>
             <Image
-              // @ts-ignore
-              source={props.posterSource}
+              tw={tw}
               style={StyleSheet.absoluteFill}
               blurhash={blurhash}
+              // @ts-ignore
+              source={props.posterSource}
             />
 
             <ExpoVideo

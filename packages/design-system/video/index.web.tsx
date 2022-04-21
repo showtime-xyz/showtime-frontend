@@ -25,21 +25,21 @@ function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
     <View>
       {videoConfig?.previewOnly ? (
         <Image
-          //@ts-ignore
-          source={props.posterSource}
           tw={tw}
           resizeMode={resizeMode}
           blurhash={blurhash}
+          //@ts-ignore
+          source={props.posterSource}
         />
       ) : (
         <>
           <Image
-            // @ts-ignore
-            source={props.posterSource}
-            style={StyleSheet.absoluteFill}
             tw={tw}
+            style={StyleSheet.absoluteFill}
             resizeMode={resizeMode}
             blurhash={blurhash}
+            // @ts-ignore
+            source={props.posterSource}
           />
 
           <ExpoVideo
