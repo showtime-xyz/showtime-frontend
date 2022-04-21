@@ -6,7 +6,7 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { Notifications } from "app/components/notifications";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { View, Spinner } from "design-system";
+import { View, Text, Spinner } from "design-system";
 
 const NotificationsScreen = withColorScheme(() => {
   const headerHeight = useHeaderHeight();
@@ -14,7 +14,7 @@ const NotificationsScreen = withColorScheme(() => {
   return (
     <>
       {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
-      <ErrorBoundary>
+      {/* <ErrorBoundary>
         <Suspense
           fallback={
             <View tw="mt-10 items-center justify-center">
@@ -24,7 +24,16 @@ const NotificationsScreen = withColorScheme(() => {
         >
           <Notifications />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
+      <View tw="p-4">
+        <Text variant="text-2xl" tw="font-extrabold text-black dark:text-white">
+          Notifications
+        </Text>
+        <View tw="h-6" />
+        <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+          🚧 Coming soon
+        </Text>
+      </View>
     </>
   );
 });
