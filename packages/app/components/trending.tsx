@@ -22,7 +22,6 @@ import {
   Pressable,
 } from "design-system";
 import { Card } from "design-system/card";
-import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
@@ -206,6 +205,7 @@ const CreatorsList = ({
   );
 
   const { width } = useWindowDimensions();
+  const router = useRouter();
 
   const newData = useMemo(() => ["header", ...data], [data]);
 
@@ -218,6 +218,9 @@ const CreatorsList = ({
       }).cloneWithRows(newData),
     [newData]
   );
+
+  const mediaDimension = useWindowDimensions().width / 3;
+  const cardSize = 64 + mediaDimension + 16;
 
   const cardHeight = cardSize + separatorHeight;
 
@@ -252,12 +255,20 @@ const CreatorsList = ({
 
       return (
         <>
-          <CreatorPreview creator={item} days={days} />
+          <CreatorPreview
+            creator={item}
+            onMediaPress={(initialScrollIndex: number) => {
+              router.push(
+                `/list?initialScrollIndex=${initialScrollIndex}&type=trendingCreator&days=${days}&creatorId=${item.profile_id}`
+              );
+            }}
+            mediaSize={mediaDimension}
+          />
           <ItemSeparatorComponent />
         </>
       );
     },
-    [ListHeaderComponent, days]
+    [ListHeaderComponent, days, router]
   );
 
   return (
