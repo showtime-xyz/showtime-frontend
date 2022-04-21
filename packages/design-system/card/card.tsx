@@ -2,7 +2,9 @@ import { Platform, useWindowDimensions } from "react-native";
 
 // import { Activity } from "app/components/activity";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { NFTDropdown } from "app/components/nft-dropdown";
 import { NFT } from "app/types";
+import { CARD_DARK_SHADOW } from "app/utilities";
 
 // import { Grid } from "design-system/card/grid";
 import { Collection } from "design-system/card/rows/collection";
@@ -13,6 +15,8 @@ import { Social } from "design-system/card/social";
 import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
 import { View } from "design-system/view";
+
+import { useIsDarkMode } from "../hooks";
 
 type Props = {
   nft: NFT & { loading?: boolean };
@@ -32,6 +36,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       </Pressable>
     );
   }
+  const isDark = useIsDarkMode();
 
   const size = tw
     ? tw
@@ -43,28 +48,35 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
 
   return (
     <View
+      style={{
+        // @ts-ignore
+        boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+      }}
       tw={[
         size,
         numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
         nft?.loading ? "opacity-50" : "opacity-100",
-        "shadow-md rounded-2xl overflow-hidden",
+        "shadow-lg rounded-2xl overflow-hidden",
         "self-center justify-self-center",
       ]}
     >
       <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
         {/* {variant === "activity" && <Activity activity={act} />} */}
-        <Creator nft={nft} shouldShowDateCreated={false} />
-
-        <View tw="py-2">
-          <Pressable onPress={onPress}>
-            <Media item={nft} numColumns={numColumns} />
-          </Pressable>
-          {/* <Grid nfts={nfts ?? []} /> */}
+        <View tw="flex-row justify-between items-center px-4 py-2">
+          <Creator nft={nft} shouldShowDateCreated={false} />
+          <NFTDropdown nftId={nft.nft_id} />
         </View>
 
         <Pressable onPress={onPress}>
-          <Title nft={nft} />
+          <Media item={nft} numColumns={numColumns} />
         </Pressable>
+        {/* <Grid nfts={nfts ?? []} /> */}
+
+        <View tw="mt-2">
+          <Pressable onPress={onPress}>
+            <Title nft={nft} />
+          </Pressable>
+        </View>
 
         <Social nft={nft} />
 

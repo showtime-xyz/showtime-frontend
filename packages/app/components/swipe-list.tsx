@@ -273,7 +273,9 @@ export const FeedItem = memo(
             <LikedBy nft={nft} />
             <Title nft={nft} />
             <Description nft={nft} />
-            <Creator nft={nft} />
+            <View tw="px-4">
+              <Creator nft={nft} />
+            </View>
             <Owner nft={nft} price={Platform.OS !== "ios"} />
             {/* Comments */}
           </View>
@@ -352,7 +354,9 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
     <View>
       <View tw="h-4" />
 
-      <Creator nft={nft} shouldShowCreatorIndicator={false} />
+      <View tw="px-4">
+        <Creator nft={nft} shouldShowCreatorIndicator={false} />
+      </View>
 
       <View tw="h-4" />
 
