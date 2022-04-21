@@ -13,7 +13,7 @@ const NotificationsScreen = withColorScheme(() => {
 
   return (
     <>
-      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+      {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       {/* <ErrorBoundary>
         <Suspense
           fallback={
