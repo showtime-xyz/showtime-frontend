@@ -13,6 +13,7 @@ import type { NFT } from "app/types";
 
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
+import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
@@ -53,40 +54,48 @@ export const FeedList = () => {
 
       <View tw="flex-2">
         {isAuthenticated ? (
-          <Tabs.Root>
-            <Tabs.List
-              contentContainerStyle={tw.style(
-                "mb-1 justify-center bg-transparent"
-              )}
-            >
-              <Tabs.Trigger>
-                <View tw="p-4">
-                  <Text variant="text-lg" tw="dark:text-gray-400 text-gray-600">
-                    Following
-                  </Text>
-                </View>
-              </Tabs.Trigger>
-              <Tabs.Trigger>
-                <View tw="p-4 ml-2">
-                  <Text variant="text-lg" tw="dark:text-gray-400 text-gray-600">
-                    For you
-                  </Text>
-                </View>
-              </Tabs.Trigger>
-            </Tabs.List>
-            <Tabs.Pager>
-              <ErrorBoundary>
-                <Suspense fallback={<View />}>
-                  <FollowingFeed />
-                </Suspense>
-              </ErrorBoundary>
-              <ErrorBoundary>
-                <Suspense fallback={<View />}>
-                  <AlgorithmicFeed />
-                </Suspense>
-              </ErrorBoundary>
-            </Tabs.Pager>
-          </Tabs.Root>
+          <View tw="-mt-5">
+            <Tabs.Root>
+              <Tabs.List
+                contentContainerStyle={tw.style(
+                  "mb-1 justify-center bg-transparent"
+                )}
+              >
+                <Tabs.Trigger>
+                  <View tw="p-4">
+                    <Text
+                      variant="text-lg"
+                      tw="dark:text-gray-400 text-gray-600"
+                    >
+                      Following
+                    </Text>
+                  </View>
+                </Tabs.Trigger>
+                <Tabs.Trigger>
+                  <View tw="p-4 ml-2">
+                    <Text
+                      variant="text-lg"
+                      tw="dark:text-gray-400 text-gray-600"
+                    >
+                      For you
+                    </Text>
+                  </View>
+                </Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Pager>
+                <ErrorBoundary>
+                  <Suspense fallback={<View />}>
+                    <FollowingFeed />
+                  </Suspense>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Suspense fallback={<View />}>
+                    <AlgorithmicFeed />
+                  </Suspense>
+                </ErrorBoundary>
+              </Tabs.Pager>
+            </Tabs.Root>
+          </View>
         ) : (
           <CuratedFeed />
         )}
@@ -110,7 +119,11 @@ const AlgorithmicFeed = () => {
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <View tw="mt-8">
+      <NFTScrollList {...queryState} data={queryState.data} />
+    </View>
+  );
 };
 
 const NFTScrollList = ({
@@ -148,7 +161,7 @@ const NFTScrollList = ({
       <View tw="flex-row justify-center" nativeID="334343">
         <Card
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] mb-8`}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
         />
       </View>
     );
@@ -166,8 +179,8 @@ const NFTScrollList = ({
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
-        //@ts-ignore
         style={{
+          //@ts-ignore
           overflowX: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
@@ -188,14 +201,15 @@ const NFTScrollList = ({
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
   const colorMode = useColorScheme();
-  const isDark = colorMode === "dark";
+  const isDark = useIsDarkMode();
+
   return (
     <>
       <Text variant="text-2xl" tw="text-black dark:text-white">
         Home
       </Text>
       <View
-        tw="bg-white dark:bg-black shadow-lg rounded-2xl mt-8"
+        tw="bg-white dark:bg-black rounded-2xl mt-8"
         style={{
           // @ts-ignore
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
