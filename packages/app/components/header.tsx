@@ -5,6 +5,7 @@ import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
+  ShowtimeTabBarIcon,
   CameraTabBarIcon,
   TrendingTabBarIcon,
   NotificationsTabBarIcon,
@@ -15,31 +16,10 @@ import { useRouter } from "app/navigation/use-router";
 import { View, Pressable, Button } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { useBlurredBackgroundColor } from "design-system/hooks";
-import { Showtime, Search, ArrowLeft } from "design-system/icon";
+import { Search, ArrowLeft } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-
-type IconButtonProps = {
-  children: React.ReactChild;
-  customTw?: TW;
-};
-
-export const IconButton = ({ children, customTw }: IconButtonProps) => {
-  const isWeb = Platform.OS === "web";
-
-  return (
-    <Pressable
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="w-12 h-12 rounded-full items-center justify-center"
-      style={tw.style(
-        `${isWeb ? "bg-gray-100 dark:bg-gray-900" : ""} ${customTw}`
-      )}
-    >
-      {children}
-    </Pressable>
-  );
-};
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -139,25 +119,17 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   );
 };
 
-const HeaderCenter = () => {
-  const { width } = useWindowDimensions();
-  const isWideScreen = width >= 768;
+const HeaderCenter = ({ isWideScreen }: { isWideScreen: boolean }) => {
+  const isDark = useIsDarkMode();
 
   return (
     <View tw="flex flex-row">
-      <IconButton customTw="mr-4">
-        <Showtime
-          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-          width={24}
-          height={24}
-        />
-      </IconButton>
+      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} customTw="mr-4" />
       {isWideScreen ? (
         <Input
           placeholder="Search by name or wallet"
           leftElement={
-            <IconButton>
+            <View tw="w-12 h-12 rounded-full items-center justify-center">
               <Search
                 style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
                 color={
@@ -167,7 +139,7 @@ const HeaderCenter = () => {
                 width={24}
                 height={24}
               />
-            </IconButton>
+            </View>
           }
         />
       ) : null}
@@ -179,8 +151,9 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const isWideScreen = width >= 768;
 
-  if (width >= 768) {
+  if (isWideScreen) {
     return (
       <View
         // @ts-expect-error
@@ -191,7 +164,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="items-start">
           <Link href="/">
-            <HeaderCenter />
+            <HeaderCenter isWideScreen />
           </Link>
         </View>
         <View tw="items-end">
