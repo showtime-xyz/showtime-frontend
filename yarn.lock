@@ -6096,7 +6096,7 @@ __metadata:
     react-native-safe-area-context: 3.3.2
     react-native-screens: ~3.10.1
     react-native-svg: ^12.1.1
-    react-native-vision-camera: 2.13.0
+    react-native-vision-camera: 2.12.0
     react-native-web: 0.17.5
     react-native-webview: 11.15.0
     react-string-replace: ^0.4.4
@@ -6325,6 +6325,7 @@ __metadata:
     expo: ^44.0.5
     expo-asset: ~8.4.4
     expo-av: ~10.2.0
+    expo-blur: ~11.0.0
     expo-community-flipper: ^44.0.1
     expo-constants: ~13.0.1
     expo-dev-client: ~0.8.4
@@ -6357,7 +6358,7 @@ __metadata:
     react-native-safe-area-context: 3.3.2
     react-native-screens: ~3.10.1
     react-native-svg: 12.1.1
-    react-native-vision-camera: ^2.12.0
+    react-native-vision-camera: 2.12.0
     react-native-web: 0.17.1
     three: ^0.139.0
     typescript: 4.5.2
@@ -26509,23 +26510,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:2.13.0":
-  version: 2.13.0
-  resolution: "react-native-vision-camera@npm:2.13.0"
+"react-native-vision-camera@npm:2.12.0":
+  version: 2.12.0
+  resolution: "react-native-vision-camera@npm:2.12.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 7b904f3b147a0b4c188c3938dd9403db546a1d4dccaf92ddf6224fe0010eac7e3b218290615ae2eeebbd9450451a781d12012fac9d2e420c8f3ab7e7045c54e4
-  languageName: node
-  linkType: hard
-
-"react-native-vision-camera@npm:^2.12.0":
-  version: 2.13.2
-  resolution: "react-native-vision-camera@npm:2.13.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 7bbcd8df4b9c7d764e1a0645571d668d21e0f7491e1c8a37fb9fbaa28bffc33f27abd6374ba1300b19a770d69aaea541f839e06a34a701adc2e89db083464d19
+  checksum: 4072231a1e550afcc15776df629ebdbf7281e5c1547a0ecba08b1af490fcd981c1d76c8e79a99a0e1c5fc98351707f724cc48a906f8711c4e2681514b9a06eb9
   languageName: node
   linkType: hard
 

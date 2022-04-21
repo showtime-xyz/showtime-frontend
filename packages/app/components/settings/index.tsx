@@ -82,7 +82,7 @@ const SettingsTabs = () => {
         lazy
       >
         <Tabs.Header>
-          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+          {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between">
             <Text
               variant="text-2xl"

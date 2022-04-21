@@ -45,5 +45,5 @@ const DetailsModal = () => {
 export const DetailsScreen = withModalScreen(
   DetailsModal,
   "/nft/[id]/details",
-  "details"
+  "detailsModal"
 );

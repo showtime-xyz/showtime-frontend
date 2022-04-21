@@ -5,7 +5,6 @@ import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { Link } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
@@ -18,11 +17,9 @@ import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;
-  days: any;
+  onMediaPress?: any;
+  mediaSize: number;
 };
-
-const mediaDimension = Dimensions.get("window").width / 3 - 16;
-export const cardSize = 64 + mediaDimension + 16;
 
 export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
@@ -31,13 +28,9 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     () => isFollowing(creatorId),
     [creatorId, isFollowing]
   );
-  const router = useRouter();
 
   return (
-    <View
-      tw="p-4"
-      style={useMemo(() => ({ height: cardSize, overflow: "hidden" }), [])}
-    >
+    <View tw="p-4">
       <View tw="flex-row justify-between items-center">
         <Link
           href={`/@${props.creator.username ?? props.creator.address}`}
@@ -85,13 +78,15 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
         {props.creator.top_items.slice(0, 3).map((item, idx) => {
           return (
             <Pressable
-              onPress={() =>
-                router.push(
-                  `/list?initialScrollIndex=${idx}&type=trendingCreator&days=${props.days}&creatorId=${props.creator.profile_id}`
-                )
-              }
+              key={item.nft_id}
+              onPress={() => props.onMediaPress(idx)}
             >
-              <Media key={item.nft_id} item={item} numColumns={3} />
+              <Media
+                key={item.nft_id}
+                item={item}
+                numColumns={3}
+                tw={`w-[${props.mediaSize}px] h-[${props.mediaSize}px]`}
+              />
             </Pressable>
           );
         })}

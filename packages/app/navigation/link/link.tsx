@@ -8,9 +8,17 @@ import type { TW } from "design-system/tailwind/types";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-type LinkProps = Props & { viewProps?: ViewProps; tw?: TW };
+type LinkProps = Props & {
+  viewProps?: ViewProps;
+  tw?: TW;
+  // react-native-web only types
+  hrefAttrs?: {
+    rel: "noreferrer";
+    target?: "_blank";
+  };
+};
 
-function Link({ viewProps, tw, ...props }: LinkProps) {
+function Link({ viewProps, tw, hrefAttrs, ...props }: LinkProps) {
   return (
     <LinkCore
       {...props}
@@ -18,7 +26,11 @@ function Link({ viewProps, tw, ...props }: LinkProps) {
         web: View,
         default: Pressable as any,
       })}
-      componentProps={{ ...viewProps, tw }}
+      componentProps={{
+        ...viewProps,
+        tw,
+        hrefAttrs,
+      }}
     />
   );
 }

@@ -1,11 +1,12 @@
 import { Suspense } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, useWindowDimensions, Platform } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useSafeAreaInsets } from "app/lib/safe-area";
+import { useSafeAreaFrame } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 
 import { Skeleton, View } from "design-system";
@@ -59,11 +60,20 @@ const NFTDetail = () => {
   });
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
+  const { height: windowHeight } = useWindowDimensions();
 
-  if (data && data.data.item) {
+  const itemHeight =
+    Platform.OS === "web"
+      ? windowHeight - headerHeight - safeAreaBottom
+      : Platform.OS === "android"
+      ? safeAreaFrameHeight - headerHeight
+      : screenHeight;
+
+  if (data?.data?.item) {
     return (
       <FeedItem
-        itemHeight={screenHeight - headerHeight}
+        itemHeight={itemHeight}
         bottomPadding={safeAreaBottom}
         nft={data.data.item}
       />
@@ -72,4 +82,5 @@ const NFTDetail = () => {
 
   return null;
 };
+
 export { NftScreen };

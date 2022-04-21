@@ -16,9 +16,9 @@ export class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
 
   render() {
     if (this.state.hasError) {
-      return null;
+      return <></>;
     }
 
-    return this.props.children;
+    return <>{this.props.children}</>;
   }
 }

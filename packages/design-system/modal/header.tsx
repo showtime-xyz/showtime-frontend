@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { Button } from "design-system/button";
 import { Close, MoreHorizontal } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
@@ -13,8 +15,10 @@ type Props = {
 export function Header({ title, close }: Props) {
   return (
     <>
-      <View tw="h-4 items-center justify-center">
-        <View tw="h-1 w-12 rounded-lg bg-gray-300 dark:bg-gray-700" />
+      <View tw="h-4 web:h-1 items-center justify-center">
+        {Platform.OS !== "web" && (
+          <View tw="h-1 w-12 rounded-lg bg-gray-300 dark:bg-gray-700" />
+        )}
       </View>
       <View tw="px-4 h-[50px] flex-row items-center justify-between">
         <Pressable onPress={close}>

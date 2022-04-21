@@ -86,6 +86,7 @@ function Media({
               uri: mediaStillPreviewUri,
             }}
             tw={size}
+            blurhash={item?.blurhash}
             resizeMode={resizeMode}
           />
         </PinchToZoom>

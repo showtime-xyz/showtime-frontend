@@ -26,12 +26,15 @@ import {
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
+import { useSnackbarBottom } from "app/hooks/use-snackbar-bottom";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import {
   useBottomTabBarHeight,
   BottomTabBarHeightContext,
 } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { DataProvider } from "app/lib/recyclerlistview";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -45,19 +48,21 @@ import {
   Select,
 } from "design-system";
 import { Avatar } from "design-system/avatar";
-import { useColorScheme } from "design-system/hooks";
+import { Card } from "design-system/card";
+import { useColorScheme, useIsDarkMode } from "design-system/hooks";
+import { ArrowRight } from "design-system/icon";
 import { Image } from "design-system/image";
-import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
+import { useSnackbar } from "design-system/snackbar";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
-import { useToast } from "design-system/toast";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
 
 const COVER_IMAGE_HEIGHT = 104;
+const LIST_HEADER_HEIGHT = 80;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
@@ -106,18 +111,20 @@ const ProfileScreen = ({ username }: { username: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
-  const toast = useToast();
+  const snackbar = useSnackbar();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+  // const router = useRouter();
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
   const { state: mintingState } = useContext(MintContext);
-
+  const snackBarHeight = useSnackbarBottom();
+  const isDark = useIsDarkMode();
   useEffect(() => {
     if (
       mintingState.status === "mediaUpload" ||
@@ -125,22 +132,46 @@ const Profile = ({ address }: { address?: string }) => {
       mintingState.status === "minting" ||
       mintingState.status === "transactionCompleted"
     ) {
-      toast?.show({
-        element: (
-          <View tw="flex-row items-center p-5">
-            <Spinner size={20} />
-            <View tw="mx-1" />
-            <Text tw="dark:text-white text-black">Creating...</Text>
-          </View>
-        ),
-        hideAfter: 4000,
+      /**
+       * TODO: replaced `Creating...` text, waiting for copywriting.
+       * https://linear.app/showtime/issue/SHOW2-651#comment-0e19621c
+       * */
+      snackbar?.show({
+        text: "Creating...",
+        iconStatus: "waiting",
+        bottom: snackBarHeight,
       });
     }
 
     if (mintingState.status === "mintingSuccess") {
-      toast?.show({
-        message: "Created 🎉 Your NFT will appear in a minute!",
+      snackbar?.show({
+        text: "Created 🎉 Your NFT will appear in a minute!",
+        iconStatus: "done",
+        bottom: snackBarHeight,
         hideAfter: 4000,
+        // Todo: navigate to NFT's detail, display placeholder
+        // action: {
+        //   text: "View",
+        //   onPress: () => {
+        //     snackbar?.hide();
+        //   },
+        //   element: (
+        //     <View tw="flex-row items-center justify-center">
+        //       <Text
+        //         tw="text-white dark:text-gray-900 font-bold"
+        //         variant="text-xs"
+        //         numberOfLines={1}
+        //       >
+        //         View
+        //       </Text>
+        //       <ArrowRight
+        //         width={14}
+        //         height={14}
+        //         color={isDark ? colors.gray[900] : colors.white}
+        //       />
+        //     </View>
+        //   ),
+        // },
       });
     }
   }, [mintingState]);
@@ -154,7 +185,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
-          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+          {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         {data?.data.lists ? (
@@ -231,9 +262,6 @@ const TabList = ({
   isBlocked?: boolean;
   list: List;
 }) => {
-  const keyExtractor = useCallback((item) => {
-    return item.nft_id;
-  }, []);
   const router = useRouter();
   const { state: mintingState } = useContext(MintContext);
 
@@ -283,25 +311,12 @@ const TabList = ({
     [list.id, profileId, filter.collectionId, filter.sortId]
   );
 
-  const renderItem = useCallback(
-    ({ item, index }) => (
-      <Pressable onPress={() => onItemPress(index)}>
-        <Media item={item} numColumns={3} />
-      </Pressable>
-    ),
-    [onItemPress]
-  );
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
 
-  const getItemLayout = useCallback((_data, index) => {
-    return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
-  }, []);
-
-  const ListHeaderComponent = useMemo(
+  const ListHeaderComponent = useCallback(
     () => (
       <View tw="p-4">
         <Filter
@@ -330,6 +345,7 @@ const TabList = ({
     ),
     [
       data,
+      username,
       isLoading,
       filter,
       onCollectionChange,
@@ -339,43 +355,84 @@ const TabList = ({
     ]
   );
 
-  const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
+  const newData = useMemo(() => {
+    let newData: any = ["header"];
+    if (isBlocked) return newData;
+
+    if (
+      mintingState.status !== "idle" &&
+      mintingState.tokenId !== data?.[0]?.token_id
+    ) {
+      //@ts-ignore
+      newData.push({
+        loading: true,
+        chain_name: "polygon",
+        contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
+        token_id: mintingState.tokenId ?? "1",
+        source_url:
+          typeof mintingState.file === "string" ? mintingState.file : "",
+        mime_type: mintingState.fileType ?? "image/jpeg",
+      });
+    }
+
+    newData = newData.concat(data);
+
+    return newData;
+  }, [
+    data,
+    mintingState.status,
+    mintingState.tokenId,
+    mintingState.file,
+    mintingState.fileType,
+    isBlocked,
+  ]);
+
+  const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
+
+  const dataProvider = useMemo(
+    () =>
+      new DataProvider((r1, r2) => {
+        return typeof r1 === "string" && typeof r2 === "string"
+          ? r1 !== r2
+          : r1.nft_id !== r2.nft_id;
+      }).cloneWithRows(newData),
+    [newData]
+  );
+
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index) => {
+      if (_type === "header") {
+        return <ListHeaderComponent />;
+      }
+
+      // currently minting nft
+      if (item.loading) {
+        return <Card nft={item} numColumns={3} />;
+      }
+
+      return (
+        // index - 1 because header takes the initial index!
+        <Card
+          nft={item}
+          numColumns={3}
+          onPress={() => onItemPress(index - 1)}
+        />
+      );
+    },
+    [ListHeaderComponent, onItemPress]
+  );
 
   return (
-    <Tabs.FlatList
-      data={
-        isBlocked
-          ? null
-          : mintingState.status !== "idle" &&
-            mintingState.tokenId !== data?.[0]?.token_id
-          ? [
-              {
-                loading: true,
-                chain_name: "polygon",
-                contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
-                token_id: mintingState.tokenId ?? "1",
-                source_url: mintingState.filePath ?? "",
-                mime_type: mintingState.fileType ?? "image/jpeg",
-              },
-              ...data,
-            ]
-          : data
-      }
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
+    <Tabs.RecyclerList
+      //@ts-ignore
+      layoutProvider={_layoutProvider}
+      dataProvider={dataProvider}
+      rowRenderer={_rowRenderer}
+      onEndReached={fetchMore}
       refreshing={isRefreshing}
       onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      ListHeaderComponent={ListHeaderComponent}
-      numColumns={3}
-      getItemLayout={getItemLayout}
-      windowSize={6}
-      initialNumToRender={9}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-      style={listStyle}
+      style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
+      renderFooter={ListFooterComponent}
     />
   );
 };

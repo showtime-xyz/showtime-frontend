@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Share } from "react-native";
+import { Platform, Share } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
@@ -225,25 +225,6 @@ export function formatNumber(number: number) {
   }
 }
 
-export const handleShareNFT = async (nft?: NFT) => {
-  if (nft) {
-    const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
-      //@ts-ignore
-      (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
-    );
-    const share = await Share.share({
-      url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
-    });
-
-    if (share.action === "sharedAction") {
-      track(
-        "NFT Shared",
-        share.activityType ? { type: share.activityType } : undefined
-      );
-    }
-  }
-};
-
 export const findListingItemByOwner = (
   nft: NFT | undefined,
   profileID: Profile["profile_id"] | undefined
@@ -334,3 +315,8 @@ export const getMediaUrl = ({
     stillPreview ? "&still_preview=true" : ""
   }`;
 };
+
+export const CARD_DARK_SHADOW =
+  Platform.OS === "web"
+    ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
+    : undefined;

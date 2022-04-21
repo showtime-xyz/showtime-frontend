@@ -34,7 +34,7 @@ function CameraScreen() {
             native: createPostURL,
             web: {
               pathname: router.pathname,
-              query: { ...router.query, create: true, form: true },
+              query: { ...router.query, createModal: true, form: true },
             },
           }),
           createPostURL,

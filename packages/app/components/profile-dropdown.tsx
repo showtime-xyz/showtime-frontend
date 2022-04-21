@@ -2,6 +2,7 @@ import { Share, Platform } from "react-native";
 
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
+import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
@@ -28,6 +29,7 @@ function ProfileDropdown({ user }: Props) {
   const { report } = useReport();
   const { block, unblock, getIsBlocked } = useBlock();
   const router = useRouter();
+  const share = useShare();
 
   const isBlocked = getIsBlocked(user.profile_id);
   //#region callbacks
@@ -41,7 +43,7 @@ function ProfileDropdown({ user }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         Platform.select({
@@ -62,7 +64,7 @@ function ProfileDropdown({ user }: Props) {
           native: "/login",
           web: {
             pathname: router.pathname,
-            query: { ...router.query, login: true },
+            query: { ...router.query, loginModal: true },
           },
         }),
         Platform.select({
@@ -93,17 +95,17 @@ function ProfileDropdown({ user }: Props) {
       >
         <DropdownMenuItem
           onSelect={async () => {
-            const share = await Share.share({
+            const result = await share({
               url: `https://showtime.io/${
                 user?.username ??
                 user?.wallet_addresses_excluding_email_v2?.[0]?.address
               }`,
             });
 
-            if (share.action === "sharedAction") {
+            if (result.action === "sharedAction") {
               track(
                 "User Shared",
-                share.activityType ? { type: share.activityType } : undefined
+                result.activityType ? { type: result.activityType } : undefined
               );
             }
           }}

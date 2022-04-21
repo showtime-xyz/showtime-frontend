@@ -40,6 +40,7 @@ const theme = makeTheme({
     SpaceGrotesk: {
       default: webFont("SpaceGrotesk-Regular"),
       bold: webFont("SpaceGrotesk-Bold"),
+      700: webFont("SpaceGrotesk-Bold"),
     },
   },
   text: {
@@ -88,6 +89,19 @@ const theme = makeTheme({
     },
   },
 });
+
+export const breakpoints = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  "2xl": 1536,
+};
+
+export const CARD_DARK_SHADOW =
+  Platform.OS === "web"
+    ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
+    : undefined;
 
 type MyTheme = typeof theme;
 

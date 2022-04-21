@@ -25,7 +25,7 @@ function Collection({ nft }: Props) {
         <Text
           tw={`${
             nft.collection_img_url ? "ml-2" : ""
-          } font-bold text-xs dark:text-white w-[65vw]`}
+          } font-bold text-xs dark:text-white`}
           numberOfLines={1}
         >
           {nft.collection_name}

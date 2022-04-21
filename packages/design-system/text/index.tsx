@@ -5,17 +5,16 @@ import { Theme } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+import { textSizes } from "design-system/typography";
 
 import { ViewProps } from "../view";
 import { Text as DripsyText } from "./text";
-
-type Variant = keyof Theme["text"];
 
 export type TextProps = ComponentProps<typeof DripsyText>;
 
 export type Props = {
   tw?: TW;
-  variant?: Variant;
+  variant?: keyof typeof textSizes;
   htmlFor?: string;
   pointerEvents?: ViewProps["pointerEvents"];
 } & Pick<

@@ -49,7 +49,7 @@ function LoginModal() {
   return (
     <Modal
       title="Sign In"
-      close={router.pop}
+      close={router.asPath === "/login" ? () => router.push("/") : router.pop}
       height=""
       keyboardVerticalOffset={topSafeArea + modalPresentationHeight}
       bodyTW="bg-white dark:bg-black"
@@ -59,4 +59,4 @@ function LoginModal() {
   );
 }
 
-export const LoginScreen = withModalScreen(LoginModal, "/login", "login");
+export const LoginScreen = withModalScreen(LoginModal, "/login", "loginModal");

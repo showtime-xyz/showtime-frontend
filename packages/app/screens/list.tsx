@@ -23,4 +23,8 @@ const ListModal = withColorScheme(() => {
   return <List nftId={nftId} />;
 });
 
-export const ListScreen = withModalScreen(ListModal, "/nft/[id]/list", "list");
+export const ListScreen = withModalScreen(
+  ListModal,
+  "/nft/[id]/list",
+  "listModal"
+);

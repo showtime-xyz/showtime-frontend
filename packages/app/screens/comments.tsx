@@ -44,7 +44,7 @@ export function CommentsModal() {
   //#region callbacks
   const handleClose = useCallback(() => {
     wasClosedByUserAction.current = true;
-    router.back();
+    router.pop();
   }, [router]);
   const handleOnClose = useCallback(() => {
     if (!isModalFocused) {
@@ -53,7 +53,7 @@ export function CommentsModal() {
 
     if (!wasClosedByUserAction.current) {
       wasClosedByUserAction.current = true;
-      router.back();
+      router.pop();
     }
   }, [router, isModalFocused]);
   //#endregion
@@ -86,5 +86,5 @@ export function CommentsModal() {
 export const CommentsScreen = withModalScreen(
   CommentsModal,
   "/nft/[id]/comments",
-  "comments"
+  "commentsModal"
 );

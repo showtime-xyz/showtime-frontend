@@ -9,7 +9,7 @@ type VideoConfigContextType = {
 export const VideoConfigContext = createContext<VideoConfigContextType | null>({
   isMuted: true,
   useNativeControls: false,
-  previewOnly: false,
+  previewOnly: true,
 });
 
 export const useVideoConfig = () => {

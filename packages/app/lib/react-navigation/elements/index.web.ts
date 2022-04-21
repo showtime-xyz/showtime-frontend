@@ -1,5 +1,7 @@
+const HEADER_HEIGHT = 64;
+
 const useHeaderHeight = () => {
-  return 0;
+  return HEADER_HEIGHT;
 };
 
 export { useHeaderHeight };

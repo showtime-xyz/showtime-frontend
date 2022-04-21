@@ -81,11 +81,25 @@ function localStorageProvider() {
   return map;
 }
 
-function AppContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element {
+export default function App({ Component, pageProps, router }: AppProps) {
+  useEffect(() => {
+    // Load feature definitions from API
+    // TODO: fix bug with `.json()` on web
+    // fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     growthbook.setFeatures(json.features);
+    //   });
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
+  }, []);
+
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
@@ -114,37 +128,8 @@ function AppContextProvider({
     setColorScheme: (newColorScheme: "light" | "dark") => {
       setColorScheme(newColorScheme);
       setUserColorScheme(newColorScheme);
-      // This is needed to force a re-render of the app
-      // TODO: find out why the app doesn't re-render like on native
-      window.location.reload();
     },
   };
-
-  return (
-    <AppContext.Provider value={injectedGlobalContext}>
-      {children}
-    </AppContext.Provider>
-  );
-}
-
-export default function App({ Component, pageProps, router }: AppProps) {
-  useEffect(() => {
-    // Load feature definitions from API
-    // TODO: fix bug with `.json()` on web
-    // fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
-    //   .then((res) => res.json())
-    //   .then((json) => {
-    //     growthbook.setFeatures(json.features);
-    //   });
-    // growthbook.setAttributes({
-    //   "id": "foo",
-    // })
-    if (process.env.STAGE !== "development") {
-      LogRocket.init("oulg1q/showtime", {
-        redactionTags: ["data-private"],
-      });
-    }
-  }, []);
 
   return (
     <>
@@ -177,7 +162,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               }}
             >
               <Web3Provider>
-                <AppContextProvider>
+                <AppContext.Provider value={injectedGlobalContext}>
                   <AuthProvider>
                     <UserProvider>
                       <MintProvider>
@@ -193,7 +178,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     }
                                   />
 
-                                  <Component {...pageProps} />
+                                  <View tw="min-h-screen">
+                                    <Component {...pageProps} />
+                                  </View>
 
                                   <Footer />
                                 </View>
@@ -215,7 +202,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                       </MintProvider>
                     </UserProvider>
                   </AuthProvider>
-                </AppContextProvider>
+                </AppContext.Provider>
               </Web3Provider>
             </SWRConfig>
           </ToastProvider>

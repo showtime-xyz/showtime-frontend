@@ -99,12 +99,7 @@ const ListingCard = (props: Props) => {
             </View>
           </View>
         </View>
-        <Owner
-          nft={nft}
-          toggleCreatorName={true}
-          price={!hasMultipleOwners}
-          tw="px-0 my-4"
-        />
+        <Owner nft={nft} price={!hasMultipleOwners} tw="px-0 my-4" />
         {isActiveAddressAnOwner ? (
           <ListingForm nft={nft} />
         ) : (

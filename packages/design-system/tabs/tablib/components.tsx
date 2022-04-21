@@ -10,6 +10,7 @@ import { useIsDarkMode } from "design-system/hooks";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
+import { fontFamily } from "design-system/typography";
 import { View } from "design-system/view";
 
 const TAB_ITEM_PADDING_HORIZONTAL = 16;
@@ -47,13 +48,13 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           height: "100%",
           paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
         },
-        animatedStyle,
+        Platform.OS === "web" ? { opacity: 1 } : animatedStyle,
       ]}
     >
       <RNText
         style={[
           tw.style("text-gray-900 dark:text-white text-sm"),
-          { fontFamily: "Inter-Bold" },
+          { fontFamily: fontFamily("Inter-Bold") },
         ]}
       >
         {name}

@@ -1,4 +1,4 @@
-import { Link } from "app/navigation/link";
+// import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
 
 import { Image } from "design-system/image";
@@ -23,9 +23,11 @@ function Collection({ nft }: Props) {
           />
         )}
         <Text
-          tw={`${
-            nft.collection_img_url ? "ml-2" : ""
-          } text-xs font-bold text-gray-600 dark:text-gray-400 w-[65vw]`}
+          tw={[
+            nft.collection_img_url ? "ml-2" : "",
+            "text-xs font-bold text-gray-600 dark:text-gray-400",
+            // w-[65vw]
+          ]}
           numberOfLines={1}
         >
           {nft.collection_name}
