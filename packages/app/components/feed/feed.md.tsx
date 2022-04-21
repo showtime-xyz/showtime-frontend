@@ -4,18 +4,20 @@ import { Platform, useWindowDimensions } from "react-native";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
+import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
+import { useColorScheme } from "app/lib/color-scheme";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
-import { TabItem, Tabs, Text } from "design-system";
+import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
-const CARD_HEIGHT = 740;
-const CARD_WIDTH = 490;
+const CARD_HEIGHT = 860;
+const CARD_WIDTH = 590;
 
 export const Feed = () => {
   return (
@@ -31,9 +33,33 @@ export const Feed = () => {
 
 // TODO: move to separate file
 const SuggestedUsers = () => {
+  const { data, loading } = useFollowSuggestions();
+  const colorMode = useColorScheme();
   return (
-    <View tw="bg-white dark:bg-black p-4 shadow-xl md:mx-10 flex-1">
-      <Text tw="text-white">Suggested</Text>
+    <View tw="bg-white dark:bg-black shadow-lg w-[400px] rounded-lg">
+      <Text
+        tw="dark:text-white p-4"
+        //@ts-ignore
+        variant="text-xl"
+      >
+        Suggested
+      </Text>
+      {loading ? (
+        <View tw="m-4">
+          <Skeleton colorMode={colorMode} width={200} height={20} />
+          <View tw="h-4" />
+          <Skeleton colorMode={colorMode} width={140} height={15} />
+        </View>
+      ) : null}
+      {data?.map((user) => {
+        return (
+          <CreatorPreview
+            creator={user}
+            onMediaPress={() => {}}
+            mediaSize={120}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -43,18 +69,36 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      <View tw="flex-1 absolute">
+      <View
+        style={{
+          position: Platform.OS === "web" ? "fixed" : null,
+          zIndex: 2,
+          left: 100,
+        }}
+      >
         <SuggestedUsers />
       </View>
       <View tw="flex-2">
         {isAuthenticated ? (
           <Tabs.Root>
-            <Tabs.List contentContainerStyle={tw.style("justify-center")}>
+            <Tabs.List
+              contentContainerStyle={tw.style(
+                "justify-center mb-4 mx-2 dark:bg-black bg-white"
+              )}
+            >
               <Tabs.Trigger>
-                <TabItem name="Following" />
+                <View tw="p-2">
+                  <Text variant="text-sm" tw="dark:text-white text-black">
+                    Following
+                  </Text>
+                </View>
               </Tabs.Trigger>
               <Tabs.Trigger>
-                <TabItem name="For you" />
+                <View tw="p-2 ml-2">
+                  <Text variant="text-sm" tw="dark:text-white text-black">
+                    For You
+                  </Text>
+                </View>
               </Tabs.Trigger>
             </Tabs.List>
             <Tabs.Pager>
@@ -126,13 +170,13 @@ const NFTScrollList = ({
     [screenWidth]
   );
 
-  const _rowRenderer = useCallback((_type: any, item: any) => {
+  const _rowRenderer = useCallback((_type: any, item: any, idx) => {
     return (
       <View tw="w-full flex-row" nativeID="334343">
         <View tw="flex-2" />
         <Card
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT}px] mb-4 ml-auto`}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] mb-8 ml-auto`}
         />
         <View tw="flex-1" />
       </View>
