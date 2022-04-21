@@ -10,12 +10,11 @@ import { useColorScheme } from "app/lib/color-scheme";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
-import { CARD_DARK_SHADOW } from "app/utilities";
 
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
 import { tw } from "design-system/tailwind";
-import { breakpoints } from "design-system/theme";
+import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
 const CARD_HEIGHT = 890;

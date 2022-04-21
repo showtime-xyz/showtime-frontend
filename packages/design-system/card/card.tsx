@@ -4,7 +4,6 @@ import { Platform, useWindowDimensions } from "react-native";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { NFT } from "app/types";
-import { CARD_DARK_SHADOW } from "app/utilities";
 
 // import { Grid } from "design-system/card/grid";
 import { Collection } from "design-system/card/rows/collection";
@@ -14,6 +13,7 @@ import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
 import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
+import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
 import { useIsDarkMode } from "../hooks";
