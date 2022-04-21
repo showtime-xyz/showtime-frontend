@@ -14,6 +14,14 @@ import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import type { ModalContainerProps } from "./types";
 
+const BACKGROUND_TW = [
+  "bg-white dark:bg-black",
+  "rounded-t-[32px]",
+  "pointer-events-auto",
+];
+
+const BACKDROP_TW = "bg-gray-100 dark:bg-gray-900";
+
 function ModalContainerComponent({
   title,
   mobile_snapPoints,
@@ -22,13 +30,7 @@ function ModalContainerComponent({
 }: ModalContainerProps) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-  const backgroundStyle = useMemo(
-    () =>
-      tailwind.style(
-        "bg-white dark:bg-black rounded-t-[32px] pointer-events-auto"
-      ),
-    []
-  );
+  const backgroundStyle = useMemo(() => tailwind.style(...BACKGROUND_TW), []);
 
   //#region effects
   useEffect(() => {
@@ -42,7 +44,7 @@ function ModalContainerComponent({
       <BottomSheetBackdrop
         appearsOnIndex={0}
         disappearsOnIndex={-1}
-        style={tailwind.style("bg-gray-100 dark:bg-gray-900")}
+        style={tailwind.style(BACKDROP_TW)}
         {...props}
       />
     ),
