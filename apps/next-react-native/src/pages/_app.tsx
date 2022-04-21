@@ -178,7 +178,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     }
                                   />
 
-                                  <Component {...pageProps} />
+                                  <View tw="min-h-screen">
+                                    <Component {...pageProps} />
+                                  </View>
 
                                   <Footer />
                                 </View>

@@ -37,12 +37,12 @@ const HeaderRight = () => {
                   focused={router.pathname === "/trending"}
                 />
               </View>
-              <View tw="mx-3">
+              {/* <View tw="mx-3">
                 <NotificationsTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={router.pathname === "/notifications"}
                 />
-              </View>
+              </View> */}
               <View tw="mx-3">
                 <CameraTabBarIcon
                   color={isDark ? "white" : "black"}
