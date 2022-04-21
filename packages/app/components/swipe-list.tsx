@@ -152,15 +152,7 @@ export const SwipeList = ({
         />
       );
     },
-    [
-      itemHeight,
-      bottomPadding,
-      hideHeader,
-      showHeader,
-      toggleHeader,
-      opacity,
-      // windowWidth,
-    ]
+    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -286,24 +278,27 @@ export const FeedItem = memo(
     return (
       <LikeContextProvider nft={nft}>
         <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
-          <View tw="absolute w-full h-full">
-            {nft.blurhash ? (
-              <Blurhash
-                blurhash={nft.blurhash}
-                decodeWidth={16}
-                decodeHeight={16}
-                decodeAsync={true}
-                style={tw.style("w-full h-full")}
-              />
-            ) : (
-              <Image
-                source={{
-                  uri: getMediaUrl({ nft, stillPreview: true }),
-                }}
-                style={tw.style("w-full h-full")}
-              />
-            )}
-          </View>
+          {Platform.OS !== "web" && (
+            <View tw="absolute w-full h-full">
+              {nft.blurhash ? (
+                <Blurhash
+                  blurhash={nft.blurhash}
+                  decodeWidth={16}
+                  decodeHeight={16}
+                  decodeAsync={true}
+                  style={tw.style("w-full h-full")}
+                />
+              ) : (
+                <Image
+                  tw="w-full h-full"
+                  source={{
+                    uri: getMediaUrl({ nft, stillPreview: true }),
+                  }}
+                />
+              )}
+            </View>
+          )}
+
           <FeedItemTapGesture
             toggleHeader={toggleHeader}
             showHeader={showHeader}
@@ -316,7 +311,11 @@ export const FeedItem = memo(
               <Media
                 item={nft}
                 numColumns={1}
-                tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+                tw={
+                  Platform.OS === "web"
+                    ? ""
+                    : `h-[${mediaHeight}px] w-[${screenWidth}px]`
+                }
                 resizeMode="contain"
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
