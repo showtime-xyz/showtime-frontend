@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
@@ -16,7 +16,30 @@ import { View, Pressable, Button } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { useBlurredBackgroundColor } from "design-system/hooks";
 import { Showtime, Search, ArrowLeft } from "design-system/icon";
+import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
+
+type IconButtonProps = {
+  children: React.ReactChild;
+  customTw?: TW;
+};
+
+export const IconButton = ({ children, customTw }: IconButtonProps) => {
+  const isWeb = Platform.OS === "web";
+
+  return (
+    <Pressable
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      tw="w-12 h-12 rounded-full items-center justify-center"
+      style={tw.style(
+        `${isWeb ? "bg-gray-100 dark:bg-gray-900" : ""} ${customTw}`
+      )}
+    >
+      {children}
+    </Pressable>
+  );
+};
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -31,19 +54,13 @@ const HeaderRight = () => {
         <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
           {isAuthenticated && width > 768 && (
             <>
-              <View tw="mx-3">
+              <View tw="mx-2">
                 <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={router.pathname === "/trending"}
                 />
               </View>
-              {/* <View tw="mx-3">
-                <NotificationsTabBarIcon
-                  color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/notifications"}
-                />
-              </View> */}
-              <View tw="mx-3">
+              <View tw="mx-2">
                 <CameraTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={false}
@@ -51,7 +68,7 @@ const HeaderRight = () => {
               </View>
             </>
           )}
-          <View tw="md:mx-3 flex-row items-center">
+          <View tw="md:mx-2 flex-row items-center">
             {isAuthenticated ? (
               <HeaderDropdown type={width >= 768 ? "profile" : "settings"} />
             ) : (
@@ -111,13 +128,6 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
           router.push("/search");
         }
       }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
-
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
-      // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
-      // }, [])}
     >
       <Icon
         style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
@@ -130,33 +140,38 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 };
 
 const HeaderCenter = () => {
-  // TODO: why is this crashing the native header?
-  // const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isWideScreen = width >= 768;
 
   return (
-    <Pressable
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="w-12 h-12 rounded-full items-center justify-center"
-      onPress={() => {
-        if (Platform.OS === "web") {
-          // router.push("/");
-        }
-      }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
-
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
-      // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
-      // }, [])}
-    >
-      <Showtime
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-        width={24}
-        height={24}
-      />
-    </Pressable>
+    <View tw="flex flex-row">
+      <IconButton customTw="mr-4">
+        <Showtime
+          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
+      </IconButton>
+      {isWideScreen ? (
+        <Input
+          placeholder="Search by name or wallet"
+          leftElement={
+            <IconButton>
+              <Search
+                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+                color={
+                  tw.style("bg-gray-500 dark:bg-gray-400")
+                    ?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            </IconButton>
+          }
+        />
+      ) : null}
+    </View>
   );
 };
 
