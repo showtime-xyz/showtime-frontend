@@ -263,7 +263,10 @@ export const FeedItem = memo(
             <Divider tw="my-2" />
             <Social nft={nft} />
             <LikedBy nft={nft} />
-            <Title nft={nft} />
+            <View tw="flex-row justify-between mr-4">
+              <Title nft={nft} />
+              <NFTDropdown nftId={nft.nft_id} />
+            </View>
             <Description nft={nft} />
             <View tw="px-4">
               <Creator nft={nft} />
