@@ -110,7 +110,7 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
 
 export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/camera">
+    <TabBarIcon tab={Platform.select({ default: "/camera", web: "/create" })}>
       <View
         tw={[
           "rounded-full h-12 w-12 justify-center items-center",
