@@ -44,7 +44,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
               <Text tw="font-semibold ml-2 mr-1">
-                {user.data.profile.username}
+                {`@${user.data.profile.username}`}
               </Text>
             ) : null}
           </View>
