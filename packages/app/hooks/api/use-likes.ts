@@ -1,6 +1,7 @@
 import useSWR from "swr";
+import useUnmountSignal from "use-unmount-signal";
 
-import { fetcher } from "../use-infinite-list-query";
+import { axios } from "app/lib/axios";
 
 export interface Liker {
   profile_id: number;
@@ -21,9 +22,10 @@ interface LikesPayload {
 }
 
 export function useLikes(nftId?: number) {
+  const unmountSignal = useUnmountSignal();
   const { data, error } = useSWR<LikesPayload>(
     nftId ? "/v1/likes/" + nftId : null,
-    fetcher
+    (url) => axios({ url, method: "GET", unmountSignal })
   );
 
   return {
