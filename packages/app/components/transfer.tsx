@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Platform, Linking } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
