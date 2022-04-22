@@ -258,7 +258,7 @@
       "@testing-library/jest-native/extend-expect"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*|@react-three/.*)"
     ]
   }
 }
