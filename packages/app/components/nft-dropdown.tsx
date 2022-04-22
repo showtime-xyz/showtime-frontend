@@ -155,6 +155,8 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
         <DropdownMenuItem
           onSelect={() => {
             handleNavigateRoute(`/nft/${nftId}/activities`, "activitiesModal");
@@ -179,7 +181,9 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        {!isOwner && isFollowingUser && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
 
         {/* <DropdownMenuItem
           onSelect={() => {}}
@@ -223,7 +227,9 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        {!isOwner && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
 
         {!isOwner ? (
           !isBlocked ? (
@@ -250,6 +256,10 @@ function NFTDropdown({ nftId }: Props) {
         ) : null}
 
         {!isOwner && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
+
+        {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
               await report({ nftId: nft?.token_id });
@@ -262,6 +272,10 @@ function NFTDropdown({ nftId }: Props) {
               Report
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
+        )}
+
+        {isOwner && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
         )}
 
         {isOwner && (
@@ -291,6 +305,10 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
+
+        {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => {
               const as = `/nft/${nftId}/list`;
@@ -314,6 +332,10 @@ function NFTDropdown({ nftId }: Props) {
               List
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
+        )}
+
+        {hasOwnership && usableContractAddress && !hasMatchingListing && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
         )}
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
