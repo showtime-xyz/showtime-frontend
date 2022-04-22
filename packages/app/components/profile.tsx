@@ -61,7 +61,6 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
 
-const COVER_IMAGE_HEIGHT = 104;
 const LIST_HEADER_HEIGHT = 80;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
@@ -111,7 +110,6 @@ const ProfileScreen = ({ username }: { username: string }) => {
 };
 
 const Profile = ({ address }: { address?: string }) => {
-  const snackbar = useSnackbar();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -122,59 +120,7 @@ const Profile = ({ address }: { address?: string }) => {
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
-  const { state: mintingState } = useContext(MintContext);
-  const snackBarHeight = useSnackbarBottom();
   const isDark = useIsDarkMode();
-  useEffect(() => {
-    if (
-      mintingState.status === "mediaUpload" ||
-      mintingState.status === "nftJSONUpload" ||
-      mintingState.status === "minting" ||
-      mintingState.status === "transactionCompleted"
-    ) {
-      /**
-       * TODO: replaced `Creating...` text, waiting for copywriting.
-       * https://linear.app/showtime/issue/SHOW2-651#comment-0e19621c
-       * */
-      snackbar?.show({
-        text: "Creating...",
-        iconStatus: "waiting",
-        bottom: snackBarHeight,
-      });
-    }
-
-    if (mintingState.status === "mintingSuccess") {
-      snackbar?.show({
-        text: "Created 🎉 Your NFT will appear in a minute!",
-        iconStatus: "done",
-        bottom: snackBarHeight,
-        hideAfter: 4000,
-        // Todo: navigate to NFT's detail, display placeholder
-        // action: {
-        //   text: "View",
-        //   onPress: () => {
-        //     snackbar?.hide();
-        //   },
-        //   element: (
-        //     <View tw="flex-row items-center justify-center">
-        //       <Text
-        //         tw="text-white dark:text-gray-900 font-bold"
-        //         variant="text-xs"
-        //         numberOfLines={1}
-        //       >
-        //         View
-        //       </Text>
-        //       <ArrowRight
-        //         width={14}
-        //         height={14}
-        //         color={isDark ? colors.gray[900] : colors.white}
-        //       />
-        //     </View>
-        //   ),
-        // },
-      });
-    }
-  }, [mintingState]);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -466,7 +412,6 @@ const ProfileTop = ({
   const [showBottomSheet, setShowBottomSheet] = useState<
     "followers" | "following" | null
   >(null);
-
   const bioWithMentions = useMemo(
     () =>
       reactStringReplace(
@@ -487,16 +432,17 @@ const ProfileTop = ({
       ),
     [bio]
   );
+  const coverImageHeight = useMemo(() => (width < 768 ? 120 : 180), [width]);
 
   return (
     <>
       <View pointerEvents="box-none">
         <View
-          tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}
+          tw={`bg-gray-100 dark:bg-gray-900 h-[${coverImageHeight}px]`}
           pointerEvents="none"
         >
           <Skeleton
-            height={COVER_IMAGE_HEIGHT}
+            height={coverImageHeight}
             width={width}
             show={loading}
             colorMode={colorMode as any}
@@ -504,8 +450,10 @@ const ProfileTop = ({
             {profileData?.data.profile.cover_url && (
               <Image
                 source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+                tw={`h-[${coverImageHeight}px] w-100 object-cover`}
                 alt="Cover image"
+                resizeMethod="resize"
+                resizeMode="cover"
               />
             )}
           </Skeleton>
@@ -632,7 +580,7 @@ const ProfileTop = ({
                 pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
               >
                 <Text tw="text-sm text-gray-600 dark:text-gray-400">
-                  {bioWithMentions}
+                  {`${bioWithMentions}`}
                 </Text>
               </View>
             ) : null}
