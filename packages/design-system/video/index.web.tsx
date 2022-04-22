@@ -7,6 +7,7 @@ import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
 
 import { Image } from "design-system/image";
+import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
@@ -22,8 +23,8 @@ function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
   // useItemVisible({ videoRef });
 
   return (
-    <View>
-      {videoConfig?.previewOnly ? (
+    <View style={[style, tailwind.style(tw)]}>
+      {videoConfig?.previewOnly && props.posterSource ? (
         <Image
           tw={tw}
           resizeMode={resizeMode}

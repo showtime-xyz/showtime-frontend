@@ -7,11 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { MintContext } from "app/context/mint-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import {
-  useMintNFT,
-  supportedVideoExtensions,
-  UseMintNFT,
-} from "app/hooks/use-mint-nft";
+import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
@@ -26,10 +22,11 @@ import {
   View,
 } from "design-system";
 import { ErrorText } from "design-system/fieldset";
+import { useFilePicker } from "design-system/file-picker";
 import { useIsDarkMode } from "design-system/hooks";
-import { ChevronUp } from "design-system/icon";
-import { Image } from "design-system/image";
-import { Video } from "design-system/video";
+import { ChevronUp, Image as ImageIcon } from "design-system/icon";
+import { Preview } from "design-system/preview";
+import { tw } from "design-system/tailwind";
 
 const defaultValues = {
   editionCount: 1,
@@ -65,7 +62,7 @@ function Create() {
   const { user } = useUser();
   const { web3 } = useWeb3();
   const { state } = useContext(MintContext);
-  const { startMinting } = useMintNFT();
+  const { setMedia, startMinting } = useMintNFT();
   const { userAddress: address } = useCurrentUserAddress();
 
   const isNotMagic = !web3;
@@ -88,11 +85,7 @@ function Create() {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const fileExtension =
-    typeof state.file === "string" ? state.file?.split(".").pop() : undefined;
-  const isVideo =
-    fileExtension && supportedVideoExtensions.includes(fileExtension);
-  const Preview = isVideo ? Video : Image;
+  const pickFile = useFilePicker();
 
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
@@ -130,15 +123,34 @@ function Create() {
             testID="data-private"
           >
             <View tw="z-1">
-              <Preview
-                source={{
-                  uri:
-                    typeof state.file === "string"
-                      ? state.file
-                      : URL.createObjectURL(state.file),
+              <Pressable
+                onPress={async () => {
+                  const file = await pickFile({ mediaTypes: "all" });
+                  setMedia({ file: file.file, fileType: file.type });
                 }}
-                tw="w-20 h-20 rounded-2xl"
-              />
+              >
+                {state.file ? (
+                  <Preview
+                    file={state.file}
+                    type={state.fileType}
+                    tw="w-24 h-24 rounded-2xl"
+                  />
+                ) : (
+                  <View tw="w-24 h-24 rounded-2xl items-center justify-center">
+                    <ImageIcon
+                      color={
+                        tw.style("bg-black dark:bg-white")
+                          ?.backgroundColor as string
+                      }
+                      width={24}
+                      height={24}
+                    />
+                    <Text tw="mt-2" variant="text-xs">
+                      Select Media
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
             </View>
             <View tw="ml--2 flex-1">
               <Controller
