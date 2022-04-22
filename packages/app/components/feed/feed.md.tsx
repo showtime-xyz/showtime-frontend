@@ -13,10 +13,10 @@ import type { NFT } from "app/types";
 
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
+import { Hidden } from "design-system/hidden";
 import { useIsDarkMode } from "design-system/hooks";
-import { Show } from "design-system/show";
 import { tw } from "design-system/tailwind";
-import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
+import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
 const CARD_HEIGHT = 890;
@@ -40,7 +40,7 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      <Show from="xl">
+      <Hidden till="xl">
         <View
           style={{
             position: Platform.OS === "web" ? "fixed" : null,
@@ -51,7 +51,7 @@ export const FeedList = () => {
         >
           <SuggestedUsers />
         </View>
-      </Show>
+      </Hidden>
 
       <View tw="flex-2">
         {isAuthenticated ? (

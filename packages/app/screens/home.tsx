@@ -6,7 +6,7 @@ import { Feed as FeedDesktop } from "app/components/feed/feed.md";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { mixpanel } from "app/lib/mixpanel";
 
-import { Hide, Show } from "design-system/show";
+import { Hidden } from "design-system/hidden";
 
 const HomeScreen = withColorScheme(() => {
   useEffect(() => {
@@ -15,12 +15,12 @@ const HomeScreen = withColorScheme(() => {
 
   return (
     <ErrorBoundary>
-      <Hide from="md">
+      <Hidden from="md">
         <Feed />
-      </Hide>
-      <Show from="md">
+      </Hidden>
+      <Hidden till="md">
         <FeedDesktop />
-      </Show>
+      </Hidden>
     </ErrorBoundary>
   );
 });
