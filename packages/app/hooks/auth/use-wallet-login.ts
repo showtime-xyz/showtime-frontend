@@ -122,6 +122,7 @@ export function useWalletLogin() {
     } else if (status === "EXPIRED_NONCE") {
       mixpanel.track(`Login success - wallet`);
     } else if (status === "ERRORED") {
+      console.error("Error logging in with wallet", error);
       logout();
     }
   });

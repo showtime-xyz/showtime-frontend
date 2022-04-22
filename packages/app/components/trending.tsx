@@ -344,7 +344,6 @@ const NFTSList = ({
           nft={item}
           numColumns={numColumns}
           onPress={() =>
-            // TODO:
             router.push(
               `/list?initialScrollIndex=${
                 // index - 1 because header takes the initial index!

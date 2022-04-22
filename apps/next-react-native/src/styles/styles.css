@@ -53,9 +53,8 @@
 /* SpaceGrotesk Regular */
 @font-face {
   font-family: "SpaceGrotesk Regular";
-  src: url("/fonts/woff2/SpaceGrotesk-Regular-subset.zopfli.woff")
-      format("woff"),
-    url("/fonts/woff2/SpaceGrotesk-Regular-subset.woff2") format("woff2");
+  src: url("/fonts/woff/SpaceGrotesk-Regular-subset.zopfli.woff") format("woff"),
+    url("/fonts/woff/SpaceGrotesk-Regular-subset.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;

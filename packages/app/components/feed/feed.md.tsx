@@ -24,7 +24,7 @@ const CARD_WIDTH = 620;
 
 export const Feed = () => {
   return (
-    <View tw="flex-1 bg-gray-100 dark:bg-gray-900 py-8" testID="homeFeed">
+    <View tw="flex-1 bg-gray-100 dark:bg-black py-8" testID="homeFeed">
       <ErrorBoundary>
         <Suspense fallback={<View />}>
           <FeedList />

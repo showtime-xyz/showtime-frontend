@@ -17,7 +17,6 @@ interface Props {
 
 export function LikedBy({ nft }: Props) {
   //#region hooks
-  const router = useRouter();
   const isDarkMode = useIsDarkMode();
   const { data, loading } = useLikes(nft?.nft_id);
   //#endregion

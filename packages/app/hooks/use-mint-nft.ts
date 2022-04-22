@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -13,6 +13,8 @@ import { useWalletConnect } from "app/lib/walletconnect";
 //@ts-ignore
 import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
 
 import { useWeb3 } from "./use-web3";
 
@@ -229,6 +231,7 @@ const getPinataToken = () => {
 };
 
 export const useMintNFT = () => {
+  const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
   const biconomyRef = useRef<any>();
   let { web3 } = useWeb3();
@@ -256,8 +259,9 @@ export const useMintNFT = () => {
         typeof fileMetaData.size === "number" &&
         fileMetaData.size > MAX_FILE_SIZE
       ) {
-        // TODO: improve alert
-        Alert.alert("File too big! Please use a file smaller than 50MB.");
+        Alert.alert(
+          `This file is too big. Please use a file smaller than 50 MB.`
+        );
         return;
       }
 

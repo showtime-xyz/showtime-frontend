@@ -1,14 +1,14 @@
-import { useContext, useReducer, useCallback, useRef } from "react";
-import { Alert } from "react-native";
+import { useReducer, useCallback, useRef } from "react";
 
 import { ethers } from "ethers";
 
 import transfererAbi from "app/abi/ShowtimeMT.json";
-import { AppContext } from "app/context/app-context";
 import { track } from "app/lib/analytics";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { NFT } from "app/types";
 import { getBiconomy } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
 
 import { useCurrentUserAddress } from "./use-current-user-address";
 import { useWeb3 } from "./use-web3";
@@ -61,6 +61,7 @@ export type UseTransferNFT = {
 };
 
 export const useTransferNFT = () => {
+  const Alert = useAlert();
   const [state, dispatch] = useReducer(
     transferNFTReducer,
     initialTransferNFTState
@@ -68,8 +69,6 @@ export const useTransferNFT = () => {
   const biconomyRef = useRef<any>();
   const { userAddress } = useCurrentUserAddress();
   const { web3 } = useWeb3();
-  const context = useContext(AppContext);
-
   const connector = useWalletConnect();
 
   async function transferToken({
