@@ -1,3 +1,5 @@
+import { Alert, Linking } from "react-native";
+
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -20,6 +22,21 @@ export const SettingAccountSlotHeader = () => {
 };
 
 export const SettingAccountSlotFooter = () => {
+  const supportMailURL = "mailto:help@tryshowtime.com";
+
+  const handleDeleteAccount = async () => {
+    try {
+      const canOpenUrl = await Linking.canOpenURL(supportMailURL);
+      if (canOpenUrl) {
+        Linking.openURL(supportMailURL);
+      } else {
+        Alert.alert("Error", "Could not find a mail client on your device.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong. Please try again later.");
+    }
+  };
+
   return (
     <View tw="px-4 mt-4">
       <View tw="flex flex-col items-start">
@@ -31,7 +48,7 @@ export const SettingAccountSlotFooter = () => {
         </Text>
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
-            <Button variant="danger" size="small">
+            <Button variant="danger" size="small" onPress={handleDeleteAccount}>
               <ButtonLabel>Delete Account</ButtonLabel>
             </Button>
           </Link>
