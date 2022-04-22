@@ -21,7 +21,6 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 export type MintNFTStatus =
   | "idle"
   | "mediaUpload"
-  | "setMedia"
   | "mediaUploadError"
   | "mediaUploadSuccess"
   | "nftJSONUpload"
@@ -31,6 +30,8 @@ export type MintNFTStatus =
   | "mintingError"
   | "mintingSuccess"
   | "transactionCompleted";
+
+export type MintActionType = MintNFTStatus | "reset" | "setMedia";
 
 export type MintNFTType = {
   status: MintNFTStatus;
@@ -66,9 +67,17 @@ export type ActionPayload = {
 
 export const mintNFTReducer = (
   state: MintNFTType,
-  action: { type: MintNFTStatus; payload?: ActionPayload }
+  action: {
+    type: MintActionType;
+    payload?: ActionPayload;
+  }
 ): MintNFTType => {
   switch (action.type) {
+    case "reset": {
+      return {
+        ...initialMintNFTState,
+      };
+    }
     case "setMedia": {
       return {
         ...initialMintNFTState,

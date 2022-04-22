@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo } from "react";
-import { Alert, Platform } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 
 import { Create } from "app/components/create";
 import { MintContext } from "app/context/mint-context";
@@ -10,7 +10,8 @@ import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import { withModalScreen } from "app/navigation/with-modal-screen";
 
-import { Modal, ModalSheet } from "design-system";
+import { Button, Modal, ModalSheet, Spinner, Text, View } from "design-system";
+import { Hidden } from "design-system/hidden";
 
 type Query = {
   form: string;
@@ -23,7 +24,7 @@ const CreateModal = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const [form] = useParam("form");
-  const { state } = useContext(MintContext);
+  const { state, dispatch } = useContext(MintContext);
   //#endregion
 
   //#region variables
@@ -34,7 +35,12 @@ const CreateModal = () => {
   //#region effects
   useEffect(() => {
     mixpanel.track("Create page view");
+
+    return () => {
+      dispatch({ type: "reset" });
+    };
   }, []);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       if (
@@ -72,21 +78,67 @@ const CreateModal = () => {
   }, [navigation, router]);
   //#endregion
 
-  if (!form) {
-    return null;
-  }
+  // if (!form) {
+  //   return null;
+  // }
 
   return (
-    <ModalComponent
-      title="Add details"
-      close={router.pop}
-      snapPoints={snapPoints}
-      height="h-[90vh]"
-      bodyTW="bg-white dark:bg-black"
-      bodyContentTW="p-0"
-    >
-      <Create />
-    </ModalComponent>
+    <>
+      <ModalComponent
+        title="New NFT"
+        close={router.pop}
+        snapPoints={snapPoints}
+        bodyTW="bg-white dark:bg-black"
+        height="h-[90vh]"
+        bodyContentTW="p-0"
+      >
+        <>
+          <Hidden till="md">
+            <CreateMD />
+          </Hidden>
+
+          <Hidden from="md">
+            <Create />
+          </Hidden>
+        </>
+      </ModalComponent>
+    </>
+  );
+};
+
+const CreateMD = () => {
+  const { state } = useContext(MintContext);
+  return (
+    <View tw="flex-1 py-8">
+      {state.status === "transactionCompleted" ? (
+        <View tw="items-center justify-center">
+          <Spinner />
+          <Text tw="text-black dark:text-white mt-10 text-center">
+            Your NFT is being minted on Polygon network. Feel free to navigate
+            away from this screen.
+          </Text>
+        </View>
+      ) : state.status === "mintingSuccess" ? (
+        <View tw="items-center justify-center">
+          <Text tw="text-black dark:text-white mb-4 text-center">
+            🎉 Your NFT has been minted!
+          </Text>
+          <Button
+            onPress={() => {
+              Linking.openURL(
+                `https://${
+                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+                }polygonscan.com/tx/${state.transaction}`
+              );
+            }}
+          >
+            Polygon Scan
+          </Button>
+        </View>
+      ) : (
+        <Create />
+      )}
+    </View>
   );
 };
 

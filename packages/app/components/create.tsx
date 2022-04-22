@@ -19,6 +19,7 @@ import {
   Button,
   Checkbox,
   Fieldset,
+  Spinner,
   Text,
   View,
 } from "design-system";
@@ -36,7 +37,7 @@ const defaultValues = {
   royaltiesPercentage: 10,
   notSafeForWork: false,
   hasAcceptedTerms: false,
-  file: undefined,
+  file: { file: null, type: null },
 };
 
 const createNFTValidationSchema = yup.object({
@@ -112,7 +113,10 @@ function Create() {
 
   useEffect(
     function redirect() {
-      if (state.status === "mediaUpload" || state.status === "nftJSONUpload") {
+      if (
+        (state.status === "mediaUpload" || state.status === "nftJSONUpload") &&
+        Platform.OS !== "web"
+      ) {
         // TODO: save the file in the user gallery (if taken from camera)
         setTimeout(() => {
           router.pop();
@@ -149,7 +153,7 @@ function Create() {
                           setMedia({ file: file.file, fileType: file.type });
                         }}
                       >
-                        {value ? (
+                        {value.file ? (
                           <Preview
                             file={value.file}
                             //@ts-ignore
@@ -227,13 +231,27 @@ function Create() {
                           .backgroundColor,
                       }}
                     >
-                      {value ? (
-                        <Preview
-                          file={value.file}
-                          //@ts-ignore
-                          type={value.type}
-                          tw="w-80 h-80 rounded-2xl"
-                        />
+                      {value.file ? (
+                        <View>
+                          <Preview
+                            file={value.file}
+                            //@ts-ignore
+                            type={value.type}
+                            tw="w-80 h-80 rounded-2xl"
+                          />
+                          {state.status === "nftJSONUpload" ||
+                          state.status === "mediaUpload" ? (
+                            <View tw="py-3 px-4 bg-white dark:bg-black mt-4 rounded-full flex-row items-center">
+                              <Spinner size="small" />
+                              <Text
+                                variant="text-xs"
+                                tw="text-black dark:text-white ml-4 font-bold"
+                              >
+                                Uploading to IPFS...
+                              </Text>
+                            </View>
+                          ) : null}
+                        </View>
                       ) : (
                         <View tw="items-center">
                           <Text
@@ -447,6 +465,7 @@ function Create() {
           size="regular"
           onPress={handleSubmit(handleSubmitForm)}
           disabled={!enable}
+          tw={!enable ? "opacity-60" : ""}
         >
           {state.status === "idle"
             ? "Create"
