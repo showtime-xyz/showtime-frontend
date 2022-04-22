@@ -91,7 +91,7 @@ const theme = makeTheme({
 });
 
 export const breakpoints = {
-  xs: 0,
+  base: 0,
   sm: 640,
   md: 768,
   lg: 1024,
