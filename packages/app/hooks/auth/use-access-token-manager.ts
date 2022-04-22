@@ -21,10 +21,10 @@ export function useAccessTokenManager() {
 
     try {
       // Get refresh token
-      const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
-      if (!sealedRefreshToken) {
-        throw "Missing sealed refresh token";
-      }
+      // const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
+      // if (!sealedRefreshToken) {
+      //   throw "Missing sealed refresh token";
+      // }
 
       // TODO: unseal refresh token
       // const { refreshToken } = await Iron.unseal(
@@ -39,8 +39,7 @@ export function useAccessTokenManager() {
         url: `/v1/jwt/refresh`,
         method: "POST",
         data: {
-          // refresh: refreshToken,
-          refresh: sealedRefreshToken,
+          refresh: refreshToken,
         },
       });
 

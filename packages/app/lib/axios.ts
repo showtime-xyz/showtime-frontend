@@ -4,7 +4,7 @@ import type { Method, AxiosRequestHeaders } from "axios";
 import { getAccessToken } from "app/lib/access-token";
 
 export type AxiosOverrides = {
-  forceAccessTokenAuthorization: boolean;
+  forceAccessTokenAuthorization?: boolean;
 };
 
 export type AxiosParams = {
