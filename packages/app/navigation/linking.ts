@@ -5,9 +5,10 @@ import type { LinkingOptions } from "app/lib/react-navigation/native";
 
 const withRewrites = (unparsedPath: string): string => {
   if (unparsedPath.startsWith("/@")) {
-    const username = unparsedPath.replace("/@", "");
+    const username = unparsedPath.replace("/@", "").split("?")[0].split("/")[0];
+    const rest = unparsedPath.replace(`/@${username}`, "");
 
-    return `/profile/${username}`;
+    return `/profile/${username}${rest}`;
   }
 
   return unparsedPath;
