@@ -93,15 +93,17 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <Model
-          url={item?.source_url}
-          // TODO: update this to get a preview from CDN v2
-          fallbackUrl={item?.still_preview_url}
-          numColumns={numColumns}
-          tw={size}
-          blurhash={item?.blurhash}
-          resizeMode={resizeMode}
-        />
+        <View tw="h-screen w-screen">
+          <Model
+            url={item?.source_url}
+            // TODO: update this to get a preview from CDN v2
+            fallbackUrl={item?.still_preview_url}
+            numColumns={numColumns}
+            tw={size}
+            blurhash={item?.blurhash}
+            resizeMode={resizeMode}
+          />
+        </View>
       ) : null}
     </View>
   );

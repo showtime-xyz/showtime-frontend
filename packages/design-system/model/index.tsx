@@ -2,7 +2,8 @@ import { Suspense } from "react";
 
 import { Image } from "design-system/image";
 
-import { Canvas, useFrame, useGLTF } from "./react-three-fiber";
+import { useGLTF, Bounds, Stage } from "./react-three-drei";
+import { Canvas, useFrame } from "./react-three-fiber";
 
 type Props = {
   url: string;
@@ -17,7 +18,19 @@ function Model({ url }: { url: string }) {
   const { scene } = useGLTF(url);
   useFrame(() => (scene.rotation.y += 0.01));
 
-  return <primitive object={scene} />;
+  scene.scale.setScalar(1000);
+
+  return (
+    <Stage
+      shadows
+      adjustCamera
+      intensity={1}
+      environment="city"
+      preset="rembrandt"
+    >
+      <primitive object={scene} />
+    </Stage>
+  );
 }
 
 // TODO: implement touch events à la `OrbitControls`
@@ -41,8 +54,7 @@ function ModelViewer({
 }: Props) {
   console.log(url);
 
-  // && numColumns > 1
-  if (fallbackUrl) {
+  if (fallbackUrl && numColumns > 1) {
     return (
       <Image
         source={{
