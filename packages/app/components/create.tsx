@@ -23,9 +23,11 @@ import {
 } from "design-system";
 import { ErrorText } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
+import { Hidden } from "design-system/hidden";
 import { useIsDarkMode } from "design-system/hooks";
 import { ChevronUp, Image as ImageIcon } from "design-system/icon";
 import { Preview } from "design-system/preview";
+import { Switch } from "design-system/switch";
 import { tw } from "design-system/tailwind";
 
 const defaultValues = {
@@ -122,36 +124,38 @@ function Create() {
             tw="flex-row items-center bg-gray-100 dark:bg-gray-900 rounded-4"
             testID="data-private"
           >
-            <View tw="z-1">
-              <Pressable
-                onPress={async () => {
-                  const file = await pickFile({ mediaTypes: "all" });
-                  setMedia({ file: file.file, fileType: file.type });
-                }}
-              >
-                {state.file ? (
-                  <Preview
-                    file={state.file}
-                    type={state.fileType}
-                    tw="w-24 h-24 rounded-2xl"
-                  />
-                ) : (
-                  <View tw="w-24 h-24 rounded-2xl items-center justify-center">
-                    <ImageIcon
-                      color={
-                        tw.style("bg-black dark:bg-white")
-                          ?.backgroundColor as string
-                      }
-                      width={24}
-                      height={24}
+            <Hidden from="md">
+              <View tw="z-1">
+                <Pressable
+                  onPress={async () => {
+                    const file = await pickFile({ mediaTypes: "all" });
+                    setMedia({ file: file.file, fileType: file.type });
+                  }}
+                >
+                  {state.file ? (
+                    <Preview
+                      file={state.file}
+                      type={state.fileType}
+                      tw="w-24 h-24 rounded-2xl"
                     />
-                    <Text tw="mt-2" variant="text-xs">
-                      Select Media
-                    </Text>
-                  </View>
-                )}
-              </Pressable>
-            </View>
+                  ) : (
+                    <View tw="w-24 h-24 rounded-2xl items-center justify-center">
+                      <ImageIcon
+                        color={
+                          tw.style("bg-black dark:bg-white")
+                            ?.backgroundColor as string
+                        }
+                        width={24}
+                        height={24}
+                      />
+                      <Text tw="mt-2" variant="text-xs">
+                        Select Media
+                      </Text>
+                    </View>
+                  )}
+                </Pressable>
+              </View>
+            </Hidden>
             <View tw="ml--2 flex-1">
               <Controller
                 control={control}
@@ -170,6 +174,59 @@ function Create() {
               />
             </View>
           </View>
+
+          <Hidden till="md">
+            <Pressable
+              onPress={async () => {
+                const file = await pickFile({ mediaTypes: "all" });
+                setMedia({ file: file.file, fileType: file.type });
+              }}
+            >
+              <View
+                tw="bg-gray-100 dark:gray-900 p-8 rounded-xl mt-4 items-center"
+                style={{
+                  borderStyle: "dashed",
+                  borderWidth: 2,
+                  borderColor: tw.color("gray-400"),
+                }}
+              >
+                {state.file ? (
+                  <Preview
+                    file={state.file}
+                    type={state.fileType}
+                    tw="w-80 h-80 rounded-2xl"
+                  />
+                ) : (
+                  <View tw="items-center">
+                    <Text
+                      variant="text-sm"
+                      tw="dark:text-white text-gray-900 font-bold"
+                    >
+                      Select file to upload
+                    </Text>
+                    <Text
+                      variant="text-sm"
+                      tw="mt-4 dark:text-gray-400 text-gray-600"
+                    >
+                      png, jpg, mp4, mov, gltf, glb
+                    </Text>
+                    <Text
+                      variant="text-sm"
+                      tw="mt-4 dark:text-gray-400 text-gray-600"
+                    >
+                      Stored on{" "}
+                      <Text
+                        variant="text-sm"
+                        tw="dark:text-gray-400 text-gray-600 font-bold"
+                      >
+                        IPFS
+                      </Text>
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </Pressable>
+          </Hidden>
 
           <View tw="mt-4 flex-row">
             <Controller
@@ -213,7 +270,9 @@ function Create() {
           </View>
 
           <View tw="mt-4 border-2 border-gray-200 dark:border-gray-800 rounded-2xl">
-            <Accordion.Root>
+            <Accordion.Root
+              value={Platform.select({ web: "options", default: undefined })}
+            >
               <Accordion.Item value="options">
                 <Accordion.Trigger>
                   <Accordion.Label>Options</Accordion.Label>
@@ -237,8 +296,8 @@ function Create() {
                       />
                     )}
                   />
-                  <View tw="flex-row mt-4">
-                    {/* <Controller
+                  {/* <View tw="flex-row mt-4"> */}
+                  {/* <Controller
                       control={control}
                       name="c"
                       render={({ field: { onChange, onBlur, value } }) => (
@@ -259,26 +318,46 @@ function Create() {
                         />
                       )}
                     /> */}
-                    {isNotMagic ? (
-                      <Controller
-                        control={control}
-                        name="royaltiesPercentage"
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <Fieldset
-                            label="Creator Royalties"
-                            placeholder="10%"
-                            // tw="ml-4 w-[48%]"
-                            value={value}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            helperText="How much you'll earn each time this NFT is sold."
-                            keyboardType="numeric"
-                            returnKeyType="done"
-                            errorText={errors.royaltiesPercentage?.message}
-                          />
-                        )}
-                      />
-                    ) : null}
+                  {isNotMagic ? (
+                    <Controller
+                      control={control}
+                      name="royaltiesPercentage"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Fieldset
+                          label="Creator Royalties (%)"
+                          placeholder="10%"
+                          tw="mt-4"
+                          value={value}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          helperText="How much you'll earn each time this NFT is sold."
+                          keyboardType="numeric"
+                          returnKeyType="done"
+                          errorText={errors.royaltiesPercentage?.message}
+                        />
+                      )}
+                    />
+                  ) : null}
+
+                  <View tw="mt-8 flex-row justify-between">
+                    <View>
+                      <Text
+                        variant="text-sm"
+                        tw="font-bold text-black dark:text-white"
+                      >
+                        Explicit content
+                      </Text>
+                      <Text tw="mt-2 text-gray-600 dark:text-gray-400">
+                        18+
+                      </Text>
+                    </View>
+                    <Controller
+                      control={control}
+                      name="notSafeForWork"
+                      render={({ field: { onChange, value } }) => (
+                        <Switch checked={value} onChange={onChange} />
+                      )}
+                    />
                   </View>
                 </Accordion.Content>
               </Accordion.Item>
@@ -296,7 +375,10 @@ function Create() {
                     accesibilityLabel="I agree to the terms and conditions"
                   />
 
-                  <Pressable onPress={() => onChange(!value)}>
+                  <Pressable
+                    onPress={() => onChange(!value)}
+                    style={{ flex: 1 }}
+                  >
                     <Text tw="ml-4 text-gray-600 dark:text-gray-400 text-sm">
                       I have the rights to publish this artwork, and understand
                       it will be minted on the Polygon network.
@@ -310,41 +392,40 @@ function Create() {
             )}
           />
         </View>
-
-        <View tw="mt-8 px-4 w-full">
-          <Button
-            variant="primary"
-            size="regular"
-            onPress={handleSubmit(handleSubmitForm)}
-            disabled={!enable}
-          >
-            {state.status === "idle"
-              ? "Create"
-              : state.status === "mediaUpload" ||
-                state.status === "nftJSONUpload"
-              ? "Uploading..."
-              : state.status === "mintingSuccess"
-              ? "Success!"
-              : isError
-              ? "Failed. Retry"
-              : "Minting..."}
-          </Button>
-
-          <View tw="h-12 mt-4">
-            {state.status === "minting" && !state.isMagic ? (
-              <Button
-                onPress={handleSubmit(handleSubmitForm)}
-                tw="h-12"
-                variant="tertiary"
-              >
-                <Text tw="text-gray-900 dark:text-white text-sm">
-                  Didn't receive the signature request yet?
-                </Text>
-              </Button>
-            ) : null}
-          </View>
-        </View>
       </CreateScrollView>
+
+      <View tw="mt-8 px-4 w-full">
+        <Button
+          variant="primary"
+          size="regular"
+          onPress={handleSubmit(handleSubmitForm)}
+          disabled={!enable}
+        >
+          {state.status === "idle"
+            ? "Create"
+            : state.status === "mediaUpload" || state.status === "nftJSONUpload"
+            ? "Uploading..."
+            : state.status === "mintingSuccess"
+            ? "Success!"
+            : isError
+            ? "Failed. Retry"
+            : "Minting..."}
+        </Button>
+
+        <View tw="h-12 mt-4">
+          {state.status === "minting" && !state.isMagic ? (
+            <Button
+              onPress={handleSubmit(handleSubmitForm)}
+              tw="h-12"
+              variant="tertiary"
+            >
+              <Text tw="text-gray-900 dark:text-white text-sm">
+                Didn't receive the signature request yet?
+              </Text>
+            </Button>
+          ) : null}
+        </View>
+      </View>
     </View>
   );
 }
