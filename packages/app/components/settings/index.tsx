@@ -64,6 +64,7 @@ const SettingsTabs = () => {
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+  const isWeb = Platform.OS === "web";
 
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
@@ -111,12 +112,14 @@ const SettingsTabs = () => {
             >
               Settings
             </Text>
-            <Text
-              variant="text-2xl"
-              tw="text-gray-100 dark:text-gray-900 font-extrabold"
-            >
-              v{Constants?.manifest?.version ?? packageJson?.version}
-            </Text>
+            {!isWeb ? (
+              <Text
+                variant="text-2xl"
+                tw="text-gray-100 dark:text-gray-900 font-extrabold"
+              >
+                v{Constants?.manifest?.version ?? packageJson?.version}
+              </Text>
+            ) : null}
           </View>
         </Tabs.Header>
         <Tabs.List
