@@ -77,6 +77,7 @@ export const useFilePicker = () => {
 
           resolve({ file: result.uri, type: result.type });
         } catch (error) {
+          reject(error);
           console.error(error);
         }
       }
