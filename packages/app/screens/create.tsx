@@ -38,9 +38,9 @@ const CreateModal = () => {
   useEffect(() => {
     mixpanel.track("Create page view");
 
-    return () => {
-      dispatch({ type: "reset" });
-    };
+    // return () => {
+    //   dispatch({ type: "reset" });
+    // };
   }, []);
 
   useEffect(() => {
