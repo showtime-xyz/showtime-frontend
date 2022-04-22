@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { Dimensions, useWindowDimensions, Platform } from "react-native";
 
+import Head from "next/head";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -69,14 +71,46 @@ const NFTDetail = () => {
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
+  const item = data?.data?.item;
 
-  if (data?.data?.item) {
+  if (item) {
     return (
-      <FeedItem
-        itemHeight={itemHeight}
-        bottomPadding={safeAreaBottom}
-        nft={data.data.item}
-      />
+      <>
+        <Head>
+          <title>{item.token_name} | Showtime</title>
+
+          <meta name="description" content={item.token_description} />
+          <meta property="og:type" content="website" />
+          <meta name="og:description" content={item.token_description} />
+          <meta
+            property="og:image"
+            content={
+              item.token_img_twitter_url
+                ? item.token_img_twitter_url
+                : item.token_img_url
+            }
+          />
+          <meta name="og:title" content={item.token_name} />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={item.token_name} />
+          <meta name="twitter:description" content={item.token_description} />
+          <meta
+            name="twitter:image"
+            content={
+              item.token_img_twitter_url
+                ? item.token_img_twitter_url
+                : item.token_img_url
+            }
+          />
+        </Head>
+
+        <FeedItem
+          itemHeight={itemHeight}
+          bottomPadding={safeAreaBottom}
+          nft={data.data.item}
+        />
+      </>
     );
   }
 

@@ -1,5 +1,4 @@
 const PagerView = () => {
-  // TODO:
   return;
 };
 

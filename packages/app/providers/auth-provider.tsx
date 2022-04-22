@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
-import useUnmountSignal from "use-unmount-signal";
 
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -35,7 +34,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   //#region hooks
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
-  const unmountSignal = useUnmountSignal();
   const { setWeb3 } = useWeb3();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
@@ -49,7 +47,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         url: `/v1/${endpoint}`,
         method: "POST",
         data,
-        unmountSignal,
       });
 
       const accessToken = response?.access;
@@ -66,7 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, unmountSignal]
+    [setTokens, setAuthenticationStatus]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
@@ -112,9 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     () => ({
       authenticationStatus,
       accessToken,
-
       setAuthenticationStatus,
-
       login,
       logout,
     }),
@@ -131,6 +126,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           await refreshTokens();
           setAuthenticationStatus("AUTHENTICATED");
         } catch (error: any) {
+          setAuthenticationStatus("UNAUTHENTICATED");
           console.log(
             "AuthProvider",
             typeof error === "string" ? error : error.message || "unknown"
@@ -138,10 +134,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
           await logout();
         }
       }
+
       doRefreshToken();
     }
   }, [authenticationStatus, logout, refreshTokens]);
   //#endregion
+
   return (
     <AuthContext.Provider value={authenticationContextValue}>
       {children}

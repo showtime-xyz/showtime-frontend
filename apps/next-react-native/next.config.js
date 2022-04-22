@@ -73,6 +73,11 @@ const nextConfig = {
         destination: "https://showtime.nolt.io",
         permanent: true,
       },
+      {
+        source: "/t/:path*",
+        destination: "/token/:path*",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
