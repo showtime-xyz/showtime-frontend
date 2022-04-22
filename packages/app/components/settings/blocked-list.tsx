@@ -54,8 +54,6 @@ const HeaderSection = () => {
 };
 
 export const UserItem = (props: UserItemProps) => {
-  const router = useRouter();
-
   return (
     <View tw="flex-1 flex-row w-full px-4 py-2 items-center">
       <View tw="mr-2 rounded-xl w-6 h-6 bg-gray-200">
@@ -71,7 +69,7 @@ export const UserItem = (props: UserItemProps) => {
         size="small"
         variant="danger"
         onPress={() => {
-          // TODO(enes): unblock action
+          // TODO(enes): implement unblocking logics
         }}
       >
         <ButtonLabel>Unblock</ButtonLabel>
@@ -91,7 +89,12 @@ export const BlockedList = () => {
     <ScrollView>
       {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
-      {list.map(renderUserItem)}
+      <View tw="flex-1 px-4">
+        <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+          🚧 Coming soon
+        </Text>
+      </View>
+      {/* // TODO(enes): implement unblocking logics */}
     </ScrollView>
   );
 };

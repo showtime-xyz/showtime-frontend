@@ -19,6 +19,7 @@ export const SettingAccountSlotHeader = () => {
 };
 
 export const SettingAccountSlotFooter = () => {
+  // TODO(enes): implement delete account logics
   return (
     <View tw="px-4 mt-4">
       <View tw="flex flex-col items-start">
