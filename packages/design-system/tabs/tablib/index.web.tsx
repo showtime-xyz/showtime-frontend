@@ -84,59 +84,61 @@ const Root = ({
 
   return (
     <TabsContext.Provider value={{ position, offset }}>
-      {headerChild}
       <RadixTabs.Root
         value={selected}
         onValueChange={onIndexChange}
         activationMode="manual"
       >
-        <RadixTabs.List aria-label={accessibilityLabel} asChild>
-          <ScrollView
-            {...(listChild as any).props}
-            contentContainerStyle={[
-              {
-                flexDirection: "row",
-                flexWrap: "nowrap",
-                alignItems: "center",
-                paddingHorizontal: 10,
-                height: "100%",
-              },
-              tw.style(`bg-white dark:bg-black px-2`),
-              (listChild as any).props?.contentContainerStyle,
-            ]}
-          >
-            {tabTriggers.map((t, index) => {
-              const value = index.toString();
+        <View tw="flex flex-row justify-between shadow-md">
+          {headerChild}
+          <RadixTabs.List aria-label={accessibilityLabel} asChild>
+            <ScrollView
+              {...(listChild as any).props}
+              contentContainerStyle={[
+                {
+                  flexDirection: "row",
+                  flexWrap: "nowrap",
+                  alignItems: "center",
+                  paddingHorizontal: 10,
+                  height: "100%",
+                },
+                tw.style(`bg-white dark:bg-black px-2`),
+                (listChild as any).props?.contentContainerStyle,
+              ]}
+            >
+              {tabTriggers.map((t, index) => {
+                const value = index.toString();
 
-              return (
-                <RadixTabs.Trigger
-                  value={value}
-                  key={value}
-                  style={radixTriggerStyle}
-                  {...t.props}
-                >
-                  <TabIndexContext.Provider value={{ index }}>
-                    <View
-                      sx={{
-                        alignItems: "center",
-                        borderBottomWidth: 2,
-                        height: "100%",
-                        justifyContent: "center",
-                      }}
-                      tw={
-                        selected === value
-                          ? "border-b-gray-900 dark:border-b-gray-100"
-                          : "border-b-transparent"
-                      }
-                    >
-                      {t}
-                    </View>
-                  </TabIndexContext.Provider>
-                </RadixTabs.Trigger>
-              );
-            })}
-          </ScrollView>
-        </RadixTabs.List>
+                return (
+                  <RadixTabs.Trigger
+                    value={value}
+                    key={value}
+                    style={radixTriggerStyle}
+                    {...t.props}
+                  >
+                    <TabIndexContext.Provider value={{ index }}>
+                      <View
+                        sx={{
+                          alignItems: "center",
+                          borderBottomWidth: 2,
+                          height: "100%",
+                          justifyContent: "center",
+                        }}
+                        tw={
+                          selected === value
+                            ? "border-b-gray-900 dark:border-b-gray-100"
+                            : "border-b-transparent"
+                        }
+                      >
+                        {t}
+                      </View>
+                    </TabIndexContext.Provider>
+                  </RadixTabs.Trigger>
+                );
+              })}
+            </ScrollView>
+          </RadixTabs.List>
+        </View>
         {tabContents.map((c, index) => {
           const value = index.toString();
           return (
