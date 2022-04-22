@@ -5584,6 +5584,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-three/fiber@npm:^8.0.12":
+  version: 8.0.12
+  resolution: "@react-three/fiber@npm:8.0.12"
+  dependencies:
+    "@babel/runtime": ^7.17.8
+    "@types/react-reconciler": ^0.26.6
+    react-merge-refs: ^1.1.0
+    react-reconciler: ^0.27.0
+    react-use-measure: ^2.1.1
+    scheduler: ^0.21.0
+    suspend-react: ^0.0.8
+    zustand: ^3.7.1
+  peerDependencies:
+    expo: ">=43.0"
+    expo-asset: ">=8.4"
+    expo-gl: ">=11.0"
+    react: ">=18.0"
+    react-dom: ">=18.0"
+    react-native: ">=0.64"
+    three: ">=0.133"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+    expo-asset:
+      optional: true
+    expo-gl:
+      optional: true
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: a403827da2bc7cdecd851f22d9599af41c4f571db90c99032d93e95f7fdc75d0890dd0b97245b972d709634535330c1d891202d689f1ae1534efae85faa18dd1
+  languageName: node
+  linkType: hard
+
 "@react-three/fiber@npm:beta":
   version: 8.0.0-beta.10
   resolution: "@react-three/fiber@npm:8.0.0-beta.10"
@@ -6133,7 +6168,7 @@ __metadata:
     "@react-navigation/native-stack": ^6.3.0
     "@react-navigation/stack": ^6.1.0
     "@react-three/drei": ^9.5.3
-    "@react-three/fiber": beta
+    "@react-three/fiber": ^8.0.12
     "@rudderstack/rudder-sdk-react-native": ^1.2.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz"
@@ -6284,6 +6319,7 @@ __metadata:
     "@next/bundle-analyzer": ^12.0.4
     "@react-native-menu/menu": ^0.5.2
     "@react-three/drei": ^9.5.3
+    "@react-three/fiber": ^8.0.12
     "@sentry/integrations": 7.0.0-alpha.0
     "@sentry/nextjs": 7.0.0-alpha.0
     "@tailwindcss/forms": ^0.3.2
@@ -8850,6 +8886,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 5ebb72f8aa70824b69030ae7f4c21828c0fb5c1cc5873a606eb7f7ac50cf5dd52502edcd32bf1eead2f149d076ee1798c86f1ffaebfa8b31d523343368d351e0
+  languageName: node
+  linkType: hard
+
+"@types/react-reconciler@npm:^0.26.6":
+  version: 0.26.6
+  resolution: "@types/react-reconciler@npm:0.26.6"
+  dependencies:
+    "@types/react": "*"
+  checksum: 5c96f40338f2ccc544018610b42f467945450a8448b042ce5a052a3a45820ccd028b1fb65157c99f5889a10cd1e17093252c54c56a002bc64acadd6d5a9e4b08
   languageName: node
   linkType: hard
 

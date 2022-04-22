@@ -63,7 +63,7 @@
     "@react-navigation/native-stack": "^6.3.0",
     "@react-navigation/stack": "^6.1.0",
     "@react-three/drei": "^9.5.3",
-    "@react-three/fiber": "beta",
+    "@react-three/fiber": "^8.0.12",
     "@rudderstack/rudder-sdk-react-native": "^1.2.0",
     "@sentry/react-native": "^3.3.0",
     "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz",
