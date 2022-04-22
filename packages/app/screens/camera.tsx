@@ -11,6 +11,8 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
+import { FilePickerResolveValue } from "design-system/file-picker";
+
 function CameraScreen() {
   useHideHeader();
   const { isAuthenticated } = useUser();
@@ -24,8 +26,8 @@ function CameraScreen() {
   const { setMedia } = useMintNFT();
 
   const postPhoto = useCallback(
-    (param: any) => {
-      setMedia(param);
+    (param: FilePickerResolveValue) => {
+      setMedia({ file: param.file, fileType: param.type });
 
       const createPostURL = `/create?form=true`;
       if (isAuthenticated) {
@@ -67,8 +69,12 @@ function CameraScreen() {
     onTimeOver: () => {
       if (photos.length >= 1) {
         setIsLoading(false);
-        //@ts-ignore
-        postPhoto(photos[0].uri);
+        postPhoto({
+          file:
+            //@ts-ignore
+            photos[0].uri,
+          type: "image",
+        });
       } else {
         setPhotos([]);
       }
