@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo } from "react";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { Create } from "app/components/create";
 import { MintContext } from "app/context/mint-context";
@@ -11,6 +11,7 @@ import { useRouter } from "app/navigation/use-router";
 import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Modal, ModalSheet } from "design-system";
+import { useAlert } from "design-system/alert";
 
 type Query = {
   form: string;
@@ -20,6 +21,7 @@ const { useParam } = createParam<Query>();
 const CreateModal = () => {
   useHideHeader();
   //#region hooks
+  const Alert = useAlert();
   const router = useRouter();
   const navigation = useNavigation();
   const [form] = useParam("form");

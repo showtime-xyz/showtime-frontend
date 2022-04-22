@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef } from "react";
 import {
-  Alert,
   FlatList as RNFlatList,
   Keyboard,
   ListRenderItemInfo,
@@ -16,6 +15,7 @@ import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
 import { View } from "design-system";
+import { useAlert } from "design-system/alert";
 
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
@@ -28,6 +28,7 @@ const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
 export function Comments({ nftId }: CommentsProps) {
   //#region refs
+  const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
   //#endregion
 

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Alert } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -9,6 +8,7 @@ import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";
+import { useAlert } from "design-system/alert";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 import { Ethereum, Tezos } from "design-system/icon";
@@ -24,6 +24,7 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
+  const Alert = useAlert();
   const toast = useToast();
   const { state, addWallet } = useAddWallet();
 
