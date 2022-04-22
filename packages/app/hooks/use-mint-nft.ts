@@ -466,8 +466,8 @@ export const useMintNFT = () => {
 
   console.log("minting state ", state);
 
-  const setMedia = (file: string | File) => {
-    dispatch({ type: "setMedia", payload: { file } });
+  const setMedia = ({ file, fileType }: { file: any; fileType: any }) => {
+    dispatch({ type: "setMedia", payload: { file, fileType } });
   };
 
   return { state, startMinting: mintNFT, setMedia };

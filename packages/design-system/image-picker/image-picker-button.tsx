@@ -1,32 +1,19 @@
-import { useRef } from "react";
-import { Platform } from "react-native";
-
+import {
+  FilePickerResolveValue,
+  useFilePicker,
+} from "design-system/file-picker";
 import { Image } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
-
-import { pickImage } from "./pick-image";
 
 export function ImagePickerButton({
   onPick,
   type,
 }: {
-  onPick: (attachment: { file?: File; uri?: string }) => void;
+  onPick: (param: FilePickerResolveValue) => void;
   type: "camera" | "profilePhoto" | "button";
 }) {
-  // if (type === "button") {
-  //   return (
-  //     <Button
-  //       onPress={() => {
-  //         pickImage({
-  //           onPick,
-  //         });
-  //       }}
-  //     />
-  //   );
-  // }
-
-  const filePickerRef = useRef();
+  const pickFile = useFilePicker();
 
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
   return (
@@ -36,15 +23,9 @@ export function ImagePickerButton({
           ? "w-20 h-20 bg-white dark:bg-black rounded-full justify-center items-center"
           : "w-12 h-12 bg-white dark:bg-black rounded-full justify-center items-center"
       }
-      onPress={() => {
-        if (Platform.OS !== "web") {
-          pickImage({
-            onPick,
-          });
-        } else {
-          //@ts-ignore
-          filePickerRef.current.click();
-        }
+      onPress={async () => {
+        const file = await pickFile({ mediaTypes: "image" });
+        onPick(file);
       }}
     >
       {/* {type === "profilePhoto" && currentUser?.profile_photo_url && (
@@ -61,21 +42,6 @@ export function ImagePickerButton({
           />
         </View>
       )}*/}
-
-      {Platform.OS === "web" ? (
-        <input
-          type="file"
-          hidden
-          //@ts-ignore
-          ref={filePickerRef}
-          multiple={false}
-          onChange={(e) => {
-            //@ts-ignore
-            onPick({ file: e.target.files[0] });
-          }}
-        />
-      ) : null}
-
       <Image
         color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
         width={24}
