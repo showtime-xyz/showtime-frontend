@@ -47,6 +47,7 @@ export function BottomTabNavigator() {
         if (update.isAvailable) {
           await Updates.fetchUpdateAsync();
 
+          // TODO: use Snackbar instead?
           Alert.alert(
             "New update available 🎉",
             "Press 'Reload' to update the app.",

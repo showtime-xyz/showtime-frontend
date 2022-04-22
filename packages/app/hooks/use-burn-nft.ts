@@ -9,6 +9,8 @@ import { track } from "app/lib/analytics";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
 
+import { useAlert } from "design-system/alert";
+
 import { useUser } from "./use-user";
 
 type BurnNFTType = {
@@ -48,6 +50,7 @@ export type UseBurnNFT = {
 };
 
 export const useBurnNFT = () => {
+  const Alert = useAlert();
   const [state, dispatch] = useReducer(burnNFTReducer, initialBurnNFTState);
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState<string>();
