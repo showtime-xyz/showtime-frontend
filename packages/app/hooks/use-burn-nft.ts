@@ -1,10 +1,10 @@
 import { useContext, useEffect, useReducer, useState } from "react";
-import { Alert } from "react-native";
 
 import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { AppContext } from "app/context/app-context";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
@@ -55,13 +55,13 @@ export const useBurnNFT = () => {
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState<string>();
   const connector = useWalletConnect();
-  const context = useContext(AppContext);
+  const { web3 } = useWeb3();
 
   const getActiveUserAddress = async () => {
-    const isMagic = !!context.web3;
+    const isMagic = !!web3;
 
     if (isMagic) {
-      const signer = context.web3.getSigner();
+      const signer = web3.getSigner();
       const activeMagicAddress = await signer.getAddress();
       setUserAddress(activeMagicAddress);
     } else if (connector.connected) {
@@ -79,11 +79,11 @@ export const useBurnNFT = () => {
 
   useEffect(() => {
     getActiveUserAddress();
-  }, [user, context.web3]);
+  }, [user, web3]);
 
   async function burnToken({ ...params }: UseBurnNFT) {
     return new Promise<{ transaction: string }>(async (resolve, reject) => {
-      const { biconomy } = await getBiconomy(connector, context.web3);
+      const { biconomy } = await getBiconomy(connector, web3);
 
       const contract = new ethers.Contract(
         //@ts-ignore
