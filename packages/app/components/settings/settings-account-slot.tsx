@@ -1,3 +1,4 @@
+import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Text, Button, ButtonLabel, Pressable } from "design-system";
@@ -19,7 +20,6 @@ export const SettingAccountSlotHeader = () => {
 };
 
 export const SettingAccountSlotFooter = () => {
-  // TODO(enes): implement delete account logics
   return (
     <View tw="px-4 mt-4">
       <View tw="flex flex-col items-start">
@@ -30,9 +30,11 @@ export const SettingAccountSlotFooter = () => {
           This action cannot be undone.
         </Text>
         <View tw="flex flex-row">
-          <Button variant="danger" size="small">
-            <ButtonLabel>Delete Account</ButtonLabel>
-          </Button>
+          <Link href="mailto:support@tryshowtime.com">
+            <Button variant="danger" size="small">
+              <ButtonLabel>Delete Account</ButtonLabel>
+            </Button>
+          </Link>
         </View>
       </View>
     </View>

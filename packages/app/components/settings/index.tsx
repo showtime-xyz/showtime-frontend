@@ -186,7 +186,7 @@ const SettingsTabs = () => {
             renderItem={renderSettingRoutes}
             removeClippedSubviews={Platform.OS !== "web"}
             ListHeaderComponent={<SettingAccountSlotHeader />}
-            // ListFooterComponent={<SettingAccountSlotFooter />}
+            ListFooterComponent={<SettingAccountSlotFooter />}
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
