@@ -19,27 +19,6 @@ export type UserItemProps = {
   image_url?: string;
 };
 
-const list = [
-  {
-    id: 1,
-    title: "Enes",
-    image_url:
-      "http://lh3.googleusercontent.com/HoSAPydLhYadm-jdgAE83mou5Fi5qbwbhv9UqcQuaHHfZreVsykcbFNLBuQhawIWLEa883DeBDprMM76oTHTAvPIrACxBHRK05h5Dw",
-  },
-  {
-    id: 1,
-    title: "Axel",
-    image_url:
-      "http://lh3.googleusercontent.com/HoSAPydLhYadm-jdgAE83mou5Fi5qbwbhv9UqcQuaHHfZreVsykcbFNLBuQhawIWLEa883DeBDprMM76oTHTAvPIrACxBHRK05h5Dw",
-  },
-  {
-    id: 1,
-    title: "Alan",
-    image_url:
-      "http://lh3.googleusercontent.com/HoSAPydLhYadm-jdgAE83mou5Fi5qbwbhv9UqcQuaHHfZreVsykcbFNLBuQhawIWLEa883DeBDprMM76oTHTAvPIrACxBHRK05h5Dw",
-  },
-];
-
 const HeaderSection = () => {
   return (
     <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
@@ -80,14 +59,12 @@ export const UserItem = (props: UserItemProps) => {
 
 export const BlockedList = () => {
   const headerHeight = useHeaderHeight();
-
-  const renderUserItem = (item: UserItemProps) => {
-    return <UserItem {...item} />;
-  };
+  const shouldRenderHeaderGap =
+    Platform.OS !== "web" && Platform.OS !== "android";
 
   return (
     <ScrollView>
-      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+      {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       <View tw="flex-1 px-4">
         <Text tw="font-semibold text-gray-600 dark:text-gray-400">

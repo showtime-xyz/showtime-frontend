@@ -60,6 +60,8 @@ export const AccountSettingItem = (props: SettingItemProps) => {
 
 export const PrivacyAndSecuritySettings = () => {
   const headerHeight = useHeaderHeight();
+  const shouldRenderHeaderGap =
+    Platform.OS !== "web" && Platform.OS !== "android";
 
   const renderSetting = (item: SettingItemProps) => {
     return (
@@ -72,7 +74,7 @@ export const PrivacyAndSecuritySettings = () => {
 
   return (
     <ScrollView>
-      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+      {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       {list.map(renderSetting)}
     </ScrollView>
