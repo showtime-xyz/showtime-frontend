@@ -54,7 +54,10 @@ function TextLink({
     <LinkCore
       {...props}
       hitSlop={hitSlop ?? DEFAULT_TEXT_LINK_HIT_SLOP}
-      Component={Text}
+      Component={Platform.select({
+        web: View,
+        default: Text as any,
+      })}
       componentProps={useMemo(
         () => ({
           ...textProps,
