@@ -11,6 +11,7 @@ import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
+import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import {
@@ -35,6 +36,7 @@ const defaultValues = {
   royaltiesPercentage: 10,
   notSafeForWork: false,
   hasAcceptedTerms: false,
+  file: undefined,
 };
 
 const createNFTValidationSchema = yup.object({
@@ -57,6 +59,7 @@ const createNFTValidationSchema = yup.object({
   title: yup.string().required(),
   notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
   description: yup.string(),
+  file: yup.mixed().required(),
 });
 
 function Create() {
@@ -125,36 +128,54 @@ function Create() {
             testID="data-private"
           >
             <Hidden from="md">
-              <View tw="z-1">
-                <Pressable
-                  onPress={async () => {
-                    const file = await pickFile({ mediaTypes: "all" });
-                    setMedia({ file: file.file, fileType: file.type });
-                  }}
-                >
-                  {state.file ? (
-                    <Preview
-                      file={state.file}
-                      type={state.fileType}
-                      tw="w-24 h-24 rounded-2xl"
-                    />
-                  ) : (
-                    <View tw="w-24 h-24 rounded-2xl items-center justify-center">
-                      <ImageIcon
-                        color={
-                          tw.style("bg-black dark:bg-white")
-                            ?.backgroundColor as string
-                        }
-                        width={24}
-                        height={24}
-                      />
-                      <Text tw="mt-2" variant="text-xs">
-                        Select Media
-                      </Text>
+              <Controller
+                control={control}
+                name="file"
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <View tw="z-1">
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({ mediaTypes: "all" });
+                          onChange(file);
+                          setMedia({ file: file.file, fileType: file.type });
+                        }}
+                      >
+                        {value ? (
+                          <Preview
+                            file={value.file}
+                            //@ts-ignore
+                            type={value.type}
+                            tw="w-24 h-24 rounded-2xl"
+                          />
+                        ) : (
+                          <View tw="w-24 h-24 rounded-2xl items-center justify-center">
+                            <ImageIcon
+                              color={
+                                tw.style("bg-black dark:bg-white")
+                                  ?.backgroundColor as string
+                              }
+                              width={24}
+                              height={24}
+                            />
+                            <Text
+                              tw="mt-2 dark:text-gray-400 text-gray-600"
+                              variant="text-xs"
+                            >
+                              Select Media
+                            </Text>
+                            {errors.file?.message ? (
+                              <Text variant="text-sm" tw="text-red-500 mt-2">
+                                required
+                              </Text>
+                            ) : null}
+                          </View>
+                        )}
+                      </Pressable>
                     </View>
-                  )}
-                </Pressable>
-              </View>
+                  );
+                }}
+              />
             </Hidden>
             <View tw="ml--2 flex-1">
               <Controller
@@ -176,56 +197,74 @@ function Create() {
           </View>
 
           <Hidden till="md">
-            <Pressable
-              onPress={async () => {
-                const file = await pickFile({ mediaTypes: "all" });
-                setMedia({ file: file.file, fileType: file.type });
+            <Controller
+              control={control}
+              name="file"
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <Pressable
+                    onPress={async () => {
+                      const file = await pickFile({ mediaTypes: "all" });
+                      onChange(file);
+                      setMedia({ file: file.file, fileType: file.type });
+                    }}
+                  >
+                    <View
+                      tw="bg-gray-100 dark:bg-gray-900 p-8 rounded-xl mt-4 items-center"
+                      //@ts-ignore
+                      style={{
+                        borderStyle: "dashed",
+                        borderWidth: 1,
+                        borderColor: tw.style("dark:bg-gray-600 bg-gray-400")
+                          .backgroundColor,
+                      }}
+                    >
+                      {value ? (
+                        <Preview
+                          file={value.file}
+                          //@ts-ignore
+                          type={value.type}
+                          tw="w-80 h-80 rounded-2xl"
+                        />
+                      ) : (
+                        <View tw="items-center">
+                          <Text
+                            variant="text-sm"
+                            tw="dark:text-white text-gray-900 font-bold"
+                          >
+                            Select file to upload
+                          </Text>
+                          <Text
+                            variant="text-sm"
+                            tw="mt-4 dark:text-gray-400 text-gray-600"
+                          >
+                            png, jpg, mp4, mov, gltf, glb
+                          </Text>
+                          <Text
+                            variant="text-sm"
+                            tw="mt-4 dark:text-gray-400 text-gray-600"
+                          >
+                            Stored on{" "}
+                            <TextLink
+                              variant="text-sm"
+                              tw="dark:text-gray-400 text-gray-600 font-bold"
+                              href={"https://ipfs.io/"}
+                            >
+                              IPFS
+                            </TextLink>
+                          </Text>
+                          {errors.file?.message ? (
+                            <Text variant="text-sm" tw="text-red-500 mt-2">
+                              required
+                            </Text>
+                          ) : null}
+                        </View>
+                      )}
+                    </View>
+                  </Pressable>
+                );
               }}
-            >
-              <View
-                tw="bg-gray-100 dark:gray-900 p-8 rounded-xl mt-4 items-center"
-                style={{
-                  borderStyle: "dashed",
-                  borderWidth: 2,
-                  borderColor: tw.color("gray-400"),
-                }}
-              >
-                {state.file ? (
-                  <Preview
-                    file={state.file}
-                    type={state.fileType}
-                    tw="w-80 h-80 rounded-2xl"
-                  />
-                ) : (
-                  <View tw="items-center">
-                    <Text
-                      variant="text-sm"
-                      tw="dark:text-white text-gray-900 font-bold"
-                    >
-                      Select file to upload
-                    </Text>
-                    <Text
-                      variant="text-sm"
-                      tw="mt-4 dark:text-gray-400 text-gray-600"
-                    >
-                      png, jpg, mp4, mov, gltf, glb
-                    </Text>
-                    <Text
-                      variant="text-sm"
-                      tw="mt-4 dark:text-gray-400 text-gray-600"
-                    >
-                      Stored on{" "}
-                      <Text
-                        variant="text-sm"
-                        tw="dark:text-gray-400 text-gray-600 font-bold"
-                      >
-                        IPFS
-                      </Text>
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </Pressable>
+            />
           </Hidden>
 
           <View tw="mt-4 flex-row">

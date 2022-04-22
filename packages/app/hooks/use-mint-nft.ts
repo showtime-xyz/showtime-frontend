@@ -313,11 +313,11 @@ export const useMintNFT = () => {
 
   async function uploadNFTJson(params: UseMintNFT) {
     let mediaIpfsHash;
-    if (state.mediaIPFSHash) {
-      mediaIpfsHash = state.mediaIPFSHash;
-    } else {
-      mediaIpfsHash = await uploadMedia();
-    }
+    // if (state.mediaIPFSHash) {
+    // mediaIpfsHash = state.mediaIPFSHash;
+    // } else {
+    mediaIpfsHash = await uploadMedia();
+    // }
     try {
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
@@ -357,11 +357,11 @@ export const useMintNFT = () => {
     mintNftParams.current = null;
     let nftJsonIpfsHash;
 
-    if (state.nftIPFSHash) {
-      nftJsonIpfsHash = state.nftIPFSHash;
-    } else {
-      nftJsonIpfsHash = await uploadNFTJson(params);
-    }
+    // if (state.nftIPFSHash) {
+    // nftJsonIpfsHash = state.nftIPFSHash;
+    // } else {
+    nftJsonIpfsHash = await uploadNFTJson(params);
+    // }
 
     let userAddress;
     try {
