@@ -13,7 +13,7 @@ type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
-  resizeMode?: "contain";
+  resizeMode?: "contain" | "cover";
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
 };
@@ -93,16 +93,15 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw={size}>
-          {/* <Model
-            url={item?.source_url}
-            // TODO: update this to get a preview from CDN v2
-            fallbackUrl={item?.still_preview_url}
-            numColumns={numColumns}
-            blurhash={item?.blurhash}
-            // {...mediaProps}
-          /> */}
-        </View>
+        <Model
+          url={item?.source_url}
+          // TODO: update this to get a preview from CDN v2
+          fallbackUrl={item?.still_preview_url}
+          numColumns={numColumns}
+          tw={size}
+          blurhash={item?.blurhash}
+          resizeMode={resizeMode}
+        />
       ) : null}
     </View>
   );

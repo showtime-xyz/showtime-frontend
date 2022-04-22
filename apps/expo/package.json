@@ -62,6 +62,7 @@
     "@react-navigation/native": "^6.0.7",
     "@react-navigation/native-stack": "^6.3.0",
     "@react-navigation/stack": "^6.1.0",
+    "@react-three/drei": "^9.5.3",
     "@react-three/fiber": "beta",
     "@rudderstack/rudder-sdk-react-native": "^1.2.0",
     "@sentry/react-native": "^3.3.0",

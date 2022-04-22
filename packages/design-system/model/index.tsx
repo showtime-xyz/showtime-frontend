@@ -1,15 +1,15 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
-import { Canvas, useFrame } from "./react-three-fiber";
-import { useGLTF } from "./use-gltf";
 import { Image } from "design-system/image";
 
-// import iphoneModelPath from "./iphone.glb";
+import { Canvas, useFrame, useGLTF } from "./react-three-fiber";
 
 type Props = {
   url: string;
   fallbackUrl: string;
-  blurhash: string;
+  tw?: string;
+  blurhash?: string;
+  resizeMode?: "contain" | "cover";
   numColumns: number;
 };
 
@@ -21,6 +21,8 @@ function Model({ url }: { url: string }) {
 }
 
 // TODO: implement touch events à la `OrbitControls`
+// https://docs.pmnd.rs/react-three-fiber/api/events
+
 // Event (prop)	Description	Implementation
 // onPointerOver	called when mouse hover starts	onHoverIn
 // onPointerOut	called when mouse hover ends	onHoverOut
@@ -29,32 +31,35 @@ function Model({ url }: { url: string }) {
 // onPointerUp	called when press ends	onPressOut
 // onPointerMove	called when press moves	onPressMove
 
-function ModelViewer({ url, fallbackUrl, blurhash, numColumns }: Props) {
-  // TODO: fix remote `.gltf` loading
-  if (url.endsWith(".gltf")) {
+function ModelViewer({
+  url,
+  fallbackUrl,
+  tw,
+  blurhash,
+  resizeMode,
+  numColumns,
+}: Props) {
+  console.log(url);
+
+  // && numColumns > 1
+  if (fallbackUrl) {
     return (
       <Image
         source={{
           uri: fallbackUrl,
         }}
-        tw={numColumns > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+        tw={tw}
         blurhash={blurhash}
-        resizeMode="cover"
+        resizeMode={resizeMode}
       />
     );
   }
 
-  console.log(url);
-
   return (
     <Canvas>
-      <color attach="background" args={[0xe2f4df]} />
       <ambientLight />
-      <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
-      <directionalLight intensity={0.8} position={[-6, 2, 2]} />
       <Suspense fallback={null}>
         <Model url={url} />
-        {/* <Model url={iphoneModelPath} /> */}
       </Suspense>
     </Canvas>
   );
