@@ -7,9 +7,6 @@ module.exports = function (api) {
       ["@babel/plugin-proposal-private-methods", { loose: true }],
       ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
       "react-native-reanimated/plugin",
-      process.env.NODE_ENV === "development"
-        ? "babel-plugin-open-source-react-native-web"
-        : null,
     ],
   };
 };

@@ -1,8 +1,10 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import { Video } from "expo-av";
+
 import { Image } from "design-system/image";
-import { Video } from "design-system/video";
+import { tw as tailwind } from "design-system/tailwind";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -46,10 +48,16 @@ export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
       );
     }
 
-    console.log("dudies ", file, fileType);
-
     if (fileType === "video") {
-      return <Video source={{ uri }} style={style} tw={tw} />;
+      return (
+        <Video
+          source={{ uri }}
+          style={[tailwind.style(tw), style]}
+          resizeMode="cover"
+          isMuted
+          shouldPlay
+        />
+      );
     }
   }
 
