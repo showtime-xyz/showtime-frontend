@@ -85,8 +85,16 @@ function Create() {
     resolver: yupResolver(createNFTValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      file: {
+        // initialise file in form with minting state. Happens when we set file in mint from camera screen
+        file: state.file,
+        type: state.fileType,
+      },
+    },
   });
+
   //#endregion
 
   const isDark = useIsDarkMode();
