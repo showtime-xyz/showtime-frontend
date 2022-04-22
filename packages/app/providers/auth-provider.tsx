@@ -112,9 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     () => ({
       authenticationStatus,
       accessToken,
-
       setAuthenticationStatus,
-
       login,
       logout,
     }),
@@ -138,10 +136,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
           await logout();
         }
       }
+
       doRefreshToken();
     }
   }, [authenticationStatus, logout, refreshTokens]);
   //#endregion
+
   return (
     <AuthContext.Provider value={authenticationContextValue}>
       {children}
