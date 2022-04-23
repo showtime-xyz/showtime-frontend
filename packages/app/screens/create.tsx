@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo } from "react";
-import { Platform } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { Create } from "app/components/create";
 import { MintContext } from "app/context/mint-context";
