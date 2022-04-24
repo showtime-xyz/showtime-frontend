@@ -1,18 +1,23 @@
 import {
+  forwardRef,
   memo,
-  ReactNode,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
 } from "react";
 
-import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tw as tailwind } from "../tailwind";
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
-import type { ModalContainerProps } from "./types";
+import { ModalContainerProps, ModalMethods } from "./types";
 
 const BACKGROUND_TW = [
   "bg-white dark:bg-black",
@@ -22,56 +27,74 @@ const BACKGROUND_TW = [
 
 const BACKDROP_TW = "bg-gray-100 dark:bg-gray-900";
 
-function ModalContainerComponent({
-  title,
-  mobile_snapPoints,
-  onClose,
-  children,
-}: ModalContainerProps) {
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
+  function ModalContainerComponent(
+    { title, mobile_snapPoints, isScreen, close, onClose, children },
+    ref
+  ) {
+    const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const backgroundStyle = useMemo(() => tailwind.style(...BACKGROUND_TW), []);
+    const { top } = useSafeAreaInsets();
 
-  //#region effects
-  useEffect(() => {
-    bottomSheetRef.current?.present();
-  }, []);
-  //#endregion
+    const backgroundStyle = useMemo(() => tailwind.style(...BACKGROUND_TW), []);
+    const ModalSheet = useMemo(
+      () => (isScreen ? BottomSheet : BottomSheetModal),
+      [isScreen]
+    );
 
-  //#region render
-  const renderBackdropComponent = useCallback(
-    (props) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        style={tailwind.style(BACKDROP_TW)}
-        {...props}
-      />
-    ),
-    []
-  );
-  const renderHandleComponent = useCallback(
-    (props) => (
-      <>
-        <ModalHeaderBar />
-        <ModalHeader title={title} onClose={onClose} {...props} />
-      </>
-    ),
-    [title, onClose]
-  );
-  return (
-    <BottomSheetModal
-      ref={bottomSheetRef}
-      index={0}
-      snapPoints={mobile_snapPoints!}
-      backgroundStyle={backgroundStyle}
-      onDismiss={onClose}
-      handleComponent={renderHandleComponent}
-      backdropComponent={renderBackdropComponent}
-    >
-      {children}
-    </BottomSheetModal>
-  );
-}
+    //#region effects
+    useEffect(() => {
+      if (!isScreen) {
+        // @ts-ignore
+        bottomSheetRef.current?.present();
+      }
+    }, [isScreen]);
+    useImperativeHandle(ref, () => ({
+      close: () => bottomSheetRef.current?.close(),
+    }));
+    //#endregion
+
+    //#region render
+    const renderBackdropComponent = useCallback(
+      (props) => (
+        <BottomSheetBackdrop
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          style={tailwind.style(BACKDROP_TW)}
+          {...props}
+        />
+      ),
+      []
+    );
+    const renderHandleComponent = useCallback(
+      (props) => (
+        <>
+          <ModalHeaderBar />
+          <ModalHeader title={title} onClose={close} {...props} />
+        </>
+      ),
+      [title, close]
+    );
+    return (
+      <ModalSheet
+        ref={bottomSheetRef as any}
+        index={0}
+        topInset={top}
+        snapPoints={mobile_snapPoints!}
+        keyboardBehavior="extend"
+        android_keyboardInputMode="adjustPan"
+        keyboardBlurBehavior="restore"
+        backgroundStyle={backgroundStyle}
+        enablePanDownToClose={true}
+        handleComponent={renderHandleComponent}
+        backdropComponent={renderBackdropComponent}
+        onClose={onClose}
+        onDismiss={onClose}
+      >
+        {children}
+      </ModalSheet>
+    );
+  }
+);
 
 export const ModalContainer = memo(ModalContainerComponent);
