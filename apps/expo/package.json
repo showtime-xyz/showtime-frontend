@@ -47,7 +47,7 @@
     "@capsizecss/core": "^3.0.0",
     "@dripsy/gradient": "^3.5.3",
     "@ethersproject/shims": "^5.5.0",
-    "@gorhom/bottom-sheet": "^4.1.4",
+    "@gorhom/bottom-sheet": "^4.2.1",
     "@growthbook/growthbook-react": "^0.7.0",
     "@hookform/resolvers": "^2.8.5",
     "@logrocket/react-native": "^1.2.1",
