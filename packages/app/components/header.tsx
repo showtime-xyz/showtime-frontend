@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
-  ShowtimeTabBarIcon,
   CameraTabBarIcon,
+  ShowtimeTabBarIcon,
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Pressable, Button } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
-import { useBlurredBackgroundColor } from "design-system/hooks";
-import { Search, ArrowLeft } from "design-system/icon";
+import { Button, Pressable, View } from "design-system";
+import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
+import { ArrowLeft, Search } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
@@ -165,7 +164,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         style={{
           position: "sticky",
         }}
-        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm"
+        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
       >
         <View tw="items-start">
           <Link href="/">
