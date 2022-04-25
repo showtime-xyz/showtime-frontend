@@ -1,4 +1,4 @@
-import { Share, Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
@@ -14,8 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
@@ -30,7 +30,7 @@ function ProfileDropdown({ user }: Props) {
   const { block, unblock, getIsBlocked } = useBlock();
   const router = useRouter();
   const share = useShare();
-
+  const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
   //#region callbacks
   const handleOnBlockPress = async () => {
@@ -80,7 +80,12 @@ function ProfileDropdown({ user }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="small" asChild>
+        <Button
+          variant="tertiary"
+          iconOnly={true}
+          size={width < 768 ? "small" : "regular"}
+          asChild
+        >
           <MoreHorizontal
             color={
               tw.style("bg-black dark:bg-white")?.backgroundColor as string
