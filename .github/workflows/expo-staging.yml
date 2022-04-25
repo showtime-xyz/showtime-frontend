@@ -53,7 +53,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: EAS Update
-        run: NODE_OPTIONS=--max_old_space_size=5120 EXPO_DEBUG=true STAGE=staging eas update --branch staging --message "Deploy to staging"
+        run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true STAGE=staging eas update --branch staging --message "Deploy to staging"
 
       - name: Build on EAS
         run: STAGE=staging eas build --profile preview --platform all --non-interactive --no-wait
