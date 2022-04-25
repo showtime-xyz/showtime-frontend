@@ -1,5 +1,4 @@
 import { MotiView } from "moti";
-import { Easing } from "react-native-reanimated";
 import { SvgProps } from "react-native-svg";
 
 import { useIsDarkMode } from "../../hooks";
@@ -23,8 +22,7 @@ export const ChevronDownIcon: React.FC<ChevronDownIconProps> = ({
       }}
       transition={{
         type: "timing",
-        duration: 500,
-        easing: Easing.bezier(0.87, 0, 0.13, 1),
+        duration: 300,
       }}
     >
       <ChevronDown

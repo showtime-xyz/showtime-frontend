@@ -18,7 +18,13 @@ const useNFTCardDimensions = () => {
   };
 };
 
-function useNFTCardsListLayoutProvider({ newData }: { newData: any }) {
+function useNFTCardsListLayoutProvider({
+  newData,
+  headerHeight = LIST_HEADER_HEIGHT,
+}: {
+  newData: [];
+  headerHeight?: number;
+}) {
   const { height, width } = useNFTCardDimensions();
   const { width: windowWidth } = useWindowDimensions();
 
@@ -38,7 +44,7 @@ function useNFTCardsListLayoutProvider({ newData }: { newData: any }) {
             dim.height = height;
           } else if (_type === "header") {
             dim.width = windowWidth;
-            dim.height = LIST_HEADER_HEIGHT;
+            dim.height = headerHeight;
           }
         }
       ),

@@ -40,6 +40,7 @@ import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
 
+import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
@@ -156,55 +157,58 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <SWRConfig
-              value={{
-                provider: isServer ? () => new Map() : localStorageProvider,
-              }}
-            >
-              <Web3Provider>
-                <AppContext.Provider value={injectedGlobalContext}>
-                  <AuthProvider>
-                    <UserProvider>
-                      <MintProvider>
+            <SnackbarProvider>
+              <SWRConfig
+                value={{
+                  provider: isServer ? () => new Map() : localStorageProvider,
+                }}
+              >
+                <Web3Provider>
+                  <AppContext.Provider value={injectedGlobalContext}>
+                    <AuthProvider>
+                      <UserProvider>
                         <BottomSheetModalProvider>
                           <GrowthBookProvider growthbook={growthbook}>
                             <FeedProvider>
                               <NavigationProvider>
-                                <View tw="bg-white dark:bg-black flex-1">
-                                  <Header
-                                    canGoBack={
-                                      router.pathname === "/search" ||
-                                      router.pathname.split("/").length - 1 >= 2
-                                    }
-                                  />
+                                <MintProvider>
+                                  <View tw="bg-white dark:bg-black flex-1">
+                                    <Header
+                                      canGoBack={
+                                        router.pathname === "/search" ||
+                                        router.pathname.split("/").length - 1 >=
+                                          2
+                                      }
+                                    />
 
-                                  <View tw="min-h-screen">
-                                    <Component {...pageProps} />
+                                    <View tw="min-h-screen">
+                                      <Component {...pageProps} />
+                                    </View>
+
+                                    <Footer />
                                   </View>
 
-                                  <Footer />
-                                </View>
-
-                                {/* Modals */}
-                                <ActivitiesScreen />
-                                <LoginScreen />
-                                <CommentsScreen />
-                                <TransferScreen />
-                                <CreateScreen />
-                                <DeleteScreen />
-                                <ListScreen />
-                                <UnlistScreen />
-                                <DetailsScreen />
+                                  {/* Modals */}
+                                  <ActivitiesScreen />
+                                  <LoginScreen />
+                                  <CommentsScreen />
+                                  <TransferScreen />
+                                  <CreateScreen />
+                                  <DeleteScreen />
+                                  <ListScreen />
+                                  <UnlistScreen />
+                                  <DetailsScreen />
+                                </MintProvider>
                               </NavigationProvider>
                             </FeedProvider>
                           </GrowthBookProvider>
                         </BottomSheetModalProvider>
-                      </MintProvider>
-                    </UserProvider>
-                  </AuthProvider>
-                </AppContext.Provider>
-              </Web3Provider>
-            </SWRConfig>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContext.Provider>
+                </Web3Provider>
+              </SWRConfig>
+            </SnackbarProvider>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
