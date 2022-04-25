@@ -4,7 +4,7 @@ import { Platform, ScrollView } from "react-native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
@@ -14,7 +14,7 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 
-import { View, Text, Fieldset, Button, Media } from "design-system";
+import { Button, Fieldset, Media, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
@@ -89,8 +89,13 @@ function Delete({ nftId }: { nftId: number }) {
     mutate(`/v2/nft_detail/${nftId}`);
 
     // We're popping twice here to also close the NFT page behind this modal
-    router.pop();
-    router.pop();
+    // For web, we just pop it once
+    if (Platform.OS === "web") {
+      router.pop();
+    } else {
+      router.pop();
+      router.pop();
+    }
   }, [state.status]);
 
   return (
