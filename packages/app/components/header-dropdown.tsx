@@ -14,9 +14,9 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
-  DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
@@ -43,7 +43,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           >
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
-              <Text tw="font-semibold ml-2 mr-1">
+              <Text tw="font-semibold ml-2 mr-1 dark:text-white">
                 {`@${user.data.profile.username}`}
               </Text>
             ) : null}

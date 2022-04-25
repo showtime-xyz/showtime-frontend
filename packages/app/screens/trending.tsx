@@ -18,7 +18,7 @@ const TrendingScreen = withColorScheme(() => {
       <Hidden from="md">
         <Trending />
       </Hidden>
-      <Hidden till="md">
+      <Hidden until="md">
         <TrendingMD />
       </Hidden>
     </>

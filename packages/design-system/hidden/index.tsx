@@ -9,21 +9,21 @@ import {
 
 type HiddenProps = {
   from?: IBreakpoints;
-  till?: IBreakpoints;
+  until?: IBreakpoints;
   platform?: "web" | "android" | "ios" | "native";
   children: any;
 };
 
 export const Hidden = (props: HiddenProps) => {
   const { width } = useWindowDimensions();
-  const { from, platform, till, children } = props;
+  const { from, platform, until, children } = props;
   const currentBreakpoint = useMemo(
     () => sortedBreakpointKeys.find((key) => width >= breakpoints[key]),
     [width]
   );
 
   // Hide if no props are passed
-  if (!from && !till && !platform) {
+  if (!from && !until && !platform) {
     return null;
   }
 
@@ -32,16 +32,16 @@ export const Hidden = (props: HiddenProps) => {
   }
 
   if (currentBreakpoint) {
-    if (from && till) {
+    if (from && until) {
       if (
         breakpoints[currentBreakpoint] >= breakpoints[from] &&
-        breakpoints[currentBreakpoint] < breakpoints[till]
+        breakpoints[currentBreakpoint] < breakpoints[until]
       ) {
         return null;
       }
     } else if (from && breakpoints[currentBreakpoint] >= breakpoints[from]) {
       return null;
-    } else if (till && breakpoints[currentBreakpoint] < breakpoints[till]) {
+    } else if (until && breakpoints[currentBreakpoint] < breakpoints[until]) {
       return null;
     }
   }

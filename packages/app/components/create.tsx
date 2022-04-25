@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -208,7 +208,7 @@ function Create() {
             </View>
           </View>
 
-          <Hidden till="md">
+          <Hidden until="md">
             <Controller
               control={control}
               name="file"

@@ -18,7 +18,7 @@ const HomeScreen = withColorScheme(() => {
       <Hidden from="md">
         <Feed />
       </Hidden>
-      <Hidden till="md">
+      <Hidden until="md">
         <FeedDesktop />
       </Hidden>
     </ErrorBoundary>
