@@ -66,15 +66,14 @@ export const Trending = () => {
   const [selected, setSelected] = useState(0);
   const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
+  const isWeb = Platform.OS === "web";
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
-          {Platform.OS === "ios" && (
-            <View tw={`h-[${headerHeight}px] bg-white dark:bg-black`} />
-          )}
-          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
+          {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+          <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between">
             <Text
               //@ts-ignore
               variant="text-2xl"
@@ -96,15 +95,15 @@ export const Trending = () => {
           )}
           contentContainerStyle={tw.style("w-full")}
         >
-          <Tabs.Trigger style={{ flex: 1 }}>
+          <Tabs.Trigger style={isWeb ? { height: "100%" } : { flex: 1 }}>
             <TabItem name="Today" selected={selected === 0} />
           </Tabs.Trigger>
 
-          <Tabs.Trigger style={{ flex: 1 }}>
+          <Tabs.Trigger style={isWeb ? { height: "100%" } : { flex: 1 }}>
             <TabItem name="This week" selected={selected === 1} />
           </Tabs.Trigger>
 
-          <Tabs.Trigger style={{ flex: 1 }}>
+          <Tabs.Trigger style={isWeb ? { height: "100%" } : { flex: 1 }}>
             <TabItem name="This month" selected={selected === 2} />
           </Tabs.Trigger>
 

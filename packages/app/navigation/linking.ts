@@ -34,6 +34,9 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       profile: "profile/:username",
       editProfile: "profile/edit",
       settings: "settings",
+      privacySecuritySettings: "settings/privacy-and-security",
+      notificationSettings: "settings/notifications",
+      blockedList: "settings/blocked-list",
       swipeList: "list",
       bottomTabs: {
         screens: {
