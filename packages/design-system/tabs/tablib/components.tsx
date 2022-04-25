@@ -57,7 +57,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
     <Animated.View
       style={[
         tw.style("flex-row justify-center items-center h-full px-4"),
-        Platform.OS === "web" && animatedStyle,
+        Platform.OS !== "web" && animatedStyle,
       ]}
     >
       <RNText
