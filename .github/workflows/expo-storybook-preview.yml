@@ -71,7 +71,7 @@ jobs:
 
       - name: EAS Update
         if: success() && steps.PR.outputs.number != ''
-        run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=development eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
+        run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true STAGE=development eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
       - name: Preview Deep Link
         id: publish-url
