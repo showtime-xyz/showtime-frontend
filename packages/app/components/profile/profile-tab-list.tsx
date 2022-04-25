@@ -4,6 +4,7 @@ import { useWindowDimensions } from "react-native";
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
+import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
@@ -32,6 +33,8 @@ export const ProfileTabList = ({
   list,
 }: TabListProps) => {
   const router = useRouter();
+  const { user } = useUser();
+
   const { state: mintingState } = useContext(MintContext);
   const { width } = useWindowDimensions();
 
@@ -119,10 +122,10 @@ export const ProfileTabList = ({
   const newData = useMemo(() => {
     let newData: any = ["header"];
     if (isBlocked) return newData;
-
     if (
       mintingState.status !== "idle" &&
-      mintingState.tokenId !== data?.[0]?.token_id
+      mintingState.tokenId !== data?.[0]?.token_id &&
+      profileId === user?.data.profile.profile_id
     ) {
       //@ts-ignore
       newData.push({
