@@ -11,15 +11,14 @@ import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
 import {
-  View,
-  Spinner,
-  Text,
-  Tabs,
-  TabItem,
-  SelectedTabIndicator,
   CreatorPreview,
   SegmentedControl,
-  Pressable,
+  SelectedTabIndicator,
+  Spinner,
+  TabItem,
+  Tabs,
+  Text,
+  View,
 } from "design-system";
 import { Card } from "design-system/card";
 import { useIsDarkMode } from "design-system/hooks";
@@ -274,7 +273,6 @@ const CreatorsList = ({
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.RecyclerList
-        //@ts-ignore
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
