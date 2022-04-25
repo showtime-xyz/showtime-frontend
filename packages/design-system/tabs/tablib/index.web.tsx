@@ -101,6 +101,8 @@ const Root = ({
                   alignItems: "center",
                   paddingHorizontal: 10,
                   height: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
                 },
                 tw.style(`bg-white dark:bg-black px-2`),
                 (listChild as any).props?.contentContainerStyle,
