@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
-import { Platform } from "react-native";
+import { useContext } from "react";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -8,15 +7,11 @@ import { v4 as uuid } from "uuid";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
+import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useWeb3 } from "app/hooks/use-web3";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { useWalletConnect } from "app/lib/walletconnect";
-//@ts-ignore
-import getWeb3Modal from "app/lib/web3-modal";
-import { getBiconomy } from "app/utilities";
 
 import { useAlert } from "design-system/alert";
-
-import { useWeb3 } from "./use-web3";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -233,20 +228,11 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
-  const biconomyRef = useRef<any>();
   let { web3 } = useWeb3();
 
+  const { getSignerAndProvider } = useSignerAndProvider();
+  // TODO: this magic check is incorrect. In future, web3 can be just a normal provider
   const isMagic = !!web3;
-  const connector = useWalletConnect();
-
-  const mintNftParams = useRef<any>(null);
-
-  useEffect(() => {
-    if (mintNftParams.current && connector.connected) {
-      console.log("connected to wallet, resuming mint request");
-      mintNFT(mintNftParams.current);
-    }
-  }, [connector.connected]);
 
   async function uploadMedia() {
     // Media Upload
@@ -367,113 +353,77 @@ export const useMintNFT = () => {
   }
 
   async function mintNFT(params: UseMintNFT) {
-    mintNftParams.current = null;
-    let nftJsonIpfsHash;
+    const nftJsonIpfsHash = await uploadNFTJson(params);
 
-    // if (state.nftIPFSHash) {
-    // nftJsonIpfsHash = state.nftIPFSHash;
-    // } else {
-    nftJsonIpfsHash = await uploadNFTJson(params);
-    // }
+    const result = await getSignerAndProvider();
+    if (result) {
+      const { signer, signerAddress, provider } = result;
 
-    let userAddress;
-    try {
-      if (web3) {
-        const signer = web3.getSigner();
-        const addr = await signer.getAddress();
-        userAddress = addr;
-        params.royaltiesPercentage = 0;
-      } else if (Platform.OS === "web") {
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        const web3Modal = await getWeb3Modal();
-        web3 = new Web3Provider(await web3Modal.connect());
-        const addr = await web3.getSigner().getAddress();
-        userAddress = addr;
-      } else if (connector.connected) {
-        [userAddress] = connector.accounts.filter((addr) =>
-          addr.startsWith("0x")
+      try {
+        dispatch({ type: "minting", payload: { isMagic } });
+
+        const contract = new ethers.Contract(
+          //@ts-ignore
+          process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+          minterAbi,
+          signer
         );
-      } else {
-        await connector.connect();
-        console.log("Not connected to wallet, sending connect request");
-        mintNftParams.current = params;
-        return;
-      }
 
-      console.log("user address for minting ", userAddress);
+        const { data } = await contract.populateTransaction.issueToken(
+          signerAddress,
+          params.editionCount,
+          nftJsonIpfsHash,
+          0,
+          signerAddress,
+          params.royaltiesPercentage * 100
+        );
 
-      if (!userAddress) {
-        Alert.alert("Sorry! seems like you are not connected to the wallet");
-        return;
-      }
+        console.log("** minting: opening wallet for signing **");
 
-      dispatch({ type: "minting", payload: { isMagic } });
+        const transaction = await provider
+          .send("eth_sendTransaction", [
+            {
+              data,
+              from: signerAddress,
+              to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+              signatureType: "EIP712_SIGN",
+            },
+          ])
+          .catch((error: any) => {
+            console.error("eth send transaction failure ", error);
+            throw error;
+          });
 
-      biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
-
-      const contract = new ethers.Contract(
-        //@ts-ignore
-        process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-        minterAbi,
-        biconomyRef.current.getSignerByAddress(userAddress)
-      );
-
-      const { data } = await contract.populateTransaction.issueToken(
-        userAddress,
-        params.editionCount,
-        nftJsonIpfsHash,
-        0,
-        userAddress,
-        params.royaltiesPercentage * 100
-      );
-
-      const provider = biconomyRef.current.getEthersProvider();
-      console.log("** minting: opening wallet for signing **");
-
-      const transaction = await provider
-        .send("eth_sendTransaction", [
-          {
-            data,
-            from: userAddress,
-            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-            signatureType: "EIP712_SIGN",
-          },
-        ])
-        .catch((error: any) => {
-          console.error("eth send transaction failure ", error);
-          throw error;
-        });
-
-      dispatch({
-        type: "transactionCompleted",
-        payload: {
-          transaction,
-        },
-      });
-
-      provider.once(transaction, (result: any) => {
-        // console.log(
-        //   "token id! ",
-        //   contract.interface
-        //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-        //     .toNumber()
-        // );
         dispatch({
-          type: "mintingSuccess",
+          type: "transactionCompleted",
           payload: {
-            tokenId: contract.interface
-              .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-              .toString(),
-            transaction: transaction,
+            transaction,
           },
         });
-      });
-    } catch (error) {
-      console.error("Minting error ", error);
-      dispatch({
-        type: "mintingError",
-      });
+
+        provider.once(transaction, (result: any) => {
+          // console.log(
+          //   "token id! ",
+          //   contract.interface
+          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+          //     .toNumber()
+          // );
+          dispatch({
+            type: "mintingSuccess",
+            payload: {
+              tokenId: contract.interface
+                .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+                .toString(),
+              transaction: transaction,
+            },
+          });
+        });
+      } catch (error) {
+        console.error("Minting error ", error);
+        dispatch({
+          type: "mintingError",
+        });
+      }
     }
   }
 
