@@ -1,13 +1,16 @@
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
 import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
 
+import { useAlert } from "design-system/alert";
+
 export const useSignerAndProvider = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
+  const Alert = useAlert();
   const getSignerAndProvider = async () => {
     let userAddress;
     if (web3) {
