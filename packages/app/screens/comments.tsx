@@ -13,16 +13,6 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-/**
- * extracted these number from react-navigation
- */
-// @ts-ignore
-const modalPresentationHeight = Platform.isPad
-  ? 6
-  : Platform.OS === "ios"
-  ? 12
-  : 0;
-
 function CommentsModal() {
   //#region hooks
   // @ts-ignore

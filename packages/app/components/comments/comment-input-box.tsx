@@ -8,6 +8,7 @@ import {
 import { ViewStyle } from "react-native";
 
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { formatAddressShort } from "app/utilities";
@@ -43,6 +44,7 @@ export const CommentInputBox = forwardRef<
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null
   );
+  const { bottom } = useSafeAreaInsets();
   const context = useBottomSheetInternal(true);
   //#endregion
 
@@ -123,7 +125,11 @@ export const CommentInputBox = forwardRef<
       <MessageBox
         ref={inputRef}
         submitting={submitting}
-        style={{ paddingHorizontal: 16 }}
+        style={{
+          paddingHorizontal: 16,
+          marginBottom: Math.max(0, bottom - 16),
+          paddingBottom: 0,
+        }}
         onSubmit={handleOnSubmitComment}
         onBlur={context ? handleOnBlur : undefined}
         onFocus={context ? handleOnFocus : undefined}

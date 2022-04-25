@@ -13,11 +13,11 @@ import { CommentRow } from "app/components/comments/comment-row";
 import { useComments, CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 
-import { View } from "design-system";
 import { useAlert } from "design-system/alert";
 import { ModalFooter } from "design-system/modal-new";
 
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
+import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 interface CommentsProps {
@@ -25,6 +25,8 @@ interface CommentsProps {
 }
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+
+const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
 export function Comments({ nftId }: CommentsProps) {
   //#region refs
@@ -117,10 +119,8 @@ export function Comments({ nftId }: CommentsProps) {
     [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
 
-  const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
-
   return (
-    <View tw="flex-1">
+    <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -135,7 +135,7 @@ export function Comments({ nftId }: CommentsProps) {
             windowSize={6}
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
-            // onTouchMove={handleOnTouchMove}
+            keyboardDismissMode="on-drag"
             enableFooterMarginAdjustment={true}
           />
           {isAuthenticated && (
@@ -149,7 +149,7 @@ export function Comments({ nftId }: CommentsProps) {
           )}
         </>
       )}
-    </View>
+    </CommentsContainer>
   );
   //#endregion
 }
