@@ -8,6 +8,7 @@ import Animated, {
 import { CircularProgress } from "app/components/circular-progress";
 import { useRouter } from "app/navigation/use-router";
 
+import { FilePickerResolveValue } from "design-system/file-picker";
 import { Flip, Close, Check } from "design-system/icon";
 import { ImagePickerButton } from "design-system/image-picker";
 import { Pressable } from "design-system/pressable-scale";
@@ -23,7 +24,7 @@ type Props = {
   takePhoto: () => void;
   cameraPosition: "front" | "back";
   setCameraPosition: (cameraPosition: "front" | "back") => void;
-  postPhoto: (param?: File | string) => void;
+  postPhoto: (param: FilePickerResolveValue) => void;
 };
 
 export function CameraButtons({
@@ -72,7 +73,7 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            postPhoto(photo.file ? photo.file : photo.uri);
+            postPhoto(photo);
           }}
           type="camera"
         />
@@ -112,7 +113,7 @@ export function CameraButtons({
             <Pressable
               tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
               onPress={() => {
-                postPhoto(photos[0].uri);
+                postPhoto({ file: photos[0].uri, type: "image" });
               }}
             >
               <Check

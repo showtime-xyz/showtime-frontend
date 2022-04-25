@@ -15,7 +15,8 @@ config.resolver.nodeModulesPath = [
   path.resolve(workspaceRoot, "node_modules"),
 ];
 config.resolver.extraNodeModules = extraNodeModules;
-config.resolver.assetExts = ["glb", "png", "jpg"];
+config.resolver.sourceExts = ["ts", "tsx", "js", "jsx", "json", "cjs"];
+config.resolver.assetExts = ["glb", "gltf", "png", "jpg"];
 // config.transformer.minifierPath = "metro-minify-esbuild";
 
 module.exports = config;

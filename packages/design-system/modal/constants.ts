@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 
 const DEFAULT_WIDTH = Platform.select({
-  web: "w-10/12 max-w-420px md:w-420px lg:w-420px",
+  web: "w-10/12 max-w-480px md:w-420px lg:w-420px xl:w-480px",
   default: "w-12/12 max-w-480px md:w-480px lg:w-480px",
 });
 const DEFAULT_HEIGHT = "max-h-280px";

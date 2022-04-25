@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useMemo } from "react";
+import React, { forwardRef, useMemo } from "react";
 
 import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -19,7 +19,7 @@ interface SelectButtonProps extends Pick<SelectProps, "size"> {
 }
 
 const BACKGROUND_MAPPER = {
-  default: [colors.gray[900], colors.gray[100]],
+  default: [colors.black, colors.white],
   hover: [colors.gray[800], colors.gray[200]],
   pressed: [colors.gray[700], colors.gray[300]],
 };
@@ -32,7 +32,7 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
     const { onPressIn, onPressOut, pressed } = useOnPress();
     //#endregion
 
-    const iconSize = useMemo(() => (size === "regular" ? 30 : 24), [size]);
+    const iconSize = useMemo(() => (size === "regular" ? 30 : 16), [size]);
 
     //#region styles
     const containerAnimatedStyle = useAnimatedStyle(
@@ -50,8 +50,8 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
     const containerStyle = useMemo(
       () => [
         tw`${
-          size === "regular" ? "px-4 py-3" : "px-3 py-2"
-        } flex-row items-center justify-between rounded-full`,
+          size === "regular" ? "py-3" : "py-2"
+        } flex-row items-center justify-between rounded-full pl-4 pr-2 border border-gray-200 dark:border-gray-800`,
         containerAnimatedStyle,
       ],
       [containerAnimatedStyle, size]
@@ -72,7 +72,7 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
       >
         <Animated.View style={containerStyle}>
           <Text
-            tw={`font-bold text-gray-900 dark:text-gray-100 ${
+            tw={`font-bold text-gray-900 dark:text-white ${
               size === "regular" ? "text-sm" : "text-xs"
             } mr-2`}
           >

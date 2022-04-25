@@ -5,9 +5,9 @@ import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
+  ShowtimeTabBarIcon,
   CameraTabBarIcon,
   TrendingTabBarIcon,
-  NotificationsTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
@@ -15,8 +15,10 @@ import { useRouter } from "app/navigation/use-router";
 import { View, Pressable, Button } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { useBlurredBackgroundColor } from "design-system/hooks";
-import { Showtime, Search, ArrowLeft } from "design-system/icon";
+import { Search, ArrowLeft } from "design-system/icon";
+import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
+import { breakpoints } from "design-system/theme";
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -24,26 +26,21 @@ const HeaderRight = () => {
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
+  const isMdWidth = width >= breakpoints["md"];
 
   return (
     <View>
       {!isLoading && (
         <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
-          {isAuthenticated && width > 768 && (
+          {isAuthenticated && isMdWidth && (
             <>
-              <View tw="mx-3">
+              <View tw="mx-2">
                 <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={router.pathname === "/trending"}
                 />
               </View>
-              {/* <View tw="mx-3">
-                <NotificationsTabBarIcon
-                  color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/notifications"}
-                />
-              </View> */}
-              <View tw="mx-3">
+              <View tw="mx-2">
                 <CameraTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={false}
@@ -51,12 +48,12 @@ const HeaderRight = () => {
               </View>
             </>
           )}
-          <View tw="md:mx-3 flex-row items-center">
+          <View tw="md:mx-2 flex-row items-center">
             {isAuthenticated ? (
-              <HeaderDropdown type={width >= 768 ? "profile" : "settings"} />
+              <HeaderDropdown type={isMdWidth ? "profile" : "settings"} />
             ) : (
               <>
-                {width >= 768 && (
+                {isMdWidth && (
                   <View tw="mx-3">
                     <TrendingTabBarIcon
                       color={isDark ? "white" : "black"}
@@ -82,7 +79,7 @@ const HeaderRight = () => {
                     );
                   }}
                   variant="primary"
-                  size={width >= 768 ? "regular" : "small"}
+                  size={isMdWidth ? "regular" : "small"}
                   labelTW="font-semibold"
                 >
                   Sign&nbsp;In
@@ -111,13 +108,6 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
           router.push("/search");
         }
       }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
-
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
-      // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
-      // }, [])}
     >
       <Icon
         style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
@@ -129,34 +119,35 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   );
 };
 
-const HeaderCenter = () => {
-  // TODO: why is this crashing the native header?
-  // const router = useRouter();
-
+const HeaderCenter = ({
+  isDark,
+  isMdWidth,
+}: {
+  isDark?: boolean;
+  isMdWidth?: boolean;
+}) => {
   return (
-    <Pressable
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="w-12 h-12 rounded-full items-center justify-center"
-      onPress={() => {
-        if (Platform.OS === "web") {
-          // router.push("/");
-        }
-      }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
-
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
-      // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
-      // }, [])}
-    >
-      <Showtime
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-        width={24}
-        height={24}
-      />
-    </Pressable>
+    <View tw="flex flex-row">
+      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} customTw="mr-4" />
+      {isMdWidth ? (
+        <Input
+          placeholder="Search by name or wallet"
+          leftElement={
+            <View tw="w-12 h-12 rounded-full items-center justify-center">
+              <Search
+                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+                color={
+                  tw.style("bg-gray-500 dark:bg-gray-400")
+                    ?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            </View>
+          }
+        />
+      ) : null}
+    </View>
   );
 };
 
@@ -164,8 +155,10 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const isDark = useIsDarkMode();
+  const isMdWidth = width >= breakpoints["md"];
 
-  if (width >= 768) {
+  if (isMdWidth) {
     return (
       <View
         // @ts-expect-error
@@ -176,7 +169,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="items-start">
           <Link href="/">
-            <HeaderCenter />
+            <HeaderCenter {...{ isDark, isMdWidth }} />
           </Link>
         </View>
         <View tw="items-end">

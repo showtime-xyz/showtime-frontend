@@ -5,12 +5,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { Alert, ViewStyle } from "react-native";
+import { ViewStyle } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Text, View } from "design-system";
+import { useAlert } from "design-system/alert";
 import { Close } from "design-system/icon";
 import {
   MessageBox,
@@ -35,6 +36,7 @@ export const CommentInputBox = forwardRef<
   CommentInputBoxProps
 >(function CommentInputBox({ submitting, style, submit }, ref) {
   //#region variables
+  const Alert = useAlert();
   const inputRef = useRef<MessageBoxMethods>(null);
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null

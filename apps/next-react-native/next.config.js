@@ -25,6 +25,7 @@ const withTM = require("next-transpile-modules")([
   "@zeego/menu",
   "@zeego/dropdown-menu",
   "solito",
+  "three",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
@@ -71,6 +72,11 @@ const nextConfig = {
       {
         source: "/feedback",
         destination: "https://showtime.nolt.io",
+        permanent: true,
+      },
+      {
+        source: "/t/:path*",
+        destination: "/token/:path*",
         permanent: true,
       },
     ];

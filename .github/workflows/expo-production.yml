@@ -73,7 +73,7 @@ jobs:
 
       - name: EAS Update
         if: steps.version.outputs.type == 'patch'
-        run: NODE_OPTIONS=--max_old_space_size=4096 EXPO_DEBUG=true STAGE=production eas update --branch production --message "Deploy to production"
+        run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build on EAS
         if: steps.version.outputs.type == 'major'

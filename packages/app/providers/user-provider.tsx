@@ -2,7 +2,6 @@ import { useEffect, useMemo, ReactNode } from "react";
 import { Platform } from "react-native";
 
 import useSWR from "swr";
-import useUnmountSignal from "use-unmount-signal";
 
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -22,10 +21,9 @@ export const MY_INFO_ENDPOINT = "/v2/myinfo";
 export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
   const { authenticationStatus, accessToken } = useAuth();
-  const unmountSignal = useUnmountSignal();
   const { data, error, mutate } = useSWR<UserType>(
     accessToken ? MY_INFO_ENDPOINT : null,
-    (url) => axios({ url, method: "GET", unmountSignal })
+    (url) => axios({ url, method: "GET" })
   );
   //#endregion
 

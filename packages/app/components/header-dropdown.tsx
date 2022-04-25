@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -6,6 +7,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
+import { Text } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   DropdownMenuContent,
@@ -18,6 +20,7 @@ import {
 } from "design-system/dropdown-menu";
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
@@ -26,14 +29,27 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const context = useContext(AppContext);
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
+  const { width } = useWindowDimensions();
+  const isWeb = Platform.OS === "web";
+  const isMdWidth = width >= breakpoints["md"];
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="h-8 w-8 items-center justify-center rounded-full">
-          {type === "profile" ? (
+        {type === "profile" ? (
+          <View
+            tw="h-12 p-2 items-center justify-center rounded-full flex flex-row cursor-pointer"
+            style={tw.style(isWeb ? "bg-gray-100 dark:bg-gray-900" : "")}
+          >
             <Avatar url={user?.data?.profile?.img_url} />
-          ) : (
+            {isWeb && isMdWidth && user?.data?.profile?.username ? (
+              <Text tw="font-semibold ml-2 mr-1">
+                {`@${user.data.profile.username}`}
+              </Text>
+            ) : null}
+          </View>
+        ) : (
+          <View tw="h-8 w-8 items-center justify-center rounded-full">
             <Settings
               width={24}
               height={24}
@@ -41,8 +57,8 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
                 tw.style("bg-black dark:bg-white")?.backgroundColor as string
               }
             />
-          )}
-        </View>
+          </View>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

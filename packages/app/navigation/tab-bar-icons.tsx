@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -18,26 +18,42 @@ import {
   Bell,
   BellFilled,
   Plus,
+  Showtime,
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { TW } from "design-system/tailwind/types";
+import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
 
 type TabBarIconProps = {
-  color: string;
-  focused: boolean;
+  color?: string;
+  focused?: boolean;
+  customTw?: TW;
 };
-
-function TabBarIcon({
-  tab,
-  children,
-}: {
+type TabBarButtonProps = {
   tab: string;
   children: React.ReactNode;
-}) {
-  if (Platform.OS === "web") {
+  customTw?: TW;
+};
+
+function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
+  const isWeb = Platform.OS === "web";
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+
+  if (isWeb) {
     return (
       <Link href={tab}>
-        <View tw="w-12 h-12 items-center justify-center">{children}</View>
+        <View
+          tw="w-12 h-12 rounded-full items-center justify-center"
+          style={tw.style(
+            `${
+              isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
+            } ${customTw}`
+          )}
+        >
+          {children}
+        </View>
       </Link>
     );
   }
@@ -79,9 +95,22 @@ export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   );
 };
 
+export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
+  return (
+    <TabBarIcon tab="/" customTw={customTw}>
+      <Showtime
+        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        width={24}
+        height={24}
+      />
+    </TabBarIcon>
+  );
+};
+
 export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/camera">
+    <TabBarIcon tab={Platform.select({ default: "/camera", web: "/create" })}>
       <View
         tw={[
           "rounded-full h-12 w-12 justify-center items-center",
