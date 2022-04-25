@@ -45,3 +45,7 @@ export function useSafeAreaInsets(): ReturnType<typeof nativeHook> {
 export function useSafeAreaFrame(): ReturnType<typeof nativeHook> {
   return area;
 }
+
+export function SafeAreaView({ children }: { children: React.ReactElement }) {
+  return <>{children}</>;
+}
