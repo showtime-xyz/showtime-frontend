@@ -1,9 +1,10 @@
-import { Alert, Linking } from "react-native";
+import { Linking } from "react-native";
 
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Button, ButtonLabel, Pressable } from "design-system";
+import { Button, ButtonLabel, Pressable, Text, View } from "design-system";
+import { useAlert } from "design-system/alert";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
 
@@ -23,6 +24,7 @@ export const SettingAccountSlotHeader = () => {
 
 export const SettingAccountSlotFooter = () => {
   const supportMailURL = "mailto:help@tryshowtime.com";
+  const Alert = useAlert();
 
   const handleDeleteAccount = async () => {
     try {
