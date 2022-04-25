@@ -94,7 +94,7 @@ const Profile = ({ address }: { address?: string }) => {
             <View tw="z-10">
               {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
               <ProfileTop address={address} isBlocked={isBlocked} />
-              <Hidden till="md">
+              <Hidden until="md">
                 <View tw={"absolute right-10 z-10 -bottom-10"}>
                   <ProfileListFilter
                     onCollectionChange={onCollectionChange}

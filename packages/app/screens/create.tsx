@@ -95,7 +95,7 @@ const CreateModal = () => {
         bodyContentTW="p-0"
       >
         <>
-          <Hidden till="md">
+          <Hidden until="md">
             <CreateMD />
           </Hidden>
 

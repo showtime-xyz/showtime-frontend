@@ -7,8 +7,11 @@ import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
 import { useColorScheme } from "app/lib/color-scheme";
-import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
-import { RecyclerListView } from "app/lib/recyclerlistview";
+import {
+  DataProvider,
+  LayoutProvider,
+  RecyclerListView,
+} from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
@@ -40,7 +43,7 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      <Hidden till="xl">
+      <Hidden until="xl">
         <View
           style={{
             position: Platform.OS === "web" ? "fixed" : null,

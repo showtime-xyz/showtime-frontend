@@ -3,6 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useRouter } from "app/navigation/use-router";
+import { CARD_DARK_SHADOW } from "app/utilities";
 
 import {
   CreatorPreview,
@@ -13,13 +14,14 @@ import {
   View,
 } from "design-system";
 import { Card } from "design-system/card";
+import { useIsDarkMode } from "design-system/hooks";
 import { breakpoints } from "design-system/theme";
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
 
   return (
-    <View tw="bg-gray-100">
+    <View tw="bg-gray-100 dark:bg-black">
       <View tw="w-[90%] mx-auto py-8">
         <View tw="flex-row justify-between items-center">
           <View>
@@ -27,7 +29,7 @@ export const Trending = () => {
               Trending
             </Text>
           </View>
-          <View tw="w-[400px] bg-white p-4 shadow-lg rounded-lg">
+          <View tw="w-[400px] bg-white dark:bg-black p-4 shadow-lg rounded-lg">
             <SegmentedControl
               values={["CREATOR", "NFT"]}
               onChange={setSelected}
@@ -52,15 +54,15 @@ const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
         contentContainerStyle={{ backgroundColor: "transparent" }}
       >
         <Tabs.Trigger>
-          <Text tw="p-4">Today</Text>
+          <Text tw="p-4 text-black dark:text-white">Today</Text>
         </Tabs.Trigger>
 
         <Tabs.Trigger>
-          <Text tw="p-4">This week</Text>
+          <Text tw="p-4 text-black dark:text-white">This week</Text>
         </Tabs.Trigger>
 
         <Tabs.Trigger>
-          <Text tw="p-4">This month</Text>
+          <Text tw="p-4 text-black dark:text-white">This month</Text>
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Pager>
@@ -106,6 +108,7 @@ const CreatorsList = ({ days }: { days: any }) => {
   const router = useRouter();
 
   const [containerWidth, setContainerWidth] = useState(0);
+  const isDark = useIsDarkMode();
 
   return (
     <View
@@ -120,7 +123,12 @@ const CreatorsList = ({ days }: { days: any }) => {
       {data.length > 0 && containerWidth
         ? data.map((item) => {
             return (
-              <View key={item.creator_id} tw="bg-white rounded-md mb-8">
+              <View
+                key={item.creator_id}
+                tw="bg-white dark:bg-black rounded-lg mb-8"
+                //@ts-ignore
+                style={{ boxShadow: isDark ? CARD_DARK_SHADOW : null }}
+              >
                 <CreatorPreview
                   creator={item}
                   onMediaPress={(initialScrollIndex: number) => {
@@ -128,7 +136,7 @@ const CreatorsList = ({ days }: { days: any }) => {
                       `/list?initialScrollIndex=${initialScrollIndex}&type=trendingCreator&days=${days}&creatorId=${item.profile_id}`
                     );
                   }}
-                  mediaSize={containerWidth / 3}
+                  mediaSize={containerWidth / 3 - 2}
                 />
               </View>
             );
@@ -152,7 +160,7 @@ const NFTList = ({ days }: { days: any }) => {
 
   return (
     <View
-      tw="flex-1 flex-row flex-wrap justify-between"
+      tw="flex-1 flex-row flex-wrap justify-between mt-4"
       onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
     >
       {isLoading ? (
@@ -167,7 +175,7 @@ const NFTList = ({ days }: { days: any }) => {
                 nft={item}
                 tw={`w-[${containerWidth / numColumns - 30}px] h-[${
                   containerWidth / numColumns + 205
-                }px] mt-4`}
+                }px] mb-8`}
                 onPress={() =>
                   router.push(
                     `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`

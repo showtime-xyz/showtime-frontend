@@ -172,7 +172,7 @@ export const ProfileTop = ({
               </View>
             ) : profileId && userId !== profileId ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
-                <Hidden till="md">
+                <Hidden until="md">
                   <Follow
                     onPressFollower={() => setShowBottomSheet("followers")}
                     onPressFollowing={() => setShowBottomSheet("following")}
