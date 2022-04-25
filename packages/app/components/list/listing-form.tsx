@@ -47,7 +47,12 @@ const defaultListingValues = {
   currency: defaultCurrency,
 };
 
-const options: SelectOption[] = [];
+const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
+  (currency) => {
+    const [value, label] = currency;
+    return { value, label } as { value: string; label: string };
+  }
+);
 
 export const ListingForm = (props: Props) => {
   const nft = props.nft;
