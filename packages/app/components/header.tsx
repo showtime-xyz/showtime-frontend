@@ -165,7 +165,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         style={{
           position: "sticky",
         }}
-        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm"
       >
         <View tw="items-start">
           <Link href="/">
@@ -191,7 +191,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         backdropFilter: "blur(20px)",
         backgroundColor: blurredBackgroundColor,
       }}
-      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm"
     >
       <View tw="w-20 items-start">
         <HeaderLeft canGoBack={canGoBack} />
