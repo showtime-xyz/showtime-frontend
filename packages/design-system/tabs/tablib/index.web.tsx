@@ -84,27 +84,20 @@ const Root = ({
 
   return (
     <TabsContext.Provider value={{ position, offset }}>
+      {headerChild}
       <RadixTabs.Root
         value={selected}
         onValueChange={onIndexChange}
         activationMode="manual"
       >
-        <View tw="flex flex-row justify-between shadow-md">
-          {headerChild}
+        <View tw="flex flex-row justify-between shadow-md flex-1">
           <RadixTabs.List aria-label={accessibilityLabel} asChild>
             <ScrollView
               {...(listChild as any).props}
               contentContainerStyle={[
-                {
-                  flexDirection: "row",
-                  flexWrap: "nowrap",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                },
-                tw.style(`bg-white dark:bg-black px-2`),
+                tw.style(
+                  `bg-white dark:bg-black flex h-full px-2.5 items-center flex-row flex-nowrap`
+                ),
                 (listChild as any).props?.contentContainerStyle,
               ]}
             >

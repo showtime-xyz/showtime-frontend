@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useContext, useMemo } from "react";
+import { Suspense, useContext, useEffect } from "react";
 import { Platform } from "react-native";
 
 import Animated, {
@@ -19,7 +19,6 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { TabItem, Tabs } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
 import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -181,7 +180,9 @@ const WebFeed = () => {
         style={{
           height: TAB_LIST_HEIGHT,
         }}
-        contentContainerStyle={tw.style("w-full justify-center")}
+        contentContainerStyle={tw.style(
+          "w-full justify-center bg-gray-100 dark:bg-gray-900"
+        )}
       >
         <Tabs.Trigger>
           <TabItem name="Following" />
