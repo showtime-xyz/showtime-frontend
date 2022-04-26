@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { ListingValues, ListNFT, useListNFT } from "app/hooks/use-list-nft";
+import { ListingValues, ListNFT } from "app/hooks/use-list-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
@@ -21,6 +21,8 @@ import { tw } from "design-system/tailwind";
 
 type Props = {
   nft?: NFT;
+  listNFT: any;
+  listState: ListNFT;
 };
 
 type StatusMapping = Exclude<ListNFT["status"], "idle">;
@@ -37,6 +39,7 @@ const statusCopyMapping: StatusCopyMapping = {
   listing: "Listing your NFT...",
   listingError: "Can't list your NFT. Please try again.",
   listingSuccess: "Success! Your NFT is on sale. Redirecting...",
+  transactionInitiated: "Transaction initiated...",
 };
 
 const defaultCurrency = "WETH";
@@ -55,11 +58,10 @@ const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
 );
 
 export const ListingForm = (props: Props) => {
-  const nft = props.nft;
+  const { nft, listNFT, listState: state } = props;
   const router = useRouter();
   const isDark = useIsDarkMode();
   const { web3 } = useWeb3();
-  const { listNFT, state } = useListNFT();
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const [currentCurrencyAddress, setCurrentCurrency] = useState<string>(

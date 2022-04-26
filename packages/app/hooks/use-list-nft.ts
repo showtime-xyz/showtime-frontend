@@ -16,12 +16,15 @@ export type ListNFT = {
     | "approvalChecking"
     | "approvalRequesting"
     | "approvalError"
-    | "approvalSuccess";
+    | "approvalSuccess"
+    | "transactionInitiated";
+  transactionHash?: string;
 };
 
 type ListNFTAction = {
   type: "status";
   status: ListNFT["status"];
+  transactionHash?: string;
 };
 
 export type ListingValues = {
@@ -33,6 +36,7 @@ export type ListingValues = {
 
 const initialState: ListNFT = {
   status: "idle",
+  transactionHash: undefined,
 };
 
 const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
@@ -41,6 +45,7 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
       return {
         ...state,
         status: action.status,
+        transactionHash: action.transactionHash,
       };
     default:
       return state;
@@ -157,12 +162,25 @@ export const useListNFT = () => {
           },
         ]);
 
+        dispatch({
+          type: "status",
+          status: "transactionInitiated",
+          transactionHash: transaction,
+        });
+
         provider.once(transaction, () => {
-          dispatch({ type: "status", status: "listingSuccess" });
+          dispatch({
+            type: "status",
+            status: "listingSuccess",
+            transactionHash: transaction,
+          });
           resolve(true);
         });
       } catch (error) {
-        dispatch({ type: "status", status: "listingError" });
+        dispatch({
+          type: "status",
+          status: "listingError",
+        });
 
         console.log("Error: Listing Request", error);
         reject(false);

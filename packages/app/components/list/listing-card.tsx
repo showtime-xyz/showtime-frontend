@@ -1,19 +1,17 @@
 import { formatDistanceToNowStrict } from "date-fns";
-import useSWR from "swr";
 
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
-import { axios } from "app/lib/axios";
+import { useListNFT } from "app/hooks/use-list-nft";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { View, Text } from "design-system";
+import { Media, Spinner, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
-import { Video } from "design-system/video";
 
 import { ListingForm } from "./listing-form";
 import { ListingUnavailable } from "./listing-unavailable";
@@ -28,26 +26,10 @@ type NFT_Detail = {
 
 const ListingCard = (props: Props) => {
   const nftId = props.nftId;
-  const endpoint = nftId ? `/v2/nft_detail/${nftId}` : undefined;
   const { userAddress: address } = useCurrentUserAddress();
+  const { listNFT, state } = useListNFT();
 
-  const { data, error, mutate } = useSWR<NFT_Detail>(endpoint, (url) =>
-    axios({ url, method: "GET" })
-  );
-  const nft = data?.data;
-  const isLoading = !data;
-
-  if (error) {
-    console.log(`Error in Listing Card From Endpoint ${endpoint}:`, error);
-  }
-
-  if (isLoading) {
-    // TODO: Explore skeleton screens, not high priority as endpoint is cached by this flow
-    console.log(
-      `Loading in Listing Card From Endpoint ${endpoint}:`,
-      isLoading
-    );
-  }
+  const { data: nft, loading } = useNFTDetails(Number(nftId));
 
   const hasMultipleOwners = nft?.multiple_owners_list
     ? nft?.multiple_owners_list.length > 1
@@ -57,25 +39,49 @@ const ListingCard = (props: Props) => {
     findAddressInOwnerList(address, nft?.multiple_owners_list)
   );
 
-  const fileExtension = nft?.token_img_url?.split(".").pop();
-  const isVideo =
-    fileExtension && supportedVideoExtensions.includes(fileExtension);
-  const Preview = isVideo ? Video : Image;
-  const previewURI = nft?.token_img_url;
+  if (loading) {
+    return (
+      <View tw="flex-1 justify-center items-center">
+        <Spinner />
+      </View>
+    );
+  }
+
+  if (state.status === "listingSuccess") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Text variant="text-4xl">🎉</Text>
+        <View>
+          <Text variant="text-lg" tw="my-8 text-center">
+            Your NFT has been listed on Showtime!
+          </Text>
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+        <View tw="items-center">
+          <Text variant="text-base" tw="text-center my-8">
+            Your NFT is being listed on Showtime. Feel free to navigate away
+            from this screen.
+          </Text>
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1">
       <Collection nft={nft} />
       <View tw="p-4">
         <View tw="flex-row items-center">
-          {previewURI ? (
-            <Preview
-              source={{
-                uri: previewURI,
-              }}
-              tw="w-[80px] h-[80px] rounded-2xl"
-            />
-          ) : null}
+          <Media item={nft} tw="w-[80px] h-[80px] rounded-2xl" />
           <View tw="flex-1 px-4">
             <Text variant="text-lg" tw=" text-black dark:text-white mb-2">
               {nft?.token_name}
@@ -101,7 +107,7 @@ const ListingCard = (props: Props) => {
         </View>
         <Owner nft={nft} price={!hasMultipleOwners} tw="px-0 my-4" />
         {isActiveAddressAnOwner ? (
-          <ListingForm nft={nft} />
+          <ListingForm nft={nft} listNFT={listNFT} listState={state} />
         ) : (
           <ListingUnavailable nft={nft} />
         )}
