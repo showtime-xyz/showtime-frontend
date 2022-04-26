@@ -100,7 +100,7 @@ export const ListingForm = (props: Props) => {
           .default(LIST_CURRENCIES[defaultListingValues.currency]),
         editions: yup.number().required().min(1).max(ownedAmount).default(1),
       }),
-    []
+    [ownedAmount]
   );
 
   const { control, handleSubmit, formState } = useForm<any>({

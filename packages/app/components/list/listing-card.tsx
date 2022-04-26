@@ -49,10 +49,13 @@ const ListingCard = (props: Props) => {
 
   if (state.status === "listingSuccess") {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center mt-4">
         <Text variant="text-4xl">🎉</Text>
         <View>
-          <Text variant="text-lg" tw="my-8 text-center">
+          <Text
+            variant="text-lg"
+            tw="my-8 text-black dark:text-white text-center"
+          >
             Your NFT has been listed on Showtime!
           </Text>
           <PolygonScanButton transactionHash={state.transactionHash} />
@@ -66,7 +69,10 @@ const ListingCard = (props: Props) => {
       <View tw="flex-1 items-center justify-center">
         <Spinner />
         <View tw="items-center">
-          <Text variant="text-base" tw="text-center my-8">
+          <Text
+            variant="text-base"
+            tw="text-black dark:text-white text-center my-8"
+          >
             Your NFT is being listed on Showtime. Feel free to navigate away
             from this screen.
           </Text>
