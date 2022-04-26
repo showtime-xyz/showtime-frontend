@@ -1,18 +1,15 @@
 import * as React from "react";
-import { Platform, Share } from "react-native";
+import { Platform } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
 
-import { BYPASS_EMAIL } from "app/lib/constants";
-import { LIST_CURRENCIES } from "app/lib/constants";
+import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import { track } from "./lib/analytics";
-import { CHAIN_IDENTIFIERS } from "./lib/constants";
-import { Profile, NFT, WalletAddressesV2, OwnersListOwner } from "./types";
+import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -320,3 +317,9 @@ export const CARD_DARK_SHADOW =
   Platform.OS === "web"
     ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
     : undefined;
+
+export const getPolygonScanLink = (transactionHash: string) => {
+  return `https://${
+    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+  }polygonscan.com/tx/${transactionHash}`;
+};
