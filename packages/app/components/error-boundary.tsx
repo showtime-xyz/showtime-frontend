@@ -1,22 +1,25 @@
 import React from "react";
 
-export class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
+export class ErrorBoundary extends React.Component<
+  any,
+  { hasError: boolean; error: any }
+> {
   constructor(props: any) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: any, errorInfo: any) {
-    console.error("error boundary: ", error, errorInfo);
+    console.error("ErrorBoundary: ", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      return <></>;
+      return <>{this.props.fallback}</>;
     }
 
     return <>{this.props.children}</>;
