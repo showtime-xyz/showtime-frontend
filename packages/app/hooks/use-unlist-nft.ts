@@ -1,20 +1,25 @@
-import { useRef, useReducer } from "react";
+import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useWeb3 } from "app/hooks/use-web3";
-import { useWalletConnect } from "app/lib/walletconnect";
-import { getBiconomy, parseBalance } from "app/utilities";
+
+import { useSignerAndProvider } from "./use-signer-provider";
 
 export type UnlistNFT = {
-  status: "idle" | "unlisting" | "unlistingError" | "unlistingSuccess";
+  status:
+    | "idle"
+    | "unlisting"
+    | "unlistingError"
+    | "unlistingSuccess"
+    | "transactionInitiated";
+  transactionHash?: string;
 };
 
 type UnlistNFTAction = {
   type: "status";
   status: UnlistNFT["status"];
+  transactionHash?: string;
 };
 
 // Maps to market place smart contract listingId
@@ -22,6 +27,7 @@ export type UnlistingValue = number | undefined;
 
 const initialState: UnlistNFT = {
   status: "idle",
+  transactionHash: undefined,
 };
 
 const listNFTReducer = (
@@ -33,33 +39,18 @@ const listNFTReducer = (
       return {
         ...state,
         status: action.status,
+        transactionHash: action.transactionHash,
       };
     default:
       return state;
   }
 };
 
-export const useListNFT = () => {
-  const biconomyRef = useRef<any>();
-  const connector = useWalletConnect();
-  const { web3 } = useWeb3();
-  const { userAddress: address } = useCurrentUserAddress();
+export const useUnlistNFT = () => {
+  const { getSignerAndProvider } = useSignerAndProvider();
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
-
-  const biconomy = async () => {
-    const configureBiconomy = !biconomyRef.current;
-
-    if (configureBiconomy) {
-      biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
-    }
-
-    return {
-      signer: biconomyRef.current.getSignerByAddress(address),
-      provider: biconomyRef.current.getEthersProvider(),
-    };
-  };
 
   const unlistingFromMarketPlace = async (listingId: UnlistingValue) => {
     return await new Promise(async (resolve, reject) => {
@@ -73,35 +64,47 @@ export const useListNFT = () => {
 
         dispatch({ type: "status", status: "unlisting" });
 
-        const { signer, provider } = await biconomy();
+        const result = await getSignerAndProvider();
 
-        const marketContract = new ethers.Contract(
-          //@ts-ignore
-          MARKET_PLACE_ADDRESS,
-          marketplaceAbi,
-          signer
-        );
+        if (result) {
+          const { signer, signerAddress, provider } = result;
 
-        const populatedTransaction =
-          await marketContract.populateTransaction.cancelSale(listingId);
+          const marketContract = new ethers.Contract(
+            //@ts-ignore
+            MARKET_PLACE_ADDRESS,
+            marketplaceAbi,
+            signer
+          );
 
-        const data = populatedTransaction.data;
+          const populatedTransaction =
+            await marketContract.populateTransaction.cancelSale(listingId);
 
-        const transaction = await provider.send("eth_sendTransaction", [
-          {
-            data,
-            from: address,
-            to: MARKET_PLACE_ADDRESS,
-            signatureType: "EIP712_SIGN",
-          },
-        ]);
+          const data = populatedTransaction.data;
 
-        console.log("Unlisting Transaction", transaction);
+          const transaction = await provider.send("eth_sendTransaction", [
+            {
+              data,
+              from: signerAddress,
+              to: MARKET_PLACE_ADDRESS,
+              signatureType: "EIP712_SIGN",
+            },
+          ]);
 
-        provider.once(transaction, () => {
-          dispatch({ type: "status", status: "unlistingSuccess" });
-          resolve(true);
-        });
+          dispatch({
+            type: "status",
+            status: "transactionInitiated",
+            transactionHash: transaction,
+          });
+
+          provider.once(transaction, () => {
+            dispatch({
+              type: "status",
+              status: "unlistingSuccess",
+              transactionHash: transaction,
+            });
+            resolve(true);
+          });
+        }
       } catch (error) {
         dispatch({ type: "status", status: "unlistingError" });
 
@@ -119,6 +122,8 @@ export const useListNFT = () => {
       console.log("Error: Listing Flow", error);
     }
   };
+
+  console.log("unlisting nft state ", state);
 
   return {
     unlistNFT,

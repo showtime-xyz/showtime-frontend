@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useListNFT, UnlistNFT } from "app/hooks/use-unlist-nft";
+import { UnlistNFT } from "app/hooks/use-unlist-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Button } from "design-system";
+import { Button, Text, View } from "design-system";
 
 type Props = {
   listingID?: number;
+  unlistState: UnlistNFT;
+  unlistNFT: (listingID?: number) => void;
 };
 
 type StatusCopyMapping = {
@@ -21,16 +23,17 @@ const statusCopyMapping: StatusCopyMapping = {
   unlisting: "Unlisting your NFT...",
   unlistingError: "Can't unlist your NFT. Please try again.",
   unlistingSuccess: "Success! Your NFT was unlisted.",
+  transactionInitiated: "Transaction initiated...",
 };
 
 const UnlistingSubmit = (props: Props) => {
   const listingID = props.listingID;
-  const { unlistNFT, state } = useListNFT();
   const router = useRouter();
   const { web3 } = useWeb3();
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const isNotMagic = !web3;
+  const { unlistState: state, unlistNFT } = props;
 
   useEffect(() => {
     if (state.status === "unlistingSuccess") {
