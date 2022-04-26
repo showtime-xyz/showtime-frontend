@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -26,6 +26,8 @@ function useCurrentUserAddress() {
       });
     } else if (user?.data && user?.data.profile.wallet_addresses_v2[0]) {
       setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
+    } else {
+      setUserAddress("");
     }
   }, [user, web3]);
 
