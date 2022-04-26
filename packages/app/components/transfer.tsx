@@ -3,12 +3,13 @@ import { Linking, Platform } from "react-native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatDistanceToNowStrict } from "date-fns";
+import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { yup } from "app/lib/yup";
-import { findAddressInOwnerList } from "app/utilities";
+import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
 
 import {
   Button,
@@ -22,7 +23,7 @@ import {
 import { Avatar } from "design-system/avatar";
 import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
-import { ArrowRight, Check, PolygonScan } from "design-system/icon";
+import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 import { tw } from "design-system/tailwind";
 
@@ -88,16 +89,33 @@ function Transfer({ nftId }: { nftId?: string }) {
 
   const { data } = useUserProfile({ address: debouncedTransferAddress });
 
-  function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
-    if (nft) startTransfer({ nft, receiverAddress, quantity });
+  async function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
+    // TODO: move address resolver to a hook?
+    let address: string | undefined;
+    // probably ens address. ENS address should be obtained only from eth mainnet
+    if (receiverAddress.includes(".")) {
+      const provider = new ethers.providers.InfuraProvider(
+        null,
+        process.env.NEXT_PUBLIC_INFURA_ID
+      );
+      address = await provider.resolveName(receiverAddress);
+    }
+    // hex address
+    else if (receiverAddress.startsWith("0x")) {
+      address = receiverAddress;
+    }
+    // showtime username
+    else {
+      address = data?.data.profile.wallet_addresses_v2[0].address;
+    }
+
+    if (nft && address) {
+      startTransfer({ nft, receiverAddress: address, quantity });
+    }
   }
 
   function handleOpenPolygonScan() {
-    Linking.openURL(
-      `https://${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
-      }polygonscan.com/tx/${state.transaction}`
-    );
+    Linking.openURL(getPolygonScanLink(state.transaction));
   }
 
   if (error) {
@@ -122,14 +140,7 @@ function Transfer({ nftId }: { nftId?: string }) {
         {state.status === "transfering" ? (
           <Spinner />
         ) : (
-          <Check
-            style={tw.style("rounded-lg overflow-hidden")}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-            width={32}
-            height={32}
-          />
+          <Text variant="text-4xl">🎉</Text>
         )}
 
         <Text tw="text-center text-black dark:text-white py-8">
@@ -227,7 +238,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                   <Fieldset
                     tw="flex-1"
                     label="Receiver"
-                    placeholder="eg: @showtime, showtime.eth, 0x..."
+                    placeholder="eg: showtime, showtime.eth, 0x..."
                     helperText="Type username, ENS, or Ethereum address"
                     onBlur={onBlur}
                     errorText={errors.receiverAddress?.message}
