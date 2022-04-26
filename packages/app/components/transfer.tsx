@@ -230,7 +230,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                   <Fieldset
                     tw="flex-1"
                     label="Receiver"
-                    placeholder="eg: showtime.eth, 0x..."
+                    placeholder="eg: @showtime, showtime.eth, 0x..."
                     helperText="Type username, ENS, or Ethereum address"
                     onBlur={onBlur}
                     errorText={errors.receiverAddress?.message}
@@ -252,7 +252,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                 >
                   {data?.data.profile.name}
                 </Text>
-                <View tw="flex-row mt-1">
+                <View tw="flex-row mt-1 items-center">
                   <Text
                     tw="dark:text-white text-black font-semibold"
                     variant="text-13"
@@ -261,7 +261,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                   </Text>
                   {data?.data.profile.verified ? (
                     <View tw="ml-1">
-                      <VerificationBadge size={16} />
+                      <VerificationBadge size={12} />
                     </View>
                   ) : null}
                 </View>
