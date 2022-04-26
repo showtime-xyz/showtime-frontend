@@ -244,7 +244,10 @@ export const isUserAnOwner = (
     userAddresses?.find((addressObject) => {
       return nftOwnerList?.find(
         (owner) =>
-          addressObject.address.toLowerCase() === owner.address?.toLowerCase()
+          addressObject.address.toLowerCase() ===
+            owner.address?.toLowerCase() ||
+          addressObject.ens_domain?.toLowerCase() ===
+            owner.address?.toLowerCase()
       );
     })
   );
@@ -261,7 +264,8 @@ export const findUserInOwnerList = (
   const ownedList = userAddresses?.filter((addressObject) => {
     const hasMatch = nftOwnerList?.find(
       (owner) =>
-        addressObject.address.toLowerCase() === owner.address?.toLowerCase()
+        addressObject.address.toLowerCase() === owner.address?.toLowerCase() ||
+        addressObject.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
     );
     return hasMatch ? true : false;
   });
@@ -274,10 +278,17 @@ export const findUserInOwnerList = (
  */
 export const findAddressInOwnerList = (
   address?: string,
+  userAddresses?: Profile["wallet_addresses_v2"],
   nftOwnerList?: NFT["multiple_owners_list"]
 ): OwnersListOwner | undefined => {
+  const userAddress = userAddresses?.find((addressObject) => {
+    return addressObject.address.toLowerCase() === address?.toLowerCase();
+  });
+
   return nftOwnerList?.find(
-    (owner) => address?.toLowerCase() === owner.address?.toLowerCase()
+    (owner) =>
+      userAddress?.address?.toLowerCase() === owner.address?.toLowerCase() ||
+      userAddress?.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
   );
 };
 

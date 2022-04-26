@@ -1,13 +1,11 @@
-import { useRef, useReducer } from "react";
+import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useWeb3 } from "app/hooks/use-web3";
-import { useWalletConnect } from "app/lib/walletconnect";
-import { getBiconomy, parseBalance } from "app/utilities";
+import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { parseBalance } from "app/utilities";
 
 export type ListNFT = {
   status:
@@ -18,12 +16,15 @@ export type ListNFT = {
     | "approvalChecking"
     | "approvalRequesting"
     | "approvalError"
-    | "approvalSuccess";
+    | "approvalSuccess"
+    | "transactionInitiated";
+  transactionHash?: string;
 };
 
 type ListNFTAction = {
   type: "status";
   status: ListNFT["status"];
+  transactionHash?: string;
 };
 
 export type ListingValues = {
@@ -35,6 +36,7 @@ export type ListingValues = {
 
 const initialState: ListNFT = {
   status: "idle",
+  transactionHash: undefined,
 };
 
 const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
@@ -43,6 +45,7 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
       return {
         ...state,
         status: action.status,
+        transactionHash: action.transactionHash,
       };
     default:
       return state;
@@ -50,38 +53,23 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
 };
 
 export const useListNFT = () => {
-  const biconomyRef = useRef<any>();
-  const connector = useWalletConnect();
-  const { web3 } = useWeb3();
-  const { userAddress: address } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
+  const { getSignerAndProvider } = useSignerAndProvider();
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
   const MINTING_ADDRESS = process.env.NEXT_PUBLIC_MINTING_CONTRACT;
-
-  const biconomy = async () => {
-    const configureBiconomy = !biconomyRef.current;
-
-    if (configureBiconomy) {
-      biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
-    }
-
-    return {
-      signer: biconomyRef.current.getSignerByAddress(address),
-      provider: biconomyRef.current.getEthersProvider(),
-    };
-  };
 
   /**
    * Check and request listing approval
    */
-  const requestingListingApproval = async () => {
+  const requestingListingApproval = async (params: {
+    signer: any;
+    signerAddress: string;
+    provider: any;
+  }) => {
     return await new Promise(async (resolve, reject) => {
+      const { provider, signer, signerAddress } = params;
       try {
-        dispatch({ type: "status", status: "approvalChecking" });
-
-        const { signer, provider } = await biconomy();
-
         const mintContract = new ethers.Contract(
           //@ts-ignore
           MINTING_ADDRESS,
@@ -90,7 +78,7 @@ export const useListNFT = () => {
         );
 
         const isApprovedToList = await mintContract.isApprovedForAll(
-          address,
+          signerAddress,
           MARKET_PLACE_ADDRESS
         );
 
@@ -112,7 +100,7 @@ export const useListNFT = () => {
           const transaction = await provider.send("eth_sendTransaction", [
             {
               data,
-              from: address,
+              from: signerAddress,
               to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
               signatureType: "EIP712_SIGN",
             },
@@ -133,12 +121,18 @@ export const useListNFT = () => {
     });
   };
 
-  const listingToMarketPlace = async (listingValues: ListingValues) => {
-    return await new Promise(async (resolve, reject) => {
-      try {
-        dispatch({ type: "status", status: "listing" });
+  const listingToMarketPlace = async (params: {
+    signer: any;
+    signerAddress: string;
+    provider: any;
+    listingValues: ListingValues;
+  }) => {
+    const { signer, signerAddress, provider, listingValues } = params;
 
-        const { signer, provider } = await biconomy();
+    return await new Promise(async (resolve, reject) => {
+      dispatch({ type: "status", status: "listing" });
+
+      try {
         const marketContract = new ethers.Contract(
           //@ts-ignore
           MARKET_PLACE_ADDRESS,
@@ -162,18 +156,31 @@ export const useListNFT = () => {
         const transaction = await provider.send("eth_sendTransaction", [
           {
             data,
-            from: address,
+            from: signerAddress,
             to: MARKET_PLACE_ADDRESS,
             signatureType: "EIP712_SIGN",
           },
         ]);
 
+        dispatch({
+          type: "status",
+          status: "transactionInitiated",
+          transactionHash: transaction,
+        });
+
         provider.once(transaction, () => {
-          dispatch({ type: "status", status: "listingSuccess" });
+          dispatch({
+            type: "status",
+            status: "listingSuccess",
+            transactionHash: transaction,
+          });
           resolve(true);
         });
       } catch (error) {
-        dispatch({ type: "status", status: "listingError" });
+        dispatch({
+          type: "status",
+          status: "listingError",
+        });
 
         console.log("Error: Listing Request", error);
         reject(false);
@@ -183,8 +190,12 @@ export const useListNFT = () => {
 
   const listNFT = async (listingValues: ListingValues) => {
     try {
-      await requestingListingApproval();
-      await listingToMarketPlace(listingValues);
+      dispatch({ type: "status", status: "approvalChecking" });
+      const result = await getSignerAndProvider();
+      if (result) {
+        await requestingListingApproval(result);
+        await listingToMarketPlace({ ...result, listingValues });
+      }
     } catch (error) {
       dispatch({ type: "status", status: "listingError" });
 
@@ -192,6 +203,7 @@ export const useListNFT = () => {
     }
   };
 
+  console.log("listing state ", state);
   return {
     listNFT,
     state,

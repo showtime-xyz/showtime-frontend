@@ -3,11 +3,12 @@ import useSWR from "swr";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
+import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { View, Text } from "design-system";
+import { Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
@@ -31,6 +32,7 @@ const UnlistingCard = (props: Props) => {
   const nftId = props.nftId;
   const endpoint = nftId ? `/v2/nft_detail/${nftId}` : undefined;
 
+  const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
 
   const { data, error } = useSWR<NFT_Detail>(endpoint, (url) =>
@@ -58,7 +60,11 @@ const UnlistingCard = (props: Props) => {
     : false;
 
   const isActiveAddressAnOwner = Boolean(
-    findAddressInOwnerList(address, nft?.multiple_owners_list)
+    findAddressInOwnerList(
+      address,
+      user?.data.profile.wallet_addresses_v2,
+      nft?.multiple_owners_list
+    )
   );
 
   const fileExtension = nft?.token_img_url?.split(".").pop();
