@@ -2,16 +2,21 @@ import Fortmatic from "fortmatic";
 
 import { Magic } from "app/lib/magic";
 
-// theme
+let web3ModalCached: any;
+
 const getWeb3Modal = async ({ withMagic = false } = {}) => {
+  if (web3ModalCached) {
+    return web3ModalCached;
+  }
+
   const WalletConnectProvider = (await import("@walletconnect/web3-provider"))
     .default;
   const WalletLink = (await import("walletlink")).WalletLink;
   const Web3Modal = (await import("web3modal")).default;
 
-  const web3Modal = new Web3Modal({
+  web3ModalCached = new Web3Modal({
     network: "mainnet",
-    cacheProvider: false,
+    cacheProvider: true,
     providerOptions: {
       walletconnect: {
         display: {
@@ -97,9 +102,7 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
     // theme,
   });
 
-  web3Modal.clearCachedProvider();
-
-  return web3Modal;
+  return web3ModalCached;
 };
 
 export default getWeb3Modal;

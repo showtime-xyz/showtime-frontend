@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
 
 import { Web3Context } from "app/context/web3-context";
 import { magic, Relayer } from "app/lib/magic";
+import getWeb3Modal from "app/lib/web3-modal";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
@@ -32,6 +34,18 @@ export function Web3Provider({ children }: Web3ProviderProps) {
         setWeb3(provider);
       }
     });
+
+    if (Platform.OS === "web") {
+      (async () => {
+        const web3Modal = await getWeb3Modal();
+
+        if (web3Modal.cachedProvider) {
+          const provider = await web3Modal.connect();
+          const ethersProvider = new EthersWeb3Provider(provider);
+          setWeb3(ethersProvider);
+        }
+      })();
+    }
   }, []);
 
   //#endregion
