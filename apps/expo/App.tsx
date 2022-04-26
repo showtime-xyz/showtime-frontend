@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   AppState,
   LogBox,
@@ -17,15 +17,17 @@ import rudderClient, {
 import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
-import { StatusBar, setStatusBarStyle } from "expo-status-bar";
+import { setStatusBarStyle, StatusBar } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
 import { enableScreens } from "react-native-screens";
+import type { PublicConfiguration, Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
-import { useDeviceContext, useAppColorScheme } from "twrnc";
+import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { AppContext } from "app/context/app-context";
+import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
 import {
   setColorScheme as setUserColorScheme,
@@ -33,6 +35,7 @@ import {
 } from "app/lib/color-scheme";
 import { SafeAreaProvider } from "app/lib/safe-area";
 import { Sentry } from "app/lib/sentry";
+import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AuthProvider } from "app/providers/auth-provider";
@@ -45,7 +48,7 @@ import { Web3Provider } from "app/providers/web3-provider";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
-import { ToastProvider } from "design-system/toast";
+import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -95,12 +98,56 @@ function mmkvProvider() {
 }
 
 function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
+  const toast = useToast();
   const navigation = useNavigation();
+  const { refreshTokens } = useAccessTokenManager();
 
   return (
     <SWRConfig
       value={{
         provider: mmkvProvider,
+        onError: (err, key) => {
+          toast?.show({
+            message: err,
+            hideAfter: 4000,
+          });
+        },
+        onErrorRetry: async (
+          error: {
+            status: number;
+          },
+          key: string,
+          config: Readonly<PublicConfiguration>,
+          revalidate: Revalidator,
+          opts: Required<RevalidatorOptions>
+        ) => {
+          const maxRetryCount = config.errorRetryCount;
+          const currentRetryCount = opts.retryCount;
+
+          // Exponential backoff
+          const timeout =
+            ~~(
+              (Math.random() + 0.5) *
+              (1 << (currentRetryCount < 8 ? currentRetryCount : 8))
+            ) * config.errorRetryInterval;
+
+          if (
+            !isUndefined(maxRetryCount) &&
+            currentRetryCount > maxRetryCount
+          ) {
+            return;
+          }
+
+          if (error.status === 404) {
+            return;
+          }
+
+          if (error.status === 401) {
+            await refreshTokens();
+          }
+
+          setTimeout(revalidate, timeout, opts);
+        },
         isVisible: () => {
           return AppState.currentState === "active";
         },

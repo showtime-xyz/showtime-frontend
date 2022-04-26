@@ -1,6 +1,6 @@
 import "raf/polyfill";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -8,13 +8,15 @@ import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import type { PublicConfiguration, Revalidator, RevalidatorOptions } from "swr";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
-import { useDeviceContext, useAppColorScheme } from "twrnc";
+import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
+import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
 import {
   setColorScheme as setUserColorScheme,
@@ -24,6 +26,7 @@ import { isServer } from "app/lib/is-server";
 import LogRocket from "app/lib/logrocket";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "app/lib/safe-area";
+import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
@@ -43,7 +46,7 @@ import { UnlistScreen } from "app/screens/unlist";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
-import { ToastProvider } from "design-system/toast";
+import { ToastProvider, useToast } from "design-system/toast";
 import { View } from "design-system/view";
 
 import "../styles/styles.css";
@@ -80,6 +83,63 @@ function localStorageProvider() {
   });
 
   return map;
+}
+
+function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
+  const toast = useToast();
+  const { refreshTokens } = useAccessTokenManager();
+
+  return (
+    <SWRConfig
+      value={{
+        provider: isServer ? () => new Map() : localStorageProvider,
+        onError: (err, key) => {
+          toast?.show({
+            message: err,
+            hideAfter: 4000,
+          });
+        },
+        onErrorRetry: async (
+          error: {
+            status: number;
+          },
+          key: string,
+          config: Readonly<PublicConfiguration>,
+          revalidate: Revalidator,
+          opts: Required<RevalidatorOptions>
+        ) => {
+          const maxRetryCount = config.errorRetryCount;
+          const currentRetryCount = opts.retryCount;
+
+          // Exponential backoff
+          const timeout =
+            ~~(
+              (Math.random() + 0.5) *
+              (1 << (currentRetryCount < 8 ? currentRetryCount : 8))
+            ) * config.errorRetryInterval;
+
+          if (
+            !isUndefined(maxRetryCount) &&
+            currentRetryCount > maxRetryCount
+          ) {
+            return;
+          }
+
+          if (error.status === 404) {
+            return;
+          }
+
+          if (error.status === 401) {
+            await refreshTokens();
+          }
+
+          setTimeout(revalidate, timeout, opts);
+        },
+      }}
+    >
+      {children}
+    </SWRConfig>
+  );
 }
 
 export default function App({ Component, pageProps, router }: AppProps) {
@@ -158,11 +218,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <SafeAreaProvider>
           <ToastProvider>
             <SnackbarProvider>
-              <SWRConfig
-                value={{
-                  provider: isServer ? () => new Map() : localStorageProvider,
-                }}
-              >
+              <SWRProvider>
                 <Web3Provider>
                   <AppContext.Provider value={injectedGlobalContext}>
                     <AuthProvider>
@@ -207,7 +263,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                     </AuthProvider>
                   </AppContext.Provider>
                 </Web3Provider>
-              </SWRConfig>
+              </SWRProvider>
             </SnackbarProvider>
           </ToastProvider>
         </SafeAreaProvider>
