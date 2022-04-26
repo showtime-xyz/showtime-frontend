@@ -1,18 +1,15 @@
 import * as React from "react";
-import { Platform, Share } from "react-native";
+import { Platform } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
 
-import { BYPASS_EMAIL } from "app/lib/constants";
-import { LIST_CURRENCIES } from "app/lib/constants";
+import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import { track } from "./lib/analytics";
-import { CHAIN_IDENTIFIERS } from "./lib/constants";
-import { Profile, NFT, WalletAddressesV2, OwnersListOwner } from "./types";
+import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -247,7 +244,10 @@ export const isUserAnOwner = (
     userAddresses?.find((addressObject) => {
       return nftOwnerList?.find(
         (owner) =>
-          addressObject.address.toLowerCase() === owner.address?.toLowerCase()
+          addressObject.address.toLowerCase() ===
+            owner.address?.toLowerCase() ||
+          addressObject.ens_domain?.toLowerCase() ===
+            owner.address?.toLowerCase()
       );
     })
   );
@@ -264,7 +264,8 @@ export const findUserInOwnerList = (
   const ownedList = userAddresses?.filter((addressObject) => {
     const hasMatch = nftOwnerList?.find(
       (owner) =>
-        addressObject.address.toLowerCase() === owner.address?.toLowerCase()
+        addressObject.address.toLowerCase() === owner.address?.toLowerCase() ||
+        addressObject.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
     );
     return hasMatch ? true : false;
   });
@@ -277,10 +278,17 @@ export const findUserInOwnerList = (
  */
 export const findAddressInOwnerList = (
   address?: string,
+  userAddresses?: Profile["wallet_addresses_v2"],
   nftOwnerList?: NFT["multiple_owners_list"]
 ): OwnersListOwner | undefined => {
+  const userAddress = userAddresses?.find((addressObject) => {
+    return addressObject.address.toLowerCase() === address?.toLowerCase();
+  });
+
   return nftOwnerList?.find(
-    (owner) => address?.toLowerCase() === owner.address?.toLowerCase()
+    (owner) =>
+      userAddress?.address?.toLowerCase() === owner.address?.toLowerCase() ||
+      userAddress?.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
   );
 };
 

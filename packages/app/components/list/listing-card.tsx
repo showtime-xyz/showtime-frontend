@@ -4,7 +4,7 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useListNFT } from "app/hooks/use-list-nft";
 import { useNFTDetails } from "app/hooks/use-nft-details";
-import { NFT } from "app/types";
+import { useUser } from "app/hooks/use-user";
 import { findAddressInOwnerList } from "app/utilities";
 
 import { Media, Spinner, Text, View } from "design-system";
@@ -17,26 +17,27 @@ import { ListingForm } from "./listing-form";
 import { ListingUnavailable } from "./listing-unavailable";
 
 type Props = {
-  nftId?: string;
-};
-
-type NFT_Detail = {
-  data: NFT;
+  nftId?: number;
 };
 
 const ListingCard = (props: Props) => {
   const nftId = props.nftId;
+  const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const { listNFT, state } = useListNFT();
 
-  const { data: nft, loading } = useNFTDetails(Number(nftId));
+  const { data: nft, loading } = useNFTDetails(nftId);
 
   const hasMultipleOwners = nft?.multiple_owners_list
     ? nft?.multiple_owners_list.length > 1
     : false;
 
   const isActiveAddressAnOwner = Boolean(
-    findAddressInOwnerList(address, nft?.multiple_owners_list)
+    findAddressInOwnerList(
+      address,
+      user?.data.profile.wallet_addresses_v2,
+      nft?.multiple_owners_list
+    )
   );
 
   if (loading) {
