@@ -17,6 +17,7 @@ import { mixpanel } from "app/lib/mixpanel";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
+import getWeb3Modal from "app/lib/web3-modal";
 import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
@@ -70,6 +71,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
    */
   const logout = useCallback(
     async function logout() {
+      if (Platform.OS === "web") {
+        const web3Modal = await getWeb3Modal();
+        web3Modal.clearCachedProvider();
+      }
+
       const wasUserLoggedIn = loginStorage.getLogin();
 
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
