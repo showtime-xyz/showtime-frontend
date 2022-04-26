@@ -334,7 +334,7 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
+        {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
         )}
 
