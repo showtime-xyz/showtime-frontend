@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Linking, Platform } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -73,6 +72,8 @@ function Transfer({ nftId }: { nftId?: string }) {
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<any>({
     resolver: yupResolver(transferNFTValidationSchema),
@@ -81,8 +82,9 @@ function Transfer({ nftId }: { nftId?: string }) {
     defaultValues,
   });
 
-  const [transferAddress, setTransferAddress] = useState("");
-  const debouncedTransferAddress = useDebounce(transferAddress, 200);
+  const watchReceiverAddress = watch("receiverAddress");
+
+  const debouncedTransferAddress = useDebounce(watchReceiverAddress, 400);
 
   const { data } = useUserProfile({ address: debouncedTransferAddress });
 
@@ -220,11 +222,6 @@ function Transfer({ nftId }: { nftId?: string }) {
             <Controller
               control={control}
               name="receiverAddress"
-              rules={{
-                onChange: (e) => {
-                  setTransferAddress(e.target.value);
-                },
-              }}
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
@@ -242,7 +239,7 @@ function Transfer({ nftId }: { nftId?: string }) {
               }}
             />
           </View>
-          {data?.data.profile ? (
+          {data?.data.profile && watchReceiverAddress ? (
             <View tw="mt-4 flex-row items-center bg-white dark:bg-black shadow-lg rounded-lg p-4">
               <Avatar url={data?.data.profile.img_url} />
               <View tw="justify-around ml-1">
@@ -270,7 +267,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                 <Button
                   variant="tertiary"
                   onPress={() => {
-                    setTransferAddress("");
+                    setValue("receiverAddress", "");
                   }}
                 >
                   Remove
