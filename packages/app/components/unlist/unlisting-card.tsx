@@ -1,21 +1,19 @@
 import { formatDistanceToNowStrict } from "date-fns";
-import useSWR from "swr";
 
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
+import { useUnlistNFT } from "app/hooks/use-unlist-nft";
 import { useUser } from "app/hooks/use-user";
-import { axios } from "app/lib/axios";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { Text, View } from "design-system";
+import { Media, Spinner, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
-import { Video } from "design-system/video";
 
+import { useNFTDetails } from "../../hooks/use-nft-details";
 import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";
 import { UnlistingUnavailable } from "./unlisting-unavailable";
@@ -29,32 +27,13 @@ type NFT_Detail = {
 };
 
 const UnlistingCard = (props: Props) => {
-  const nftId = props.nftId;
-  const endpoint = nftId ? `/v2/nft_detail/${nftId}` : undefined;
-
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
+  const { data: nft, loading } = useNFTDetails(Number(props.nftId));
 
-  const { data, error } = useSWR<NFT_Detail>(endpoint, (url) =>
-    axios({ url, method: "GET" })
-  );
+  const { state, unlistNFT } = useUnlistNFT();
 
-  const isLoading = !data;
-  const nft = data?.data;
   const listingId = nft?.listing?.sale_identifier;
-
-  if (error) {
-    console.log(`Error in Unlisting Card From Endpoint ${endpoint}:`, error);
-  }
-
-  if (isLoading) {
-    // TODO: Explore skeleton screens, not high priority as endpoint is cached by this flow
-    console.log(
-      `Loading in Unlisting Card From Endpoint ${endpoint}:`,
-      isLoading
-    );
-  }
-
   const hasMultipleOwners = nft?.multiple_owners_list
     ? nft?.multiple_owners_list.length > 1
     : false;
@@ -67,11 +46,48 @@ const UnlistingCard = (props: Props) => {
     )
   );
 
-  const fileExtension = nft?.token_img_url?.split(".").pop();
-  const isVideo =
-    fileExtension && supportedVideoExtensions.includes(fileExtension);
-  const Preview = isVideo ? Video : Image;
-  const previewURI = nft?.token_img_url;
+  if (loading) {
+    return (
+      <View tw="flex-1 justify-center items-center">
+        <Spinner />
+      </View>
+    );
+  }
+
+  if (state.status === "unlistingSuccess") {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4">
+        <Text variant="text-4xl">🎉</Text>
+        <View>
+          <Text
+            variant="text-lg"
+            tw="my-8 text-black dark:text-white text-center"
+          >
+            Your NFT has been listed from Showtime
+          </Text>
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="text-black dark:text-white text-center my-8"
+          >
+            Your NFT is being unlisted on Showtime. Feel free to navigate away
+            from this screen.
+          </Text>
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1">
@@ -79,14 +95,7 @@ const UnlistingCard = (props: Props) => {
       <Collection nft={nft} />
       <View tw="p-4">
         <View tw="flex-row items-center">
-          {previewURI ? (
-            <Preview
-              source={{
-                uri: previewURI,
-              }}
-              tw="w-[80px] h-[80px] rounded-2xl"
-            />
-          ) : null}
+          <Media item={nft} tw="w-[80px] h-[80px] rounded-2xl" />
           <View tw="flex-1 px-4">
             <Text variant="text-lg" tw=" text-black dark:text-white mb-2">
               {nft?.token_name}
@@ -112,7 +121,11 @@ const UnlistingCard = (props: Props) => {
         </View>
         <Owner nft={nft} price={!hasMultipleOwners} tw="px-0 my-4" />
         {isActiveAddressAnOwner ? (
-          <UnlistingSubmit listingID={listingId} />
+          <UnlistingSubmit
+            listingID={listingId}
+            unlistState={state}
+            unlistNFT={unlistNFT}
+          />
         ) : (
           <UnlistingUnavailable nft={nft} />
         )}
