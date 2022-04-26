@@ -6,7 +6,10 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
+import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import useDebounce from "app/hooks/use-debounce";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { yup } from "app/lib/yup";
 import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
@@ -26,10 +29,6 @@ import { Owner } from "design-system/card/rows/owner";
 import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 import { tw } from "design-system/tailwind";
-
-import { useUserProfile } from "../hooks/api-hooks";
-import useDebounce from "../hooks/use-debounce";
-import { useNFTDetails } from "../hooks/use-nft-details";
 
 type FormData = {
   quantity: number;
