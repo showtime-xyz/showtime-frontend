@@ -1,10 +1,10 @@
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useListNFT, ListNFT, ListingValues } from "app/hooks/use-list-nft";
+import { ListingValues, ListNFT, useListNFT } from "app/hooks/use-list-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
@@ -13,7 +13,7 @@ import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { View, Text, Fieldset, Button } from "design-system";
+import { Button, Fieldset, Text, View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { Tag } from "design-system/icon";
 import { SelectOption } from "design-system/select/types";
@@ -30,7 +30,7 @@ type StatusCopyMapping = {
 };
 
 const statusCopyMapping: StatusCopyMapping = {
-  approvalChecking: "Approve Listing",
+  approvalChecking: "Approving Listing...",
   approvalRequesting: "Requesting listing approval...",
   approvalError: "Listing approval denied. Please try again.",
   approvalSuccess: "Successfully approved",
@@ -108,7 +108,11 @@ export const ListingForm = (props: Props) => {
     defaultValues: defaultListingValues,
   });
 
-  const isValidForm = formState.isValid && state.status === "idle";
+  const isValidForm =
+    formState.isValid &&
+    (state.status === "idle" ||
+      state.status === "listingError" ||
+      state.status === "approvalError");
 
   const deriveCTACopy = () => {
     const displayFreeListingCopy =
