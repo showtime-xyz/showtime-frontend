@@ -16,7 +16,6 @@ const CONTAINER_TW = [
 const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
   "w-full	sm:w-480px",
-  "max-h-[50%]", // TODO < verify this with the designer
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px]",
