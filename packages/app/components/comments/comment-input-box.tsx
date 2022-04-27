@@ -8,9 +8,9 @@ import {
 import { ViewStyle } from "react-native";
 
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CommentType } from "app/hooks/api/use-comments";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Text, View } from "design-system";

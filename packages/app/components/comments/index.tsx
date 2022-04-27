@@ -1,5 +1,13 @@
 import { useCallback, useMemo, useRef } from "react";
-import { Keyboard, ListRenderItemInfo, StyleSheet } from "react-native";
+import {
+  FlatList as RNFlatList,
+  Keyboard,
+  ListRenderItemInfo,
+  Platform,
+  StyleSheet,
+} from "react-native";
+
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
@@ -14,6 +22,8 @@ import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+
+const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
 export function Comments({ nft }: { nft: NFT }) {
   //#region refs
