@@ -15,7 +15,7 @@ import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 
 import { useAlert } from "design-system/alert";
-import { ModalFooter } from "design-system/modal-new";
+import { ModalFooter } from "design-system/modal";
 
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsContainer } from "./comments-container";

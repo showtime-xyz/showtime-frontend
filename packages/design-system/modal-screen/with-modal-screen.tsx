@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 
-import { ModalMethods } from "design-system/modal-new";
-import { ModalScreen } from "design-system/modal-new/modal.screen";
+import { useRouter } from "app/navigation/use-router";
 
-import { useRouter } from "../use-router";
+import { ModalMethods } from "design-system/modal";
+import { ModalScreen } from "design-system/modal/modal.screen";
+
 import { useBackPressHandler } from "./use-back-press-handler";
 
 const snapPoints = ["90%", "100%"];
@@ -18,13 +19,13 @@ function withModalScreen<P>(
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
-    const { pop } = useRouter();
-
-    const onClose = useCallback(() => {
-      pop();
-    }, [pop]);
-
     useBackPressHandler(modalRef);
+
+    const router = useRouter();
+    const onClose = useCallback(() => {
+      router.pop();
+    }, [router]);
+
     return (
       <ModalScreen
         ref={modalRef}

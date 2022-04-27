@@ -14,16 +14,16 @@ import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { TextLink, Link } from "app/navigation/link";
+import { Link, TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { ModalSheet, Skeleton, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   HeartFilled,
+  MarketFilled,
   MessageFilled,
   PlusFilled,
-  MarketFilled,
 } from "design-system/icon";
 import { colors } from "design-system/tailwind/colors";
 
@@ -99,7 +99,7 @@ export const Notifications = () => {
       />
 
       <ModalSheet
-        snapPoints={["85%"]}
+        snapPoints={["85%", "100%"]}
         title="People"
         visible={users.length > 0}
         close={() => setUsers([])}

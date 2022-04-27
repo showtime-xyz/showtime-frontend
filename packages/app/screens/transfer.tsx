@@ -1,14 +1,9 @@
-import { useMemo } from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
-
 import { Transfer } from "app/components/transfer";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
-import { useRouter } from "app/navigation/use-router";
-import { withModalScreen } from "app/navigation/with-modal-screen";
 
-import { Modal, ModalSheet } from "design-system";
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;
@@ -20,9 +15,6 @@ const { useParam } = createParam<Query>();
 
 const TransferModal = () => {
   useHideHeader();
-
-  //#region hooks
-  const router = useRouter();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
@@ -31,35 +23,13 @@ const TransferModal = () => {
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
-  //#endregion
 
-  //#region variables
-  const snapPoints = useMemo(() => ["90%"], []);
-  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
-  //#endregion
-
-  return (
-    <ModalComponent
-      title="Transfer NFT"
-      close={router.pop}
-      snapPoints={snapPoints}
-      height="h-[80vh]"
-      bodyTW="bg-white dark:bg-black"
-      bodyContentTW="p-0"
-    >
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={100}
-      >
-        <Transfer nft={data?.data?.item} />
-      </KeyboardAvoidingView>
-    </ModalComponent>
-  );
+  return <Transfer nft={data?.data?.item} />;
 };
 
 export const TransferScreen = withModalScreen(
   TransferModal,
+  "Transfer",
   "/nft/[chainName]/[contractAddress]/[tokenId]/transfer",
   "transferModal"
 );

@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 
-import { ModalMethods } from "design-system/modal-new";
-import { ModalScreen } from "design-system/modal-new/modal.screen";
+import { useRouter } from "app/navigation/use-router";
 
-import { useRouter } from "../use-router";
+import { ModalMethods } from "design-system/modal";
+import { ModalScreen } from "design-system/modal/modal.screen";
 
 function withModalScreen<P>(
   Screen: FC<P>,
@@ -13,15 +13,19 @@ function withModalScreen<P>(
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
-    const { pathname, query, pop } = useRouter();
+    const router = useRouter();
 
     const onClose = useCallback(() => {
-      pop();
-    }, [pop]);
+      if (router.asPath === "/login") {
+        router.push("/");
+      } else {
+        router.pop();
+      }
+    }, [router]);
 
     const shouldShowModal =
-      pathname === matchingPathname ||
-      Boolean(query[matchingQueryParam as any]);
+      router.pathname === matchingPathname ||
+      Boolean(router.query[matchingQueryParam as any]);
 
     if (!shouldShowModal) {
       return null;

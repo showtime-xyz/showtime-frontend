@@ -174,12 +174,13 @@ function Transfer({ nft }: { nft?: NFT }) {
                   width={14}
                 />
                 <Text tw="text-gray-500 font-bold pl-1" variant="text-xs">
-                  {`Minted ${formatDistanceToNowStrict(
-                    new Date(nft?.token_created),
-                    {
-                      addSuffix: true,
-                    }
-                  )}`}
+                  {nft?.token_created &&
+                    `Minted ${formatDistanceToNowStrict(
+                      new Date(nft?.token_created),
+                      {
+                        addSuffix: true,
+                      }
+                    )}`}
                 </Text>
               </View>
             </View>

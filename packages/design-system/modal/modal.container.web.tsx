@@ -11,13 +11,11 @@ const CONTAINER_TW = [
   "top-0 right-0 bottom-0 left-0",
   "flex items-center justify-end sm:justify-center",
   "z-[999]",
-  "bg-red-900",
 ];
 
 const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
   "w-full	sm:w-480px",
-  "max-h-[50%]", // TODO < verify this with the designer
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px]",

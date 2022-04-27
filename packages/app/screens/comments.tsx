@@ -4,8 +4,9 @@ import { Comments } from "app/components/comments";
 import { CommentsStatus } from "app/components/comments/comments-status";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { withModalScreen } from "app/navigation/modal-screen/with-modal-screen";
 import { createParam } from "app/navigation/use-param";
+
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;

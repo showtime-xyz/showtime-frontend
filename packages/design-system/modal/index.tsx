@@ -1,87 +1,64 @@
-import React, { useMemo } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { forwardRef, memo, useCallback, useRef } from "react";
 
-import { useSafeAreaInsets } from "app/lib/safe-area";
+import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
+import { ModalContainer as BaseModalContainer } from "./modal.container";
+import type { ModalMethods, ModalProps } from "./types";
 
-import { View } from "design-system/view";
+export { ModalFooter } from "./modal.footer";
+export { ModalMethods };
 
-import { ModalBackdrop } from "./backdrop";
-import { ModalBody } from "./body";
-import {
-  DEFAULT_HEIGHT,
-  DEFAULT_WIDTH,
-  CONTAINER_TW,
-  MODAL_TW,
-} from "./constants";
-import { createModalContainer } from "./container";
-import { Header } from "./header";
-import type { ModalProps } from "./types";
+const ModalComponent = forwardRef<ModalMethods, ModalProps>(
+  function ModalComponent(
+    {
+      title,
+      isScreen = false,
+      web_height = WEB_HEIGHT,
+      mobile_snapPoints = MOBILE_SNAP_POINTS,
+      modalContainer: ModalContainer = BaseModalContainer,
+      children,
+      onClose,
+    },
+    ref
+  ) {
+    const didFireClose = useRef(false);
 
-const ModalKeyboardAvoidingView: React.FC<{
-  keyboardVerticalOffset: number;
-  style: any;
-}> = Platform.select({
-  web: ({ children }) => children as any,
-  default: ({ keyboardVerticalOffset, style, children }) => (
-    <KeyboardAvoidingView
-      pointerEvents="box-none"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      style={style}
-    >
-      {children}
-    </KeyboardAvoidingView>
-  ),
-});
+    //#region methods
+    const handleOnClose = useCallback(() => {
+      if (didFireClose.current) {
+        return;
+      }
+      didFireClose.current = true;
+      onClose?.();
+    }, [onClose]);
 
-export function Modal({
-  title,
-  width = DEFAULT_WIDTH,
-  height = DEFAULT_HEIGHT,
-  bodyTW,
-  bodyContentTW,
-  keyboardVerticalOffset = 0,
-  scrollable = true,
-  close,
-  onDismiss,
-  modalWrapper,
-  children,
-}: ModalProps) {
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+    const handleClose = useCallback(() => {
+      if (!isScreen) {
+        handleOnClose();
+        //@ts-ignore
+      } else if (isScreen && ref && ref.current) {
+        //@ts-ignore
+        ref.current.close();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isScreen, handleOnClose]);
+    //#endregion
 
-  const ModalContainer = useMemo(
-    () => createModalContainer(modalWrapper),
-    [modalWrapper]
-  );
-  return (
-    <ModalContainer onDismiss={onDismiss}>
-      <View tw={`${CONTAINER_TW} mb-[${safeAreaBottom}px]`}>
-        <ModalBackdrop close={close} />
-        <ModalKeyboardAvoidingView
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            justifyContent: "flex-end",
-          }}
-          keyboardVerticalOffset={keyboardVerticalOffset}
-        >
-          <View
-            tw={[
-              width,
-              height.length === 0 || !height ? "max-h-screen" : height,
-              MODAL_TW ?? "",
-            ]}
-          >
-            <Header title={title} close={close} />
-            <ModalBody
-              tw={bodyTW}
-              contentTW={bodyContentTW}
-              scrollable={scrollable}
-            >
-              {children}
-            </ModalBody>
-          </View>
-        </ModalKeyboardAvoidingView>
-      </View>
-    </ModalContainer>
-  );
-}
+    //#region render
+    return (
+      <ModalContainer
+        ref={ref}
+        title={title}
+        isScreen={isScreen}
+        web_height={web_height}
+        mobile_snapPoints={mobile_snapPoints}
+        close={handleClose}
+        onClose={handleOnClose}
+      >
+        {children}
+      </ModalContainer>
+    );
+    //#endregion
+  }
+);
+
+export const Modal = memo(ModalComponent);
