@@ -25,6 +25,7 @@ const withTM = require("next-transpile-modules")([
   "@zeego/menu",
   "@zeego/dropdown-menu",
   "solito",
+  "three",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";

@@ -6,7 +6,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { SafeAreaView } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
-import { CountryCodePicker, View, Text, Pressable } from "design-system";
+import { CountryCodePicker, Pressable, Text, View } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";

@@ -1,5 +1,6 @@
 export {
   SafeAreaProvider,
-  useSafeAreaInsets,
+  SafeAreaView,
   useSafeAreaFrame,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";

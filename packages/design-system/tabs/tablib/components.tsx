@@ -1,14 +1,16 @@
-import { Platform, StyleSheet, Text as RNText } from "react-native";
+import { useMemo } from "react";
+import { Platform, Text as RNText } from "react-native";
 
 import Animated, {
-  useAnimatedStyle,
   Extrapolate,
   interpolate,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 import { fontFamily } from "design-system/typography";
 import { View } from "design-system/view";
@@ -21,10 +23,10 @@ type TabItemProps = {
   selected?: boolean;
 };
 
-export const TabItem = ({ name, count }: TabItemProps) => {
+export const TabItem = ({ name, count, selected }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
-
+  const isDark = useIsDarkMode();
   const animatedStyle = useAnimatedStyle(() => {
     const newPos = position.value + offset.value;
 
@@ -37,24 +39,32 @@ export const TabItem = ({ name, count }: TabItemProps) => {
       ),
     };
   });
+  const getTextStyle = useMemo(() => {
+    if (Platform.OS !== "web") {
+      return {
+        color: isDark ? colors.white : colors.gray[900],
+      };
+    }
+    const selectedColor = isDark ? colors.white : colors.gray[900];
+    const unselectedColor = isDark ? colors.gray[400] : colors.gray[600];
+    const color = selected ? selectedColor : unselectedColor;
+    return {
+      color,
+    };
+  }, [isDark, selected]);
 
   return (
     <Animated.View
       style={[
-        {
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
-        },
-        Platform.OS === "web" ? { opacity: 1 } : animatedStyle,
+        tw.style("flex-row justify-center items-center h-full px-4"),
+        Platform.OS !== "web" && animatedStyle,
       ]}
     >
       <RNText
         style={[
-          tw.style("text-gray-900 dark:text-white text-sm"),
+          tw.style("text-sm"),
           { fontFamily: fontFamily("Inter-Bold") },
+          getTextStyle,
         ]}
       >
         {name}
@@ -65,7 +75,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           sx={{ fontWeight: "400" }}
           tw={`text-gray-900 dark:text-white`}
         >
-          {" " + count}
+          {` ${count}`}
         </Text>
       ) : null}
     </Animated.View>
@@ -131,14 +141,10 @@ export const SelectedTabIndicator = () => {
       <View
         style={[
           {
-            height: 2,
-            position: "absolute",
-            zIndex: 9999,
-            width: "100%",
             // negative bottom to accomodate border bottom of 1px
             bottom: -1,
           },
-          tw.style(`bg-gray-900 dark:bg-gray-100`),
+          tw.style(`bg-gray-900 dark:bg-gray-100 h-0.5 absolute z-50 w-full`),
         ]}
       />
       {/* {disableBackground ? null : (

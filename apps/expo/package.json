@@ -62,7 +62,8 @@
     "@react-navigation/native": "^6.0.7",
     "@react-navigation/native-stack": "^6.3.0",
     "@react-navigation/stack": "^6.1.0",
-    "@react-three/fiber": "beta",
+    "@react-three/drei": "^9.5.3",
+    "@react-three/fiber": "^8.0.12",
     "@rudderstack/rudder-sdk-react-native": "^1.2.0",
     "@sentry/react-native": "^3.3.0",
     "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.107-alpha/shopify-react-native-skia-0.1.107.tgz",
@@ -193,6 +194,7 @@
     "jest-expo": "^44.0.1",
     "jest-next-dynamic": "^1.0.1",
     "metro-minify-esbuild": "^0.1.0",
+    "react-native-bundle-visualizer": "^3.1.1",
     "react-test-renderer": "18.0.0",
     "semver": "^7.3.5",
     "simple-git": "^3.3.0",
@@ -257,7 +259,7 @@
       "@testing-library/jest-native/extend-expect"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*|@react-three/.*|@babel/.*)"
     ]
   }
 }

@@ -1,40 +1,40 @@
 //@ts-nocheck
 import React, {
-  useContext,
   ForwardedRef,
+  useContext,
   useMemo,
   useRef,
   useState,
 } from "react";
 import {
-  Pressable,
-  View,
-  useWindowDimensions,
-  StyleSheet,
-  ScrollViewProps,
-  ViewProps,
-  PressableProps,
-  FlatList,
-  Platform,
   Dimensions,
+  FlatList,
   FlatListProps,
   LayoutRectangle,
+  Platform,
+  Pressable,
+  PressableProps,
   RefreshControl,
+  ScrollViewProps,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  ViewProps,
 } from "react-native";
 
 import PagerView from "react-native-pager-view";
 import Reanimated, {
-  useSharedValue,
-  useDerivedValue,
-  scrollTo,
-  useAnimatedRef,
-  runOnJS,
-  runOnUI,
   Extrapolate,
   interpolate,
+  runOnJS,
+  runOnUI,
+  scrollTo,
+  useAnimatedReaction,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
-  useAnimatedReaction,
+  useDerivedValue,
+  useSharedValue,
 } from "react-native-reanimated";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
@@ -45,10 +45,10 @@ import { flattenChildren } from "app/utilities";
 import { tw } from "design-system/tailwind";
 
 import {
+  ExtendObject,
   TabListProps,
   TabRootProps,
   TabsContextType,
-  ExtendObject,
 } from "./types";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
 

@@ -1,6 +1,6 @@
+// import { Activity } from "app/components/activity";
 import { Platform, useWindowDimensions } from "react-native";
 
-// import { Activity } from "app/components/activity";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { NFT } from "app/types";
@@ -28,6 +28,7 @@ type Props = {
 
 function Card({ nft, numColumns, tw, onPress }: Props) {
   const { width } = useWindowDimensions();
+  const isDark = useIsDarkMode();
 
   if (width < 768) {
     return (
@@ -36,7 +37,6 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       </Pressable>
     );
   }
-  const isDark = useIsDarkMode();
 
   const size = tw
     ? tw

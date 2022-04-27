@@ -91,17 +91,21 @@ function Img({
     );
   }
 
-  // @ts-ignore
-  return (
-    <Image
-      src={source as string}
-      loading={loading}
-      width={actualWidth}
-      height={actualHeight}
-      layout={!hasHeightOrWidth ? "fill" : undefined}
-      {...props}
-    />
-  );
+  if (source) {
+    // @ts-ignore
+    return (
+      <Image
+        src={source as string}
+        loading={loading}
+        width={actualWidth}
+        height={actualHeight}
+        layout={!hasHeightOrWidth ? "fill" : undefined}
+        {...props}
+      />
+    );
+  }
+
+  return null;
 }
 
 type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;

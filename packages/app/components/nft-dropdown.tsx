@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
@@ -22,8 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
@@ -334,7 +334,7 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
+        {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
         )}
 
@@ -362,6 +362,10 @@ function NFTDropdown({ nftId }: Props) {
               Unlist
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
+        )}
+
+        {isOwner && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
         )}
 
         {isOwner && (

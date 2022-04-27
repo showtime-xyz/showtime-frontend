@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useRef, memo } from "react";
+import { memo, useCallback, useMemo, useRef } from "react";
 import {
   Dimensions,
   FlatList,
+  Platform,
   Pressable,
   RefreshControl,
-  Platform,
   useWindowDimensions,
 } from "react-native";
 
@@ -24,7 +24,7 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useScrollToTop, useNavigation } from "app/lib/react-navigation/native";
+import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useSafeAreaFrame } from "app/lib/safe-area";
 import type { NFT } from "app/types";
@@ -309,7 +309,7 @@ export const FeedItem = memo(
             <View
               tw={`absolute h-[${
                 itemHeight - bottomPadding - 50
-              }px] justify-center`}
+              }px] justify-center bg-white dark:bg-black`}
             >
               <Media
                 item={nft}

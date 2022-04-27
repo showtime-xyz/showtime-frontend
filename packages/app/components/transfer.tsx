@@ -1,29 +1,34 @@
-import { useState } from "react";
-import { Platform, Linking } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useForm, Controller } from "react-hook-form";
-import useSWR from "swr";
-import useUnmountSignal from "use-unmount-signal";
+import { ethers } from "ethers";
+import { Controller, useForm } from "react-hook-form";
 
+import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
+import useDebounce from "app/hooks/use-debounce";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
-import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
-import type { NFT } from "app/types";
-import { findAddressInOwnerList } from "app/utilities";
+import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
 
-import { View, Text, Fieldset, Button, ScrollView } from "design-system";
+import {
+  Button,
+  Fieldset,
+  Media,
+  ScrollView,
+  Text,
+  VerificationBadge,
+  View,
+} from "design-system";
+import { Avatar } from "design-system/avatar";
 import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
-import { ArrowRight, PolygonScan, Check } from "design-system/icon";
-import { Image } from "design-system/image";
+import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 import { tw } from "design-system/tailwind";
-import { Video } from "design-system/video";
 
 type FormData = {
   quantity: number;
@@ -34,13 +39,7 @@ function Transfer({ nftId }: { nftId?: string }) {
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
 
-  const [url] = useState(`/v2/nft_detail/${nftId}`);
-  const unmountSignal = useUnmountSignal();
-  const { data, error } = useSWR([url], (url) =>
-    axios({ url, method: "GET", unmountSignal })
-  );
-
-  const nft = data?.data as NFT;
+  const { data: nft, error, loading } = useNFTDetails(Number(nftId));
 
   const ownerListItem = findAddressInOwnerList(
     userAddress,
@@ -73,6 +72,8 @@ function Transfer({ nftId }: { nftId?: string }) {
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<any>({
     resolver: yupResolver(transferNFTValidationSchema),
@@ -81,31 +82,56 @@ function Transfer({ nftId }: { nftId?: string }) {
     defaultValues,
   });
 
-  function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
-    startTransfer({ nft, receiverAddress, quantity });
+  const watchReceiverAddress = watch("receiverAddress");
+
+  const debouncedTransferAddress = useDebounce(watchReceiverAddress, 400);
+
+  const { data } = useUserProfile({ address: debouncedTransferAddress });
+
+  async function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
+    // TODO: move address resolver to a hook?
+    let address: string | undefined;
+    // probably ens address. ENS address should be obtained only from eth mainnet
+    if (receiverAddress.includes(".")) {
+      const provider = new ethers.providers.InfuraProvider(
+        null,
+        process.env.NEXT_PUBLIC_INFURA_ID
+      );
+      address = await provider.resolveName(receiverAddress);
+    }
+    // hex address
+    else if (receiverAddress.startsWith("0x")) {
+      address = receiverAddress;
+    }
+    // showtime username
+    else {
+      address = data?.data.profile.wallet_addresses_v2[0].address;
+    }
+
+    if (nft && address) {
+      startTransfer({ nft, receiverAddress: address, quantity });
+    }
   }
 
   function handleOpenPolygonScan() {
-    Linking.openURL(
-      `https://${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
-      }polygonscan.com/tx/${state.transaction}`
-    );
+    Linking.openURL(getPolygonScanLink(state.transaction));
   }
 
   if (error) {
     console.error(error);
   }
 
+  if (loading)
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+
   if (!nft) return null;
 
   const TransferNftScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
-
-  const fileExtension = nft?.token_img_url.split(".").pop();
-  const isVideo =
-    fileExtension && supportedVideoExtensions.includes(fileExtension);
-  const Preview = isVideo ? Video : Image;
 
   if (state.status === "transfering" || state.status === "transferingSuccess") {
     return (
@@ -113,14 +139,7 @@ function Transfer({ nftId }: { nftId?: string }) {
         {state.status === "transfering" ? (
           <Spinner />
         ) : (
-          <Check
-            style={tw.style("rounded-lg overflow-hidden")}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-            width={32}
-            height={32}
-          />
+          <Text variant="text-4xl">🎉</Text>
         )}
 
         <Text tw="text-center text-black dark:text-white py-8">
@@ -152,12 +171,7 @@ function Transfer({ nftId }: { nftId?: string }) {
 
         <View tw="p-[16px]">
           <View tw="flex-row items-center pb-4">
-            <Preview
-              source={{
-                uri: nft?.token_img_url,
-              }}
-              tw="w-[80px] h-[80px] rounded-2xl"
-            />
+            <Media item={nft} tw="w-[80px] h-[80px] rounded-2xl" />
             <View tw="flex-1 px-[16px]">
               <Text
                 tw="text-black dark:text-white font-bold pb-4"
@@ -223,7 +237,7 @@ function Transfer({ nftId }: { nftId?: string }) {
                   <Fieldset
                     tw="flex-1"
                     label="Receiver"
-                    placeholder="eg: @showtime, showtime.eth, 0x..."
+                    placeholder="eg: showtime, showtime.eth, 0x..."
                     helperText="Type username, ENS, or Ethereum address"
                     onBlur={onBlur}
                     errorText={errors.receiverAddress?.message}
@@ -235,7 +249,44 @@ function Transfer({ nftId }: { nftId?: string }) {
               }}
             />
           </View>
+          {data?.data.profile && watchReceiverAddress ? (
+            <View tw="mt-4 flex-row items-center bg-white dark:bg-black shadow-lg rounded-lg p-4">
+              <Avatar url={data?.data.profile.img_url} />
+              <View tw="justify-around ml-1">
+                <Text
+                  variant="text-xs"
+                  tw="text-gray-600  font-semibold dark:text-gray-400"
+                >
+                  {data?.data.profile.name}
+                </Text>
+                <View tw="flex-row mt-1 items-center">
+                  <Text
+                    tw="dark:text-white text-black font-semibold"
+                    variant="text-13"
+                  >
+                    @{data?.data.profile.username}
+                  </Text>
+                  {data?.data.profile.verified ? (
+                    <View tw="ml-1">
+                      <VerificationBadge size={12} />
+                    </View>
+                  ) : null}
+                </View>
+              </View>
+              <View tw="ml-auto">
+                <Button
+                  variant="tertiary"
+                  onPress={() => {
+                    setValue("receiverAddress", "");
+                  }}
+                >
+                  Remove
+                </Button>
+              </View>
+            </View>
+          ) : null}
         </View>
+
         <View tw="absolute px-4 w-full" style={{ bottom: 16 }}>
           <Button
             onPress={handleSubmit(handleSubmitTransfer)}
