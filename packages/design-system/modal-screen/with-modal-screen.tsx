@@ -2,8 +2,8 @@ import { FC, useCallback, useRef } from "react";
 
 import { useRouter } from "app/navigation/use-router";
 
-import { ModalMethods } from "design-system/modal-new";
-import { ModalScreen } from "design-system/modal-new/modal.screen";
+import { ModalMethods } from "design-system/modal";
+import { ModalScreen } from "design-system/modal/modal.screen";
 
 import { useBackPressHandler } from "./use-back-press-handler";
 

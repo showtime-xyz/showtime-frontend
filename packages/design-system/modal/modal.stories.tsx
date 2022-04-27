@@ -1,91 +1,93 @@
 import { useState } from "react";
 
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Meta } from "@storybook/react";
 
-import { Button } from "../button";
-import { Text } from "../text";
+import { Button } from "design-system/button";
+import { Close } from "design-system/icon";
+import { Text } from "design-system/text";
+
 import { View } from "../view";
 import { Modal } from "./index";
+import { ModalHeader } from "./modal.header";
 
 export default {
-  component: Modal,
-  title: "Components/Modal",
+  component: ModalHeader,
+  title: "Components/NewModal",
 } as Meta;
 
 const Container = (props: any) => {
-  return <View tw={"dark:bg-gray-100 p-10 bg-white"}>{props.children}</View>;
+  return <View tw={"dark:bg-white p-10 bg-black"}>{props.children}</View>;
 };
 
-export const Basic: React.VFC<{}> = () => {
+export const HeaderDefault: React.VFC<{}> = () => {
+  return (
+    <Container>
+      <ModalHeader title="Modal Header Title" tw={"bg-white dark:bg-black"} />
+    </Container>
+  );
+};
+
+export const HeaderWithEndContent: React.VFC<{}> = () => {
+  return (
+    <Container>
+      <ModalHeader
+        title="Modal Header Title"
+        tw={"bg-white dark:bg-black"}
+        endContentComponent={() => (
+          <Button size="small" iconOnly>
+            <Close />
+          </Button>
+        )}
+      />
+    </Container>
+  );
+};
+
+export const Default: React.VFC<{}> = () => {
   const [visible, setVisible] = useState(false);
+
+  const onClose = () => {
+    setVisible(false);
+  };
   return (
     <Container>
       <Button onPress={() => setVisible(!visible)}>
         <Text tw="text-white dark:text-black">Open modal</Text>
       </Button>
       {visible && (
-        <Modal title="Modal" close={() => setVisible(false)}>
-          <View>
-            <Text tw="dark:text-white text-black">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's standard
-              dummy text ever since the 1500s, when an unknown printer took a
-              galley of type and scrambled it to make a type specimen book. It
-              has survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </Text>
-          </View>
+        <Modal title="Modal Title" onClose={onClose}>
+          <Button size="small" iconOnly>
+            <Close />
+          </Button>
         </Modal>
       )}
     </Container>
   );
 };
 
-export const AutoHeight: React.VFC<{}> = () => {
+export const WithScrollable: React.VFC<{}> = () => {
   const [visible, setVisible] = useState(false);
+
+  const onClose = () => {
+    console.log("onClose");
+    setVisible(false);
+  };
   return (
     <Container>
-      <Button onPress={() => setVisible(!visible)}>
-        <Text tw="text-white dark:text-black">Open modal</Text>
-      </Button>
+      <Button onPress={() => setVisible(!visible)}>Open modal</Button>
       {visible && (
-        <Modal title="Modal" close={() => setVisible(false)} height="">
-          <View>
-            <Text tw="dark:text-white text-black">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's standard
-              dummy text ever since the 1500s, when an unknown printer took a
-              galley of type and scrambled it to make a type specimen book. It
-              has survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </Text>
-          </View>
+        <Modal title="Modal Title" onClose={onClose}>
+          <BottomSheetScrollView>
+            {Array(50)
+              .fill(0)
+              .map((_, index) => (
+                <Text
+                  key={`${index}-item`}
+                  tw="text-white p-1"
+                >{`#${index} item`}</Text>
+              ))}
+          </BottomSheetScrollView>
         </Modal>
       )}
     </Container>
