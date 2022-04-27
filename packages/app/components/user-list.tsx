@@ -8,7 +8,7 @@ import { FollowerUser } from "app/hooks/api/use-followers-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { View, Text, Skeleton, Button } from "design-system";
+import { Button, Skeleton, Text, View } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
@@ -85,7 +85,7 @@ export const UserList = ({
   } else if (users?.length === 0) {
     return (
       <View tw="items-center">
-        <Text tw="dark:text-gray-100 text-gray-900">No Results found</Text>
+        <Text tw="dark:text-gray-100 text-gray-900">No results found</Text>
       </View>
     );
   }
@@ -110,7 +110,7 @@ const FollowingListUser = memo(
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
     return (
       <View
-        tw={`flex-row justify-between items-center h-[${ITEM_HEIGHT}px] overflow-hidden`}
+        tw={`flex-row justify-between items-center h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
       >
         <Link
           href={`/@${item.username ?? item.wallet_address}`}
