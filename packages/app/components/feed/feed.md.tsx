@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo } from "react";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -14,20 +14,29 @@ import {
 } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
-import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
+import {
+  CreatorPreview,
+  SegmentedControl,
+  Skeleton,
+  Tabs,
+  Text,
+} from "design-system";
 import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
 import { useIsDarkMode } from "design-system/hooks";
-import { tw } from "design-system/tailwind";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
+import { MAX_CONTENT_WIDTH } from "../../constants/layout";
+
 const CARD_HEIGHT = 890;
 const CARD_WIDTH = 620;
+const LEFT_SLIDE_WIDTH = 320;
+const LEFT_SLIDE_MARGIN = 80;
 
 export const Feed = () => {
   return (
-    <View tw="flex-1 bg-gray-100 dark:bg-black py-8" testID="homeFeed">
+    <View tw="flex-1 py-8 max-w-7xl" testID="homeFeed">
       <ErrorBoundary>
         <Suspense fallback={<View />}>
           <FeedList />
@@ -40,52 +49,36 @@ export const Feed = () => {
 export const FeedList = () => {
   const { isAuthenticated } = useUser();
   const { width } = useWindowDimensions();
+  const [selected, setSelected] = useState(1);
 
   return (
     <View tw="flex-row">
       <Hidden until="xl">
         <View
           style={{
-            position: Platform.OS === "web" ? "fixed" : null,
-            zIndex: 2,
-            left: 40,
-            width: 320,
+            width: LEFT_SLIDE_WIDTH,
+            marginRight: LEFT_SLIDE_MARGIN,
           }}
         >
           <SuggestedUsers />
         </View>
       </Hidden>
 
-      <View tw="flex-2">
+      <View tw="flex-1">
         {isAuthenticated ? (
-          <View tw="-mt-5">
-            <Tabs.Root>
-              <Tabs.List
-                contentContainerStyle={tw.style(
-                  "mb-1 justify-center bg-transparent"
-                )}
-              >
-                <Tabs.Trigger>
-                  <View tw="p-4">
-                    <Text
-                      variant="text-lg"
-                      tw="dark:text-gray-400 text-gray-600"
-                    >
-                      Following
-                    </Text>
-                  </View>
-                </Tabs.Trigger>
-                <Tabs.Trigger>
-                  <View tw="p-4 ml-2">
-                    <Text
-                      variant="text-lg"
-                      tw="dark:text-gray-400 text-gray-600"
-                    >
-                      For you
-                    </Text>
-                  </View>
-                </Tabs.Trigger>
-              </Tabs.List>
+          <>
+            <View tw="w-[375px] self-end bg-white dark:bg-black p-4 shadow-lg rounded-lg mr-5">
+              <SegmentedControl
+                values={["FOLLOWING", "FOR YOU"]}
+                onChange={setSelected}
+                selectedIndex={selected}
+              />
+            </View>
+            <Tabs.Root
+              onIndexChange={setSelected}
+              value={selected.toString()}
+              initialIndex={1}
+            >
               <Tabs.Pager>
                 <ErrorBoundary>
                   <Suspense fallback={<View />}>
@@ -99,7 +92,7 @@ export const FeedList = () => {
                 </ErrorBoundary>
               </Tabs.Pager>
             </Tabs.Root>
-          </View>
+          </>
         ) : (
           <CuratedFeed />
         )}
@@ -123,11 +116,7 @@ const AlgorithmicFeed = () => {
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return (
-    <View tw="mt-8">
-      <NFTScrollList {...queryState} data={queryState.data} />
-    </View>
-  );
+  return <NFTScrollList {...queryState} data={queryState.data} />;
 };
 
 const NFTScrollList = ({
@@ -137,7 +126,7 @@ const NFTScrollList = ({
   data: NFT[];
   fetchMore: any;
 }) => {
-  const { width: screenWidth } = useWindowDimensions();
+  const { width: screenWidth, height } = useWindowDimensions();
 
   let dataProvider = useMemo(
     () =>
@@ -146,6 +135,13 @@ const NFTScrollList = ({
       }).cloneWithRows(data),
     [data]
   );
+  const contentWidth = useMemo(
+    () =>
+      screenWidth < MAX_CONTENT_WIDTH
+        ? screenWidth
+        : MAX_CONTENT_WIDTH - (LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH),
+    [screenWidth]
+  );
   const _layoutProvider = useMemo(
     () =>
       new LayoutProvider(
@@ -153,16 +149,22 @@ const NFTScrollList = ({
           return "item";
         },
         (_type, dim) => {
-          dim.width = screenWidth;
+          dim.width = contentWidth;
           dim.height = CARD_HEIGHT;
         }
       ),
     [screenWidth]
   );
-
+  const layoutSize = useMemo(
+    () => ({
+      width: contentWidth - 100,
+      height,
+    }),
+    [screenWidth]
+  );
   const _rowRenderer = useCallback((_type: any, item: any, idx) => {
     return (
-      <View tw="flex-row justify-center" nativeID="334343">
+      <View tw="flex-row" nativeID="334343">
         <Card
           nft={item}
           tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
@@ -195,6 +197,7 @@ const NFTScrollList = ({
           rowRenderer={_rowRenderer}
           onEndReached={fetchMore}
           onEndReachedThreshold={300}
+          layoutSize={layoutSize}
         />
       </View>
     </VideoConfigContext.Provider>
@@ -209,13 +212,15 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text variant="text-2xl" tw="text-black dark:text-white">
+      <Text variant="text-2xl" tw="text-black dark:text-white p-4">
         Home
       </Text>
       <View
         tw="bg-white dark:bg-black rounded-2xl mt-8"
+        // @ts-ignore
         style={{
-          // @ts-ignore
+          position: Platform.OS === "web" ? "sticky" : null,
+          top: 100,
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >

@@ -1,13 +1,12 @@
 import { useEffect, useMemo } from "react";
 import {
   KeyboardAvoidingView,
-  ScrollView,
-  Pressable,
   Platform,
+  Pressable,
+  ScrollView,
 } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
@@ -182,7 +181,7 @@ export const EditProfile = () => {
   };
 
   return (
-    <View tw="flex-1">
+    <View tw="flex-1 max-w-screen-xl w-full bg-white dark:bg-black">
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"

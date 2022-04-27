@@ -1,5 +1,6 @@
 const { colors } = require("./colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
+const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
 
 module.exports = {
   mode: "jit",
@@ -10,6 +11,8 @@ module.exports = {
       maxWidth: {
         "screen-3xl": "1680px",
         screen: "100vw",
+        "screen-xl": `${MAX_CONTENT_WIDTH}px`,
+        "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
       boxShadow: {
         dropdown:

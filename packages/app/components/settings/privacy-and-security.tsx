@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Pressable, ScrollView } from "design-system";
+import { Pressable, ScrollView, Text, View } from "design-system";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
 
@@ -73,7 +73,7 @@ export const PrivacyAndSecuritySettings = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView tw="w-full max-w-screen-xl">
       {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       {list.map(renderSetting)}

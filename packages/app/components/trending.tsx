@@ -73,12 +73,8 @@ export const Trending = () => {
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-          <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between">
-            <Text
-              //@ts-ignore
-              variant="text-2xl"
-              tw="text-gray-900 dark:text-white font-extrabold"
-            >
+          <View tw="bg-white dark:bg-black py-2 px-4 flex-row justify-between">
+            <Text tw="text-gray-900 dark:text-white font-extrabold text-2xl">
               Trending
             </Text>
           </View>

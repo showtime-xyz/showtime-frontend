@@ -1,6 +1,6 @@
 import "raf/polyfill";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -10,7 +10,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
-import { useDeviceContext, useAppColorScheme } from "twrnc";
+import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
@@ -172,7 +172,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                             <FeedProvider>
                               <NavigationProvider>
                                 <MintProvider>
-                                  <View tw="bg-white dark:bg-black flex-1">
+                                  <View tw="bg-gray-100 dark:bg-black">
                                     <Header
                                       canGoBack={
                                         router.pathname === "/search" ||
@@ -181,7 +181,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                       }
                                     />
 
-                                    <View tw="min-h-screen">
+                                    <View tw="min-h-screen items-center">
                                       <Component {...pageProps} />
                                     </View>
 

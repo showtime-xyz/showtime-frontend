@@ -4,6 +4,7 @@ import { useWindowDimensions } from "react-native";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
+import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
@@ -23,7 +24,6 @@ import { Pressable } from "design-system/pressable-scale";
 import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 
-import { FillterContext } from ".";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowersList, FollowingList } from "../following-user-list";
 
@@ -78,7 +78,6 @@ export const ProfileTop = ({
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
-  const { filter, dispatch } = useContext(FillterContext);
   const tabBarHeight = useContext(BottomTabBarHeightContext)
     ? useBottomTabBarHeight()
     : 0;
@@ -117,19 +116,19 @@ export const ProfileTop = ({
     <>
       <View pointerEvents="box-none">
         <View
-          tw={`bg-gray-100 dark:bg-gray-900 h-[${coverImageHeight}px]`}
+          tw={`bg-gray-100 dark:bg-gray-900 overflow-hidden md:rounded-b-[32px] md:-mx-20`}
           pointerEvents="none"
         >
           <Skeleton
             height={coverImageHeight}
-            width={width}
+            width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
             show={loading}
             colorMode={colorMode as any}
           >
             {profileData?.data.profile.cover_url && (
               <Image
                 source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${coverImageHeight}px] w-100 object-cover`}
+                tw={`h-[${coverImageHeight}px] w-100  object-cover`}
                 alt="Cover image"
                 resizeMethod="resize"
                 resizeMode="cover"

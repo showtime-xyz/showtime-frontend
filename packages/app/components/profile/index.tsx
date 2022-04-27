@@ -1,11 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  Suspense,
-  useCallback,
-  useReducer,
-  useState,
-} from "react";
+import { Suspense, useCallback, useReducer, useState } from "react";
 import { Platform } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -24,21 +17,10 @@ import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
+import { FillterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
-
-export interface FillterActions {
-  type: "collection_change" | "sort_change";
-  payload: number;
-}
-export const FillterContext = createContext<{
-  filter: typeof defaultFilters;
-  dispatch: Dispatch<FillterActions>;
-}>({
-  filter: defaultFilters,
-  dispatch: () => undefined,
-});
 
 const ProfileScreen = ({ username }: { username: string }) => {
   return <Profile address={username} />;
@@ -83,7 +65,7 @@ const Profile = ({ address }: { address?: string }) => {
   );
   return (
     <FillterContext.Provider value={{ filter, dispatch }}>
-      <View tw="bg-white dark:bg-black flex-1">
+      <View tw="w-full items-center web:mb-8">
         <Tabs.Root
           onIndexChange={setSelected}
           initialIndex={selected}
@@ -91,29 +73,31 @@ const Profile = ({ address }: { address?: string }) => {
           lazy
         >
           <Tabs.Header>
-            <View tw="z-10">
-              {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-              <ProfileTop address={address} isBlocked={isBlocked} />
-              <Hidden until="md">
-                <View tw={"absolute right-10 z-10 -bottom-10"}>
-                  <ProfileListFilter
-                    onCollectionChange={onCollectionChange}
-                    onSortChange={onSortChange}
-                    collectionId={filter.collectionId}
-                    collections={data?.data?.lists[selected]?.collections || []}
-                    sortId={filter.sortId}
-                  />
-                </View>
-              </Hidden>
+            <View tw="bg-white dark:bg-black items-center z-10">
+              <View tw="w-full web:max-w-screen-xl">
+                {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+                <ProfileTop address={address} isBlocked={isBlocked} />
+                <Hidden until="md">
+                  <View tw={"absolute right-10 z-10 -bottom-10"}>
+                    <ProfileListFilter
+                      onCollectionChange={onCollectionChange}
+                      onSortChange={onSortChange}
+                      collectionId={filter.collectionId}
+                      collections={
+                        data?.data?.lists[selected]?.collections || []
+                      }
+                      sortId={filter.sortId}
+                    />
+                  </View>
+                </Hidden>
+              </View>
             </View>
           </Tabs.Header>
 
           {data?.data.lists ? (
             <>
               <Tabs.List
-                style={tw.style(
-                  `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
-                )}
+                style={tw.style(`h-[${TAB_LIST_HEIGHT}px] w-full self-center`)}
               >
                 {data?.data.lists.map((list, index) => (
                   <Tabs.Trigger key={list.id}>

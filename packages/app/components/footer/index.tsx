@@ -2,17 +2,16 @@ import { useWindowDimensions } from "react-native";
 
 import { useUser } from "app/hooks/use-user";
 import {
-  HomeTabBarIcon,
-  TrendingTabBarIcon,
   CameraTabBarIcon,
+  HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
+  TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { useBlurredBackgroundColor } from "design-system/hooks";
-import { useIsDarkMode } from "design-system/hooks";
+import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
 import { View } from "design-system/view";
 
 import { WebFooter } from "./links-footer.web";
