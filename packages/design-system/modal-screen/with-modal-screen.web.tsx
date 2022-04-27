@@ -1,9 +1,9 @@
-import { FC, useCallback, useRef } from "react";
-
 import { useRouter } from "app/navigation/use-router";
-
 import { ModalMethods } from "design-system/modal";
 import { ModalScreen } from "design-system/modal/modal.screen";
+import { FC, useCallback, useRef } from "react";
+
+
 
 function withModalScreen<P>(
   Screen: FC<P>,
@@ -16,7 +16,7 @@ function withModalScreen<P>(
     const router = useRouter();
 
     const onClose = useCallback(() => {
-      if (router.asPath === "/login") {
+      if (router.asPath === "/login" || router.asPath === "/create") {
         router.push("/");
       } else {
         router.pop();

@@ -1,22 +1,19 @@
-import { Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
 import { Avatar } from "design-system/avatar";
 import {
-  Home,
-  HomeFilled,
-  Compass,
-  CompassFilled,
-  Hot,
-  HotFilled,
   Bell,
   BellFilled,
+  Compass,
+  CompassFilled,
+  Home,
+  HomeFilled,
+  Hot,
+  HotFilled,
   Plus,
   Showtime,
 } from "design-system/icon";
@@ -109,8 +106,15 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
 };
 
 export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+  const { width } = useWindowDimensions();
+
   return (
-    <TabBarIcon tab={Platform.select({ default: "/camera", web: "/create" })}>
+    <TabBarIcon
+      tab={Platform.select({
+        default: "/camera",
+        web: width >= breakpoints["md"] ? "/create" : "/camera",
+      })}
+    >
       <View
         tw={[
           "rounded-full h-12 w-12 justify-center items-center",
