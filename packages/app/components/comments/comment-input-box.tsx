@@ -10,6 +10,7 @@ import { ViewStyle } from "react-native";
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
 import { CommentType } from "app/hooks/api/use-comments";
+import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { formatAddressShort } from "app/utilities";
 
@@ -46,6 +47,7 @@ export const CommentInputBox = forwardRef<
   );
   const { bottom } = useSafeAreaInsets();
   const context = useBottomSheetInternal(true);
+  const { user } = useUser();
   //#endregion
 
   //#region callbacks
@@ -133,6 +135,7 @@ export const CommentInputBox = forwardRef<
         onSubmit={handleOnSubmitComment}
         onBlur={context ? handleOnBlur : undefined}
         onFocus={context ? handleOnFocus : undefined}
+        userAvatar={user?.data.profile.img_url}
       />
     </>
   );

@@ -1,7 +1,6 @@
 import {
   forwardRef,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -90,7 +89,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             onFocus={onFocus}
             onBlur={onBlur}
           />
-          <Avatar tw="absolute mt-3.5 ml-3" size={24} url={userAvatar} />
+          <Avatar tw="absolute mt-3 ml-3" size={24} url={userAvatar} />
         </View>
         <Button size="regular" iconOnly={true} onPress={handleSubmit}>
           {submitting ? <Spinner size="small" /> : <Send />}
