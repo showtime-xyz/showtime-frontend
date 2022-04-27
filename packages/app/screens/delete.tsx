@@ -1,8 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Delete } from "app/components/delete";
-import { mixpanel } from "app/lib/mixpanel";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
@@ -11,7 +11,9 @@ import { withModalScreen } from "app/navigation/with-modal-screen";
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  id: string;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -19,11 +21,14 @@ const { useParam } = createParam<Query>();
 const DeleteModal = () => {
   useHideHeader();
   const router = useRouter();
-  const [nftId] = useParam("id");
-
-  useEffect(() => {
-    mixpanel.track("Delete nft view");
-  }, []);
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
 
   const snapPoints = useMemo(() => ["90%"], []);
 
@@ -37,13 +42,13 @@ const DeleteModal = () => {
       height="h-[90vh]"
       bodyTW="bg-white dark:bg-black"
     >
-      <Delete nftId={nftId} />
+      <Delete nft={data?.data?.item} />
     </ModalComponent>
   );
 };
 
 export const DeleteScreen = withModalScreen(
   DeleteModal,
-  "/nft/[id]/delete",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/delete",
   "deleteModal"
 );

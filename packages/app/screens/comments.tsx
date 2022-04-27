@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { Comments } from "app/components/comments";
 import { CommentsStatus } from "app/components/comments/comments-status";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
@@ -13,7 +14,9 @@ import { withModalScreen } from "app/navigation/with-modal-screen";
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  id: number;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -37,8 +40,14 @@ export function CommentsModal() {
   const isModalFocused = useIsFocused();
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();
-  // @ts-ignore
-  const [nftId, _] = useParam("id");
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
   //#endregion
 
   //#region callbacks
@@ -76,7 +85,7 @@ export function CommentsModal() {
         <Suspense
           fallback={<CommentsStatus isLoading={true} error={undefined} />}
         >
-          <Comments nftId={nftId!} />
+          <Comments nft={data?.data?.item} />
         </Suspense>
       </ErrorBoundary>
     </ModalComponent>
@@ -85,6 +94,6 @@ export function CommentsModal() {
 
 export const CommentsScreen = withModalScreen(
   CommentsModal,
-  "/nft/[id]/comments",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/comments",
   "commentsModal"
 );

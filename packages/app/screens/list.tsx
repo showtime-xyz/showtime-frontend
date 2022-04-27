@@ -1,30 +1,34 @@
-import { useEffect } from "react";
-
 import { List } from "app/components/list";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { withModalScreen } from "app/navigation/with-modal-screen";
 
 type Query = {
-  id: string;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
 
 const ListModal = withColorScheme(() => {
   useHideHeader();
-  const [nftId] = useParam("id");
-  useEffect(() => {
-    mixpanel.track("NFT list view");
-  }, []);
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
 
-  return <List nftId={nftId} />;
+  return <List nft={data?.data?.item} />;
 });
 
 export const ListScreen = withModalScreen(
   ListModal,
-  "/nft/[id]/list",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/list",
   "listModal"
 );

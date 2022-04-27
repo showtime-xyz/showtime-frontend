@@ -1,25 +1,23 @@
-import { useEffect } from "react";
 import { Platform, ScrollView } from "react-native";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModalProvider,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 
-import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
 
 import { UnlistingCard } from "./unlisting-card";
 import { UnlistingModal } from "./unlisting-modal";
 
 type Props = {
-  nftId?: string;
+  nft?: NFT;
 };
 
 const UnlistingScrollView =
   Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
-const Unlist = (props: Props) => {
-  const nftId = props.nftId;
-
+const Unlist = ({ nft }: Props) => {
   return (
     <BottomSheetModalProvider>
       <UnlistingModal>
@@ -28,7 +26,7 @@ const Unlist = (props: Props) => {
             paddingBottom: 80,
           }}
         >
-          <UnlistingCard nftId={nftId} />
+          <UnlistingCard nft={nft} />
         </UnlistingScrollView>
       </UnlistingModal>
     </BottomSheetModalProvider>

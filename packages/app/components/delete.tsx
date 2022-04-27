@@ -12,7 +12,7 @@ import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
-import { NFT } from "app/types";
+import type { NFT } from "app/types";
 
 import { Button, Fieldset, Media, Text, View } from "design-system";
 import { Owner } from "design-system/card";
@@ -24,7 +24,7 @@ const defaultValues = {
   copies: 1,
 };
 
-function Delete({ nftId }: { nftId: number }) {
+function Delete({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
@@ -32,15 +32,6 @@ function Delete({ nftId }: { nftId: number }) {
     console.log("** Submiting burning form **", values);
     startBurning({ ...values, tokenId: nft.token_id });
   };
-
-  const { data, error, mutate } = useSWR(`/v2/nft_detail/${nftId}`, (url) =>
-    axios({ url, method: "GET" })
-  );
-  const nft = data?.data as NFT;
-
-  if (error) {
-    console.error(error);
-  }
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -85,8 +76,7 @@ function Delete({ nftId }: { nftId: number }) {
   useEffect(() => {
     if (state.status != "burningSuccess") return;
 
-    // @TODO: Maybe we should optimistically decrease edition count?
-    mutate(`/v2/nft_detail/${nftId}`);
+    // TODO: optimistically decrease edition count?
 
     // We're popping twice here to also close the NFT page behind this modal
     // For web, we just pop it once

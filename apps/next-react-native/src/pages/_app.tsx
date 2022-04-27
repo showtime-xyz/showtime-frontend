@@ -245,7 +245,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                   </View>
 
                                   {/* Modals */}
-                                  <ActivitiesScreen />
                                   <LoginScreen />
                                   <CommentsScreen />
                                   <TransferScreen />
@@ -254,6 +253,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                   <ListScreen />
                                   <UnlistScreen />
                                   <DetailsScreen />
+                                  <ActivitiesScreen />
                                 </MintProvider>
                               </NavigationProvider>
                             </FeedProvider>

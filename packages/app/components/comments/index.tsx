@@ -10,9 +10,10 @@ import {
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { CommentRow } from "app/components/comments/comment-row";
-import { useComments, CommentType } from "app/hooks/api/use-comments";
+import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
+import type { NFT } from "app/types";
 
 import { View } from "design-system";
 import { useAlert } from "design-system/alert";
@@ -20,13 +21,9 @@ import { useAlert } from "design-system/alert";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
-interface CommentsProps {
-  nftId: number;
-}
-
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
-export function Comments({ nftId }: CommentsProps) {
+export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -45,7 +42,7 @@ export function Comments({ nftId }: CommentsProps) {
     deleteComment,
     newComment,
     refresh,
-  } = useComments(nftId);
+  } = useComments(nft?.nft_id);
   const { keyboardHeight } = useKeyboardDimensions(true);
   //#endregion
 

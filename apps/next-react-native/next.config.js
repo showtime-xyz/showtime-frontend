@@ -76,7 +76,12 @@ const nextConfig = {
       },
       {
         source: "/t/:path*",
-        destination: "/token/:path*",
+        destination: "/nft/:path*",
+        permanent: true,
+      },
+      {
+        source: "/token/:path*",
+        destination: "/nft/:path*",
         permanent: true,
       },
     ];

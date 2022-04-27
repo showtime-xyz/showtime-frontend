@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { KeyboardAvoidingView, Platform } from "react-native";
 
 import { Transfer } from "app/components/transfer";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
@@ -10,7 +11,9 @@ import { withModalScreen } from "app/navigation/with-modal-screen";
 import { Modal, ModalSheet } from "design-system";
 
 type Query = {
-  id: string;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -20,7 +23,14 @@ const TransferModal = () => {
 
   //#region hooks
   const router = useRouter();
-  const [nftId, setNftId] = useParam("id");
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
   //#endregion
 
   //#region variables
@@ -42,7 +52,7 @@ const TransferModal = () => {
         style={{ flex: 1 }}
         keyboardVerticalOffset={100}
       >
-        <Transfer nftId={nftId} />
+        <Transfer nft={data?.data?.item} />
       </KeyboardAvoidingView>
     </ModalComponent>
   );
@@ -50,6 +60,6 @@ const TransferModal = () => {
 
 export const TransferScreen = withModalScreen(
   TransferModal,
-  "/nft/[id]/transfer",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/transfer",
   "transferModal"
 );
