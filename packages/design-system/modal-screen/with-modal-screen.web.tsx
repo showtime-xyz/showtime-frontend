@@ -1,36 +1,37 @@
-import React, { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
+
+import { useRouter } from "app/navigation/use-router";
 
 import { ModalMethods } from "design-system/modal-new";
 import { ModalScreen } from "design-system/modal-new/modal.screen";
 
-import { useRouter } from "../use-router";
-import { useBackPressHandler } from "./use-back-press-handler";
-
-const snapPoints = ["90%", "100%"];
-
 function withModalScreen<P>(
   Screen: FC<P>,
   title: string,
-  // eslint-disable-next-line no-unused-vars
-  _?: string,
-  // eslint-disable-next-line no-unused-vars
-  __?: string
+  matchingPathname: string,
+  matchingQueryParam: string
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
-    const { pop } = useRouter();
+    const { pathname, query, pop } = useRouter();
 
     const onClose = useCallback(() => {
       pop();
     }, [pop]);
 
-    useBackPressHandler(modalRef);
+    const shouldShowModal =
+      pathname === matchingPathname ||
+      Boolean(query[matchingQueryParam as any]);
+
+    if (!shouldShowModal) {
+      return null;
+    }
+
     return (
       <ModalScreen
         ref={modalRef}
         title={title}
-        mobile_snapPoints={snapPoints}
-        isScreen={true}
+        web_height="auto"
         onClose={onClose}
       >
         <Screen {...props} />

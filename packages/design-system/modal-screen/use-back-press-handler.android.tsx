@@ -1,5 +1,5 @@
 import { RefObject, useCallback } from "react";
-import { BackHandler, Platform } from "react-native";
+import { BackHandler } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -10,7 +10,6 @@ export const useBackPressHandler = (ref: RefObject<ModalMethods>) => {
     useCallback(() => {
       const onBackPress = () => {
         ref.current?.close();
-        console.log("withModalScreen", "onBackPress");
         return true;
       };
 

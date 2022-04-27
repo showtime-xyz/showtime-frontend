@@ -1,23 +1,10 @@
 import { useCallback } from "react";
-import { Platform } from "react-native";
 
 import { Login } from "app/components/login";
-import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
-import { withModalScreen } from "app/navigation/with-modal-screen";
 
-import { Modal } from "design-system";
-
-/**
- * extracted these number from react-navigation
- */
-// @ts-ignore
-const modalPresentationHeight = Platform.isPad
-  ? 6
-  : Platform.OS === "ios"
-  ? 12
-  : 0;
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   redirect_url: string;
@@ -29,7 +16,6 @@ function LoginModal() {
   //#region hooks
   const [redirect_url] = useParam("redirect_url");
   const router = useRouter();
-  const { top: topSafeArea } = useSafeAreaInsets();
   //#endregion
 
   //#region callbacks
@@ -46,17 +32,13 @@ function LoginModal() {
   }, [redirect_url, router]);
   //#endregion
 
-  return (
-    <Modal
-      title="Sign In"
-      close={router.asPath === "/login" ? () => router.push("/") : router.pop}
-      height=""
-      keyboardVerticalOffset={topSafeArea + modalPresentationHeight}
-      bodyTW="bg-white dark:bg-black"
-    >
-      <Login onLogin={handleOnLogin} />
-    </Modal>
-  );
+  // TODO: close={router.asPath === "/login" ? () => router.push("/") : router.pop}
+  return <Login onLogin={handleOnLogin} />;
 }
 
-export const LoginScreen = withModalScreen(LoginModal, "/login", "loginModal");
+export const LoginScreen = withModalScreen(
+  LoginModal,
+  "Sign In",
+  "/login",
+  "loginModal"
+);

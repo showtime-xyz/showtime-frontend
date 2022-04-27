@@ -3,7 +3,8 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
-import { withModalScreen } from "app/navigation/with-modal-screen";
+
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;
@@ -29,6 +30,7 @@ const ListModal = withColorScheme(() => {
 
 export const ListScreen = withModalScreen(
   ListModal,
+  "List",
   "/nft/[chainName]/[contractAddress]/[tokenId]/list",
   "listModal"
 );

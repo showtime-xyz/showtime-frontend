@@ -3,7 +3,8 @@ import { Unlist } from "app/components/unlist";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
-import { withModalScreen } from "app/navigation/with-modal-screen";
+
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;
@@ -29,6 +30,7 @@ const UnlistModal = withColorScheme(() => {
 
 export const UnlistScreen = withModalScreen(
   UnlistModal,
+  "Unlist",
   "/nft/[chainName]/[contractAddress]/[tokenId]/unlist",
   "unlistModal"
 );

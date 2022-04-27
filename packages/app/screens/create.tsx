@@ -8,11 +8,11 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
-import { withModalScreen } from "app/navigation/with-modal-screen";
 
 import { Button, Modal, ModalSheet, Spinner, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   form: string;
@@ -86,24 +86,13 @@ const CreateModal = () => {
 
   return (
     <>
-      <ModalComponent
-        title="New NFT"
-        close={router.pop}
-        snapPoints={snapPoints}
-        bodyTW="bg-white dark:bg-black"
-        height="h-[90vh]"
-        bodyContentTW="p-0"
-      >
-        <>
-          <Hidden until="md">
-            <CreateMD />
-          </Hidden>
+      <Hidden until="md">
+        <CreateMD />
+      </Hidden>
 
-          <Hidden from="md">
-            <Create />
-          </Hidden>
-        </>
-      </ModalComponent>
+      <Hidden from="md">
+        <Create />
+      </Hidden>
     </>
   );
 };
@@ -146,6 +135,7 @@ const CreateMD = () => {
 
 export const CreateScreen = withModalScreen(
   CreateModal,
+  "Create",
   "/create",
   "createModal"
 );
