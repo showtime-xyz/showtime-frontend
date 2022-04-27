@@ -13,12 +13,14 @@ type Props = {
   nft?: NFT;
   shouldShowCreatorIndicator?: boolean;
   shouldShowDateCreated?: boolean;
+  label?: string;
 };
 
 export function Creator({
   nft,
   shouldShowCreatorIndicator = true,
   shouldShowDateCreated = true,
+  label = "Creator",
 }: Props) {
   if (!nft) return null;
 
@@ -36,7 +38,7 @@ export function Creator({
               nft.creator_username ? "mb-1" : ""
             } text-gray-600 dark:text-gray-400 font-semibold`}
           >
-            Creator
+            {label}
           </Text>
         )}
         {nft.creator_username ? (

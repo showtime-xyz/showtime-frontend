@@ -2,6 +2,7 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { LIST_CURRENCIES } from "app/lib/constants";
@@ -11,9 +12,13 @@ import { parseBalance } from "app/utilities";
 type Status =
   | "idle"
   | "loading"
-  | "waitingForTransaction"
+  | "transactionInitiated"
+  | "verifyingUserBalance"
+  | "verifyingAllowance"
+  | "needsAllowance"
+  | "noBalance"
   | "error"
-  | "success";
+  | "buyingSuccess";
 
 type BuyNFTState = {
   status: Status;
@@ -39,16 +44,24 @@ const buyNFTReducer = (
   switch (action.type) {
     case "loading":
       return { ...initialState, status: "loading" };
+    case "verifyingUserBalance":
+      return { ...state, status: "verifyingUserBalance" };
+    case "noBalance":
+      return { ...state, status: "noBalance" };
+    case "verifyingAllowance":
+      return { ...state, status: "verifyingAllowance" };
+    case "needsAllowance":
+      return { ...state, status: "needsAllowance" };
     case "error":
       return { ...state, status: "error", error: action.payload?.error };
-    case "waitingForTransaction":
+    case "transactionInitiated":
       return {
         ...state,
-        status: "waitingForTransaction",
+        status: "transactionInitiated",
         transaction: action.payload?.transaction,
       };
-    case "success":
-      return { ...state, status: "success" };
+    case "buyingSuccess":
+      return { ...state, status: "buyingSuccess" };
     default:
       return state;
   }
@@ -58,7 +71,7 @@ export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const { getSignerAndProvider } = useSignerAndProvider();
 
-  const buyNFT = async (nft?: NFT) => {
+  const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
 
     dispatch({ type: "loading" });
@@ -73,15 +86,39 @@ export const useBuyNFT = () => {
         signer
       );
 
+      const ercContract = new ethers.Contract(
+        LIST_CURRENCIES[nft.listing.currency],
+        iercPermit20Abi,
+        signer
+      );
+
       const basePrice = parseBalance(
         nft.listing.min_price.toString(),
         LIST_CURRENCIES[nft.listing.currency]
       );
 
+      dispatch({ type: "verifyingUserBalance" });
+
+      if (!(await ercContract.balanceOf(signerAddress)).gte(basePrice)) {
+        dispatch({ type: "noBalance" });
+        return;
+      }
+
+      dispatch({ type: "verifyingAllowance" });
+      const allowance = await ercContract.allowance(
+        signerAddress,
+        process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
+      );
+
+      if (!allowance.gte(basePrice)) {
+        dispatch({ type: "needsAllowance" });
+        return;
+      }
+
       const { data } = await contract.populateTransaction.buy(
         nft.listing.sale_identifier,
         nft.token_id,
-        1,
+        quantity,
         basePrice,
         LIST_CURRENCIES[nft.listing.currency],
         signerAddress
@@ -105,8 +142,8 @@ export const useBuyNFT = () => {
         });
 
       if (transaction) {
-        dispatch({ type: "waitingForTransaction", payload: { transaction } });
-        provider.once(transaction, () => dispatch({ type: "success" }));
+        dispatch({ type: "transactionInitiated", payload: { transaction } });
+        provider.once(transaction, () => dispatch({ type: "buyingSuccess" }));
       }
     }
   };

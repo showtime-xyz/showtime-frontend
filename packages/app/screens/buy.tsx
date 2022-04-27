@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { useNFTDetails } from "app/hooks/use-nft-details";
+import { Buy } from "app/components/buy";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import { withModalScreen } from "app/navigation/with-modal-screen";
 
-import { Modal, ModalSheet, Text } from "design-system";
+import { Modal, ModalSheet } from "design-system";
 
 type Query = {
   id: string;
@@ -18,7 +18,7 @@ const BuyModal = () => {
   const [nftId] = useParam("id");
 
   const router = useRouter();
-  const { data: nft } = useNFTDetails(Number(nftId));
+
   //#endregion
 
   //#region variables
@@ -36,7 +36,7 @@ const BuyModal = () => {
         height="h-[90vh]"
         bodyContentTW="p-0"
       >
-        <Text>hi</Text>
+        <Buy nftId={nftId} />
       </ModalComponent>
     </>
   );
