@@ -1,7 +1,7 @@
 import * as Linking from "expo-linking";
 
-import { getStateFromPath } from "app/lib/react-navigation/native";
 import type { LinkingOptions } from "app/lib/react-navigation/native";
+import { getStateFromPath } from "app/lib/react-navigation/native";
 
 const withRewrites = (unparsedPath: string): string => {
   if (unparsedPath.startsWith("/@")) {
@@ -25,6 +25,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       activities: "nft/:id/activities",
       transfer: "nft/:id/transfer",
       list: "nft/:id/list",
+      buy: "nft/:id/buy",
       unlist: "nft/:id/unlist",
       details: "nft/:id/details",
       delete: "nft/:id/delete",
