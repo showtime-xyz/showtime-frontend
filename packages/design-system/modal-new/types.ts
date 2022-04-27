@@ -1,8 +1,15 @@
 import type { FC, ReactNode } from "react";
 
-import type { BottomSheetProps } from "@gorhom/bottom-sheet";
+import type {
+  BottomSheetProps,
+  BottomSheetFooterProps,
+} from "@gorhom/bottom-sheet";
 
 import type { TW } from "../tailwind/types";
+
+export interface ModalMethods {
+  close: () => void;
+}
 
 export interface ModalProps {
   /**
@@ -80,6 +87,16 @@ export interface ModalContainerProps
     | "children"
     | "mobile_snapPoints"
     | "web_height"
-  > {}
+  > {
+  close: () => void;
+}
+
+export interface ModalScreenProps extends ModalProps {
+  close: () => void;
+}
+
+export interface ModalFooterProps {
+  children: JSX.Element;
+}
 
 export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}
