@@ -29,4 +29,9 @@ function CommentsModal() {
   );
 }
 
-export const CommentsScreen = withModalScreen(CommentsModal, "Comments");
+export const CommentsScreen = withModalScreen(
+  CommentsModal,
+  "Comments",
+  "/nft/[id]/comments",
+  "commentsModal"
+);
