@@ -11,7 +11,6 @@ const CONTAINER_TW = [
   "top-0 right-0 bottom-0 left-0",
   "flex items-center justify-end sm:justify-center",
   "z-[999]",
-  "bg-red-900",
 ];
 
 const MODAL_CONTAINER_TW = [
