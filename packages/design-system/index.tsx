@@ -10,6 +10,7 @@ export { Image } from "design-system/image";
 export { LikeButton } from "design-system/like-button";
 export { Media } from "design-system/media";
 export { Modal } from "design-system/modal";
+export { ModalSheet } from "design-system/modal-sheet";
 export { Pressable } from "design-system/pressable-scale";
 export { ScrollView } from "design-system/scroll-view";
 export { SegmentedControl } from "design-system/segmented-control";

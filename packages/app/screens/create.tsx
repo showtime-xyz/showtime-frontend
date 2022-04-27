@@ -1,15 +1,14 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 import { Linking, Platform } from "react-native";
 
 import { Create } from "app/components/create";
 import { MintContext } from "app/context/mint-context";
-import { mixpanel } from "app/lib/mixpanel";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, Modal, ModalSheet, Spinner, Text, View } from "design-system";
+import { Button, Spinner, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
@@ -29,20 +28,7 @@ const CreateModal = () => {
   const { state, dispatch } = useContext(MintContext);
   //#endregion
 
-  //#region variables
-  const snapPoints = useMemo(() => ["90%"], []);
-  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
-  //#endregion
-
   //#region effects
-  useEffect(() => {
-    mixpanel.track("Create page view");
-
-    // return () => {
-    //   dispatch({ type: "reset" });
-    // };
-  }, []);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       if (
