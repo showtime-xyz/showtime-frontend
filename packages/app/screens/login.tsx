@@ -32,7 +32,6 @@ function LoginModal() {
   }, [redirect_url, router]);
   //#endregion
 
-  // TODO: close={router.asPath === "/login" ? () => router.push("/") : router.pop}
   return <Login onLogin={handleOnLogin} />;
 }
 

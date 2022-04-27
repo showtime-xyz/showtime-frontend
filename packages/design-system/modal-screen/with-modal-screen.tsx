@@ -19,13 +19,13 @@ function withModalScreen<P>(
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
-    const { pop } = useRouter();
-
-    const onClose = useCallback(() => {
-      pop();
-    }, [pop]);
-
     useBackPressHandler(modalRef);
+
+    const router = useRouter();
+    const onClose = useCallback(() => {
+      router.pop();
+    }, [router]);
+
     return (
       <ModalScreen
         ref={modalRef}
