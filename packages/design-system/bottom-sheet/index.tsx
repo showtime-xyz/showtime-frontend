@@ -1,17 +1,17 @@
 import {
-  useRef,
-  useMemo,
+  ComponentProps,
+  ComponentType,
+  MutableRefObject,
   useCallback,
   useEffect,
-  ComponentProps,
-  MutableRefObject,
-  ComponentType,
+  useMemo,
+  useRef,
 } from "react";
 
 import {
-  BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetHandleProps,
+  BottomSheetModal,
   BottomSheetTextInput as BottomSheetInput,
 } from "@gorhom/bottom-sheet";
 
@@ -50,7 +50,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
     }
   }, [visible]);
 
-  const defaultSnapPoints = useMemo(() => ["50%", "75%"], []);
+  const defaultSnapPoints = useMemo(() => ["90%", "100%"], []);
 
   const renderBackdrop = useCallback(
     (props) => (

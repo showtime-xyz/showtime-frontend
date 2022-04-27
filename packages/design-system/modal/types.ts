@@ -1,9 +1,6 @@
 import type { FC, ReactNode } from "react";
 
-import type {
-  BottomSheetProps,
-  BottomSheetFooterProps,
-} from "@gorhom/bottom-sheet";
+import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
 import type { TW } from "../tailwind/types";
 
@@ -26,7 +23,7 @@ export interface ModalProps {
   /**
    * **MOBILE ONLY**: Defines the points for the bottom sheet
    * to snap to. It accepts array of number, string or mix.
-   * @default ["50%"]
+   * @default ["90%", "100%"]
    */
   mobile_snapPoints?: BottomSheetProps["snapPoints"];
 
