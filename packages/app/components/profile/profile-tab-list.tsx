@@ -1,9 +1,9 @@
 import { useCallback, useContext, useMemo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { MAX_CONTENT_WIDTH } from "app/constants/layout";
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
+import useContentWidth from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
@@ -14,7 +14,7 @@ import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 
-import { FillterContext } from "./fillter-context";
+import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./footer";
 import { ProfileListFilter } from "./profile-tab-filter";
 
@@ -39,7 +39,7 @@ export const ProfileTabList = ({
   const { state: mintingState } = useContext(MintContext);
   const { width, height } = useWindowDimensions();
 
-  const { filter, dispatch } = useContext(FillterContext);
+  const { filter, dispatch } = useContext(FilterContext);
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
     useProfileNFTs({
@@ -169,10 +169,8 @@ export const ProfileTabList = ({
       }).cloneWithRows(newData),
     [newData]
   );
-  const contentWidth = useMemo(
-    () => (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH),
-    [width]
-  );
+  const contentWidth = useContentWidth();
+
   const layoutSize = useMemo(
     () => ({
       width: contentWidth,

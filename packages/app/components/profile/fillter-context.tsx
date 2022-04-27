@@ -7,7 +7,7 @@ export interface FillterActions {
   payload: number;
 }
 
-export const FillterContext = createContext<{
+export const FilterContext = createContext<{
   filter: typeof defaultFilters;
   dispatch: Dispatch<FillterActions>;
 }>({

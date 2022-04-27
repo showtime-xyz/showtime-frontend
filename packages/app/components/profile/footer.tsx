@@ -1,7 +1,6 @@
-import { memo, useContext, useMemo } from "react";
-import { useWindowDimensions } from "react-native";
+import { memo, useContext } from "react";
 
-import { MAX_CONTENT_WIDTH } from "app/constants/layout";
+import useContentWidth from "app/hooks/use-content-width";
 import {
   BottomTabBarHeightContext,
   useBottomTabBarHeight,
@@ -17,12 +16,8 @@ type ProfileFooterProps = {
 export const ProfileFooter = memo(
   ({ isLoading, numColumns = 3 }: ProfileFooterProps) => {
     const colorMode = useColorScheme();
-    const { width } = useWindowDimensions();
+    const contentWidth = useContentWidth();
 
-    const contentWidth = useMemo(
-      () => (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH),
-      [width]
-    );
     const squareSize = (contentWidth - 32 * numColumns) / numColumns;
     const tabBarHeight = useContext(BottomTabBarHeightContext)
       ? useBottomTabBarHeight()

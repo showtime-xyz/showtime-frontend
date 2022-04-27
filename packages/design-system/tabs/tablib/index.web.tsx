@@ -125,12 +125,9 @@ const Root = ({
                     >
                       <TabIndexContext.Provider value={{ index }}>
                         <View
-                          sx={{
-                            alignItems: "center",
-                            borderBottomWidth: 2,
-                            height: "100%",
-                            justifyContent: "center",
-                          }}
+                          sx={tw.style(
+                            "item items-center border-b-2 h-full justify-center"
+                          )}
                           tw={
                             selected === value
                               ? "border-b-gray-900 dark:border-b-gray-100"

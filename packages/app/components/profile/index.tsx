@@ -17,7 +17,7 @@ import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
-import { FillterContext } from "./fillter-context";
+import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
@@ -64,7 +64,7 @@ const Profile = ({ address }: { address?: string }) => {
     [dispatch]
   );
   return (
-    <FillterContext.Provider value={{ filter, dispatch }}>
+    <FilterContext.Provider value={{ filter, dispatch }}>
       <View tw="w-full items-center web:mb-8">
         <Tabs.Root
           onIndexChange={setSelected}
@@ -156,7 +156,7 @@ const Profile = ({ address }: { address?: string }) => {
           ) : null}
         </Tabs.Root>
       </View>
-    </FillterContext.Provider>
+    </FilterContext.Provider>
   );
 };
 

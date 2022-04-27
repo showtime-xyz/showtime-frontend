@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
+import useContentWidth from "app/hooks/use-content-width";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
@@ -26,8 +27,6 @@ import { Hidden } from "design-system/hidden";
 import { useIsDarkMode } from "design-system/hooks";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
-
-import { MAX_CONTENT_WIDTH } from "../../constants/layout";
 
 const CARD_HEIGHT = 890;
 const CARD_WIDTH = 620;
@@ -57,7 +56,8 @@ export const FeedList = () => {
         <View
           style={{
             width: LEFT_SLIDE_WIDTH,
-            marginRight: LEFT_SLIDE_MARGIN,
+            // for right shadow
+            marginRight: LEFT_SLIDE_MARGIN - 16,
           }}
         >
           <SuggestedUsers />
@@ -67,7 +67,7 @@ export const FeedList = () => {
       <View tw="flex-1">
         {isAuthenticated ? (
           <>
-            <View tw="w-[375px] self-end bg-white dark:bg-black p-4 shadow-lg rounded-lg mr-5">
+            <View tw="w-[375px] self-end bg-white dark:bg-black p-4 shadow-lg rounded-lg mr-6">
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
                 onChange={setSelected}
@@ -127,6 +127,7 @@ const NFTScrollList = ({
   fetchMore: any;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
+  const contentWidth = useContentWidth(LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH);
 
   let dataProvider = useMemo(
     () =>
@@ -135,13 +136,7 @@ const NFTScrollList = ({
       }).cloneWithRows(data),
     [data]
   );
-  const contentWidth = useMemo(
-    () =>
-      screenWidth < MAX_CONTENT_WIDTH
-        ? screenWidth
-        : MAX_CONTENT_WIDTH - (LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH),
-    [screenWidth]
-  );
+
   const _layoutProvider = useMemo(
     () =>
       new LayoutProvider(
@@ -157,14 +152,14 @@ const NFTScrollList = ({
   );
   const layoutSize = useMemo(
     () => ({
-      width: contentWidth - 100,
+      width: contentWidth - LEFT_SLIDE_MARGIN,
       height,
     }),
     [screenWidth]
   );
   const _rowRenderer = useCallback((_type: any, item: any, idx) => {
     return (
-      <View tw="flex-row" nativeID="334343">
+      <View tw="flex-row pl-4" nativeID="334343">
         <Card
           nft={item}
           tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
