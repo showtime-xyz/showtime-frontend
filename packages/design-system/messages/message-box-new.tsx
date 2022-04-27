@@ -20,6 +20,8 @@ interface MessageBoxProps {
   userAvatar?: string;
   style?: ViewStyle;
   onSubmit?: (text: string) => Promise<void>;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export interface MessageBoxMethods {
@@ -30,7 +32,10 @@ export interface MessageBoxMethods {
 }
 
 export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
-  function MessageBox({ submitting, userAvatar, style, onSubmit }, ref) {
+  function MessageBox(
+    { submitting, userAvatar, style, onSubmit, onFocus, onBlur },
+    ref
+  ) {
     //#region variables
     const inputRef = useRef<typeof TextInput>();
     const [value, setValue] = useState("");
@@ -82,6 +87,8 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             tw="py-3 pr-3 pl-[44px] rounded-[32px] text-base text-black dark:text-white bg-gray-100 dark:bg-gray-900"
             onChangeText={handleTextChange}
             onSubmitEditing={handleSubmit}
+            onFocus={onFocus}
+            onBlur={onBlur}
           />
           <Avatar tw="absolute mt-3.5 ml-3" size={24} url={userAvatar} />
         </View>

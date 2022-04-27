@@ -11,13 +11,13 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { CommentRow } from "app/components/comments/comment-row";
 import { useComments, CommentType } from "app/hooks/api/use-comments";
-import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
-import { View } from "design-system";
 import { useAlert } from "design-system/alert";
+import { ModalFooter } from "design-system/modal-new";
 
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
+import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 interface CommentsProps {
@@ -25,6 +25,8 @@ interface CommentsProps {
 }
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+
+const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
 export function Comments({ nftId }: CommentsProps) {
   //#region refs
@@ -46,7 +48,6 @@ export function Comments({ nftId }: CommentsProps) {
     newComment,
     refresh,
   } = useComments(nftId);
-  const { keyboardHeight } = useKeyboardDimensions(true);
   //#endregion
 
   //#region variables
@@ -58,10 +59,8 @@ export function Comments({ nftId }: CommentsProps) {
 
   //#region callbacks
   const handleOnTouchMove = useCallback(() => {
-    if (keyboardHeight > 0) {
-      Keyboard.dismiss();
-    }
-  }, [keyboardHeight]);
+    Keyboard.dismiss();
+  }, []);
   const handleOnDeleteComment = useCallback(
     async function handleOnDeleteComment(commentId: number) {
       const _deleteComment = async () => {
@@ -119,10 +118,9 @@ export function Comments({ nftId }: CommentsProps) {
     ),
     [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
-  const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
   return (
-    <View tw="flex-1">
+    <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -132,32 +130,35 @@ export function Comments({ nftId }: CommentsProps) {
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            initialNumToRender={5}
-            maxToRenderPerBatch={5}
-            windowSize={5}
-            contentContainerStyle={styles.container}
-            onTouchMove={handleOnTouchMove}
+            initialNumToRender={6}
+            maxToRenderPerBatch={3}
+            windowSize={6}
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+            keyboardDismissMode="on-drag"
+            enableFooterMarginAdjustment={true}
           />
           {isAuthenticated && (
-            <CommentInputBox
-              ref={inputRef}
-              submitting={isSubmitting}
-              submit={newComment}
-              style={{
-                marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
-                backgroundColor: "red",
-              }}
-            />
+            <ModalFooter>
+              <CommentInputBox
+                ref={inputRef}
+                submitting={isSubmitting}
+                submit={newComment}
+              />
+            </ModalFooter>
           )}
         </>
       )}
-    </View>
+    </CommentsContainer>
   );
   //#endregion
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  contentContainer: {
     paddingHorizontal: 16,
   },
 });

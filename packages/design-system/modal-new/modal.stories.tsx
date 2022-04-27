@@ -48,7 +48,6 @@ export const Default: React.VFC<{}> = () => {
   const [visible, setVisible] = useState(false);
 
   const onClose = () => {
-    console.log("onClose");
     setVisible(false);
   };
   return (
