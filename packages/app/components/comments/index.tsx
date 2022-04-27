@@ -5,6 +5,7 @@ import {
   ListRenderItemInfo,
   Platform,
   StyleSheet,
+  useWindowDimensions,
 } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -12,10 +13,15 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
+import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import { useAlert } from "design-system/alert";
+import { Button } from "design-system/button";
 import { ModalFooter } from "design-system/modal";
+import { Text } from "design-system/text";
+import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsContainer } from "./comments-container";
@@ -29,6 +35,9 @@ export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
+  const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   //#endregion
 
   //#region hooks
@@ -99,6 +108,50 @@ export function Comments({ nft }: { nft: NFT }) {
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
+
+  const listEmptyComponent = useCallback(
+    () => (
+      <View tw="items-center justify-center p-4">
+        <Text variant="text-lg" tw="dark:text-gray-100 text-gray-900">
+          💬 No comments yet...
+        </Text>
+        <View tw="h-4" />
+        <Text variant="text-sm" tw="dark:text-gray-400 text-gray-600">
+          Be the first to add a comment!
+        </Text>
+        {!isAuthenticated ? (
+          <>
+            <View tw="h-4" />
+            <Button
+              onPress={() => {
+                router.push(
+                  Platform.select({
+                    native: "/login",
+                    // @ts-ignore
+                    web: {
+                      pathname: router.pathname,
+                      query: { ...router.query, loginModal: true },
+                    },
+                  }),
+                  Platform.select({
+                    native: "/login",
+                    web: router.asPath === "/" ? "/login" : router.asPath,
+                  }),
+                  { shallow: true }
+                );
+              }}
+              variant="primary"
+              size={isMdWidth ? "regular" : "small"}
+              labelTW="font-semibold"
+            >
+              Sign&nbsp;In
+            </Button>
+          </>
+        ) : null}
+      </View>
+    ),
+    [isAuthenticated, router, isMdWidth]
+  );
   //#endregion
 
   //#region rendering
@@ -134,6 +187,7 @@ export function Comments({ nft }: { nft: NFT }) {
             contentContainerStyle={styles.contentContainer}
             keyboardDismissMode="on-drag"
             enableFooterMarginAdjustment={true}
+            ListEmptyComponent={listEmptyComponent}
           />
           {isAuthenticated && (
             <ModalFooter>

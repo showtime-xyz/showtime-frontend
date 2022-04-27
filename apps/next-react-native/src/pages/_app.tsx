@@ -245,7 +245,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                   </View>
 
                                   {/* Modals */}
-                                  <LoginScreen />
                                   <CommentsScreen />
                                   <TransferScreen />
                                   <CreateScreen />
@@ -254,6 +253,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                   <UnlistScreen />
                                   <DetailsScreen />
                                   <ActivitiesScreen />
+                                  {/* Login should be the last so
+                                      it renders on top of others if needed */}
+                                  <LoginScreen />
                                 </MintProvider>
                               </NavigationProvider>
                             </FeedProvider>
