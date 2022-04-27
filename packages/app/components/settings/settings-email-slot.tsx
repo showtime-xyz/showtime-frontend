@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -7,7 +7,7 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { magic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
-import { View, Text, Button, Skeleton } from "design-system";
+import { Button, Skeleton, Text, View } from "design-system";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 
@@ -81,7 +81,7 @@ export const SettingsEmailSkeletonSlot = () => {
 
 export const SettingsEmailSlotPlaceholder = () => {
   return (
-    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4">
+    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4 m-0">
       No email connected to your profile.
     </Text>
   );

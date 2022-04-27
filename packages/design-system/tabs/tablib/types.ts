@@ -1,6 +1,5 @@
 import React from "react";
-import { LayoutRectangle } from "react-native";
-import { ScrollViewProps } from "react-native";
+import { LayoutRectangle, ScrollViewProps } from "react-native";
 
 import PagerView from "react-native-pager-view";
 import Reanimated from "react-native-reanimated";
@@ -12,6 +11,7 @@ export type TabRootProps = {
   children: React.ReactNode;
   lazy?: boolean;
   accessibilityLabel?: string;
+  value?: string;
 };
 
 export type TabListProps = ScrollViewProps;

@@ -3,6 +3,8 @@ import { useWindowDimensions } from "react-native";
 
 import { LayoutProvider } from "app/lib/recyclerlistview";
 
+import { MAX_CONTENT_WIDTH } from "../constants/layout";
+
 const LIST_HEADER_HEIGHT = 80;
 
 const useNFTCardDimensions = () => {
@@ -11,10 +13,9 @@ const useNFTCardDimensions = () => {
   if (width < 768) {
     return { height: width / 3, width: width / 3 };
   }
-
   return {
     height: 604,
-    width: width / 3,
+    width: (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH) / 3,
   };
 };
 
@@ -22,7 +23,7 @@ function useNFTCardsListLayoutProvider({
   newData,
   headerHeight = LIST_HEADER_HEIGHT,
 }: {
-  newData: [];
+  newData: any;
   headerHeight?: number;
 }) {
   const { height, width } = useNFTCardDimensions();

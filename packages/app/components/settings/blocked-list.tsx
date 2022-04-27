@@ -1,16 +1,14 @@
-import { useCallback } from "react";
-import { FlatList, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRouter } from "app/navigation/use-router";
 
 import {
-  View,
-  Text,
   Button,
   ButtonLabel,
   Image,
   ScrollView,
+  Text,
+  View,
 } from "design-system";
 
 export type UserItemProps = {
@@ -63,7 +61,7 @@ export const BlockedList = () => {
     Platform.OS !== "web" && Platform.OS !== "android";
 
   return (
-    <ScrollView>
+    <ScrollView tw="w-full max-w-screen-xl">
       {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       <View tw="flex-1 px-4">

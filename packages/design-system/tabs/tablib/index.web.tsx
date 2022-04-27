@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Animated,
   FlatList,
@@ -33,6 +33,7 @@ const Root = ({
   initialIndex = 0,
   onIndexChange: onIndexChangeProp,
   accessibilityLabel,
+  value,
 }: TabRootProps) => {
   const [selected, setSelected] = React.useState(
     initialIndex.toString() ?? "0"
@@ -41,17 +42,20 @@ const Root = ({
   // Animations are mocked on web for now
   const position = React.useRef(new Animated.Value(0)).current;
   const offset = React.useRef(new Animated.Value(0)).current;
-
   const onIndexChange = (v: string) => {
     onIndexChangeProp?.(parseInt(v));
     setSelected(v);
 
     position.setValue(parseInt(v));
   };
+  useEffect(() => {
+    value && setSelected(value);
+  }, [value]);
 
-  const { tabTriggers, tabContents, headerChild, listChild } =
+  const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
     React.useMemo(() => {
       let tabTriggers: JSX.Element[] = [];
+      let tabPage: JSX.Element | undefined;
       let tabContents: JSX.Element[] = [];
       let headerChild;
       let listChild = {};
@@ -73,75 +77,85 @@ const Root = ({
             //@ts-ignore
           } else if (c.type === Pager) {
             //@ts-ignore
+            tabPage = c;
             flattenChildren(c.props.children).forEach((c) =>
               tabContents.push(c as JSX.Element)
             );
           }
         }
       });
-      return { tabTriggers, headerChild, tabContents, listChild };
+      return { tabTriggers, headerChild, tabContents, listChild, tabPage };
     }, [children]);
 
   return (
     <TabsContext.Provider value={{ position, offset }}>
-      {headerChild}
       <RadixTabs.Root
         value={selected}
         onValueChange={onIndexChange}
         activationMode="manual"
+        style={tw.style("w-full")}
       >
-        <View tw="flex flex-row justify-between shadow-md flex-1">
-          <RadixTabs.List aria-label={accessibilityLabel} asChild>
-            <ScrollView
-              {...(listChild as any).props}
-              contentContainerStyle={[
-                tw.style(
-                  `bg-white dark:bg-black flex h-full px-2.5 items-center flex-row flex-nowrap`
-                ),
-                (listChild as any).props?.contentContainerStyle,
-              ]}
+        {headerChild}
+        <View tw="flex flex-row flex-1 justify-center bg-white dark:bg-black">
+          <View tw="max-w-screen-xl w-full">
+            <RadixTabs.List
+              aria-label={accessibilityLabel}
+              style={tw.style("")}
+              asChild
             >
-              {tabTriggers.map((t, index) => {
-                const value = index.toString();
+              <ScrollView
+                {...(listChild as any).props}
+                horizontal
+                contentContainerStyle={[
+                  tw.style(
+                    `bg-white dark:bg-black flex h-full px-2.5 items-center flex-row flex-nowrap`
+                  ),
+                  (listChild as any).props?.contentContainerStyle,
+                ]}
+              >
+                {tabTriggers.map((t, index) => {
+                  const value = index.toString();
 
-                return (
-                  <RadixTabs.Trigger
-                    value={value}
-                    key={value}
-                    style={radixTriggerStyle}
-                    {...t.props}
-                  >
-                    <TabIndexContext.Provider value={{ index }}>
-                      <View
-                        sx={{
-                          alignItems: "center",
-                          borderBottomWidth: 2,
-                          height: "100%",
-                          justifyContent: "center",
-                        }}
-                        tw={
-                          selected === value
-                            ? "border-b-gray-900 dark:border-b-gray-100"
-                            : "border-b-transparent"
-                        }
-                      >
-                        {t}
-                      </View>
-                    </TabIndexContext.Provider>
-                  </RadixTabs.Trigger>
-                );
-              })}
-            </ScrollView>
-          </RadixTabs.List>
+                  return (
+                    <RadixTabs.Trigger
+                      value={value}
+                      key={value}
+                      style={radixTriggerStyle}
+                      {...t.props}
+                    >
+                      <TabIndexContext.Provider value={{ index }}>
+                        <View
+                          sx={tw.style(
+                            "item items-center border-b-2 h-full justify-center"
+                          )}
+                          tw={
+                            selected === value
+                              ? "border-b-gray-900 dark:border-b-gray-100"
+                              : "border-b-transparent"
+                          }
+                        >
+                          {t}
+                        </View>
+                      </TabIndexContext.Provider>
+                    </RadixTabs.Trigger>
+                  );
+                })}
+              </ScrollView>
+            </RadixTabs.List>
+          </View>
         </View>
-        {tabContents.map((c, index) => {
-          const value = index.toString();
-          return (
-            <RadixTabs.Content key={value} value={value}>
-              {c}
-            </RadixTabs.Content>
-          );
-        })}
+        <View tw="w-full items-center">
+          <View tw={`max-w-screen-xl w-full ${tabPage?.props.tw}`}>
+            {tabContents.map((c, index) => {
+              const value = index.toString();
+              return (
+                <RadixTabs.Content key={value} value={value}>
+                  {c}
+                </RadixTabs.Content>
+              );
+            })}
+          </View>
+        </View>
       </RadixTabs.Root>
     </TabsContext.Provider>
   );
@@ -155,7 +169,7 @@ const List = () => {
   return null;
 };
 
-const Pager = () => {
+const Pager = ({ tw }: { tw?: string }) => {
   return null;
 };
 

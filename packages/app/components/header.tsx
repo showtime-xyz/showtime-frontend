@@ -65,6 +65,7 @@ const HeaderRight = () => {
                     router.push(
                       Platform.select({
                         native: "/login",
+                        // @ts-ignore
                         web: {
                           pathname: router.pathname,
                           query: { ...router.query, loginModal: true },
@@ -127,7 +128,20 @@ const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} customTw="mr-4" />
+      {isMdWidth ? (
+        <Link href="/">
+          <ShowtimeTabBarIcon
+            color={isDark ? "black" : "white"}
+            customTw="mr-4"
+          />
+        </Link>
+      ) : (
+        <ShowtimeTabBarIcon
+          color={isDark ? "black" : "white"}
+          customTw="mr-4"
+        />
+      )}
+
       {isMdWidth ? (
         <Input
           placeholder="Search by name or wallet"
@@ -144,6 +158,7 @@ const HeaderCenter = ({
               />
             </View>
           }
+          inputStyle={tw.style("w-[216px]")}
         />
       ) : null}
     </View>
@@ -164,15 +179,15 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         style={{
           position: "sticky",
         }}
-        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 items-center w-full shadow-sm"
       >
-        <View tw="items-start">
-          <Link href="/">
+        <View tw="max-w-screen-2xl w-full h-16 flex-row justify-between px-4 py-2">
+          <View tw="items-start">
             <HeaderCenter {...{ isDark, isMdWidth }} />
-          </Link>
-        </View>
-        <View tw="items-end">
-          <HeaderRight />
+          </View>
+          <View tw="items-end">
+            <HeaderRight />
+          </View>
         </View>
       </View>
     );
@@ -190,7 +205,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         backdropFilter: "blur(20px)",
         backgroundColor: blurredBackgroundColor,
       }}
-      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm"
+      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm w-full"
     >
       <View tw="w-20 items-start">
         <HeaderLeft canGoBack={canGoBack} />

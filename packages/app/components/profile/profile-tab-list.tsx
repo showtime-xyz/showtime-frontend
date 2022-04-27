@@ -3,6 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
+import useContentWidth from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
@@ -13,7 +14,7 @@ import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 
-import { FillterContext } from ".";
+import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./footer";
 import { ProfileListFilter } from "./profile-tab-filter";
 
@@ -36,9 +37,9 @@ export const ProfileTabList = ({
   const { user } = useUser();
 
   const { state: mintingState } = useContext(MintContext);
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
-  const { filter, dispatch } = useContext(FillterContext);
+  const { filter, dispatch } = useContext(FilterContext);
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
     useProfileNFTs({
@@ -65,7 +66,6 @@ export const ProfileTabList = ({
 
   const onItemPress = useCallback(
     (index: number) => {
-      // TODO:
       router.push(
         `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
@@ -169,7 +169,15 @@ export const ProfileTabList = ({
       }).cloneWithRows(newData),
     [newData]
   );
+  const contentWidth = useContentWidth();
 
+  const layoutSize = useMemo(
+    () => ({
+      width: contentWidth,
+      height,
+    }),
+    [width]
+  );
   const _rowRenderer = useCallback(
     (_type: any, item: any, index) => {
       if (_type === "header") {
@@ -204,6 +212,7 @@ export const ProfileTabList = ({
       onRefresh={refresh}
       style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
       renderFooter={ListFooterComponent}
+      layoutSize={layoutSize}
     />
   );
 };

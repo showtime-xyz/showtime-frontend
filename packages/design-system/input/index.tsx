@@ -1,10 +1,16 @@
 import { forwardRef, useMemo } from "react";
-import { Platform, TextInputProps } from "react-native";
+import {
+  Platform,
+  StyleProp,
+  StyleSheet,
+  TextInputProps,
+  TextStyle,
+} from "react-native";
 
 import { TextInput } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import { useOnFocus, useIsDarkMode, useColorScheme } from "../hooks";
+import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
 import { Label } from "../label";
 import { Pressable, Props as PressableProps } from "../pressable-scale";
 import { tw } from "../tailwind";
@@ -13,8 +19,8 @@ import { Text } from "../text";
 import { View } from "../view";
 
 type InputProps = {
-  leftElement?: React.ReactElement;
-  rightElement?: React.ReactElement;
+  leftElement?: JSX.Element;
+  rightElement?: JSX.Element;
   placeholder?: string;
   onChangeText?: (text: string) => void;
   value?: string;
@@ -27,6 +33,7 @@ type InputProps = {
   helperText?: string;
   accessibilityLabel?: string;
   autoFocus?: boolean;
+  inputStyle?: StyleProp<TextStyle>;
 };
 
 const borderColor = {
@@ -127,12 +134,15 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             ...tw.style("text-gray-900 dark:text-white"),
           }}
           // @ts-ignore remove focus outline on web as we'll control the focus styling
-          style={Platform.select({
-            web: {
-              outline: "none",
-            },
-            default: undefined,
-          })}
+          style={StyleSheet.flatten([
+            Platform.select({
+              web: {
+                outline: "none",
+              },
+              default: undefined,
+            }),
+            props.inputStyle,
+          ])}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
           }

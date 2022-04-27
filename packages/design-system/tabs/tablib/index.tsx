@@ -252,7 +252,13 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
 
 const TabIndexContext = React.createContext({} as { index: number });
 
-const Pager = ({ children }) => {
+const Pager = ({
+  children,
+  tw,
+}: {
+  children: React.ReactNode;
+  tw?: string;
+}) => {
   const {
     initialIndex,
     onIndexChange,
@@ -318,6 +324,7 @@ const Pager = ({ children }) => {
       onPageScroll={handler}
       initialPage={initialIndex}
       onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}
+      tw={tw}
     >
       {newChildren}
     </AnimatedPagerView>

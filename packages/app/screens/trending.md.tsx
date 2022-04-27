@@ -19,11 +19,10 @@ import { breakpoints } from "design-system/theme";
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
-
   return (
-    <View tw="bg-gray-100 dark:bg-black">
+    <View tw="bg-gray-100 dark:bg-black w-full max-w-screen-xl">
       <View tw="w-[90%] mx-auto py-8">
-        <View tw="flex-row justify-between items-center">
+        <View tw="flex-row justify-between items-center pb-8">
           <View>
             <Text variant="text-2xl" tw="text-black dark:text-white">
               Trending
