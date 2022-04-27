@@ -28,7 +28,3 @@ export type UserItemProps = {
   title: string | null;
   verified: number | null;
 };
-
-export type ActivitiesProps = {
-  nftId: number;
-};

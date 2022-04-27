@@ -2,6 +2,7 @@ import useSWR from "swr";
 
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import type { NFT } from "app/types";
 
 type UseNFTDetailByTokenIdParams = {
   contractAddress: string;
@@ -9,8 +10,16 @@ type UseNFTDetailByTokenIdParams = {
   chainName: string;
 };
 
+type Data = {
+  item: NFT;
+};
+
+type NFTDetailPayload = {
+  data: Data;
+};
+
 export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
-  const queryState = useSWR(
+  const queryState = useSWR<NFTDetailPayload>(
     `/v2/token/${params.contractAddress}/${params.tokenId}${
       params.chainName
         ? //@ts-ignore

@@ -1,24 +1,26 @@
 import { useEffect } from "react";
 import { Platform, ScrollView } from "react-native";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModalProvider,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
 
 import { ListingCard } from "./listing-card";
 import { ListingModal } from "./listing-modal";
 
 type Props = {
-  nftId?: string;
+  nft?: NFT;
 };
 
 const ListingScrollView =
   Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
-const List = (props: Props) => {
-  const nftId = props.nftId;
+const List = ({ nft }: Props) => {
   const router = useRouter();
   const { isAuthenticated } = useUser();
 
@@ -36,7 +38,7 @@ const List = (props: Props) => {
     <BottomSheetModalProvider>
       <ListingModal>
         <ListingScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-          <ListingCard nftId={nftId} />
+          <ListingCard nft={nft} />
         </ListingScrollView>
       </ListingModal>
     </BottomSheetModalProvider>

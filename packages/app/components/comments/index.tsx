@@ -10,8 +10,9 @@ import {
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { CommentRow } from "app/components/comments/comment-row";
-import { useComments, CommentType } from "app/hooks/api/use-comments";
+import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
+import type { NFT } from "app/types";
 
 import { useAlert } from "design-system/alert";
 import { ModalFooter } from "design-system/modal-new";
@@ -20,15 +21,11 @@ import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
-interface CommentsProps {
-  nftId: number;
-}
-
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
 const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
-export function Comments({ nftId }: CommentsProps) {
+export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -47,7 +44,7 @@ export function Comments({ nftId }: CommentsProps) {
     deleteComment,
     newComment,
     refresh,
-  } = useComments(nftId);
+  } = useComments(nft?.nft_id);
   //#endregion
 
   //#region variables

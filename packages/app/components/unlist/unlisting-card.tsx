@@ -4,7 +4,7 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUnlistNFT } from "app/hooks/use-unlist-nft";
 import { useUser } from "app/hooks/use-user";
-import { NFT } from "app/types";
+import type { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
 import { Media, Spinner, Text, View } from "design-system";
@@ -13,23 +13,17 @@ import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
-import { useNFTDetails } from "../../hooks/use-nft-details";
 import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";
 import { UnlistingUnavailable } from "./unlisting-unavailable";
 
 type Props = {
-  nftId?: string;
+  nft?: NFT;
 };
 
-type NFT_Detail = {
-  data: NFT;
-};
-
-const UnlistingCard = (props: Props) => {
+const UnlistingCard = ({ nft }: Props) => {
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
-  const { data: nft, loading } = useNFTDetails(Number(props.nftId));
 
   const { state, unlistNFT } = useUnlistNFT();
 
@@ -45,14 +39,6 @@ const UnlistingCard = (props: Props) => {
       nft?.multiple_owners_list
     )
   );
-
-  if (loading) {
-    return (
-      <View tw="flex-1 justify-center items-center">
-        <Spinner />
-      </View>
-    );
-  }
 
   if (state.status === "unlistingSuccess") {
     return (

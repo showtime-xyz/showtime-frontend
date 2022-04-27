@@ -19,6 +19,7 @@ export const modalPresentationHeight = Platform.isPad
   ? 12
   : 0;
 
+// TODO: remove this and replace with modalScreen HOC
 export const useModal = () => {
   const wasClosedByUserAction = useRef<boolean | undefined>(undefined);
   const isModalFocused = useIsFocused();
@@ -27,7 +28,7 @@ export const useModal = () => {
 
   const handleClose = useCallback(() => {
     wasClosedByUserAction.current = true;
-    router.back();
+    router.pop();
   }, [router]);
 
   const handleOnClose = useCallback(() => {
@@ -37,7 +38,7 @@ export const useModal = () => {
 
     if (!wasClosedByUserAction.current) {
       wasClosedByUserAction.current = true;
-      router.back();
+      router.pop();
     }
   }, [router, isModalFocused]);
 

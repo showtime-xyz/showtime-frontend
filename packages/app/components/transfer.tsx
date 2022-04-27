@@ -9,9 +9,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import useDebounce from "app/hooks/use-debounce";
-import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { yup } from "app/lib/yup";
+import type { NFT } from "app/types";
 import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
 
 import {
@@ -35,11 +35,9 @@ type FormData = {
   receiverAddress: string;
 };
 
-function Transfer({ nftId }: { nftId?: string }) {
+function Transfer({ nft }: { nft?: NFT }) {
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
-
-  const { data: nft, error, loading } = useNFTDetails(Number(nftId));
 
   const ownerListItem = findAddressInOwnerList(
     userAddress,
@@ -116,17 +114,6 @@ function Transfer({ nftId }: { nftId?: string }) {
   function handleOpenPolygonScan() {
     Linking.openURL(getPolygonScanLink(state.transaction));
   }
-
-  if (error) {
-    console.error(error);
-  }
-
-  if (loading)
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <Spinner />
-      </View>
-    );
 
   if (!nft) return null;
 

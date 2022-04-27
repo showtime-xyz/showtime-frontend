@@ -3,8 +3,8 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useListNFT } from "app/hooks/use-list-nft";
-import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useUser } from "app/hooks/use-user";
+import type { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
 import { Media, Spinner, Text, View } from "design-system";
@@ -17,16 +17,13 @@ import { ListingForm } from "./listing-form";
 import { ListingUnavailable } from "./listing-unavailable";
 
 type Props = {
-  nftId?: number;
+  nft?: NFT;
 };
 
-const ListingCard = (props: Props) => {
-  const nftId = props.nftId;
+const ListingCard = ({ nft }: Props) => {
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const { listNFT, state } = useListNFT();
-
-  const { data: nft, loading } = useNFTDetails(nftId);
 
   const hasMultipleOwners = nft?.multiple_owners_list
     ? nft?.multiple_owners_list.length > 1
@@ -39,14 +36,6 @@ const ListingCard = (props: Props) => {
       nft?.multiple_owners_list
     )
   );
-
-  if (loading) {
-    return (
-      <View tw="flex-1 justify-center items-center">
-        <Spinner />
-      </View>
-    );
-  }
 
   if (state.status === "listingSuccess") {
     return (
