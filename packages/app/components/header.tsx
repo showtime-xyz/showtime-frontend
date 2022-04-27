@@ -5,7 +5,6 @@ import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
-  CameraTabBarIcon,
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
@@ -14,7 +13,7 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Button, Pressable, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
-import { ArrowLeft, Search } from "design-system/icon";
+import { ArrowLeft, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
@@ -40,10 +39,37 @@ const HeaderRight = () => {
                 />
               </View>
               <View tw="mx-2">
-                <CameraTabBarIcon
-                  color={isDark ? "white" : "black"}
-                  focused={false}
-                />
+                <Pressable
+                  onPress={() => {
+                    router.push(
+                      Platform.select({
+                        native: "/camera",
+                        web: {
+                          pathname: router.pathname,
+                          query: { ...router.query, createModal: true },
+                        },
+                      }),
+                      Platform.select({
+                        native: "/camera",
+                        web: router.asPath === "/" ? "/create" : router.asPath,
+                      }),
+                      { shallow: true }
+                    );
+                  }}
+                >
+                  <View
+                    tw={[
+                      "rounded-full h-12 w-12 justify-center items-center",
+                      "bg-black dark:bg-white",
+                    ]}
+                  >
+                    <Plus
+                      width={24}
+                      height={24}
+                      color={isDark ? "black" : "white"}
+                    />
+                  </View>
+                </Pressable>
               </View>
             </>
           )}

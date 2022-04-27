@@ -1,3 +1,3 @@
-import { CreateScreen } from "app/screens/create";
+import { HomeScreen } from "app/screens/home";
 
-export default CreateScreen;
+export default HomeScreen;
