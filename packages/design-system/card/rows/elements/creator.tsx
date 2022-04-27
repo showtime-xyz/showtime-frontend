@@ -30,18 +30,19 @@ export function Creator({
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (
-          <Text
-            variant="text-xs"
-            tw={`${
-              nft.creator_username ? "mb-1" : ""
-            } text-gray-600 dark:text-gray-400 font-semibold`}
-          >
-            Creator
-          </Text>
+          <>
+            <Text
+              variant="text-xs"
+              tw="text-gray-600 dark:text-gray-400 font-semibold"
+            >
+              Creator
+            </Text>
+            <View tw="h-2" />
+          </>
         )}
         {nft.creator_username ? (
           <View>
-            <View tw="h-[12px] flex flex-row items-center">
+            <View tw="flex flex-row items-center">
               <Text
                 variant="text-13"
                 tw="text-gray-900 dark:text-white font-semibold"
