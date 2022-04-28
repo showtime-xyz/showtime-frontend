@@ -118,7 +118,7 @@ export const ProfileTop = ({
     <>
       <View pointerEvents="box-none">
         <View
-          tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 md:-mx-20 md:rounded-b-[32px]`}
+          tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:rounded-b-[32px] xl:-mx-20`}
           pointerEvents="none"
         >
           <Skeleton
