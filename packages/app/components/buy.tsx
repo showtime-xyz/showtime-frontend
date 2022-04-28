@@ -18,11 +18,12 @@ const defaultValues = {
 };
 
 export const Buy = (props: { nftId: string }) => {
-  const { state, buyNFT } = useBuyNFT();
+  const { state, buyNFT, grantAllowance, reset } = useBuyNFT();
   const { data: nft } = useNFTDetails(Number(props.nftId));
 
   const buyValidationSchema = useMemo(() => {
     return yup.object({
+      //@ts-ignore
       quantity: yup.number().required().min(1).max(nft?.listing?.quantity),
     });
   }, [nft?.listing?.quantity]);
@@ -30,6 +31,7 @@ export const Buy = (props: { nftId: string }) => {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<any>({
     mode: "onBlur",
@@ -39,7 +41,7 @@ export const Buy = (props: { nftId: string }) => {
   });
 
   const onSubmit = (data: typeof defaultValues) => {
-    buyNFT({ nft, quantity: data.quantity });
+    if (nft) buyNFT({ nft, quantity: data.quantity });
   };
 
   if (!nft || !nft.listing) return null;
@@ -66,7 +68,7 @@ export const Buy = (props: { nftId: string }) => {
     );
   }
 
-  if (state.status === "noBalance") {
+  if (state.status === "grantingAllowance") {
     return (
       <View tw="flex-1 items-center justify-center">
         <Spinner />
@@ -75,24 +77,70 @@ export const Buy = (props: { nftId: string }) => {
             variant="text-base"
             tw="text-black dark:text-white text-center my-8"
           >
-            No Balance!
+            Granting allowance...
           </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "grantingAllowanceError") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="text-black dark:text-white text-center my-8"
+          >
+            Sorry. Granting allowance failed.
+          </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "noBalance") {
+    const quantity = getValues("quantity");
+
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="text-black dark:text-white text-center my-8"
+          >
+            You don't have enough ${nft.listing.currency} on your wallet.
+          </Text>
+          <Text>You can</Text>
+          <Button onPress={reset}>Go back </Button>
+          <Text>, or </Text>
+          <Button onPress={() => buyNFT({ nft, quantity: quantity })}>
+            try again with a different wallet.
+          </Button>
         </View>
       </View>
     );
   }
 
   if (state.status === "needsAllowance") {
+    const quantity = getValues("quantity");
     return (
       <View tw="flex-1 items-center justify-center">
-        <Spinner />
         <View tw="items-center">
           <Text
             variant="text-base"
             tw="text-black dark:text-white text-center my-8"
           >
-            needs allowance!!
+            To buy this NFT, we need permission to spend your{" "}
+            {nft.listing.min_price + " " + nft.listing.currency}.
           </Text>
+          <Button onPress={() => grantAllowance({ nft, quantity })}>
+            Grant Permission
+          </Button>
         </View>
       </View>
     );

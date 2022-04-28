@@ -1,13 +1,17 @@
 import { useReducer } from "react";
 
+import axios from "axios";
 import { ethers } from "ethers";
 
+import ierc20MetaTx from "app/abi/IERC20MetaTx.json";
+import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
-import { LIST_CURRENCIES } from "app/lib/constants";
+import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
+import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
-import { parseBalance } from "app/utilities";
+import { parseBalance, SOL_MAX_INT } from "app/utilities";
 
 type Status =
   | "idle"
@@ -18,7 +22,10 @@ type Status =
   | "needsAllowance"
   | "noBalance"
   | "error"
-  | "buyingSuccess";
+  | "buyingSuccess"
+  | "grantingAllowance"
+  | "grantingAllowanceError"
+  | "reset";
 
 type BuyNFTState = {
   status: Status;
@@ -44,14 +51,15 @@ const buyNFTReducer = (
   switch (action.type) {
     case "loading":
       return { ...initialState, status: "loading" };
+    case "reset":
+      return { ...initialState };
     case "verifyingUserBalance":
-      return { ...state, status: "verifyingUserBalance" };
     case "noBalance":
-      return { ...state, status: "noBalance" };
     case "verifyingAllowance":
-      return { ...state, status: "verifyingAllowance" };
     case "needsAllowance":
-      return { ...state, status: "needsAllowance" };
+    case "grantingAllowance":
+    case "grantingAllowanceError":
+      return { ...state, status: action.type };
     case "error":
       return { ...state, status: "error", error: action.payload?.error };
     case "transactionInitiated":
@@ -148,7 +156,122 @@ export const useBuyNFT = () => {
     }
   };
 
+  const grantAllowance = async ({
+    nft,
+    quantity,
+  }: {
+    nft: NFT;
+    quantity: number;
+  }) => {
+    if (nft.listing) {
+      const tokenAddr = LIST_CURRENCIES[nft.listing.currency];
+      if (!nft.listing) return;
+
+      dispatch({ type: "grantingAllowance" });
+      try {
+        if (
+          [
+            LIST_CURRENCIES.WETH,
+            LIST_CURRENCIES.DAI,
+            LIST_CURRENCIES.USDC,
+          ].includes(tokenAddr)
+        ) {
+          const web3Modal = await getWeb3Modal();
+
+          const web3 = new ethers.providers.Web3Provider(
+            await web3Modal.connect()
+          );
+
+          const userAddress = await web3.getSigner().getAddress();
+          let tokenContract, nonce;
+
+          if (tokenAddr === LIST_CURRENCIES.USDC) {
+            tokenContract = new ethers.Contract(
+              tokenAddr,
+              ierc20MetaTxNonces,
+              new ethers.providers.JsonRpcProvider(
+                `https://polygon-${
+                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
+                    ? "mumbai"
+                    : "mainnet"
+                }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+              )
+            );
+
+            nonce = await tokenContract.nonces(userAddress);
+          } else {
+            tokenContract = new ethers.Contract(
+              tokenAddr,
+              ierc20MetaTx,
+              new ethers.providers.JsonRpcProvider(
+                `https://polygon-${
+                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
+                    ? "mumbai"
+                    : "mainnet"
+                }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+              )
+            );
+
+            nonce = await tokenContract.getNonce(userAddress);
+          }
+
+          const metatx = {
+            nonce,
+            from: userAddress,
+            functionSignature: tokenContract.interface.encodeFunctionData(
+              "approve",
+              [process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT]
+            ),
+          };
+
+          const signature = await web3.getSigner()._signTypedData(
+            {
+              name: CURRENCY_NAMES[tokenAddr],
+              version: "1",
+              verifyingContract: tokenAddr,
+              salt:
+                process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+                  ? "0x0000000000000000000000000000000000000000000000000000000000013881"
+                  : "0x0000000000000000000000000000000000000000000000000000000000000089",
+            },
+            {
+              MetaTransaction: [
+                { name: "nonce", type: "uint256" },
+                { name: "from", type: "address" },
+                { name: "functionSignature", type: "bytes" },
+              ],
+            },
+            metatx
+          );
+
+          const request = {
+            owner: metatx.from,
+            fnSig: metatx.functionSignature,
+            tokenAddr,
+            signature,
+          };
+
+          const transaction = await axios
+            .post("/api/marketplace/permit", request)
+            .then((res) => res.data);
+
+          web3.once(transaction, () => {
+            console.log("success ", transaction);
+            buyNFT({ nft, quantity });
+          });
+        }
+      } catch (error) {
+        console.error("Allowance failed ", error);
+        dispatch({ type: "grantingAllowanceError" });
+      }
+    }
+  };
+
+  const reset = () => {
+    dispatch({ type: "reset" });
+  };
+
   if (__DEV__) console.log("buy nft state ", state);
 
-  return { buyNFT, state };
+  return { buyNFT, state, grantAllowance, reset };
 };

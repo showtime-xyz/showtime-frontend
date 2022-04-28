@@ -218,18 +218,23 @@ export const LIST_CURRENCIES = {
     WETH: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
     DAI: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
   },
+  //@ts-ignore
 }[process.env.NEXT_PUBLIC_CHAIN_ID];
+
+export const SOL_MAX_INT =
+  "115792089237316195423570985008687907853269984665640564039457584007913129639930";
 
 export const CURRENCY_NAMES = {
   mumbai: {
-    [LIST_CURRENCIES?.TKN]: "TKN",
-    [LIST_CURRENCIES?.USDC]: "USDC",
-    [LIST_CURRENCIES?.WETH]: "WETH",
-    [LIST_CURRENCIES?.DAI]: "DAI",
+    [LIST_CURRENCIES?.TKN]: "Test Token",
+    [LIST_CURRENCIES?.WETH]: "Wrapped Ether",
+    [LIST_CURRENCIES?.DAI]: "(PoS) Dai Stablecoin",
+    [LIST_CURRENCIES?.USDC]: "Mumbai USD Coin",
   },
   polygon: {
-    [LIST_CURRENCIES?.USDC]: "USDC",
-    [LIST_CURRENCIES?.WETH]: "WETH",
-    [LIST_CURRENCIES?.DAI]: "DAI",
+    [LIST_CURRENCIES?.USDC]: "USD Coin (PoS)",
+    [LIST_CURRENCIES?.WETH]: "Wrapped Ether",
+    [LIST_CURRENCIES?.DAI]: "(PoS) Dai Stablecoin",
   },
+  //@ts-ignore
 }[process.env.NEXT_PUBLIC_CHAIN_ID];

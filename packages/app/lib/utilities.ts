@@ -217,3 +217,5 @@ export const personalSignMessage = async (web3, message) => {
       await web3.getSigner().getAddress(),
     ]);
 };
+
+export const toWei = (number: number) => Math.floor(number * 10 ** 9);
