@@ -1,6 +1,7 @@
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
@@ -106,25 +107,26 @@ export function Ownership({ nft }: Props) {
         <View tw="ml-2 justify-center">
           <Text
             sx={{ fontSize: 12, lineHeight: 12 }}
-            tw={`${
-              nft.owner_username ? "mb-1" : ""
-            } font-semibold text-gray-600 dark:text-gray-400`}
+            tw="font-semibold text-gray-600 dark:text-gray-400"
           >
             Owner
           </Text>
-          {nft.owner_username && (
-            <View tw="flex h-[12px] flex-row items-center">
-              <Text
-                sx={{ fontSize: 13, lineHeight: 15 }}
-                tw="font-semibold text-gray-900 dark:text-white"
-              >
-                @{nft.owner_username}
-              </Text>
-              {nft.owner_verified ? (
-                <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-              ) : null}
-            </View>
-          )}
+          <View tw="h-2" />
+          <View tw="flex flex-row items-center">
+            <Text
+              variant="text-13"
+              tw="font-semibold text-gray-900 dark:text-white"
+            >
+              {nft.creator_username
+                ? `@${nft.creator_username}`
+                : nft.creator_name
+                ? nft.creator_name
+                : formatAddressShort(nft.creator_address)}
+            </Text>
+            {nft.creator_verified ? (
+              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            ) : null}
+          </View>
         </View>
       </Link>
     );
