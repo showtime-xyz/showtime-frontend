@@ -5,7 +5,8 @@
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-    "source.organizeImports": true
+    // already have a Prettier plugin, so don't need this.
+    "source.organizeImports": false
   },
   "tailwindCSS.experimental.classRegex": [
     "tw`([^`]*)", // tw`...`

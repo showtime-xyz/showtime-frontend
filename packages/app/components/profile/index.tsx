@@ -108,7 +108,7 @@ const Profile = ({ address }: { address?: string }) => {
               <Tabs.Pager>
                 {data?.data.lists.map((list) => {
                   return (
-                    <ErrorBoundary>
+                    <ErrorBoundary key={list.id}>
                       <Suspense
                         fallback={
                           <View tw="items-center justify-center pt-20">
