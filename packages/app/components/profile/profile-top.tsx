@@ -130,7 +130,7 @@ export const ProfileTop = ({
             {profileData?.data.profile.cover_url && (
               <Image
                 source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${coverImageHeight}px] w-100 object-cover`}
+                tw={`h-[${coverImageHeight}px] w-100 web:object-cover`}
                 alt="Cover image"
                 resizeMethod="resize"
                 resizeMode="cover"
