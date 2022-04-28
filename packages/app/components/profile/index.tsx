@@ -1,26 +1,25 @@
-import { Suspense, useCallback, useReducer, useState } from "react";
-import { Platform } from "react-native";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
   defaultFilters,
   useProfileNftTabs,
-  useUserProfile,
+  useUserProfile
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-
 import { Skeleton, Spinner, View } from "design-system";
 import { Hidden } from "design-system/hidden";
-import { useColorScheme, useIsDarkMode } from "design-system/hooks";
+import { useColorScheme } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
-
+import { Suspense, useCallback, useReducer, useState } from "react";
+import { Platform } from "react-native";
 import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
+
+
 
 const ProfileScreen = ({ username }: { username: string }) => {
   return <Profile address={username} />;
@@ -38,7 +37,6 @@ const Profile = ({ address }: { address?: string }) => {
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
-  const isDark = useIsDarkMode();
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
       switch (action.type) {
