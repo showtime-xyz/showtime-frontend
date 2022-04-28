@@ -1,8 +1,3 @@
-import { useContext, useMemo, useRef, useState } from "react";
-import { useWindowDimensions } from "react-native";
-
-import reactStringReplace from "react-string-replace";
-
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
@@ -10,11 +5,10 @@ import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import {
   BottomTabBarHeightContext,
-  useBottomTabBarHeight,
+  useBottomTabBarHeight
 } from "app/lib/react-navigation/bottom-tabs";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
-
 import { Button, ModalSheet, Skeleton, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Hidden } from "design-system/hidden";
@@ -23,9 +17,15 @@ import { Image } from "design-system/image";
 import { Pressable } from "design-system/pressable-scale";
 import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
-
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Platform, useWindowDimensions } from "react-native";
+import reactStringReplace from "react-string-replace";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowersList, FollowingList } from "../following-user-list";
+
+
+
+
 
 type FollowProps = {
   onPressFollowing: () => void;
@@ -111,7 +111,9 @@ export const ProfileTop = ({
     [bio]
   );
   const coverImageHeight = useMemo(() => (width < 768 ? 120 : 180), [width]);
-
+  useEffect(() => {
+    Platform.OS === 'web' && setShowBottomSheet(null)
+  }, [address]);
   return (
     <>
       <View pointerEvents="box-none">
@@ -128,7 +130,7 @@ export const ProfileTop = ({
             {profileData?.data.profile.cover_url && (
               <Image
                 source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${coverImageHeight}px] w-100 object-cover`}
+                tw={`h-[${coverImageHeight}px] w-100 web:object-cover`}
                 alt="Cover image"
                 resizeMethod="resize"
                 resizeMode="cover"
@@ -157,9 +159,8 @@ export const ProfileTop = ({
                 </Skeleton>
               </View>
             </View>
-
-            {isBlocked ? (
-              <View tw="flex-row items-center" pointerEvents="box-none">
+            <View tw="flex-row items-center" pointerEvents="box-none">
+              {isBlocked ? (
                 <Button
                   size={width < 768 ? "small" : "regular"}
                   onPress={() => {
@@ -168,45 +169,49 @@ export const ProfileTop = ({
                 >
                   Unblock
                 </Button>
-              </View>
-            ) : profileId && userId !== profileId ? (
-              <View tw="flex-row items-center" pointerEvents="box-none">
-                <Hidden until="md">
-                  <Follow
-                    onPressFollower={() => setShowBottomSheet("followers")}
-                    onPressFollowing={() => setShowBottomSheet("following")}
-                    followersCount={profileData?.data.followers_count}
-                    followingCount={profileData?.data.following_count}
-                    tw="mr-8"
-                  />
-                </Hidden>
-                <ProfileDropdown user={profileData?.data.profile} />
-                <View tw="w-2" />
-                <Button
-                  size={width < 768 ? "small" : "regular"}
-                  onPress={() => {
-                    if (isFollowingUser) {
-                      unfollow(profileId);
-                    } else {
-                      follow(profileId);
-                    }
-                  }}
-                >
-                  {isFollowingUser ? "Following" : "Follow"}
-                </Button>
-              </View>
-            ) : userId === profileId ? (
-              <View tw="flex-row items-center" pointerEvents="box-none">
-                <Button
-                  size="small"
-                  onPress={() => {
-                    router.push(`/profile/edit`);
-                  }}
-                >
-                  Edit profile
-                </Button>
-              </View>
-            ) : null}
+              ) : (
+                <>
+                  <Hidden until="md">
+                    <Follow
+                      onPressFollower={() => setShowBottomSheet("followers")}
+                      onPressFollowing={() => setShowBottomSheet("following")}
+                      followersCount={profileData?.data.followers_count}
+                      followingCount={profileData?.data.following_count}
+                      tw="mr-8"
+                    />
+                  </Hidden>
+                  {profileId && userId !== profileId ? (
+                    <>
+                      <ProfileDropdown user={profileData?.data.profile} />
+                      <View tw="w-2" />
+                      <Button
+                        size={width < 768 ? "small" : "regular"}
+                        onPress={() => {
+                          if (isFollowingUser) {
+                            unfollow(profileId);
+                          } else {
+                            follow(profileId);
+                          }
+                        }}
+                      >
+                        {isFollowingUser ? "Following" : "Follow"}
+                      </Button>
+                    </>
+                  ) : (
+                    userId === profileId && (
+                      <Button
+                        size="small"
+                        onPress={() => {
+                          router.push(`/profile/edit`);
+                        }}
+                      >
+                        Edit profile
+                      </Button>
+                    )
+                  )}
+                </>
+              )}
+            </View>
           </View>
 
           <View tw="px-2 py-3" pointerEvents="box-none">

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 import Constants from "expo-constants";
 
@@ -96,37 +96,35 @@ const SettingsTabs = () => {
   }, [isAuthenticated]);
 
   return (
-    <View tw="min-h-screen w-full items-center">
+    <View tw="h-[100vh] web:items-center w-full">
       <Tabs.Root
         onIndexChange={setSelected}
         initialIndex={selected}
         tabListHeight={TAB_LIST_HEIGHT}
         lazy
       >
-        <Tabs.Header>
+      <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="items-center bg-white dark:bg-black">
             <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
               <Text
-                variant="text-2xl"
-                tw="font-extrabold text-gray-900 dark:text-white"
+                tw="font-extrabold text-gray-900 dark:text-white text-2xl"
               >
                 Settings
               </Text>
-            </View>
-            {!isWeb ? (
+              {!isWeb ? (
               <Text
-                variant="text-2xl"
-                tw="font-extrabold text-gray-100 dark:text-gray-900"
+                tw="font-extrabold text-gray-100 dark:text-gray-900 text-2xl"
               >
                 v{Constants?.manifest?.version ?? packageJson?.version}
               </Text>
             ) : null}
+            </View>
           </View>
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] md:-right-36`
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] md:-right-36 ios:w-screen android:w-screen`
           )}
         >
           <Tabs.Trigger>

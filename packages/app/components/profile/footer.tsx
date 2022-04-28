@@ -11,7 +11,7 @@ import { useColorScheme } from "design-system/hooks";
 
 type ProfileFooterProps = {
   isLoading: boolean;
-  numColumns: number;
+  numColumns?: number;
 };
 export const ProfileFooter = memo(
   ({ isLoading, numColumns = 3 }: ProfileFooterProps) => {
