@@ -13,7 +13,7 @@ export default {
 } as Meta;
 
 const Container = (props: any) => {
-  return <View tw={"dark:bg-gray-100 p-10 bg-white"}>{props.children}</View>;
+  return <View tw={"bg-white p-10 dark:bg-gray-100"}>{props.children}</View>;
 };
 
 export const Basic: React.VFC<{}> = () => {
@@ -29,7 +29,7 @@ export const Basic: React.VFC<{}> = () => {
         close={() => setVisible(false)}
       >
         <View>
-          <Text tw="dark:text-white text-black">Hello world</Text>
+          <Text tw="text-black dark:text-white">Hello world</Text>
         </View>
       </ModalSheet>
     </Container>

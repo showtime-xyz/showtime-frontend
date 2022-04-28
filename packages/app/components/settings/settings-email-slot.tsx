@@ -30,7 +30,7 @@ export const SettingEmailSlotHeader = (props: EmailHeaderProps) => {
   return (
     <View>
       <SettingSubTitle>
-        <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
           Manage your email
         </Text>
         {noEmailConnected ? (
@@ -81,7 +81,7 @@ export const SettingsEmailSkeletonSlot = () => {
 
 export const SettingsEmailSlotPlaceholder = () => {
   return (
-    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4 m-0">
+    <Text tw="m-0 p-4 text-base font-bold text-gray-900 dark:text-white">
       No email connected to your profile.
     </Text>
   );
@@ -117,9 +117,9 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
   }, [getCurrentMagicUser]);
 
   return (
-    <View tw="flex-1 flex-row justify-between w-full p-4 items-center">
+    <View tw="w-full flex-1 flex-row items-center justify-between p-4">
       <View tw="flex-1">
-        <Text tw="text-gray-900 dark:text-white font-bold pb-3">{email}</Text>
+        <Text tw="pb-3 font-bold text-gray-900 dark:text-white">{email}</Text>
         {isCurrentEmail ? (
           <View tw="flex flex-row">
             <DataPill label="Current" type="secondary" />

@@ -1,3 +1,5 @@
+import "raf/polyfill";
+
 import { useEffect, useState } from "react";
 
 import ModalThrottleUser from "@/components/ModalThrottleUser";
@@ -13,7 +15,6 @@ import { DripsyProvider } from "dripsy";
 import mixpanel from "mixpanel-browser";
 import { ThemeProvider } from "next-themes";
 import Router, { useRouter } from "next/router";
-import "raf/polyfill";
 import { SWRConfig, useSWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 

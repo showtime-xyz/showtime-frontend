@@ -96,8 +96,8 @@ const Root = ({
         style={tw.style("w-full")}
       >
         {headerChild}
-        <View tw="flex flex-row flex-1 justify-center bg-white dark:bg-black">
-          <View tw="max-w-screen-xl w-full">
+        <View tw="flex flex-1 flex-row justify-center bg-white dark:bg-black">
+          <View tw="w-full max-w-screen-xl">
             <RadixTabs.List
               aria-label={accessibilityLabel}
               style={tw.style("")}
@@ -145,7 +145,7 @@ const Root = ({
           </View>
         </View>
         <View tw="w-full items-center">
-          <View tw={`max-w-screen-xl w-full ${tabPage?.props.tw}`}>
+          <View tw={`w-full max-w-screen-xl ${tabPage?.props.tw}`}>
             {tabContents.map((c, index) => {
               const value = index.toString();
               return (

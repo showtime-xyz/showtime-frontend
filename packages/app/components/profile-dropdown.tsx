@@ -96,7 +96,7 @@ function ProfileDropdown({ user }: Props) {
 
       <DropdownMenuContent
         loop
-        tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
+        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         <DropdownMenuItem
           onSelect={async () => {
@@ -115,19 +115,19 @@ function ProfileDropdown({ user }: Props) {
             }
           }}
           key="share"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         {!isBlocked ? (
           <DropdownMenuItem
             key="block"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             onSelect={handleOnBlockPress}
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
@@ -137,7 +137,7 @@ function ProfileDropdown({ user }: Props) {
         ) : (
           <DropdownMenuItem
             key="block"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             onSelect={handleOnUnblockPress}
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
@@ -146,7 +146,7 @@ function ProfileDropdown({ user }: Props) {
           </DropdownMenuItem>
         )}
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={async () => {
@@ -154,7 +154,7 @@ function ProfileDropdown({ user }: Props) {
             router.pop();
           }}
           key="report"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Report

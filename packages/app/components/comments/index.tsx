@@ -112,11 +112,11 @@ export function Comments({ nft }: { nft: NFT }) {
   const listEmptyComponent = useCallback(
     () => (
       <View tw="items-center justify-center p-4">
-        <Text variant="text-lg" tw="dark:text-gray-100 text-gray-900">
+        <Text variant="text-lg" tw="text-gray-900 dark:text-gray-100">
           💬 No comments yet...
         </Text>
         <View tw="h-4" />
-        <Text variant="text-sm" tw="dark:text-gray-400 text-gray-600">
+        <Text variant="text-sm" tw="text-gray-600 dark:text-gray-400">
           Be the first to add a comment!
         </Text>
         {!isAuthenticated ? (

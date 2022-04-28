@@ -14,7 +14,7 @@ function Transfer({ act }) {
           {verb}{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
@@ -22,7 +22,7 @@ function Transfer({ act }) {
           {preposition}{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/@${
               act.counterparty?.username ?? act.counterparty?.wallet_address
             }`}

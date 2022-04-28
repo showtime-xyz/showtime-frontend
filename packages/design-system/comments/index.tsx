@@ -101,7 +101,7 @@ function Comments({ nftId }: Props) {
   const comments = data?.[0]?.comments;
 
   return (
-    <View tw="flex-1 z-1 bg-white dark:bg-black">
+    <View tw="z-1 flex-1 bg-white dark:bg-black">
       <FlatList
         ref={flatListRef}
         data={comments}

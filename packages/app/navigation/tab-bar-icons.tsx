@@ -42,7 +42,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
     return (
       <Link href={tab}>
         <View
-          tw="w-12 h-12 rounded-full items-center justify-center"
+          tw="h-12 w-12 items-center justify-center rounded-full"
           style={tw.style(
             `${
               isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
@@ -55,7 +55,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
     );
   }
 
-  return <View tw="w-12 h-12 items-center justify-center">{children}</View>;
+  return <View tw="h-12 w-12 items-center justify-center">{children}</View>;
 }
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
@@ -117,7 +117,7 @@ export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
     >
       <View
         tw={[
-          "rounded-full h-12 w-12 justify-center items-center",
+          "h-12 w-12 items-center justify-center rounded-full",
           focused ? "bg-gray-100 dark:bg-gray-900" : "bg-black dark:bg-white",
         ]}
       >

@@ -86,7 +86,7 @@ export function Login({ onLogin }: LoginProps) {
             </Button>
           </View>
           <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
-            <Text tw="my-2 font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
+            <Text tw="my-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
               — or —
             </Text>
           </View>

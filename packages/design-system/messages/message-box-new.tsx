@@ -68,10 +68,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     return (
       <View
         pointerEvents={submitting ? "none" : "auto"}
-        tw="flex-row py-4 items-center bg-white dark:bg-black"
+        tw="flex-row items-center bg-white py-4 dark:bg-black"
         style={style}
       >
-        <View tw="flex-1 mr-2">
+        <View tw="mr-2 flex-1">
           <TextInput
             //@ts-ignore
             ref={inputRef}
@@ -83,7 +83,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             multiline={true}
             keyboardType="twitter"
             returnKeyType="send"
-            tw="py-3 pr-3 pl-[44px] rounded-[32px] text-base text-black dark:text-white bg-gray-100 dark:bg-gray-900"
+            tw="rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
             onChangeText={handleTextChange}
             onSubmitEditing={handleSubmit}
             onFocus={onFocus}

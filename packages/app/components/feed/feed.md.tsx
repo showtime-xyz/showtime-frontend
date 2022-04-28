@@ -35,7 +35,7 @@ const LEFT_SLIDE_MARGIN = 80;
 
 export const Feed = () => {
   return (
-    <View tw="flex-1 py-8 max-w-7xl" testID="homeFeed">
+    <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
       <ErrorBoundary>
         <Suspense fallback={<View />}>
           <FeedList />
@@ -67,7 +67,7 @@ export const FeedList = () => {
       <View tw="flex-1">
         {isAuthenticated ? (
           <>
-            <View tw="w-[375px] self-end bg-white dark:bg-black p-4 shadow-lg rounded-lg mr-6">
+            <View tw="mr-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black">
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
                 onChange={setSelected}
@@ -207,11 +207,11 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text variant="text-2xl" tw="text-black dark:text-white p-4">
+      <Text variant="text-2xl" tw="p-4 text-black dark:text-white">
         Home
       </Text>
       <View
-        tw="bg-white dark:bg-black rounded-2xl mt-8"
+        tw="mt-8 rounded-2xl bg-white dark:bg-black"
         // @ts-ignore
         style={{
           position: Platform.OS === "web" ? "sticky" : null,
@@ -219,7 +219,7 @@ const SuggestedUsers = () => {
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
-        <Text tw="dark:text-white p-4" variant="text-lg">
+        <Text tw="p-4 dark:text-white" variant="text-lg">
           Suggested
         </Text>
         {loading ? (

@@ -19,33 +19,33 @@ const TableRow = ({ ...props }: TableRowProps) => {
 
   return (
     <View tw="flex flex-row items-center p-4">
-      <View tw="flex flex-row items-center flex-1 min-w-[128px]">
+      <View tw="flex min-w-[128px] flex-1 flex-row items-center">
         <View tw="mr-2">
           {getNftActivityEventIcon({ event: props.event_type, color })}
         </View>
-        <Text tw=" text-gray-600 dark:text-gray-400 text-xs font-semibold">
+        <Text tw=" text-xs font-semibold text-gray-600 dark:text-gray-400">
           {props.event_type}
         </Text>
       </View>
-      <View tw="flex-1 text-gray-600 dark:text-gray-400 text-xs font-semibold min-w-[128px]">
+      <View tw="min-w-[128px] flex-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
         <UserItem
           imageUrl={props.from_img_url}
           title={props.from_username}
           verified={props.from_verified}
         />
       </View>
-      <View tw="flex-1 text-gray-600 dark:text-gray-400 text-xs font-semibold min-w-[128px]">
+      <View tw="min-w-[128px] flex-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
         <UserItem
           imageUrl={props.to_img_url}
           title={props.to_username}
           verified={props.to_verified}
         />
       </View>
-      <Text tw="flex-1 text-gray-600 dark:text-gray-400 text-xs font-semibold min-w-[128px]">
+      <Text tw="min-w-[128px] flex-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
         {props.quantity}
       </Text>
-      <View tw="flex flex-row items-center flex-1 min-w-[128px]">
-        <Text tw="text-gray-600 dark:text-gray-400 text-xs font-semibold">
+      <View tw="flex min-w-[128px] flex-1 flex-row items-center">
+        <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
           {formatDistanceToNowStrict(new Date(props.timestamp), {
             addSuffix: true,
           })}

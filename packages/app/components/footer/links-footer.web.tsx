@@ -12,8 +12,8 @@ export const WebFooter = () => {
   const {} = useWindowDimensions();
   const { social, links } = useFooter();
   return (
-    <View tw="bg-white dark:bg-black w-full items-center">
-      <View tw="max-w-screen-2xl w-full flex-col-reverse md:flex-row p-4 md:p-12 justify-between ">
+    <View tw="w-full items-center bg-white dark:bg-black">
+      <View tw="w-full max-w-screen-2xl flex-col-reverse justify-between p-4 md:flex-row md:p-12 ">
         <View tw="mt-4 md:mt-0">
           <Link href="/">
             <ShowtimeWordmark
@@ -22,12 +22,12 @@ export const WebFooter = () => {
               width={140}
             />
           </Link>
-          <Text variant="text-13" tw={"text-gray-500 font-semibold mt-4"}>
+          <Text variant="text-13" tw={"mt-4 font-semibold text-gray-500"}>
             &copy; {new Date().getFullYear()} Showtime Technologies, Inc.
           </Text>
         </View>
-        <View tw="justify-between flex flex-row">
-          <View tw="flex flex-col mr-20">
+        <View tw="flex flex-row justify-between">
+          <View tw="mr-20 flex flex-col">
             {links.map((item) => (
               <Link
                 href={item.link}
@@ -38,7 +38,7 @@ export const WebFooter = () => {
                 key={item.title}
               >
                 <Text
-                  tw="mb-4 font-semibold text-gray-900 dark:text-white mt-0"
+                  tw="mb-4 mt-0 font-semibold text-gray-900 dark:text-white"
                   variant="text-13"
                 >
                   {item.title}
@@ -49,7 +49,7 @@ export const WebFooter = () => {
           <View tw="flex flex-col">
             {social.map((item) => (
               <Link
-                tw="flex-row items-center mb-4"
+                tw="mb-4 flex-row items-center"
                 href={item.link}
                 hrefAttrs={{
                   target: "_blank",
@@ -57,7 +57,7 @@ export const WebFooter = () => {
                 }}
                 key={item.title}
               >
-                <View tw="text-base mr-2">
+                <View tw="mr-2 text-base">
                   {item.icon({
                     color: tw.style("text-gray-900 dark:text-white")
                       .color as string,

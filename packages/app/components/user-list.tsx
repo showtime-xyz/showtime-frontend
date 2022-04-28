@@ -85,7 +85,7 @@ export const UserList = ({
   } else if (users?.length === 0) {
     return (
       <View tw="items-center">
-        <Text tw="dark:text-gray-100 text-gray-900">No results found</Text>
+        <Text tw="text-gray-900 dark:text-gray-100">No results found</Text>
       </View>
     );
   }
@@ -110,14 +110,14 @@ const FollowingListUser = memo(
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
     return (
       <View
-        tw={`flex-row justify-between items-center h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
+        tw={`flex-row items-center justify-between h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
       >
         <Link
           href={`/@${item.username ?? item.wallet_address}`}
           onPress={hideSheet}
         >
           <View tw="flex-row">
-            <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
+            <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
@@ -128,16 +128,16 @@ const FollowingListUser = memo(
             <View tw="mr-1 justify-center">
               {item.name ? (
                 <Text
-                  tw="text-sm text-gray-600 dark:text-gray-300 font-semibold mb-[1px] max-w-[150px]"
+                  tw="mb-[1px] max-w-[150px] text-sm font-semibold text-gray-600 dark:text-gray-300"
                   numberOfLines={1}
                 >
                   {item.name}
                 </Text>
               ) : null}
 
-              <View tw="items-center flex-row">
+              <View tw="flex-row items-center">
                 <Text
-                  tw="text-sm text-gray-900 dark:text-white font-semibold max-w-[150px]"
+                  tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username ? (
@@ -175,7 +175,7 @@ const FollowingUserItemLoadingIndicator = () => {
       {[1, 2, 3].map((v) => {
         return (
           <View tw="flex-row pt-4" key={v}>
-            <View tw="mr-2 rounded-full overflow-hidden">
+            <View tw="mr-2 overflow-hidden rounded-full">
               <Skeleton
                 width={32}
                 height={32}

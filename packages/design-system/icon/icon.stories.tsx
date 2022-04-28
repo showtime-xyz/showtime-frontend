@@ -17,7 +17,7 @@ type IconItemProps = {
 
 const IconItem = ({ icon, title }: IconItemProps) => {
   return (
-    <View tw="p-4 m-2 rounded-md flex flex-col items-center justify-center w-[120px]">
+    <View tw="m-2 flex w-[120px] flex-col items-center justify-center rounded-md p-4">
       {React.createElement(icon, {
         width: 32,
         height: 32,

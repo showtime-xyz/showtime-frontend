@@ -31,20 +31,20 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
 
   return (
     <View tw="p-4">
-      <View tw="flex-row justify-between items-center">
+      <View tw="flex-row items-center justify-between">
         <Link
           href={`/@${props.creator.username ?? props.creator.address}`}
           tw="flex-row items-center"
         >
-          <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
+          <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
             <Image
               source={{ uri: props.creator?.img_url ?? DEFAULT_PROFILE_PIC }}
               tw="h-8 w-8 rounded-full"
             />
           </View>
           <View>
-            <View tw="items-center flex-row">
-              <Text tw="text-sm text-gray-900 dark:text-white font-semibold mr-1">
+            <View tw="flex-row items-center">
+              <Text tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white">
                 {props.creator.username ? (
                   <>@{props.creator.username}</>
                 ) : (
@@ -59,7 +59,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
             </View>
           </View>
         </Link>
-        <View tw="flex-row justify-center items-center">
+        <View tw="flex-row items-center justify-center">
           <Button
             variant="primary"
             onPress={() => {
@@ -74,7 +74,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           </Button>
         </View>
       </View>
-      <View tw="flex-row justify-center mt-4 mx-[-1px]">
+      <View tw="mx-[-1px] mt-4 flex-row justify-center">
         {props.creator.top_items.slice(0, 3).map((item, idx) => {
           return (
             <Pressable

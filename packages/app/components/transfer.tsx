@@ -122,14 +122,14 @@ function Transfer({ nft }: { nft?: NFT }) {
 
   if (state.status === "transfering" || state.status === "transferingSuccess") {
     return (
-      <View tw="flex-1 justify-center items-center p-4 h-full">
+      <View tw="h-full flex-1 items-center justify-center p-4">
         {state.status === "transfering" ? (
           <Spinner />
         ) : (
           <Text variant="text-4xl">🎉</Text>
         )}
 
-        <Text tw="text-center text-black dark:text-white py-8">
+        <Text tw="py-8 text-center text-black dark:text-white">
           {state.status === "transfering"
             ? `Your NFT is being transferred. Feel free to navigate away from this screen.`
             : "The transaction has been completed!"}
@@ -142,7 +142,7 @@ function Transfer({ nft }: { nft?: NFT }) {
                 tw.style("bg-black dark:bg-white")?.backgroundColor as string
               }
             />
-            <Text tw="text-black dark:text-white text-sm pl-2">
+            <Text tw="pl-2 text-sm text-black dark:text-white">
               View on Polygon Scan
             </Text>
           </Button>
@@ -158,10 +158,10 @@ function Transfer({ nft }: { nft?: NFT }) {
 
         <View tw="p-[16px]">
           <View tw="flex-row items-center pb-4">
-            <Media item={nft} tw="w-[80px] h-[80px] rounded-2xl" />
+            <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
             <View tw="flex-1 px-[16px]">
               <Text
-                tw="text-black dark:text-white font-bold pb-4"
+                tw="pb-4 font-bold text-black dark:text-white"
                 variant="text-lg"
               >
                 {nft?.token_name}
@@ -173,7 +173,7 @@ function Transfer({ nft }: { nft?: NFT }) {
                   height={14}
                   width={14}
                 />
-                <Text tw="text-gray-500 font-bold pl-1" variant="text-xs">
+                <Text tw="pl-1 font-bold text-gray-500" variant="text-xs">
                   {nft?.token_created
                     ? `Minted ${formatDistanceToNowStrict(
                         new Date(nft?.token_created),
@@ -239,18 +239,18 @@ function Transfer({ nft }: { nft?: NFT }) {
             />
           </View>
           {data?.data.profile && watchReceiverAddress ? (
-            <View tw="mt-4 flex-row items-center bg-white dark:bg-black shadow-lg rounded-lg p-4">
+            <View tw="mt-4 flex-row items-center rounded-lg bg-white p-4 shadow-lg dark:bg-black">
               <Avatar url={data?.data.profile.img_url} />
-              <View tw="justify-around ml-1">
+              <View tw="ml-1 justify-around">
                 <Text
                   variant="text-xs"
-                  tw="text-gray-600  font-semibold dark:text-gray-400"
+                  tw="font-semibold  text-gray-600 dark:text-gray-400"
                 >
                   {data?.data.profile.name}
                 </Text>
-                <View tw="flex-row mt-1 items-center">
+                <View tw="mt-1 flex-row items-center">
                   <Text
-                    tw="dark:text-white text-black font-semibold"
+                    tw="font-semibold text-black dark:text-white"
                     variant="text-13"
                   >
                     @{data?.data.profile.username}
@@ -276,12 +276,12 @@ function Transfer({ nft }: { nft?: NFT }) {
           ) : null}
         </View>
 
-        <View tw="absolute px-4 w-full" style={{ bottom: 16 }}>
+        <View tw="absolute w-full px-4" style={{ bottom: 16 }}>
           <Button
             onPress={handleSubmit(handleSubmitTransfer)}
             tw="h-12 rounded-full"
           >
-            <Text tw="text-white dark:text-gray-900 text-sm pr-2">
+            <Text tw="pr-2 text-sm text-white dark:text-gray-900">
               Transfer
             </Text>
             <ArrowRight

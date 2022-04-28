@@ -7,7 +7,7 @@
   }
 
   a {
-    @apply no-underline text-inherit;
+    @apply text-inherit no-underline;
   }
   button:focus {
     @apply outline-none;

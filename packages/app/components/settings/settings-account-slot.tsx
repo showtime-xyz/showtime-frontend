@@ -14,7 +14,7 @@ export const SettingAccountSlotHeader = () => {
   return (
     <View>
       <SettingSubTitle>
-        <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
           Account
         </Text>
       </SettingSubTitle>
@@ -40,12 +40,12 @@ export const SettingAccountSlotFooter = () => {
   };
 
   return (
-    <View tw="px-4 mt-4">
+    <View tw="mt-4 px-4">
       <View tw="flex flex-col items-start">
-        <Text tw="text-gray-900 dark:text-white font-bold text-base">
+        <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <Text tw="text-gray-500 dark:text-white text-base mt-1 mb-2">
+        <Text tw="mt-1 mb-2 text-base text-gray-500 dark:text-white">
           This action cannot be undone.
         </Text>
         <View tw="flex flex-row">
@@ -75,13 +75,13 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
 
   return (
     <Pressable
-      tw="flex-1 flex-row justify-between w-full p-4 items-center"
+      tw="w-full flex-1 flex-row items-center justify-between p-4"
       onPress={() => handleOnPressItem(props.subRoute)}
     >
       <View tw="flex flex-col">
-        <Text tw="text-gray-900 dark:text-white pb-3">{props.title}</Text>
+        <Text tw="pb-3 text-gray-900 dark:text-white">{props.title}</Text>
       </View>
-      <View tw="w-8 h-8">
+      <View tw="h-8 w-8">
         <ChevronRight
           width={24}
           height={24}

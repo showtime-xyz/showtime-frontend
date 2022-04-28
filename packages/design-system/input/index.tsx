@@ -101,7 +101,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
         <Label
           variant="text-sm"
           htmlFor={inputId}
-          tw="dark:text-white text-gray-900"
+          tw="text-gray-900 dark:text-white"
           sx={{ marginBottom: 4, fontWeight: "700" }}
         >
           {label}

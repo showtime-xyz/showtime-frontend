@@ -136,7 +136,7 @@ function Create() {
       <CreateScrollView keyboardShouldPersistTaps="handled">
         <View tw="px-3 py-4">
           <View
-            tw="flex-row items-center bg-gray-100 dark:bg-gray-900 rounded-4"
+            tw="rounded-4 flex-row items-center bg-gray-100 dark:bg-gray-900"
             testID="data-private"
           >
             <Hidden from="md">
@@ -158,10 +158,10 @@ function Create() {
                             file={value.file}
                             //@ts-ignore
                             type={value.type}
-                            tw="w-24 h-24 rounded-2xl"
+                            tw="h-24 w-24 rounded-2xl"
                           />
                         ) : (
-                          <View tw="w-24 h-24 rounded-2xl items-center justify-center">
+                          <View tw="h-24 w-24 items-center justify-center rounded-2xl">
                             <ImageIcon
                               color={
                                 tw.style("bg-black dark:bg-white")
@@ -171,13 +171,13 @@ function Create() {
                               height={24}
                             />
                             <Text
-                              tw="mt-2 dark:text-gray-400 text-gray-600"
+                              tw="mt-2 text-gray-600 dark:text-gray-400"
                               variant="text-xs"
                             >
                               Select Media
                             </Text>
                             {errors.file?.message ? (
-                              <Text variant="text-sm" tw="text-red-500 mt-2">
+                              <Text variant="text-sm" tw="mt-2 text-red-500">
                                 required
                               </Text>
                             ) : null}
@@ -222,7 +222,7 @@ function Create() {
                     }}
                   >
                     <View
-                      tw="bg-gray-100 dark:bg-gray-900 p-8 rounded-xl mt-4 items-center"
+                      tw="mt-4 items-center rounded-xl bg-gray-100 p-8 dark:bg-gray-900"
                       //@ts-ignore
                       style={{
                         borderStyle: "dashed",
@@ -237,15 +237,15 @@ function Create() {
                             file={value.file}
                             //@ts-ignore
                             type={value.type}
-                            tw="w-80 h-80 rounded-2xl"
+                            tw="h-80 w-80 rounded-2xl"
                           />
                           {state.status === "nftJSONUpload" ||
                           state.status === "mediaUpload" ? (
-                            <View tw="py-3 px-4 bg-white dark:bg-black mt-4 rounded-full flex-row items-center">
+                            <View tw="mt-4 flex-row items-center rounded-full bg-white py-3 px-4 dark:bg-black">
                               <Spinner size="small" />
                               <Text
                                 variant="text-xs"
-                                tw="text-black dark:text-white ml-4 font-bold"
+                                tw="ml-4 font-bold text-black dark:text-white"
                               >
                                 Uploading to IPFS...
                               </Text>
@@ -256,31 +256,31 @@ function Create() {
                         <View tw="items-center">
                           <Text
                             variant="text-sm"
-                            tw="dark:text-white text-gray-900 font-bold"
+                            tw="font-bold text-gray-900 dark:text-white"
                           >
                             Select file to upload
                           </Text>
                           <Text
                             variant="text-sm"
-                            tw="mt-4 dark:text-gray-400 text-gray-600"
+                            tw="mt-4 text-gray-600 dark:text-gray-400"
                           >
                             png, jpg, mp4, mov, gltf, glb
                           </Text>
                           <Text
                             variant="text-sm"
-                            tw="mt-4 dark:text-gray-400 text-gray-600"
+                            tw="mt-4 text-gray-600 dark:text-gray-400"
                           >
                             Stored on{" "}
                             <TextLink
                               variant="text-sm"
-                              tw="dark:text-gray-400 text-gray-600 font-bold"
+                              tw="font-bold text-gray-600 dark:text-gray-400"
                               href={"https://ipfs.io/"}
                             >
                               IPFS
                             </TextLink>
                           </Text>
                           {errors.file?.message ? (
-                            <Text variant="text-sm" tw="text-red-500 mt-2">
+                            <Text variant="text-sm" tw="mt-2 text-red-500">
                               required
                             </Text>
                           ) : null}
@@ -334,7 +334,7 @@ function Create() {
             /> */}
           </View>
 
-          <View tw="mt-4 border-2 border-gray-200 dark:border-gray-800 rounded-2xl">
+          <View tw="mt-4 rounded-2xl border-2 border-gray-200 dark:border-gray-800">
             <Accordion.Root
               value={Platform.select({ web: "options", default: undefined })}
             >
@@ -342,7 +342,7 @@ function Create() {
                 <Accordion.Trigger>
                   <Accordion.Label>Options</Accordion.Label>
                   <Accordion.Chevron>
-                    <View tw="rounded-full h-8 w-8 bg-gray-100 dark:bg-gray-900 items-center justify-center">
+                    <View tw="h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
                       <ChevronUp color={isDark ? "#fff" : "#000"} />
                     </View>
                   </Accordion.Chevron>
@@ -433,7 +433,7 @@ function Create() {
             name="hasAcceptedTerms"
             render={({ field: { onChange, value } }) => (
               <View>
-                <View tw="mt-8 flex-row justify-center items-center">
+                <View tw="mt-8 flex-row items-center justify-center">
                   <Checkbox
                     onChange={(v) => onChange(v)}
                     checked={value}
@@ -444,7 +444,7 @@ function Create() {
                     onPress={() => onChange(!value)}
                     style={{ flex: 1 }}
                   >
-                    <Text tw="ml-4 text-gray-600 dark:text-gray-400 text-sm">
+                    <Text tw="ml-4 text-sm text-gray-600 dark:text-gray-400">
                       I have the rights to publish this artwork, and understand
                       it will be minted on the Polygon network.
                     </Text>
@@ -459,7 +459,7 @@ function Create() {
         </View>
       </CreateScrollView>
 
-      <View tw="mt-8 px-4 w-full">
+      <View tw="mt-8 w-full px-4">
         <Button
           variant="primary"
           size="regular"
@@ -478,14 +478,14 @@ function Create() {
             : "Minting..."}
         </Button>
 
-        <View tw="h-12 mt-4">
+        <View tw="mt-4 h-12">
           {state.status === "minting" && !state.isMagic ? (
             <Button
               onPress={handleSubmit(handleSubmitForm)}
               tw="h-12"
               variant="tertiary"
             >
-              <Text tw="text-gray-900 dark:text-white text-sm">
+              <Text tw="text-sm text-gray-900 dark:text-white">
                 Didn't receive the signature request yet?
               </Text>
             </Button>

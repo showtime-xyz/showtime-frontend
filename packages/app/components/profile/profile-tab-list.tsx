@@ -91,17 +91,17 @@ export const ProfileTabList = ({
           />
         </Hidden>
         {isBlocked ? (
-          <View tw="items-center justify-center mt-8">
+          <View tw="mt-8 items-center justify-center">
             <Text tw="text-gray-900 dark:text-white">
               <Text tw="font-bold">@{username}</Text> is blocked
             </Text>
           </View>
         ) : data.length === 0 && !isLoading ? (
-          <View tw="items-center justify-center mt-20">
+          <View tw="mt-20 items-center justify-center">
             <Text tw="text-gray-900 dark:text-white">No results found</Text>
           </View>
         ) : isLoading ? (
-          <View tw="items-center justify-center mt-20">
+          <View tw="mt-20 items-center justify-center">
             <Spinner />
           </View>
         ) : null}

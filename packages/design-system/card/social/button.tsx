@@ -61,7 +61,7 @@ function Button({
   return (
     <Pressable
       tw={[
-        "h-8 p-2 flex-row items-center rounded-full dark:bg-gray-900",
+        "h-8 flex-row items-center rounded-full p-2 dark:bg-gray-900",
         isHovered ? backgroundHoverColor : backgroundColor,
         isPressed && !isDisabled ? "dark:bg-gray-800" : "",
         isDisabled ? "opacity-40" : "", // TODO: add `cursor-not-allowed` utility to twrnc

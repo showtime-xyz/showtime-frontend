@@ -74,7 +74,7 @@ function Media({
           disabled={numColumns > 1}
         >
           {numColumns > 1 && (
-            <View tw="bg-transparent absolute z-1 bottom-1 right-1">
+            <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}

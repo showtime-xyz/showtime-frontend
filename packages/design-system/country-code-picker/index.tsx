@@ -53,7 +53,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={useCallback(
           () => (
-            <View tw="h-[1px] dark:bg-gray-800 bg-gray-200 w-full" />
+            <View tw="h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
           ),
           []
         )}
@@ -83,7 +83,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
 
   return (
     <Pressable onPress={handleChange}>
-      <View tw="dark:bg-black flex-row px-8 py-5 items-center">
+      <View tw="flex-row items-center px-8 py-5 dark:bg-black">
         <Text tw="text-sm font-semibold dark:text-gray-100">
           {item.emoji} {item.name} ({item.dial_code})
         </Text>

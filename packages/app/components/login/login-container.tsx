@@ -37,7 +37,7 @@ export function LoginContainer({
       {children}
 
       {loading && (
-        <View tw="absolute top--2 right-0 bottom--2 left-0 opacity-95 dark:opacity-85 bg-white dark:bg-black justify-center items-center">
+        <View tw="dark:opacity-85 absolute top--2 right-0 bottom--2 left-0 items-center justify-center bg-white opacity-95 dark:bg-black">
           <Spinner />
         </View>
       )}
