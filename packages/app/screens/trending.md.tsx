@@ -19,17 +19,16 @@ import { breakpoints } from "design-system/theme";
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
-
   return (
-    <View tw="bg-gray-100 dark:bg-black">
-      <View tw="w-[90%] mx-auto py-8">
-        <View tw="flex-row justify-between items-center">
+    <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
+      <View tw="mx-auto w-[90%] py-8">
+        <View tw="flex-row items-center justify-between pb-8">
           <View>
             <Text variant="text-2xl" tw="text-black dark:text-white">
               Trending
             </Text>
           </View>
-          <View tw="w-[400px] bg-white dark:bg-black p-4 shadow-lg rounded-lg">
+          <View tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black">
             <SegmentedControl
               values={["CREATOR", "NFT"]}
               onChange={setSelected}
@@ -112,7 +111,7 @@ const CreatorsList = ({ days }: { days: any }) => {
 
   return (
     <View
-      tw="flex-1 mt-4"
+      tw="mt-4 flex-1"
       onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
     >
       {isLoading ? (
@@ -125,7 +124,7 @@ const CreatorsList = ({ days }: { days: any }) => {
             return (
               <View
                 key={item.creator_id}
-                tw="bg-white dark:bg-black rounded-lg mb-8"
+                tw="mb-8 rounded-lg bg-white dark:bg-black"
                 //@ts-ignore
                 style={{ boxShadow: isDark ? CARD_DARK_SHADOW : null }}
               >
@@ -160,7 +159,7 @@ const NFTList = ({ days }: { days: any }) => {
 
   return (
     <View
-      tw="flex-1 flex-row flex-wrap justify-between mt-4"
+      tw="mt-4 flex-1 flex-row flex-wrap justify-between"
       onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
     >
       {isLoading ? (

@@ -1,13 +1,11 @@
-import { useNFTDetails } from "app/hooks/use-nft-details";
+import type { NFT } from "app/types";
 
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-function Details({ nftId }: { nftId: number }) {
-  const { data: nft, loading, error } = useNFTDetails(nftId);
-
+function Details({ nft }: { nft: NFT }) {
   return (
     <>
       <View tw="m-4">
@@ -27,9 +25,9 @@ function Details({ nftId }: { nftId: number }) {
         )}
       </View>
       <Collection nft={nft} />
-      <View tw="border-b border-gray-100 dark:border-gray-900 mx-4" />
+      <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
       <Owner nft={nft} />
-      <View tw="border-b border-gray-100 dark:border-gray-900 mx-4" />
+      <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
     </>
   );
 }

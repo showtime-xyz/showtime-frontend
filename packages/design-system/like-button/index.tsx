@@ -14,7 +14,7 @@ export function LikeButton({
   likeCount: number;
 }) {
   return (
-    <Button variant="text" size="regular" tw="p-0 h-auto" onPress={onPress}>
+    <Button variant="text" size="regular" tw="h-auto p-0" onPress={onPress}>
       {isLiked ? (
         // <Animated.View key="liked" exiting={ZoomOut} entering={ZoomIn}>
         <HeartFilled height={24} width={24} color={tw.color("red-500")} />

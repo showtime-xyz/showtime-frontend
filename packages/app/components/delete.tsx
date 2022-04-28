@@ -12,7 +12,7 @@ import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
-import { NFT } from "app/types";
+import type { NFT } from "app/types";
 
 import { Button, Fieldset, Media, Text, View } from "design-system";
 import { Owner } from "design-system/card";
@@ -24,7 +24,7 @@ const defaultValues = {
   copies: 1,
 };
 
-function Delete({ nftId }: { nftId: number }) {
+function Delete({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
@@ -32,15 +32,6 @@ function Delete({ nftId }: { nftId: number }) {
     console.log("** Submiting burning form **", values);
     startBurning({ ...values, tokenId: nft.token_id });
   };
-
-  const { data, error, mutate } = useSWR(`/v2/nft_detail/${nftId}`, (url) =>
-    axios({ url, method: "GET" })
-  );
-  const nft = data?.data as NFT;
-
-  if (error) {
-    console.error(error);
-  }
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -85,8 +76,7 @@ function Delete({ nftId }: { nftId: number }) {
   useEffect(() => {
     if (state.status != "burningSuccess") return;
 
-    // @TODO: Maybe we should optimistically decrease edition count?
-    mutate(`/v2/nft_detail/${nftId}`);
+    // TODO: optimistically decrease edition count?
 
     // We're popping twice here to also close the NFT page behind this modal
     // For web, we just pop it once
@@ -101,11 +91,11 @@ function Delete({ nftId }: { nftId: number }) {
   return (
     <View tw="flex-1">
       <CreateScrollView>
-        <View tw="px-3 py-4 flex-1">
+        <View tw="flex-1 px-3 py-4">
           <View tw="mb-4">
             <Text
               variant="text-xl"
-              tw="font-bold text-black dark:text-white mb-4"
+              tw="mb-4 font-bold text-black dark:text-white"
             >
               Are you sure you want to delete this NFT?
             </Text>
@@ -113,17 +103,17 @@ function Delete({ nftId }: { nftId: number }) {
               This can’t be undone and it will be sent to a burn address.
             </Text>
           </View>
-          <View tw="border-b border-gray-100 dark:border-gray-900 -mx-2">
+          <View tw="-mx-2 border-b border-gray-100 dark:border-gray-900">
             <Collection nft={nft} />
           </View>
-          <View tw="p-4 flex-row items-center -mx-2">
-            <View tw="w-20 h-20 mr-4">
-              <Media item={nft} tw="w-20 h-20" />
+          <View tw="-mx-2 flex-row items-center p-4">
+            <View tw="mr-4 h-20 w-20">
+              <Media item={nft} tw="h-20 w-20" />
             </View>
             <View>
               <Text
                 variant="text-lg"
-                tw="font-medium text-black dark:text-white mb-2"
+                tw="mb-2 font-medium text-black dark:text-white"
               >
                 {nft?.token_name}
               </Text>
@@ -179,13 +169,13 @@ function Delete({ nftId }: { nftId: number }) {
           ) : null}
         </View>
       </CreateScrollView>
-      <View tw="p-4 w-full">
+      <View tw="w-full p-4">
         <Button
           onPress={handleSubmit(handleSubmitForm)}
           tw="h-12 rounded-full"
           disabled={!enable}
         >
-          <Text tw="text-white dark:text-gray-900 text-sm">
+          <Text tw="text-sm text-white dark:text-gray-900">
             {state.status === "idle"
               ? "Burn"
               : state.status === "burning"

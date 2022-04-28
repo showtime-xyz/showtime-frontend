@@ -40,7 +40,7 @@ export const AddEmail = (props: AddEmailProps) => {
         snapPoints={snapPoints}
       >
         <View tw="flex h-full">
-          <Text tw="text-gray-900 dark:text-white text-base font-bold px-2 py-8">
+          <Text tw="px-2 py-8 text-base font-bold text-gray-900 dark:text-white">
             Enter your email to receive a sign in link.
           </Text>
           <EmailInput

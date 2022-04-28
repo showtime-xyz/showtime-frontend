@@ -1,4 +1,5 @@
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
+import { StyleSheet } from "react-native";
 
 import { View } from "../view";
 import { WEB_HEIGHT } from "./constants";
@@ -7,17 +8,18 @@ import { ModalHeader } from "./modal.header";
 import type { ModalContainerProps } from "./types";
 
 const CONTAINER_TW = [
-  "absolute top-0 right-0 bottom-0 left-0",
+  "top-0 right-0 bottom-0 left-0",
   "flex items-center justify-end sm:justify-center",
   "z-[999]",
 ];
 
 const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
-  "w-full	sm:w-420px",
+  "w-full	sm:w-480px",
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px]",
+  "max-h-100vh",
 ];
 
 const MODAL_BODY_TW = "flex-1 overflow-scroll";
@@ -32,8 +34,22 @@ function ModalContainerComponent({
     () => [...MODAL_CONTAINER_TW, web_height],
     [web_height]
   );
+
+  /**
+   * prevent scrolling when modal is open
+   */
+  useEffect(() => {
+    if (typeof window != "undefined" && window.document) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      if (typeof window != "undefined" && window.document) {
+        document.body.style.overflow = "auto";
+      }
+    };
+  }, []);
   return (
-    <View tw={CONTAINER_TW}>
+    <View tw={CONTAINER_TW} style={styles.container}>
       <ModalBackdrop onClose={onClose} />
       <View tw={modalContainerTW}>
         <ModalHeader title={title} onClose={onClose} />
@@ -42,5 +58,11 @@ function ModalContainerComponent({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: "fixed" as any,
+  },
+});
 
 export const ModalContainer = memo(ModalContainerComponent);

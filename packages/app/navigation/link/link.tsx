@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { TextProps, ViewProps, Platform } from "react-native";
+import { Platform, TextProps, ViewProps } from "react-native";
 
-import { Props, LinkCore } from "app/navigation/link/link-core";
+import { LinkCore, Props } from "app/navigation/link/link-core";
 
 import { Pressable } from "design-system/pressable-scale";
 import type { TW } from "design-system/tailwind/types";
@@ -18,7 +18,7 @@ type LinkProps = Props & {
   };
 };
 
-function Link({ viewProps, tw, hrefAttrs, ...props }: LinkProps) {
+function Link({ viewProps, tw, hrefAttrs, onPress, ...props }: LinkProps) {
   return (
     <LinkCore
       {...props}
@@ -30,6 +30,7 @@ function Link({ viewProps, tw, hrefAttrs, ...props }: LinkProps) {
         ...viewProps,
         tw,
         hrefAttrs,
+        onPress,
       }}
     />
   );
@@ -48,6 +49,7 @@ function TextLink({
   variant,
   tw,
   hitSlop,
+  onPress,
   ...props
 }: TextLinkProps) {
   return (
@@ -65,6 +67,7 @@ function TextLink({
           tw,
           accessibilityRole: "link",
           selectable: false,
+          onPress,
         }),
         [variant, tw, textProps]
       )}

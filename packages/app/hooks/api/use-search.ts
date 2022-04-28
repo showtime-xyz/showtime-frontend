@@ -19,7 +19,9 @@ type SearchResponse = {
 export const useSearch = (term: string) => {
   const debouncedSearch = useDebounce(term, 200);
   const { data, error } = useSWR<SearchResponse>(
-    debouncedSearch ? "/v1/search?q=" + debouncedSearch : null,
+    term.length >= 2 && debouncedSearch
+      ? "/v1/search?q=" + debouncedSearch
+      : null,
     fetcher
   );
 

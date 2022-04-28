@@ -1,22 +1,19 @@
-import { Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
 import { Avatar } from "design-system/avatar";
 import {
-  Home,
-  HomeFilled,
-  Compass,
-  CompassFilled,
-  Hot,
-  HotFilled,
   Bell,
   BellFilled,
+  Compass,
+  CompassFilled,
+  Home,
+  HomeFilled,
+  Hot,
+  HotFilled,
   Plus,
   Showtime,
 } from "design-system/icon";
@@ -45,7 +42,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
     return (
       <Link href={tab}>
         <View
-          tw="w-12 h-12 rounded-full items-center justify-center"
+          tw="h-12 w-12 items-center justify-center rounded-full"
           style={tw.style(
             `${
               isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
@@ -58,7 +55,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
     );
   }
 
-  return <View tw="w-12 h-12 items-center justify-center">{children}</View>;
+  return <View tw="h-12 w-12 items-center justify-center">{children}</View>;
 }
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
@@ -109,11 +106,18 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
 };
 
 export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+  const { width } = useWindowDimensions();
+
   return (
-    <TabBarIcon tab={Platform.select({ default: "/camera", web: "/create" })}>
+    <TabBarIcon
+      tab={Platform.select({
+        default: "/camera",
+        web: width >= breakpoints["md"] ? "/create" : "/camera",
+      })}
+    >
       <View
         tw={[
-          "rounded-full h-12 w-12 justify-center items-center",
+          "h-12 w-12 items-center justify-center rounded-full",
           focused ? "bg-gray-100 dark:bg-gray-900" : "bg-black dark:bg-white",
         ]}
       >

@@ -32,59 +32,43 @@ export function Creator({
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (
-          <Text
-            variant="text-xs"
-            tw={`${
-              nft.creator_username ? "mb-1" : ""
-            } text-gray-600 dark:text-gray-400 font-semibold`}
-          >
+          <>
+            <Text
+              variant="text-xs"
+              tw="font-semibold text-gray-600 dark:text-gray-400"
+            >
             {label}
-          </Text>
+            </Text>
+            <View tw="h-2" />
+          </>
         )}
-        {nft.creator_username ? (
-          <View>
-            <View tw="h-[12px] flex flex-row items-center">
-              <Text
-                variant="text-13"
-                tw="text-gray-900 dark:text-white font-semibold"
-              >
-                @{nft.creator_username}
-              </Text>
-              {nft.creator_verified ? (
-                <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-              ) : null}
-            </View>
-            {shouldShowDateCreated && nft.token_created ? (
-              <Text
-                variant="text-xs"
-                tw="text-gray-900 dark:text-white mt-1 font-semibold"
-              >
-                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
-                  addSuffix: true,
-                })}
-              </Text>
-            ) : null}
-          </View>
-        ) : (
-          <View>
+        <View>
+          <View tw="flex flex-row items-center">
             <Text
               variant="text-13"
-              tw="text-gray-900 dark:text-white font-bold"
+              tw="font-semibold text-gray-900 dark:text-white"
             >
-              {formatAddressShort(nft.creator_address)}
+              {nft.creator_username
+                ? `@${nft.creator_username}`
+                : nft.creator_name
+                ? nft.creator_name
+                : formatAddressShort(nft.creator_address)}
             </Text>
-            {shouldShowDateCreated && nft.token_created ? (
-              <Text
-                variant="text-xs"
-                tw="text-gray-900 dark:text-white mt-1 font-semibold"
-              >
-                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
-                  addSuffix: true,
-                })}
-              </Text>
+            {nft.creator_verified ? (
+              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>
-        )}
+          {shouldShowDateCreated && nft.token_created ? (
+            <Text
+              variant="text-xs"
+              tw="mt-1 font-semibold text-gray-900 dark:text-white"
+            >
+              {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                addSuffix: true,
+              })}
+            </Text>
+          ) : null}
+        </View>
       </View>
     </Link>
   );

@@ -11,7 +11,7 @@ function Buy({ act }) {
           bought{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
@@ -19,7 +19,7 @@ function Buy({ act }) {
           from{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/@${act.seller?.username ?? act.seller?.wallet_address}`}
           >
             {act.seller?.name}
@@ -32,7 +32,7 @@ function Buy({ act }) {
           bought{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
@@ -40,7 +40,7 @@ function Buy({ act }) {
           and{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}
@@ -53,7 +53,7 @@ function Buy({ act }) {
           bought{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
@@ -61,7 +61,7 @@ function Buy({ act }) {
           ,{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}
@@ -69,7 +69,7 @@ function Buy({ act }) {
           and{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[2].nft_id}`}
           >
             {nfts[2].title}
@@ -82,7 +82,7 @@ function Buy({ act }) {
           bought{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
@@ -90,7 +90,7 @@ function Buy({ act }) {
           ,{" "}
           <TextLink
             variant="text-sm"
-            tw="text-black dark:text-white font-bold"
+            tw="font-bold text-black dark:text-white"
             href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}

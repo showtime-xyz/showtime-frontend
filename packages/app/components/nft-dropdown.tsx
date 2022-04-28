@@ -115,16 +115,27 @@ function NFTDropdown({ nftId }: Props) {
   }, [nft, userAddress]);
   //#endregion
 
-  const handleNavigateRoute = (as: string, matchingQueryParam: string) => {
+  const openModal = (modal: string) => {
+    const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/${modal}`;
+
     router.push(
       Platform.select({
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, id: nftId, [matchingQueryParam]: true },
+          query: {
+            ...router.query,
+            chainName: nft?.chain_name,
+            contractAddress: nft?.contract_address,
+            tokenId: nft?.token_id,
+            [`${modal}Modal`]: true,
+          },
         },
       }),
-      as,
+      Platform.select({
+        native: as,
+        web: router.asPath.startsWith("/nft/") ? as : router.asPath,
+      }),
       { shallow: true }
     );
   };
@@ -141,40 +152,36 @@ function NFTDropdown({ nftId }: Props) {
 
       <DropdownMenuContent
         loop
-        tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
+        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         <DropdownMenuItem
-          onSelect={() => {
-            handleNavigateRoute(`/nft/${nftId}/details`, "detailsModal");
-          }}
+          onSelect={() => openModal("details")}
           key="details"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Details
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
-          onSelect={() => {
-            handleNavigateRoute(`/nft/${nftId}/activities`, "activitiesModal");
-          }}
+          onSelect={() => openModal("activities")}
           key="activities"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Activity
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={() => shareNFT(nft)}
           key="copy-link"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Share
@@ -182,7 +189,7 @@ function NFTDropdown({ nftId }: Props) {
         </DropdownMenuItem>
 
         {!isOwner && isFollowingUser && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {/* <DropdownMenuItem
@@ -219,7 +226,7 @@ function NFTDropdown({ nftId }: Props) {
               }
             }}
             key="unfollow"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Unfollow User
@@ -228,14 +235,14 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {!isOwner && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {!isOwner ? (
           !isBlocked ? (
             <DropdownMenuItem
               key="block"
-              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
               onSelect={handleOnBlockPress}
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
@@ -245,7 +252,7 @@ function NFTDropdown({ nftId }: Props) {
           ) : (
             <DropdownMenuItem
               key="unblock"
-              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
               onSelect={handleOnUnblockPress}
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
@@ -256,7 +263,7 @@ function NFTDropdown({ nftId }: Props) {
         ) : null}
 
         {!isOwner && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {!isOwner && (
@@ -266,7 +273,7 @@ function NFTDropdown({ nftId }: Props) {
               router.pop();
             }}
             key="report"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Report
@@ -275,28 +282,14 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {isOwner && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => {
-              const as = `/nft/${nftId}/transfer`;
-
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, transferModal: true, id: nftId },
-                  },
-                }),
-                as,
-                { shallow: true }
-              );
-            }}
+            onSelect={() => openModal("transfer")}
             key="transfer"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Transfer
@@ -305,28 +298,14 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => {
-              const as = `/nft/${nftId}/list`;
-
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, listModal: true, id: nftId },
-                  },
-                }),
-                as,
-                { shallow: true }
-              );
-            }}
+            onSelect={() => openModal("list")}
             key="list"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               List
@@ -335,28 +314,14 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => {
-              const as = `/nft/${nftId}/unlist`;
-
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, unlistModal: true, id: nftId },
-                  },
-                }),
-                as,
-                { shallow: true }
-              );
-            }}
+            onSelect={() => openModal("unlist")}
             key="unlist"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Unlist
@@ -365,29 +330,15 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {isOwner && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => {
-              const as = `/nft/${nftId}/delete`;
-
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, deleteModal: true, id: nftId },
-                  },
-                }),
-                as,
-                { shallow: true }
-              );
-            }}
+            onSelect={() => openModal("delete")}
             key="delete"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Delete

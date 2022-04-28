@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
 import Constants from "expo-constants";
@@ -9,29 +9,29 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
-import { View, Text } from "design-system";
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
+import { Text, View } from "design-system";
+import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
 import packageJson from "../../../../package.json";
 import {
-  SettingAccountSlotHeader,
-  SettingAccountSlotFooter,
   AccountSettingItem,
   AccountSettingItemProps,
+  SettingAccountSlotFooter,
+  SettingAccountSlotHeader,
 } from "./settings-account-slot";
 import {
   EmailSlotProps,
-  SettingsEmailSlot,
   SettingEmailSlotHeader,
   SettingsEmailSkeletonSlot,
+  SettingsEmailSlot,
   SettingsEmailSlotPlaceholder,
 } from "./settings-email-slot";
 import {
   SettingsWalletSlot,
   SettingsWalletSlotHeader,
-  SettingsWalletSlotSkeleton,
   SettingsWalletSlotPlaceholder,
+  SettingsWalletSlotSkeleton,
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
 
@@ -96,41 +96,40 @@ const SettingsTabs = () => {
   }, [isAuthenticated]);
 
   return (
-    <View tw="bg-white dark:bg-black h-[100vh]">
+    <View tw="h-[100vh] web:items-center w-full">
       <Tabs.Root
         onIndexChange={setSelected}
         initialIndex={selected}
         tabListHeight={TAB_LIST_HEIGHT}
         lazy
       >
-        <Tabs.Header>
+      <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-          <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between">
-            <Text
-              variant="text-2xl"
-              tw="text-gray-900 dark:text-white font-extrabold"
-            >
-              Settings
-            </Text>
-            {!isWeb ? (
+          <View tw="items-center bg-white dark:bg-black">
+            <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
               <Text
-                variant="text-2xl"
-                tw="text-gray-100 dark:text-gray-900 font-extrabold"
+                tw="font-extrabold text-gray-900 dark:text-white text-2xl"
+              >
+                Settings
+              </Text>
+              {!isWeb ? (
+              <Text
+                tw="font-extrabold text-gray-100 dark:text-gray-900 text-2xl"
               >
                 v{Constants?.manifest?.version ?? packageJson?.version}
               </Text>
             ) : null}
+            </View>
           </View>
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen`
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] md:-right-36 ios:w-screen android:w-screen`
           )}
         >
           <Tabs.Trigger>
             <TabItem name="Wallets" selected={selected === 0} />
           </Tabs.Trigger>
-
           <Tabs.Trigger>
             <TabItem name="Email Addresses" selected={selected === 1} />
           </Tabs.Trigger>
@@ -139,7 +138,7 @@ const SettingsTabs = () => {
           </Tabs.Trigger>
           <SelectedTabIndicator />
         </Tabs.List>
-        <Tabs.Pager>
+        <Tabs.Pager tw="mt-8">
           <Tabs.FlatList
             data={wallets}
             keyExtractor={keyExtractor}
@@ -154,7 +153,6 @@ const SettingsTabs = () => {
             }}
             ListHeaderComponent={<SettingsWalletSlotHeader />}
             alwaysBounceVertical={false}
-            minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
           />
 
@@ -176,7 +174,6 @@ const SettingsTabs = () => {
               />
             }
             alwaysBounceVertical={false}
-            minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
           />
 
@@ -188,7 +185,6 @@ const SettingsTabs = () => {
             ListHeaderComponent={<SettingAccountSlotHeader />}
             ListFooterComponent={<SettingAccountSlotFooter />}
             alwaysBounceVertical={false}
-            minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
           />
         </Tabs.Pager>

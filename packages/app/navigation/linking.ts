@@ -11,6 +11,14 @@ const withRewrites = (unparsedPath: string): string => {
     return `/profile/${username}${rest}`;
   }
 
+  if (unparsedPath.startsWith("/t/")) {
+    return unparsedPath.replace("/t/", "/nft/");
+  }
+
+  if (unparsedPath.startsWith("/token/")) {
+    return unparsedPath.replace("/token/", "/nft/");
+  }
+
   return unparsedPath;
 };
 
@@ -19,17 +27,15 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   config: {
     screens: {
       login: "login",
-      // TODO: change this to use `nft/:id`
       nft: "nft/:chainName/:contractAddress/:tokenId",
-      comments: "nft/:id/comments",
-      activities: "nft/:id/activities",
-      transfer: "nft/:id/transfer",
-      list: "nft/:id/list",
-      buy: "nft/:id/buy",
-      unlist: "nft/:id/unlist",
-      details: "nft/:id/details",
-      delete: "nft/:id/delete",
-      token: "token/:chainName/:contractAddress/:tokenId",
+      comments: "nft/:chainName/:contractAddress/:tokenId/comments",
+      activities: "nft/:chainName/:contractAddress/:tokenId/activities",
+      transfer: "nft/:chainName/:contractAddress/:tokenId/transfer",
+      list: "nft/:chainName/:contractAddress/:tokenId/list",
+      buy: "nft/:chainName/:contractAddress/:tokenId/buy",
+      unlist: "nft/:chainName/:contractAddress/:tokenId/unlist",
+      details: "nft/:chainName/:contractAddress/:tokenId/details",
+      delete: "nft/:chainName/:contractAddress/:tokenId/delete",
       create: "create",
       search: "search",
       profile: "profile/:username",

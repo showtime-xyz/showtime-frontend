@@ -9,7 +9,7 @@ export default {
 } as Meta;
 
 export const Primary: React.VFC<{}> = () => (
-  <View tw="dark:bg-gray-300 flex-row flex-1 items-center justify-center">
+  <View tw="flex-1 flex-row items-center justify-center dark:bg-gray-300">
     <Fieldset
       errorText="hello world"
       helperText="hello world"

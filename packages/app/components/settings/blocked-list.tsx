@@ -1,16 +1,14 @@
-import { useCallback } from "react";
-import { FlatList, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRouter } from "app/navigation/use-router";
 
 import {
-  View,
-  Text,
   Button,
   ButtonLabel,
   Image,
   ScrollView,
+  Text,
+  View,
 } from "design-system";
 
 export type UserItemProps = {
@@ -21,10 +19,10 @@ export type UserItemProps = {
 
 const HeaderSection = () => {
   return (
-    <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
+    <View tw="mb-4 flex-row justify-between bg-white px-4 pt-4 pb-[3px] dark:bg-black">
       <Text
         variant="text-2xl"
-        tw="text-gray-900 dark:text-white font-extrabold"
+        tw="font-extrabold text-gray-900 dark:text-white"
       >
         Blocked List
       </Text>
@@ -34,14 +32,14 @@ const HeaderSection = () => {
 
 export const UserItem = (props: UserItemProps) => {
   return (
-    <View tw="flex-1 flex-row w-full px-4 py-2 items-center">
-      <View tw="mr-2 rounded-xl w-6 h-6 bg-gray-200">
+    <View tw="w-full flex-1 flex-row items-center px-4 py-2">
+      <View tw="mr-2 h-6 w-6 rounded-xl bg-gray-200">
         <Image
-          tw={"w-full h-full rounded-full"}
+          tw={"h-full w-full rounded-full"}
           source={{ uri: props.image_url }}
         />
       </View>
-      <View tw="flex-1 flex flex-col items-start justify-center">
+      <View tw="flex flex-1 flex-col items-start justify-center">
         <Text tw="text-gray-900 dark:text-white">{props.title}</Text>
       </View>
       <Button
@@ -63,7 +61,7 @@ export const BlockedList = () => {
     Platform.OS !== "web" && Platform.OS !== "android";
 
   return (
-    <ScrollView>
+    <ScrollView tw="w-full max-w-screen-xl">
       {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       <View tw="flex-1 px-4">

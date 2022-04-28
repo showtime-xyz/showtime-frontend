@@ -88,8 +88,8 @@ export const AlertProvider: React.FC = ({ children }) => {
         visible={show}
         onDismiss={onModalDismiss}
       >
-        <View tw={"w-full h-full bg-opacity-60 bg-black"}>
-          <View tw="items-center justify-center w-full h-full">
+        <View tw={"h-full w-full bg-black bg-opacity-60"}>
+          <View tw="h-full w-full items-center justify-center">
             <AnimatePresence>
               <MotiView
                 style={tw.style(
@@ -101,14 +101,14 @@ export const AlertProvider: React.FC = ({ children }) => {
                 transition={{ type: "timing", duration: 300 }}
               >
                 <Text
-                  tw="text-gray-900 dark:text-white text-center font-bold"
+                  tw="text-center font-bold text-gray-900 dark:text-white"
                   variant="text-lg"
                 >
                   {title}
                 </Text>
                 {Boolean(message) && (
                   <Text
-                    tw="text-gray-900 dark:text-white text-xs mt-4 text-center"
+                    tw="mt-4 text-center text-xs text-gray-900 dark:text-white"
                     variant="text-base"
                   >
                     {message}

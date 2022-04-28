@@ -32,7 +32,7 @@ export const useNavigateToBuy = () => {
 
   const navigateToBuy = (nft: NFT) => {
     const nftId = nft.nft_id;
-    const as = `/nft/${nftId}/buy`;
+    const as =  `nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}/buy`
 
     router.push(
       Platform.select({

@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 
 import { yup } from "app/lib/yup";
 
-import { View, Text, Button, ButtonLabel } from "design-system";
+import { Button, ButtonLabel, Text, View } from "design-system";
 
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
@@ -76,7 +76,7 @@ export function Login({ onLogin }: LoginProps) {
       ) : (
         <>
           <LoginHeader />
-          <View tw="mb-[16px]">
+          <View tw="p-4">
             <Button
               onPress={() => handleSubmitWallet()}
               variant="primary"
@@ -85,19 +85,21 @@ export function Login({ onLogin }: LoginProps) {
               <ButtonLabel>Sign in with Wallet</ButtonLabel>
             </Button>
           </View>
-          <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
-            <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
+          <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
+            <Text tw="my-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
               — or —
             </Text>
           </View>
-          <LoginInputField
-            key="login-contact-details-field"
-            label="Contact details"
-            placeholder="Enter your email or phone number"
-            signInButtonLabel="Sign in"
-            validationSchema={contactDetailsValidationSchema}
-            onSubmit={handleSubmitContactDetails}
-          />
+          <View tw="p-4">
+            <LoginInputField
+              key="login-contact-details-field"
+              label="Contact details"
+              placeholder="Enter your email or phone number"
+              signInButtonLabel="Sign in"
+              validationSchema={contactDetailsValidationSchema}
+              onSubmit={handleSubmitContactDetails}
+            />
+          </View>
         </>
       )}
     </LoginContainer>

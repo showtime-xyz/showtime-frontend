@@ -7,7 +7,11 @@ import {
 } from "react";
 import { ViewStyle } from "react-native";
 
+import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
+
 import { CommentType } from "app/hooks/api/use-comments";
+import { useUser } from "app/hooks/use-user";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Text, View } from "design-system";
@@ -34,13 +38,16 @@ const getUsername = (comment?: CommentType) =>
 export const CommentInputBox = forwardRef<
   CommentInputBoxMethods,
   CommentInputBoxProps
->(function CommentInputBox({ submitting, style, submit }, ref) {
+>(function CommentInputBox({ submitting, submit }, ref) {
   //#region variables
   const Alert = useAlert();
   const inputRef = useRef<MessageBoxMethods>(null);
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null
   );
+  const { bottom } = useSafeAreaInsets();
+  const context = useBottomSheetInternal(true);
+  const { user } = useUser();
   //#endregion
 
   //#region callbacks
@@ -72,6 +79,18 @@ export const CommentInputBox = forwardRef<
     [submit, selectedComment]
   );
 
+  const handleOnBlur = useCallback(() => {
+    if (context) {
+      context.shouldHandleKeyboardEvents.value = false;
+    }
+  }, [context]);
+
+  const handleOnFocus = useCallback(() => {
+    if (context) {
+      context.shouldHandleKeyboardEvents.value = true;
+    }
+  }, [context]);
+
   const handleOnClearPress = useCallback(() => {
     setSelectedComment(null);
     inputRef.current?.setValue("");
@@ -89,10 +108,10 @@ export const CommentInputBox = forwardRef<
   }));
 
   return (
-    <View pointerEvents="box-none" style={style} collapsable={true}>
+    <>
       {selectedComment && (
-        <View tw="bg-gray-900 dark:bg-white flex-row justify-between items-center px-4">
-          <Text variant="text-xs" tw="font-bold py-2">{`Reply to @${getUsername(
+        <View tw="flex-row items-center justify-between bg-gray-900 px-4 dark:bg-white">
+          <Text variant="text-xs" tw="py-2 font-bold">{`Reply to @${getUsername(
             selectedComment
           )}`}</Text>
           <Button
@@ -108,9 +127,16 @@ export const CommentInputBox = forwardRef<
       <MessageBox
         ref={inputRef}
         submitting={submitting}
-        style={{ paddingHorizontal: 16 }}
+        style={{
+          paddingHorizontal: 16,
+          marginBottom: Math.max(0, bottom - 16),
+          paddingBottom: 0,
+        }}
         onSubmit={handleOnSubmitComment}
+        onBlur={context ? handleOnBlur : undefined}
+        onFocus={context ? handleOnFocus : undefined}
+        userAvatar={user?.data.profile.img_url}
       />
-    </View>
+    </>
   );
 });

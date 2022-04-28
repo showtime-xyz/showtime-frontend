@@ -1,6 +1,7 @@
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
@@ -25,7 +26,7 @@ function OwnershipContainer({
   ) : (
     <View
       tw={[
-        "flex flex-row flex-wrap justify-between w-[30px] h-[30px]",
+        "flex h-[30px] w-[30px] flex-row flex-wrap justify-between",
         count < 3 ? "content-center" : "content-between",
       ]}
       children={children}
@@ -71,7 +72,7 @@ export function Ownership({ nft }: Props) {
           {data?.multiple_owners_list?.slice(0, 4).map((owner) => (
             <Avatar
               key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-              tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+              tw="h-[14px] w-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
               size={14}
               url={owner.img_url}
             />
@@ -81,13 +82,13 @@ export function Ownership({ nft }: Props) {
         <View tw="">
           <Text
             variant="text-xs"
-            tw="mb-1 text-gray-600 dark:text-gray-400 font-semibold"
+            tw="mb-1 font-semibold text-gray-600 dark:text-gray-400"
           >
             Owners
           </Text>
           <Text
             variant="text-13"
-            tw="text-gray-900 dark:text-white font-semibold"
+            tw="font-semibold text-gray-900 dark:text-white"
           >
             Multiple
           </Text>
@@ -106,25 +107,26 @@ export function Ownership({ nft }: Props) {
         <View tw="ml-2 justify-center">
           <Text
             sx={{ fontSize: 12, lineHeight: 12 }}
-            tw={`${
-              nft.owner_username ? "mb-1" : ""
-            } text-gray-600 dark:text-gray-400 font-semibold`}
+            tw="font-semibold text-gray-600 dark:text-gray-400"
           >
             Owner
           </Text>
-          {nft.owner_username && (
-            <View tw="h-[12px] flex flex-row items-center">
-              <Text
-                sx={{ fontSize: 13, lineHeight: 15 }}
-                tw="text-gray-900 dark:text-white font-semibold"
-              >
-                @{nft.owner_username}
-              </Text>
-              {nft.owner_verified ? (
-                <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-              ) : null}
-            </View>
-          )}
+          <View tw="h-2" />
+          <View tw="flex flex-row items-center">
+            <Text
+              variant="text-13"
+              tw="font-semibold text-gray-900 dark:text-white"
+            >
+              {nft.creator_username
+                ? `@${nft.creator_username}`
+                : nft.creator_name
+                ? nft.creator_name
+                : formatAddressShort(nft.creator_address)}
+            </Text>
+            {nft.creator_verified ? (
+              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            ) : null}
+          </View>
         </View>
       </Link>
     );

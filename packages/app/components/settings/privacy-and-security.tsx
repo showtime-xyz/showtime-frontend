@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Pressable, ScrollView } from "design-system";
+import { Pressable, ScrollView, Text, View } from "design-system";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
 
@@ -25,10 +25,10 @@ const list = [
 
 export const HeaderSection = () => {
   return (
-    <View tw="bg-white dark:bg-black pt-4 px-4 pb-[3px] flex-row justify-between mb-4">
+    <View tw="mb-4 flex-row justify-between bg-white px-4 pt-4 pb-[3px] dark:bg-black">
       <Text
         variant="text-2xl"
-        tw="text-gray-900 dark:text-white font-extrabold"
+        tw="font-extrabold text-gray-900 dark:text-white"
       >
         Privacy & Security
       </Text>
@@ -41,13 +41,13 @@ export const AccountSettingItem = (props: SettingItemProps) => {
 
   return (
     <Pressable
-      tw="flex-1 flex-row justify-between w-full p-4 items-cente"
+      tw="items-cente w-full flex-1 flex-row justify-between p-4"
       onPress={() => router.push(`/settings/${props.route}`)}
     >
       <View tw="flex flex-col items-start justify-center">
-        <Text tw="text-gray-900 dark:text-white pb-3">{props.title}</Text>
+        <Text tw="pb-3 text-gray-900 dark:text-white">{props.title}</Text>
       </View>
-      <View tw="w-8 h-8">
+      <View tw="h-8 w-8">
         <ChevronRight
           width={24}
           height={24}
@@ -73,7 +73,7 @@ export const PrivacyAndSecuritySettings = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView tw="w-full max-w-screen-xl">
       {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
       <HeaderSection />
       {list.map(renderSetting)}

@@ -33,14 +33,14 @@ export const AddressMenu = (props: AddressMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         loop
-        tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
+        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         <DropdownMenuItem
           // @ts-ignore
           onSelect={() => removeAccount(address)}
           disabled={disable}
           key="your-profile"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           destructive
         >
           <DropdownMenuItemTitle>{ctaCopy}</DropdownMenuItemTitle>

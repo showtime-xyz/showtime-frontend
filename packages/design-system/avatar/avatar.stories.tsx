@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
-import { Avatar } from "./index";
+
 import { AvatarWithToken } from "./avatarWithToken";
+import { Avatar } from "./index";
 
 const URL =
   "https://lh3.googleusercontent.com/4NZDQhHbwkjrewCLnnuvmsXOrjNMrBCZ4xg3cS7FyJAPiT6T2vrdo3ZkVE8RwkQ-4ticjxTVjyGehJS0xOG3SW1UMEKz7qVFIjj1";

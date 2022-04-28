@@ -1,45 +1,40 @@
-import { useMemo } from "react";
-import { Platform } from "react-native";
 
 import { Buy } from "app/components/buy";
 import { createParam } from "app/navigation/use-param";
-import { useRouter } from "app/navigation/use-router";
-import { withModalScreen } from "app/navigation/with-modal-screen";
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
-import { Modal, ModalSheet } from "design-system";
+import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
-  id: string;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
 
 const BuyModal = () => {
-  const [nftId] = useParam("id");
-
-  const router = useRouter();
-
-  //#endregion
-
-  //#region variables
-  const snapPoints = useMemo(() => ["90%"], []);
-  const ModalComponent = Platform.OS === "android" ? ModalSheet : Modal;
-  //#endregion
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data: nft } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
+  console.log("djdjdjdj ", nft?.data)
 
   return (
-    <>
-      <ModalComponent
-        title="Buy"
-        close={router.pop}
-        snapPoints={snapPoints}
-        bodyTW="bg-white dark:bg-black"
-        height="h-[90vh]"
-        bodyContentTW="p-0"
-      >
-        <Buy nftId={nftId} />
-      </ModalComponent>
-    </>
+
+        <Buy nft={nft?.data.item} />
   );
 };
 
-export const BuyScreen = withModalScreen(BuyModal, "/nft/[id]/buy", "buyModal");
+export const BuyScreen = withModalScreen(
+  BuyModal,
+  "Buy",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/buy",
+  "buyModal"
+);
+
+

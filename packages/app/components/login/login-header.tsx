@@ -6,13 +6,13 @@ import { View, Text, Pressable } from "design-system";
 export function LoginHeader() {
   return (
     <>
-      <Text tw="text-gray-900 dark:text-white mb-[10px] text-center font-semibold">
+      <Text tw="mb-[10px] text-center font-semibold text-gray-900 dark:text-white">
         If this is your first time, it will create a new account on Showtime.
       </Text>
-      <View tw="flex-row justify-center mb-[16px]">
+      <View tw="mb-[16px] flex-row justify-center">
         <Text
           variant="text-xs"
-          tw="text-gray-600 dark:text-gray-400 text-center"
+          tw="text-center text-gray-600 dark:text-gray-400"
         >
           By signing in you agree to our{" "}
         </Text>
@@ -25,14 +25,14 @@ export function LoginHeader() {
         >
           <Text
             variant="text-xs"
-            tw="text-black dark:text-white font-bold text-center"
+            tw="text-center font-bold text-black dark:text-white"
           >
             Terms &amp; Conditions
           </Text>
         </Pressable>
         <Text
           variant="text-xs"
-          tw="text-gray-600 dark:text-gray-400 text-center"
+          tw="text-center text-gray-600 dark:text-gray-400"
         >
           .
         </Text>

@@ -191,7 +191,7 @@ export const ListingForm = (props: Props) => {
         </View>
       )}
 
-      <View tw="mt-4 flex-row bg-gray-100 dark:bg-gray-900 rounded-full">
+      <View tw="mt-4 flex-row rounded-full bg-gray-100 dark:bg-gray-900">
         <Controller
           control={control}
           name="price"
@@ -233,7 +233,7 @@ export const ListingForm = (props: Props) => {
               <>
                 <Fieldset
                   selectOnly={true}
-                  tw="p-0 m-0"
+                  tw="m-0 p-0"
                   select={{
                     options,
                     placeholder: defaultCurrency,
@@ -270,24 +270,24 @@ export const ListingForm = (props: Props) => {
                 width={21}
                 height={21}
               />
-              <Text tw="text-white dark:text-gray-900 text-sm pl-1">
+              <Text tw="pl-1 text-sm text-white dark:text-gray-900">
                 {ctaCopy}
               </Text>
             </>
           ) : (
-            <Text tw="text-white dark:text-gray-900 text-sm pl-1">
+            <Text tw="pl-1 text-sm text-white dark:text-gray-900">
               {ctaCopy}
             </Text>
           )}
         </Button>
-        <View tw="h-12 mt-4">
+        <View tw="mt-4 h-12">
           {showSigningOption ? (
             <Button
               onPress={handleSubmit(handleSubmitForm)}
               tw="h-12"
               variant="tertiary"
             >
-              <Text tw="text-gray-900 dark:text-white text-sm">
+              <Text tw="text-sm text-gray-900 dark:text-white">
                 Didn't receive the signature request yet?
               </Text>
             </Button>

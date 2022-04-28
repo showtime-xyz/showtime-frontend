@@ -1,8 +1,7 @@
 import { Collection } from "app/hooks/api-hooks";
+import { getSortFields } from "app/utilities";
 
 import { Select, View } from "design-system";
-
-import { getSortFields } from "../../utilities";
 
 type FilterProps = {
   onCollectionChange: (id: string | number) => void;

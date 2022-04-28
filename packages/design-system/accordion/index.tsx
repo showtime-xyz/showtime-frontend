@@ -48,7 +48,7 @@ const Chevron = ({ children }: { children: any }) => {
 const Item = ({ tw = "", disabled, ...props }: ViewProps & ItemProps) => {
   return (
     <RNAccordion.Item value={props.value} disabled={disabled}>
-      <View tw={`bg-white dark:bg-black rounded-2xl ${tw}`} {...props} />
+      <View tw={`rounded-2xl bg-white dark:bg-black ${tw}`} {...props} />
     </RNAccordion.Item>
   );
 };
@@ -57,7 +57,7 @@ const Trigger = ({ tw = "", ...props }: ViewProps) => {
   return (
     <RNAccordion.Trigger>
       <View
-        tw={"px-4 py-5 flex-row items-center justify-between w-full " + tw}
+        tw={"w-full flex-row items-center justify-between px-4 py-5 " + tw}
         {...props}
       >
         {props.children}
@@ -77,7 +77,7 @@ const Content = ({ tw = "", ...props }: ViewProps) => {
 const Label = ({ tw = "", ...props }: TextProps) => {
   return (
     <Text
-      tw={"font-bold text-gray-900 dark:text-white text-sm " + tw}
+      tw={"text-sm font-bold text-gray-900 dark:text-white " + tw}
       {...props}
     />
   );

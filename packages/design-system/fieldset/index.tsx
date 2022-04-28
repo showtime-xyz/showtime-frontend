@@ -48,7 +48,7 @@ export function Fieldset(props: FieldsetProps) {
   const errorTextId = useId();
 
   return (
-    <View tw={`p-4 rounded-4 ${style} ${twProp}`}>
+    <View tw={`rounded-4 p-4 ${style} ${twProp}`}>
       <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
         {label}
       </Label>
@@ -56,7 +56,7 @@ export function Fieldset(props: FieldsetProps) {
         {leftElement}
         {!selectOnly ? (
           <Component
-            tw="flex-1 text-black dark:text-white focus:outline-none focus-visible:ring-1"
+            tw="focus:outline-none flex-1 text-black focus-visible:ring-1 dark:text-white"
             {...textInputProps}
             style={{
               fontSize: 16,
@@ -98,7 +98,7 @@ export function Fieldset(props: FieldsetProps) {
           <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
           <Text
             nativeID={helperTextId}
-            tw="mt-4 text-sm dark:text-gray-300 text-gray-700"
+            tw="mt-4 text-sm text-gray-700 dark:text-gray-300"
           >
             {helperText}
           </Text>
@@ -116,7 +116,7 @@ export const ErrorText = ({
   nativeID?: string;
 }) => {
   return (
-    <Text nativeID={nativeID} tw="mt-4 text-sm text-red-500 font-semibold">
+    <Text nativeID={nativeID} tw="mt-4 text-sm font-semibold text-red-500">
       {children}
     </Text>
   );

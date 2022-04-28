@@ -52,7 +52,7 @@ const Avatar = ({ url, icon = "none" }: Props) => {
   }
 
   return (
-    <View tw="h-12 w-12 rounded-full relative">
+    <View tw="relative h-12 w-12 rounded-full">
       <Image
         tw="h-12 w-12 rounded-full"
         source={{
@@ -60,7 +60,7 @@ const Avatar = ({ url, icon = "none" }: Props) => {
         }}
       />
       {icon !== "none" ? (
-        <View tw="absolute -bottom-px -right-px rounded-full border-white dark:border-black border-2 justify-center items-center">
+        <View tw="absolute -bottom-px -right-px items-center justify-center rounded-full border-2 border-white dark:border-black">
           <Icon width={20} height={20} color="white" />
         </View>
       ) : null}

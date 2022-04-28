@@ -10,16 +10,16 @@ import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
 import { Creator } from "design-system/card/rows/elements/creator";
 
-import { useNFTDetails } from "../hooks/use-nft-details";
 import { yup } from "../lib/yup";
+import { NFT } from "../types";
 
 const defaultValues = {
   quantity: 1,
 };
 
-export const Buy = (props: { nftId: string }) => {
+export const Buy = (props: { nft?: NFT }) => {
   const { state, buyNFT, grantAllowance, reset } = useBuyNFT();
-  const { data: nft } = useNFTDetails(Number(props.nftId));
+  const nft = props.nft;
 
   const buyValidationSchema = useMemo(() => {
     return yup.object({

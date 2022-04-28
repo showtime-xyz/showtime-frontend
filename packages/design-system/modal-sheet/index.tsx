@@ -3,7 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { BottomSheet } from "../bottom-sheet";
 import { Modal } from "../modal";
-import { Header } from "../modal/header";
+import { ModalHeader } from "../modal/modal.header";
 import { TW } from "../tailwind/types";
 
 type Props = {
@@ -21,7 +21,7 @@ export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
 
   const renderHandleComponent = useCallback(
     (handleProps) => (
-      <Header title={props.title} close={props.close} {...handleProps} />
+      <ModalHeader title={props.title} onClose={props.close} {...handleProps} />
     ),
     [props.title, props.close]
   );
@@ -31,7 +31,7 @@ export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
       <Modal
         key={`modalsheet-${props.title}-lg`}
         title={props.title}
-        close={() => {
+        onClose={() => {
           // TODO: extract `onClose` to a proper unmount transition completion event.
           props.close?.();
           props.onClose?.();

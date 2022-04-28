@@ -4,6 +4,7 @@ import NextLink from "next/link";
 
 type Props = {
   children: React.ReactNode;
+  onPress?: (e: any) => void;
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({
@@ -19,7 +20,9 @@ function LinkCore({
 }) {
   return (
     <NextLink {...props} href={href} as={as} passHref>
-      <Component {...componentProps}>{children}</Component>
+      <Component {...componentProps} onClick={componentProps?.onPress}>
+        {children}
+      </Component>
     </NextLink>
   );
 }

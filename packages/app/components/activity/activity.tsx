@@ -42,17 +42,17 @@ function Activity({ activity }: Props) {
           />
         </Link>
 
-        <View tw="items-start justify-center ml-2 w-[69vw]">
+        <View tw="ml-2 w-[69vw] items-start justify-center">
           <Text
             variant="text-sm"
-            tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
+            tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
             numberOfLines={2}
             ellipsizeMode="tail"
           >
             <TextLink
               href={`/@${actor.username ?? actor.wallet_address}`}
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
             >
               {actor.username ? (
                 <>@{actor.username}</>

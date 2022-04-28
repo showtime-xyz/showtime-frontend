@@ -27,7 +27,7 @@ const Snackbar = () => {
     }
   };
   return (
-    <View tw="flex-1 justify-center items-center bg-gray-600">
+    <View tw="flex-1 items-center justify-center bg-gray-600">
       <Button
         tw="mb-4"
         onPress={() =>
@@ -71,7 +71,7 @@ const Snackbar = () => {
               element: (
                 <View tw="flex-row items-center justify-center">
                   <Text
-                    tw="text-white dark:text-gray-900 font-bold"
+                    tw="font-bold text-white dark:text-gray-900"
                     variant="text-xs"
                     numberOfLines={1}
                   >
@@ -106,7 +106,7 @@ const Snackbar = () => {
       </Button>
 
       <View tw="flex-row items-center justify-center">
-        <Text variant="text-base" tw="dark:text-white text-gray-300">
+        <Text variant="text-base" tw="text-gray-300 dark:text-white">
           Transition:
         </Text>
         <Button

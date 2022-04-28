@@ -11,7 +11,7 @@ export default {
 
 const Container = (props: any) => {
   return (
-    <View tw={" bg-gray-100 dark:bg-gray-900 p-10"} style={{ flex: 1 }}>
+    <View tw={" bg-gray-100 p-10 dark:bg-gray-900"} style={{ flex: 1 }}>
       {props.children}
     </View>
   );
@@ -25,7 +25,7 @@ export const Basic: React.VFC<{}> = () => (
           <Accordion.Label>Label</Accordion.Label>
         </Accordion.Trigger>
         <Accordion.Content>
-          <Text tw="dark:text-white text-gray-900">
+          <Text tw="text-gray-900 dark:text-white">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
             ever since the 1500s, when an unknown printer took a galley of type
@@ -40,7 +40,7 @@ export const Basic: React.VFC<{}> = () => (
           <Accordion.Label>Label</Accordion.Label>
         </Accordion.Trigger>
         <Accordion.Content>
-          <Text tw="dark:text-white text-gray-900">
+          <Text tw="text-gray-900 dark:text-white">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
             ever since the 1500s, when an unknown printer took a galley of type

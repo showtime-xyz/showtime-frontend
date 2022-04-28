@@ -1,3 +1,5 @@
+import "../expo/shim";
+
 import * as React from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,7 +8,6 @@ import { enableScreens } from "react-native-screens";
 
 import { linking } from "app/navigation/linking";
 
-import "../expo/shim";
 import StorybookUIRoot from "./.storybook/Storybook";
 
 enableScreens(true);

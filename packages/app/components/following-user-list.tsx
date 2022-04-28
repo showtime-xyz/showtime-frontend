@@ -18,6 +18,7 @@ export const FollowingList = (props: {
   hideSheet: () => void;
 }) => {
   const { data, loading } = useFollowingList(props.profileId);
+
   return (
     <UserList loading={loading} users={data?.list} onClose={props.hideSheet} />
   );

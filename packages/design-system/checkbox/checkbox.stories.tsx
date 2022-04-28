@@ -24,7 +24,7 @@ export const Primary: React.VFC<{}> = () => {
       />
       <Label
         htmlFor="checkbox"
-        tw="flex-row ml-2 items-center text-black dark:text-white"
+        tw="ml-2 flex-row items-center text-black dark:text-white"
       >
         I agree
       </Label>

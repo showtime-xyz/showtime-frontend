@@ -8,7 +8,7 @@ import { useLinkTo } from "app/lib/react-navigation/native";
 type Props = {
   children: React.ReactNode;
   hitSlop?: { top: number; bottom: number; left: number; right: number };
-  onPress?: () => void;
+  onPress?: (e: any) => void;
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({
@@ -17,7 +17,6 @@ function LinkCore({
   as,
   hitSlop,
   componentProps,
-  onPress,
   Component,
 }: Props & {
   Component: ComponentType<any>;

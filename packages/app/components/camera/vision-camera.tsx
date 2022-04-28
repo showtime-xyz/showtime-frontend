@@ -369,16 +369,16 @@ export function Camera({
       {photoUri && (
         <View
           style={{ height: "100%" }}
-          tw="w-screen bg-gray-100 dark:bg-gray-900 opacity-95"
+          tw="w-screen bg-gray-100 opacity-95 dark:bg-gray-900"
         >
-          <Image source={{ uri: photoUri }} tw="w-screen h-screen" />
+          <Image source={{ uri: photoUri }} tw="h-screen w-screen" />
         </View>
       )}
 
-      <View tw="absolute top-0 right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
-        <View tw="py-8 px-4 flex-row justify-end">
+      <View tw="absolute top-0 right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900">
+        <View tw="flex-row justify-end py-8 px-4">
           <Pressable
-            tw="w-12 h-12 mt-4 rounded-full justify-center items-center bg-white dark:bg-black"
+            tw="mt-4 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
             onPress={onFlashPressed}
           >
             {flash === "off" ? (
@@ -407,7 +407,7 @@ export function Camera({
 
       <View
         tw={[
-          "absolute right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95",
+          "absolute right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900",
           `bottom-[${tabBarHeight - 1}px]`,
         ]}
       >

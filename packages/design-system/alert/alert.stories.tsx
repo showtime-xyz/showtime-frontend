@@ -13,7 +13,7 @@ const Alert = () => {
   const Alert = useAlert();
   const toast = useToast();
   return (
-    <View tw="flex-1 justify-center items-center">
+    <View tw="flex-1 items-center justify-center">
       <Button tw="mb-4" onPress={() => Alert.alert("Alert label")}>
         Alert Title
       </Button>

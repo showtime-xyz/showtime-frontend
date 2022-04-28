@@ -32,7 +32,7 @@ export const Primary: React.VFC<{}> = () => {
                 <View tw="flex-row items-center p-5">
                   <Spinner size={20} />
                   <View tw="mx-1" />
-                  <Text tw="dark:text-white text-black">
+                  <Text tw="text-black dark:text-white">
                     This toast will hide in 5 seconds.
                   </Text>
                 </View>

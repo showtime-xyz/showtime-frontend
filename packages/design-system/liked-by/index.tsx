@@ -24,10 +24,10 @@ export function LikedBy({ nft }: Props) {
   if (!nft || nft.like_count === 0) return null;
 
   return (
-    <View tw="bg-white dark:bg-black px-4 py-2 flex flex-row justify-start	items-center">
+    <View tw="flex flex-row items-center justify-start bg-white px-4 py-2	dark:bg-black">
       <Text
         variant="text-xs"
-        tw="text-gray-600 dark:text-gray-400 font-semibold"
+        tw="font-semibold text-gray-600 dark:text-gray-400"
       >
         Liked by&nbsp;
       </Text>
@@ -40,7 +40,7 @@ export function LikedBy({ nft }: Props) {
         {!loading ? (
           <Text
             variant="text-xs"
-            tw="text-gray-600 dark:text-gray-400 font-semibold"
+            tw="font-semibold text-gray-600 dark:text-gray-400"
           >
             {data?.likers.slice(0, 2).map((like, index) => (
               <Fragment key={`liked-by-user-${like.profile_id}`}>

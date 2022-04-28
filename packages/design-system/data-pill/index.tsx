@@ -11,14 +11,14 @@ export const DataPill = (props: DataPillProps) => {
 
   return (
     <View
-      tw={`items-center justify-center py-2 px-2 rounded-full ${
+      tw={`items-center justify-center rounded-full py-2 px-2 ${
         type === "primary"
-          ? "dark:bg-gray-900 bg-gray-100 "
+          ? "bg-gray-100 dark:bg-gray-900 "
           : " bg-gray-900 dark:bg-gray-100"
       }`}
     >
       <Text
-        tw={`font-medium text-xs ${
+        tw={`text-xs font-medium ${
           type === "primary"
             ? "text-gray-500 "
             : " text-white dark:text-gray-900"

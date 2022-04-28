@@ -186,7 +186,7 @@ export function MessageRow({
   );
   //#endregion
   return (
-    <View tw="flex flex-row py-4 bg-white dark:bg-black">
+    <View tw="flex flex-row bg-white py-4 dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
       <View tw="items-center">
         {(hasReplies || hasParent) && (
@@ -205,11 +205,11 @@ export function MessageRow({
           <Avatar url={userAvatar} size={24} />
         </Button>
       </View>
-      <View tw="flex-1 ml-2">
+      <View tw="ml-2 flex-1">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
             sx={{ fontSize: 13, lineHeight: 15 }}
-            tw="text-gray-900 dark:text-white font-semibold"
+            tw="font-semibold text-gray-900 dark:text-white"
             onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
             @{username}
@@ -226,7 +226,7 @@ export function MessageRow({
           {contentWithTags}
         </Text>
 
-        <View tw="flex-row ml--2 mt-2 mb--2">
+        <View tw="ml--2 mt-2 mb--2 flex-row">
           <Button
             variant="text"
             tw="px-2"
@@ -265,7 +265,7 @@ export function MessageRow({
             ]}
           >
             {createdAtText && (
-              <Text tw="text-gray-500 font-bold" variant="text-xs">
+              <Text tw="font-bold text-gray-500" variant="text-xs">
                 {`${createdAtText}${onDeletePress ? "  •" : ""}`}
               </Text>
             )}

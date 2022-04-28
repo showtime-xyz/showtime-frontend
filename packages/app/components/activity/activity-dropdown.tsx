@@ -30,7 +30,7 @@ function ActivityDropdown({ activity }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="w-8 h-8">
+        <View tw="h-8 w-8">
           <Button
             variant="tertiary"
             tw="h-8 rounded-full p-2"
@@ -50,7 +50,7 @@ function ActivityDropdown({ activity }: Props) {
 
       <DropdownMenuContent
         loop
-        tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
+        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         {isAuthenticated && (
           <DropdownMenuItem
@@ -59,7 +59,7 @@ function ActivityDropdown({ activity }: Props) {
               mutate(null);
             }}
             key="unfollow"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Unfollow
@@ -68,7 +68,7 @@ function ActivityDropdown({ activity }: Props) {
         )}
 
         {isAuthenticated && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         <DropdownMenuItem
@@ -76,7 +76,7 @@ function ActivityDropdown({ activity }: Props) {
             report({ activityId: activity.id });
           }}
           key="report"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Report

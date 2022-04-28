@@ -1,73 +1,99 @@
-import type React from "react";
+import type { FC, ReactNode } from "react";
+
+import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
 import type { TW } from "../tailwind/types";
 
-export interface ModalWrapperProps {
-  tw?: TW;
+export interface ModalMethods {
+  close: () => void;
 }
 
 export interface ModalProps {
   /**
-   * Defines the modal content.
-   */
-  children: React.ReactNode;
-  /**
-   * Defines the modal wrapper.
-   */
-  modalWrapper?: React.FC<ModalWrapperProps> | null;
-  /**
    * Defines the modal title.
-   *
-   * @default undefined
+   * @default ""
    */
   title?: string;
   /**
-   * Defines the height style, set it empty to let
-   * the modal be auto height.
-   *
+   * Defines if the modal is presenting as
+   * a screen.
+   * @default false
+   */
+  isScreen?: boolean;
+  /**
+   * **MOBILE ONLY**: Defines the points for the bottom sheet
+   * to snap to. It accepts array of number, string or mix.
+   * @default ["90%", "100%"]
+   */
+  mobile_snapPoints?: BottomSheetProps["snapPoints"];
+
+  /**
+   * **WEB ONLY**: Defines the modal container height.
+   * It could be static value or responsive.
    * @default "max-h-280px"
    */
-  height?: string;
+  web_height?: string;
+
   /**
-   * Defines the width style.
-   *
-   * @default "w-10/12 max-w-480px md:w-480px lg:w-480px"
-   */
-  width?: string;
-  /**
-   * Defines the body tailwind style.
-   *
+   * Defines the modal container
+   * tailwind style.
    * @default undefined
    */
-  bodyTW?: TW;
+  tw?: string;
+
+  //#region components
+  modalContainer?: FC<ModalContainerProps>;
   /**
-   * Defines the body ScrollView content tailwind style.
-   *
+   * Defines the modal content.
    * @default undefined
    */
-  bodyContentTW?: TW;
+  children?: ReactNode;
+  //#endregion
+
+  //#region callbacks
   /**
-   * Defines the keyboard vertical offset, usually
-   * the header height.
-   *
-   * @default 0
-   */
-  keyboardVerticalOffset?: number;
-  /**
-   * Defines if the modal body is scrollable or not.
-   */
-  scrollable?: boolean;
-  /**
-   * Defines the action to be fried to close
-   * the modal.
-   *
+   * Defines the action to close
+   * the modal view/screen.
    * @default undefined
    */
-  close?: () => void;
-  /**
-   * Defines the callback when the modal dismiss.
-   *
-   * @default undefined
-   */
-  onDismiss?: () => void;
+  onClose?: () => void;
+  //#endregion
 }
+
+export interface ModalHeaderProps
+  extends Pick<ModalProps, "title" | "onClose"> {
+  /**
+   * Defines the component to be placed
+   * at the end of the header.
+   * @default undefined
+   */
+  endContentComponent?: FC<any>;
+  /**
+   * Defines the header tailwind style.
+   * @default undefined
+   */
+  tw?: TW;
+}
+
+export interface ModalContainerProps
+  extends Pick<
+    ModalProps,
+    | "title"
+    | "isScreen"
+    | "onClose"
+    | "children"
+    | "mobile_snapPoints"
+    | "web_height"
+  > {
+  close: () => void;
+}
+
+export interface ModalScreenProps extends ModalProps {
+  close: () => void;
+}
+
+export interface ModalFooterProps {
+  children: JSX.Element;
+}
+
+export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}

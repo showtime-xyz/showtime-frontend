@@ -16,14 +16,20 @@ export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
 
   const handleOnPress = useCallback(() => {
-    const as = `/nft/${nft?.nft_id}/comments`;
+    const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
 
     router.push(
       Platform.select({
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, commentsModal: true, id: nft?.nft_id },
+          query: {
+            ...router.query,
+            commentsModal: true,
+            chainName: nft?.chain_name,
+            contractAddress: nft?.contract_address,
+            tokenId: nft?.token_id,
+          },
         },
       }),
       Platform.select({
@@ -42,7 +48,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
     <Button
       variant="text"
       size="regular"
-      tw="p-0 h-auto"
+      tw="h-auto p-0"
       onPress={handleOnPress}
     >
       <Message height={24} width={24} />{" "}

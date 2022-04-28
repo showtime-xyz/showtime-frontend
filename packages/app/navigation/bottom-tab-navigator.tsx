@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useWindowDimensions, Platform, StyleSheet, Alert } from "react-native";
+import { Alert, Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
@@ -14,11 +14,11 @@ import { View } from "design-system";
 import { tw } from "design-system/tailwind";
 
 import {
-  HomeTabBarIcon,
-  TrendingTabBarIcon,
   CameraTabBarIcon,
+  HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
+  TrendingTabBarIcon,
 } from "./tab-bar-icons";
 import { useNavigationElements } from "./use-navigation-elements";
 
@@ -69,7 +69,7 @@ export function BottomTabNavigator() {
       }
     };
 
-    if (Platform.OS !== "web" && !isForeground) {
+    if (Platform.OS === "ios" && !isForeground) {
       checkUpdate();
     }
   }, [isForeground]);
@@ -108,7 +108,7 @@ export function BottomTabNavigator() {
             <>
               {Platform.OS === "android" ? (
                 <View
-                  tw="bg-white dark:bg-black opacity-95"
+                  tw="bg-white opacity-95 dark:bg-black"
                   style={StyleSheet.absoluteFill}
                 />
               ) : (
