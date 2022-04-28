@@ -272,9 +272,11 @@ export const FeedItem = memo(
             <View tw="px-4">
               <Creator nft={nft} />
             </View>
-            <View tw="px-4 py-4">
-              <BuyButton nft={nft} />
-            </View>
+            {Platform.OS === 'web' ? 
+              <View tw="px-4 py-4">
+                <BuyButton nft={nft} />
+              </View> : null  
+            }
             <Owner nft={nft} price={Platform.OS !== "ios"} />
             {/* Comments */}
           </View>

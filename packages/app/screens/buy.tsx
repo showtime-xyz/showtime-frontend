@@ -22,12 +22,8 @@ const BuyModal = () => {
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
-  console.log("djdjdjdj ", nft?.data)
 
-  return (
-
-        <Buy nft={nft?.data.item} />
-  );
+  return <Buy nft={nft?.data.item} />;
 };
 
 export const BuyScreen = withModalScreen(

@@ -5,6 +5,7 @@ import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 
 type Query = {
   tokenId: string;
@@ -25,7 +26,9 @@ const ListModal = withColorScheme(() => {
     contractAddress: contractAddress as string,
   });
 
-  return <List nft={data?.data?.item} />;
+  const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
+
+  return <List nft={nft} />;
 });
 
 export const ListScreen = withModalScreen(

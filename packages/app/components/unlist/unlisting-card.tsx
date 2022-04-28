@@ -13,7 +13,7 @@ import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
-import { useNFTDetails } from "../../hooks/use-nft-details";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";
 import { UnlistingUnavailable } from "./unlisting-unavailable";

@@ -10,8 +10,8 @@ import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
 import { Creator } from "design-system/card/rows/elements/creator";
 
-import { yup } from "../lib/yup";
-import { NFT } from "../types";
+import { yup } from "app/lib/yup";
+import { NFT } from "app/types";
 
 const defaultValues = {
   quantity: 1,
