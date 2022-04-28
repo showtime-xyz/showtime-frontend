@@ -1,7 +1,16 @@
-import { useState } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  FlatList,
+  Platform,
+  TextInput,
+  useWindowDimensions,
+} from "react-native";
+
+import * as Popover from "@radix-ui/react-popover";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
+import { SearchItem, SearchItemSkeleton } from "app/components/search";
+import { useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
@@ -13,10 +22,117 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Button, Pressable, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
-import { ArrowLeft, Plus, Search } from "design-system/icon";
+import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
+
+const SearchInHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [term, setTerm] = useState("");
+  const { loading, data } = useSearch(term);
+  const inputRef = useRef<TextInput>();
+
+  useEffect(() => {
+    if (term !== "") {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [term]);
+
+  const Separator = useCallback(
+    () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
+    []
+  );
+
+  const renderItem = useCallback(
+    ({ item }) => {
+      return (
+        <SearchItem
+          item={item}
+          onPress={() => {
+            setIsOpen(false);
+          }}
+        />
+      );
+    },
+    [setIsOpen]
+  );
+
+  return (
+    <Popover.Root modal={false} open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger />
+
+      <Popover.Anchor>
+        <Input
+          placeholder="Search for @username or name.eth"
+          value={term}
+          ref={inputRef}
+          onChangeText={(text) => {
+            setTerm(text);
+            inputRef.current?.focus();
+          }}
+          leftElement={
+            <View tw="h-12 w-12 items-center justify-center rounded-full">
+              <Search
+                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+                color={
+                  tw.style("bg-gray-500 dark:bg-gray-400")
+                    ?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            </View>
+          }
+          rightElement={
+            term.length > 0 ? (
+              <Popover.Close>
+                <Pressable
+                  tw="p-2"
+                  onPress={() => {
+                    setTerm("");
+                    inputRef.current?.focus();
+                  }}
+                  hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+                >
+                  <Close
+                    //@ts-ignore
+                    color={
+                      tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
+                    }
+                    width={24}
+                    height={24}
+                  />
+                </Pressable>
+              </Popover.Close>
+            ) : undefined
+          }
+          inputStyle={tw.style("w-[269px]")}
+        />
+      </Popover.Anchor>
+
+      <Popover.Content
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <View tw="dark:shadow-white shadow-black mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
+          {data ? (
+            <FlatList
+              data={data}
+              renderItem={renderItem}
+              ItemSeparatorComponent={Separator}
+              keyboardShouldPersistTaps="handled"
+            />
+          ) : loading && term ? (
+            <SearchItemSkeleton />
+          ) : null}
+        </View>
+      </Popover.Content>
+    </Popover.Root>
+  );
+};
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -168,25 +284,7 @@ const HeaderCenter = ({
         />
       )}
 
-      {isMdWidth ? (
-        <Input
-          placeholder="Search by name or wallet"
-          leftElement={
-            <View tw="h-12 w-12 items-center justify-center rounded-full">
-              <Search
-                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-                color={
-                  tw.style("bg-gray-500 dark:bg-gray-400")
-                    ?.backgroundColor as string
-                }
-                width={24}
-                height={24}
-              />
-            </View>
-          }
-          inputStyle={tw.style("w-[216px]")}
-        />
-      ) : null}
+      {isMdWidth ? <SearchInHeader /> : null}
     </View>
   );
 };

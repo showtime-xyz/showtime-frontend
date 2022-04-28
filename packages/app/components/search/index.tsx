@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { Keyboard, Platform, TextInput } from "react-native";
-import { FlatList } from "react-native";
+import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -8,8 +7,7 @@ import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { useColorScheme } from "design-system/hooks";
-import CloseIcon from "design-system/icon/Close";
-import SearchIcon from "design-system/icon/Search";
+import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Input } from "design-system/input";
 import { Pressable } from "design-system/pressable-scale";
@@ -25,7 +23,7 @@ export const Search = () => {
   const { loading, data } = useSearch(term);
   const inputRef = useRef<TextInput>();
   const Separator = useCallback(
-    () => <View tw={`h-[1px] bg-gray-200 dark:bg-gray-800`} />,
+    () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
   );
 
@@ -98,9 +96,19 @@ export const Search = () => {
   );
 };
 
-const SearchItem = ({ item }: { item: SearchResponseItem }) => {
+export const SearchItem = ({
+  item,
+  onPress,
+}: {
+  item: SearchResponseItem;
+  onPress: () => void;
+}) => {
   return (
-    <Link href={`/@${item.username ?? item.address0}`} tw="p-4">
+    <Link
+      href={`/@${item.username ?? item.address0}`}
+      onPress={onPress}
+      tw="p-4"
+    >
       <View tw="flex-row items-center justify-between">
         <View tw="flex-row">
           <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
@@ -142,11 +150,11 @@ const SearchItem = ({ item }: { item: SearchResponseItem }) => {
   );
 };
 
-const SearchItemSkeleton = () => {
+export const SearchItemSkeleton = () => {
   const colorMode = useColorScheme();
 
   return (
-    <View tw="px-4">
+    <View tw="px-4 pb-4">
       {[1, 2, 3].map((v) => {
         return (
           <View tw="flex-row pt-4" key={v}>
