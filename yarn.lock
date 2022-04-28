@@ -25629,6 +25629,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-plugin-tailwindcss@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "prettier-plugin-tailwindcss@npm:0.1.10"
+  peerDependencies:
+    prettier: ">=2.2.0"
+  checksum: 465a7e02bd2224f9773f35190b6b4d19f281848d0492d4d43eabf403b33117303222faf775d8d569d0ce8bbb75336aa4db005db1935bb78c551ff711a8f89537
+  languageName: node
+  linkType: hard
+
 "prettier@npm:^2.4.1":
   version: 2.6.2
   resolution: "prettier@npm:2.6.2"
@@ -28760,6 +28769,7 @@ __metadata:
     eslint-plugin-prettier: ^4.0.0
     patch-package: ^6.4.7
     prettier: ^2.4.1
+    prettier-plugin-tailwindcss: ^0.1.10
     react-native-fast-image: ^8.5.11
     sentry-expo: ^4.1.0
     turbo: ^1.0.16
