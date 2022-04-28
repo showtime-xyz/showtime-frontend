@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -87,6 +88,7 @@ export const useBuyNFT = () => {
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
+    if (Platform.OS !== "web") return;
 
     dispatch({ type: "loading" });
     const result = await getSignerAndProvider();

@@ -1,4 +1,4 @@
-import { Linking } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
@@ -22,6 +22,8 @@ export const BuyButton = ({ nft }: { nft: NFT }) => {
 
   const navigateToListing = useNavigateToListing();
   const navigateToBuy = useNavigateToBuy();
+
+  if (Platform.OS !== "web") return null;
 
   if (!nft.listing) {
     if (isNFTOwner && SHOWTIME_CONTRACTS.includes(nft.contract_address)) {
