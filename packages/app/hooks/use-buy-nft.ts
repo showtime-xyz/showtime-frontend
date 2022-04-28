@@ -13,6 +13,12 @@ import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
 import { parseBalance, SOL_MAX_INT } from "app/utilities";
 
+const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
+  `https://polygon-${
+    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+  }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+);
+
 type Status =
   | "idle"
   | "loading"
@@ -189,13 +195,7 @@ export const useBuyNFT = () => {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTxNonces,
-              new ethers.providers.JsonRpcProvider(
-                `https://polygon-${
-                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
-                    ? "mumbai"
-                    : "mainnet"
-                }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-              )
+              infurePolygonProvider
             );
 
             nonce = await tokenContract.nonces(userAddress);
@@ -203,13 +203,7 @@ export const useBuyNFT = () => {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTx,
-              new ethers.providers.JsonRpcProvider(
-                `https://polygon-${
-                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
-                    ? "mumbai"
-                    : "mainnet"
-                }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-              )
+              infurePolygonProvider
             );
 
             nonce = await tokenContract.getNonce(userAddress);
@@ -255,7 +249,8 @@ export const useBuyNFT = () => {
             .post("/api/marketplace/permit", request)
             .then((res) => res.data);
 
-          web3.once(transaction, () => {
+          // since we sent the transaction on polygon chain, we listen it with infure provider
+          infurePolygonProvider.once(transaction, () => {
             console.log("success ", transaction);
             buyNFT({ nft, quantity });
           });
