@@ -18,7 +18,7 @@ import { Pressable } from "design-system/pressable-scale";
 import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 import reactStringReplace from "react-string-replace";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowersList, FollowingList } from "../following-user-list";
@@ -111,7 +111,9 @@ export const ProfileTop = ({
     [bio]
   );
   const coverImageHeight = useMemo(() => (width < 768 ? 120 : 180), [width]);
-  useEffect(() => setShowBottomSheet(null), [address]);
+  useEffect(() => {
+    Platform.OS === 'web' && setShowBottomSheet(null)
+  }, [address]);
   return (
     <>
       <View pointerEvents="box-none">
