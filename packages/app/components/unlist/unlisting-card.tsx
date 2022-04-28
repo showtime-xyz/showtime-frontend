@@ -63,7 +63,7 @@ const UnlistingCard = (props: Props) => {
             variant="text-lg"
             tw="my-8 text-black dark:text-white text-center"
           >
-            Your NFT has been listed from Showtime
+            Your NFT has been unlisted from Showtime
           </Text>
           <PolygonScanButton transactionHash={state.transactionHash} />
         </View>

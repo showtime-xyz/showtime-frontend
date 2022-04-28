@@ -107,7 +107,6 @@ export const Buy = (props: { nftId: string }) => {
 
     return (
       <View tw="flex-1 items-center justify-center">
-        <Spinner />
         <View tw="items-center">
           <Text
             variant="text-base"
