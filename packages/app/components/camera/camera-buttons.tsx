@@ -47,7 +47,7 @@ export function CameraButtons({
   });
 
   return (
-    <View tw="py-8 px-6 justify-between items-center flex-row">
+    <View tw="flex-row items-center justify-between py-8 px-6">
       {isLoading ? (
         <Animated.View
           entering={SlideInDown}
@@ -55,7 +55,7 @@ export function CameraButtons({
           style={{ zIndex: 1 }}
         >
           <Pressable
-            tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
+            tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
             onPress={() => {
               setPhotos([]);
               setIsLoading(false);
@@ -79,14 +79,14 @@ export function CameraButtons({
         />
       )}
 
-      <View tw="h-[83px] w-[83px] justify-center items-center">
+      <View tw="h-[83px] w-[83px] items-center justify-center">
         <View tw="absolute">
-          <View tw="w-20 h-20 rounded-full bg-black dark:bg-white" />
+          <View tw="h-20 w-20 rounded-full bg-black dark:bg-white" />
         </View>
 
-        <View tw="rounded-full border-4 border-white dark:border-black bg-white dark:bg-black">
+        <View tw="rounded-full border-4 border-white bg-white dark:border-black dark:bg-black">
           <Pressable
-            tw="w-[64px] h-[64px] rounded-full bg-black dark:bg-white"
+            tw="h-[64px] w-[64px] rounded-full bg-black dark:bg-white"
             onPress={takePhoto}
             disabled={!canPop && photos.length < 9}
           />
@@ -99,7 +99,7 @@ export function CameraButtons({
           exiting={SlideOutDown}
           style={{ zIndex: 1 }}
         >
-          <View tw="h-12 w-12 justify-center items-center">
+          <View tw="h-12 w-12 items-center justify-center">
             {/* <View tw="absolute">
               <CircularProgress
                 size={50}
@@ -111,7 +111,7 @@ export function CameraButtons({
             </View> */}
 
             <Pressable
-              tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
+              tw="z-10 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
               onPress={() => {
                 postPhoto({ file: photos[0].uri, type: "image" });
               }}
@@ -128,7 +128,7 @@ export function CameraButtons({
         </Animated.View>
       ) : (
         <Pressable
-          tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
+          tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
           onPress={() =>
             setCameraPosition(cameraPosition === "front" ? "back" : "front")
           }

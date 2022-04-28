@@ -110,7 +110,7 @@ export const ToastProvider = ({ children }: any) => {
               {render ? (
                 render
               ) : (
-                <Text tw="text-center p-4 dark:text-white text-gray-900">
+                <Text tw="p-4 text-center text-gray-900 dark:text-white">
                   {message}
                 </Text>
               )}

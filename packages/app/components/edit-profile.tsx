@@ -181,7 +181,7 @@ export const EditProfile = () => {
   };
 
   return (
-    <View tw="flex-1 max-w-screen-xl w-full bg-white dark:bg-black">
+    <View tw="w-full max-w-screen-xl flex-1 bg-white dark:bg-black">
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
@@ -204,14 +204,14 @@ export const EditProfile = () => {
                 }}
                 style={tw.style("w-full h-30 flex-row absolute")}
               >
-                <View tw="absolute z-10 flex-row items-center justify-end w-full p-2">
+                <View tw="absolute z-10 w-full flex-row items-center justify-end p-2">
                   <Edit
                     height={20}
                     width={20}
                     //@ts-ignore
                     color={tw.style("bg-black dark:bg-white").backgroundColor}
                   />
-                  <Text tw="text-xs text-black dark:text-white ml-1">
+                  <Text tw="ml-1 text-xs text-black dark:text-white">
                     Cover
                   </Text>
                 </View>
@@ -220,7 +220,7 @@ export const EditProfile = () => {
             )}
           />
 
-          <View tw="px-4 mt-20">
+          <View tw="mt-20 px-4">
             <Controller
               control={control}
               name="profilePicture"
@@ -239,7 +239,7 @@ export const EditProfile = () => {
                   )}
                 >
                   {value && <Image source={{ uri: value }} tw="flex-1" />}
-                  <View tw="absolute z-10 flex-1 w-full h-full items-center justify-center">
+                  <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center">
                     <Upload
                       height={20}
                       width={20}
@@ -251,13 +251,13 @@ export const EditProfile = () => {
               )}
             />
 
-            <View tw="flex-row mt-4">
+            <View tw="mt-4 flex-row">
               <Controller
                 control={control}
                 name="name"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Fieldset
-                    tw="flex-1 mr-4"
+                    tw="mr-4 flex-1"
                     label="Name"
                     placeholder="Your display name"
                     value={value}
@@ -351,7 +351,7 @@ export const EditProfile = () => {
                             onBlur={onBlur}
                             onChangeText={onChange}
                             leftElement={
-                              <Text tw="dark:text-gray-400 text-gray-600">
+                              <Text tw="text-gray-600 dark:text-gray-400">
                                 {v.prefix}
                               </Text>
                             }
@@ -442,7 +442,7 @@ export const EditProfile = () => {
         >
           Done
         </Button>
-        <Text tw="mt-1 text-red-500 text-sm text-center">
+        <Text tw="mt-1 text-center text-sm text-red-500">
           {errors.submitError?.message}
         </Text>
       </View>

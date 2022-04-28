@@ -1,9 +1,9 @@
-import { useRouter } from "app/navigation/use-router";
-import { ModalMethods } from "design-system/modal";
-import { ModalScreen } from "design-system/modal/modal.screen";
 import { FC, useCallback, useRef } from "react";
 
+import { useRouter } from "app/navigation/use-router";
 
+import { ModalMethods } from "design-system/modal";
+import { ModalScreen } from "design-system/modal/modal.screen";
 
 function withModalScreen<P>(
   Screen: FC<P>,

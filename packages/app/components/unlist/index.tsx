@@ -42,12 +42,12 @@ const Unlist = ({ nft }: Props) => {
 
   if (state.status === "unlistingSuccess") {
     return (
-      <View tw="flex-1 items-center justify-center mt-4">
+      <View tw="mt-4 flex-1 items-center justify-center">
         <Text variant="text-4xl">🎉</Text>
         <View>
           <Text
             variant="text-lg"
-            tw="my-8 text-black dark:text-white text-center"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Your NFT has been listed from Showtime
           </Text>
@@ -64,7 +64,7 @@ const Unlist = ({ nft }: Props) => {
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Your NFT is being unlisted on Showtime. Feel free to navigate away
             from this screen.
@@ -81,9 +81,9 @@ const Unlist = ({ nft }: Props) => {
       <Collection nft={nft} />
       <View tw="p-4">
         <View tw="flex-row items-center">
-          <Media item={nft} tw="w-[80px] h-[80px] rounded-2xl" />
+          <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
           <View tw="flex-1 px-4">
-            <Text variant="text-lg" tw=" text-black dark:text-white mb-2">
+            <Text variant="text-lg" tw=" mb-2 text-black dark:text-white">
               {nft?.token_name}
             </Text>
             <View tw="flex-row items-center">
@@ -93,7 +93,7 @@ const Unlist = ({ nft }: Props) => {
                 color={tw.style("text-gray-500").color as string}
               />
               {nft?.token_created ? (
-                <Text tw="text-gray-500 font-bold pl-1" variant="text-xs">
+                <Text tw="pl-1 font-bold text-gray-500" variant="text-xs">
                   {`Minted ${formatDistanceToNowStrict(
                     new Date(nft?.token_created),
                     {
@@ -105,7 +105,7 @@ const Unlist = ({ nft }: Props) => {
             </View>
           </View>
         </View>
-        <Owner nft={nft} price={!hasMultipleOwners} tw="px-0 my-4" />
+        <Owner nft={nft} price={!hasMultipleOwners} tw="my-4 px-0" />
         {isActiveAddressAnOwner ? (
           <UnlistingSubmit
             listingID={listingId}

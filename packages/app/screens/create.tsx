@@ -90,14 +90,14 @@ const CreateMD = () => {
       {state.status === "transactionCompleted" ? (
         <View tw="items-center justify-center">
           <Spinner />
-          <Text tw="text-black dark:text-white mt-10 text-center">
+          <Text tw="mt-10 text-center text-black dark:text-white">
             Your NFT is being minted on Polygon network. Feel free to navigate
             away from this screen.
           </Text>
         </View>
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">
-          <Text tw="text-black dark:text-white mb-4 text-center">
+          <Text tw="mb-4 text-center text-black dark:text-white">
             🎉 Your NFT has been minted!
           </Text>
           <Button

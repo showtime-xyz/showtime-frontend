@@ -27,7 +27,7 @@ export const PolygonScanButton = ({
         style={tw.style("rounded-lg overflow-hidden ")}
         color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
       />
-      <Text tw="text-black dark:text-white text-sm pl-2">
+      <Text tw="pl-2 text-sm text-black dark:text-white">
         View on Polygon Scan
       </Text>
     </Button>

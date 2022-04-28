@@ -12,7 +12,7 @@ function Comment({ act }) {
             commented on{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].token_name}
@@ -25,7 +25,7 @@ function Comment({ act }) {
             commented on{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].token_name}
@@ -33,7 +33,7 @@ function Comment({ act }) {
             and{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].token_name}
@@ -46,7 +46,7 @@ function Comment({ act }) {
             commented on{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].token_name}
@@ -54,7 +54,7 @@ function Comment({ act }) {
             ,{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].token_name}
@@ -62,7 +62,7 @@ function Comment({ act }) {
             and{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[2].nft_id}`}
             >
               {nfts[2].token_name}
@@ -75,7 +75,7 @@ function Comment({ act }) {
             commented on{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].token_name}
@@ -83,7 +83,7 @@ function Comment({ act }) {
             ,{" "}
             <TextLink
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].token_name}

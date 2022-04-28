@@ -143,12 +143,12 @@ export function Header({ title, close, onSearchSubmit }: Props) {
   }, [showSearch]);
 
   return (
-    <View tw="p-4 flex-row items-center justify-between dark:bg-black">
-      <View tw="w-12 h-12 justify-center items-center">
+    <View tw="flex-row items-center justify-between p-4 dark:bg-black">
+      <View tw="h-12 w-12 items-center justify-center">
         <Button
           onPress={close}
           variant="tertiary"
-          tw="rounded-full h-12 w-12"
+          tw="h-12 w-12 rounded-full"
           iconOnly={true}
         >
           <ChevronLeft
@@ -167,16 +167,16 @@ export function Header({ title, close, onSearchSubmit }: Props) {
             <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
           </View>
         ) : (
-          <Text variant="text-lg" tw="dark:text-white font-bold">
+          <Text variant="text-lg" tw="font-bold dark:text-white">
             {title}
           </Text>
         )}
       </Animated.View>
-      <View tw="w-12 h-12 justify-center items-center">
+      <View tw="h-12 w-12 items-center justify-center">
         <Button
           onPress={() => setShowSearch(!showSearch)}
           variant="tertiary"
-          tw="rounded-full h-12 w-12"
+          tw="h-12 w-12 rounded-full"
           iconOnly={true}
         >
           {showSearch ? (

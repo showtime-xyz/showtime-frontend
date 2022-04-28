@@ -33,7 +33,7 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
   if (isLoading) {
     return (
       <View
-        tw={`items-center justify-center mt-6 px-3`}
+        tw={`mt-6 items-center justify-center px-3`}
         sx={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
       >
         <Spinner size="small" />
@@ -46,16 +46,16 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
 
 const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
   <View
-    tw="p-4 dark:border-gray-900 border-gray-100"
+    tw="border-gray-100 p-4 dark:border-gray-900"
     style={{ borderBottomWidth: 1 }}
   >
     {SelectionControl}
     {data.length === 0 && !isLoading ? (
-      <View tw="items-center justify-center mt-20">
+      <View tw="mt-20 items-center justify-center">
         <Text tw="text-gray-900 dark:text-white">No results found</Text>
       </View>
     ) : isLoading ? (
-      <View tw="items-center justify-center mt-20">
+      <View tw="mt-20 items-center justify-center">
         <Spinner size="small" />
       </View>
     ) : null}
@@ -69,12 +69,12 @@ export const Trending = () => {
   const isWeb = Platform.OS === "web";
 
   return (
-    <View tw="bg-white dark:bg-black flex-1">
+    <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-          <View tw="bg-white dark:bg-black py-2 px-4 flex-row justify-between">
-            <Text tw="text-gray-900 dark:text-white font-extrabold text-2xl">
+          <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
+            <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
               Trending
             </Text>
           </View>

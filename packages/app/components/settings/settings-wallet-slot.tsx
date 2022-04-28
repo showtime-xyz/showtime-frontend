@@ -63,7 +63,7 @@ export const SettingsWalletSlotHeader = () => {
 
   return (
     <SettingSubTitle>
-      <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+      <Text tw="text-xl font-bold text-gray-900 dark:text-white">
         Your Wallets
       </Text>
       <Button variant="primary" size="small" onPress={triggerAddWallet}>
@@ -76,7 +76,7 @@ export const SettingsWalletSlotHeader = () => {
 export const SettingsWalletSlotSkeleton = () => {
   const colorMode = useColorScheme();
   return (
-    <View tw="flex-1 flex-row justify-between w-full p-4 max-h-[150px]">
+    <View tw="max-h-[150px] w-full flex-1 flex-row justify-between p-4">
       <View tw="flex justify-center">
         <Skeleton
           height={25}
@@ -136,7 +136,7 @@ export const SettingsWalletSlotSkeleton = () => {
 
 export const SettingsWalletSlotPlaceholder = () => {
   return (
-    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4">
+    <Text tw="p-4 text-base font-bold text-gray-900 dark:text-white">
       No wallet connected to your profile.
     </Text>
   );
@@ -157,17 +157,17 @@ export const SettingsWalletSlot = (props: Props) => {
   const multiplePills = isConnectedAddress && mintingEnabled;
 
   return (
-    <View tw="flex-1 flex-row justify-between w-full p-4 max-h-[150px]">
+    <View tw="max-h-[150px] w-full flex-1 flex-row justify-between p-4">
       <View tw="justify-center">
         <Button iconOnly={true} variant="secondary">
           {isEthereumAddress ? <Ethereum /> : <Tezos />}
         </Button>
       </View>
       <View tw="flex-1 px-4">
-        <Text tw="text-gray-900 dark:text-white pb-3 text-base font-bold">
+        <Text tw="pb-3 text-base font-bold text-gray-900 dark:text-white">
           {display}
         </Text>
-        <View tw="pb-3 flex flex-row">
+        <View tw="flex flex-row pb-3">
           {isConnectedAddress ? (
             <DataPill label="Current" type="secondary" />
           ) : null}
@@ -176,7 +176,7 @@ export const SettingsWalletSlot = (props: Props) => {
             <DataPill label="🔨 Minting Enabled" type="primary" />
           ) : null}
         </View>
-        <Text tw="text-gray-900 dark:text-white text-xs pb-3">{address}</Text>
+        <Text tw="pb-3 text-xs text-gray-900 dark:text-white">{address}</Text>
       </View>
       <View tw="flex justify-center">
         <AddressMenu

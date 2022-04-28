@@ -77,7 +77,7 @@ function Description({ nft }: Props) {
   }
 
   return (
-    <View tw="px-4 pb-4 bg-white dark:bg-black">
+    <View tw="bg-white px-4 pb-4 dark:bg-black">
       <Text
         variant="text-sm"
         tw="text-gray-600 dark:text-gray-400"
@@ -91,7 +91,7 @@ function Description({ nft }: Props) {
         <Pressable onPress={showMore ? onShowMore : onShowLess}>
           <Text
             variant="text-sm"
-            tw="font-bold text-gray-600 dark:text-gray-400 mt-1"
+            tw="mt-1 font-bold text-gray-600 dark:text-gray-400"
           >
             {showMore ? "More" : "Less"}
           </Text>

@@ -49,22 +49,22 @@ const UnlistingSubmit = (props: Props) => {
   const showSigningOption = state.status === "unlisting" && isNotMagic;
 
   return (
-    <View tw="p-4 w-full">
+    <View tw="w-full p-4">
       <Button
         onPress={() => unlistNFT(listingID)}
         tw="h-12 rounded-full"
         variant="primary"
       >
-        <Text tw="text-white dark:text-gray-900 text-sm pl-1">{ctaCopy}</Text>
+        <Text tw="pl-1 text-sm text-white dark:text-gray-900">{ctaCopy}</Text>
       </Button>
-      <View tw=" h-36 w-full mt-4">
+      <View tw=" mt-4 h-36 w-full">
         {showSigningOption ? (
           <Button
             onPress={() => unlistNFT(listingID)}
-            tw="h-12 w-full mt-4"
+            tw="mt-4 h-12 w-full"
             variant="tertiary"
           >
-            <Text tw="text-gray-900 dark:text-white text-sm">
+            <Text tw="text-sm text-gray-900 dark:text-white">
               Didn't receive the signature request yet?
             </Text>
           </Button>

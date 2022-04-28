@@ -44,14 +44,14 @@ const Follow = ({
   return (
     <View tw={`flex-row ${tw}`} pointerEvents="box-none">
       <Pressable onPress={onPressFollowing}>
-        <Text tw="text-sm text-gray-900 dark:text-white font-bold">
+        <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
           <Text tw="font-medium">following</Text>
         </Text>
       </Pressable>
       <View tw="ml-8 md:ml-4" pointerEvents="box-none">
         <Pressable onPress={onPressFollower}>
-          <Text tw="text-sm text-gray-900 dark:text-white font-bold">
+          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             {`${followersCount ?? 0} `}
             <Text tw="font-medium">followers</Text>
           </Text>
@@ -116,7 +116,7 @@ export const ProfileTop = ({
     <>
       <View pointerEvents="box-none">
         <View
-          tw={`bg-gray-100 dark:bg-gray-900 overflow-hidden md:rounded-b-[32px] md:-mx-20`}
+          tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 md:-mx-20 md:rounded-b-[32px]`}
           pointerEvents="none"
         >
           <Skeleton
@@ -137,10 +137,10 @@ export const ProfileTop = ({
           </Skeleton>
         </View>
 
-        <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
+        <View tw="bg-white px-2 dark:bg-black" pointerEvents="box-none">
           <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
             <View tw="flex-row items-end" pointerEvents="none">
-              <View tw="bg-white dark:bg-black rounded-full mt-[-72px] p-2">
+              <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
                 <Skeleton
                   height={128}
                   width={128}
@@ -219,7 +219,7 @@ export const ProfileTop = ({
               >
                 <Text
                   variant="text-2xl"
-                  tw="dark:text-white text-gray-900 font-extrabold"
+                  tw="font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {name}
@@ -237,7 +237,7 @@ export const ProfileTop = ({
                 <View tw="flex-row items-center">
                   <Text
                     variant="text-base"
-                    tw="text-gray-900 dark:text-white font-semibold"
+                    tw="font-semibold text-gray-900 dark:text-white"
                   >
                     {username ? `@${username}` : null}
                   </Text>
@@ -263,7 +263,7 @@ export const ProfileTop = ({
 
             {bio ? (
               <View
-                tw="flex-row items-center mt-3"
+                tw="mt-3 flex-row items-center"
                 pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
               >
                 <Text tw="text-sm text-gray-600 dark:text-gray-400">

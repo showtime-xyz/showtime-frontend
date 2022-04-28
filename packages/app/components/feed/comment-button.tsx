@@ -48,7 +48,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
     <Button
       variant="text"
       size="regular"
-      tw="p-0 h-auto"
+      tw="h-auto p-0"
       onPress={handleOnPress}
     >
       <Message height={24} width={24} />{" "}

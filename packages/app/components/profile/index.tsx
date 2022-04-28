@@ -65,7 +65,7 @@ const Profile = ({ address }: { address?: string }) => {
   );
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
-      <View tw="w-full items-center web:mb-8">
+      <View tw="web:mb-8 w-full items-center">
         <Tabs.Root
           onIndexChange={setSelected}
           initialIndex={selected}
@@ -73,12 +73,12 @@ const Profile = ({ address }: { address?: string }) => {
           lazy
         >
           <Tabs.Header>
-            <View tw="bg-white dark:bg-black items-center z-10">
-              <View tw="w-full web:max-w-screen-xl">
+            <View tw="z-10 items-center bg-white dark:bg-black">
+              <View tw="web:max-w-screen-xl w-full">
                 {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
                 <ProfileTop address={address} isBlocked={isBlocked} />
                 <Hidden until="md">
-                  <View tw={"absolute right-10 z-10 -bottom-10"}>
+                  <View tw={"absolute right-10 -bottom-10 z-10"}>
                     <ProfileListFilter
                       onCollectionChange={onCollectionChange}
                       onSortChange={onSortChange}

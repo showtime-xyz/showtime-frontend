@@ -146,7 +146,7 @@ export function Camera({
         {photoUri && (
           <View
             style={{ height: "100%" }}
-            tw="w-screen bg-gray-100 dark:bg-gray-900 opacity-95"
+            tw="w-screen bg-gray-100 opacity-95 dark:bg-gray-900"
           >
             <img
               src={photoUri}

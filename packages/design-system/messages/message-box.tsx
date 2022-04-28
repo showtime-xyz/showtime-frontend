@@ -147,7 +147,7 @@ function MessageBox({
     <View
       ref={inputContainerRef}
       tw={[
-        "bg-white dark:bg-black flex-1 w-full py-4 ios:absolute android:absolute web:fixed",
+        "ios:absolute android:absolute web:fixed w-full flex-1 bg-white py-4 dark:bg-black",
         `h-[${scrollHeight + PADDING_HEIGHT}px]`,
         `bottom-[${messageBoxBottom}px] right-0 left-0`,
       ]}
@@ -160,13 +160,13 @@ function MessageBox({
         }),
       }}
     >
-      <View tw="flex-row justify-around flex-shrink-0 p-1 web:break-words">
-        <View tw="px-5 bg-gray-100 dark:bg-gray-900 rounded-full w-[80vw]">
+      <View tw="web:break-words flex-shrink-0 flex-row justify-around p-1">
+        <View tw="w-[80vw] rounded-full bg-gray-100 px-5 dark:bg-gray-900">
           <TextInput
             ref={inputRef}
             tw={[
               `w-full h-[${scrollHeight}px] pt-2`,
-              "text-black dark:text-white font-semibold text-base",
+              "text-base font-semibold text-black dark:text-white",
               "web:resize-none web:outline-none",
             ]}
             placeholder="Add a comment..."
@@ -209,7 +209,7 @@ function MessageBox({
           <Button
             variant="primary"
             iconOnly={true}
-            tw="rounded-full h-12 w-12 web:outline-none web:cursor-pointer"
+            tw="web:outline-none web:cursor-pointer h-12 w-12 rounded-full"
             onPress={submitMessage}
           >
             <Send color={isDark ? "#000" : "#fff"} />

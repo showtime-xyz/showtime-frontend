@@ -23,7 +23,7 @@ export const ListingUnavailable = (props: Props) => {
 
   return (
     <View tw="mt-8">
-      <Text tw="text-black dark:text-white mb-2">
+      <Text tw="mb-2 text-black dark:text-white">
         Your current address does not own this NFT!
       </Text>
       {userOwnershipAmount && userOwnershipList ? (
@@ -34,7 +34,7 @@ export const ListingUnavailable = (props: Props) => {
               : ownerListItem.address;
             return (
               <Text
-                tw="font-medium text-black dark:text-white mb-2"
+                tw="mb-2 font-medium text-black dark:text-white"
                 key={`${ownerListItem.address}`}
               >
                 Please connect {displayAddress} address

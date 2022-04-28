@@ -38,12 +38,12 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View
-            tw="h-12 p-2 items-center justify-center rounded-full flex flex-row cursor-pointer"
+            tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full p-2"
             style={tw.style(isWeb ? "bg-gray-100 dark:bg-gray-900" : "")}
           >
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
-              <Text tw="font-semibold ml-2 mr-1 dark:text-white">
+              <Text tw="ml-2 mr-1 font-semibold dark:text-white">
                 {`@${user.data.profile.username}`}
               </Text>
             ) : null}
@@ -63,7 +63,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
 
       <DropdownMenuContent
         loop
-        tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
+        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         {type === "profile" && (
           <DropdownMenuItem
@@ -71,7 +71,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
               router.push(`/@${user?.data?.profile?.username ?? userAddress}`);
             }}
             key="your-profile"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Profile
@@ -80,35 +80,35 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
         )}
 
         {type === "profile" && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         <DropdownMenuItem
           onSelect={() => router.push("/settings")}
           key="your-settings"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Settings
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuRoot>
           <DropdownMenuTriggerItem
             key="nested-group-trigger"
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuTriggerItem>
-          <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
+          <DropdownMenuContent tw="w-30 rounded-2xl bg-white p-2 shadow dark:bg-gray-900">
             <DropdownMenuItem
               onSelect={() => context.setColorScheme("light")}
               key="nested-group-1"
-              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
                 Light
@@ -117,7 +117,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             <DropdownMenuItem
               onSelect={() => context.setColorScheme("dark")}
               key="nested-group-2"
-              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
                 Dark
@@ -126,13 +126,13 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           </DropdownMenuContent>
         </DropdownMenuRoot>
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           destructive
           onSelect={logout}
           key="sign-out"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Sign Out

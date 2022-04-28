@@ -55,14 +55,14 @@ export const Notifications = () => {
   }, [isLoadingMore]);
 
   const Separator = useCallback(
-    () => <View tw={`bg-gray-100 dark:bg-gray-800 h-[1px]`} />,
+    () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
     []
   );
 
   const ListEmptyComponent = useCallback(
     () => (
       <View tw="h-full items-center justify-center">
-        <Text tw="dark:text-gray-100 text-gray-900">No new notifications</Text>
+        <Text tw="text-gray-900 dark:text-gray-100">No new notifications</Text>
       </View>
     ),
     []
@@ -115,7 +115,7 @@ const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   const notificationInfo = useNotificationInfo(notification);
 
   return (
-    <View tw="flex-row p-4 items-center">
+    <View tw="flex-row items-center p-4">
       {notificationInfo.icon}
       <View tw="mx-2">
         <Link href={notificationInfo.href}>
@@ -147,7 +147,7 @@ const NotificationDescription = ({
       <View>
         <Text
           //@ts-ignore
-          tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
+          tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
           sx={{ lineHeight: 20, fontSize: 13 }}
         >
@@ -174,7 +174,7 @@ const NotificationDescription = ({
               <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
               and{" "}
               <Text
-                tw="text-black dark:text-white font-bold"
+                tw="font-bold text-black dark:text-white"
                 onPress={() => setUsers(actors.slice(2, actors.length))}
               >
                 {actors.length - 2} other{" "}
@@ -206,7 +206,7 @@ const NotificationDescription = ({
             <TextLink
               //@ts-ignore
               variant="text-sm"
-              tw="text-black dark:text-white font-bold"
+              tw="font-bold text-black dark:text-white"
               href={notificationInfo.href}
             >
               {notification.nft__nftdisplay__name}
@@ -230,7 +230,7 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
       variant="text-sm"
-      tw="text-black dark:text-white font-bold"
+      tw="font-bold text-black dark:text-white"
     >
       {actor.username ? (
         <>@{actor.username}</>

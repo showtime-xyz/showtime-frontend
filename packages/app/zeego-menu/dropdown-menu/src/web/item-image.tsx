@@ -1,7 +1,7 @@
-import { MenuDisplayName, MenuItemImageProps } from '@zeego/menu'
-import { Image } from 'react-native'
+import React from "react";
+import { Image } from "react-native";
 
-import React from 'react'
+import { MenuDisplayName, MenuItemImageProps } from "@zeego/menu";
 
 const ItemImage = ({
   source,
@@ -20,9 +20,9 @@ const ItemImage = ({
       width={width}
       height={height}
     />
-  )
-}
+  );
+};
 
-ItemImage.displayName = MenuDisplayName.ItemImage
+ItemImage.displayName = MenuDisplayName.ItemImage;
 
-export { ItemImage }
+export { ItemImage };

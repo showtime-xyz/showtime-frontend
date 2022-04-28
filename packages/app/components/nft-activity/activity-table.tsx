@@ -13,7 +13,7 @@ const ActivityTable = ({ data }: TableProps) => {
   }, []);
 
   const handleRenderSeparator = useCallback(() => {
-    return <View tw="bg-gray-100 dark:bg-gray-900 w-full h-0.25" />;
+    return <View tw="h-0.25 w-full bg-gray-100 dark:bg-gray-900" />;
   }, []);
 
   return (

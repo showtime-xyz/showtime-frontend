@@ -20,8 +20,8 @@ export function ImagePickerButton({
     <Pressable
       tw={
         type === "profilePhoto"
-          ? "w-20 h-20 bg-white dark:bg-black rounded-full justify-center items-center"
-          : "w-12 h-12 bg-white dark:bg-black rounded-full justify-center items-center"
+          ? "h-20 w-20 items-center justify-center rounded-full bg-white dark:bg-black"
+          : "h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
       }
       onPress={async () => {
         const file = await pickFile({ mediaTypes: "image" });

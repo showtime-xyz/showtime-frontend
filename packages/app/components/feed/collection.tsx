@@ -19,13 +19,13 @@ function Collection({ nft }: Props) {
         {nft.collection_img_url && (
           <Image
             source={{ uri: nft.collection_img_url }}
-            tw="w-5 h-5 rounded-full"
+            tw="h-5 w-5 rounded-full"
           />
         )}
         <Text
           tw={`${
             nft.collection_img_url ? "ml-2" : ""
-          } font-bold text-xs dark:text-white`}
+          } text-xs font-bold dark:text-white`}
           numberOfLines={1}
         >
           {nft.collection_name}

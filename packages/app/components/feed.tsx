@@ -98,7 +98,7 @@ const HeaderFeed = () => {
   });
 
   return (
-    <View tw="flex-row justify-center items-center">
+    <View tw="flex-row items-center justify-center">
       <Pressable
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
@@ -114,7 +114,7 @@ const HeaderFeed = () => {
       </Pressable>
 
       <View tw="w-3" />
-      <View tw="w-[1px] h-4 bg-black dark:bg-white opacity-50" />
+      <View tw="h-4 w-[1px] bg-black opacity-50 dark:bg-white" />
       <View tw="w-3" />
 
       <Pressable

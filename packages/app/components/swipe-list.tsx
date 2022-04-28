@@ -249,8 +249,8 @@ export const FeedItem = memo(
 
     if (windowWidth >= 768) {
       return (
-        <View tw="w-full h-full flex-row">
-          <View tw="flex-3 bg-gray-100 dark:bg-black justify-center items-center">
+        <View tw="h-full w-full flex-row">
+          <View tw="flex-3 items-center justify-center bg-gray-100 dark:bg-black">
             <Media
               item={nft}
               numColumns={1}
@@ -258,12 +258,12 @@ export const FeedItem = memo(
               resizeMode="contain"
             />
           </View>
-          <View tw="flex-1 bg-white dark:bg-black shadow-md">
+          <View tw="flex-1 bg-white shadow-md dark:bg-black">
             <Collection nft={nft} />
             <Divider tw="my-2" />
             <Social nft={nft} />
             <LikedBy nft={nft} />
-            <View tw="flex-row justify-between mr-4">
+            <View tw="mr-4 flex-row justify-between">
               <Title nft={nft} />
               <NFTDropdown nftId={nft.nft_id} />
             </View>
@@ -282,7 +282,7 @@ export const FeedItem = memo(
       <LikeContextProvider nft={nft}>
         <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
           {Platform.OS !== "web" && (
-            <View tw="absolute w-full h-full">
+            <View tw="absolute h-full w-full">
               {nft.blurhash ? (
                 <Blurhash
                   blurhash={nft.blurhash}
@@ -293,7 +293,7 @@ export const FeedItem = memo(
                 />
               ) : (
                 <Image
-                  tw="w-full h-full"
+                  tw="h-full w-full"
                   source={{
                     uri: getMediaUrl({ nft, stillPreview: true }),
                   }}

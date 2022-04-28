@@ -45,7 +45,7 @@ function Social({ nft }: { nft?: NFT }) {
   }, [router, nft]);
 
   return (
-    <View tw="px-4 py-2 bg-white dark:bg-black flex-row justify-between">
+    <View tw="flex-row justify-between bg-white px-4 py-2 dark:bg-black">
       <View tw="flex-row">
         <Button
           variant="like"

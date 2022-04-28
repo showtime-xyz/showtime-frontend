@@ -25,7 +25,7 @@ function OwnershipContainer({
   ) : (
     <View
       tw={[
-        "flex flex-row flex-wrap justify-between w-[30px] h-[30px]",
+        "flex h-[30px] w-[30px] flex-row flex-wrap justify-between",
         count < 3 ? "content-center" : "content-between",
       ]}
       children={children}
@@ -71,7 +71,7 @@ export function Ownership({ nft }: Props) {
           {data?.multiple_owners_list?.slice(0, 4).map((owner) => (
             <Avatar
               key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-              tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+              tw="h-[14px] w-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
               size={14}
               url={owner.img_url}
             />
@@ -81,13 +81,13 @@ export function Ownership({ nft }: Props) {
         <View tw="">
           <Text
             variant="text-xs"
-            tw="mb-1 text-gray-600 dark:text-gray-400 font-semibold"
+            tw="mb-1 font-semibold text-gray-600 dark:text-gray-400"
           >
             Owners
           </Text>
           <Text
             variant="text-13"
-            tw="text-gray-900 dark:text-white font-semibold"
+            tw="font-semibold text-gray-900 dark:text-white"
           >
             Multiple
           </Text>
@@ -108,15 +108,15 @@ export function Ownership({ nft }: Props) {
             sx={{ fontSize: 12, lineHeight: 12 }}
             tw={`${
               nft.owner_username ? "mb-1" : ""
-            } text-gray-600 dark:text-gray-400 font-semibold`}
+            } font-semibold text-gray-600 dark:text-gray-400`}
           >
             Owner
           </Text>
           {nft.owner_username && (
-            <View tw="h-[12px] flex flex-row items-center">
+            <View tw="flex h-[12px] flex-row items-center">
               <Text
                 sx={{ fontSize: 13, lineHeight: 15 }}
-                tw="text-gray-900 dark:text-white font-semibold"
+                tw="font-semibold text-gray-900 dark:text-white"
               >
                 @{nft.owner_username}
               </Text>

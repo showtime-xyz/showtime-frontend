@@ -10,7 +10,7 @@ export default {
 } as Meta;
 
 export const Basic: React.VFC<{}> = () => (
-  <View tw="flex-1 justify-center items-center">
+  <View tw="flex-1 items-center justify-center">
     <Divider tw="my-4" />
     <Divider tw="my-4" width={300} />
     <Divider tw="my-4" height={10} width={100} />

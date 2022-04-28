@@ -28,7 +28,7 @@ export const ProfileFooter = memo(
         <View tw={`flex-row mb-[${tabBarHeight}px] mt-4`}>
           {new Array(numColumns).fill(0).map((_, i) => (
             <View
-              tw="mx-4 rounded-2xl overflow-hidden"
+              tw="mx-4 overflow-hidden rounded-2xl"
               key={`ProfileFooter-Skeleton-${i}`}
             >
               <Skeleton

@@ -56,13 +56,13 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
         size,
         numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
         nft?.loading ? "opacity-50" : "opacity-100",
-        "shadow-lg rounded-2xl overflow-hidden",
+        "overflow-hidden rounded-2xl shadow-lg",
         "self-center justify-self-center",
       ]}
     >
       <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
         {/* {variant === "activity" && <Activity activity={act} />} */}
-        <View tw="flex-row justify-between items-center px-4 py-2">
+        <View tw="flex-row items-center justify-between px-4 py-2">
           <Creator nft={nft} shouldShowDateCreated={false} />
           <NFTDropdown nftId={nft.nft_id} />
         </View>
@@ -82,7 +82,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
 
         <Owner nft={nft} price={Platform.OS !== "ios"} />
 
-        <View tw="h-[1px] mx-4 bg-gray-100 dark:bg-gray-900" />
+        <View tw="mx-4 h-[1px] bg-gray-100 dark:bg-gray-900" />
         <Collection nft={nft} />
       </View>
     </View>

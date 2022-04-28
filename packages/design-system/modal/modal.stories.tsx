@@ -17,7 +17,7 @@ export default {
 } as Meta;
 
 const Container = (props: any) => {
-  return <View tw={"dark:bg-white p-10 bg-black"}>{props.children}</View>;
+  return <View tw={"bg-black p-10 dark:bg-white"}>{props.children}</View>;
 };
 
 export const HeaderDefault: React.VFC<{}> = () => {
@@ -84,7 +84,7 @@ export const WithScrollable: React.VFC<{}> = () => {
               .map((_, index) => (
                 <Text
                   key={`${index}-item`}
-                  tw="text-white p-1"
+                  tw="p-1 text-white"
                 >{`#${index} item`}</Text>
               ))}
           </BottomSheetScrollView>

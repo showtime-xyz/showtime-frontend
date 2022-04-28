@@ -110,8 +110,8 @@ export const CommentInputBox = forwardRef<
   return (
     <>
       {selectedComment && (
-        <View tw="bg-gray-900 dark:bg-white flex-row justify-between items-center px-4">
-          <Text variant="text-xs" tw="font-bold py-2">{`Reply to @${getUsername(
+        <View tw="flex-row items-center justify-between bg-gray-900 px-4 dark:bg-white">
+          <Text variant="text-xs" tw="py-2 font-bold">{`Reply to @${getUsername(
             selectedComment
           )}`}</Text>
           <Button

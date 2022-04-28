@@ -108,8 +108,8 @@ export function Login({ onLogin }: LoginProps) {
               onIndexChange={setSelected}
               tabListHeight={TAB_LIST_HEIGHT}
             >
-              <View tw="justify-center items-center border-b border-gray-200 dark:border-gray-800">
-                <View tw="flex-row h-[56px]">
+              <View tw="items-center justify-center border-b border-gray-200 dark:border-gray-800">
+                <View tw="h-[56px] flex-row">
                   {tabsData.map((d, i) => (
                     // @ts-ignore
                     <Tabs.Trigger key={d.name} index={i}>
@@ -137,8 +137,8 @@ export function Login({ onLogin }: LoginProps) {
                       <ButtonLabel>Sign in with Wallet</ButtonLabel>
                     </Button>
                   </View>
-                  <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
-                    <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
+                  <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
+                    <Text tw="my-[8px] text-center text-sm font-bold text-gray-600 dark:text-gray-400">
                       — or —
                     </Text>
                   </View>

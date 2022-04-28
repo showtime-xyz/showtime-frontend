@@ -17,7 +17,7 @@ function Owner({ price, nft, tw = "" }: Props) {
   return (
     <View
       tw={[
-        "px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black",
+        "flex flex-row items-center justify-between bg-white px-4 py-2 dark:bg-black",
         tw,
       ]}
     >

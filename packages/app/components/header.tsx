@@ -59,7 +59,7 @@ const HeaderRight = () => {
                 >
                   <View
                     tw={[
-                      "rounded-full h-12 w-12 justify-center items-center",
+                      "h-12 w-12 items-center justify-center rounded-full",
                       "bg-black dark:bg-white",
                     ]}
                   >
@@ -73,7 +73,7 @@ const HeaderRight = () => {
               </View>
             </>
           )}
-          <View tw="md:mx-2 flex-row items-center">
+          <View tw="flex-row items-center md:mx-2">
             {isAuthenticated ? (
               <HeaderDropdown type={isMdWidth ? "profile" : "settings"} />
             ) : (
@@ -126,7 +126,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   return (
     <Pressable
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="w-6 h-6 rounded-full items-center justify-center"
+      tw="h-6 w-6 items-center justify-center rounded-full"
       onPress={() => {
         if (canGoBack) {
           router.pop();
@@ -172,7 +172,7 @@ const HeaderCenter = ({
         <Input
           placeholder="Search by name or wallet"
           leftElement={
-            <View tw="w-12 h-12 rounded-full items-center justify-center">
+            <View tw="h-12 w-12 items-center justify-center rounded-full">
               <Search
                 style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
                 color={
@@ -205,9 +205,9 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         style={{
           position: "sticky",
         }}
-        tw="bg-white dark:bg-black top-0 right-0 left-0 z-50 items-center w-full shadow-sm"
+        tw="top-0 right-0 left-0 z-50 w-full items-center bg-white shadow-sm dark:bg-black"
       >
-        <View tw="max-w-screen-2xl w-full h-16 flex-row justify-between px-4 py-2">
+        <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
             <HeaderCenter {...{ isDark, isMdWidth }} />
           </View>
@@ -231,7 +231,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         backdropFilter: "blur(20px)",
         backgroundColor: blurredBackgroundColor,
       }}
-      tw="top-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2 shadow-sm w-full"
+      tw="top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm"
     >
       <View tw="w-20 items-start">
         <HeaderLeft canGoBack={canGoBack} />
