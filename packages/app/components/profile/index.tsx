@@ -63,7 +63,7 @@ const Profile = ({ address }: { address?: string }) => {
   );
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
-      <View tw="web:mb-8 w-full items-center">
+      <View tw="web:mb-8 w-full web:items-center flex-1">
         <Tabs.Root
           onIndexChange={setSelected}
           initialIndex={selected}
