@@ -3707,7 +3707,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/create-cache-key-function@npm:^28.0.2":
+"@jest/create-cache-key-function@npm:28.0.2":
   version: 28.0.2
   resolution: "@jest/create-cache-key-function@npm:28.0.2"
   dependencies:
@@ -11932,7 +11932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-expo@npm:^8.5.1":
+"babel-preset-expo@npm:8.5.1":
   version: 8.5.1
   resolution: "babel-preset-expo@npm:8.5.1"
   dependencies:
@@ -17548,7 +17548,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-linear-gradient@npm:~11.3.0":
+"expo-linear-gradient@npm:11.3.0":
   version: 11.3.0
   resolution: "expo-linear-gradient@npm:11.3.0"
   peerDependencies:
@@ -21742,7 +21742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-runtime@npm:^28.0.3":
+"jest-runtime@npm:28.0.3":
   version: 28.0.3
   resolution: "jest-runtime@npm:28.0.3"
   dependencies:
@@ -32095,8 +32095,8 @@ __metadata:
   linkType: hard
 
 "terser@npm:^5.10.0, terser@npm:^5.3.4, terser@npm:^5.7.2":
-  version: 5.13.0
-  resolution: "terser@npm:5.13.0"
+  version: 5.13.1
+  resolution: "terser@npm:5.13.1"
   dependencies:
     acorn: ^8.5.0
     commander: ^2.20.0
@@ -32104,7 +32104,7 @@ __metadata:
     source-map-support: ~0.5.20
   bin:
     terser: bin/terser
-  checksum: fb3cfc11c16269f7563de48644b7d5adc4791bbb916eb59cda14db9497a494f287990d0451542294d836ea545d71649ca2c39ce9be35e90b456e9533a1e41259
+  checksum: 0b1f5043cf5c3973005fe2ae4ff3be82511c336a6430599dacd4e2acf77c974d4474b0f1eec4823977c1f33823147e736ff712ca8e098bee3db25946480fa29d
   languageName: node
   linkType: hard
 
