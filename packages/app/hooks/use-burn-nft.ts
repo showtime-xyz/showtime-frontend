@@ -7,7 +7,12 @@ import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { track } from "app/lib/analytics";
 
 type BurnNFTType = {
-  status: "idle" | "burning" | "burningError" | "burningSuccess";
+  status:
+    | "idle"
+    | "burning"
+    | "burningError"
+    | "burningSuccess"
+    | "transactionInitiated";
   transaction?: string;
 };
 
@@ -30,6 +35,12 @@ const burnNFTReducer = (state: BurnNFTType, action: any): BurnNFTType => {
       return {
         ...state,
         status: "burningSuccess",
+        transaction: action.transaction,
+      };
+    case "transactionInitiated":
+      return {
+        ...state,
+        status: "transactionInitiated",
         transaction: action.transaction,
       };
     default:
@@ -85,6 +96,8 @@ export const useBurnNFT = () => {
 
             reject("Something went wrong");
           });
+
+        dispatch({ type: "transactionInitiated", transaction });
 
         console.log("transaction hash ", transaction);
 

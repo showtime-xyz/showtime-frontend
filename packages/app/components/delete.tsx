@@ -14,11 +14,13 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
-import { Button, Fieldset, Media, Text, View } from "design-system";
+import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+
+import { PolygonScanButton } from "./polygon-scan-button";
 
 const defaultValues = {
   copies: 1,
@@ -73,20 +75,57 @@ function Delete({ nft }: { nft: NFT }) {
   // enable submission only on idle or error state.
   const enable = state.status === "idle" || state.status === "burningError";
 
-  useEffect(() => {
-    if (state.status != "burningSuccess") return;
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="flex-1 items-center justify-center pb-8">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Your NFT is being deleted. Feel free to navigate away from this
+            screen.
+          </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
+      </View>
+    );
+  }
 
-    // TODO: optimistically decrease edition count?
+  if (state.status === "burningError") {
+    return (
+      <View tw="flex-1 items-center justify-center pb-8">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Something went wrong!
+          </Text>
+          <Button onPress={handleSubmit(handleSubmitForm)}>Retry</Button>
+        </View>
+      </View>
+    );
+  }
 
-    // We're popping twice here to also close the NFT page behind this modal
-    // For web, we just pop it once
-    if (Platform.OS === "web") {
-      router.pop();
-    } else {
-      router.pop();
-      router.pop();
-    }
-  }, [state.status]);
+  if (state.status === "burningSuccess") {
+    return (
+      <View tw="mt-4 flex-1 items-center justify-center pb-8">
+        <Text variant="text-4xl">🎉</Text>
+        <View>
+          <Text
+            variant="text-lg"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Your NFT has been deleted
+          </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1">
