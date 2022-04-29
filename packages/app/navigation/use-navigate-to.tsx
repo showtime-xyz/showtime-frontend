@@ -8,15 +8,23 @@ export const useNavigateToListing = () => {
   const router = useRouter();
 
   const navigateToList = (nft: NFT) => {
-    const nftId = nft.nft_id;
-    const as = `/nft/${nftId}/list`;
+    const as = `nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}/buy`;
 
     router.push(
       Platform.select({
         native: as,
         web: {
           pathname: router.pathname,
-          query: { ...router.query, listModal: true, id: nftId },
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              chainName: nft?.chain_name,
+              contractAddress: nft?.contract_address,
+              tokenId: nft?.token_id,
+              listModal: true,
+            },
+          },
         },
       }),
       as,
