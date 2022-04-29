@@ -22,10 +22,12 @@ import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
 import { enableScreens } from "react-native-screens";
-import type { PublicConfiguration, Revalidator, RevalidatorOptions } from "swr";
+import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
+import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { MintSnackbar } from "app/components/mint-snackbar";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
@@ -303,11 +305,10 @@ function AppContextProvider({
   useEffect(() => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        const content =
-          Platform.OS === "ios"
-            ? response?.notification?.request?.content?.data?.body?.path
-            : response?.notification?.request?.content?.data?.path;
-
+        // const content =
+        //   Platform.OS === "ios"
+        //     ? response?.notification?.request?.content?.data?.body?.path
+        //     : response?.notification?.request?.content?.data?.path;
         // Notifications.dismissNotificationAsync(
         //   response?.notification?.request?.identifier
         // );
@@ -393,6 +394,7 @@ function App() {
                                   <FeedProvider>
                                     <StatusBar style="auto" />
                                     <RootStackNavigator />
+                                    <MintSnackbar />
                                   </FeedProvider>
                                 </GrowthBookProvider>
                               </BottomSheetModalProvider>
