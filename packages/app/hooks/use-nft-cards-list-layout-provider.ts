@@ -28,14 +28,13 @@ function useNFTCardsListLayoutProvider({
 }) {
   const { height, width } = useNFTCardDimensions();
   const { width: windowWidth } = useWindowDimensions();
+  const isFirstIndexHeader = newData[0] === "header";
 
   const _layoutProvider = useMemo(
     () =>
       new LayoutProvider(
         (index) => {
-          if (newData && newData[index] === "header") {
-            return "header";
-          }
+          if (isFirstIndexHeader && index === 0) return "header";
 
           return "item";
         },
@@ -49,7 +48,7 @@ function useNFTCardsListLayoutProvider({
           }
         }
       ),
-    [width, windowWidth, newData]
+    [isFirstIndexHeader, width, windowWidth, headerHeight]
   );
 
   return _layoutProvider;
