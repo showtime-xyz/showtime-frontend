@@ -12,7 +12,7 @@ class Document extends NextDocument {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
         </Head>
-        <body className="!max-w-screen bg-white dark:bg-black">
+        <body className="!max-w-screen">
           <Main />
           <NextScript />
         </body>
