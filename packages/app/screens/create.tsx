@@ -113,7 +113,7 @@ const CreateMD = () => {
               variant="text-lg"
               tw="my-8 text-center text-black dark:text-white"
             >
-              Your NFT has been listed on Showtime!
+              Your NFT has been minted on Showtime!
             </Text>
             <PolygonScanButton transactionHash={state.transaction} />
           </View>
