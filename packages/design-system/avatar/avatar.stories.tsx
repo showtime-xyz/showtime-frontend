@@ -13,8 +13,6 @@ export default {
 
 export const Basic: React.VFC<{}> = () => <Avatar url={URL} />;
 
-export const withTokenIcon: React.VFC<{}> = () => <AvatarWithToken url={URL} />;
-
 export const withBorder: React.VFC<{}> = () => (
   <Avatar url={URL} borderWidth={4} />
 );
