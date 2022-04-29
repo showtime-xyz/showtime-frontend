@@ -52,7 +52,7 @@ export const Buy = (props: { nft?: NFT }) => {
     state.status === "loading"
   ) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text
@@ -69,7 +69,7 @@ export const Buy = (props: { nft?: NFT }) => {
 
   if (state.status === "grantingAllowance") {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text
@@ -88,7 +88,7 @@ export const Buy = (props: { nft?: NFT }) => {
     const quantity = getValues("quantity");
 
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
@@ -108,7 +108,7 @@ export const Buy = (props: { nft?: NFT }) => {
     const quantity = getValues("quantity");
 
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
@@ -130,7 +130,7 @@ export const Buy = (props: { nft?: NFT }) => {
   if (state.status === "needsAllowance") {
     const quantity = getValues("quantity");
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
@@ -149,7 +149,7 @@ export const Buy = (props: { nft?: NFT }) => {
 
   if (state.status === "buyingSuccess") {
     return (
-      <View tw="mt-4 flex-1 items-center justify-center">
+      <View tw="mt-4 flex-1 items-center justify-center p-8">
         <Text variant="text-4xl">🎉</Text>
         <View>
           <Text
