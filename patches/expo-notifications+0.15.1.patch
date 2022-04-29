@@ -1,5 +1,5 @@
 diff --git a/node_modules/expo-notifications/build/ServerRegistrationModule.web.js b/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
-index bd8b617..04d86fc 100644
+index 5c9feb1..206f772 100644
 --- a/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
 +++ b/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
 @@ -9,6 +9,8 @@ let getFallbackInstallationId = () => {
