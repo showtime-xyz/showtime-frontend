@@ -10,7 +10,7 @@ export interface NFTDetailsPayload {
 
 export function useNFTDetails(nftId?: number) {
   const { data, error } = useSWR<NFTDetailsPayload>(
-    "/v2/nft_detail/" + nftId,
+    nftId ? "/v2/nft_detail/" + nftId : null,
     fetcher
   );
 
