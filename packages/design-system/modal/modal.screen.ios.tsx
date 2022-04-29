@@ -4,11 +4,10 @@ import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import type { ModalScreenProps } from "./types";
 
-const ModalScreenComponent = forwardRef(function ModalScreenComponent({
-  title,
-  children,
-  onClose,
-}: ModalScreenProps) {
+const ModalScreenComponent = forwardRef(function ModalScreenComponent(
+  { title, children, onClose }: ModalScreenProps,
+  ref
+) {
   return (
     <>
       <ModalHeaderBar />
