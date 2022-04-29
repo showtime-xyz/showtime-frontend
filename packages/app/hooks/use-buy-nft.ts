@@ -12,7 +12,8 @@ import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
-import { parseBalance, SOL_MAX_INT } from "app/utilities";
+import { parseBalance } from "app/utilities";
+import { SOL_MAX_INT } from "app/lib/constants";
 
 const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
   `https://polygon-${
@@ -175,8 +176,16 @@ export const useBuyNFT = () => {
       const tokenAddr = LIST_CURRENCIES[nft.listing.currency];
       if (!nft.listing) return;
 
+      let permitRequest;
+
       dispatch({ type: "grantingAllowance" });
       try {
+        const web3Modal = await getWeb3Modal();
+
+        const web3 = new ethers.providers.Web3Provider(
+          await web3Modal.connect()
+        );
+
         if (
           [
             LIST_CURRENCIES.WETH,
@@ -184,16 +193,12 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
-          const web3Modal = await getWeb3Modal();
-
-          const web3 = new ethers.providers.Web3Provider(
-            await web3Modal.connect()
-          );
-
           const userAddress = await web3.getSigner().getAddress();
           let tokenContract, nonce;
 
-          if (tokenAddr === LIST_CURRENCIES.USDC) {
+          if (
+            tokenAddr === LIST_CURRENCIES.USDC
+          ) {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTxNonces,
@@ -240,23 +245,65 @@ export const useBuyNFT = () => {
             metatx
           );
 
-          const request = {
+          permitRequest = {
             owner: metatx.from,
             fnSig: metatx.functionSignature,
             tokenAddr,
             signature,
           };
+        } else {
+          const tokenContract = new ethers.Contract(
+            tokenAddr,
+            iercPermit20Abi,
+            infurePolygonProvider
+          );
 
-          const transaction = await axios
-            .post("/api/marketplace/permit", request)
-            .then((res) => res.data);
+          const userAddress = await web3.getSigner().getAddress();
+          const permit = {
+            owner: userAddress,
+            spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+            value: SOL_MAX_INT,
+            nonce: await tokenContract.nonces(userAddress),
+            deadline: Date.now() + 120,
+          };
 
-          // since we sent the transaction on polygon chain, we listen it with infure provider
-          infurePolygonProvider.once(transaction, () => {
-            console.log("success ", transaction);
-            buyNFT({ nft, quantity });
-          });
+          const signature = await web3.getSigner()._signTypedData(
+            {
+              name: CURRENCY_NAMES[tokenAddr],
+              version: "1",
+              chainId:
+                process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137,
+              verifyingContract: tokenAddr,
+            },
+            {
+              Permit: [
+                { name: "owner", type: "address" },
+                { name: "spender", type: "address" },
+                { name: "value", type: "uint256" },
+                { name: "nonce", type: "uint256" },
+                { name: "deadline", type: "uint256" },
+              ],
+            },
+            permit
+          );
+
+         permitRequest =  {
+            owner: permit.owner,
+            deadline: permit.deadline,
+            tokenAddr,
+            signature
+          };
         }
+
+
+        const transaction = await axios
+          .post("/api/marketplace/permit", permitRequest)
+          .then((res) => res.data);
+
+        // since we sent the transaction on polygon chain, we listen it with infure provider
+        infurePolygonProvider.once(transaction, () => {
+          buyNFT({ nft, quantity });
+        });
       } catch (error) {
         console.error("Allowance failed ", error);
         dispatch({ type: "grantingAllowanceError" });

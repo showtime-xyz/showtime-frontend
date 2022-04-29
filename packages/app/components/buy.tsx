@@ -86,9 +86,10 @@ export const Buy = (props: { nft?: NFT }) => {
   }
 
   if (state.status === "grantingAllowanceError") {
+    const quantity = getValues("quantity");
+
     return (
       <View tw="flex-1 items-center justify-center">
-        <Spinner />
         <View tw="items-center">
           <Text
             variant="text-base"
@@ -96,7 +97,9 @@ export const Buy = (props: { nft?: NFT }) => {
           >
             Sorry. Granting allowance failed.
           </Text>
-          <PolygonScanButton transactionHash={state.transaction} />
+          <Button onPress={() => grantAllowance({ nft, quantity: quantity })}>
+            Try again
+          </Button>       
         </View>
       </View>
     );
@@ -161,6 +164,7 @@ export const Buy = (props: { nft?: NFT }) => {
       </View>
     );
   }
+
 
   return (
     <View>
