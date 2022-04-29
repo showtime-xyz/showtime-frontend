@@ -39,7 +39,7 @@ export const useNavigateToBuy = () => {
   const router = useRouter();
 
   const navigateToBuy = (nft: NFT) => {
-    const as = `nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}/buy`;
+    const as = `/nft/${nft.chain_name}/${nft.contract_address}/${nft.token_id}/buy`;
 
     router.push(
       Platform.select({
@@ -55,7 +55,10 @@ export const useNavigateToBuy = () => {
           },
         },
       }),
-      as,
+      Platform.select({
+        native: as,
+        web: router.asPath.startsWith("/nft/") ? as : router.asPath,
+      }),
       { shallow: true }
     );
   };
