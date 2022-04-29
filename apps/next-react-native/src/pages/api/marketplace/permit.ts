@@ -6,6 +6,8 @@ import ierc20PermitAbi from "app/abi/IERC20Permit.json";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "app/lib/constants";
 import { toWei } from "app/lib/utilities";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const { body } = req;
@@ -41,7 +43,9 @@ export default async function handler(req, res) {
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {
-      console.log("Permit:", errorMsg);
+      if (proc) {
+        console.log("Permit:", errorMsg);
+      }
       return res
         .status(errorMsg === "Something went wrong." ? 500 : 400)
         .send(errorMsg);
@@ -69,7 +73,9 @@ const submitErc20Permit = async (wallet, permit, options) => {
       options
     );
   } catch (error) {
-    console.log("submitErc20Permit Permit:", error);
+    if (isDev) {
+      console.log("submitErc20Permit Permit:", error);
+    }
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
     if (!revertMessage) {
@@ -97,7 +103,9 @@ const executeMetaTx = async (wallet, metatx, options) => {
       options
     );
   } catch (error) {
-    console.log("ExecuteMetaTx Permit:", error);
+    if (isDev) {
+      console.log("ExecuteMetaTx Permit:", error);
+    }
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
 
