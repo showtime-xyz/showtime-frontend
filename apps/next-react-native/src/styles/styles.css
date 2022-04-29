@@ -348,3 +348,6 @@
 .web3modal-modal-lightbox {
   z-index: 99999 !important;
 }
+body{
+  width: unset !important;
+}
