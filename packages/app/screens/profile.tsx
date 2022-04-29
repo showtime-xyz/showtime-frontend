@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
@@ -7,7 +7,6 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
-import { mixpanel } from "app/lib/mixpanel";
 import { createParam } from "app/navigation/use-param";
 
 type Query = {
@@ -17,12 +16,9 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const ProfileScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Profile view");
-  }, []);
-
   const [username] = useParam("username");
-  const cleanedUsername = username?.replace(/@/g, "");
+  const cleanedUsername =
+    username && username !== "" ? username?.replace(/@/g, "") : null;
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
 
@@ -31,7 +27,9 @@ const ProfileScreen = withColorScheme(() => {
       <ErrorBoundary>
         <Profile
           username={
-            cleanedUsername ?? user?.data?.profile?.username ?? userAddress
+            Platform.OS === "web"
+              ? cleanedUsername
+              : cleanedUsername ?? user?.data?.profile?.username ?? userAddress
           }
         />
       </ErrorBoundary>

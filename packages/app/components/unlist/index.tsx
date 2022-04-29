@@ -42,14 +42,14 @@ const Unlist = ({ nft }: Props) => {
 
   if (state.status === "unlistingSuccess") {
     return (
-      <View tw="mt-4 flex-1 items-center justify-center">
+      <View tw="mt-4 flex-1 items-center justify-center p-8">
         <Text variant="text-4xl">🎉</Text>
         <View>
           <Text
             variant="text-lg"
             tw="my-8 text-center text-black dark:text-white"
           >
-            Your NFT has been listed from Showtime
+            Your NFT has been unlisted from Showtime
           </Text>
           <PolygonScanButton transactionHash={state.transactionHash} />
         </View>
@@ -59,7 +59,7 @@ const Unlist = ({ nft }: Props) => {
 
   if (state.status === "transactionInitiated") {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text

@@ -175,20 +175,20 @@ const CuratedFeed = () => {
 
 const WebFeed = () => {
   return (
-    <Tabs.Root>
+    <Tabs.Root initialIndex={1}>
       <Tabs.List
         style={{
           height: TAB_LIST_HEIGHT,
         }}
         contentContainerStyle={tw.style(
-          "w-full justify-center bg-gray-100 dark:bg-gray-900"
+          "w-full justify-center bg-white dark:bg-black"
         )}
       >
         <Tabs.Trigger>
           <TabItem name="Following" />
         </Tabs.Trigger>
         <Tabs.Trigger>
-          <TabItem name="For you" />
+          <TabItem name="For You" />
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Pager>

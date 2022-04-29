@@ -29,14 +29,14 @@ function CameraScreen() {
     (param: FilePickerResolveValue) => {
       setMedia({ file: param.file, fileType: param.type });
 
-      const createPostURL = `/create?form=true`;
+      const createPostURL = `/create`;
       if (isAuthenticated) {
         router.push(
           Platform.select({
             native: createPostURL,
             web: {
               pathname: router.pathname,
-              query: { ...router.query, createModal: true, form: true },
+              query: { ...router.query, createModal: true },
             },
           }),
           createPostURL,

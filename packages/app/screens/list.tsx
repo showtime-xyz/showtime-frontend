@@ -1,6 +1,9 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
 import { List } from "app/components/list";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -25,7 +28,13 @@ const ListModal = withColorScheme(() => {
     contractAddress: contractAddress as string,
   });
 
-  return <List nft={data?.data?.item} />;
+  const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
+
+  return (
+    <BottomSheetModalProvider>
+      <List nft={nft} />
+    </BottomSheetModalProvider>
+  );
 });
 
 export const ListScreen = withModalScreen(

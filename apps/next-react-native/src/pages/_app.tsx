@@ -36,6 +36,7 @@ import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 import { ActivitiesScreen } from "app/screens/activities";
+import { BuyScreen } from "app/screens/buy";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -96,10 +97,12 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
       value={{
         provider: isServer ? () => new Map() : localStorageProvider,
         onError: (err, key) => {
-          toast?.show({
-            message: err,
-            hideAfter: 4000,
-          });
+          if (err?.message) {
+            toast?.show({
+              message: err.message,
+              hideAfter: 4000,
+            });
+          }
         },
         onErrorRetry: async (
           error: {
@@ -254,6 +257,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                   <ListScreen />
                                   <UnlistScreen />
                                   <DetailsScreen />
+                                  <BuyScreen />
                                   <ActivitiesScreen />
                                   <MintSnackbar />
                                   {/* Login should be the last so

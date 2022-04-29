@@ -1,10 +1,10 @@
-import { Transfer } from "app/components/transfer";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { Buy } from "app/components/buy";
 import { useNFTDetails } from "app/hooks/use-nft-details";
-import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+
+import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
   tokenId: string;
@@ -14,8 +14,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const TransferModal = () => {
-  useHideHeader();
+const BuyModal = () => {
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
@@ -27,12 +26,12 @@ const TransferModal = () => {
 
   const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
 
-  return <Transfer nft={nft} />;
+  return <Buy nft={nft} />;
 };
 
-export const TransferScreen = withModalScreen(
-  TransferModal,
-  "Transfer",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/transfer",
-  "transferModal"
+export const BuyScreen = withModalScreen(
+  BuyModal,
+  "Buy",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/buy",
+  "buyModal"
 );
