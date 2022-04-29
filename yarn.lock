@@ -1266,7 +1266,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-object-assign@npm:^7.0.0, @babel/plugin-transform-object-assign@npm:^7.10.4, @babel/plugin-transform-object-assign@npm:^7.16.7":
+"@babel/plugin-transform-object-assign@npm:^7.0.0, @babel/plugin-transform-object-assign@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/plugin-transform-object-assign@npm:7.16.7"
   dependencies:
@@ -4628,10 +4628,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/env@npm:12.1.5-canary.6"
-  checksum: 847468bfe38993021a4e33954294d5934cada18724e6acc7105c8f21e5e64fe095dd272ddda5c611418cf3c122931d8df3c6c3750cb8943369185136300248d4
+"@next/env@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/env@npm:12.1.6-canary.14"
+  checksum: 608b6c0666195865c0b96455b443ad35bf8eda7ecc3b7387ff211ac5f508aacb686b0f044e3ffc53eb3548860b805d93369ab18a1dd8712036216fbefd6b7330
   languageName: node
   linkType: hard
 
@@ -4644,86 +4644,86 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm-eabi@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-android-arm-eabi@npm:12.1.5-canary.6"
+"@next/swc-android-arm-eabi@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-android-arm-eabi@npm:12.1.6-canary.14"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm64@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-android-arm64@npm:12.1.5-canary.6"
+"@next/swc-android-arm64@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-android-arm64@npm:12.1.6-canary.14"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-darwin-arm64@npm:12.1.5-canary.6"
+"@next/swc-darwin-arm64@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-darwin-arm64@npm:12.1.6-canary.14"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-darwin-x64@npm:12.1.5-canary.6"
+"@next/swc-darwin-x64@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-darwin-x64@npm:12.1.6-canary.14"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm-gnueabihf@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.5-canary.6"
+"@next/swc-linux-arm-gnueabihf@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.6-canary.14"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-linux-arm64-gnu@npm:12.1.5-canary.6"
+"@next/swc-linux-arm64-gnu@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-linux-arm64-gnu@npm:12.1.6-canary.14"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-linux-arm64-musl@npm:12.1.5-canary.6"
+"@next/swc-linux-arm64-musl@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-linux-arm64-musl@npm:12.1.6-canary.14"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-linux-x64-gnu@npm:12.1.5-canary.6"
+"@next/swc-linux-x64-gnu@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-linux-x64-gnu@npm:12.1.6-canary.14"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-linux-x64-musl@npm:12.1.5-canary.6"
+"@next/swc-linux-x64-musl@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-linux-x64-musl@npm:12.1.6-canary.14"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-win32-arm64-msvc@npm:12.1.5-canary.6"
+"@next/swc-win32-arm64-msvc@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-win32-arm64-msvc@npm:12.1.6-canary.14"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-ia32-msvc@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-win32-ia32-msvc@npm:12.1.5-canary.6"
+"@next/swc-win32-ia32-msvc@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-win32-ia32-msvc@npm:12.1.6-canary.14"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "@next/swc-win32-x64-msvc@npm:12.1.5-canary.6"
+"@next/swc-win32-x64-msvc@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "@next/swc-win32-x64-msvc@npm:12.1.6-canary.14"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6292,6 +6292,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/browser@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/browser@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/core": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: f7bc3d4aa83d273b190be13d6437fbffdcb3ce10b8ceb129af63eacf3c574101cd5971c6f1979fcac6f413d92a3953167a6f6be3245f9b0125b007e6ee4539ae
+  languageName: node
+  linkType: hard
+
 "@sentry/browser@npm:^6.12.0":
   version: 6.19.7
   resolution: "@sentry/browser@npm:6.19.7"
@@ -6360,6 +6372,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/core@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/core@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/hub": 7.0.0-alpha.1
+    "@sentry/minimal": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: d59cc26d583488aee8819ec101ce81b76ee5cd8182a7a507a23c80b5a049e06c95c853b3e62bd51cbfd71d8ce69be36b53c5ef8e4b753187e1c1508643fd0ae8
+  languageName: node
+  linkType: hard
+
 "@sentry/hub@npm:6.19.2":
   version: 6.19.2
   resolution: "@sentry/hub@npm:6.19.2"
@@ -6393,6 +6418,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/hub@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/hub@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: 59b52f0eb6639b23c48d94575c14ca8ee495540c588845d0bf0c1eb5b24d52ea8d63107c2d792c662d2cf3f7e4e13990105bc7900f7a7e2f0628b6df98544020
+  languageName: node
+  linkType: hard
+
 "@sentry/integrations@npm:6.19.2":
   version: 6.19.2
   resolution: "@sentry/integrations@npm:6.19.2"
@@ -6414,6 +6450,18 @@ __metadata:
     localforage: ^1.8.1
     tslib: ^1.9.3
   checksum: 7bc0316f85a22743370ec54daae33db7ee5a2c01a1dfb8f1ad2791c976c8242c876a481a11ce5117605dc91f515a963b26cc6a6e9e50c5708e79520dbbc34293
+  languageName: node
+  linkType: hard
+
+"@sentry/integrations@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/integrations@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    localforage: ^1.8.1
+    tslib: ^1.9.3
+  checksum: bb3722ed5a92d06cc86251d64faec8ee7ef7253b3e981a72b75fa5425fcc2080491d60d4d8582e586ca58bf94fa2cd57a5857ef3ec09b36d2fea4d53e8e94bb8
   languageName: node
   linkType: hard
 
@@ -6462,6 +6510,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/minimal@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/minimal@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/hub": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: 470b14c3be5cc321891273eb7da015168c7b7746bf2577a77e5d0175bc0cccf1deacb02beae2e853914eabe7264bfccefc190490991248f48460d3b40fa9ffa1
+  languageName: node
+  linkType: hard
+
 "@sentry/nextjs@npm:7.0.0-alpha.0":
   version: 7.0.0-alpha.0
   resolution: "@sentry/nextjs@npm:7.0.0-alpha.0"
@@ -6486,6 +6545,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/nextjs@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/nextjs@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/core": 7.0.0-alpha.1
+    "@sentry/hub": 7.0.0-alpha.1
+    "@sentry/integrations": 7.0.0-alpha.1
+    "@sentry/node": 7.0.0-alpha.1
+    "@sentry/react": 7.0.0-alpha.1
+    "@sentry/tracing": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    "@sentry/webpack-plugin": 1.18.8
+    tslib: ^1.9.3
+  peerDependencies:
+    next: ^10.0.8 || ^11.0 || ^12.0
+    react: 15.x || 16.x || 17.x || 18.x
+    webpack: ">= 4.0.0"
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+  checksum: 6634cc07374326b5809eb310afcbeda7543b558f56f8f35a85ff1cbccc8cc5975a8b7de2f5e63c42828dffaf12c57cb9a2c59b47472f9d8a8fc130c40675b8a8
+  languageName: node
+  linkType: hard
+
 "@sentry/node@npm:7.0.0-alpha.0":
   version: 7.0.0-alpha.0
   resolution: "@sentry/node@npm:7.0.0-alpha.0"
@@ -6499,6 +6582,22 @@ __metadata:
     lru_map: ^0.3.3
     tslib: ^1.9.3
   checksum: b5a65b7b9ea8e1375005bfcdcbd75568c5b12ce03077860e665c65a3a58b8d76070c7005572e92efbb69bf273f69c358327fbf0bc66c7624fcf97fdf86777dfa
+  languageName: node
+  linkType: hard
+
+"@sentry/node@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/node@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/core": 7.0.0-alpha.1
+    "@sentry/hub": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    cookie: ^0.4.1
+    https-proxy-agent: ^5.0.0
+    lru_map: ^0.3.3
+    tslib: ^1.9.3
+  checksum: 8a4016c8655fd13a150c4b0853e917259ee51f11928533dac29863ac24ebf897abdf75647c4035a1cd31285d4eeeda6cfaf681ceaf2ec72204f4d166b63837e0
   languageName: node
   linkType: hard
 
@@ -6555,6 +6654,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/react@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/react@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/browser": 7.0.0-alpha.1
+    "@sentry/minimal": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    hoist-non-react-statics: ^3.3.2
+    tslib: ^1.9.3
+  peerDependencies:
+    react: 15.x || 16.x || 17.x || 18.x
+  checksum: 5d8878373e4294ba908c140fcd3df4471de1173083542b029ea6ee6a62c24fb81a0a204649263faad874952a9a7a73b7f1e28685bc8c7992382946a78b67e795
+  languageName: node
+  linkType: hard
+
 "@sentry/tracing@npm:6.19.2":
   version: 6.19.2
   resolution: "@sentry/tracing@npm:6.19.2"
@@ -6581,6 +6696,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/tracing@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/tracing@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/hub": 7.0.0-alpha.1
+    "@sentry/minimal": 7.0.0-alpha.1
+    "@sentry/types": 7.0.0-alpha.1
+    "@sentry/utils": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: 00b4c4a6dcb4b57cedce26f9fe937b1d46b03a77f80c0438f7ca31a230073578ba25108de66db997fa3dd88be7614f1662289e2c09b8cdf6f1924719d337ec60
+  languageName: node
+  linkType: hard
+
 "@sentry/types@npm:6.19.2":
   version: 6.19.2
   resolution: "@sentry/types@npm:6.19.2"
@@ -6599,6 +6727,13 @@ __metadata:
   version: 7.0.0-alpha.0
   resolution: "@sentry/types@npm:7.0.0-alpha.0"
   checksum: a9e54582a026bd53c4e987c8b0dbf23fbe03a9ff61942ce7f0d67693903d04d5db57930caec53d9e3256726be65c0d4f2537dabe17522cdab7202b716b14a363
+  languageName: node
+  linkType: hard
+
+"@sentry/types@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/types@npm:7.0.0-alpha.1"
+  checksum: d664ee8496c37fa9f6120c5f5378fe7ac5618a2516c7346831689775d84f63d7fe0916d835d1ae454d96f8df341619086094f44c28aa8c5ae1d335908cd16e25
   languageName: node
   linkType: hard
 
@@ -6629,6 +6764,16 @@ __metadata:
     "@sentry/types": 7.0.0-alpha.0
     tslib: ^1.9.3
   checksum: b422d4bec45b0fa0018d9b7355f2bc61018941ef88822f254db817ac58d2d053cac36e5a69faff1252f4c1d2d8619cc9899f39f043abf9e5e720da8b05683f1e
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:7.0.0-alpha.1":
+  version: 7.0.0-alpha.1
+  resolution: "@sentry/utils@npm:7.0.0-alpha.1"
+  dependencies:
+    "@sentry/types": 7.0.0-alpha.1
+    tslib: ^1.9.3
+  checksum: 642aca75c7ec3afa45b52fb6450e2e5f8a03ed755b5384f9c61bf1d81aafa93cd1ff9f8673da44e3f35a44578ee4fd7e4f7f68e83eb5c3d971e928c2790b2fc4
   languageName: node
   linkType: hard
 
@@ -6787,7 +6932,7 @@ __metadata:
     react-native-crypto: ^2.1.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: ~2.2.0
+    react-native-gesture-handler: 2.4.1
     react-native-ios-context-menu: 1.3.0
     react-native-level-fs: ^3.0.0
     react-native-localhost: ^1.0.0
@@ -6853,8 +6998,8 @@ __metadata:
     "@react-native-menu/menu": ^0.5.2
     "@react-three/drei": ^9.5.3
     "@react-three/fiber": ^8.0.12
-    "@sentry/integrations": 7.0.0-alpha.0
-    "@sentry/nextjs": 7.0.0-alpha.0
+    "@sentry/integrations": 7.0.0-alpha.1
+    "@sentry/nextjs": 7.0.0-alpha.1
     "@tailwindcss/forms": ^0.3.2
     "@tippyjs/react": ^4.2.6
     "@walletconnect/web3-provider": ^1.7.4
@@ -6880,14 +7025,14 @@ __metadata:
     eslint-config-next: ^12.0.7
     eslint-config-prettier: ^8.3.0
     eslint-plugin-diff: ^1.0.12
-    ethers: ^5.4.6
+    ethers: ^5.6.4
     fortmatic: ^2.2.1
     jwt-decode: ^3.1.2
     libsodium-wrappers: ^0.7.9
     logrocket: ^2.2.1
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
-    next: 12.1.5-canary.6
+    next: 12.1.6-canary.14
     next-compose-plugins: ^2.2.1
     next-connect: ^0.11.0
     next-fonts: ^1.5.1
@@ -6914,7 +7059,7 @@ __metadata:
     rudder-sdk-js: ^2.3.6
     sortablejs: ^1.14.0
     sotez: ^10.0.0
-    swr: ^1.1.0-beta.9
+    swr: ^2.0.0-beta.1
     tailwindcss: ^2.2.19
     walletlink: ^2.2.8
     web3modal: ^1.9.4
@@ -6967,13 +7112,13 @@ __metadata:
     eslint-config-next: ^12.0.7
     eslint-config-prettier: ^8.3.0
     eslint-plugin-diff: ^1.0.12
-    ethers: ^5.4.6
+    ethers: ^5.6.4
     fortmatic: ^2.2.1
     jwt-decode: ^3.1.2
     libsodium-wrappers: ^0.7.9
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
-    next: 12.1.5-canary.6
+    next: 12.1.6-canary.14
     next-compose-plugins: ^2.2.1
     next-connect: ^0.11.0
     next-fonts: ^1.5.1
@@ -6999,7 +7144,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     sortablejs: ^1.14.0
     sotez: ^10.0.0
-    swr: ^1.1.0-beta.9
+    swr: ^2.0.0-beta.1
     tailwindcss: ^2.2.19
     walletlink: ^2.2.8
     web3modal: ^1.9.4
@@ -7040,7 +7185,7 @@ __metadata:
     expo-font: ~10.0.4
     expo-gl: ~11.0.3
     expo-image-picker: ^12.0.2
-    expo-linear-gradient: ~11.0.2
+    expo-linear-gradient: ~11.3.0
     expo-linking: ~3.0.0
     expo-modules-core: ~0.6.4
     expo-splash-screen: ~0.14.1
@@ -7055,17 +7200,17 @@ __metadata:
     react-native-cronet: ^0.5.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: ^2.1.1
+    react-native-gesture-handler: 2.4.1
     react-native-ios-context-menu: 1.3.0
     react-native-mmkv: ^1.6.2
     react-native-pager-view: ^5.4.9
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: 2.4.1
+    react-native-reanimated: ~2.8.0
     react-native-safe-area-context: 3.3.2
     react-native-screens: ~3.10.1
-    react-native-svg: 12.1.1
+    react-native-svg: 12.3.0
     react-native-vision-camera: 2.12.0
     react-native-web: 0.17.1
     three: ^0.139.0
@@ -7093,7 +7238,7 @@ __metadata:
     design-system: "*"
     eslint: 7
     eslint-config-next: ^12.0.7
-    next: 12.1.5-canary.6
+    next: 12.1.6-canary.14
     react: 18.0.0
     react-dom: 18.0.0
     react-native-web: 0.17.5
@@ -12872,7 +13017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001283, caniuse-lite@npm:^1.0.30001332":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001332":
   version: 1.0.30001334
   resolution: "caniuse-lite@npm:1.0.30001334"
   checksum: 1a1c783942d53ca37dc3dbdd7c4a6f7994996d0bfd178d4f4cdd714c6b09d9d9f48a3a2452e009e8203aba4b7a2da43f3d9d88060668a46fc237dbe0d39358a3
@@ -16786,7 +16931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.0.24, ethers@npm:^5.4.6":
+"ethers@npm:^5.0.24, ethers@npm:^5.6.4":
   version: 5.6.4
   resolution: "ethers@npm:5.6.4"
   dependencies:
@@ -17403,12 +17548,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-linear-gradient@npm:~11.0.2":
-  version: 11.0.3
-  resolution: "expo-linear-gradient@npm:11.0.3"
+"expo-linear-gradient@npm:~11.3.0":
+  version: 11.3.0
+  resolution: "expo-linear-gradient@npm:11.3.0"
   peerDependencies:
     expo: "*"
-  checksum: 0728a0ef16210f0998b0fd309880e411f873542ca8878f069adfb8356f9e6bc808a00fef2aec8094be1bbdb094a359c9a281abd0894cd601991c3e82925704de
+  checksum: e524e92b87eef63b9c51def788962d8b50a6c215be9a27acb028b6996473e13d4c390ae87b0b88d0377d4a302075eba0c9fdd5b4139de9c58c918b325040433b
   languageName: node
   linkType: hard
 
@@ -24546,13 +24691,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mockdate@npm:^3.0.2":
-  version: 3.0.5
-  resolution: "mockdate@npm:3.0.5"
-  checksum: 72b66786d9e072379693f80bf9fb82eb5153c9741030a4294184e3ccaf952d0713fae8966f77780580cf902f8ec7ccc95577b0ad47980d255e2ffb71fc7ca49c
-  languageName: node
-  linkType: hard
-
 "modern-normalize@npm:^1.1.0":
   version: 1.1.0
   resolution: "modern-normalize@npm:1.1.0"
@@ -24834,24 +24972,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:12.1.5-canary.6":
-  version: 12.1.5-canary.6
-  resolution: "next@npm:12.1.5-canary.6"
+"next@npm:12.1.6-canary.14":
+  version: 12.1.6-canary.14
+  resolution: "next@npm:12.1.6-canary.14"
   dependencies:
-    "@next/env": 12.1.5-canary.6
-    "@next/swc-android-arm-eabi": 12.1.5-canary.6
-    "@next/swc-android-arm64": 12.1.5-canary.6
-    "@next/swc-darwin-arm64": 12.1.5-canary.6
-    "@next/swc-darwin-x64": 12.1.5-canary.6
-    "@next/swc-linux-arm-gnueabihf": 12.1.5-canary.6
-    "@next/swc-linux-arm64-gnu": 12.1.5-canary.6
-    "@next/swc-linux-arm64-musl": 12.1.5-canary.6
-    "@next/swc-linux-x64-gnu": 12.1.5-canary.6
-    "@next/swc-linux-x64-musl": 12.1.5-canary.6
-    "@next/swc-win32-arm64-msvc": 12.1.5-canary.6
-    "@next/swc-win32-ia32-msvc": 12.1.5-canary.6
-    "@next/swc-win32-x64-msvc": 12.1.5-canary.6
-    caniuse-lite: ^1.0.30001283
+    "@next/env": 12.1.6-canary.14
+    "@next/swc-android-arm-eabi": 12.1.6-canary.14
+    "@next/swc-android-arm64": 12.1.6-canary.14
+    "@next/swc-darwin-arm64": 12.1.6-canary.14
+    "@next/swc-darwin-x64": 12.1.6-canary.14
+    "@next/swc-linux-arm-gnueabihf": 12.1.6-canary.14
+    "@next/swc-linux-arm64-gnu": 12.1.6-canary.14
+    "@next/swc-linux-arm64-musl": 12.1.6-canary.14
+    "@next/swc-linux-x64-gnu": 12.1.6-canary.14
+    "@next/swc-linux-x64-musl": 12.1.6-canary.14
+    "@next/swc-win32-arm64-msvc": 12.1.6-canary.14
+    "@next/swc-win32-ia32-msvc": 12.1.6-canary.14
+    "@next/swc-win32-x64-msvc": 12.1.6-canary.14
+    caniuse-lite: ^1.0.30001332
     postcss: 8.4.5
     styled-jsx: 5.0.1
   peerDependencies:
@@ -24894,7 +25032,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 71b877549d9d576c78bb399dab2cc0c1db1a6fe2847af7a869ce5b4a3bbfb8215d0ffc78123b6ce8739ca9ced8e4fe5fa26fe895e3fd1b6fec563a1a944e4454
+  checksum: 822b754981c209aaed9bb35778a067c1b3a72777379ce92dab5305018a7604290cd880ac81686ee286a6e5500019ffe6a9e98d57e3a1a924aad0c8491087b2fa
   languageName: node
   linkType: hard
 
@@ -28230,7 +28368,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:^2.1.1":
+"react-native-gesture-handler@npm:2.4.1":
   version: 2.4.1
   resolution: "react-native-gesture-handler@npm:2.4.1"
   dependencies:
@@ -28243,19 +28381,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: a0f854faf2664f48a41551e73db852a98f04ce7d8c372aa1fb25f95aa1a98edc1fcaffca2c68c006e8e0d6e8c3d28d8cd1b125aa6860952a2e0026a3f23fdafc
-  languageName: node
-  linkType: hard
-
-"react-native-gesture-handler@npm:~2.2.0":
-  version: 2.2.0
-  resolution: "react-native-gesture-handler@npm:2.2.0"
-  dependencies:
-    "@egjs/hammerjs": ^2.0.17
-    hoist-non-react-statics: ^3.3.0
-    invariant: ^2.2.4
-    lodash: ^4.17.21
-    prop-types: ^15.7.2
-  checksum: 9c3cf952002b75cfe3d6e14bb16639052d9fe0d177c056e887716be67b8904931da04616b43a729a3e1e60f9e580caff019003ec3ab94252f3b032e838d8513c
   languageName: node
   linkType: hard
 
@@ -28406,26 +28531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:2.4.1":
-  version: 2.4.1
-  resolution: "react-native-reanimated@npm:2.4.1"
-  dependencies:
-    "@babel/plugin-transform-object-assign": ^7.10.4
-    "@types/invariant": ^2.2.35
-    invariant: ^2.2.4
-    lodash.isequal: ^4.5.0
-    mockdate: ^3.0.2
-    react-native-screens: ^3.4.0
-    string-hash-64: ^1.0.3
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: "*"
-  checksum: 17b6e47e02798349c003c2e78a8be3a0e8f5f841be40e89d899f5747a7ea379351c1ecaf6441cf08a486b96b4b92fce47d410be09a60b3b0ef3eb675d0df407a
-  languageName: node
-  linkType: hard
-
-"react-native-reanimated@npm:~2.8.0":
+"react-native-reanimated@npm:2.8.0":
   version: 2.8.0
   resolution: "react-native-reanimated@npm:2.8.0"
   dependencies:
@@ -28480,19 +28586,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.4.0":
-  version: 3.13.1
-  resolution: "react-native-screens@npm:3.13.1"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: aaab7071f65ea7b3be197417e073d0cad06c80fcb2a956faaeb020322c8002963f4d14ba96550484e96d156a48a29989c1485f47ec4bcd98c9701fe8de5c7cc1
-  languageName: node
-  linkType: hard
-
 "react-native-screens@npm:~3.10.1":
   version: 3.10.2
   resolution: "react-native-screens@npm:3.10.2"
@@ -28519,7 +28612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:^12.1.1":
+"react-native-svg@npm:12.3.0":
   version: 12.3.0
   resolution: "react-native-svg@npm:12.3.0"
   dependencies:
@@ -31653,12 +31746,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^1.1.0-beta.9":
-  version: 1.3.0
-  resolution: "swr@npm:1.3.0"
+"swr@npm:^2.0.0-beta.1":
+  version: 2.0.0-beta.1
+  resolution: "swr@npm:2.0.0-beta.1"
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
-  checksum: e7a184f0d560e9c8be85c023cc8e65e56a88a6ed46f9394b301b07f838edca23d2e303685319a4fcd620b81d447a7bcb489c7fa0a752c259f91764903c690cdb
+  checksum: a2d70d1d71f5e2e8c7f812bbc8982d50ed43ccf5127dde9420df6ab664b154a1853fda6dfbd5a25a3852fb62c46a1f69fce8e4327644c43a968fd5560193a0d2
   languageName: node
   linkType: hard
 
