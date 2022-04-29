@@ -229,12 +229,13 @@ const SuggestedUsers = () => {
             <Skeleton colorMode={colorMode} width={90} height={15} />
           </View>
         ) : null}
-        {data?.map((user) => {
+        {data?.map((user, index) => {
           return (
             <CreatorPreview
               creator={user}
               onMediaPress={() => {}}
               mediaSize={90}
+              key={`CreatorPreview-${index}`}
             />
           );
         })}
