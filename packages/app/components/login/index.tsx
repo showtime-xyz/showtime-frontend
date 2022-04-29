@@ -98,8 +98,6 @@ export function Login({ onLogin }: LoginProps) {
 
           <View
             style={{
-              marginLeft: -16,
-              marginRight: -16,
               height: 376,
             }}
           >
