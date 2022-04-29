@@ -29,6 +29,14 @@ const CreateModal = () => {
   const { state, dispatch } = useContext(MintContext);
   //#endregion
 
+  useEffect(() => {
+    return () => {
+      if (Platform.OS === "web") {
+        dispatch({ type: "reset" });
+      }
+    };
+  }, []);
+
   //#region effects
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -88,13 +96,14 @@ const CreateMD = () => {
   const { state } = useContext(MintContext);
   return (
     <View tw="flex-1 py-8">
-      {state.status === "transactionCompleted" ? (
+      {state.status === "transactionInitiated" ? (
         <View tw="items-center justify-center">
           <Spinner />
-          <Text tw="mt-10 text-center text-black dark:text-white">
+          <Text tw="mt-10 mb-4 text-center text-black dark:text-white">
             Your NFT is being minted on Polygon network. Feel free to navigate
             away from this screen.
           </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
         </View>
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">

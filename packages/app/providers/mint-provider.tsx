@@ -25,7 +25,7 @@ export function MintProvider({ children }: MintProviderProps) {
       state.status === "mediaUpload" ||
       state.status === "nftJSONUpload" ||
       state.status === "minting" ||
-      state.status === "transactionCompleted"
+      state.status === "transactionInitiated"
     ) {
       /**
        * TODO: replaced `Creating...` text, waiting for copywriting.
