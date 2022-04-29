@@ -65,7 +65,11 @@ export const Select: React.FC<SelectProps> = ({
         disabled={disabled}
         onPress={handleSelectButtonPress}
       />
-      <BottomSheet visible={open} onDismiss={handleSheetDismiss}>
+      <BottomSheet
+        visible={open}
+        snapPoints={["60%", "85%"]}
+        onDismiss={handleSheetDismiss}
+      >
         <BottomSheetFlatList
           data={options}
           keyExtractor={keyExtractor}
