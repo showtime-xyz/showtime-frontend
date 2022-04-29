@@ -1,11 +1,10 @@
-import { List } from "app/components/list";
-import { withColorScheme } from "app/components/memo-with-theme";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { useHideHeader } from "app/navigation/use-navigation-elements";
+import { Buy } from "app/components/buy";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
-import { useNFTDetails } from "app/hooks/use-nft-details";
+
+import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
   tokenId: string;
@@ -15,8 +14,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const ListModal = withColorScheme(() => {
-  useHideHeader();
+const BuyModal = () => {
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
@@ -28,12 +26,12 @@ const ListModal = withColorScheme(() => {
 
   const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
 
-  return <List nft={nft} />;
-});
+  return <Buy nft={nft} />;
+};
 
-export const ListScreen = withModalScreen(
-  ListModal,
-  "List",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/list",
-  "listModal"
+export const BuyScreen = withModalScreen(
+  BuyModal,
+  "Buy",
+  "/nft/[chainName]/[contractAddress]/[tokenId]/buy",
+  "buyModal"
 );

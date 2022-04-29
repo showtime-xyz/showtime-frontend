@@ -15,6 +15,7 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { BuyButton } from "app/components/buy-button";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
@@ -271,6 +272,11 @@ export const FeedItem = memo(
             <View tw="px-4">
               <Creator nft={nft} />
             </View>
+            {Platform.OS === 'web' ? 
+              <View tw="px-4 py-4">
+                <BuyButton nft={nft} />
+              </View> : null  
+            }
             <Owner nft={nft} price={Platform.OS !== "ios"} />
             {/* Comments */}
           </View>

@@ -49,7 +49,7 @@ const Unlist = ({ nft }: Props) => {
             variant="text-lg"
             tw="my-8 text-center text-black dark:text-white"
           >
-            Your NFT has been listed from Showtime
+            Your NFT has been unlisted from Showtime
           </Text>
           <PolygonScanButton transactionHash={state.transactionHash} />
         </View>

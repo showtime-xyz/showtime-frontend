@@ -20,14 +20,14 @@ type NFTDetailPayload = {
 
 export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
   const queryState = useSWR<NFTDetailPayload>(
-    `/v2/token/${params.contractAddress}/${params.tokenId}${
+    params.tokenId ?`/v2/token/${params.contractAddress}/${params.tokenId}${
       params.chainName
         ? //@ts-ignore
           `?chain_identifier=${CHAIN_IDENTIFIERS[params.chainName]}`
         : ""
-    }`,
+    }` : null,
     (url) => axios({ url, method: "GET" }),
-    { suspense: true }
+    // { suspense: true }
   );
 
   return queryState;

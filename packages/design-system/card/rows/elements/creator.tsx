@@ -13,12 +13,14 @@ type Props = {
   nft?: NFT;
   shouldShowCreatorIndicator?: boolean;
   shouldShowDateCreated?: boolean;
+  label?: string;
 };
 
 export function Creator({
   nft,
   shouldShowCreatorIndicator = true,
   shouldShowDateCreated = true,
+  label = "Creator",
 }: Props) {
   if (!nft) return null;
 
@@ -35,7 +37,7 @@ export function Creator({
               variant="text-xs"
               tw="font-semibold text-gray-600 dark:text-gray-400"
             >
-              Creator
+            {label}
             </Text>
             <View tw="h-2" />
           </>

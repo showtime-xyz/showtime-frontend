@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useReducer } from "react";
+import { Platform } from "react-native";
 
 import { MintContext } from "app/context/mint-context";
 import { mintNFTReducer, initialMintNFTState } from "app/hooks/use-mint-nft";
@@ -17,6 +18,9 @@ export function MintProvider({ children }: MintProviderProps) {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
+    // Do not show snackbar on web
+    if (Platform.OS === "web") return;
+
     if (
       state.status === "mediaUpload" ||
       state.status === "nftJSONUpload" ||

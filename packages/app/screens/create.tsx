@@ -1,14 +1,15 @@
 import { useContext, useEffect } from "react";
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { Create } from "app/components/create";
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { MintContext } from "app/context/mint-context";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, Spinner, Text, View } from "design-system";
+import { Spinner, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
@@ -97,20 +98,16 @@ const CreateMD = () => {
         </View>
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">
-          <Text tw="mb-4 text-center text-black dark:text-white">
-            🎉 Your NFT has been minted!
-          </Text>
-          <Button
-            onPress={() => {
-              Linking.openURL(
-                `https://${
-                  process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
-                }polygonscan.com/tx/${state.transaction}`
-              );
-            }}
-          >
-            Polygon Scan
-          </Button>
+          <Text variant="text-4xl">🎉</Text>
+          <View>
+            <Text
+              variant="text-lg"
+              tw="my-8 text-center text-black dark:text-white"
+            >
+              Your NFT has been listed on Showtime!
+            </Text>
+            <PolygonScanButton transactionHash={state.transaction} />
+          </View>
         </View>
       ) : (
         <Create />

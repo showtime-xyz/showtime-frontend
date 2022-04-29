@@ -7,7 +7,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { ListingValues, ListNFT } from "app/hooks/use-list-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
-import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
+import { LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
@@ -18,6 +18,20 @@ import { useIsDarkMode } from "design-system/hooks";
 import { Tag } from "design-system/icon";
 import { SelectOption } from "design-system/select/types";
 import { tw } from "design-system/tailwind";
+
+const LISTING_SUPPORTED_CURRENCIES = {
+  mumbai: {
+    [LIST_CURRENCIES?.TKN]: "TKN",
+    [LIST_CURRENCIES?.USDC]: "USDC",
+    [LIST_CURRENCIES?.WETH]: "WETH",
+    [LIST_CURRENCIES?.DAI]: "DAI",
+  },
+  polygon: {
+    [LIST_CURRENCIES?.USDC]: "USDC",
+    [LIST_CURRENCIES?.WETH]: "WETH",
+    [LIST_CURRENCIES?.DAI]: "DAI",
+  },
+}[process.env.NEXT_PUBLIC_CHAIN_ID];
 
 type Props = {
   nft?: NFT;
@@ -50,12 +64,12 @@ const defaultListingValues = {
   currency: defaultCurrency,
 };
 
-const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
-  (currency) => {
-    const [value, label] = currency;
-    return { value, label } as { value: string; label: string };
-  }
-);
+const options: SelectOption[] = Object.entries(
+  LISTING_SUPPORTED_CURRENCIES
+).map((currency) => {
+  const [value, label] = currency;
+  return { value, label } as { value: string; label: string };
+});
 
 export const ListingForm = (props: Props) => {
   const { nft, listNFT, listState: state } = props;
@@ -78,7 +92,7 @@ export const ListingForm = (props: Props) => {
   const ownedAmount = ownerListItem?.quantity || 1;
   const hideCopiesInput = ownedAmount === 1;
   const copiesHelperText = `1 by default, you own ${ownedAmount}`;
-  const currencySymbol = CURRENCY_NAMES[currentCurrencyAddress];
+  const currencySymbol = LISTING_SUPPORTED_CURRENCIES[currentCurrencyAddress];
   const isNotMagic = !web3;
 
   useEffect(() => {

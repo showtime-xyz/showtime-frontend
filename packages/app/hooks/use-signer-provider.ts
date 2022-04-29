@@ -43,6 +43,7 @@ export const useSignerAndProvider = () => {
       signer: biconomy.getSignerByAddress(userAddress),
       provider: biconomy.getEthersProvider(),
       signerAddress: userAddress,
+      web3,
     };
   };
   return { getSignerAndProvider };
