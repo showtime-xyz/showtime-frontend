@@ -94,7 +94,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
       value={{
         provider: isServer ? () => new Map() : localStorageProvider,
         onError: (err, key) => {
-          if (err.message) {
+          if (err?.message) {
             toast?.show({
               message: err.message,
               hideAfter: 4000,
