@@ -267,12 +267,15 @@ function Transfer({ nft }: { nft?: NFT }) {
             <View tw="mt-4 flex-row items-center rounded-lg bg-white p-4 shadow-lg dark:bg-black">
               <Avatar url={data?.data.profile.img_url} />
               <View tw="ml-1 justify-around">
-                <Text
-                  variant="text-xs"
-                  tw="font-semibold  text-gray-600 dark:text-gray-400"
-                >
-                  {data?.data.profile.name}
-                </Text>
+                {data?.data.profile.name ? (
+                  <Text
+                    variant="text-xs"
+                    tw="font-semibold text-gray-600 dark:text-gray-400"
+                  >
+                    {data?.data.profile.name}
+                  </Text>
+                ) : null}
+
                 <View tw="mt-1 flex-row items-center">
                   <Text
                     tw="font-semibold text-black dark:text-white"
