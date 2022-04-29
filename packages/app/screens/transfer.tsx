@@ -1,5 +1,6 @@
 import { Transfer } from "app/components/transfer";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -24,7 +25,9 @@ const TransferModal = () => {
     contractAddress: contractAddress as string,
   });
 
-  return <Transfer nft={data?.data?.item} />;
+  const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
+
+  return <Transfer nft={nft} />;
 };
 
 export const TransferScreen = withModalScreen(

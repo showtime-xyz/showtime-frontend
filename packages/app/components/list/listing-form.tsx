@@ -86,6 +86,7 @@ export const ListingForm = (props: Props) => {
   );
   const ownerListItem = findAddressInOwnerList(
     address,
+    user?.data.profile.wallet_addresses_v2,
     nft?.multiple_owners_list
   );
 

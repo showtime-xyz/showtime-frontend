@@ -10,7 +10,12 @@ import { NFT } from "app/types";
 import { useAlert } from "design-system/alert";
 
 type TransferNFTType = {
-  status: "idle" | "transfering" | "transferingError" | "transferingSuccess";
+  status:
+    | "idle"
+    | "transfering"
+    | "transferingError"
+    | "transferingSuccess"
+    | "transactionInitiated";
 
   tokenId?: string;
   transaction?: string;
@@ -32,6 +37,12 @@ const transferNFTReducer = (
         ...state,
         status: "transfering",
         tokenId: action?.tokenId,
+        transaction: action?.transaction,
+      };
+    case "transactionInitiated":
+      return {
+        ...state,
+        status: "transactionInitiated",
         transaction: action?.transaction,
       };
     case "transferingError":
@@ -122,7 +133,7 @@ export const useTransferNFT = () => {
             });
 
           dispatch({
-            type: "transfering",
+            type: "transactionInitiated",
             transaction: transaction,
           });
 

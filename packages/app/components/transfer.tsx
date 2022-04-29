@@ -10,6 +10,7 @@ import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import useDebounce from "app/hooks/use-debounce";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
+import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
 import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
@@ -30,6 +31,8 @@ import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 import { tw } from "design-system/tailwind";
 
+import { PolygonScanButton } from "./polygon-scan-button";
+
 type FormData = {
   quantity: number;
   receiverAddress: string;
@@ -38,9 +41,11 @@ type FormData = {
 function Transfer({ nft }: { nft?: NFT }) {
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
+  const { user } = useUser();
 
   const ownerListItem = findAddressInOwnerList(
     userAddress,
+    user?.data.profile.wallet_addresses_v2,
     nft?.multiple_owners_list
   );
 
@@ -111,42 +116,62 @@ function Transfer({ nft }: { nft?: NFT }) {
     }
   }
 
-  function handleOpenPolygonScan() {
-    Linking.openURL(getPolygonScanLink(state.transaction));
-  }
-
   if (!nft) return null;
 
   const TransferNftScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
-  if (state.status === "transfering" || state.status === "transferingSuccess") {
-    return (
-      <View tw="h-full flex-1 items-center justify-center p-4">
-        {state.status === "transfering" ? (
-          <Spinner />
-        ) : (
-          <Text variant="text-4xl">🎉</Text>
-        )}
+  // enable submission only on idle or error state.
+  const enable = state.status === "idle" || state.status === "transferingError";
 
-        <Text tw="py-8 text-center text-black dark:text-white">
-          {state.status === "transfering"
-            ? `Your NFT is being transferred. Feel free to navigate away from this screen.`
-            : "The transaction has been completed!"}
-        </Text>
-        {state.transaction && (
-          <Button onPress={handleOpenPolygonScan} variant="tertiary">
-            <PolygonScan
-              style={tw.style("rounded-lg overflow-hidden ")}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-            <Text tw="pl-2 text-sm text-black dark:text-white">
-              View on Polygon Scan
-            </Text>
-          </Button>
-        )}
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="flex-1 items-center justify-center p-8">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Your NFT is being transferred. Feel free to navigate away from this
+            screen.
+          </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "transferingError") {
+    return (
+      <View tw="flex-1 items-center justify-center pb-8">
+        <Spinner />
+        <View tw="items-center">
+          <Text
+            variant="text-base"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Something went wrong!
+          </Text>
+          <Button onPress={handleSubmit(handleSubmitTransfer)}>Retry</Button>
+        </View>
+      </View>
+    );
+  }
+
+  if (state.status === "transferingSuccess") {
+    return (
+      <View tw="mt-4 flex-1 items-center justify-center pb-8">
+        <Text variant="text-4xl">🎉</Text>
+        <View>
+          <Text
+            variant="text-lg"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Your NFT has been transferred
+          </Text>
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
       </View>
     );
   }
@@ -279,10 +304,17 @@ function Transfer({ nft }: { nft?: NFT }) {
         <View tw="absolute w-full px-4" style={{ bottom: 16 }}>
           <Button
             onPress={handleSubmit(handleSubmitTransfer)}
-            tw="h-12 rounded-full"
+            disabled={!enable}
+            tw={`h-12 rounded-full ${!enable ? "opacity-60" : ""}`}
           >
             <Text tw="pr-2 text-sm text-white dark:text-gray-900">
-              Transfer
+              {state.status === "idle"
+                ? "Transfer"
+                : state.status === "transfering"
+                ? "Transferring..."
+                : state.status === "transferingError"
+                ? "Failed. Retry"
+                : "Success!"}
             </Text>
             <ArrowRight
               style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
