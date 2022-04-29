@@ -86,6 +86,7 @@ export const ListingForm = (props: Props) => {
   );
   const ownerListItem = findAddressInOwnerList(
     address,
+    user?.data.profile.wallet_addresses_v2,
     nft?.multiple_owners_list
   );
 
@@ -254,8 +255,8 @@ export const ListingForm = (props: Props) => {
       <View tw="p-4">
         <Button
           onPress={handleSubmit(handleSubmitForm)}
-          tw="h-12 rounded-full"
           variant="primary"
+          tw={`h-12 rounded-full ${!isValidForm ? "opacity-60" : ""}`}
           disabled={!isValidForm}
         >
           {state.status === "idle" ? (

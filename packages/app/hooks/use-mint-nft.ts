@@ -26,7 +26,7 @@ export type MintNFTStatus =
   | "minting"
   | "mintingError"
   | "mintingSuccess"
-  | "transactionCompleted";
+  | "transactionInitiated";
 
 export type MintActionType = MintNFTStatus | "reset" | "setMedia";
 
@@ -115,10 +115,10 @@ export const mintNFTReducer = (
         status: "nftJSONUploadSuccess",
         nftIPFSHash: action.payload?.nftIPFSHash,
       };
-    case "transactionCompleted":
+    case "transactionInitiated":
       return {
         ...state,
-        status: "transactionCompleted",
+        status: "transactionInitiated",
         transaction: action.payload?.transaction,
       };
     case "nftJSONUploadError":
@@ -395,7 +395,7 @@ export const useMintNFT = () => {
           });
 
         dispatch({
-          type: "transactionCompleted",
+          type: "transactionInitiated",
           payload: {
             transaction,
           },
