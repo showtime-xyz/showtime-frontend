@@ -107,10 +107,12 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
       value={{
         provider: mmkvProvider,
         onError: (err, key) => {
-          toast?.show({
-            message: err,
-            hideAfter: 4000,
-          });
+          if (err.message) {
+            toast?.show({
+              message: err.message,
+              hideAfter: 4000,
+            });
+          }
         },
         onErrorRetry: async (
           error: {
