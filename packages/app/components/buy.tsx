@@ -5,13 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useBuyNFT } from "app/hooks/use-buy-nft";
+import { yup } from "app/lib/yup";
+import { NFT } from "app/types";
 
 import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
 import { Creator } from "design-system/card/rows/elements/creator";
-
-import { yup } from "app/lib/yup";
-import { NFT } from "app/types";
 
 const defaultValues = {
   quantity: 1,
@@ -53,12 +52,12 @@ export const Buy = (props: { nft?: NFT }) => {
     state.status === "loading"
   ) {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Your NFT is being purchased on Showtime.
           </Text>
@@ -70,12 +69,12 @@ export const Buy = (props: { nft?: NFT }) => {
 
   if (state.status === "grantingAllowance") {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Granting allowance...
           </Text>
@@ -89,17 +88,17 @@ export const Buy = (props: { nft?: NFT }) => {
     const quantity = getValues("quantity");
 
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Sorry. Granting allowance failed.
           </Text>
           <Button onPress={() => grantAllowance({ nft, quantity: quantity })}>
             Try again
-          </Button>       
+          </Button>
         </View>
       </View>
     );
@@ -109,11 +108,11 @@ export const Buy = (props: { nft?: NFT }) => {
     const quantity = getValues("quantity");
 
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             You don't have enough ${nft.listing.currency} on your wallet.
           </Text>
@@ -131,11 +130,11 @@ export const Buy = (props: { nft?: NFT }) => {
   if (state.status === "needsAllowance") {
     const quantity = getValues("quantity");
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
           <Text
             variant="text-base"
-            tw="text-black dark:text-white text-center my-8"
+            tw="my-8 text-center text-black dark:text-white"
           >
             To buy this NFT, we need permission to spend your{" "}
             {nft.listing.min_price + " " + nft.listing.currency}.
@@ -150,12 +149,12 @@ export const Buy = (props: { nft?: NFT }) => {
 
   if (state.status === "buyingSuccess") {
     return (
-      <View tw="flex-1 items-center justify-center mt-4">
+      <View tw="mt-4 flex-1 items-center justify-center p-8">
         <Text variant="text-4xl">🎉</Text>
         <View>
           <Text
             variant="text-lg"
-            tw="my-8 text-black dark:text-white text-center"
+            tw="my-8 text-center text-black dark:text-white"
           >
             Your NFT has been purchased!
           </Text>
@@ -164,7 +163,6 @@ export const Buy = (props: { nft?: NFT }) => {
       </View>
     );
   }
-
 
   return (
     <View>
@@ -177,7 +175,7 @@ export const Buy = (props: { nft?: NFT }) => {
           </View>
         </View>
 
-        <View tw="flex-row justify-between mt-8">
+        <View tw="mt-8 flex-row justify-between">
           <Creator nft={nft} shouldShowDateCreated={false} />
           <Creator nft={nft} label="Listed by" shouldShowDateCreated={false} />
         </View>
@@ -205,8 +203,8 @@ export const Buy = (props: { nft?: NFT }) => {
           />
         </View>
         <View tw="my-8 flex-row justify-between">
-          <Text tw="text-gray-900 dark:text-white font-bold">Total</Text>
-          <Text tw="text-gray-900 dark:text-white font-bold">
+          <Text tw="font-bold text-gray-900 dark:text-white">Total</Text>
+          <Text tw="font-bold text-gray-900 dark:text-white">
             {nft?.listing?.min_price === 0
               ? "Free"
               : `${nft.listing.min_price} ${nft.listing.currency}`}

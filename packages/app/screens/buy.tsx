@@ -1,6 +1,7 @@
-
 import { Buy } from "app/components/buy";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { createParam } from "app/navigation/use-param";
+
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
@@ -17,13 +18,15 @@ const BuyModal = () => {
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
-  const { data: nft } = useNFTDetailByTokenId({
+  const { data } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
 
-  return <Buy nft={nft?.data.item} />;
+  const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
+
+  return <Buy nft={nft} />;
 };
 
 export const BuyScreen = withModalScreen(
@@ -32,5 +35,3 @@ export const BuyScreen = withModalScreen(
   "/nft/[chainName]/[contractAddress]/[tokenId]/buy",
   "buyModal"
 );
-
-
