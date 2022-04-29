@@ -12,7 +12,7 @@ const NotificationsScreen = withColorScheme(() => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <>
+    <View tw="w-full">
       {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       {/* <ErrorBoundary>
         <Suspense
@@ -34,7 +34,7 @@ const NotificationsScreen = withColorScheme(() => {
           🚧 Coming soon
         </Text>
       </View>
-    </>
+    </View>
   );
 });
 

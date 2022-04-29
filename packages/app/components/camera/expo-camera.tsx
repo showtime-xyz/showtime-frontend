@@ -104,13 +104,7 @@ export function Camera({
   }, [form]);
 
   return (
-    <View
-      sx={{
-        flex: 1,
-        alignContent: "center",
-        justifyContent: "center",
-      }}
-    >
+    <View tw="w-full flex-1 content-center justify-center">
       <View sx={{ height: "70%" }}>
         {isActive && (
           <ExpoCamera

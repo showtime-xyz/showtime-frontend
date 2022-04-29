@@ -1,1 +1,1 @@
-export { default } from "app/pages/create";
+export { default } from "app/pages/camera";

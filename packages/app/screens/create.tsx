@@ -14,18 +14,12 @@ import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
-type Query = {
-  form: string;
-};
-
-const { useParam } = createParam<Query>();
 const CreateModal = () => {
-  useHideHeader();
   //#region hooks
+  useHideHeader();
   const Alert = useAlert();
   const router = useRouter();
   const navigation = useNavigation();
-  const [form] = useParam("form");
   const { state, dispatch } = useContext(MintContext);
   //#endregion
 
@@ -74,10 +68,6 @@ const CreateModal = () => {
     return unsubscribe;
   }, [navigation, router]);
   //#endregion
-
-  // if (!form) {
-  //   return null;
-  // }
 
   return (
     <>

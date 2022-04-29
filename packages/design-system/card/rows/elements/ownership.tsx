@@ -117,13 +117,13 @@ export function Ownership({ nft }: Props) {
               variant="text-13"
               tw="font-semibold text-gray-900 dark:text-white"
             >
-              {nft.creator_username
-                ? `@${nft.creator_username}`
-                : nft.creator_name
-                ? nft.creator_name
-                : formatAddressShort(nft.creator_address)}
+              {nft.owner_username
+                ? `@${nft.owner_username}`
+                : nft.owner_name
+                ? nft.owner_name
+                : formatAddressShort(nft.owner_address)}
             </Text>
-            {nft.creator_verified ? (
+            {nft.owner_verified ? (
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>

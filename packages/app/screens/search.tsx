@@ -1,15 +1,14 @@
-import { useEffect } from "react";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Search } from "app/components/search";
-import { mixpanel } from "app/lib/mixpanel";
+
+import { View } from "design-system/view";
 
 const SearchScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Search view");
-  }, []);
-
-  return <Search />;
+  return (
+    <View tw="w-full">
+      <Search />
+    </View>
+  );
 });
 
 export { SearchScreen };
