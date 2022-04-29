@@ -4628,10 +4628,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/env@npm:12.1.6-canary.14"
-  checksum: 608b6c0666195865c0b96455b443ad35bf8eda7ecc3b7387ff211ac5f508aacb686b0f044e3ffc53eb3548860b805d93369ab18a1dd8712036216fbefd6b7330
+"@next/env@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/env@npm:12.1.5"
+  checksum: 21a6345ad6ff39edd76630484af3f2a87a0984d06be19ca88d9758583a1c724905f1ea6c0d110a4c825430e5bcda835f7197ee820c7173c428416fb615ff97e6
   languageName: node
   linkType: hard
 
@@ -4644,86 +4644,86 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm-eabi@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-android-arm-eabi@npm:12.1.6-canary.14"
+"@next/swc-android-arm-eabi@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-android-arm-eabi@npm:12.1.5"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm64@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-android-arm64@npm:12.1.6-canary.14"
+"@next/swc-android-arm64@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-android-arm64@npm:12.1.5"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-darwin-arm64@npm:12.1.6-canary.14"
+"@next/swc-darwin-arm64@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-darwin-arm64@npm:12.1.5"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-darwin-x64@npm:12.1.6-canary.14"
+"@next/swc-darwin-x64@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-darwin-x64@npm:12.1.5"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm-gnueabihf@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.6-canary.14"
+"@next/swc-linux-arm-gnueabihf@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.5"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-linux-arm64-gnu@npm:12.1.6-canary.14"
+"@next/swc-linux-arm64-gnu@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-linux-arm64-gnu@npm:12.1.5"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-linux-arm64-musl@npm:12.1.6-canary.14"
+"@next/swc-linux-arm64-musl@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-linux-arm64-musl@npm:12.1.5"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-linux-x64-gnu@npm:12.1.6-canary.14"
+"@next/swc-linux-x64-gnu@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-linux-x64-gnu@npm:12.1.5"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-linux-x64-musl@npm:12.1.6-canary.14"
+"@next/swc-linux-x64-musl@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-linux-x64-musl@npm:12.1.5"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-win32-arm64-msvc@npm:12.1.6-canary.14"
+"@next/swc-win32-arm64-msvc@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-win32-arm64-msvc@npm:12.1.5"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-ia32-msvc@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-win32-ia32-msvc@npm:12.1.6-canary.14"
+"@next/swc-win32-ia32-msvc@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-win32-ia32-msvc@npm:12.1.5"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "@next/swc-win32-x64-msvc@npm:12.1.6-canary.14"
+"@next/swc-win32-x64-msvc@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@next/swc-win32-x64-msvc@npm:12.1.5"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6943,12 +6943,12 @@ __metadata:
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: ~2.8.0
+    react-native-reanimated: 2.8.0
     react-native-safe-area-context: 4.2.4
     react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
     react-native-vision-camera: 2.12.0
-    react-native-web: 0.17.1
+    react-native-web: 0.17.7
     react-native-webview: 11.18.1
     react-string-replace: ^0.4.4
     react-test-renderer: 18.0.0
@@ -7032,7 +7032,7 @@ __metadata:
     logrocket: ^2.2.1
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
-    next: 12.1.6-canary.14
+    next: 12.1.5
     next-compose-plugins: ^2.2.1
     next-connect: ^0.11.0
     next-fonts: ^1.5.1
@@ -7049,7 +7049,7 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
-    react-native-web: 0.17.5
+    react-native-web: 0.17.7
     react-player: ^2.8.1
     react-scroll: ^1.8.4
     react-sortablejs: ^6.0.0
@@ -7118,7 +7118,7 @@ __metadata:
     libsodium-wrappers: ^0.7.9
     magic-sdk: ^7.0.0
     mixpanel-browser: ^2.42.0
-    next: 12.1.6-canary.14
+    next: 12.1.5
     next-compose-plugins: ^2.2.1
     next-connect: ^0.11.0
     next-fonts: ^1.5.1
@@ -7135,7 +7135,7 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
-    react-native-web: 0.17.5
+    react-native-web: 0.17.7
     react-player: ^2.8.1
     react-scroll: ^1.8.4
     react-sortablejs: ^6.0.0
@@ -7207,12 +7207,12 @@ __metadata:
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: ~2.8.0
-    react-native-safe-area-context: 3.3.2
-    react-native-screens: ~3.10.1
+    react-native-reanimated: 2.8.0
+    react-native-safe-area-context: 4.2.4
+    react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
     react-native-vision-camera: 2.12.0
-    react-native-web: 0.17.1
+    react-native-web: 0.17.7
     three: ^0.139.0
     typescript: 4.5.2
   languageName: unknown
@@ -7238,10 +7238,10 @@ __metadata:
     design-system: "*"
     eslint: 7
     eslint-config-next: ^12.0.7
-    next: 12.1.6-canary.14
+    next: 12.1.5
     react: 18.0.0
     react-dom: 18.0.0
-    react-native-web: 0.17.5
+    react-native-web: 0.17.7
     storybook-addon-next: ^1.6.2
     typescript: 4.5.2
   languageName: unknown
@@ -13017,7 +13017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001332":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001283, caniuse-lite@npm:^1.0.30001332":
   version: 1.0.30001334
   resolution: "caniuse-lite@npm:1.0.30001334"
   checksum: 1a1c783942d53ca37dc3dbdd7c4a6f7994996d0bfd178d4f4cdd714c6b09d9d9f48a3a2452e009e8203aba4b7a2da43f3d9d88060668a46fc237dbe0d39358a3
@@ -24972,24 +24972,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:12.1.6-canary.14":
-  version: 12.1.6-canary.14
-  resolution: "next@npm:12.1.6-canary.14"
+"next@npm:12.1.5":
+  version: 12.1.5
+  resolution: "next@npm:12.1.5"
   dependencies:
-    "@next/env": 12.1.6-canary.14
-    "@next/swc-android-arm-eabi": 12.1.6-canary.14
-    "@next/swc-android-arm64": 12.1.6-canary.14
-    "@next/swc-darwin-arm64": 12.1.6-canary.14
-    "@next/swc-darwin-x64": 12.1.6-canary.14
-    "@next/swc-linux-arm-gnueabihf": 12.1.6-canary.14
-    "@next/swc-linux-arm64-gnu": 12.1.6-canary.14
-    "@next/swc-linux-arm64-musl": 12.1.6-canary.14
-    "@next/swc-linux-x64-gnu": 12.1.6-canary.14
-    "@next/swc-linux-x64-musl": 12.1.6-canary.14
-    "@next/swc-win32-arm64-msvc": 12.1.6-canary.14
-    "@next/swc-win32-ia32-msvc": 12.1.6-canary.14
-    "@next/swc-win32-x64-msvc": 12.1.6-canary.14
-    caniuse-lite: ^1.0.30001332
+    "@next/env": 12.1.5
+    "@next/swc-android-arm-eabi": 12.1.5
+    "@next/swc-android-arm64": 12.1.5
+    "@next/swc-darwin-arm64": 12.1.5
+    "@next/swc-darwin-x64": 12.1.5
+    "@next/swc-linux-arm-gnueabihf": 12.1.5
+    "@next/swc-linux-arm64-gnu": 12.1.5
+    "@next/swc-linux-arm64-musl": 12.1.5
+    "@next/swc-linux-x64-gnu": 12.1.5
+    "@next/swc-linux-x64-musl": 12.1.5
+    "@next/swc-win32-arm64-msvc": 12.1.5
+    "@next/swc-win32-ia32-msvc": 12.1.5
+    "@next/swc-win32-x64-msvc": 12.1.5
+    caniuse-lite: ^1.0.30001283
     postcss: 8.4.5
     styled-jsx: 5.0.1
   peerDependencies:
@@ -25032,7 +25032,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 822b754981c209aaed9bb35778a067c1b3a72777379ce92dab5305018a7604290cd880ac81686ee286a6e5500019ffe6a9e98d57e3a1a924aad0c8491087b2fa
+  checksum: a70e70f7863035d9b2d5bb70ede6b165d4022c75d8e3b44411097eb20e4a4d9b34205873cb2d0088a76986fe3e0f160edad0ff7602fc269994e02dc4d21d035c
   languageName: node
   linkType: hard
 
@@ -28566,16 +28566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:3.3.2":
-  version: 3.3.2
-  resolution: "react-native-safe-area-context@npm:3.3.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 4feda1bbc9e18b3b279b972303f1866c46e37f331ef22cd2ff630599fdd8b2b8c7a84cc53420df595b89d95d0bce7496333fe28ea5c4b2330d9d1b7beab8f389
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:4.2.4":
   version: 4.2.4
   resolution: "react-native-safe-area-context@npm:4.2.4"
@@ -28583,19 +28573,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 492a78b7728448dc802b528c7a0c526a7a00e7079e00925426dcdfcaff057d6fc460ca7838ec1737622609ad92a17640d676c96dcc0d0e0bcc13dc4800533d5e
-  languageName: node
-  linkType: hard
-
-"react-native-screens@npm:~3.10.1":
-  version: 3.10.2
-  resolution: "react-native-screens@npm:3.10.2"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 9b20b0c8ab6b9b03fb2bfdd9edbc5bdba93eec415095d121dd9444a930bc5c76774a4e169901f9fe3f3180cb7fb04fd9f66367f70e7a4397a1787bfd87b6e336
   languageName: node
   linkType: hard
 
@@ -28642,9 +28619,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:0.17.1":
-  version: 0.17.1
-  resolution: "react-native-web@npm:0.17.1"
+"react-native-web@npm:0.17.7":
+  version: 0.17.7
+  resolution: "react-native-web@npm:0.17.7"
   dependencies:
     array-find-index: ^1.0.2
     create-react-class: ^15.7.0
@@ -28656,25 +28633,7 @@ __metadata:
   peerDependencies:
     react: ">=17.0.1"
     react-dom: ">=17.0.1"
-  checksum: a06ec047082bb4edf49323a5a88b576ba93ddc965e4dd00c4c0b1f423a4175a430d9c2619f32d184f719181c4d3f08ffa8fa4f3b8c951f6a95176d3735e4bf7d
-  languageName: node
-  linkType: hard
-
-"react-native-web@npm:0.17.5":
-  version: 0.17.5
-  resolution: "react-native-web@npm:0.17.5"
-  dependencies:
-    array-find-index: ^1.0.2
-    create-react-class: ^15.7.0
-    fbjs: ^3.0.0
-    hyphenate-style-name: ^1.0.4
-    inline-style-prefixer: ^6.0.0
-    normalize-css-color: ^1.0.2
-    prop-types: ^15.6.0
-  peerDependencies:
-    react: ">=17.0.1"
-    react-dom: ">=17.0.1"
-  checksum: 548cbba9f8fd081a08d0d882f7db9f5cd38e9706f2261c3f296a8406b2455beba0e80b294b5d052a927b0b2dcfbd5af59a3441ae78a7d407feee59e2f9487232
+  checksum: 9a32073d18e12f7d0e77befc0489f07a60e4aea9b7d6da9228387f488956b8f3e04eff02102f70bc427d8ee5047b6f393dc6cb4b3d34501504b9799344054e34
   languageName: node
   linkType: hard
 
