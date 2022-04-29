@@ -35,6 +35,8 @@ const UnlistingSubmit = (props: Props) => {
   const isNotMagic = !web3;
   const { unlistState: state, unlistNFT } = props;
 
+  const enabled = state.status === "idle" || state.status === "unlistingError";
+
   useEffect(() => {
     if (state.status === "unlistingSuccess") {
       setTimeout(() => {
@@ -52,8 +54,9 @@ const UnlistingSubmit = (props: Props) => {
     <View tw="w-full p-4">
       <Button
         onPress={() => unlistNFT(listingID)}
-        tw="h-12 rounded-full"
         variant="primary"
+        disabled={!enabled}
+        tw={`h-12 rounded-full ${!enabled ? "opacity-60" : ""}`}
       >
         <Text tw="pl-1 text-sm text-white dark:text-gray-900">{ctaCopy}</Text>
       </Button>
