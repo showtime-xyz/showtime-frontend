@@ -17,7 +17,8 @@ const { useParam } = createParam<Query>();
 
 const ProfileScreen = withColorScheme(() => {
   const [username] = useParam("username");
-  const cleanedUsername = username?.replace(/@/g, "");
+  const cleanedUsername =
+    username && username !== "" ? username?.replace(/@/g, "") : null;
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
 
@@ -28,7 +29,7 @@ const ProfileScreen = withColorScheme(() => {
           username={
             Platform.OS === "web"
               ? cleanedUsername
-              : cleanedUsername ?? userAddress ?? user?.data?.profile?.username
+              : cleanedUsername ?? user?.data?.profile?.username ?? userAddress
           }
         />
       </ErrorBoundary>
