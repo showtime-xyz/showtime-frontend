@@ -39,7 +39,7 @@ const List = ({ nft }: Props) => {
 
   if (state.status === "listingSuccess") {
     return (
-      <View tw="mt-4 flex-1 items-center justify-center">
+      <View tw="mt-4 flex-1 items-center justify-center p-8">
         <Text variant="text-4xl">🎉</Text>
         <View>
           <Text
@@ -56,7 +56,7 @@ const List = ({ nft }: Props) => {
 
   if (state.status === "transactionInitiated") {
     return (
-      <View tw="flex-1 items-center justify-center">
+      <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
           <Text
