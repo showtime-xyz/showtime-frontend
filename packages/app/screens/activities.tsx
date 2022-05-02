@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Activities } from "app/components/nft-activity";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
@@ -16,6 +17,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 export function ActivitiesModal() {
+  useTrackPageViewed({ name: "Activity" });
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
@@ -36,7 +38,7 @@ export function ActivitiesModal() {
 
 export const ActivitiesScreen = withModalScreen(
   ActivitiesModal,
-  "Activities",
+  "Activity",
   "/nft/[chainName]/[contractAddress]/[tokenId]/activities",
   "activitiesModal"
 );

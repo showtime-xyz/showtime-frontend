@@ -79,7 +79,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const wasUserLoggedIn = loginStorage.getLogin();
 
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        mixpanel.track("Logout");
         track("User Logged Out");
       }
       await rudder?.reset();

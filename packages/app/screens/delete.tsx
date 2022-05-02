@@ -1,5 +1,6 @@
 import { Delete } from "app/components/delete";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -14,6 +15,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const DeleteModal = () => {
+  useTrackPageViewed({ name: "Delete" });
   useHideHeader();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");

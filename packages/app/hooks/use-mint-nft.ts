@@ -9,6 +9,7 @@ import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { useWeb3 } from "app/hooks/use-web3";
+import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 
 import { useAlert } from "design-system/alert";
@@ -417,6 +418,7 @@ export const useMintNFT = () => {
               transaction: transaction,
             },
           });
+          track("NFT Created");
         });
       } catch (error) {
         console.error("Minting error ", error);

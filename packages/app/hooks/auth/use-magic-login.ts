@@ -27,8 +27,6 @@ export function useMagicLogin() {
           did,
           phone_number: phoneNumber,
         });
-
-        mixpanel.track(`Login success - phone number`);
       } catch (error) {
         logout();
         throw error;
@@ -53,8 +51,6 @@ export function useMagicLogin() {
           did,
           email: overrideEmail,
         });
-
-        mixpanel.track(`Login success - email`);
       } catch (error) {
         logout();
         throw error;

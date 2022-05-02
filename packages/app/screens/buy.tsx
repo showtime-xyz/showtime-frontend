@@ -1,10 +1,10 @@
 import { Buy } from "app/components/buy";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
-
-import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
   tokenId: string;
@@ -15,6 +15,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const BuyModal = () => {
+  useTrackPageViewed({ name: "Buy" });
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
