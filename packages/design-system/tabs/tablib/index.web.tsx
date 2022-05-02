@@ -33,7 +33,7 @@ const Root = ({
   initialIndex = 0,
   onIndexChange: onIndexChangeProp,
   accessibilityLabel,
-  value,
+  index,
 }: TabRootProps) => {
   const [selected, setSelected] = React.useState(
     initialIndex.toString() ?? "0"
@@ -45,12 +45,15 @@ const Root = ({
   const onIndexChange = (v: string) => {
     onIndexChangeProp?.(parseInt(v));
     setSelected(v);
-
     position.setValue(parseInt(v));
   };
+
   useEffect(() => {
-    value && setSelected(value);
-  }, [value]);
+    if (typeof index === "number") {
+      setSelected(index.toString());
+      position.setValue(index);
+    }
+  }, [index]);
 
   const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
     React.useMemo(() => {
