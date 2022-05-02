@@ -64,7 +64,7 @@
     "react-native-ios-context-menu": "1.3.0",
     "jest-runtime": "28.0.3",
     "react-native-reanimated": "2.8.0",
-    "@types/react": "~18.0.8"
+    "@types/react": "18.0.8"
   },
   "turbo": {
     "baseBranch": "origin/main",
