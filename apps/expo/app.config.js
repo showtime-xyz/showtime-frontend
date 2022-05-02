@@ -43,7 +43,7 @@ export default {
   description: "The web3 social network",
   slug: "showtime",
   scheme: config.scheme,
-  owner: "tryshowtime",
+  owner: "showtime-xyz",
   icon: config.icon,
   version: version.toString(),
   userInterfaceStyle: "automatic",
