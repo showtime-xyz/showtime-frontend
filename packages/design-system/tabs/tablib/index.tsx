@@ -2,6 +2,7 @@
 import React, {
   ForwardedRef,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -64,11 +65,14 @@ const Root = ({
   children,
   tabListHeight: initialtabListHeight,
   initialIndex = 0,
+  index: indexProp,
   onIndexChange: onIndexChangeProp,
   lazy,
 }: TabRootProps) => {
   const pagerRef = React.useRef();
-  const index = useSharedValue(initialIndex ?? 0);
+  const index = useSharedValue(
+    typeof indexProp === "number" ? indexProp : initialIndex ?? 0
+  );
   const position = useSharedValue(0);
   const offset = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -84,6 +88,10 @@ const Root = ({
     index.value = newIndex;
     onIndexChangeProp?.(newIndex);
   };
+
+  useEffect(() => {
+    if (typeof indexProp === "number") index.value = indexProp;
+  }, [indexProp]);
 
   // We need to put both header and TabBar in absolute view so filter here, bad for composition, maybe improve later
   const { tabListChild, restChildren, headerChild } = React.useMemo(() => {
