@@ -8935,29 +8935,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:>=16.0.0":
-  version: 18.0.3
-  resolution: "@types/react@npm:18.0.3"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 4bd1f088b4650af95fa3c6f592221b5d151af96ea619d34536fdc4f8bbf7c0807a5154c4e75911ed851e654da3a99d7c138f5f14aa17e00d39d3258af89c0d98
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:17.0.36":
-  version: 17.0.36
-  resolution: "@types/react@npm:17.0.36"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: feeaa484d5d7e354ba6830b06342dec6fd1a2ac87f73d21d3d4f2a3d311459de4090330a1e8af7275c8d1e7737b655a7550c8dd3dbc74ccf34ffd3fc824bbd12
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^17.0.0, @types/react@npm:~17.0.36":
+"@types/react@npm:~17.0.36":
   version: 17.0.44
   resolution: "@types/react@npm:17.0.44"
   dependencies:
@@ -28791,7 +28769,6 @@ __metadata:
   dependencies:
     "@react-native-menu/menu": ^0.5.2
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
-    "@types/react": ~17.0.36
     "@types/react-native": ~0.66.5
     eslint-plugin-prettier: ^4.0.0
     patch-package: ^6.4.7
