@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Image } from "design-system/image";
 
-import { useGLTF, Stage } from "./react-three-drei";
+import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";
 
 type Props = {
@@ -29,6 +29,7 @@ function Model({ url }: { url: string }) {
       preset="rembrandt"
     >
       <primitive object={scene} />
+      <OrbitControls enableZoom={false} />
     </Stage>
   );
 }
