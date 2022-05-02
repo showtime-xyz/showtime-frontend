@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useCallback, useMemo, useRef, Suspense } from "react";
 import {
   Dimensions,
   FlatList,
@@ -43,6 +43,7 @@ import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
 import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
+import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
@@ -266,17 +267,19 @@ export const FeedItem = memo(
             <LikedBy nft={nft} />
             <View tw="mr-4 flex-row justify-between">
               <Title nft={nft} />
-              <NFTDropdown nftId={nft.nft_id} />
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown nftId={nft.nft_id} />
+              </Suspense>
             </View>
             <Description nft={nft} />
             <View tw="px-4">
               <Creator nft={nft} />
             </View>
-            {Platform.OS === 'web' ? 
+            {Platform.OS === "web" ? (
               <View tw="px-4 py-4">
                 <BuyButton nft={nft} />
-              </View> : null  
-            }
+              </View>
+            ) : null}
             <Owner nft={nft} price={Platform.OS !== "ios"} />
             {/* Comments */}
           </View>
@@ -397,7 +400,9 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
               />
             </Pressable>
             <View tw="w-8" />
-            <NFTDropdown nftId={nft?.nft_id} />
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown nftId={nft?.nft_id} />
+            </Suspense>
           </View>
         </View>
       </View>
