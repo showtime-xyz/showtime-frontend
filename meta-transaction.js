@@ -54,7 +54,7 @@ const createEdition = async () => {
     "0x5a10c03724f18ec2534436cc5f5d4e9d60a91c2c6cea3ad7e623eb3d54e20ea9", // imageHash
     100, // editionSize
     1000, // royaltyBPS
-    createDropContractAddress,
+    mintDropContractAddress,
   ]);
   const accessToken = await getAccessToken();
   console.log("Wrapping request...");
