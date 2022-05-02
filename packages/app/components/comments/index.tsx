@@ -108,7 +108,22 @@ export function Comments({ nft }: { nft: NFT }) {
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
+  //#endregion
 
+  //#region rendering
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<CommentType>) => (
+      <CommentRow
+        key={`comment-row-${item.comment_id}`}
+        comment={item}
+        likeComment={likeComment}
+        unlikeComment={unlikeComment}
+        deleteComment={handleOnDeleteComment}
+        reply={handleOnReply}
+      />
+    ),
+    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
+  );
   const listEmptyComponent = useCallback(
     () => (
       <View tw="items-center justify-center p-4">
@@ -152,23 +167,6 @@ export function Comments({ nft }: { nft: NFT }) {
     ),
     [isAuthenticated, router, isMdWidth]
   );
-  //#endregion
-
-  //#region rendering
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<CommentType>) => (
-      <CommentRow
-        key={`comment-row-${item.comment_id}`}
-        comment={item}
-        likeComment={likeComment}
-        unlikeComment={unlikeComment}
-        deleteComment={handleOnDeleteComment}
-        reply={handleOnReply}
-      />
-    ),
-    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
-  );
-
   return (
     <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (

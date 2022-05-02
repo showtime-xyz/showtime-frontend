@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useMemo, useState } from "react";
+import { Dimensions, LayoutChangeEvent, StyleSheet } from "react-native";
 
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
@@ -17,6 +17,7 @@ import {
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
+import { LoginOverlays } from "./login-overlays";
 import { PhoneNumberPicker } from "./phone-number-picker";
 import { useLogin } from "./use-login";
 
@@ -83,7 +84,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer loading={loading && !isConnectingToWallet}>
+    <LoginContainer style={styles.container}>
       {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -98,7 +99,7 @@ export function Login({ onLogin }: LoginProps) {
 
           <View
             style={{
-              height: 376,
+              height: 397,
             }}
           >
             <Tabs.Root
@@ -128,7 +129,7 @@ export function Login({ onLogin }: LoginProps) {
                 <Tabs.View style={styles.tabListItemContainer}>
                   <View tw="mb-[16px]">
                     <Button
-                      onPress={() => handleSubmitWallet()}
+                      onPress={handleSubmitWallet}
                       variant="primary"
                       size="regular"
                     >
@@ -150,17 +151,22 @@ export function Login({ onLogin }: LoginProps) {
                     signInButtonLabel="Send"
                     onSubmit={handleSubmitEmail}
                   />
+                  <View tw="h-4" collapsable={true} />
                 </Tabs.View>
               </Tabs.Pager>
             </Tabs.Root>
           </View>
         </>
       )}
+      <LoginOverlays loading={loading && !isConnectingToWallet} />
     </LoginContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   tabListItemContainer: {
     marginTop: -(TAB_LIST_HEIGHT - 16),
     paddingHorizontal: 16,
