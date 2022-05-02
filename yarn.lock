@@ -6862,6 +6862,7 @@ __metadata:
     "@testing-library/react-native": ^9.1.0
     "@tradle/react-native-http": ^2.0.0
     "@types/jest": ^27.4.1
+    "@types/react": ^18.0.8
     "@types/three": ^0.139.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.7.4
@@ -7231,7 +7232,7 @@ __metadata:
     "@storybook/manager-webpack5": ~6.3.12
     "@storybook/react": ~6.3.12
     "@types/node": 16.11.9
-    "@types/react": 17.0.36
+    "@types/react": ^18.0.8
     babel-loader: ^8.2.3
     babel-plugin-react-native-web: ^0.17.5
     chromatic: ^6.0.6
@@ -9582,7 +9583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:~18.0.8":
+"@types/react@npm:18.0.8":
   version: 18.0.8
   resolution: "@types/react@npm:18.0.8"
   dependencies:

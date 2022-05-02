@@ -1,22 +1,21 @@
-// import { Activity } from "app/components/activity";
+import { Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { NFT } from "app/types";
 
-// import { Grid } from "design-system/card/grid";
 import { Collection } from "design-system/card/rows/collection";
 import { Creator } from "design-system/card/rows/elements/creator";
 import { Owner } from "design-system/card/rows/owner";
 import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
+import { useIsDarkMode } from "design-system/hooks";
 import { Media } from "design-system/media";
 import { Pressable } from "design-system/pressable-scale";
+import { Skeleton } from "design-system/skeleton";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
-
-import { useIsDarkMode } from "../hooks";
 
 type Props = {
   nft: NFT & { loading?: boolean };
@@ -64,7 +63,9 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
         {/* {variant === "activity" && <Activity activity={act} />} */}
         <View tw="flex-row items-center justify-between px-4 py-2">
           <Creator nft={nft} shouldShowDateCreated={false} />
-          <NFTDropdown nftId={nft.nft_id} />
+          <Suspense fallback={<Skeleton width={24} height={24} />}>
+            <NFTDropdown nftId={nft.nft_id} />
+          </Suspense>
         </View>
 
         <Pressable onPress={onPress}>

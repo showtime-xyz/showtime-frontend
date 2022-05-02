@@ -93,7 +93,7 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw="h-screen w-screen">
+        <View tw={numColumns > 1 ? size : "h-screen w-screen"}>
           <Model
             url={item?.source_url}
             // TODO: update this to get a preview from CDN v2
