@@ -1,0 +1,15 @@
+diff --git a/node_modules/jest-expo/src/preset/assetFileTransformer.js b/node_modules/jest-expo/src/preset/assetFileTransformer.js
+index c4b0952..b4ea1e2 100644
+--- a/node_modules/jest-expo/src/preset/assetFileTransformer.js
++++ b/node_modules/jest-expo/src/preset/assetFileTransformer.js
+@@ -1,6 +1,9 @@
+ const createCacheKeyFunction = require('@jest/create-cache-key-function').default;
+ 
+ module.exports = {
+-  process: (_, filename) => `module.exports = 1;`,
++  // https://jestjs.io/docs/upgrading-to-jest28#transformer
++  process: (_, filename) => ({
++    code: `module.exports = 1;`
++  }),
+   getCacheKey: createCacheKeyFunction([__filename]),
+ };
