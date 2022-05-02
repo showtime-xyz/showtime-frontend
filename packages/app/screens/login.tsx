@@ -35,9 +35,9 @@ function LoginModal() {
   return <Login onLogin={handleOnLogin} />;
 }
 
-export const LoginScreen = withModalScreen(
-  LoginModal,
-  "Sign In",
-  "/login",
-  "loginModal"
-);
+export const LoginScreen = withModalScreen(LoginModal, {
+  title: "Sign In",
+  matchingPathname: "/login",
+  matchingQueryParam: "loginModal",
+  snapPoints: ["90%"],
+});

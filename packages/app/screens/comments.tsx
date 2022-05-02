@@ -37,9 +37,8 @@ function CommentsModal() {
   );
 }
 
-export const CommentsScreen = withModalScreen(
-  CommentsModal,
-  "Comments",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/comments",
-  "commentsModal"
-);
+export const CommentsScreen = withModalScreen(CommentsModal, {
+  title: "Comments",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/comments",
+  matchingQueryParam: "commentsModal",
+});

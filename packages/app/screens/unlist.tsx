@@ -31,9 +31,8 @@ const UnlistModal = withColorScheme(() => {
   return <Unlist nft={nft} />;
 });
 
-export const UnlistScreen = withModalScreen(
-  UnlistModal,
-  "Unlist",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/unlist",
-  "unlistModal"
-);
+export const UnlistScreen = withModalScreen(UnlistModal, {
+  title: "Unlist",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/unlist",
+  matchingQueryParam: "unlistModal",
+});
