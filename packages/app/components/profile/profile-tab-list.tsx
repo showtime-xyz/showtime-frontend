@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
@@ -11,7 +11,6 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Spinner, Text, View } from "design-system";
 import { Card } from "design-system/card";
-import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 
 import { FilterContext } from "./fillter-context";
@@ -81,7 +80,7 @@ export const ProfileTabList = ({
   const ListHeaderComponent = useCallback(
     () => (
       <View tw="p-4">
-        <Hidden from="md">
+        {Platform.OS !== "web" && (
           <ProfileListFilter
             onCollectionChange={onCollectionChange}
             onSortChange={onSortChange}
@@ -89,7 +88,7 @@ export const ProfileTabList = ({
             collections={list.collections}
             sortId={filter.sortId}
           />
-        </Hidden>
+        )}
         {isBlocked ? (
           <View tw="mt-8 items-center justify-center">
             <Text tw="text-gray-900 dark:text-white">
@@ -179,7 +178,7 @@ export const ProfileTabList = ({
     [width]
   );
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index) => {
+    (_type: any, item: any, index: number) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }

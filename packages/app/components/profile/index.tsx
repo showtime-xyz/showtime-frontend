@@ -86,8 +86,8 @@ const Profile = ({ address }: { address: string | null }) => {
               <View tw="web:max-w-screen-xl w-full">
                 {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
                 <ProfileTop address={address} isBlocked={isBlocked} />
-                <Hidden until="md">
-                  <View tw={"absolute right-10 -bottom-10 z-10"}>
+                {Platform.OS === "web" && (
+                  <View tw="-bottom-26 absolute w-full justify-between md:right-10 md:-bottom-10 md:w-auto">
                     <ProfileListFilter
                       onCollectionChange={onCollectionChange}
                       onSortChange={onSortChange}
@@ -98,7 +98,7 @@ const Profile = ({ address }: { address: string | null }) => {
                       sortId={filter.sortId}
                     />
                   </View>
-                </Hidden>
+                )}
               </View>
             </View>
           </Tabs.Header>

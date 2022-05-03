@@ -48,7 +48,7 @@ export const SelectItem: React.FC<SelectItemProps> = ({
   );
   const containerStyle = useMemo(
     () => [
-      tw`p-2 m-1 items-center justify-between rounded-xl`,
+      tw`p-2 m-1 items-center justify-between rounded-lg`,
       containerAnimatedStyle,
     ],
     []

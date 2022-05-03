@@ -7,7 +7,7 @@ export interface SelectProps {
   size?: "small" | "regular";
   disabled?: boolean;
   tw?: TW;
-  onChange?: (value: string | number) => void;
+  onChange: (value: string | number) => void;
 }
 
 export interface SelectOption {
