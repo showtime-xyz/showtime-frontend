@@ -96,35 +96,31 @@ const SettingsTabs = () => {
   }, [isAuthenticated]);
 
   return (
-    <View tw="h-[100vh] web:items-center w-full">
+    <View tw="web:items-center h-[100vh] w-full">
       <Tabs.Root
         onIndexChange={setSelected}
         initialIndex={selected}
         tabListHeight={TAB_LIST_HEIGHT}
         lazy
       >
-      <Tabs.Header>
+        <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="items-center bg-white dark:bg-black">
             <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
-              <Text
-                tw="font-extrabold text-gray-900 dark:text-white text-2xl"
-              >
+              <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
                 Settings
               </Text>
               {!isWeb ? (
-              <Text
-                tw="font-extrabold text-gray-100 dark:text-gray-900 text-2xl"
-              >
-                v{Constants?.manifest?.version ?? packageJson?.version}
-              </Text>
-            ) : null}
+                <Text tw="text-2xl font-extrabold text-gray-100 dark:text-gray-900">
+                  v{Constants?.manifest?.version ?? packageJson?.version}
+                </Text>
+              ) : null}
             </View>
           </View>
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] md:-right-36 ios:w-screen android:w-screen`
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] right-0 xl:-right-24 2xl:-right-36 ios:w-screen android:w-screen`
           )}
         >
           <Tabs.Trigger>
