@@ -16,12 +16,6 @@ import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
 import { parseBalance } from "app/utilities";
 
-const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
-  `https://polygon-${
-    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-  }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-);
-
 type Status =
   | "idle"
   | "loading"
@@ -176,6 +170,12 @@ export const useBuyNFT = () => {
     nft: NFT;
     quantity: number;
   }) => {
+    const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
+      `https://polygon-${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+    );
+
     if (nft.listing) {
       const tokenAddr = LIST_CURRENCIES[nft.listing.currency];
       if (!nft.listing) return;
