@@ -16,12 +16,6 @@ import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
 import { parseBalance } from "app/utilities";
 
-const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
-  `https://polygon-${
-    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-  }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-);
-
 type Status =
   | "idle"
   | "loading"
@@ -176,6 +170,12 @@ export const useBuyNFT = () => {
     nft: NFT;
     quantity: number;
   }) => {
+    const infuraPolygonProvider = new ethers.providers.JsonRpcProvider(
+      `https://polygon-${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+    );
+
     if (nft.listing) {
       const tokenAddr = LIST_CURRENCIES[nft.listing.currency];
       if (!nft.listing) return;
@@ -204,7 +204,7 @@ export const useBuyNFT = () => {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTxNonces,
-              infurePolygonProvider
+              infuraPolygonProvider
             );
 
             nonce = await tokenContract.nonces(userAddress);
@@ -212,7 +212,7 @@ export const useBuyNFT = () => {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTx,
-              infurePolygonProvider
+              infuraPolygonProvider
             );
 
             nonce = await tokenContract.getNonce(userAddress);
@@ -257,7 +257,7 @@ export const useBuyNFT = () => {
           const tokenContract = new ethers.Contract(
             tokenAddr,
             iercPermit20Abi,
-            infurePolygonProvider
+            infuraPolygonProvider
           );
 
           const userAddress = await web3.getSigner().getAddress();
@@ -302,7 +302,7 @@ export const useBuyNFT = () => {
           .then((res) => res.data);
 
         // since we sent the transaction on polygon chain, we listen it with infure provider
-        infurePolygonProvider.once(transaction, () => {
+        infuraPolygonProvider.once(transaction, () => {
           buyNFT({ nft, quantity });
         });
       } catch (error) {
