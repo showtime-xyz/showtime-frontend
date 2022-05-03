@@ -1,6 +1,10 @@
 import { Children, cloneElement, useMemo } from "react";
 
-import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 
 import { Pressable } from "design-system/pressable-scale";
@@ -33,6 +37,8 @@ export function BaseButton({
   //#region variables
   const isDarkMode = useIsDarkMode();
   const animatedPressed = useSharedValue(false);
+  const pressed = useSharedValue(false);
+  const scaleTo = 0.95;
   //#endregion
 
   //#region styles
@@ -53,9 +59,13 @@ export function BaseButton({
             isDarkMode ? 1 : 0
           ]
         : "transparent",
+      transform: [
+        { scale: pressed.value ? withTiming(scaleTo) : withTiming(1) },
+      ],
     }),
     [backgroundColors, animatedPressed, isDarkMode]
   );
+
   const labelStyle = useMemo(
     () => [
       LABEL_SIZE_TW[size],
@@ -113,6 +123,9 @@ export function BaseButton({
   return (
     <Pressable
       {...props}
+      // TODO: remove when https://github.com/software-mansion/react-native-reanimated/issues/3209 is fixed
+      onPressIn={() => (pressed.value = true)}
+      onPressOut={() => (pressed.value = false)}
       tw={containerStyle}
       style={backgroundColors ? containerAnimatedStyle : undefined}
       pressedValue={animatedPressed}
