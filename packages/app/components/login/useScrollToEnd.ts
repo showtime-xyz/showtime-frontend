@@ -6,7 +6,7 @@ export const useScrollToEnd = () => {
 
   useEffect(() => {
     const subscription = Keyboard.addListener("keyboardDidShow", () => {
-      scrollViewRef?.current?.scrollToEnd?.();
+      requestAnimationFrame(() => scrollViewRef?.current?.scrollToEnd?.());
     });
     return () => {
       subscription.remove();

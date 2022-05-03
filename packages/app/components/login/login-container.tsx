@@ -14,13 +14,7 @@ export function LoginContainer({ style, children }: ViewProps) {
   const { scrollViewRef } = useScrollToEnd();
 
   return (
-    <ContainerView
-      ref={scrollViewRef}
-      style={style}
-      contentContainerStyle={{
-        paddingTop: 16,
-      }}
-    >
+    <ContainerView ref={scrollViewRef} style={style}>
       {children}
     </ContainerView>
   );

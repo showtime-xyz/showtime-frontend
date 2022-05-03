@@ -84,7 +84,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer style={styles.container}>
+    <LoginContainer index={selected} style={styles.container}>
       {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
