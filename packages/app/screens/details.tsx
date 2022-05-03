@@ -1,5 +1,6 @@
 import { Details } from "app/components/details";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -14,6 +15,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const DetailsModal = () => {
+  useTrackPageViewed({ name: "Details" });
   useHideHeader();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");

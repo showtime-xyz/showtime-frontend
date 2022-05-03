@@ -1,7 +1,8 @@
-import { Suspense, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
@@ -17,8 +18,24 @@ import { Card } from "design-system/card";
 import { useIsDarkMode } from "design-system/hooks";
 import { breakpoints } from "design-system/theme";
 
+type Query = {
+  tab: string;
+  days: number;
+};
+
+const { useParam } = createParam<Query>();
+
 export const Trending = () => {
-  const [selected, setSelected] = useState(0);
+  const [tab, setTab] = useParam("tab");
+  const selected = tab === "nft" ? 1 : 0;
+  const handleTabChange = useCallback((index: number) => {
+    if (index === 0) {
+      setTab("following");
+    } else {
+      setTab("nft");
+    }
+  }, []);
+
   return (
     <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
       <View tw="mx-auto w-[90%] py-8">
@@ -31,7 +48,7 @@ export const Trending = () => {
           <View tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black">
             <SegmentedControl
               values={["CREATOR", "NFT"]}
-              onChange={setSelected}
+              onChange={handleTabChange}
               selectedIndex={selected}
             />
           </View>
@@ -43,10 +60,25 @@ export const Trending = () => {
 };
 
 const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
-  const [selected, setSelected] = useState(0);
-  const days = selected === 0 ? 1 : selected === 1 ? 7 : 30;
+  const [days, setDays] = useParam("days", {
+    initial: 1,
+    parse: (value) => Number(value ?? 1),
+  });
+
+  const handleDaysChange = useCallback((index: number) => {
+    if (index === 0) {
+      setDays(1);
+    } else if (index === 1) {
+      setDays(7);
+    } else {
+      setDays(30);
+    }
+  }, []);
+
+  const index = days === 1 ? 0 : days === 7 ? 1 : 2;
+
   return (
-    <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
+    <Tabs.Root onIndexChange={handleDaysChange} index={index} lazy>
       <Tabs.List
         scrollEnabled={false}
         style={{ backgroundColor: "transparent" }}
@@ -120,7 +152,7 @@ const CreatorsList = ({ days }: { days: any }) => {
         </View>
       ) : null}
       {data.length > 0 && containerWidth
-        ? data.map((item) => {
+        ? data.map((item: any) => {
             return (
               <View
                 key={item.creator_id}

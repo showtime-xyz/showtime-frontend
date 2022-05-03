@@ -10,6 +10,7 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { createParam } from "app/navigation/use-param";
 
 import { Skeleton, Spinner, View } from "design-system";
 import { Hidden } from "design-system/hidden";
@@ -22,6 +23,12 @@ import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
+type Query = {
+  tab: number;
+};
+
+const { useParam } = createParam<Query>();
+
 const ProfileScreen = ({ username }: { username: string | null }) => {
   return <Profile address={username} />;
 };
@@ -31,11 +38,14 @@ const Profile = ({ address }: { address: string | null }) => {
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  // const router = useRouter();
+  const [selected, setSelected] = useParam("tab", {
+    parse: (v) => Number(v ?? 0),
+    initial: 0,
+  });
+
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
 
-  const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
   const [filter, dispatch] = useReducer(
@@ -67,7 +77,7 @@ const Profile = ({ address }: { address: string | null }) => {
       <View tw="web:mb-8 web:items-center w-full flex-1 overflow-hidden">
         <Tabs.Root
           onIndexChange={setSelected}
-          initialIndex={selected}
+          index={selected}
           tabListHeight={TAB_LIST_HEIGHT}
           lazy
         >
@@ -76,8 +86,8 @@ const Profile = ({ address }: { address: string | null }) => {
               <View tw="web:max-w-screen-xl w-full">
                 {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
                 <ProfileTop address={address} isBlocked={isBlocked} />
-                <Hidden until="md">
-                  <View tw={"absolute right-10 -bottom-10 z-10"}>
+                {Platform.OS === "web" && (
+                  <View tw="-bottom-26 absolute w-full justify-between md:right-10 md:-bottom-10 md:w-auto">
                     <ProfileListFilter
                       onCollectionChange={onCollectionChange}
                       onSortChange={onSortChange}
@@ -88,7 +98,7 @@ const Profile = ({ address }: { address: string | null }) => {
                       sortId={filter.sortId}
                     />
                   </View>
-                </Hidden>
+                )}
               </View>
             </View>
           </Tabs.Header>

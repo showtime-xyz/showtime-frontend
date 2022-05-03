@@ -1,0 +1,76 @@
+diff --git a/node_modules/react-native/Libraries/Blob/BlobManager.js b/node_modules/react-native/Libraries/Blob/BlobManager.js
+index 0d4cee7..9e39534 100644
+--- a/node_modules/react-native/Libraries/Blob/BlobManager.js
++++ b/node_modules/react-native/Libraries/Blob/BlobManager.js
+@@ -14,6 +14,7 @@ const BlobRegistry = require('./BlobRegistry');
+ import type {BlobData, BlobOptions, BlobCollector} from './BlobTypes';
+ import NativeBlobModule from './NativeBlobModule';
+ import invariant from 'invariant';
++import { getBlobForArrayBuffer } from 'react-native-blob-jsi-helper';
+ 
+ /*eslint-disable no-bitwise */
+ /*eslint-disable eqeqeq */
+@@ -69,9 +70,7 @@ class BlobManager {
+         part instanceof ArrayBuffer ||
+         (global.ArrayBufferView && part instanceof global.ArrayBufferView)
+       ) {
+-        throw new Error(
+-          "Creating blobs from 'ArrayBuffer' and 'ArrayBufferView' are not supported",
+-        );
++        return getBlobForArrayBuffer(part);
+       }
+       if (part instanceof Blob) {
+         return {
+diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
+index c58dfba..2f3aa15 100644
+--- a/node_modules/react-native/Libraries/Blob/FileReader.js
++++ b/node_modules/react-native/Libraries/Blob/FileReader.js
+@@ -10,6 +10,7 @@
+ 
+ const Blob = require('./Blob');
+ const EventTarget = require('event-target-shim');
++const { toByteArray } = require('base64-js');
+ 
+ import NativeFileReaderModule from './NativeFileReaderModule';
+ 
+@@ -80,7 +81,32 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+   }
+ 
+   readAsArrayBuffer() {
+-    throw new Error('FileReader.readAsArrayBuffer is not implemented');
++    this._aborted = false;
++
++    if (blob == null) {
++      throw new TypeError(
++        "Failed to execute 'readAsArrayBuffer' on 'FileReader': parameter 1 is not of type 'Blob'",
++      );
++    }
++
++    NativeFileReaderModule.readAsDataURL(blob.data).then(
++      (dataUrl: string) => {
++        if (this._aborted) {
++          return;
++        }
++        const base64 = dataUrl.split(',')[1];
++        const buffer = toByteArray(base64);
++        this._result = buffer;
++        this._setReadyState(DONE);
++      },
++      error => {
++        if (this._aborted) {
++          return;
++        }
++        this._error = error;
++        this._setReadyState(DONE);
++      }
++    );
+   }
+ 
+   readAsDataURL(blob: ?Blob) {
+diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
+new file mode 100644
+index 0000000..361f5fb
+--- /dev/null
++++ b/node_modules/react-native/scripts/.packager.env
+@@ -0,0 +1 @@
++export RCT_METRO_PORT=8081

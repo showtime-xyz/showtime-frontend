@@ -51,7 +51,6 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitWallet() {
       try {
         loginSource.current = "wallet";
-        mixpanel.track("Login - wallet button click");
         trackButtonClicked({ name: "Login with wallet" });
 
         await loginWithWallet();
@@ -65,7 +64,6 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        mixpanel.track("Login - email button click");
         trackButtonClicked({ name: "Login with email" });
 
         const Web3Provider = (await import("@ethersproject/providers"))
@@ -85,7 +83,6 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        mixpanel.track("Login - phone number button click");
         trackButtonClicked({ name: "Login with phone number" });
 
         const Web3Provider = (await import("@ethersproject/providers"))

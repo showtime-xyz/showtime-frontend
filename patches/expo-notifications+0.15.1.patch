@@ -1,0 +1,27 @@
+diff --git a/node_modules/expo-notifications/build/ServerRegistrationModule.web.js b/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
+index 5c9feb1..206f772 100644
+--- a/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
++++ b/node_modules/expo-notifications/build/ServerRegistrationModule.web.js
+@@ -9,6 +9,8 @@ let getFallbackInstallationId = () => {
+ };
+ export default {
+     getInstallationIdAsync: async () => {
++        if (typeof window === 'undefined') return;
++
+         let installationId;
+         try {
+             installationId = localStorage.getItem(INSTALLATION_ID_KEY);
+@@ -23,9 +25,13 @@ export default {
+         return installationId;
+     },
+     getRegistrationInfoAsync: async () => {
++        if (typeof window === 'undefined') return;
++
+         return localStorage.getItem(REGISTRATION_INFO_KEY);
+     },
+     setRegistrationInfoAsync: async (registrationInfo) => {
++        if (typeof window === 'undefined') return;
++        
+         try {
+             if (registrationInfo) {
+                 localStorage.setItem(REGISTRATION_INFO_KEY, registrationInfo);

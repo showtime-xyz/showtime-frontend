@@ -279,7 +279,6 @@ export const useMyInfo = () => {
   const follow = useCallback(
     async (profileId: number) => {
       if (!accessToken) {
-        mixpanel.track("Follow but logged out");
         router.push(
           Platform.select({
             native: "/login",
@@ -315,7 +314,6 @@ export const useMyInfo = () => {
             method: "POST",
             data: {},
           });
-          mixpanel.track("Followed profile");
         } catch (err) {
           console.error(err);
         }
@@ -348,7 +346,6 @@ export const useMyInfo = () => {
             method: "POST",
             data: {},
           });
-          mixpanel.track("Unfollowed profile");
         } catch (err) {
           console.error(err);
         }

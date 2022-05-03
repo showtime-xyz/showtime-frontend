@@ -4,6 +4,7 @@ import { List } from "app/components/list";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -18,6 +19,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const ListModal = withColorScheme(() => {
+  useTrackPageViewed({ name: "List" });
   useHideHeader();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");

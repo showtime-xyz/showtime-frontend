@@ -113,7 +113,7 @@ export const useBurnNFT = () => {
 
       const response = await burnToken({ ...params });
       dispatch({ type: "burningSuccess", transaction: response.transaction });
-      track("NFT Burned");
+      track("NFT Deleted");
 
       console.log("** burning success **");
     } catch (e) {

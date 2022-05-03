@@ -13,6 +13,8 @@ import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
 
+import { EmptyPlaceholder } from "./empty-placeholder";
+
 type FollowingListProp = {
   follow: (profileId: number) => void;
   unFollow: (profileId: number) => void;
@@ -30,10 +32,13 @@ export const UserList = ({
 }) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
 
-  const keyExtractor = useCallback((item) => item.profile_id, []);
+  const keyExtractor = useCallback(
+    (item: FollowerUser) => `${item.profile_id}`,
+    []
+  );
 
   const getItemLayout = useCallback(
-    (_, index) => ({
+    (_: FollowerUser[] | null | undefined, index: number) => ({
       length: ITEM_HEIGHT,
       offset: ITEM_HEIGHT * index,
       index,
@@ -83,13 +88,8 @@ export const UserList = ({
   } else if (loading) {
     return <FollowingUserItemLoadingIndicator />;
   } else if (users?.length === 0) {
-    return (
-      <View tw="items-center">
-        <Text tw="text-gray-900 dark:text-gray-100">No results found</Text>
-      </View>
-    );
+    return <EmptyPlaceholder title="No results found" />;
   }
-
   return null;
 };
 
@@ -172,9 +172,9 @@ const FollowingUserItemLoadingIndicator = () => {
 
   return (
     <View tw="px-4">
-      {[1, 2, 3].map((v) => {
+      {new Array(8).fill(0).map((_, i) => {
         return (
-          <View tw="flex-row pt-4" key={v}>
+          <View tw="flex-row pt-4" key={`${i}`}>
             <View tw="mr-2 overflow-hidden rounded-full">
               <Skeleton
                 width={32}
@@ -185,14 +185,14 @@ const FollowingUserItemLoadingIndicator = () => {
             </View>
             <View>
               <Skeleton
-                width={100}
+                width={140}
                 height={14}
                 show
                 colorMode={colorMode as any}
               />
               <View tw="h-1" />
               <Skeleton
-                width={80}
+                width={90}
                 height={14}
                 show
                 colorMode={colorMode as any}

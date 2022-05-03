@@ -1,6 +1,7 @@
 import { Transfer } from "app/components/transfer";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -15,6 +16,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const TransferModal = () => {
+  useTrackPageViewed({ name: "Transfer" });
   useHideHeader();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");

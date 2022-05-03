@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { track } from "app/lib/analytics";
 import { parseBalance } from "app/utilities";
 
 export type ListNFT = {
@@ -174,6 +175,7 @@ export const useListNFT = () => {
             status: "listingSuccess",
             transactionHash: transaction,
           });
+          track("NFT Listed");
           resolve(true);
         });
       } catch (error) {

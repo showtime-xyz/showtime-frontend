@@ -1,12 +1,8 @@
-import { useEffect } from "react";
-
 import { withColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
+import { useTrackPageViewed } from "app/lib/analytics";
 
 const NotificationSettingsScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Notification Settings screen");
-  }, []);
+  useTrackPageViewed({ name: "Notification Settings" });
 
   return null;
 });

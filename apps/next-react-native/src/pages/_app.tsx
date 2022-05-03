@@ -182,6 +182,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
+    // change browser's default color scheme
+    document.documentElement.setAttribute(
+      "data-color-scheme",
+      isDark ? "dark" : "light"
+    );
     if (isDark) {
       tw.setColorScheme("dark");
     } else {

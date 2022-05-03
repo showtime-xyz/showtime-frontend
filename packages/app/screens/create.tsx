@@ -4,9 +4,9 @@ import { Platform } from "react-native";
 import { Create } from "app/components/create";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { MintContext } from "app/context/mint-context";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
 import { Spinner, Text, View } from "design-system";
@@ -16,6 +16,7 @@ import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 const CreateModal = () => {
   //#region hooks
+  useTrackPageViewed({ name: "Create" });
   useHideHeader();
   const Alert = useAlert();
   const router = useRouter();

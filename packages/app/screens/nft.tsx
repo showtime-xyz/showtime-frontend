@@ -6,6 +6,7 @@ import Head from "next/head";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useSafeAreaFrame, useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
@@ -23,6 +24,7 @@ const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen() {
+  useTrackPageViewed({ name: "NFT" });
   const colorScheme = useColorScheme();
 
   return (

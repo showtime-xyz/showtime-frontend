@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 import { Login } from "app/components/login";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
@@ -14,6 +15,7 @@ const { useParam } = createParam<Query>();
 
 function LoginModal() {
   //#region hooks
+  useTrackPageViewed({ name: "Login" });
   const [redirect_url] = useParam("redirect_url");
   const router = useRouter();
   //#endregion

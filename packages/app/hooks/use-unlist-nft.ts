@@ -3,6 +3,7 @@ import { useReducer } from "react";
 import { ethers } from "ethers";
 
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
+import { track } from "app/lib/analytics";
 
 import { useSignerAndProvider } from "./use-signer-provider";
 
@@ -102,6 +103,7 @@ export const useUnlistNFT = () => {
               status: "unlistingSuccess",
               transactionHash: transaction,
             });
+            track("NFT Unlisted");
             resolve(true);
           });
         }

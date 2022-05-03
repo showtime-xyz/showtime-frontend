@@ -462,3 +462,13 @@ export const getBidLink = (item: NFT) => {
       }?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`;
   }
 };
+
+export const DROPDOWN_LIGHT_SHADOW =
+  "0px 12px 16px rgba(0, 0, 0, 0.1), 0px 16px 48px rgba(0, 0, 0, 0.1)";
+export const DROPDOWN_DRAK_SHADOW =
+  "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 16px 48px rgba(255, 255, 255, 0.2)";
+
+export const getDropdownShadow = (isDark = false) => {
+  const shadow = isDark ? DROPDOWN_DRAK_SHADOW : DROPDOWN_LIGHT_SHADOW;
+  return Platform.OS === "web" ? shadow : undefined;
+};

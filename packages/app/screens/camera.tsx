@@ -7,6 +7,7 @@ import { useTimer } from "use-timer";
 import { Camera } from "app/components/camera";
 import { useMintNFT } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
@@ -14,6 +15,7 @@ import { useRouter } from "app/navigation/use-router";
 import { FilePickerResolveValue } from "design-system/file-picker";
 
 function CameraScreen() {
+  useTrackPageViewed({ name: "Camera" });
   useHideHeader();
   const { isAuthenticated } = useUser();
   const router = useRouter();
