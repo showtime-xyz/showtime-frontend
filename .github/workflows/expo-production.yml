@@ -5,6 +5,9 @@ defaults:
     working-directory: apps/expo
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
