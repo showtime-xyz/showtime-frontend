@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Image } from "design-system/image";
 
-import { useGLTF, Bounds, Stage } from "./react-three-drei";
+import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";
 
 type Props = {
@@ -29,6 +29,7 @@ function Model({ url }: { url: string }) {
       preset="rembrandt"
     >
       <primitive object={scene} />
+      <OrbitControls enableZoom={false} />
     </Stage>
   );
 }
@@ -52,8 +53,6 @@ function ModelViewer({
   resizeMode,
   numColumns,
 }: Props) {
-  console.log(url);
-
   if (fallbackUrl && numColumns > 1) {
     return (
       <Image

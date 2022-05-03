@@ -31,7 +31,7 @@ async function registerForPushNotificationsAsync() {
     });
   }
 
-  const experienceId = "@tryshowtime/showtime";
+  const experienceId = "@showtime-xyz/showtime";
   const applicationId = "io.showtime";
 
   let granted = await getNotificationPermissionStatus();

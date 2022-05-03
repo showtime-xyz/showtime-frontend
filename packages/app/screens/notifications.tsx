@@ -4,11 +4,13 @@ import { Platform } from "react-native";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Notifications } from "app/components/notifications";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { View, Text, Spinner } from "design-system";
 
 const NotificationsScreen = withColorScheme(() => {
+  useTrackPageViewed({ name: "Notifications" });
   const headerHeight = useHeaderHeight();
 
   return (

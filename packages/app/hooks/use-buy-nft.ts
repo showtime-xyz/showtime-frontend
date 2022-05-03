@@ -9,11 +9,12 @@ import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
+import { SOL_MAX_INT } from "app/lib/constants";
 import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
 import { parseBalance } from "app/utilities";
-import { SOL_MAX_INT } from "app/lib/constants";
 
 const infurePolygonProvider = new ethers.providers.JsonRpcProvider(
   `https://polygon-${
@@ -160,7 +161,10 @@ export const useBuyNFT = () => {
 
       if (transaction) {
         dispatch({ type: "transactionInitiated", payload: { transaction } });
-        provider.once(transaction, () => dispatch({ type: "buyingSuccess" }));
+        provider.once(transaction, () => {
+          dispatch({ type: "buyingSuccess" });
+          track("NFT Purchased");
+        });
       }
     }
   };
@@ -196,9 +200,7 @@ export const useBuyNFT = () => {
           const userAddress = await web3.getSigner().getAddress();
           let tokenContract, nonce;
 
-          if (
-            tokenAddr === LIST_CURRENCIES.USDC
-          ) {
+          if (tokenAddr === LIST_CURRENCIES.USDC) {
             tokenContract = new ethers.Contract(
               tokenAddr,
               ierc20MetaTxNonces,
@@ -287,14 +289,13 @@ export const useBuyNFT = () => {
             permit
           );
 
-         permitRequest =  {
+          permitRequest = {
             owner: permit.owner,
             deadline: permit.deadline,
             tokenAddr,
-            signature
+            signature,
           };
         }
-
 
         const transaction = await axios
           .post("/api/marketplace/permit", permitRequest)

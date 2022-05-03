@@ -1,1 +1,1 @@
-export { useGLTF, Bounds, Stage } from "@react-three/drei";
+export { useGLTF, Bounds, Stage, OrbitControls } from "@react-three/drei";

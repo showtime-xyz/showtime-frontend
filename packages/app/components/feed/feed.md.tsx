@@ -13,6 +13,7 @@ import {
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
+import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 
 import {
@@ -33,6 +34,10 @@ const CARD_WIDTH = 620;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 80;
 
+type Query = {
+  tab: number;
+};
+
 export const Feed = () => {
   return (
     <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
@@ -45,10 +50,14 @@ export const Feed = () => {
   );
 };
 
+const { useParam } = createParam<Query>();
+
 export const FeedList = () => {
   const { isAuthenticated } = useUser();
-  const { width } = useWindowDimensions();
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useParam("tab", {
+    parse: (v) => Number(v),
+    initial: 0,
+  });
 
   return (
     <View tw="flex-row">
@@ -74,11 +83,7 @@ export const FeedList = () => {
                 selectedIndex={selected}
               />
             </View>
-            <Tabs.Root
-              onIndexChange={setSelected}
-              value={selected.toString()}
-              initialIndex={1}
-            >
+            <Tabs.Root onIndexChange={setSelected} index={selected}>
               <Tabs.Pager>
                 <ErrorBoundary>
                   <Suspense fallback={<View />}>

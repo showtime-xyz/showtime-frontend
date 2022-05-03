@@ -1,9 +1,11 @@
 import { withColorScheme } from "app/components/memo-with-theme";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { View, Text } from "design-system";
 
 const MarketplaceScreen = withColorScheme(() => {
+  useTrackPageViewed({ name: "Marketplace" });
   const headerHeight = useHeaderHeight();
 
   return (

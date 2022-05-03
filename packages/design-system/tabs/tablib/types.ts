@@ -11,7 +11,7 @@ export type TabRootProps = {
   children: React.ReactNode;
   lazy?: boolean;
   accessibilityLabel?: string;
-  value?: string;
+  index?: number;
 };
 
 export type TabListProps = ScrollViewProps;

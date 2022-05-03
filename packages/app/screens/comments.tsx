@@ -4,6 +4,7 @@ import { Comments } from "app/components/comments";
 import { CommentsStatus } from "app/components/comments/comments-status";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
@@ -17,6 +18,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 function CommentsModal() {
+  useTrackPageViewed({ name: "Comments" });
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");

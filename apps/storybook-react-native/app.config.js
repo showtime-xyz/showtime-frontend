@@ -2,7 +2,7 @@ export default {
   name: "Showtime",
   description: "Showtime Storybook",
   slug: "showtime-storybook-react-native",
-  owner: "tryshowtime",
+  owner: "showtime-xyz",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.storybook.png",

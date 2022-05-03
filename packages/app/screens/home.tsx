@@ -1,17 +1,13 @@
-import { useEffect } from "react";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Feed } from "app/components/feed";
 import { Feed as FeedDesktop } from "app/components/feed/feed.md";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
+import { useTrackPageViewed } from "app/lib/analytics";
 
 import { Hidden } from "design-system/hidden";
 
 const HomeScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Home page view");
-  }, []);
+  useTrackPageViewed({ name: "Home" });
 
   return (
     <ErrorBoundary>

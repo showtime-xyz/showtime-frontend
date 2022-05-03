@@ -1,14 +1,9 @@
-import { useEffect } from "react";
-
 import { withColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
-
-import { PrivacyAndSecuritySettings } from "../components/settings/privacy-and-security";
+import { PrivacyAndSecuritySettings } from "app/components/settings/privacy-and-security";
+import { useTrackPageViewed } from "app/lib/analytics";
 
 const PrivacySecuritySettingsScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Privacy and Security screen");
-  }, []);
+  useTrackPageViewed({ name: "Privacy and Security" });
 
   return <PrivacyAndSecuritySettings />;
 });
