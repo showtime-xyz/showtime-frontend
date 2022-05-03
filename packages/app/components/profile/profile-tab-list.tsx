@@ -35,7 +35,6 @@ export const ProfileTabList = ({
 }: TabListProps) => {
   const router = useRouter();
   const { user } = useUser();
-
   const { state: mintingState } = useContext(MintContext);
   const { width, height } = useWindowDimensions();
 
@@ -81,7 +80,7 @@ export const ProfileTabList = ({
   const ListHeaderComponent = useCallback(
     () => (
       <View tw="p-4">
-        <Hidden from="md">
+        <Hidden platform="web">
           <ProfileListFilter
             onCollectionChange={onCollectionChange}
             onSortChange={onSortChange}
@@ -179,7 +178,7 @@ export const ProfileTabList = ({
     [width]
   );
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index) => {
+    (_type: any, item: any, index: number) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }

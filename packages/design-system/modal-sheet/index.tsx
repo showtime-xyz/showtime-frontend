@@ -1,10 +1,11 @@
 import { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { BottomSheetHandleProps } from "@gorhom/bottom-sheet";
+
 import { BottomSheet } from "../bottom-sheet";
 import { Modal } from "../modal";
 import { ModalHeader } from "../modal/modal.header";
-import { TW } from "../tailwind/types";
 
 type Props = {
   children: React.ReactElement;
@@ -13,13 +14,13 @@ type Props = {
   close?: () => void;
   onClose?: () => void;
   snapPoints?: string[];
-  bodyContentTW?: TW;
+  bodyContentTW?: string;
 };
 
 export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
   const { width } = useWindowDimensions();
 
-  const renderHandleComponent = useCallback(
+  const renderHandleComponent: React.FC<BottomSheetHandleProps> = useCallback(
     (handleProps) => (
       <ModalHeader title={props.title} onClose={props.close} {...handleProps} />
     ),

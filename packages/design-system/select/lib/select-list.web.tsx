@@ -2,20 +2,19 @@ import { forwardRef, useMemo } from "react";
 
 import { MotiView, AnimatePresence } from "moti";
 
+import { getDropdownShadow } from "app/utilities";
+
+import { useIsDarkMode } from "../../hooks";
 import { tw } from "../../tailwind";
 
 interface SelectListProps {
   open: boolean;
+  children: React.ReactNode;
 }
 
 export const SelectList: React.FC<SelectListProps> = forwardRef(
   ({ open, children, ...rest }, ref) => {
-    const containerStyle = useMemo(
-      () =>
-        tw`z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
-      []
-    );
-
+    const isDark = useIsDarkMode();
     return (
       <AnimatePresence>
         {open ? (
@@ -37,7 +36,10 @@ export const SelectList: React.FC<SelectListProps> = forwardRef(
               type: "timing",
               duration: 250,
             }}
-            style={containerStyle}
+            style={[
+              tw`z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
+              { boxShadow: getDropdownShadow(isDark) } as {},
+            ]}
             {...rest}
           >
             {children}
