@@ -55,8 +55,8 @@ const { useParam } = createParam<Query>();
 export const FeedList = () => {
   const { isAuthenticated } = useUser();
   const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v),
-    initial: 0,
+    parse: (v) => Number(v ?? 1),
+    initial: 1,
   });
 
   return (

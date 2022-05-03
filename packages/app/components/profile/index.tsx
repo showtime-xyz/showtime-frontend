@@ -39,7 +39,7 @@ const Profile = ({ address }: { address: string | null }) => {
     profileId: profileData?.data?.profile.profile_id,
   });
   const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v),
+    parse: (v) => Number(v ?? 0),
     initial: 0,
   });
 
