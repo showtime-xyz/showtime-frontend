@@ -352,3 +352,13 @@ body {
   width: unset !important;
   padding-right: 0 !important;
 }
+
+[data-color-scheme="dark"] {
+  color-scheme: dark;
+  background-color: #000;
+}
+
+[data-color-scheme="light"] {
+  color-scheme: light;
+  background-color: #fff;
+}

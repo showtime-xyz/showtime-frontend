@@ -302,8 +302,9 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
         // @ts-expect-error
         style={{
           position: "sticky",
+          width: Platform.OS === "web" ? "100vw" : "100%",
         }}
-        tw="top-0 right-0 left-0 z-50 w-full items-center bg-white shadow-sm dark:bg-black"
+        tw="top-0 right-0 left-0 z-50 items-center bg-white shadow-sm dark:bg-black"
       >
         <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
