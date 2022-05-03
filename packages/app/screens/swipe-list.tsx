@@ -4,6 +4,7 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
@@ -22,6 +23,7 @@ type Query = {
 export const SwipeListScreen = withColorScheme(() => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
+  useTrackPageViewed({ name: "Swipe List", type });
 
   switch (type) {
     case "profile":

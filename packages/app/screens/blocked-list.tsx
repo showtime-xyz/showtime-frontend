@@ -1,14 +1,9 @@
-import { useEffect } from "react";
-
 import { withColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
-
-import { BlockedList } from "../components/settings/blocked-list";
+import { BlockedList } from "app/components/settings/blocked-list";
+import { useTrackPageViewed } from "app/lib/analytics";
 
 const BlockedListScreen = withColorScheme(() => {
-  useEffect(() => {
-    mixpanel.track("Blocket List screen");
-  }, []);
+  useTrackPageViewed({ name: "Blocked List" });
 
   return <BlockedList />;
 });
