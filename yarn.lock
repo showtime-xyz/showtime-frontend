@@ -3353,52 +3353,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-common-types@npm:^0.2.36":
-  version: 0.2.36
-  resolution: "@fortawesome/fontawesome-common-types@npm:0.2.36"
-  checksum: d604ac51da0b1597127fde70c64157b70ead6af7f2643ab7dfca268ef99d4ed0b4cc823afba206362422a622e389828408bec573df802bf4f02b118d0fa18dc8
-  languageName: node
-  linkType: hard
-
-"@fortawesome/fontawesome-svg-core@npm:^1.2.36":
-  version: 1.2.36
-  resolution: "@fortawesome/fontawesome-svg-core@npm:1.2.36"
-  dependencies:
-    "@fortawesome/fontawesome-common-types": ^0.2.36
-  checksum: 3011d8c1452b5df52a62eaee8b1ec925b9fdfabcc170fd6da5eaac7cfdef56258b9292ddd06c30f03a6a8ed6faa886565211f2e469fee3c9831c32f93e9383d8
-  languageName: node
-  linkType: hard
-
-"@fortawesome/free-regular-svg-icons@npm:^5.15.4":
-  version: 5.15.4
-  resolution: "@fortawesome/free-regular-svg-icons@npm:5.15.4"
-  dependencies:
-    "@fortawesome/fontawesome-common-types": ^0.2.36
-  checksum: 2e6039e3bb2125940ed2cb5738b6562b082755c1e45b73571ee92d976773ab81118c9efb9a7b57453b664a025613e81e1dafd2235aafeaadd8f0d75f8e1fe25e
-  languageName: node
-  linkType: hard
-
-"@fortawesome/free-solid-svg-icons@npm:^5.15.4":
-  version: 5.15.4
-  resolution: "@fortawesome/free-solid-svg-icons@npm:5.15.4"
-  dependencies:
-    "@fortawesome/fontawesome-common-types": ^0.2.36
-  checksum: eb037b703827ee37af3387a964afc7a190ff42a674ef46f4a6c295b634a38e849741eca78306b6423eaf3062d6ab1e7372aac5be2aec06f0fd9e8bd8110efcf9
-  languageName: node
-  linkType: hard
-
-"@fortawesome/react-fontawesome@npm:^0.1.15":
-  version: 0.1.18
-  resolution: "@fortawesome/react-fontawesome@npm:0.1.18"
-  dependencies:
-    prop-types: ^15.8.1
-  peerDependencies:
-    "@fortawesome/fontawesome-svg-core": ~1 || ~6
-    react: ">=16.x"
-  checksum: eba711234541928e1877435905bcd94ab6aea1cf228833a55fc7c6a2fc18dd08d3f7f327ca4af0f3ba365188ad0869d7ecd31be5940d27f4e2bbe7e12cbcf520
-  languageName: node
-  linkType: hard
-
 "@gar/promisify@npm:^1.0.1, @gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -3536,22 +3490,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/react@npm:^1.4.2":
-  version: 1.6.0
-  resolution: "@headlessui/react@npm:1.6.0"
+"@headlessui/react@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@headlessui/react@npm:1.6.1"
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: ee12b13dd2e98fc2f6ccebda78c6bbc4ca00e8f3cbb670cb330334591b317448fdaa250b250795c643833c344a7cbc8ceca1a13ff0a7655e28bd05e742ac8599
-  languageName: node
-  linkType: hard
-
-"@heroicons/react@npm:^1.0.4":
-  version: 1.0.6
-  resolution: "@heroicons/react@npm:1.0.6"
-  peerDependencies:
-    react: ">= 16"
-  checksum: 372b1eda3ce735ef069777bc96304f70de585ebb71a6d1cedc121bb695f9bca235619112e3ee14e8779e95a03096813cbbe3b755927a54b7580d1ce084fa4096
+  checksum: e69ac75b71dae4960790ca985a4b1eff4ba0e4a7c9b9d31791a0a0ae618dc125b7decd8801d530b017de02b90150884eb17c1c3dedcf42afc2b42f137e17c870
   languageName: node
   linkType: hard
 
@@ -6280,18 +6225,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/browser@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/core": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: e550af7ed63595bbedef23a560b730531ae8a0eb1b49f7b4e8947c3ddc72bccdc0a1529714fdbc34dfc3ddc1b6afe89ca60fad6f9315f3a07ab113b8e359e757
-  languageName: node
-  linkType: hard
-
 "@sentry/browser@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/browser@npm:7.0.0-alpha.1"
@@ -6359,19 +6292,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/core@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/hub": 7.0.0-alpha.0
-    "@sentry/minimal": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: cd7f3532299ecb8d90713ed35e45f4c8f23a18eabc7938d3f462b1507942faf730c57795fc413f7cc46864176a031b9570d40d90ad37fdf67346babdc13db07c
-  languageName: node
-  linkType: hard
-
 "@sentry/core@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/core@npm:7.0.0-alpha.1"
@@ -6407,17 +6327,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/hub@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/hub@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: 7ee986f871c500cf3325268e72f6196fe386146fc5a101434b372801d74f956835f32cc47548723805ebeccaf8631cbbe852a59f4e1fe84da07f02a4ecc2f40e
-  languageName: node
-  linkType: hard
-
 "@sentry/hub@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/hub@npm:7.0.0-alpha.1"
@@ -6438,18 +6347,6 @@ __metadata:
     localforage: ^1.8.1
     tslib: ^1.9.3
   checksum: 298cff982882a619d6c9c7d43431dff4898323eaa79095c6028acea4c98b90f15ffcd03583bc2e5a7ddab1c567fe8ecc438f73c7910fc60f6f1fc95a48806197
-  languageName: node
-  linkType: hard
-
-"@sentry/integrations@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/integrations@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    localforage: ^1.8.1
-    tslib: ^1.9.3
-  checksum: 7bc0316f85a22743370ec54daae33db7ee5a2c01a1dfb8f1ad2791c976c8242c876a481a11ce5117605dc91f515a963b26cc6a6e9e50c5708e79520dbbc34293
   languageName: node
   linkType: hard
 
@@ -6499,17 +6396,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/minimal@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/minimal@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/hub": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: dad69cc2aa2c1b17be3a2f33688abf7b6a2bc242dd379ac5a6e22220cf3a756a2c850f10f04610c635f9dd65eea6da2c9e180023f85fe2a8ea313903f4b633c4
-  languageName: node
-  linkType: hard
-
 "@sentry/minimal@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/minimal@npm:7.0.0-alpha.1"
@@ -6518,30 +6404,6 @@ __metadata:
     "@sentry/types": 7.0.0-alpha.1
     tslib: ^1.9.3
   checksum: 470b14c3be5cc321891273eb7da015168c7b7746bf2577a77e5d0175bc0cccf1deacb02beae2e853914eabe7264bfccefc190490991248f48460d3b40fa9ffa1
-  languageName: node
-  linkType: hard
-
-"@sentry/nextjs@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/nextjs@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/core": 7.0.0-alpha.0
-    "@sentry/hub": 7.0.0-alpha.0
-    "@sentry/integrations": 7.0.0-alpha.0
-    "@sentry/node": 7.0.0-alpha.0
-    "@sentry/react": 7.0.0-alpha.0
-    "@sentry/tracing": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    "@sentry/webpack-plugin": 1.18.8
-    tslib: ^1.9.3
-  peerDependencies:
-    next: ^10.0.8 || ^11.0 || ^12.0
-    react: 15.x || 16.x || 17.x || 18.x
-    webpack: ">= 4.0.0"
-  peerDependenciesMeta:
-    webpack:
-      optional: true
-  checksum: 8bae687f4d9a26f5955c2b10bfd81eef8ec2915b6544905206fe6f72f4f857dcde006957fe8ac210f03c11a62c746878472a013db6c7af567ca4c5534992f497
   languageName: node
   linkType: hard
 
@@ -6566,22 +6428,6 @@ __metadata:
     webpack:
       optional: true
   checksum: 6634cc07374326b5809eb310afcbeda7543b558f56f8f35a85ff1cbccc8cc5975a8b7de2f5e63c42828dffaf12c57cb9a2c59b47472f9d8a8fc130c40675b8a8
-  languageName: node
-  linkType: hard
-
-"@sentry/node@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/node@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/core": 7.0.0-alpha.0
-    "@sentry/hub": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    cookie: ^0.4.1
-    https-proxy-agent: ^5.0.0
-    lru_map: ^0.3.3
-    tslib: ^1.9.3
-  checksum: b5a65b7b9ea8e1375005bfcdcbd75568c5b12ce03077860e665c65a3a58b8d76070c7005572e92efbb69bf273f69c358327fbf0bc66c7624fcf97fdf86777dfa
   languageName: node
   linkType: hard
 
@@ -6638,22 +6484,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/react@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/browser": 7.0.0-alpha.0
-    "@sentry/minimal": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    hoist-non-react-statics: ^3.3.2
-    tslib: ^1.9.3
-  peerDependencies:
-    react: 15.x || 16.x || 17.x || 18.x
-  checksum: a65be36470acc331bd4163855b0d9ce15be1b2ae1da6f3565c15d8bea534eddd5d64039bf021755f5bc3ac412e0c2bc38b4c0d7a4251edb9d313f0b887b8fa27
-  languageName: node
-  linkType: hard
-
 "@sentry/react@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/react@npm:7.0.0-alpha.1"
@@ -6680,19 +6510,6 @@ __metadata:
     "@sentry/utils": 6.19.2
     tslib: ^1.9.3
   checksum: 07bdc2658118d5ad8b0c921d6b15362731cac6383f82396784ba8fdecfabc9a9712456d5c5c90a24dc57fa6ecb8cb366cc5dc426482f2a2a243ee04c1c61c2ba
-  languageName: node
-  linkType: hard
-
-"@sentry/tracing@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/tracing@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/hub": 7.0.0-alpha.0
-    "@sentry/minimal": 7.0.0-alpha.0
-    "@sentry/types": 7.0.0-alpha.0
-    "@sentry/utils": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: da7464b0b9ec8bb23f5dcfd2fe1f8c6cc399e4fb8babf9caf075eacec25c01f3ba43ab0b64c20df7f7604f09a10425099268bb924817665928098e9c28963a42
   languageName: node
   linkType: hard
 
@@ -6723,13 +6540,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/types@npm:7.0.0-alpha.0"
-  checksum: a9e54582a026bd53c4e987c8b0dbf23fbe03a9ff61942ce7f0d67693903d04d5db57930caec53d9e3256726be65c0d4f2537dabe17522cdab7202b716b14a363
-  languageName: node
-  linkType: hard
-
 "@sentry/types@npm:7.0.0-alpha.1":
   version: 7.0.0-alpha.1
   resolution: "@sentry/types@npm:7.0.0-alpha.1"
@@ -6754,16 +6564,6 @@ __metadata:
     "@sentry/types": 6.19.7
     tslib: ^1.9.3
   checksum: a000223b9c646c64e3565e79cace1eeb75114342b768367c4dddd646476c215eb1bddfb70c63f05e2352d3bce2d7d415344e4757a001605d0e01ac74da5dd306
-  languageName: node
-  linkType: hard
-
-"@sentry/utils@npm:7.0.0-alpha.0":
-  version: 7.0.0-alpha.0
-  resolution: "@sentry/utils@npm:7.0.0-alpha.0"
-  dependencies:
-    "@sentry/types": 7.0.0-alpha.0
-    tslib: ^1.9.3
-  checksum: b422d4bec45b0fa0018d9b7355f2bc61018941ef88822f254db817ac58d2d053cac36e5a69faff1252f4c1d2d8619cc9899f39f043abf9e5e720da8b05683f1e
   languageName: node
   linkType: hard
 
@@ -6993,6 +6793,7 @@ __metadata:
     "@google/model-viewer": ^1.9.2
     "@growthbook/growthbook-react": ^0.7.0
     "@hapi/iron": ^6.0.0
+    "@headlessui/react": ^1.6.1
     "@magic-sdk/admin": ^1.3.2
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
@@ -7058,91 +6859,6 @@ __metadata:
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
     rudder-sdk-js: ^2.3.6
-    sortablejs: ^1.14.0
-    sotez: ^10.0.0
-    swr: ^2.0.0-beta.1
-    tailwindcss: ^2.2.19
-    walletlink: ^2.2.8
-    web3modal: ^1.9.4
-  languageName: unknown
-  linkType: soft
-
-"@showtime/next-react@workspace:apps/next-react":
-  version: 0.0.0-use.local
-  resolution: "@showtime/next-react@workspace:apps/next-react"
-  dependencies:
-    "@airgap/beacon-sdk": ^2.3.9
-    "@babel/eslint-parser": ^7.16.3
-    "@badrap/bar-of-progress": ^0.1.2
-    "@biconomy/mexa": 2.0.24
-    "@expo/next-adapter": 3.1.7
-    "@fortawesome/fontawesome-svg-core": ^1.2.36
-    "@fortawesome/free-regular-svg-icons": ^5.15.4
-    "@fortawesome/free-solid-svg-icons": ^5.15.4
-    "@fortawesome/react-fontawesome": ^0.1.15
-    "@google/model-viewer": ^1.9.2
-    "@hapi/iron": ^6.0.0
-    "@headlessui/react": ^1.4.2
-    "@heroicons/react": ^1.0.4
-    "@magic-sdk/admin": ^1.3.2
-    "@next/bundle-analyzer": ^12.0.4
-    "@react-native-menu/menu": ^0.5.2
-    "@sentry/integrations": 7.0.0-alpha.0
-    "@sentry/nextjs": 7.0.0-alpha.0
-    "@tailwindcss/forms": ^0.3.2
-    "@tippyjs/react": ^4.2.6
-    "@walletconnect/web3-provider": ^1.7.4
-    app: "*"
-    array-to-image: ^1.0.0
-    autoprefixer: ^10.4.0
-    awesome-debounce-promise: ^2.1.0
-    axios: ^0.24.0
-    axios-auth-refresh: ^3.2.1
-    blake2b: ^2.1.4
-    blurhash: ^1.1.4
-    canvas-confetti: ^1.4.0
-    cookie: ^0.4.1
-    copy-to-clipboard: ^3.3.1
-    critters: ^0.0.14
-    croppie: ^2.6.5
-    date-fns: ^2.26.0
-    design-system: "*"
-    elliptic: ^6.5.4
-    emoji-mart: ^3.0.1
-    eslint: 7.32.0
-    eslint-config-next: ^12.0.7
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-diff: ^1.0.12
-    ethers: ^5.6.4
-    fortmatic: ^2.2.1
-    jwt-decode: ^3.1.2
-    libsodium-wrappers: ^0.7.9
-    magic-sdk: ^7.0.0
-    mixpanel-browser: ^2.42.0
-    next: 12.1.5
-    next-compose-plugins: ^2.2.1
-    next-connect: ^0.11.0
-    next-fonts: ^1.5.1
-    next-images: ^1.8.2
-    next-themes: ^0.0.15
-    next-transpile-modules: ^9.0.0
-    patch-package: ^6.4.7
-    postcss: ^8.3.6
-    postinstall-postinstall: ^2.1.0
-    raf: ^3.4.1
-    react-autosize-textarea: ^7.1.0
-    react-blurhash: ^0.1.3
-    react-image-lightbox: ^5.1.4
-    react-infinite-scroll-component: ^6.1.0
-    react-mentions: ^4.1.1
-    react-native-fast-image: ^8.5.11
-    react-native-web: 0.17.7
-    react-player: ^2.8.1
-    react-scroll: ^1.8.4
-    react-sortablejs: ^6.0.0
-    react-string-replace: ^0.4.4
-    remove-markdown: ^0.3.0
-    resize-observer-polyfill: ^1.5.1
     sortablejs: ^1.14.0
     sotez: ^10.0.0
     swr: ^2.0.0-beta.1
