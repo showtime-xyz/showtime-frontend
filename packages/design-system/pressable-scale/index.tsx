@@ -1,9 +1,13 @@
-import React, { ComponentProps, useMemo } from "react";
+import React, { ComponentProps } from "react";
+import { Pressable as RNPressable } from "react-native";
 
-import { MotiPressable, mergeAnimateProp } from "moti/interactions";
+import { MotiPressable } from "moti/interactions";
+import Reanimated from "react-native-reanimated";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+
+const AnimatedPressable = Reanimated.createAnimatedComponent(RNPressable);
 
 export type Props = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;
@@ -17,20 +21,5 @@ export function Pressable({
   style,
   ...props
 }: Props) {
-  return (
-    <MotiPressable
-      animate={useMemo(
-        () => (interaction) => {
-          "worklet";
-
-          return mergeAnimateProp(interaction, animate, {
-            scale: interaction.pressed ? scaleTo : 1,
-          });
-        },
-        [animate, scaleTo]
-      )}
-      style={[tailwind.style(tw), style]}
-      {...props}
-    />
-  );
+  return <AnimatedPressable style={[tailwind.style(tw), style]} {...props} />;
 }
