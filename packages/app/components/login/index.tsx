@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Dimensions, LayoutChangeEvent, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
@@ -24,6 +24,11 @@ import { useLogin } from "./use-login";
 interface LoginProps {
   onLogin?: () => void;
 }
+
+const CONTENT_HEIGHT = Platform.select({
+  android: [281, 397],
+  default: [389, 389],
+});
 
 export function Login({ onLogin }: LoginProps) {
   //#region state
@@ -84,7 +89,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer index={selected} style={styles.container}>
+    <LoginContainer style={styles.container}>
       {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -99,7 +104,7 @@ export function Login({ onLogin }: LoginProps) {
 
           <View
             style={{
-              height: 397,
+              height: CONTENT_HEIGHT[selected],
             }}
           >
             <Tabs.Root
@@ -151,7 +156,6 @@ export function Login({ onLogin }: LoginProps) {
                     signInButtonLabel="Send"
                     onSubmit={handleSubmitEmail}
                   />
-                  <View tw="h-4" collapsable={true} />
                 </Tabs.View>
               </Tabs.Pager>
             </Tabs.Root>
@@ -166,9 +170,11 @@ export function Login({ onLogin }: LoginProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 16,
   },
   tabListItemContainer: {
     marginTop: -(TAB_LIST_HEIGHT - 16),
     paddingHorizontal: 16,
+    paddingBottom: 16,
   },
 });

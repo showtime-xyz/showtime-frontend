@@ -2,7 +2,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
   ViewProps,
 } from "react-native";
 
@@ -33,8 +32,8 @@ export function LoginContainer({ children, style }: ViewProps) {
     >
       <ScrollView
         ref={scrollViewRef}
-        style={{ paddingTop: 16 }}
         bounces={false}
+        removeClippedSubviews={false}
       >
         {children}
       </ScrollView>
