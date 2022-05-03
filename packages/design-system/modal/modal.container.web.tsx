@@ -1,7 +1,6 @@
 import { memo, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
-import * as Portal from "@radix-ui/react-portal";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { View } from "../view";
@@ -20,7 +19,7 @@ const MODAL_CONTAINER_TW = [
   "w-full	sm:w-480px",
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
-  "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-5 web:min-h-[120]px",
+  "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-5",
   "max-h-100vh",
 ];
 
@@ -38,24 +37,22 @@ function ModalContainerComponent({
   );
 
   return (
-    <Portal.Root>
-      <View tw={CONTAINER_TW} style={styles.container}>
-        {/* prevent scrolling/shaking when modal is open */}
-        <RemoveScrollBar />
-        <ModalBackdrop onClose={onClose} />
-        <View tw={modalContainerTW}>
-          <ModalHeader title={title} onClose={onClose} />
-          <View tw={MODAL_BODY_TW}>{children}</View>
-        </View>
+    <View tw={CONTAINER_TW} style={styles.container}>
+      {/* prevent scrolling/shaking when modal is open */}
+      <RemoveScrollBar />
+      <ModalBackdrop onClose={onClose} />
+      <View tw={modalContainerTW}>
+        <ModalHeader title={title} onClose={onClose} />
+        <View tw={MODAL_BODY_TW}>{children}</View>
       </View>
-    </Portal.Root>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     position: "fixed" as any,
-    scrollbarWidth: 4,
+    zIndex: 999,
   },
 });
 
