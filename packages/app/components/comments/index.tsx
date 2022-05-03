@@ -17,12 +17,10 @@ import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import { useAlert } from "design-system/alert";
-import { Button } from "design-system/button";
 import { ModalFooter } from "design-system/modal";
-import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
-import { View } from "design-system/view";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
@@ -111,44 +109,10 @@ export function Comments({ nft }: { nft: NFT }) {
 
   const listEmptyComponent = useCallback(
     () => (
-      <View tw="items-center justify-center p-4">
-        <Text variant="text-lg" tw="text-gray-900 dark:text-gray-100">
-          💬 No comments yet...
-        </Text>
-        <View tw="h-4" />
-        <Text variant="text-sm" tw="text-gray-600 dark:text-gray-400">
-          Be the first to add a comment!
-        </Text>
-        {!isAuthenticated ? (
-          <>
-            <View tw="h-4" />
-            <Button
-              onPress={() => {
-                router.push(
-                  Platform.select({
-                    native: "/login",
-                    // @ts-ignore
-                    web: {
-                      pathname: router.pathname,
-                      query: { ...router.query, loginModal: true },
-                    },
-                  }),
-                  Platform.select({
-                    native: "/login",
-                    web: router.asPath === "/" ? "/login" : router.asPath,
-                  }),
-                  { shallow: true }
-                );
-              }}
-              variant="primary"
-              size={isMdWidth ? "regular" : "small"}
-              labelTW="font-semibold"
-            >
-              Sign&nbsp;In
-            </Button>
-          </>
-        ) : null}
-      </View>
+      <EmptyPlaceholder
+        text="Be the first to add a comment!"
+        title="💬 No comments yet..."
+      />
     ),
     [isAuthenticated, router, isMdWidth]
   );

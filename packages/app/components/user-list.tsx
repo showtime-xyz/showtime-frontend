@@ -13,6 +13,8 @@ import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
 
+import { EmptyPlaceholder } from "./empty-placeholder";
+
 type FollowingListProp = {
   follow: (profileId: number) => void;
   unFollow: (profileId: number) => void;
@@ -86,13 +88,8 @@ export const UserList = ({
   } else if (loading) {
     return <FollowingUserItemLoadingIndicator />;
   } else if (users?.length === 0) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <Text tw="text-gray-900 dark:text-gray-100">No results found</Text>
-      </View>
-    );
+    return <EmptyPlaceholder title="No results found" />;
   }
-
   return null;
 };
 
