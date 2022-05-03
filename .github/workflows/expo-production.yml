@@ -5,13 +5,10 @@ defaults:
     working-directory: apps/expo
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 concurrency:
-  group: production-${{ github.event_name }}-${{ github.ref }}
+  group: expo-production-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
