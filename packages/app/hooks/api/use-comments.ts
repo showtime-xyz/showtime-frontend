@@ -55,7 +55,7 @@ export const useComments = (nftId: number) => {
     function fetchCommentsURL(index) {
       // TODO: uncomment when pagination is fixed.
       // return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
-      return `/v2/comments/${nftId}`;
+      return nftId ? `/v2/comments/${nftId}` : null;
     },
     [nftId]
   );
