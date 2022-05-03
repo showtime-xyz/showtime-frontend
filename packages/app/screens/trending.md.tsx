@@ -28,7 +28,7 @@ const { useParam } = createParam<Query>();
 export const Trending = () => {
   const [tab, setTab] = useParam("tab");
   const selected = tab === "nft" ? 1 : 0;
-  const handleTabChange = useCallback((index) => {
+  const handleTabChange = useCallback((index: number) => {
     if (index === 0) {
       setTab("following");
     } else {
@@ -62,10 +62,10 @@ export const Trending = () => {
 const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
   const [days, setDays] = useParam("days", {
     initial: 1,
-    parse: (value) => Number(value),
+    parse: (value) => Number(value ?? 1),
   });
 
-  const handleDaysChange = useCallback((index) => {
+  const handleDaysChange = useCallback((index: number) => {
     if (index === 0) {
       setDays(1);
     } else if (index === 1) {
@@ -152,7 +152,7 @@ const CreatorsList = ({ days }: { days: any }) => {
         </View>
       ) : null}
       {data.length > 0 && containerWidth
-        ? data.map((item) => {
+        ? data.map((item: any) => {
             return (
               <View
                 key={item.creator_id}
