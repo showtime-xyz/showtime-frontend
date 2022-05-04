@@ -6728,7 +6728,7 @@ __metadata:
     react-hook-form: ^7.27.1
     react-native: 0.68.1
     react-native-blob-jsi-helper: ^0.2.1
-    react-native-blurhash: 1.1.5
+    react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
     react-native-crypto: ^2.1.0
     react-native-fast-image: ^8.5.11
@@ -27980,13 +27980,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-blurhash@npm:1.1.5":
-  version: 1.1.5
-  resolution: "react-native-blurhash@npm:1.1.5"
+"react-native-blurhash@npm:^1.1.10":
+  version: 1.1.10
+  resolution: "react-native-blurhash@npm:1.1.10"
   peerDependencies:
-    react: ^16.8.1
+    react: ">=16.8.1"
     react-native: ">=0.60.0-rc.0 <1.0.x"
-  checksum: ff62ece7bb091e45139154ef1224c15303061bbd4813be64842af488bb4c6f9a7af386ba83770dfaa00c68ee448e8d5bf5642acdd3b51b53a35bef9e9f1226bf
+  checksum: 5f462ceb4dd28af6f92c4c1a2828a8d78355be8fb65564892070afe52771aa4a166367882fbb6ae612ee1d0b464e1103cde494cb151bb9e2d5f3b7cdcaa2d89b
   languageName: node
   linkType: hard
 
