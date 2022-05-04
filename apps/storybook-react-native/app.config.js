@@ -79,7 +79,6 @@ export default {
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
-    "./plugins/react-native-cronet.js",
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
