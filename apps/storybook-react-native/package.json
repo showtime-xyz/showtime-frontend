@@ -60,7 +60,7 @@
     "expo-web-browser": "~10.1.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-native": "0.64.3",
+    "react-native": "0.68.1",
     "react-native-blob-jsi-helper": "^0.2.1",
     "react-native-fast-image": "^8.5.11",
     "react-native-flipper": "^0.131.1",
