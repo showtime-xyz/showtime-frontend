@@ -6607,19 +6607,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/react-native-skia@npm:^0.1.123":
-  version: 0.1.123
-  resolution: "@shopify/react-native-skia@npm:0.1.123"
-  dependencies:
-    react-reconciler: ^0.26.2
-  peerDependencies:
-    react: ">=16.8.1"
-    react-native: ">=0.63.0-rc.0 <1.0.x"
-    react-native-reanimated: ">=2.0.0"
-  checksum: 05f17ba1e7a6d66630dfd5937edbdfd74cfd3280fbd369511dc99256e05a37898a84a5eaa9d756aecba5f2d31d12b8e27e822d4e5aa04b38a76c6a537f4f6c90
-  languageName: node
-  linkType: hard
-
 "@showtime/expo@workspace:apps/expo":
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
@@ -6650,7 +6637,6 @@ __metadata:
     "@react-three/fiber": ^8.0.12
     "@rudderstack/rudder-sdk-react-native": ^1.2.0
     "@sentry/react-native": ^3.3.0
-    "@shopify/react-native-skia": ^0.1.123
     "@storybook/addon-actions": ^6.3.12
     "@storybook/addon-controls": ^6.3.12
     "@storybook/addon-ondevice-actions": ^6.0.1-alpha.6
@@ -28482,19 +28468,6 @@ __metadata:
     react: ^16.8.0 || ^17 || ^18
     react-dom: ^16.8.0 || ^17 || ^18
   checksum: 837111c98738011c69b3069a464ea5bdcbf487105b6148e8faf90cb7337e134edb1b98b8824322941c378756cca30a15c18c25f558e53b85ed5762fa0dc8e6b2
-  languageName: node
-  linkType: hard
-
-"react-reconciler@npm:^0.26.2":
-  version: 0.26.2
-  resolution: "react-reconciler@npm:0.26.2"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
-  peerDependencies:
-    react: ^17.0.2
-  checksum: 2ebceace56f547f51eaf142becefef9cca980eae4f42d90ee5a966f54a375f5082d78b71b00c40bbd9bca69e0e0f698c7d4e81cc7373437caa19831fddc1d01b
   languageName: node
   linkType: hard
 
