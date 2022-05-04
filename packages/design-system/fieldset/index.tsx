@@ -17,7 +17,7 @@ type FieldsetProps = {
   helperText?: string;
   disabled?: boolean;
   tw?: string;
-  select?: SelectProps;
+  select?: SelectProps<string | number>;
   selectOnly?: boolean;
   leftElement?: React.ReactNode;
   Component?: ComponentType;
