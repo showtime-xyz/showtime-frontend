@@ -78,12 +78,16 @@ function NFTDropdown({ nftId }: Props) {
       router.push(
         Platform.select({
           native: "/login",
+          // @ts-ignore
           web: {
             pathname: router.pathname,
             query: { ...router.query, loginModal: true },
           },
         }),
-        "/login",
+        Platform.select({
+          native: "/login",
+          web: router.asPath === "/" ? "/login" : router.asPath,
+        }),
         { shallow: true }
       );
     }
@@ -95,12 +99,16 @@ function NFTDropdown({ nftId }: Props) {
       router.push(
         Platform.select({
           native: "/login",
+          // @ts-ignore
           web: {
             pathname: router.pathname,
             query: { ...router.query, loginModal: true },
           },
         }),
-        "/login",
+        Platform.select({
+          native: "/login",
+          web: router.asPath === "/" ? "/login" : router.asPath,
+        }),
         { shallow: true }
       );
     }
