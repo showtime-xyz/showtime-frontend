@@ -1,6 +1,6 @@
 import type { TW } from "design-system/tailwind/types";
 
-export interface SelectProps<T> {
+export interface SelectProps<T = string | number> {
   value?: T;
   placeholder?: string;
   options?: SelectOption<T>[];

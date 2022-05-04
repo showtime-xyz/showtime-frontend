@@ -37,8 +37,6 @@ export function Select<T>({
   //     </RadixSelect.Content>
   //   </RadixSelect.Root>
   // );
-  console.log(value);
-
   return (
     <Listbox value={value} disabled={disabled} onChange={onChange}>
       {({ open }) => (
