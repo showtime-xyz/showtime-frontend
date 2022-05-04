@@ -114,7 +114,6 @@ export default {
       },
     ],
     ["./plugins/with-compile-sdk-version.js", 31],
-    "./plugins/react-native-mmkv-plugin.js",
     [
       "./plugins/with-pick-first.js",
       {
@@ -130,7 +129,6 @@ export default {
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
-    "./plugins/react-native-cronet.js",
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
