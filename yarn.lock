@@ -6913,7 +6913,6 @@ __metadata:
     react-dom: 18.0.0
     react-native: 0.64.3
     react-native-blob-jsi-helper: ^0.2.1
-    react-native-cronet: ^0.5.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.4.1
@@ -28009,16 +28008,6 @@ __metadata:
     jscodeshift: ^0.11.0
     nullthrows: ^1.1.1
   checksum: 545d1e416be5bd0bc27a9bc4d58719317577fbcb38f80082857142f4946ba336df3f5fa3e87137709691acd809ee46e1f52834648399cb50219a70f441d6e6a3
-  languageName: node
-  linkType: hard
-
-"react-native-cronet@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "react-native-cronet@npm:0.5.0"
-  peerDependencies:
-    react: ">=16.11.0"
-    react-native: ">=0.62.0 <1.0.x"
-  checksum: 0967065301a622d6439d53bd2a45db4d7ddbef174811bab23be86b956d96cbbd4ec1da05b11d0bf31548701e17d466b0c3a5913dce8e908a1a80d27d0efd6edc
   languageName: node
   linkType: hard
 
