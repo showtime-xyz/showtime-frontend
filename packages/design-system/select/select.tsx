@@ -1,15 +1,18 @@
 import { useCallback, useState } from "react";
+import { ListRenderItemInfo } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { BottomSheet } from "../bottom-sheet";
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
-import { SelectProps } from "./types";
+import { SelectOption, SelectProps } from "./types";
 
-const keyExtractor = (item) => `select-item-${item.value}`;
+function keyExtractor<T>(item: SelectOption<T>) {
+  return `select-item-${item.value}`;
+}
 
-export const Select: React.FC<SelectProps> = ({
+export function Select<T>({
   size = "regular",
   value,
   placeholder = "Select item",
@@ -17,12 +20,12 @@ export const Select: React.FC<SelectProps> = ({
   disabled,
   tw = "",
   onChange,
-}) => {
+}: SelectProps<T>) {
   const [open, setOpen] = useState(false);
 
   //#region callbacks
   const handleSelectItemPress = useCallback(
-    (value: string | number) => {
+    (value: T) => {
       setOpen(false);
       if (onChange) {
         onChange(value);
@@ -40,7 +43,7 @@ export const Select: React.FC<SelectProps> = ({
   //#endregion
 
   const renderSelectItem = useCallback(
-    ({ item }) => (
+    ({ item }: ListRenderItemInfo<SelectOption<T>>) => (
       <SelectItem
         key={`select-item-${item.value}`}
         value={item.value}
@@ -57,9 +60,10 @@ export const Select: React.FC<SelectProps> = ({
       <SelectButton
         open={open}
         label={
-          (value !== undefined &&
-            options?.filter((t) => t.value === value)?.[0]?.label) ??
-          placeholder
+          value !== undefined
+            ? options?.filter((t) => t.value === value)?.[0]?.label ??
+              placeholder
+            : placeholder
         }
         size={size}
         disabled={disabled}
@@ -78,4 +82,4 @@ export const Select: React.FC<SelectProps> = ({
       </BottomSheet>
     </>
   );
-};
+}

@@ -1,13 +1,10 @@
-import { memo, useContext } from "react";
+import { memo } from "react";
 
 import useContentWidth from "app/hooks/use-content-width";
-import {
-  BottomTabBarHeightContext,
-  useBottomTabBarHeight,
-} from "app/lib/react-navigation/bottom-tabs";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 
-import { Skeleton, View } from "design-system";
-import { useColorScheme } from "design-system/hooks";
+import { View } from "design-system";
+import { CardSkeleton } from "design-system/card/card-skeleton";
 
 type ProfileFooterProps = {
   isLoading: boolean;
@@ -15,34 +12,19 @@ type ProfileFooterProps = {
 };
 export const ProfileFooter = memo(
   ({ isLoading, numColumns = 3 }: ProfileFooterProps) => {
-    const colorMode = useColorScheme();
     const contentWidth = useContentWidth();
-
-    const squareSize = (contentWidth - 32 * numColumns) / numColumns;
-    const tabBarHeight = useContext(BottomTabBarHeightContext)
-      ? useBottomTabBarHeight()
-      : 0;
+    const squareSize = contentWidth / numColumns;
+    const tabBarHeight = usePlatformBottomHeight();
 
     if (isLoading) {
       return (
-        <View tw={`flex-row mb-[${tabBarHeight}px] mt-4`}>
+        <View tw={`flex-row mb-[${tabBarHeight}px]`}>
           {new Array(numColumns).fill(0).map((_, i) => (
-            <View
-              tw="mx-4 overflow-hidden rounded-2xl"
-              key={`ProfileFooter-Skeleton-${i}`}
-            >
-              <Skeleton
-                colorMode={colorMode}
-                height={squareSize}
-                width={squareSize}
-                radius={0}
-              />
-            </View>
+            <CardSkeleton squareSize={squareSize} key={`Card-Skeleton-${i}`} />
           ))}
         </View>
       );
     }
-
-    return <View tw={`h-[${tabBarHeight}px]`} />;
+    return <View tw={`h-[${tabBarHeight}px] mb-4`} />;
   }
 );

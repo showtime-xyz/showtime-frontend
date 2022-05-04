@@ -9,7 +9,7 @@ import { SelectItem } from "./lib/select-item";
 import { SelectList } from "./lib/select-list.web";
 import type { SelectProps } from "./types";
 
-export const Select: React.FC<SelectProps> = ({
+export function Select<T>({
   size = "regular",
   value,
   placeholder = "Select item",
@@ -17,7 +17,7 @@ export const Select: React.FC<SelectProps> = ({
   disabled,
   tw = "",
   onChange,
-}) => {
+}: SelectProps<T>) {
   if (!options) return null;
   // Todo: use radix-ui's Select replace this, but radix-ui's Select use fixed postion, has weird problem.
   // return (
@@ -47,14 +47,15 @@ export const Select: React.FC<SelectProps> = ({
             open={open}
             label={
               value !== undefined
-                ? options?.filter((t) => t.value === value)?.[0]?.label
+                ? options?.filter((t) => t.value === value)?.[0]?.label ??
+                  placeholder
                 : placeholder
             }
           />
           <Listbox.Options static={true} as={SelectList} open={open}>
             {options.map((item) => (
               <Listbox.Option
-                key={item.value}
+                key={`Option-${item.value}`}
                 as={SelectItem}
                 value={item.value}
                 label={item.label}
@@ -66,4 +67,4 @@ export const Select: React.FC<SelectProps> = ({
       )}
     </Listbox>
   );
-};
+}

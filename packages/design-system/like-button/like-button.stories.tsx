@@ -9,7 +9,13 @@ export default {
   title: "Components/LikeButton",
 } as Meta;
 
-export const Basic: React.VFC<{}> = () => {
+export const Basic: React.FC<{}> = () => {
   const [liked, setLiked] = useState(false);
-  return <LikeButton onPress={() => setLiked(!liked)} likeCount={10} />;
+  return (
+    <LikeButton
+      onPress={() => setLiked(!liked)}
+      isLiked={liked}
+      likeCount={10}
+    />
+  );
 };
