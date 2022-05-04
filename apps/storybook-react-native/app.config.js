@@ -64,7 +64,6 @@ export default {
       },
     ],
     ["./plugins/with-compile-sdk-version.js", 31],
-    "./plugins/react-native-mmkv-plugin.js",
     [
       "./plugins/with-pick-first.js",
       {
