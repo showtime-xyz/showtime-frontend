@@ -18,6 +18,8 @@ import { tw as tailwind } from "../tailwind";
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import { ModalContainerProps, ModalMethods } from "./types";
+// @ts-ignore
+import { useKeyboard } from "./useKeyboard";
 
 const BACKGROUND_TW = [
   "bg-white dark:bg-black",
@@ -88,6 +90,8 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         enablePanDownToClose={true}
         handleComponent={renderHandleComponent}
         backdropComponent={renderBackdropComponent}
+        // @ts-ignore
+        keyboardHandlerHook={useKeyboard}
         onClose={onClose}
         onDismiss={onClose}
       >

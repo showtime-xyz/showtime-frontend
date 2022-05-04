@@ -3371,9 +3371,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "@gorhom/bottom-sheet@npm:4.2.1"
+"@gorhom/bottom-sheet@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "@gorhom/bottom-sheet@npm:4.2.2"
   dependencies:
     "@gorhom/portal": 1.0.13
     invariant: ^2.2.4
@@ -3384,7 +3384,7 @@ __metadata:
     react-native: "*"
     react-native-gesture-handler: ">=1.10.1"
     react-native-reanimated: ">=2.2.0"
-  checksum: 3dd392961125953a64daef724d91d78340263d9939cf788586de47ba76ed6fecfae54b9edc7a59eed6bb826da6d8c3f3abfd49062a1d265bd08386cde96b0b43
+  checksum: 4809b692aede953cde763f883daf8db338434ab831ca38e2b976e2a9a6104c3a88ad60e05ec5079aeb2d61f8cb36fcaeb91c40f0e32f71314c7281d05c96e55b
   languageName: node
   linkType: hard
 
@@ -6631,7 +6631,7 @@ __metadata:
     "@dripsy/gradient": ^3.6.0
     "@ethersproject/shims": ^5.5.0
     "@expo/xcpretty": ^4.1.0
-    "@gorhom/bottom-sheet": ^4.2.1
+    "@gorhom/bottom-sheet": ^4.2.2
     "@growthbook/growthbook-react": ^0.7.0
     "@hookform/resolvers": ^2.8.5
     "@logrocket/react-native": ^1.2.1

@@ -5,11 +5,11 @@ import { useRouter } from "app/navigation/use-router";
 import { ModalMethods } from "design-system/modal";
 import { ModalScreen } from "design-system/modal/modal.screen";
 
+import type { ModalScreenOptions } from "./types";
+
 function withModalScreen<P>(
   Screen: FC<P>,
-  title: string,
-  matchingPathname: string,
-  matchingQueryParam: string
+  { title, matchingPathname, matchingQueryParam }: ModalScreenOptions
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);

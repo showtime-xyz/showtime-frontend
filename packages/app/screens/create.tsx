@@ -116,9 +116,8 @@ const CreateMD = () => {
   );
 };
 
-export const CreateScreen = withModalScreen(
-  CreateModal,
-  "Create",
-  "/create",
-  "createModal"
-);
+export const CreateScreen = withModalScreen(CreateModal, {
+  title: "Create",
+  matchingPathname: "/create",
+  matchingQueryParam: "createModal",
+});

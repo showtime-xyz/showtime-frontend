@@ -29,9 +29,8 @@ const DetailsModal = () => {
   return <Details nft={data?.data?.item} />;
 };
 
-export const DetailsScreen = withModalScreen(
-  DetailsModal,
-  "Details",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/details",
-  "detailsModal"
-);
+export const DetailsScreen = withModalScreen(DetailsModal, {
+  title: "Details",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/details",
+  matchingQueryParam: "detailsModal",
+});

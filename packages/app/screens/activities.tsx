@@ -36,9 +36,8 @@ export function ActivitiesModal() {
   );
 }
 
-export const ActivitiesScreen = withModalScreen(
-  ActivitiesModal,
-  "Activity",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/activities",
-  "activitiesModal"
-);
+export const ActivitiesScreen = withModalScreen(ActivitiesModal, {
+  title: "Activity",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/activities",
+  matchingQueryParam: "activitiesModal",
+});
