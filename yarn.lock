@@ -1900,7 +1900,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dripsy/gradient@npm:^3.5.3":
+"@dripsy/gradient@npm:^3.6.0":
   version: 3.6.0
   resolution: "@dripsy/gradient@npm:3.6.0"
   dependencies:
@@ -6628,7 +6628,7 @@ __metadata:
     "@babel/runtime": ^7.16.5
     "@capsizecss/core": ^3.0.0
     "@config-plugins/detox": ^1.1.0
-    "@dripsy/gradient": ^3.5.3
+    "@dripsy/gradient": ^3.6.0
     "@ethersproject/shims": ^5.5.0
     "@expo/xcpretty": ^4.1.0
     "@gorhom/bottom-sheet": ^4.2.1
@@ -6683,7 +6683,7 @@ __metadata:
     dns.js: ^1.0.1
     domain-browser: ^4.22.0
     dotenv: ^10.0.0
-    dripsy: ^3.5.3
+    dripsy: ^3.6.0
     esbuild: ^0.14.11
     events: ^3.3.0
     expo: next
@@ -15082,7 +15082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dripsy@npm:^3.5.3":
+"dripsy@npm:^3.6.0":
   version: 3.6.0
   resolution: "dripsy@npm:3.6.0"
   dependencies:
