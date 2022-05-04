@@ -9,12 +9,14 @@ const wallet = new ethers.Wallet(
 );
 
 const minterABI = ["function mintEdition(address collection, address _to)"];
-const mintDropContractAddress = "0x50c001362FB06E2CB4D4e8138654267328a8B247";
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, address minter) returns(uint256)",
 ];
-const createDropContractAddress = "0x50c001c0aaa97B06De431432FDbF275e1F349694";
-const forwarderContractAddress = "0x7Fb382B775e2aA82Ee8fd523EffDc3807E7fa09C";
+
+const onePerAddressMinterContract =
+  "0x50c001362FB06E2CB4D4e8138654267328a8B247";
+const metaSingleEditionMintableCreator =
+  "0x50c001c0aaa97B06De431432FDbF275e1F349694";
 
 const getAccessToken = async () => {
   const {
@@ -42,26 +44,30 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
+async function delay(ms) {
+  return await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const createEdition = async () => {
   const targetInterface = new ethers.utils.Interface(editionCreatorABI);
   const callData = targetInterface.encodeFunctionData("createEdition", [
-    "Hello Drop",
-    "DROP",
-    "A drop of love",
+    "test 1234",
+    "TEST",
+    "A drop of test",
     "", // animationUrl
     "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
     "ipfs://QmNSh7w75EPALBQC57tZiMggy7atTxD3sgmfmEtsi2CjCG", // imageUrl
     "0x5a10c03724f18ec2534436cc5f5d4e9d60a91c2c6cea3ad7e623eb3d54e20ea9", // imageHash
     100, // editionSize
     1000, // royaltyBPS
-    mintDropContractAddress,
+    onePerAddressMinterContract,
   ]);
   const accessToken = await getAccessToken();
   console.log("Wrapping request...");
   const { data: res } = await axios(
     `https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/relayer/forward-request?call_data=${encodeURIComponent(
       callData
-    )}&to_address=${encodeURIComponent(createDropContractAddress)}`,
+    )}&to_address=${encodeURIComponent(metaSingleEditionMintableCreator)}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -88,7 +94,30 @@ const createEdition = async () => {
       },
     }
   );
-  console.log("relayed tx:", relayedTx);
+
+  let intervalMs = 1000;
+  for (let attempts = 0; attempts < 20; attempts++) {
+    console.log(`Checking tx... (${attempts + 1} / 20)`);
+    const {
+      data: { status, relayed_transaction_id: relayedTransactionId, edition },
+    } = await axios.get(
+      `https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/creator-airdrops/poll-edition?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (edition) {
+      console.log(edition);
+      break;
+    } else {
+      console.log({ status, relayedTransactionId });
+    }
+
+    await delay(intervalMs);
+  }
 };
 
 createEdition().catch((err) => console.log(err));
