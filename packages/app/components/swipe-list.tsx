@@ -195,6 +195,7 @@ export const SwipeList = ({
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
+        disableRecycling={Platform.OS === 'android'}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
         style={tw.style("dark:bg-gray-900 bg-gray-100")}
