@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-os/android/build.gradle b/node_modules/react-native-os/android/build.gradle
+index 7055b60..784681d 100644
+--- a/node_modules/react-native-os/android/build.gradle
++++ b/node_modules/react-native-os/android/build.gradle
+@@ -44,5 +44,5 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile 'com.facebook.react:react-native:+'
++    implementation 'com.facebook.react:react-native:+'
+ }
+diff --git a/node_modules/react-native-os/ios/RNOS.m b/node_modules/react-native-os/ios/RNOS.m
+index f24b100..0557eb8 100644
+--- a/node_modules/react-native-os/ios/RNOS.m
++++ b/node_modules/react-native-os/ios/RNOS.m
+@@ -8,7 +8,7 @@
+ 
+ #import "RNOS.h"
+ 
+-#import "RCTAssert.h"
++#import <React/RCTAssert.h>
+ 
+ #include <ifaddrs.h>
+ #include <arpa/inet.h>
