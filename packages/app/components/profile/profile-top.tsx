@@ -255,16 +255,6 @@ export const ProfileTop = ({
                       <VerificationBadge size={16} />
                     </View>
                   ) : null}
-                  {/* {profileData?.data ? (
-                <View tw="bg-gray-100 dark:bg-gray-900 ml-2 h-[23px] px-2 justify-center rounded-full">
-                  <Text
-                    variant="text-xs"
-                    tw="dark:text-gray-400 text-gray-500 font-semibold"
-                  >
-                    Follows You
-                  </Text>
-                </View>
-              ) : null} */}
                 </View>
               </Skeleton>
             </View>
@@ -288,19 +278,6 @@ export const ProfileTop = ({
                 tw="mt-4"
               />
             </Hidden>
-
-            {/* <View>
-            <View tw="flex-row items-center">
-              <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
-                Followed by{" "}
-              </Text>
-              <Pressable>
-                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
-                  @m1guelpf
-                </Text>
-              </Pressable>
-            </View>
-          </View> */}
           </View>
         </View>
       </View>
