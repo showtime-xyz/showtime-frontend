@@ -13,6 +13,7 @@ import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
@@ -46,6 +47,7 @@ function NFTDropdown({ nftId }: Props) {
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
   const shareNFT = useShareNFT();
+  const navigateToLogin = useNavigateToLogin();
   //#endregion
 
   //#region variables
@@ -75,42 +77,14 @@ function NFTDropdown({ nftId }: Props) {
     if (isAuthenticated) {
       await block(nft?.creator_id);
     } else {
-      router.push(
-        Platform.select({
-          native: "/login",
-          // @ts-ignore
-          web: {
-            pathname: router.pathname,
-            query: { ...router.query, loginModal: true },
-          },
-        }),
-        Platform.select({
-          native: "/login",
-          web: router.asPath === "/" ? "/login" : router.asPath,
-        }),
-        { shallow: true }
-      );
+      navigateToLogin();
     }
   };
   const handleOnUnblockPress = async () => {
     if (isAuthenticated) {
       await unblock(nft?.creator_id);
     } else {
-      router.push(
-        Platform.select({
-          native: "/login",
-          // @ts-ignore
-          web: {
-            pathname: router.pathname,
-            query: { ...router.query, loginModal: true },
-          },
-        }),
-        Platform.select({
-          native: "/login",
-          web: router.asPath === "/" ? "/login" : router.asPath,
-        }),
-        { shallow: true }
-      );
+      navigateToLogin();
     }
   };
   //#endregion
@@ -217,20 +191,7 @@ function NFTDropdown({ nftId }: Props) {
                 await unfollow(nft?.creator_id);
                 refresh();
               } else {
-                router.push(
-                  Platform.select({
-                    native: "/login",
-                    web: {
-                      pathname: router.pathname,
-                      query: { ...router.query, loginModal: true },
-                    },
-                  }),
-                  Platform.select({
-                    native: "/login",
-                    web: router.asPath,
-                  }),
-                  { shallow: true }
-                );
+                navigateToLogin();
               }
             }}
             key="unfollow"

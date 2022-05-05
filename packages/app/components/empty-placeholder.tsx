@@ -1,11 +1,11 @@
 import React from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+
 import { Button, Text, View } from "design-system";
 import { breakpoints } from "design-system/theme";
-
-import { useUser } from "../hooks/use-user";
-import { useRouter } from "../navigation/use-router";
 
 type EmptyPlaceholderProps = {
   title?: string;
@@ -13,6 +13,7 @@ type EmptyPlaceholderProps = {
   hideLoginBtn?: boolean;
   tw?: string;
 };
+
 const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   title = "",
   text = "",
@@ -20,9 +21,10 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   hideLoginBtn,
 }) => {
   const { isAuthenticated } = useUser();
-  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const navigateToLogin = useNavigateToLogin();
+
   return (
     <View tw={`items-center justify-center p-4 ${tw}`}>
       <Text variant="text-lg" tw="text-gray-900 dark:text-gray-100">
@@ -37,21 +39,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
           <View tw="h-4" />
           <Button
             onPress={() => {
-              router.push(
-                Platform.select({
-                  native: "/login",
-                  // @ts-ignore
-                  web: {
-                    pathname: router.pathname,
-                    query: { ...router.query, loginModal: true },
-                  },
-                }),
-                Platform.select({
-                  native: "/login",
-                  web: router.asPath === "/" ? "/login" : router.asPath,
-                }),
-                { shallow: true }
-              );
+              navigateToLogin();
             }}
             variant="primary"
             size={isMdWidth ? "regular" : "small"}
@@ -64,4 +52,5 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
     </View>
   );
 };
+
 export { EmptyPlaceholder };

@@ -17,6 +17,7 @@ import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
@@ -141,6 +142,7 @@ const HeaderRight = () => {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
+  const navigateToLogin = useNavigateToLogin();
 
   return (
     <View>
@@ -204,21 +206,7 @@ const HeaderRight = () => {
                 )}
                 <Button
                   onPress={() => {
-                    router.push(
-                      Platform.select({
-                        native: "/login",
-                        // @ts-ignore
-                        web: {
-                          pathname: router.pathname,
-                          query: { ...router.query, loginModal: true },
-                        },
-                      }),
-                      Platform.select({
-                        native: "/login",
-                        web: router.asPath === "/" ? "/login" : router.asPath,
-                      }),
-                      { shallow: true }
-                    );
+                    navigateToLogin();
                   }}
                   variant="primary"
                   size={isMdWidth ? "regular" : "small"}
