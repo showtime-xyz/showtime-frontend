@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import { StyleSheet } from "react-native";
 
 import { yup } from "app/lib/yup";
 
@@ -7,6 +8,7 @@ import { Button, ButtonLabel, Text, View } from "design-system";
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
+import { LoginOverlays } from "./login-overlays";
 import { useLogin } from "./use-login";
 
 interface LoginProps {
@@ -64,7 +66,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer loading={loading}>
+    <LoginContainer style={styles.container}>
       {walletStatus === "FETCHING_SIGNATURE" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -102,6 +104,15 @@ export function Login({ onLogin }: LoginProps) {
           </View>
         </>
       )}
+
+      <LoginOverlays loading={loading} />
     </LoginContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 16,
+  },
+});

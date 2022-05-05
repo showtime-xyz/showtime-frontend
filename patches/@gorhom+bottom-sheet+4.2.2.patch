@@ -1,0 +1,109 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+index e21a3ca..e7c0148 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
++++ b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+@@ -28,7 +28,7 @@ import {
+   usePropsValidator,
+   useReactiveSharedValue,
+   useNormalizedSnapPoints,
+-  useKeyboard,
++  useKeyboard as useKeyboardDefault,
+ } from '../../hooks';
+ import {
+   BottomSheetInternalProvider,
+@@ -113,6 +113,7 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+ 
+       // hooks
+       gestureEventsHandlersHook,
++      keyboardHandlerHook: useKeyboard = useKeyboardDefault,
+ 
+       // keyboard
+       keyboardBehavior = DEFAULT_KEYBOARD_BEHAVIOR,
+@@ -1651,20 +1652,21 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+                 values={{
+                   // topInset,
+                   // bottomInset,
+-                  animatedSheetState,
+-                  animatedScrollableState,
+-                  animatedScrollableOverrideState,
++                  // animatedSheetState,
++                  // animatedScrollableState,
++                  // animatedScrollableOverrideState,
+                   // isScrollableRefreshable,
+                   // animatedScrollableContentOffsetY,
+                   // keyboardState,
+                   // animatedIndex,
+                   // animatedCurrentIndex,
+                   // animatedPosition,
+-                  // animatedContainerHeight,
+-                  // animatedSheetHeight,
+-                  // animatedHandleHeight,
+-                  // animatedContentHeight,
+-                  // // keyboardHeight,
++                  animatedContainerHeight,
++                  animatedSheetHeight,
++                  animatedHandleHeight,
++                  animatedContentHeight,
++                  animatedKeyboardHeight,
++                  animatedKeyboardHeightInContainer
+                   // isLayoutCalculated,
+                   // isContentHeightFixed,
+                   // isInTemporaryPosition,
+diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/types.d.ts b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/types.d.ts
+index 40ed817..d9e4a4e 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/types.d.ts
++++ b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/types.d.ts
+@@ -17,7 +17,7 @@ import type {
+   KEYBOARD_BLUR_BEHAVIOR,
+   KEYBOARD_INPUT_MODE,
+ } from '../../constants';
+-import type { GestureEventsHandlersHookType } from '../../types';
++import type { KeyboardHookType, GestureEventsHandlersHookType } from '../../types';
+ 
+ export interface BottomSheetProps
+   extends BottomSheetAnimationConfigs,
+@@ -215,6 +215,8 @@ export interface BottomSheetProps
+    */
+   gestureEventsHandlersHook?: GestureEventsHandlersHookType;
+ 
++  keyboardHandlerHook?: KeyboardHookType;
++
+   //#region animated nodes
+   /**
+    * Animated value to be used as a callback of the position node internally.
+diff --git a/node_modules/@gorhom/bottom-sheet/src/types.d.ts b/node_modules/@gorhom/bottom-sheet/src/types.d.ts
+index 1b44f12..743ef65 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/types.d.ts
++++ b/node_modules/@gorhom/bottom-sheet/src/types.d.ts
+@@ -4,6 +4,7 @@ import type {
+   ScrollView,
+   SectionList,
+   NativeScrollEvent,
++  KeyboardEventEasing,
+ } from 'react-native';
+ import type {
+   GestureEventPayload,
+@@ -14,7 +15,7 @@ import type {
+   WithSpringConfig,
+   WithTimingConfig,
+ } from 'react-native-reanimated';
+-import type { GESTURE_SOURCE } from './constants';
++import type { GESTURE_SOURCE, KEYBOARD_STATE } from './constants';
+ 
+ //#region Methods
+ export interface BottomSheetMethods {
+@@ -142,6 +143,14 @@ export type GestureEventsHandlersHookType = () => {
+   handleOnEnd: GestureEventHandlerCallbackType;
+ };
+ 
++export type KeyboardHookType = () => {
++  state: SharedValue<KEYBOARD_STATE>;
++  height: SharedValue<number>;
++  animationEasing: SharedValue<KeyboardEventEasing>;
++  animationDuration: SharedValue<number>;
++  shouldHandleKeyboardEvents: SharedValue<boolean>;
++}
++
+ type ScrollEventHandlerCallbackType<C = any> = (
+   payload: NativeScrollEvent,
+   context: C

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useMemo, useState } from "react";
+import { Platform, StyleSheet } from "react-native";
 
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
@@ -17,12 +17,18 @@ import {
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
+import { LoginOverlays } from "./login-overlays";
 import { PhoneNumberPicker } from "./phone-number-picker";
 import { useLogin } from "./use-login";
 
 interface LoginProps {
   onLogin?: () => void;
 }
+
+const CONTENT_HEIGHT = Platform.select({
+  android: [281, 397],
+  default: [389, 389],
+});
 
 export function Login({ onLogin }: LoginProps) {
   //#region state
@@ -83,7 +89,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer loading={loading && !isConnectingToWallet}>
+    <LoginContainer style={styles.container}>
       {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -98,7 +104,7 @@ export function Login({ onLogin }: LoginProps) {
 
           <View
             style={{
-              height: 376,
+              height: CONTENT_HEIGHT[selected],
             }}
           >
             <Tabs.Root
@@ -128,7 +134,7 @@ export function Login({ onLogin }: LoginProps) {
                 <Tabs.View style={styles.tabListItemContainer}>
                   <View tw="mb-[16px]">
                     <Button
-                      onPress={() => handleSubmitWallet()}
+                      onPress={handleSubmitWallet}
                       variant="primary"
                       size="regular"
                     >
@@ -156,13 +162,19 @@ export function Login({ onLogin }: LoginProps) {
           </View>
         </>
       )}
+      <LoginOverlays loading={loading && !isConnectingToWallet} />
     </LoginContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 16,
+  },
   tabListItemContainer: {
     marginTop: -(TAB_LIST_HEIGHT - 16),
     paddingHorizontal: 16,
+    paddingBottom: 16,
   },
 });

@@ -39,9 +39,8 @@ const ListModal = withColorScheme(() => {
   );
 });
 
-export const ListScreen = withModalScreen(
-  ListModal,
-  "List",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/list",
-  "listModal"
-);
+export const ListScreen = withModalScreen(ListModal, {
+  title: "List",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/list",
+  matchingQueryParam: "listModal",
+});

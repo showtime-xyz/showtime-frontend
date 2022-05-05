@@ -5,17 +5,12 @@ import { useRouter } from "app/navigation/use-router";
 import { ModalMethods } from "design-system/modal";
 import { ModalScreen } from "design-system/modal/modal.screen";
 
+import type { ModalScreenOptions } from "./types";
 import { useBackPressHandler } from "./use-back-press-handler";
-
-const snapPoints = ["90%", "100%"];
 
 function withModalScreen<P>(
   Screen: FC<P>,
-  title: string,
-  // eslint-disable-next-line no-unused-vars
-  _?: string,
-  // eslint-disable-next-line no-unused-vars
-  __?: string
+  { title, snapPoints = ["90%", "100%"] }: ModalScreenOptions
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);

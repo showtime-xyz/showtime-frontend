@@ -106,16 +106,6 @@ export function Comments({ nft }: { nft: NFT }) {
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
-
-  const listEmptyComponent = useCallback(
-    () => (
-      <EmptyPlaceholder
-        text="Be the first to add a comment!"
-        title="💬 No comments yet..."
-      />
-    ),
-    [isAuthenticated, router, isMdWidth]
-  );
   //#endregion
 
   //#region rendering
@@ -132,7 +122,15 @@ export function Comments({ nft }: { nft: NFT }) {
     ),
     [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
-
+  const listEmptyComponent = useCallback(
+    () => (
+      <EmptyPlaceholder
+        text="Be the first to add a comment!"
+        title="💬 No comments yet..."
+      />
+    ),
+    [isAuthenticated, router, isMdWidth]
+  );
   return (
     <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (

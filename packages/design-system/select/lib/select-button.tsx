@@ -10,7 +10,7 @@ import { Text } from "../../text";
 import { SelectProps } from "../types";
 import { ChevronDownIcon } from "./chevron-down-icon";
 
-interface SelectButtonProps extends Pick<SelectProps, "size"> {
+interface SelectButtonProps extends Pick<SelectProps<any>, "size"> {
   open: boolean;
   label: string;
   disabled?: boolean;

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import { GestureResponderEvent } from "react-native";
 
 import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -9,12 +10,12 @@ import { colors } from "../../tailwind/colors";
 import { Text } from "../../text";
 import { SelectProps } from "../types";
 
-interface SelectItemProps extends Pick<SelectProps, "size"> {
-  value: string | number;
+interface SelectItemProps<T> extends Pick<SelectProps<T>, "size"> {
+  value: T;
   label: string;
   disabled?: boolean;
-  onPress?: (value: string | number) => void;
-  onClick?: (e: any) => void;
+  onPress?: (value: T) => void;
+  onClick?: (e: GestureResponderEvent) => void;
 }
 
 const BACKGROUND_MAPPER = {
@@ -22,7 +23,7 @@ const BACKGROUND_MAPPER = {
   hover: [colors.gray[800], colors.gray[200]],
 };
 
-export const SelectItem: React.FC<SelectItemProps> = ({
+export function SelectItem<T>({
   label,
   value,
   disabled,
@@ -30,7 +31,7 @@ export const SelectItem: React.FC<SelectItemProps> = ({
   onPress,
   onClick,
   ...rest
-}) => {
+}: SelectItemProps<T>) {
   //#region hooks
   const isDarkMode = useIsDarkMode();
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
@@ -57,7 +58,7 @@ export const SelectItem: React.FC<SelectItemProps> = ({
 
   //#region callbacks
   const handlePress = useCallback(
-    (e) => {
+    (e: GestureResponderEvent) => {
       if (onClick) {
         onClick(e);
       }
@@ -89,4 +90,4 @@ export const SelectItem: React.FC<SelectItemProps> = ({
       </Animated.View>
     </Pressable>
   );
-};
+}

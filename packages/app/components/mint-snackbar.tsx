@@ -2,17 +2,13 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { MintContext } from "app/context/mint-context";
-import { useSnackbarBottom } from "app/hooks/use-snackbar-bottom";
 import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { useRouter } from "app/navigation/use-router";
 
-import { Text, View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
-import { ArrowRight } from "design-system/icon";
 import { SnackbarState } from "design-system/snackbar";
 import { initSnakbarParams, Snackbar } from "design-system/snackbar/snackbar";
-import { colors } from "design-system/tailwind/colors";
 
 import { useCurrentUserAddress } from "../hooks/use-current-user-address";
 
@@ -34,8 +30,7 @@ const MintSnackbar = () => {
     if (
       state.status === "mediaUpload" ||
       state.status === "nftJSONUpload" ||
-      state.status === "minting" ||
-      state.status === "transactionCompleted"
+      state.status === "minting"
     ) {
       setSnackbar({
         show: true,

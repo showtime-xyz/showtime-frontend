@@ -1,16 +1,16 @@
 import type { TW } from "design-system/tailwind/types";
 
-export interface SelectProps {
-  value?: string | number;
+export interface SelectProps<T = string | number> {
+  value?: T;
   placeholder?: string;
-  options?: SelectOption[];
+  options?: SelectOption<T>[];
   size?: "small" | "regular";
   disabled?: boolean;
   tw?: TW;
-  onChange: (value: string | number) => void;
+  onChange: (value: T) => void;
 }
 
-export interface SelectOption {
-  value: string | number;
+export interface SelectOption<T> {
+  value: T;
   label: string;
 }

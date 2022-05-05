@@ -29,9 +29,8 @@ const DeleteModal = () => {
   return <Delete nft={data?.data?.item} />;
 };
 
-export const DeleteScreen = withModalScreen(
-  DeleteModal,
-  "Delete",
-  "/nft/[chainName]/[contractAddress]/[tokenId]/delete",
-  "deleteModal"
-);
+export const DeleteScreen = withModalScreen(DeleteModal, {
+  title: "Delete",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/delete",
+  matchingQueryParam: "deleteModal",
+});
