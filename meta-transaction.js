@@ -1,6 +1,13 @@
 const { ethers } = require("ethers");
 const axios = require("axios").default;
 
+const LOCAL_API = "http://localhost:8001";
+const REMOTE_API = "https://testingservice-dot-showtimenft.wl.r.appspot.com";
+
+const USE_REMOTE_API = true;
+
+const API = USE_REMOTE_API ? REMOTE_API : LOCAL_API;
+
 const wallet = new ethers.Wallet(
   "0xaf1ccdbd39b6e31cc8cd74e3af698d6fe42b676ebbe20295b3ea4ca591a19cb2",
   new ethers.providers.JsonRpcProvider(
@@ -21,9 +28,7 @@ const metaSingleEditionMintableCreator =
 const getAccessToken = async () => {
   const {
     data: { data: nonce },
-  } = await axios.get(
-    `https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/getnonce?address=${wallet.address}`
-  );
+  } = await axios.get(`${API}/api/v1/getnonce?address=${wallet.address}`);
   console.log("Nonce", nonce);
   const signature = await wallet.signMessage(
     `Sign into Showtime with this wallet. ${nonce}`
@@ -32,13 +37,10 @@ const getAccessToken = async () => {
   console.log("Signature", signature);
   const {
     data: { access: accessToken },
-  } = await axios.post(
-    "https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/login_wallet",
-    {
-      address: wallet.address,
-      signature,
-    }
-  );
+  } = await axios.post(`${API}/api/v1/login_wallet`, {
+    address: wallet.address,
+    signature,
+  });
   console.log("Access token", accessToken);
 
   return accessToken;
@@ -48,7 +50,70 @@ async function delay(ms) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const createEdition = async () => {
+const sign = async (forwardRequest) => {
+  return wallet._signTypedData(
+    forwardRequest.domain,
+    forwardRequest.types,
+    forwardRequest.value
+  );
+};
+
+const wrapAndSubmitTx = async (callData, toAddress, accessToken) => {
+  console.log("Wrapping tx...");
+  const { data: forwardRequest } = await axios(
+    `${API}/api/v1/relayer/forward-request?call_data=${encodeURIComponent(
+      callData
+    )}&to_address=${encodeURIComponent(toAddress)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  console.log("Signing...");
+  const signature = await sign(forwardRequest);
+  console.log("Signature", signature);
+  console.log("Submitting tx...");
+  const { data: relayedTx } = await axios.post(
+    `${API}/api/v1/relayer/forward-request`,
+    {
+      forward_request: forwardRequest,
+      signature,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return relayedTx;
+};
+
+const pollTransaction = async (
+  relayedTransactionId,
+  pollEndpointName,
+  accessToken
+) => {
+  let intervalMs = 1000;
+  for (let attempts = 0; attempts < 20; attempts++) {
+    console.log(`Checking tx... (${attempts + 1} / 20)`);
+    const { data: response } = await axios.get(
+      `${API}/api/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    console.log(response);
+    if (response.is_complete) {
+      return response;
+    }
+    await delay(intervalMs);
+  }
+};
+
+const createEdition = async (accessToken) => {
   const targetInterface = new ethers.utils.Interface(editionCreatorABI);
   const callData = targetInterface.encodeFunctionData("createEdition", [
     "test 1234",
@@ -62,62 +127,50 @@ const createEdition = async () => {
     1000, // royaltyBPS
     onePerAddressMinterContract,
   ]);
-  const accessToken = await getAccessToken();
-  console.log("Wrapping request...");
-  const { data: res } = await axios(
-    `https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/relayer/forward-request?call_data=${encodeURIComponent(
-      callData
-    )}&to_address=${encodeURIComponent(metaSingleEditionMintableCreator)}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
+  const relayedTx = await wrapAndSubmitTx(
+    callData,
+    metaSingleEditionMintableCreator,
+    accessToken
   );
-  console.log("Signing...");
-  const signature = await wallet._signTypedData(
-    res.domain,
-    res.types,
-    res.value
+  const edition = await pollTransaction(
+    relayedTx.relayed_transaction_id,
+    "poll-edition",
+    accessToken
   );
-  console.log("Signature", signature);
-  console.log("Submitting tx...");
-  const { data: relayedTx } = await axios.post(
-    "https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/relayer/forward-request",
-    {
-      forward_request: res,
-      signature,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-
-  let intervalMs = 1000;
-  for (let attempts = 0; attempts < 20; attempts++) {
-    console.log(`Checking tx... (${attempts + 1} / 20)`);
-    const {
-      data: { status, relayed_transaction_id: relayedTransactionId, edition },
-    } = await axios.get(
-      `https://testingservice-dot-showtimenft.wl.r.appspot.com/api/v1/creator-airdrops/poll-edition?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (edition) {
-      console.log(edition);
-      break;
-    } else {
-      console.log({ status, relayedTransactionId });
-    }
-
-    await delay(intervalMs);
+  if (!edition) {
+    throw new Error("Edition creation failed");
   }
+  return edition;
 };
 
-createEdition().catch((err) => console.log(err));
+const mintEdition = async (editionAddress, accessToken) => {
+  const targetInterface = new ethers.utils.Interface(minterABI);
+  const callData = targetInterface.encodeFunctionData("mintEdition", [
+    editionAddress,
+    wallet.address,
+  ]);
+  const relayedTx = await wrapAndSubmitTx(
+    callData,
+    onePerAddressMinterContract,
+    accessToken
+  );
+  const mint = await pollTransaction(
+    relayedTx.relayed_transaction_id,
+    "poll-mint",
+    accessToken
+  );
+  if (!mint) {
+    throw new Error("Edition minting failed");
+  }
+  return mint;
+};
+
+const main = async () => {
+  const accessToken = await getAccessToken();
+  const edition = await createEdition(accessToken);
+  console.log("Edition", edition);
+  const mint = await mintEdition(edition.edition.contract_address, accessToken);
+  console.log("Mint", mint);
+};
+
+main().catch((err) => console.log(err));
