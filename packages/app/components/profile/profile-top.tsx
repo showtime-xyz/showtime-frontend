@@ -275,7 +275,7 @@ export const ProfileTop = ({
                 pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
               >
                 <Text tw="text-sm text-gray-600 dark:text-gray-400">
-                  {`${bioWithMentions}`}
+                  {bioWithMentions}
                 </Text>
               </View>
             ) : null}
