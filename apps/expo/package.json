@@ -95,7 +95,7 @@
     "expo-camera": "~12.2.0",
     "expo-community-flipper": "^44.0.1",
     "expo-constants": "~13.1.0",
-    "expo-dev-client": "~0.9.3",
+    "expo-dev-client": "~0.9.4",
     "expo-device": "~4.2.0",
     "expo-font": "~10.1.0",
     "expo-gl": "~11.3.0",
