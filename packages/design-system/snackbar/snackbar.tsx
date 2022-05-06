@@ -70,19 +70,7 @@ const isWeb = Platform.OS === "web";
 export const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
 );
-// If you don't upgrade reanimated to above v2.5+, the slide effect needs to use this method to fixed animation.
-// const useFadeInUp = () => {
-//   return useAnimationState({
-//     from: {
-//       opacity: 0,
-//       translateY: 60,
-//     },
-//     to: {
-//       opacity: 1,
-//       translateY: 0,
-//     },
-//   });
-// };
+
 export const initSnakbarParams: SnackbarShowParams = {
   text: "",
   iconStatus: "default",

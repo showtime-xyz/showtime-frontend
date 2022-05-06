@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import useContentWidth from "app/hooks/use-content-width";
 import { NFT } from "app/types";
 
 import { Collection } from "design-system/card/rows/collection";
@@ -28,7 +29,7 @@ type Props = {
 function Card({ nft, numColumns, tw, onPress }: Props) {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
-
+  const contentWidth = useContentWidth();
   if (width < 768) {
     return (
       <Pressable onPress={onPress}>
@@ -36,7 +37,6 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       </Pressable>
     );
   }
-
   const size = tw
     ? tw
     : numColumns === 3
@@ -45,6 +45,16 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
     ? "w-[50vw]"
     : "w-[100vw]";
 
+  const cardMaxWidth = useMemo(() => {
+    switch (numColumns) {
+      case 3:
+        return contentWidth / 3;
+      case 2:
+        return contentWidth / 2;
+      default:
+        return 500;
+    }
+  }, []);
   return (
     <View
       style={{
@@ -75,7 +85,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
 
         <View tw="mt-2">
           <Pressable onPress={onPress}>
-            <Title nft={nft} />
+            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
           </Pressable>
         </View>
 

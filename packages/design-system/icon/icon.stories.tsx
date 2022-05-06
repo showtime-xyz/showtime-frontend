@@ -31,6 +31,8 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 export const Default = () => {
   return (
     <View tw="flex flex-row flex-wrap justify-center">
+      <IconItem icon={Icon.ArrowTop} title="ArrowTop" />
+      <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />
       <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" />
       <IconItem icon={Icon.ArrowRight} title="ArrowRight" />
       <IconItem icon={Icon.Badge} title="Badge" />
