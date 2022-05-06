@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { Platform } from "react-native";
 
 import type { NFT } from "app/types";
@@ -6,15 +6,14 @@ import type { NFT } from "app/types";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-import { tw } from "../../tailwind";
 import { Tooltip } from "../../tooltip";
 
 type Props = {
   nft?: NFT;
-  cardSize?: string;
+  cardMaxWidth?: number;
 };
 
-function Title({ nft, cardSize }: Props) {
+function Title({ nft, cardMaxWidth }: Props) {
   const [isUseTooltip] = useState(Platform.OS === "web");
   /**
    * Todo: If the content width is greater than the container width, use Tooltip components,
@@ -43,7 +42,9 @@ function Title({ nft, cardSize }: Props) {
         <Tooltip
           delay={300}
           text={nft.token_name}
-          contentStyle={tw.style(`max-${cardSize}`)}
+          contentStyle={{
+            maxWidth: cardMaxWidth,
+          }}
         >
           <Text
             tw="font-semibold text-black dark:text-white"
