@@ -60,20 +60,6 @@ export const Hidden = memo((props: HiddenProps) => {
     }
   }
 
-  // return children;
-
-  // const twValue = useMemo(() => {
-  //   if (from && until) {
-  //     return `flex ${from}:hidden ${until}:flex`;
-  //   } else if (until) {
-  //     return `hidden ${until}:flex`;
-  //   } else if (from) {
-  //     return `flex ${from}:hidden`;
-  //   } else {
-  //     return "";
-  //   }
-  // }, [from, until]);
-
   return !twValue ? (
     children
   ) : (

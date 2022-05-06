@@ -27,6 +27,7 @@ const { useParam } = createParam<Query>();
 
 export const Trending = () => {
   const [tab, setTab] = useParam("tab");
+  const isDark = useIsDarkMode();
   const selected = tab === "nft" ? 1 : 0;
   const handleTabChange = useCallback((index: number) => {
     if (index === 0) {
@@ -45,7 +46,13 @@ export const Trending = () => {
               Trending
             </Text>
           </View>
-          <View tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black">
+          <View
+            tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black"
+            style={{
+              // @ts-ignore
+              boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+            }}
+          >
             <SegmentedControl
               values={["CREATOR", "NFT"]}
               onChange={handleTabChange}

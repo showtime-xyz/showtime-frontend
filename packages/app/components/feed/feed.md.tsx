@@ -141,7 +141,6 @@ const NFTScrollList = ({
   fetchMore: any;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-  const contentWidth = useContentWidth(LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH);
 
   let dataProvider = useMemo(
     () =>
@@ -169,7 +168,7 @@ const NFTScrollList = ({
       width: CARD_CONTAINER_WIDTH,
       height,
     }),
-    [screenWidth]
+    []
   );
   const _rowRenderer = useCallback((_type: any, item: any) => {
     return (
