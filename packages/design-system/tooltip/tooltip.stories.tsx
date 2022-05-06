@@ -3,7 +3,7 @@ import { Meta } from "@storybook/react";
 
 import { Text } from "../text";
 import { View } from "../view";
-import { Placement } from "./getPlacement";
+import { Placement } from "./get-placement";
 import { Tooltip } from "./index";
 
 export default {

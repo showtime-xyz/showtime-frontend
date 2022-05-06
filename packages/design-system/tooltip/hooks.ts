@@ -1,7 +1,7 @@
 import { useLayoutEffect, RefObject, useMemo, useState } from "react";
 import { Platform, View } from "react-native";
 
-import { PlatformRect } from "./getPlacement";
+import { PlatformRect } from "./get-placement";
 
 export const useWebScroll = (
   ele: RefObject<HTMLElement | View | null>,

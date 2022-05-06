@@ -1,6 +1,6 @@
-import { StyleProp, TextStyle, ViewStyle } from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 
-import { Placement } from "./getPlacement";
+import { Placement } from "./get-placement";
 
 export type TooltipProps = {
   text?: string;

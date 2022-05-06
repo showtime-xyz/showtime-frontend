@@ -3,7 +3,7 @@ import { LayoutChangeEvent, Platform, View as NativeWiew } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import { Placement, getPosition, PlatformRect } from "./getPlacement";
+import { Placement, getPosition, PlatformRect } from "./get-placement";
 import { useWebClientRect, useWebScroll, usePlatformResize } from "./hooks";
 
 interface IPositionProps {

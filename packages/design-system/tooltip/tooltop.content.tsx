@@ -7,7 +7,7 @@ import { tw } from "../tailwind";
 import { colors } from "../tailwind/colors";
 import { Text } from "../text";
 import { View } from "../view";
-import { Placement } from "./getPlacement";
+import { Placement } from "./get-placement";
 import { TooltipProps } from "./types";
 
 const DARK_SHADOW =
