@@ -1,6 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { View } from "design-system";
+import { tw } from "design-system/tailwind";
 import {
   breakpoints,
   IBreakpoints,
@@ -12,11 +14,12 @@ type HiddenProps = {
   until?: IBreakpoints;
   platform?: "web" | "android" | "ios" | "native";
   children: any;
+  unmount?: boolean;
 };
 
-export const Hidden = (props: HiddenProps) => {
+export const Hidden = memo((props: HiddenProps) => {
   const { width } = useWindowDimensions();
-  const { from, platform, until, children } = props;
+  const { from, platform, until, children, unmount } = props;
   const currentBreakpoint = useMemo(
     () => sortedBreakpointKeys.find((key) => width >= breakpoints[key]),
     [width]
@@ -31,20 +34,49 @@ export const Hidden = (props: HiddenProps) => {
     return null;
   }
 
+  let twValue: string = "";
+
   if (currentBreakpoint) {
     if (from && until) {
       if (
         breakpoints[currentBreakpoint] >= breakpoints[from] &&
         breakpoints[currentBreakpoint] < breakpoints[until]
       ) {
-        return null;
+        if (unmount) {
+          return null;
+        }
+        twValue = `flex ${from}:hidden ${until}:flex`;
       }
     } else if (from && breakpoints[currentBreakpoint] >= breakpoints[from]) {
-      return null;
+      if (unmount) {
+        return null;
+      }
+      twValue = `flex ${from}:hidden`;
     } else if (until && breakpoints[currentBreakpoint] < breakpoints[until]) {
-      return null;
+      if (unmount) {
+        return null;
+      }
+      twValue = `hidden ${until}:flex`;
     }
   }
 
-  return children;
-};
+  // return children;
+
+  // const twValue = useMemo(() => {
+  //   if (from && until) {
+  //     return `flex ${from}:hidden ${until}:flex`;
+  //   } else if (until) {
+  //     return `hidden ${until}:flex`;
+  //   } else if (from) {
+  //     return `flex ${from}:hidden`;
+  //   } else {
+  //     return "";
+  //   }
+  // }, [from, until]);
+
+  return !twValue ? (
+    children
+  ) : (
+    <View style={tw.style(twValue)}>{children}</View>
+  );
+});

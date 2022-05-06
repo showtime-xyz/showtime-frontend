@@ -11,10 +11,10 @@ const HomeScreen = withColorScheme(() => {
 
   return (
     <ErrorBoundary>
-      <Hidden from="md">
+      <Hidden from="md" unmount>
         <Feed />
       </Hidden>
-      <Hidden until="md">
+      <Hidden until="md" unmount>
         <FeedDesktop />
       </Hidden>
     </ErrorBoundary>
