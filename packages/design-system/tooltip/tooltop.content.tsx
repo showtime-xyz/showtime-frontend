@@ -40,10 +40,10 @@ export const TooltipContent: React.FC<
 }) => {
   const isDark = useIsDarkMode();
   const color = useMemo(
-    () => (isDark ? colors.black : colors.gray[700]),
+    () => (isDark ? colors.gray[700] : colors.black),
     [isDark]
   );
-  const getTriangleMargin = useMemo<ViewStyle>(() => {
+  const getArrowOffset = useMemo<ViewStyle>(() => {
     switch (placement) {
       case Placement.top:
         return {
@@ -58,11 +58,13 @@ export const TooltipContent: React.FC<
     }
   }, [placement]);
 
-  const getTriangleStyle = useMemo<ViewStyle>(() => {
+  const getArrowStyle = useMemo<ViewStyle>(() => {
+    // ofset 1px for `border`
+    const arrowHeight = ARROW_SIZE.height - 1;
     switch (placement) {
       case Placement.top:
         return {
-          bottom: -ARROW_SIZE.height,
+          bottom: -arrowHeight,
           transform: [
             {
               rotate: "180deg",
@@ -71,7 +73,7 @@ export const TooltipContent: React.FC<
         };
       case Placement.bottom:
         return {
-          top: -ARROW_SIZE.height,
+          top: -arrowHeight,
         };
       default:
         return {};
@@ -86,14 +88,14 @@ export const TooltipContent: React.FC<
           filter: isDark ? DARK_SHADOW : LIGHT_SHADOW,
           backgroundColor: color,
         },
-        getTriangleMargin,
+        getArrowOffset,
         contentStyle,
       ]}
     >
       <Text tw={`text-center text-base font-bold text-white ${textTw}`}>
         {text}
       </Text>
-      <View style={[tw.style("z-1 absolute self-center"), getTriangleStyle]}>
+      <View style={[tw.style("z-1 absolute self-center"), getArrowStyle]}>
         <ArrowTop color={color} {...ARROW_SIZE} />
       </View>
     </View>
