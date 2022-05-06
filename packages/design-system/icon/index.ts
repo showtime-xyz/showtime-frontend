@@ -79,3 +79,5 @@ export { default as Flip } from "./Flip";
 export { default as Play } from "./Play";
 export { default as Settings } from "./Settings";
 export { default as Share } from "./Share";
+export { default as ArrowBottom } from "./ArrowBottom";
+export { default as ArrowTop } from "./ArrowTop";
