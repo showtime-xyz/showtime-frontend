@@ -4,10 +4,10 @@ import { Platform } from "react-native";
 import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
-import { mixpanel } from "app/lib/mixpanel";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
+import { NFT, Profile } from "app/types";
 
-import { NFT, Profile } from "../types";
 import { useAuth } from "./auth/use-auth";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 
@@ -270,6 +270,7 @@ export const useMyInfo = () => {
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const router = useRouter();
+  const navigateToLogin = useNavigateToLogin();
 
   const { data, error } = useSWR<MyInfo>(
     accessToken ? queryKey : null,
@@ -279,20 +280,7 @@ export const useMyInfo = () => {
   const follow = useCallback(
     async (profileId: number) => {
       if (!accessToken) {
-        router.push(
-          Platform.select({
-            native: "/login",
-            web: {
-              pathname: router.pathname,
-              query: { ...router.query, loginModal: true },
-            },
-          }),
-          Platform.select({
-            native: "/login",
-            web: router.asPath,
-          }),
-          { shallow: true }
-        );
+        navigateToLogin();
         return;
       }
 
@@ -368,20 +356,7 @@ export const useMyInfo = () => {
   const like = useCallback(
     async (nftId: number) => {
       if (!accessToken) {
-        router.push(
-          Platform.select({
-            native: "/login",
-            web: {
-              pathname: router.pathname,
-              query: { ...router.query, loginModal: true },
-            },
-          }),
-          Platform.select({
-            native: "/login",
-            web: router.asPath,
-          }),
-          { shallow: true }
-        );
+        navigateToLogin();
         // TODO: perform the action post login
         return false;
       }

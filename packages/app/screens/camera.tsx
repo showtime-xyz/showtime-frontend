@@ -48,16 +48,20 @@ function CameraScreen() {
         router.push(
           Platform.select({
             native: "/login",
+            // @ts-ignore
             web: {
               pathname: router.pathname,
               query: {
                 ...router.query,
-                login: true,
+                loginModal: true,
                 redirect_url: encodeURIComponent(createPostURL),
               },
             },
           }),
-          "/login",
+          Platform.select({
+            native: "/login",
+            web: router.asPath === "/" ? "/login" : router.asPath,
+          }),
           { shallow: true }
         );
       }

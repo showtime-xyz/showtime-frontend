@@ -5,6 +5,7 @@ import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
 
@@ -32,26 +33,15 @@ function ProfileDropdown({ user }: Props) {
   const share = useShare();
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
+  const navigateToLogin = useNavigateToLogin();
+
   //#region callbacks
   const handleOnBlockPress = async () => {
     if (isAuthenticated) {
       await block(user.profile_id);
       router.pop();
     } else {
-      router.push(
-        Platform.select({
-          native: "/login",
-          web: {
-            pathname: router.pathname,
-            query: { ...router.query, loginModal: true },
-          },
-        }),
-        Platform.select({
-          native: "/login",
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
+      navigateToLogin();
     }
   };
   const handleOnUnblockPress = async () => {
@@ -59,20 +49,7 @@ function ProfileDropdown({ user }: Props) {
       await unblock(user.profile_id);
       router.pop();
     } else {
-      router.push(
-        Platform.select({
-          native: "/login",
-          web: {
-            pathname: router.pathname,
-            query: { ...router.query, loginModal: true },
-          },
-        }),
-        Platform.select({
-          native: "/login",
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
+      navigateToLogin();
     }
   };
   //#endregion

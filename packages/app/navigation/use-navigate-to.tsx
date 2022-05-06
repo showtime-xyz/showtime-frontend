@@ -4,6 +4,30 @@ import { NFT } from "app/types";
 
 import { useRouter } from "./use-router";
 
+export const useNavigateToLogin = () => {
+  const router = useRouter();
+
+  const navigateToLogin = () => {
+    router.push(
+      Platform.select({
+        native: "/login",
+        // @ts-ignore
+        web: {
+          pathname: router.pathname,
+          query: { ...router.query, loginModal: true },
+        },
+      }),
+      Platform.select({
+        native: "/login",
+        web: router.asPath === "/" ? "/login" : router.asPath,
+      }),
+      { shallow: true }
+    );
+  };
+
+  return navigateToLogin;
+};
+
 export const useNavigateToListing = () => {
   const router = useRouter();
 
