@@ -46,8 +46,8 @@ const withMainApplication = (config) => {
         }
 
         mainApplication = mainApplication.replace(
-          `import com.facebook.react.bridge.JSIModulePackage;`,
-          `import com.facebook.react.bridge.JSIModulePackage;
+          `import com.facebook.react.ReactApplication;`,
+          `import com.facebook.react.ReactApplication;
 import com.akshetpandey.rncronet.RNCronetFrescoImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.react.shell.MainPackageConfig;`

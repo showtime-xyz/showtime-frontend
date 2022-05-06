@@ -1,0 +1,149 @@
+diff --git a/node_modules/react-native-cronet/android/build.gradle b/node_modules/react-native-cronet/android/build.gradle
+index c47d540..ed2286e 100644
+--- a/node_modules/react-native-cronet/android/build.gradle
++++ b/node_modules/react-native-cronet/android/build.gradle
+@@ -28,7 +28,7 @@ buildscript {
+ }
+ 
+ apply plugin: 'com.android.library'
+-apply plugin: 'maven'
++apply plugin: 'maven-publish'
+ 
+ android {
+     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+@@ -72,76 +72,5 @@ repositories {
+ dependencies {
+     //noinspection GradleDynamicVersion
+     implementation 'com.facebook.react:react-native:+'  // From node_modules
+-    implementation 'com.google.android.gms:play-services-cronet:17.0.0'
+-}
+-
+-def configureReactNativePom(def pom) {
+-    def packageJson = new JsonSlurper().parseText(file('../package.json').text)
+-
+-    pom.project {
+-        name packageJson.title
+-        artifactId packageJson.name
+-        version = packageJson.version
+-        group = "com.akshetpandey.rncronet"
+-        description packageJson.description
+-        url packageJson.repository.baseUrl
+-
+-        licenses {
+-            license {
+-                name packageJson.license
+-                url packageJson.repository.baseUrl + '/blob/master/' + packageJson.licenseFilename
+-                distribution 'repo'
+-            }
+-        }
+-
+-        developers {
+-            developer {
+-                id packageJson.author.username
+-                name packageJson.author.name
+-            }
+-        }
+-    }
+-}
+-
+-afterEvaluate { project ->
+-    task androidJavadoc(type: Javadoc) {
+-        source = android.sourceSets.main.java.srcDirs
+-        classpath += files(android.bootClasspath)
+-        classpath += files(project.getConfigurations().getByName('compile').asList())
+-        include '**/*.java'
+-    }
+-
+-    task androidJavadocJar(type: Jar, dependsOn: androidJavadoc) {
+-        classifier = 'javadoc'
+-        from androidJavadoc.destinationDir
+-    }
+-
+-    task androidSourcesJar(type: Jar) {
+-        classifier = 'sources'
+-        from android.sourceSets.main.java.srcDirs
+-        include '**/*.java'
+-    }
+-
+-    android.libraryVariants.all { variant ->
+-        def name = variant.name.capitalize()
+-        def javaCompileTask = variant.javaCompileProvider.get()
+-
+-        task "jar${name}"(type: Jar, dependsOn: javaCompileTask) {
+-            from javaCompileTask.destinationDir
+-        }
+-    }
+-
+-    artifacts {
+-        archives androidSourcesJar
+-        archives androidJavadocJar
+-    }
+-
+-    task installArchives(type: Upload) {
+-        configuration = configurations.archives
+-        repositories.mavenDeployer {
+-            // Deploy to react-native-event-bridge/maven, ready to publish to npm
+-            repository url: "file://${projectDir}/../android/maven"
+-            configureReactNativePom pom
+-        }
+-    }
++    implementation 'com.google.android.gms:play-services-cronet:18.0.1'
+ }
+diff --git a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetInterceptor.java b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetInterceptor.java
+index 604f98a..9562e62 100644
+--- a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetInterceptor.java
++++ b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetInterceptor.java
+@@ -7,9 +7,7 @@ import java.io.IOException;
+ import okhttp3.Call;
+ import okhttp3.Request;
+ import okhttp3.Response;
+-import okhttp3.internal.annotations.EverythingIsNonNull;
+ 
+-@EverythingIsNonNull
+ class RNCronetInterceptor implements okhttp3.Interceptor {
+   @Override
+   public Response intercept(Chain chain) throws IOException {
+diff --git a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetNetworkingModule.java b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetNetworkingModule.java
+index 61e6a3d..c491070 100644
+--- a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetNetworkingModule.java
++++ b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetNetworkingModule.java
+@@ -61,7 +61,8 @@ public class RNCronetNetworkingModule extends ReactContextBaseJavaModule {
+ 
+           sharedClient = clientBuilder.build();
+         } catch (Exception e) {
+-          sharedClient = OkHttpClientProvider.enableTls12OnPreLollipop(clientBuilder).build();
++          sharedClient = clientBuilder.build();
++//          sharedClient = OkHttpClientProvider.enableTls12OnPreLollipop(clientBuilder).build();
+         }
+ 
+         return sharedClient;
+diff --git a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCall.java b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCall.java
+index 15ab8ba..1597987 100644
+--- a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCall.java
++++ b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCall.java
+@@ -14,11 +14,9 @@ import okhttp3.EventListener;
+ import okhttp3.OkHttpClient;
+ import okhttp3.Request;
+ import okhttp3.Response;
+-import okhttp3.internal.annotations.EverythingIsNonNull;
+ import okio.AsyncTimeout;
+ import okio.Timeout;
+ 
+-@EverythingIsNonNull
+ final public class RNCronetOkHttpCall implements Call {
+   private final OkHttpClient client;
+   private final EventListener eventListener;
+diff --git a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCallFactory.java b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCallFactory.java
+index 5b2a527..1a04c05 100644
+--- a/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCallFactory.java
++++ b/node_modules/react-native-cronet/android/src/main/java/com/akshetpandey/rncronet/RNCronetOkHttpCallFactory.java
+@@ -5,9 +5,7 @@ import org.chromium.net.CronetEngine;
+ import okhttp3.Call;
+ import okhttp3.OkHttpClient;
+ import okhttp3.Request;
+-import okhttp3.internal.annotations.EverythingIsNonNull;
+ 
+-@EverythingIsNonNull
+ public class RNCronetOkHttpCallFactory implements Call.Factory {
+ 
+   private final OkHttpClient client;
