@@ -61,7 +61,7 @@ export const FeedList = () => {
     return (
       <PagerView
         ref={pagerRef}
-        style={{ flex: 1 }}
+        style={tw.style("flex-1 w-full")}
         initialPage={1}
         onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
       >
@@ -177,9 +177,7 @@ const WebFeed = () => {
   return (
     <Tabs.Root initialIndex={1}>
       <Tabs.List
-        style={{
-          height: TAB_LIST_HEIGHT,
-        }}
+        style={tw.style(`h-[${TAB_LIST_HEIGHT}px]`)}
         contentContainerStyle={tw.style(
           "w-full justify-center bg-white dark:bg-black"
         )}

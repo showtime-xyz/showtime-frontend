@@ -195,7 +195,7 @@ export const SwipeList = ({
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
-        disableRecycling={Platform.OS === 'android'}
+        disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
         style={tw.style("dark:bg-gray-900 bg-gray-100")}
@@ -231,11 +231,11 @@ export const FeedItem = memo(
 
     const feedItemStyle = {
       height: itemHeight,
-      width: screenWidth,
+      width: windowWidth,
     };
 
     let mediaHeight =
-      screenWidth /
+      windowWidth /
       (isNaN(Number(nft.token_aspect_ratio))
         ? 1
         : Number(nft.token_aspect_ratio));
@@ -290,9 +290,9 @@ export const FeedItem = memo(
 
     return (
       <LikeContextProvider nft={nft}>
-        <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
+        <BlurView style={tw.style("flex-1 w-full")} tint={tint} intensity={85}>
           {Platform.OS !== "web" && (
-            <View tw="absolute h-full w-full">
+            <View>
               {nft.blurhash ? (
                 <Blurhash
                   blurhash={nft.blurhash}
@@ -327,7 +327,7 @@ export const FeedItem = memo(
                 tw={
                   Platform.OS === "web"
                     ? ""
-                    : `h-[${mediaHeight}px] w-[${screenWidth}px]`
+                    : `h-[${mediaHeight}px] w-[${windowWidth}px]`
                 }
                 resizeMode="contain"
                 onPinchStart={hideHeader}
