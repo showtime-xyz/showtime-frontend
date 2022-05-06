@@ -30,9 +30,11 @@ import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
 const CARD_HEIGHT = 890;
-const CARD_WIDTH = 620;
+const CARD_CONTAINER_WIDTH = 620;
+const HORIZONTAL_GAPS = 24;
+const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
-const LEFT_SLIDE_MARGIN = 80;
+const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
 type Query = {
   tab: number;
@@ -58,25 +60,32 @@ export const FeedList = () => {
     parse: (v) => Number(v ?? 1),
     initial: 1,
   });
+  const isDark = useIsDarkMode();
 
   return (
     <View tw="flex-row">
       <Hidden until="xl">
         <View
           style={{
-            width: LEFT_SLIDE_WIDTH,
-            // for right shadow
-            marginRight: LEFT_SLIDE_MARGIN - 16,
+            flex: 1,
+            maxWidth: LEFT_SLIDE_WIDTH,
+            marginRight: LEFT_SLIDE_MARGIN,
           }}
         >
           <SuggestedUsers />
         </View>
       </Hidden>
 
-      <View tw="flex-1">
+      <View tw={`flex-2 max-w-[${CARD_CONTAINER_WIDTH}px]`}>
         {isAuthenticated ? (
           <>
-            <View tw="mr-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black">
+            <View
+              tw="mr-2 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
+              style={{
+                // @ts-ignore
+                boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+              }}
+            >
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
                 onChange={setSelected}
@@ -132,7 +141,6 @@ const NFTScrollList = ({
   fetchMore: any;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-  const contentWidth = useContentWidth(LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH);
 
   let dataProvider = useMemo(
     () =>
@@ -149,7 +157,7 @@ const NFTScrollList = ({
           return "item";
         },
         (_type, dim) => {
-          dim.width = contentWidth;
+          dim.width = screenWidth;
           dim.height = CARD_HEIGHT;
         }
       ),
@@ -157,14 +165,14 @@ const NFTScrollList = ({
   );
   const layoutSize = useMemo(
     () => ({
-      width: contentWidth - LEFT_SLIDE_MARGIN,
+      width: CARD_CONTAINER_WIDTH,
       height,
     }),
-    [screenWidth]
+    []
   );
-  const _rowRenderer = useCallback((_type: any, item: any, idx) => {
+  const _rowRenderer = useCallback((_type: any, item: any) => {
     return (
-      <View tw="flex-row pl-4" nativeID="334343">
+      <View tw="flex-row justify-center" nativeID="334343">
         <Card
           nft={item}
           tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}

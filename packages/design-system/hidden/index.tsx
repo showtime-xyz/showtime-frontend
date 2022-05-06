@@ -22,7 +22,6 @@ export const Hidden = (props: HiddenProps) => {
     [width]
   );
 
-  // Hide if no props are passed
   if (!from && !until && !platform) {
     return null;
   }
