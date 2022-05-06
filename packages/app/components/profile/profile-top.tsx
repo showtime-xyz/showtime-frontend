@@ -141,7 +141,7 @@ export const ProfileTop = ({
           </Skeleton>
         </View>
 
-        <View tw="mx-2 dark:bg-black" pointerEvents="box-none">
+        <View tw="mx-2 bg-white dark:bg-black" pointerEvents="box-none">
           <View tw="flex-row justify-between" pointerEvents="box-none">
             <View tw="flex-row items-end" pointerEvents="none">
               <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
