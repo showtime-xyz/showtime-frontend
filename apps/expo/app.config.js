@@ -55,7 +55,7 @@ export default {
   ios: {
     bundleIdentifier: config.scheme,
     buildNumber: majorVersion.toString(),
-    supportsTablet: true,
+    supportsTablet: false, // TODO:
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
     config: {
