@@ -141,8 +141,8 @@ export const ProfileTop = ({
           </Skeleton>
         </View>
 
-        <View tw="bg-white px-2 dark:bg-black" pointerEvents="box-none">
-          <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
+        <View tw="mx-2 dark:bg-black" pointerEvents="box-none">
+          <View tw="flex-row justify-between" pointerEvents="box-none">
             <View tw="flex-row items-end" pointerEvents="none">
               <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
                 <Skeleton
@@ -163,7 +163,7 @@ export const ProfileTop = ({
             </View>
 
             {address ? (
-              <View tw="flex-row items-center" pointerEvents="box-none">
+              <View tw="mr-2 flex-row items-center" pointerEvents="box-none">
                 {isBlocked ? (
                   <Button
                     size={width < 768 ? "small" : "regular"}
@@ -234,15 +234,13 @@ export const ProfileTop = ({
                 </Text>
               </Skeleton>
 
-              <View tw="h-2" />
-
               <Skeleton
                 height={12}
                 width={100}
                 show={loading}
                 colorMode={colorMode as any}
               >
-                <View tw="flex-row items-center">
+                <View tw="mt-2 flex-row items-center">
                   <Text
                     variant="text-base"
                     tw="font-semibold text-gray-900 dark:text-white"
