@@ -30,9 +30,11 @@ import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
 
 const CARD_HEIGHT = 890;
-const CARD_WIDTH = 620;
+const CARD_CONTAINER_WIDTH = 620;
+const HORIZONTAL_GAPS = 24;
+const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
-const LEFT_SLIDE_MARGIN = 64;
+const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
 type Query = {
   tab: number;
@@ -74,7 +76,7 @@ export const FeedList = () => {
         </View>
       </Hidden>
 
-      <View tw={`flex-2 max-w-[${CARD_WIDTH}px]`}>
+      <View tw={`flex-2 max-w-[${CARD_CONTAINER_WIDTH}px]`}>
         {isAuthenticated ? (
           <>
             <View
@@ -164,17 +166,17 @@ const NFTScrollList = ({
   );
   const layoutSize = useMemo(
     () => ({
-      width: CARD_WIDTH,
+      width: CARD_CONTAINER_WIDTH,
       height,
     }),
     [screenWidth]
   );
-  const _rowRenderer = useCallback((_type: any, item: any, idx) => {
+  const _rowRenderer = useCallback((_type: any, item: any) => {
     return (
       <View tw="flex-row justify-center" nativeID="334343">
         <Card
           nft={item}
-          tw={`w-[${CARD_WIDTH - 16}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
         />
       </View>
     );
