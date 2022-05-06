@@ -75,7 +75,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
 
         <View tw="mt-2">
           <Pressable onPress={onPress}>
-            <Title nft={nft} />
+            <Title nft={nft} cardSize={size} />
           </Pressable>
         </View>
 
