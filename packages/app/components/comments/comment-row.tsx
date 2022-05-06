@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import { formatAddressShort, getRoundedCount } from "app/utilities";
 
@@ -39,6 +40,7 @@ function CommentRowComponent({
   //#region hooks
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
+  const navigateToLogin = useNavigateToLogin();
   //#endregion
 
   //#region variables
@@ -67,20 +69,7 @@ function CommentRowComponent({
   const handleOnLikePress = useCallback(
     async function handleOnLikePress() {
       if (!isAuthenticated) {
-        router.push(
-          Platform.select({
-            native: "/login",
-            web: {
-              pathname: router.pathname,
-              query: { ...router.query, loginModal: true },
-            },
-          }),
-          Platform.select({
-            native: "/login",
-            web: router.asPath,
-          }),
-          { shallow: true }
-        );
+        navigateToLogin();
         return;
       }
 
@@ -111,20 +100,7 @@ function CommentRowComponent({
   }, []);
   const handleOnReplyPress = useCallback(() => {
     if (!isAuthenticated) {
-      router.push(
-        Platform.select({
-          native: "/login",
-          web: {
-            pathname: router.pathname,
-            query: { ...router.query, loginModal: true },
-          },
-        }),
-        Platform.select({
-          native: "/login",
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
+      navigateToLogin();
       return;
     }
 
