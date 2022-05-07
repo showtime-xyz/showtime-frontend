@@ -234,13 +234,15 @@ export const ProfileTop = ({
                 </Text>
               </Skeleton>
 
+              <View tw="h-2" />
+
               <Skeleton
                 height={12}
                 width={100}
                 show={loading}
                 colorMode={colorMode as any}
               >
-                <View tw="mt-2 flex-row items-center">
+                <View tw="flex-row items-center">
                   <Text
                     variant="text-base"
                     tw="font-semibold text-gray-900 dark:text-white"
