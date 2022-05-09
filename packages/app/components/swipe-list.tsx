@@ -319,7 +319,7 @@ export const FeedItem = memo(
             <View
               tw={`absolute h-[${
                 itemHeight - bottomPadding - 50
-              }px] justify-center bg-white dark:bg-black`}
+              }px] justify-center`}
             >
               <Media
                 item={nft}
@@ -342,7 +342,13 @@ export const FeedItem = memo(
               detailStyle,
             ]}
           >
-            <BlurView tint={tint} intensity={85}>
+            <BlurView
+              tint={tint}
+              intensity={100}
+              style={tw.style(
+                "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
+              )}
+            >
               <NFTDetails nft={nft} />
               <View
                 tw={`${
