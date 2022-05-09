@@ -56,11 +56,12 @@ export function Fieldset(props: FieldsetProps) {
         {leftElement}
         {!selectOnly ? (
           <Component
-            tw="focus:outline-none flex-1 text-black focus-visible:ring-1 dark:text-white"
-            {...textInputProps}
-            style={{
-              fontSize: 16,
-            }}
+            tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
+            //@ts-ignore - web only
+            style={Platform.select({
+              web: { outline: "none" },
+              default: undefined,
+            })}
             editable={disabled}
             nativeID={inputId}
             accessibilityLabel={accessibilityLabel}
@@ -83,6 +84,7 @@ export function Fieldset(props: FieldsetProps) {
               web: errorText ? true : false,
               default: undefined,
             })}
+            {...textInputProps}
           />
         ) : null}
 
