@@ -90,7 +90,7 @@
     "expo": "next",
     "expo-app-loading": "~2.0.0",
     "expo-application": "~4.1.0",
-    "expo-av": "~11.2.2",
+    "expo-av": "~11.2.3",
     "expo-blur": "~11.1.0",
     "expo-camera": "~12.2.0",
     "expo-community-flipper": "^44.0.1",

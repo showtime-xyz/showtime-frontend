@@ -42,7 +42,7 @@
     "design-system": "*",
     "expo": "next",
     "expo-asset": "~8.4.4",
-    "expo-av": "~11.2.2",
+    "expo-av": "~11.2.3",
     "expo-blur": "~11.1.0",
     "expo-community-flipper": "^44.0.1",
     "expo-constants": "~13.0.1",
