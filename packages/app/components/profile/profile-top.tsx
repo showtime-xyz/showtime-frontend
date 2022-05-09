@@ -25,6 +25,7 @@ import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName } from "../../utilities";
+import { FollowButton } from "../follow-button";
 import { FollowersList, FollowingList } from "../following-user-list";
 
 type FollowProps = {
@@ -110,7 +111,11 @@ export const ProfileTop = ({
       ),
     [bio]
   );
-  const coverImageHeight = useMemo(() => (width < 768 ? 120 : 180), [width]);
+  // cover down to twitter banner ratio: w:h=3:1
+  const coverImageHeight = useMemo(
+    () => (width < 768 ? width / 3 : 180),
+    [width]
+  );
 
   useEffect(() => {
     Platform.OS === "web" && setShowBottomSheet(null);
@@ -188,18 +193,12 @@ export const ProfileTop = ({
                       <>
                         <ProfileDropdown user={profileData?.data.profile} />
                         <View tw="w-2" />
-                        <Button
+                        <FollowButton
                           size={width < 768 ? "small" : "regular"}
-                          onPress={() => {
-                            if (isFollowingUser) {
-                              unfollow(profileId);
-                            } else {
-                              follow(profileId);
-                            }
-                          }}
-                        >
-                          {isFollowingUser ? "Following" : "Follow"}
-                        </Button>
+                          isFollowing={isFollowingUser}
+                          name={profileData?.data.profile.name}
+                          profileId={profileId}
+                        />
                       </>
                     ) : userId === profileId ? (
                       <Button
@@ -282,7 +281,7 @@ export const ProfileTop = ({
         </View>
       </View>
       <ModalSheet
-        snapPoints={["85%", "100%"]}
+        snapPoints={["70%", "85%"]}
         title={showBottomSheet === "followers" ? "Followers" : "Following"}
         visible={
           showBottomSheet === "followers" || showBottomSheet === "following"

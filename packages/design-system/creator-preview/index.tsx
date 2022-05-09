@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Dimensions, Pressable } from "react-native";
+import { Pressable } from "react-native";
 
+import { FollowButton } from "app/components/follow-button";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
@@ -8,7 +9,6 @@ import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
-import { Button } from "design-system/button";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
 import { Text } from "design-system/text";
@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
-  const { isFollowing, follow, unfollow } = useMyInfo();
+  const { isFollowing } = useMyInfo();
   const creatorId = props.creator.profile_id;
   const isFollowingCreator = useMemo(
     () => isFollowing(creatorId),
@@ -60,18 +60,11 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           </View>
         </Link>
         <View tw="flex-row items-center justify-center">
-          <Button
-            variant="primary"
-            onPress={() => {
-              if (isFollowingCreator) {
-                unfollow(creatorId);
-              } else {
-                follow(creatorId);
-              }
-            }}
-          >
-            {isFollowingCreator ? "Following" : "Follow"}
-          </Button>
+          <FollowButton
+            isFollowing={isFollowingCreator}
+            name={props.creator.name}
+            profileId={creatorId}
+          />
         </View>
       </View>
       <View tw="mx-[-1px] mt-4 flex-row justify-center">

@@ -8,12 +8,13 @@ import { FollowerUser } from "app/hooks/api/use-followers-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { Button, Skeleton, Text, View } from "design-system";
+import { Skeleton, Text, View } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { EmptyPlaceholder } from "./empty-placeholder";
+import { FollowButton } from "./follow-button";
 
 type FollowingListProp = {
   follow: (profileId: number) => void;
@@ -155,13 +156,11 @@ const FollowingListUser = memo(
             </View>
           </View>
         </Link>
-        {isFollowingUser ? (
-          <Button onPress={() => unFollow(item.profile_id)} variant="tertiary">
-            Following
-          </Button>
-        ) : (
-          <Button onPress={() => follow(item.profile_id)}>Follow</Button>
-        )}
+        <FollowButton
+          isFollowing={isFollowingUser}
+          profileId={item.profile_id}
+          name={item.name}
+        />
       </View>
     );
   }

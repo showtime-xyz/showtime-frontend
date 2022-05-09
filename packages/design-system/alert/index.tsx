@@ -14,6 +14,7 @@ import {
 } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
+import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -22,17 +23,29 @@ import { Divider } from "../divider";
 import { View } from "../view";
 import { AlertOption } from "./alert-option";
 
-type AlertContext = Pick<AlertStatic, "alert">;
+type AlertContext = {
+  alert: (...params: Parameters<AlertStatic["alert"]>) => void;
+  /**
+   * check out AlertProvider is installed
+   */
+  isMounted?: boolean;
+};
 
-// default alert function is to use Alert.alert instead of Alert?.alert
-export const AlertContext = createContext<AlertContext>({ alert: () => false });
+export const AlertContext = createContext<AlertContext>({
+  /**
+   * use Alert.alert instead of Alert?.alert
+   */
+  alert: () => undefined,
+  isMounted: false,
+});
 
-export const AlertProvider: React.FC = ({ children }) => {
+export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
+  children,
+}) => {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [buttons, setButtons] = useState<AlertButton[]>([]);
-
   const closeAlert = useCallback(() => {
     setShow(false);
   }, []);
@@ -45,6 +58,7 @@ export const AlertProvider: React.FC = ({ children }) => {
         params[1] && setMessage(params[1]);
         params[2] && setButtons(params[2]);
       },
+      isMounted: true,
     }),
     []
   );
@@ -63,9 +77,9 @@ export const AlertProvider: React.FC = ({ children }) => {
     }
     if (buttons?.length === 2) {
       return (
-        <View tw="flex-row items-center">
+        <View tw="flex-row items-center justify-between">
           {buttons.map((btn, i) => (
-            <View key={`alert-option-${btn.text ?? i}`} tw="flex-1">
+            <View key={`alert-option-${btn.text ?? i}`}>
               <AlertOption {...btn} hide={closeAlert} />
             </View>
           ))}
@@ -88,29 +102,25 @@ export const AlertProvider: React.FC = ({ children }) => {
         visible={show}
         onDismiss={onModalDismiss}
       >
+        {/* prevent scrolling/shaking when modal is open */}
+        {Platform.OS === "web" && <RemoveScrollBar />}
         <View tw={"h-full w-full bg-black bg-opacity-60"}>
           <View tw="h-full w-full items-center justify-center">
             <AnimatePresence>
               <MotiView
                 style={tw.style(
-                  "max-w-xs w-4/5 bg-white dark:bg-black rounded-2xl px-4 py-4"
+                  "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
                 )}
                 from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
                 animate={{ transform: [{ scale: 1 }], opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ type: "timing", duration: 300 }}
               >
-                <Text
-                  tw="text-center font-bold text-gray-900 dark:text-white"
-                  variant="text-lg"
-                >
+                <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
                   {title}
                 </Text>
                 {Boolean(message) && (
-                  <Text
-                    tw="mt-4 text-center text-xs text-gray-900 dark:text-white"
-                    variant="text-base"
-                  >
+                  <Text tw="mt-4 text-center text-base text-gray-900 dark:text-white">
                     {message}
                   </Text>
                 )}
@@ -128,11 +138,20 @@ export const AlertProvider: React.FC = ({ children }) => {
 export const useAlert = () => {
   if (Platform.OS === "web") {
     const Alert = useContext(AlertContext);
-    if (Alert === null) {
+    if (!Alert.isMounted) {
       console.error("Trying to use useAlert without a AlertProvider");
     }
     return Alert;
   } else {
     return RNAlert;
   }
+};
+
+// If we need to use the same Alert style on the cross-platform, use this hooks.
+export const useCustomAlert = () => {
+  const Alert = useContext(AlertContext);
+  if (!Alert.isMounted) {
+    console.error("Trying to use useAlert without a AlertProvider");
+  }
+  return Alert;
 };
