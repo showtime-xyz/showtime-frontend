@@ -6490,14 +6490,14 @@ __metadata:
     dripsy: ^3.6.0
     esbuild: ^0.14.11
     events: ^3.3.0
-    expo: ^45.0.1
+    expo: ^45.0.2
     expo-app-loading: ~2.0.0
     expo-application: ~4.1.0
     expo-av: ~11.2.3
     expo-blur: ~11.1.0
     expo-camera: ~12.2.0
-    expo-community-flipper: ^44.0.1
-    expo-constants: ~13.1.0
+    expo-community-flipper: ^45.0.0
+    expo-constants: ~13.1.1
     expo-dev-client: ~0.9.5
     expo-device: ~4.2.0
     expo-font: ~10.1.0
@@ -6506,7 +6506,7 @@ __metadata:
     expo-image-picker: ~13.1.1
     expo-linear-gradient: ~11.3.0
     expo-linking: ~3.1.0
-    expo-modules-core: ~0.9.1
+    expo-modules-core: ~0.9.2
     expo-navigation-bar: ~1.2.0
     expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.15.2
@@ -6696,19 +6696,19 @@ __metadata:
     "@types/three": ^0.139.0
     "@zeego/dropdown-menu": ^0.0.2-alpha.28
     design-system: "*"
-    expo: ^45.0.1
+    expo: ^45.0.2
     expo-asset: ~8.4.4
     expo-av: ~11.2.3
     expo-blur: ~11.1.0
-    expo-community-flipper: ^44.0.1
-    expo-constants: ~13.0.1
+    expo-community-flipper: ^45.0.0
+    expo-constants: ~13.1.1
     expo-dev-client: ~0.9.5
     expo-font: ~10.0.4
     expo-gl: ~11.0.3
     expo-image-picker: ^12.0.2
     expo-linear-gradient: ~11.3.0
     expo-linking: ~3.0.0
-    expo-modules-core: ~0.9.1
+    expo-modules-core: ~0.9.2
     expo-splash-screen: ~0.14.1
     expo-status-bar: ~1.2.0
     expo-system-ui: ~1.1.0
@@ -16550,17 +16550,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-community-flipper@npm:^44.0.1":
-  version: 44.0.3
-  resolution: "expo-community-flipper@npm:44.0.3"
+"expo-community-flipper@npm:^45.0.0":
+  version: 45.0.0
+  resolution: "expo-community-flipper@npm:45.0.0"
   dependencies:
     "@expo/config-plugins": ^4.0.15
     resolve-from: ^5.0.0
-  checksum: e928ca3a7151d91107a4503c5d822afe43ab3a27df3755685bb4cc784a435600523bc79ca5950716a376706b19bcf3a955b34630864ab14f1ae491d91d03102e
+  checksum: 4735d801a0f9032fc4ca87a43e95194aae6533bd8187832da25c0896c884d46591d4c0f203bc25606736b29452b972aa4bd7da110e57b1e1fd84f5acf586d8e1
   languageName: node
   linkType: hard
 
-"expo-constants@npm:~13.0.0, expo-constants@npm:~13.0.1":
+"expo-constants@npm:~13.0.0":
   version: 13.0.2
   resolution: "expo-constants@npm:13.0.2"
   dependencies:
@@ -16894,13 +16894,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:0.9.1, expo-modules-core@npm:~0.9.1":
-  version: 0.9.1
-  resolution: "expo-modules-core@npm:0.9.1"
+"expo-modules-core@npm:0.9.2, expo-modules-core@npm:~0.9.2":
+  version: 0.9.2
+  resolution: "expo-modules-core@npm:0.9.2"
   dependencies:
     compare-versions: ^3.4.0
     invariant: ^2.2.4
-  checksum: 6a7f4644801b1ca8d9d0fbee3a158bdccdf50da253a5138212877de1465df44e8ad574d4258d5e25de0ef34ce5ee15be06f099e48b4b9c762d6df8c650de1c7c
+  checksum: cc7a5efa50cdd193f3240c824276eae2aad4bbae256607529df6f039c9db3cea5bd898002096fb152026abeca33fc46755d3ea68644c7b25dfdb913d9cef383e
   languageName: node
   linkType: hard
 
@@ -17096,9 +17096,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:^45.0.1":
-  version: 45.0.1
-  resolution: "expo@npm:45.0.1"
+"expo@npm:^45.0.2":
+  version: 45.0.2
+  resolution: "expo@npm:45.0.2"
   dependencies:
     "@babel/runtime": ^7.14.0
     "@expo/cli": 0.1.4
@@ -17113,7 +17113,7 @@ __metadata:
     expo-font: ~10.1.0
     expo-keep-awake: ~10.1.1
     expo-modules-autolinking: 0.8.0
-    expo-modules-core: 0.9.1
+    expo-modules-core: 0.9.2
     fbemitter: ^3.0.0
     getenv: ^1.0.0
     invariant: ^2.2.4
@@ -17126,7 +17126,7 @@ __metadata:
       optional: true
   bin:
     expo: bin/cli.js
-  checksum: c6f9a62c67027764ed466c5d43e9dce41d9ea30095195a3ff13ee4d2d54336b9927a593c33d3cbcd10f0cde2a4dc0332f64bb88faa6f352d4e195f117629551b
+  checksum: b91ab7cea95a77a34cd758aeee1b7edfd100a4ef723b5a0f4c00300b4336e79c3b7ae162c7b71a7844cff2f987a6966ab1a19c2aee96a5a57ff01c36b3410a15
   languageName: node
   linkType: hard
 
