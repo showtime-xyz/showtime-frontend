@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useReducer, useState } from "react";
+import { Suspense, useCallback, useReducer } from "react";
 import { Platform } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -13,7 +13,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 
 import { Skeleton, Spinner, View } from "design-system";
-import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
