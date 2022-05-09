@@ -29256,6 +29256,7 @@ __metadata:
     "@react-native-menu/menu": ^0.5.2
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@types/react-native": 0.67.6
+    eslint-plugin-diff: ^1.0.12
     eslint-plugin-prettier: ^4.0.0
     patch-package: ^6.4.7
     prettier: ^2.4.1
