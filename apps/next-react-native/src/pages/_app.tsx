@@ -46,6 +46,7 @@ import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
 
+import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -227,58 +228,61 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <DripsyProvider theme={theme} ssr>
         <SafeAreaProvider>
           <ToastProvider>
-            <SnackbarProvider>
-              <SWRProvider>
-                <Web3Provider>
-                  <AppContext.Provider value={injectedGlobalContext}>
-                    <AuthProvider>
-                      <UserProvider>
-                        <BottomSheetModalProvider>
-                          <GrowthBookProvider growthbook={growthbook}>
-                            <FeedProvider>
-                              <NavigationProvider>
-                                <MintProvider>
-                                  <View tw="bg-gray-100 dark:bg-black">
-                                    <Header
-                                      canGoBack={
-                                        router.pathname === "/search" ||
-                                        router.pathname.split("/").length - 1 >=
-                                          2
-                                      }
-                                    />
+            <AlertProvider>
+              <SnackbarProvider>
+                <SWRProvider>
+                  <Web3Provider>
+                    <AppContext.Provider value={injectedGlobalContext}>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <MintProvider>
+                                    <View tw="bg-gray-100 dark:bg-black">
+                                      <Header
+                                        canGoBack={
+                                          router.pathname === "/search" ||
+                                          router.pathname.split("/").length -
+                                            1 >=
+                                            2
+                                        }
+                                      />
 
-                                    <View tw="min-h-screen items-center">
-                                      <Component {...pageProps} />
+                                      <View tw="min-h-screen items-center">
+                                        <Component {...pageProps} />
+                                      </View>
+
+                                      <Footer />
                                     </View>
 
-                                    <Footer />
-                                  </View>
-
-                                  {/* Modals */}
-                                  <CommentsScreen />
-                                  <TransferScreen />
-                                  <CreateScreen />
-                                  <DeleteScreen />
-                                  <ListScreen />
-                                  <UnlistScreen />
-                                  <DetailsScreen />
-                                  <BuyScreen />
-                                  <ActivitiesScreen />
-                                  <MintSnackbar />
-                                  {/* Login should be the last so
+                                    {/* Modals */}
+                                    <CommentsScreen />
+                                    <TransferScreen />
+                                    <CreateScreen />
+                                    <DeleteScreen />
+                                    <ListScreen />
+                                    <UnlistScreen />
+                                    <DetailsScreen />
+                                    <BuyScreen />
+                                    <ActivitiesScreen />
+                                    <MintSnackbar />
+                                    {/* Login should be the last so
                                       it renders on top of others if needed */}
-                                  <LoginScreen />
-                                </MintProvider>
-                              </NavigationProvider>
-                            </FeedProvider>
-                          </GrowthBookProvider>
-                        </BottomSheetModalProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContext.Provider>
-                </Web3Provider>
-              </SWRProvider>
-            </SnackbarProvider>
+                                    <LoginScreen />
+                                  </MintProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </AppContext.Provider>
+                  </Web3Provider>
+                </SWRProvider>
+              </SnackbarProvider>
+            </AlertProvider>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>

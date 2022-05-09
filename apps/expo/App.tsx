@@ -47,6 +47,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -380,33 +381,35 @@ function App() {
       <DripsyProvider theme={theme}>
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
           <ToastProvider>
-            <SnackbarProvider>
-              <NavigationProvider>
-                <SWRProvider>
-                  <WalletConnectProvider>
-                    <Web3Provider>
-                      <AppContextProvider>
-                        <AuthProvider>
-                          <UserProvider>
-                            <MintProvider>
-                              <BottomSheetModalProvider>
-                                <GrowthBookProvider growthbook={growthbook}>
-                                  <FeedProvider>
-                                    <StatusBar style="auto" />
-                                    <RootStackNavigator />
-                                    <MintSnackbar />
-                                  </FeedProvider>
-                                </GrowthBookProvider>
-                              </BottomSheetModalProvider>
-                            </MintProvider>
-                          </UserProvider>
-                        </AuthProvider>
-                      </AppContextProvider>
-                    </Web3Provider>
-                  </WalletConnectProvider>
-                </SWRProvider>
-              </NavigationProvider>
-            </SnackbarProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <NavigationProvider>
+                  <SWRProvider>
+                    <WalletConnectProvider>
+                      <Web3Provider>
+                        <AppContextProvider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <MintProvider>
+                                <BottomSheetModalProvider>
+                                  <GrowthBookProvider growthbook={growthbook}>
+                                    <FeedProvider>
+                                      <StatusBar style="auto" />
+                                      <RootStackNavigator />
+                                      <MintSnackbar />
+                                    </FeedProvider>
+                                  </GrowthBookProvider>
+                                </BottomSheetModalProvider>
+                              </MintProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </AppContextProvider>
+                      </Web3Provider>
+                    </WalletConnectProvider>
+                  </SWRProvider>
+                </NavigationProvider>
+              </SnackbarProvider>
+            </AlertProvider>
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
