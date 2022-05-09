@@ -54,7 +54,9 @@ export const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
 );
 export type SnackbarState = { show: boolean; snackbar: SnackbarShowParams };
-export const SnackbarProvider: React.FC = ({ children }) => {
+export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
+  children,
+}) => {
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     show: false,
     snackbar: initSnakbarParams,
