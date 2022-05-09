@@ -24,6 +24,8 @@ interface LoginInputFieldProps
   onSubmit: (value: string) => void;
 }
 
+const INPUT_NAME = "data";
+
 export function LoginInputField({
   label = "Input Field",
   placeholder = "Enter here",
@@ -38,12 +40,14 @@ export function LoginInputField({
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
   });
+  const inputValue = watch(INPUT_NAME);
   const bottomSheetContext = useBottomSheetInternal(true);
   //#endregion
 
@@ -90,7 +94,7 @@ export function LoginInputField({
             returnKeyType="go"
           />
         )}
-        name="data"
+        name={INPUT_NAME}
       />
 
       <Button
@@ -98,6 +102,7 @@ export function LoginInputField({
         variant="tertiary"
         size="regular"
         tw="mt-6"
+        disabled={!Boolean(inputValue)}
       >
         <ButtonLabel tw="text-black dark:text-white">
           {signInButtonLabel}
