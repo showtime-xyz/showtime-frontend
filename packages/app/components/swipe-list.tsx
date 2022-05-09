@@ -290,7 +290,7 @@ export const FeedItem = memo(
 
     return (
       <LikeContextProvider nft={nft}>
-        <BlurView style={tw.style("flex-1 w-full")} tint={tint} intensity={85}>
+        <View tw="w-full flex-1">
           {Platform.OS !== "web" && (
             <View>
               {nft.blurhash ? (
@@ -359,7 +359,7 @@ export const FeedItem = memo(
               />
             </BlurView>
           </Reanimated.View>
-        </BlurView>
+        </View>
       </LikeContextProvider>
     );
   }
