@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { StyleProp, ViewStyle } from "react-native";
 
 import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
@@ -58,6 +59,7 @@ export interface ModalProps {
    */
   onClose?: () => void;
   //#endregion
+  bodyStyle?: StyleProp<ViewStyle>;
 }
 
 export interface ModalHeaderProps
@@ -86,6 +88,7 @@ export interface ModalContainerProps
     | "web_height"
   > {
   close: () => void;
+  bodyStyle?: StyleProp<ViewStyle>;
 }
 
 export interface ModalScreenProps extends ModalProps {

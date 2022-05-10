@@ -7,17 +7,19 @@ import {
   useMemo,
   useRef,
 } from "react";
+import { StyleProp, ViewStyle } from "react-native";
 
 import {
   BottomSheetBackdrop,
   BottomSheetHandleProps,
   BottomSheetModal,
   BottomSheetTextInput as BottomSheetInput,
+  BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
-import { tw as tailwind } from "design-system/tailwind";
+import { tw as tailwind, tw } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
@@ -27,7 +29,7 @@ type BottomSheetProps = {
   visible?: boolean;
   onDismiss?: () => void;
   snapPoints?: string[];
-  bodyContentTW?: string;
+  bodyStyle?: StyleProp<ViewStyle>;
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {
@@ -37,7 +39,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
     handleComponent,
     onDismiss,
     snapPoints,
-    bodyContentTW = "",
+    bodyStyle,
   } = props;
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
@@ -53,7 +55,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
   const defaultSnapPoints = useMemo(() => ["90%", "100%"], []);
 
   const renderBackdrop = useCallback(
-    (props) => (
+    (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
         {...props}
         disappearsOnIndex={-1}
@@ -78,7 +80,12 @@ export const BottomSheet = (props: BottomSheetProps) => {
       )}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw={[`flex-1 px-4 pt-6 mb-[${safeAreaBottom}px]`, bodyContentTW]}>
+      <View
+        style={[
+          tw.style(`flex-1 px-4 pt-6 mb-[${safeAreaBottom}px]`),
+          bodyStyle,
+        ]}
+      >
         {children}
       </View>
     </BottomSheetModal>
