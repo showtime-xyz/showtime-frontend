@@ -1,17 +1,17 @@
 import { ComponentProps } from "react";
-import {
-  // Image as ReactNativeImage,
-  ImageProps as ReactNativeImageProps,
-} from "react-native";
 
 import { Blurhash } from "react-native-blurhash";
-import FastImage from "react-native-fast-image";
+import FastImage, { FastImageProps } from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
-function Img({ source, height, width, ...props }: ReactNativeImageProps) {
+type ImgProps = FastImageProps & {
+  height?: number;
+  width?: number;
+};
+function Img({ source, height, width, ...props }: ImgProps) {
   return (
     // @ts-ignore
     <FastImage
