@@ -48,6 +48,7 @@ import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
 import { AlertProvider } from "design-system/alert";
+import { LightBoxProvider } from "design-system/light-box/index";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -382,33 +383,35 @@ function App() {
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
           <ToastProvider>
             <AlertProvider>
-              <SnackbarProvider>
-                <NavigationProvider>
-                  <SWRProvider>
-                    <WalletConnectProvider>
-                      <Web3Provider>
-                        <AppContextProvider>
-                          <AuthProvider>
-                            <UserProvider>
-                              <MintProvider>
-                                <BottomSheetModalProvider>
-                                  <GrowthBookProvider growthbook={growthbook}>
-                                    <FeedProvider>
-                                      <StatusBar style="auto" />
-                                      <RootStackNavigator />
-                                      <MintSnackbar />
-                                    </FeedProvider>
-                                  </GrowthBookProvider>
-                                </BottomSheetModalProvider>
-                              </MintProvider>
-                            </UserProvider>
-                          </AuthProvider>
-                        </AppContextProvider>
-                      </Web3Provider>
-                    </WalletConnectProvider>
-                  </SWRProvider>
-                </NavigationProvider>
-              </SnackbarProvider>
+              <LightBoxProvider>
+                <SnackbarProvider>
+                  <NavigationProvider>
+                    <SWRProvider>
+                      <WalletConnectProvider>
+                        <Web3Provider>
+                          <AppContextProvider>
+                            <AuthProvider>
+                              <UserProvider>
+                                <MintProvider>
+                                  <BottomSheetModalProvider>
+                                    <GrowthBookProvider growthbook={growthbook}>
+                                      <FeedProvider>
+                                        <StatusBar style="auto" />
+                                        <RootStackNavigator />
+                                        <MintSnackbar />
+                                      </FeedProvider>
+                                    </GrowthBookProvider>
+                                  </BottomSheetModalProvider>
+                                </MintProvider>
+                              </UserProvider>
+                            </AuthProvider>
+                          </AppContextProvider>
+                        </Web3Provider>
+                      </WalletConnectProvider>
+                    </SWRProvider>
+                  </NavigationProvider>
+                </SnackbarProvider>
+              </LightBoxProvider>
             </AlertProvider>
           </ToastProvider>
         </SafeAreaProvider>
