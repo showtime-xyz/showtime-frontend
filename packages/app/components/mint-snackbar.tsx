@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 import { MintContext } from "app/context/mint-context";

@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from "react";
+import { forwardRef } from "react";
 
 import { MotiView, AnimatePresence } from "moti";
 
@@ -56,3 +56,5 @@ export const SelectList: React.FC<SelectListProps> = forwardRef(
     );
   }
 );
+
+SelectList.displayName = "SelectList";

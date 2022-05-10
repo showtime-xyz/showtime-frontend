@@ -1,12 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Platform, ViewStyle, AccessibilityInfo } from "react-native";
+import React, { createContext, useEffect, useMemo, useRef } from "react";
+import { Platform, ViewStyle } from "react-native";
 
 import { BlurView } from "expo-blur";
 import {
@@ -100,7 +93,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
         hide?.();
       }, snackbar.hideAfter);
     }
-  }, [snackbar]);
+  }, [hide, snackbar]);
 
   const renderIcon = useMemo(() => {
     switch (snackbar.iconStatus) {
@@ -115,7 +108,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                 ? colors.gray[100]
                 : colors.gray[600]
             }
-            сolor={isExplore ? colors.white : colors.violet[500]}
+            color={isExplore ? colors.white : colors.violet[500]}
           />
         );
       case "done":
@@ -123,7 +116,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
       default:
         return snackbar?.icon;
     }
-  }, [snackbar, isDark, isExplore]);
+  }, [snackbar, isDark, isExplore, textColor]);
 
   const snackbarStyle = useMemo(
     () => ({
@@ -141,7 +134,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
         type: "timing",
         duration: 300,
       },
-    []
+    [snackbar]
   );
 
   return (

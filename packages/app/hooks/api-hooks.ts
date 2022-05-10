@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from "react";
-import { Platform } from "react-native";
 
 import useSWR, { useSWRConfig } from "swr";
 

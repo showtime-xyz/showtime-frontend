@@ -31,6 +31,7 @@ type AlertContext = {
   isMounted?: boolean;
 };
 
+// eslint-disable-next-line no-redeclare
 export const AlertContext = createContext<AlertContext>({
   /**
    * use Alert.alert instead of Alert?.alert
@@ -136,8 +137,9 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
 };
 
 export const useAlert = () => {
+  const Alert = useContext(AlertContext);
+
   if (Platform.OS === "web") {
-    const Alert = useContext(AlertContext);
     if (!Alert.isMounted) {
       console.error("Trying to use useAlert without a AlertProvider");
     }

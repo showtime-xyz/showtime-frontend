@@ -1,4 +1,4 @@
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +13,7 @@ import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
-import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
+import { findAddressInOwnerList } from "app/utilities";
 
 import {
   Button,

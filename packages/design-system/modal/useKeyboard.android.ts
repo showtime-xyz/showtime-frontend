@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import {
-  Dimensions,
   Keyboard,
   KeyboardEvent,
   KeyboardEventEasing,
@@ -15,10 +14,7 @@ import {
   useSharedValue,
   useWorkletCallback,
 } from "react-native-reanimated";
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 const KEYBOARD_EVENT_MAPPER = {
   KEYBOARD_SHOW: Platform.select({
@@ -32,9 +28,6 @@ const KEYBOARD_EVENT_MAPPER = {
     default: "",
   }) as KeyboardEventName,
 };
-
-const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
-const { height: WINDOW_HEIGHT } = Dimensions.get("window");
 
 export const useKeyboard = () => {
   //#region variables
@@ -50,7 +43,6 @@ export const useKeyboard = () => {
   //#endregion
 
   const { height: frameHeight } = useSafeAreaFrame();
-  const { top } = useSafeAreaInsets();
 
   //#region worklets
   const handleKeyboardEvent = useWorkletCallback(

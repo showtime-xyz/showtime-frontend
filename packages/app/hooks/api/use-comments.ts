@@ -199,6 +199,7 @@ export const useComments = (nftId: number) => {
 
     isSubmitting,
     isLoading,
+    isLoadingMore,
     isRefreshing,
 
     refresh,

@@ -200,6 +200,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
   );
 });
 
+Input.displayName = "Input";
+
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {

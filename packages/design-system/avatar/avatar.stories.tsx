@@ -1,6 +1,5 @@
 import { Meta } from "@storybook/react";
 
-import { AvatarWithToken } from "./avatarWithToken";
 import { Avatar } from "./index";
 
 const URL =

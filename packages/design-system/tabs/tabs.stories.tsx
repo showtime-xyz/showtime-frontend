@@ -80,15 +80,7 @@ export const SimpleTabs: React.FC = () => {
 };
 
 export const TabsWithHeader: React.FC = () => {
-  const [selected, setSelected] = React.useState(0);
-  const onIndexChange = (index) => {
-    setSelected(index);
-    console.log("index changed", index);
-  };
-
-  const onRefresh = () => {
-    console.log("refresh page!");
-  };
+  const onIndexChange = () => {};
 
   const data = [
     { name: "Created", count: 145 },
@@ -117,7 +109,7 @@ export const TabsWithHeader: React.FC = () => {
             height: TAB_LIST_HEIGHT,
           }}
         >
-          {data.map((d, i) => {
+          {data.map((d) => {
             return (
               <Tabs.Trigger key={d.name}>
                 <TabItem name={d.name} count={d.count} />

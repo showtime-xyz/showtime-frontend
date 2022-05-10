@@ -17,14 +17,11 @@ function Grid({ nfts }: Props) {
 
   const keyExtractor = useCallback((item) => item?.nft_id?.toString(), []);
 
-  const renderItem = useCallback(
-    ({ item }) => {
-      if (!item) return null;
+  const renderItem = useCallback(({ item }) => {
+    if (!item) return null;
 
-      return <Media item={item} numColumns={2} />;
-    },
-    [count]
-  );
+    return <Media item={item} numColumns={2} />;
+  }, []);
 
   const getItemLayout = useCallback((_data, index) => {
     return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };

@@ -53,6 +53,7 @@ const Root = ({
       setSelected(index.toString());
       position.setValue(index);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
   const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
@@ -172,13 +173,14 @@ const List = () => {
   return null;
 };
 
-const Pager = ({ tw }: { tw?: string }) => {
+const Pager = () => {
   return null;
 };
 
 const Trigger = React.forwardRef((props: any, ref: any) => {
   return <View {...props} ref={ref} />;
 });
+Trigger.displayName = "Trigger";
 
 const TabRecyclerListView = React.memo(
   React.forwardRef((props, ref) => {

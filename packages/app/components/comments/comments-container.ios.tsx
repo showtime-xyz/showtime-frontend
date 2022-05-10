@@ -1,9 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  ViewProps,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ViewProps } from "react-native";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

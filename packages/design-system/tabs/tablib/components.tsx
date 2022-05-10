@@ -27,6 +27,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
   const isDark = useIsDarkMode();
+
   const animatedStyle = useAnimatedStyle(() => {
     const newPos = position.value + offset.value;
 
@@ -39,6 +40,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
       ),
     };
   });
+
   const getTextStyle = useMemo(() => {
     if (Platform.OS !== "web") {
       return {
@@ -83,12 +85,6 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
 };
 
 export const SelectedTabIndicator = () => {
-  if (Platform.OS === "web") {
-    return null;
-  }
-
-  const isDark = useIsDarkMode();
-
   const { offset, position, tabItemLayouts } = useTabsContext();
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -96,6 +92,7 @@ export const SelectedTabIndicator = () => {
     let translateOutput = tabItemLayouts.map((v) => v.value?.x);
     let widthOutput = tabItemLayouts.map((v) => v.value?.width);
     const newPos = position.value + offset.value;
+
     if (
       translateOutput.some((v) => v === undefined) ||
       widthOutput.some((v) => v === undefined)
@@ -126,6 +123,10 @@ export const SelectedTabIndicator = () => {
       };
     }
   });
+
+  if (Platform.OS === "web") {
+    return null;
+  }
 
   return (
     <Animated.View

@@ -56,7 +56,7 @@ export const TooltipContent: React.FC<
       default:
         return {};
     }
-  }, [placement]);
+  }, [offset, placement]);
 
   const getArrowStyle = useMemo<ViewStyle>(() => {
     // ofset 1px for `border`

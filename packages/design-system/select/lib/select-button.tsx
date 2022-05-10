@@ -89,3 +89,5 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
     );
   }
 );
+
+SelectButton.displayName = "SelectButton";

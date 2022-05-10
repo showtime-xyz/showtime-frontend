@@ -2,7 +2,6 @@ import { useCallback, useEffect } from "react";
 
 import { convertUtf8ToHex } from "@walletconnect/utils";
 
-import { mixpanel } from "app/lib/mixpanel";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 import { useStableCallback } from "../use-stable-callback";

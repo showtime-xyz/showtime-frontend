@@ -26,6 +26,7 @@ type ToastContext = {
   isVisible: boolean;
 };
 
+// eslint-disable-next-line no-redeclare
 const ToastContext = createContext<ToastContext | undefined>(undefined);
 
 const SAFE_AREA_TOP = 20;
@@ -38,8 +39,9 @@ export const ToastProvider = ({ children }: any) => {
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
   const hideTimeoutRef = useRef<any>(null);
+  const safeAreaInsets = useSafeAreaInsets();
   const { top: safeAreaTop } =
-    Platform.OS === "web" ? { top: SAFE_AREA_TOP } : useSafeAreaInsets();
+    Platform.OS === "web" ? { top: SAFE_AREA_TOP } : safeAreaInsets;
 
   const value = useMemo(
     () => ({

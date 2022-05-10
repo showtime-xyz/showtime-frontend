@@ -10,7 +10,6 @@ import { track } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 
-import { Image } from "design-system/image";
 import { View } from "design-system/view";
 
 type Props = {

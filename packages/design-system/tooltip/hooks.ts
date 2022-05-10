@@ -19,22 +19,24 @@ export const useWebScroll = (
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ele, onScroll, ...deps]);
 };
 
 export const useWebClientRect = (ele: RefObject<HTMLElement | View | null>) => {
   const [clientRect, setClientRect] = useState<PlatformRect | null>(null);
+
   const updateClientRect = useMemo(() => {
     return () => {
       setClientRect((ele.current as HTMLElement)!.getBoundingClientRect());
     };
-  }, []);
+  }, [ele]);
 
   useLayoutEffect(() => {
     if (ele.current && Platform.OS === "web") {
       updateClientRect();
     }
-  }, []);
+  }, [ele, updateClientRect]);
 
   return [clientRect, updateClientRect] as [
     typeof clientRect,
@@ -52,5 +54,5 @@ export const usePlatformResize = (onResize: (evt: Event) => any) => {
       Platform.OS === "web" &&
         window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [onResize]);
 };

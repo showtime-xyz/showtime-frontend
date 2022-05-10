@@ -20,7 +20,6 @@ interface LoginInputFieldProps
   signInButtonLabel?: string;
   validationSchema: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (value: string) => void;
 }
 

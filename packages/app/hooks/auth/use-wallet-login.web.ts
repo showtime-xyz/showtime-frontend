@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
 
-import { mixpanel } from "app/lib/mixpanel";
 import { personalSignMessage } from "app/lib/utilities";
 // @ts-ignore
 import getWeb3Modal from "app/lib/web3-modal";

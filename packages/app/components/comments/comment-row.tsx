@@ -1,5 +1,4 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
-import { Platform } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
@@ -17,7 +16,6 @@ interface CommentRowProps {
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
   reply?: (comment: CommentType) => void;
 }
 
