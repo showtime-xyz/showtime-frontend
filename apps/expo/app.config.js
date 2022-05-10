@@ -62,7 +62,6 @@ export default {
       usesNonExemptEncryption: false,
     },
     bitcode: false, // or "Debug",
-    associatedDomains: ["applinks:showtime.xyz"],
   },
   android: {
     package: config.scheme,
