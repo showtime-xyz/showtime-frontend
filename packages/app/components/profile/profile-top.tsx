@@ -287,6 +287,7 @@ export const ProfileTop = ({
           showBottomSheet === "followers" || showBottomSheet === "following"
         }
         close={() => setShowBottomSheet(null)}
+        web_height={"max-h-480px"}
         onClose={() => setShowBottomSheet(null)}
       >
         <>
