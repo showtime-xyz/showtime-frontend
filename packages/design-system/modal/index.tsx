@@ -17,6 +17,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
       modalContainer: ModalContainer = BaseModalContainer,
       children,
       onClose,
+      ...rest
     },
     ref
   ) {
@@ -53,6 +54,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
         mobile_snapPoints={mobile_snapPoints}
         close={handleClose}
         onClose={handleOnClose}
+        {...rest}
       >
         {children}
       </ModalContainer>
