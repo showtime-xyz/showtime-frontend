@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
-import { Text, View } from "design-system";
+import { ModalSheet, Text, View } from "design-system";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
 import packageJson from "../../../../package.json";
+import { AddEmail } from "./add-email";
 import {
   AccountSettingItem,
   AccountSettingItemProps,
@@ -65,6 +68,7 @@ const SettingsTabs = () => {
   const headerHeight = useHeaderHeight();
   const router = useRouter();
   const isWeb = Platform.OS === "web";
+  const [viewAddEmail, setViewAddEmail] = useState(false);
 
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
@@ -167,6 +171,7 @@ const SettingsTabs = () => {
             ListHeaderComponent={
               <SettingEmailSlotHeader
                 hasEmail={Boolean(emailWallets?.length)}
+                onAddEmail={() => setViewAddEmail(true)}
               />
             }
             alwaysBounceVertical={false}
@@ -185,10 +190,20 @@ const SettingsTabs = () => {
           />
         </Tabs.Pager>
       </Tabs.Root>
+      <AddEmail
+        visibility={viewAddEmail}
+        dismiss={() => setViewAddEmail(false)}
+      />
     </View>
   );
 };
 
 export function Settings() {
-  return <SettingsTabs />;
+  return (
+    <BottomSheetModalProvider>
+      <ErrorBoundary>
+        <SettingsTabs />
+      </ErrorBoundary>
+    </BottomSheetModalProvider>
+  );
 }

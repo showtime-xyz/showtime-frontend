@@ -1,58 +1,68 @@
 import { useCallback } from "react";
-import { useWindowDimensions } from "react-native";
+import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
 
 import { BottomSheetHandleProps } from "@gorhom/bottom-sheet";
 
 import { BottomSheet } from "../bottom-sheet";
 import { Modal } from "../modal";
 import { ModalHeader } from "../modal/modal.header";
+import { ModalProps } from "../modal/types";
 
-type Props = {
+type Props = Pick<ModalProps, "web_height"> & {
   children: React.ReactElement;
   title?: string;
   visible?: boolean;
   close?: () => void;
   onClose?: () => void;
   snapPoints?: string[];
-  bodyContentTW?: string;
+  bodyStyle?: StyleProp<ViewStyle>;
 };
 
-export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
+export function ModalSheet({
+  visible = true,
+  title,
+  close,
+  onClose,
+  snapPoints,
+  children,
+  ...rest
+}: Props) {
   const { width } = useWindowDimensions();
 
   const renderHandleComponent: React.FC<BottomSheetHandleProps> = useCallback(
     (handleProps) => (
-      <ModalHeader title={props.title} onClose={props.close} {...handleProps} />
+      <ModalHeader title={title} onClose={close} {...handleProps} />
     ),
-    [props.title, props.close]
+    [title, close]
   );
 
   if (width >= 768) {
     return visible ? (
       <Modal
-        key={`modalsheet-${props.title}-lg`}
-        title={props.title}
+        key={`modalsheet-${title}-lg`}
+        title={title}
         onClose={() => {
           // TODO: extract `onClose` to a proper unmount transition completion event.
-          props.close?.();
-          props.onClose?.();
+          close?.();
+          onClose?.();
         }}
+        {...rest}
       >
-        {props.children}
+        {children}
       </Modal>
     ) : null;
   }
 
   return (
     <BottomSheet
-      key={`modalsheet-${props.title}-sm`}
+      key={`modalsheet-${title}-sm`}
       visible={visible}
       handleComponent={renderHandleComponent}
-      onDismiss={props.onClose}
-      snapPoints={props.snapPoints}
-      bodyContentTW={bodyContentTW}
+      onDismiss={onClose}
+      snapPoints={snapPoints}
+      {...rest}
     >
-      {props.children}
+      {children}
     </BottomSheet>
   );
 }
