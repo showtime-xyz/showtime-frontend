@@ -14,6 +14,8 @@
     "eslint-plugin-diff": "^1.0.12",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-unused-imports": "1.1.5",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
