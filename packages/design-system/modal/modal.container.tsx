@@ -11,6 +11,8 @@ import {
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetHandleProps,
+  BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -58,7 +60,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
 
     //#region render
     const renderBackdropComponent = useCallback(
-      (props) => (
+      (props: BottomSheetBackdropProps) => (
         <BottomSheetBackdrop
           appearsOnIndex={0}
           disappearsOnIndex={-1}
@@ -69,7 +71,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       []
     );
     const renderHandleComponent = useCallback(
-      (props) => (
+      (props: BottomSheetHandleProps) => (
         <>
           <ModalHeaderBar />
           <ModalHeader title={title} onClose={close} {...props} />
