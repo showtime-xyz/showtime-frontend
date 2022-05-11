@@ -26,7 +26,7 @@ export const Search = () => {
     () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
   );
-  const isOS = Platform.OS === "ios";
+  const isiOS = Platform.OS === "ios";
 
   const renderItem = useCallback(({ item }) => {
     return <SearchItem item={item} />;
@@ -41,7 +41,7 @@ export const Search = () => {
 
   return (
     <>
-      {isOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
+      {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
       <View tw="px-4 py-2">
         <Input
           placeholder="Search for @username or name.eth"
@@ -87,7 +87,7 @@ export const Search = () => {
           data={data}
           contentContainerStyle={tw.style(`pb-[${headerHeight}px]`)}
           ListFooterComponent={
-            isOS ? <View tw={`h-[${headerHeight}px]`} /> : null
+            isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null
           }
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}
