@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --output-file ../../lint-results/design-system.json --format json --fix \"./**/*.{ts,tsx}\""
+    "lint": "eslint \"./**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"./**/*.{ts,tsx}\"",
+    "lint:report": "eslint --output-file ../../lint-results/design-system.json --format json --fix \"./**/*.{ts,tsx}\""
   }
 }

@@ -12,6 +12,12 @@
     "lint": {
       "outputs": []
     },
+    "lint:fix": {
+      "outputs": []
+    },
+    "lint:report": {
+      "outputs": []
+    },
     "dev": {
       "cache": false
     }
