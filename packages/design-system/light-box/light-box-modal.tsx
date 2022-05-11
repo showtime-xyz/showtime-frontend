@@ -160,16 +160,6 @@ export const LightImageModal = ({
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 0,
-    backgroundColor: "#fff",
-  },
-
-  scrollContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "black",
