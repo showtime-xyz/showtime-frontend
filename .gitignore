@@ -117,3 +117,6 @@ apps/expo/service-account-key.json
 
 # Turborepo
 .turbo
+
+# ESLint
+lint-results/

@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --fix \"./**/*.{ts,tsx,md.tsx}\""
+    "lint": "eslint --output-file ../../lint-results/app.json --format json --fix \"./**/*.{ts,tsx,md.tsx}\""
   }
 }
