@@ -101,7 +101,7 @@ export function LoginInputField({
         variant="tertiary"
         size="regular"
         tw="mt-6"
-        disabled={!Boolean(inputValue)}
+        disabled={!inputValue}
       >
         <ButtonLabel tw="text-black dark:text-white">
           {signInButtonLabel}

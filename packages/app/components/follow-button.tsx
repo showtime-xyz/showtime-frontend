@@ -11,13 +11,15 @@ type ToggleFollowParams = Pick<ButtonProps, "size"> & {
   name?: string;
   profileId: number;
 };
+
 export const FollowButton = memo<ToggleFollowParams>(
   ({ isFollowing, profileId, name, ...rest }) => {
     const { unfollow, follow } = useMyInfo();
     const Alert = useAlert();
+
     const toggleFollow = useCallback(() => {
       if (isFollowing) {
-        Alert.alert(`Unfollow ${Boolean(name) ? `@${name}` : ""}?`, "", [
+        Alert.alert(`Unfollow ${name ? `@${name}` : ""}?`, "", [
           {
             text: "Cancel",
             style: "cancel",
@@ -33,7 +35,7 @@ export const FollowButton = memo<ToggleFollowParams>(
       } else {
         follow(profileId);
       }
-    }, [isFollowing, profileId, name]);
+    }, [Alert, follow, unfollow, isFollowing, profileId, name]);
 
     return (
       <Button
@@ -46,3 +48,5 @@ export const FollowButton = memo<ToggleFollowParams>(
     );
   }
 );
+
+FollowButton.displayName = "FollowButton";

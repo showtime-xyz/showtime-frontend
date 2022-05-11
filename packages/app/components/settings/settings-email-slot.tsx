@@ -11,7 +11,6 @@ import { Button, Skeleton, Text, View } from "design-system";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 
-import { AddEmail } from "./add-email";
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
 

@@ -11,7 +11,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
-import { ModalSheet, Text, View } from "design-system";
+import { Text, View } from "design-system";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 

@@ -105,8 +105,6 @@ const FollowingListUser = memo(
   ({
     item,
     isFollowingUser,
-    follow,
-    unFollow,
     hideSheet,
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
     return (
