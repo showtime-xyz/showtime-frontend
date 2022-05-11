@@ -167,7 +167,7 @@ const NFTScrollList = ({
       width: CARD_CONTAINER_WIDTH,
       height,
     }),
-    []
+    [height]
   );
   const _rowRenderer = useCallback((_type: any, item: any) => {
     return (

@@ -29,13 +29,17 @@ export const Trending = () => {
   const [tab, setTab] = useParam("tab");
   const isDark = useIsDarkMode();
   const selected = tab === "nft" ? 1 : 0;
-  const handleTabChange = useCallback((index: number) => {
-    if (index === 0) {
-      setTab("following");
-    } else {
-      setTab("nft");
-    }
-  }, []);
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      if (index === 0) {
+        setTab("following");
+      } else {
+        setTab("nft");
+      }
+    },
+    [setTab]
+  );
 
   return (
     <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
@@ -72,15 +76,18 @@ const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
     parse: (value) => Number(value ?? 1),
   });
 
-  const handleDaysChange = useCallback((index: number) => {
-    if (index === 0) {
-      setDays(1);
-    } else if (index === 1) {
-      setDays(7);
-    } else {
-      setDays(30);
-    }
-  }, []);
+  const handleDaysChange = useCallback(
+    (index: number) => {
+      if (index === 0) {
+        setDays(1);
+      } else if (index === 1) {
+        setDays(7);
+      } else {
+        setDays(30);
+      }
+    },
+    [setDays]
+  );
 
   const index = days === 1 ? 0 : days === 7 ? 1 : 2;
 
@@ -189,9 +196,7 @@ const NFTList = ({ days }: { days: any }) => {
   const { data, isLoading } = useTrendingNFTS({
     days,
   });
-
   const [containerWidth, setContainerWidth] = useState(0);
-
   const { width } = useWindowDimensions();
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
@@ -210,6 +215,7 @@ const NFTList = ({ days }: { days: any }) => {
         ? data.map((item, index) => {
             return (
               <Card
+                key={`nft-list-card-${index}`}
                 nft={item}
                 tw={`w-[${containerWidth / numColumns - 30}px] h-[${
                   containerWidth / numColumns + 205

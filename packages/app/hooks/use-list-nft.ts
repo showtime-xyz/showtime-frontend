@@ -68,6 +68,7 @@ export const useListNFT = () => {
     signerAddress: string;
     provider: any;
   }) => {
+    // eslint-disable-next-line no-async-promise-executor
     return await new Promise(async (resolve, reject) => {
       const { provider, signer, signerAddress } = params;
       try {
@@ -130,6 +131,7 @@ export const useListNFT = () => {
   }) => {
     const { signer, signerAddress, provider, listingValues } = params;
 
+    // eslint-disable-next-line no-async-promise-executor
     return await new Promise(async (resolve, reject) => {
       dispatch({ type: "status", status: "listing" });
 

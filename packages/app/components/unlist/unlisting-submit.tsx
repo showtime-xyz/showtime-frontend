@@ -44,7 +44,7 @@ const UnlistingSubmit = (props: Props) => {
         router.push(`/@${user?.data?.profile?.username ?? address}`);
       }, 1000);
     }
-  }, [state.status, user, address]);
+  }, [state.status, user, address, router]);
 
   const ctaCopy = statusCopyMapping[state.status];
 

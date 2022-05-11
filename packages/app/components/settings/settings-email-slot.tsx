@@ -104,7 +104,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         setIsCurrentEmail(true);
       }
     }
-  }, [isMagic, email]);
+  }, [isMagic, email, userAddress]);
 
   useEffect(() => {
     getCurrentMagicUser();

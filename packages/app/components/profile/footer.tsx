@@ -10,6 +10,7 @@ type ProfileFooterProps = {
   isLoading: boolean;
   numColumns?: number;
 };
+
 export const ProfileFooter = memo(
   ({ isLoading, numColumns = 3 }: ProfileFooterProps) => {
     const contentWidth = useContentWidth();
@@ -28,3 +29,5 @@ export const ProfileFooter = memo(
     return <View tw={`h-[${tabBarHeight}px] mb-4`} />;
   }
 );
+
+ProfileFooter.displayName = "ProfileFooter";

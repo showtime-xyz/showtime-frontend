@@ -24,7 +24,7 @@ function useLinkingConfig(
             trackedLinking.current.enabled = false;
           },
         }),
-      []
+      [trackedLinking]
     ),
   };
 }

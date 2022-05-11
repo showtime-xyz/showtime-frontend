@@ -54,6 +54,7 @@ export const useUnlistNFT = () => {
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
 
   const unlistingFromMarketPlace = async (listingId: UnlistingValue) => {
+    // eslint-disable-next-line no-async-promise-executor
     return await new Promise(async (resolve, reject) => {
       try {
         const missingListingId = !listingId;

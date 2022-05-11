@@ -1,5 +1,3 @@
-import { useWindowDimensions } from "react-native";
-
 import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
 
@@ -9,8 +7,8 @@ import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
 export const WebFooter = () => {
-  const {} = useWindowDimensions();
   const { social, links } = useFooter();
+
   return (
     <View tw="w-full items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-2xl flex-col-reverse justify-between p-4 md:flex-row md:p-12 ">

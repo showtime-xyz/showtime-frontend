@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
@@ -74,13 +74,13 @@ export const useTransferNFT = () => {
 
   const { getSignerAndProvider } = useSignerAndProvider();
 
-  async function transferToken({
+  const transferToken = async ({
     nft,
     receiverAddress,
     quantity,
-  }: UseTransferNFT) {
-    console.log("transfer params ", { nft, receiverAddress, quantity });
+  }: UseTransferNFT) => {
     return new Promise<{ transaction: string; tokenId: number }>(
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         const result = await getSignerAndProvider();
         if (result) {
@@ -99,8 +99,6 @@ export const useTransferNFT = () => {
             quantity,
             0
           );
-
-          console.log("** transfer: opening wallet for signing **");
 
           const transaction = await provider
             .send("eth_sendTransaction", [
@@ -124,11 +122,9 @@ export const useTransferNFT = () => {
                   error?.body || error?.error?.body || "{}"
                 )?.error?.message?.includes("caller is not transferer")
               ) {
-                console.log("Your address is not approved for transfering");
                 reject("Your address is not approved for transfering");
               }
 
-              console.log("Something went wrong", error);
               reject("Something went wrong");
             });
 
@@ -148,31 +144,23 @@ export const useTransferNFT = () => {
         }
       }
     );
-  }
+  };
 
-  const transferTokenPipeline = useCallback(
-    async (params: UseTransferNFT) => {
-      try {
-        dispatch({ type: "transfering" });
-        console.log("** Begin transfer **");
-        const response = await transferToken(params);
-        dispatch({
-          type: "transferingSuccess",
-          tokenId: response.tokenId,
-          transaction: response.transaction,
-        });
-        track("NFT Transferred");
-        console.log("** transfer success **");
-      } catch (e) {
-        dispatch({ type: "transferingError" });
-        console.error("Transfer nft failure", e);
-        Alert.alert("Sorry! Something went wrong");
-      }
-    },
-    [state, dispatch]
-  );
-
-  console.log("transfer nft state ", state);
+  const transferTokenPipeline = async (params: UseTransferNFT) => {
+    try {
+      dispatch({ type: "transfering" });
+      const response = await transferToken(params);
+      dispatch({
+        type: "transferingSuccess",
+        tokenId: response.tokenId,
+        transaction: response.transaction,
+      });
+      track("NFT Transferred");
+    } catch (e) {
+      dispatch({ type: "transferingError" });
+      Alert.alert("Sorry! Something went wrong");
+    }
+  };
 
   return { state, startTransfer: transferTokenPipeline };
 };

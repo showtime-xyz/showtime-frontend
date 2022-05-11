@@ -17,17 +17,20 @@ export const AddEmail = ({ visibility, dismiss }: AddEmailProps) => {
   const { addEmail } = useManageAccount();
   const snapPoints = useMemo(() => ["75%", "100%"], []);
 
-  const submitEmail = useCallback(async (email: string) => {
-    try {
-      const did = await magic.auth.loginWithMagicLink({ email });
-      if (did) {
-        await addEmail(email, did);
-        dismiss();
+  const submitEmail = useCallback(
+    async (email: string) => {
+      try {
+        const did = await magic.auth.loginWithMagicLink({ email });
+        if (did) {
+          await addEmail(email, did);
+          dismiss();
+        }
+      } catch (error) {
+        console.log("Error:", error);
       }
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  }, []);
+    },
+    [addEmail, dismiss]
+  );
 
   return (
     <View>

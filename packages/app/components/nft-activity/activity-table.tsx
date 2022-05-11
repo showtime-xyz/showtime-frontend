@@ -8,7 +8,7 @@ import TableHead from "./table-head";
 import TableRow from "./table-row";
 
 const ActivityTable = ({ data }: TableProps) => {
-  const handleRenderItem = useCallback(({ item, key }) => {
+  const handleRenderItem = useCallback(({ item }) => {
     return <TableRow {...item} />;
   }, []);
 

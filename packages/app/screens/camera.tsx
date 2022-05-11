@@ -101,6 +101,7 @@ function CameraScreen() {
           const { Camera } = require("react-native-vision-camera");
           const status = await Camera.requestCameraPermission();
           setHasPermission(status === "authorized");
+          // eslint-disable-next-line no-empty
         } catch (error) {}
       }
     })();
@@ -108,7 +109,7 @@ function CameraScreen() {
 
   useEffect(
     function checkIfContinueOrDelete() {
-      const unsubscribe = navigation.addListener("focus", (e) => {
+      const unsubscribe = navigation.addListener("focus", () => {
         setPhotos([]);
         setRender(!render);
       });

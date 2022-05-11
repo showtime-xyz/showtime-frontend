@@ -21,7 +21,6 @@ import {
   View,
 } from "design-system";
 import { Card } from "design-system/card";
-import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
 const LIST_HEADER_HEIGHT = 64;
@@ -64,9 +63,18 @@ const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
-  const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
   const isWeb = Platform.OS === "web";
+
+  const tabListStyles = useMemo(
+    () => ({
+      height: TAB_LIST_HEIGHT,
+      ...tw.style(
+        "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
+      ),
+    }),
+    []
+  );
 
   return (
     <View tw="flex-1 bg-white dark:bg-black">
@@ -80,15 +88,7 @@ export const Trending = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
-          style={useMemo(
-            () => ({
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
-              ),
-            }),
-            [isDark]
-          )}
+          style={tabListStyles}
           contentContainerStyle={tw.style("w-full")}
         >
           <Tabs.Trigger style={isWeb ? { height: "100%" } : { flex: 1 }}>
@@ -132,7 +132,7 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <ErrorBoundary>
+        <ErrorBoundary key="error-boundary-1">
           <Suspense
             fallback={
               <ListHeader
@@ -145,7 +145,7 @@ const TabListContainer = ({ days }: { days: number }) => {
             <CreatorsList days={days} SelectionControl={SelectionControl} />
           </Suspense>
         </ErrorBoundary>,
-        <ErrorBoundary>
+        <ErrorBoundary key="error-boundary-2">
           <Suspense
             fallback={
               <ListHeader
@@ -174,7 +174,6 @@ const CreatorsList = ({
     useTrendingCreators({
       days,
     });
-  const isDark = useIsDarkMode();
   const separatorHeight = 8;
 
   const ListFooterComponent = useCallback(
@@ -184,7 +183,7 @@ const CreatorsList = ({
 
   const ItemSeparatorComponent = useCallback(
     () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
-    [isDark]
+    []
   );
 
   const ListHeaderComponent = useCallback(
@@ -195,7 +194,7 @@ const CreatorsList = ({
         data={data}
       />
     ),
-    [SelectionControl, data, isLoading, isDark]
+    [SelectionControl, data, isLoading]
   );
 
   const { width } = useWindowDimensions();
@@ -262,7 +261,7 @@ const CreatorsList = ({
         </>
       );
     },
-    [ListHeaderComponent, days, router]
+    [ItemSeparatorComponent, ListHeaderComponent, days, router, mediaDimension]
   );
 
   return (

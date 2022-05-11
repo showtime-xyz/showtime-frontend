@@ -12,64 +12,6 @@ export function useAccessTokenManager() {
   const accessToken = accessTokenStorage.useAccessToken();
   const refreshToken = refreshTokenStorage.useRefreshToken();
 
-  //#region methods
-  const refreshTokens = useCallback(async function refreshTokens() {
-    if (isRefreshing.current) {
-      return;
-    }
-    isRefreshing.current = true;
-
-    try {
-      // Get refresh token
-      // const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
-      // if (!sealedRefreshToken) {
-      //   throw "Missing sealed refresh token";
-      // }
-
-      // TODO: unseal refresh token
-      // const { refreshToken } = await Iron.unseal(
-      //   sealedRefreshToken,
-      //   // @ts-ignore
-      //   process.env.ENCRYPTION_SECRET_V2,
-      //   Iron.defaults
-      // );
-
-      // Call refresh API
-      const response = await axios({
-        url: `/v1/jwt/refresh`,
-        method: "POST",
-        data: {
-          refresh: refreshToken,
-        },
-      });
-
-      const _accessToken = response?.access;
-      const _refreshToken = response?.refresh;
-
-      setAccessToken(_accessToken);
-      setRefreshToken(_refreshToken);
-
-      isRefreshing.current = false;
-    } catch (error: any) {
-      isRefreshing.current = false;
-
-      accessTokenStorage.deleteAccessToken();
-      refreshTokenStorage.deleteRefreshToken();
-      setLogout(Date.now().toString());
-
-      // captureException(error, {
-      //   tags: {
-      //     failed_silent_refresh: "use-access-token-manager.ts",
-      //   },
-      // });
-
-      throw `Failed to refresh tokens. ${
-        typeof error === "string" ? error : error.message || ""
-      }`;
-    }
-  }, []);
-  //#endregion
-
   //#region setters/getters
   const setAccessToken = useCallback(async function setAccessToken(
     accessToken: string
@@ -97,6 +39,67 @@ export function useAccessTokenManager() {
       setRefreshToken(refreshToken);
     },
     [setAccessToken, setRefreshToken]
+  );
+  //#endregion
+
+  //#region methods
+  const refreshTokens = useCallback(
+    async function refreshTokens() {
+      if (isRefreshing.current) {
+        return;
+      }
+      isRefreshing.current = true;
+
+      try {
+        // Get refresh token
+        // const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
+        // if (!sealedRefreshToken) {
+        //   throw "Missing sealed refresh token";
+        // }
+
+        // TODO: unseal refresh token
+        // const { refreshToken } = await Iron.unseal(
+        //   sealedRefreshToken,
+        //   // @ts-ignore
+        //   process.env.ENCRYPTION_SECRET_V2,
+        //   Iron.defaults
+        // );
+
+        // Call refresh API
+        const response = await axios({
+          url: `/v1/jwt/refresh`,
+          method: "POST",
+          data: {
+            refresh: refreshToken,
+          },
+        });
+
+        const _accessToken = response?.access;
+        const _refreshToken = response?.refresh;
+
+        setAccessToken(_accessToken);
+        setRefreshToken(_refreshToken);
+
+        isRefreshing.current = false;
+      } catch (error: any) {
+        isRefreshing.current = false;
+
+        accessTokenStorage.deleteAccessToken();
+        refreshTokenStorage.deleteRefreshToken();
+        setLogout(Date.now().toString());
+
+        // captureException(error, {
+        //   tags: {
+        //     failed_silent_refresh: "use-access-token-manager.ts",
+        //   },
+        // });
+
+        throw `Failed to refresh tokens. ${
+          typeof error === "string" ? error : error.message || ""
+        }`;
+      }
+    },
+    [refreshToken, setAccessToken, setRefreshToken]
   );
   //#endregion
 

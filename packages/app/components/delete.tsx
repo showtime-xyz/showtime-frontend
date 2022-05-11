@@ -11,7 +11,6 @@ import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
@@ -27,11 +26,10 @@ const defaultValues = {
 };
 
 function Delete({ nft }: { nft: NFT }) {
-  const router = useRouter();
   const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
+
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
-    console.log("** Submiting burning form **", values);
     startBurning({ ...values, tokenId: nft.token_id });
   };
 

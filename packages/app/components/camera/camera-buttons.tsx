@@ -1,11 +1,4 @@
-import Animated, {
-  SlideInDown,
-  SlideOutDown,
-  useDerivedValue,
-  withTiming,
-} from "react-native-reanimated";
-
-import { useRouter } from "app/navigation/use-router";
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
 import { Flip, Close, Check } from "design-system/icon";

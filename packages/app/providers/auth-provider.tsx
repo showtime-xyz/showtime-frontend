@@ -63,7 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
@@ -103,8 +103,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
         router.push("/");
       }
     },
-    [connector]
+    [connector, mutate, router, setWeb3]
   );
+  const doRefreshToken = useCallback(async () => {
+    setAuthenticationStatus("REFRESHING");
+    try {
+      await refreshTokens();
+      setAuthenticationStatus("AUTHENTICATED");
+    } catch (error: any) {
+      setAuthenticationStatus("UNAUTHENTICATED");
+      console.log(
+        "AuthProvider",
+        typeof error === "string" ? error : error.message || "unknown"
+      );
+      await logout();
+    }
+  }, [refreshTokens, setAuthenticationStatus, logout]);
   //#endregion
 
   //#region variables
@@ -124,24 +138,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   //#region effects
   useEffect(() => {
     if (authenticationStatus === "IDLE") {
-      async function doRefreshToken() {
-        setAuthenticationStatus("REFRESHING");
-        try {
-          await refreshTokens();
-          setAuthenticationStatus("AUTHENTICATED");
-        } catch (error: any) {
-          setAuthenticationStatus("UNAUTHENTICATED");
-          console.log(
-            "AuthProvider",
-            typeof error === "string" ? error : error.message || "unknown"
-          );
-          await logout();
-        }
-      }
-
       doRefreshToken();
     }
-  }, [authenticationStatus, logout, refreshTokens]);
+  }, [authenticationStatus, doRefreshToken]);
   //#endregion
 
   return (

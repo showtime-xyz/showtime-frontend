@@ -49,7 +49,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [dispatch]
+    [dispatch, setWeb3]
   );
   const fetchNonce = useCallback(
     async function fetchNonce() {
@@ -63,7 +63,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [address, dispatch]
+    [address, dispatch, getNonce]
   );
   const expireNonce = useCallback(
     async function expireNonce() {
@@ -75,7 +75,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [address, dispatch]
+    [address, dispatch, rotateNonce]
   );
   const signPersonalMessage = useCallback(
     async function signPersonalMessage() {
@@ -90,7 +90,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [web3, nonce, address, dispatch]
+    [web3, nonce, dispatch]
   );
   const login = useCallback(
     async function login() {
@@ -126,6 +126,7 @@ export function useWalletLogin() {
     } else if (status === "LOGGED_IN") {
       expireNonce();
     } else if (status === "EXPIRED_NONCE") {
+      // do nothing
     } else if (status === "ERRORED") {
       console.error("Error logging in with wallet", error);
       logout();

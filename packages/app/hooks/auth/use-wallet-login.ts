@@ -105,7 +105,7 @@ export function useWalletLogin() {
       setAuthenticationStatus("AUTHENTICATING");
       connectToWallet();
     },
-    [connectToWallet, setAuthenticationStatus, walletConnector]
+    [connectToWallet, setAuthenticationStatus]
   );
   const continueLoginIn = useStableCallback(() => {
     if (status === "CONNECTED_TO_WALLET" && (!address || !name)) {
@@ -119,8 +119,8 @@ export function useWalletLogin() {
     } else if (status === "LOGGED_IN") {
       expireNonce();
     } else if (status === "EXPIRED_NONCE") {
+      // do nothing
     } else if (status === "ERRORED") {
-      console.error("Error logging in with wallet", error);
       logout();
     }
   });

@@ -110,7 +110,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         }, [selectedCountry])}
         onSubmit={useCallback(
           (v) => props.handleSubmitPhoneNumber(selectedCountry?.dial_code + v),
-          [props.handleSubmitPhoneNumber, selectedCountry]
+          [props, selectedCountry]
         )}
       />
     </>
@@ -140,7 +140,7 @@ export function Header({ title, close, onSearchSubmit }: Props) {
     if (!showSearch) {
       onSearchSubmit("");
     }
-  }, [showSearch]);
+  }, [showSearch, onSearchSubmit]);
 
   return (
     <View tw="flex-row items-center justify-between p-4 dark:bg-black">

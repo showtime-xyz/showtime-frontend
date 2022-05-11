@@ -13,12 +13,10 @@ type Props = {
   strokeColor?: string;
 };
 
-// Progress goes from 0 to 1
 const CircularProgress = ({
   size,
   strokeWidth,
   progress,
-  showOverlay,
   strokeColor = "rgba(255, 255, 255, 0.2)",
 }: Props) => {
   const r = (size - strokeWidth) / 2;

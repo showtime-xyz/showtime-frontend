@@ -48,5 +48,6 @@ export const ViewabilityTrackerFlatlist = forwardRef(
     );
   }
 );
+ViewabilityTrackerFlatlist.displayName = "ViewabilityTrackerFlatlist";
 
 export const ItemKeyContext = createContext<any | undefined>(undefined);

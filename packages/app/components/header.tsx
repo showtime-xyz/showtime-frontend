@@ -138,7 +138,6 @@ const SearchInHeader = () => {
 const HeaderRight = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
-  const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
@@ -147,7 +146,7 @@ const HeaderRight = () => {
   return (
     <View>
       {!isLoading && (
-        <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
+        <View tw="flex-row items-center">
           {isAuthenticated && isMdWidth && (
             <>
               <View tw="mx-2">

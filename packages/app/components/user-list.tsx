@@ -165,6 +165,7 @@ const FollowingListUser = memo(
     );
   }
 );
+FollowingListUser.displayName = "FollowingListUser";
 
 const FollowingUserItemLoadingIndicator = () => {
   const colorMode = useColorScheme();

@@ -36,6 +36,9 @@ module.exports = {
     "react/prop-types": "off",
     "unused-imports/no-unused-imports": "warn",
     "unused-imports/no-unused-vars": "warn",
+    "no-empty": "warn",
+    "react/display-name": "warn",
+    "no-async-promise-executor": "warn",
   },
   reportUnusedDisableDirectives: true,
 };

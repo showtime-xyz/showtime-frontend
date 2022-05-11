@@ -21,7 +21,7 @@ export const useFeed = (type: FeedType) => {
       }&limit=5`;
       return url;
     },
-    [accessToken]
+    [accessToken, type]
   );
 
   const queryState = useInfiniteListQuerySWR<FeedAPIResponse>(feedUrlFn);

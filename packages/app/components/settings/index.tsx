@@ -97,7 +97,7 @@ const SettingsTabs = () => {
     if (isUnauthenticated) {
       router.pop();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
 
   return (
     <View tw="web:items-center h-[100vh] w-full">
