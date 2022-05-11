@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
-import { useSWRConfig } from "swr";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -35,7 +33,6 @@ type Props = {
 
 function NFTDropdown({ nftId }: Props) {
   //#region hooks
-  const { mutate } = useSWRConfig();
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
@@ -64,7 +61,7 @@ function NFTDropdown({ nftId }: Props) {
 
   const isFollowingUser = useMemo(
     () => nft?.owner_id && isFollowing(nft?.creator_id),
-    [nft?.creator_id, isFollowing]
+    [nft?.creator_id, nft?.owner_id, isFollowing]
   );
   const isBlocked = useMemo(
     () => getIsBlocked(nft?.creator_id),

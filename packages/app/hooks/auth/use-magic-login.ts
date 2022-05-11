@@ -2,7 +2,6 @@ import { useCallback } from "react";
 
 import { BYPASS_EMAIL_WITH_INSECURE_KEYS } from "app/lib/constants";
 import { magic } from "app/lib/magic";
-import { mixpanel } from "app/lib/mixpanel";
 import { overrideMagicInstance } from "app/utilities";
 
 import { useAuth } from "./use-auth";

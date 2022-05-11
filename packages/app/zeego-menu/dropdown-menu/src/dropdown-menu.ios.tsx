@@ -15,7 +15,7 @@ const {
   CheckboxItem,
   ItemIndicator,
   Label,
-} = createIosMenu("DropdownMenu");
+} = createIosMenu();
 
 export {
   Root,

@@ -29,7 +29,7 @@ function useCurrentUserAddress() {
     } else {
       setUserAddress("");
     }
-  }, [user, web3]);
+  }, [user, web3, connectedAddress, connector?.connected]);
 
   return { userAddress };
 }

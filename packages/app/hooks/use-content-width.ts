@@ -7,7 +7,7 @@ export default function useContentWidth(offset = 0) {
   const { width } = useWindowDimensions();
   const contentWidth = useMemo(
     () => (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH - offset),
-    [width]
+    [offset, width]
   );
   return contentWidth;
 }

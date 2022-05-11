@@ -23,7 +23,8 @@ export const useFilePicker = () => {
     };
   }, []);
 
-  const pickFile = async ({ mediaTypes = "all" }: Props) => {
+  const pickFile = ({ mediaTypes = "all" }: Props) => {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<FilePickerResolveValue>(async (resolve, reject) => {
       if (Platform.OS === "web") {
         const input = document.createElement("input");

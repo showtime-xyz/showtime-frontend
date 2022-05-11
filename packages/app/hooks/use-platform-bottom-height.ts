@@ -13,10 +13,12 @@ export const usePlatformBottomHeight = () => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const bottomTabBarHeight = useBottomTabBarHeight();
   const nativeBottomTabBarHeight = useContext(BottomTabBarHeightContext)
-    ? useBottomTabBarHeight()
+    ? bottomTabBarHeight
     : insets.bottom;
   const webBottomTabBarHeight = isMdWidth ? insets.bottom : insets.bottom + 64;
+
   return Platform.OS === "web"
     ? webBottomTabBarHeight
     : nativeBottomTabBarHeight;

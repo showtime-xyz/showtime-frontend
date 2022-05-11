@@ -42,7 +42,7 @@ type Props = ReactNativeImageProps & {
   width: number;
   height: number;
   borderRadius: number;
-  layout: "fixed" | "intrinsic" | "responsive" | "fill";
+  layout?: "fixed" | "intrinsic" | "responsive" | "fill";
   alt?: string;
   blurhash?: string;
 };
@@ -52,7 +52,6 @@ function Img({
   loading = "lazy",
   width,
   height,
-  layout,
   resizeMode,
   ...props
 }: Props) {
@@ -71,7 +70,6 @@ function Img({
         loading={loading}
         width={actualWidth}
         height={actualHeight}
-        layout={layout}
         objectFit={resizeModeToObjectFit(
           resizeMode ??
             // When using intrinsic size use contain to avoid

@@ -75,7 +75,7 @@ export const SwipeList = ({
   useScrollToTop(listRef);
   const navigation = useNavigation();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { height: windowHeight } = useWindowDimensions();
 
   const itemHeight =
     Platform.OS === "web"
@@ -103,7 +103,7 @@ export const SwipeList = ({
           dim.height = itemHeight;
         }
       ),
-    [screenWidth, itemHeight]
+    [itemHeight]
   );
 
   const opacity = useSharedValue(1);
@@ -145,16 +145,25 @@ export const SwipeList = ({
       return (
         <FeedItem
           nft={item}
-          itemHeight={itemHeight}
-          bottomPadding={bottomPadding}
-          detailStyle={detailStyle}
-          toggleHeader={toggleHeader}
-          hideHeader={hideHeader}
-          showHeader={showHeader}
+          {...{
+            itemHeight,
+            bottomPadding,
+            detailStyle,
+            toggleHeader,
+            hideHeader,
+            showHeader,
+          }}
         />
       );
     },
-    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
+    [
+      itemHeight,
+      bottomPadding,
+      hideHeader,
+      showHeader,
+      toggleHeader,
+      detailStyle,
+    ]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -364,6 +373,7 @@ export const FeedItem = memo(
     );
   }
 );
+FeedItem.displayName = "FeedItem";
 
 const NFTDetails = ({ nft }: { nft: NFT }) => {
   const shareNFT = useShareNFT();

@@ -1,5 +1,4 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
-import { Platform } from "react-native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
@@ -17,7 +16,6 @@ interface CommentRowProps {
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
   reply?: (comment: CommentType) => void;
 }
 
@@ -56,7 +54,7 @@ function CommentRowComponent({
   );
   const isRepliedByMe = useMemo(
     () => user?.data.comments.includes(comment.comment_id),
-    [user]
+    [user, comment.comment_id]
   );
   const isLikedByMe = useMemo(
     () => user?.data.likes_comment.includes(comment.comment_id),
@@ -82,6 +80,7 @@ function CommentRowComponent({
       }
     },
     [
+      navigateToLogin,
       comment.comment_id,
       isAuthenticated,
       isLikedByMe,
@@ -93,7 +92,7 @@ function CommentRowComponent({
     async function handleOnDeletePress() {
       await deleteComment(comment.comment_id);
     },
-    [comment.comment_id]
+    [comment.comment_id, deleteComment]
   );
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
@@ -107,10 +106,13 @@ function CommentRowComponent({
     if (reply) {
       reply(comment);
     }
-  }, [reply, comment, isAuthenticated]);
-  const handleOnUserPress = useCallback((username: string) => {
-    router.push(`/@${username}`);
-  }, []);
+  }, [reply, comment, isAuthenticated, navigateToLogin]);
+  const handleOnUserPress = useCallback(
+    (username: string) => {
+      router.push(`/@${username}`);
+    },
+    [router]
+  );
   //#endregion
 
   return (

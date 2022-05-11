@@ -11,7 +11,6 @@ import {
 } from "./viewability-tracker-flatlist";
 
 type ViewabilityItemsContextType = number[];
-const MAX_VISIBLE_ITEM = 1;
 
 export const ViewabilityTrackerRecyclerList = forwardRef(
   (props: React.ComponentProps<typeof RecyclerListView>, ref: any) => {
@@ -55,7 +54,7 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
           }
         }
       },
-      [props.dataProvider]
+      [props.dataProvider, visibleItems]
     );
 
     return (
@@ -71,3 +70,5 @@ export const ViewabilityTrackerRecyclerList = forwardRef(
     );
   }
 );
+
+ViewabilityTrackerRecyclerList.displayName = "ViewabilityTrackerRecyclerList";

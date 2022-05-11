@@ -11,6 +11,7 @@ function withModalScreen<P>(
   Screen: FC<P>,
   { title, matchingPathname, matchingQueryParam }: ModalScreenOptions
 ) {
+  // eslint-disable-next-line react/display-name
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
     const router = useRouter();

@@ -1,10 +1,6 @@
 import { useMemo } from "react";
 
-import {
-  formatDistanceToNowStrict,
-  differenceInSeconds,
-  formatDistance,
-} from "date-fns";
+import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
 import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
@@ -115,6 +111,7 @@ export function MessageRow({
   hasParent,
   hasReplies,
   likedByMe,
+  // eslint-disable-next-line unused-imports/no-unused-vars
   repliedByMe,
   onLikePress,
   onDeletePress,

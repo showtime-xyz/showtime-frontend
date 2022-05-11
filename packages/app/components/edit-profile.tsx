@@ -93,7 +93,7 @@ export const EditProfile = () => {
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues]);
+  }, [reset, defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
     const links = Object.keys(values.links)

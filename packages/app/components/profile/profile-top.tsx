@@ -78,9 +78,10 @@ export const ProfileTop = ({
   const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
-  const { isFollowing, follow, unfollow } = useMyInfo();
+  const { isFollowing } = useMyInfo();
+  const bottomTabBarHeight = useBottomTabBarHeight();
   const tabBarHeight = useContext(BottomTabBarHeightContext)
-    ? useBottomTabBarHeight()
+    ? bottomTabBarHeight
     : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(

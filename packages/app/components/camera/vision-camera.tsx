@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { StyleSheet } from "react-native";
 
@@ -75,7 +76,6 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
-  const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);

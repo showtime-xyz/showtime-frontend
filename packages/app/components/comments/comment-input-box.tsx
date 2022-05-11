@@ -76,7 +76,7 @@ export const CommentInputBox = forwardRef<
 
       setSelectedComment(null);
     },
-    [submit, selectedComment]
+    [Alert, submit, selectedComment]
   );
 
   const handleOnBlur = useCallback(() => {

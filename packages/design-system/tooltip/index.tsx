@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
-import { AccessibilityInfo, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
 
@@ -12,6 +12,7 @@ import { TooltipProps } from "./types";
 export const Tooltip: React.FC<TooltipProps> = ({
   children,
   text,
+  // eslint-disable-next-line unused-imports/no-unused-vars
   delay,
   open,
   placement,

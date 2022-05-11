@@ -1,11 +1,9 @@
 import { useCallback, useMemo, useRef } from "react";
 import {
   FlatList as RNFlatList,
-  Keyboard,
   ListRenderItemInfo,
   Platform,
   StyleSheet,
-  useWindowDimensions,
 } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -13,12 +11,10 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import { useAlert } from "design-system/alert";
 import { ModalFooter } from "design-system/modal";
-import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
@@ -33,9 +29,6 @@ export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
-  const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
   //#endregion
 
   //#region hooks
@@ -45,12 +38,10 @@ export function Comments({ nft }: { nft: NFT }) {
     error,
     isSubmitting,
     isLoading,
-    isRefreshing,
     likeComment,
     unlikeComment,
     deleteComment,
     newComment,
-    refresh,
   } = useComments(nft?.nft_id);
   //#endregion
 
@@ -62,9 +53,6 @@ export function Comments({ nft }: { nft: NFT }) {
   //#endregion
 
   //#region callbacks
-  const handleOnTouchMove = useCallback(() => {
-    Keyboard.dismiss();
-  }, []);
   const handleOnDeleteComment = useCallback(
     async function handleOnDeleteComment(commentId: number) {
       const _deleteComment = async () => {
@@ -101,7 +89,7 @@ export function Comments({ nft }: { nft: NFT }) {
         ]
       );
     },
-    [deleteComment]
+    [Alert, deleteComment]
   );
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
@@ -129,8 +117,9 @@ export function Comments({ nft }: { nft: NFT }) {
         title="💬 No comments yet..."
       />
     ),
-    [isAuthenticated, router, isMdWidth]
+    []
   );
+
   return (
     <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (

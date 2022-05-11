@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { captureException } from "@sentry/nextjs";
 
@@ -9,7 +9,6 @@ import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
 import { useWeb3 } from "app/hooks/use-web3";
 import { trackButtonClicked } from "app/lib/analytics";
 import { magic } from "app/lib/magic";
-import { mixpanel } from "app/lib/mixpanel";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 import { MintContext } from "app/context/mint-context";
@@ -6,7 +6,6 @@ import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { useRouter } from "app/navigation/use-router";
 
-import { useIsDarkMode } from "design-system/hooks";
 import { SnackbarState } from "design-system/snackbar";
 import { initSnakbarParams, Snackbar } from "design-system/snackbar/snackbar";
 
@@ -19,7 +18,6 @@ const MintSnackbar = () => {
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
 
-  const isDark = useIsDarkMode();
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     show: false,
     snackbar: initSnakbarParams,
@@ -67,13 +65,16 @@ const MintSnackbar = () => {
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
   const hide = useCallback(() => {
     setSnackbar({
       show: false,
       snackbar: initSnakbarParams,
     });
   }, []);
+
   return <Snackbar {...snackbar} hide={hide} />;
 };
 

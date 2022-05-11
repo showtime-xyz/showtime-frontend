@@ -128,7 +128,7 @@ function Create() {
         }, 1000);
       }
     },
-    [state.status, user, address]
+    [state.status, user, address, router]
   );
 
   return (

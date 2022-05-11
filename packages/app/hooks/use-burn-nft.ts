@@ -58,6 +58,7 @@ export const useBurnNFT = () => {
   const { getSignerAndProvider } = useSignerAndProvider();
 
   async function burnToken({ ...params }: UseBurnNFT) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<{ transaction: string }>(async (resolve, reject) => {
       const result = await getSignerAndProvider();
       if (result) {
