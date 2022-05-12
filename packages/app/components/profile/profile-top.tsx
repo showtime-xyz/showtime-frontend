@@ -204,7 +204,22 @@ export const ProfileTop = ({
                       <Button
                         size="small"
                         onPress={() => {
-                          router.push(`/profile/edit`);
+                          router.push(
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: {
+                                pathname: router.pathname,
+                                query: {
+                                  ...router.query,
+                                  editProfileModal: true,
+                                },
+                              } as any,
+                            }),
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: router.asPath,
+                            })
+                          );
                         }}
                       >
                         Edit profile
@@ -232,7 +247,6 @@ export const ProfileTop = ({
                   {name}
                 </Text>
               </Skeleton>
-
               <View tw="h-2" />
 
               <Skeleton

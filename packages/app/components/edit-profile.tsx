@@ -1,13 +1,7 @@
-import { useEffect, useMemo } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-} from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Platform, Pressable, useWindowDimensions } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as ImagePicker from "expo-image-picker";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
@@ -21,15 +15,31 @@ import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { SORT_FIELDS } from "app/utilities";
 
-import { Accordion, Button, Fieldset, Image, Text, View } from "design-system";
-import { ChevronUp, Edit, Upload } from "design-system/icon";
-import { pickImage } from "design-system/image-picker/pick-image";
+import {
+  Button,
+  Fieldset,
+  Image,
+  SelectedTabIndicator,
+  TabItem,
+  Tabs,
+  Text,
+  View,
+} from "design-system";
+import { Avatar } from "design-system/avatar";
+import { useFilePicker } from "design-system/file-picker";
+import { Upload } from "design-system/icon";
+import { getLocalFileURI } from "design-system/preview";
 import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
+
+import { TAB_LIST_HEIGHT } from "../lib/constants";
+import { useSafeAreaInsets } from "../lib/safe-area";
 
 const editProfileValidationSchema = yup.object({
   username: yup.string().min(2).nullable(),
   bio: yup.string().max(300).nullable(),
 });
+const tabs = ["Profile", "Links", "Page Settings"];
 
 const nftList = [
   { label: "Created", value: 1 },
@@ -46,9 +56,12 @@ export const EditProfile = () => {
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const router = useRouter();
-
+  const [selected, setSelected] = useState(0);
   const { isValid, validate } = useValidateUsername();
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const socialLinks = useLinkOptions();
+  const pickFile = useFilePicker();
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -139,7 +152,7 @@ export const EditProfile = () => {
           data: formData,
         });
       }
-
+      console.log(values);
       if (
         values.profilePicture &&
         values.profilePicture !== defaultValues.profilePicture
@@ -179,266 +192,269 @@ export const EditProfile = () => {
       console.error("edit profile failed ", e);
     }
   };
-
+  // cover down to twitter banner ratio: w:h=3:1
+  const coverImageHeight = useMemo(
+    () => (width < 768 ? width / 3 : 160),
+    [width]
+  );
   return (
-    <View tw="w-full max-w-screen-xl flex-1 bg-white dark:bg-black">
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior="padding"
-        enabled={Platform.OS !== "android"}
-        keyboardVerticalOffset={95}
+    <View tw="w-full flex-1">
+      <Tabs.Root
+        onIndexChange={setSelected}
+        tabListHeight={TAB_LIST_HEIGHT}
+        initialIndex={0}
+        lazy
       >
-        <ScrollView contentContainerStyle={tw.style("pb-20")}>
-          <Controller
-            control={control}
-            name="coverPicture"
-            render={({ field: { onChange, value } }) => (
-              <Pressable
-                onPress={() => {
-                  pickImage({
-                    onPick: (e) => {
-                      onChange(e.uri);
-                    },
-                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                  });
-                }}
-                style={tw.style("w-full h-30 flex-row absolute")}
-              >
-                <View tw="absolute z-10 w-full flex-row items-center justify-end p-2">
-                  <Edit
-                    height={20}
-                    width={20}
-                    //@ts-ignore
-                    color={tw.style("bg-black dark:bg-white").backgroundColor}
-                  />
-                  <Text tw="ml-1 text-xs text-black dark:text-white">
-                    Cover
-                  </Text>
-                </View>
-                {value && <Image source={{ uri: value }} tw="flex-1" />}
-              </Pressable>
-            )}
-          />
-
-          <View tw="mt-20 px-4">
+        <Tabs.List
+          style={tw.style(
+            `h-[${TAB_LIST_HEIGHT}px] ios:w-screen android:w-screen`
+          )}
+        >
+          {tabs.map((name, index) => (
+            <Tabs.Trigger key={name}>
+              <TabItem name={name} selected={selected === index} />
+            </Tabs.Trigger>
+          ))}
+          <SelectedTabIndicator />
+        </Tabs.List>
+        <Tabs.Pager
+          tw="web:max-h-60vh"
+          style={{
+            overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
+          }}
+        >
+          <Tabs.ScrollView style={tw.style("flex-1")} useKeyboardAvoidingView>
             <Controller
               control={control}
-              name="profilePicture"
+              name="coverPicture"
               render={({ field: { onChange, value } }) => (
                 <Pressable
-                  onPress={() => {
-                    pickImage({
-                      onPick: (e) => {
-                        onChange(e.uri);
-                      },
-                      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                    });
+                  onPress={async () => {
+                    const file = await pickFile({ mediaTypes: "image" });
+                    console.log(file);
+                    const uri = getLocalFileURI(file.file);
+                    onChange(uri);
                   }}
                   style={tw.style(
-                    "w-20 h-20 rounded-full overflow-hidden border-2"
+                    `w-full h-[${coverImageHeight}px] flex-row absolute`
                   )}
                 >
-                  {value && <Image source={{ uri: value }} tw="flex-1" />}
-                  <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center">
-                    <Upload
-                      height={20}
-                      width={20}
-                      //@ts-ignore
-                      color={tw.style("bg-black dark:bg-white").backgroundColor}
-                    />
+                  <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                    <View tw="rounded-full bg-gray-800/70 p-2">
+                      <Upload height={20} width={20} color={colors.white} />
+                    </View>
                   </View>
+                  {value && (
+                    <Image
+                      source={{ uri: value }}
+                      tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
+                      alt="Cover image"
+                      resizeMethod="resize"
+                      resizeMode="cover"
+                    />
+                  )}
                 </Pressable>
               )}
             />
 
-            <View tw="mt-4 flex-row">
+            <View tw={`mt-[${coverImageHeight - 40}px] px-4`}>
               <Controller
                 control={control}
-                name="name"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Fieldset
-                    tw="mr-4 flex-1"
-                    label="Name"
-                    placeholder="Your display name"
-                    value={value}
-                    textContentType="name"
-                    errorText={errors.name?.message}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                  />
+                name="profilePicture"
+                render={({ field: { onChange, value } }) => (
+                  <Pressable
+                    onPress={async () => {
+                      const file = await pickFile({ mediaTypes: "image" });
+                      const uri = getLocalFileURI(file.file);
+                      onChange(uri);
+                    }}
+                    style={tw.style(
+                      "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
+                    )}
+                  >
+                    {value && <Avatar url={value} size={94} />}
+                    <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                      <View tw="rounded-full bg-gray-800/70 p-2">
+                        <Upload height={20} width={20} color={colors.white} />
+                      </View>
+                    </View>
+                  </Pressable>
                 )}
               />
 
+              <View tw="mt-4 flex-row">
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Fieldset
+                      tw="mr-4 flex-1"
+                      label="Name"
+                      placeholder="Your display name"
+                      value={value}
+                      textContentType="name"
+                      errorText={errors.name?.message}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                    />
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  rules={{
+                    onChange: (v) => {
+                      validate(v.target.value);
+                    },
+                  }}
+                  name="username"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Fieldset
+                      tw="flex-1"
+                      label="Username"
+                      placeholder="Enter your username"
+                      value={value}
+                      textContentType="username"
+                      errorText={errors.username?.message}
+                      onBlur={onBlur}
+                      helperText={
+                        !isValid ? "username not available" : undefined
+                      }
+                      onChangeText={onChange}
+                    />
+                  )}
+                />
+              </View>
+
               <Controller
                 control={control}
-                rules={{
-                  onChange: (v) => {
-                    validate(v.target.value);
-                  },
-                }}
-                name="username"
+                name="bio"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Fieldset
-                    tw="flex-1"
-                    label="Username"
-                    placeholder="Enter your username"
+                    label="About me"
+                    placeholder="About me"
+                    tw="mt-4"
                     value={value}
-                    textContentType="username"
-                    errorText={errors.username?.message}
+                    errorText={errors.bio?.message}
                     onBlur={onBlur}
-                    helperText={!isValid ? "username not available" : undefined}
                     onChangeText={onChange}
                   />
                 )}
               />
             </View>
-
+          </Tabs.ScrollView>
+          <Tabs.ScrollView
+            style={tw.style("px-4 mt-4")}
+            useKeyboardAvoidingView
+          >
             <Controller
               control={control}
-              name="bio"
+              name="website_url"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Fieldset
-                  label="About me"
-                  placeholder="About me"
-                  tw="mt-4"
+                  label="Website"
+                  keyboardType="url"
+                  textContentType="URL"
+                  placeholder="Your url"
                   value={value}
-                  errorText={errors.bio?.message}
                   onBlur={onBlur}
                   onChangeText={onChange}
                 />
               )}
             />
 
-            <Accordion.Root>
-              <Accordion.Item value="options">
-                <Accordion.Trigger tw="px-0">
-                  <Accordion.Label>Links</Accordion.Label>
-                  <Accordion.Chevron>
-                    <ChevronUp
-                      //@ts-ignore
-                      color={tw.style("dark:bg-white bg-black").backgroundColor}
+            {socialLinks.data?.data.map((v) => {
+              return (
+                <Controller
+                  control={control}
+                  key={v.id}
+                  name={`links[${v.id}]`}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Fieldset
+                      tw="mt-4"
+                      label={v.name}
+                      value={value}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      leftElement={
+                        <Text tw="text-gray-600 dark:text-gray-400">
+                          {v.prefix}
+                        </Text>
+                      }
                     />
-                  </Accordion.Chevron>
-                </Accordion.Trigger>
-                <Accordion.Content>
-                  <Controller
-                    control={control}
-                    name="website_url"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Fieldset
-                        label="Website"
-                        keyboardType="url"
-                        textContentType="URL"
-                        placeholder="Your url"
-                        value={value}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                      />
-                    )}
+                  )}
+                />
+              );
+            })}
+          </Tabs.ScrollView>
+          <Tabs.ScrollView
+            style={tw.style("px-4 mt-4")}
+            useKeyboardAvoidingView
+          >
+            <View tw="z-2">
+              <Controller
+                control={control}
+                name="default_list_id"
+                render={({ field: { onChange, value } }) => (
+                  <Fieldset
+                    label="Default NFT List"
+                    selectOnly
+                    select={{
+                      options: nftList,
+                      placeholder: "Select",
+                      value: value,
+                      onChange: onChange,
+                    }}
                   />
-
-                  {socialLinks.data?.data.map((v) => {
-                    return (
-                      <Controller
-                        control={control}
-                        key={v.id}
-                        name={`links[${v.id}]`}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <Fieldset
-                            tw="mt-4"
-                            label={v.name}
-                            value={value}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            leftElement={
-                              <Text tw="text-gray-600 dark:text-gray-400">
-                                {v.prefix}
-                              </Text>
-                            }
-                          />
-                        )}
-                      />
-                    );
-                  })}
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
-
-            <Accordion.Root>
-              <Accordion.Item value="options">
-                <Accordion.Trigger tw="px-0">
-                  <Accordion.Label>Page Settings</Accordion.Label>
-                  <Accordion.Chevron>
-                    <ChevronUp
-                      //@ts-ignore
-                      color={tw.style("dark:bg-white bg-black").backgroundColor}
-                    />
-                  </Accordion.Chevron>
-                </Accordion.Trigger>
-                <Accordion.Content>
-                  <Controller
-                    control={control}
-                    name="default_list_id"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        label="Default NFT List"
-                        selectOnly
-                        select={{
-                          options: nftList,
-                          placeholder: "Select",
-                          value: value,
-                          onChange: onChange,
-                        }}
-                      />
-                    )}
+                )}
+              />
+            </View>
+            <View tw="z-1">
+              <Controller
+                control={control}
+                name="default_created_sort_id"
+                render={({ field: { onChange, value } }) => (
+                  <Fieldset
+                    label="Sort Created By"
+                    selectOnly
+                    tw="mt-4"
+                    select={{
+                      options: sortingOptionsList,
+                      placeholder: "Select",
+                      value: value,
+                      onChange: onChange,
+                    }}
                   />
+                )}
+              />
+            </View>
+            <Controller
+              control={control}
+              name="default_owned_sort_id"
+              render={({ field: { onChange, value } }) => (
+                <Fieldset
+                  label="Sort Owned By"
+                  selectOnly
+                  tw="mt-4"
+                  select={{
+                    options: sortingOptionsList,
+                    placeholder: "Select",
+                    value: value,
+                    onChange: onChange,
+                  }}
+                />
+              )}
+            />
+          </Tabs.ScrollView>
+        </Tabs.Pager>
+      </Tabs.Root>
 
-                  <Controller
-                    control={control}
-                    name="default_created_sort_id"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        label="Sort Created By"
-                        selectOnly
-                        tw="mt-4"
-                        select={{
-                          options: sortingOptionsList,
-                          placeholder: "Select",
-                          value: value,
-                          onChange: onChange,
-                        }}
-                      />
-                    )}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="default_owned_sort_id"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        label="Sort Owned By"
-                        selectOnly
-                        tw="mt-4"
-                        select={{
-                          options: sortingOptionsList,
-                          placeholder: "Select",
-                          value: value,
-                          onChange: onChange,
-                        }}
-                      />
-                    )}
-                  />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-      <View tw="absolute bottom-0 w-full px-10 pb-5">
+      <View tw={`pb-${insets.bottom}px mt-2.5 px-4`}>
         <Button
           disabled={isSubmitting}
           tw={isSubmitting ? "opacity-50" : ""}
           onPress={handleSubmit(handleSubmitForm)}
+          size="regular"
         >
           Done
         </Button>
