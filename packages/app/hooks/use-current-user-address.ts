@@ -40,11 +40,8 @@ function useCurrentUserAddress() {
           }
         });
     } else if (user?.data && user?.data.profile.wallet_addresses_v2[0]) {
-      console.log("3 i239399 ", user.data);
       setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
     } else {
-      console.log("3 i239399 ", "");
-
       setUserAddress("");
     }
   }, [user, web3, connectedAddress, connector?.connected]);
