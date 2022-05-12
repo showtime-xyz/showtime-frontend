@@ -71,5 +71,5 @@ export const getLocalFileURI = (file?: string | File) => {
 
   if (Platform.OS === "web") return URL.createObjectURL(file);
 
-  return null;
+  return file;
 };
