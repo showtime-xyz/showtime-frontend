@@ -9,7 +9,7 @@ import type { ModalScreenOptions } from "./types";
 
 function withModalScreen<P>(
   Screen: FC<P>,
-  { title, matchingPathname, matchingQueryParam }: ModalScreenOptions
+  { title, matchingPathname, matchingQueryParam, ...rest }: ModalScreenOptions
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
@@ -37,6 +37,7 @@ function withModalScreen<P>(
         title={title}
         web_height="auto"
         onClose={onClose}
+        {...rest}
       >
         <Screen {...props} />
       </ModalScreen>

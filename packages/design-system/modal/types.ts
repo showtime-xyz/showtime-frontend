@@ -59,7 +59,14 @@ export interface ModalProps {
    */
   onClose?: () => void;
   //#endregion
+  /**
+   * **WEB ONLY**: modal body style
+   */
   bodyStyle?: StyleProp<ViewStyle>;
+  /**
+   * **WEB ONLY**: modal style
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 export interface ModalHeaderProps
@@ -86,6 +93,7 @@ export interface ModalContainerProps
     | "children"
     | "mobile_snapPoints"
     | "web_height"
+    | "style"
   > {
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;

@@ -10,7 +10,7 @@ import { useBackPressHandler } from "./use-back-press-handler";
 
 function withModalScreen<P>(
   Screen: FC<P>,
-  { title, snapPoints = ["90%", "100%"] }: ModalScreenOptions
+  { title, snapPoints = ["90%", "100%"], ...rest }: ModalScreenOptions
 ) {
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
@@ -28,6 +28,7 @@ function withModalScreen<P>(
         mobile_snapPoints={snapPoints}
         isScreen={true}
         onClose={onClose}
+        {...rest}
       >
         <Screen {...props} />
       </ModalScreen>
