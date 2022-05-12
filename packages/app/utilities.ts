@@ -472,3 +472,23 @@ export const getDropdownShadow = (isDark = false) => {
   const shadow = isDark ? DROPDOWN_DRAK_SHADOW : DROPDOWN_LIGHT_SHADOW;
   return Platform.OS === "web" ? shadow : undefined;
 };
+
+export const MATIC_CHAIN_ID =
+  process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137;
+
+export const MATIC_CHAIN_DETAILS = {
+  chainId: `0x${MATIC_CHAIN_ID.toString(16)}`,
+  chainName:
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? "Mumbai Testnet" : "Polygon",
+  nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+  rpcUrls: [
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+      ? "https://rpc-mumbai.maticvigil.com/"
+      : "https://rpc-mainnet.maticvigil.com/",
+  ],
+  blockExplorerUrls: [
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+      ? "https://mumbai.polygonscan.com/"
+      : "https://polygonscan.com/",
+  ],
+};
