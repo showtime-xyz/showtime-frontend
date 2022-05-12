@@ -4,6 +4,7 @@ import { Modal, Platform } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { SafeAreaView } from "app/lib/safe-area";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
 import { CountryCodePicker, Pressable, Text, View } from "design-system";
@@ -87,11 +88,14 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
                 setModalVisible(true);
               }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              tw="flex-row items-center justify-center"
+              tw={`mt-[${Platform.select({
+                ios: ".6",
+                android: ".25",
+                default: "0",
+              })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
                 sx={{
-                  // this hack is needed to make image align with text
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,
@@ -102,7 +106,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               >
                 {selectedCountry?.emoji}
               </Text>
-              <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+              <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
                 {selectedCountry?.dial_code}{" "}
               </Text>
             </Pressable>
@@ -126,6 +130,7 @@ type Props = {
 export function Header({ title, close, onSearchSubmit }: Props) {
   const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
+  const { top: safeAreaTop } = useSafeAreaInsets();
 
   const handleSearch = (text: string) => {
     if (searchDebounceTimeout.current) {
@@ -143,7 +148,9 @@ export function Header({ title, close, onSearchSubmit }: Props) {
   }, [showSearch, onSearchSubmit]);
 
   return (
-    <View tw="flex-row items-center justify-between p-4 dark:bg-black">
+    <View
+      tw={`mt-[${safeAreaTop}px] w-full flex-row items-center px-4 py-2 dark:bg-black`}
+    >
       <View tw="h-12 w-12 items-center justify-center">
         <Button
           onPress={close}
@@ -161,13 +168,11 @@ export function Header({ title, close, onSearchSubmit }: Props) {
         </Button>
       </View>
 
-      <Animated.View layout={FadeIn}>
+      <Animated.View layout={FadeIn} style={tw.style("flex-1 mx-2")}>
         {showSearch ? (
-          <View tw="w-[210px]">
-            <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
-          </View>
+          <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text variant="text-lg" tw="font-bold dark:text-white">
+          <Text variant="text-lg" tw="px-4 font-bold dark:text-white">
             {title}
           </Text>
         )}
