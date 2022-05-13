@@ -13,7 +13,7 @@ import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-import { SORT_FIELDS } from "app/utilities";
+import { getFileFormData, SORT_FIELDS } from "app/utilities";
 
 import {
   Button,
@@ -28,7 +28,7 @@ import {
 import { Avatar } from "design-system/avatar";
 import { useFilePicker } from "design-system/file-picker";
 import { Upload } from "design-system/icon";
-import { getLocalFileURI } from "design-system/preview";
+import { getLocalFileURI, Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
 
@@ -135,45 +135,44 @@ export const EditProfile = () => {
         values.coverPicture &&
         values.coverPicture !== defaultValues.coverPicture
       ) {
+        const coverPictureFormData = await getFileFormData(values.coverPicture);
         const formData = new FormData();
-        formData.append("image", {
-          //@ts-ignore
-          uri: values.coverPicture,
-          type: "image/jpg",
-          name: "image.jpg",
-        });
+        if (coverPictureFormData) {
+          formData.append("image", coverPictureFormData);
 
-        await axios({
-          url: "/v1/profile/photo/cover",
-          method: "POST",
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          },
-          data: formData,
-        });
+          await axios({
+            url: "/v1/profile/photo/cover",
+            method: "POST",
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+            data: formData,
+          });
+        }
       }
-      console.log(values);
+
       if (
         values.profilePicture &&
         values.profilePicture !== defaultValues.profilePicture
       ) {
         const formData = new FormData();
 
-        formData.append("image", {
-          //@ts-ignore
-          uri: values.profilePicture,
-          type: "image/jpg",
-          name: "image.jpg",
-        });
+        const profilePictureFormData = await getFileFormData(
+          values.profilePicture
+        );
 
-        await axios({
-          url: "/v1/profile/photo",
-          method: "POST",
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          },
-          data: formData,
-        });
+        if (profilePictureFormData) {
+          formData.append("image", profilePictureFormData);
+
+          await axios({
+            url: "/v1/profile/photo",
+            method: "POST",
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+            data: formData,
+          });
+        }
       }
 
       await axios({
@@ -231,9 +230,7 @@ export const EditProfile = () => {
                 <Pressable
                   onPress={async () => {
                     const file = await pickFile({ mediaTypes: "image" });
-                    console.log(file);
-                    const uri = getLocalFileURI(file.file);
-                    onChange(uri);
+                    onChange(file.file);
                   }}
                   style={tw.style(
                     `w-full h-[${coverImageHeight}px] flex-row absolute`
@@ -245,10 +242,9 @@ export const EditProfile = () => {
                     </View>
                   </View>
                   {value && (
-                    <Image
-                      source={{ uri: value }}
+                    <Preview
+                      file={value}
                       tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
-                      alt="Cover image"
                       resizeMethod="resize"
                       resizeMode="cover"
                     />
@@ -265,14 +261,18 @@ export const EditProfile = () => {
                   <Pressable
                     onPress={async () => {
                       const file = await pickFile({ mediaTypes: "image" });
-                      const uri = getLocalFileURI(file.file);
-                      onChange(uri);
+                      onChange(file.file);
                     }}
                     style={tw.style(
                       "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
                     )}
                   >
-                    {value && <Avatar url={value} size={94} />}
+                    {value && (
+                      <Preview
+                        file={value}
+                        tw={"h-[94px] w-[94px] rounded-full"}
+                      />
+                    )}
                     <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
                       <View tw="rounded-full bg-gray-800/70 p-2">
                         <Upload height={20} width={20} color={colors.white} />
