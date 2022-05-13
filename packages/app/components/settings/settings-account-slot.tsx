@@ -5,8 +5,10 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Button, ButtonLabel, Pressable, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
+import { useIsDarkMode, useOnHover } from "design-system/hooks";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 import { SettingSubTitle } from "./settings-subtitle";
 
@@ -68,24 +70,42 @@ export type AccountSettingItemProps = {
 
 export const AccountSettingItem = (props: AccountSettingItemProps) => {
   const router = useRouter();
-
+  const { onHoverIn, onHoverOut, hovered } = useOnHover();
+  const isDark = useIsDarkMode();
   const handleOnPressItem = (route: string) => {
     router.push(`/settings/${route}`);
   };
 
   return (
     <Pressable
-      tw="w-full flex-1 flex-row items-center justify-between p-4"
       onPress={() => handleOnPressItem(props.subRoute)}
+      onHoverIn={onHoverIn}
+      onHoverOut={onHoverOut}
+      disablePressAnimation
+      style={[
+        tw.style(
+          "w-full flex-1 flex-row items-center justify-between px-4 py-2 mb-2 rounded-md"
+        ),
+        {
+          backgroundColor: hovered.value
+            ? isDark
+              ? colors.gray[200]
+              : colors.gray[200]
+            : "transparent",
+          transitionDuration: "150ms",
+        },
+      ]}
     >
       <View tw="flex flex-col">
-        <Text tw="pb-3 text-gray-900 dark:text-white">{props.title}</Text>
+        <Text tw="text-md text-gray-900 dark:text-white">{props.title}</Text>
       </View>
-      <View tw="h-8 w-8">
+      <View tw="h-8 w-8 items-center justify-center">
         <ChevronRight
           width={24}
           height={24}
-          color={tw.style("dark:bg-gray-700 bg-gray-300").backgroundColor}
+          color={
+            tw.style("dark:bg-gray-700 bg-gray-300").backgroundColor as string
+          }
         />
       </View>
     </Pressable>

@@ -58,18 +58,18 @@ export function Login({ onLogin }: LoginProps) {
       ].includes(walletStatus),
     [walletStatus]
   );
-  const phoneNumberValidationSchema = useMemo(
-    () =>
-      yup
-        .object({
-          data: yup
-            .string()
-            .phone("US", false, "Please enter a valid phone number.")
-            .required("Please enter a valid phone number."),
-        })
-        .required(),
-    []
-  );
+  // const phoneNumberValidationSchema = useMemo(
+  //   () =>
+  //     yup
+  //       .object({
+  //         data: yup
+  //           .string()
+  //           .phone("US", false, "Please enter a valid phone number.")
+  //           .required("Please enter a valid phone number."),
+  //       })
+  //       .required(),
+  //   []
+  // );
 
   const emailValidationSchema = useMemo(
     () =>

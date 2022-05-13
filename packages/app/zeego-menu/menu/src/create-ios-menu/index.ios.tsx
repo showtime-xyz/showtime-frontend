@@ -22,13 +22,11 @@ import type {
   MenuTriggerProps,
   MenuItemIconProps,
   MenuCheckboxItemProps,
-  MenuSeparatorProps,
   MenuItemImageProps,
-  MenuItemIndicatorProps,
   MenuLabelProps,
 } from "../types";
 
-const createIosMenu = (Menu: "ContextMenu" | "DropdownMenu") => {
+const createIosMenu = () => {
   const Trigger = menuify(({ children }: MenuTriggerProps) => {
     const child = <>{children}</>;
 
@@ -129,7 +127,7 @@ If you want to use a custom component as your <Content />, you can use the menui
     return <>{children}</>;
   }, "TriggerItem");
 
-  const CheckboxItem = menuify(({}: MenuCheckboxItemProps) => {
+  const CheckboxItem = menuify(() => {
     return <></>;
   }, "CheckboxItem");
 
@@ -140,15 +138,11 @@ If you want to use a custom component as your <Content />, you can use the menui
     return <></>;
   }, "Label");
 
-  type MenuOption = "destructive" | "displayInline";
-  type MenuAttribute = "disabled" | "destructive" | "hidden";
-
   type MenuAttributes = {
     disabled?: boolean;
     destructive?: boolean;
     hidden?: boolean;
   };
-  type MenuOptions = MenuOption[];
 
   type MenuConfig = {
     id?: string;
@@ -448,14 +442,11 @@ If you want to use a custom component as your <Content />, you can use the menui
     // );
   }, "Root");
 
-  const Separator = menuify((_: MenuSeparatorProps) => {
+  const Separator = menuify(() => {
     return <></>;
   }, "Separator");
 
-  const ItemIndicator = menuify(
-    (_: MenuItemIndicatorProps) => <></>,
-    "ItemIndicator"
-  );
+  const ItemIndicator = menuify(() => <></>, "ItemIndicator");
 
   return {
     Root,

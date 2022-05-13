@@ -61,7 +61,7 @@ export default {
     config: {
       usesNonExemptEncryption: false,
     },
-    bitcode: false, // or "Debug"
+    bitcode: false, // or "Debug",
   },
   android: {
     package: config.scheme,
@@ -100,8 +100,10 @@ export default {
     [
       "react-native-vision-camera",
       {
-        cameraPermissionText: "$(PRODUCT_NAME) needs access to your camera.",
-        enableMicrophonePermission: true,
+        cameraPermissionText:
+          "$(PRODUCT_NAME) uses your camera to let you take photos or videos and to turn them into NFTs.",
+        // Disable for now to be safe, we don't support videos yet
+        enableMicrophonePermission: false,
         microphonePermissionText:
           "$(PRODUCT_NAME) needs access to your microphone.",
         disableFrameProcessors: true,
@@ -110,7 +112,8 @@ export default {
     [
       "expo-image-picker",
       {
-        photosPermission: "$(PRODUCT_NAME) needs access to your photos.",
+        photosPermission:
+          "$(PRODUCT_NAME) needs to access your camera roll so that you can upload photos on Showtime.",
       },
     ],
     ["./plugins/with-compile-sdk-version.js", 31],

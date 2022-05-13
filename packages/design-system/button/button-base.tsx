@@ -1,10 +1,5 @@
 import { Children, cloneElement, useMemo } from "react";
 
-import {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 
 import { Pressable } from "design-system/pressable-scale";
@@ -96,20 +91,16 @@ export function BaseButton({
     });
   }, [size, iconColor, labelStyle, children, isDarkMode]);
 
+  const childStyles = useMemo(
+    () =>
+      backgroundColors
+        ? [containerAnimatedStyle, tailwind.style(containerStyle)]
+        : tailwind.style(containerStyle),
+    [backgroundColors, containerAnimatedStyle, containerStyle]
+  );
+
   if (asChild) {
-    return (
-      <Animated.View
-        style={useMemo(
-          () =>
-            backgroundColors
-              ? [containerAnimatedStyle, tailwind.style(containerStyle)]
-              : tailwind.style(containerStyle),
-          [backgroundColors, containerAnimatedStyle, containerStyle]
-        )}
-      >
-        {renderChildren}
-      </Animated.View>
-    );
+    return <Animated.View style={childStyles}>{renderChildren}</Animated.View>;
   }
 
   return (
@@ -117,8 +108,9 @@ export function BaseButton({
       {...props}
       tw={containerStyle}
       style={backgroundColors ? containerAnimatedStyle : undefined}
-      children={renderChildren}
-    />
+    >
+      {renderChildren}
+    </Pressable>
   );
   //#endregion
 }

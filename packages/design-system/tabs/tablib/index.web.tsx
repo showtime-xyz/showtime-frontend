@@ -53,6 +53,7 @@ const Root = ({
       setSelected(index.toString());
       position.setValue(index);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
   const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
@@ -148,7 +149,12 @@ const Root = ({
           </View>
         </View>
         <View tw="w-full items-center">
-          <View tw={`w-full max-w-screen-xl ${tabPage?.props.tw}`}>
+          <View
+            style={[
+              tw.style(`w-full max-w-screen-xl ${tabPage?.props.tw}`),
+              tabPage?.props.style,
+            ]}
+          >
             {tabContents.map((c, index) => {
               const value = index.toString();
               return (
@@ -172,13 +178,14 @@ const List = () => {
   return null;
 };
 
-const Pager = ({ tw }: { tw?: string }) => {
+const Pager = () => {
   return null;
 };
 
 const Trigger = React.forwardRef((props: any, ref: any) => {
   return <View {...props} ref={ref} />;
 });
+Trigger.displayName = "Trigger";
 
 const TabRecyclerListView = React.memo(
   React.forwardRef((props, ref) => {

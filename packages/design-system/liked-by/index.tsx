@@ -3,7 +3,6 @@ import { Fragment } from "react";
 import { useLikes } from "app/hooks/api/use-likes";
 import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
 import { Skeleton } from "design-system/skeleton";
 import { Text } from "design-system/text";

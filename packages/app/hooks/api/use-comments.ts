@@ -52,7 +52,7 @@ export const useComments = (nftId: number) => {
   //#region hooks
   const { mutate } = useSWRConfig();
   const fetchCommentsURL = useCallback(
-    function fetchCommentsURL(index) {
+    function fetchCommentsURL() {
       // TODO: uncomment when pagination is fixed.
       // return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
       return nftId ? `/v2/comments/${nftId}` : null;
@@ -72,75 +72,72 @@ export const useComments = (nftId: number) => {
   //#endregion
 
   //#region callbacks
-  const likeComment = useCallback(async function likeComment(
-    commentId: number
-  ) {
-    try {
-      await axios({
-        url: `/v1/likecomment/${commentId}`,
-        method: "POST",
-        data: {},
-      });
+  const likeComment = useCallback(
+    async function likeComment(commentId: number) {
+      try {
+        await axios({
+          url: `/v1/likecomment/${commentId}`,
+          method: "POST",
+          data: {},
+        });
 
-      // mutate customer info
-      mutate(
-        MY_INFO_ENDPOINT,
-        (data: UserType): UserType => ({
-          data: {
-            ...data.data,
-            likes_comment: [...data.data.likes_comment, commentId],
-          },
-        }),
-        true
-      );
+        // mutate customer info
+        mutate(
+          MY_INFO_ENDPOINT,
+          (data: UserType): UserType => ({
+            data: {
+              ...data.data,
+              likes_comment: [...data.data.likes_comment, commentId],
+            },
+          }),
+          true
+        );
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  },
-  []);
-  const unlikeComment = useCallback(async function unlikeComment(
-    commentId: number
-  ) {
-    try {
-      await axios({
-        url: `/v1/unlikecomment/${commentId}`,
-        method: "POST",
-        data: {},
-      });
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    [mutate]
+  );
+  const unlikeComment = useCallback(
+    async function unlikeComment(commentId: number) {
+      try {
+        await axios({
+          url: `/v1/unlikecomment/${commentId}`,
+          method: "POST",
+          data: {},
+        });
 
-      // mutate local data
-      mutate(
-        MY_INFO_ENDPOINT,
-        (data: UserType): UserType => ({
-          data: {
-            ...data.data,
-            likes_comment: data.data.likes_comment.filter(
-              (item) => item !== commentId
-            ),
-          },
-        }),
-        true
-      );
+        // mutate local data
+        mutate(
+          MY_INFO_ENDPOINT,
+          (data: UserType): UserType => ({
+            data: {
+              ...data.data,
+              likes_comment: data.data.likes_comment.filter(
+                (item) => item !== commentId
+              ),
+            },
+          }),
+          true
+        );
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  },
-  []);
-  const deleteComment = useCallback(async function deleteComment(
-    commentId: number
-  ) {
-    try {
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    [mutate]
+  );
+  const deleteComment = useCallback(
+    async function deleteComment(commentId: number) {
       await axios({
         url: `/v1/deletecomment/${commentId}`,
         method: "POST",
         data: {},
       });
 
-      // mutate comments
       mutateComments((data) => {
         if (data?.[0].data?.comments) {
           data[0].data.comments = deleteCommentRecursively(
@@ -150,11 +147,10 @@ export const useComments = (nftId: number) => {
         }
         return data;
       }, true);
-    } catch (error) {
-      throw error;
-    }
-  },
-  []);
+    },
+    [mutateComments]
+  );
+
   const newComment = useCallback(
     async function newComment(message: string, parentId: number | null = null) {
       try {
@@ -199,6 +195,7 @@ export const useComments = (nftId: number) => {
 
     isSubmitting,
     isLoading,
+    isLoadingMore,
     isRefreshing,
 
     refresh,

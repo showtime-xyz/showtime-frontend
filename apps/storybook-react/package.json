@@ -7,7 +7,6 @@
     "dev": "yarn storybook",
     "build": "yarn build:storybook",
     "build:storybook": "build-storybook -s public",
-    "lint": "next lint",
     "storybook": "start-storybook -p 6006 -s ./public",
     "chromatic": "npx chromatic --project-token=aa4fa9ec8af5"
   },

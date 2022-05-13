@@ -49,3 +49,5 @@ export const Text = forwardRef<TextType, TextProps>(
     }
   }
 );
+
+Text.displayName = "Text";

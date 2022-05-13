@@ -11,7 +11,6 @@ import { Button, Skeleton, Text, View } from "design-system";
 import { DataPill } from "design-system/data-pill";
 import { useColorScheme } from "design-system/hooks";
 
-import { AddEmail } from "./add-email";
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
 
@@ -22,31 +21,25 @@ export type EmailSlotProps = {
 
 export type EmailHeaderProps = {
   hasEmail: boolean;
+  onAddEmail: () => void;
 };
 
-export const SettingEmailSlotHeader = (props: EmailHeaderProps) => {
-  const noEmailConnected = !props.hasEmail;
-  const [viewAddEmail, setViewAddEmail] = useState(false);
+export const SettingEmailSlotHeader = ({
+  hasEmail,
+  onAddEmail,
+}: EmailHeaderProps) => {
   return (
     <View>
       <SettingSubTitle>
         <Text tw="text-xl font-bold text-gray-900 dark:text-white">
           Manage your email
         </Text>
-        {noEmailConnected ? (
-          <Button
-            variant="primary"
-            size="small"
-            onPress={() => setViewAddEmail(true)}
-          >
+        {!hasEmail ? (
+          <Button variant="primary" size="small" onPress={onAddEmail}>
             Add Email
           </Button>
         ) : null}
       </SettingSubTitle>
-      <AddEmail
-        visibility={viewAddEmail}
-        dismiss={() => setViewAddEmail(false)}
-      />
     </View>
   );
 };
@@ -110,7 +103,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         setIsCurrentEmail(true);
       }
     }
-  }, [isMagic, email]);
+  }, [isMagic, email, userAddress]);
 
   useEffect(() => {
     getCurrentMagicUser();

@@ -59,7 +59,7 @@ export const LikeContextProvider = ({
     } else {
       likeImpl();
     }
-  }, [like, isAuthenticated, isLikedNft, unlike, likeImpl, nft]);
+  }, [isAuthenticated, isLikedNft, unlike, likeImpl, nft]);
 
   const likeContextValue = useMemo(
     () => ({ isLiked: isLikedNft, likeCount, toggleLike, like: likeImpl }),

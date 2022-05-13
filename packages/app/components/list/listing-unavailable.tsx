@@ -10,7 +10,6 @@ type Props = {
 
 export const ListingUnavailable = (props: Props) => {
   const multipleOwnersList = props.nft?.multiple_owners_list;
-  console.log("nft ", props.nft)
 
   const { user } = useUser();
   const userAddresses = user?.data.profile.wallet_addresses_v2;

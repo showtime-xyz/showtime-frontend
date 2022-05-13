@@ -48,7 +48,7 @@ function useNFTCardsListLayoutProvider({
           }
         }
       ),
-    [isFirstIndexHeader, width, windowWidth, headerHeight]
+    [isFirstIndexHeader, width, windowWidth, headerHeight, height]
   );
 
   return _layoutProvider;

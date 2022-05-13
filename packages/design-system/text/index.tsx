@@ -1,8 +1,6 @@
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
-import { Theme } from "dripsy";
-
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { textSizes } from "design-system/typography";

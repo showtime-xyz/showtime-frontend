@@ -30,13 +30,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
-  if (width < 768) {
-    return (
-      <Pressable onPress={onPress}>
-        <Media item={nft} numColumns={numColumns} />
-      </Pressable>
-    );
-  }
+
   const size = tw
     ? tw
     : numColumns === 3
@@ -54,7 +48,16 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       default:
         return 500;
     }
-  }, []);
+  }, [numColumns, contentWidth]);
+
+  if (width < 768) {
+    return (
+      <Pressable onPress={onPress}>
+        <Media item={nft} numColumns={numColumns} />
+      </Pressable>
+    );
+  }
+
   return (
     <View
       style={{

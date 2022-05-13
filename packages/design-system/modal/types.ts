@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { StyleProp, ViewStyle } from "react-native";
 
 import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
@@ -58,6 +59,21 @@ export interface ModalProps {
    */
   onClose?: () => void;
   //#endregion
+  /**
+   * **WEB ONLY**: modal body style
+   */
+  bodyStyle?: StyleProp<ViewStyle>;
+  /**
+   * **WEB ONLY**: modal style
+   */
+  style?: StyleProp<ViewStyle>;
+  /**
+   * **ANDROID ONLY ** BottomSheet's props
+   * Enable content panning gesture interaction.
+   * @type boolean
+   * @default true
+   */
+  enableContentPanningGesture?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -84,8 +100,11 @@ export interface ModalContainerProps
     | "children"
     | "mobile_snapPoints"
     | "web_height"
+    | "style"
   > {
   close: () => void;
+  bodyStyle?: StyleProp<ViewStyle>;
+  enableContentPanningGesture?: boolean;
 }
 
 export interface ModalScreenProps extends ModalProps {

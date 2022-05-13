@@ -42,7 +42,7 @@ export const BuyButton = ({ nft }: { nft: NFT }) => {
   if (isNFTOwner) {
     return (
       <View>
-        <Text tw='dark:text-white text-black'>
+        <Text tw="text-black dark:text-white">
           {freeItem
             ? "Listed for free"
             : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
@@ -52,9 +52,9 @@ export const BuyButton = ({ nft }: { nft: NFT }) => {
   } else {
     return (
       <Button onPress={() => navigateToBuy(nft)}>
-          {freeItem
-            ? "Price Free"
-            : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
+        {freeItem
+          ? "Price Free"
+          : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
       </Button>
     );
   }

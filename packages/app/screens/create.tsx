@@ -30,7 +30,7 @@ const CreateModal = () => {
         dispatch({ type: "reset" });
       }
     };
-  }, []);
+  }, [dispatch]);
 
   //#region effects
   useEffect(() => {
@@ -67,7 +67,7 @@ const CreateModal = () => {
       }
     });
     return unsubscribe;
-  }, [navigation, router]);
+  }, [Alert, navigation, router, state.status]);
   //#endregion
 
   return (

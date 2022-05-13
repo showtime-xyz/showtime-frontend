@@ -31,8 +31,8 @@ function ModalHeaderComponent({
   );
   return (
     <View style={containerStyle}>
-      <Button variant="tertiary" size="small" onPress={onClose} iconOnly>
-        <Close />
+      <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
+        <Close width={20} height={24} />
       </Button>
 
       <Text variant="text-lg" tw={MODAL_HEADER_TITLE_TW}>
@@ -42,7 +42,7 @@ function ModalHeaderComponent({
       {EndContentComponent ? (
         <EndContentComponent />
       ) : (
-        <View tw="w-8" collapsable={true} />
+        <View tw="w-12" collapsable={true} />
       )}
     </View>
   );

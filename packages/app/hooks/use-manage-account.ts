@@ -37,7 +37,7 @@ export function useManageAccount() {
         });
       }
     },
-    [toast]
+    [toast, mutate]
   );
 
   const removeAccount = useCallback(
@@ -63,7 +63,7 @@ export function useManageAccount() {
         });
       }
     },
-    [toast]
+    [toast, mutate]
   );
 
   return { addEmail, removeAccount };

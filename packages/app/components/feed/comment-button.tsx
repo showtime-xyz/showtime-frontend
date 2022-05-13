@@ -38,7 +38,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
       }),
       { shallow: true }
     );
-  }, [router, nft?.nft_id]);
+  }, [router, nft]);
 
   if (!nft) {
     return null;

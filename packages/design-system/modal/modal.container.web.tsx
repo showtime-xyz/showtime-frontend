@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
+import { tw } from "../tailwind";
 import { View } from "../view";
 import { WEB_HEIGHT } from "./constants";
 import { ModalBackdrop } from "./modal.backdrop";
@@ -19,7 +20,7 @@ const MODAL_CONTAINER_TW = [
   "w-full	sm:w-480px",
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
-  "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-5",
+  "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
   "max-h-100vh",
 ];
 
@@ -30,6 +31,8 @@ function ModalContainerComponent({
   web_height = WEB_HEIGHT,
   onClose,
   children,
+  bodyStyle,
+  style,
 }: ModalContainerProps) {
   const modalContainerTW = useMemo(
     () => [...MODAL_CONTAINER_TW, web_height],
@@ -41,9 +44,9 @@ function ModalContainerComponent({
       {/* prevent scrolling/shaking when modal is open */}
       <RemoveScrollBar />
       <ModalBackdrop onClose={onClose} />
-      <View tw={modalContainerTW}>
+      <View style={[tw.style(modalContainerTW), style]}>
         <ModalHeader title={title} onClose={onClose} />
-        <View tw={MODAL_BODY_TW}>{children}</View>
+        <View style={[tw.style(MODAL_BODY_TW), bodyStyle]}>{children}</View>
       </View>
     </View>
   );

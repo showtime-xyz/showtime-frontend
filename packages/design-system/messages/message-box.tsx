@@ -52,9 +52,11 @@ function MessageBox({
   const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(userAgent);
 
   useEffect(() => {
+    const inputContainer = inputContainerRef.current;
+
     if (isSafari) {
-      if (inputContainerRef.current) {
-        inputContainerRef.current.addEventListener(
+      if (inputContainer) {
+        inputContainer.addEventListener(
           "touchmove",
           (e) => {
             e.preventDefault();
@@ -66,14 +68,14 @@ function MessageBox({
 
     return () => {
       if (isSafari) {
-        if (inputContainerRef.current) {
-          inputContainerRef.current.removeEventListener("touchmove", (e) => {
+        if (inputContainer) {
+          inputContainer.removeEventListener("touchmove", (e) => {
             e.preventDefault();
           });
         }
       }
     };
-  }, [isSafari, inputContainerRef.current]);
+  }, [isSafari, inputContainerRef]);
 
   const useListenersOnAndroid = true;
   const { keyboardEndPositionY, keyboardHeight } = useKeyboardDimensions(

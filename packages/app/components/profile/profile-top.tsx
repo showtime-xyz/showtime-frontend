@@ -79,9 +79,10 @@ export const ProfileTop = ({
   const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
-  const { isFollowing, follow, unfollow } = useMyInfo();
+  const { isFollowing } = useMyInfo();
   const tabBarHeight = useContext(BottomTabBarHeightContext)
-    ? useBottomTabBarHeight()
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBottomTabBarHeight()
     : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
@@ -214,7 +215,22 @@ export const ProfileTop = ({
                       <Button
                         size="small"
                         onPress={() => {
-                          router.push(`/profile/edit`);
+                          router.push(
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: {
+                                pathname: router.pathname,
+                                query: {
+                                  ...router.query,
+                                  editProfileModal: true,
+                                },
+                              } as any,
+                            }),
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: router.asPath,
+                            })
+                          );
                         }}
                       >
                         Edit profile
@@ -242,7 +258,6 @@ export const ProfileTop = ({
                   {name}
                 </Text>
               </Skeleton>
-
               <View tw="h-2" />
 
               <Skeleton
@@ -297,6 +312,7 @@ export const ProfileTop = ({
           showBottomSheet === "followers" || showBottomSheet === "following"
         }
         close={() => setShowBottomSheet(null)}
+        web_height={"max-h-480px"}
         onClose={() => setShowBottomSheet(null)}
       >
         <>

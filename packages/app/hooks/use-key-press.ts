@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 
 function useKeyPress(targetKey: string) {
-  if (Platform.OS !== "web" || typeof window === "undefined") return;
-
   const [keyPressed, setKeyPressed] = useState(false);
 
   function downHandler({ key }: { key: string }) {
@@ -26,7 +24,10 @@ function useKeyPress(targetKey: string) {
       window.removeEventListener("keydown", downHandler);
       window.removeEventListener("keyup", upHandler);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (Platform.OS !== "web" || typeof window === "undefined") return;
 
   return keyPressed;
 }

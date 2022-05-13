@@ -105,8 +105,6 @@ const FollowingListUser = memo(
   ({
     item,
     isFollowingUser,
-    follow,
-    unFollow,
     hideSheet,
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
     return (
@@ -165,6 +163,7 @@ const FollowingListUser = memo(
     );
   }
 );
+FollowingListUser.displayName = "FollowingListUser";
 
 const FollowingUserItemLoadingIndicator = () => {
   const colorMode = useColorScheme();

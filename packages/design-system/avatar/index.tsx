@@ -30,7 +30,7 @@ export const Avatar = ({
 }: AvatarProps) => {
   const imageSource = useMemo(
     () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
-    [url]
+    [url, size]
   );
 
   const containerTW = useMemo(
@@ -39,7 +39,7 @@ export const Avatar = ({
       `w-[${size}px] h-[${size}px]`,
       CONTAINER_TW,
     ],
-    [size]
+    [size, tw]
   );
   const imageTW = useMemo(
     () => [

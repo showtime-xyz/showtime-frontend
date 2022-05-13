@@ -11,23 +11,13 @@ import {
   View,
 } from "design-system";
 
+import { SettingBody } from "./setting-content";
+import { SettingHeaderSection } from "./setting-header";
+
 export type UserItemProps = {
   id: number | string;
   title: string;
   image_url?: string;
-};
-
-const HeaderSection = () => {
-  return (
-    <View tw="mb-4 flex-row justify-between bg-white px-4 pt-4 pb-[3px] dark:bg-black">
-      <Text
-        variant="text-2xl"
-        tw="font-extrabold text-gray-900 dark:text-white"
-      >
-        Blocked List
-      </Text>
-    </View>
-  );
 };
 
 export const UserItem = (props: UserItemProps) => {
@@ -61,14 +51,17 @@ export const BlockedList = () => {
     Platform.OS !== "web" && Platform.OS !== "android";
 
   return (
-    <ScrollView tw="w-full max-w-screen-xl">
+    <ScrollView tw="w-full">
       {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
-      <HeaderSection />
-      <View tw="flex-1 px-4">
-        <Text tw="font-semibold text-gray-600 dark:text-gray-400">
-          🚧 Coming soon
-        </Text>
-      </View>
+      <SettingHeaderSection title="Blocked List" />
+      <SettingBody>
+        <View tw="flex-1 px-4 pt-4">
+          <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+            🚧 Coming soon
+          </Text>
+        </View>
+      </SettingBody>
+
       {/* // TODO(enes): implement unblocking logics */}
     </ScrollView>
   );

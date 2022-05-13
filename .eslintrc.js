@@ -7,24 +7,21 @@ module.exports = {
     node: true,
   },
   extends: [
-    "next",
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:diff/diff",
     "plugin:prettier/recommended",
   ],
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly",
     route: "readonly",
+    __DEV__: "readonly",
   },
-  parserOptions: {
-    parser: "@babel/eslint-parser",
-    ecmaVersion: 2020,
-    sourceType: "module",
-  },
-  plugins: ["react", "react-hooks"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint", "react", "react-hooks", "unused-imports"],
   rules: {
+    "no-undef": "off",
+    "no-unused-vars": "off",
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": [
@@ -37,6 +34,11 @@ module.exports = {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": "warn",
+    "no-empty": "warn",
+    "react/display-name": "warn",
+    "no-async-promise-executor": "warn",
   },
   reportUnusedDisableDirectives: true,
 };

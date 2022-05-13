@@ -14,9 +14,11 @@ export const usePlatformBottomHeight = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const nativeBottomTabBarHeight = useContext(BottomTabBarHeightContext)
-    ? useBottomTabBarHeight()
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBottomTabBarHeight()
     : insets.bottom;
   const webBottomTabBarHeight = isMdWidth ? insets.bottom : insets.bottom + 64;
+
   return Platform.OS === "web"
     ? webBottomTabBarHeight
     : nativeBottomTabBarHeight;

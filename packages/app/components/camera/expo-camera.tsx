@@ -10,7 +10,6 @@ import { track } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 
-import { Image } from "design-system/image";
 import { View } from "design-system/view";
 
 type Props = {
@@ -49,8 +48,6 @@ export function Camera({
   const isForeground = useIsForeground();
   const isActive = isFocused && isForeground;
 
-  const [flash, setFlash] = useState<"off" | "on" | "auto">("auto");
-
   const takePhoto = useCallback(async () => {
     try {
       if (camera.current == null) throw new Error("Camera ref is null!");
@@ -86,7 +83,8 @@ export function Camera({
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-  }, [camera, photos]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camera, photos, setIsLoading, setPhotos, burstCaptureTimer]);
 
   const [cameraPosition, setCameraPosition] = useState<
     keyof typeof ExpoCamera.Constants.Type
@@ -101,6 +99,7 @@ export function Camera({
       setPhotos([]);
       setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
   return (

@@ -18,7 +18,6 @@ export function Select<T>({
   placeholder = "Select item",
   options,
   disabled,
-  tw = "",
   onChange,
 }: SelectProps<T>) {
   const [open, setOpen] = useState(false);
