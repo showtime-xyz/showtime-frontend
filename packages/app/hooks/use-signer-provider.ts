@@ -7,7 +7,6 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
-import { captureException } from "app/lib/sentry";
 import { useWalletConnect } from "app/lib/walletconnect";
 import getWeb3Modal from "app/lib/web3-modal";
 import {
@@ -23,6 +22,17 @@ export const useSignerAndProvider = () => {
   let { web3 } = useWeb3();
   const Alert = useAlert();
   const getSignerAndProvider = async () => {
+    let userAddress = await getUserAddress();
+    const biconomy = await (await getBiconomy(connector, web3)).biconomy;
+    return {
+      signer: biconomy.getSignerByAddress(userAddress),
+      provider: biconomy.getEthersProvider(),
+      signerAddress: userAddress,
+      web3,
+    };
+  };
+
+  const getUserAddress = async () => {
     let userAddress;
     if (web3) {
       const addr = await web3.getSigner().getAddress();
@@ -49,15 +59,10 @@ export const useSignerAndProvider = () => {
       Alert.alert("Sorry! seems like you are not connected to the wallet");
       return;
     }
-    const biconomy = await (await getBiconomy(connector, web3)).biconomy;
-    return {
-      signer: biconomy.getSignerByAddress(userAddress),
-      provider: biconomy.getEthersProvider(),
-      signerAddress: userAddress,
-      web3,
-    };
+    return userAddress;
   };
-  return { getSignerAndProvider };
+
+  return { getSignerAndProvider, getUserAddress };
 };
 
 export const useSignTypedData = () => {
@@ -103,7 +108,6 @@ export const useSignTypedData = () => {
         console.log("Not connected to wallet, sending connect request");
       }
     } catch (e: any) {
-      captureException(e);
       Logger.error("signing failed with erro", e);
       if (
         e.code === -32603 ||
@@ -144,7 +148,6 @@ const useUpdateChain = () => {
           });
         } catch (error: any) {
           Logger.error(error);
-          captureException(error);
           if (error.code === 4902) {
             try {
               await web3?.provider?.request?.({
@@ -153,7 +156,6 @@ const useUpdateChain = () => {
               });
             } catch (error) {
               Logger.error(error);
-              captureException(error);
               Alert.alert(
                 "something went wrong while switching network",
                 "Please manually try to switch to polygon network"
@@ -174,7 +176,6 @@ const useUpdateChain = () => {
         });
       }
     } catch (e) {
-      captureException(e);
       Logger.error("error switching chain ", e);
     }
   };
