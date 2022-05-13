@@ -11,4 +11,6 @@ export const EditProfileScreen = withModalScreen(EditProfilePage, {
   title: "Edit Profile",
   matchingPathname: "/profile/edit",
   matchingQueryParam: "editProfileModal",
+  enableContentPanningGesture: false,
+  snapPoints: ["90%"],
 });
