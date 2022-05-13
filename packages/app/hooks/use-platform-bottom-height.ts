@@ -13,9 +13,9 @@ export const usePlatformBottomHeight = () => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const bottomTabBarHeight = useBottomTabBarHeight();
   const nativeBottomTabBarHeight = useContext(BottomTabBarHeightContext)
-    ? bottomTabBarHeight
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBottomTabBarHeight()
     : insets.bottom;
   const webBottomTabBarHeight = isMdWidth ? insets.bottom : insets.bottom + 64;
 

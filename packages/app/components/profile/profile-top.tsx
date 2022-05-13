@@ -79,9 +79,9 @@ export const ProfileTop = ({
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing } = useMyInfo();
-  const bottomTabBarHeight = useBottomTabBarHeight();
   const tabBarHeight = useContext(BottomTabBarHeightContext)
-    ? bottomTabBarHeight
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBottomTabBarHeight()
     : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
