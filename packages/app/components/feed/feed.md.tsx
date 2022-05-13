@@ -13,6 +13,7 @@ import {
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import {
@@ -34,6 +35,8 @@ const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
+
+type Tab = "following" | "curated" | "" | undefined;
 
 type Query = {
   tab: number;
@@ -117,7 +120,9 @@ export const FeedList = () => {
 const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+  );
 };
 
 const AlgorithmicFeed = () => {
@@ -129,17 +134,20 @@ const AlgorithmicFeed = () => {
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return <NFTScrollList {...queryState} data={queryState.data} tab="curated" />;
 };
 
 const NFTScrollList = ({
   data,
   fetchMore,
+  tab,
 }: {
   data: NFT[];
   fetchMore: any;
+  tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
+  const router = useRouter();
 
   let dataProvider = useMemo(
     () =>
@@ -169,16 +177,26 @@ const NFTScrollList = ({
     }),
     [height]
   );
-  const _rowRenderer = useCallback((_type: any, item: any) => {
-    return (
-      <View tw="flex-row justify-center" nativeID="334343">
-        <Card
-          nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-        />
-      </View>
-    );
-  }, []);
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index: number) => {
+      return (
+        <View tw="flex-row justify-center" nativeID="334343">
+          <Card
+            onPress={() =>
+              router.push(
+                `/list?initialScrollIndex=${index}&type=feed${
+                  tab ? "&tab=" + tab : ""
+                }`
+              )
+            }
+            nft={item}
+            tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          />
+        </View>
+      );
+    },
+    [tab]
+  );
 
   const videoConfig = useMemo(
     () => ({
