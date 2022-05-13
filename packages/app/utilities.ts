@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
 import { ethers } from "ethers";
+import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
@@ -472,3 +473,107 @@ export const getDropdownShadow = (isDark = false) => {
   const shadow = isDark ? DROPDOWN_DRAK_SHADOW : DROPDOWN_LIGHT_SHADOW;
   return Platform.OS === "web" ? shadow : undefined;
 };
+
+export const getFileFormData = async (
+  file: string | File
+): Promise<Blob | undefined> => {
+  const fileMetaData = await getFileMeta(file);
+
+  if (!fileMetaData) return;
+
+  if (typeof file === "string") {
+    // Web Camera -  Data URI
+    if (file?.startsWith("data")) {
+      //@ts-ignore
+      const file = dataURLtoFile(file, "unknown");
+
+      return file;
+    }
+    // Native - File path string
+    else {
+      return {
+        //@ts-ignore
+        uri: file,
+        name: fileMetaData.name,
+        type: fileMetaData.type,
+      };
+    }
+  }
+
+  // Web File Picker - File Object
+  return file as Blob;
+};
+
+export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
+
+const getFileMeta = async (file?: File | string) => {
+  if (!file) {
+    return;
+  }
+
+  if (typeof file === "string") {
+    // Web Camera -  Data URI
+    if (file.startsWith("data")) {
+      const fileExtension = file.substring(
+        file.indexOf(":") + 1,
+        file.indexOf(";")
+      );
+
+      const contentWithoutMime = file.split(",")[1];
+      const sizeInBytes = window.atob(contentWithoutMime).length;
+
+      return {
+        name: "unknown",
+        type: fileExtension,
+        size: sizeInBytes,
+      };
+    }
+
+    // Native - File path
+    else {
+      const fileName = file.split("/").pop();
+      const fileExtension = fileName?.split(".").pop();
+      const fileInfo = await FileSystem.getInfoAsync(file);
+
+      if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+        return {
+          name: fileName,
+          type: "image/" + fileExtension,
+          size: fileInfo.size,
+        };
+      } else if (
+        fileExtension &&
+        supportedVideoExtensions.includes(fileExtension)
+      ) {
+        return {
+          name: fileName,
+          type: "video/" + fileExtension,
+          size: fileInfo.size,
+        };
+      }
+    }
+  }
+
+  // Web File Picker - File Object
+  else {
+    return {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    };
+  }
+};
+function dataURLtoFile(dataurl: string, filename: string) {
+  let arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}

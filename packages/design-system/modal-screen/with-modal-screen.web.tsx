@@ -9,7 +9,7 @@ import type { ModalScreenOptions } from "./types";
 
 function withModalScreen<P>(
   Screen: FC<P>,
-  { title, matchingPathname, matchingQueryParam }: ModalScreenOptions
+  { title, matchingPathname, matchingQueryParam, ...rest }: ModalScreenOptions
 ) {
   // eslint-disable-next-line react/display-name
   return function (props: P) {
@@ -38,6 +38,7 @@ function withModalScreen<P>(
         title={title}
         web_height="auto"
         onClose={onClose}
+        {...rest}
       >
         <Screen {...props} />
       </ModalScreen>
