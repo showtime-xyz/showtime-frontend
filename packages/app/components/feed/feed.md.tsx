@@ -195,7 +195,7 @@ const NFTScrollList = ({
         </View>
       );
     },
-    [tab]
+    [router, tab]
   );
 
   const videoConfig = useMemo(
