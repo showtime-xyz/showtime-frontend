@@ -44,16 +44,15 @@ export const useViewabilityMount = ({
 
       loaded.current = true;
     },
-    [source, videoRef]
+    [source, videoRef, videoConfig?.isMuted]
   );
 
   const unload = useCallback(() => {
     if (loaded.current) {
       videoRef.current?.unloadAsync();
-      // if (__DEV__) console.log("📽 : unloading ", id);
     }
     loaded.current = false;
-  }, [videoRef, id]);
+  }, [videoRef]);
 
   // we mount or unmount the Video depending on the focus state
   useEffect(() => {
@@ -65,7 +64,7 @@ export const useViewabilityMount = ({
         loadPlayOrPause(shouldPlay);
       }
     }
-  }, [isItemInList, unload, isListFocused, id]);
+  }, [isItemInList, unload, isListFocused, id, context.value, loadPlayOrPause]);
 
   useAnimatedReaction(
     () => context.value,

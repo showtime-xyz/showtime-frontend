@@ -69,7 +69,7 @@ export const ProfileTabList = ({
         `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
     },
-    [list.id, profileId, filter.collectionId, filter.sortId]
+    [list.id, profileId, filter.collectionId, filter.sortId, router]
   );
 
   const ListFooterComponent = useCallback(
@@ -148,6 +148,8 @@ export const ProfileTabList = ({
     mintingState.file,
     mintingState.fileType,
     isBlocked,
+    profileId,
+    user?.data.profile.profile_id,
   ]);
 
   const headerHeight = useMemo(
@@ -175,7 +177,7 @@ export const ProfileTabList = ({
       width: contentWidth,
       height,
     }),
-    [width]
+    [contentWidth, height]
   );
   const _rowRenderer = useCallback(
     (_type: any, item: any, index: number) => {

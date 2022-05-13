@@ -12,6 +12,7 @@ function withModalScreen<P>(
   Screen: FC<P>,
   { title, snapPoints = ["90%", "100%"] }: ModalScreenOptions
 ) {
+  // eslint-disable-next-line react/display-name
   return function (props: P) {
     const modalRef = useRef<ModalMethods>(null);
     useBackPressHandler(modalRef);

@@ -1,11 +1,9 @@
 import { useCallback, useMemo } from "react";
-import { Platform } from "react-native";
 
 import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import { NFT, Profile } from "app/types";
 
 import { useAuth } from "./auth/use-auth";
@@ -240,13 +238,10 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 };
 
 export const useComments = ({ nftId }: { nftId: number }) => {
-  const commentsUrlFn = useCallback(
-    (index) => {
-      const url = `/v2/comments/${nftId}?limit=10`;
-      return url;
-    },
-    [nftId]
-  );
+  const commentsUrlFn = useCallback(() => {
+    const url = `/v2/comments/${nftId}?limit=10`;
+    return url;
+  }, [nftId]);
 
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
@@ -269,7 +264,6 @@ export const useMyInfo = () => {
   const { accessToken } = useAuth();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
-  const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
 
   const { data, error } = useSWR<MyInfo>(
@@ -309,7 +303,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [accessToken, data, router]
+    [accessToken, data, mutate, navigateToLogin]
   );
 
   const unfollow = useCallback(
@@ -341,7 +335,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [data]
+    [data, mutate]
   );
 
   const isFollowing = useCallback(
@@ -389,7 +383,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data, accessToken]
+    [data, accessToken, mutate, navigateToLogin]
   );
 
   const unlike = useCallback(
@@ -421,7 +415,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data]
+    [data, mutate]
   );
 
   const isLiked = useCallback(

@@ -16,7 +16,7 @@ type Props = {
 export function Price({ nft }: Props) {
   //#region hooks
   const isDarkMode = useIsDarkMode();
-  const { data, loading, error } = useNFTListings(nft?.nft_id);
+  const { data, loading } = useNFTListings(nft?.nft_id);
   //#endregion
 
   //#region variables
@@ -52,8 +52,9 @@ export function Price({ nft }: Props) {
         <Text
           sx={{ fontSize: 13, lineHeight: 14 }}
           tw="text-right font-bold uppercase text-gray-900 dark:text-white"
-          children={price}
-        />
+        >
+          {price}
+        </Text>
       </Skeleton>
     </View>
   );

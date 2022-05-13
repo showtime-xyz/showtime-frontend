@@ -69,7 +69,7 @@ function TextLink({
           selectable: false,
           onPress,
         }),
-        [variant, tw, textProps]
+        [variant, tw, textProps, onPress]
       )}
     />
   );

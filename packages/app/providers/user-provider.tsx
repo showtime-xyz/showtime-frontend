@@ -40,7 +40,7 @@ export function UserProvider({ children }: UserProviderProps) {
       isLoading,
       isAuthenticated: accessToken != undefined,
     }),
-    [isLoading, data, accessToken, mutate]
+    [isLoading, data, accessToken, mutate, error]
   );
   //#endregion
 

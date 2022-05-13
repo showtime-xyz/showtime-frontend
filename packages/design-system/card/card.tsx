@@ -30,6 +30,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
+
   const size = tw
     ? tw
     : numColumns === 3
@@ -47,7 +48,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       default:
         return 500;
     }
-  }, []);
+  }, [numColumns, contentWidth]);
 
   if (width < 768) {
     return (
@@ -56,6 +57,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
       </Pressable>
     );
   }
+
   return (
     <View
       style={{

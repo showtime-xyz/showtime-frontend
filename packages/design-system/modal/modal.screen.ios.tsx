@@ -1,13 +1,14 @@
-import { forwardRef, memo } from "react";
+import { memo } from "react";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import type { ModalScreenProps } from "./types";
 
-const ModalScreenComponent = forwardRef(function ModalScreenComponent(
-  { title, children, onClose }: ModalScreenProps,
-  ref
-) {
+const ModalScreenComponent = ({
+  title,
+  children,
+  onClose,
+}: ModalScreenProps) => {
   return (
     <>
       <ModalHeaderBar />
@@ -15,6 +16,6 @@ const ModalScreenComponent = forwardRef(function ModalScreenComponent(
       {children}
     </>
   );
-});
+};
 
 export const ModalScreen = memo(ModalScreenComponent);

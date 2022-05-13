@@ -167,7 +167,7 @@ export function createParam<
 
     useEffect(() => {
       setNativeState(router?.params?.[name]);
-    }, [router?.params?.[name]]);
+    }, [name, router?.params]);
 
     const webParam: string | undefined = router.getParam(name as string);
 

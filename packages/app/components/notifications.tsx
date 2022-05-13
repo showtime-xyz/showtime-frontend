@@ -30,9 +30,10 @@ import { colors } from "design-system/tailwind/colors";
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
 
 export const Notifications = () => {
-  const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
+  const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
+  const bottomBarHeight = useBottomTabBarHeight();
 
   const [users, setUsers] = useState([]);
 
@@ -41,18 +42,16 @@ export const Notifications = () => {
   }, []);
 
   const keyExtractor = useCallback((item: NotificationType) => {
-    // console.log("item ", item.id);
     return item.id.toString();
   }, []);
 
   const ListFooter = useCallback(() => {
-    const bottomBarHeight = useBottomTabBarHeight();
     return isLoadingMore ? (
       <Skeleton height={bottomBarHeight} width="100%" />
     ) : (
       <View tw={`h-${bottomBarHeight}px`} />
     );
-  }, [isLoadingMore]);
+  }, [isLoadingMore, bottomBarHeight]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,

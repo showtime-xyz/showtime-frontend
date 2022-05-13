@@ -15,4 +15,6 @@ const TextInput = forwardRef<typeof DripsyTextInput, TextInputProps>(
   )
 );
 
+TextInput.displayName = "TextInput";
+
 export { TextInput };

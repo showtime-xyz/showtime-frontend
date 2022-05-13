@@ -16,7 +16,7 @@ const Root = (props: RootProps) => {
       onValueChange?.(newValue);
       setValue(newValue);
     },
-    [setValue, onValueChange, value]
+    [setValue, onValueChange]
   );
 
   useUpdateEffect(() => {

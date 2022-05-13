@@ -29,16 +29,17 @@ function OwnershipContainer({
         "flex h-[30px] w-[30px] flex-row flex-wrap justify-between",
         count < 3 ? "content-center" : "content-between",
       ]}
-      children={children}
-    />
+    >
+      {children}
+    </View>
   );
 }
 
 export function Ownership({ nft }: Props) {
-  if (!nft) return null;
-
   const isDarkMode = useIsDarkMode();
-  const { data, loading, error } = useNFTDetails(nft.nft_id);
+  const { data, loading } = useNFTDetails(nft.nft_id);
+
+  if (!nft) return null;
 
   if (loading) {
     return (

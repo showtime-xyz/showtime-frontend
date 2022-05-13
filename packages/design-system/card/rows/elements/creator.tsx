@@ -37,7 +37,7 @@ export function Creator({
               variant="text-xs"
               tw="font-semibold text-gray-600 dark:text-gray-400"
             >
-            {label}
+              {label}
             </Text>
             <View tw="h-2" />
           </>

@@ -24,7 +24,7 @@ const Root = (props: RootProps) => {
       onValueChange?.(newValue);
       setValue(newValue);
     },
-    [setValue, onValueChange, value]
+    [setValue, onValueChange]
   );
 
   useUpdateEffect(() => {
@@ -62,6 +62,7 @@ const TriggerPressable = forwardRef<unknown, any>((props, ref) => {
     </Pressable>
   );
 });
+TriggerPressable.displayName = "TriggerPressable";
 
 const Trigger = (props: TriggerProps) => {
   return (

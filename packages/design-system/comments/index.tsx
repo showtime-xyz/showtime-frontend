@@ -73,12 +73,7 @@ function Comments({ nftId }: Props) {
     messagesListBottom = messageBoxHeight;
   }
 
-  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
-    useComments({
-      nftId,
-    });
-
-  console.log("Comments", data);
+  const { data, isRefreshing, refresh, fetchMore } = useComments(nftId);
 
   const keyExtractor = useCallback((item) => {
     return item.comment_id;
@@ -90,11 +85,7 @@ function Comments({ nftId }: Props) {
     []
   );
 
-  const ListFooterComponent = useCallback(
-    () => <View />,
-    // <Footer isLoading={isLoadingMore} />
-    [isLoadingMore]
-  );
+  const ListFooterComponent = useCallback(() => <View />, []);
 
   // TODO: getItemLayout
 

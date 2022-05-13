@@ -46,6 +46,7 @@ type MenuVisibleContext = {
 const VirtualizedMenuContext = createContext(false);
 const useIsNestedMenu = () => useContext(VirtualizedMenuContext);
 
+// eslint-disable-next-line no-redeclare
 const MenuVisibleContext = createContext<MenuVisibleContext>(null as any);
 
 const useMenuVisibleContext = () => useContext(MenuVisibleContext);
@@ -96,7 +97,7 @@ function MenuProvider({ children }: { children: ReactNode }) {
           closeRootMenu: closeRootMenu ?? (() => setOpen(false)),
           onToggleOpen: () => setOpen((prev) => !prev),
         }),
-        [isOpen]
+        [isOpen, closeRootMenu]
       )}
     >
       <VirtualizedMenuContext.Provider value={isNestedMenu}>
@@ -167,10 +168,12 @@ const Item = menuify(
     disabled,
   }: MenuItemProps) => {
     const { closeRootMenu } = useMenuVisibleContext();
+
     const onPress = useCallback(() => {
       onSelect?.();
       closeRootMenu();
     }, [onSelect, closeRootMenu]);
+
     return (
       <Pressable
         onPress={onPress}

@@ -52,6 +52,7 @@ export function SelectItem<T>({
       tw`p-2 m-1 items-center justify-between rounded-lg`,
       containerAnimatedStyle,
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   //#endregion

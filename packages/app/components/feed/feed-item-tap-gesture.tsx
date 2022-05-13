@@ -66,6 +66,7 @@ export const FeedItemTapGesture = ({
 
             like();
             showHeader();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
           }, [like, showHeader])}
         >
           {children}

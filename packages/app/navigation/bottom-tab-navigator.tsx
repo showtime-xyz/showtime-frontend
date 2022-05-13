@@ -33,7 +33,7 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isAuthenticated } = useUser();
   const isForeground = useIsForeground();
 

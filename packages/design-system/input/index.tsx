@@ -101,8 +101,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
         <Label
           variant="text-sm"
           htmlFor={inputId}
-          tw="text-gray-900 dark:text-white"
-          sx={{ marginBottom: 4, fontWeight: "700" }}
+          tw="mb-2 font-bold text-gray-900 dark:text-white"
         >
           {label}
         </Label>
@@ -127,7 +126,10 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
         <TextInput
           sx={{
             flexGrow: 1,
-            paddingY: 12,
+            paddingY: Platform.select({
+              ios: 16,
+              default: 12,
+            }),
             paddingLeft: leftElement ? 0 : 16,
             paddingRight: rightElement ? 0 : 16,
             fontWeight: "500",
@@ -199,6 +201,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     </View>
   );
 });
+
+Input.displayName = "Input";
 
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement

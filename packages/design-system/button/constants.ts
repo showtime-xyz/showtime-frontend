@@ -1,4 +1,3 @@
-import { tw as tailwind } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
 
 const CONTAINER_TW =

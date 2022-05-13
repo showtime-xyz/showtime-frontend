@@ -9,14 +9,9 @@ import { Button } from "design-system/card/social/button";
 import { View } from "design-system/view";
 
 function Social({ nft }: { nft?: NFT }) {
-  if (!nft) return null;
-
   const router = useRouter();
-
   const { isLiked, like, unlike } = useMyInfo();
-
   const isLikedNft = useMemo(() => isLiked(nft.nft_id), [isLiked, nft.nft_id]);
-
   const [likeCount, setLikeCount] = useState(nft.like_count);
 
   const handleCommentPress = useCallback(() => {
@@ -44,6 +39,22 @@ function Social({ nft }: { nft?: NFT }) {
     );
   }, [router, nft]);
 
+  const handleLikeButton = useCallback(async () => {
+    if (isLikedNft) {
+      const isSuccessfullyUnlike = await unlike(nft.nft_id);
+      if (isSuccessfullyUnlike) {
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      const isSuccessfullyLiked = await like(nft.nft_id);
+      if (isSuccessfullyLiked) {
+        setLikeCount(likeCount + 1);
+      }
+    }
+  }, [isLikedNft, like, unlike, likeCount, nft.nft_id]);
+
+  if (!nft) return null;
+
   return (
     <View tw="flex-row justify-between bg-white px-4 py-2 dark:bg-black">
       <View tw="flex-row">
@@ -51,19 +62,7 @@ function Social({ nft }: { nft?: NFT }) {
           variant="like"
           count={likeCount}
           active={isLikedNft}
-          onPress={useCallback(async () => {
-            if (isLikedNft) {
-              const isSuccessfullyUnlike = await unlike(nft.nft_id);
-              if (isSuccessfullyUnlike) {
-                setLikeCount(likeCount - 1);
-              }
-            } else {
-              const isSuccessfullyLiked = await like(nft.nft_id);
-              if (isSuccessfullyLiked) {
-                setLikeCount(likeCount + 1);
-              }
-            }
-          }, [isLikedNft, like, unlike, likeCount])}
+          onPress={handleLikeButton}
         />
         <View tw="ml-2" />
         <Button
@@ -72,10 +71,6 @@ function Social({ nft }: { nft?: NFT }) {
           onPress={handleCommentPress}
         />
       </View>
-
-      {/* <View>
-        <Button variant="boost" count={0} />
-      </View> */}
     </View>
   );
 }

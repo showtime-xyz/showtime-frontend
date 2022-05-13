@@ -1,7 +1,5 @@
 import { Meta } from "@storybook/react";
 
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs/index.web";
-
 import { Button } from "../button";
 import { useIsDarkMode } from "../hooks";
 import { ArrowRight } from "../icon";

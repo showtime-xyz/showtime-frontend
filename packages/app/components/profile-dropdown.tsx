@@ -1,4 +1,4 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";

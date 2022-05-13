@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 import { Video as ExpoVideo } from "expo-av";
 
 import { useVideoConfig } from "app/context/video-config-context";
-import { useItemVisible } from "app/hooks/use-viewability-mount";
 
 import { Image } from "design-system/image";
 import type { TW } from "design-system/tailwind/types";
@@ -15,7 +14,7 @@ type VideoProps = {
   blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, blurhash, style, resizeMode, ...props }: VideoProps) {
+function Video({ tw, blurhash, resizeMode, ...props }: VideoProps) {
   const videoConfig = useVideoConfig();
 
   const videoRef = useRef<ExpoVideo>();

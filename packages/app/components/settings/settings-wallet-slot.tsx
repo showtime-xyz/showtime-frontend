@@ -39,7 +39,7 @@ export const SettingsWalletSlotHeader = () => {
         hideAfter: 4000,
       });
     }
-  }, [state.status]);
+  }, [state.status, connectionError, toast]);
 
   const triggerAddWallet = async () => {
     Alert.alert(

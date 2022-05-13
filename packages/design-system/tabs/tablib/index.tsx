@@ -91,6 +91,7 @@ const Root = ({
 
   useEffect(() => {
     if (typeof indexProp === "number") index.value = indexProp;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indexProp]);
 
   // We need to put both header and TabBar in absolute view so filter here, bad for composition, maybe improve later
@@ -351,6 +352,7 @@ const Content = React.forwardRef(
     );
   }
 );
+Content.displayName = "Content";
 
 const Trigger = React.forwardRef(
   (
@@ -362,6 +364,7 @@ const Trigger = React.forwardRef(
       onPress,
       ...props
     }: PressableProps,
+    // eslint-disable-next-line unused-imports/no-unused-vars
     ref: ForwardedRef<typeof Pressable>
   ) => {
     const { pagerRef, tabItemLayouts } = useContext(TabsContext);
@@ -391,6 +394,7 @@ const Trigger = React.forwardRef(
     );
   }
 );
+Trigger.displayName = "Trigger";
 
 function useTabScrollViewProps(props: any, ref: any) {
   const {
@@ -498,7 +502,7 @@ function useTabScrollViewProps(props: any, ref: any) {
         paddingTop: Platform.OS === "android" ? topHeight : 0,
         minHeight,
       }),
-      [topHeight]
+      [topHeight, minHeight]
     ),
     progressViewOffset: topHeight,
   };

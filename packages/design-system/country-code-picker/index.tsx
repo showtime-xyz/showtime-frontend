@@ -35,6 +35,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
 
   useEffect(() => {
     sharedValue.value = value;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const contextValue = useMemo(() => {
@@ -45,6 +46,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         onChange(item.code);
       },
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onChange]);
 
   return (
@@ -100,3 +102,5 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
     </Pressable>
   );
 });
+
+PickerItem.displayName = "PickerItem";

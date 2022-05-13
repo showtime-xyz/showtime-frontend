@@ -1,12 +1,4 @@
-import Animated, {
-  SlideInDown,
-  SlideOutDown,
-  useDerivedValue,
-  withTiming,
-} from "react-native-reanimated";
-
-import { CircularProgress } from "app/components/circular-progress";
-import { useRouter } from "app/navigation/use-router";
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
 import { Flip, Close, Check } from "design-system/icon";
@@ -38,14 +30,6 @@ export function CameraButtons({
   setCameraPosition,
   postPhoto,
 }: Props) {
-  const router = useRouter();
-
-  const loading = useDerivedValue(() => {
-    return withTiming(isLoading ? 0 : 1, {
-      duration: isLoading ? 6000 : 0,
-    });
-  });
-
   return (
     <View tw="flex-row items-center justify-between py-8 px-6">
       {isLoading ? (

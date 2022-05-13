@@ -65,6 +65,10 @@ export function Fieldset(props: FieldsetProps) {
             editable={disabled}
             nativeID={inputId}
             accessibilityLabel={accessibilityLabel}
+            multiline={textInputProps.multiline ?? true}
+            numberOfLines={textInputProps.numberOfLines ?? 1}
+            blurOnSubmit={textInputProps.blurOnSubmit ?? true}
+            textAlignVertical="bottom"
             placeholderTextColor={
               isDark ? tw.color("gray-400") : tw.color("gray-600")
             }
