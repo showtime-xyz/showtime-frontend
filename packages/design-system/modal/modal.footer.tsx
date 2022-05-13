@@ -13,10 +13,9 @@ import { useKeyboardOffset } from "./useKeyboardOffset";
 function ModalFooterComponent({ children }: ModalFooterProps) {
   const bottomSheetContext = useBottomSheetInternal(true);
   const { bottom, top } = useSafeAreaInsets();
-
   const animatedContainerStyle = useKeyboardOffset(
     top,
-    bottomSheetContext.animatedKeyboardState
+    bottomSheetContext?.animatedKeyboardState
   );
 
   if (bottomSheetContext == null) {
