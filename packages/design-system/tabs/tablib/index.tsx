@@ -40,6 +40,7 @@ import Reanimated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
@@ -280,7 +281,6 @@ const Pager = ({
     lazy,
     index,
   } = useContext(TabsContext);
-
   const [mountedIndices, setMountedIndices] = React.useState(
     lazy ? [initialIndex] : flattenChildren(children).map((_c, i) => i)
   );
@@ -304,8 +304,9 @@ const Pager = ({
                     <KeyboardAvoidingView
                       style={{ flex: 1 }}
                       behavior="padding"
-                      enabled={Platform.OS !== "android"}
-                      keyboardVerticalOffset={95}
+                      keyboardVerticalOffset={
+                        c.props.keyboardVerticalOffset || 0
+                      }
                     >
                       {c}
                     </KeyboardAvoidingView>
@@ -564,6 +565,7 @@ TabRecyclerListView.displayName = "TabRecyclerListView";
 
 type ScrollableScrollViewType = ScrollViewProps & {
   useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
 };
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
@@ -577,6 +579,7 @@ const AnimatedFlatList = Reanimated.createAnimatedComponent(
 interface ExtendedFlatListProps extends FlatListProps<any> {
   minHeight?: number;
   useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
 }
 const TabFlatList = makeScrollableComponent<FlatList, ExtendedFlatListProps>(
   AnimatedFlatList
