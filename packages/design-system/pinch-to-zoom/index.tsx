@@ -73,7 +73,7 @@ export function PinchToZoom(props: Props) {
           if (newScale < minimumZoomScale || newScale > maximumZoomScale)
             return;
 
-          scale.value = prevScale.value * e.scale;
+          scale.value = newScale;
 
           // reset the origin
           if (!isPinching.value) {
