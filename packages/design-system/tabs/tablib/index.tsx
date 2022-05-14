@@ -191,7 +191,12 @@ const List = (props: TabListProps) => {
   return null;
 };
 
-const ListImpl = ({ children, style, ...props }: TabListProps) => {
+const ListImpl = ({
+  children,
+  style,
+  onPressCallback,
+  ...props
+}: TabListProps) => {
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
@@ -203,7 +208,7 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
       if (React.isValidElement(c) && c && c.type === Trigger) {
         triggerIndex++;
         // @ts-ignore - Todo - do better ts check here
-        return React.cloneElement(c, { index: triggerIndex });
+        return React.cloneElement(c, { index: triggerIndex, onPressCallback });
       } else {
         return c;
       }
@@ -362,8 +367,11 @@ const Trigger = React.forwardRef(
       index,
       onLayout,
       onPress,
+      onPressCallback,
       ...props
-    }: PressableProps,
+    }: PressableProps & {
+      onPressCallback?: () => void;
+    },
     // eslint-disable-next-line unused-imports/no-unused-vars
     ref: ForwardedRef<typeof Pressable>
   ) => {
@@ -382,6 +390,7 @@ const Trigger = React.forwardRef(
           onLayout?.(e);
         }}
         onPress={(e) => {
+          onPressCallback?.();
           pagerRef.current.setPage(index);
           onPress?.(e);
         }}
