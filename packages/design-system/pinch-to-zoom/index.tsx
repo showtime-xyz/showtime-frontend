@@ -1,134 +1,153 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
+import type { ViewProps } from "react-native";
 
-import {
-  PinchGestureHandler,
-  PinchGestureHandlerGestureEvent,
-} from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  useAnimatedGestureHandler,
-  runOnJS,
-  useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  useAnimatedStyle,
+  withTiming,
+  cancelAnimation,
 } from "react-native-reanimated";
-
-import { useLayout } from "../hooks";
 
 type Props = {
   children: React.ReactNode;
-  onPinchStart?: () => void;
-  onPinchEnd?: () => void;
-  disabled?: boolean;
-};
+  minimumZoomScale?: number;
+  maximumZoomScale?: number;
+} & ViewProps;
 
-export const PinchToZoom = ({
-  children,
-  onPinchStart,
-  onPinchEnd,
-  disabled,
-}: Props) => {
+export function PinchToZoom(props: Props) {
+  const {
+    minimumZoomScale = 1,
+    maximumZoomScale = 8,
+    style: propStyle,
+    onLayout,
+  } = props;
+
+  const translationX = useSharedValue(0);
+  const translationY = useSharedValue(0);
+  const originX = useSharedValue(0);
+  const originY = useSharedValue(0);
   const scale = useSharedValue(1);
-  const zIndex = useSharedValue(1);
-  const origin = { x: useSharedValue(0), y: useSharedValue(0) };
-  const translation = { x: useSharedValue(0), y: useSharedValue(0) };
-  const { onLayout, layout } = useLayout();
+  const isPinching = useSharedValue(false);
+  const viewHeight = useSharedValue(0);
+  const viewWidth = useSharedValue(0);
 
-  const handler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>(
-    {
-      onStart(e, ctx: any) {
-        // On android, we get focalX and focalY 0 in onStart callback. So, use a flag and set initial focalX and focalY in onActive
-        // 😢 https://github.com/software-mansion/react-native-gesture-handler/issues/546
-        ctx.start = true;
-        if (onPinchStart) runOnJS(onPinchStart)();
-      },
+  const prevScale = useSharedValue(0);
+  const offsetScale = useSharedValue(0);
+  const prevTranslationX = useSharedValue(0);
+  const prevTranslationY = useSharedValue(0);
 
-      onActive(e, ctx: any) {
-        if (ctx.start) {
-          origin.x.value = e.focalX;
-          origin.y.value = e.focalY;
+  const panTranslateX = useSharedValue(0);
+  const panTranslateY = useSharedValue(0);
+  const prevPointers = useSharedValue(0);
+  const offsetFromFocalX = useSharedValue(0);
+  const offsetFromFocalY = useSharedValue(0);
 
-          ctx.offsetFromFocalX = origin.x.value;
-          ctx.offsetFromFocalY = origin.y.value;
-          ctx.prevTranslateOriginX = origin.x.value;
-          ctx.prevTranslateOriginY = origin.y.value;
-          ctx.prevPointers = e.numberOfPointers;
-
-          ctx.start = false;
+  const gesture = useMemo(() => {
+    const pinch = Gesture.Pinch()
+      .onStart(() => {
+        cancelAnimation(translationX);
+        cancelAnimation(translationY);
+        cancelAnimation(scale);
+        prevScale.value = scale.value;
+        offsetScale.value = scale.value;
+      })
+      .onUpdate((e) => {
+        if (e.numberOfPointers !== prevPointers.value) {
+          prevTranslationX.value = translationX.value;
+          prevTranslationY.value = translationY.value;
+          offsetFromFocalX.value = e.focalX;
+          offsetFromFocalY.value = e.focalY;
+          prevPointers.value = e.numberOfPointers;
         }
 
-        scale.value = e.scale;
+        if (e.numberOfPointers === 1) {
+          translationX.value =
+            prevTranslationX.value + e.focalX - offsetFromFocalX.value;
+          translationY.value =
+            prevTranslationY.value + e.focalY - offsetFromFocalY.value;
+          isPinching.value = false;
+        } else if (e.numberOfPointers === 2) {
+          const newScale = prevScale.value * e.scale;
 
-        if (ctx.prevPointers !== e.numberOfPointers) {
-          ctx.offsetFromFocalX = e.focalX;
-          ctx.offsetFromFocalY = e.focalY;
-          ctx.prevTranslateOriginX = ctx.translateOriginX;
-          ctx.prevTranslateOriginY = ctx.translateOriginY;
+          if (newScale < minimumZoomScale || newScale > maximumZoomScale)
+            return;
+
+          scale.value = prevScale.value * e.scale;
+
+          // reset the origin
+          if (!isPinching.value) {
+            isPinching.value = true;
+            originX.value = e.focalX;
+            originY.value = e.focalY;
+            prevTranslationX.value = translationX.value;
+            prevTranslationY.value = translationY.value;
+            offsetScale.value = scale.value;
+          }
+
+          if (isPinching.value) {
+            // translate the image to the focal point as we're zooming
+            translationX.value =
+              prevTranslationX.value +
+              -1 *
+                ((scale.value - offsetScale.value) *
+                  (originX.value - viewWidth.value / 2));
+            translationY.value =
+              prevTranslationY.value +
+              -1 *
+                ((scale.value - offsetScale.value) *
+                  (originY.value - viewHeight.value / 2));
+          }
         }
+      })
+      .onEnd(() => {
+        isPinching.value = false;
+        prevTranslationX.value = translationX.value;
+        prevTranslationY.value = translationY.value;
 
-        ctx.translateOriginX =
-          ctx.prevTranslateOriginX + e.focalX - ctx.offsetFromFocalX;
-        ctx.translateOriginY =
-          ctx.prevTranslateOriginY + e.focalY - ctx.offsetFromFocalY;
+        translationX.value = withTiming(0);
+        translationY.value = withTiming(0);
+        scale.value = withTiming(1);
+        originX.value = 0;
+        originY.value = 0;
+        isPinching.value = false;
+        prevScale.value = 0;
+        prevTranslationX.value = 0;
+        prevTranslationY.value = 0;
+        panTranslateX.value = 0;
+        panTranslateY.value = 0;
+      });
 
-        if (scale.value > 1) {
-          translation.x.value = ctx.translateOriginX - origin.x.value;
-          translation.y.value = ctx.translateOriginY - origin.y.value;
-        }
+    return pinch;
 
-        ctx.prevPointers = e.numberOfPointers;
+    // only add prop dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maximumZoomScale, minimumZoomScale]);
 
-        zIndex.value = 10;
-      },
-      onEnd() {
-        scale.value = withSpring(1, {
-          stiffness: 60,
-          overshootClamping: true,
-        });
-        translation.x.value = withSpring(0, {
-          stiffness: 60,
-          overshootClamping: true,
-        });
-        translation.y.value = withSpring(0, {
-          stiffness: 60,
-          overshootClamping: true,
-        });
-
-        zIndex.value = 1;
-
-        if (onPinchEnd) runOnJS(onPinchEnd)();
-      },
-    },
-    [onPinchStart, onPinchEnd]
-  );
-
-  const imageLeftForSettingTransformOrigin = layout ? -layout.height / 2 : 0;
-  const imageTopForSettingTransformOrigin = layout ? -layout.width / 2 : 0;
-
-  const animatedStyles = useAnimatedStyle(() => {
+  const style = useAnimatedStyle(() => {
     return {
-      zIndex: zIndex.value,
       transform: [
-        { translateX: translation.x.value },
-        {
-          translateY: translation.y.value,
-        },
-
-        { translateX: imageLeftForSettingTransformOrigin + origin.x.value },
-        { translateY: imageTopForSettingTransformOrigin + origin.y.value },
-        {
-          scale: scale.value,
-        },
-        { translateX: -(imageLeftForSettingTransformOrigin + origin.x.value) },
-        { translateY: -(imageTopForSettingTransformOrigin + origin.y.value) },
+        { translateX: translationX.value },
+        { translateY: translationY.value },
+        { scale: scale.value },
       ],
     };
-  }, [imageTopForSettingTransformOrigin, imageLeftForSettingTransformOrigin]);
+  }, []);
 
   return (
-    <PinchGestureHandler onGestureEvent={handler} enabled={!disabled}>
-      <Animated.View onLayout={onLayout} style={animatedStyles}>
-        {children}
-      </Animated.View>
-    </PinchGestureHandler>
+    <GestureDetector gesture={gesture}>
+      <Animated.View
+        {...props}
+        onLayout={useCallback(
+          (e) => {
+            viewHeight.value = e.nativeEvent.layout.height;
+            viewWidth.value = e.nativeEvent.layout.width;
+            onLayout?.(e);
+          },
+          [viewHeight, viewWidth, onLayout]
+        )}
+        style={useMemo(() => [style, propStyle], [style, propStyle])}
+      />
+    </GestureDetector>
   );
-};
+}
