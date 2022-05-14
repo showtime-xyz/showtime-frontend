@@ -7,12 +7,16 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   cancelAnimation,
+  runOnJS,
 } from "react-native-reanimated";
 
 type Props = {
   children: React.ReactNode;
   minimumZoomScale?: number;
   maximumZoomScale?: number;
+  onPinchStart?: () => void;
+  onPinchEnd?: () => void;
+  disabled?: boolean;
 } & ViewProps;
 
 export function PinchToZoom(props: Props) {
@@ -20,6 +24,9 @@ export function PinchToZoom(props: Props) {
     minimumZoomScale = 1,
     maximumZoomScale = 8,
     style: propStyle,
+    onPinchStart,
+    onPinchEnd,
+    disabled,
     onLayout,
   } = props;
 
@@ -45,12 +52,14 @@ export function PinchToZoom(props: Props) {
 
   const gesture = useMemo(() => {
     const pinch = Gesture.Pinch()
+      .enabled(!disabled)
       .onStart(() => {
         cancelAnimation(translationX);
         cancelAnimation(translationY);
         cancelAnimation(scale);
         prevScale.value = scale.value;
         offsetScale.value = scale.value;
+        if (onPinchStart) runOnJS(onPinchStart)();
       })
       .onUpdate((e) => {
         if (e.numberOfPointers !== prevPointers.value) {
@@ -116,13 +125,15 @@ export function PinchToZoom(props: Props) {
         prevTranslationY.value = 0;
         panTranslateX.value = 0;
         panTranslateY.value = 0;
+
+        if (onPinchEnd) runOnJS(onPinchEnd)();
       });
 
     return pinch;
 
     // only add prop dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maximumZoomScale, minimumZoomScale]);
+  }, [maximumZoomScale, minimumZoomScale, onPinchEnd, onPinchStart, disabled]);
 
   const style = useAnimatedStyle(() => {
     return {
