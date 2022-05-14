@@ -213,7 +213,7 @@ const ListImpl = ({
         return c;
       }
     });
-  }, [children]);
+  }, [children, onPressCallback]);
 
   const listWidth = useSharedValue(0);
   const windowWidth = useWindowDimensions().width;
