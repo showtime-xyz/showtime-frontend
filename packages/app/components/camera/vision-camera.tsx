@@ -260,7 +260,7 @@ export function Camera({
       setIsLoading(false);
       setShowPop(true);
       setTimeout(() => setShowPop(false), 10);
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Haptics.impactAsync();
 
       // Add photo
       const photo = await camera.current.takePhoto(takePhotoOptions);
