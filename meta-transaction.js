@@ -94,9 +94,9 @@ const pollTransaction = async (
   pollEndpointName,
   accessToken
 ) => {
-  let intervalMs = 1000;
-  for (let attempts = 0; attempts < 20; attempts++) {
-    console.log(`Checking tx... (${attempts + 1} / 20)`);
+  let intervalMs = 2000;
+  for (let attempts = 0; attempts < 30; attempts++) {
+    console.log(`Checking tx... (${attempts + 1} / 30)`);
     const { data: response } = await axios.get(
       `${API}/api/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
       {
