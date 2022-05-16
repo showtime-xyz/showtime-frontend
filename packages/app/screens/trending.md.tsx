@@ -192,7 +192,6 @@ const CreatorsList = ({ days }: { days: any }) => {
 };
 
 const NFTList = ({ days }: { days: any }) => {
-  const router = useRouter();
   const { data, isLoading } = useTrendingNFTS({
     days,
   });

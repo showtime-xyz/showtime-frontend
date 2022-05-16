@@ -13,7 +13,6 @@ import {
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { createParam } from "app/navigation/use-param";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
 import {
@@ -147,7 +146,6 @@ const NFTScrollList = ({
   tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-  const router = useRouter();
 
   let dataProvider = useMemo(
     () =>

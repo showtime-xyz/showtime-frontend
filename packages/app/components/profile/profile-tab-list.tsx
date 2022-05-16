@@ -210,7 +210,7 @@ export const ProfileTabList = ({
         />
       );
     },
-    [ListHeaderComponent, onItemPress]
+    [filter, list.id, profileId, ListHeaderComponent, onItemPress]
   );
 
   return (
