@@ -73,7 +73,6 @@ export function RootStackNavigator() {
           component={SwipeListScreen}
           getId={({ params }) => params?.type}
         />
-        <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
       </Stack.Group>
 
@@ -95,6 +94,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="activities" component={ActivitiesScreen} />
+        <Stack.Screen name="editProfile" component={EditProfileScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

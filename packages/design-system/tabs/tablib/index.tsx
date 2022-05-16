@@ -11,16 +11,19 @@ import {
   Dimensions,
   FlatList,
   FlatListProps,
+  KeyboardAvoidingView,
   LayoutRectangle,
   Platform,
   Pressable,
   PressableProps,
   RefreshControl,
   ScrollViewProps,
+  StyleProp,
   StyleSheet,
   useWindowDimensions,
   View,
   ViewProps,
+  ViewStyle,
 } from "react-native";
 
 import PagerView from "react-native-pager-view";
@@ -37,6 +40,7 @@ import Reanimated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
@@ -239,7 +243,7 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
   );
 
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-gray-900`), style];
+    return [tw.style(`bg-white dark:bg-black`), style];
   }, [style]);
 
   return (
@@ -267,6 +271,7 @@ const Pager = ({
 }: {
   children: React.ReactNode;
   tw?: string;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const {
     initialIndex,
@@ -277,7 +282,6 @@ const Pager = ({
     lazy,
     index,
   } = useContext(TabsContext);
-
   const [mountedIndices, setMountedIndices] = React.useState(
     lazy ? [initialIndex] : flattenChildren(children).map((_c, i) => i)
   );
@@ -296,7 +300,21 @@ const Pager = ({
                   shouldLoad ? StyleSheet.absoluteFill : undefined,
                 ]}
               >
-                {shouldLoad ? c : null}
+                {shouldLoad ? (
+                  c.props.useKeyboardAvoidingView ? (
+                    <KeyboardAvoidingView
+                      style={{ flex: 1 }}
+                      behavior="padding"
+                      keyboardVerticalOffset={
+                        c.props.keyboardVerticalOffset || 0
+                      }
+                    >
+                      {c}
+                    </KeyboardAvoidingView>
+                  ) : (
+                    c
+                  )
+                ) : null}
               </View>
             }
           </TabIndexContext.Provider>
@@ -549,21 +567,27 @@ const TabRecyclerListView = React.memo(
 
 TabRecyclerListView.displayName = "TabRecyclerListView";
 
+type ScrollableScrollViewType = ScrollViewProps & {
+  useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
+};
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
-  typeof Reanimated.ScrollView
+  ScrollableScrollViewType
 >(Reanimated.ScrollView);
+
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
 );
 
 interface ExtendedFlatListProps extends FlatListProps<any> {
   minHeight?: number;
+  useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
 }
-const TabFlatList = makeScrollableComponent<
-  ExtendedFlatListProps,
-  typeof AnimatedFlatList
->(AnimatedFlatList);
+const TabFlatList = makeScrollableComponent<FlatList, ExtendedFlatListProps>(
+  AnimatedFlatList
+);
 
 const Header = (props) => {
   return props.children;

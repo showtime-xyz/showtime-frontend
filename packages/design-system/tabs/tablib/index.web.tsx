@@ -149,7 +149,12 @@ const Root = ({
           </View>
         </View>
         <View tw="w-full items-center">
-          <View tw={`w-full max-w-screen-xl ${tabPage?.props.tw}`}>
+          <View
+            style={[
+              tw.style(`w-full max-w-screen-xl ${tabPage?.props.tw}`),
+              tabPage?.props.style,
+            ]}
+          >
             {tabContents.map((c, index) => {
               const value = index.toString();
               return (

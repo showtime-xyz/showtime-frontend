@@ -4,5 +4,5 @@ import type { SharedValue } from "react-native-reanimated";
 
 export const useKeyboardOffset = (
   top: number,
-  keyboardState: SharedValue<KEYBOARD_STATE>
+  keyboardState?: SharedValue<KEYBOARD_STATE>
 ) => undefined;

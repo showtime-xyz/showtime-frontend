@@ -41,6 +41,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
@@ -268,6 +269,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <BuyScreen />
                                     <ActivitiesScreen />
                                     <MintSnackbar />
+                                    <EditProfileScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}
                                     <LoginScreen />
