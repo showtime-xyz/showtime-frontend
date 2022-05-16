@@ -9,7 +9,7 @@ const USE_REMOTE_API = true;
 const API = USE_REMOTE_API ? REMOTE_API : LOCAL_API;
 
 const wallet = new ethers.Wallet(
-  "0xaf1ccdbd39b6e31cc8cd74e3af698d6fe42b676ebbe20295b3ea4ca591a19cb2",
+  "0xf740980eb4eb61094ca514ee96f04e77fa7c40837287bc8f224bbec2adc337d7",
   new ethers.providers.JsonRpcProvider(
     `https://polygon-${"mumbai"}.infura.io/v3/45f2e4f4ce3f483b8472f5f77f12c50d`
   )
@@ -63,7 +63,9 @@ const wrapAndSubmitTx = async (callData, toAddress, accessToken) => {
   const { data: forwardRequest } = await axios(
     `${API}/api/v1/relayer/forward-request?call_data=${encodeURIComponent(
       callData
-    )}&to_address=${encodeURIComponent(toAddress)}`,
+    )}&to_address=${encodeURIComponent(
+      toAddress
+    )}&from_address=${encodeURIComponent(wallet.address)}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -78,6 +80,7 @@ const wrapAndSubmitTx = async (callData, toAddress, accessToken) => {
     `${API}/api/v1/relayer/forward-request`,
     {
       forward_request: forwardRequest,
+      from_address: wallet.address,
       signature,
     },
     {
