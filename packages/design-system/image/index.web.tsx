@@ -1,9 +1,5 @@
 import { ComponentProps } from "react";
-import {
-  ImageProps as ReactNativeImageProps,
-  ImageURISource,
-  ImageResizeMode,
-} from "react-native";
+import { ImageURISource, ImageResizeMode } from "react-native";
 
 import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
@@ -12,6 +8,8 @@ import Image from "next/image";
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
+
+import { ImgProps } from ".";
 
 const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
   switch (resizeMode) {
@@ -35,7 +33,7 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
-type Props = ReactNativeImageProps & {
+type Props = ImgProps & {
   className: string;
   source: ImageURISource;
   loading: "lazy" | "eager";
@@ -53,6 +51,7 @@ function Img({
   width,
   height,
   resizeMode,
+  onLoad,
   ...props
 }: Props) {
   const actualHeight =
@@ -70,6 +69,14 @@ function Img({
         loading={loading}
         width={actualWidth}
         height={actualHeight}
+        onLoadingComplete={(e) => {
+          onLoad?.({
+            nativeEvent: {
+              width: e.naturalWidth,
+              height: e.naturalHeight,
+            },
+          });
+        }}
         objectFit={resizeModeToObjectFit(
           resizeMode ??
             // When using intrinsic size use contain to avoid
