@@ -32,7 +32,7 @@ const DropModal = () => {
     defaultValues,
   });
 
-  const dropNFT = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -161,7 +161,12 @@ const DropModal = () => {
           />
         </View>
       </View>
-      <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+      <Button
+        disabled={state.status === "loading"}
+        onPress={handleSubmit(onSubmit)}
+      >
+        Submit
+      </Button>
     </View>
   );
 };
