@@ -12,7 +12,6 @@ import {
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
-import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
@@ -181,18 +180,20 @@ const NFTScrollList = ({
   const _rowRenderer = useCallback(
     (_type: any, item: any, index: number) => {
       return (
-        <Link
-          href={`/list?initialScrollIndex=${index}&type=feed${
-            tab ? "&tab=" + tab : ""
-          }`}
-        >
-          <View tw="flex-row justify-center" nativeID="334343">
-            <Card
-              nft={item}
-              tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-            />
-          </View>
-        </Link>
+        <View tw="flex-row justify-center" nativeID="334343">
+          <Card
+            hrefProps={{
+              pathname: "/list",
+              query: {
+                initialScrollIndex: index,
+                type: "feed",
+                tab,
+              },
+            }}
+            nft={item}
+            tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          />
+        </View>
       );
     },
     [tab]

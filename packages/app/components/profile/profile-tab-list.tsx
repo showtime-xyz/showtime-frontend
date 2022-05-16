@@ -196,6 +196,17 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           onPress={() => onItemPress(index - 1)}
+          hrefProps={{
+            pathname: "/list",
+            query: {
+              initialScrollIndex: index - 1,
+              listId: list.id,
+              profileId,
+              collectionId: filter.collectionId,
+              sortId: filter.sortId,
+              type: "profile",
+            },
+          }}
         />
       );
     },
