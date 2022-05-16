@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { axios } from "app/lib/axios";
 
 import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
+import { useUploadMedia } from "./use-upload-media";
 
 const minterABI = ["function mintEdition(address collection, address _to)"];
 const editionCreatorABI = [
@@ -36,43 +37,49 @@ const pollTransaction = async (
     await delay(intervalMs);
   }
 };
-type UseDropNFT = {
+
+export type UseDropNFT = {
   title: string;
-  symbol: string;
   description: string;
-  animationUrl: string;
-  animationHash: string;
-  imageUrl: string;
-  imageHash: string;
+  file: File | string;
   editionSize: number;
   royalty: number;
+  symbol?: string;
+  animationUrl?: string;
+  animationHash?: string;
+  imageHash?: string;
 };
 
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
-  const dropNFT = async (props: UseDropNFT) => {
+  const uploadMedia = useUploadMedia();
+  const dropNFT = async (params: UseDropNFT) => {
     const targetInterface = new ethers.utils.Interface(editionCreatorABI);
+
+    const ipfsHash = await uploadMedia(params.file);
+    console.log("ipfs hash ", ipfsHash, params);
+
     const callData = targetInterface.encodeFunctionData("createEdition", [
-      "test 1234",
-      "TEST",
-      "A drop of test",
+      params.title,
+      "SHOWTIME",
+      params.description,
       "", // animationUrl
       "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
-      "ipfs://QmNSh7w75EPALBQC57tZiMggy7atTxD3sgmfmEtsi2CjCG", // imageUrl
-      "0x5a10c03724f18ec2534436cc5f5d4e9d60a91c2c6cea3ad7e623eb3d54e20ea9", // imageHash
-      100, // editionSize
-      1000, // royaltyBPS
+      "ipfs://" + ipfsHash, // imageUrl
+      "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
+      params.editionSize, // editionSize
+      params.royalty * 100, // royaltyBPS
       onePerAddressMinterContract,
     ]);
 
-    const { data: forwardRequest } = await axios({
+    const forwardRequest = await axios({
       url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
         callData
       )}&to_address=${encodeURIComponent(metaSingleEditionMintableCreator)}`,
       method: "GET",
     });
 
-    console.log("Signing...");
+    console.log("Signing... ", forwardRequest);
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
@@ -81,7 +88,7 @@ export const useDropNFT = () => {
 
     console.log("Signature", signature);
     console.log("Submitting tx...");
-    const { data: relayedTx } = await axios({
+    const relayerResponse = await axios({
       url: `/v1/relayer/forward-request`,
       method: "POST",
       data: {
@@ -91,7 +98,7 @@ export const useDropNFT = () => {
     });
 
     const edition = await pollTransaction(
-      relayedTx.relayed_transaction_id,
+      relayerResponse.relayed_transaction_id,
       "poll-edition"
     );
 

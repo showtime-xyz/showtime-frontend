@@ -8,6 +8,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
@@ -95,6 +96,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="activities" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
+        <Stack.Screen name="drop" component={DropScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

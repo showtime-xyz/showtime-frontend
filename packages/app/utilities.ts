@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
+import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
@@ -598,3 +599,11 @@ function dataURLtoFile(dataurl: string, filename: string) {
 
   return new File([u8arr], filename, { type: mime });
 }
+
+export const getPinataToken = () => {
+  return showtimeAPIAxios({
+    url: "/v1/pinata/key",
+    method: "POST",
+    data: {},
+  }).then((res) => res.token);
+};
