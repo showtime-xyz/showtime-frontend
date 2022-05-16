@@ -154,6 +154,7 @@ export const LightImageModal = ({
       );
     });
     backdropOpacity.value = withTiming(0, timingConfig);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     requestAnimationFrame(() => {
