@@ -6,7 +6,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 
-import { useSignTypedData } from "./use-signer-provider";
+import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
 
 const editionCreatorABI = [
@@ -64,6 +64,7 @@ export type UseDropNFT = {
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMedia();
+  const { getUserAddress } = useSignerAndProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const dropNFT = async (params: UseDropNFT) => {
@@ -73,7 +74,6 @@ export const useDropNFT = () => {
       dispatch({ type: "loading" });
       const ipfsHash = await uploadMedia(params.file);
       console.log("ipfs hash ", ipfsHash, params);
-
       const callData = targetInterface.encodeFunctionData("createEdition", [
         params.title,
         "SHOWTIME",
@@ -87,10 +87,14 @@ export const useDropNFT = () => {
         onePerAddressMinterContract,
       ]);
 
+      const userAddress = await getUserAddress();
+
       const forwardRequest = await axios({
         url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
           callData
-        )}&to_address=${encodeURIComponent(metaSingleEditionMintableCreator)}`,
+        )}&to_address=${encodeURIComponent(
+          metaSingleEditionMintableCreator
+        )}&from_address=${userAddress}`,
         method: "GET",
       });
 
@@ -109,6 +113,7 @@ export const useDropNFT = () => {
         data: {
           forward_request: forwardRequest,
           signature,
+          from_address: userAddress,
         },
       });
 
@@ -139,7 +144,7 @@ export const pollTransaction = async (
   let intervalMs = 1000;
   for (let attempts = 0; attempts < 20; attempts++) {
     console.log(`Checking tx... (${attempts + 1} / 20)`);
-    const { data: response } = await axios({
+    const response = await axios({
       url: `/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
       method: "GET",
     });
