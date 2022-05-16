@@ -1,5 +1,11 @@
-import React, { RefObject, useEffect } from "react";
-import { StyleProp, StyleSheet, useWindowDimensions, View } from "react-native";
+import React, { useEffect, useCallback } from "react";
+import {
+  BackHandler,
+  StyleProp,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 
 import { ImageStyle } from "react-native-fast-image";
 // import { useHeaderHeight } from "@react-navigation/elements";
@@ -135,13 +141,37 @@ export const LightImageModal = ({
       opacity: backdropOpacity.value,
     };
   });
-
+  const closeModal = useCallback(() => {
+    animationProgress.value = withTiming(0, timingConfig, () => {
+      imageOpacity.value = withTiming(
+        1,
+        {
+          duration: 16,
+        },
+        () => {
+          runOnJS(onClose)();
+        }
+      );
+    });
+    backdropOpacity.value = withTiming(0, timingConfig);
+  }, []);
   useEffect(() => {
     requestAnimationFrame(() => {
       imageOpacity.value = 0;
     });
     animationProgress.value = withTiming(1, timingConfig);
     backdropOpacity.value = withTiming(1, timingConfig);
+    const backhanderListener = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        closeModal();
+        return true;
+      }
+    );
+    return () => {
+      backhanderListener.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

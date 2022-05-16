@@ -8,6 +8,7 @@ import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import "photoswipe/dist/photoswipe.css";
 import type { Revalidator, RevalidatorOptions } from "swr";
 // import Script from "next/script";
 import { SWRConfig } from "swr";

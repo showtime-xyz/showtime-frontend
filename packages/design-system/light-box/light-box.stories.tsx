@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
+import "photoswipe/dist/photoswipe.css";
 
-import { LightBoxProvider, useLightBox } from ".";
+import { LightBoxProvider } from ".";
 import { View } from "../view";
 import { LightBoxImg } from "./light-box-image";
 
@@ -18,6 +19,10 @@ const LightBoxBasic = () => {
         }}
         width={120}
         height={120}
+        imgLayout={{
+          width: 128,
+          height: 128,
+        }}
       />
     </View>
   );

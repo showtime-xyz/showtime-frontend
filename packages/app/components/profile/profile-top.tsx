@@ -114,10 +114,8 @@ export const ProfileTop = ({
     [bio]
   );
   // cover down to twitter banner ratio: w:h=3:1
-  const coverImageHeight = useMemo(
-    () => (width < 768 ? width / 3 : 180),
-    [width]
-  );
+  const coverHeight = useMemo(() => (width < 768 ? width / 3 : 180), [width]);
+
   const coverWidth = useContentWidth(-64);
 
   useEffect(() => {
@@ -131,7 +129,7 @@ export const ProfileTop = ({
           tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:-mx-20 xl:rounded-b-[32px]`}
         >
           <Skeleton
-            height={coverImageHeight}
+            height={coverHeight}
             width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
             show={loading}
             colorMode={colorMode as any}
@@ -142,7 +140,7 @@ export const ProfileTop = ({
                   uri: profileData?.data.profile.cover_url,
                 }}
                 width={coverWidth}
-                height={coverImageHeight}
+                height={coverHeight}
                 resizeMode="cover"
               />
             )}

@@ -7,7 +7,7 @@ import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
-type ImgProps = FastImageProps & {
+export type ImgProps = FastImageProps & {
   height?: number;
   width?: number;
 };

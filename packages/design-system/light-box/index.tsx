@@ -12,11 +12,11 @@ export type AnimationParams = {
   source: FastImageProps["source"];
 };
 
-type LightBoxContext = {
+type LightBoxContextType = {
   show: (params: AnimationParams) => void;
 };
 
-export const LightBoxContext = createContext<LightBoxContext | null>(null);
+export const LightBoxContext = createContext<LightBoxContextType | null>(null);
 
 export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
   children,
