@@ -6674,6 +6674,7 @@ __metadata:
     next-themes: ^0.0.15
     next-transpile-modules: ^9.0.0
     patch-package: ^6.4.7
+    photoswipe: ^5.2.7
     postcss: ^8.3.6
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
@@ -25584,6 +25585,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"photoswipe@npm:^5.2.7":
+  version: 5.2.7
+  resolution: "photoswipe@npm:5.2.7"
+  checksum: 62f626a6df0aa95fe8629d0aff2afd936bc8d89b27e9aebc538164e3fd8f81b506932e57ac8f4a824466b2d0d5e096ee2804387ca5cdf84c06701889674c08ad
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^0.2.1":
   version: 0.2.1
   resolution: "picocolors@npm:0.2.1"
@@ -27455,6 +27463,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-codegen@npm:^0.0.17":
+  version: 0.0.17
+  resolution: "react-native-codegen@npm:0.0.17"
+  dependencies:
+    "@babel/parser": ^7.14.0
+    flow-parser: ^0.121.0
+    jscodeshift: ^0.13.1
+    nullthrows: ^1.1.1
+  checksum: 32ac7e77851df32fdafa6721c01e3bbfe4e42ca4b8e6d6e7e64b96200060629b3c0475bd7007de6db96b4c5edef1f6dd625fb7b77efa8f7fd1869c0777b064cc
+  languageName: node
+  linkType: hard
+
 "react-native-cronet@npm:^0.5.0":
   version: 0.5.0
   resolution: "react-native-cronet@npm:0.5.0"
@@ -27828,6 +27848,50 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: 72916e7ac092ca68702254d2a80db80b340e735f1ea654d5146e54037cf20410c182477d1c7f59dd4c6d854472a67b5ed6c279640d515235998717ba12757a39
+  languageName: node
+  linkType: hard
+
+"react-native@npm:0.68.2":
+  version: 0.68.2
+  resolution: "react-native@npm:0.68.2"
+  dependencies:
+    "@jest/create-cache-key-function": ^27.0.1
+    "@react-native-community/cli": ^7.0.3
+    "@react-native-community/cli-platform-android": ^7.0.1
+    "@react-native-community/cli-platform-ios": ^7.0.1
+    "@react-native/assets": 1.0.0
+    "@react-native/normalize-color": 2.0.0
+    "@react-native/polyfills": 2.0.0
+    abort-controller: ^3.0.0
+    anser: ^1.4.9
+    base64-js: ^1.1.2
+    deprecated-react-native-prop-types: ^2.3.0
+    event-target-shim: ^5.0.1
+    hermes-engine: ~0.11.0
+    invariant: ^2.2.4
+    jsc-android: ^250230.2.1
+    metro-react-native-babel-transformer: 0.67.0
+    metro-runtime: 0.67.0
+    metro-source-map: 0.67.0
+    nullthrows: ^1.1.1
+    pretty-format: ^26.5.2
+    promise: ^8.0.3
+    react-devtools-core: ^4.23.0
+    react-native-codegen: ^0.0.17
+    react-native-gradle-plugin: ^0.0.6
+    react-refresh: ^0.4.0
+    react-shallow-renderer: 16.14.1
+    regenerator-runtime: ^0.13.2
+    scheduler: ^0.20.2
+    stacktrace-parser: ^0.1.3
+    use-subscription: ">=1.0.0 <1.6.0"
+    whatwg-fetch: ^3.0.0
+    ws: ^6.1.4
+  peerDependencies:
+    react: 17.0.2
+  bin:
+    react-native: cli.js
+  checksum: a595e7c284041d0ea6439f476d4e34239212f6ca7863321d214494ac938c83a89ae8b79f86bda7c515be727ffec7403456f8f721fca7f8670cf1fa9bf19b0b1d
   languageName: node
   linkType: hard
 
