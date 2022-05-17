@@ -118,7 +118,7 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="dark:shadow-white shadow-black mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
+        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
           {data ? (
             <FlatList
               data={data}
