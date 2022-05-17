@@ -26,28 +26,26 @@ export function Pressable({
 }: Props) {
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
   const isDark = useIsDarkMode();
-  const backgroundColor = useMemo(() => {
+
+  const hoverStyle = useMemo(() => {
     if (disableHoverEffect) {
-      return "transparent";
+      return { backgroundColor: "transparent" };
     }
-    return hovered.value
-      ? isDark
-        ? colors.gray[800]
-        : colors.gray[200]
-      : "transparent";
+    return {
+      backgroundColor: hovered.value
+        ? isDark
+          ? colors.gray[800]
+          : colors.gray[200]
+        : "transparent",
+      transitionDuration: "150ms",
+    };
   }, [disableHoverEffect, hovered.value, isDark]);
+
   return (
     <MotiPressable
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
-      style={[
-        {
-          backgroundColor,
-          transitionDuration: "150ms",
-        },
-        tailwind.style(tw),
-        style,
-      ]}
+      style={[hoverStyle, tailwind.style(tw), style]}
       {...props}
     />
   );
