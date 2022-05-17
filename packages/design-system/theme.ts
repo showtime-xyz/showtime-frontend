@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 
-// import { makeTheme } from "dripsy";
-import { fontFamily, textSizes } from "design-system/typography";
+/*
+import { fontFamily } from "design-system/typography";
 
 const webFont = (font: string) => {
   return Platform.select({
@@ -12,7 +12,6 @@ const webFont = (font: string) => {
   });
 };
 
-/*
 customFonts: {
   Inter: {
     // 100: webFont('Inter-Thin'),

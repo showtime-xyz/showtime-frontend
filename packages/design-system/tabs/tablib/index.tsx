@@ -40,7 +40,6 @@ import Reanimated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";

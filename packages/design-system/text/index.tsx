@@ -41,7 +41,7 @@ const ParentContext = createContext<{} | undefined>(undefined);
 export const Text = forwardRef<TextType, Props>(
   (
     {
-      variant,
+      // variant,
       onLayout,
       onTextLayout,
       children,
