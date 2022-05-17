@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { yup } from "app/lib/yup";
 
@@ -13,12 +14,28 @@ import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 
-const dropValidationSchema = yup.object({});
-
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
 };
+
+const dropValidationSchema = yup.object({
+  file: yup.mixed().required(),
+  title: yup.string().required(),
+  description: yup.string().required(),
+  editionSize: yup
+    .number()
+    .required()
+    .min(1)
+    .max(10000)
+    .default(defaultValues.editionSize),
+  royalty: yup
+    .number()
+    .required()
+    .min(1)
+    .max(69)
+    .default(defaultValues.royalty),
+});
 
 const DropModal = () => {
   const {
@@ -37,6 +54,8 @@ const DropModal = () => {
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
   };
+
+  console.log("dude ", state);
 
   const pickFile = useFilePicker();
 
@@ -165,11 +184,20 @@ const DropModal = () => {
       </ScrollView>
       <View tw="mb-16 px-4">
         <Button
+          tw={state.status === "loading" ? "opacity-45" : ""}
           disabled={state.status === "loading"}
           onPress={handleSubmit(onSubmit)}
         >
-          Submit
+          {state.status === "loading"
+            ? "Submitting..."
+            : state.status === "error"
+            ? "Failed. Retry!"
+            : "Submit"}
         </Button>
+
+        <View tw="mt-4">
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
       </View>
     </>
   );

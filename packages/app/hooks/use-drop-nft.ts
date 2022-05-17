@@ -24,12 +24,14 @@ async function delay(ms: number) {
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
+  transactionHash?: string;
   error?: string;
 };
 
 type Action = {
   error?: string;
   type: string;
+  transactionHash?: string;
 };
 
 const initialState: State = {
@@ -44,6 +46,11 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, status: "success" };
     case "error":
       return { ...state, status: "error", error: action.error };
+    case "transactionHash":
+      return {
+        ...state,
+        transactionHash: action.transactionHash,
+      };
     default:
       return state;
   }
@@ -72,8 +79,9 @@ export const useDropNFT = () => {
       const targetInterface = new ethers.utils.Interface(editionCreatorABI);
 
       dispatch({ type: "loading" });
+
       const ipfsHash = await uploadMedia(params.file);
-      console.log("ipfs hash ", ipfsHash, params);
+      Logger.log("ipfs hash ", ipfsHash, params);
       const callData = targetInterface.encodeFunctionData("createEdition", [
         params.title,
         "SHOWTIME",
@@ -89,6 +97,7 @@ export const useDropNFT = () => {
 
       const userAddress = await getUserAddress();
 
+      // Sending params to backend to get the signature request
       const forwardRequest = await axios({
         url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
           callData
@@ -98,15 +107,16 @@ export const useDropNFT = () => {
         method: "GET",
       });
 
-      console.log("Signing... ", forwardRequest);
+      Logger.log("Signing... ", forwardRequest);
       const signature = await signTypedData(
         forwardRequest.domain,
         forwardRequest.types,
         forwardRequest.value
       );
 
-      console.log("Signature", signature);
-      console.log("Submitting tx...");
+      Logger.log("Signature", signature);
+      Logger.log("Submitting tx...");
+      // Sending signature to backend to initiate the transaction
       const relayerResponse = await axios({
         url: `/v1/relayer/forward-request`,
         method: "POST",
@@ -117,16 +127,29 @@ export const useDropNFT = () => {
         },
       });
 
-      const edition = await pollTransaction(
-        relayerResponse.relayed_transaction_id,
-        "poll-edition"
-      );
+      // Polling to check transaction status
+      let intervalMs = 2000;
+      for (let attempts = 0; attempts < 100; attempts++) {
+        Logger.log(`Checking tx... (${attempts + 1} / 100)`);
+        const response = await axios({
+          url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${relayerResponse.relayed_transaction_id}`,
+          method: "GET",
+        });
 
-      if (edition) {
-        dispatch({ type: "success" });
-      } else {
-        dispatch({ type: "error" });
+        dispatch({
+          type: "transactionHash",
+          transactionHash: response.transaction_hash,
+        });
+
+        if (response.is_complete) {
+          dispatch({ type: "success" });
+          return;
+        }
+
+        await delay(intervalMs);
       }
+
+      dispatch({ type: "error", error: "polling timed out" });
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
@@ -143,12 +166,12 @@ export const pollTransaction = async (
 ) => {
   let intervalMs = 2000;
   for (let attempts = 0; attempts < 100; attempts++) {
-    console.log(`Checking tx... (${attempts + 1} / 20)`);
+    Logger.log(`Checking tx... (${attempts + 1} / 20)`);
     const response = await axios({
       url: `/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
       method: "GET",
     });
-    console.log(response);
+    Logger.log(response);
     if (response.is_complete) {
       return response;
     }
