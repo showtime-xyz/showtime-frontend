@@ -33,10 +33,7 @@ export function Creator({
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (
           <>
-            <Text
-              variant="text-xs"
-              tw="font-semibold text-gray-600 dark:text-gray-400"
-            >
+            <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
               {label}
             </Text>
             <View tw="h-2" />
@@ -44,10 +41,7 @@ export function Creator({
         )}
         <View>
           <View tw="flex flex-row items-center">
-            <Text
-              variant="text-13"
-              tw="font-semibold text-gray-900 dark:text-white"
-            >
+            <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
               {nft.creator_username
                 ? `@${nft.creator_username}`
                 : nft.creator_name
@@ -59,10 +53,7 @@ export function Creator({
             ) : null}
           </View>
           {shouldShowDateCreated && nft.token_created ? (
-            <Text
-              variant="text-xs"
-              tw="mt-1 font-semibold text-gray-900 dark:text-white"
-            >
+            <Text tw="mt-1 text-xs font-semibold text-gray-900 dark:text-white">
               {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
                 addSuffix: true,
               })}

@@ -73,9 +73,8 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
       </RNText>
       {count ? (
         <Text
-          variant="text-sm"
           style={{ fontWeight: "400" }}
-          tw={`text-gray-900 dark:text-white`}
+          tw="text-sm text-gray-900 dark:text-white"
         >
           {` ${count}`}
         </Text>

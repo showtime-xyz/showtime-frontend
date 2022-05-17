@@ -43,12 +43,9 @@ const Unlist = ({ nft }: Props) => {
   if (state.status === "unlistingSuccess") {
     return (
       <View tw="mt-4 flex-1 items-center justify-center p-8">
-        <Text variant="text-4xl">🎉</Text>
+        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text
-            variant="text-lg"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
             Your NFT has been unlisted from Showtime
           </Text>
           <PolygonScanButton transactionHash={state.transactionHash} />
@@ -62,10 +59,7 @@ const Unlist = ({ nft }: Props) => {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="my-8 text-center text-base text-black dark:text-white">
             Your NFT is being unlisted on Showtime. Feel free to navigate away
             from this screen.
           </Text>
@@ -83,7 +77,7 @@ const Unlist = ({ nft }: Props) => {
         <View tw="flex-row items-center">
           <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
           <View tw="flex-1 px-4">
-            <Text variant="text-lg" tw=" mb-2 text-black dark:text-white">
+            <Text tw="font-space-bold mb-2 text-lg text-black dark:text-white">
               {nft?.token_name}
             </Text>
             <View tw="flex-row items-center">
@@ -93,7 +87,7 @@ const Unlist = ({ nft }: Props) => {
                 color={tw.style("text-gray-500").color as string}
               />
               {nft?.token_created ? (
-                <Text tw="pl-1 font-bold text-gray-500" variant="text-xs">
+                <Text tw="pl-1 text-xs font-bold text-gray-500">
                   {`Minted ${formatDistanceToNowStrict(
                     new Date(nft?.token_created),
                     {

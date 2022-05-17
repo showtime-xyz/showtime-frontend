@@ -85,8 +85,7 @@ function Button({
         }
       />
       <Text
-        variant="text-13"
-        tw={["font-bold", count > 0 ? "ml-1" : ""]}
+        tw={["text-13 font-bold", count > 0 ? "ml-1" : ""]}
         // @ts-ignore
         style={textStyle}
       >

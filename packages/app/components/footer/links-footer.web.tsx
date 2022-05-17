@@ -20,7 +20,7 @@ export const WebFooter = () => {
               width={140}
             />
           </Link>
-          <Text variant="text-13" tw={"mt-4 font-semibold text-gray-500"}>
+          <Text tw={"text-13 mt-4 font-semibold text-gray-500"}>
             &copy; {new Date().getFullYear()} Showtime Technologies, Inc.
           </Text>
         </View>
@@ -35,10 +35,7 @@ export const WebFooter = () => {
                 }}
                 key={item.title}
               >
-                <Text
-                  tw="mb-4 mt-0 font-semibold text-gray-900 dark:text-white"
-                  variant="text-13"
-                >
+                <Text tw="text-13 mb-4 mt-0 font-semibold text-gray-900 dark:text-white">
                   {item.title}
                 </Text>
               </Link>
@@ -61,10 +58,7 @@ export const WebFooter = () => {
                       .color as string,
                   })}
                 </View>
-                <Text
-                  variant="text-13"
-                  tw="font-semibold text-gray-900 dark:text-white"
-                >
+                <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
                   {item.title}
                 </Text>
               </Link>

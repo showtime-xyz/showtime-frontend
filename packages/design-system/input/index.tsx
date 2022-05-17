@@ -99,9 +99,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     <View>
       {label ? (
         <Label
-          variant="text-sm"
           htmlFor={inputId}
-          tw="mb-2 font-bold text-gray-900 dark:text-white"
+          tw="mb-2 text-sm font-bold text-gray-900 dark:text-white"
         >
           {label}
         </Label>
@@ -184,9 +183,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       </Animated.View>
       {helperText ? (
         <Text
-          variant="text-sm"
           nativeID={helperTextId}
-          tw="text-gray-600 dark:text-gray-400"
+          tw="text-sm text-gray-600 dark:text-gray-400"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
           {helperText}
@@ -195,8 +193,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       {errorText ? (
         <Text
           nativeID={errorTextId}
-          variant="text-sm"
-          tw="text-red-500"
+          tw="text-sm text-red-500"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
           {errorText}

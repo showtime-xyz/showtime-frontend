@@ -117,7 +117,7 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
                 exit={{ opacity: 0 }}
                 transition={{ type: "timing", duration: 300 }}
               >
-                <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
+                <Text tw="font-space-bold text-center text-lg font-bold text-gray-900 dark:text-white">
                   {title}
                 </Text>
                 {Boolean(message) && (

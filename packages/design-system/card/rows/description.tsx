@@ -79,8 +79,7 @@ function Description({ nft }: Props) {
   return (
     <View tw="bg-white px-4 pb-4 dark:bg-black">
       <Text
-        variant="text-sm"
-        tw="text-gray-600 dark:text-gray-400"
+        tw="text-sm text-gray-600 dark:text-gray-400"
         numberOfLines={numberOfLines}
         onTextLayout={onTextLayout}
       >
@@ -89,10 +88,7 @@ function Description({ nft }: Props) {
 
       {(showMore || showLess) && (
         <Pressable onPress={showMore ? onShowMore : onShowLess}>
-          <Text
-            variant="text-sm"
-            tw="mt-1 font-bold text-gray-600 dark:text-gray-400"
-          >
+          <Text tw="mt-1 text-sm font-bold text-gray-600 dark:text-gray-400">
             {showMore ? "More" : "Less"}
           </Text>
         </Pressable>

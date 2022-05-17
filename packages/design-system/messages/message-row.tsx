@@ -262,7 +262,7 @@ export function MessageRow({
             ]}
           >
             {createdAtText && (
-              <Text tw="font-bold text-gray-500" variant="text-xs">
+              <Text tw="text-xs font-bold text-gray-500">
                 {`${createdAtText}${onDeletePress ? "  •" : ""}`}
               </Text>
             )}

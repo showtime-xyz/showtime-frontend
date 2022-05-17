@@ -390,8 +390,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
       <View tw="px-4">
         <Text
-          variant="text-2xl"
-          tw="dark:text-white"
+          tw="font-space-bold text-2xl dark:text-white"
           numberOfLines={3}
           style={{ fontSize: 17, lineHeight: 22 }}
         >

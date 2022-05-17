@@ -107,7 +107,7 @@ const HeaderFeed = () => {
         }}
       >
         <Animated.View style={animatedStyleFirstTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             Following
           </Text>
         </Animated.View>
@@ -125,7 +125,7 @@ const HeaderFeed = () => {
         }}
       >
         <Animated.View style={animatedStyleSecondTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             For You
           </Text>
         </Animated.View>

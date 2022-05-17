@@ -78,10 +78,7 @@ function Delete({ nft }: { nft: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="my-8 text-center text-base text-black dark:text-white">
             Your NFT is being deleted. Feel free to navigate away from this
             screen.
           </Text>
@@ -96,10 +93,7 @@ function Delete({ nft }: { nft: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="my-8 text-center text-base text-black dark:text-white">
             Something went wrong!
           </Text>
           <Button onPress={handleSubmit(handleSubmitForm)}>Retry</Button>
@@ -111,12 +105,9 @@ function Delete({ nft }: { nft: NFT }) {
   if (state.status === "burningSuccess") {
     return (
       <View tw="mt-4 flex-1 items-center justify-center pb-8">
-        <Text variant="text-4xl">🎉</Text>
+        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text
-            variant="text-lg"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
             Your NFT has been deleted
           </Text>
           <PolygonScanButton transactionHash={state.transaction} />
@@ -130,14 +121,11 @@ function Delete({ nft }: { nft: NFT }) {
       <CreateScrollView>
         <View tw="flex-1 px-3 py-4">
           <View tw="mb-4">
-            <Text
-              variant="text-xl"
-              tw="mb-4 font-bold text-black dark:text-white"
-            >
+            <Text tw="mb-4 text-xl font-bold text-black dark:text-white">
               Are you sure you want to delete this NFT?
             </Text>
-            <Text variant="text-sm" tw="text-black dark:text-white">
-              This can’t be undone and it will be sent to a burn address.
+            <Text tw="text-sm text-black dark:text-white">
+              This can't be undone and it will be sent to a burn address.
             </Text>
           </View>
           <View tw="-mx-2 border-b border-gray-100 dark:border-gray-900">
@@ -148,10 +136,7 @@ function Delete({ nft }: { nft: NFT }) {
               <Media item={nft} tw="h-20 w-20" />
             </View>
             <View>
-              <Text
-                variant="text-lg"
-                tw="mb-2 font-medium text-black dark:text-white"
-              >
+              <Text tw="font-space-bold mb-2 text-lg font-medium text-black dark:text-white">
                 {nft?.token_name}
               </Text>
               <View tw="flex-row items-center">
@@ -161,7 +146,7 @@ function Delete({ nft }: { nft: NFT }) {
                   color={tw.style("text-gray-500").color as string}
                 />
                 {nft?.token_created ? (
-                  <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
+                  <Text tw="ml-1 text-xs font-bold text-gray-500">
                     {`Minted ${formatDistanceToNowStrict(
                       new Date(nft?.token_created),
                       {

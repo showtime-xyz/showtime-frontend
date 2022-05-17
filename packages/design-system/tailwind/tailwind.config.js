@@ -1,6 +1,8 @@
+const { Platform } = require("react-native");
 const { colors } = require("./colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
+const { textSizes, fontFamily } = require("design-system/typography");
 
 module.exports = {
   content: [
@@ -58,11 +60,23 @@ module.exports = {
         copy: "copy",
       },
       fontSize: {
-        sm2: [".875rem", "1.7rem"],
+        xs: ["12px", textSizes["text-xs"]],
+        13: ["13px", textSizes["text-13"]],
+        sm: ["14px", textSizes["text-sm"]],
+        base: ["16px", textSizes["text-base"]],
+        lg: ["18px", textSizes["text-lg"]], // font-space-bold
+        xl: ["20px", textSizes["text-xl"]],
+        "2xl": ["24px", textSizes["text-2xl"]], // font-space-bold
+        "3xl": ["30px", textSizes["text-3xl"]],
+        "4xl": ["36px", textSizes["text-4xl"]],
       },
       fontFamily: {
-        space: "Space Grotesk",
-        sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
+        space: fontFamily("SpaceGrotesk-Regular"),
+        "space-bold": fontFamily("SpaceGrotesk-Bold"),
+        inter: fontFamily("Inter-Regular"),
+        "inter-semibold": fontFamily("Inter-SemiBold"),
+        "inter-bold": fontFamily("Inter-Bold"),
+        sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
       },
       whitespace: {
         "break-spaces": "break-spaces",

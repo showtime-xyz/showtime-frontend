@@ -241,8 +241,7 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <Text
-                  variant="text-2xl"
-                  tw="font-extrabold text-gray-900 dark:text-white"
+                  tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {name}
@@ -257,10 +256,7 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <View tw="flex-row items-center">
-                  <Text
-                    variant="text-base"
-                    tw="font-semibold text-gray-900 dark:text-white"
-                  >
+                  <Text tw="text-base font-semibold text-gray-900 dark:text-white">
                     {username ? `@${username}` : null}
                   </Text>
 
