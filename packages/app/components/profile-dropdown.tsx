@@ -3,9 +3,7 @@ import { useWindowDimensions } from "react-native";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
-import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
 
@@ -26,33 +24,12 @@ type Props = {
 };
 
 function ProfileDropdown({ user }: Props) {
-  const { isAuthenticated } = useUser();
   const { report } = useReport();
-  const { block, unblock, getIsBlocked } = useBlock();
+  const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const share = useShare();
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
-  const navigateToLogin = useNavigateToLogin();
-
-  //#region callbacks
-  const handleOnBlockPress = async () => {
-    if (isAuthenticated) {
-      await block(user.profile_id);
-      router.pop();
-    } else {
-      navigateToLogin();
-    }
-  };
-  const handleOnUnblockPress = async () => {
-    if (isAuthenticated) {
-      await unblock(user.profile_id);
-      router.pop();
-    } else {
-      navigateToLogin();
-    }
-  };
-  //#endregion
 
   return (
     <DropdownMenuRoot>
@@ -101,27 +78,22 @@ function ProfileDropdown({ user }: Props) {
 
         <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
-        {!isBlocked ? (
-          <DropdownMenuItem
-            key="block"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-            onSelect={handleOnBlockPress}
-          >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
-              Block
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem
-            key="block"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-            onSelect={handleOnUnblockPress}
-          >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
-              Unblock User
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem
+          key="block"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+          onSelect={() => {
+            toggleBlock({
+              isBlocked,
+              creatorId: user?.profile_id,
+              name: user?.name,
+              onBlocked: () => router.pop(),
+            });
+          }}
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            {isBlocked ? "Unblock User" : "Block User"}
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
