@@ -39,7 +39,7 @@ function NFTDropdown({ nftId }: Props) {
   const [isOwner, setIsOwner] = useState(false);
   const { report } = useReport();
   const { unfollow, isFollowing } = useMyInfo();
-  const { getIsBlocked, unblock, block } = useBlock();
+  const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
@@ -69,23 +69,6 @@ function NFTDropdown({ nftId }: Props) {
   );
   //#endregion
 
-  //#region callback
-  const handleOnBlockPress = async () => {
-    if (isAuthenticated) {
-      await block(nft?.creator_id);
-    } else {
-      navigateToLogin();
-    }
-  };
-  const handleOnUnblockPress = async () => {
-    if (isAuthenticated) {
-      await unblock(nft?.creator_id);
-    } else {
-      navigateToLogin();
-    }
-  };
-  //#endregion
-
   //#region effects
   useEffect(() => {
     if (nft?.owner_address) {
@@ -109,7 +92,7 @@ function NFTDropdown({ nftId }: Props) {
             tokenId: nft?.token_id,
             [`${modal}Modal`]: true,
           },
-        },
+        } as any,
       }),
       Platform.select({
         native: as,
@@ -205,27 +188,21 @@ function NFTDropdown({ nftId }: Props) {
         )}
 
         {!isOwner ? (
-          !isBlocked ? (
-            <DropdownMenuItem
-              key="block"
-              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-              onSelect={handleOnBlockPress}
-            >
-              <DropdownMenuItemTitle tw="text-black dark:text-white">
-                Block User
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem
-              key="unblock"
-              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-              onSelect={handleOnUnblockPress}
-            >
-              <DropdownMenuItemTitle tw="text-black dark:text-white">
-                Unblock User
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )
+          <DropdownMenuItem
+            key="block"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+            onSelect={() =>
+              toggleBlock({
+                isBlocked,
+                creatorId: nft?.creator_id,
+                name: nft?.creator_name,
+              })
+            }
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              {isBlocked ? "Unblock User" : "Block User"}
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
         ) : null}
 
         {!isOwner && (
