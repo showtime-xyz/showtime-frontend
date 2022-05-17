@@ -7,7 +7,7 @@ import { SafeAreaView } from "app/lib/safe-area";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
-import { CountryCodePicker, Pressable, Text, View } from "design-system";
+import { CountryCodePicker, PressableScale, Text, View } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";
@@ -82,7 +82,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         signInButtonLabel="Send"
         leftElement={useMemo(() => {
           return (
-            <Pressable
+            <PressableScale
               onPress={() => {
                 setSearch("");
                 setModalVisible(true);
@@ -109,7 +109,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
                 {selectedCountry?.dial_code}{" "}
               </Text>
-            </Pressable>
+            </PressableScale>
           );
         }, [selectedCountry])}
         onSubmit={useCallback(

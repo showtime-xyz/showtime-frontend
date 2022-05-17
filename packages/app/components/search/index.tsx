@@ -10,7 +10,7 @@ import { useColorScheme } from "design-system/hooks";
 import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Input } from "design-system/input";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -61,7 +61,7 @@ export const Search = () => {
           }
           rightElement={
             term.length > 0 ? (
-              <Pressable
+              <PressableScale
                 tw="p-2"
                 onPress={() => {
                   setTerm("");
@@ -77,7 +77,7 @@ export const Search = () => {
                   width={24}
                   height={24}
                 />
-              </Pressable>
+              </PressableScale>
             ) : undefined
           }
         />

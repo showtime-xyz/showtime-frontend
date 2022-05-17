@@ -21,7 +21,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, Pressable, View } from "design-system";
+import { Button, PressableScale, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
 import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
@@ -90,7 +90,7 @@ const SearchInHeader = () => {
           rightElement={
             term.length > 0 ? (
               <Popover.Close>
-                <Pressable
+                <PressableScale
                   tw="p-2"
                   onPress={() => {
                     setTerm("");
@@ -106,7 +106,7 @@ const SearchInHeader = () => {
                     width={24}
                     height={24}
                   />
-                </Pressable>
+                </PressableScale>
               </Popover.Close>
             ) : undefined
           }
@@ -156,7 +156,7 @@ const HeaderRight = () => {
                 />
               </View>
               <View tw="mx-2">
-                <Pressable
+                <PressableScale
                   onPress={() => {
                     router.push(
                       Platform.select({
@@ -186,7 +186,7 @@ const HeaderRight = () => {
                       color={isDark ? "black" : "white"}
                     />
                   </View>
-                </Pressable>
+                </PressableScale>
               </View>
             </>
           )}
@@ -227,7 +227,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   const Icon = canGoBack ? ArrowLeft : Search;
 
   return (
-    <Pressable
+    <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="h-6 w-6 items-center justify-center rounded-full"
       onPress={() => {
@@ -244,7 +244,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         width={24}
         height={24}
       />
-    </Pressable>
+    </PressableScale>
   );
 };
 
