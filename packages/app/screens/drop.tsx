@@ -163,12 +163,14 @@ const DropModal = () => {
           </View>
         </View>
       </ScrollView>
-      <Button
-        disabled={state.status === "loading"}
-        onPress={handleSubmit(onSubmit)}
-      >
-        Submit
-      </Button>
+      <View tw="mb-16 px-4">
+        <Button
+          disabled={state.status === "loading"}
+          onPress={handleSubmit(onSubmit)}
+        >
+          Submit
+        </Button>
+      </View>
     </>
   );
 };

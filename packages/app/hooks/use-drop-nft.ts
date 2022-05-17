@@ -141,8 +141,8 @@ export const pollTransaction = async (
   relayedTransactionId: string,
   pollEndpointName: string
 ) => {
-  let intervalMs = 1000;
-  for (let attempts = 0; attempts < 20; attempts++) {
+  let intervalMs = 2000;
+  for (let attempts = 0; attempts < 100; attempts++) {
     console.log(`Checking tx... (${attempts + 1} / 20)`);
     const response = await axios({
       url: `/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
