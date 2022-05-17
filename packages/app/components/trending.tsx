@@ -33,14 +33,14 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
     return (
       <View
         tw={`mt-6 items-center justify-center px-3`}
-        sx={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
+        style={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
       >
         <Spinner size="small" />
       </View>
     );
   }
 
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
+  return <View style={{ marginBottom: tabBarHeight }}></View>;
 };
 
 const ListHeader = ({ isLoading, SelectionControl, data }: any) => (

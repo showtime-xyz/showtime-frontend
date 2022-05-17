@@ -1,5 +1,4 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { DripsyProvider } from "dripsy";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -40,19 +39,17 @@ export const decorators = [
   (Story) => (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TailwindDeviceContextProvider>
-        <DripsyProvider theme={theme}>
-          <BottomSheetModalProvider>
-            <SafeAreaProvider>
-              <ToastProvider>
-                <MainAxisCenter>
-                  <FontsLoader>
-                    <Story />
-                  </FontsLoader>
-                </MainAxisCenter>
-              </ToastProvider>
-            </SafeAreaProvider>
-          </BottomSheetModalProvider>
-        </DripsyProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <ToastProvider>
+              <MainAxisCenter>
+                <FontsLoader>
+                  <Story />
+                </FontsLoader>
+              </MainAxisCenter>
+            </ToastProvider>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
       </TailwindDeviceContextProvider>
     </GestureHandlerRootView>
   ),

@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TextInputProps,
   TextStyle,
+  TextInput,
 } from "react-native";
 
-import { TextInput } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
@@ -124,17 +124,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       >
         {leftElement}
         <TextInput
-          sx={{
-            flexGrow: 1,
-            paddingY: Platform.select({
-              ios: 16,
-              default: 12,
-            }),
-            paddingLeft: leftElement ? 0 : 16,
-            paddingRight: rightElement ? 0 : 16,
-            fontWeight: "500",
-            ...tw.style("text-gray-900 dark:text-white"),
-          }}
           // @ts-ignore remove focus outline on web as we'll control the focus styling
           style={StyleSheet.flatten([
             Platform.select({
@@ -144,6 +133,17 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               default: undefined,
             }),
             props.inputStyle,
+            {
+              flexGrow: 1,
+              paddingY: Platform.select({
+                ios: 16,
+                default: 12,
+              }),
+              paddingLeft: leftElement ? 0 : 16,
+              paddingRight: rightElement ? 0 : 16,
+              fontWeight: "500",
+              ...tw.style("text-gray-900 dark:text-white"),
+            },
           ])}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
@@ -175,7 +175,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           ref={ref}
         />
         {rightElement && (
-          <View sx={{ marginLeft: "auto" }}>{rightElement}</View>
+          <View style={{ marginLeft: "auto" }}>{rightElement}</View>
         )}
       </Animated.View>
       {helperText ? (
@@ -183,7 +183,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           variant="text-sm"
           nativeID={helperTextId}
           tw="text-gray-600 dark:text-gray-400"
-          sx={{ marginTop: 4, fontWeight: "600" }}
+          style={{ marginTop: 4, fontWeight: "600" }}
         >
           {helperText}
         </Text>
@@ -193,7 +193,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           nativeID={errorTextId}
           variant="text-sm"
           tw="text-red-500"
-          sx={{ marginTop: 4, fontWeight: "600" }}
+          style={{ marginTop: 4, fontWeight: "600" }}
         >
           {errorText}
         </Text>

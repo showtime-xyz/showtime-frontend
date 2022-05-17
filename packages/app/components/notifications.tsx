@@ -148,7 +148,7 @@ const NotificationDescription = ({
           //@ts-ignore
           tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
-          sx={{ lineHeight: 20, fontSize: 13 }}
+          style={{ lineHeight: 20, fontSize: 13 }}
         >
           {actors.length == 1 ? (
             <>

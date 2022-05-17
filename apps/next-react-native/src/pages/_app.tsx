@@ -5,7 +5,6 @@ import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
-import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import type { Revalidator, RevalidatorOptions } from "swr";
@@ -226,68 +225,65 @@ export default function App({ Component, pageProps, router }: AppProps) {
           }}
         /> */}
       </Head>
-      <DripsyProvider theme={theme} ssr>
-        <SafeAreaProvider>
-          <ToastProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <SWRProvider>
-                  <Web3Provider>
-                    <AppContext.Provider value={injectedGlobalContext}>
-                      <AuthProvider>
-                        <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <MintProvider>
-                                    <View tw="bg-gray-100 dark:bg-black">
-                                      <Header
-                                        canGoBack={
-                                          router.pathname === "/search" ||
-                                          router.pathname.split("/").length -
-                                            1 >=
-                                            2
-                                        }
-                                      />
+      <SafeAreaProvider>
+        <ToastProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <SWRProvider>
+                <Web3Provider>
+                  <AppContext.Provider value={injectedGlobalContext}>
+                    <AuthProvider>
+                      <UserProvider>
+                        <BottomSheetModalProvider>
+                          <GrowthBookProvider growthbook={growthbook}>
+                            <FeedProvider>
+                              <NavigationProvider>
+                                <MintProvider>
+                                  <View tw="bg-gray-100 dark:bg-black">
+                                    <Header
+                                      canGoBack={
+                                        router.pathname === "/search" ||
+                                        router.pathname.split("/").length - 1 >=
+                                          2
+                                      }
+                                    />
 
-                                      <View tw="min-h-screen items-center">
-                                        <Component {...pageProps} />
-                                      </View>
-
-                                      <Footer />
+                                    <View tw="min-h-screen items-center">
+                                      <Component {...pageProps} />
                                     </View>
 
-                                    {/* Modals */}
-                                    <CommentsScreen />
-                                    <TransferScreen />
-                                    <CreateScreen />
-                                    <DeleteScreen />
-                                    <ListScreen />
-                                    <UnlistScreen />
-                                    <DetailsScreen />
-                                    <BuyScreen />
-                                    <ActivitiesScreen />
-                                    <MintSnackbar />
-                                    <EditProfileScreen />
-                                    {/* Login should be the last so
+                                    <Footer />
+                                  </View>
+
+                                  {/* Modals */}
+                                  <CommentsScreen />
+                                  <TransferScreen />
+                                  <CreateScreen />
+                                  <DeleteScreen />
+                                  <ListScreen />
+                                  <UnlistScreen />
+                                  <DetailsScreen />
+                                  <BuyScreen />
+                                  <ActivitiesScreen />
+                                  <MintSnackbar />
+                                  <EditProfileScreen />
+                                  {/* Login should be the last so
                                       it renders on top of others if needed */}
-                                    <LoginScreen />
-                                  </MintProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </AppContext.Provider>
-                  </Web3Provider>
-                </SWRProvider>
-              </SnackbarProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+                                  <LoginScreen />
+                                </MintProvider>
+                              </NavigationProvider>
+                            </FeedProvider>
+                          </GrowthBookProvider>
+                        </BottomSheetModalProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContext.Provider>
+                </Web3Provider>
+              </SWRProvider>
+            </SnackbarProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </>
   );
 }

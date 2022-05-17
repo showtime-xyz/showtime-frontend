@@ -107,7 +107,7 @@ export function Ownership({ nft }: Props) {
         <Avatar url={nft.owner_img_url} />
         <View tw="ml-2 justify-center">
           <Text
-            sx={{ fontSize: 12, lineHeight: 12 }}
+            style={{ fontSize: 12, lineHeight: 12 }}
             tw="font-semibold text-gray-600 dark:text-gray-400"
           >
             Owner

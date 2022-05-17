@@ -165,7 +165,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
             <Text
               tw="text-xs font-medium"
               numberOfLines={1}
-              sx={{ color: textColor }}
+              style={{ color: textColor }}
               accessibilityRole="text"
             >
               {snackbar.text}
@@ -189,7 +189,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                     <Text
                       tw="text-xs font-bold"
                       numberOfLines={1}
-                      sx={{ color: textColor }}
+                      style={{ color: textColor }}
                     >
                       {snackbar.action?.text}
                     </Text>

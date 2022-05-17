@@ -95,7 +95,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
-                sx={{
+                style={{
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,

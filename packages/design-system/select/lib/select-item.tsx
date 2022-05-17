@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { GestureResponderEvent } from "react-native";
+import { Pressable, GestureResponderEvent } from "react-native";
 
-import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useIsDarkMode, useOnHover } from "../../hooks";

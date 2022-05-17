@@ -393,7 +393,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
           variant="text-2xl"
           tw="dark:text-white"
           numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
+          style={{ fontSize: 17, lineHeight: 22 }}
         >
           {nft.token_name}
         </Text>

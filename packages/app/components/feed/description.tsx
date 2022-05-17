@@ -82,7 +82,7 @@ function Description({ nft }: Props) {
         variant="text-2xl"
         tw="text-gray-900 dark:text-white"
         numberOfLines={numberOfLines}
-        sx={{ fontSize: 16, lineHeight: 20 }}
+        style={{ fontSize: 16, lineHeight: 20 }}
         onTextLayout={onTextLayout}
       >
         {description} this is a very long description to test if the view gets

@@ -205,7 +205,7 @@ export function MessageRow({
       <View tw="ml-2 flex-1">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
-            sx={{ fontSize: 13, lineHeight: 15 }}
+            style={{ fontSize: 13, lineHeight: 15 }}
             tw="font-semibold text-gray-900 dark:text-white"
             onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
@@ -218,7 +218,7 @@ export function MessageRow({
 
         <Text
           tw="text-gray-900 dark:text-gray-100"
-          sx={{ fontSize: 13, lineHeight: 15 }}
+          style={{ fontSize: 13, lineHeight: 15 }}
         >
           {contentWithTags}
         </Text>

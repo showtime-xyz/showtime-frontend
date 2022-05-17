@@ -1,18 +1,19 @@
 import { ComponentProps } from "react";
-
-import { ScrollView as DripsyScrollView } from "dripsy";
+import { ScrollView as ReactNativeScrollView } from "react-native";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
-type ScrollViewProps = { tw?: TW } & ComponentProps<typeof DripsyScrollView>;
+type ScrollViewProps = { tw?: TW } & ComponentProps<
+  typeof ReactNativeScrollView
+>;
 
-function ScrollView({ tw, sx, ...props }: ScrollViewProps) {
+function ScrollView({ tw, style, ...props }: ScrollViewProps) {
   return (
-    <DripsyScrollView
+    <ReactNativeScrollView
       keyboardShouldPersistTaps="handled"
-      sx={{ ...sx, ...tailwind.style(tw) }}
       {...props}
+      style={{ ...(style as object), ...tailwind.style(tw) }}
     />
   );
 }

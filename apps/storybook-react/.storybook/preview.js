@@ -1,7 +1,6 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { DripsyProvider } from "dripsy";
 import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
@@ -38,18 +37,16 @@ const TailwindDeviceContextProvider = ({ children }) => {
 
 export const decorators = [
   (Story) => (
-    <DripsyProvider theme={theme}>
-      <TailwindDeviceContextProvider>
-        <BottomSheetModalProvider>
-          <ToastProvider>
-            <NavigationContainer linking={linking}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Storybook" component={Story} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ToastProvider>
-        </BottomSheetModalProvider>
-      </TailwindDeviceContextProvider>
-    </DripsyProvider>
+    <TailwindDeviceContextProvider>
+      <BottomSheetModalProvider>
+        <ToastProvider>
+          <NavigationContainer linking={linking}>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Storybook" component={Story} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ToastProvider>
+      </BottomSheetModalProvider>
+    </TailwindDeviceContextProvider>
   ),
 ];

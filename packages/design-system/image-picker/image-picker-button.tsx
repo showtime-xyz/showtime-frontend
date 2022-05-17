@@ -29,7 +29,7 @@ export function ImagePickerButton({
       }}
     >
       {/* {type === "profilePhoto" && currentUser?.profile_photo_url && (
-        <View sx={{ position: "absolute" }}>
+        <View style={{ position: "absolute" }}>
           <Image
             source={{
               uri: currentUser.profile_photo_url,
