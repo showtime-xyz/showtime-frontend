@@ -1,7 +1,7 @@
 import React from "react";
 import { Linking } from "react-native";
 
-import { View, Text, Pressable } from "design-system";
+import { View, Text, PressableScale } from "design-system";
 
 export function LoginHeader() {
   return (
@@ -16,7 +16,7 @@ export function LoginHeader() {
         >
           By signing in you agree to our{" "}
         </Text>
-        <Pressable
+        <PressableScale
           onPress={() => {
             Linking.openURL(
               "https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
@@ -29,7 +29,7 @@ export function LoginHeader() {
           >
             Terms &amp; Conditions
           </Text>
-        </Pressable>
+        </PressableScale>
         <Text
           variant="text-xs"
           tw="text-center text-gray-600 dark:text-gray-400"
