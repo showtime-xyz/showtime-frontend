@@ -12,7 +12,7 @@ import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
 import { Label } from "../label";
-import { Pressable, Props as PressableProps } from "../pressable-scale";
+import { PressableScale, Props as PressableProps } from "../pressable-scale";
 import { tw } from "../tailwind";
 import { colors } from "../tailwind/colors";
 import { Text } from "../text";
@@ -208,5 +208,5 @@ Input.displayName = "Input";
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {
-  return <Pressable tw="p-2" {...props} />;
+  return <PressableScale tw="p-2" {...props} />;
 };

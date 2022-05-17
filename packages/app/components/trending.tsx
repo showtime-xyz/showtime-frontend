@@ -5,6 +5,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Haptics } from "app/lib/haptics";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
@@ -76,6 +77,10 @@ export const Trending = () => {
     []
   );
 
+  const handleTabOnPress = useCallback(() => {
+    Haptics.impactAsync();
+  }, []);
+
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
@@ -88,6 +93,7 @@ export const Trending = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
+          onPressCallback={handleTabOnPress}
           style={tabListStyles}
           contentContainerStyle={tw.style("w-full")}
         >
@@ -118,15 +124,23 @@ export const Trending = () => {
 const TabListContainer = ({ days }: { days: number }) => {
   const [selected, setSelected] = useState(0);
 
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
+
   const SelectionControl = useMemo(
     () => (
       <SegmentedControl
         values={["CREATOR", "NFT"]}
-        onChange={setSelected}
+        onChange={handleTabChange}
         selectedIndex={selected}
       />
     ),
-    [selected, setSelected]
+    [selected, handleTabChange]
   );
 
   return useMemo(

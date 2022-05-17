@@ -3,7 +3,7 @@ import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { FilePickerResolveValue } from "design-system/file-picker";
 import { Flip, Close, Check } from "design-system/icon";
 import { ImagePickerButton } from "design-system/image-picker";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
@@ -38,7 +38,7 @@ export function CameraButtons({
           exiting={SlideOutDown}
           style={{ zIndex: 1 }}
         >
-          <Pressable
+          <PressableScale
             tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
             onPress={() => {
               setPhotos([]);
@@ -52,7 +52,7 @@ export function CameraButtons({
               width={24}
               height={24}
             />
-          </Pressable>
+          </PressableScale>
         </Animated.View>
       ) : (
         <ImagePickerButton
@@ -69,7 +69,7 @@ export function CameraButtons({
         </View>
 
         <View tw="rounded-full border-4 border-white bg-white dark:border-black dark:bg-black">
-          <Pressable
+          <PressableScale
             tw="h-[64px] w-[64px] rounded-full bg-black dark:bg-white"
             onPress={takePhoto}
             disabled={!canPop && photos.length < 9}
@@ -94,7 +94,7 @@ export function CameraButtons({
               />
             </View> */}
 
-            <Pressable
+            <PressableScale
               tw="z-10 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
               onPress={() => {
                 postPhoto({ file: photos[0].uri, type: "image" });
@@ -107,11 +107,11 @@ export function CameraButtons({
                 width={24}
                 height={24}
               />
-            </Pressable>
+            </PressableScale>
           </View>
         </Animated.View>
       ) : (
-        <Pressable
+        <PressableScale
           tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
           onPress={() =>
             setCameraPosition(cameraPosition === "front" ? "back" : "front")
@@ -124,7 +124,7 @@ export function CameraButtons({
             width={24}
             height={24}
           />
-        </Pressable>
+        </PressableScale>
       )}
     </View>
   );

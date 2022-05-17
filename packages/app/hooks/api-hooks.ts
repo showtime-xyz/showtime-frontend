@@ -19,7 +19,7 @@ export const useActivity = ({
   const { accessToken } = useAuth();
 
   const activityURLFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `/v2/${
         accessToken ? "activity_with_auth" : "activity_without_auth"
       }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
@@ -61,7 +61,7 @@ export const useActivity = ({
 
 export const useTrendingCreators = ({ days }: { days: number }) => {
   const trendingCreatorsUrlFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `/v1/leaderboard?page=${index + 1}&days=${days}&limit=15`;
       return url;
     },
@@ -167,7 +167,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `v1/profile_nfts?profile_id=${profileId}&page=${
         index + 1
       }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
@@ -177,7 +177,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   );
 
   const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params.profileId ? trendingCreatorsUrlFn : null,
+    params?.profileId ? trendingCreatorsUrlFn : () => null,
     refreshInterval
   );
 
@@ -307,7 +307,7 @@ export const useMyInfo = () => {
   );
 
   const unfollow = useCallback(
-    async (profileId: number) => {
+    async (profileId?: number) => {
       if (data) {
         mutate(
           queryKey,

@@ -1,15 +1,15 @@
 import { Meta } from "@storybook/react";
 
 import { Text } from "../text";
-import { PressableScale } from "./index";
+import { Pressable } from "./index";
 
 export default {
-  component: PressableScale,
-  title: "Components/PressableScale",
+  component: Pressable,
+  title: "Components/Pressable",
 } as Meta;
 
 export const Primary: React.VFC<{}> = () => (
-  <PressableScale tw="w-auto rounded-full bg-black p-2 dark:bg-white">
+  <Pressable tw="w-auto rounded-full bg-black p-2 dark:bg-white">
     <Text tw="text-center text-white dark:text-black">Press Me</Text>
-  </PressableScale>
+  </Pressable>
 );
