@@ -2,7 +2,7 @@ import { Children, cloneElement, useMemo } from "react";
 
 import Animated from "react-native-reanimated";
 
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw as tailwind } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
@@ -104,13 +104,13 @@ export function BaseButton({
   }
 
   return (
-    <Pressable
+    <PressableScale
       {...props}
       tw={containerStyle}
       style={backgroundColors ? containerAnimatedStyle : undefined}
     >
       {renderChildren}
-    </Pressable>
+    </PressableScale>
   );
   //#endregion
 }

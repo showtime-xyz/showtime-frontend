@@ -3,7 +3,7 @@ import {
   useFilePicker,
 } from "design-system/file-picker";
 import { Image } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 
 export function ImagePickerButton({
@@ -17,7 +17,7 @@ export function ImagePickerButton({
 
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
   return (
-    <Pressable
+    <PressableScale
       tw={
         type === "profilePhoto"
           ? "h-20 w-20 items-center justify-center rounded-full bg-white dark:bg-black"
@@ -47,6 +47,6 @@ export function ImagePickerButton({
         width={24}
         height={24}
       />
-    </Pressable>
+    </PressableScale>
   );
 }

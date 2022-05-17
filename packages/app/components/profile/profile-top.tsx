@@ -21,6 +21,8 @@ import { useColorScheme } from "design-system/hooks";
 import { LightBoxImg } from "design-system/light-box/light-box-image";
 import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
+import { Image } from "design-system/image";
+import { PressableScale } from "design-system/pressable-scale";
 import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 
@@ -45,19 +47,19 @@ const Follow = ({
 }: FollowProps) => {
   return (
     <View tw={`flex-row ${tw}`} pointerEvents="box-none">
-      <Pressable onPress={onPressFollowing}>
+      <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
           <Text tw="font-medium">following</Text>
         </Text>
-      </Pressable>
+      </PressableScale>
       <View tw="ml-8 md:ml-4" pointerEvents="box-none">
-        <Pressable onPress={onPressFollower}>
+        <PressableScale onPress={onPressFollower}>
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             {`${followersCount ?? 0} `}
             <Text tw="font-medium">followers</Text>
           </Text>
-        </Pressable>
+        </PressableScale>
       </View>
     </View>
   );

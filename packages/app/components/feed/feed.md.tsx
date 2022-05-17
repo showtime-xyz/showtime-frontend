@@ -7,6 +7,7 @@ import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
 import { useColorScheme } from "app/lib/color-scheme";
+import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,
   LayoutProvider,
@@ -35,6 +36,8 @@ const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
+type Tab = "following" | "curated" | "" | undefined;
+
 type Query = {
   tab: number;
 };
@@ -60,6 +63,14 @@ export const FeedList = () => {
     initial: 1,
   });
   const isDark = useIsDarkMode();
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
 
   return (
     <View tw="flex-row">
@@ -87,7 +98,7 @@ export const FeedList = () => {
             >
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
-                onChange={setSelected}
+                onChange={handleTabChange}
                 selectedIndex={selected}
               />
             </View>
@@ -117,7 +128,9 @@ export const FeedList = () => {
 const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+  );
 };
 
 const AlgorithmicFeed = () => {
@@ -129,15 +142,17 @@ const AlgorithmicFeed = () => {
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return <NFTScrollList {...queryState} data={queryState.data} tab="curated" />;
 };
 
 const NFTScrollList = ({
   data,
   fetchMore,
+  tab,
 }: {
   data: NFT[];
   fetchMore: any;
+  tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
 
@@ -169,16 +184,27 @@ const NFTScrollList = ({
     }),
     [height]
   );
-  const _rowRenderer = useCallback((_type: any, item: any) => {
-    return (
-      <View tw="flex-row justify-center" nativeID="334343">
-        <Card
-          nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-        />
-      </View>
-    );
-  }, []);
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index: number) => {
+      return (
+        <View tw="flex-row justify-center" nativeID="334343">
+          <Card
+            hrefProps={{
+              pathname: "/list",
+              query: {
+                initialScrollIndex: index,
+                type: "feed",
+                tab,
+              },
+            }}
+            nft={item}
+            tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          />
+        </View>
+      );
+    },
+    [tab]
+  );
 
   const videoConfig = useMemo(
     () => ({
