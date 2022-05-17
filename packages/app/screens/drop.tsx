@@ -55,9 +55,32 @@ const DropModal = () => {
     dropNFT(values);
   };
 
-  console.log("dude ", state);
-
   const pickFile = useFilePicker();
+
+  if (state.status === "success") {
+    return (
+      <View tw="items-center justify-center">
+        <Text variant="text-4xl">🎉</Text>
+        <View>
+          <Text
+            variant="text-4xl"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Congrats!
+          </Text>
+
+          <Text
+            variant="text-lg"
+            tw="my-8 text-center text-black dark:text-white"
+          >
+            Now share your free NFT drop to the world!
+          </Text>
+
+          <Text>Contract address: {state.edition?.contract_address}</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <>

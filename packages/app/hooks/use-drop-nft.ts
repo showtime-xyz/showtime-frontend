@@ -22,9 +22,20 @@ async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+type IEdition = {
+  contract_address: string;
+  description: string;
+  edition_size: string;
+  image_url: string;
+  name: string;
+  owner_address: string;
+  symbol: string;
+};
+
 type State = {
   status: "idle" | "loading" | "success" | "error";
   transactionHash?: string;
+  edition?: IEdition;
   error?: string;
 };
 
@@ -32,6 +43,7 @@ type Action = {
   error?: string;
   type: string;
   transactionHash?: string;
+  edition?: IEdition;
 };
 
 const initialState: State = {
@@ -43,7 +55,7 @@ const reducer = (state: State, action: Action): State => {
     case "loading":
       return { ...initialState, status: "loading" };
     case "success":
-      return { ...state, status: "success" };
+      return { ...state, status: "success", edition: action.edition };
     case "error":
       return { ...state, status: "error", error: action.error };
     case "transactionHash":
@@ -135,6 +147,7 @@ export const useDropNFT = () => {
           url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${relayerResponse.relayed_transaction_id}`,
           method: "GET",
         });
+        Logger.log(response);
 
         dispatch({
           type: "transactionHash",
@@ -142,7 +155,7 @@ export const useDropNFT = () => {
         });
 
         if (response.is_complete) {
-          dispatch({ type: "success" });
+          dispatch({ type: "success", edition: response.edition });
           return;
         }
 
