@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+import { delay } from "app/utilities";
 
 import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
@@ -17,10 +18,6 @@ const onePerAddressMinterContract =
   "0x50c001362FB06E2CB4D4e8138654267328a8B247";
 const metaSingleEditionMintableCreator =
   "0x50c001c0aaa97B06De431432FDbF275e1F349694";
-
-async function delay(ms: number) {
-  return await new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 type IEdition = {
   contract_address: string;

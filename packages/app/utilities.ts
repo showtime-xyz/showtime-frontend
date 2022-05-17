@@ -607,3 +607,7 @@ export const getPinataToken = () => {
     data: {},
   }).then((res) => res.token);
 };
+
+export async function delay(ms: number) {
+  return await new Promise((resolve) => setTimeout(resolve, ms));
+}

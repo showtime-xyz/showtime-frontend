@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { yup } from "app/lib/yup";
+import { TextLink } from "app/navigation/link";
 
 import { View, Text, Fieldset, Button, ScrollView } from "design-system";
 import { useFilePicker } from "design-system/file-picker";
@@ -64,19 +65,24 @@ const DropModal = () => {
         <View>
           <Text
             variant="text-4xl"
-            tw="my-8 text-center text-black dark:text-white"
+            tw="mt-4 text-center text-black dark:text-white"
           >
             Congrats!
           </Text>
 
           <Text
             variant="text-lg"
-            tw="my-8 text-center text-black dark:text-white"
+            tw="mt-8 mb-4 text-center text-black dark:text-white"
           >
             Now share your free NFT drop to the world!
           </Text>
 
-          <Text>Contract address: {state.edition?.contract_address}</Text>
+          <TextLink
+            href={`/nft/${process.env.NEXT_PUBLIC_CHAIN_ID}/${state.edition?.contract_address}`}
+            tw="text-center font-bold text-blue-700"
+          >
+            Open URL
+          </TextLink>
         </View>
       </View>
     );

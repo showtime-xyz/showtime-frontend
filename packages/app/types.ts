@@ -176,3 +176,13 @@ export interface AllSellers {
   sale_identifier: number;
   quantity: number;
 }
+
+export type IEdition = {
+  contract_address: string;
+  description: string;
+  edition_size: string;
+  image_url: string;
+  name: string;
+  owner_address: string;
+  symbol: string;
+};
