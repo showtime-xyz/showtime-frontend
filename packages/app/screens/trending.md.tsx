@@ -192,7 +192,6 @@ const CreatorsList = ({ days }: { days: any }) => {
 };
 
 const NFTList = ({ days }: { days: any }) => {
-  const router = useRouter();
   const { data, isLoading } = useTrendingNFTS({
     days,
   });
@@ -215,16 +214,19 @@ const NFTList = ({ days }: { days: any }) => {
         ? data.map((item, index) => {
             return (
               <Card
+                hrefProps={{
+                  pathname: "/list",
+                  query: {
+                    initialScrollIndex: index,
+                    type: "trendingNFTs",
+                    days,
+                  },
+                }}
                 key={`nft-list-card-${index}`}
                 nft={item}
                 tw={`w-[${containerWidth / numColumns - 30}px] h-[${
                   containerWidth / numColumns + 205
                 }px] mb-8`}
-                onPress={() =>
-                  router.push(
-                    `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
-                  )
-                }
               />
             );
           })

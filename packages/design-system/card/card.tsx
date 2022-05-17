@@ -1,9 +1,12 @@
 import { Suspense, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import type { UrlObject } from "url";
+
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import useContentWidth from "app/hooks/use-content-width";
+import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 
 import { Collection } from "design-system/card/rows/collection";
@@ -24,12 +27,15 @@ type Props = {
   onPress: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
+  hrefProps?: UrlObject;
 };
 
-function Card({ nft, numColumns, tw, onPress }: Props) {
+function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
+  const isWeb = Platform.OS === "web";
+  const RouteComponent = isWeb ? Link : Pressable;
 
   const size = tw
     ? tw
@@ -52,9 +58,9 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
 
   if (width < 768) {
     return (
-      <PressableScale onPress={onPress}>
+      <RouteComponent href={hrefProps} onPress={onPress}>
         <Media item={nft} numColumns={numColumns} />
-      </PressableScale>
+      </RouteComponent>
     );
   }
 
@@ -81,15 +87,13 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
           </Suspense>
         </View>
 
-        <PressableScale onPress={onPress}>
+        <RouteComponent href={hrefProps} onPress={onPress}>
           <Media item={nft} numColumns={numColumns} />
-        </PressableScale>
-        {/* <Grid nfts={nfts ?? []} /> */}
-
+        </RouteComponent>
         <View tw="mt-2">
-          <PressableScale onPress={onPress}>
+          <RouteComponent href={hrefProps} onPress={onPress}>
             <Title nft={nft} cardMaxWidth={cardMaxWidth} />
-          </PressableScale>
+          </RouteComponent>
         </View>
 
         <Social nft={nft} />
