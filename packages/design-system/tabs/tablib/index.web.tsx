@@ -8,11 +8,11 @@ import {
 } from "react-native";
 
 import * as RadixTabs from "@radix-ui/react-tabs";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
 
-import { tw } from "../../tailwind";
 import { View } from "../../view";
 import { TabRootProps } from "./types";
 
@@ -35,6 +35,7 @@ const Root = ({
   accessibilityLabel,
   index,
 }: TabRootProps) => {
+  const tailwind = useTailwind();
   const [selected, setSelected] = React.useState(
     initialIndex.toString() ?? "0"
   );
@@ -97,21 +98,21 @@ const Root = ({
         value={selected}
         onValueChange={onIndexChange}
         activationMode="manual"
-        style={tw.style("w-full")}
+        style={tailwind("w-full")}
       >
         {headerChild}
         <View tw="flex flex-1 flex-row justify-center bg-white dark:bg-black">
           <View tw="w-full max-w-screen-xl">
             <RadixTabs.List
               aria-label={accessibilityLabel}
-              style={tw.style("")}
+              style={tailwind("")}
               asChild
             >
               <ScrollView
                 {...(listChild as any).props}
                 horizontal
                 contentContainerStyle={[
-                  tw.style(
+                  tailwind(
                     `bg-white dark:bg-black flex h-full px-2.5 items-center flex-row flex-nowrap`
                   ),
                   (listChild as any).props?.contentContainerStyle,
@@ -129,14 +130,12 @@ const Root = ({
                     >
                       <TabIndexContext.Provider value={{ index }}>
                         <View
-                          sx={tw.style(
-                            "item items-center border-b-2 h-full justify-center"
-                          )}
-                          tw={
+                          tw={[
                             selected === value
                               ? "border-b-gray-900 dark:border-b-gray-100"
-                              : "border-b-transparent"
-                          }
+                              : "border-b-transparent",
+                            "item h-full items-center justify-center border-b-2",
+                          ]}
                         >
                           {t}
                         </View>

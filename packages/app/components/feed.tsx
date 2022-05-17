@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
@@ -20,7 +21,6 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { TabItem, Tabs } from "design-system";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -37,6 +37,7 @@ export const Feed = () => {
 };
 
 export const FeedList = () => {
+  const tailwind = useTailwind();
   const { isAuthenticated } = useUser();
   const navigation = useNavigation();
   const { selected, pagerRef } = useContext(FeedContext);
@@ -61,7 +62,7 @@ export const FeedList = () => {
     return (
       <PagerView
         ref={pagerRef}
-        style={tw.style("flex-1 w-full")}
+        style={tailwind("flex-1 w-full")}
         initialPage={1}
         onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
       >
@@ -174,11 +175,13 @@ const CuratedFeed = () => {
 };
 
 const WebFeed = () => {
+  const tailwind = useTailwind();
+
   return (
     <Tabs.Root initialIndex={1}>
       <Tabs.List
-        style={tw.style(`h-[${TAB_LIST_HEIGHT}px]`)}
-        contentContainerStyle={tw.style(
+        style={tailwind(`h-[${TAB_LIST_HEIGHT}px]`)}
+        contentContainerStyle={tailwind(
           "w-full justify-center bg-white dark:bg-black"
         )}
       >

@@ -12,6 +12,13 @@ module.exports = function (api) {
   let plugins = [
     ["inline-dotenv", { path: envPath }],
     "react-native-reanimated/plugin",
+    [
+      "tailwindcss-react-native/babel",
+      {
+        platform: "native",
+        skipTransform: true,
+      },
+    ],
   ];
 
   if (process.env.NODE_ENV === "test") {

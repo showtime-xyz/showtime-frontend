@@ -6,10 +6,10 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
-import { tw } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 import { fontFamily } from "design-system/typography";
@@ -24,6 +24,7 @@ type TabItemProps = {
 };
 
 export const TabItem = ({ name, count, selected }: TabItemProps) => {
+  const tailwind = useTailwind();
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
   const isDark = useIsDarkMode();
@@ -58,13 +59,13 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
   return (
     <Animated.View
       style={[
-        tw.style("flex-row justify-center items-center h-full px-4"),
+        tailwind("flex-row justify-center items-center h-full px-4"),
         Platform.OS !== "web" && animatedStyle,
       ]}
     >
       <RNText
         style={[
-          tw.style("text-sm"),
+          tailwind("text-sm"),
           { fontFamily: fontFamily("Inter-Bold") },
           getTextStyle,
         ]}
@@ -72,11 +73,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
         {name}
       </RNText>
       {count ? (
-        <Text
-          variant="text-sm"
-          sx={{ fontWeight: "400" }}
-          tw={`text-gray-900 dark:text-white`}
-        >
+        <Text variant="text-sm" tw={`text-gray-900 dark:text-white`}>
           {` ${count}`}
         </Text>
       ) : null}
@@ -85,6 +82,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
 };
 
 export const SelectedTabIndicator = () => {
+  const tailwind = useTailwind();
   const { offset, position, tabItemLayouts } = useTabsContext();
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -145,12 +143,12 @@ export const SelectedTabIndicator = () => {
             // negative bottom to accomodate border bottom of 1px
             bottom: -1,
           },
-          tw.style(`bg-gray-900 dark:bg-gray-100 h-0.5 absolute z-50 w-full`),
+          tailwind(`bg-gray-900 dark:bg-gray-100 h-0.5 absolute z-50 w-full`),
         ]}
       />
       {/* {disableBackground ? null : (
         <View
-          sx={{
+          style={{
             backgroundColor: isDark
               ? "rgba(229, 231, 235, 0.1)"
               : "rgba(0, 0, 0, 0.1)",

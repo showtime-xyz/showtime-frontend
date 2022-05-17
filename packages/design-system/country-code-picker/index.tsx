@@ -12,10 +12,11 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
+import { useIsDarkMode } from "design-system/hooks";
 import { Check } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -30,6 +31,7 @@ type CountryCodePickerProps = {
 const PickerContext = createContext<any>(null);
 
 export const CountryCodePicker = (props: CountryCodePickerProps) => {
+  const tailwind = useTailwind();
   const { onChange, value } = props;
   const sharedValue = useSharedValue(value);
 
@@ -62,7 +64,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         renderItem={useCallback(({ item }) => {
           return <PickerItem item={item} />;
         }, [])}
-        style={tw.style("dark:bg-black")}
+        style={tailwind("dark:bg-black")}
         keyExtractor={useCallback((item) => item.code, [])}
         data={props.data ?? data}
       />
@@ -71,6 +73,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
 };
 
 const PickerItem = memo(({ item }: { item: CountryDataType }) => {
+  const isDark = useIsDarkMode();
   const { onChange, sharedValue } = useContext(PickerContext);
 
   const handleChange = useCallback(() => {
@@ -90,13 +93,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
           {item.emoji} {item.name} ({item.dial_code})
         </Text>
         <Animated.View style={[style, { marginLeft: "auto" }]}>
-          <Check
-            height={24}
-            width={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          <Check height={24} width={24} color={isDark ? "#fff" : "#000"} />
         </Animated.View>
       </View>
     </Pressable>

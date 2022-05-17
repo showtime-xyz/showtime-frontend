@@ -30,7 +30,7 @@ import { useIsDarkMode } from "design-system/hooks";
 import { ChevronUp, Image as ImageIcon } from "design-system/icon";
 import { Preview } from "design-system/preview";
 import { Switch } from "design-system/switch";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 const defaultValues = {
   editionCount: 1,
@@ -163,10 +163,7 @@ function Create() {
                         ) : (
                           <View tw="h-24 w-24 items-center justify-center rounded-2xl">
                             <ImageIcon
-                              color={
-                                tw.style("bg-black dark:bg-white")
-                                  ?.backgroundColor as string
-                              }
+                              color={isDark ? "#fff" : "#000"}
                               width={24}
                               height={24}
                             />
@@ -227,8 +224,9 @@ function Create() {
                       style={{
                         borderStyle: "dashed",
                         borderWidth: 1,
-                        borderColor: tw.style("dark:bg-gray-600 bg-gray-400")
-                          .backgroundColor,
+                        borderColor: isDark
+                          ? colors.gray["600"]
+                          : colors.gray["400"],
                       }}
                     >
                       {value.file ? (

@@ -24,8 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
 import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 type Props = {
   nftId?: NFT["nft_id"];
@@ -33,6 +33,7 @@ type Props = {
 
 function NFTDropdown({ nftId }: Props) {
   //#region hooks
+  const isDark = useIsDarkMode();
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
@@ -123,7 +124,7 @@ function NFTDropdown({ nftId }: Props) {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <MoreHorizontal
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          color={isDark ? "#fff" : "#000"}
           width={24}
           height={24}
         />

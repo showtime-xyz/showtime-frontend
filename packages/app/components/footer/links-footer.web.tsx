@@ -2,11 +2,13 @@ import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
 
 import { Text } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import ShowtimeWordmark from "design-system/icon/ShowtimeWordmark";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { View } from "design-system/view";
 
 export const WebFooter = () => {
+  const isDark = useIsDarkMode();
   const { social, links } = useFooter();
 
   return (
@@ -15,7 +17,7 @@ export const WebFooter = () => {
         <View tw="mt-4 md:mt-0">
           <Link href="/">
             <ShowtimeWordmark
-              color={tw.style("text-gray-900 dark:text-white").color as string}
+              color={isDark ? "#fff" : colors.gray["900"]}
               height={24}
               width={140}
             />
@@ -57,8 +59,7 @@ export const WebFooter = () => {
               >
                 <View tw="mr-2 text-base">
                   {item.icon({
-                    color: tw.style("text-gray-900 dark:text-white")
-                      .color as string,
+                    color: isDark ? "#fff" : colors.gray["900"],
                   })}
                 </View>
                 <Text

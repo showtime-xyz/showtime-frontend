@@ -9,10 +9,10 @@ import { ViewStyle } from "react-native";
 
 import { Button, TextInput, View } from "design-system";
 import { Avatar } from "design-system/avatar";
+import { useIsDarkMode } from "design-system/hooks";
 import { Send } from "design-system/icon";
-import { tw } from "design-system/tailwind";
-
-import { Spinner } from "../spinner";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind/colors";
 
 interface MessageBoxProps {
   submitting?: boolean;
@@ -36,6 +36,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     ref
   ) {
     //#region variables
+    const isDark = useIsDarkMode();
     const inputRef = useRef<typeof TextInput>();
     const [value, setValue] = useState("");
     //#endregion
@@ -65,6 +66,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       }),
       [handleReset, handleFocus]
     );
+
     return (
       <View
         pointerEvents={submitting ? "none" : "auto"}
@@ -78,7 +80,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             value={value}
             placeholder="Add a comment..."
             placeholderTextColor={
-              tw.style("text-gray-500 dark:text-gray-400").color as string
+              isDark ? colors.gray["400"] : colors.gray["500"]
             }
             multiline={true}
             keyboardType="twitter"

@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
@@ -25,10 +26,12 @@ import { Button, Pressable, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
 import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { breakpoints } from "design-system/theme";
 
 const SearchInHeader = () => {
+  const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
@@ -77,11 +80,8 @@ const SearchInHeader = () => {
           leftElement={
             <View tw="h-12 w-12 items-center justify-center rounded-full">
               <Search
-                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-                color={
-                  tw.style("bg-gray-500 dark:bg-gray-400")
-                    ?.backgroundColor as string
-                }
+                style={tailwind("rounded-lg overflow-hidden w-6 h-6")}
+                color={isDark ? colors.gray["400"] : colors.gray["500"]}
                 width={24}
                 height={24}
               />
@@ -99,10 +99,7 @@ const SearchInHeader = () => {
                   hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
                 >
                   <Close
-                    //@ts-ignore
-                    color={
-                      tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
-                    }
+                    color={isDark ? colors.gray["400"] : colors.gray["600"]}
                     width={24}
                     height={24}
                   />
@@ -110,7 +107,7 @@ const SearchInHeader = () => {
               </Popover.Close>
             ) : undefined
           }
-          inputStyle={tw.style("w-[269px]")}
+          inputStyle={tailwind("w-[269px]")}
         />
       </Popover.Anchor>
 
@@ -223,6 +220,8 @@ const HeaderRight = () => {
 };
 
 const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+  const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
 
@@ -239,8 +238,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
       }}
     >
       <Icon
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={tailwind("rounded-lg overflow-hidden w-6 h-6")}
+        color={isDark ? "#fff" : "#000"}
         width={24}
         height={24}
       />
@@ -282,6 +281,8 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
+
+  return null;
 
   if (isMdWidth) {
     return (

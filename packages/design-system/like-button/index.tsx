@@ -1,6 +1,7 @@
 import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
 import { Heart, HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 const getRoundedCount = (count: number = 0) => {
   const digits = `${count}`.split("");
@@ -44,19 +45,20 @@ export function LikeButton({
   isLiked?: boolean;
   likeCount: number;
 }) {
+  const isDark = useIsDarkMode();
+
   return (
     <Button variant="text" size="regular" tw="h-auto p-0" onPress={onPress}>
       {isLiked ? (
         // <Animated.View key="liked" exiting={ZoomOut} entering={ZoomIn}>
-        <HeartFilled height={24} width={24} color={tw.color("red-500")} />
+        <HeartFilled height={24} width={24} color={colors.red[500]} />
       ) : (
         // </Animated.View>
         // <Animated.View key="unliked" exiting={ZoomOut} entering={ZoomIn}>
         <Heart
           height={24}
           width={24}
-          // @ts-ignore
-          color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+          color={isDark ? "#fff" : colors.gray[900]}
         />
         // </Animated.View>
       )}{" "}

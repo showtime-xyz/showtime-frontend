@@ -1,8 +1,8 @@
 import React, { ComponentProps, useMemo } from "react";
 
 import { MotiPressable, mergeAnimateProp } from "moti/interactions";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
 export type Props = ComponentProps<typeof MotiPressable> & {
@@ -19,6 +19,8 @@ export function Pressable({
   disablePressAnimation = false,
   ...props
 }: Props) {
+  const tailwind = useTailwind();
+
   const animateValues = useMemo(
     () => (interaction) => {
       "worklet";
@@ -33,7 +35,9 @@ export function Pressable({
   return (
     <MotiPressable
       animate={disablePressAnimation ? undefined : animateValues}
-      style={[tailwind.style(tw), style]}
+      style={
+        tw ? [tailwind(Array.isArray(tw) ? tw.join(" ") : tw), style] : style
+      }
       {...props}
     />
   );

@@ -2,7 +2,6 @@ import { memo, useMemo } from "react";
 
 import { Button } from "design-system/button";
 import { Close } from "design-system/icon";
-import { tw as tailwind } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -17,20 +16,20 @@ function ModalHeaderComponent({
   tw,
   onClose,
 }: ModalHeaderProps) {
-  const containerStyle = useMemo(
-    () =>
-      tailwind.style(
-        MODAL_HEADER_CONTAINER_TW,
-        ...(typeof tw === "undefined"
-          ? [""]
-          : typeof tw === "string"
-          ? [tw]
-          : tw)
-      ),
+  const containerTw = useMemo(
+    () => [
+      MODAL_HEADER_CONTAINER_TW,
+      ...(typeof tw === "undefined"
+        ? [""]
+        : typeof tw === "string"
+        ? [tw]
+        : tw),
+    ],
     [tw]
   );
+
   return (
-    <View style={containerStyle}>
+    <View tw={containerTw}>
       <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
         <Close width={20} height={24} />
       </Button>

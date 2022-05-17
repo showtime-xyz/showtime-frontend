@@ -34,10 +34,11 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { useRouter } from "app/navigation/use-router";
 
+import { useIsDarkMode } from "design-system/hooks";
 import { Flash, FlashOff } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { View } from "design-system/view";
 
 // Multi camera on Android not yet supported by CameraX
@@ -76,6 +77,7 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
+  const isDark = useIsDarkMode();
   const tabBarHeight = useBottomTabBarHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -383,9 +385,7 @@ export function Camera({
           >
             {flash === "off" ? (
               <FlashOff
-                color={
-                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
-                }
+                color={isDark ? "#fff" : "#000"}
                 width={24}
                 height={24}
               />
@@ -393,9 +393,10 @@ export function Camera({
               <Flash
                 color={
                   flash === "on"
-                    ? tw.color("amber-500")
-                    : (tw.style("bg-black dark:bg-white")
-                        ?.backgroundColor as string)
+                    ? colors.amber["500"]
+                    : isDark
+                    ? "#fff"
+                    : "#000"
                 }
                 width={21}
                 height={21}

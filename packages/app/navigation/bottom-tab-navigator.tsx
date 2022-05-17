@@ -11,7 +11,7 @@ import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { View } from "design-system";
-import { tw } from "design-system/tailwind";
+import { useIsDarkMode } from "design-system/hooks";
 
 import {
   CameraTabBarIcon,
@@ -31,13 +31,14 @@ const ProfileNavigator = dynamic(() => import("../pages/profile"));
 const BottomTab = createBottomTabNavigator();
 
 export function BottomTabNavigator() {
+  const isDark = useIsDarkMode();
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isAuthenticated } = useUser();
   const isForeground = useIsForeground();
 
-  const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
+  const color = isDark ? "#fff" : "#000";
   const tint = color === "#000" ? "light" : "dark";
 
   useEffect(() => {

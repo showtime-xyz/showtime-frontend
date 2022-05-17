@@ -1,14 +1,11 @@
 import React, { useCallback, useMemo } from "react";
-import { Platform } from "react-native";
+import { Platform, Pressable } from "react-native";
 
-import { Pressable } from "dripsy";
 import { MotiView } from "moti";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Path, Svg } from "react-native-svg";
 
-import { useOnFocus, useOnHover } from "../hooks";
-import { useIsDarkMode } from "../hooks";
-import { tw } from "../tailwind";
+import { useOnFocus, useOnHover, useIsDarkMode } from "../hooks";
 import { colors } from "../tailwind/colors";
 
 type CheckboxProps = {
@@ -81,7 +78,7 @@ export const Checkbox = ({
               justifyContent: "center",
             },
             animatedStyle,
-            tw`bg-white dark:bg-black`,
+            isDark ? "#000" : "#fff",
           ],
           [animatedStyle]
         )}

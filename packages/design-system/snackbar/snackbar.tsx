@@ -8,10 +8,10 @@ import {
   MotiTransitionProp,
   StyleValueWithReplacedTransforms,
 } from "moti";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 
-import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
 import { useIsDarkMode } from "../hooks";
@@ -78,6 +78,7 @@ export type SnackbarProps = {
 };
 
 export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
+  const tailwind = useTailwind();
   const isDark = useIsDarkMode();
   const { isMobileWeb } = useIsMobileWeb();
   const isExplore = useMemo(() => snackbar.preset === "explore", [snackbar]);
@@ -142,13 +143,13 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
       {show && (
         <MotiView
           transition={transition}
-          style={[tw.style(`w-full h-10`), snackbarStyle]}
+          style={[tailwind(`w-full h-10`), snackbarStyle]}
           {...PRESET_TRANSITION_MAP.get(snackbar.transition ?? "fade")}
         >
           <BlurView
             intensity={snackbar.preset === "explore" ? 0 : 100}
             style={[
-              tw.style(`w-full items-center h-full flex-row`),
+              tailwind(`w-full items-center h-full flex-row`),
               { paddingHorizontal: isWeb && !isMobileWeb ? 32 : 10 },
             ]}
             tint={isDark ? "light" : "dark"}
@@ -163,9 +164,9 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
               {renderIcon}
             </MotiView>
             <Text
+              // TODO: review this. add textColor
               tw="text-xs font-medium"
               numberOfLines={1}
-              sx={{ color: textColor }}
               accessibilityRole="text"
             >
               {snackbar.text}
@@ -187,9 +188,9 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                     snackbar.action?.element
                   ) : (
                     <Text
+                      // TODO: review this. add textColor
                       tw="text-xs font-bold"
                       numberOfLines={1}
-                      sx={{ color: textColor }}
                     >
                       {snackbar.action?.text}
                     </Text>

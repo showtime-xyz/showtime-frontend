@@ -2,8 +2,8 @@ import React, { useRef, useCallback, useState, useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "../tailwind";
 import { Placement, PlatformRect } from "./get-placement";
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";
@@ -20,6 +20,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   style,
   ...rest
 }) => {
+  const tailwind = useTailwind();
   const triggerEl = useRef<View>(null);
   const [show, setShow] = useState(false);
   const [triggerRect, setTriggerRect] = useState<PlatformRect>(null);
@@ -48,7 +49,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           });
         }}
         ref={triggerEl}
-        style={[tailwind.style(tw), style]}
+        style={[tailwind(tw), style]}
       >
         {children}
       </Pressable>

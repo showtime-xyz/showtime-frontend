@@ -37,13 +37,12 @@ import Reanimated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
-
-import { tw } from "design-system/tailwind";
 
 import {
   ExtendObject,
@@ -192,6 +191,7 @@ const List = (props: TabListProps) => {
 };
 
 const ListImpl = ({ children, style, ...props }: TabListProps) => {
+  const tailwind = useTailwind();
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
@@ -239,8 +239,8 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
   );
 
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-gray-900`), style];
-  }, [style]);
+    return [tailwind(`bg-white dark:bg-gray-900`), style];
+  }, [tailwind, style]);
 
   return (
     <Reanimated.ScrollView

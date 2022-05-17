@@ -11,7 +11,7 @@ import { Media, Spinner, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 import { ListingForm } from "./listing-form";
 import { ListingUnavailable } from "./listing-unavailable";
@@ -83,11 +83,7 @@ const List = ({ nft }: Props) => {
               {nft?.token_name}
             </Text>
             <View tw="flex-row items-center">
-              <PolygonScan
-                width={14}
-                height={14}
-                color={tw.style("text-gray-500").color as string}
-              />
+              <PolygonScan width={14} height={14} color={colors.gray["500"]} />
               {nft?.token_created ? (
                 <Text tw="pl-1 font-bold text-gray-500" variant="text-xs">
                   {`Minted ${formatDistanceToNowStrict(

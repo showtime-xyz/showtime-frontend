@@ -1,9 +1,8 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { DripsyProvider } from "dripsy";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useDeviceContext } from "twrnc";
+import { TailwindProvider } from "tailwindcss-react-native";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -30,37 +29,27 @@ const FontsLoader = ({ children }) => {
   return children;
 };
 
-const TailwindDeviceContextProvider = ({ children }) => {
-  useDeviceContext(tw);
-
-  return children;
-};
-
 export const decorators = [
   (Story) => (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TailwindDeviceContextProvider>
-        <DripsyProvider theme={theme}>
-          <BottomSheetModalProvider>
-            <SafeAreaProvider>
-              <ToastProvider>
-                <MainAxisCenter>
-                  <FontsLoader>
-                    <Story />
-                  </FontsLoader>
-                </MainAxisCenter>
-              </ToastProvider>
-            </SafeAreaProvider>
-          </BottomSheetModalProvider>
-        </DripsyProvider>
-      </TailwindDeviceContextProvider>
+      <TailwindProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <ToastProvider>
+              <MainAxisCenter>
+                <FontsLoader>
+                  <Story />
+                </FontsLoader>
+              </MainAxisCenter>
+            </ToastProvider>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
+      </TailwindProvider>
     </GestureHandlerRootView>
   ),
 ];
 
 const MainAxisCenter = ({ children }) => {
-  useDeviceContext(tw);
-
   return <View tw="flex-1 justify-center dark:bg-gray-900">{children}</View>;
 };
 

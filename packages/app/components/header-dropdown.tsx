@@ -18,12 +18,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
 import { Settings } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
+  const isDark = useIsDarkMode();
   const { logout } = useAuth();
   const router = useRouter();
   const context = useContext(AppContext);
@@ -38,8 +39,10 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View
-            tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full p-2"
-            style={tw.style(isWeb ? "bg-gray-100 dark:bg-gray-900" : "")}
+            tw={[
+              "flex h-12 cursor-pointer flex-row items-center justify-center rounded-full p-2",
+              isWeb ? "bg-gray-100 dark:bg-gray-900" : "",
+            ]}
           >
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
@@ -50,13 +53,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           </View>
         ) : (
           <View tw="h-8 w-8 items-center justify-center rounded-full">
-            <Settings
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Settings width={24} height={24} color={isDark ? "#fff" : "#000"} />
           </View>
         )}
       </DropdownMenuTrigger>

@@ -14,6 +14,7 @@ import Reanimated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { BuyButton } from "app/components/buy-button";
 import { CommentButton } from "app/components/feed/comment-button";
@@ -44,7 +45,7 @@ import { Image } from "design-system/image";
 import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -70,6 +71,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   bottomPadding = 0,
 }: Props) => {
+  const tailwind = useTailwind();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -207,7 +209,7 @@ export const SwipeList = ({
         disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        style={tailwind("dark:bg-gray-900 bg-gray-100")}
         renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
         onEndReachedThreshold={itemHeight}
@@ -236,6 +238,7 @@ export const FeedItem = memo(
     bottomPadding: number;
     itemHeight: number;
   }) => {
+    const tailwind = useTailwind();
     const { width: windowWidth } = useWindowDimensions();
 
     const feedItemStyle = {
@@ -308,7 +311,7 @@ export const FeedItem = memo(
                   decodeWidth={16}
                   decodeHeight={16}
                   decodeAsync={true}
-                  style={tw.style("w-full h-full")}
+                  style={tailwind("w-full h-full")}
                 />
               ) : (
                 <Image
@@ -347,14 +350,14 @@ export const FeedItem = memo(
 
           <Reanimated.View
             style={[
-              tw.style("z-1 absolute bottom-0 right-0 left-0"),
+              tailwind("z-1 absolute bottom-0 right-0 left-0"),
               detailStyle,
             ]}
           >
             <BlurView
               tint={tint}
               intensity={100}
-              style={tw.style(
+              style={tailwind(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               )}
             >
@@ -373,9 +376,11 @@ export const FeedItem = memo(
     );
   }
 );
+
 FeedItem.displayName = "FeedItem";
 
 const NFTDetails = ({ nft }: { nft: NFT }) => {
+  const isDark = useIsDarkMode();
   const shareNFT = useShareNFT();
 
   return (
@@ -389,12 +394,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
       <View tw="h-4" />
 
       <View tw="px-4">
-        <Text
-          variant="text-2xl"
-          tw="dark:text-white"
-          numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
-        >
+        <Text variant="text-lg" tw="dark:text-white" numberOfLines={3}>
           {nft.token_name}
         </Text>
 
@@ -412,8 +412,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
               <Share
                 height={22}
                 width={22}
-                // @ts-ignore
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+                color={isDark ? "#fff" : colors.gray["900"]}
               />
             </Pressable>
             <View tw="w-8" />

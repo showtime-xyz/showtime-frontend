@@ -1,5 +1,7 @@
 import { Linking } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
@@ -7,7 +9,6 @@ import { Button, ButtonLabel, Pressable, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
 import { useIsDarkMode, useOnHover } from "design-system/hooks";
 import ChevronRight from "design-system/icon/ChevronRight";
-import { tw } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
 
 import { SettingSubTitle } from "./settings-subtitle";
@@ -69,6 +70,7 @@ export type AccountSettingItemProps = {
 };
 
 export const AccountSettingItem = (props: AccountSettingItemProps) => {
+  const tailwind = useTailwind();
   const router = useRouter();
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
   const isDark = useIsDarkMode();
@@ -83,7 +85,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
       onHoverOut={onHoverOut}
       disablePressAnimation
       style={[
-        tw.style(
+        tailwind(
           "w-full flex-1 flex-row items-center justify-between px-4 py-2 mb-2 rounded-md"
         ),
         {
@@ -103,9 +105,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
         <ChevronRight
           width={24}
           height={24}
-          color={
-            tw.style("dark:bg-gray-700 bg-gray-300").backgroundColor as string
-          }
+          color={isDark ? colors.gray["700"] : colors.gray["300"]}
         />
       </View>
     </Pressable>

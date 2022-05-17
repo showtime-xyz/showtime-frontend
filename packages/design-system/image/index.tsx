@@ -6,8 +6,8 @@ import {
 
 import { Blurhash } from "react-native-blurhash";
 import FastImage from "react-native-fast-image";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
@@ -52,11 +52,9 @@ type ImageProps = {
 } & ComponentProps<typeof Img>;
 
 function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
-  const width = Number(tailwind.style(tw).width);
-  const height = Number(tailwind.style(tw).height);
-  // const borderRadius = Number(tailwind.style(tw).borderRadius) ?? 0
-
-  // <View sx={{ borderRadius, overflow: 'hidden' }}>
+  const tailwind = useTailwind();
+  const width = Number(tailwind(tw).width);
+  const height = Number(tailwind(tw).height);
 
   if (blurhash) {
     return (
@@ -67,11 +65,12 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
             decodeWidth={16}
             decodeHeight={16}
             decodeAsync={true}
-            style={[style, tailwind.style(tw)]}
+            style={[style, tailwind(tw)]}
           />
         </View>
         <Img
-          style={[style, tailwind.style(tw)]}
+          // TODO: review this. ts complaining
+          style={[style, tailwind(tw)]}
           width={width}
           height={height}
           {...props}
@@ -82,7 +81,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
 
   return (
     <Img
-      style={[style, tailwind.style(tw)]}
+      style={[style, tailwind(tw)]}
       width={width}
       height={height}
       {...props}

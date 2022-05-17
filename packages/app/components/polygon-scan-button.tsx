@@ -1,14 +1,19 @@
 import { Linking } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { Button, Text } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 export const PolygonScanButton = ({
   transactionHash,
 }: {
   transactionHash?: string;
 }) => {
+  const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
+
   function handleOpenPolygonScan() {
     Linking.openURL(
       `https://${
@@ -24,8 +29,8 @@ export const PolygonScanButton = ({
   return (
     <Button onPress={handleOpenPolygonScan} variant="tertiary">
       <PolygonScan
-        style={tw.style("rounded-lg overflow-hidden ")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={tailwind("rounded-lg overflow-hidden")}
+        color={isDark ? "#fff" : "#000"}
       />
       <Text tw="pl-2 text-sm text-black dark:text-white">
         View on Polygon Scan

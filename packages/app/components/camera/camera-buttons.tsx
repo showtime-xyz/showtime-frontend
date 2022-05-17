@@ -1,10 +1,10 @@
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
+import { useIsDarkMode } from "design-system/hooks";
 import { Flip, Close, Check } from "design-system/icon";
 import { ImagePickerButton } from "design-system/image-picker";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
 type Props = {
@@ -30,6 +30,8 @@ export function CameraButtons({
   setCameraPosition,
   postPhoto,
 }: Props) {
+  const isDark = useIsDarkMode();
+
   return (
     <View tw="flex-row items-center justify-between py-8 px-6">
       {isLoading ? (
@@ -45,13 +47,7 @@ export function CameraButtons({
               setIsLoading(false);
             }}
           >
-            <Close
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-              width={24}
-              height={24}
-            />
+            <Close color={isDark ? "#fff" : "#000"} width={24} height={24} />
           </Pressable>
         </Animated.View>
       ) : (
@@ -100,13 +96,7 @@ export function CameraButtons({
                 postPhoto({ file: photos[0].uri, type: "image" });
               }}
             >
-              <Check
-                color={
-                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
-                }
-                width={24}
-                height={24}
-              />
+              <Check color={isDark ? "#fff" : "#000"} width={24} height={24} />
             </Pressable>
           </View>
         </Animated.View>
@@ -117,13 +107,7 @@ export function CameraButtons({
             setCameraPosition(cameraPosition === "front" ? "back" : "front")
           }
         >
-          <Flip
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-            width={24}
-            height={24}
-          />
+          <Flip color={isDark ? "#fff" : "#000"} width={24} height={24} />
         </Pressable>
       )}
     </View>

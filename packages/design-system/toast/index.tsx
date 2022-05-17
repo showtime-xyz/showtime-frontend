@@ -8,10 +8,10 @@ import {
 } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
-import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
 type ShowParams = {
@@ -32,6 +32,7 @@ const ToastContext = createContext<ToastContext | undefined>(undefined);
 const SAFE_AREA_TOP = 20;
 
 export const ToastProvider = ({ children }: any) => {
+  const tw = useTailwind();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState<string | undefined>();
   const [render, setRender] = useState<React.ReactElement | null>();
@@ -93,9 +94,7 @@ export const ToastProvider = ({ children }: any) => {
               style={[
                 styles.toastContainer,
                 { opacity: layout ? 1 : 0 },
-                tw.style(
-                  "bg-white dark:bg-black shadow-black dark:shadow-white"
-                ),
+                tw("bg-white dark:bg-black shadow-black dark:shadow-white"),
               ]}
               accessibilityLiveRegion="polite"
               pointerEvents="box-none"

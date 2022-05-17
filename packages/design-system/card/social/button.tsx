@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { useOnPress, useOnHover } from "design-system/hooks";
 import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 
 type Props = {
@@ -15,6 +17,7 @@ type Props = {
   onPress?: () => void;
 };
 
+// TODO: review this shit
 function Button({
   variant,
   state = "default",
@@ -23,6 +26,7 @@ function Button({
   onPress,
   disabled,
 }: Props) {
+  const tailwind = useTailwind();
   const { onPressIn, onPressOut, pressed } = useOnPress();
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
   const isHovered = hovered.value || state === "hover";
@@ -38,25 +42,25 @@ function Button({
       : Boost;
   const backgroundColor = "bg-gray-100";
   const backgroundHoverColor = getBackgroundHoverColor(variant);
-  const iconActiveColor = getIconActiveColor(variant);
-  const textActiveColor = getTextActiveColor(variant);
-  const hoverColor = getHoverColor(variant);
-  const defaultColor = active
-    ? textActiveColor
-    : tw.style("text-gray-600 dark:text-gray-400");
+  // const iconActiveColor = getIconActiveColor(variant);
+  // const textActiveColor = getTextActiveColor(variant);
+  // const hoverColor = getHoverColor(variant);
+  // const defaultColor = active
+  //   ? textActiveColor
+  //   : tailwind("text-gray-600 dark:text-gray-400");
 
   // TODO: animate color with Moti and useDerivedValue
-  const textStyle = useMemo(
-    () => ({
-      color:
-        isHoverable && isHovered
-          ? hoverColor
-          : active
-          ? textActiveColor.color
-          : defaultColor.color,
-    }),
-    [isHoverable, isHovered, hoverColor, active, textActiveColor, defaultColor]
-  );
+  // const textStyle = useMemo(
+  //   () => ({
+  //     color:
+  //       isHoverable && isHovered
+  //         ? hoverColor
+  //         : active
+  //         ? textActiveColor
+  //         : defaultColor,
+  //   }),
+  //   [isHoverable, isHovered, hoverColor, active, textActiveColor, defaultColor]
+  // );
 
   return (
     <Pressable
@@ -64,7 +68,7 @@ function Button({
         "h-8 flex-row items-center rounded-full p-2 dark:bg-gray-900",
         isHovered ? backgroundHoverColor : backgroundColor,
         isPressed && !isDisabled ? "dark:bg-gray-800" : "",
-        isDisabled ? "opacity-40" : "", // TODO: add `cursor-not-allowed` utility to twrnc
+        isDisabled ? "cursor-not-allowed opacity-40" : "",
       ]}
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
@@ -76,20 +80,15 @@ function Button({
       <Icon
         width={16}
         height={16}
-        color={
-          active
-            ? iconActiveColor
-            : isHovered && !isDisabled
-            ? hoverColor
-            : tw.color("gray-400")
-        }
+        // color={
+        //   active
+        //     ? iconActiveColor
+        //     : isHovered && !isDisabled
+        //     ? hoverColor
+        //     : tailwind("gray-400")
+        // }
       />
-      <Text
-        variant="text-13"
-        tw={["font-bold", count > 0 ? "ml-1" : ""]}
-        // @ts-ignore
-        sx={textStyle}
-      >
+      <Text variant="text-13" tw={["font-bold", count > 0 ? "ml-1" : ""]}>
         {count > 0 ? formatNumber(count) : ""}
       </Text>
     </Pressable>
@@ -121,46 +120,46 @@ function getBackgroundHoverColor(variant: Props["variant"]) {
   }
 }
 
-// Get icon active color
-function getIconActiveColor(variant: Props["variant"]) {
-  switch (variant) {
-    case "like":
-      return tw.color("red-500");
-    case "comment":
-      return tw.color("indigo-600");
-    case "boost":
-      return tw.color("green-600");
-    default:
-      return tw.color("gray-400");
-  }
-}
+// // Get icon active color
+// function getIconActiveColor(variant: Props["variant"]) {
+//   switch (variant) {
+//     case "like":
+//       return colors.red["500"];
+//     case "comment":
+//       return colors.indigo["600"];
+//     case "boost":
+//       return colors.green["600"];
+//     default:
+//       return colors.gray["400"];
+//   }
+// }
 
-// Get text active color
-function getTextActiveColor(variant: Props["variant"]) {
-  switch (variant) {
-    case "like":
-      return tw.style("text-red-500");
-    case "comment":
-      return tw.style("text-indigo-600 dark:text-indigo-500");
-    case "boost":
-      return tw.style("text-green-600 dark:text-green-500");
-    default:
-      return tw.style("text-gray-600 dark:text-gray-400");
-  }
-}
+// // Get text active color
+// function getTextActiveColor(variant: Props["variant"]) {
+//   switch (variant) {
+//     case "like":
+//       return colors.red["500"];
+//     case "comment":
+//       return tw.style("text-indigo-600 dark:text-indigo-500");
+//     case "boost":
+//       return tw.style("text-green-600 dark:text-green-500");
+//     default:
+//       return tw.style("text-gray-600 dark:text-gray-400");
+//   }
+// }
 
-// Get hover color
-function getHoverColor(variant: Props["variant"]) {
-  switch (variant) {
-    case "like":
-      return tw.color("red-500");
-    case "comment":
-      return tw.color("indigo-500");
-    case "boost":
-      return tw.color("green-500");
-    default:
-      return "";
-  }
-}
+// // Get hover color
+// function getHoverColor(variant: Props["variant"]) {
+//   switch (variant) {
+//     case "like":
+//       return colors.red["500"];
+//     case "comment":
+//       return colors.indigo["500"];
+//     case "boost":
+//       return colors.green["500"];
+//     default:
+//       return "";
+//   }
+// }
 
 export { Button };

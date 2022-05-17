@@ -6,7 +6,7 @@ import { useId } from "design-system/input";
 import { Label } from "design-system/label";
 import { Select } from "design-system/select";
 import { SelectProps } from "design-system/select/types";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 import { TextInput, TextInputProps } from "design-system/text-input";
 import { View } from "design-system/view";
@@ -70,11 +70,9 @@ export function Fieldset(props: FieldsetProps) {
             blurOnSubmit={textInputProps.blurOnSubmit ?? true}
             textAlignVertical="bottom"
             placeholderTextColor={
-              isDark ? tw.color("gray-400") : tw.color("gray-600")
+              isDark ? colors.gray["400"] : colors.gray["600"]
             }
-            selectionColor={
-              isDark ? tw.color("gray-300") : tw.color("gray-700")
-            }
+            selectionColor={isDark ? colors.gray["300"] : colors.gray["700"]}
             //@ts-ignore - web only
             accessibilityDescribedBy={Platform.select({
               web: helperText ? helperTextId : undefined,

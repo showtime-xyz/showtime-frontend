@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 
 import { MotiView, AnimatePresence } from "moti";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { useIsDarkMode } from "../../hooks";
-import { tw } from "../../tailwind";
+import { useIsDarkMode } from "design-system/hooks";
 
 const DROPDOWN_LIGHT_SHADOW =
   "0px 12px 16px rgba(0, 0, 0, 0.1), 0px 16px 48px rgba(0, 0, 0, 0.1)";
@@ -18,6 +18,8 @@ interface SelectListProps {
 export const SelectList: React.FC<SelectListProps> = forwardRef(
   ({ open, children, ...rest }, ref) => {
     const isDark = useIsDarkMode();
+    const tailwind = useTailwind();
+
     return (
       <AnimatePresence>
         {open ? (
@@ -40,7 +42,9 @@ export const SelectList: React.FC<SelectListProps> = forwardRef(
               duration: 250,
             }}
             style={[
-              tw`z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
+              tailwind(
+                `z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`
+              ),
               {
                 boxShadow: isDark
                   ? DROPDOWN_DRAK_SHADOW

@@ -1,5 +1,7 @@
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
@@ -17,7 +19,6 @@ import {
   Plus,
   Showtime,
 } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 import { TW } from "design-system/tailwind/types";
 import { breakpoints } from "design-system/theme";
 import { View } from "design-system/view";
@@ -34,6 +35,7 @@ type TabBarButtonProps = {
 };
 
 function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
+  const tailwind = useTailwind();
   const isWeb = Platform.OS === "web";
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -43,7 +45,7 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
       <Link href={tab}>
         <View
           tw="h-12 w-12 items-center justify-center rounded-full"
-          style={tw.style(
+          style={tailwind(
             `${
               isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
             } ${customTw}`
@@ -59,45 +61,51 @@ function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
 }
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+  const tailwind = useTailwind();
+
   return (
     <TabBarIcon tab="/">
       {focused ? (
         <HomeFilled
-          style={tw.style("z-1")}
+          style={tailwind("z-1")}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Home style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Home style={tailwind("z-1")} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
 };
 
 export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+  const tailwind = useTailwind();
+
   return (
     <TabBarIcon tab="/marketplace">
       {focused ? (
         <CompassFilled
-          style={tw.style("z-1")}
+          style={tailwind("z-1")}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Compass style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Compass style={tailwind("z-1")} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
 };
 
 export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
+  const tailwind = useTailwind();
+
   return (
     <TabBarIcon tab="/" customTw={customTw}>
       <Showtime
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={tailwind("rounded-lg overflow-hidden w-6 h-6")}
+        color={tailwind("bg-black dark:bg-white")?.backgroundColor as string}
         width={24}
         height={24}
       />
@@ -106,6 +114,7 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
 };
 
 export const CameraTabBarIcon = ({ focused }: TabBarIconProps) => {
+  const tailwind = useTailwind();
   const { width } = useWindowDimensions();
 
   return (
@@ -125,7 +134,7 @@ export const CameraTabBarIcon = ({ focused }: TabBarIconProps) => {
           width={24}
           height={24}
           color={
-            tw.style(
+            tailwind(
               focused ? "bg-black dark:bg-white" : "bg-white dark:bg-black"
             )?.backgroundColor as string
           }
@@ -136,17 +145,19 @@ export const CameraTabBarIcon = ({ focused }: TabBarIconProps) => {
 };
 
 export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+  const tailwind = useTailwind();
+
   return (
     <TabBarIcon tab="/trending">
       {focused ? (
         <HotFilled
-          style={tw.style("z-1")}
+          style={tailwind("z-1")}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Hot style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Hot style={tailwind("z-1")} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
@@ -156,17 +167,19 @@ export const NotificationsTabBarIcon = ({
   color,
   focused,
 }: TabBarIconProps) => {
+  const tailwind = useTailwind();
+
   return (
     <TabBarIcon tab="/notifications">
       {focused ? (
         <BellFilled
-          style={tw.style("z-1")}
+          style={tailwind("z-1")}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Bell style={tailwind("z-1")} width={24} height={24} color={color} />
       )}
       {/* <ErrorBoundary>
         <Suspense fallback={null}>

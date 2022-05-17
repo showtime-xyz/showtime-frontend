@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as ImagePicker from "expo-image-picker";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -22,9 +23,9 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { SORT_FIELDS } from "app/utilities";
 
 import { Accordion, Button, Fieldset, Image, Text, View } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { ChevronUp, Edit, Upload } from "design-system/icon";
 import { pickImage } from "design-system/image-picker/pick-image";
-import { tw } from "design-system/tailwind";
 
 const editProfileValidationSchema = yup.object({
   username: yup.string().min(2).nullable(),
@@ -43,6 +44,8 @@ const sortingOptionsList = [
 ];
 
 export const EditProfile = () => {
+  const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const router = useRouter();
@@ -188,7 +191,7 @@ export const EditProfile = () => {
         enabled={Platform.OS !== "android"}
         keyboardVerticalOffset={95}
       >
-        <ScrollView contentContainerStyle={tw.style("pb-20")}>
+        <ScrollView contentContainerStyle={tailwind("pb-20")}>
           <Controller
             control={control}
             name="coverPicture"
@@ -202,14 +205,13 @@ export const EditProfile = () => {
                     mediaTypes: ImagePicker.MediaTypeOptions.Images,
                   });
                 }}
-                style={tw.style("w-full h-30 flex-row absolute")}
+                style={tailwind("w-full h-30 flex-row absolute")}
               >
                 <View tw="absolute z-10 w-full flex-row items-center justify-end p-2">
                   <Edit
                     height={20}
                     width={20}
-                    //@ts-ignore
-                    color={tw.style("bg-black dark:bg-white").backgroundColor}
+                    color={isDark ? "#fff" : "#000"}
                   />
                   <Text tw="ml-1 text-xs text-black dark:text-white">
                     Cover
@@ -234,7 +236,7 @@ export const EditProfile = () => {
                       mediaTypes: ImagePicker.MediaTypeOptions.Images,
                     });
                   }}
-                  style={tw.style(
+                  style={tailwind(
                     "w-20 h-20 rounded-full overflow-hidden border-2"
                   )}
                 >
@@ -243,8 +245,7 @@ export const EditProfile = () => {
                     <Upload
                       height={20}
                       width={20}
-                      //@ts-ignore
-                      color={tw.style("bg-black dark:bg-white").backgroundColor}
+                      color={isDark ? "#fff" : "#000"}
                     />
                   </View>
                 </Pressable>
@@ -314,10 +315,7 @@ export const EditProfile = () => {
                 <Accordion.Trigger tw="px-0">
                   <Accordion.Label>Links</Accordion.Label>
                   <Accordion.Chevron>
-                    <ChevronUp
-                      //@ts-ignore
-                      color={tw.style("dark:bg-white bg-black").backgroundColor}
-                    />
+                    <ChevronUp color={isDark ? "#fff" : "#000"} />
                   </Accordion.Chevron>
                 </Accordion.Trigger>
                 <Accordion.Content>
@@ -369,10 +367,7 @@ export const EditProfile = () => {
                 <Accordion.Trigger tw="px-0">
                   <Accordion.Label>Page Settings</Accordion.Label>
                   <Accordion.Chevron>
-                    <ChevronUp
-                      //@ts-ignore
-                      color={tw.style("dark:bg-white bg-black").backgroundColor}
-                    />
+                    <ChevronUp color={isDark ? "#fff" : "#000"} />
                   </Accordion.Chevron>
                 </Accordion.Trigger>
                 <Accordion.Content>

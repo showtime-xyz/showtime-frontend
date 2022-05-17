@@ -13,8 +13,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
 import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
 type Props = {
@@ -22,6 +22,7 @@ type Props = {
 };
 
 function ActivityDropdown({ activity }: Props) {
+  const isDark = useIsDarkMode();
   const { mutate } = useSWRConfig();
   const { report } = useReport();
   const { unfollow } = useMyInfo();
@@ -40,9 +41,7 @@ function ActivityDropdown({ activity }: Props) {
             <MoreHorizontal
               width={24}
               height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
+              color={isDark ? "#fff" : "#000"}
             />
           </Button>
         </View>

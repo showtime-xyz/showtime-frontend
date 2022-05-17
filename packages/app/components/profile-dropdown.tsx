@@ -18,14 +18,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
 import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 type Props = {
   user: Profile;
 };
 
 function ProfileDropdown({ user }: Props) {
+  const isDark = useIsDarkMode();
   const { isAuthenticated } = useUser();
   const { report } = useReport();
   const { block, unblock, getIsBlocked } = useBlock();
@@ -63,11 +64,7 @@ function ProfileDropdown({ user }: Props) {
           size={width < 768 ? "small" : "regular"}
           asChild
         >
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          <MoreHorizontal color={isDark ? "#fff" : "#000"} />
         </Button>
       </DropdownMenuTrigger>
 

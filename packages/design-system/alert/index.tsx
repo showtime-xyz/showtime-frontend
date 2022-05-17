@@ -15,8 +15,8 @@ import {
 
 import { AnimatePresence, MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
 import { Divider } from "../divider";
@@ -43,6 +43,7 @@ export const AlertContext = createContext<AlertContext>({
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
+  const tailwind = useTailwind();
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -109,7 +110,7 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
           <View tw="h-full w-full items-center justify-center">
             <AnimatePresence>
               <MotiView
-                style={tw.style(
+                style={tailwind(
                   "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
                 )}
                 from={{ transform: [{ scale: 1.1 }], opacity: 0 }}

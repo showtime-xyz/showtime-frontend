@@ -54,7 +54,7 @@ export const Notifications = () => {
   }, [isLoadingMore, bottomBarHeight]);
 
   const Separator = useCallback(
-    () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
+    () => <View tw="h-[1px] bg-gray-100 dark:bg-gray-800" />,
     []
   );
 
@@ -145,10 +145,9 @@ const NotificationDescription = ({
     return (
       <View>
         <Text
-          //@ts-ignore
-          tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
+          variant="text-13"
+          tw="max-w-[69vw] leading-5 text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
-          sx={{ lineHeight: 20, fontSize: 13 }}
         >
           {actors.length == 1 ? (
             <>

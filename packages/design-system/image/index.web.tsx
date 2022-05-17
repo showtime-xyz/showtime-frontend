@@ -8,8 +8,8 @@ import {
 import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image from "next/image";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
@@ -109,12 +109,14 @@ function Img({
 type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;
 
 function StyledImage({ tw, ...props }: ImageProps) {
-  const width = Number(tailwind.style(tw).width);
-  const height = Number(tailwind.style(tw).height);
-  const borderRadius = Number(tailwind.style(tw).borderRadius);
+  const tailwind = useTailwind();
+  const width = Number(tailwind(tw).width);
+  const height = Number(tailwind(tw).height);
+  const borderRadius = Number(tailwind(tw).borderRadius);
 
   return (
-    <View sx={{ borderRadius, overflow: "hidden" }}>
+    // TODO: review this. use `tw` prop
+    <View style={{ borderRadius, overflow: "hidden" }}>
       <Img className={tw} width={width} height={height} {...props} />
     </View>
   );

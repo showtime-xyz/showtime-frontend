@@ -17,7 +17,7 @@ import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 
@@ -158,7 +158,7 @@ function Delete({ nft }: { nft: NFT }) {
                 <PolygonScan
                   width={16}
                   height={16}
-                  color={tw.style("text-gray-500").color as string}
+                  color={colors.gray["500"]}
                 />
                 {nft?.token_created ? (
                   <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">

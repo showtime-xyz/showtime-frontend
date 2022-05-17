@@ -104,7 +104,7 @@ export function Camera({
 
   return (
     <View tw="w-full flex-1 content-center justify-center">
-      <View sx={{ height: "70%" }}>
+      <View style={{ height: "70%" }}>
         {isActive && (
           <ExpoCamera
             ref={camera}

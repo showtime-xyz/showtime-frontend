@@ -1,17 +1,23 @@
 import { ComponentProps, forwardRef } from "react";
+import { TextInput as ReactNativeTextInput } from "react-native";
 
-import { TextInput as DripsyTextInput } from "dripsy";
+import { styled } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
+const StyledTextInput = styled(ReactNativeTextInput);
+
 export type TextInputProps = { tw?: TW } & ComponentProps<
-  typeof DripsyTextInput
+  typeof ReactNativeTextInput
 >;
 
-const TextInput = forwardRef<typeof DripsyTextInput, TextInputProps>(
+const TextInput = forwardRef<typeof StyledTextInput, TextInputProps>(
   ({ tw, ...props }, ref) => (
-    <DripsyTextInput ref={ref} sx={tailwind.style(tw)} {...props} />
+    <StyledTextInput
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+      {...props}
+      ref={ref}
+    />
   )
 );
 

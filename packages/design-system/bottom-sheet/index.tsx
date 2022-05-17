@@ -16,10 +16,10 @@ import {
   BottomSheetTextInput as BottomSheetInput,
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
-import { tw as tailwind, tw } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
@@ -43,6 +43,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
   } = props;
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const tailwind = useTailwind();
 
   useEffect(() => {
     if (visible) {
@@ -72,17 +73,13 @@ export const BottomSheet = (props: BottomSheetProps) => {
       onDismiss={onDismiss}
       ref={bottomSheetModalRef}
       index={0}
-      handleIndicatorStyle={tailwind.style(
-        `bg-gray-300 dark:bg-gray-700 w-12 h-1`
-      )}
-      backgroundStyle={tailwind.style(
-        `bg-white dark:bg-black rounded-t-[32px]`
-      )}
+      handleIndicatorStyle={tailwind(`bg-gray-300 dark:bg-gray-700 w-12 h-1`)}
+      backgroundStyle={tailwind(`bg-white dark:bg-black rounded-t-[32px]`)}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
       <View
         style={[
-          tw.style(`flex-1 px-4 pt-6 mb-[${safeAreaBottom}px]`),
+          tailwind(`flex-1 px-4 pt-6 mb-[${safeAreaBottom}px]`),
           bodyStyle,
         ]}
       >
@@ -98,8 +95,11 @@ export type TextInputProps = {
 } & ComponentProps<typeof BottomSheetInput>;
 
 export const BottomSheetTextInput = (props: TextInputProps) => {
+  const tailwind = useTailwind();
   const { tw, style, componentRef, ...textInputProps } = props;
-  const styles = { ...tailwind.style(tw), ...(style as {}) };
+  // TODO: review this
+  const styles = { ...tailwind(tw), ...(style as {}) };
+
   return (
     <BottomSheetInput
       style={styles}

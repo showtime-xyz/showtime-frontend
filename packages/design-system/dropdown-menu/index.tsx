@@ -1,15 +1,15 @@
 import { ComponentProps, useMemo, useCallback } from "react";
 
-import { styled } from "dripsy";
 import { MotiView } from "moti";
 import Animated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import { styled } from "tailwindcss-react-native";
+import { useTailwind } from "tailwindcss-react-native";
 
 import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { Text } from "design-system/text";
 
@@ -20,9 +20,18 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuContent = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
-    <DropdownMenu.Content {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.Content
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "Content"
 );
 
@@ -35,6 +44,8 @@ const DropdownItemFocusRing = ({
 }: {
   isFocused: Animated.SharedValue<boolean>;
 }) => {
+  const tailwind = useTailwind();
+
   // TODO moti should provide this
   const state = useDerivedValue<
     UseMotiAnimate<React.ComponentProps<typeof MotiView>["animate"]>
@@ -47,7 +58,7 @@ const DropdownItemFocusRing = ({
   return (
     <MotiView
       animate={state}
-      style={tailwind.style("")}
+      style={tailwind("")}
       transition={useMemo(
         () => ({
           type: "timing",
@@ -94,6 +105,8 @@ const DropdownMenuItem = DropdownMenu.menuify(
     onFocus,
     ...props
   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Item>) => {
+    const tailwind = useTailwind();
+
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -104,7 +117,7 @@ const DropdownMenuItem = DropdownMenu.menuify(
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        style={tailwind(Array.isArray(tw) ? tw.join(" ") : tw)}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         {children}
@@ -122,6 +135,8 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
     onFocus,
     ...props
   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
+    const tailwind = useTailwind();
+
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -132,7 +147,7 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        style={tailwind(Array.isArray(tw) ? tw.join(" ") : tw)}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         <DropdownMenu.ItemIndicator>
@@ -145,7 +160,7 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
   "CheckboxItem"
 );
 
-const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle)();
+const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle);
 
 const DropdownMenuItemTitle = DropdownMenu.menuify(
   (
@@ -159,7 +174,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
   "ItemTitle"
 );
 
-const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle)();
+const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle);
 
 const DropdownMenuItemSubtitle = DropdownMenu.menuify(
   (
@@ -174,16 +189,34 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemIndicator = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => (
-    <DropdownMenu.ItemIndicator {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.ItemIndicator
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "ItemIndicator"
 );
 
 const DropdownMenuSeparator = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => (
-    <DropdownMenu.Separator {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.Separator
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "Separator"
 );
 
@@ -195,6 +228,8 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
     onFocus,
     ...props
   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.TriggerItem>) => {
+    const tailwind = useTailwind();
+
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -205,7 +240,7 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        style={tailwind(Array.isArray(tw) ? tw.join(" ") : tw)}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         {children}
@@ -216,23 +251,50 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemIcon = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIcon>) => (
-    <DropdownMenu.ItemIcon {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIcon>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.ItemIcon
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "ItemIcon"
 );
 
 const DropdownMenuItemImage = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemImage>) => (
-    <DropdownMenu.ItemImage {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemImage>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.ItemImage
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "ItemImage"
 );
 
 const DropdownMenuLabel = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Label>) => (
-    <DropdownMenu.Label {...props} style={tailwind.style(props.tw)} />
-  ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Label>) => {
+    const tailwind = useTailwind();
+
+    return (
+      <DropdownMenu.Label
+        {...props}
+        style={tailwind(
+          Array.isArray(props.tw) ? props.tw.join(" ") : props.tw
+        )}
+      />
+    );
+  },
   "Label"
 );
 

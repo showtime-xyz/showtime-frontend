@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -27,9 +28,10 @@ import {
 import { Avatar } from "design-system/avatar";
 import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
+import { useIsDarkMode } from "design-system/hooks";
 import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 
@@ -39,6 +41,8 @@ type FormData = {
 };
 
 function Transfer({ nft }: { nft?: NFT }) {
+  const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
   const { user } = useUser();
@@ -193,8 +197,8 @@ function Transfer({ nft }: { nft?: NFT }) {
               </Text>
               <View tw="flex-row items-center">
                 <PolygonScan
-                  style={tw.style("overflow-hidden")}
-                  color={tw.style("bg-gray-500")?.backgroundColor as string}
+                  style={tailwind("overflow-hidden")}
+                  color={colors.gray["500"]}
                   height={14}
                   width={14}
                 />
@@ -320,10 +324,8 @@ function Transfer({ nft }: { nft?: NFT }) {
                 : "Success!"}
             </Text>
             <ArrowRight
-              style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-              color={
-                tw.style("bg-white dark:bg-black")?.backgroundColor as string
-              }
+              style={tailwind("rounded-lg overflow-hidden w-6 h-6")}
+              color={isDark ? "#000" : "#fff"}
             />
           </Button>
         </View>

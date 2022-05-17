@@ -1,19 +1,21 @@
 import { ComponentProps } from "react";
+import { ActivityIndicator as ReactNativeActivityIndicator } from "react-native";
 
-import { ActivityIndicator as DripsyActivityIndicator } from "dripsy";
+import { styled } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
 type ActivityIndicatorProps = { tw?: TW } & ComponentProps<
-  typeof DripsyActivityIndicator
+  typeof ReactNativeActivityIndicator
 >;
 
-function ActivityIndicator({ tw, sx, ...props }: ActivityIndicatorProps) {
+const StyledActivityIndicator = styled(ReactNativeActivityIndicator);
+
+function ActivityIndicator({ tw, ...props }: ActivityIndicatorProps) {
   return (
-    <DripsyActivityIndicator
+    <StyledActivityIndicator
       color="#8b5cf6"
-      sx={{ ...sx, ...tailwind.style(tw) }}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       {...props}
     />
   );

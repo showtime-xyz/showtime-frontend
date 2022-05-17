@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
@@ -21,7 +23,6 @@ import {
   View,
 } from "design-system";
 import { Card } from "design-system/card";
-import { tw } from "design-system/tailwind";
 
 const LIST_HEADER_HEIGHT = 64;
 const LIST_FOOTER_HEIGHT = 80;
@@ -33,14 +34,14 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
     return (
       <View
         tw={`mt-6 items-center justify-center px-3`}
-        sx={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
+        style={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
       >
         <Spinner size="small" />
       </View>
     );
   }
 
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
+  return <View style={{ marginBottom: tabBarHeight }}></View>;
 };
 
 const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
@@ -62,6 +63,7 @@ const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
 );
 
 export const Trending = () => {
+  const tailwind = useTailwind();
   const [selected, setSelected] = useState(0);
   const headerHeight = useHeaderHeight();
   const isWeb = Platform.OS === "web";
@@ -69,7 +71,7 @@ export const Trending = () => {
   const tabListStyles = useMemo(
     () => ({
       height: TAB_LIST_HEIGHT,
-      ...tw.style(
+      ...tailwind(
         "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
       ),
     }),
@@ -89,7 +91,7 @@ export const Trending = () => {
         </Tabs.Header>
         <Tabs.List
           style={tabListStyles}
-          contentContainerStyle={tw.style("w-full")}
+          contentContainerStyle={tailwind("w-full")}
         >
           <Tabs.Trigger style={isWeb ? { height: "100%" } : { flex: 1 }}>
             <TabItem name="Today" selected={selected === 0} />

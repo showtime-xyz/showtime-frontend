@@ -5,13 +5,13 @@ import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
-import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import type { Revalidator, RevalidatorOptions } from "swr";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
+import { TailwindProvider } from "tailwindcss-react-native";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
@@ -225,7 +225,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
           }}
         /> */}
       </Head>
-      <DripsyProvider theme={theme} ssr>
+      <TailwindProvider preview={true}>
         <SafeAreaProvider>
           <ToastProvider>
             <AlertProvider>
@@ -285,7 +285,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
             </AlertProvider>
           </ToastProvider>
         </SafeAreaProvider>
-      </DripsyProvider>
+      </TailwindProvider>
     </>
   );
 }

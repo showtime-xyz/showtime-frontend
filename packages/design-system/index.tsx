@@ -5,7 +5,6 @@ export { Checkbox } from "design-system/checkbox";
 export { CountryCodePicker } from "design-system/country-code-picker";
 export { CreatorPreview } from "design-system/creator-preview";
 export { Fieldset } from "design-system/fieldset";
-export { Gradient } from "design-system/gradient";
 export { Image } from "design-system/image";
 export { LikeButton } from "design-system/like-button";
 export { Media } from "design-system/media";

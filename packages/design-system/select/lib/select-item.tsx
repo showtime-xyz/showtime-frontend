@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo } from "react";
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, Pressable } from "react-native";
 
-import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsDarkMode, useOnHover } from "../../hooks";
-import { tw } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
 import { Text } from "../../text";
 import { SelectProps } from "../types";
@@ -34,6 +33,7 @@ export function SelectItem<T>({
 }: SelectItemProps<T>) {
   //#region hooks
   const isDarkMode = useIsDarkMode();
+  const tailwind = useTailwind();
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
   //#endregion
 
@@ -49,7 +49,7 @@ export function SelectItem<T>({
   );
   const containerStyle = useMemo(
     () => [
-      tw`p-2 m-1 items-center justify-between rounded-lg`,
+      tailwind(`p-2 m-1 items-center justify-between rounded-lg`),
       containerAnimatedStyle,
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps

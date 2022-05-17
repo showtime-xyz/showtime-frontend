@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal, Platform } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { SafeAreaView } from "app/lib/safe-area";
 import { useSafeAreaInsets } from "app/lib/safe-area";
@@ -10,9 +11,9 @@ import { yup } from "app/lib/yup";
 import { CountryCodePicker, Pressable, Text, View } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
+import { useIsDarkMode } from "design-system/hooks";
 import { ChevronLeft, Close, Search } from "design-system/icon";
 import { Input } from "design-system/input";
-import { tw } from "design-system/tailwind";
 
 import { LoginInputField } from "./login-input-field";
 
@@ -21,6 +22,7 @@ type PhoneNumberPickerProp = {
 };
 
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
+  const tailwind = useTailwind();
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
   const [country, setCountry] = useState("US");
@@ -57,7 +59,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
       >
-        <SafeAreaView style={tw.style("dark:bg-black")}>
+        <SafeAreaView style={tailwind("dark:bg-black")}>
           <Header
             title="Select country"
             close={() => setModalVisible(false)}
@@ -95,7 +97,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
-                sx={{
+                style={{
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,
@@ -128,6 +130,8 @@ type Props = {
 };
 
 export function Header({ title, close, onSearchSubmit }: Props) {
+  const tailwind = useTailwind();
+  const isDark = useIsDarkMode();
   const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
   const { top: safeAreaTop } = useSafeAreaInsets();
@@ -161,14 +165,12 @@ export function Header({ title, close, onSearchSubmit }: Props) {
           <ChevronLeft
             width={24}
             height={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
+            color={isDark ? "#fff" : "#000"}
           />
         </Button>
       </View>
 
-      <Animated.View layout={FadeIn} style={tw.style("flex-1 mx-2")}>
+      <Animated.View layout={FadeIn} style={tailwind("flex-1 mx-2")}>
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
@@ -185,21 +187,9 @@ export function Header({ title, close, onSearchSubmit }: Props) {
           iconOnly={true}
         >
           {showSearch ? (
-            <Close
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Close width={24} height={24} color={isDark ? "#fff" : "#000"} />
           ) : (
-            <Search
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Search width={24} height={24} color={isDark ? "#fff" : "#000"} />
           )}
         </Button>
       </View>

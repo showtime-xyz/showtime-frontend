@@ -1,7 +1,7 @@
-import React from "react";
 import { StyleSheet, ViewProps, StyleProp, ViewStyle } from "react-native";
 
-import { tw as tailwind } from "../tailwind";
+import { useTailwind } from "tailwindcss-react-native";
+
 import { TW } from "../tailwind/types";
 import { View } from "../view";
 
@@ -29,18 +29,22 @@ export const Divider: React.FC<DividerProps> = ({
   width = "100%",
   height = "auto",
   ...rest
-}) => (
-  <View
-    style={StyleSheet.flatten([
-      tailwind.style("bg-gray-200 dark:bg-gray-800"),
-      orientation === "horizontal"
-        ? { width, height: StyleSheet.hairlineWidth }
-        : { width: StyleSheet.hairlineWidth, height },
-      tailwind.style(tw),
-      style,
-    ])}
-    {...rest}
-  />
-);
+}) => {
+  const tailwind = useTailwind();
+
+  return (
+    <View
+      style={StyleSheet.flatten([
+        tailwind("bg-gray-200 dark:bg-gray-800"),
+        orientation === "horizontal"
+          ? { width, height: StyleSheet.hairlineWidth }
+          : { width: StyleSheet.hairlineWidth, height },
+        tailwind(Array.isArray(tw) ? tw.join(" ") : tw),
+        style,
+      ])}
+      {...rest}
+    />
+  );
+};
 
 Divider.displayName = "Divider";

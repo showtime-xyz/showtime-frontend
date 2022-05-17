@@ -1,10 +1,10 @@
 import React, { forwardRef, useMemo } from "react";
+import { Pressable } from "react-native";
 
-import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
-import { tw } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
 import { Text } from "../../text";
 import { SelectProps } from "../types";
@@ -28,6 +28,7 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
   ({ label, open, disabled, size, onPress, onClick, ...rest }, ref) => {
     //#region hooks
     const isDarkMode = useIsDarkMode();
+    const tailwind = useTailwind();
     const { onHoverIn, onHoverOut, hovered } = useOnHover();
     const { onPressIn, onPressOut, pressed } = useOnPress();
     //#endregion
@@ -49,14 +50,17 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
 
     const containerStyle = useMemo(
       () => [
-        tw`${
-          size === "regular" ? "py-3" : "py-2"
-        } flex-row items-center justify-between rounded-full pl-4 pr-2 border border-gray-200 dark:border-gray-800`,
+        tailwind(
+          `${
+            size === "regular" ? "py-3" : "py-2"
+          } flex-row items-center justify-between rounded-full pl-4 pr-2 border border-gray-200 dark:border-gray-800`
+        ),
         containerAnimatedStyle,
       ],
       [containerAnimatedStyle, size]
     );
     //#endregion
+
     return (
       <Pressable
         //@ts-ignore

@@ -1,5 +1,5 @@
 import { ComponentProps, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 
@@ -7,8 +7,8 @@ import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 
 import { Image } from "design-system/image";
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+import { View } from "design-system/view";
 
 type VideoProps = {
   tw?: TW;
@@ -23,7 +23,7 @@ function Video({ tw, blurhash, style, ...props }: VideoProps) {
 
   return (
     <>
-      <View style={[style, tailwind.style(tw)]}>
+      <View tw={tw}>
         {videoConfig?.previewOnly ? (
           <Image
             tw={tw}

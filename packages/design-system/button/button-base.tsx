@@ -1,12 +1,12 @@
 import { Children, cloneElement, useMemo } from "react";
 
 import Animated from "react-native-reanimated";
+import { useTailwind } from "tailwindcss-react-native";
 
+import { useIsDarkMode } from "design-system/hooks";
 import { Pressable } from "design-system/pressable-scale";
-import { tw as tailwind } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
-import { useIsDarkMode } from "../hooks";
 import {
   CONTAINER_HEIGHT_TW,
   CONTAINER_ICON_PADDING_TW,
@@ -29,9 +29,8 @@ export function BaseButton({
   asChild,
   ...props
 }: BaseButtonProps) {
-  //#region variables
+  const tailwind = useTailwind();
   const isDarkMode = useIsDarkMode();
-  //#endregion
 
   //#region styles
   const containerStyle = useMemo<any>(
@@ -94,8 +93,8 @@ export function BaseButton({
   const childStyles = useMemo(
     () =>
       backgroundColors
-        ? [containerAnimatedStyle, tailwind.style(containerStyle)]
-        : tailwind.style(containerStyle),
+        ? [containerAnimatedStyle, tailwind(containerStyle)]
+        : tailwind(containerStyle),
     [backgroundColors, containerAnimatedStyle, containerStyle]
   );
 

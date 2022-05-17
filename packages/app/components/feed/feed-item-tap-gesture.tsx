@@ -12,7 +12,6 @@ import Animated, {
 import { useLike } from "app/context/like-context";
 
 import { HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 const heartContainerStyle = {
   position: "absolute",
@@ -77,7 +76,7 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color={tw.color("white")} />
+        <HeartFilled width={90} height={90} color="#fff" />
       </Animated.View>
     </>
   );

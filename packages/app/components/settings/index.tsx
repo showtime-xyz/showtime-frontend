@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useUser } from "app/hooks/use-user";
@@ -13,7 +14,6 @@ import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
 import { Text, View } from "design-system";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
-import { tw } from "design-system/tailwind";
 
 import packageJson from "../../../../package.json";
 import { AddEmail } from "./add-email";
@@ -63,6 +63,7 @@ const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
 };
 
 const SettingsTabs = () => {
+  const tailwind = useTailwind();
   const [selected, setSelected] = useState(0);
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
@@ -123,8 +124,9 @@ const SettingsTabs = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
-          style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] right-0 xl:-right-24 2xl:-right-36 ios:w-screen android:w-screen`
+          style={tailwind(
+            // TODO: ios:w-screen android:w-screen
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] right-0 xl:-right-24 2xl:-right-36`
           )}
         >
           <Tabs.Trigger>

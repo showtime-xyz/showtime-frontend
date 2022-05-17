@@ -15,8 +15,8 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "../tailwind";
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import { ModalContainerProps, ModalMethods } from "./types";
@@ -36,11 +36,15 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
     { title, mobile_snapPoints, isScreen, close, onClose, children },
     ref
   ) {
+    const tailwind = useTailwind();
     const bottomSheetRef = useRef<BottomSheet>(null);
 
     const { top } = useSafeAreaInsets();
 
-    const backgroundStyle = useMemo(() => tailwind.style(...BACKGROUND_TW), []);
+    const backgroundStyle = useMemo(
+      () => tailwind(...BACKGROUND_TW),
+      [tailwind]
+    );
     const ModalSheet = useMemo(
       () => (isScreen ? BottomSheet : BottomSheetModal),
       [isScreen]
@@ -64,12 +68,13 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         <BottomSheetBackdrop
           appearsOnIndex={0}
           disappearsOnIndex={-1}
-          style={tailwind.style(BACKDROP_TW)}
+          style={tailwind(BACKDROP_TW)}
           {...props}
         />
       ),
       []
     );
+
     const renderHandleComponent = useCallback(
       (props: BottomSheetHandleProps) => (
         <>
@@ -79,6 +84,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       ),
       [title, close]
     );
+
     return (
       <ModalSheet
         ref={bottomSheetRef as any}

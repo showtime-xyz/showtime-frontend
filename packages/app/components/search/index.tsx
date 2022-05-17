@@ -1,23 +1,27 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { useColorScheme } from "design-system/hooks";
+import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Input } from "design-system/input";
 import { Pressable } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
 export const Search = () => {
+  const tailwind = useTailwind();
+  const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
@@ -52,8 +56,7 @@ export const Search = () => {
           leftElement={
             <View tw="p-2">
               <SearchIcon
-                //@ts-ignore
-                color={tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor}
+                color={isDark ? colors.gray["400"] : colors.gray["600"]}
                 width={24}
                 height={24}
               />
@@ -70,10 +73,7 @@ export const Search = () => {
                 hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
               >
                 <CloseIcon
-                  //@ts-ignore
-                  color={
-                    tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
-                  }
+                  color={isDark ? colors.gray["400"] : colors.gray["600"]}
                   width={24}
                   height={24}
                 />
@@ -85,7 +85,7 @@ export const Search = () => {
       {data ? (
         <FlatList
           data={data}
-          contentContainerStyle={tw.style(`pb-[${headerHeight}px]`)}
+          contentContainerStyle={tailwind(`pb-[${headerHeight}px]`)}
           ListFooterComponent={
             isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null
           }

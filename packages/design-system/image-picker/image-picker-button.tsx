@@ -2,9 +2,9 @@ import {
   FilePickerResolveValue,
   useFilePicker,
 } from "design-system/file-picker";
+import { useIsDarkMode } from "design-system/hooks";
 import { Image } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 
 export function ImagePickerButton({
   onPick,
@@ -13,6 +13,7 @@ export function ImagePickerButton({
   onPick: (param: FilePickerResolveValue) => void;
   type: "camera" | "profilePhoto" | "button";
 }) {
+  const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
@@ -29,7 +30,7 @@ export function ImagePickerButton({
       }}
     >
       {/* {type === "profilePhoto" && currentUser?.profile_photo_url && (
-        <View sx={{ position: "absolute" }}>
+        <View style={{ position: "absolute" }}>
           <Image
             source={{
               uri: currentUser.profile_photo_url,
@@ -42,11 +43,7 @@ export function ImagePickerButton({
           />
         </View>
       )}*/}
-      <Image
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-        width={24}
-        height={24}
-      />
+      <Image color={isDark ? "#fff" : "#000"} width={24} height={24} />
     </Pressable>
   );
 }

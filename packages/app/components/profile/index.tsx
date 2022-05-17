@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useReducer } from "react";
 import { Platform } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
   defaultFilters,
@@ -15,7 +17,6 @@ import { createParam } from "app/navigation/use-param";
 import { Skeleton, Spinner, View } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
-import { tw } from "design-system/tailwind";
 
 import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
@@ -33,6 +34,7 @@ const ProfileScreen = ({ username }: { username: string | null }) => {
 };
 
 const Profile = ({ address }: { address: string | null }) => {
+  const tailwind = useTailwind();
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -71,6 +73,7 @@ const Profile = ({ address }: { address: string | null }) => {
     },
     [dispatch]
   );
+
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
       <View tw="web:items-center w-full flex-1 overflow-hidden">
@@ -105,7 +108,7 @@ const Profile = ({ address }: { address: string | null }) => {
           {data?.data.lists ? (
             <>
               <Tabs.List
-                style={tw.style(`h-[${TAB_LIST_HEIGHT}px] w-full self-center`)}
+                style={tailwind(`h-[${TAB_LIST_HEIGHT}px] w-full self-center`)}
               >
                 {data?.data.lists.map((list, index) => (
                   <Tabs.Trigger key={list.id}>
@@ -141,7 +144,7 @@ const Profile = ({ address }: { address: string | null }) => {
             </>
           ) : tabsLoading ? (
             <Tabs.List
-              style={tw.style(
+              style={tailwind(
                 `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 ml-4 mt-4`
               )}
             >

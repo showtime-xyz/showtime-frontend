@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { ViewStyle } from "react-native";
 
+import { useTailwind } from "tailwindcss-react-native";
+
 import { useIsDarkMode } from "../hooks";
 import { ArrowTop } from "../icon";
-import { tw } from "../tailwind";
 import { colors } from "../tailwind/colors";
 import { Text } from "../text";
 import { View } from "../view";
@@ -39,10 +40,12 @@ export const TooltipContent: React.FC<
   customContent,
 }) => {
   const isDark = useIsDarkMode();
+  const tailwind = useTailwind();
   const color = useMemo(
     () => (isDark ? colors.gray[700] : colors.black),
     [isDark]
   );
+
   const getArrowOffset = useMemo<ViewStyle>(() => {
     switch (placement) {
       case Placement.top:
@@ -65,11 +68,12 @@ export const TooltipContent: React.FC<
       case Placement.top:
         return {
           bottom: -arrowHeight,
-          transform: [
-            {
-              rotate: "180deg",
-            },
-          ],
+          // TODO: review this
+          // transform: [
+          //   {
+          //     rotate: "180deg",
+          //   },
+          // ],
         };
       case Placement.bottom:
         return {
@@ -79,11 +83,13 @@ export const TooltipContent: React.FC<
         return {};
     }
   }, [placement]);
+
   if (customContent) return customContent;
+
   return (
     <View
       style={[
-        tw.style("relative items-center justify-center rounded-2xl px-4 py-2"),
+        tailwind("relative items-center justify-center rounded-2xl px-4 py-2"),
         {
           filter: isDark ? DARK_SHADOW : LIGHT_SHADOW,
           backgroundColor: color,
@@ -95,7 +101,7 @@ export const TooltipContent: React.FC<
       <Text tw={`text-center text-base font-bold text-white ${textTw}`}>
         {text}
       </Text>
-      <View style={[tw.style("z-1 absolute self-center"), getArrowStyle]}>
+      <View style={[tailwind("z-1 absolute self-center"), getArrowStyle]}>
         <ArrowTop color={color} {...ARROW_SIZE} />
       </View>
     </View>

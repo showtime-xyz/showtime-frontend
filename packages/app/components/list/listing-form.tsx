@@ -17,7 +17,6 @@ import { Button, Fieldset, Text, View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { Tag } from "design-system/icon";
 import { SelectOption } from "design-system/select/types";
-import { tw } from "design-system/tailwind";
 
 const LISTING_SUPPORTED_CURRENCIES = {
   mumbai: {
@@ -261,16 +260,7 @@ export const ListingForm = (props: Props) => {
         >
           {state.status === "idle" ? (
             <>
-              <Tag
-                fill={
-                  isDark
-                    ? "none"
-                    : (tw.style("text-white dark:text-gray-900")
-                        .color as string)
-                }
-                width={21}
-                height={21}
-              />
+              <Tag fill={isDark ? "none" : "#fff"} width={21} height={21} />
               <Text tw="pl-1 text-sm text-white dark:text-gray-900">
                 {ctaCopy}
               </Text>

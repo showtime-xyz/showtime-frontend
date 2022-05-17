@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
   RUDDER_LOG_LEVEL,
 } from "@rudderstack/rudder-sdk-react-native";
-import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
@@ -25,6 +24,7 @@ import { enableScreens } from "react-native-screens";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
+import { TailwindProvider } from "tailwindcss-react-native";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { MintSnackbar } from "app/components/mint-snackbar";
@@ -378,7 +378,7 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <DripsyProvider theme={theme}>
+      <TailwindProvider preview={true}>
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
           <ToastProvider>
             <AlertProvider>
@@ -412,7 +412,7 @@ function App() {
             </AlertProvider>
           </ToastProvider>
         </SafeAreaProvider>
-      </DripsyProvider>
+      </TailwindProvider>
     </GestureHandlerRootView>
   );
 }

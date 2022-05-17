@@ -1,14 +1,13 @@
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { textSizes } from "design-system/typography";
 
 import { ViewProps } from "../view";
-import { Text as DripsyText } from "./text";
+import { Text as StyledText } from "./text";
 
-export type TextProps = ComponentProps<typeof DripsyText>;
+export type TextProps = ComponentProps<typeof StyledText>;
 
 export type Props = {
   tw?: TW;
@@ -21,7 +20,6 @@ export type Props = {
   | "onTextLayout"
   | "children"
   | "selectable"
-  | "sx"
   | "nativeID"
   | "accessibilityRole"
   | "numberOfLines"
@@ -35,7 +33,7 @@ export type Props = {
 const ParentContext = createContext<{} | undefined>(undefined);
 
 /**
- * Note: You can wrap <DripsyText> in a <View> with a background color
+ * Note: You can wrap <Text> in a <View> with a background color
  * to verify if the text is rendered correctly and if Capsize is working well.
  */
 export const Text = forwardRef<TextType, Props>(
@@ -47,7 +45,6 @@ export const Text = forwardRef<TextType, Props>(
       children,
       selectable,
       tw,
-      sx,
       nativeID,
       htmlFor,
       accessibilityRole,
@@ -60,14 +57,22 @@ export const Text = forwardRef<TextType, Props>(
   ) => {
     const parentTw = useContext(ParentContext);
 
-    const compoundSx = {
-      ...tailwind.style(parentTw),
-      ...sx,
-      ...tailwind.style(tw),
-    };
+    // TODO: review this + implement variants
+
+    // const parentTwProps = tailwind(
+    //   typeof parentTw === "string" ? parentTw : parentTw?.join(" ")
+    // );
+    // const twProps = tailwind(Array.isArray(tw) ? tw.join(" ") : tw);
+    // const compoundTw = {
+    //   ...parentTwProps,
+    //   ...twProps,
+    // };
+
+    const compoundTw = `${tw} ${parentTw}`;
 
     return (
-      <DripsyText
+      <StyledText
+        tw={compoundTw}
         nativeID={nativeID}
         // @ts-ignore Dripsy‘s Text component issue
         ref={ref}
@@ -75,7 +80,6 @@ export const Text = forwardRef<TextType, Props>(
         selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}
-        sx={compoundSx}
         accessibilityRole={accessibilityRole}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
@@ -84,10 +88,10 @@ export const Text = forwardRef<TextType, Props>(
         htmlFor={htmlFor}
         pointerEvents={pointerEvents}
       >
-        <ParentContext.Provider value={compoundSx}>
+        <ParentContext.Provider value={compoundTw}>
           {children}
         </ParentContext.Provider>
-      </DripsyText>
+      </StyledText>
     );
   }
 );

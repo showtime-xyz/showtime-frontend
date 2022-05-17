@@ -1,19 +1,24 @@
-import React, { ComponentProps } from "react";
+import { ComponentProps, forwardRef } from "react";
+import { View as ReactNativeView } from "react-native";
 
-import { View as DripsyView } from "dripsy";
+import { styled } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
-export type ViewProps = { tw?: TW } & ComponentProps<typeof DripsyView>;
+const StyledView = styled(ReactNativeView);
 
-const View = React.forwardRef(function View(
-  { tw, sx, ...props }: ViewProps,
-  ref: any
-) {
+export type ViewProps = { tw?: TW } & ComponentProps<typeof ReactNativeView>;
+
+const View = forwardRef(function View({ tw, ...props }: ViewProps, ref: any) {
   return (
-    <DripsyView sx={{ ...sx, ...tailwind.style(tw) }} {...props} ref={ref} />
+    <StyledView
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+      {...props}
+      ref={ref}
+    />
   );
 });
+
+View.displayName = "View";
 
 export { View };

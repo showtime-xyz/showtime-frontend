@@ -3,10 +3,10 @@ import { View } from "react-native";
 
 import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, MotiView } from "moti";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 
-import { tw as tailwind } from "../tailwind";
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";
 import { TooltipProps } from "./types";
@@ -21,6 +21,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   style,
   ...rest
 }) => {
+  const tailwind = useTailwind();
   const [show, setShow] = useState(false);
   const triggerEl = useRef<View>(null);
   const timeout = useRef<NodeJS.Timeout | null>(null);
@@ -52,14 +53,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         ref={triggerEl}
-        style={[tailwind.style(tw), style]}
+        style={[tailwind(tw), style]}
       >
         {children}
       </View>
       {/* @ts-ignore */}
       <AnimatePresence>
         {show && (
-          <Portal.Root style={tailwind.style(`w-full`)}>
+          <Portal.Root style={tailwind(`w-full`)}>
             <MotiView
               from={{
                 opacity: 0,

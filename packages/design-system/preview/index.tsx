@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Video } from "expo-av";
+import { useTailwind } from "tailwindcss-react-native";
 
 import { Image } from "design-system/image";
-import { tw as tailwind } from "design-system/tailwind";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -17,6 +17,7 @@ type PreviewProps = {
 };
 
 export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
+  const tailwind = useTailwind();
   const uri = getLocalFileURI(file);
 
   const fileType = useMemo(() => {
@@ -52,7 +53,7 @@ export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
       return (
         <Video
           source={{ uri }}
-          style={[tailwind.style(tw), style]}
+          style={[tailwind(tw), style]}
           resizeMode="cover"
           isMuted
           shouldPlay
