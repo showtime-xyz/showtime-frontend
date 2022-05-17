@@ -135,7 +135,11 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             props.inputStyle,
             {
               flexGrow: 1,
-              paddingY: Platform.select({
+              paddingTop: Platform.select({
+                ios: 16,
+                default: 12,
+              }),
+              paddingBottom: Platform.select({
                 ios: 16,
                 default: 12,
               }),

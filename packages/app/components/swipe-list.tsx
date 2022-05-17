@@ -207,7 +207,7 @@ export const SwipeList = ({
         disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        style={tw.style("flex-1 dark:bg-gray-900 bg-gray-100")}
         renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
         onEndReachedThreshold={itemHeight}

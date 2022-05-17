@@ -1887,30 +1887,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dripsy/core@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "@dripsy/core@npm:3.6.0"
-  dependencies:
-    "@expo/html-elements": ^0.0.1
-    "@react-native-community/hooks": ^2.6.0
-    "@theme-ui/css": ^0.4.0-rc.1
-    stable-hash: ^0.0.2
-    ts-toolbelt: ^9.6.0
-  checksum: f914ac3f6b3b43ab6aaa25a2f259da039a2b9cbcb9e1bd5c9359c31528db1af875cf006585f630300e53feb4739397416111400685e887628440601c2ffe7434
-  languageName: node
-  linkType: hard
-
-"@dripsy/gradient@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "@dripsy/gradient@npm:3.6.0"
-  dependencies:
-    "@dripsy/core": ^3.6.0
-    expo-linear-gradient: ^10.0.3
-    stable-hash: ^0.0.2
-  checksum: 1f234de24f641686ac6e7c555eab6a755ff1c1f8ebf409d63b28a2503d458066c49a55c65f87c3a46f33a74c777776920d6af253d674ebe1f214b44b00a7dd53
-  languageName: node
-  linkType: hard
-
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -2899,15 +2875,6 @@ __metadata:
     tmp: ^0.0.33
     tslib: ^1.10.0
   checksum: f2ec379dc18239d9e03c0a18693c3a9f68eb923c92defb4c66c900d8bfa361f894ec63fd9d544149f586c4cb72e34aac1e4ca1396b81a359379c923bf6c87ee8
-  languageName: node
-  linkType: hard
-
-"@expo/html-elements@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@expo/html-elements@npm:0.0.1"
-  peerDependencies:
-    react-native-web: ~0.13.7
-  checksum: 70d6f88060aaf979f623796372f08fe046e4ca662654748e8097fcc6e55cf6f81b10482860b1fe794df0957d7a8db051821c543dd8908c73b64462106c21f4d7
   languageName: node
   linkType: hard
 
@@ -5621,16 +5588,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/hooks@npm:^2.6.0":
-  version: 2.8.1
-  resolution: "@react-native-community/hooks@npm:2.8.1"
-  peerDependencies:
-    react: ">=16.8.0"
-    react-native: ">=0.59"
-  checksum: d1138c3203ebddcbeb7866724a22785df33e9f36b4b683ec90f5678b5eac9fe6e34eb22afd8aecf14145e17eb4df4fcddac8183f085476a90e658a5a7a7b45f0
-  languageName: node
-  linkType: hard
-
 "@react-native-community/netinfo@npm:8.2.0":
   version: 8.2.0
   resolution: "@react-native-community/netinfo@npm:8.2.0"
@@ -6460,7 +6417,6 @@ __metadata:
     "@babel/runtime": ^7.16.5
     "@capsizecss/core": ^3.0.0
     "@config-plugins/detox": ^1.1.0
-    "@dripsy/gradient": ^3.6.0
     "@ethersproject/shims": ^5.5.0
     "@expo/xcpretty": ^4.1.0
     "@gorhom/bottom-sheet": ^4.2.2
@@ -6515,7 +6471,6 @@ __metadata:
     dns.js: ^1.0.1
     domain-browser: ^4.22.0
     dotenv: ^10.0.0
-    dripsy: ^3.6.0
     esbuild: ^0.14.11
     events: ^3.3.0
     expo: ^45.0.2
@@ -8313,15 +8268,6 @@ __metadata:
     react-native: ">=0.59"
     react-test-renderer: ">=16.0.0"
   checksum: 0777cc569939bd996bdae31a8c94d8417fbfe1f34ddd84dc99aafc96709064e5e02f3c5a687a662a4f040c5c1767442fd7c4530886f716738d40e930cce446d1
-  languageName: node
-  linkType: hard
-
-"@theme-ui/css@npm:^0.4.0-rc.1":
-  version: 0.4.0-rc.13
-  resolution: "@theme-ui/css@npm:0.4.0-rc.13"
-  dependencies:
-    csstype: ^2.5.7
-  checksum: fedcdcf30e7ac2a605fb423b0f9b1588395273e8413b75f9f38bcb13411b505ebf976c2a58a4f4b32239a70e1c7568d6af9611268d71b947f68746b6fb6d2501
   languageName: node
   linkType: hard
 
@@ -14812,15 +14758,6 @@ __metadata:
     create-hash: ^1.1.2
     create-hmac: ^1.1.4
   checksum: f8df5cdd4fb792e548d6187cbc446fbd0afd8f1ef7fa486e1c286c2adee55a687183ce48ab178e9f24965c2deabb6e2ba7a7ee2d675264b951356480eb042476
-  languageName: node
-  linkType: hard
-
-"dripsy@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "dripsy@npm:3.6.0"
-  dependencies:
-    "@dripsy/core": ^3.6.0
-  checksum: 0686a6c72749242d93b50f07d541264c6b310f92dba27f1f4df9dba414ccaa2abe41317ac78ac670218836b9f641136e2a0777865e4d753b8a7b2e99ed555817
   languageName: node
   linkType: hard
 
@@ -30057,13 +29994,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stable-hash@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "stable-hash@npm:0.0.2"
-  checksum: c4d1c2d5e947c9c95b034f7d1948e0208006a5c39bf0c5dc570402a7c5dd1d341ad5f7f6d6642f6a1271f0f19d63534a5c291fcc546092f0360e85c376fc5e2d
-  languageName: node
-  linkType: hard
-
 "stable@npm:^0.1.8":
   version: 0.1.8
   resolution: "stable@npm:0.1.8"
@@ -31589,13 +31519,6 @@ __metadata:
     typescript:
       optional: true
   checksum: c2a698b85d521298fe6f2435fbf2d3dc5834b423ea25abd321805ead3f399dbeedce7ca09492d7eb005b9d2c009c6b9587055bc3ab273dc6b9e40eefd7edb5b2
-  languageName: node
-  linkType: hard
-
-"ts-toolbelt@npm:^9.6.0":
-  version: 9.6.0
-  resolution: "ts-toolbelt@npm:9.6.0"
-  checksum: 9f35fd95d895a5d32ea9fd2e532a695b0bae6cbff6832b77292efa188a0ed1ed6e54f63f74a8920390f3d909a7a3adb20a144686372a8e78b420246a9bd3d58a
   languageName: node
   linkType: hard
 
