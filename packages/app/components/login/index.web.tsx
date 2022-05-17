@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { yup } from "app/lib/yup";
 
 import { Button, ButtonLabel, Text, View } from "design-system";
@@ -78,14 +80,8 @@ export function Login({ onLogin }: LoginProps) {
       ) : (
         <>
           <LoginHeader />
-          <View tw="p-4">
-            <Button
-              onPress={() => handleSubmitWallet()}
-              variant="primary"
-              size="regular"
-            >
-              <ButtonLabel>Sign in with Wallet</ButtonLabel>
-            </Button>
+          <View tw="items-center p-4">
+            <ConnectButton label="Sign in with Wallet" />
           </View>
           <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
             <View tw="h-2" />
