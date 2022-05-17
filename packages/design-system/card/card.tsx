@@ -16,7 +16,7 @@ import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
 import { useIsDarkMode } from "design-system/hooks";
 import { Media } from "design-system/media";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 import { View } from "design-system/view";
@@ -90,7 +90,6 @@ function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
         <RouteComponent href={hrefProps} onPress={onPress}>
           <Media item={nft} numColumns={numColumns} />
         </RouteComponent>
-
         <View tw="mt-2">
           <RouteComponent href={hrefProps} onPress={onPress}>
             <Title nft={nft} cardMaxWidth={cardMaxWidth} />
