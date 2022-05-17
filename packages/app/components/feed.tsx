@@ -13,6 +13,7 @@ import { FeedContext } from "app/context/feed-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Haptics } from "app/lib/haptics";
 import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
@@ -102,6 +103,7 @@ const HeaderFeed = () => {
       <PressableScale
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
+          Haptics.impactAsync();
           selected.value = 0;
           pagerRef?.current?.setPage(0);
         }}
@@ -120,6 +122,7 @@ const HeaderFeed = () => {
       <PressableScale
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
+          Haptics.impactAsync();
           selected.value = 1;
           pagerRef?.current?.setPage(1);
         }}

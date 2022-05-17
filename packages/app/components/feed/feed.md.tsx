@@ -7,6 +7,7 @@ import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
 import { useColorScheme } from "app/lib/color-scheme";
+import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,
   LayoutProvider,
@@ -63,6 +64,14 @@ export const FeedList = () => {
   });
   const isDark = useIsDarkMode();
 
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
+
   return (
     <View tw="flex-row">
       <Hidden until="xl">
@@ -89,7 +98,7 @@ export const FeedList = () => {
             >
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
-                onChange={setSelected}
+                onChange={handleTabChange}
                 selectedIndex={selected}
               />
             </View>

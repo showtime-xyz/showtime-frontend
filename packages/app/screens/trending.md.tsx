@@ -2,6 +2,7 @@ import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import { CARD_DARK_SHADOW } from "app/utilities";
@@ -32,6 +33,7 @@ export const Trending = () => {
 
   const handleTabChange = useCallback(
     (index: number) => {
+      Haptics.impactAsync();
       if (index === 0) {
         setTab("following");
       } else {

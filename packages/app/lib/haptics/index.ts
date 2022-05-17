@@ -1,3 +1,12 @@
-import * as Haptics from "expo-haptics";
+import { Platform } from "react-native";
 
-export { Haptics };
+import * as ExpoHaptics from "expo-haptics";
+
+export const Haptics = {
+  impactAsync: Platform.select({
+    ios: () => ExpoHaptics.impactAsync(ExpoHaptics.ImpactFeedbackStyle.Light),
+    android: () =>
+      ExpoHaptics.impactAsync(ExpoHaptics.ImpactFeedbackStyle.Light),
+    default: () => {},
+  }),
+};
