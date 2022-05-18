@@ -281,6 +281,7 @@ const CreatorsList = ({
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.RecyclerList
+        // @ts-ignore
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
@@ -340,7 +341,7 @@ const NFTSList = ({
   const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
 
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index) => {
+    (_type: any, item: any, index: number) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }
