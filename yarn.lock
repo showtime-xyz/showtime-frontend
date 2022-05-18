@@ -6698,7 +6698,7 @@ __metadata:
     expo-web-browser: ~10.1.0
     react: 18.0.0
     react-dom: 18.0.0
-    react-native: 0.68.1
+    react-native: 0.68.2
     react-native-blob-jsi-helper: ^0.2.1
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
@@ -27324,18 +27324,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-codegen@npm:^0.0.13":
-  version: 0.0.13
-  resolution: "react-native-codegen@npm:0.0.13"
-  dependencies:
-    "@babel/parser": ^7.14.0
-    flow-parser: ^0.121.0
-    jscodeshift: ^0.13.1
-    nullthrows: ^1.1.1
-  checksum: bfe645fea6de985922d6d060b2ad0c9194f25b436b5b31c11fcc76358fa527f541c044d0818f32cba853bec3debfa12d2a48b4c9282f19d575ee2a7d3599571f
-  languageName: node
-  linkType: hard
-
 "react-native-codegen@npm:^0.0.17":
   version: 0.0.17
   resolution: "react-native-codegen@npm:0.0.17"
@@ -27677,50 +27665,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: a0dbdfa8d46efdf9f207f286aef00a843d5bf6f51503be44fe26df9c10536580fb877c090843b84622e540e57beae459d640db27cbc4021537a5233f0c8da200
-  languageName: node
-  linkType: hard
-
-"react-native@npm:0.68.1":
-  version: 0.68.1
-  resolution: "react-native@npm:0.68.1"
-  dependencies:
-    "@jest/create-cache-key-function": ^27.0.1
-    "@react-native-community/cli": ^7.0.3
-    "@react-native-community/cli-platform-android": ^7.0.1
-    "@react-native-community/cli-platform-ios": ^7.0.1
-    "@react-native/assets": 1.0.0
-    "@react-native/normalize-color": 2.0.0
-    "@react-native/polyfills": 2.0.0
-    abort-controller: ^3.0.0
-    anser: ^1.4.9
-    base64-js: ^1.1.2
-    deprecated-react-native-prop-types: ^2.3.0
-    event-target-shim: ^5.0.1
-    hermes-engine: ~0.11.0
-    invariant: ^2.2.4
-    jsc-android: ^250230.2.1
-    metro-react-native-babel-transformer: 0.67.0
-    metro-runtime: 0.67.0
-    metro-source-map: 0.67.0
-    nullthrows: ^1.1.1
-    pretty-format: ^26.5.2
-    promise: ^8.0.3
-    react-devtools-core: ^4.23.0
-    react-native-codegen: ^0.0.13
-    react-native-gradle-plugin: ^0.0.6
-    react-refresh: ^0.4.0
-    react-shallow-renderer: 16.14.1
-    regenerator-runtime: ^0.13.2
-    scheduler: ^0.20.2
-    stacktrace-parser: ^0.1.3
-    use-subscription: ">=1.0.0 <1.6.0"
-    whatwg-fetch: ^3.0.0
-    ws: ^6.1.4
-  peerDependencies:
-    react: 17.0.2
-  bin:
-    react-native: cli.js
-  checksum: 72916e7ac092ca68702254d2a80db80b340e735f1ea654d5146e54037cf20410c182477d1c7f59dd4c6d854472a67b5ed6c279640d515235998717ba12757a39
   languageName: node
   linkType: hard
 
