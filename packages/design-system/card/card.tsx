@@ -35,7 +35,7 @@ function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
-  const RouteComponent = isWeb ? Link : Pressable;
+  const RouteComponent = isWeb ? Link : PressableScale;
 
   const size = tw
     ? tw
