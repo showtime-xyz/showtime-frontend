@@ -49,6 +49,7 @@ import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
+import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
@@ -76,6 +77,7 @@ export const SwipeList = ({
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
   const navigation = useNavigation();
+  const { isMobileWeb } = useIsMobileWeb();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
@@ -168,13 +170,13 @@ export const SwipeList = ({
     ]
   );
 
-  const contentWidth = useMemo(
-    () =>
-      windowWidth < MAX_HEADER_WIDTH
-        ? windowWidth - SCROLL_BAR_WIDTH
-        : MAX_HEADER_WIDTH,
-    [windowWidth]
-  );
+  const contentWidth = useMemo(() => {
+    const scorllBarWidth = isMobileWeb ? 0 : SCROLL_BAR_WIDTH;
+    return windowWidth < MAX_HEADER_WIDTH
+      ? windowWidth - scorllBarWidth
+      : MAX_HEADER_WIDTH;
+  }, [windowWidth, isMobileWeb]);
+
   const layoutSize = useMemo(
     () => ({
       width: contentWidth,
