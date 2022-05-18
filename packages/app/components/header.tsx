@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
+  ListRenderItemInfo,
   Platform,
   TextInput,
   useWindowDimensions,
@@ -10,7 +11,7 @@ import * as Popover from "@radix-ui/react-popover";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
-import { useSearch } from "app/hooks/api/use-search";
+import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
@@ -48,7 +49,7 @@ const SearchInHeader = () => {
   );
 
   const renderItem = useCallback(
-    ({ item }) => {
+    ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
       return (
         <SearchItem
           item={item}
@@ -164,7 +165,7 @@ const HeaderRight = () => {
                         web: {
                           pathname: router.pathname,
                           query: { ...router.query, createModal: true },
-                        },
+                        } as any,
                       }),
                       Platform.select({
                         native: "/camera",
