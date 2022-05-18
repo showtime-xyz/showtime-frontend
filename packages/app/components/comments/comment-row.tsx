@@ -1,4 +1,8 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
+import { Platform } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
@@ -36,6 +40,7 @@ function CommentRowComponent({
   //#endregion
 
   //#region hooks
+  const { dispatch } = useNavigation();
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
@@ -107,12 +112,18 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment, isAuthenticated, navigateToLogin]);
-  const handleOnUserPress = useCallback(
-    (username: string) => {
-      router.push(`/@${username}`);
-    },
-    [router]
-  );
+  const handleOnUserPress = useCallback((username: string) => {
+    if (Platform.OS === "web") {
+      router.replace(`/@${username}`);
+    } else {
+      dispatch(
+        StackActions.replace("profile", {
+          username: username,
+        })
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   //#endregion
 
   return (
