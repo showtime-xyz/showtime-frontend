@@ -299,7 +299,9 @@ export const FeedItem = memo(
               resizeMode="contain"
             />
           </View>
-          <View tw={`w-${NFT_DETAIL_WIDTH}px bg-white shadow-md dark:bg-black`}>
+          <View
+            tw={`w-[${NFT_DETAIL_WIDTH}]px bg-white shadow-md dark:bg-black`}
+          >
             <Collection nft={nft} />
             <Divider tw="my-2" />
             <Social nft={nft} />
