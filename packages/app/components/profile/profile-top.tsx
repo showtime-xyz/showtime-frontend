@@ -21,7 +21,6 @@ import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { PressableScale } from "design-system/pressable-scale";
-import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName } from "../../utilities";
@@ -33,8 +32,9 @@ type FollowProps = {
   onPressFollower: () => void;
   followingCount?: number;
   followersCount?: number;
-  tw?: TW;
+  tw?: string;
 };
+
 const Follow = ({
   onPressFollowing,
   onPressFollower,
@@ -43,7 +43,7 @@ const Follow = ({
   tw,
 }: FollowProps) => {
   return (
-    <View tw={`flex-row ${tw}`} pointerEvents="box-none">
+    <View tw={["flex-row", tw ? tw : ""]} pointerEvents="box-none">
       <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}

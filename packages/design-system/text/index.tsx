@@ -58,7 +58,12 @@ export const Text = forwardRef<TextType, Props>(
     ref
   ) => {
     const parentTw = useContext(ParentContext);
-    const compoundStyle = [tailwind.style(parentTw), tailwind.style(tw), style];
+
+    const compoundStyle = {
+      ...tailwind.style(parentTw),
+      ...tailwind.style(tw),
+      ...(style as object),
+    };
 
     return (
       <UniversalText
