@@ -34,6 +34,7 @@ type InputProps = {
   accessibilityLabel?: string;
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
+  autocomplete?: "on" | "off";
 };
 
 const borderColor = {
@@ -76,6 +77,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     isInvalid,
     accessibilityLabel,
     autoFocus,
+    autocomplete,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const colorScheme = useColorScheme();
@@ -176,6 +178,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             default: undefined,
           })}
           ref={ref}
+          autocomplete={autocomplete}
         />
         {rightElement && (
           <View style={{ marginLeft: "auto" }}>{rightElement}</View>

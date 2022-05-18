@@ -67,7 +67,8 @@ const SearchInHeader = () => {
 
       <Popover.Anchor>
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
+          autocomplete="off"
           value={term}
           ref={inputRef}
           onChangeText={(text) => {

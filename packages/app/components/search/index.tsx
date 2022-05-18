@@ -44,7 +44,7 @@ export const Search = () => {
       {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
       <View tw="px-4 py-2">
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
           value={term}
           ref={inputRef}
           autoFocus
