@@ -229,11 +229,9 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
-  let { web3 } = useWeb3();
+  let { isMagicLogin } = useWeb3();
 
   const { getSignerAndProvider } = useSignerAndProvider();
-  // TODO: this magic check is incorrect. In future, web3 can be just a normal provider
-  const isMagic = !!web3;
 
   async function uploadMedia() {
     // Media Upload
@@ -361,7 +359,7 @@ export const useMintNFT = () => {
       const { signer, signerAddress, provider } = result;
 
       try {
-        dispatch({ type: "minting", payload: { isMagic } });
+        dispatch({ type: "minting", payload: { isMagic: isMagicLogin } });
 
         const contract = new ethers.Contract(
           //@ts-ignore

@@ -66,12 +66,10 @@ const createNFTValidationSchema = yup.object({
 function Create() {
   const router = useRouter();
   const { user } = useUser();
-  const { web3 } = useWeb3();
+  const { isMagicLogin } = useWeb3();
   const { state } = useContext(MintContext);
   const { setMedia, startMinting } = useMintNFT();
   const { userAddress: address } = useCurrentUserAddress();
-
-  const isNotMagic = !web3;
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
@@ -372,7 +370,7 @@ function Create() {
                         />
                       )}
                     /> */}
-                  {isNotMagic ? (
+                  {!isMagicLogin ? (
                     <Controller
                       control={control}
                       name="royaltiesPercentage"

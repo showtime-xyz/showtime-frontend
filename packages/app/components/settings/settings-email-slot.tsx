@@ -82,16 +82,15 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
-  const { web3 } = useWeb3();
+  const { isMagicLogin } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
 
   const email = props.email;
-  const isMagic = !!web3;
 
   const backendAddress = props.address;
 
   const getCurrentMagicUser = useCallback(async () => {
-    if (isMagic) {
+    if (isMagicLogin) {
       const magicMetaData = await magic?.user?.getMetadata();
       const currentEmail = magicMetaData.email;
       const currentMagicAddress = magicMetaData.publicAddress;
@@ -103,7 +102,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         setIsCurrentEmail(true);
       }
     }
-  }, [isMagic, email, userAddress]);
+  }, [isMagicLogin, email, userAddress]);
 
   useEffect(() => {
     getCurrentMagicUser();

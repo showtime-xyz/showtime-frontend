@@ -75,7 +75,7 @@ export const ListingForm = (props: Props) => {
   const { nft, listNFT, listState: state } = props;
   const router = useRouter();
   const isDark = useIsDarkMode();
-  const { web3 } = useWeb3();
+  const { isMagicLogin } = useWeb3();
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
   const [currentCurrencyAddress, setCurrentCurrency] = useState<string>(
@@ -94,7 +94,6 @@ export const ListingForm = (props: Props) => {
   const hideCopiesInput = ownedAmount === 1;
   const copiesHelperText = `1 by default, you own ${ownedAmount}`;
   const currencySymbol = LISTING_SUPPORTED_CURRENCIES[currentCurrencyAddress];
-  const isNotMagic = !web3;
 
   useEffect(() => {
     if (state.status === "listingSuccess") {
@@ -151,7 +150,7 @@ export const ListingForm = (props: Props) => {
 
   const showSigningOption =
     (state.status === "listing" || state.status === "approvalRequesting") &&
-    isNotMagic;
+    !isMagicLogin;
 
   const handleSubmitForm = async (values: ListingValues) => {
     const currencyAddress =
