@@ -66,12 +66,8 @@ export const FeedList = () => {
         initialPage={1}
         onPageSelected={(e) => (selected.value = e.nativeEvent.position)}
       >
-        <View key="following-feed">
-          <FollowingFeed />
-        </View>
-        <View key="algorithmic-feed">
-          <AlgorithmicFeed />
-        </View>
+        <FollowingFeed />
+        <AlgorithmicFeed />
       </PagerView>
     );
   }
