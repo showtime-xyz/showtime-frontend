@@ -61,9 +61,9 @@ export const Text = forwardRef<TextType, Props>(
     const parentTw = useContext(ParentContext);
 
     const compoundStyle = {
-      ...(style as object),
       ...tailwind.style(parentTw),
       ...tailwind.style(tw),
+      ...(style as object),
     };
 
     // TODO: implement `variant`

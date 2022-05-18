@@ -100,6 +100,7 @@ export type TextInputProps = {
 export const BottomSheetTextInput = (props: TextInputProps) => {
   const { tw, style, componentRef, ...textInputProps } = props;
   const styles = { ...tailwind.style(tw), ...(style as {}) };
+
   return (
     <BottomSheetInput
       style={styles}

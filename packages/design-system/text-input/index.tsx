@@ -12,7 +12,7 @@ const TextInput = forwardRef<typeof ReactNativeTextInput, TextInputProps>(
   ({ tw, style, ...props }, ref) => (
     <ReactNativeTextInput
       {...props}
-      style={{ ...(style as object), ...tailwind.style(tw) }}
+      style={{ ...tailwind.style(tw), ...(style as object) }}
       ref={ref}
     />
   )
