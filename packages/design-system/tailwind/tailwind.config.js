@@ -1,7 +1,7 @@
-const { Platform } = require("react-native");
-const { colors } = require("./colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
+
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
+const { colors } = require("design-system/tailwind/colors");
 const { textSizes, fontFamily } = require("design-system/typography");
 
 module.exports = {
