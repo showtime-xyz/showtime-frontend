@@ -3,6 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
 const { colors } = require("design-system/tailwind/colors");
 const { textSizes, fontFamily } = require("design-system/typography");
+const { plugin } = require("twrnc");
 
 module.exports = {
   content: [
@@ -59,17 +60,7 @@ module.exports = {
       cursor: {
         copy: "copy",
       },
-      fontSize: {
-        xs: ["12px", textSizes["text-xs"]],
-        13: ["13px", textSizes["text-13"]],
-        sm: ["14px", textSizes["text-sm"]],
-        base: ["16px", textSizes["text-base"]],
-        lg: ["18px", textSizes["text-lg"]], // font-space-bold
-        xl: ["20px", textSizes["text-xl"]],
-        "2xl": ["24px", textSizes["text-2xl"]], // font-space-bold
-        "3xl": ["30px", textSizes["text-3xl"]],
-        "4xl": ["36px", textSizes["text-4xl"]],
-      },
+      fontSize: {},
       fontFamily: {
         space: fontFamily("SpaceGrotesk-Regular"),
         "space-bold": fontFamily("SpaceGrotesk-Bold"),
@@ -91,4 +82,19 @@ module.exports = {
       },
     },
   },
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        "text-xs": textSizes["text-xs"],
+        "text-13": textSizes["text-13"],
+        "text-sm": textSizes["text-sm"],
+        "text-base": textSizes["text-base"],
+        "text-lg": textSizes["text-lg"],
+        "text-xl": textSizes["text-xl"],
+        "text-2xl": textSizes["text-2xl"],
+        "text-3xl": textSizes["text-3xl"],
+        "text-4xl": textSizes["text-4xl"],
+      });
+    }),
+  ],
 };
