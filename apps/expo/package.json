@@ -35,6 +35,7 @@
     "build:production": "STAGE=production eas build --profile production --platform all && say done",
     "build:production:ios": "STAGE=production eas build --profile production --platform ios && say done",
     "build:production:android": "STAGE=production eas build --profile production --platform android && say done",
+    "build:simulator": "STAGE=staging eas build --profile simulator --platform ios && say done",
     "submit:ios": "STAGE=production eas submit --platform ios",
     "submit:android": "STAGE=production eas submit --platform android",
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",

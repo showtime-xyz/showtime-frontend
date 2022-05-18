@@ -46,6 +46,19 @@
       "cache": {
         "key": "showtime-2"
       }
+    },
+    "simulator": {
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "STAGE": "staging"
+      },
+      "node": "14.18.1",
+      "prebuildCommand": "prebuild --skip-dependency-update react",
+      "cache": {
+        "key": "showtime-2"
+      }
     }
   },
   "submit": {
