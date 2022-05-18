@@ -13,7 +13,7 @@ function ActivityIndicator({ tw, style, ...props }: ActivityIndicatorProps) {
     <ReactNativeActivityIndicator
       color="#8b5cf6"
       {...props}
-      style={{ ...tailwind.style(tw), ...(style as object) }}
+      style={[tailwind.style(tw), style]}
     />
   );
 }

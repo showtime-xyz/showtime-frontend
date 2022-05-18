@@ -41,7 +41,6 @@ const ParentContext = createContext<{} | undefined>(undefined);
 export const Text = forwardRef<TextType, Props>(
   (
     {
-      // variant,
       onLayout,
       onTextLayout,
       children,
@@ -59,14 +58,7 @@ export const Text = forwardRef<TextType, Props>(
     ref
   ) => {
     const parentTw = useContext(ParentContext);
-
-    const compoundStyle = {
-      ...tailwind.style(parentTw),
-      ...tailwind.style(tw),
-      ...(style as object),
-    };
-
-    // TODO: implement `variant`
+    const compoundStyle = [tailwind.style(parentTw), tailwind.style(tw), style];
 
     return (
       <UniversalText

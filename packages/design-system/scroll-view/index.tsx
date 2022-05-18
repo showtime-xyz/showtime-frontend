@@ -13,7 +13,7 @@ function ScrollView({ tw, style, ...props }: ScrollViewProps) {
     <ReactNativeScrollView
       keyboardShouldPersistTaps="handled"
       {...props}
-      style={{ ...tailwind.style(tw), ...(style as object) }}
+      style={[tailwind.style(tw), style]}
     />
   );
 }

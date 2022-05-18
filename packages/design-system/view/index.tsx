@@ -11,11 +11,7 @@ const View = forwardRef(function View(
   ref: any
 ) {
   return (
-    <ReactNativeView
-      {...props}
-      style={{ ...tailwind.style(tw), ...(style as object) }}
-      ref={ref}
-    />
+    <ReactNativeView {...props} style={[tailwind.style(tw), style]} ref={ref} />
   );
 });
 
