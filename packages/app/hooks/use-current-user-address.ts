@@ -3,8 +3,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useAccount } from "wagmi";
 
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
-import { BYPASS_EMAIL_WITH_INSECURE_KEYS } from "app/lib/constants";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 /**

@@ -31,7 +31,7 @@ export function useWalletLogin() {
         address: wagmiData.address,
       });
     }
-  }, [wagmiData]);
+  }, [wagmiData, dispatch]);
 
   useEffect(() => {
     if (wagmiSignData) {
@@ -39,7 +39,7 @@ export function useWalletLogin() {
         signature: wagmiSignData,
       });
     }
-  }, [wagmiSignData]);
+  }, [wagmiSignData, dispatch]);
 
   //#region methods
   const fetchNonce = useCallback(
@@ -80,7 +80,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [nonce, dispatch]
+    [nonce, dispatch, signMessage]
   );
   const login = useCallback(
     async function login() {
@@ -96,7 +96,7 @@ export function useWalletLogin() {
         dispatch("ERROR", { error });
       }
     },
-    [dispatch, signature, _login]
+    [address, dispatch, signature, _login]
   );
   const continueLoginIn = useStableCallback(() => {
     if (status === "CONNECTED_TO_WALLET" && address && name) {

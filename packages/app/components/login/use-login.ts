@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Platform, PlatformColor } from "react-native";
+import { Platform } from "react-native";
 
 import { captureException } from "@sentry/nextjs";
 
@@ -59,7 +59,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [handleLoginFailure]
+    [handleLoginFailure, loginWithWallet, setAuthenticationStatus]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {

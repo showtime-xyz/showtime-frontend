@@ -14,7 +14,7 @@ const useColorScheme = () => {
   useDeviceContext(tw, { withDeviceColorScheme: false });
   const deviceColorScheme = useDeviceColorScheme();
   const userColorScheme = useUserColorScheme();
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  const [colorScheme, _, setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );

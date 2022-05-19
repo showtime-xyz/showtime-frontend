@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { ConnectButton } from "app/components/connect-button";
 import { yup } from "app/lib/yup";
 
-import { Button, ButtonLabel, Text, View } from "design-system";
+import { Text, View } from "design-system";
 
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";

@@ -38,7 +38,7 @@ export const SWRProvider = ({
     <SWRConfig
       value={{
         provider: mmkvProvider,
-        onError: (err, key) => {
+        onError: (err) => {
           if (err?.message) {
             toast?.show({
               message: err.message,

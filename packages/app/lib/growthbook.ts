@@ -1,4 +1,4 @@
-import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { GrowthBook } from "@growthbook/growthbook-react";
 
 import { track } from "app/lib/analytics";
 

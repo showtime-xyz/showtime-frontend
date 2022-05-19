@@ -19,7 +19,7 @@ const useColorScheme = () => {
   const [notification, setNotification] = useState(null);
   const deviceColorScheme = useDeviceColorScheme();
   const userColorScheme = useUserColorScheme();
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  const [colorScheme, _, setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );
@@ -86,7 +86,7 @@ const useColorScheme = () => {
   // Listeners registered by this method will be called whenever a user interacts with a notification (eg. taps on it).
   useEffect(() => {
     const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) => {
+      Notifications.addNotificationResponseReceivedListener(() => {
         // const content =
         //   Platform.OS === "ios"
         //     ? response?.notification?.request?.content?.data?.body?.path
