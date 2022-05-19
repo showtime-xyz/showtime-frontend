@@ -13,9 +13,11 @@ import { chain, createClient, WagmiProvider } from "wagmi";
 
 import { useIsDarkMode } from "design-system/hooks";
 
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
+
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [apiProvider.alchemy(process.env.ALCHEMY_ID), apiProvider.fallback()]
+  [apiProvider.infura(infuraId), apiProvider.fallback()]
 );
 
 const { connectors } = getDefaultWallets({
