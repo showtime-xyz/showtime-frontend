@@ -1,5 +1,3 @@
-import { Pressable } from "react-native";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
@@ -12,6 +10,7 @@ import { View, Text, Fieldset, Button, ScrollView } from "design-system";
 import { useFilePicker } from "design-system/file-picker";
 import { Image as ImageIcon } from "design-system/icon";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+import { Pressable } from "design-system/pressable";
 import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 
@@ -61,22 +60,18 @@ const DropModal = () => {
   if (state.status === "success") {
     return (
       <View tw="items-center justify-center">
-        <Text variant="text-4xl">🎉</Text>
+        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text
-            variant="text-4xl"
-            tw="mt-4 text-center text-black dark:text-white"
-          >
+          <View tw="h-4" />
+          <Text tw="text-center text-4xl text-black dark:text-white">
             Congrats!
           </Text>
 
-          <Text
-            variant="text-lg"
-            tw="mt-8 mb-4 text-center text-black dark:text-white"
-          >
-            Now share your free NFT drop to the world!
-          </Text>
-
+          <View tw="mt-8 mb-4">
+            <Text tw="text-center text-lg text-black dark:text-white">
+              Now share your free NFT drop to the world!
+            </Text>
+          </View>
           <TextLink
             href={`/nft/${process.env.NEXT_PUBLIC_CHAIN_ID}/${state.edition?.contract_address}`}
             tw="text-center font-bold text-blue-700"
@@ -97,36 +92,42 @@ const DropModal = () => {
             name="file"
             render={({ field: { onChange, value } }) => {
               return (
-                <View tw="z-1">
+                <View tw="z-1 items-center">
                   <Pressable
                     onPress={async () => {
                       const file = await pickFile({ mediaTypes: "all" });
                       onChange(file.file);
                     }}
+                    tw="h-84 w-84 items-center justify-center rounded-lg"
                   >
                     {value ? (
-                      <Preview file={value} tw="h-24 w-24 rounded-2xl" />
+                      <Preview file={value} tw="h-84 w-84 rounded-2xl" />
                     ) : (
-                      <View tw="h-24 w-24 items-center justify-center rounded-2xl">
+                      <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
                         <ImageIcon
                           color={
                             tw.style("bg-black dark:bg-white")
                               ?.backgroundColor as string
                           }
-                          width={24}
-                          height={24}
+                          width={40}
+                          height={40}
                         />
-                        <Text
-                          tw="mt-2 text-gray-600 dark:text-gray-400"
-                          variant="text-xs"
-                        >
-                          Select Media
-                        </Text>
-                        {errors.file?.message ? (
-                          <Text variant="text-sm" tw="mt-2 text-red-500">
-                            required
+                        <View tw="mt-4">
+                          <Text tw="font-bold text-gray-600 dark:text-gray-200">
+                            Upload a media file
                           </Text>
+                        </View>
+                        {errors.file?.message ? (
+                          <View tw="mt-2">
+                            <Text tw="text-sm text-red-500">required</Text>
+                          </View>
                         ) : null}
+
+                        <View tw="mt-2">
+                          <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
+                            Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
+                          </Text>
+                        </View>
                       </View>
                     )}
                   </Pressable>
@@ -165,6 +166,7 @@ const DropModal = () => {
                     label="Description"
                     placeholder="What is this NFT drop about?"
                     onBlur={onBlur}
+                    helperText="You will not be able to edit this after the drop is created"
                     errorText={errors.description?.message}
                     value={value}
                     onChangeText={onChange}
@@ -191,7 +193,7 @@ const DropModal = () => {
               }}
             />
           </View>
-          <View tw="mt-4 flex-row">
+          <View tw="mt-4 mb-8 flex-row">
             <Controller
               control={control}
               name="editionSize"
