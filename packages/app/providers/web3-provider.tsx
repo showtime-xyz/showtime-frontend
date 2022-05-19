@@ -23,6 +23,7 @@ export function Web3Provider({ children }: Web3ProviderProps) {
       web3,
       setWeb3,
       setMountRelayerOnApp,
+      isMagicLogin: Boolean(web3),
     }),
     [web3]
   );

@@ -29,10 +29,9 @@ const statusCopyMapping: StatusCopyMapping = {
 const UnlistingSubmit = (props: Props) => {
   const listingID = props.listingID;
   const router = useRouter();
-  const { web3 } = useWeb3();
+  const { isMagicLogin } = useWeb3();
   const { user } = useUser();
   const { userAddress: address } = useCurrentUserAddress();
-  const isNotMagic = !web3;
   const { unlistState: state, unlistNFT } = props;
 
   const enabled = state.status === "idle" || state.status === "unlistingError";
@@ -48,7 +47,7 @@ const UnlistingSubmit = (props: Props) => {
 
   const ctaCopy = statusCopyMapping[state.status];
 
-  const showSigningOption = state.status === "unlisting" && isNotMagic;
+  const showSigningOption = state.status === "unlisting" && !isMagicLogin;
 
   return (
     <View tw="w-full p-4">
