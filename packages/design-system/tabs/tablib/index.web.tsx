@@ -150,7 +150,7 @@ const Root = ({
         <View tw="w-full items-center">
           <View
             style={[
-              tw.style(`w-full max-w-screen-xl ${tabPage?.props.tw}`),
+              tailwind(`w-full max-w-screen-xl ${tabPage?.props.tw}`),
               tabPage?.props.style,
             ]}
           >
