@@ -1,11 +1,12 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { Text } from "@showtime/universal.text";
+
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
-import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
@@ -37,7 +38,7 @@ export function Creator({
               variant="text-xs"
               tw="font-semibold text-gray-600 dark:text-gray-400"
             >
-            {label}
+              {label}
             </Text>
             <View tw="h-2" />
           </>

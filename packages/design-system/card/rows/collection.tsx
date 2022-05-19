@@ -1,8 +1,9 @@
 // import { Link } from "app/navigation/link";
+import { Text } from "@showtime/universal.text";
+
 import type { NFT } from "app/types";
 
 import { Image } from "design-system/image";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 type Props = {

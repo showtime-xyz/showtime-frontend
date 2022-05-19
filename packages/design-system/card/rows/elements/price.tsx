@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 
+import { Text } from "@showtime/universal.text";
+
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { NFT } from "app/types";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Skeleton } from "design-system/skeleton";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 type Props = {

@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
+import { Text } from "@showtime/universal.text";
+
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
@@ -13,7 +15,6 @@ import { Input } from "design-system/input";
 import { Pressable } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 

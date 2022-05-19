@@ -1,5 +1,7 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { Text } from "@showtime/universal.text";
+
 import { ActivityDropdown } from "app/components/activity/activity-dropdown";
 import { Avatar } from "app/components/activity/avatar";
 import {
@@ -15,7 +17,6 @@ import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { Link, TextLink } from "app/navigation/link";
 
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 const getProfileImageUrl = (imgUrl: string) => {

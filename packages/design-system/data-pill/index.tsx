@@ -1,4 +1,5 @@
-import { Text } from "design-system/text";
+import { Text } from "@showtime/universal.text";
+
 import { View } from "design-system/view";
 
 type DataPillProps = {

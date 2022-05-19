@@ -6,6 +6,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { Text } from "@showtime/universal.text";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
 import { SwipeList } from "app/components/swipe-list";
@@ -21,7 +23,6 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { TabItem, Tabs } from "design-system";
 import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 export const Feed = () => {

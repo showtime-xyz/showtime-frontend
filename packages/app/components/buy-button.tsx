@@ -1,5 +1,7 @@
 import { Linking, Platform } from "react-native";
 
+import { Text } from "@showtime/universal.text";
+
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import {
@@ -10,7 +12,6 @@ import { NFT } from "app/types";
 import { getBidLink, getContractName } from "app/utilities";
 
 import { Button } from "design-system/button";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 export const BuyButton = ({ nft }: { nft: NFT }) => {
@@ -42,7 +43,7 @@ export const BuyButton = ({ nft }: { nft: NFT }) => {
   if (isNFTOwner) {
     return (
       <View>
-        <Text tw='dark:text-white text-black'>
+        <Text tw="text-black dark:text-white">
           {freeItem
             ? "Listed for free"
             : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
@@ -52,9 +53,9 @@ export const BuyButton = ({ nft }: { nft: NFT }) => {
   } else {
     return (
       <Button onPress={() => navigateToBuy(nft)}>
-          {freeItem
-            ? "Price Free"
-            : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
+        {freeItem
+          ? "Price Free"
+          : `Price ${nft.listing.min_price} ${nft.listing.currency}`}
       </Button>
     );
   }

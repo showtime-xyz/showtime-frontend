@@ -7,11 +7,12 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { Text } from "@showtime/universal.text";
+
 import { useIsDarkMode } from "design-system/hooks";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 import { tw } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
-import { Text } from "design-system/text";
 import { fontFamily } from "design-system/typography";
 import { View } from "design-system/view";
 

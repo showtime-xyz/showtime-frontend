@@ -3,9 +3,10 @@ import { useState } from "react";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Meta } from "@storybook/react";
 
+import { Text } from "@showtime/universal.text";
+
 import { Button } from "design-system/button";
 import { Close } from "design-system/icon";
-import { Text } from "design-system/text";
 
 import { View } from "../view";
 import { Modal } from "./index";

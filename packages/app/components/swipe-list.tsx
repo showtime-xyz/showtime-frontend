@@ -15,6 +15,8 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { Text } from "@showtime/universal.text";
+
 import { BuyButton } from "app/components/buy-button";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
@@ -45,7 +47,6 @@ import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";

@@ -6,10 +6,11 @@ import {
   formatDistance,
 } from "date-fns";
 
+import { Text, linkify } from "@showtime/universal.text";
+
 import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
 import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
-import { Text, linkify } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 

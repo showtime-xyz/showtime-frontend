@@ -7,9 +7,10 @@ import {
 } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 
+import { Text } from "@showtime/universal.text";
+
 import { Pressable } from "design-system/pressable-scale";
 import { tw as tailwind } from "design-system/tailwind";
-import { Text } from "design-system/text";
 
 import { useIsDarkMode } from "../hooks";
 import {

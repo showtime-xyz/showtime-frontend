@@ -13,10 +13,11 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { Text } from "@showtime/universal.text";
+
 import { Check } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
 import data, { CountryDataType } from "./country-code-data";

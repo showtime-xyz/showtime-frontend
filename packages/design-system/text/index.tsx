@@ -1,13 +1,11 @@
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
-import { Theme } from "dripsy";
+import { tw as tailwind } from "@showtime/universal.tailwind";
+import type { TW } from "@showtime/universal.tailwind/types";
+import { textSizes } from "@showtime/universal.typography";
+import { ViewProps } from "@showtime/universal.view";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
-import { textSizes } from "design-system/typography";
-
-import { ViewProps } from "../view";
 import { Text as DripsyText } from "./text";
 
 export type TextProps = ComponentProps<typeof DripsyText>;

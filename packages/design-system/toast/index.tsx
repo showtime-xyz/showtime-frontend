@@ -9,10 +9,11 @@ import {
 
 import { MotiView, AnimatePresence } from "moti";
 
+import { Text } from "@showtime/universal.text";
+
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 
 type ShowParams = {
   message?: string;

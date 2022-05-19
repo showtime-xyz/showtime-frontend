@@ -16,10 +16,11 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
+import { Text } from "@showtime/universal.text";
+
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 
 import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 
 import { useIsDarkMode } from "../hooks";
 import { Check } from "../icon";

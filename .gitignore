@@ -114,3 +114,7 @@ apps/expo/service-account-key.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Bit
+
+public
