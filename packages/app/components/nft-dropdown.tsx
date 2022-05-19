@@ -7,6 +7,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
@@ -44,6 +45,7 @@ function NFTDropdown({ nftId }: Props) {
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
   const shareNFT = useShareNFT();
+  const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
 
@@ -150,19 +152,17 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        {!isOwner && isFollowingUser && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
-        {/* <DropdownMenuItem
-          onSelect={() => {}}
+        <DropdownMenuItem
+          onSelect={() => refreshMetadata(nft)}
           key="refresh-metadata"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
           <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Refresh Metadata
           </DropdownMenuItemTitle>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
 
         {!isOwner && isFollowingUser && (
           <DropdownMenuItem

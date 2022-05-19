@@ -188,7 +188,7 @@ function Create() {
                 }}
               />
             </Hidden>
-            <View tw="ml--2 flex-1">
+            <View tw="flex-1">
               <Controller
                 control={control}
                 name="title"
