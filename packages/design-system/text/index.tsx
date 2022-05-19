@@ -3,7 +3,6 @@ import type { Text as TextType } from "react-native";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { textSizes } from "design-system/typography";
 
 import { ViewProps } from "../view";
 import { Text as UniversalText } from "./text";
@@ -12,7 +11,6 @@ export type TextProps = ComponentProps<typeof UniversalText>;
 
 export type Props = {
   tw?: TW;
-  variant?: keyof typeof textSizes;
   htmlFor?: string;
   pointerEvents?: ViewProps["pointerEvents"];
 } & Pick<

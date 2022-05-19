@@ -61,7 +61,7 @@ function ActivityDropdown({ activity }: Props) {
             key="unfollow"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Unfollow
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -78,7 +78,7 @@ function ActivityDropdown({ activity }: Props) {
           key="report"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Report
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
