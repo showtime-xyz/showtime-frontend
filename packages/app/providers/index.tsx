@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, Fragment } from "react";
 import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -33,6 +33,8 @@ export const AppProvider = ({ children }) => {
     [isWeb]
   );
 
+  const CSRProvider = useMemo(() => (isWeb ? CSROnly : Fragment), [isWeb]);
+
   return (
     <DripsyProvider theme={theme} ssr={isWeb}>
       <SafeAreaProvider style={safeAreaProviderStyles}>
@@ -46,13 +48,15 @@ export const AppProvider = ({ children }) => {
                       <AppContext.Provider value={injectedGlobalColorContext}>
                         <AuthProvider>
                           <UserProvider>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <MintProvider>{children}</MintProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
+                            <CSRProvider>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <MintProvider>{children}</MintProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </CSRProvider>
                           </UserProvider>
                         </AuthProvider>
                       </AppContext.Provider>
@@ -66,4 +70,20 @@ export const AppProvider = ({ children }) => {
       </SafeAreaProvider>
     </DripsyProvider>
   );
+};
+
+/**
+ * TODO: This will wait the tailwind-react-native transition.
+ * See: https://github.com/showtime-xyz/showtime-frontend/pull/1119
+ */
+const CSROnly = ({ children }: any) => {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  if (ready) return children;
+
+  return null;
 };
