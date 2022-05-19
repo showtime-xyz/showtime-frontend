@@ -7,6 +7,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
@@ -44,6 +45,7 @@ function NFTDropdown({ nftId }: Props) {
   const { refresh } = useFeed("");
   const { data: nft } = useNFTDetails(nftId);
   const shareNFT = useShareNFT();
+  const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
 
@@ -121,7 +123,7 @@ function NFTDropdown({ nftId }: Props) {
           key="details"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Details
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -133,7 +135,7 @@ function NFTDropdown({ nftId }: Props) {
           key="activities"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Activity
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -145,24 +147,22 @@ function NFTDropdown({ nftId }: Props) {
           key="copy-link"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        {!isOwner && isFollowingUser && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
-        {/* <DropdownMenuItem
-          onSelect={() => {}}
+        <DropdownMenuItem
+          onSelect={() => refreshMetadata(nft)}
           key="refresh-metadata"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Refresh Metadata
           </DropdownMenuItemTitle>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
 
         {!isOwner && isFollowingUser && (
           <DropdownMenuItem
@@ -177,7 +177,7 @@ function NFTDropdown({ nftId }: Props) {
             key="unfollow"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Unfollow User
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -199,7 +199,7 @@ function NFTDropdown({ nftId }: Props) {
               })
             }
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               {isBlocked ? "Unblock User" : "Block User"}
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -218,7 +218,7 @@ function NFTDropdown({ nftId }: Props) {
             key="report"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Report
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -234,7 +234,7 @@ function NFTDropdown({ nftId }: Props) {
             key="transfer"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Transfer
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -250,7 +250,7 @@ function NFTDropdown({ nftId }: Props) {
             key="list"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               List
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -266,7 +266,7 @@ function NFTDropdown({ nftId }: Props) {
             key="unlist"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Unlist
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -283,7 +283,7 @@ function NFTDropdown({ nftId }: Props) {
             key="delete"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Delete
             </DropdownMenuItemTitle>
           </DropdownMenuItem>

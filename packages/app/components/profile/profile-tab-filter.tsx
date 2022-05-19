@@ -4,9 +4,9 @@ import { getSortFields } from "app/utilities";
 import { Select, View } from "design-system";
 
 type FilterProps = {
-  onCollectionChange: (id: string | number) => void;
+  onCollectionChange: (id: number) => void;
   collections: Collection[];
-  onSortChange: (id: string | number) => void;
+  onSortChange: (id: number) => void;
   collectionId: number;
   sortId: number;
 };

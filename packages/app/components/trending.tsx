@@ -34,14 +34,14 @@ const ListFooter = ({ isLoading }: { isLoading: boolean }) => {
     return (
       <View
         tw={`mt-6 items-center justify-center px-3`}
-        sx={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
+        style={{ marginBottom: tabBarHeight, height: LIST_FOOTER_HEIGHT }}
       >
         <Spinner size="small" />
       </View>
     );
   }
 
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
+  return <View style={{ marginBottom: tabBarHeight }}></View>;
 };
 
 const ListHeader = ({ isLoading, SelectionControl, data }: any) => (
@@ -87,7 +87,7 @@ export const Trending = () => {
         <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
-            <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
+            <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
               Trending
             </Text>
           </View>
@@ -281,6 +281,7 @@ const CreatorsList = ({
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.RecyclerList
+        // @ts-ignore
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
@@ -340,7 +341,7 @@ const NFTSList = ({
   const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
 
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index) => {
+    (_type: any, item: any, index: number) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }

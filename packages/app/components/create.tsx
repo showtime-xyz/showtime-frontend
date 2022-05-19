@@ -170,16 +170,15 @@ function Create() {
                               width={24}
                               height={24}
                             />
-                            <Text
-                              tw="mt-2 text-gray-600 dark:text-gray-400"
-                              variant="text-xs"
-                            >
+                            <View tw="h-2" />
+                            <Text tw="text-xs text-gray-600 dark:text-gray-400">
                               Select Media
                             </Text>
                             {errors.file?.message ? (
-                              <Text variant="text-sm" tw="mt-2 text-red-500">
-                                required
-                              </Text>
+                              <>
+                                <View tw="h-2" />
+                                <Text tw="text-sm text-red-500">required</Text>
+                              </>
                             ) : null}
                           </View>
                         )}
@@ -189,7 +188,7 @@ function Create() {
                 }}
               />
             </Hidden>
-            <View tw="ml--2 flex-1">
+            <View tw="flex-1">
               <Controller
                 control={control}
                 name="title"
@@ -243,10 +242,7 @@ function Create() {
                           state.status === "mediaUpload" ? (
                             <View tw="mt-4 flex-row items-center rounded-full bg-white py-3 px-4 dark:bg-black">
                               <Spinner size="small" />
-                              <Text
-                                variant="text-xs"
-                                tw="ml-4 font-bold text-black dark:text-white"
-                              >
+                              <Text tw="ml-4 text-xs font-bold text-black dark:text-white">
                                 Uploading to IPFS...
                               </Text>
                             </View>
@@ -254,35 +250,28 @@ function Create() {
                         </View>
                       ) : (
                         <View tw="items-center">
-                          <Text
-                            variant="text-sm"
-                            tw="font-bold text-gray-900 dark:text-white"
-                          >
+                          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
                             Select file to upload
                           </Text>
-                          <Text
-                            variant="text-sm"
-                            tw="mt-4 text-gray-600 dark:text-gray-400"
-                          >
+                          <View tw="h-4" />
+                          <Text tw="text-sm text-gray-600 dark:text-gray-400">
                             png, jpg, mp4, mov, gltf, glb
                           </Text>
-                          <Text
-                            variant="text-sm"
-                            tw="mt-4 text-gray-600 dark:text-gray-400"
-                          >
+                          <View tw="h-4" />
+                          <Text tw="text-sm text-gray-600 dark:text-gray-400">
                             Stored on{" "}
                             <TextLink
-                              variant="text-sm"
-                              tw="font-bold text-gray-600 dark:text-gray-400"
+                              tw="text-sm font-bold text-gray-600 dark:text-gray-400"
                               href={"https://ipfs.io/"}
                             >
                               IPFS
                             </TextLink>
                           </Text>
                           {errors.file?.message ? (
-                            <Text variant="text-sm" tw="mt-2 text-red-500">
-                              required
-                            </Text>
+                            <>
+                              <View tw="h-2" />
+                              <Text tw="text-sm text-red-500">required</Text>
+                            </>
                           ) : null}
                         </View>
                       )}
@@ -406,15 +395,11 @@ function Create() {
 
                   <View tw="mt-8 flex-row justify-between">
                     <View>
-                      <Text
-                        variant="text-sm"
-                        tw="font-bold text-black dark:text-white"
-                      >
+                      <Text tw="text-sm font-bold text-black dark:text-white">
                         Explicit content
                       </Text>
-                      <Text tw="mt-2 text-gray-600 dark:text-gray-400">
-                        18+
-                      </Text>
+                      <View tw="h-2" />
+                      <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
                     </View>
                     <Controller
                       control={control}

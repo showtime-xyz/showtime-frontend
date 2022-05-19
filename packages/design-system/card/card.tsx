@@ -5,6 +5,7 @@ import type { UrlObject } from "url";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { LikeContextProvider } from "app/context/like-context";
 import useContentWidth from "app/hooks/use-content-width";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
@@ -35,7 +36,7 @@ function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
-  const RouteComponent = isWeb ? Link : Pressable;
+  const RouteComponent = isWeb ? Link : PressableScale;
 
   const size = tw
     ? tw
@@ -65,45 +66,47 @@ function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
   }
 
   return (
-    <View
-      style={{
-        // @ts-ignore
-        boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-      }}
-      tw={[
-        size,
-        numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
-        nft?.loading ? "opacity-50" : "opacity-100",
-        "overflow-hidden rounded-2xl shadow-lg",
-        "self-center justify-self-center",
-      ]}
-    >
-      <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
-        {/* {variant === "activity" && <Activity activity={act} />} */}
-        <View tw="flex-row items-center justify-between px-4 py-2">
-          <Creator nft={nft} shouldShowDateCreated={false} />
-          <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nftId={nft.nft_id} />
-          </Suspense>
-        </View>
+    <LikeContextProvider nft={nft}>
+      <View
+        style={{
+          // @ts-ignore
+          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+        }}
+        tw={[
+          size,
+          numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
+          nft?.loading ? "opacity-50" : "opacity-100",
+          "overflow-hidden rounded-2xl shadow-lg",
+          "self-center justify-self-center",
+        ]}
+      >
+        <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
+          {/* {variant === "activity" && <Activity activity={act} />} */}
+          <View tw="flex-row items-center justify-between px-4 py-2">
+            <Creator nft={nft} shouldShowDateCreated={false} />
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown nftId={nft.nft_id} />
+            </Suspense>
+          </View>
 
-        <RouteComponent href={hrefProps} onPress={onPress}>
-          <Media item={nft} numColumns={numColumns} />
-        </RouteComponent>
-        <View tw="mt-2">
           <RouteComponent href={hrefProps} onPress={onPress}>
-            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+            <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
+          <View tw="mt-2">
+            <RouteComponent href={hrefProps} onPress={onPress}>
+              <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+            </RouteComponent>
+          </View>
+
+          <Social nft={nft} />
+
+          <Owner nft={nft} price={Platform.OS !== "ios"} />
+
+          <View tw="mx-4 h-[1px] bg-gray-100 dark:bg-gray-900" />
+          <Collection nft={nft} />
         </View>
-
-        <Social nft={nft} />
-
-        <Owner nft={nft} price={Platform.OS !== "ios"} />
-
-        <View tw="mx-4 h-[1px] bg-gray-100 dark:bg-gray-900" />
-        <Collection nft={nft} />
       </View>
-    </View>
+    </LikeContextProvider>
   );
 }
 

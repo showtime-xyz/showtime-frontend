@@ -27,13 +27,11 @@
     "@react-three/fiber": "^8.0.12",
     "@sentry/integrations": "7.0.0-alpha.1",
     "@sentry/nextjs": "7.0.0-alpha.1",
-    "@tailwindcss/forms": "^0.3.2",
     "@tippyjs/react": "^4.2.6",
     "@walletconnect/web3-provider": "^1.7.4",
     "app": "*",
     "array-to-image": "^1.0.0",
     "authereum": "^0.1.0",
-    "autoprefixer": "^10.4.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.24.0",
     "axios-auth-refresh": "^3.2.1",
@@ -82,18 +80,19 @@
     "sortablejs": "^1.14.0",
     "sotez": "^10.0.0",
     "swr": "^2.0.0-beta.1",
-    "tailwindcss": "^2.2.19",
     "walletlink": "^2.2.8",
     "web3modal": "^1.9.4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
     "@expo/next-adapter": "3.1.7",
+    "autoprefixer": "^10.4.7",
     "critters": "^0.0.14",
     "eslint": "7.32.0",
     "eslint-config-next": "^12.0.7",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-diff": "^1.0.12",
-    "next-compose-plugins": "^2.2.1"
+    "next-compose-plugins": "^2.2.1",
+    "tailwindcss": "^3.0.24"
   }
 }

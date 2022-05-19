@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
+  ListRenderItemInfo,
   Platform,
   TextInput,
   useWindowDimensions,
@@ -10,7 +11,7 @@ import * as Popover from "@radix-ui/react-popover";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
-import { useSearch } from "app/hooks/api/use-search";
+import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
@@ -48,7 +49,7 @@ const SearchInHeader = () => {
   );
 
   const renderItem = useCallback(
-    ({ item }) => {
+    ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
       return (
         <SearchItem
           item={item}
@@ -67,7 +68,8 @@ const SearchInHeader = () => {
 
       <Popover.Anchor>
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
+          autocomplete="off"
           value={term}
           ref={inputRef}
           onChangeText={(text) => {
@@ -118,7 +120,7 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
+        <View tw="shadow-black dark:shadow-white mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
           {data ? (
             <FlatList
               data={data}
@@ -164,7 +166,7 @@ const HeaderRight = () => {
                         web: {
                           pathname: router.pathname,
                           query: { ...router.query, createModal: true },
-                        },
+                        } as any,
                       }),
                       Platform.select({
                         native: "/camera",

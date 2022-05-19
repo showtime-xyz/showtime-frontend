@@ -11,16 +11,14 @@ function Sell({ act }) {
           <>
             sold{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].title}
             </TextLink>{" "}
             to{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${act.buyer?.username ?? act.buyer?.wallet_address}`}
             >
               {act.buyer?.name}
@@ -32,16 +30,14 @@ function Sell({ act }) {
           <>
             sold{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].title}
             </TextLink>{" "}
             and{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].title}
@@ -53,24 +49,21 @@ function Sell({ act }) {
           <>
             sold{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].title}
             </TextLink>
             ,{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].title}
             </TextLink>{" "}
             and{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[2].nft_id}`}
             >
               {nfts[2].title}
@@ -82,16 +75,14 @@ function Sell({ act }) {
           <>
             sold{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[0].nft_id}`}
             >
               {nfts[0].title}
             </TextLink>
             ,{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/nft/${nfts[1].nft_id}`}
             >
               {nfts[1].title}

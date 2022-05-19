@@ -5,6 +5,7 @@ import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
 import {
@@ -48,7 +49,7 @@ export const Trending = () => {
       <View tw="mx-auto w-[90%] py-8">
         <View tw="flex-row items-center justify-between pb-8">
           <View>
-            <Text variant="text-2xl" tw="text-black dark:text-white">
+            <Text tw="font-space-bold text-2xl text-black dark:text-white">
               Trending
             </Text>
           </View>
@@ -194,7 +195,7 @@ const CreatorsList = ({ days }: { days: any }) => {
 };
 
 const NFTList = ({ days }: { days: any }) => {
-  const { data, isLoading } = useTrendingNFTS({
+  const { data, updateItem, isLoading } = useTrendingNFTS({
     days,
   });
   const [containerWidth, setContainerWidth] = useState(0);
@@ -203,36 +204,38 @@ const NFTList = ({ days }: { days: any }) => {
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
 
   return (
-    <View
-      tw="mt-4 flex-1 flex-row flex-wrap justify-between"
-      onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
-    >
-      {isLoading ? (
-        <View tw="mx-auto p-10">
-          <Spinner />
-        </View>
-      ) : null}
-      {data.length > 0 && containerWidth
-        ? data.map((item, index) => {
-            return (
-              <Card
-                hrefProps={{
-                  pathname: "/list",
-                  query: {
-                    initialScrollIndex: index,
-                    type: "trendingNFTs",
-                    days,
-                  },
-                }}
-                key={`nft-list-card-${index}`}
-                nft={item}
-                tw={`w-[${containerWidth / numColumns - 30}px] h-[${
-                  containerWidth / numColumns + 205
-                }px] mb-8`}
-              />
-            );
-          })
-        : null}
-    </View>
+    <MutateProvider mutate={updateItem}>
+      <View
+        tw="mt-4 flex-1 flex-row flex-wrap justify-between"
+        onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+      >
+        {isLoading ? (
+          <View tw="mx-auto p-10">
+            <Spinner />
+          </View>
+        ) : null}
+        {data.length > 0 && containerWidth
+          ? data.map((item, index) => {
+              return (
+                <Card
+                  hrefProps={{
+                    pathname: "/list",
+                    query: {
+                      initialScrollIndex: index,
+                      type: "trendingNFTs",
+                      days,
+                    },
+                  }}
+                  key={`nft-list-card-${index}`}
+                  nft={item}
+                  tw={`w-[${containerWidth / numColumns - 30}px] h-[${
+                    containerWidth / numColumns + 205
+                  }px] mb-8`}
+                />
+              );
+            })
+          : null}
+      </View>
+    </MutateProvider>
   );
 };

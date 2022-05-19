@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
   RUDDER_LOG_LEVEL,
 } from "@rudderstack/rudder-sdk-react-native";
-import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
@@ -51,7 +50,6 @@ import { AlertProvider } from "design-system/alert";
 import { LightBoxProvider } from "design-system/light-box/index";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);
@@ -379,43 +377,41 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <DripsyProvider theme={theme}>
-        <SafeAreaProvider style={{ backgroundColor: "black" }}>
-          <ToastProvider>
-            <AlertProvider>
-              <LightBoxProvider>
-                <SnackbarProvider>
-                  <NavigationProvider>
-                    <SWRProvider>
-                      <WalletConnectProvider>
-                        <Web3Provider>
-                          <AppContextProvider>
-                            <AuthProvider>
-                              <UserProvider>
-                                <MintProvider>
-                                  <BottomSheetModalProvider>
-                                    <GrowthBookProvider growthbook={growthbook}>
-                                      <FeedProvider>
-                                        <StatusBar style="auto" />
-                                        <RootStackNavigator />
-                                        <MintSnackbar />
-                                      </FeedProvider>
-                                    </GrowthBookProvider>
-                                  </BottomSheetModalProvider>
-                                </MintProvider>
-                              </UserProvider>
-                            </AuthProvider>
-                          </AppContextProvider>
-                        </Web3Provider>
-                      </WalletConnectProvider>
-                    </SWRProvider>
-                  </NavigationProvider>
-                </SnackbarProvider>
-              </LightBoxProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+      <SafeAreaProvider style={{ backgroundColor: "black" }}>
+        <ToastProvider>
+          <AlertProvider>
+            <LightBoxProvider>
+              <SnackbarProvider>
+                <NavigationProvider>
+                  <SWRProvider>
+                    <WalletConnectProvider>
+                      <Web3Provider>
+                        <AppContextProvider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <MintProvider>
+                                <BottomSheetModalProvider>
+                                  <GrowthBookProvider growthbook={growthbook}>
+                                    <FeedProvider>
+                                      <StatusBar style="auto" />
+                                      <RootStackNavigator />
+                                      <MintSnackbar />
+                                    </FeedProvider>
+                                  </GrowthBookProvider>
+                                </BottomSheetModalProvider>
+                              </MintProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </AppContextProvider>
+                      </Web3Provider>
+                    </WalletConnectProvider>
+                  </SWRProvider>
+                </NavigationProvider>
+              </SnackbarProvider>
+            </LightBoxProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

@@ -1,6 +1,6 @@
 import React, { forwardRef, useMemo } from "react";
+import { Pressable } from "react-native";
 
-import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";

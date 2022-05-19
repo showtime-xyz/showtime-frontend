@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { Platform } from "react-native";
+import { Platform, Pressable } from "react-native";
 
-import { Pressable } from "dripsy";
 import { MotiView } from "moti";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Path, Svg } from "react-native-svg";

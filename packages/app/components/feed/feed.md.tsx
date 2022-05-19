@@ -14,6 +14,7 @@ import {
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { createParam } from "app/navigation/use-param";
+import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
 import {
@@ -129,20 +130,30 @@ const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
   return (
-    <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+    </MutateProvider>
   );
 };
 
 const AlgorithmicFeed = () => {
   const queryState = useFeed("");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} />
+    </MutateProvider>
+  );
 };
 
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} tab="curated" />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="curated" />
+    </MutateProvider>
+  );
 };
 
 const NFTScrollList = ({
@@ -245,7 +256,7 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text variant="text-2xl" tw="p-4 text-black dark:text-white">
+      <Text tw="font-space-bold p-4 text-2xl text-black dark:text-white">
         Home
       </Text>
       <View
@@ -257,9 +268,7 @@ const SuggestedUsers = () => {
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
-        <Text tw="p-4 dark:text-white" variant="text-lg">
-          Suggested
-        </Text>
+        <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
             <Skeleton colorMode={colorMode} width={100} height={20} />

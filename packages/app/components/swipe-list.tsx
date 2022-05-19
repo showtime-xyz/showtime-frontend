@@ -20,6 +20,7 @@ import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useShareNFT } from "app/hooks/use-share-nft";
@@ -48,11 +49,13 @@ import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
+import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
-
+const NFT_DETAIL_WIDTH = 380;
+const SCROLL_BAR_WIDTH = 15;
 type Props = {
   data: NFT[];
   fetchMore: () => void;
@@ -74,8 +77,9 @@ export const SwipeList = ({
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
   const navigation = useNavigation();
+  const { isMobileWeb } = useIsMobileWeb();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
   const itemHeight =
     Platform.OS === "web"
@@ -166,6 +170,20 @@ export const SwipeList = ({
     ]
   );
 
+  const contentWidth = useMemo(() => {
+    const scorllBarWidth = isMobileWeb ? 0 : SCROLL_BAR_WIDTH;
+    return windowWidth < MAX_HEADER_WIDTH
+      ? windowWidth - scorllBarWidth
+      : MAX_HEADER_WIDTH;
+  }, [windowWidth, isMobileWeb]);
+
+  const layoutSize = useMemo(
+    () => ({
+      width: contentWidth,
+      height: windowHeight,
+    }),
+    [contentWidth, windowHeight]
+  );
   // const ListFooterComponent = useCallback(() => {
   //   const colorMode = useColorScheme();
   //   return isLoadingMore ? (
@@ -207,12 +225,13 @@ export const SwipeList = ({
         disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        style={tw.style("flex-1 dark:bg-gray-900 bg-gray-100")}
         renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
         onEndReachedThreshold={itemHeight}
         scrollViewProps={scrollViewProps}
         extendedState={extendedState}
+        layoutSize={layoutSize}
       />
     </VideoConfigContext.Provider>
   );
@@ -259,18 +278,30 @@ export const FeedItem = memo(
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
 
+    const mediaWidth = useMemo(() => {
+      if (windowWidth >= MAX_HEADER_WIDTH) {
+        return MAX_HEADER_WIDTH - NFT_DETAIL_WIDTH;
+      }
+
+      return windowWidth - NFT_DETAIL_WIDTH;
+    }, [windowWidth]);
+
     if (windowWidth >= 768) {
       return (
         <View tw="h-full w-full flex-row">
-          <View tw="flex-3 items-center justify-center bg-gray-100 dark:bg-black">
+          <View
+            tw={`flex-1 items-center justify-center bg-gray-100 dark:bg-black`}
+          >
             <Media
               item={nft}
               numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+              tw={`h-[${mediaHeight}px] w-[${mediaWidth}px]`}
               resizeMode="contain"
             />
           </View>
-          <View tw="flex-1 bg-white shadow-md dark:bg-black">
+          <View
+            tw={`w-[${NFT_DETAIL_WIDTH}]px bg-white shadow-md dark:bg-black`}
+          >
             <Collection nft={nft} />
             <Divider tw="my-2" />
             <Social nft={nft} />
@@ -390,10 +421,9 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
       <View tw="px-4">
         <Text
-          variant="text-2xl"
-          tw="dark:text-white"
+          tw="font-space-bold text-2xl dark:text-white"
           numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
+          style={{ fontSize: 17, lineHeight: 22 }}
         >
           {nft.token_name}
         </Text>

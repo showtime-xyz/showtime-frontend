@@ -71,7 +71,7 @@ function ProfileDropdown({ user }: Props) {
           key="share"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -90,7 +90,7 @@ function ProfileDropdown({ user }: Props) {
             });
           }}
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -105,7 +105,7 @@ function ProfileDropdown({ user }: Props) {
           key="report"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Report
           </DropdownMenuItemTitle>
         </DropdownMenuItem>

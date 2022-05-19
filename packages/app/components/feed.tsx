@@ -18,6 +18,7 @@ import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
+import { MutateProvider } from "app/providers/mutate-provider";
 
 import { TabItem, Tabs } from "design-system";
 import { PressableScale } from "design-system/pressable-scale";
@@ -109,7 +110,7 @@ const HeaderFeed = () => {
         }}
       >
         <Animated.View style={animatedStyleFirstTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             Following
           </Text>
         </Animated.View>
@@ -128,7 +129,7 @@ const HeaderFeed = () => {
         }}
       >
         <Animated.View style={animatedStyleSecondTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             For You
           </Text>
         </Animated.View>
@@ -142,11 +143,13 @@ const FollowingFeed = () => {
   const bottomBarHeight = useBottomTabBarHeight();
 
   return (
-    <SwipeList
-      {...queryState}
-      bottomPadding={bottomBarHeight}
-      data={queryState.data}
-    />
+    <MutateProvider mutate={queryState.updateItem}>
+      <SwipeList
+        {...queryState}
+        bottomPadding={bottomBarHeight}
+        data={queryState.data}
+      />
+    </MutateProvider>
   );
 };
 
@@ -155,11 +158,13 @@ const AlgorithmicFeed = () => {
   const bottomBarHeight = useBottomTabBarHeight();
 
   return (
-    <SwipeList
-      {...queryState}
-      bottomPadding={bottomBarHeight}
-      data={queryState.data}
-    />
+    <MutateProvider mutate={queryState.updateItem}>
+      <SwipeList
+        {...queryState}
+        bottomPadding={bottomBarHeight}
+        data={queryState.data}
+      />
+    </MutateProvider>
   );
 };
 
@@ -168,11 +173,13 @@ const CuratedFeed = () => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <SwipeList
-      {...queryState}
-      bottomPadding={safeAreaBottom}
-      data={queryState.data}
-    />
+    <MutateProvider mutate={queryState.updateItem}>
+      <SwipeList
+        {...queryState}
+        bottomPadding={safeAreaBottom}
+        data={queryState.data}
+      />
+    </MutateProvider>
   );
 };
 

@@ -23,7 +23,6 @@ import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
 import { PressableScale } from "design-system/pressable-scale";
-import { TW } from "design-system/tailwind/types";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";
@@ -36,8 +35,9 @@ type FollowProps = {
   onPressFollower: () => void;
   followingCount?: number;
   followersCount?: number;
-  tw?: TW;
+  tw?: string;
 };
+
 const Follow = ({
   onPressFollowing,
   onPressFollower,
@@ -46,7 +46,7 @@ const Follow = ({
   tw,
 }: FollowProps) => {
   return (
-    <View tw={`flex-row ${tw}`} pointerEvents="box-none">
+    <View tw={["flex-row", tw ? tw : ""]} pointerEvents="box-none">
       <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
@@ -251,8 +251,7 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <Text
-                  variant="text-2xl"
-                  tw="font-extrabold text-gray-900 dark:text-white"
+                  tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {name}
@@ -267,10 +266,7 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <View tw="flex-row items-center">
-                  <Text
-                    variant="text-base"
-                    tw="font-semibold text-gray-900 dark:text-white"
-                  >
+                  <Text tw="text-base font-semibold text-gray-900 dark:text-white">
                     {username ? `@${username}` : null}
                   </Text>
 

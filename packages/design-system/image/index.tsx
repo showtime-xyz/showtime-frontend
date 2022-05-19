@@ -56,7 +56,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
   const height = Number(tailwind.style(tw).height);
   // const borderRadius = Number(tailwind.style(tw).borderRadius) ?? 0
 
-  // <View sx={{ borderRadius, overflow: 'hidden' }}>
+  // <View style={{ borderRadius, overflow: 'hidden' }}>
 
   if (blurhash) {
     return (

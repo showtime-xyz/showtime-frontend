@@ -42,7 +42,7 @@ export const Inputs = () => {
   const isDark = useIsDarkMode();
   return (
     <View
-      sx={{ padding: 10, flex: 1, minHeight: 500 }}
+      style={{ padding: 10, flex: 1, minHeight: 500 }}
       tw={isDark ? "bg-black" : "bg-white"}
     >
       <Input
@@ -73,7 +73,7 @@ export const InputFormElements = () => {
   const isDark = useIsDarkMode();
   return (
     <View
-      sx={{ padding: 10, flex: 1, minHeight: 500 }}
+      style={{ padding: 10, flex: 1, minHeight: 500 }}
       tw={isDark ? "bg-black" : "bg-white"}
     >
       <Input
@@ -96,7 +96,7 @@ export const InputFormElements = () => {
 };
 
 const Spacer = () => {
-  return <View sx={{ height: 20 }} />;
+  return <View style={{ height: 20 }} />;
 };
 export default {
   component: Input,
