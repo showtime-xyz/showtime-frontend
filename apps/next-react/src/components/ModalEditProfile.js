@@ -19,7 +19,7 @@ import GhostButton from "./UI/Buttons/GhostButton";
 import CloseButton from "./CloseButton";
 import useProfile from "@/hooks/useProfile";
 
-const SHOWTIME_PROD_URL = "showtime.io/";
+const SHOWTIME_PROD_URL = "showtime.xyz/";
 
 const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
   const username = value ? value.trim() : null;
