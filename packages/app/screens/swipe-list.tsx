@@ -146,7 +146,7 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   }, [data, creatorId]);
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const updateItem = (_updatedNFT: NFT) => {
+  const updateItem = () => {
     mutate();
   };
 

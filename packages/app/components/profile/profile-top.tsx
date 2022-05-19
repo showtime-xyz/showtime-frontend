@@ -19,10 +19,8 @@ import { Button, ModalSheet, Skeleton, Text, View } from "design-system";
 import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
 import { LightBoxImg } from "design-system/light-box/light-box-image";
-import { Pressable } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
-import { Image } from "design-system/image";
 import { PressableScale } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";
