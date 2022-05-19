@@ -14,8 +14,8 @@ export type TextInputProps = { tw?: TW } & ComponentProps<
 const TextInput = forwardRef<typeof StyledTextInput, TextInputProps>(
   ({ tw, ...props }, ref) => (
     <StyledTextInput
-      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       ref={ref}
     />
   )

@@ -13,7 +13,7 @@ type Props = ComponentProps<typeof MotiSkeleton> & {
 
 function Skeleton({ tw, ...props }: Props) {
   return (
-    <StyledSkeleton tw={Array.isArray(tw) ? tw.join(" ") : tw} {...props} />
+    <StyledSkeleton {...props} tw={Array.isArray(tw) ? tw.join(" ") : tw} />
   );
 }
 

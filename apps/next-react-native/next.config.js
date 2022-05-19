@@ -12,9 +12,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 const withTM = require("next-transpile-modules")([
   "app",
+  "design-system",
   "@gorhom/bottom-sheet",
   "@gorhom/portal",
-  "twrnc",
   "moti",
   "@motify/components",
   "@motify/core",

@@ -1,9 +1,9 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
+const plugin = require("tailwindcss/plugin");
 
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
 const { colors } = require("design-system/tailwind/colors");
 const { textSizes, fontFamily } = require("design-system/typography");
-const { plugin } = require("twrnc");
 
 module.exports = {
   content: [
@@ -83,17 +83,18 @@ module.exports = {
     },
   },
   plugins: [
+    require("tailwindcss-react-native/plugin"),
     plugin(({ addUtilities }) => {
       addUtilities({
-        "text-xs": textSizes["text-xs"],
-        "text-13": textSizes["text-13"],
-        "text-sm": textSizes["text-sm"],
-        "text-base": textSizes["text-base"],
-        "text-lg": textSizes["text-lg"],
-        "text-xl": textSizes["text-xl"],
-        "text-2xl": textSizes["text-2xl"],
-        "text-3xl": textSizes["text-3xl"],
-        "text-4xl": textSizes["text-4xl"],
+        ".text-xs": textSizes["text-xs"],
+        ".text-13": textSizes["text-13"],
+        ".text-sm": textSizes["text-sm"],
+        ".text-base": textSizes["text-base"],
+        ".text-lg": textSizes["text-lg"],
+        ".text-xl": textSizes["text-xl"],
+        ".text-2xl": textSizes["text-2xl"],
+        ".text-3xl": textSizes["text-3xl"],
+        ".text-4xl": textSizes["text-4xl"],
       });
     }),
   ],

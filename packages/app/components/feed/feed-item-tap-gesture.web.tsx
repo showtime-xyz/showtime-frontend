@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { AnimatePresence, View as MotiView } from "moti";
 import { TapGestureHandler } from "react-native-gesture-handler";
@@ -6,7 +6,6 @@ import { TapGestureHandler } from "react-native-gesture-handler";
 import { useLike } from "app/context/like-context";
 
 import { HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 const heartContainerStyle = {
   position: "absolute",
@@ -52,7 +51,7 @@ export const FeedItemTapGesture = ({
               scale: 0.8,
             }}
           >
-            <HeartFilled width={90} height={90} color={tw.color("white")} />
+            <HeartFilled width={90} height={90} color="#fff" />
           </MotiView>
         )}
       </AnimatePresence>

@@ -1,8 +1,8 @@
-import React, { ComponentProps, useMemo } from "react";
+import { ComponentProps, useMemo } from "react";
 
 import { MotiPressable } from "moti/interactions";
+import { useTailwind } from "tailwindcss-react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
 import { useIsDarkMode, useOnHover } from "../hooks";
@@ -24,6 +24,7 @@ export function Pressable({
   disableHoverEffect = false,
   ...props
 }: Props) {
+  const tailwind = useTailwind();
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
   const isDark = useIsDarkMode();
 
@@ -45,8 +46,12 @@ export function Pressable({
     <MotiPressable
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
-      style={[hoverStyle, tailwind.style(tw), style]}
       {...props}
+      style={[
+        hoverStyle,
+        tailwind(Array.isArray(tw) ? tw.join(" ") : tw),
+        style,
+      ]}
     />
   );
 }

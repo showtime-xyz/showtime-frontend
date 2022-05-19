@@ -158,7 +158,6 @@
     "three": "^0.139.0",
     "timers-browserify": "^2.0.12",
     "tty-browserify": "0.0.1",
-    "twrnc": "^3.3.2",
     "url": "~0.11.0",
     "use-timer": "^2.0.1",
     "use-unmount-signal": "^1.0.0",

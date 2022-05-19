@@ -12,7 +12,6 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { TailwindProvider } from "tailwindcss-react-native";
-import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
@@ -49,7 +48,6 @@ import { UnlistScreen } from "app/screens/unlist";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
-import { tw } from "design-system/tailwind";
 import { ToastProvider, useToast } from "design-system/toast";
 import { View } from "design-system/view";
 
@@ -167,19 +165,20 @@ export default function App({ Component, pageProps, router }: AppProps) {
     }
   }, []);
 
-  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
   // User can override color scheme
   const userColorScheme = useUserColorScheme();
   // Use the user color scheme if it's set
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
-    tw,
-    userColorScheme ?? deviceColorScheme
-  );
+  // const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  //   tw,
+  //   userColorScheme ?? deviceColorScheme
+  // );
+  const colorScheme = userColorScheme ?? deviceColorScheme;
 
   // setting it before useEffect or else we'll see a flash of white paint before
-  useState(() => setColorScheme(colorScheme));
+  // useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
@@ -188,17 +187,17 @@ export default function App({ Component, pageProps, router }: AppProps) {
       "data-color-scheme",
       isDark ? "dark" : "light"
     );
-    if (isDark) {
-      tw.setColorScheme("dark");
-    } else {
-      tw.setColorScheme("light");
-    }
+    // if (isDark) {
+    //   tw.setColorScheme("dark");
+    // } else {
+    //   tw.setColorScheme("light");
+    // }
   }, [isDark]);
 
   const injectedGlobalContext = {
     colorScheme,
     setColorScheme: (newColorScheme: "light" | "dark") => {
-      setColorScheme(newColorScheme);
+      // setColorScheme(newColorScheme);
       setUserColorScheme(newColorScheme);
     },
   };

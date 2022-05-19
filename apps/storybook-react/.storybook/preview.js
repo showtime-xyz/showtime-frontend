@@ -6,7 +6,6 @@ import { TailwindProvider } from "tailwindcss-react-native";
 
 import { linking } from "app/navigation/linking";
 
-import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";

@@ -284,8 +284,6 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
 
-  return null;
-
   if (isMdWidth) {
     return (
       <View

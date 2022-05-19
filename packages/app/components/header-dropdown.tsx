@@ -39,10 +39,9 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View
-            tw={[
-              "flex h-12 cursor-pointer flex-row items-center justify-center rounded-full p-2",
-              isWeb ? "bg-gray-100 dark:bg-gray-900" : "",
-            ]}
+            tw={
+              "web:bg-gray-100 web:dark:bg-gray-900 flex h-12 cursor-pointer flex-row items-center justify-center rounded-full p-2"
+            }
           >
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (

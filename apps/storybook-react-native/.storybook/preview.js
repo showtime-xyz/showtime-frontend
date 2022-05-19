@@ -4,7 +4,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TailwindProvider } from "tailwindcss-react-native";
 
-import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";

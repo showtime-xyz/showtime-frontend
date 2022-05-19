@@ -6574,7 +6574,6 @@ __metadata:
     timers-browserify: ^2.0.12
     ts-jest: ^27.1.4
     tty-browserify: 0.0.1
-    twrnc: ^3.3.2
     typescript: 4.5.2
     url: ~0.11.0
     use-timer: ^2.0.1
@@ -30783,7 +30782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:>=2.0.0, tailwindcss@npm:^3.0.24":
+"tailwindcss@npm:^3.0.24":
   version: 3.0.24
   resolution: "tailwindcss@npm:3.0.24"
   dependencies:
@@ -31763,17 +31762,6 @@ __metadata:
   version: 0.14.5
   resolution: "tweetnacl@npm:0.14.5"
   checksum: 6061daba1724f59473d99a7bb82e13f211cdf6e31315510ae9656fefd4779851cb927adad90f3b488c8ed77c106adc0421ea8055f6f976ff21b27c5c4e918487
-  languageName: node
-  linkType: hard
-
-"twrnc@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "twrnc@npm:3.3.2"
-  dependencies:
-    tailwindcss: ">=2.0.0"
-  peerDependencies:
-    react-native: ">=0.63.0"
-  checksum: 05cd1098a8a04ea37af5d47fa0c49dad7a579aede9c9d2f3d05a6803639f26e6063cf6584a874f0e76a94f5b7eab8837c5332e9611d2931d2012b5d2346b064a
   languageName: node
   linkType: hard
 

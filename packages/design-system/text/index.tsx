@@ -50,7 +50,6 @@ export const Text = forwardRef<TextType, Props>(
       ellipsizeMode,
       pointerEvents,
       onPress,
-      style,
     },
     ref
   ) => {

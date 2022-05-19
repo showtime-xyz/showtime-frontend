@@ -12,8 +12,8 @@ export type ViewProps = { tw?: TW } & ComponentProps<typeof ReactNativeView>;
 const View = forwardRef(function View({ tw, ...props }: ViewProps, ref: any) {
   return (
     <StyledView
-      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       ref={ref}
     />
   );

@@ -1,16 +1,15 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
+const plugin = require("tailwindcss/plugin");
 
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
-// TODO: fix imports from design-system
-// const { colors } = require("design-system/tailwind/colors");
-// const { textSizes, fontFamily } = require("design-system/typography");
+const { colors } = require("design-system/tailwind/colors");
+const { textSizes, fontFamily } = require("design-system/typography");
 
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "../../packages/**/*.{js,ts,jsx,tsx}",
   ],
-  important: "html",
   theme: {
     extend: {
       maxWidth: {
@@ -49,37 +48,27 @@ module.exports = {
         stteal: "#1dd4e0",
         stteal100: "rgba(29, 212, 224, 0.2)",
         stteal700: "#198c94",
-        // gray: colors.neutral,
-        // cyan: colors.cyan,
-        // yellow: colors.yellow,
-        // fuchsia: colors.fuchsia,
-        // violet: colors.violet,
-        // indigo: colors.indigo,
-        // rose: colors.rose,
-        // amber: colors.amber,
+        gray: colors.neutral,
+        cyan: colors.cyan,
+        yellow: colors.yellow,
+        fuchsia: colors.fuchsia,
+        violet: colors.violet,
+        indigo: colors.indigo,
+        rose: colors.rose,
+        amber: colors.amber,
       },
       cursor: {
         copy: "copy",
       },
-      // fontSize: {
-      //   xs: ["12px", textSizes["text-xs"]],
-      //   13: ["13px", textSizes["text-13"]],
-      //   sm: ["14px", textSizes["text-sm"]],
-      //   base: ["16px", textSizes["text-base"]],
-      //   lg: ["18px", textSizes["text-lg"]], // font-space-bold
-      //   xl: ["20px", textSizes["text-xl"]],
-      //   "2xl": ["24px", textSizes["text-2xl"]], // font-space-bold
-      //   "3xl": ["30px", textSizes["text-3xl"]],
-      //   "4xl": ["36px", textSizes["text-4xl"]],
-      // },
-      // fontFamily: {
-      //   space: fontFamily("SpaceGrotesk-Regular"),
-      //   "space-bold": fontFamily("SpaceGrotesk-Bold"),
-      //   inter: fontFamily("Inter-Regular"),
-      //   "inter-semibold": fontFamily("Inter-SemiBold"),
-      //   "inter-bold": fontFamily("Inter-Bold"),
-      //   sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
-      // },
+      fontSize: {},
+      fontFamily: {
+        space: fontFamily("SpaceGrotesk-Regular"),
+        "space-bold": fontFamily("SpaceGrotesk-Bold"),
+        inter: fontFamily("Inter-Regular"),
+        "inter-semibold": fontFamily("Inter-SemiBold"),
+        "inter-bold": fontFamily("Inter-Bold"),
+        sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
+      },
       whitespace: {
         "break-spaces": "break-spaces",
       },
@@ -93,5 +82,20 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-react-native/plugin")],
+  plugins: [
+    require("tailwindcss-react-native/plugin"),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".text-xs": textSizes["text-xs"],
+        ".text-13": textSizes["text-13"],
+        ".text-sm": textSizes["text-sm"],
+        ".text-base": textSizes["text-base"],
+        ".text-lg": textSizes["text-lg"],
+        ".text-xl": textSizes["text-xl"],
+        ".text-2xl": textSizes["text-2xl"],
+        ".text-3xl": textSizes["text-3xl"],
+        ".text-4xl": textSizes["text-4xl"],
+      });
+    }),
+  ],
 };

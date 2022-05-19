@@ -25,7 +25,6 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { TailwindProvider } from "tailwindcss-react-native";
-import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { MintSnackbar } from "app/components/mint-snackbar";
 import { AppContext } from "app/context/app-context";
@@ -49,7 +48,7 @@ import { Web3Provider } from "app/providers/web3-provider";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
-import { tw } from "design-system/tailwind";
+// import { tw } from "design-system/tailwind";
 import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);
@@ -230,19 +229,20 @@ function AppContextProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const [notification, setNotification] = useState(null);
-  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
   // User can override color scheme
   const userColorScheme = useUserColorScheme();
   // Use the user color scheme if it's set
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
-    tw,
-    userColorScheme ?? deviceColorScheme
-  );
+  // const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  //   tw,
+  //   userColorScheme ?? deviceColorScheme
+  // );
+  const colorScheme = userColorScheme ?? deviceColorScheme;
 
   // setting it before useEffect or else we'll see a flash of white paint before
-  useState(() => setColorScheme(colorScheme));
+  // useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
@@ -252,7 +252,7 @@ function AppContextProvider({
         NavigationBar.setButtonStyleAsync("light");
       }
 
-      tw.setColorScheme("dark");
+      // tw.setColorScheme("dark");
       SystemUI.setBackgroundColorAsync("black");
       setStatusBarStyle("light");
     } else {
@@ -261,7 +261,7 @@ function AppContextProvider({
         NavigationBar.setButtonStyleAsync("dark");
       }
 
-      tw.setColorScheme("light");
+      // tw.setColorScheme("light");
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
     }
@@ -321,7 +321,7 @@ function AppContextProvider({
   const injectedGlobalContext = {
     colorScheme,
     setColorScheme: (newColorScheme: "light" | "dark") => {
-      setColorScheme(newColorScheme);
+      // setColorScheme(newColorScheme);
       setUserColorScheme(newColorScheme);
     },
     // TODO: notification?

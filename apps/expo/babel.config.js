@@ -16,7 +16,7 @@ module.exports = function (api) {
       "tailwindcss-react-native/babel",
       {
         platform: "native",
-        skipTransform: true,
+        mode: "compileOnly",
       },
     ],
   ];

@@ -145,8 +145,7 @@ const NotificationDescription = ({
     return (
       <View>
         <Text
-          variant="text-13"
-          tw="max-w-[69vw] leading-5 text-gray-600 dark:text-gray-400"
+          tw="text-13 max-w-[69vw] leading-5 text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
         >
           {actors.length == 1 ? (
