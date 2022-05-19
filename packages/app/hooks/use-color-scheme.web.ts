@@ -14,7 +14,8 @@ const useColorScheme = () => {
   useDeviceContext(tw, { withDeviceColorScheme: false });
   const deviceColorScheme = useDeviceColorScheme();
   const userColorScheme = useUserColorScheme();
-  const [colorScheme, _, setColorScheme] = useAppColorScheme(
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );
