@@ -24,6 +24,8 @@ const withTM = require("next-transpile-modules")([
   "solito",
   "three",
   "@showtime/universal.text",
+  "@showtime/universal.view",
+  "@showtime/universal.tailwind",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
