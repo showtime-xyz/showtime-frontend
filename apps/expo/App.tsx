@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
   RUDDER_LOG_LEVEL,
 } from "@rudderstack/rudder-sdk-react-native";
-import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
@@ -378,41 +377,39 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <DripsyProvider theme={theme}>
-        <SafeAreaProvider style={{ backgroundColor: "black" }}>
-          <ToastProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <NavigationProvider>
-                  <SWRProvider>
-                    <WalletConnectProvider>
-                      <Web3Provider>
-                        <AppContextProvider>
-                          <AuthProvider>
-                            <UserProvider>
-                              <MintProvider>
-                                <BottomSheetModalProvider>
-                                  <GrowthBookProvider growthbook={growthbook}>
-                                    <FeedProvider>
-                                      <StatusBar style="auto" />
-                                      <RootStackNavigator />
-                                      <MintSnackbar />
-                                    </FeedProvider>
-                                  </GrowthBookProvider>
-                                </BottomSheetModalProvider>
-                              </MintProvider>
-                            </UserProvider>
-                          </AuthProvider>
-                        </AppContextProvider>
-                      </Web3Provider>
-                    </WalletConnectProvider>
-                  </SWRProvider>
-                </NavigationProvider>
-              </SnackbarProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+      <SafeAreaProvider style={{ backgroundColor: "black" }}>
+        <ToastProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <NavigationProvider>
+                <SWRProvider>
+                  <WalletConnectProvider>
+                    <Web3Provider>
+                      <AppContextProvider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <MintProvider>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <StatusBar style="auto" />
+                                    <RootStackNavigator />
+                                    <MintSnackbar />
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </MintProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </AppContextProvider>
+                    </Web3Provider>
+                  </WalletConnectProvider>
+                </SWRProvider>
+              </NavigationProvider>
+            </SnackbarProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

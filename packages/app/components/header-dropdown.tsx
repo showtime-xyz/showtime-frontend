@@ -73,7 +73,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             key="your-profile"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Profile
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -88,7 +88,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           key="your-settings"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Settings
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -100,7 +100,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             key="nested-group-trigger"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuTriggerItem>
@@ -110,7 +110,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
               key="nested-group-1"
               tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             >
-              <DropdownMenuItemTitle tw="text-black dark:text-white">
+              <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
                 Light
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -119,7 +119,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
               key="nested-group-2"
               tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             >
-              <DropdownMenuItemTitle tw="text-black dark:text-white">
+              <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
                 Dark
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -134,7 +134,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           key="sign-out"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Sign Out
           </DropdownMenuItemTitle>
         </DropdownMenuItem>

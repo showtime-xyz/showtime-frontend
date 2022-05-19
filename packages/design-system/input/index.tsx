@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TextInputProps,
   TextStyle,
+  TextInput,
 } from "react-native";
 
-import { TextInput } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
@@ -34,6 +34,7 @@ type InputProps = {
   accessibilityLabel?: string;
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
+  autocomplete?: "on" | "off";
 };
 
 const borderColor = {
@@ -76,6 +77,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     isInvalid,
     accessibilityLabel,
     autoFocus,
+    autocomplete,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const colorScheme = useColorScheme();
@@ -98,13 +100,15 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
   return (
     <View>
       {label ? (
-        <Label
-          variant="text-sm"
-          htmlFor={inputId}
-          tw="mb-2 font-bold text-gray-900 dark:text-white"
-        >
-          {label}
-        </Label>
+        <>
+          <Label
+            htmlFor={inputId}
+            tw="text-sm font-bold text-gray-900 dark:text-white"
+          >
+            {label}
+          </Label>
+          <View tw="h-2" />
+        </>
       ) : null}
       <Animated.View
         style={[
@@ -124,17 +128,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       >
         {leftElement}
         <TextInput
-          sx={{
-            flexGrow: 1,
-            paddingY: Platform.select({
-              ios: 16,
-              default: 12,
-            }),
-            paddingLeft: leftElement ? 0 : 16,
-            paddingRight: rightElement ? 0 : 16,
-            fontWeight: "500",
-            ...tw.style("text-gray-900 dark:text-white"),
-          }}
           // @ts-ignore remove focus outline on web as we'll control the focus styling
           style={StyleSheet.flatten([
             Platform.select({
@@ -144,6 +137,21 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               default: undefined,
             }),
             props.inputStyle,
+            {
+              flexGrow: 1,
+              paddingTop: Platform.select({
+                ios: 16,
+                default: 12,
+              }),
+              paddingBottom: Platform.select({
+                ios: 16,
+                default: 12,
+              }),
+              paddingLeft: leftElement ? 0 : 16,
+              paddingRight: rightElement ? 0 : 16,
+              fontWeight: "500",
+              ...tw.style("text-gray-900 dark:text-white"),
+            },
           ])}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
@@ -173,17 +181,17 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             default: undefined,
           })}
           ref={ref}
+          autocomplete={autocomplete}
         />
         {rightElement && (
-          <View sx={{ marginLeft: "auto" }}>{rightElement}</View>
+          <View style={{ marginLeft: "auto" }}>{rightElement}</View>
         )}
       </Animated.View>
       {helperText ? (
         <Text
-          variant="text-sm"
           nativeID={helperTextId}
-          tw="text-gray-600 dark:text-gray-400"
-          sx={{ marginTop: 4, fontWeight: "600" }}
+          tw="text-sm text-gray-600 dark:text-gray-400"
+          style={{ marginTop: 4, fontWeight: "600" }}
         >
           {helperText}
         </Text>
@@ -191,9 +199,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       {errorText ? (
         <Text
           nativeID={errorTextId}
-          variant="text-sm"
-          tw="text-red-500"
-          sx={{ marginTop: 4, fontWeight: "600" }}
+          tw="text-sm text-red-500"
+          style={{ marginTop: 4, fontWeight: "600" }}
         >
           {errorText}
         </Text>

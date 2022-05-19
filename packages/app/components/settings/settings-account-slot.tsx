@@ -45,9 +45,11 @@ export const SettingAccountSlotFooter = () => {
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <Text tw="mt-1 mb-2 text-base text-gray-500 dark:text-white">
+        <View tw="h-1" />
+        <Text tw="text-base text-gray-500 dark:text-white">
           This action cannot be undone.
         </Text>
+        <View tw="h-2" />
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
             <Button variant="danger" size="small" onPress={handleDeleteAccount}>

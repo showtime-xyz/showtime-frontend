@@ -23,7 +23,8 @@ const IconItem = ({ icon, title }: IconItemProps) => {
         height: 32,
         fill: "black",
       })}
-      <Text tw="mt-2">{title}</Text>
+      <View tw="h-2" />
+      <Text>{title}</Text>
     </View>
   );
 };

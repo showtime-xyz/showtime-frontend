@@ -69,8 +69,7 @@ const Snackbar = () => {
               element: (
                 <View tw="flex-row items-center justify-center">
                   <Text
-                    tw="font-bold text-white dark:text-gray-900"
-                    variant="text-xs"
+                    tw="text-xs font-bold text-white dark:text-gray-900"
                     numberOfLines={1}
                   >
                     View
@@ -104,9 +103,7 @@ const Snackbar = () => {
       </Button>
 
       <View tw="flex-row items-center justify-center">
-        <Text variant="text-base" tw="text-gray-300 dark:text-white">
-          Transition:
-        </Text>
+        <Text tw="text-base text-gray-300 dark:text-white">Transition:</Text>
         <Button
           tw="ml-4"
           onPress={() =>

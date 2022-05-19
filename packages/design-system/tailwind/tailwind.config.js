@@ -1,11 +1,15 @@
-const { colors } = require("./colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
+
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
+const { colors } = require("design-system/tailwind/colors");
+const { textSizes, fontFamily } = require("design-system/typography");
+const { plugin } = require("twrnc");
 
 module.exports = {
-  mode: "jit",
-  purge: ["./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "../../packages/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       maxWidth: {
@@ -44,7 +48,7 @@ module.exports = {
         stteal: "#1dd4e0",
         stteal100: "rgba(29, 212, 224, 0.2)",
         stteal700: "#198c94",
-        gray: colors.trueGray,
+        gray: colors.neutral,
         cyan: colors.cyan,
         yellow: colors.yellow,
         fuchsia: colors.fuchsia,
@@ -56,12 +60,14 @@ module.exports = {
       cursor: {
         copy: "copy",
       },
-      fontSize: {
-        sm2: [".875rem", "1.7rem"],
-      },
+      fontSize: {},
       fontFamily: {
-        space: "Space Grotesk",
-        sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
+        space: fontFamily("SpaceGrotesk-Regular"),
+        "space-bold": fontFamily("SpaceGrotesk-Bold"),
+        inter: fontFamily("Inter-Regular"),
+        "inter-semibold": fontFamily("Inter-SemiBold"),
+        "inter-bold": fontFamily("Inter-Bold"),
+        sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
       },
       whitespace: {
         "break-spaces": "break-spaces",
@@ -76,9 +82,19 @@ module.exports = {
       },
     },
   },
-  // plugins: [
-  // 	require('@tailwindcss/forms')({
-  // 		strategy: 'class',
-  // 	}),
-  // ],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        "text-xs": textSizes["text-xs"],
+        "text-13": textSizes["text-13"],
+        "text-sm": textSizes["text-sm"],
+        "text-base": textSizes["text-base"],
+        "text-lg": textSizes["text-lg"],
+        "text-xl": textSizes["text-xl"],
+        "text-2xl": textSizes["text-2xl"],
+        "text-3xl": textSizes["text-3xl"],
+        "text-4xl": textSizes["text-4xl"],
+      });
+    }),
+  ],
 };

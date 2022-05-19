@@ -27,13 +27,11 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
 
   return (
     <View tw={`items-center justify-center p-4 ${tw}`}>
-      <Text variant="text-lg" tw="text-gray-900 dark:text-gray-100">
+      <Text tw="font-space-bold text-lg text-gray-900 dark:text-gray-100">
         {title}
       </Text>
       <View tw="h-4" />
-      <Text variant="text-sm" tw="text-gray-600 dark:text-gray-400">
-        {text}
-      </Text>
+      <Text tw="text-sm text-gray-600 dark:text-gray-400">{text}</Text>
       {!isAuthenticated && !hideLoginBtn && (
         <>
           <View tw="h-4" />

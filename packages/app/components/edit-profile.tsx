@@ -458,7 +458,8 @@ export const EditProfile = () => {
           >
             Done
           </Button>
-          <Text tw="mt-1 text-center text-sm text-red-500">
+          <View tw="h-1" />
+          <Text tw="text-center text-sm text-red-500">
             {errors.submitError?.message}
           </Text>
         </View>

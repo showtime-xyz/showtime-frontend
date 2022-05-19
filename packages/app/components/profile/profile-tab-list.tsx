@@ -57,14 +57,14 @@ export const ProfileTabList = ({
   });
 
   const onCollectionChange = useCallback(
-    (value: number) => {
+    (value: number | string) => {
       dispatch({ type: "collection_change", payload: value });
     },
     [dispatch]
   );
 
   const onSortChange = useCallback(
-    (value: number) => {
+    (value: number | string) => {
       dispatch({ type: "sort_change", payload: value });
     },
     [dispatch]

@@ -43,7 +43,7 @@ export const AddressMenu = (props: AddressMenuProps) => {
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           destructive
         >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
+          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             {ctaCopy}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>

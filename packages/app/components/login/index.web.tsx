@@ -88,9 +88,11 @@ export function Login({ onLogin }: LoginProps) {
             </Button>
           </View>
           <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
-            <Text tw="my-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
+            <View tw="h-2" />
+            <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
               — or —
             </Text>
+            <View tw="h-2" />
           </View>
           <View tw="p-4">
             <LoginInputField
