@@ -10,7 +10,6 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
-
 type Tab = "following" | "curated" | "" | undefined;
 
 type Query = {

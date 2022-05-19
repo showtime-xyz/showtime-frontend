@@ -71,15 +71,15 @@ const createTextSize = ({
       : 0;
 
   return {
-    fontSize: `${styles.fontSize}px`,
-    lineHeight: `${styles.lineHeight}px`,
-    letterSpacing: `${styles.letterSpacing}px`,
-    marginTop: `${PixelRatio.roundToNearestPixel(
+    fontSize: styles.fontSize,
+    lineHeight: styles.lineHeight,
+    letterSpacing: styles.letterSpacing,
+    marginTop: PixelRatio.roundToNearestPixel(
       styles.marginTop + marginCorrectionForPlatform
-    )}px`,
-    marginBottom: `${PixelRatio.roundToNearestPixel(
+    ),
+    marginBottom: PixelRatio.roundToNearestPixel(
       styles.marginBottom - marginCorrectionForPlatform
-    )}px`,
+    ),
   };
 };
 
