@@ -58,18 +58,18 @@ export function Login({ onLogin }: LoginProps) {
       ].includes(walletStatus),
     [walletStatus]
   );
-  const phoneNumberValidationSchema = useMemo(
-    () =>
-      yup
-        .object({
-          data: yup
-            .string()
-            .phone("US", false, "Please enter a valid phone number.")
-            .required("Please enter a valid phone number."),
-        })
-        .required(),
-    []
-  );
+  // const phoneNumberValidationSchema = useMemo(
+  //   () =>
+  //     yup
+  //       .object({
+  //         data: yup
+  //           .string()
+  //           .phone("US", false, "Please enter a valid phone number.")
+  //           .required("Please enter a valid phone number."),
+  //       })
+  //       .required(),
+  //   []
+  // );
 
   const emailValidationSchema = useMemo(
     () =>
@@ -142,9 +142,11 @@ export function Login({ onLogin }: LoginProps) {
                     </Button>
                   </View>
                   <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
-                    <Text tw="my-[8px] text-center text-sm font-bold text-gray-600 dark:text-gray-400">
+                    <View tw="h-2" />
+                    <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
                       — or —
                     </Text>
+                    <View tw="h-2" />
                   </View>
                   <LoginInputField
                     key="login-email-field"

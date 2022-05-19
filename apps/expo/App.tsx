@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
   RUDDER_LOG_LEVEL,
 } from "@rudderstack/rudder-sdk-react-native";
-import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
@@ -48,9 +47,9 @@ import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
 import { AlertProvider } from "design-system/alert";
+import { LightBoxProvider } from "design-system/light-box/index";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);
@@ -378,10 +377,10 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <DripsyProvider theme={theme}>
-        <SafeAreaProvider style={{ backgroundColor: "black" }}>
-          <ToastProvider>
-            <AlertProvider>
+      <SafeAreaProvider style={{ backgroundColor: "black" }}>
+        <ToastProvider>
+          <AlertProvider>
+            <LightBoxProvider>
               <SnackbarProvider>
                 <NavigationProvider>
                   <SWRProvider>
@@ -409,10 +408,10 @@ function App() {
                   </SWRProvider>
                 </NavigationProvider>
               </SnackbarProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+            </LightBoxProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

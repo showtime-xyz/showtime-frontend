@@ -5,10 +5,8 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Button, ButtonLabel, Pressable, Text, View } from "design-system";
 import { useAlert } from "design-system/alert";
-import { useIsDarkMode, useOnHover } from "design-system/hooks";
 import ChevronRight from "design-system/icon/ChevronRight";
 import { tw } from "design-system/tailwind";
-import { colors } from "design-system/tailwind/colors";
 
 import { SettingSubTitle } from "./settings-subtitle";
 
@@ -47,9 +45,11 @@ export const SettingAccountSlotFooter = () => {
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <Text tw="mt-1 mb-2 text-base text-gray-500 dark:text-white">
+        <View tw="h-1" />
+        <Text tw="text-base text-gray-500 dark:text-white">
           This action cannot be undone.
         </Text>
+        <View tw="h-2" />
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
             <Button variant="danger" size="small" onPress={handleDeleteAccount}>
@@ -70,8 +70,6 @@ export type AccountSettingItemProps = {
 
 export const AccountSettingItem = (props: AccountSettingItemProps) => {
   const router = useRouter();
-  const { onHoverIn, onHoverOut, hovered } = useOnHover();
-  const isDark = useIsDarkMode();
   const handleOnPressItem = (route: string) => {
     router.push(`/settings/${route}`);
   };
@@ -79,21 +77,10 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
   return (
     <Pressable
       onPress={() => handleOnPressItem(props.subRoute)}
-      onHoverIn={onHoverIn}
-      onHoverOut={onHoverOut}
-      disablePressAnimation
       style={[
         tw.style(
           "w-full flex-1 flex-row items-center justify-between px-4 py-2 mb-2 rounded-md"
         ),
-        {
-          backgroundColor: hovered.value
-            ? isDark
-              ? colors.gray[200]
-              : colors.gray[200]
-            : "transparent",
-          transitionDuration: "150ms",
-        },
       ]}
     >
       <View tw="flex flex-col">
@@ -104,7 +91,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
           width={24}
           height={24}
           color={
-            tw.style("dark:bg-gray-700 bg-gray-300").backgroundColor as string
+            tw.style("dark:bg-gray-200 bg-gray-700").backgroundColor as string
           }
         />
       </View>

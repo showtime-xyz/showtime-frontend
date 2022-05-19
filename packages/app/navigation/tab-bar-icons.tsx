@@ -105,7 +105,7 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
   );
 };
 
-export const CameraTabBarIcon = ({ color, focused }: TabBarIconProps) => {
+export const CameraTabBarIcon = ({ focused }: TabBarIconProps) => {
   const { width } = useWindowDimensions();
 
   return (

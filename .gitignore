@@ -116,5 +116,10 @@ apps/expo/service-account-key.json
 !.yarn/versions
 
 # Bit
-
 public
+
+# Turborepo
+.turbo
+
+# ESLint
+lint-results/

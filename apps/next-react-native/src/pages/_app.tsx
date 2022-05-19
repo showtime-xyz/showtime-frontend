@@ -1,13 +1,14 @@
 import "raf/polyfill";
 
 import { useEffect, useState } from "react";
-import { useColorScheme as useDeviceColorScheme } from "react-native";
+import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
-import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
+// Todo: move to inner-components.
+import "photoswipe/dist/photoswipe.css";
 import type { Revalidator, RevalidatorOptions } from "swr";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
@@ -41,6 +42,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
@@ -49,7 +51,6 @@ import { UnlistScreen } from "app/screens/unlist";
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 import { View } from "design-system/view";
 
@@ -225,16 +226,16 @@ export default function App({ Component, pageProps, router }: AppProps) {
           }}
         /> */}
       </Head>
-      <DripsyProvider theme={theme} ssr>
-        <SafeAreaProvider>
-          <ToastProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <SWRProvider>
-                  <Web3Provider>
-                    <AppContext.Provider value={injectedGlobalContext}>
-                      <AuthProvider>
-                        <UserProvider>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <SWRProvider>
+                <Web3Provider>
+                  <AppContext.Provider value={injectedGlobalContext}>
+                    <AuthProvider>
+                      <UserProvider>
+                        <CSROnly>
                           <BottomSheetModalProvider>
                             <GrowthBookProvider growthbook={growthbook}>
                               <FeedProvider>
@@ -268,6 +269,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <BuyScreen />
                                     <ActivitiesScreen />
                                     <MintSnackbar />
+                                    <EditProfileScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}
                                     <LoginScreen />
@@ -276,16 +278,34 @@ export default function App({ Component, pageProps, router }: AppProps) {
                               </FeedProvider>
                             </GrowthBookProvider>
                           </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </AppContext.Provider>
-                  </Web3Provider>
-                </SWRProvider>
-              </SnackbarProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+                        </CSROnly>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContext.Provider>
+                </Web3Provider>
+              </SWRProvider>
+            </SnackbarProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </>
   );
 }
+
+// TODO: remove CSR after replacing to css tailwind
+const CSROnly = ({ children }: any) => {
+  const [ready, setReady] = useState(() => {
+    if (Platform.OS !== "web") {
+      return true;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  if (ready) return children;
+
+  return null;
+};

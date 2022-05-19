@@ -1,6 +1,5 @@
 import { ComponentProps, useMemo, useCallback } from "react";
 
-import { styled } from "dripsy";
 import { MotiView } from "moti";
 import Animated, {
   useDerivedValue,
@@ -146,7 +145,7 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
   "CheckboxItem"
 );
 
-const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle)();
+const StyledDropdownMenuItemTitle = DropdownMenu.ItemTitle;
 
 const DropdownMenuItemTitle = DropdownMenu.menuify(
   (
@@ -160,7 +159,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
   "ItemTitle"
 );
 
-const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle)();
+const StyledDropdownMenuItemSubtitle = DropdownMenu.ItemSubtitle;
 
 const DropdownMenuItemSubtitle = DropdownMenu.menuify(
   (

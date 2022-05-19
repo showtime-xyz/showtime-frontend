@@ -16,14 +16,14 @@ import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { Button, ModalSheet, Skeleton, Text, View } from "design-system";
-import { Avatar } from "design-system/avatar";
 import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
-import { Image } from "design-system/image";
-import { Pressable } from "design-system/pressable-scale";
-import { TW } from "design-system/tailwind/types";
+import { LightBoxImg } from "design-system/light-box/light-box-image";
+import { PressableScale } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
+import useContentWidth from "../../hooks/use-content-width";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 import { FollowersList, FollowingList } from "../following-user-list";
@@ -33,8 +33,9 @@ type FollowProps = {
   onPressFollower: () => void;
   followingCount?: number;
   followersCount?: number;
-  tw?: TW;
+  tw?: string;
 };
+
 const Follow = ({
   onPressFollowing,
   onPressFollower,
@@ -43,20 +44,20 @@ const Follow = ({
   tw,
 }: FollowProps) => {
   return (
-    <View tw={`flex-row ${tw}`} pointerEvents="box-none">
-      <Pressable onPress={onPressFollowing}>
+    <View tw={["flex-row", tw ? tw : ""]} pointerEvents="box-none">
+      <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
           <Text tw="font-medium">following</Text>
         </Text>
-      </Pressable>
+      </PressableScale>
       <View tw="ml-8 md:ml-4" pointerEvents="box-none">
-        <Pressable onPress={onPressFollower}>
+        <PressableScale onPress={onPressFollower}>
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             {`${followersCount ?? 0} `}
             <Text tw="font-medium">followers</Text>
           </Text>
-        </Pressable>
+        </PressableScale>
       </View>
     </View>
   );
@@ -78,9 +79,10 @@ export const ProfileTop = ({
   const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
-  const { isFollowing, follow, unfollow } = useMyInfo();
+  const { isFollowing } = useMyInfo();
   const tabBarHeight = useContext(BottomTabBarHeightContext)
-    ? useBottomTabBarHeight()
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBottomTabBarHeight()
     : 0;
   const profileId = profileData?.data.profile.profile_id;
   const isFollowingUser = useMemo(
@@ -112,10 +114,9 @@ export const ProfileTop = ({
     [bio]
   );
   // cover down to twitter banner ratio: w:h=3:1
-  const coverImageHeight = useMemo(
-    () => (width < 768 ? width / 3 : 180),
-    [width]
-  );
+  const coverHeight = useMemo(() => (width < 768 ? width / 3 : 180), [width]);
+
+  const coverWidth = useContentWidth(-64);
 
   useEffect(() => {
     Platform.OS === "web" && setShowBottomSheet(null);
@@ -126,20 +127,20 @@ export const ProfileTop = ({
       <View pointerEvents="box-none">
         <View
           tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:-mx-20 xl:rounded-b-[32px]`}
-          pointerEvents="none"
         >
           <Skeleton
-            height={coverImageHeight}
+            height={coverHeight}
             width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
             show={loading}
             colorMode={colorMode as any}
           >
             {profileData?.data.profile.cover_url && (
-              <Image
-                source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${coverImageHeight}px] w-100 web:object-cover`}
-                alt="Cover image"
-                resizeMethod="resize"
+              <LightBoxImg
+                source={{
+                  uri: profileData?.data.profile.cover_url,
+                }}
+                width={coverWidth}
+                height={coverHeight}
                 resizeMode="cover"
               />
             )}
@@ -148,7 +149,7 @@ export const ProfileTop = ({
 
         <View tw="mx-2 bg-white dark:bg-black" pointerEvents="box-none">
           <View tw="flex-row justify-between" pointerEvents="box-none">
-            <View tw="flex-row items-end" pointerEvents="none">
+            <View tw="flex-row items-end">
               <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
                 <Skeleton
                   height={128}
@@ -158,9 +159,17 @@ export const ProfileTop = ({
                   radius={99999}
                 >
                   {profileData && (
-                    <Avatar
-                      url={getProfileImage(profileData?.data.profile)}
-                      size={128}
+                    <LightBoxImg
+                      source={{
+                        uri: getProfileImage(profileData?.data.profile),
+                      }}
+                      imgLayout={{
+                        width: 128,
+                        height: 128,
+                      }}
+                      width={128}
+                      height={128}
+                      style={tw.style("rounded-full")}
                     />
                   )}
                 </Skeleton>
@@ -204,7 +213,22 @@ export const ProfileTop = ({
                       <Button
                         size="small"
                         onPress={() => {
-                          router.push(`/profile/edit`);
+                          router.push(
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: {
+                                pathname: router.pathname,
+                                query: {
+                                  ...router.query,
+                                  editProfileModal: true,
+                                },
+                              } as any,
+                            }),
+                            Platform.select({
+                              native: "/profile/edit",
+                              web: router.asPath,
+                            })
+                          );
                         }}
                       >
                         Edit profile
@@ -225,14 +249,12 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <Text
-                  variant="text-2xl"
-                  tw="font-extrabold text-gray-900 dark:text-white"
+                  tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {name}
                 </Text>
               </Skeleton>
-
               <View tw="h-2" />
 
               <Skeleton
@@ -242,10 +264,7 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
               >
                 <View tw="flex-row items-center">
-                  <Text
-                    variant="text-base"
-                    tw="font-semibold text-gray-900 dark:text-white"
-                  >
+                  <Text tw="text-base font-semibold text-gray-900 dark:text-white">
                     {username ? `@${username}` : null}
                   </Text>
 

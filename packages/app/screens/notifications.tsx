@@ -1,13 +1,10 @@
-import { Suspense } from "react";
 import { Platform } from "react-native";
 
-import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { Notifications } from "app/components/notifications";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { View, Text, Spinner } from "design-system";
+import { View, Text } from "design-system";
 
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });
@@ -28,7 +25,7 @@ const NotificationsScreen = withColorScheme(() => {
         </Suspense>
       </ErrorBoundary> */}
       <View tw="p-4">
-        <Text variant="text-2xl" tw="font-extrabold text-black dark:text-white">
+        <Text tw="font-space-bold text-2xl font-extrabold text-black dark:text-white">
           Notifications
         </Text>
         <View tw="h-6" />

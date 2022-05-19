@@ -67,7 +67,9 @@ export class ExpoMixpanelAnalytics {
         if (result) {
           try {
             this.superProps = JSON.parse(result) || {};
-          } catch {}
+          } catch {
+            throw new Error("Couldn't parse data");
+          }
         }
 
         this.ready = true;
@@ -80,7 +82,9 @@ export class ExpoMixpanelAnalytics {
     this.superProps = props;
     try {
       this.storage.set(this.storageKey, JSON.stringify(props));
-    } catch {}
+    } catch {
+      throw new Error("Couldn't set key to storage");
+    }
   }
 
   track(name: string, props?: any) {
@@ -99,7 +103,9 @@ export class ExpoMixpanelAnalytics {
     this.identify(this.clientId);
     try {
       this.storage.set(this.storageKey, JSON.stringify({}));
-    } catch {}
+    } catch {
+      throw new Error("Couldn't set key to storage");
+    }
   }
 
   people_set(props) {

@@ -1,4 +1,4 @@
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +13,7 @@ import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
-import { findAddressInOwnerList, getPolygonScanLink } from "app/utilities";
+import { findAddressInOwnerList } from "app/utilities";
 
 import {
   Button,
@@ -129,13 +129,12 @@ function Transfer({ nft }: { nft?: NFT }) {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Your NFT is being transferred. Feel free to navigate away from this
             screen.
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
@@ -147,12 +146,11 @@ function Transfer({ nft }: { nft?: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Something went wrong!
           </Text>
+          <View tw="h-8" />
           <Button onPress={handleSubmit(handleSubmitTransfer)}>Retry</Button>
         </View>
       </View>
@@ -162,12 +160,9 @@ function Transfer({ nft }: { nft?: NFT }) {
   if (state.status === "transferingSuccess") {
     return (
       <View tw="mt-4 flex-1 items-center justify-center pb-8">
-        <Text variant="text-4xl">🎉</Text>
+        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text
-            variant="text-lg"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
             Your NFT has been transferred
           </Text>
           <PolygonScanButton transactionHash={state.transaction} />
@@ -185,10 +180,7 @@ function Transfer({ nft }: { nft?: NFT }) {
           <View tw="flex-row items-center pb-4">
             <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
             <View tw="flex-1 px-[16px]">
-              <Text
-                tw="pb-4 font-bold text-black dark:text-white"
-                variant="text-lg"
-              >
+              <Text tw="font-space-bold pb-4 text-lg font-bold text-black dark:text-white">
                 {nft?.token_name}
               </Text>
               <View tw="flex-row items-center">
@@ -198,7 +190,7 @@ function Transfer({ nft }: { nft?: NFT }) {
                   height={14}
                   width={14}
                 />
-                <Text tw="pl-1 font-bold text-gray-500" variant="text-xs">
+                <Text tw="pl-1 text-xs font-bold text-gray-500">
                   {nft?.token_created
                     ? `Minted ${formatDistanceToNowStrict(
                         new Date(nft?.token_created),
@@ -268,19 +260,13 @@ function Transfer({ nft }: { nft?: NFT }) {
               <Avatar url={data?.data.profile.img_url} />
               <View tw="ml-1 justify-around">
                 {data?.data.profile.name ? (
-                  <Text
-                    variant="text-xs"
-                    tw="font-semibold text-gray-600 dark:text-gray-400"
-                  >
+                  <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
                     {data?.data.profile.name}
                   </Text>
                 ) : null}
 
                 <View tw="mt-1 flex-row items-center">
-                  <Text
-                    tw="font-semibold text-black dark:text-white"
-                    variant="text-13"
-                  >
+                  <Text tw="text-13 font-semibold text-black dark:text-white">
                     @{data?.data.profile.username}
                   </Text>
                   {data?.data.profile.verified ? (

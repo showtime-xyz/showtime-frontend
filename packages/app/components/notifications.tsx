@@ -30,9 +30,10 @@ import { colors } from "design-system/tailwind/colors";
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
 
 export const Notifications = () => {
-  const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
+  const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
+  const bottomBarHeight = useBottomTabBarHeight();
 
   const [users, setUsers] = useState([]);
 
@@ -41,18 +42,16 @@ export const Notifications = () => {
   }, []);
 
   const keyExtractor = useCallback((item: NotificationType) => {
-    // console.log("item ", item.id);
     return item.id.toString();
   }, []);
 
   const ListFooter = useCallback(() => {
-    const bottomBarHeight = useBottomTabBarHeight();
     return isLoadingMore ? (
       <Skeleton height={bottomBarHeight} width="100%" />
     ) : (
       <View tw={`h-${bottomBarHeight}px`} />
     );
-  }, [isLoadingMore]);
+  }, [isLoadingMore, bottomBarHeight]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
@@ -149,7 +148,7 @@ const NotificationDescription = ({
           //@ts-ignore
           tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
-          sx={{ lineHeight: 20, fontSize: 13 }}
+          style={{ lineHeight: 20, fontSize: 13 }}
         >
           {actors.length == 1 ? (
             <>
@@ -204,16 +203,15 @@ const NotificationDescription = ({
 
           {notification.nft__nftdisplay__name ? (
             <TextLink
-              //@ts-ignore
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={notificationInfo.href}
             >
               {notification.nft__nftdisplay__name}
             </TextLink>
           ) : null}
         </Text>
-        <Text tw="mt-1 text-gray-500" variant="text-xs">
+        <View tw="h-1" />
+        <Text tw="text-xs text-gray-500">
           {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
             addSuffix: true,
           })}
@@ -229,8 +227,7 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
-      variant="text-sm"
-      tw="font-bold text-black dark:text-white"
+      tw="text-sm font-bold text-black dark:text-white"
     >
       {actor.username ? (
         <>@{actor.username}</>

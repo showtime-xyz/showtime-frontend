@@ -4,13 +4,18 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
+import { useFeed } from "app/hooks/use-feed";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
+import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+
+type Tab = "following" | "curated" | "" | undefined;
 
 type Query = {
   type: string;
+  tab: Tab;
   listId: any;
   profileId: any;
   collectionId: any;
@@ -23,6 +28,7 @@ type Query = {
 export const SwipeListScreen = withColorScheme(() => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
+  const [tab] = useParam("tab");
   useTrackPageViewed({ name: "Swipe List", type });
 
   switch (type) {
@@ -32,10 +38,34 @@ export const SwipeListScreen = withColorScheme(() => {
       return <TrendingNFTsSwipeList />;
     case "trendingCreator":
       return <TrendingCreatorSwipeList />;
+    case "feed":
+      return <FeedSwipeList tab={tab} />;
     default:
       return null;
   }
 });
+
+const FeedSwipeList = ({ tab }: { tab: Tab }) => {
+  const { useParam } = createParam<Query>();
+  const { data, updateItem, fetchMore, isRefreshing, refresh } = useFeed(
+    tab ? `/${tab}` : ""
+  );
+  const [initialScrollIndex] = useParam("initialScrollIndex");
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  return (
+    <MutateProvider mutate={updateItem}>
+      <SwipeList
+        data={data}
+        fetchMore={fetchMore}
+        isRefreshing={isRefreshing}
+        refresh={refresh}
+        initialScrollIndex={Number(initialScrollIndex)}
+        bottomPadding={safeAreaBottom}
+      />
+    </MutateProvider>
+  );
+};
 
 const ProfileSwipeList = () => {
   const { useParam } = createParam<Query>();
@@ -45,25 +75,27 @@ const ProfileSwipeList = () => {
   const [sortId] = useParam("sortId");
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
-  const { data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useProfileNFTs({
+  const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
+    {
       listId,
       profileId,
       collectionId,
       sortId,
-    });
+    }
+  );
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <SwipeList
-      data={data}
-      fetchMore={fetchMore}
-      isRefreshing={isRefreshing}
-      refresh={refresh}
-      isLoadingMore={isLoadingMore}
-      initialScrollIndex={Number(initialScrollIndex)}
-      bottomPadding={safeAreaBottom}
-    />
+    <MutateProvider mutate={updateItem}>
+      <SwipeList
+        data={data}
+        fetchMore={fetchMore}
+        isRefreshing={isRefreshing}
+        refresh={refresh}
+        initialScrollIndex={Number(initialScrollIndex)}
+        bottomPadding={safeAreaBottom}
+      />
+    </MutateProvider>
   );
 };
 
@@ -72,22 +104,23 @@ const TrendingNFTsSwipeList = () => {
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
-  const { data, isLoadingMore, isRefreshing, refresh, fetchMore } =
+  const { data, updateItem, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
       days,
     });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <SwipeList
-      data={data}
-      fetchMore={fetchMore}
-      isRefreshing={isRefreshing}
-      refresh={refresh}
-      isLoadingMore={isLoadingMore}
-      initialScrollIndex={Number(initialScrollIndex)}
-      bottomPadding={safeAreaBottom}
-    />
+    <MutateProvider mutate={updateItem}>
+      <SwipeList
+        data={data}
+        fetchMore={fetchMore}
+        isRefreshing={isRefreshing}
+        refresh={refresh}
+        initialScrollIndex={Number(initialScrollIndex)}
+        bottomPadding={safeAreaBottom}
+      />
+    </MutateProvider>
   );
 };
 
@@ -97,7 +130,7 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const [creatorId] = useParam("creatorId");
 
-  const { data } = useTrendingCreators({
+  const { data, mutate } = useTrendingCreators({
     days,
   });
 
@@ -113,12 +146,20 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   }, [data, creatorId]);
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const updateItem = () => {
+    mutate();
+  };
 
   return (
-    <SwipeList
-      data={creatorTopNFTs}
-      initialScrollIndex={Number(initialScrollIndex)}
-      bottomPadding={safeAreaBottom}
-    />
+    <MutateProvider mutate={updateItem}>
+      <SwipeList
+        data={creatorTopNFTs}
+        initialScrollIndex={Number(initialScrollIndex)}
+        bottomPadding={safeAreaBottom}
+        fetchMore={() => {}}
+        isRefreshing={false}
+        refresh={() => {}}
+      />
+    </MutateProvider>
   );
 });

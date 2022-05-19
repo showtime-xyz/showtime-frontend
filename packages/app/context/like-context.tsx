@@ -37,7 +37,7 @@ export const LikeContextProvider = ({
   );
 
   const likeImpl = useCallback(async () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync();
     if (!isLikedNft) {
       if (isAuthenticated) setLikeCount((l) => l + 1);
 
@@ -59,7 +59,7 @@ export const LikeContextProvider = ({
     } else {
       likeImpl();
     }
-  }, [like, isAuthenticated, isLikedNft, unlike, likeImpl, nft]);
+  }, [isAuthenticated, isLikedNft, unlike, likeImpl, nft]);
 
   const likeContextValue = useMemo(
     () => ({ isLiked: isLikedNft, likeCount, toggleLike, like: likeImpl }),

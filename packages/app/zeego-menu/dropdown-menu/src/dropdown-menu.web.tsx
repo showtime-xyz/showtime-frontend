@@ -29,6 +29,7 @@ const TriggerView = forwardRef<unknown, any>((props, ref) => {
     </View>
   );
 });
+TriggerView.displayName = "TriggerView";
 
 const Trigger = ({ children, style }: MenuTriggerProps) => {
   return (
@@ -46,6 +47,7 @@ const ContentView = forwardRef<unknown, any>((props, ref) => {
     </View>
   );
 });
+ContentView.displayName = "ContentView";
 
 const Content = ({
   children,

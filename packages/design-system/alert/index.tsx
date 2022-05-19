@@ -32,6 +32,7 @@ type AlertContext = {
   isMounted?: boolean;
 };
 
+// eslint-disable-next-line no-redeclare
 export const AlertContext = createContext<AlertContext>({
   /**
    * use Alert.alert instead of Alert?.alert
@@ -98,47 +99,57 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
     <AlertContext.Provider value={value}>
       {children}
       <Modal
-        animationType="fade"
+        animationType="none"
         transparent
         visible={show}
         onDismiss={onModalDismiss}
+        statusBarTranslucent
       >
         {/* prevent scrolling/shaking when modal is open */}
         {Platform.OS === "web" && <RemoveScrollBar />}
-        <View tw={"h-full w-full bg-black bg-opacity-60"}>
+        <AnimatePresence>
+          <MotiView
+            style={tw.style("h-full w-full bg-black bg-opacity-60 absolute")}
+            from={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "timing", duration: 120 }}
+          />
           <View tw="h-full w-full items-center justify-center">
-            <AnimatePresence>
-              <MotiView
-                style={tw.style(
-                  "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
-                )}
-                from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
-                animate={{ transform: [{ scale: 1 }], opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: "timing", duration: 300 }}
-              >
-                <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
-                  {title}
-                </Text>
-                {Boolean(message) && (
-                  <Text tw="mt-4 text-center text-base text-gray-900 dark:text-white">
+            <MotiView
+              style={tw.style(
+                "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
+              )}
+              from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
+              animate={{ transform: [{ scale: 1 }], opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type: "timing", duration: 250 }}
+            >
+              <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
+                {title}
+              </Text>
+              {Boolean(message) && (
+                <>
+                  <View tw="h-4" />
+                  <Text tw="text-center text-base text-gray-900 dark:text-white">
                     {message}
                   </Text>
-                )}
-                <Divider tw="my-4" />
-                {renderBtns}
-              </MotiView>
-            </AnimatePresence>
+                </>
+              )}
+              <Divider tw="my-4" />
+              {renderBtns}
+            </MotiView>
           </View>
-        </View>
+        </AnimatePresence>
       </Modal>
     </AlertContext.Provider>
   );
 };
 
 export const useAlert = () => {
+  const Alert = useContext(AlertContext);
+
   if (Platform.OS === "web") {
-    const Alert = useContext(AlertContext);
     if (!Alert.isMounted) {
       console.error("Trying to use useAlert without a AlertProvider");
     }

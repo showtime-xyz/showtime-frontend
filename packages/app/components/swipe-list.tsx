@@ -22,6 +22,7 @@ import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useShareNFT } from "app/hooks/use-share-nft";
@@ -49,10 +50,13 @@ import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
+import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
+const NFT_DETAIL_WIDTH = 380;
+const SCROLL_BAR_WIDTH = 15;
 
 type Props = {
   data: NFT[];
@@ -75,6 +79,7 @@ export const SwipeList = ({
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
   const navigation = useNavigation();
+  const { isMobileWeb } = useIsMobileWeb();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
@@ -104,7 +109,7 @@ export const SwipeList = ({
           dim.height = itemHeight;
         }
       ),
-    [screenWidth, itemHeight]
+    [itemHeight]
   );
 
   const opacity = useSharedValue(1);
@@ -146,18 +151,41 @@ export const SwipeList = ({
       return (
         <FeedItem
           nft={item}
-          itemHeight={itemHeight}
-          bottomPadding={bottomPadding}
-          detailStyle={detailStyle}
-          toggleHeader={toggleHeader}
-          hideHeader={hideHeader}
-          showHeader={showHeader}
+          {...{
+            itemHeight,
+            bottomPadding,
+            detailStyle,
+            toggleHeader,
+            hideHeader,
+            showHeader,
+          }}
         />
       );
     },
-    [itemHeight, bottomPadding, hideHeader, showHeader, toggleHeader, opacity]
+    [
+      itemHeight,
+      bottomPadding,
+      hideHeader,
+      showHeader,
+      toggleHeader,
+      detailStyle,
+    ]
   );
 
+  const contentWidth = useMemo(() => {
+    const scorllBarWidth = isMobileWeb ? 0 : SCROLL_BAR_WIDTH;
+    return windowWidth < MAX_HEADER_WIDTH
+      ? windowWidth - scorllBarWidth
+      : MAX_HEADER_WIDTH;
+  }, [windowWidth, isMobileWeb]);
+
+  const layoutSize = useMemo(
+    () => ({
+      width: contentWidth,
+      height: windowHeight,
+    }),
+    [contentWidth, windowHeight]
+  );
   // const ListFooterComponent = useCallback(() => {
   //   const colorMode = useColorScheme();
   //   return isLoadingMore ? (
@@ -199,12 +227,13 @@ export const SwipeList = ({
         disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        style={tw.style("flex-1 dark:bg-gray-900 bg-gray-100")}
         renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
         onEndReachedThreshold={itemHeight}
         scrollViewProps={scrollViewProps}
         extendedState={extendedState}
+        layoutSize={layoutSize}
       />
     </VideoConfigContext.Provider>
   );
@@ -251,41 +280,69 @@ export const FeedItem = memo(
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
 
+    const mediaWidth = useMemo(() => {
+      if (windowWidth >= MAX_HEADER_WIDTH) {
+        return MAX_HEADER_WIDTH - NFT_DETAIL_WIDTH;
+      }
+
+      return windowWidth - NFT_DETAIL_WIDTH;
+    }, [windowWidth]);
+
     if (windowWidth >= 768) {
       return (
-        <View tw="h-full w-full flex-row">
-          <View tw="flex-3 items-center justify-center bg-gray-100 dark:bg-black">
-            <Media
-              item={nft}
-              numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-              resizeMode="contain"
-            />
-          </View>
-          <View tw="flex-1 bg-white shadow-md dark:bg-black">
-            <Collection nft={nft} />
-            <Divider tw="my-2" />
-            <Social nft={nft} />
-            <LikedBy nft={nft} />
-            <View tw="mr-4 flex-row justify-between">
-              <Title nft={nft} />
-              <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown nftId={nft.nft_id} />
-              </Suspense>
+        <LikeContextProvider nft={nft}>
+          <View tw="h-full w-full flex-row">
+            <View
+              style={[
+                tw.style(
+                  "flex-1 items-center justify-center bg-gray-100 dark:bg-black"
+                ),
+                {
+                  width: 100,
+                },
+              ]}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                tw={`h-[${mediaHeight}px] w-[${mediaWidth}px]`}
+                resizeMode="contain"
+              />
             </View>
-            <Description nft={nft} />
-            <View tw="px-4">
-              <Creator nft={nft} />
-            </View>
-            {Platform.OS === "web" ? (
-              <View tw="px-4 py-4">
-                <BuyButton nft={nft} />
+            <View
+              style={[
+                tw.style(
+                  "bg-white dark:bg-black shadow-lg shadow-black/5 dark:shadow-white/50"
+                ),
+                {
+                  width: NFT_DETAIL_WIDTH,
+                },
+              ]}
+            >
+              <Collection nft={nft} />
+              <Divider tw="my-2" />
+              <Social nft={nft} />
+              <LikedBy nft={nft} />
+              <View tw="mr-4 flex-row justify-between">
+                <Title nft={nft} />
+                <Suspense fallback={<Skeleton width={24} height={24} />}>
+                  <NFTDropdown nftId={nft.nft_id} />
+                </Suspense>
               </View>
-            ) : null}
-            <Owner nft={nft} price={Platform.OS !== "ios"} />
-            {/* Comments */}
+              <Description nft={nft} />
+              <View tw="px-4">
+                <Creator nft={nft} />
+              </View>
+              {Platform.OS === "web" ? (
+                <View tw="px-4 py-4">
+                  <BuyButton nft={nft} />
+                </View>
+              ) : null}
+              <Owner nft={nft} price={Platform.OS !== "ios"} />
+              {/* Comments */}
+            </View>
           </View>
-        </View>
+        </LikeContextProvider>
       );
     }
 
@@ -365,6 +422,7 @@ export const FeedItem = memo(
     );
   }
 );
+FeedItem.displayName = "FeedItem";
 
 const NFTDetails = ({ nft }: { nft: NFT }) => {
   const shareNFT = useShareNFT();
@@ -381,10 +439,9 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
       <View tw="px-4">
         <Text
-          variant="text-2xl"
-          tw="dark:text-white"
+          tw="font-space-bold text-2xl dark:text-white"
           numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
+          style={{ fontSize: 17, lineHeight: 22 }}
         >
           {nft.token_name}
         </Text>

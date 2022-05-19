@@ -1,19 +1,28 @@
-const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
+const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
+// TODO: fix imports from design-system
+// const { colors } = require("design-system/tailwind/colors");
+// const { textSizes, fontFamily } = require("design-system/typography");
+
 module.exports = {
-  mode: "jit",
-  purge: ["./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "../../packages/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       maxWidth: {
         "screen-3xl": "1680px",
         screen: "100vw",
+        "screen-xl": `${MAX_CONTENT_WIDTH}px`,
+        "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
       boxShadow: {
         dropdown:
           "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
+        modal:
+          "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
       },
       borderRadius: {
         inherit: "inherit",
@@ -39,25 +48,37 @@ module.exports = {
         stteal: "#1dd4e0",
         stteal100: "rgba(29, 212, 224, 0.2)",
         stteal700: "#198c94",
-        gray: colors.trueGray,
-        cyan: colors.cyan,
-        yellow: colors.yellow,
-        fuchsia: colors.fuchsia,
-        violet: colors.violet,
-        indigo: colors.indigo,
-        rose: colors.rose,
-        amber: colors.amber,
+        // gray: colors.neutral,
+        // cyan: colors.cyan,
+        // yellow: colors.yellow,
+        // fuchsia: colors.fuchsia,
+        // violet: colors.violet,
+        // indigo: colors.indigo,
+        // rose: colors.rose,
+        // amber: colors.amber,
       },
       cursor: {
         copy: "copy",
       },
-      fontSize: {
-        sm2: [".875rem", "1.7rem"],
-      },
-      fontFamily: {
-        space: "Space Grotesk",
-        sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
-      },
+      // fontSize: {
+      //   xs: ["12px", textSizes["text-xs"]],
+      //   13: ["13px", textSizes["text-13"]],
+      //   sm: ["14px", textSizes["text-sm"]],
+      //   base: ["16px", textSizes["text-base"]],
+      //   lg: ["18px", textSizes["text-lg"]], // font-space-bold
+      //   xl: ["20px", textSizes["text-xl"]],
+      //   "2xl": ["24px", textSizes["text-2xl"]], // font-space-bold
+      //   "3xl": ["30px", textSizes["text-3xl"]],
+      //   "4xl": ["36px", textSizes["text-4xl"]],
+      // },
+      // fontFamily: {
+      //   space: fontFamily("SpaceGrotesk-Regular"),
+      //   "space-bold": fontFamily("SpaceGrotesk-Bold"),
+      //   inter: fontFamily("Inter-Regular"),
+      //   "inter-semibold": fontFamily("Inter-SemiBold"),
+      //   "inter-bold": fontFamily("Inter-Bold"),
+      //   sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
+      // },
       whitespace: {
         "break-spaces": "break-spaces",
       },
@@ -70,14 +91,5 @@ module.exports = {
         2: 2,
       },
     },
-    screens: {
-      xs: "475px",
-      ...defaultTheme.screens,
-    },
   },
-  plugins: [
-    require("@tailwindcss/forms")({
-      strategy: "class",
-    }),
-  ],
 };

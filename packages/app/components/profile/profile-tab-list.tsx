@@ -8,6 +8,7 @@ import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layo
 import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
+import { MutateProvider } from "app/providers/mutate-provider";
 
 import { Spinner, Text, View } from "design-system";
 import { Card } from "design-system/card";
@@ -40,24 +41,30 @@ export const ProfileTabList = ({
 
   const { filter, dispatch } = useContext(FilterContext);
 
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useProfileNFTs({
-      listId: list.id,
-      profileId,
-      collectionId: filter.collectionId,
-      sortId: filter.sortId,
-      refreshInterval: 1000,
-    });
+  const {
+    isLoading,
+    data,
+    fetchMore,
+    isRefreshing,
+    refresh,
+    updateItem,
+    isLoadingMore,
+  } = useProfileNFTs({
+    listId: list.id,
+    profileId,
+    collectionId: filter.collectionId,
+    sortId: filter.sortId,
+  });
 
   const onCollectionChange = useCallback(
-    (value) => {
+    (value: number | string) => {
       dispatch({ type: "collection_change", payload: value });
     },
     [dispatch]
   );
 
   const onSortChange = useCallback(
-    (value) => {
+    (value: number | string) => {
       dispatch({ type: "sort_change", payload: value });
     },
     [dispatch]
@@ -69,7 +76,7 @@ export const ProfileTabList = ({
         `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
       );
     },
-    [list.id, profileId, filter.collectionId, filter.sortId]
+    [list.id, profileId, filter.collectionId, filter.sortId, router]
   );
 
   const ListFooterComponent = useCallback(
@@ -148,6 +155,8 @@ export const ProfileTabList = ({
     mintingState.file,
     mintingState.fileType,
     isBlocked,
+    profileId,
+    user?.data.profile.profile_id,
   ]);
 
   const headerHeight = useMemo(
@@ -175,7 +184,7 @@ export const ProfileTabList = ({
       width: contentWidth,
       height,
     }),
-    [width]
+    [contentWidth, height]
   );
   const _rowRenderer = useCallback(
     (_type: any, item: any, index: number) => {
@@ -194,24 +203,37 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           onPress={() => onItemPress(index - 1)}
+          hrefProps={{
+            pathname: "/list",
+            query: {
+              initialScrollIndex: index - 1,
+              listId: list.id,
+              profileId,
+              collectionId: filter.collectionId,
+              sortId: filter.sortId,
+              type: "profile",
+            },
+          }}
         />
       );
     },
-    [ListHeaderComponent, onItemPress]
+    [filter, list.id, profileId, ListHeaderComponent, onItemPress]
   );
 
   return (
-    <Tabs.RecyclerList
-      //@ts-ignore
-      layoutProvider={_layoutProvider}
-      dataProvider={dataProvider}
-      rowRenderer={_rowRenderer}
-      onEndReached={fetchMore}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
-      renderFooter={ListFooterComponent}
-      layoutSize={layoutSize}
-    />
+    <MutateProvider mutate={updateItem}>
+      <Tabs.RecyclerList
+        //@ts-ignore
+        layoutProvider={_layoutProvider}
+        dataProvider={dataProvider}
+        rowRenderer={_rowRenderer}
+        onEndReached={fetchMore}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        style={{ flex: 1, margin: -GAP_BETWEEN_ITEMS }}
+        renderFooter={ListFooterComponent}
+        layoutSize={layoutSize}
+      />
+    </MutateProvider>
   );
 };

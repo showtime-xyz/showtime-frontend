@@ -1,19 +1,20 @@
-import React, { Suspense, useCallback, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
-import useContentWidth from "app/hooks/use-content-width";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
 import { useColorScheme } from "app/lib/color-scheme";
+import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { createParam } from "app/navigation/use-param";
+import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
 import {
@@ -35,6 +36,8 @@ const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
+
+type Tab = "following" | "curated" | "" | undefined;
 
 type Query = {
   tab: number;
@@ -62,6 +65,14 @@ export const FeedList = () => {
   });
   const isDark = useIsDarkMode();
 
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
+
   return (
     <View tw="flex-row">
       <Hidden until="xl">
@@ -88,7 +99,7 @@ export const FeedList = () => {
             >
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
-                onChange={setSelected}
+                onChange={handleTabChange}
                 selectedIndex={selected}
               />
             </View>
@@ -118,27 +129,41 @@ export const FeedList = () => {
 const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+    </MutateProvider>
+  );
 };
 
 const AlgorithmicFeed = () => {
   const queryState = useFeed("");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} />
+    </MutateProvider>
+  );
 };
 
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="curated" />
+    </MutateProvider>
+  );
 };
 
 const NFTScrollList = ({
   data,
   fetchMore,
+  tab,
 }: {
   data: NFT[];
   fetchMore: any;
+  tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
 
@@ -168,18 +193,29 @@ const NFTScrollList = ({
       width: CARD_CONTAINER_WIDTH,
       height,
     }),
-    []
+    [height]
   );
-  const _rowRenderer = useCallback((_type: any, item: any) => {
-    return (
-      <View tw="flex-row justify-center" nativeID="334343">
-        <Card
-          nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-        />
-      </View>
-    );
-  }, []);
+  const _rowRenderer = useCallback(
+    (_type: any, item: any, index: number) => {
+      return (
+        <View tw="flex-row justify-center" nativeID="334343">
+          <Card
+            hrefProps={{
+              pathname: "/list",
+              query: {
+                initialScrollIndex: index,
+                type: "feed",
+                tab,
+              },
+            }}
+            nft={item}
+            tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          />
+        </View>
+      );
+    },
+    [tab]
+  );
 
   const videoConfig = useMemo(
     () => ({
@@ -220,7 +256,7 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text variant="text-2xl" tw="p-4 text-black dark:text-white">
+      <Text tw="font-space-bold p-4 text-2xl text-black dark:text-white">
         Home
       </Text>
       <View
@@ -232,9 +268,7 @@ const SuggestedUsers = () => {
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
-        <Text tw="p-4 dark:text-white" variant="text-lg">
-          Suggested
-        </Text>
+        <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
             <Skeleton colorMode={colorMode} width={100} height={20} />

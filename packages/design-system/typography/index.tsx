@@ -5,7 +5,7 @@ import { precomputeValues } from "@capsizecss/core";
 
 export const fontFamily = (font: string) => {
   if (Platform.OS === "web") {
-    return font.replace(/\-/g, " ");
+    return `"${font.replace(/-/g, " ")}"`;
   }
 
   return font;
@@ -65,10 +65,15 @@ const createTextSize = ({
     }),
   } as const;
 
-  const marginCorrectionForPlatform = marginCorrection[Platform.OS] ?? 0;
+  const marginCorrectionForPlatform =
+    Platform.OS === "ios" || Platform.OS === "android"
+      ? marginCorrection[Platform.OS]
+      : 0;
 
   return {
-    ...styles,
+    fontSize: styles.fontSize,
+    lineHeight: styles.lineHeight,
+    letterSpacing: styles.letterSpacing,
     marginTop: PixelRatio.roundToNearestPixel(
       styles.marginTop + marginCorrectionForPlatform
     ),

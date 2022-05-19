@@ -36,7 +36,7 @@ function ModalHeaderComponent({
         <Close width={20} height={24} />
       </Button>
 
-      <Text variant="text-lg" tw={MODAL_HEADER_TITLE_TW}>
+      <Text tw={[MODAL_HEADER_TITLE_TW, "font-space-bold text-lg"]}>
         {title}
       </Text>
 

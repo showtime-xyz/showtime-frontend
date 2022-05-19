@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
@@ -11,7 +11,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
-import { ModalSheet, Text, View } from "design-system";
+import { Text, View } from "design-system";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
@@ -97,7 +97,7 @@ const SettingsTabs = () => {
     if (isUnauthenticated) {
       router.pop();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
 
   return (
     <View tw="web:items-center h-[100vh] w-full">
@@ -111,11 +111,11 @@ const SettingsTabs = () => {
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="items-center bg-white dark:bg-black">
             <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
-              <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
+              <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
                 Settings
               </Text>
               {!isWeb ? (
-                <Text tw="text-2xl font-extrabold text-gray-100 dark:text-gray-900">
+                <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
                   v{Constants?.manifest?.version ?? packageJson?.version}
                 </Text>
               ) : null}

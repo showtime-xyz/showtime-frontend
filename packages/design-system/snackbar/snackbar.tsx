@@ -1,12 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Platform, ViewStyle, AccessibilityInfo } from "react-native";
+import React, { createContext, useEffect, useMemo, useRef } from "react";
+import { Platform, ViewStyle } from "react-native";
 
 import { BlurView } from "expo-blur";
 import {
@@ -24,7 +17,7 @@ import { tw } from "design-system/tailwind";
 
 import { useIsDarkMode } from "../hooks";
 import { Check } from "../icon";
-import { Pressable } from "../pressable-scale";
+import { PressableScale } from "../pressable-scale";
 import { Spinner } from "../spinner";
 import { colors } from "../tailwind/colors";
 import { PRESET_TRANSITION_MAP, SnackbarTransitionType } from "./constants";
@@ -101,7 +94,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
         hide?.();
       }, snackbar.hideAfter);
     }
-  }, [snackbar]);
+  }, [hide, snackbar]);
 
   const renderIcon = useMemo(() => {
     switch (snackbar.iconStatus) {
@@ -116,7 +109,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                 ? colors.gray[100]
                 : colors.gray[600]
             }
-            сolor={isExplore ? colors.white : colors.violet[500]}
+            color={isExplore ? colors.white : colors.violet[500]}
           />
         );
       case "done":
@@ -124,7 +117,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
       default:
         return snackbar?.icon;
     }
-  }, [snackbar, isDark, isExplore]);
+  }, [snackbar, isDark, isExplore, textColor]);
 
   const snackbarStyle = useMemo(
     () => ({
@@ -142,7 +135,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
         type: "timing",
         duration: 300,
       },
-    []
+    [snackbar]
   );
 
   return (
@@ -173,7 +166,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
             <Text
               tw="text-xs font-medium"
               numberOfLines={1}
-              sx={{ color: textColor }}
+              style={{ color: textColor }}
               accessibilityRole="text"
             >
               {snackbar.text}
@@ -186,7 +179,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                 transition={{ type: "timing", duration: 250 }}
                 style={{ marginLeft: "auto" }}
               >
-                <Pressable
+                <PressableScale
                   accessibilityLabel="View"
                   accessibilityRole="button"
                   onPress={snackbar.action?.onPress}
@@ -197,12 +190,12 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                     <Text
                       tw="text-xs font-bold"
                       numberOfLines={1}
-                      sx={{ color: textColor }}
+                      style={{ color: textColor }}
                     >
                       {snackbar.action?.text}
                     </Text>
                   )}
-                </Pressable>
+                </PressableScale>
               </MotiView>
             )}
           </BlurView>

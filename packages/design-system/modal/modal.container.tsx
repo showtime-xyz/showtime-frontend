@@ -33,7 +33,15 @@ const BACKDROP_TW = "bg-gray-100 dark:bg-gray-900";
 
 const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
-    { title, mobile_snapPoints, isScreen, close, onClose, children },
+    {
+      title,
+      mobile_snapPoints,
+      isScreen,
+      close,
+      onClose,
+      children,
+      enableContentPanningGesture = true,
+    },
     ref
   ) {
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -96,6 +104,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         keyboardHandlerHook={useKeyboard}
         onClose={onClose}
         onDismiss={onClose}
+        enableContentPanningGesture={enableContentPanningGesture}
       >
         {children}
       </ModalSheet>

@@ -10,7 +10,6 @@ type Props = {
 
 export const ListingUnavailable = (props: Props) => {
   const multipleOwnersList = props.nft?.multiple_owners_list;
-  console.log("nft ", props.nft);
 
   const { user } = useUser();
   const userAddresses = user?.data.profile.wallet_addresses_v2;
@@ -24,9 +23,10 @@ export const ListingUnavailable = (props: Props) => {
 
   return (
     <View tw="mt-8">
-      <Text tw="mb-2 text-black dark:text-white">
+      <Text tw="text-black dark:text-white">
         Your current address does not own this NFT!
       </Text>
+      <View tw="h-2" />
       {userOwnershipAmount && userOwnershipList ? (
         <View tw="mt-8">
           {userOwnershipList.map((ownerListItem) => {
@@ -34,12 +34,15 @@ export const ListingUnavailable = (props: Props) => {
               ? ownerListItem.ens_domain
               : ownerListItem.address;
             return (
-              <Text
-                tw="mb-2 font-medium text-black dark:text-white"
-                key={`${ownerListItem.address}`}
-              >
-                Please connect {displayAddress} address
-              </Text>
+              <>
+                <Text
+                  tw="font-medium text-black dark:text-white"
+                  key={`${ownerListItem.address}`}
+                >
+                  Please connect {displayAddress} address
+                </Text>
+                <View tw="h-2" />
+              </>
             );
           })}
         </View>

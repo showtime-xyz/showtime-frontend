@@ -15,13 +15,13 @@ export const useFeed = (type: FeedType) => {
   const { accessToken } = useAuth();
 
   const feedUrlFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `/v3/feed${accessToken ? type : "/curated"}?offset=${
         index + 1
       }&limit=5`;
       return url;
     },
-    [accessToken]
+    [accessToken, type]
   );
 
   const queryState = useInfiniteListQuerySWR<FeedAPIResponse>(feedUrlFn);
@@ -64,5 +64,19 @@ export const useFeed = (type: FeedType) => {
     return newData;
   }, [queryState.data]);
 
-  return { ...queryState, data: newData };
+  const updateItem = (updatedItem: NFT) => {
+    queryState.mutate((pages) => {
+      return pages?.map((page) => {
+        return page.map((item) => {
+          if (item.nft_id === updatedItem.nft_id) {
+            return updatedItem;
+          }
+
+          return item;
+        });
+      });
+    });
+  };
+
+  return { ...queryState, updateItem, data: newData };
 };

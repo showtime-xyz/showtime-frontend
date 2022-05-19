@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { View } from "design-system";
 import { tw } from "design-system/tailwind";
 
+import { TabBarButton } from "./tab-bar-button";
 import {
   CameraTabBarIcon,
   HomeTabBarIcon,
@@ -33,7 +34,7 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isAuthenticated } = useUser();
   const isForeground = useIsForeground();
 
@@ -126,6 +127,7 @@ export function BottomTabNavigator() {
         name="homeTab"
         component={HomeNavigator}
         options={{
+          tabBarButton: TabBarButton,
           tabBarIcon: HomeTabBarIcon,
         }}
       />
@@ -133,6 +135,7 @@ export function BottomTabNavigator() {
         name="trendingTab"
         component={TrendingNavigator}
         options={{
+          tabBarButton: TabBarButton,
           tabBarIcon: TrendingTabBarIcon,
         }}
       />
@@ -141,6 +144,7 @@ export function BottomTabNavigator() {
           name="cameraTab"
           component={CameraNavigator}
           options={{
+            tabBarButton: TabBarButton,
             tabBarIcon: CameraTabBarIcon,
             headerShown: false,
           }}
@@ -151,6 +155,7 @@ export function BottomTabNavigator() {
           name="notificationsTab"
           component={NotificationsNavigator}
           options={{
+            tabBarButton: TabBarButton,
             tabBarIcon: NotificationsTabBarIcon,
           }}
         />
@@ -160,6 +165,7 @@ export function BottomTabNavigator() {
           name="profileTab"
           component={ProfileNavigator}
           options={{
+            tabBarButton: TabBarButton,
             tabBarIcon: ProfileTabBarIcon,
           }}
         />

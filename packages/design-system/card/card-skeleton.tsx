@@ -8,6 +8,7 @@ import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 type CardSkeletonProps = {
   squareSize: number;
 };
+
 export const CardSkeleton = memo<CardSkeletonProps>(({ squareSize }) => {
   const colorMode = useColorScheme();
   const isDark = useIsDarkMode();
@@ -70,3 +71,5 @@ export const CardSkeleton = memo<CardSkeletonProps>(({ squareSize }) => {
     </View>
   );
 });
+
+CardSkeleton.displayName = "CardSkeleton";

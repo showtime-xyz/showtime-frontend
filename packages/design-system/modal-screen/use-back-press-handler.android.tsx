@@ -17,6 +17,7 @@ export const useBackPressHandler = (ref: RefObject<ModalMethods>) => {
 
       return () =>
         BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 };

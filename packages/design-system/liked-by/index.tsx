@@ -5,7 +5,6 @@ import { Text } from "@showtime/universal.text";
 import { useLikes } from "app/hooks/api/use-likes";
 import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
 import { Skeleton } from "design-system/skeleton";
 import { View } from "design-system/view";
@@ -26,10 +25,7 @@ export function LikedBy({ nft }: Props) {
 
   return (
     <View tw="flex flex-row items-center justify-start bg-white px-4 py-2	dark:bg-black">
-      <Text
-        variant="text-xs"
-        tw="font-semibold text-gray-600 dark:text-gray-400"
-      >
+      <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
         Liked by&nbsp;
       </Text>
       <Skeleton
@@ -39,16 +35,12 @@ export function LikedBy({ nft }: Props) {
         colorMode={isDarkMode ? "dark" : "light"}
       >
         {!loading ? (
-          <Text
-            variant="text-xs"
-            tw="font-semibold text-gray-600 dark:text-gray-400"
-          >
+          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             {data?.likers.slice(0, 2).map((like, index) => (
               <Fragment key={`liked-by-user-${like.profile_id}`}>
                 <TextLink
-                  variant="text-xs"
                   href={`/@${like.username ?? like.wallet_address}`}
-                  tw="font-bold	text-black dark:text-white"
+                  tw="text-xs font-bold	text-black dark:text-white"
                 >
                   {like.username ? (
                     <>@{like.username}</>
@@ -57,18 +49,15 @@ export function LikedBy({ nft }: Props) {
                   )}
                 </TextLink>
                 {index === 0 && data?.likers.length > 1 && (
-                  <Text variant="text-xs">,&nbsp;</Text>
+                  <Text tw="text-xs">,&nbsp;</Text>
                 )}
               </Fragment>
             ))}
             &nbsp;
             {(data?.likers.length ?? 0) > 2 && (
               <>
-                <Text variant="text-xs">&amp;&nbsp;</Text>
-                <Text
-                  variant="text-xs"
-                  tw="font-bold text-black dark:text-white"
-                >
+                <Text tw="text-xs">&amp;&nbsp;</Text>
+                <Text tw="text-xs font-bold text-black dark:text-white">
                   {data?.likers
                     ? `${data.likers.length - 2} ${
                         data.likers.length - 2 === 1 ? "other" : "others"

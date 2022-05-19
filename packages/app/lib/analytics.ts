@@ -29,5 +29,6 @@ type PageViewedProps = {
 export function useTrackPageViewed({ name }: PageViewedProps) {
   useEffect(() => {
     track("Page Viewed", { name });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

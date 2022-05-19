@@ -2,8 +2,10 @@ import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
+import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
 import {
@@ -29,20 +31,25 @@ export const Trending = () => {
   const [tab, setTab] = useParam("tab");
   const isDark = useIsDarkMode();
   const selected = tab === "nft" ? 1 : 0;
-  const handleTabChange = useCallback((index: number) => {
-    if (index === 0) {
-      setTab("following");
-    } else {
-      setTab("nft");
-    }
-  }, []);
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      if (index === 0) {
+        setTab("following");
+      } else {
+        setTab("nft");
+      }
+    },
+    [setTab]
+  );
 
   return (
     <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
       <View tw="mx-auto w-[90%] py-8">
         <View tw="flex-row items-center justify-between pb-8">
           <View>
-            <Text variant="text-2xl" tw="text-black dark:text-white">
+            <Text tw="font-space-bold text-2xl text-black dark:text-white">
               Trending
             </Text>
           </View>
@@ -72,15 +79,18 @@ const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
     parse: (value) => Number(value ?? 1),
   });
 
-  const handleDaysChange = useCallback((index: number) => {
-    if (index === 0) {
-      setDays(1);
-    } else if (index === 1) {
-      setDays(7);
-    } else {
-      setDays(30);
-    }
-  }, []);
+  const handleDaysChange = useCallback(
+    (index: number) => {
+      if (index === 0) {
+        setDays(1);
+      } else if (index === 1) {
+        setDays(7);
+      } else {
+        setDays(30);
+      }
+    },
+    [setDays]
+  );
 
   const index = days === 1 ? 0 : days === 7 ? 1 : 2;
 
@@ -185,44 +195,47 @@ const CreatorsList = ({ days }: { days: any }) => {
 };
 
 const NFTList = ({ days }: { days: any }) => {
-  const router = useRouter();
-  const { data, isLoading } = useTrendingNFTS({
+  const { data, updateItem, isLoading } = useTrendingNFTS({
     days,
   });
-
   const [containerWidth, setContainerWidth] = useState(0);
-
   const { width } = useWindowDimensions();
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
 
   return (
-    <View
-      tw="mt-4 flex-1 flex-row flex-wrap justify-between"
-      onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
-    >
-      {isLoading ? (
-        <View tw="mx-auto p-10">
-          <Spinner />
-        </View>
-      ) : null}
-      {data.length > 0 && containerWidth
-        ? data.map((item, index) => {
-            return (
-              <Card
-                nft={item}
-                tw={`w-[${containerWidth / numColumns - 30}px] h-[${
-                  containerWidth / numColumns + 205
-                }px] mb-8`}
-                onPress={() =>
-                  router.push(
-                    `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
-                  )
-                }
-              />
-            );
-          })
-        : null}
-    </View>
+    <MutateProvider mutate={updateItem}>
+      <View
+        tw="mt-4 flex-1 flex-row flex-wrap justify-between"
+        onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+      >
+        {isLoading ? (
+          <View tw="mx-auto p-10">
+            <Spinner />
+          </View>
+        ) : null}
+        {data.length > 0 && containerWidth
+          ? data.map((item, index) => {
+              return (
+                <Card
+                  hrefProps={{
+                    pathname: "/list",
+                    query: {
+                      initialScrollIndex: index,
+                      type: "trendingNFTs",
+                      days,
+                    },
+                  }}
+                  key={`nft-list-card-${index}`}
+                  nft={item}
+                  tw={`w-[${containerWidth / numColumns - 30}px] h-[${
+                    containerWidth / numColumns + 205
+                  }px] mb-8`}
+                />
+              );
+            })
+          : null}
+      </View>
+    </MutateProvider>
   );
 };

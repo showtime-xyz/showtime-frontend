@@ -26,7 +26,7 @@ interface MessageBoxProps {
 export interface MessageBoxMethods {
   focus: () => void;
   reset: () => void;
-  // eslint-disable-next-line no-unused-vars
+
   setValue: (value: string) => void;
 }
 
@@ -41,11 +41,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     //#endregion
 
     //#region callbacks
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
       setValue("");
       // @ts-ignore
       inputRef.current.blur();
-    };
+    }, [inputRef, setValue]);
     const handleFocus = useCallback(() => {
       // @ts-ignore
       inputRef.current.focus();

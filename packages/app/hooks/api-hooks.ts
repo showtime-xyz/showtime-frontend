@@ -1,11 +1,9 @@
 import { useCallback, useMemo } from "react";
-import { Platform } from "react-native";
 
 import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import { NFT, Profile } from "app/types";
 
 import { useAuth } from "./auth/use-auth";
@@ -21,7 +19,7 @@ export const useActivity = ({
   const { accessToken } = useAuth();
 
   const activityURLFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `/v2/${
         accessToken ? "activity_with_auth" : "activity_without_auth"
       }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
@@ -63,7 +61,7 @@ export const useActivity = ({
 
 export const useTrendingCreators = ({ days }: { days: number }) => {
   const trendingCreatorsUrlFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `/v1/leaderboard?page=${index + 1}&days=${days}&limit=15`;
       return url;
     },
@@ -109,9 +107,31 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     }
     return newData;
   }, [queryState.data]);
+
+  const updateItem = useCallback(
+    (updatedItem: NFT) => {
+      queryState.mutate((d) => {
+        const updatedData = d?.map((d) => {
+          return {
+            ...d,
+            items: d.data.items.map((item: NFT) => {
+              if (item.nft_id === updatedItem.nft_id) {
+                return updatedItem;
+              }
+              return item;
+            }),
+          };
+        });
+        return updatedData;
+      });
+    },
+    [queryState]
+  );
+
   return {
     ...queryState,
     data: newData,
+    updateItem,
     fetchMore: () => {},
   };
 };
@@ -169,7 +189,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
-    (index) => {
+    (index: number) => {
       const url = `v1/profile_nfts?profile_id=${profileId}&page=${
         index + 1
       }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
@@ -178,8 +198,8 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
   );
 
-  const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params.profileId ? trendingCreatorsUrlFn : null,
+  const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
+    params?.profileId ? trendingCreatorsUrlFn : () => null,
     refreshInterval
   );
 
@@ -201,7 +221,27 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     }
   };
 
-  return { ...queryState, fetchMore, data: newData };
+  const updateItem = useCallback(
+    (updatedItem: NFT) => {
+      mutate((d) => {
+        const updatedData = d?.map((d) => {
+          return {
+            ...d,
+            items: d.data.items.map((item: NFT) => {
+              if (item.nft_id === updatedItem.nft_id) {
+                return updatedItem;
+              }
+              return item;
+            }),
+          };
+        });
+        return updatedData;
+      });
+    },
+    [mutate]
+  );
+
+  return { ...queryState, fetchMore, updateItem, data: newData };
 };
 
 export type Collection = {
@@ -240,13 +280,10 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 };
 
 export const useComments = ({ nftId }: { nftId: number }) => {
-  const commentsUrlFn = useCallback(
-    (index) => {
-      const url = `/v2/comments/${nftId}?limit=10`;
-      return url;
-    },
-    [nftId]
-  );
+  const commentsUrlFn = useCallback(() => {
+    const url = `/v2/comments/${nftId}?limit=10`;
+    return url;
+  }, [nftId]);
 
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
@@ -269,7 +306,6 @@ export const useMyInfo = () => {
   const { accessToken } = useAuth();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
-  const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
 
   const { data, error } = useSWR<MyInfo>(
@@ -309,11 +345,11 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [accessToken, data, router]
+    [accessToken, data, mutate, navigateToLogin]
   );
 
   const unfollow = useCallback(
-    async (profileId: number) => {
+    async (profileId?: number) => {
       if (data) {
         mutate(
           queryKey,
@@ -341,7 +377,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [data]
+    [data, mutate]
   );
 
   const isFollowing = useCallback(
@@ -389,7 +425,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data, accessToken]
+    [data, accessToken, mutate, navigateToLogin]
   );
 
   const unlike = useCallback(
@@ -421,7 +457,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data]
+    [data, mutate]
   );
 
   const isLiked = useCallback(

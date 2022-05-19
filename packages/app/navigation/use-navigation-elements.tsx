@@ -32,7 +32,7 @@ export function useHideNavigationElements() {
         setIsTabBarHidden(false);
       };
     }
-  }, []);
+  }, [setIsHeaderHidden, setIsTabBarHidden]);
 }
 
 export function useHideHeader() {
@@ -46,5 +46,5 @@ export function useHideHeader() {
         setIsHeaderHidden(false);
       };
     }
-  }, []);
+  }, [setIsHeaderHidden]);
 }

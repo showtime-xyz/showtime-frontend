@@ -20,7 +20,6 @@ interface LoginInputFieldProps
   signInButtonLabel?: string;
   validationSchema: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (value: string) => void;
 }
 
@@ -102,7 +101,7 @@ export function LoginInputField({
         variant="tertiary"
         size="regular"
         tw="mt-6"
-        disabled={!Boolean(inputValue)}
+        disabled={!inputValue}
       >
         <ButtonLabel tw="text-black dark:text-white">
           {signInButtonLabel}

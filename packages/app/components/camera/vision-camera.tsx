@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { StyleSheet } from "react-native";
 
@@ -35,7 +36,7 @@ import { useRouter } from "app/navigation/use-router";
 
 import { Flash, FlashOff } from "design-system/icon";
 import { Image } from "design-system/image";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
@@ -75,7 +76,6 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
-  const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -260,7 +260,7 @@ export function Camera({
       setIsLoading(false);
       setShowPop(true);
       setTimeout(() => setShowPop(false), 10);
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Haptics.impactAsync();
 
       // Add photo
       const photo = await camera.current.takePhoto(takePhotoOptions);
@@ -377,7 +377,7 @@ export function Camera({
 
       <View tw="absolute top-0 right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900">
         <View tw="flex-row justify-end py-8 px-4">
-          <Pressable
+          <PressableScale
             tw="mt-4 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
             onPress={onFlashPressed}
           >
@@ -401,7 +401,7 @@ export function Camera({
                 height={21}
               />
             )}
-          </Pressable>
+          </PressableScale>
         </View>
       </View>
 

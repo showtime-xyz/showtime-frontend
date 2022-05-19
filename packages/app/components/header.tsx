@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
+  ListRenderItemInfo,
   Platform,
   TextInput,
   useWindowDimensions,
@@ -10,7 +11,7 @@ import * as Popover from "@radix-ui/react-popover";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
-import { useSearch } from "app/hooks/api/use-search";
+import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 import {
@@ -21,7 +22,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, Pressable, View } from "design-system";
+import { Button, PressableScale, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
 import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
@@ -48,7 +49,7 @@ const SearchInHeader = () => {
   );
 
   const renderItem = useCallback(
-    ({ item }) => {
+    ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
       return (
         <SearchItem
           item={item}
@@ -67,7 +68,8 @@ const SearchInHeader = () => {
 
       <Popover.Anchor>
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
+          autocomplete="off"
           value={term}
           ref={inputRef}
           onChangeText={(text) => {
@@ -90,7 +92,7 @@ const SearchInHeader = () => {
           rightElement={
             term.length > 0 ? (
               <Popover.Close>
-                <Pressable
+                <PressableScale
                   tw="p-2"
                   onPress={() => {
                     setTerm("");
@@ -106,7 +108,7 @@ const SearchInHeader = () => {
                     width={24}
                     height={24}
                   />
-                </Pressable>
+                </PressableScale>
               </Popover.Close>
             ) : undefined
           }
@@ -118,7 +120,7 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="dark:shadow-white shadow-black mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
+        <View tw="shadow-black dark:shadow-white mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
           {data ? (
             <FlatList
               data={data}
@@ -138,7 +140,6 @@ const SearchInHeader = () => {
 const HeaderRight = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
-  const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
@@ -147,7 +148,7 @@ const HeaderRight = () => {
   return (
     <View>
       {!isLoading && (
-        <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
+        <View tw="flex-row items-center">
           {isAuthenticated && isMdWidth && (
             <>
               <View tw="mx-2">
@@ -157,7 +158,7 @@ const HeaderRight = () => {
                 />
               </View>
               <View tw="mx-2">
-                <Pressable
+                <PressableScale
                   onPress={() => {
                     router.push(
                       Platform.select({
@@ -165,7 +166,7 @@ const HeaderRight = () => {
                         web: {
                           pathname: router.pathname,
                           query: { ...router.query, createModal: true },
-                        },
+                        } as any,
                       }),
                       Platform.select({
                         native: "/camera",
@@ -187,7 +188,7 @@ const HeaderRight = () => {
                       color={isDark ? "black" : "white"}
                     />
                   </View>
-                </Pressable>
+                </PressableScale>
               </View>
             </>
           )}
@@ -228,7 +229,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   const Icon = canGoBack ? ArrowLeft : Search;
 
   return (
-    <Pressable
+    <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="h-6 w-6 items-center justify-center rounded-full"
       onPress={() => {
@@ -245,7 +246,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         width={24}
         height={24}
       />
-    </Pressable>
+    </PressableScale>
   );
 };
 

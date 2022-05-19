@@ -1,17 +1,17 @@
 import { ComponentProps } from "react";
-import {
-  // Image as ReactNativeImage,
-  ImageProps as ReactNativeImageProps,
-} from "react-native";
 
 import { Blurhash } from "react-native-blurhash";
-import FastImage from "react-native-fast-image";
+import FastImage, { FastImageProps } from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
 
-function Img({ source, height, width, ...props }: ReactNativeImageProps) {
+export type ImgProps = FastImageProps & {
+  height?: number;
+  width?: number;
+};
+function Img({ source, height, width, ...props }: ImgProps) {
   return (
     // @ts-ignore
     <FastImage
@@ -56,7 +56,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
   const height = Number(tailwind.style(tw).height);
   // const borderRadius = Number(tailwind.style(tw).borderRadius) ?? 0
 
-  // <View sx={{ borderRadius, overflow: 'hidden' }}>
+  // <View style={{ borderRadius, overflow: 'hidden' }}>
 
   if (blurhash) {
     return (

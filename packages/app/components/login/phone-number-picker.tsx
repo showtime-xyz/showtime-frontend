@@ -4,9 +4,10 @@ import { Modal, Platform } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { SafeAreaView } from "app/lib/safe-area";
+import { useSafeAreaInsets } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
-import { CountryCodePicker, Pressable, Text, View } from "design-system";
+import { CountryCodePicker, PressableScale, Text, View } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";
@@ -81,17 +82,20 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         signInButtonLabel="Send"
         leftElement={useMemo(() => {
           return (
-            <Pressable
+            <PressableScale
               onPress={() => {
                 setSearch("");
                 setModalVisible(true);
               }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              tw="flex-row items-center justify-center"
+              tw={`mt-[${Platform.select({
+                ios: ".6",
+                android: ".25",
+                default: "0",
+              })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
-                sx={{
-                  // this hack is needed to make image align with text
+                style={{
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,
@@ -102,15 +106,15 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               >
                 {selectedCountry?.emoji}
               </Text>
-              <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+              <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
                 {selectedCountry?.dial_code}{" "}
               </Text>
-            </Pressable>
+            </PressableScale>
           );
         }, [selectedCountry])}
         onSubmit={useCallback(
           (v) => props.handleSubmitPhoneNumber(selectedCountry?.dial_code + v),
-          [props.handleSubmitPhoneNumber, selectedCountry]
+          [props, selectedCountry]
         )}
       />
     </>
@@ -126,6 +130,7 @@ type Props = {
 export function Header({ title, close, onSearchSubmit }: Props) {
   const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
+  const { top: safeAreaTop } = useSafeAreaInsets();
 
   const handleSearch = (text: string) => {
     if (searchDebounceTimeout.current) {
@@ -140,10 +145,12 @@ export function Header({ title, close, onSearchSubmit }: Props) {
     if (!showSearch) {
       onSearchSubmit("");
     }
-  }, [showSearch]);
+  }, [showSearch, onSearchSubmit]);
 
   return (
-    <View tw="flex-row items-center justify-between p-4 dark:bg-black">
+    <View
+      tw={`mt-[${safeAreaTop}px] w-full flex-row items-center px-4 py-2 dark:bg-black`}
+    >
       <View tw="h-12 w-12 items-center justify-center">
         <Button
           onPress={close}
@@ -161,13 +168,11 @@ export function Header({ title, close, onSearchSubmit }: Props) {
         </Button>
       </View>
 
-      <Animated.View layout={FadeIn}>
+      <Animated.View layout={FadeIn} style={tw.style("flex-1 mx-2")}>
         {showSearch ? (
-          <View tw="w-[210px]">
-            <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
-          </View>
+          <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text variant="text-lg" tw="font-bold dark:text-white">
+          <Text tw="font-space-bold px-4 text-lg font-bold dark:text-white">
             {title}
           </Text>
         )}

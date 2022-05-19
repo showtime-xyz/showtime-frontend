@@ -16,7 +16,7 @@ import Animated, {
 import { Text } from "@showtime/universal.text";
 
 import { Check } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
@@ -36,6 +36,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
 
   useEffect(() => {
     sharedValue.value = value;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const contextValue = useMemo(() => {
@@ -46,6 +47,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         onChange(item.code);
       },
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onChange]);
 
   return (
@@ -83,7 +85,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
   });
 
   return (
-    <Pressable onPress={handleChange}>
+    <PressableScale onPress={handleChange}>
       <View tw="flex-row items-center px-8 py-5 dark:bg-black">
         <Text tw="text-sm font-semibold dark:text-gray-100">
           {item.emoji} {item.name} ({item.dial_code})
@@ -98,6 +100,8 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
           />
         </Animated.View>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 });
+
+PickerItem.displayName = "PickerItem";

@@ -28,6 +28,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
   const isDark = useIsDarkMode();
+
   const animatedStyle = useAnimatedStyle(() => {
     const newPos = position.value + offset.value;
 
@@ -40,6 +41,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
       ),
     };
   });
+
   const getTextStyle = useMemo(() => {
     if (Platform.OS !== "web") {
       return {
@@ -72,9 +74,8 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
       </RNText>
       {count ? (
         <Text
-          variant="text-sm"
-          sx={{ fontWeight: "400" }}
-          tw={`text-gray-900 dark:text-white`}
+          style={{ fontWeight: "400" }}
+          tw="text-sm text-gray-900 dark:text-white"
         >
           {` ${count}`}
         </Text>
@@ -84,12 +85,6 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
 };
 
 export const SelectedTabIndicator = () => {
-  if (Platform.OS === "web") {
-    return null;
-  }
-
-  const isDark = useIsDarkMode();
-
   const { offset, position, tabItemLayouts } = useTabsContext();
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -97,6 +92,7 @@ export const SelectedTabIndicator = () => {
     let translateOutput = tabItemLayouts.map((v) => v.value?.x);
     let widthOutput = tabItemLayouts.map((v) => v.value?.width);
     const newPos = position.value + offset.value;
+
     if (
       translateOutput.some((v) => v === undefined) ||
       widthOutput.some((v) => v === undefined)
@@ -128,6 +124,10 @@ export const SelectedTabIndicator = () => {
     }
   });
 
+  if (Platform.OS === "web") {
+    return null;
+  }
+
   return (
     <Animated.View
       style={[
@@ -150,7 +150,7 @@ export const SelectedTabIndicator = () => {
       />
       {/* {disableBackground ? null : (
         <View
-          sx={{
+          style={{
             backgroundColor: isDark
               ? "rgba(229, 231, 235, 0.1)"
               : "rgba(0, 0, 0, 0.1)",

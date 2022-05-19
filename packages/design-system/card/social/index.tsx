@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useLike } from "app/context/like-context";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 
@@ -9,15 +9,8 @@ import { Button } from "design-system/card/social/button";
 import { View } from "design-system/view";
 
 function Social({ nft }: { nft?: NFT }) {
-  if (!nft) return null;
-
   const router = useRouter();
-
-  const { isLiked, like, unlike } = useMyInfo();
-
-  const isLikedNft = useMemo(() => isLiked(nft.nft_id), [isLiked, nft.nft_id]);
-
-  const [likeCount, setLikeCount] = useState(nft.like_count);
+  const { isLiked, likeCount, toggleLike } = useLike();
 
   const handleCommentPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
@@ -34,7 +27,7 @@ function Social({ nft }: { nft?: NFT }) {
             contractAddress: nft?.contract_address,
             tokenId: nft?.token_id,
           },
-        },
+        } as any,
       }),
       Platform.select({
         native: as,
@@ -44,26 +37,16 @@ function Social({ nft }: { nft?: NFT }) {
     );
   }, [router, nft]);
 
+  if (!nft) return null;
+
   return (
     <View tw="flex-row justify-between bg-white px-4 py-2 dark:bg-black">
       <View tw="flex-row">
         <Button
           variant="like"
           count={likeCount}
-          active={isLikedNft}
-          onPress={useCallback(async () => {
-            if (isLikedNft) {
-              const isSuccessfullyUnlike = await unlike(nft.nft_id);
-              if (isSuccessfullyUnlike) {
-                setLikeCount(likeCount - 1);
-              }
-            } else {
-              const isSuccessfullyLiked = await like(nft.nft_id);
-              if (isSuccessfullyLiked) {
-                setLikeCount(likeCount + 1);
-              }
-            }
-          }, [isLikedNft, like, unlike, likeCount])}
+          active={isLiked}
+          onPress={toggleLike}
         />
         <View tw="ml-2" />
         <Button
@@ -72,10 +55,6 @@ function Social({ nft }: { nft?: NFT }) {
           onPress={handleCommentPress}
         />
       </View>
-
-      {/* <View>
-        <Button variant="boost" count={0} />
-      </View> */}
     </View>
   );
 }

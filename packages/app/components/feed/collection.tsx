@@ -1,6 +1,5 @@
 import { Text } from "@showtime/universal.text";
 
-import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
 
 import { Image } from "design-system/image";

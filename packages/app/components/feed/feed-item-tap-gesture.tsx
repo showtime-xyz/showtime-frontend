@@ -1,12 +1,13 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 
-import { TapGestureHandler } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSequence,
   withSpring,
   withDelay,
+  runOnJS,
 } from "react-native-reanimated";
 
 import { useLike } from "app/context/like-context";
@@ -32,7 +33,6 @@ export const FeedItemTapGesture = ({
   showHeader: any;
 }) => {
   const { like } = useLike();
-  const doubleTapRef = useRef();
 
   const heartAnimation = useSharedValue(0);
 
@@ -52,26 +52,30 @@ export const FeedItemTapGesture = ({
     };
   });
 
+  const doubleTapHandleOnJS = useCallback(() => {
+    like();
+    showHeader();
+  }, [like, showHeader]);
+
+  const doubleTapHandle = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      heartAnimation.value = withSequence(
+        withSpring(1),
+        withDelay(200, withSpring(0))
+      );
+      runOnJS(doubleTapHandleOnJS)();
+    });
+
+  const singleTapHandler = Gesture.Tap().onEnd(() => {
+    runOnJS(toggleHeader)();
+  });
+  const gesture = Gesture.Exclusive(doubleTapHandle, singleTapHandler);
+
   return (
     <>
-      <TapGestureHandler waitFor={doubleTapRef} onActivated={toggleHeader}>
-        <TapGestureHandler
-          ref={doubleTapRef}
-          numberOfTaps={2}
-          onActivated={useCallback(() => {
-            heartAnimation.value = withSequence(
-              withSpring(1),
-              withDelay(200, withSpring(0))
-            );
-
-            like();
-            showHeader();
-          }, [like, showHeader])}
-        >
-          {children}
-        </TapGestureHandler>
-      </TapGestureHandler>
-
+      {/* @ts-ignore */}
+      <GestureDetector gesture={gesture}>{children}</GestureDetector>
       <Animated.View
         style={[heartContainerStyle, heartStyle]}
         pointerEvents="none"

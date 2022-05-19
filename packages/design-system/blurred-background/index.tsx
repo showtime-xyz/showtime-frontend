@@ -1,11 +1,4 @@
-import {
-  Canvas,
-  Paint,
-  Blur,
-  Fill,
-  BlurMask,
-  Rect,
-} from "@shopify/react-native-skia";
+import { Canvas, Paint, Blur, Fill } from "@shopify/react-native-skia";
 
 type BlurTint = "light" | "dark" | "default";
 
@@ -30,14 +23,12 @@ type Props = {
   height: number;
 };
 
-function BlurredBackground({ isDark, width, height }: Props) {
+function BlurredBackground({ isDark }: Props) {
   return (
     <Canvas style={{ flex: 1, marginBottom: -1 }}>
       <Paint color={getBackgroundColor(95, isDark ? "dark" : "light")}>
         <Blur sigmaX={20} sigmaY={20} />
-        {/* <BlurMask sigma={20} style="inner" /> */}
       </Paint>
-      {/* <Rect x={0} y={0} width={width} height={height} /> */}
       <Fill />
     </Canvas>
   );

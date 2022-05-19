@@ -45,6 +45,7 @@ export const useOnFocus = () => {
       },
       focused: Platform.select({ default: focused, web: { value: state } }),
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return focusHandler;
@@ -71,6 +72,7 @@ export const useOnHover = () => {
       },
       hovered: Platform.select({ default: hovered, web: { value: state } }),
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return hoverHandler;
@@ -97,6 +99,7 @@ export const useOnPress = () => {
       },
       pressed: Platform.select({ default: pressed, web: { value: state } }),
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return pressHandler;
@@ -111,6 +114,7 @@ export function useUpdateEffect(effect, dependencies = []) {
     } else {
       return effect();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 }
 

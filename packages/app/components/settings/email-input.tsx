@@ -64,7 +64,7 @@ export const EmailInput = (props: EmailInputProps) => {
   useEffect(() => {
     //@ts-ignore
     ref.current?.focus();
-  }, [ref.current]);
+  }, []);
 
   return (
     <>

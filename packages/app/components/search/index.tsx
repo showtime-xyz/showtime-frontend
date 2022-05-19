@@ -12,7 +12,7 @@ import { useColorScheme } from "design-system/hooks";
 import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Input } from "design-system/input";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
@@ -27,6 +27,7 @@ export const Search = () => {
     () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
   );
+  const isiOS = Platform.OS === "ios";
 
   const renderItem = useCallback(({ item }) => {
     return <SearchItem item={item} />;
@@ -41,10 +42,10 @@ export const Search = () => {
 
   return (
     <>
-      {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-      <View tw="p-4">
+      {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
+      <View tw="px-4 py-2">
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
           value={term}
           ref={inputRef}
           autoFocus
@@ -61,7 +62,7 @@ export const Search = () => {
           }
           rightElement={
             term.length > 0 ? (
-              <Pressable
+              <PressableScale
                 tw="p-2"
                 onPress={() => {
                   setTerm("");
@@ -77,7 +78,7 @@ export const Search = () => {
                   width={24}
                   height={24}
                 />
-              </Pressable>
+              </PressableScale>
             ) : undefined
           }
         />
@@ -85,6 +86,10 @@ export const Search = () => {
       {data ? (
         <FlatList
           data={data}
+          contentContainerStyle={tw.style(`pb-[${headerHeight}px]`)}
+          ListFooterComponent={
+            isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null
+          }
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
@@ -119,12 +124,15 @@ export const SearchItem = ({
           </View>
           <View tw="mr-1 justify-center">
             {item.name ? (
-              <Text
-                tw="mb-[1px] text-sm font-semibold text-gray-600 dark:text-gray-300"
-                numberOfLines={1}
-              >
-                {item.name}
-              </Text>
+              <>
+                <Text
+                  tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                  numberOfLines={1}
+                >
+                  {item.name}
+                </Text>
+                <View tw="h-1" />
+              </>
             ) : null}
 
             <View tw="flex-row items-center">

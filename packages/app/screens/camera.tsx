@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 
-import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 
 import { Camera } from "app/components/camera";
@@ -13,6 +12,8 @@ import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 function CameraScreen() {
   useTrackPageViewed({ name: "Camera" });
@@ -101,6 +102,7 @@ function CameraScreen() {
           const { Camera } = require("react-native-vision-camera");
           const status = await Camera.requestCameraPermission();
           setHasPermission(status === "authorized");
+          // eslint-disable-next-line no-empty
         } catch (error) {}
       }
     })();
@@ -108,7 +110,7 @@ function CameraScreen() {
 
   useEffect(
     function checkIfContinueOrDelete() {
-      const unsubscribe = navigation.addListener("focus", (e) => {
+      const unsubscribe = navigation.addListener("focus", () => {
         setPhotos([]);
         setRender(!render);
       });
@@ -123,7 +125,7 @@ function CameraScreen() {
   }
 
   if (Platform.OS !== "web" && hasPermission === false) {
-    return <Text sx={{ color: "white" }}>No access to camera</Text>;
+    return <Text style={{ color: "white" }}>No access to camera</Text>;
   }
 
   return (

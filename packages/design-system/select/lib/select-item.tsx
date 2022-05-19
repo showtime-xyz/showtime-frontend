@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { GestureResponderEvent } from "react-native";
+import { Pressable, GestureResponderEvent } from "react-native";
 
-import { Pressable } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useIsDarkMode, useOnHover } from "../../hooks";
@@ -52,6 +51,7 @@ export function SelectItem<T>({
       tw`p-2 m-1 items-center justify-between rounded-lg`,
       containerAnimatedStyle,
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   //#endregion
