@@ -1,3 +1,5 @@
+import { ResizeMode } from "expo-av";
+
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
@@ -13,7 +15,7 @@ type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
-  resizeMode?: "contain" | "cover";
+  resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
 };
@@ -26,7 +28,7 @@ function Media({
   onPinchStart,
   onPinchEnd,
 }: Props) {
-  const resizeMode = propResizeMode ?? "cover";
+  const resizeMode = propResizeMode ?? ResizeMode.COVER;
 
   const mediaUri = item?.loading
     ? item?.source_url

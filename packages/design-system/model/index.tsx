@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { ResizeMode } from "expo-av";
+
 import { Image } from "design-system/image";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
@@ -10,7 +12,7 @@ type Props = {
   fallbackUrl: string;
   tw?: string;
   blurhash?: string;
-  resizeMode?: "contain" | "cover";
+  resizeMode?: ResizeMode;
   numColumns: number;
 };
 

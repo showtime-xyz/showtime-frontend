@@ -59,6 +59,7 @@
     "next-themes": "^0.0.15",
     "next-transpile-modules": "^9.0.0",
     "patch-package": "^6.4.7",
+    "photoswipe": "^5.2.7",
     "postcss": "^8.3.6",
     "postinstall-postinstall": "^2.1.0",
     "raf": "^3.4.1",

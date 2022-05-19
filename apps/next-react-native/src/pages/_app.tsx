@@ -7,6 +7,8 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { AppProps } from "next/app";
 import Head from "next/head";
+// Todo: move to inner-components.
+import "photoswipe/dist/photoswipe.css";
 import type { Revalidator, RevalidatorOptions } from "swr";
 // import Script from "next/script";
 import { SWRConfig } from "swr";
