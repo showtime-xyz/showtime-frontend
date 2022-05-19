@@ -11,7 +11,7 @@ You'll find included:
 - [Babel config](./babel.config.js) that works for Expo and Next.js with Reanimated in a monorepo
 - [Reanimated](https://github.com/software-mansion/react-native-reanimated)
 - [React Native Bottom Sheet](https://github.com/gorhom/react-native-bottom-sheet)
-- [Tailwind](https://github.com/jaredh159/tailwind-react-native-classnames) - For react native
+- [Tailwind](https://github.com/jaredh159/tailwind-react-native-classnames)
 - [Sentry](https://docs.sentry.io/)
 - Expo Application Services
 - Custom Development Client
@@ -230,8 +230,13 @@ This is useful if you want to build the iOS app without a Mac, for example.
 React Native for Web + Tailwind
 
 - `packages/design-system/*`
-- [Showtime figma design system](https://www.figma.com/file/hseAlaaQKC4b7MIZS6TdF9/%F0%9F%93%9A-UI-Library?node-id=1099%3A3333)
+- [Design system on Figma](https://www.figma.com/file/hseAlaaQKC4b7MIZS6TdF9/%F0%9F%93%9A-UI-Library?node-id=1099%3A3333)
 - Learn more: [universal design system](https://axeldelafosse.com/blog/universal-design-system)
+
+> Note that we use custom utilities for the fonts to use `capsize`. It's applying
+> negative `margin-top` and `margin-bottom` so you can't use those on `<Text>`
+> directly. Prefer using a separator `<View tw="h-2" />` instead of
+> `<Text tw="mt-2" />` or `<Text tw="mb-2" />` for example.
 
 ### State Management
 

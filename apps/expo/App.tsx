@@ -50,7 +50,6 @@ import { Web3Provider } from "app/providers/web3-provider";
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Platform } from "react-native";
+import { ImageProps, Platform } from "react-native";
 
 import { Video } from "expo-av";
 import { useTailwind } from "tailwindcss-react-native";
@@ -14,9 +14,18 @@ type PreviewProps = {
   type?: "image" | "video";
   tw?: string;
   style?: any;
+  resizeMode?: ImageProps["resizeMode"];
+  resizeMethod?: ImageProps["resizeMethod"];
 };
 
-export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
+export const Preview = ({
+  tw = "",
+  style,
+  type,
+  file,
+  resizeMethod,
+  resizeMode = "cover",
+}: PreviewProps) => {
   const tailwind = useTailwind();
   const uri = getLocalFileURI(file);
 
@@ -42,6 +51,8 @@ export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
         <Image
           tw={tw}
           style={style}
+          resizeMethod={resizeMethod}
+          resizeMode={resizeMode}
           source={{
             uri,
           }}
@@ -54,7 +65,8 @@ export const Preview = ({ tw = "", style, type, file }: PreviewProps) => {
         <Video
           source={{ uri }}
           style={[tailwind(tw), style]}
-          resizeMode="cover"
+          resizeMode={resizeMode}
+          resizeMethod={resizeMethod}
           isMuted
           shouldPlay
         />
@@ -72,5 +84,5 @@ export const getLocalFileURI = (file?: string | File) => {
 
   if (Platform.OS === "web") return URL.createObjectURL(file);
 
-  return null;
+  return file;
 };

@@ -16,7 +16,7 @@ import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Check } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -87,7 +87,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
   });
 
   return (
-    <Pressable onPress={handleChange}>
+    <PressableScale onPress={handleChange}>
       <View tw="flex-row items-center px-8 py-5 dark:bg-black">
         <Text tw="text-sm font-semibold dark:text-gray-100">
           {item.emoji} {item.name} ({item.dial_code})
@@ -96,7 +96,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
           <Check height={24} width={24} color={isDark ? "#fff" : "#000"} />
         </Animated.View>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 });
 

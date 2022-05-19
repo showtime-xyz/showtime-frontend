@@ -7,6 +7,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Haptics } from "app/lib/haptics";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
@@ -78,18 +79,23 @@ export const Trending = () => {
     []
   );
 
+  const handleTabOnPress = useCallback(() => {
+    Haptics.impactAsync();
+  }, []);
+
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
-            <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
+            <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
               Trending
             </Text>
           </View>
         </Tabs.Header>
         <Tabs.List
+          onPressCallback={handleTabOnPress}
           style={tabListStyles}
           contentContainerStyle={tailwind("w-full")}
         >
@@ -120,15 +126,23 @@ export const Trending = () => {
 const TabListContainer = ({ days }: { days: number }) => {
   const [selected, setSelected] = useState(0);
 
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
+
   const SelectionControl = useMemo(
     () => (
       <SegmentedControl
         values={["CREATOR", "NFT"]}
-        onChange={setSelected}
+        onChange={handleTabChange}
         selectedIndex={selected}
       />
     ),
-    [selected, setSelected]
+    [selected, handleTabChange]
   );
 
   return useMemo(
@@ -269,6 +283,7 @@ const CreatorsList = ({
   return (
     <View tw="flex-1 bg-white dark:bg-black">
       <Tabs.RecyclerList
+        // @ts-ignore
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
@@ -328,7 +343,7 @@ const NFTSList = ({
   const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
 
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index) => {
+    (_type: any, item: any, index: number) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }

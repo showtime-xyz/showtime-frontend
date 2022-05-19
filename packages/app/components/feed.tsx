@@ -14,13 +14,14 @@ import { FeedContext } from "app/context/feed-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Haptics } from "app/lib/haptics";
 import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { TabItem, Tabs } from "design-system";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -100,37 +101,39 @@ const HeaderFeed = () => {
 
   return (
     <View tw="flex-row items-center justify-center">
-      <Pressable
+      <PressableScale
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
+          Haptics.impactAsync();
           selected.value = 0;
           pagerRef?.current?.setPage(0);
         }}
       >
         <Animated.View style={animatedStyleFirstTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             Following
           </Text>
         </Animated.View>
-      </Pressable>
+      </PressableScale>
 
       <View tw="w-3" />
       <View tw="h-4 w-[1px] bg-black opacity-50 dark:bg-white" />
       <View tw="w-3" />
 
-      <Pressable
+      <PressableScale
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
+          Haptics.impactAsync();
           selected.value = 1;
           pagerRef?.current?.setPage(1);
         }}
       >
         <Animated.View style={animatedStyleSecondTab}>
-          <Text variant="text-lg" tw="font-bold text-black dark:text-white">
+          <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
             For You
           </Text>
         </Animated.View>
-      </Pressable>
+      </PressableScale>
     </View>
   );
 };

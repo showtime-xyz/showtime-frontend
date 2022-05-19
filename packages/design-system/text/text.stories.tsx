@@ -8,58 +8,43 @@ export default {
 } as Meta;
 
 export const TextXS: React.VFC<{}> = () => (
-  <Text variant="text-xs" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-xs text-black dark:text-white">Hello World</Text>
 );
 
 export const TextXSBoldAndPurple: React.VFC<{}> = () => (
-  <Text variant="text-xs" tw="font-bold text-black dark:text-white">
-    Hello{" "}
-    <Text variant="text-xs" tw="text-stpurple">
-      World
-    </Text>
+  <Text tw="text-xs font-bold text-black dark:text-white">
+    Hello <Text tw="text-stpurple text-xs">World</Text>
   </Text>
 );
 
 export const TextSM: React.VFC<{}> = () => (
-  <Text variant="text-sm" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-sm text-black dark:text-white">Hello World</Text>
 );
 
 export const TextBase: React.VFC<{}> = () => (
-  <Text variant="text-base" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-base text-black dark:text-white">Hello World</Text>
 );
 
 export const TextLG: React.VFC<{}> = () => (
-  <Text variant="text-lg" tw="text-black dark:text-white">
+  <Text tw="font-space-bold text-lg text-black dark:text-white">
     Hello World
   </Text>
 );
 
 export const TextXL: React.VFC<{}> = () => (
-  <Text variant="text-xl" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-xl text-black dark:text-white">Hello World</Text>
 );
 
 export const Text2XL: React.VFC<{}> = () => (
-  <Text variant="text-2xl" tw="text-black dark:text-white">
+  <Text tw="font-space-bold text-2xl text-black dark:text-white">
     Hello World
   </Text>
 );
 
 export const Text3XL: React.VFC<{}> = () => (
-  <Text variant="text-3xl" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-3xl text-black dark:text-white">Hello World</Text>
 );
 
 export const Text4XL: React.VFC<{}> = () => (
-  <Text variant="text-4xl" tw="text-black dark:text-white">
-    Hello World
-  </Text>
+  <Text tw="text-4xl text-black dark:text-white">Hello World</Text>
 );

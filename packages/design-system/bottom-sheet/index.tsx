@@ -97,12 +97,10 @@ export type TextInputProps = {
 export const BottomSheetTextInput = (props: TextInputProps) => {
   const tailwind = useTailwind();
   const { tw, style, componentRef, ...textInputProps } = props;
-  // TODO: review this
-  const styles = { ...tailwind(tw), ...(style as {}) };
 
   return (
     <BottomSheetInput
-      style={styles}
+      style={[tailwind.style(tw), style]}
       //@ts-ignore
       ref={componentRef}
       {...textInputProps}

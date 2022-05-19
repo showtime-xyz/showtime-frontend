@@ -14,7 +14,9 @@ export type TabRootProps = {
   index?: number;
 };
 
-export type TabListProps = ScrollViewProps;
+export type TabListProps = ScrollViewProps & {
+  onPressCallback?: () => void;
+};
 
 export interface ExtendObject extends Object {
   minHeight?: number;

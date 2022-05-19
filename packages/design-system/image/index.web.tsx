@@ -115,7 +115,6 @@ function StyledImage({ tw, ...props }: ImageProps) {
   const borderRadius = Number(tailwind(tw).borderRadius);
 
   return (
-    // TODO: review this. use `tw` prop
     <View style={{ borderRadius, overflow: "hidden" }}>
       <Img className={tw} width={width} height={height} {...props} />
     </View>

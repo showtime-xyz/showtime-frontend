@@ -205,8 +205,7 @@ export function MessageRow({
       <View tw="ml-2 flex-1">
         <View tw="mb-3 h-[12px] flex-row items-center">
           <Text
-            variant="text-13"
-            tw="font-semibold text-gray-900 dark:text-white"
+            tw="text-13 font-semibold text-gray-900 dark:text-white"
             onPress={onUserPress ? () => onUserPress(username) : undefined}
           >
             @{username}
@@ -216,7 +215,7 @@ export function MessageRow({
           ) : null}
         </View>
 
-        <Text variant="text-13" tw="text-gray-900 dark:text-gray-100">
+        <Text tw="text-13 text-gray-900 dark:text-gray-100">
           {contentWithTags}
         </Text>
 
@@ -259,7 +258,7 @@ export function MessageRow({
             ]}
           >
             {createdAtText && (
-              <Text tw="font-bold text-gray-500" variant="text-xs">
+              <Text tw="text-xs font-bold text-gray-500">
                 {`${createdAtText}${onDeletePress ? "  •" : ""}`}
               </Text>
             )}

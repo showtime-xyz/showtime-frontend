@@ -56,6 +56,8 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
   const width = Number(tailwind(tw).width);
   const height = Number(tailwind(tw).height);
 
+  // TODO: review this. we can't use `useTailwind` like this on web
+
   if (blurhash) {
     return (
       <View>

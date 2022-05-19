@@ -2,15 +2,28 @@ import { useCallback } from "react";
 
 import { axios } from "app/lib/axios";
 
+import { useAlert } from "design-system/alert";
 import { useToast } from "design-system/toast";
 
+import { useNavigateToLogin } from "../navigation/use-navigate-to";
 import { useUser } from "./use-user";
 
+type ToggleBlockUserParams = {
+  isBlocked: boolean;
+  creatorId?: number;
+  name?: string;
+  /**
+   * on blocked success callback
+   */
+  onBlocked?: () => void;
+};
 function useBlock() {
   //#region hooks
   const toast = useToast();
   // const { mutate } = useSWRConfig();
-  const { user, mutate } = useUser();
+  const { user, mutate, isAuthenticated } = useUser();
+  const navigateToLogin = useNavigateToLogin();
+  const Alert = useAlert();
   //#endregion
 
   //#region methods
@@ -75,12 +88,42 @@ function useBlock() {
     },
     [toast, mutate]
   );
+  const toggleBlock = useCallback(
+    async function toggleBlock({
+      isBlocked,
+      creatorId,
+      name,
+      onBlocked,
+    }: ToggleBlockUserParams) {
+      if (!creatorId) return;
+      if (!isAuthenticated) return navigateToLogin();
+      if (isBlocked) {
+        await unblock(creatorId);
+      } else {
+        Alert.alert(`Block ${name ? `@${name}` : ""}?`, "", [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Block",
+            style: "destructive",
+            onPress: async () => {
+              await block(creatorId);
+              onBlocked?.();
+            },
+          },
+        ]);
+      }
+    },
+    [Alert, block, isAuthenticated, navigateToLogin, unblock]
+  );
   //#endregion
-
   return {
     getIsBlocked,
     block,
     unblock,
+    toggleBlock,
   };
 }
 

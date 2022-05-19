@@ -1,7 +1,7 @@
 import "raf/polyfill";
 
 import { useEffect, useState } from "react";
-import { useColorScheme as useDeviceColorScheme } from "react-native";
+import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
@@ -41,6 +41,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { EditProfileScreen } from "app/screens/edit-profile";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
@@ -49,7 +50,6 @@ import { UnlistScreen } from "app/screens/unlist";
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 import { View } from "design-system/view";
 
@@ -235,47 +235,50 @@ export default function App({ Component, pageProps, router }: AppProps) {
                     <AppContext.Provider value={injectedGlobalContext}>
                       <AuthProvider>
                         <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <MintProvider>
-                                    <View tw="bg-gray-100 dark:bg-black">
-                                      <Header
-                                        canGoBack={
-                                          router.pathname === "/search" ||
-                                          router.pathname.split("/").length -
-                                            1 >=
-                                            2
-                                        }
-                                      />
+                          <CSROnly>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <NavigationProvider>
+                                    <MintProvider>
+                                      <View tw="bg-gray-100 dark:bg-black">
+                                        <Header
+                                          canGoBack={
+                                            router.pathname === "/search" ||
+                                            router.pathname.split("/").length -
+                                              1 >=
+                                              2
+                                          }
+                                        />
 
-                                      <View tw="min-h-screen items-center">
-                                        <Component {...pageProps} />
+                                        <View tw="min-h-screen items-center">
+                                          <Component {...pageProps} />
+                                        </View>
+
+                                        <Footer />
                                       </View>
 
-                                      <Footer />
-                                    </View>
-
-                                    {/* Modals */}
-                                    <CommentsScreen />
-                                    <TransferScreen />
-                                    <CreateScreen />
-                                    <DeleteScreen />
-                                    <ListScreen />
-                                    <UnlistScreen />
-                                    <DetailsScreen />
-                                    <BuyScreen />
-                                    <ActivitiesScreen />
-                                    <MintSnackbar />
-                                    {/* Login should be the last so
+                                      {/* Modals */}
+                                      <CommentsScreen />
+                                      <TransferScreen />
+                                      <CreateScreen />
+                                      <DeleteScreen />
+                                      <ListScreen />
+                                      <UnlistScreen />
+                                      <DetailsScreen />
+                                      <BuyScreen />
+                                      <ActivitiesScreen />
+                                      <MintSnackbar />
+                                      <EditProfileScreen />
+                                      {/* Login should be the last so
                                       it renders on top of others if needed */}
-                                    <LoginScreen />
-                                  </MintProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
+                                      <LoginScreen />
+                                    </MintProvider>
+                                  </NavigationProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </CSROnly>
                         </UserProvider>
                       </AuthProvider>
                     </AppContext.Provider>
@@ -289,3 +292,21 @@ export default function App({ Component, pageProps, router }: AppProps) {
     </>
   );
 }
+
+// TODO: remove CSR after replacing to css tailwind
+const CSROnly = ({ children }: any) => {
+  const [ready, setReady] = useState(() => {
+    if (Platform.OS !== "web") {
+      return true;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  if (ready) return children;
+
+  return null;
+};

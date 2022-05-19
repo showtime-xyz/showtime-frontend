@@ -2,7 +2,6 @@ import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
 import type { TW } from "design-system/tailwind/types";
-import { textSizes } from "design-system/typography";
 
 import { ViewProps } from "../view";
 import { Text as StyledText } from "./text";
@@ -11,7 +10,6 @@ export type TextProps = ComponentProps<typeof StyledText>;
 
 export type Props = {
   tw?: TW;
-  variant?: keyof typeof textSizes;
   htmlFor?: string;
   pointerEvents?: ViewProps["pointerEvents"];
 } & Pick<
@@ -25,6 +23,7 @@ export type Props = {
   | "numberOfLines"
   | "ellipsizeMode"
   | "onPress"
+  | "style"
 >;
 
 /**
@@ -39,7 +38,6 @@ const ParentContext = createContext<{} | undefined>(undefined);
 export const Text = forwardRef<TextType, Props>(
   (
     {
-      variant,
       onLayout,
       onTextLayout,
       children,
@@ -52,6 +50,7 @@ export const Text = forwardRef<TextType, Props>(
       ellipsizeMode,
       pointerEvents,
       onPress,
+      style,
     },
     ref
   ) => {
@@ -74,9 +73,7 @@ export const Text = forwardRef<TextType, Props>(
       <StyledText
         tw={compoundTw}
         nativeID={nativeID}
-        // @ts-ignore Dripsy‘s Text component issue
         ref={ref}
-        variant={variant}
         selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}

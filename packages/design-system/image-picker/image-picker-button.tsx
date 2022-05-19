@@ -4,7 +4,7 @@ import {
 } from "design-system/file-picker";
 import { useIsDarkMode } from "design-system/hooks";
 import { Image } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 
 export function ImagePickerButton({
   onPick,
@@ -18,7 +18,7 @@ export function ImagePickerButton({
 
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
   return (
-    <Pressable
+    <PressableScale
       tw={
         type === "profilePhoto"
           ? "h-20 w-20 items-center justify-center rounded-full bg-white dark:bg-black"
@@ -44,6 +44,6 @@ export function ImagePickerButton({
         </View>
       )}*/}
       <Image color={isDark ? "#fff" : "#000"} width={24} height={24} />
-    </Pressable>
+    </PressableScale>
   );
 }

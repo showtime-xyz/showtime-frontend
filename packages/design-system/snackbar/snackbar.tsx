@@ -16,7 +16,7 @@ import { Text } from "design-system/text";
 
 import { useIsDarkMode } from "../hooks";
 import { Check } from "../icon";
-import { Pressable } from "../pressable-scale";
+import { PressableScale } from "../pressable-scale";
 import { Spinner } from "../spinner";
 import { colors } from "../tailwind/colors";
 import { PRESET_TRANSITION_MAP, SnackbarTransitionType } from "./constants";
@@ -167,6 +167,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
               // TODO: review this. add textColor
               tw="text-xs font-medium"
               numberOfLines={1}
+              style={{ color: textColor }}
               accessibilityRole="text"
             >
               {snackbar.text}
@@ -179,7 +180,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                 transition={{ type: "timing", duration: 250 }}
                 style={{ marginLeft: "auto" }}
               >
-                <Pressable
+                <PressableScale
                   accessibilityLabel="View"
                   accessibilityRole="button"
                   onPress={snackbar.action?.onPress}
@@ -191,11 +192,12 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                       // TODO: review this. add textColor
                       tw="text-xs font-bold"
                       numberOfLines={1}
+                      style={{ color: textColor }}
                     >
                       {snackbar.action?.text}
                     </Text>
                   )}
-                </Pressable>
+                </PressableScale>
               </MotiView>
             )}
           </BlurView>

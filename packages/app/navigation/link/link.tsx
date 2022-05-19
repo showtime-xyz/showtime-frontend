@@ -3,7 +3,7 @@ import { Platform, TextProps, ViewProps } from "react-native";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
 
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import type { TW } from "design-system/tailwind/types";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
@@ -24,7 +24,7 @@ function Link({ viewProps, tw, hrefAttrs, onPress, ...props }: LinkProps) {
       {...props}
       Component={Platform.select({
         web: View,
-        default: Pressable as any,
+        default: PressableScale as any,
       })}
       componentProps={{
         ...viewProps,

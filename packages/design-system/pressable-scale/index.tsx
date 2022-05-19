@@ -8,15 +8,13 @@ import type { TW } from "design-system/tailwind/types";
 export type Props = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;
   tw?: TW;
-  disablePressAnimation?: boolean;
 };
 
-export function Pressable({
+export function PressableScale({
   animate,
   scaleTo = 0.95,
   tw,
   style,
-  disablePressAnimation = false,
   ...props
 }: Props) {
   const tailwind = useTailwind();
@@ -34,7 +32,7 @@ export function Pressable({
 
   return (
     <MotiPressable
-      animate={disablePressAnimation ? undefined : animateValues}
+      animate={animateValues}
       style={
         tw ? [tailwind(Array.isArray(tw) ? tw.join(" ") : tw), style] : style
       }

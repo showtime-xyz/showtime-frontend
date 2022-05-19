@@ -12,7 +12,7 @@ import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Input } from "design-system/input";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { colors } from "design-system/tailwind/colors";
 import { Text } from "design-system/text";
@@ -48,7 +48,7 @@ export const Search = () => {
       {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
       <View tw="px-4 py-2">
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
           value={term}
           ref={inputRef}
           autoFocus
@@ -64,7 +64,7 @@ export const Search = () => {
           }
           rightElement={
             term.length > 0 ? (
-              <Pressable
+              <PressableScale
                 tw="p-2"
                 onPress={() => {
                   setTerm("");
@@ -77,7 +77,7 @@ export const Search = () => {
                   width={24}
                   height={24}
                 />
-              </Pressable>
+              </PressableScale>
             ) : undefined
           }
         />
@@ -123,12 +123,15 @@ export const SearchItem = ({
           </View>
           <View tw="mr-1 justify-center">
             {item.name ? (
-              <Text
-                tw="mb-[1px] text-sm font-semibold text-gray-600 dark:text-gray-300"
-                numberOfLines={1}
-              >
-                {item.name}
-              </Text>
+              <>
+                <Text
+                  tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                  numberOfLines={1}
+                >
+                  {item.name}
+                </Text>
+                <View tw="h-1" />
+              </>
             ) : null}
 
             <View tw="flex-row items-center">

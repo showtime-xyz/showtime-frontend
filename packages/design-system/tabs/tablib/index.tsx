@@ -11,16 +11,19 @@ import {
   Dimensions,
   FlatList,
   FlatListProps,
+  KeyboardAvoidingView,
   LayoutRectangle,
   Platform,
   Pressable,
   PressableProps,
   RefreshControl,
   ScrollViewProps,
+  StyleProp,
   StyleSheet,
   useWindowDimensions,
   View,
   ViewProps,
+  ViewStyle,
 } from "react-native";
 
 import PagerView from "react-native-pager-view";
@@ -190,7 +193,12 @@ const List = (props: TabListProps) => {
   return null;
 };
 
-const ListImpl = ({ children, style, ...props }: TabListProps) => {
+const ListImpl = ({
+  children,
+  style,
+  onPressCallback,
+  ...props
+}: TabListProps) => {
   const tailwind = useTailwind();
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
@@ -203,12 +211,12 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
       if (React.isValidElement(c) && c && c.type === Trigger) {
         triggerIndex++;
         // @ts-ignore - Todo - do better ts check here
-        return React.cloneElement(c, { index: triggerIndex });
+        return React.cloneElement(c, { index: triggerIndex, onPressCallback });
       } else {
         return c;
       }
     });
-  }, [children]);
+  }, [children, onPressCallback]);
 
   const listWidth = useSharedValue(0);
   const windowWidth = useWindowDimensions().width;
@@ -239,7 +247,7 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
   );
 
   const styles = React.useMemo(() => {
-    return [tailwind(`bg-white dark:bg-gray-900`), style];
+    return [tailwind(`bg-white dark:bg-black`), style];
   }, [tailwind, style]);
 
   return (
@@ -267,6 +275,7 @@ const Pager = ({
 }: {
   children: React.ReactNode;
   tw?: string;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const {
     initialIndex,
@@ -277,7 +286,6 @@ const Pager = ({
     lazy,
     index,
   } = useContext(TabsContext);
-
   const [mountedIndices, setMountedIndices] = React.useState(
     lazy ? [initialIndex] : flattenChildren(children).map((_c, i) => i)
   );
@@ -296,7 +304,21 @@ const Pager = ({
                   shouldLoad ? StyleSheet.absoluteFill : undefined,
                 ]}
               >
-                {shouldLoad ? c : null}
+                {shouldLoad ? (
+                  c.props.useKeyboardAvoidingView ? (
+                    <KeyboardAvoidingView
+                      style={{ flex: 1 }}
+                      behavior="padding"
+                      keyboardVerticalOffset={
+                        c.props.keyboardVerticalOffset || 0
+                      }
+                    >
+                      {c}
+                    </KeyboardAvoidingView>
+                  ) : (
+                    c
+                  )
+                ) : null}
               </View>
             }
           </TabIndexContext.Provider>
@@ -362,8 +384,11 @@ const Trigger = React.forwardRef(
       index,
       onLayout,
       onPress,
+      onPressCallback,
       ...props
-    }: PressableProps,
+    }: PressableProps & {
+      onPressCallback?: () => void;
+    },
     // eslint-disable-next-line unused-imports/no-unused-vars
     ref: ForwardedRef<typeof Pressable>
   ) => {
@@ -382,6 +407,7 @@ const Trigger = React.forwardRef(
           onLayout?.(e);
         }}
         onPress={(e) => {
+          onPressCallback?.();
           pagerRef.current.setPage(index);
           onPress?.(e);
         }}
@@ -549,21 +575,27 @@ const TabRecyclerListView = React.memo(
 
 TabRecyclerListView.displayName = "TabRecyclerListView";
 
+type ScrollableScrollViewType = ScrollViewProps & {
+  useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
+};
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
-  typeof Reanimated.ScrollView
+  ScrollableScrollViewType
 >(Reanimated.ScrollView);
+
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
 );
 
 interface ExtendedFlatListProps extends FlatListProps<any> {
   minHeight?: number;
+  useKeyboardAvoidingView?: boolean;
+  keyboardVerticalOffset?: number;
 }
-const TabFlatList = makeScrollableComponent<
-  ExtendedFlatListProps,
-  typeof AnimatedFlatList
->(AnimatedFlatList);
+const TabFlatList = makeScrollableComponent<FlatList, ExtendedFlatListProps>(
+  AnimatedFlatList
+);
 
 const Header = (props) => {
   return props.children;

@@ -15,8 +15,8 @@ function ActivityIndicator({ tw, ...props }: ActivityIndicatorProps) {
   return (
     <StyledActivityIndicator
       color="#8b5cf6"
-      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />
   );
 }

@@ -1,11 +1,8 @@
-import { useMemo } from "react";
-
 import { useTailwind } from "tailwindcss-react-native";
 
 import { useOnPress, useOnHover } from "design-system/hooks";
 import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
-import { colors } from "design-system/tailwind/colors";
+import { PressableScale } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 
 type Props = {
@@ -63,7 +60,7 @@ function Button({
   // );
 
   return (
-    <Pressable
+    <PressableScale
       tw={[
         "h-8 flex-row items-center rounded-full p-2 dark:bg-gray-900",
         isHovered ? backgroundHoverColor : backgroundColor,
@@ -88,10 +85,10 @@ function Button({
         //     : tailwind("gray-400")
         // }
       />
-      <Text variant="text-13" tw={["font-bold", count > 0 ? "ml-1" : ""]}>
+      <Text tw={["text-13 font-bold", count > 0 ? "ml-1" : ""]}>
         {count > 0 ? formatNumber(count) : ""}
       </Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 

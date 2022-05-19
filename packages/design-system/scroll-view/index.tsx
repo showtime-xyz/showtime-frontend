@@ -15,8 +15,8 @@ function ScrollView({ tw, ...props }: ScrollViewProps) {
   return (
     <StyledScrollView
       keyboardShouldPersistTaps="handled"
-      tw={Array.isArray(tw) ? tw.join(" ") : tw}
       {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />
   );
 }

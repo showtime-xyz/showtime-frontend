@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { useTailwind } from "tailwindcss-react-native";
 
 import { useIsDarkMode } from "design-system/hooks";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 
 import {
@@ -103,13 +103,13 @@ export function BaseButton({
   }
 
   return (
-    <Pressable
+    <PressableScale
       {...props}
       tw={containerStyle}
       style={backgroundColors ? containerAnimatedStyle : undefined}
     >
       {renderChildren}
-    </Pressable>
+    </PressableScale>
   );
   //#endregion
 }

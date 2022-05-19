@@ -11,6 +11,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Haptics } from "app/lib/haptics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 
@@ -74,6 +75,10 @@ const Profile = ({ address }: { address: string | null }) => {
     [dispatch]
   );
 
+  const handleTabOnPress = useCallback(() => {
+    Haptics.impactAsync();
+  }, []);
+
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
       <View tw="web:items-center w-full flex-1 overflow-hidden">
@@ -108,7 +113,10 @@ const Profile = ({ address }: { address: string | null }) => {
           {data?.data.lists ? (
             <>
               <Tabs.List
-                style={tailwind(`h-[${TAB_LIST_HEIGHT}px] w-full self-center`)}
+                onPressCallback={handleTabOnPress}
+                style={tailwind(
+                  `h-[${TAB_LIST_HEIGHT}px] w-full self-center bg-white dark:bg-black`
+                )}
               >
                 {data?.data.lists.map((list, index) => (
                   <Tabs.Trigger key={list.id}>

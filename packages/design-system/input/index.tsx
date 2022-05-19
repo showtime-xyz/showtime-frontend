@@ -13,7 +13,7 @@ import { useTailwind } from "tailwindcss-react-native";
 
 import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
 import { Label } from "../label";
-import { Pressable, Props as PressableProps } from "../pressable-scale";
+import { PressableScale, Props as PressableProps } from "../pressable-scale";
 import { colors } from "../tailwind/colors";
 import { Text } from "../text";
 import { View } from "../view";
@@ -34,6 +34,7 @@ type InputProps = {
   accessibilityLabel?: string;
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
+  autocomplete?: "on" | "off";
 };
 
 const borderColor = {
@@ -76,6 +77,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     isInvalid,
     accessibilityLabel,
     autoFocus,
+    autocomplete,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const colorScheme = useColorScheme();
@@ -99,13 +101,15 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
   return (
     <View>
       {label ? (
-        <Label
-          variant="text-sm"
-          htmlFor={inputId}
-          tw="mb-2 font-bold text-gray-900 dark:text-white"
-        >
-          {label}
-        </Label>
+        <>
+          <Label
+            htmlFor={inputId}
+            tw="text-sm font-bold text-gray-900 dark:text-white"
+          >
+            {label}
+          </Label>
+          <View tw="h-2" />
+        </>
       ) : null}
       <Animated.View
         style={[
@@ -126,7 +130,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       >
         {leftElement}
         <TextInput
-          tw="text-gray-900 dark:text-white"
           // @ts-ignore remove focus outline on web as we'll control the focus styling
           style={StyleSheet.flatten([
             Platform.select({
@@ -138,13 +141,18 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             props.inputStyle,
             {
               flexGrow: 1,
-              paddingY: Platform.select({
+              paddingTop: Platform.select({
+                ios: 16,
+                default: 12,
+              }),
+              paddingBottom: Platform.select({
                 ios: 16,
                 default: 12,
               }),
               paddingLeft: leftElement ? 0 : 16,
               paddingRight: rightElement ? 0 : 16,
               fontWeight: "500",
+              ...tailwind("text-gray-900 dark:text-white"),
             },
           ])}
           placeholderTextColor={
@@ -175,12 +183,12 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             default: undefined,
           })}
           ref={ref}
+          autocomplete={autocomplete}
         />
         {rightElement && <View tw="ml-auto">{rightElement}</View>}
       </Animated.View>
       {helperText ? (
         <Text
-          variant="text-sm"
           nativeID={helperTextId}
           tw="mt-[4px] font-bold text-gray-600 dark:text-gray-400"
         >
@@ -190,8 +198,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       {errorText ? (
         <Text
           nativeID={errorTextId}
-          variant="text-sm"
-          tw="mt-[4px] font-bold text-red-500"
+          tw="mt-[4px] text-sm font-bold text-red-500"
         >
           {errorText}
         </Text>
@@ -205,5 +212,5 @@ Input.displayName = "Input";
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {
-  return <Pressable tw="p-2" {...props} />;
+  return <PressableScale tw="p-2" {...props} />;
 };

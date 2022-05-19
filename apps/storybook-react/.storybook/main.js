@@ -16,9 +16,6 @@ module.exports = {
         modulesToTranspile: [
           "@gorhom/bottom-sheet",
           "@gorhom/portal",
-          "dripsy",
-          "@dripsy/core",
-          "@dripsy/gradient",
           "twrnc",
           "moti",
           "@motify/components",
