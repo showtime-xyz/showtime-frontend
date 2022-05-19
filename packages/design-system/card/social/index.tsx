@@ -1,9 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import debounce from "lodash/debounce";
-
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useLike } from "app/context/like-context";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 
@@ -12,9 +10,7 @@ import { View } from "design-system/view";
 
 function Social({ nft }: { nft?: NFT }) {
   const router = useRouter();
-  const { isLiked, like, unlike } = useMyInfo();
-  const isLikedNft = useMemo(() => isLiked(nft!.nft_id), [isLiked, nft]);
-  const [likeCount, setLikeCount] = useState(nft!.like_count);
+  const { isLiked, likeCount, toggleLike } = useLike();
 
   const handleCommentPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
@@ -41,23 +37,6 @@ function Social({ nft }: { nft?: NFT }) {
     );
   }, [router, nft]);
 
-  const handleLikeButton = debounce(
-    useCallback(async () => {
-      if (isLikedNft) {
-        const isSuccessfullyUnlike = await unlike(nft!.nft_id);
-        if (isSuccessfullyUnlike) {
-          setLikeCount(likeCount - 1);
-        }
-      } else {
-        const isSuccessfullyLiked = await like(nft!.nft_id);
-        if (isSuccessfullyLiked) {
-          setLikeCount(likeCount + 1);
-        }
-      }
-    }, [isLikedNft, like, unlike, likeCount, nft]),
-    300
-  );
-
   if (!nft) return null;
 
   return (
@@ -66,8 +45,8 @@ function Social({ nft }: { nft?: NFT }) {
         <Button
           variant="like"
           count={likeCount}
-          active={isLikedNft}
-          onPress={handleLikeButton}
+          active={isLiked}
+          onPress={toggleLike}
         />
         <View tw="ml-2" />
         <Button
