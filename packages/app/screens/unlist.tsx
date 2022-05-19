@@ -47,7 +47,7 @@ const UnlistModal = withColorScheme(() => {
   if (error) {
     return (
       <View tw="flex-1 items-center">
-        <Text tw="dark:text-gray-100 text-gray-900">Something went wrong</Text>
+        <Text tw="text-gray-900 dark:text-gray-100">Something went wrong</Text>
         <Button tw="mt-4" onPress={refresh}>
           Please try again
         </Button>
