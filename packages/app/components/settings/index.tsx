@@ -111,11 +111,11 @@ const SettingsTabs = () => {
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="items-center bg-white dark:bg-black">
             <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
-              <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
+              <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
                 Settings
               </Text>
               {!isWeb ? (
-                <Text tw="text-2xl font-extrabold text-gray-100 dark:text-gray-900">
+                <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
                   v{Constants?.manifest?.version ?? packageJson?.version}
                 </Text>
               ) : null}

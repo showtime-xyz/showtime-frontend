@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import { Meta } from "@storybook/react";
+
+import { Haptics } from "app/lib/haptics";
 
 import { SegmentedControl } from "./index";
 
@@ -11,10 +13,19 @@ export default {
 
 export const Primary: React.VFC<{}> = () => {
   const [selected, setSelected] = useState(0);
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      Haptics.impactAsync();
+      setSelected(index);
+    },
+    [setSelected]
+  );
+
   return (
     <SegmentedControl
       values={["LABEL 1", "LABEL 2", "LABEL 3"]}
-      onChange={setSelected}
+      onChange={handleTabChange}
       selectedIndex={selected}
     />
   );

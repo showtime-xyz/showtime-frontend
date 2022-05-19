@@ -20,7 +20,7 @@ export const WebFooter = () => {
               width={140}
             />
           </Link>
-          <Text variant="text-13" tw={"mt-4 font-semibold text-gray-500"}>
+          <Text tw={"text-13 mt-4 font-semibold text-gray-500"}>
             &copy; {new Date().getFullYear()} Showtime Technologies, Inc.
           </Text>
         </View>
@@ -35,10 +35,7 @@ export const WebFooter = () => {
                 }}
                 key={item.title}
               >
-                <Text
-                  tw="mb-4 mt-0 font-semibold text-gray-900 dark:text-white"
-                  variant="text-13"
-                >
+                <Text tw="text-13 mb-4 mt-0 font-semibold text-gray-900 dark:text-white">
                   {item.title}
                 </Text>
               </Link>
@@ -46,28 +43,28 @@ export const WebFooter = () => {
           </View>
           <View tw="flex flex-col">
             {social.map((item) => (
-              <Link
-                tw="mb-4 flex-row items-center"
-                href={item.link}
-                hrefAttrs={{
-                  target: "_blank",
-                  rel: "noreferrer",
-                }}
-                key={item.title}
-              >
-                <View tw="mr-2 text-base">
-                  {item.icon({
-                    color: tw.style("text-gray-900 dark:text-white")
-                      .color as string,
-                  })}
-                </View>
-                <Text
-                  variant="text-13"
-                  tw="font-semibold text-gray-900 dark:text-white"
+              <>
+                <Link
+                  tw="flex-row items-center"
+                  href={item.link}
+                  hrefAttrs={{
+                    target: "_blank",
+                    rel: "noreferrer",
+                  }}
+                  key={item.title}
                 >
-                  {item.title}
-                </Text>
-              </Link>
+                  <View tw="mr-2 text-base">
+                    {item.icon({
+                      color: tw.style("text-gray-900 dark:text-white")
+                        .color as string,
+                    })}
+                  </View>
+                  <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
+                    {item.title}
+                  </Text>
+                </Link>
+                <View tw="h-6" />
+              </>
             ))}
           </View>
         </View>

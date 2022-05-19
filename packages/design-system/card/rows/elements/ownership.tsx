@@ -80,17 +80,12 @@ export function Ownership({ nft }: Props) {
           ))}
         </OwnershipContainer>
         <View tw="w-2" />
-        <View tw="">
-          <Text
-            variant="text-xs"
-            tw="mb-1 font-semibold text-gray-600 dark:text-gray-400"
-          >
+        <View>
+          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             Owners
           </Text>
-          <Text
-            variant="text-13"
-            tw="font-semibold text-gray-900 dark:text-white"
-          >
+          <View tw="h-1" />
+          <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
             Multiple
           </Text>
         </View>
@@ -106,18 +101,12 @@ export function Ownership({ nft }: Props) {
       >
         <Avatar url={nft.owner_img_url} />
         <View tw="ml-2 justify-center">
-          <Text
-            sx={{ fontSize: 12, lineHeight: 12 }}
-            tw="font-semibold text-gray-600 dark:text-gray-400"
-          >
+          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             Owner
           </Text>
           <View tw="h-2" />
           <View tw="flex flex-row items-center">
-            <Text
-              variant="text-13"
-              tw="font-semibold text-gray-900 dark:text-white"
-            >
+            <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
               {nft.owner_username
                 ? `@${nft.owner_username}`
                 : nft.owner_name

@@ -44,15 +44,13 @@ function Activity({ activity }: Props) {
 
         <View tw="ml-2 w-[69vw] items-start justify-center">
           <Text
-            variant="text-sm"
-            tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
+            tw="max-w-[69vw] text-sm text-gray-600 dark:text-gray-400"
             numberOfLines={2}
             ellipsizeMode="tail"
           >
             <TextLink
               href={`/@${actor.username ?? actor.wallet_address}`}
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
             >
               {actor.username ? (
                 <>@{actor.username}</>
@@ -80,7 +78,7 @@ function Activity({ activity }: Props) {
 
           <View tw="h-2" />
 
-          <Text variant="text-xs" tw="text-gray-600 dark:text-gray-400">
+          <Text tw="text-xs text-gray-600 dark:text-gray-400">
             {formatDistanceToNowStrict(new Date(`${activity.timestamp}`), {
               addSuffix: true,
             })}

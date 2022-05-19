@@ -14,8 +14,7 @@ function Follow({ act }) {
           <>
             followed{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${
                 counterparties[0]?.username ?? counterparties[0]?.wallet_address
               }`}
@@ -32,8 +31,7 @@ function Follow({ act }) {
           <>
             followed{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${
                 counterparties[0]?.username ?? counterparties[0]?.wallet_address
               }`}
@@ -45,8 +43,7 @@ function Follow({ act }) {
             </TextLink>{" "}
             and{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(
@@ -61,8 +58,7 @@ function Follow({ act }) {
           <>
             followed{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${
                 counterparties[0]?.username ?? counterparties[0]?.wallet_address
               }`}
@@ -74,8 +70,7 @@ function Follow({ act }) {
             </TextLink>
             ,{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(
@@ -85,8 +80,7 @@ function Follow({ act }) {
             </TextLink>{" "}
             and{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${counterparties[2]?.wallet_address}`}
             >
               {truncateWithEllipses(
@@ -101,8 +95,7 @@ function Follow({ act }) {
           <>
             followed{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${
                 counterparties[0]?.username ?? counterparties[0]?.wallet_address
               }`}
@@ -114,8 +107,7 @@ function Follow({ act }) {
             </TextLink>
             ,{" "}
             <TextLink
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={`/@${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(

@@ -1,20 +1,18 @@
 import { ComponentProps } from "react";
 
-import { styled } from "dripsy";
 import { Skeleton as MotiSkeleton } from "moti/skeleton";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
 
-const StyledSkeleton = styled(MotiSkeleton)();
-
-type Props = ComponentProps<typeof StyledSkeleton> & {
+type Props = ComponentProps<typeof MotiSkeleton> & {
   tw?: TW;
 };
 
-function Skeleton({ tw, sx, ...props }: Props) {
-  return <StyledSkeleton sx={{ ...sx, ...tailwind.style(tw) }} {...props} />;
+function Skeleton({ tw, ...props }: Props) {
+  return <MotiSkeleton {...props} {...tailwind.style(tw)} />;
 }
+
 Skeleton.displayName = "Skeleton";
 
 export { Skeleton };

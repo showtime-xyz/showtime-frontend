@@ -64,7 +64,7 @@ export function Camera({
       setIsLoading(false);
       setShowPop(true);
       setTimeout(() => setShowPop(false), 10);
-      // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      // Haptics.impactAsync();
 
       // Add photo
       const photo = await camera.current.takePictureAsync({
@@ -104,7 +104,7 @@ export function Camera({
 
   return (
     <View tw="w-full flex-1 content-center justify-center">
-      <View sx={{ height: "70%" }}>
+      <View style={{ height: "70%" }}>
         {isActive && (
           <ExpoCamera
             ref={camera}

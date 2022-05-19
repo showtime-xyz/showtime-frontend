@@ -4,7 +4,7 @@ import { LayoutAnimation, UIManager, Platform } from "react-native";
 import type { NFT } from "app/types";
 import { removeTags } from "app/utilities";
 
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
@@ -79,8 +79,7 @@ function Description({ nft }: Props) {
   return (
     <View tw="bg-white px-4 pb-4 dark:bg-black">
       <Text
-        variant="text-sm"
-        tw="text-gray-600 dark:text-gray-400"
+        tw="text-sm text-gray-600 dark:text-gray-400"
         numberOfLines={numberOfLines}
         onTextLayout={onTextLayout}
       >
@@ -88,14 +87,14 @@ function Description({ nft }: Props) {
       </Text>
 
       {(showMore || showLess) && (
-        <Pressable onPress={showMore ? onShowMore : onShowLess}>
-          <Text
-            variant="text-sm"
-            tw="mt-1 font-bold text-gray-600 dark:text-gray-400"
-          >
-            {showMore ? "More" : "Less"}
-          </Text>
-        </Pressable>
+        <>
+          <View tw="h-1" />
+          <PressableScale onPress={showMore ? onShowMore : onShowLess}>
+            <Text tw="text-sm font-bold text-gray-600 dark:text-gray-400">
+              {showMore ? "More" : "Less"}
+            </Text>
+          </PressableScale>
+        </>
       )}
     </View>
   );

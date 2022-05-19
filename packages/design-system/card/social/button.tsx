@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { useOnPress, useOnHover } from "design-system/hooks";
 import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
+import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
@@ -59,7 +59,7 @@ function Button({
   );
 
   return (
-    <Pressable
+    <PressableScale
       tw={[
         "h-8 flex-row items-center rounded-full p-2 dark:bg-gray-900",
         isHovered ? backgroundHoverColor : backgroundColor,
@@ -85,14 +85,13 @@ function Button({
         }
       />
       <Text
-        variant="text-13"
-        tw={["font-bold", count > 0 ? "ml-1" : ""]}
+        tw={["text-13 font-bold", count > 0 ? "ml-1" : ""]}
         // @ts-ignore
-        sx={textStyle}
+        style={textStyle}
       >
         {count > 0 ? formatNumber(count) : ""}
       </Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 

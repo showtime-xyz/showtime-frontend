@@ -7,7 +7,7 @@ import { SafeAreaView } from "app/lib/safe-area";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
-import { CountryCodePicker, Pressable, Text, View } from "design-system";
+import { CountryCodePicker, PressableScale, Text, View } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";
@@ -82,7 +82,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         signInButtonLabel="Send"
         leftElement={useMemo(() => {
           return (
-            <Pressable
+            <PressableScale
               onPress={() => {
                 setSearch("");
                 setModalVisible(true);
@@ -95,7 +95,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
-                sx={{
+                style={{
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,
@@ -109,7 +109,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
                 {selectedCountry?.dial_code}{" "}
               </Text>
-            </Pressable>
+            </PressableScale>
           );
         }, [selectedCountry])}
         onSubmit={useCallback(
@@ -172,7 +172,7 @@ export function Header({ title, close, onSearchSubmit }: Props) {
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text variant="text-lg" tw="px-4 font-bold dark:text-white">
+          <Text tw="font-space-bold px-4 text-lg font-bold dark:text-white">
             {title}
           </Text>
         )}

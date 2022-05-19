@@ -13,7 +13,7 @@ const MarketplaceScreen = withColorScheme(() => {
       <View tw={`h-[${headerHeight}px] bg-black`} />
 
       <View tw="p-4">
-        <Text variant="text-2xl" tw="font-extrabold text-black dark:text-white">
+        <Text tw="font-space-bold text-2xl font-extrabold text-black dark:text-white">
           Discover
         </Text>
         <View tw="h-6" />

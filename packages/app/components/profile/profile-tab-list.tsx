@@ -50,14 +50,14 @@ export const ProfileTabList = ({
     });
 
   const onCollectionChange = useCallback(
-    (value) => {
+    (value: number | string) => {
       dispatch({ type: "collection_change", payload: value });
     },
     [dispatch]
   );
 
   const onSortChange = useCallback(
-    (value) => {
+    (value: number | string) => {
       dispatch({ type: "sort_change", payload: value });
     },
     [dispatch]
@@ -196,10 +196,21 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           onPress={() => onItemPress(index - 1)}
+          hrefProps={{
+            pathname: "/list",
+            query: {
+              initialScrollIndex: index - 1,
+              listId: list.id,
+              profileId,
+              collectionId: filter.collectionId,
+              sortId: filter.sortId,
+              type: "profile",
+            },
+          }}
         />
       );
     },
-    [ListHeaderComponent, onItemPress]
+    [filter, list.id, profileId, ListHeaderComponent, onItemPress]
   );
 
   return (

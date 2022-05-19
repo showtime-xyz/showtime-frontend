@@ -19,17 +19,15 @@ import { getFileFormData, SORT_FIELDS } from "app/utilities";
 import {
   Button,
   Fieldset,
-  Image,
   SelectedTabIndicator,
   TabItem,
   Tabs,
   Text,
   View,
 } from "design-system";
-import { Avatar } from "design-system/avatar";
 import { useFilePicker } from "design-system/file-picker";
 import { Upload } from "design-system/icon";
-import { getLocalFileURI, Preview } from "design-system/preview";
+import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 import { colors } from "design-system/tailwind/colors";
 
@@ -460,7 +458,8 @@ export const EditProfile = () => {
           >
             Done
           </Button>
-          <Text tw="mt-1 text-center text-sm text-red-500">
+          <View tw="h-1" />
+          <Text tw="text-center text-sm text-red-500">
             {errors.submitError?.message}
           </Text>
         </View>
