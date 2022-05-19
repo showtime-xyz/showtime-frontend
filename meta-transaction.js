@@ -11,19 +11,17 @@ const API = USE_REMOTE_API ? REMOTE_API : LOCAL_API;
 const wallet = new ethers.Wallet(
   "0xf740980eb4eb61094ca514ee96f04e77fa7c40837287bc8f224bbec2adc337d7",
   new ethers.providers.JsonRpcProvider(
-    `https://polygon-${"mumbai"}.infura.io/v3/45f2e4f4ce3f483b8472f5f77f12c50d`
+    `https://polygon-mumbai.infura.io/v3/45f2e4f4ce3f483b8472f5f77f12c50d`
   )
 );
 
-const minterABI = ["function mintEdition(address collection, address _to)"];
+const minterABI = ["function mintEdition(address _to)"];
 const editionCreatorABI = [
-  "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, address minter) returns(uint256)",
+  "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)"
 ];
 
-const onePerAddressMinterContract =
-  "0x50c001362FB06E2CB4D4e8138654267328a8B247";
 const metaSingleEditionMintableCreator =
-  "0x50c001c0aaa97B06De431432FDbF275e1F349694";
+  "0x50C001A33Caa446c8b84C489F371F77754F41024";
 
 const getAccessToken = async () => {
   const {
@@ -33,7 +31,6 @@ const getAccessToken = async () => {
   const signature = await wallet.signMessage(
     `Sign into Showtime with this wallet. ${nonce}`
   );
-  ``;
   console.log("Signature", signature);
   const {
     data: { access: accessToken },
@@ -128,7 +125,7 @@ const createEdition = async (accessToken) => {
     "0x5a10c03724f18ec2534436cc5f5d4e9d60a91c2c6cea3ad7e623eb3d54e20ea9", // imageHash
     100, // editionSize
     1000, // royaltyBPS
-    onePerAddressMinterContract,
+    604800 // claimWindowDurationSeconds (1 week here)
   ]);
   const relayedTx = await wrapAndSubmitTx(
     callData,
@@ -146,15 +143,14 @@ const createEdition = async (accessToken) => {
   return edition;
 };
 
-const mintEdition = async (editionAddress, accessToken) => {
+const mintEdition = async (editionAddress, minterAddress, accessToken) => {
   const targetInterface = new ethers.utils.Interface(minterABI);
   const callData = targetInterface.encodeFunctionData("mintEdition", [
-    editionAddress,
     wallet.address,
   ]);
   const relayedTx = await wrapAndSubmitTx(
     callData,
-    onePerAddressMinterContract,
+    minterAddress,
     accessToken
   );
   const mint = await pollTransaction(
@@ -172,7 +168,7 @@ const main = async () => {
   const accessToken = await getAccessToken();
   const edition = await createEdition(accessToken);
   console.log("Edition", edition);
-  const mint = await mintEdition(edition.edition.contract_address, accessToken);
+  const mint = await mintEdition(edition.edition.contract_address, edition.edition.minter_address, accessToken);
   console.log("Mint", mint);
 };
 
