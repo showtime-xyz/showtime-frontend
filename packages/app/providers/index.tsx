@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
-import { DripsyProvider } from "dripsy";
 
 import { AppContext } from "app/context/app-context";
 import useColorScheme from "app/hooks/use-color-scheme";
@@ -21,7 +20,6 @@ import { Web3Provider } from "app/providers/web3-provider";
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
 
 export const AppProvider = ({ children }) => {
@@ -36,39 +34,37 @@ export const AppProvider = ({ children }) => {
   const CSRProvider = useMemo(() => (isWeb ? CSROnly : Fragment), [isWeb]);
 
   return (
-    <DripsyProvider theme={theme} ssr={isWeb}>
-      <SafeAreaProvider style={safeAreaProviderStyles}>
-        <ToastProvider>
-          <AlertProvider>
-            <SnackbarProvider>
-              <NavigationProvider>
-                <SWRProvider>
-                  <WalletProvider>
-                    <Web3Provider>
-                      <AppContext.Provider value={injectedGlobalColorContext}>
-                        <AuthProvider>
-                          <UserProvider>
-                            <CSRProvider>
-                              <BottomSheetModalProvider>
-                                <GrowthBookProvider growthbook={growthbook}>
-                                  <FeedProvider>
-                                    <MintProvider>{children}</MintProvider>
-                                  </FeedProvider>
-                                </GrowthBookProvider>
-                              </BottomSheetModalProvider>
-                            </CSRProvider>
-                          </UserProvider>
-                        </AuthProvider>
-                      </AppContext.Provider>
-                    </Web3Provider>
-                  </WalletProvider>
-                </SWRProvider>
-              </NavigationProvider>
-            </SnackbarProvider>
-          </AlertProvider>
-        </ToastProvider>
-      </SafeAreaProvider>
-    </DripsyProvider>
+    <SafeAreaProvider style={safeAreaProviderStyles}>
+      <ToastProvider>
+        <AlertProvider>
+          <SnackbarProvider>
+            <NavigationProvider>
+              <SWRProvider>
+                <WalletProvider>
+                  <Web3Provider>
+                    <AppContext.Provider value={injectedGlobalColorContext}>
+                      <AuthProvider>
+                        <UserProvider>
+                          <CSRProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <MintProvider>{children}</MintProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </CSRProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </AppContext.Provider>
+                  </Web3Provider>
+                </WalletProvider>
+              </SWRProvider>
+            </NavigationProvider>
+          </SnackbarProvider>
+        </AlertProvider>
+      </ToastProvider>
+    </SafeAreaProvider>
   );
 };
 
