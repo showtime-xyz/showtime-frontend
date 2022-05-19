@@ -1,4 +1,6 @@
 // import { Link } from "app/navigation/link";
+import { Platform } from "react-native";
+
 import type { NFT } from "app/types";
 
 import { Image } from "design-system/image";
@@ -17,10 +19,21 @@ function Collection({ nft }: Props) {
     <View tw="h-9 flex-row items-center justify-between bg-white px-4 py-2 dark:bg-black">
       <View tw="flex-1 flex-row items-center">
         {nft.collection_img_url && (
-          <Image
-            source={{ uri: nft.collection_img_url }}
-            tw="h-5 w-5 rounded-full"
-          />
+          <View
+            // @ts-ignore
+            style={Platform.select({
+              default: {},
+              web: {
+                filter:
+                  "drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.5)) drop-shadow(0px 8px 16px rgba(255, 255, 255, 0.1))",
+              },
+            })}
+          >
+            <Image
+              source={{ uri: nft.collection_img_url }}
+              tw="h-5 w-5 rounded-full"
+            />
+          </View>
         )}
         <Text
           tw={[
