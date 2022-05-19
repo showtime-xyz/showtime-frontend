@@ -107,9 +107,31 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     }
     return newData;
   }, [queryState.data]);
+
+  const updateItem = useCallback(
+    (updatedItem: NFT) => {
+      queryState.mutate((d) => {
+        const updatedData = d?.map((d) => {
+          return {
+            ...d,
+            items: d.data.items.map((item: NFT) => {
+              if (item.nft_id === updatedItem.nft_id) {
+                return updatedItem;
+              }
+              return item;
+            }),
+          };
+        });
+        return updatedData;
+      });
+    },
+    [queryState]
+  );
+
   return {
     ...queryState,
     data: newData,
+    updateItem,
     fetchMore: () => {},
   };
 };
@@ -176,7 +198,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
   );
 
-  const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
+  const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
     params?.profileId ? trendingCreatorsUrlFn : () => null,
     refreshInterval
   );
@@ -199,7 +221,27 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     }
   };
 
-  return { ...queryState, fetchMore, data: newData };
+  const updateItem = useCallback(
+    (updatedItem: NFT) => {
+      mutate((d) => {
+        const updatedData = d?.map((d) => {
+          return {
+            ...d,
+            items: d.data.items.map((item: NFT) => {
+              if (item.nft_id === updatedItem.nft_id) {
+                return updatedItem;
+              }
+              return item;
+            }),
+          };
+        });
+        return updatedData;
+      });
+    },
+    [mutate]
+  );
+
+  return { ...queryState, fetchMore, updateItem, data: newData };
 };
 
 export type Collection = {
