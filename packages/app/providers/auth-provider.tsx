@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
+import { useDisconnect } from "wagmi";
 
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -16,7 +17,6 @@ import { magic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
-import getWeb3Modal from "app/lib/web3-modal";
 import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
@@ -38,6 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
+  const { disconnect } = useDisconnect();
   //#endregion
 
   //#region methods
@@ -71,8 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(
     async function logout() {
       if (Platform.OS === "web") {
-        const web3Modal = await getWeb3Modal();
-        web3Modal.clearCachedProvider();
+        disconnect();
       }
 
       const wasUserLoggedIn = loginStorage.getLogin();
