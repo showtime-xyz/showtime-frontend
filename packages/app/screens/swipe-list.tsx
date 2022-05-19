@@ -10,7 +10,6 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
-import { View } from "design-system/view";
 
 type Tab = "following" | "curated" | "" | undefined;
 
@@ -55,17 +54,15 @@ const FeedSwipeList = ({ tab }: { tab: Tab }) => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <View tw="flex-1">
-      <SwipeList
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        isLoadingMore={isLoadingMore}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-      />
-    </View>
+    <SwipeList
+      data={data}
+      fetchMore={fetchMore}
+      isRefreshing={isRefreshing}
+      refresh={refresh}
+      isLoadingMore={isLoadingMore}
+      initialScrollIndex={Number(initialScrollIndex)}
+      bottomPadding={safeAreaBottom}
+    />
   );
 };
 
