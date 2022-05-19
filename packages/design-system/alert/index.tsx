@@ -128,9 +128,12 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
                 {title}
               </Text>
               {Boolean(message) && (
-                <Text tw="mt-4 text-center text-base text-gray-900 dark:text-white">
-                  {message}
-                </Text>
+                <>
+                  <View tw="h-4" />
+                  <Text tw="text-center text-base text-gray-900 dark:text-white">
+                    {message}
+                  </Text>
+                </>
               )}
               <Divider tw="my-4" />
               {renderBtns}

@@ -129,10 +129,12 @@ function Transfer({ nft }: { nft?: NFT }) {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text tw="my-8 text-center text-base text-black dark:text-white">
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Your NFT is being transferred. Feel free to navigate away from this
             screen.
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
@@ -144,9 +146,11 @@ function Transfer({ nft }: { nft?: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text tw="my-8 text-center text-base text-black dark:text-white">
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Something went wrong!
           </Text>
+          <View tw="h-8" />
           <Button onPress={handleSubmit(handleSubmitTransfer)}>Retry</Button>
         </View>
       </View>

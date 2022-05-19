@@ -90,10 +90,12 @@ const CreateMD = () => {
       {state.status === "transactionInitiated" ? (
         <View tw="items-center justify-center">
           <Spinner />
-          <Text tw="mt-10 mb-4 text-center text-black dark:text-white">
+          <View tw="h-10" />
+          <Text tw="text-center text-black dark:text-white">
             Your NFT is being minted on Polygon network. Feel free to navigate
             away from this screen.
           </Text>
+          <View tw="h-4" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       ) : state.status === "mintingSuccess" ? (

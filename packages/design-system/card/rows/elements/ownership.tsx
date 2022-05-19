@@ -80,10 +80,11 @@ export function Ownership({ nft }: Props) {
           ))}
         </OwnershipContainer>
         <View tw="w-2" />
-        <View tw="">
-          <Text tw="mb-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
+        <View>
+          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             Owners
           </Text>
+          <View tw="h-1" />
           <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
             Multiple
           </Text>

@@ -87,11 +87,14 @@ function Description({ nft }: Props) {
       </Text>
 
       {(showMore || showLess) && (
-        <PressableScale onPress={showMore ? onShowMore : onShowLess}>
-          <Text tw="mt-1 text-sm font-bold text-gray-600 dark:text-gray-400">
-            {showMore ? "More" : "Less"}
-          </Text>
-        </PressableScale>
+        <>
+          <View tw="h-1" />
+          <PressableScale onPress={showMore ? onShowMore : onShowLess}>
+            <Text tw="text-sm font-bold text-gray-600 dark:text-gray-400">
+              {showMore ? "More" : "Less"}
+            </Text>
+          </PressableScale>
+        </>
       )}
     </View>
   );

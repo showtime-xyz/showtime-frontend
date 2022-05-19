@@ -53,11 +53,14 @@ export function Creator({
             ) : null}
           </View>
           {shouldShowDateCreated && nft.token_created ? (
-            <Text tw="mt-1 text-xs font-semibold text-gray-900 dark:text-white">
-              {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
-                addSuffix: true,
-              })}
-            </Text>
+            <>
+              <View tw="h-1" />
+              <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
+                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                  addSuffix: true,
+                })}
+              </Text>
+            </>
           ) : null}
         </View>
       </View>

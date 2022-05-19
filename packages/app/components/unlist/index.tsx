@@ -59,10 +59,12 @@ const Unlist = ({ nft }: Props) => {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text tw="my-8 text-center text-base text-black dark:text-white">
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Your NFT is being unlisted on Showtime. Feel free to navigate away
             from this screen.
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transactionHash} />
         </View>
       </View>

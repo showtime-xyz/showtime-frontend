@@ -170,13 +170,15 @@ function Create() {
                               width={24}
                               height={24}
                             />
-                            <Text tw="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                            <View tw="h-2" />
+                            <Text tw="text-xs text-gray-600 dark:text-gray-400">
                               Select Media
                             </Text>
                             {errors.file?.message ? (
-                              <Text tw="mt-2 text-sm text-red-500">
-                                required
-                              </Text>
+                              <>
+                                <View tw="h-2" />
+                                <Text tw="text-sm text-red-500">required</Text>
+                              </>
                             ) : null}
                           </View>
                         )}
@@ -251,10 +253,12 @@ function Create() {
                           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
                             Select file to upload
                           </Text>
-                          <Text tw="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                          <View tw="h-4" />
+                          <Text tw="text-sm text-gray-600 dark:text-gray-400">
                             png, jpg, mp4, mov, gltf, glb
                           </Text>
-                          <Text tw="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                          <View tw="h-4" />
+                          <Text tw="text-sm text-gray-600 dark:text-gray-400">
                             Stored on{" "}
                             <TextLink
                               tw="text-sm font-bold text-gray-600 dark:text-gray-400"
@@ -264,7 +268,10 @@ function Create() {
                             </TextLink>
                           </Text>
                           {errors.file?.message ? (
-                            <Text tw="mt-2 text-sm text-red-500">required</Text>
+                            <>
+                              <View tw="h-2" />
+                              <Text tw="text-sm text-red-500">required</Text>
+                            </>
                           ) : null}
                         </View>
                       )}
@@ -391,9 +398,8 @@ function Create() {
                       <Text tw="text-sm font-bold text-black dark:text-white">
                         Explicit content
                       </Text>
-                      <Text tw="mt-2 text-gray-600 dark:text-gray-400">
-                        18+
-                      </Text>
+                      <View tw="h-2" />
+                      <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
                     </View>
                     <Controller
                       control={control}

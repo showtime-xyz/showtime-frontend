@@ -40,10 +40,11 @@ export function Price({ nft }: Props) {
     <View tw="flex justify-end">
       <Text
         style={{ fontSize: 12 }}
-        tw="mb-1 text-right font-semibold text-gray-600 dark:text-gray-400"
+        tw="text-right font-semibold text-gray-600 dark:text-gray-400"
       >
         🏷 Price
       </Text>
+      <View tw="h-1" />
       <Skeleton
         show={loading}
         height={13}

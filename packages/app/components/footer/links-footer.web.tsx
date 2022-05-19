@@ -43,25 +43,28 @@ export const WebFooter = () => {
           </View>
           <View tw="flex flex-col">
             {social.map((item) => (
-              <Link
-                tw="mb-4 flex-row items-center"
-                href={item.link}
-                hrefAttrs={{
-                  target: "_blank",
-                  rel: "noreferrer",
-                }}
-                key={item.title}
-              >
-                <View tw="mr-2 text-base">
-                  {item.icon({
-                    color: tw.style("text-gray-900 dark:text-white")
-                      .color as string,
-                  })}
-                </View>
-                <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
-                  {item.title}
-                </Text>
-              </Link>
+              <>
+                <Link
+                  tw="flex-row items-center"
+                  href={item.link}
+                  hrefAttrs={{
+                    target: "_blank",
+                    rel: "noreferrer",
+                  }}
+                  key={item.title}
+                >
+                  <View tw="mr-2 text-base">
+                    {item.icon({
+                      color: tw.style("text-gray-900 dark:text-white")
+                        .color as string,
+                    })}
+                  </View>
+                  <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
+                    {item.title}
+                  </Text>
+                </Link>
+                <View tw="h-6" />
+              </>
             ))}
           </View>
         </View>

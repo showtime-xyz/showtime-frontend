@@ -210,7 +210,8 @@ const NotificationDescription = ({
             </TextLink>
           ) : null}
         </Text>
-        <Text tw="mt-1 text-xs text-gray-500">
+        <View tw="h-1" />
+        <Text tw="text-xs text-gray-500">
           {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
             addSuffix: true,
           })}

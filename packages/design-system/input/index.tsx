@@ -100,12 +100,15 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
   return (
     <View>
       {label ? (
-        <Label
-          htmlFor={inputId}
-          tw="mb-2 text-sm font-bold text-gray-900 dark:text-white"
-        >
-          {label}
-        </Label>
+        <>
+          <Label
+            htmlFor={inputId}
+            tw="text-sm font-bold text-gray-900 dark:text-white"
+          >
+            {label}
+          </Label>
+          <View tw="h-2" />
+        </>
       ) : null}
       <Animated.View
         style={[

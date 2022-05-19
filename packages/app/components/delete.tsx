@@ -78,10 +78,12 @@ function Delete({ nft }: { nft: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text tw="my-8 text-center text-base text-black dark:text-white">
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Your NFT is being deleted. Feel free to navigate away from this
             screen.
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
@@ -93,9 +95,11 @@ function Delete({ nft }: { nft: NFT }) {
       <View tw="flex-1 items-center justify-center pb-8">
         <Spinner />
         <View tw="items-center">
-          <Text tw="my-8 text-center text-base text-black dark:text-white">
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Something went wrong!
           </Text>
+          <View tw="h-8" />
           <Button onPress={handleSubmit(handleSubmitForm)}>Retry</Button>
         </View>
       </View>
@@ -121,9 +125,10 @@ function Delete({ nft }: { nft: NFT }) {
       <CreateScrollView>
         <View tw="flex-1 px-3 py-4">
           <View tw="mb-4">
-            <Text tw="mb-4 text-xl font-bold text-black dark:text-white">
+            <Text tw="text-xl font-bold text-black dark:text-white">
               Are you sure you want to delete this NFT?
             </Text>
+            <View tw="h-4" />
             <Text tw="text-sm text-black dark:text-white">
               This can't be undone and it will be sent to a burn address.
             </Text>
