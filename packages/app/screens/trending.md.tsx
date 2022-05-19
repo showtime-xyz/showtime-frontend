@@ -48,7 +48,7 @@ export const Trending = () => {
       <View tw="mx-auto w-[90%] py-8">
         <View tw="flex-row items-center justify-between pb-8">
           <View>
-            <Text variant="text-2xl" tw="text-black dark:text-white">
+            <Text tw="font-space-bold text-2xl text-black dark:text-white">
               Trending
             </Text>
           </View>

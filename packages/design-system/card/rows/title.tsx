@@ -47,18 +47,16 @@ function Title({ nft, cardMaxWidth }: Props) {
           }}
         >
           <Text
-            tw="font-semibold text-black dark:text-white"
+            tw="font-space-bold text-lg text-black dark:text-white"
             numberOfLines={1}
-            variant="text-lg"
           >
             {nft.token_name}
           </Text>
         </Tooltip>
       ) : (
         <Text
-          tw="font-semibold text-black dark:text-white"
+          tw="font-space-bold text-lg text-black dark:text-white"
           numberOfLines={1}
-          variant="text-lg"
         >
           {nft.token_name}
         </Text>

@@ -68,7 +68,8 @@ const SearchInHeader = () => {
 
       <Popover.Anchor>
         <Input
-          placeholder="Search for @username or name.eth"
+          placeholder="Search for @name or name.eth"
+          autocomplete="off"
           value={term}
           ref={inputRef}
           onChangeText={(text) => {
@@ -119,7 +120,7 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="shadow-black dark:shadow-white mt-2 w-[350px] rounded-3xl bg-white shadow-lg dark:bg-black">
+        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
           {data ? (
             <FlatList
               data={data}

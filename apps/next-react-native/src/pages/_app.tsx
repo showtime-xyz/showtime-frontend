@@ -1,11 +1,10 @@
 import "raf/polyfill";
 
 import { useEffect, useState } from "react";
-import { useColorScheme as useDeviceColorScheme } from "react-native";
+import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
-import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import type { Revalidator, RevalidatorOptions } from "swr";
@@ -50,7 +49,6 @@ import { UnlistScreen } from "app/screens/unlist";
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
 import { ToastProvider, useToast } from "design-system/toast";
 import { View } from "design-system/view";
 
@@ -226,16 +224,16 @@ export default function App({ Component, pageProps, router }: AppProps) {
           }}
         /> */}
       </Head>
-      <DripsyProvider theme={theme} ssr>
-        <SafeAreaProvider>
-          <ToastProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <SWRProvider>
-                  <Web3Provider>
-                    <AppContext.Provider value={injectedGlobalContext}>
-                      <AuthProvider>
-                        <UserProvider>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <SWRProvider>
+                <Web3Provider>
+                  <AppContext.Provider value={injectedGlobalContext}>
+                    <AuthProvider>
+                      <UserProvider>
+                        <CSROnly>
                           <BottomSheetModalProvider>
                             <GrowthBookProvider growthbook={growthbook}>
                               <FeedProvider>
@@ -278,16 +276,34 @@ export default function App({ Component, pageProps, router }: AppProps) {
                               </FeedProvider>
                             </GrowthBookProvider>
                           </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </AppContext.Provider>
-                  </Web3Provider>
-                </SWRProvider>
-              </SnackbarProvider>
-            </AlertProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </DripsyProvider>
+                        </CSROnly>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContext.Provider>
+                </Web3Provider>
+              </SWRProvider>
+            </SnackbarProvider>
+          </AlertProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
     </>
   );
 }
+
+// TODO: remove CSR after replacing to css tailwind
+const CSROnly = ({ children }: any) => {
+  const [ready, setReady] = useState(() => {
+    if (Platform.OS !== "web") {
+      return true;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  if (ready) return children;
+
+  return null;
+};

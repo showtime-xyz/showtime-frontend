@@ -148,7 +148,7 @@ const NotificationDescription = ({
           //@ts-ignore
           tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
-          sx={{ lineHeight: 20, fontSize: 13 }}
+          style={{ lineHeight: 20, fontSize: 13 }}
         >
           {actors.length == 1 ? (
             <>
@@ -203,16 +203,15 @@ const NotificationDescription = ({
 
           {notification.nft__nftdisplay__name ? (
             <TextLink
-              //@ts-ignore
-              variant="text-sm"
-              tw="font-bold text-black dark:text-white"
+              tw="text-sm font-bold text-black dark:text-white"
               href={notificationInfo.href}
             >
               {notification.nft__nftdisplay__name}
             </TextLink>
           ) : null}
         </Text>
-        <Text tw="mt-1 text-gray-500" variant="text-xs">
+        <View tw="h-1" />
+        <Text tw="text-xs text-gray-500">
           {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
             addSuffix: true,
           })}
@@ -228,8 +227,7 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
-      variant="text-sm"
-      tw="font-bold text-black dark:text-white"
+      tw="text-sm font-bold text-black dark:text-white"
     >
       {actor.username ? (
         <>@{actor.username}</>

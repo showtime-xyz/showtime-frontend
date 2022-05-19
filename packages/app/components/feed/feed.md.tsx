@@ -245,7 +245,7 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text variant="text-2xl" tw="p-4 text-black dark:text-white">
+      <Text tw="font-space-bold p-4 text-2xl text-black dark:text-white">
         Home
       </Text>
       <View
@@ -257,9 +257,7 @@ const SuggestedUsers = () => {
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
-        <Text tw="p-4 dark:text-white" variant="text-lg">
-          Suggested
-        </Text>
+        <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
             <Skeleton colorMode={colorMode} width={100} height={20} />

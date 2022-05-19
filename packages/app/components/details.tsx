@@ -9,16 +9,13 @@ function Details({ nft }: { nft: NFT }) {
   return (
     <>
       <View tw="m-4">
-        <Text variant="text-lg" tw="font-medium text-black dark:text-white">
+        <Text tw="font-space-bold text-lg font-medium text-black dark:text-white">
           {nft?.token_name}
         </Text>
         {nft?.token_description && (
           <>
             <View tw="h-4" />
-            <Text
-              variant="text-sm"
-              tw="font-medium text-gray-400 dark:text-gray-600"
-            >
+            <Text tw="text-sm font-medium text-gray-400 dark:text-gray-600">
               {nft?.token_description}
             </Text>
           </>

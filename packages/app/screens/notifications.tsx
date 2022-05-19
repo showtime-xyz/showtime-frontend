@@ -25,7 +25,7 @@ const NotificationsScreen = withColorScheme(() => {
         </Suspense>
       </ErrorBoundary> */}
       <View tw="p-4">
-        <Text variant="text-2xl" tw="font-extrabold text-black dark:text-white">
+        <Text tw="font-space-bold text-2xl font-extrabold text-black dark:text-white">
           Notifications
         </Text>
         <View tw="h-6" />

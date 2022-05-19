@@ -225,7 +225,7 @@ export const SwipeList = ({
         disableRecycling={Platform.OS === "android"}
         ref={listRef}
         initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        style={tw.style("flex-1 dark:bg-gray-900 bg-gray-100")}
         renderAheadOffset={itemHeight}
         onEndReached={fetchMore}
         onEndReachedThreshold={itemHeight}
@@ -421,10 +421,9 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
       <View tw="px-4">
         <Text
-          variant="text-2xl"
-          tw="dark:text-white"
+          tw="font-space-bold text-2xl dark:text-white"
           numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
+          style={{ fontSize: 17, lineHeight: 22 }}
         >
           {nft.token_name}
         </Text>

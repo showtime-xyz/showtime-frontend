@@ -126,12 +126,15 @@ const FollowingListUser = memo(
             </View>
             <View tw="mr-1 justify-center">
               {item.name ? (
-                <Text
-                  tw="mb-[1px] max-w-[150px] text-sm font-semibold text-gray-600 dark:text-gray-300"
-                  numberOfLines={1}
-                >
-                  {item.name}
-                </Text>
+                <>
+                  <Text
+                    tw="max-w-[150px] text-sm font-semibold text-gray-600 dark:text-gray-300"
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                  <View tw="h-1" />
+                </>
               ) : null}
 
               <View tw="flex-row items-center">

@@ -55,12 +55,11 @@ export const Buy = (props: { nft?: NFT }) => {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Your NFT is being purchased on Showtime.
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
@@ -72,12 +71,11 @@ export const Buy = (props: { nft?: NFT }) => {
       <View tw="flex-1 items-center justify-center p-8">
         <Spinner />
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Granting allowance...
           </Text>
+          <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
@@ -90,12 +88,11 @@ export const Buy = (props: { nft?: NFT }) => {
     return (
       <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             Sorry. Granting allowance failed.
           </Text>
+          <View tw="h-8" />
           <Button onPress={() => grantAllowance({ nft, quantity: quantity })}>
             Try again
           </Button>
@@ -110,12 +107,11 @@ export const Buy = (props: { nft?: NFT }) => {
     return (
       <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             You don't have enough ${nft.listing.currency} on your wallet.
           </Text>
+          <View tw="h-8" />
           <Text>You can</Text>
           <Button onPress={reset}>Go back </Button>
           <Text>, or </Text>
@@ -132,13 +128,12 @@ export const Buy = (props: { nft?: NFT }) => {
     return (
       <View tw="flex-1 items-center justify-center p-8">
         <View tw="items-center">
-          <Text
-            variant="text-base"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <View tw="h-8" />
+          <Text tw="text-center text-base text-black dark:text-white">
             To buy this NFT, we need permission to spend your{" "}
             {nft.listing.min_price + " " + nft.listing.currency}.
           </Text>
+          <View tw="h-8" />
           <Button onPress={() => grantAllowance({ nft, quantity })}>
             Grant Permission
           </Button>
@@ -150,12 +145,9 @@ export const Buy = (props: { nft?: NFT }) => {
   if (state.status === "buyingSuccess") {
     return (
       <View tw="mt-4 flex-1 items-center justify-center p-8">
-        <Text variant="text-4xl">🎉</Text>
+        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text
-            variant="text-lg"
-            tw="my-8 text-center text-black dark:text-white"
-          >
+          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
             Your NFT has been purchased!
           </Text>
           <PolygonScanButton transactionHash={state.transaction} />

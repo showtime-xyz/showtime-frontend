@@ -73,9 +73,8 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
       </RNText>
       {count ? (
         <Text
-          variant="text-sm"
-          sx={{ fontWeight: "400" }}
-          tw={`text-gray-900 dark:text-white`}
+          style={{ fontWeight: "400" }}
+          tw="text-sm text-gray-900 dark:text-white"
         >
           {` ${count}`}
         </Text>
@@ -150,7 +149,7 @@ export const SelectedTabIndicator = () => {
       />
       {/* {disableBackground ? null : (
         <View
-          sx={{
+          style={{
             backgroundColor: isDark
               ? "rgba(229, 231, 235, 0.1)"
               : "rgba(0, 0, 0, 0.1)",

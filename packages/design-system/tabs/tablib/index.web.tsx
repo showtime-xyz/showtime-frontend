@@ -129,7 +129,7 @@ const Root = ({
                     >
                       <TabIndexContext.Provider value={{ index }}>
                         <View
-                          sx={tw.style(
+                          style={tw.style(
                             "item items-center border-b-2 h-full justify-center"
                           )}
                           tw={

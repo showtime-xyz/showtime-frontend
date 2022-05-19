@@ -95,7 +95,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               })}rem] h-7 flex-row items-center justify-center`}
             >
               <Text
-                sx={{
+                style={{
                   marginTop: Platform.select({
                     ios: 2,
                     android: -4,
@@ -172,7 +172,7 @@ export function Header({ title, close, onSearchSubmit }: Props) {
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text variant="text-lg" tw="px-4 font-bold dark:text-white">
+          <Text tw="font-space-bold px-4 text-lg font-bold dark:text-white">
             {title}
           </Text>
         )}
