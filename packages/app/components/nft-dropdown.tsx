@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetails } from "app/hooks/use-nft-details";
@@ -36,8 +35,6 @@ function NFTDropdown({ nftId }: Props) {
   //#region hooks
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
-  const { userAddress } = useCurrentUserAddress();
-  const [isOwner, setIsOwner] = useState(false);
   const { report } = useReport();
   const { unfollow, isFollowing } = useMyInfo();
   const { getIsBlocked, toggleBlock } = useBlock();
@@ -69,14 +66,6 @@ function NFTDropdown({ nftId }: Props) {
     () => getIsBlocked(nft?.creator_id),
     [nft?.creator_id, getIsBlocked]
   );
-  //#endregion
-
-  //#region effects
-  useEffect(() => {
-    if (nft?.owner_address) {
-      setIsOwner(nft.owner_address.toLowerCase() === userAddress.toLowerCase());
-    }
-  }, [nft, userAddress]);
   //#endregion
 
   const openModal = (modal: string) => {
@@ -164,7 +153,7 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        {!isOwner && isFollowingUser && (
+        {!hasOwnership && isFollowingUser && (
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
@@ -183,11 +172,11 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        {!isOwner && (
+        {!hasOwnership && (
           <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
-        {!isOwner ? (
+        {!hasOwnership ? (
           <DropdownMenuItem
             key="block"
             tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
@@ -205,11 +194,11 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        {!isOwner && (
+        {!hasOwnership && (
           <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
-        {!isOwner && (
+        {!hasOwnership && (
           <DropdownMenuItem
             onSelect={async () => {
               await report({ nftId: nft?.token_id });
@@ -224,11 +213,11 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isOwner && (
+        {hasOwnership && (
           <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
-        {isOwner && (
+        {hasOwnership && (
           <DropdownMenuItem
             onSelect={() => openModal("transfer")}
             key="transfer"
@@ -272,11 +261,11 @@ function NFTDropdown({ nftId }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isOwner && (
+        {hasOwnership && (
           <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
-        {isOwner && (
+        {hasOwnership && (
           <DropdownMenuItem
             destructive
             onSelect={() => openModal("delete")}

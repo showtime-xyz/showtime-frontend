@@ -26271,12 +26271,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-tailwindcss@npm:^0.1.10":
-  version: 0.1.11
-  resolution: "prettier-plugin-tailwindcss@npm:0.1.11"
+"prettier-plugin-tailwindcss@npm:0.1.10":
+  version: 0.1.10
+  resolution: "prettier-plugin-tailwindcss@npm:0.1.10"
   peerDependencies:
     prettier: ">=2.2.0"
-  checksum: b06a81a22242407676de7b69342c1d69078e731e6363c7abd5877b044f2ddd83eba7281b085ea77754a49de88dcde164f394c31ae724a99fd46c0f9a4d4547a0
+  checksum: 465a7e02bd2224f9773f35190b6b4d19f281848d0492d4d43eabf403b33117303222faf775d8d569d0ce8bbb75336aa4db005db1935bb78c551ff711a8f89537
   languageName: node
   linkType: hard
 
@@ -29426,7 +29426,7 @@ __metadata:
     husky: ^8.0.1
     patch-package: ^6.4.7
     prettier: ^2.4.1
-    prettier-plugin-tailwindcss: ^0.1.10
+    prettier-plugin-tailwindcss: 0.1.10
     react-native-fast-image: ^8.5.11
     react-native-os: ^1.2.6
     sentry-expo: ^4.1.0
