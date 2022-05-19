@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+
+import { useAccount } from "wagmi";
 
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -13,38 +15,30 @@ import { useWalletConnect } from "app/lib/walletconnect";
 function useCurrentUserAddress() {
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState("");
-  const { web3 } = useWeb3();
   const connector = useWalletConnect();
+  const { data: wagmiData } = useAccount();
   const connectedAddress = connector?.session?.accounts[0];
+
+  const updateAddress = useCallback(
+    (newAddress: string) => {
+      if (!newAddress || !userAddress || userAddress !== newAddress) {
+        setUserAddress(newAddress);
+      }
+    },
+    [userAddress, setUserAddress]
+  );
 
   useEffect(() => {
     if (connector?.connected && connectedAddress) {
-      setUserAddress(connectedAddress);
-    } else if (web3) {
-      const signer = web3.getSigner();
-      signer
-        .getAddress()
-        .then((addr: string) => {
-          setUserAddress(addr);
-        })
-        .catch(() => {
-          // TODO: temporary hack to make magic test email work with current auth APIs
-          if (
-            user?.data.profile.wallet_addresses_v2.find(
-              (c) =>
-                c.email.toLowerCase() ===
-                BYPASS_EMAIL_WITH_INSECURE_KEYS.toLowerCase()
-            )
-          ) {
-            setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
-          }
-        });
+      updateAddress(connectedAddress);
+    } else if (wagmiData?.address) {
+      updateAddress(wagmiData.address);
     } else if (user?.data && user?.data.profile.wallet_addresses_v2[0]) {
-      setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
+      updateAddress(user.data.profile.wallet_addresses_v2[0].address);
     } else {
-      setUserAddress("");
+      updateAddress("");
     }
-  }, [user, web3, connectedAddress, connector?.connected]);
+  }, [user, updateAddress, connectedAddress, connector?.connected, wagmiData]);
 
   return { userAddress };
 }
