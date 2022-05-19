@@ -23,8 +23,7 @@ const textStyle = {
 
 const Label = (props) => {
   const style = useMemo(() => {
-    // TODO: review this
-    return StyleSheet.flatten([textStyle, props.style]);
+    return [textStyle, props.style];
   }, [props.style]);
 
   return unstable_createElement("label", { ...props, style });

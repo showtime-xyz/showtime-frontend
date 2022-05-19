@@ -42,7 +42,7 @@ export const Text = forwardRef<TextType, Props>(
       onTextLayout,
       children,
       selectable,
-      tw,
+      tw = "",
       nativeID,
       htmlFor,
       accessibilityRole,
@@ -54,19 +54,9 @@ export const Text = forwardRef<TextType, Props>(
     ref
   ) => {
     const parentTw = useContext(ParentContext);
-
-    // TODO: review this + implement variants
-
-    // const parentTwProps = tailwind(
-    //   typeof parentTw === "string" ? parentTw : parentTw?.join(" ")
-    // );
-    // const twProps = tailwind(Array.isArray(tw) ? tw.join(" ") : tw);
-    // const compoundTw = {
-    //   ...parentTwProps,
-    //   ...twProps,
-    // };
-
-    const compoundTw = `${tw} ${parentTw}`;
+    // TODO: review this
+    // const compoundTw = `${tw} ${parentTw}`;
+    const compoundTw = Array.isArray(tw) ? tw.join(" ") : tw;
 
     return (
       <StyledText

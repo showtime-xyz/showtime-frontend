@@ -2,7 +2,6 @@ import { forwardRef, useMemo } from "react";
 import {
   Platform,
   StyleProp,
-  StyleSheet,
   TextInputProps,
   TextStyle,
   TextInput,
@@ -131,7 +130,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
         {leftElement}
         <TextInput
           // @ts-ignore remove focus outline on web as we'll control the focus styling
-          style={StyleSheet.flatten([
+          style={[
             Platform.select({
               web: {
                 outline: "none",
@@ -154,7 +153,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               fontWeight: "500",
               ...tailwind("text-gray-900 dark:text-white"),
             },
-          ])}
+          ]}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
           }

@@ -164,7 +164,6 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
               {renderIcon}
             </MotiView>
             <Text
-              // TODO: review this. add textColor
               tw="text-xs font-medium"
               numberOfLines={1}
               style={{ color: textColor }}
@@ -189,7 +188,6 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
                     snackbar.action?.element
                   ) : (
                     <Text
-                      // TODO: review this. add textColor
                       tw="text-xs font-bold"
                       numberOfLines={1}
                       style={{ color: textColor }}

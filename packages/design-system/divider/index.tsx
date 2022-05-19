@@ -34,14 +34,14 @@ export const Divider: React.FC<DividerProps> = ({
 
   return (
     <View
-      style={StyleSheet.flatten([
+      style={[
         tailwind("bg-gray-200 dark:bg-gray-800"),
         orientation === "horizontal"
           ? { width, height: StyleSheet.hairlineWidth }
           : { width: StyleSheet.hairlineWidth, height },
         tailwind(Array.isArray(tw) ? tw.join(" ") : tw),
         style,
-      ])}
+      ]}
       {...rest}
     />
   );
