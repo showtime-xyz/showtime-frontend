@@ -4,7 +4,7 @@ import { defaultFilters } from "app/hooks/api-hooks";
 
 export interface FillterActions {
   type: "collection_change" | "sort_change";
-  payload: number;
+  payload: number | string;
 }
 
 export const FilterContext = createContext<{

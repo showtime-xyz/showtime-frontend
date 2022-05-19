@@ -60,14 +60,14 @@ const Profile = ({ address }: { address: string | null }) => {
     { ...defaultFilters }
   );
   const onCollectionChange = useCallback(
-    (value) => {
+    (value: string | number) => {
       dispatch({ type: "collection_change", payload: value });
     },
     [dispatch]
   );
 
   const onSortChange = useCallback(
-    (value) => {
+    (value: string | number) => {
       dispatch({ type: "sort_change", payload: value });
     },
     [dispatch]
