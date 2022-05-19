@@ -1,11 +1,8 @@
 import { useCallback, useEffect } from "react";
 
-import { personalSignMessage } from "app/lib/utilities";
-// @ts-ignore
-import getWeb3Modal from "app/lib/web3-modal";
+import { useAccount, useSignMessage } from "wagmi";
 
 import { useStableCallback } from "../use-stable-callback";
-import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
 import { useWalletLoginState } from "./use-wallet-login-state";
@@ -19,38 +16,32 @@ export function useWalletLogin() {
   //#endregion
 
   //#region hooks
-  const { web3, setWeb3 } = useWeb3();
+  const { data: wagmiData } = useAccount();
+  const { data: wagmiSignData, signMessage } = useSignMessage();
   const { getNonce, rotateNonce } = useNonce();
-  const { setAuthenticationStatus, login: _login, logout } = useAuth();
+  const { login: _login, logout } = useAuth();
   //#endregion
 
-  //#region methods
-  const connectToWallet = useCallback(
-    async function connectToWallet() {
+  useEffect(() => {
+    if (wagmiData?.address) {
       dispatch("CONNECT_TO_WALLET_REQUEST");
-      let walletName, walletAddress;
 
-      try {
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        const web3Modal = await getWeb3Modal();
-        const _web3 = new Web3Provider(await web3Modal.connect());
+      dispatch("CONNECT_TO_WALLET_SUCCESS", {
+        name: "wallet",
+        address: wagmiData.address,
+      });
+    }
+  }, [wagmiData]);
 
-        setWeb3(_web3);
-        //TODO: couldn't find a way to get wallet name
-        walletName = "wallet";
-        walletAddress = await _web3.getSigner().getAddress();
+  useEffect(() => {
+    if (wagmiSignData) {
+      dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", {
+        signature: wagmiSignData,
+      });
+    }
+  }, [wagmiSignData]);
 
-        dispatch("CONNECT_TO_WALLET_SUCCESS", {
-          name: walletName,
-          address: walletAddress,
-        });
-      } catch (error) {
-        dispatch("ERROR", { error });
-      }
-    },
-    [dispatch, setWeb3]
-  );
+  //#region methods
   const fetchNonce = useCallback(
     async function fetchNonce() {
       dispatch("FETCH_NONCE_REQUEST");
@@ -80,17 +71,16 @@ export function useWalletLogin() {
   const signPersonalMessage = useCallback(
     async function signPersonalMessage() {
       dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
+
       try {
-        const _signature = await personalSignMessage(
-          web3,
-          process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce
-        );
-        dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", { signature: _signature });
+        signMessage({
+          message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
+        });
       } catch (error) {
         dispatch("ERROR", { error });
       }
     },
-    [web3, nonce, dispatch]
+    [nonce, dispatch]
   );
   const login = useCallback(
     async function login() {
@@ -100,24 +90,16 @@ export function useWalletLogin() {
           signature: signature,
           address: address,
         });
+
         dispatch("LOG_IN_SUCCESS");
       } catch (error) {
         dispatch("ERROR", { error });
       }
     },
-    [dispatch, address, signature, _login]
-  );
-  const loginWithWallet = useCallback(
-    async function loginWithWallet() {
-      setAuthenticationStatus("AUTHENTICATING");
-      connectToWallet();
-    },
-    [connectToWallet, setAuthenticationStatus]
+    [dispatch, signature, _login]
   );
   const continueLoginIn = useStableCallback(() => {
-    if (status === "CONNECTED_TO_WALLET" && (!address || !name)) {
-      connectToWallet();
-    } else if (status === "CONNECTED_TO_WALLET" && address && name) {
+    if (status === "CONNECTED_TO_WALLET" && address && name) {
       fetchNonce();
     } else if (status === "FETCHED_NONCE" && nonce) {
       signPersonalMessage();
@@ -139,5 +121,6 @@ export function useWalletLogin() {
     continueLoginIn();
   }, [continueLoginIn, status]);
   //#endregion
-  return { loginWithWallet, status, name, error };
+
+  return { status, name, error };
 }

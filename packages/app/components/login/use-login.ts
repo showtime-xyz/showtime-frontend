@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { Platform, PlatformColor } from "react-native";
 
 import { captureException } from "@sentry/nextjs";
 
@@ -14,7 +15,7 @@ export const useLogin = (onLogin?: () => void) => {
   const loginSource = useRef<LoginSource>("undetermined");
 
   //#region hooks
-  const { authenticationStatus, logout } = useAuth();
+  const { setAuthenticationStatus, authenticationStatus, logout } = useAuth();
   const {
     loginWithWallet,
     name: walletName,
@@ -41,17 +42,24 @@ export const useLogin = (onLogin?: () => void) => {
   }, []);
 
   const handleSubmitWallet = useCallback(
-    async function handleSubmitWallet() {
+    async function handleSubmitWallet({ onOpenConnectModal }) {
+      const isWeb = Platform.OS === "web";
+
       try {
         loginSource.current = "wallet";
         trackButtonClicked({ name: "Login with wallet" });
 
-        await loginWithWallet();
+        if (isWeb) {
+          setAuthenticationStatus("AUTHENTICATING");
+          onOpenConnectModal?.();
+        } else {
+          await loginWithWallet();
+        }
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithWallet, handleLoginFailure]
+    [handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
