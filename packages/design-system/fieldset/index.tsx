@@ -102,9 +102,10 @@ export function Fieldset(props: FieldsetProps) {
       {helperText ? (
         <>
           <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
+          <View tw="h-4" />
           <Text
             nativeID={helperTextId}
-            tw="mt-4 text-sm text-gray-700 dark:text-gray-300"
+            tw="text-sm text-gray-700 dark:text-gray-300"
           >
             {helperText}
           </Text>
@@ -122,8 +123,11 @@ export const ErrorText = ({
   nativeID?: string;
 }) => {
   return (
-    <Text nativeID={nativeID} tw="mt-4 text-sm font-semibold text-red-500">
-      {children}
-    </Text>
+    <>
+      <View tw="h-4" />
+      <Text nativeID={nativeID} tw="text-sm font-semibold text-red-500">
+        {children}
+      </Text>
+    </>
   );
 };
