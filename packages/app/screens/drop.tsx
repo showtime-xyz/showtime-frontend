@@ -264,7 +264,7 @@ const DropModal = () => {
               }}
             />
           </View>
-          <View tw="mt-4 mb-10 flex-1">
+          <View tw="mt-4 flex-1">
             <View tw="flex-row flex-1">
               <Controller
                 control={control}
@@ -280,7 +280,7 @@ const DropModal = () => {
 
                       <Text
                         onPress={() => onChange(!value)}
-                        tw="ml-4 max-w-[90%] text-gray-600 dark:text-gray-400"
+                        tw="px-4 text-gray-600 dark:text-gray-400"
                       >
                         I have the rights to publish this artwork, and
                         understand it will be minted on the Polygon network.
@@ -294,25 +294,26 @@ const DropModal = () => {
               <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
             ) : null}
           </View>
+
+          <View tw="mt-8 mb-20">
+            <Button
+              tw={state.status === "loading" ? "opacity-45" : ""}
+              disabled={state.status === "loading"}
+              onPress={handleSubmit(onSubmit)}
+            >
+              {state.status === "loading"
+                ? "Submitting..."
+                : state.status === "error"
+                ? "Failed. Retry!"
+                : "Submit"}
+            </Button>
+
+            <View tw="mt-4">
+              <PolygonScanButton transactionHash={state.transactionHash} />
+            </View>
+          </View>
         </View>
       </ScrollView>
-      <View tw="mb-16 px-4">
-        <Button
-          tw={state.status === "loading" ? "opacity-45" : ""}
-          disabled={state.status === "loading"}
-          onPress={handleSubmit(onSubmit)}
-        >
-          {state.status === "loading"
-            ? "Submitting..."
-            : state.status === "error"
-            ? "Failed. Retry!"
-            : "Submit"}
-        </Button>
-
-        <View tw="mt-4">
-          <PolygonScanButton transactionHash={state.transactionHash} />
-        </View>
-      </View>
     </>
   );
 };
