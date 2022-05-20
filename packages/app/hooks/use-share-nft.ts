@@ -13,7 +13,7 @@ export const useShareNFT = () => {
         (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
       );
       const result = await share({
-        url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
+        url: `https://showtime.xyz/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
       });
 
       if (result.action === "sharedAction") {
