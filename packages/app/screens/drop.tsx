@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
@@ -40,7 +41,7 @@ const durationOptions = [
 ];
 
 const dropValidationSchema = yup.object({
-  file: yup.mixed().required(),
+  file: yup.mixed().required("Media is required"),
   title: yup.string().required(),
   description: yup.string().required(),
   editionSize: yup
@@ -109,7 +110,7 @@ const DropModal = () => {
   }
 
   return (
-    <>
+    <BottomSheetModalProvider>
       <ScrollView tw="p-4">
         <View>
           <Controller
@@ -144,7 +145,9 @@ const DropModal = () => {
                         </View>
                         {errors.file?.message ? (
                           <View tw="mt-2">
-                            <Text tw="text-sm text-red-500">required</Text>
+                            <Text tw="text-sm text-red-500">
+                              {errors?.file?.message}
+                            </Text>
                           </View>
                         ) : null}
 
@@ -314,7 +317,7 @@ const DropModal = () => {
           </View>
         </View>
       </ScrollView>
-    </>
+    </BottomSheetModalProvider>
   );
 };
 
