@@ -230,7 +230,7 @@ const NFTScrollList = ({
     }),
     []
   );
-  if (data?.length === 0)
+  if (data?.length === 0) {
     return (
       <View
         tw="w-full justify-center mt-4 h-60vh rounded-2xl"
@@ -245,6 +245,7 @@ const NFTScrollList = ({
         />
       </View>
     );
+  }
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
