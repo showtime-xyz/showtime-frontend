@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
@@ -104,7 +105,11 @@ export const FeedList = () => {
               />
             </View>
             <Tabs.Root onIndexChange={setSelected} index={selected}>
-              <Tabs.Pager>
+              <Tabs.Pager
+                style={{
+                  width: CARD_CONTAINER_WIDTH,
+                }}
+              >
                 <ErrorBoundary>
                   <Suspense fallback={<View />}>
                     <FollowingFeed />
@@ -166,7 +171,7 @@ const NFTScrollList = ({
   tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-
+  const isDark = useIsDarkMode();
   let dataProvider = useMemo(
     () =>
       new DataProvider((r1, r2) => {
@@ -225,7 +230,22 @@ const NFTScrollList = ({
     }),
     []
   );
-
+  if (data?.length === 0) {
+    return (
+      <View
+        tw="w-full justify-center mt-4 h-60vh rounded-2xl"
+        style={{
+          // @ts-ignore
+          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+        }}
+      >
+        <EmptyPlaceholder
+          title="No results found"
+          text="You can try to follow some users"
+        />
+      </View>
+    );
+  }
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
