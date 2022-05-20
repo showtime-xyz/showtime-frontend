@@ -8,6 +8,7 @@ import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 
+import { Button, Spinner, Text, View } from "design-system";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
@@ -30,7 +31,31 @@ const ListModal = withColorScheme(() => {
     contractAddress: contractAddress as string,
   });
 
-  const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
+  const {
+    data: nft,
+    loading,
+    error,
+    refresh,
+  } = useNFTDetails(data?.data?.item?.nft_id);
+
+  if (loading) {
+    return (
+      <View tw="flex-1 items-center">
+        <Spinner />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View tw="flex-1 items-center">
+        <Text tw="text-gray-900 dark:text-gray-100">Something went wrong</Text>
+        <Button tw="mt-4" onPress={refresh}>
+          Please try again
+        </Button>
+      </View>
+    );
+  }
 
   return (
     <BottomSheetModalProvider>

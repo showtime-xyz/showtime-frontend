@@ -75,9 +75,10 @@ const List = ({ nft }: Props) => {
         <View tw="flex-row items-center">
           <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
           <View tw="flex-1 px-4">
-            <Text tw="font-space-bold mb-2 text-lg text-black dark:text-white">
+            <Text tw="font-space-bold text-lg text-black dark:text-white">
               {nft?.token_name}
             </Text>
+            <View tw="h-2" />
             <View tw="flex-row items-center">
               <PolygonScan
                 width={14}
