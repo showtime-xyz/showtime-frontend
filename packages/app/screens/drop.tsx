@@ -6,7 +6,15 @@ import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 
-import { View, Text, Fieldset, Button, ScrollView } from "design-system";
+import {
+  View,
+  Text,
+  Fieldset,
+  Button,
+  ScrollView,
+  Checkbox,
+} from "design-system";
+import { ErrorText } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 import { Image as ImageIcon } from "design-system/icon";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
@@ -22,6 +30,7 @@ const defaultValues = {
   royalty: 10,
   editionSize: 5000,
   duration: SECONDS_IN_A_WEEK,
+  hasAcceptedTerms: false,
 };
 
 const durationOptions = [
@@ -46,6 +55,11 @@ const dropValidationSchema = yup.object({
     .min(1)
     .max(69)
     .default(defaultValues.royalty),
+  hasAcceptedTerms: yup
+    .boolean()
+    .default(defaultValues.hasAcceptedTerms)
+    .required()
+    .isTrue("You must accept the terms and conditions."),
 });
 
 const DropModal = () => {
@@ -225,7 +239,7 @@ const DropModal = () => {
             />
           </View>
 
-          <View tw="mt-4 mb-8 flex-row">
+          <View tw="mt-4 flex-row">
             <Controller
               control={control}
               name="duration"
@@ -249,6 +263,36 @@ const DropModal = () => {
                 );
               }}
             />
+          </View>
+          <View tw="mt-4 mb-10 flex-1">
+            <View tw="flex-row flex-1">
+              <Controller
+                control={control}
+                name="hasAcceptedTerms"
+                render={({ field: { onChange, value } }) => (
+                  <>
+                    <View tw="flex-row flex-1">
+                      <Checkbox
+                        onChange={(v) => onChange(v)}
+                        checked={value}
+                        accesibilityLabel="I agree to the terms and conditions"
+                      />
+
+                      <Text
+                        onPress={() => onChange(!value)}
+                        tw="ml-4 max-w-[90%] text-gray-600 dark:text-gray-400"
+                      >
+                        I have the rights to publish this artwork, and
+                        understand it will be minted on the Polygon network.
+                      </Text>
+                    </View>
+                  </>
+                )}
+              />
+            </View>
+            {errors.hasAcceptedTerms?.message ? (
+              <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+            ) : null}
           </View>
         </View>
       </ScrollView>
