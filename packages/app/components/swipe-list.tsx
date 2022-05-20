@@ -56,6 +56,7 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 const NFT_DETAIL_WIDTH = 380;
 const SCROLL_BAR_WIDTH = 15;
+
 type Props = {
   data: NFT[];
   fetchMore: () => void;
@@ -288,43 +289,59 @@ export const FeedItem = memo(
 
     if (windowWidth >= 768) {
       return (
-        <View tw="h-full w-full flex-row">
-          <View
-            tw={`flex-1 items-center justify-center bg-gray-100 dark:bg-black`}
-          >
-            <Media
-              item={nft}
-              numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${mediaWidth}px]`}
-              resizeMode="contain"
-            />
-          </View>
-          <View
-            tw={`w-[${NFT_DETAIL_WIDTH}]px bg-white shadow-md dark:bg-black`}
-          >
-            <Collection nft={nft} />
-            <Divider tw="my-2" />
-            <Social nft={nft} />
-            <LikedBy nft={nft} />
-            <View tw="mr-4 flex-row justify-between">
-              <Title nft={nft} />
-              <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown nftId={nft.nft_id} />
-              </Suspense>
+        <LikeContextProvider nft={nft}>
+          <View tw="h-full w-full flex-row">
+            <View
+              style={[
+                tw.style(
+                  "flex-1 items-center justify-center bg-gray-100 dark:bg-black"
+                ),
+                {
+                  width: 100,
+                },
+              ]}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                tw={`h-[${mediaHeight}px] w-[${mediaWidth}px]`}
+                resizeMode="contain"
+              />
             </View>
-            <Description nft={nft} />
-            <View tw="px-4">
-              <Creator nft={nft} />
-            </View>
-            {Platform.OS === "web" ? (
-              <View tw="px-4 py-4">
-                <BuyButton nft={nft} />
+            <View
+              style={[
+                tw.style(
+                  "bg-white dark:bg-black shadow-lg shadow-black/5 dark:shadow-white/50"
+                ),
+                {
+                  width: NFT_DETAIL_WIDTH,
+                },
+              ]}
+            >
+              <Collection nft={nft} />
+              <Divider tw="my-2" />
+              <Social nft={nft} />
+              <LikedBy nft={nft} />
+              <View tw="mr-4 flex-row justify-between">
+                <Title nft={nft} />
+                <Suspense fallback={<Skeleton width={24} height={24} />}>
+                  <NFTDropdown nftId={nft.nft_id} />
+                </Suspense>
               </View>
-            ) : null}
-            <Owner nft={nft} price={Platform.OS !== "ios"} />
-            {/* Comments */}
+              <Description nft={nft} />
+              <View tw="px-4">
+                <Creator nft={nft} />
+              </View>
+              {Platform.OS === "web" ? (
+                <View tw="px-4 py-4">
+                  <BuyButton nft={nft} />
+                </View>
+              ) : null}
+              <Owner nft={nft} price={Platform.OS !== "ios"} />
+              {/* Comments */}
+            </View>
           </View>
-        </View>
+        </LikeContextProvider>
       );
     }
 

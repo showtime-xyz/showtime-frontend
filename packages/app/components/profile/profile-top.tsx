@@ -16,13 +16,14 @@ import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { Button, ModalSheet, Skeleton, Text, View } from "design-system";
-import { Avatar } from "design-system/avatar";
 import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
-import { Image } from "design-system/image";
+import { LightBoxImg } from "design-system/light-box/light-box-image";
 import { PressableScale } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
+import useContentWidth from "../../hooks/use-content-width";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 import { FollowersList, FollowingList } from "../following-user-list";
@@ -113,10 +114,9 @@ export const ProfileTop = ({
     [bio]
   );
   // cover down to twitter banner ratio: w:h=3:1
-  const coverImageHeight = useMemo(
-    () => (width < 768 ? width / 3 : 180),
-    [width]
-  );
+  const coverHeight = useMemo(() => (width < 768 ? width / 3 : 180), [width]);
+
+  const coverWidth = useContentWidth(-64);
 
   useEffect(() => {
     Platform.OS === "web" && setShowBottomSheet(null);
@@ -127,20 +127,20 @@ export const ProfileTop = ({
       <View pointerEvents="box-none">
         <View
           tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:-mx-20 xl:rounded-b-[32px]`}
-          pointerEvents="none"
         >
           <Skeleton
-            height={coverImageHeight}
+            height={coverHeight}
             width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
             show={loading}
             colorMode={colorMode as any}
           >
             {profileData?.data.profile.cover_url && (
-              <Image
-                source={{ uri: profileData?.data.profile.cover_url }}
-                tw={`h-[${coverImageHeight}px] w-100 web:object-cover`}
-                alt="Cover image"
-                resizeMethod="resize"
+              <LightBoxImg
+                source={{
+                  uri: profileData?.data.profile.cover_url,
+                }}
+                width={coverWidth}
+                height={coverHeight}
                 resizeMode="cover"
               />
             )}
@@ -149,7 +149,7 @@ export const ProfileTop = ({
 
         <View tw="mx-2 bg-white dark:bg-black" pointerEvents="box-none">
           <View tw="flex-row justify-between" pointerEvents="box-none">
-            <View tw="flex-row items-end" pointerEvents="none">
+            <View tw="flex-row items-end">
               <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
                 <Skeleton
                   height={128}
@@ -159,9 +159,17 @@ export const ProfileTop = ({
                   radius={99999}
                 >
                   {profileData && (
-                    <Avatar
-                      url={getProfileImage(profileData?.data.profile)}
-                      size={128}
+                    <LightBoxImg
+                      source={{
+                        uri: getProfileImage(profileData?.data.profile),
+                      }}
+                      imgLayout={{
+                        width: 128,
+                        height: 128,
+                      }}
+                      width={128}
+                      height={128}
+                      style={tw.style("rounded-full")}
                     />
                   )}
                 </Skeleton>

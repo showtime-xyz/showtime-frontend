@@ -14,6 +14,7 @@ import {
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { createParam } from "app/navigation/use-param";
+import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
 import {
@@ -129,20 +130,30 @@ const FollowingFeed = () => {
   const queryState = useFeed("/following");
 
   return (
-    <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+    </MutateProvider>
   );
 };
 
 const AlgorithmicFeed = () => {
   const queryState = useFeed("");
 
-  return <NFTScrollList {...queryState} data={queryState.data} />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} />
+    </MutateProvider>
+  );
 };
 
 const CuratedFeed = () => {
   const queryState = useFeed("/curated");
 
-  return <NFTScrollList {...queryState} data={queryState.data} tab="curated" />;
+  return (
+    <MutateProvider mutate={queryState.updateItem}>
+      <NFTScrollList {...queryState} data={queryState.data} tab="curated" />
+    </MutateProvider>
+  );
 };
 
 const NFTScrollList = ({

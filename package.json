@@ -20,7 +20,7 @@
     "husky": "^8.0.1",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "prettier-plugin-tailwindcss": "^0.1.10",
+    "prettier-plugin-tailwindcss": "0.1.10",
     "react-native-fast-image": "^8.5.11",
     "react-native-os": "^1.2.6",
     "sentry-expo": "^4.1.0",
