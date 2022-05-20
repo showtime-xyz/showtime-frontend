@@ -12,7 +12,7 @@ export const ClaimButton = ({ edition }: { edition: IEdition }) => {
       <Button
         disabled={state.status === "loading"}
         tw={state.status === "loading" ? "opacity-45" : ""}
-        onPress={() => claimNFT({ editionAddress: edition.contract_address })}
+        onPress={() => claimNFT({ minterAddress: edition.minter_address })}
       >
         {state.status === "loading"
           ? "Claiming..."

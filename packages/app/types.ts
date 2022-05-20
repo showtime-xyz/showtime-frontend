@@ -179,6 +179,7 @@ export interface AllSellers {
 
 export type IEdition = {
   contract_address: string;
+  minter_address: string;
   description: string;
   edition_size: string;
   image_url: string;

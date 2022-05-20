@@ -11,5 +11,5 @@ export const Claim = () => {
   const [contractAddress] = useParam("contractAddress");
 
   //@ts-ignore
-  return <ClaimButton edition={{ contract_address: contractAddress }} />;
+  return <ClaimButton edition={{ minter_address: contractAddress }} />;
 };

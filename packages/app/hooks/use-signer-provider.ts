@@ -114,8 +114,8 @@ export const useSignTypedData = () => {
         (typeof e.message === "string" && e.message.includes("chainId"))
       ) {
         Alert.alert(
-          "Switch network chain id",
-          "Wallet chain id must point to polygon network",
+          "Switch network",
+          "Wallet must point to polygon network to complete the transaction",
           [
             {
               text: "Cancel",

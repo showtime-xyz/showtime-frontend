@@ -56,7 +56,7 @@ export const useClaimNFT = () => {
   const { getUserAddress } = useSignerAndProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const claimNFT = async (props: { editionAddress: string }) => {
+  const claimNFT = async (props: { minterAddress: string }) => {
     dispatch({ type: "loading" });
     try {
       const targetInterface = new ethers.utils.Interface(minterABI);
@@ -70,7 +70,7 @@ export const useClaimNFT = () => {
           url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
             callData
           )}&to_address=${encodeURIComponent(
-            props.editionAddress
+            props.minterAddress
           )}&from_address=${encodeURIComponent(userAddress)}`,
           method: "GET",
         });
