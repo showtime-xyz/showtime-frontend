@@ -9,10 +9,7 @@ import { delay } from "app/utilities";
 
 import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
 
-const minterABI = ["function mintEdition(address collection, address _to)"];
-
-const onePerAddressMinterContract =
-  "0x50c001362FB06E2CB4D4e8138654267328a8B247";
+const minterABI = ["function mintEdition(address _to)"];
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
@@ -66,7 +63,6 @@ export const useClaimNFT = () => {
       const userAddress = await getUserAddress();
       if (userAddress) {
         const callData = targetInterface.encodeFunctionData("mintEdition", [
-          props.editionAddress,
           userAddress,
         ]);
 
@@ -74,7 +70,7 @@ export const useClaimNFT = () => {
           url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
             callData
           )}&to_address=${encodeURIComponent(
-            onePerAddressMinterContract
+            props.editionAddress
           )}&from_address=${encodeURIComponent(userAddress)}`,
           method: "GET",
         });

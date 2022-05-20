@@ -14,10 +14,21 @@ import { Pressable } from "design-system/pressable";
 import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 
+const SECONDS_IN_A_DAY = 24 * 60 * 60;
+const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
+const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+
 const defaultValues = {
   royalty: 10,
-  editionSize: 100,
+  editionSize: 5000,
+  duration: SECONDS_IN_A_WEEK,
 };
+
+const durationOptions = [
+  { label: "1 day", value: SECONDS_IN_A_DAY },
+  { label: "1 week", value: SECONDS_IN_A_WEEK },
+  { label: "1 month", value: SECONDS_IN_A_MONTH },
+];
 
 const dropValidationSchema = yup.object({
   file: yup.mixed().required(),
@@ -183,8 +194,9 @@ const DropModal = () => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Royalty"
+                    label="Your royalties"
                     onBlur={onBlur}
+                    helperText="How much you’ll earn each time this NFT is sold"
                     errorText={errors.royalty?.message}
                     value={value?.toString()}
                     onChangeText={onChange}
@@ -193,7 +205,7 @@ const DropModal = () => {
               }}
             />
           </View>
-          <View tw="mt-4 mb-8 flex-row">
+          <View tw="mt-4 flex-row">
             <Controller
               control={control}
               name="editionSize"
@@ -203,9 +215,36 @@ const DropModal = () => {
                     tw="flex-1"
                     label="Editions"
                     onBlur={onBlur}
+                    helperText="How many editions will be available to claim"
                     errorText={errors.editionSize?.message}
                     value={value?.toString()}
                     onChangeText={onChange}
+                  />
+                );
+              }}
+            />
+          </View>
+
+          <View tw="mt-4 mb-8 flex-row">
+            <Controller
+              control={control}
+              name="duration"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Duration"
+                    onBlur={onBlur}
+                    helperText="How long the drop will be available to claim"
+                    errorText={errors.duration?.message}
+                    selectOnly
+                    select={{
+                      options: durationOptions,
+                      placeholder: "Duration",
+                      value: value,
+                      onChange,
+                      tw: "flex-1",
+                    }}
                   />
                 );
               }}

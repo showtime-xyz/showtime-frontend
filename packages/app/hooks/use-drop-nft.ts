@@ -11,13 +11,11 @@ import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
 
 const editionCreatorABI = [
-  "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, address minter) returns(uint256)",
+  "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
 ];
 
-const onePerAddressMinterContract =
-  "0x50c001362FB06E2CB4D4e8138654267328a8B247";
 const metaSingleEditionMintableCreator =
-  "0x50c001c0aaa97B06De431432FDbF275e1F349694";
+  "0x50C001A33Caa446c8b84C489F371F77754F41024";
 
 type IEdition = {
   contract_address: string;
@@ -71,6 +69,7 @@ export type UseDropNFT = {
   file: File | string;
   editionSize: number;
   royalty: number;
+  duration: number;
   symbol?: string;
   animationUrl?: string;
   animationHash?: string;
@@ -101,7 +100,7 @@ export const useDropNFT = () => {
         "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
         params.editionSize, // editionSize
         params.royalty * 100, // royaltyBPS
-        onePerAddressMinterContract,
+        params.duration,
       ]);
 
       const userAddress = await getUserAddress();
