@@ -55,7 +55,7 @@ function ProfileDropdown({ user }: Props) {
         <DropdownMenuItem
           onSelect={async () => {
             const result = await share({
-              url: `https://showtime.io/${
+              url: `https://showtime.xyz/${
                 user?.username ??
                 user?.wallet_addresses_excluding_email_v2?.[0]?.address
               }`,
