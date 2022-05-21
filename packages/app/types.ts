@@ -178,6 +178,7 @@ export interface AllSellers {
 }
 
 export type IEdition = {
+  id: number;
   contract_address: string;
   minter_address: string;
   description: string;
