@@ -6,7 +6,7 @@ import { Button, Spinner } from "design-system";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
-const CollectionScreen = () => {
+export const CollectionScreen = () => {
   const [collectionAddress] = useParam("collectionAddress");
   const { data, loading, error, mutate } =
     useCreatorCollectionDetail(collectionAddress);
@@ -28,5 +28,3 @@ const CollectionScreen = () => {
 
   return null;
 };
-
-export default CollectionScreen;

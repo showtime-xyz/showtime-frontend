@@ -215,7 +215,7 @@ export const ProfileTop = ({
                         onPress={() => {
                           router.push(
                             Platform.select({
-                              native: "/nft/drop",
+                              native: "/drop",
                               web: {
                                 pathname: router.pathname,
                                 query: {
@@ -225,7 +225,7 @@ export const ProfileTop = ({
                               } as any,
                             }),
                             Platform.select({
-                              native: "/nft/drop",
+                              native: "/drop",
                               web: router.asPath,
                             })
                           );

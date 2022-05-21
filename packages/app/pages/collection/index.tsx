@@ -1,4 +1,4 @@
-import CollectionScreen from "app/screens/collection";
+import { CollectionScreen } from "app/screens/collection";
 
 const CreatorCollection = () => {
   return <CollectionScreen />;
