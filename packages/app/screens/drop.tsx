@@ -99,7 +99,7 @@ const DropModal = () => {
             </Text>
           </View>
           <TextLink
-            href={`/nft/${process.env.NEXT_PUBLIC_CHAIN_ID}/${state.edition?.contract_address}`}
+            href={`/collection/${state.edition?.contract_address}`}
             tw="text-center font-bold text-blue-700"
           >
             Open URL

@@ -2,7 +2,7 @@ import { ClaimButton } from "app/components/claim-button";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
 
-import { Button, Spinner } from "design-system";
+import { Button, Spinner, View } from "design-system";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
@@ -23,7 +23,11 @@ export const CollectionScreen = () => {
   }
 
   if (data) {
-    return <ClaimButton edition={data} />;
+    return (
+      <View tw="mt-50">
+        <ClaimButton edition={data} />
+      </View>
+    );
   }
 
   return null;
