@@ -268,13 +268,13 @@ const DropModal = () => {
             />
           </View>
           <View tw="mt-4 flex-1">
-            <View tw="flex-row flex-1">
+            <View tw="flex-1 flex-row">
               <Controller
                 control={control}
                 name="hasAcceptedTerms"
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <View tw="flex-row flex-1">
+                    <View tw="flex-1 flex-row">
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}
