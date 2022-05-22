@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
-import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 
@@ -37,7 +36,6 @@ export type MintNFTType = {
   transaction?: string;
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
-  isMagic?: boolean;
   file?: string | File;
   fileType?: string;
 };
@@ -48,7 +46,6 @@ export const initialMintNFTState: MintNFTType = {
   nftIPFSHash: undefined,
   tokenId: undefined,
   transaction: undefined,
-  isMagic: undefined,
   file: undefined,
   fileType: undefined,
 };
@@ -58,7 +55,6 @@ export type ActionPayload = {
   tokenId?: string;
   transaction?: string;
   nftIPFSHash?: string;
-  isMagic?: boolean;
   file?: string | File;
   fileType?: string;
 };
@@ -133,7 +129,6 @@ export const mintNFTReducer = (
         status: "minting",
         tokenId: undefined,
         transaction: undefined,
-        isMagic: action.payload?.isMagic,
       };
     case "mintingSuccess":
       return {
@@ -229,11 +224,8 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
-  let { web3 } = useWeb3();
 
   const { getSignerAndProvider } = useSignerAndProvider();
-  // TODO: this magic check is incorrect. In future, web3 can be just a normal provider
-  const isMagic = !!web3;
 
   async function uploadMedia() {
     // Media Upload
@@ -361,7 +353,7 @@ export const useMintNFT = () => {
       const { signer, signerAddress, provider } = result;
 
       try {
-        dispatch({ type: "minting", payload: { isMagic } });
+        dispatch({ type: "minting" });
 
         const contract = new ethers.Contract(
           //@ts-ignore

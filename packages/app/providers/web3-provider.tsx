@@ -40,9 +40,8 @@ export function Web3Provider({ children }: Web3ProviderProps) {
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
         });
 
-        (async () => {
+        (async function setWeb3Provider() {
           await walletConnectProvider.enable();
-
           const ethersProvider = new EthersWeb3Provider(walletConnectProvider);
           setWeb3(ethersProvider);
         })();
