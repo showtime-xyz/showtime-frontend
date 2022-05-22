@@ -34,7 +34,7 @@ export function Web3Provider({ children }: Web3ProviderProps) {
     if (Platform.OS !== "web") {
       if (connector.connected) {
         const walletConnectProvider = new WalletConnectProvider({
-          connector: connector,
+          connector,
           qrcode: false,
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
         });
