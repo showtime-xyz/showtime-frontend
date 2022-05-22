@@ -26,7 +26,6 @@ import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import { MintSnackbar } from "app/components/mint-snackbar";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
@@ -395,7 +394,6 @@ function App() {
                                     <FeedProvider>
                                       <StatusBar style="auto" />
                                       <RootStackNavigator />
-                                      <MintSnackbar />
                                     </FeedProvider>
                                   </GrowthBookProvider>
                                 </BottomSheetModalProvider>

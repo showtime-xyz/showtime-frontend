@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -7,11 +8,16 @@ import { v4 as uuid } from "uuid";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
+import { useSafeAreaInsets } from "app/lib/safe-area";
+import { useRouter } from "app/navigation/use-router";
 
 import { useAlert } from "design-system/alert";
+import { useSnackbar } from "design-system/snackbar";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -224,6 +230,12 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
+  const snackbar = useSnackbar();
+  const { userAddress } = useCurrentUserAddress();
+  const router = useRouter();
+  const { user } = useUser();
+  const insets = useSafeAreaInsets();
+  const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
   const { getSignerAndProvider } = useSignerAndProvider();
 
@@ -300,17 +312,18 @@ export const useMintNFT = () => {
     } catch (error) {
       console.error("media upload failed", error);
       dispatch({ type: "mediaUploadError" });
+      throw error;
     }
   }
 
   async function uploadNFTJson(params: UseMintNFT) {
-    let mediaIpfsHash;
-    // if (state.mediaIPFSHash) {
-    // mediaIpfsHash = state.mediaIPFSHash;
-    // } else {
-    mediaIpfsHash = await uploadMedia();
-    // }
     try {
+      let mediaIpfsHash;
+      // if (state.mediaIPFSHash) {
+      // mediaIpfsHash = state.mediaIPFSHash;
+      // } else {
+      mediaIpfsHash = await uploadMedia();
+      // }
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
         const pinataToken = await getPinataToken();
@@ -342,17 +355,24 @@ export const useMintNFT = () => {
     } catch (e) {
       console.error("NFT upload error ", e);
       dispatch({ type: "nftJSONUploadError" });
+      throw e;
     }
   }
 
   async function mintNFT(params: UseMintNFT) {
-    const nftJsonIpfsHash = await uploadNFTJson(params);
+    snackbar?.show({
+      text: "Creating… This may take a few minutes.",
+      iconStatus: "waiting",
+      bottom,
+    });
 
-    const result = await getSignerAndProvider();
-    if (result) {
-      const { signer, signerAddress, provider } = result;
+    try {
+      const nftJsonIpfsHash = await uploadNFTJson(params);
 
-      try {
+      const result = await getSignerAndProvider();
+      if (result) {
+        const { signer, signerAddress, provider } = result;
+
         dispatch({ type: "minting" });
 
         const contract = new ethers.Contract(
@@ -411,13 +431,37 @@ export const useMintNFT = () => {
             },
           });
           track("NFT Created");
-        });
-      } catch (error) {
-        console.error("Minting error ", error);
-        dispatch({
-          type: "mintingError",
+
+          snackbar?.update({
+            text: "Created! Your NFT will appear in a minute!",
+            iconStatus: "done",
+            bottom,
+            hideAfter: 5000,
+            action: {
+              text: "View",
+              onPress: () => {
+                snackbar.hide();
+                router.push(
+                  Platform.OS === "web"
+                    ? `/@${user?.data?.profile?.username ?? userAddress}`
+                    : `/profile`
+                );
+              },
+            },
+          });
         });
       }
+    } catch (error) {
+      snackbar?.update({
+        text: "Something went wrong. Please try again",
+        bottom,
+        iconStatus: "default",
+        hideAfter: 4000,
+      });
+      console.error("Minting error ", error);
+      dispatch({
+        type: "mintingError",
+      });
     }
   }
 
@@ -432,6 +476,7 @@ export const useMintNFT = () => {
 
 function dataURLtoFile(dataurl: string, filename: string) {
   let arr = dataurl.split(","),
+    //@ts-ignore
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
