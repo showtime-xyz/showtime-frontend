@@ -378,14 +378,14 @@ function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider style={{ backgroundColor: "black" }}>
-        <ToastProvider>
-          <AlertProvider>
-            <LightBoxProvider>
-              <SnackbarProvider>
-                <NavigationProvider>
-                  <SWRProvider>
-                    <WalletConnectProvider>
-                      <Web3Provider>
+        <WalletConnectProvider>
+          <Web3Provider>
+            <ToastProvider>
+              <AlertProvider>
+                <LightBoxProvider>
+                  <SnackbarProvider>
+                    <NavigationProvider>
+                      <SWRProvider>
                         <AppContextProvider>
                           <AuthProvider>
                             <UserProvider>
@@ -403,14 +403,14 @@ function App() {
                             </UserProvider>
                           </AuthProvider>
                         </AppContextProvider>
-                      </Web3Provider>
-                    </WalletConnectProvider>
-                  </SWRProvider>
-                </NavigationProvider>
-              </SnackbarProvider>
-            </LightBoxProvider>
-          </AlertProvider>
-        </ToastProvider>
+                      </SWRProvider>
+                    </NavigationProvider>
+                  </SnackbarProvider>
+                </LightBoxProvider>
+              </AlertProvider>
+            </ToastProvider>
+          </Web3Provider>
+        </WalletConnectProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
