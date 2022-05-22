@@ -25,6 +25,8 @@ export function Web3Provider({ children }: Web3ProviderProps) {
     () => ({
       web3,
       setWeb3,
+      //@ts-ignore
+      isMagic: web3?.provider.isMagic,
       setMountRelayerOnApp,
     }),
     [web3]

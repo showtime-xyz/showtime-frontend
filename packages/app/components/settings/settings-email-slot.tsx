@@ -82,11 +82,10 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
-  const { web3 } = useWeb3();
+  const { isMagic } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
 
   const email = props.email;
-  const isMagic = !!web3;
 
   const backendAddress = props.address;
 
