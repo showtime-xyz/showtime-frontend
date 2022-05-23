@@ -29,15 +29,16 @@ import { tw } from "design-system/tailwind";
 
 type Props = {
   nftId?: NFT["nft_id"];
+  listId?: number | undefined;
   shouldEnableSharing?: boolean;
 };
 
-function NFTDropdown({ nftId, shouldEnableSharing = true }: Props) {
+function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
   //#region hooks
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
   const { report } = useReport();
-  const { unfollow, isFollowing } = useMyInfo();
+  const { unfollow, isFollowing, hide: hideNFT } = useMyInfo();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const { refresh } = useFeed("");
@@ -108,6 +109,23 @@ function NFTDropdown({ nftId, shouldEnableSharing = true }: Props) {
         loop
         tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
+        {hasOwnership ? (
+          <>
+            <DropdownMenuItem
+              onSelect={() => {
+                hideNFT(nftId, listId);
+              }}
+              key="details"
+              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+            >
+              <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+                Hide
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
+          </>
+        ) : null}
+
         <DropdownMenuItem
           onSelect={() => openModal("details")}
           key="details"

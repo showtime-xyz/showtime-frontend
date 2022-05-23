@@ -428,6 +428,30 @@ export const useMyInfo = () => {
     [data, accessToken, mutate, navigateToLogin]
   );
 
+  const hide = useCallback(
+    async (nftId: number | undefined, listId: number | undefined) => {
+      if (!accessToken) {
+        navigateToLogin();
+        return false;
+      }
+
+      if (data && nftId && listId) {
+        try {
+          await axios({
+            url: `/v1/hide_nft/${nftId}/${listId}`,
+            method: "POST",
+            data: {},
+          });
+
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+    },
+    [data, accessToken, mutate, navigateToLogin]
+  );
+
   const unlike = useCallback(
     async (nftId: number) => {
       if (data) {
@@ -482,5 +506,6 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
+    hide,
   };
 };
