@@ -449,7 +449,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data, accessToken, mutate, navigateToLogin]
+    [data, accessToken, navigateToLogin]
   );
 
   const unlike = useCallback(
