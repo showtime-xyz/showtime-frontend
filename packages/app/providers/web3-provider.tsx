@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
+import { useAccount, useProvider } from "wagmi";
 
 import { Web3Context } from "app/context/web3-context";
 import { magic, Relayer } from "app/lib/magic";
-import getWeb3Modal from "app/lib/web3-modal";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
@@ -15,13 +15,17 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   //#region state
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
+  const provider = useProvider();
   //#endregion
 
   //#region variables
   const Web3ContextValue = useMemo(
     () => ({
       web3,
-      setWeb3,
+      setWeb3: (_web3) => {
+        console.log("set web3 my fren", _web3);
+        setWeb3(_web3);
+      },
       setMountRelayerOnApp,
       isMagicLogin: Boolean(web3),
     }),
@@ -31,23 +35,16 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   useEffect(() => {
     magic?.user?.isLoggedIn().then((isLoggedIn) => {
       if (magic.rpcProvider && isLoggedIn) {
-        const provider = new EthersWeb3Provider(magic.rpcProvider);
-        setWeb3(provider);
+        const ehterProvider = new EthersWeb3Provider(magic.rpcProvider);
+        setWeb3(ehterProvider);
       }
     });
 
-    if (Platform.OS === "web") {
-      (async () => {
-        const web3Modal = await getWeb3Modal();
-
-        if (web3Modal.cachedProvider) {
-          const provider = await web3Modal.connect();
-          const ethersProvider = new EthersWeb3Provider(provider);
-          setWeb3(ethersProvider);
-        }
-      })();
-    }
-  }, []);
+    // if (Platform.OS === "web" && !web3) {
+    //   const ethersProvider = new EthersWeb3Provider(provider);
+    //   setWeb3(ethersProvider);
+    // }
+  }, [provider]);
 
   //#endregion
   return (

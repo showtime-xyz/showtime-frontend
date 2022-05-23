@@ -41,7 +41,7 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
         },
         options: {
           appName: "Showtime",
-          networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+          networkUrl: process.env.NEXT_API_ALCHEMY_MAINNET,
           chainId: process.env.NEXT_PUBLIC_CHAINID,
         },
         package: WalletLink,
@@ -71,14 +71,14 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
 
                 // Default to polygon chain
                 const customNodeOptions = {
-                  rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+                  rpcUrl: process.env.NEXT_API_ALCHEMY_MAINNET,
                   chainId: 137,
                 };
 
                 if (isMumbai) {
                   console.log("Magic network is connecting to Mumbai testnet");
                   customNodeOptions.rpcUrl =
-                    "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
+                    process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI;
                   customNodeOptions.chainId = 80001;
                 }
 

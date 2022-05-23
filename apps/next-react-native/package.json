@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "STAGE=development NODE_OPTIONS='--inspect' next dev",
+    "dev": "STAGE=staging NODE_OPTIONS='--inspect' next dev",
     "build": "STAGE=production next build",
     "build:turbo": "cd ../.. && yarn build",
     "build:analyze": "ANALYZE=true yarn build",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@biconomy/mexa": "2.0.24",
+    "@biconomy/mexa": "^2.0.32",
     "@builder.io/partytown": "^0.5.2",
     "@google/model-viewer": "^1.9.2",
     "@growthbook/growthbook-react": "^0.7.0",

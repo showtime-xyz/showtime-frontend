@@ -1,6 +1,5 @@
 import { useContext } from "react";
 
-import axios from "axios";
 import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import { v4 as uuid } from "uuid";
@@ -10,7 +9,8 @@ import { MintContext } from "app/context/mint-context";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
-import { axios as showtimeAPIAxios } from "app/lib/axios";
+import { getPinataToken, pinFileToIPFS, pinJSONToIPFS } from "app/lib/pinata";
+import { dataURLtoFile } from "app/utilities";
 
 import { useAlert } from "design-system/alert";
 
@@ -218,23 +218,13 @@ const getFileMeta = async (file?: File | string) => {
   }
 };
 
-const getPinataToken = () => {
-  return showtimeAPIAxios({
-    url: "/v1/pinata/key",
-    method: "POST",
-    data: {},
-  }).then((res) => res.token);
-};
-
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
   let { isMagicLogin } = useWeb3();
-
   const { getSignerAndProvider } = useSignerAndProvider();
 
   async function uploadMedia() {
-    // Media Upload
     try {
       const fileMetaData = await getFileMeta(state.file);
 
@@ -250,7 +240,6 @@ export const useMintNFT = () => {
         return;
       }
 
-      console.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData) {
         dispatch({
@@ -262,14 +251,13 @@ export const useMintNFT = () => {
         const formData = new FormData();
 
         if (typeof state.file === "string") {
-          // Web Camera -  Data URI
           if (state.file?.startsWith("data")) {
+            // Web Camera -  Data URI
             const file = dataURLtoFile(state.file, "unknown");
 
             formData.append("file", file);
-          }
-          // Native - File path string
-          else {
+          } else {
+            // Native - File path string
             formData.append("file", {
               //@ts-ignore
               uri: state.file,
@@ -277,10 +265,8 @@ export const useMintNFT = () => {
               type: fileMetaData.type,
             });
           }
-        }
-
-        // Web File Picker - File Object
-        else if (state.file) {
+        } else if (state.file) {
+          // Web File Picker - File Object
           formData.append("file", state.file);
         }
 
@@ -291,16 +277,14 @@ export const useMintNFT = () => {
           })
         );
 
-        const mediaIPFSHash = await axios
-          .post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
-            headers: {
-              Authorization: `Bearer ${pinataToken}`,
-              "Content-Type": `multipart/form-data`,
-            },
-          })
-          .then((res: any) => res.data.IpfsHash);
-        console.log("Uploaded file to ipfs ", mediaIPFSHash);
+        const mediaIPFSHash = await pinFileToIPFS({
+          formData,
+          token: pinataToken,
+        }).then((res: any) => res.data.IpfsHash);
+
+
         dispatch({ type: "mediaUploadSuccess", payload: { mediaIPFSHash } });
+
         return mediaIPFSHash;
       }
     } catch (error) {
@@ -310,39 +294,26 @@ export const useMintNFT = () => {
   }
 
   async function uploadNFTJson(params: UseMintNFT) {
-    let mediaIpfsHash;
-    // if (state.mediaIPFSHash) {
-    // mediaIpfsHash = state.mediaIPFSHash;
-    // } else {
-    mediaIpfsHash = await uploadMedia();
-    // }
+    let mediaIpfsHash = await uploadMedia();
+
     try {
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
+
         const pinataToken = await getPinataToken();
-        const nftIPFSHash = await axios
-          .post(
-            "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-            {
-              pinataMetadata: { name: uuid() },
-              pinataContent: {
-                name: params.title,
-                description: params.description,
-                image: `ipfs://${mediaIpfsHash}`,
-                ...(params.notSafeForWork
-                  ? { attributes: [{ value: "NSFW" }] }
-                  : {}),
-              },
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${pinataToken}`,
-              },
-            }
-          )
-          .then((res: any) => res.data.IpfsHash);
+        const nftIPFSHash = await pinJSONToIPFS({
+          content: {
+            name: params.title,
+            description: params.description,
+            image: `ipfs://${mediaIpfsHash}`,
+            ...(params.notSafeForWork
+              ? { attributes: [{ value: "NSFW" }] }
+              : {}),
+          },
+          token: pinataToken,
+        }).then((res: any) => res.data.IpfsHash);
+
         dispatch({ type: "nftJSONUploadSuccess", payload: { nftIPFSHash } });
-        console.log("Uploaded nft json to ipfs ", nftIPFSHash);
         return nftIPFSHash;
       }
     } catch (e) {
@@ -357,6 +328,10 @@ export const useMintNFT = () => {
     const result = await getSignerAndProvider();
     if (result) {
       const { signer, signerAddress, provider } = result;
+        "signer and provider",
+        `of ${signerAddress} signerAddress`,
+        provider
+      );
 
       try {
         dispatch({ type: "minting", payload: { isMagic: isMagicLogin } });
@@ -377,7 +352,6 @@ export const useMintNFT = () => {
           params.royaltiesPercentage * 100
         );
 
-        console.log("** minting: opening wallet for signing **");
 
         const transaction = await provider
           .send("eth_sendTransaction", [
@@ -401,12 +375,6 @@ export const useMintNFT = () => {
         });
 
         provider.once(transaction, (result: any) => {
-          // console.log(
-          //   "token id! ",
-          //   contract.interface
-          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          //     .toNumber()
-          // );
           dispatch({
             type: "mintingSuccess",
             payload: {
@@ -427,7 +395,6 @@ export const useMintNFT = () => {
     }
   }
 
-  console.log("minting state ", state);
 
   const setMedia = ({ file, fileType }: { file: any; fileType: any }) => {
     dispatch({ type: "setMedia", payload: { file, fileType } });
@@ -435,17 +402,3 @@ export const useMintNFT = () => {
 
   return { state, startMinting: mintNFT, setMedia };
 };
-
-function dataURLtoFile(dataurl: string, filename: string) {
-  let arr = dataurl.split(","),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-}

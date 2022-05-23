@@ -14,9 +14,9 @@ export default async function handler(req, res) {
     const wallet = new ethers.Wallet(
       process.env.WALLET_KEY,
       new ethers.providers.JsonRpcProvider(
-        `https://polygon-${
-          process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-        }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
+          ? process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI
+          : process.env.NEXT_PUBLIC_ALCHEMY_MAINNET
       )
     );
     try {

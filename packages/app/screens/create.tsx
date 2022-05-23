@@ -100,9 +100,9 @@ const CreateMD = () => {
         </View>
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">
-          <Text tw="text-4xl">🎉</Text>
+          <Text tw="mb-4 text-4xl">🎉</Text>
           <View>
-            <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
+            <Text tw="font-space-bold my-8 mb-4 text-center text-lg text-black dark:text-white">
               Your NFT has been minted on Showtime!
             </Text>
             <PolygonScanButton transactionHash={state.transaction} />

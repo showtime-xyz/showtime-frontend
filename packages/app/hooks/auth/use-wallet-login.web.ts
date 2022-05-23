@@ -1,6 +1,8 @@
 import { useCallback, useEffect } from "react";
 
-import { useAccount, useSignMessage } from "wagmi";
+import { useAccount, useSignMessage, useProvider } from "wagmi";
+
+import { useWeb3 } from "app/hooks/use-web3";
 
 import { useStableCallback } from "../use-stable-callback";
 import { useAuth } from "./use-auth";
@@ -16,13 +18,15 @@ export function useWalletLogin() {
   //#endregion
 
   //#region hooks
+  const { setWeb3 } = useWeb3();
   const { data: wagmiData } = useAccount();
   const { data: wagmiSignData, signMessage } = useSignMessage();
+  const wagmiProvider = useProvider();
   const { getNonce, rotateNonce } = useNonce();
   const { login: _login, logout } = useAuth();
   //#endregion
 
-  useEffect(() => {
+  const onConnectToWallet = useCallback(async () => {
     if (wagmiData?.address) {
       dispatch("CONNECT_TO_WALLET_REQUEST");
 
@@ -33,13 +37,23 @@ export function useWalletLogin() {
     }
   }, [wagmiData, dispatch]);
 
-  useEffect(() => {
+  const onSignMessage = useCallback(async () => {
     if (wagmiSignData) {
       dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", {
         signature: wagmiSignData,
       });
+
+      setWeb3(wagmiProvider);
     }
-  }, [wagmiSignData, dispatch]);
+  }, [wagmiSignData, wagmiProvider, dispatch, setWeb3]);
+
+  useEffect(() => {
+    onConnectToWallet();
+  }, [onConnectToWallet]);
+
+  useEffect(() => {
+    onSignMessage();
+  }, [onSignMessage]);
 
   //#region methods
   const fetchNonce = useCallback(

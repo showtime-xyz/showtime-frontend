@@ -6,8 +6,8 @@ function getAPIUrl(uri: string) {
   const endpoint = Platform.select({
     web: "",
     default:
-      process.env.NEXT_API_URL !== null && process.env.NEXT_API_URL !== ""
-        ? process.env.NEXT_API_URL
+      process.env.NEXT_PUBLIC_URL !== null && process.env.NEXT_PUBLIC_URL !== ""
+        ? process.env.NEXT_PUBLIC_URL
         : `http://${localhost}:3000`,
   });
 

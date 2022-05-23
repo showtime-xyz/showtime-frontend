@@ -108,11 +108,12 @@ export const getBiconomy = async (connector: any, provider: any) => {
           });
         },
       };
+
   const biconomy = new Biconomy(
     new ethers.providers.JsonRpcProvider(
-      `https://polygon-${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+      process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai"
+        ? process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI
+        : process.env.NEXT_PUBLIC_ALCHEMY_MAINNET
     ),
     {
       apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
@@ -158,14 +159,13 @@ export const overrideMagicInstance = (email: string) => {
     const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
     // Default to polygon chain
     const customNodeOptions = {
-      rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+      rpcUrl: process.env.NEXT_PUBLIC_ALCHEMY_MAINNET,
       chainId: 137,
     };
 
     if (isMumbai) {
       console.log("Magic network is connecting to Mumbai testnet");
-      customNodeOptions.rpcUrl =
-        "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
+      customNodeOptions.rpcUrl = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI;
       customNodeOptions.chainId = 80001;
     }
 
@@ -189,19 +189,14 @@ export const getRoundedCount = (count: number = 0) => {
   switch (digits.length) {
     case 8:
       return `${digits.slice(0, 2).join("")}m`;
-
     case 7:
       return `${digits[0]}m`;
-
     case 6:
       return `${digits.slice(0, 3).join("")}k`;
-
     case 5:
       return `${digits.slice(0, 2).join("")}k`;
-
     case 4:
       return `${digits[0]}k`;
-
     case 3:
     case 2:
     case 1:
@@ -564,7 +559,8 @@ const getFileMeta = async (file?: File | string) => {
     };
   }
 };
-function dataURLtoFile(dataurl: string, filename: string) {
+
+export function dataURLtoFile(dataurl: string, filename: string) {
   let arr = dataurl.split(","),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),

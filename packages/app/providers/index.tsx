@@ -4,16 +4,16 @@ import { Platform } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
-import { AppContext } from "app/context/app-context";
+// import { AppContext } from "app/context/app-context";
 import useColorScheme from "app/hooks/use-color-scheme";
-import { growthbook } from "app/lib/growthbook";
+// import { growthbook } from "app/lib/growthbook";
 import { SafeAreaProvider } from "app/lib/safe-area";
-import { NavigationProvider } from "app/navigation";
-import { AuthProvider } from "app/providers/auth-provider";
-import { FeedProvider } from "app/providers/feed-provider";
-import { MintProvider } from "app/providers/mint-provider";
-import { SWRProvider } from "app/providers/swr-provider";
-import { UserProvider } from "app/providers/user-provider";
+// import { NavigationProvider } from "app/navigation";
+// import { AuthProvider } from "app/providers/auth-provider";
+// import { FeedProvider } from "app/providers/feed-provider";
+// import { MintProvider } from "app/providers/mint-provider";
+// import { SWRProvider } from "app/providers/swr-provider";
+// import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
@@ -35,35 +35,9 @@ export const AppProvider = ({ children }) => {
 
   return (
     <SafeAreaProvider style={safeAreaProviderStyles}>
-      <ToastProvider>
-        <AlertProvider>
-          <SnackbarProvider>
-            <NavigationProvider>
-              <SWRProvider>
-                <WalletProvider>
-                  <Web3Provider>
-                    <AppContext.Provider value={injectedGlobalColorContext}>
-                      <AuthProvider>
-                        <UserProvider>
-                          <CSRProvider>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <MintProvider>{children}</MintProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </CSRProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </AppContext.Provider>
-                  </Web3Provider>
-                </WalletProvider>
-              </SWRProvider>
-            </NavigationProvider>
-          </SnackbarProvider>
-        </AlertProvider>
-      </ToastProvider>
+      <WalletProvider>
+        <Web3Provider>{children}</Web3Provider>
+      </WalletProvider>
     </SafeAreaProvider>
   );
 };
