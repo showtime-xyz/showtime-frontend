@@ -240,7 +240,6 @@ export const useMintNFT = () => {
         return;
       }
 
-
       if (fileMetaData) {
         dispatch({
           type: "mediaUpload",
@@ -281,7 +280,6 @@ export const useMintNFT = () => {
           formData,
           token: pinataToken,
         }).then((res: any) => res.data.IpfsHash);
-
 
         dispatch({ type: "mediaUploadSuccess", payload: { mediaIPFSHash } });
 
@@ -328,10 +326,6 @@ export const useMintNFT = () => {
     const result = await getSignerAndProvider();
     if (result) {
       const { signer, signerAddress, provider } = result;
-        "signer and provider",
-        `of ${signerAddress} signerAddress`,
-        provider
-      );
 
       try {
         dispatch({ type: "minting", payload: { isMagic: isMagicLogin } });
@@ -351,7 +345,6 @@ export const useMintNFT = () => {
           signerAddress,
           params.royaltiesPercentage * 100
         );
-
 
         const transaction = await provider
           .send("eth_sendTransaction", [
@@ -394,7 +387,6 @@ export const useMintNFT = () => {
       }
     }
   }
-
 
   const setMedia = ({ file, fileType }: { file: any; fileType: any }) => {
     dispatch({ type: "setMedia", payload: { file, fileType } });
