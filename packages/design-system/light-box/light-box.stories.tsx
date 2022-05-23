@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import "photoswipe/dist/photoswipe.css";
 
+// import "photoswipe/dist/photoswipe.css";
 import { LightBoxProvider } from ".";
 import { View } from "../view";
 import { LightBoxImg } from "./light-box-image";
