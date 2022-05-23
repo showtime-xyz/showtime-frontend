@@ -415,12 +415,6 @@ export const useMintNFT = () => {
         });
 
         provider.once(transaction, (result: any) => {
-          // console.log(
-          //   "token id! ",
-          //   contract.interface
-          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          //     .toNumber()
-          // );
           dispatch({
             type: "mintingSuccess",
             payload: {
