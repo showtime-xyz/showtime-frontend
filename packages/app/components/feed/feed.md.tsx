@@ -233,7 +233,7 @@ const NFTScrollList = ({
   if (data?.length === 0) {
     return (
       <View
-        tw="h-60vh·mt-4·w-full·justify-center"
+        tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
         style={{
           // @ts-ignore
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,

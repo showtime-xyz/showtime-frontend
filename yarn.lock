@@ -6036,7 +6036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rudderstack/rudder-sdk-react-native@npm:^1.2.0":
+"@rudderstack/rudder-sdk-react-native@npm:^1.4.0":
   version: 1.4.0
   resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.0"
   dependencies:
@@ -6529,7 +6529,7 @@ __metadata:
     "@react-navigation/stack": ^6.1.0
     "@react-three/drei": ^9.5.3
     "@react-three/fiber": ^8.0.12
-    "@rudderstack/rudder-sdk-react-native": ^1.2.0
+    "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
     "@storybook/addon-actions": ~6.3.12
