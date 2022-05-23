@@ -58,7 +58,7 @@ const CollectionModal = () => {
 
   if (data) {
     return (
-      <View tw="p-4 flex-1 items-start">
+      <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Image
             tw="h-20 w-20 rounded-lg"
@@ -68,7 +68,7 @@ const CollectionModal = () => {
             }}
           />
           <View tw="ml-4">
-            <Text tw="text-black dark:text-white text-xl font-bold">
+            <Text tw="text-xl font-bold text-black dark:text-white">
               {data.name}
             </Text>
           </View>
@@ -79,20 +79,20 @@ const CollectionModal = () => {
               {data.description}
             </Text>
           </View>
-          <View tw="flex-row justify-between dark:bg-gray-800 bg-gray-100 p-4 rounded-lg">
+          <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
             <View>
-              <Text tw="pb-2 text-gray-600 text-sm font-semibold dark:text-gray-200">
+              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
-              <Text tw="text-gray-900 text-sm font-bold dark:text-gray-100">
+              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
                 {formatAddressShort(userAddress)}
               </Text>
             </View>
             <View>
-              <Text tw="pb-2 text-gray-600 text-sm font-semibold dark:text-gray-200">
+              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Claim amount
               </Text>
-              <Text tw="text-gray-900 text-sm font-bold dark:text-gray-100 text-right">
+              <Text tw="text-right text-sm font-bold text-gray-900 dark:text-gray-100">
                 1
               </Text>
             </View>
