@@ -455,17 +455,23 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
           </View>
 
           <View tw="flex-row">
-            <Pressable onPress={() => shareNFT(nft)}>
-              <Share
-                height={22}
-                width={22}
-                // @ts-ignore
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-              />
-            </Pressable>
-            <View tw="w-8" />
+            {Platform.OS !== "ios" ? (
+              <>
+                <Pressable onPress={() => shareNFT(nft)}>
+                  <Share
+                    height={22}
+                    width={22}
+                    // @ts-ignore
+                    color={
+                      tw.style("bg-gray-900 dark:bg-white").backgroundColor
+                    }
+                  />
+                </Pressable>
+                <View tw="w-8" />
+              </>
+            ) : null}
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nftId={nft?.nft_id} />
+              <NFTDropdown nftId={nft?.nft_id} shouldEnableSharing={false} />
             </Suspense>
           </View>
         </View>
