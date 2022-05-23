@@ -50,6 +50,7 @@ const CollectionModal = () => {
           <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
             Your NFT has been claimed!
           </Text>
+          <View tw="h-4" />
           <PolygonScanButton transactionHash={state.transactionHash} />
         </View>
       </View>
