@@ -101,6 +101,8 @@ function Create() {
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
+  const { isMagic } = useWeb3();
+
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
@@ -464,7 +466,7 @@ function Create() {
         </Button>
 
         <View tw="mt-4 h-12">
-          {state.status === "minting" && !state.isMagic ? (
+          {state.status === "minting" && !isMagic ? (
             <Button
               onPress={handleSubmit(handleSubmitForm)}
               tw="h-12"

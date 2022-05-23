@@ -17,7 +17,6 @@ import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
-import { MintSnackbar } from "app/components/mint-snackbar";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
@@ -275,7 +274,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <DetailsScreen />
                                     <BuyScreen />
                                     <ActivitiesScreen />
-                                    <MintSnackbar />
                                     <EditProfileScreen />
                                     <DropScreen />
                                     {/* Login should be the last so
