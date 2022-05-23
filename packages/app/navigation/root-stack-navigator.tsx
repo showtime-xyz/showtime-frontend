@@ -76,7 +76,6 @@ export function RootStackNavigator() {
           getId={({ params }) => params?.type}
         />
         <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="collection" component={CollectionScreen} />
       </Stack.Group>
 
       {/* Modals */}
@@ -99,6 +98,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="activities" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
+        <Stack.Screen name="collection" component={CollectionScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

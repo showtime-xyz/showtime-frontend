@@ -1,16 +1,36 @@
-import { ClaimButton } from "app/components/claim-button";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { createParam } from "app/navigation/use-param";
+import React from "react";
 
-import { Button, Spinner, View } from "design-system";
+import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { useClaimNFT } from "app/hooks/use-claim-nft";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { createParam } from "app/navigation/use-param";
+import { formatAddressShort } from "app/utilities";
+
+import { Button, Image, Spinner, Text, View } from "design-system";
+import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
-export const CollectionScreen = () => {
+const CollectionModal = () => {
   const [collectionAddress] = useParam("collectionAddress");
   const { data, loading, error, mutate } =
     useCreatorCollectionDetail(collectionAddress);
-  console.log("hey there ", data, loading, error);
+  // const { web3 } = useWeb3();
+  const { state, claimNFT } = useClaimNFT();
+
+  const { userAddress } = useCurrentUserAddress();
+  // const [ensName, setEnsName] = React.useState<string | null>(null);
+  // React.useEffect(() => {
+  //   web3
+  //     ?.getSigner()
+  //     .getAddress()
+  //     .then((addr) => {
+  //       web3?.lookupAddress(addr).then((name) => {
+  //         setEnsName(name);
+  //       });
+  //     });
+  // }, [web3]);
 
   if (error) {
     return (
@@ -22,13 +42,88 @@ export const CollectionScreen = () => {
     return <Spinner />;
   }
 
+  if (state.status === "success") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="text-4xl">🎉</Text>
+        <View tw="mt-8">
+          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
+            Your NFT has been claimed!
+          </Text>
+          <PolygonScanButton transactionHash={state.transactionHash} />
+        </View>
+      </View>
+    );
+  }
+
   if (data) {
     return (
-      <View tw="mt-50">
-        <ClaimButton edition={data} />
+      <View tw="p-4 flex-1 items-start">
+        <View tw="flex-row">
+          <Image
+            tw="h-20 w-20 rounded-lg"
+            source={{
+              uri:
+                "https://ipfs.io/ipfs/" + data.image_url.replace("ipfs://", ""),
+            }}
+          />
+          <View tw="ml-4">
+            <Text tw="text-black dark:text-white text-xl font-bold">
+              {data.name}
+            </Text>
+          </View>
+        </View>
+        <View tw="mt-4 w-full">
+          <View tw="mb-4">
+            <Text tw="text-gray-900 dark:text-gray-100">
+              {data.description}
+            </Text>
+          </View>
+          <View tw="flex-row justify-between dark:bg-gray-800 bg-gray-100 p-4 rounded-lg">
+            <View>
+              <Text tw="pb-2 text-gray-600 text-sm font-semibold dark:text-gray-200">
+                Wallet
+              </Text>
+              <Text tw="text-gray-900 text-sm font-bold dark:text-gray-100">
+                {formatAddressShort(userAddress)}
+              </Text>
+            </View>
+            <View>
+              <Text tw="pb-2 text-gray-600 text-sm font-semibold dark:text-gray-200">
+                Claim amount
+              </Text>
+              <Text tw="text-gray-900 text-sm font-bold dark:text-gray-100 text-right">
+                1
+              </Text>
+            </View>
+          </View>
+          <View tw="mt-4">
+            {/* <ClaimButton edition={data} /> */}
+            <Button
+              disabled={state.status === "loading"}
+              tw={state.status === "loading" ? "opacity-45" : ""}
+              onPress={() => claimNFT({ minterAddress: data.minter_address })}
+            >
+              {state.status === "loading"
+                ? "Claiming..."
+                : state.status === "error"
+                ? "Failed. Retry!"
+                : "Claim for free"}
+            </Button>
+            <View tw="mt-4">
+              <PolygonScanButton transactionHash={state.transactionHash} />
+            </View>
+          </View>
+        </View>
       </View>
     );
   }
 
   return null;
 };
+
+export const CollectionScreen = withModalScreen(CollectionModal, {
+  title: "Claim",
+  matchingPathname: "/collection/[collectionAddress]",
+  matchingQueryParam: "collectionModal",
+});
