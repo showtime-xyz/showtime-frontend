@@ -39,7 +39,11 @@ const CollectionModal = () => {
   }
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
   }
 
   if (state.status === "success") {
