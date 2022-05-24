@@ -171,6 +171,7 @@ export const SwipeList = ({
       showHeader,
       toggleHeader,
       detailStyle,
+      listId,
     ]
   );
 
