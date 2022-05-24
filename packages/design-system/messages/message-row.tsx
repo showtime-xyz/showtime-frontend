@@ -1,6 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
+
+import { Link } from "app/navigation/link";
+import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
@@ -12,6 +16,11 @@ import { View } from "design-system/view";
 import { colors } from "../tailwind/colors";
 
 interface MessageRowProps {
+  /**
+   * Defines the address of the message owner.
+   * @default undefined
+   */
+  address?: string;
   /**
    * Defines the message owner username.
    * @default undefined
@@ -100,6 +109,7 @@ interface MessageRowProps {
 }
 
 export function MessageRow({
+  address,
   username = "",
   userAvatar,
   userVerified = false,
@@ -148,6 +158,9 @@ export function MessageRow({
         : content,
     [content, onTagPress]
   );
+  const userNameText = useMemo(() => {
+    return username || formatAddressShort(address);
+  }, []);
   //#endregion
 
   //#region styles
@@ -182,6 +195,13 @@ export function MessageRow({
     [position, hasParent]
   );
   //#endregion
+
+  const handleOnPressUser = useCallback(() => {
+    if (Platform.OS !== "web" && onUserPress) {
+      onUserPress(username);
+    }
+  }, [onUserPress, username]);
+
   return (
     <View tw="flex flex-row bg-white py-4 dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
@@ -192,29 +212,33 @@ export function MessageRow({
             <View tw={replyVerticalLineTW} />
           </>
         )}
-        <Button
-          variant="secondary"
-          size="small"
-          tw="h-[24px] w-[24px]"
-          onPress={onUserPress ? () => onUserPress(username) : undefined}
-          iconOnly
-        >
-          <Avatar url={userAvatar} size={24} />
-        </Button>
+        <Link href={`/@${username || address}`}>
+          <Button
+            variant="secondary"
+            size="small"
+            tw="h-[24px] w-[24px]"
+            onPress={handleOnPressUser}
+            iconOnly
+          >
+            <Avatar url={userAvatar} size={24} />
+          </Button>
+        </Link>
       </View>
       <View tw="ml-2 flex-1">
-        <View tw="mb-3 h-[12px] flex-row items-center">
-          <Text
-            style={{ fontSize: 13, lineHeight: 15 }}
-            tw="font-semibold text-gray-900 dark:text-white"
-            onPress={onUserPress ? () => onUserPress(username) : undefined}
-          >
-            @{username}
-          </Text>
-          {userVerified ? (
-            <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-          ) : null}
-        </View>
+        <Link href={`/@${username || address}`}>
+          <View tw="mb-3 h-[12px] flex-row items-center">
+            <Text
+              style={{ fontSize: 13, lineHeight: 15 }}
+              tw="font-semibold text-gray-900 dark:text-white"
+              onPress={handleOnPressUser}
+            >
+              @{userNameText}
+            </Text>
+            {userVerified ? (
+              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            ) : null}
+          </View>
+        </Link>
 
         <Text
           tw="text-gray-900 dark:text-gray-100"
