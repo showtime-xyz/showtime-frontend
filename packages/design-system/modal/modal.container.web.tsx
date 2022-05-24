@@ -33,10 +33,11 @@ function ModalContainerComponent({
   children,
   bodyStyle,
   style,
+  tw: propTw = '',
 }: ModalContainerProps) {
   const modalContainerTW = useMemo(
-    () => [...MODAL_CONTAINER_TW, web_height],
-    [web_height]
+    () => [...MODAL_CONTAINER_TW, web_height, propTw],
+    [web_height, propTw]
   );
 
   return (

@@ -47,6 +47,7 @@ const dropValidationSchema = yup.object({
   editionSize: yup
     .number()
     .required()
+    .typeError("Please enter a valid number")
     .min(1)
     .max(10000)
     .default(defaultValues.editionSize),
@@ -54,6 +55,7 @@ const dropValidationSchema = yup.object({
     .number()
     .required()
     .min(1)
+    .typeError("Please enter a valid number")
     .max(69)
     .default(defaultValues.royalty),
   hasAcceptedTerms: yup
@@ -113,135 +115,145 @@ const DropModal = () => {
     <BottomSheetModalProvider>
       <ScrollView tw="p-4">
         <View>
-          <Controller
-            control={control}
-            name="file"
-            render={({ field: { onChange, value } }) => {
-              return (
-                <View tw="z-1 items-center">
-                  <Pressable
-                    onPress={async () => {
-                      const file = await pickFile({ mediaTypes: "all" });
-                      onChange(file.file);
-                    }}
-                    tw="h-84 w-84 items-center justify-center rounded-lg"
-                  >
-                    {value ? (
-                      <Preview file={value} tw="h-84 w-84 rounded-2xl" />
-                    ) : (
-                      <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
-                        <ImageIcon
-                          color={
-                            tw.style("bg-black dark:bg-white")
-                              ?.backgroundColor as string
-                          }
-                          width={40}
-                          height={40}
-                        />
-                        <View tw="mt-4">
-                          <Text tw="font-bold text-gray-600 dark:text-gray-200">
-                            Upload a media file
-                          </Text>
-                        </View>
-                        {errors.file?.message ? (
-                          <View tw="mt-2">
-                            <Text tw="text-sm text-red-500">
-                              {errors?.file?.message}
-                            </Text>
+          <View tw='lg:flex-row md:flex-column'>
+            <View>
+              <Controller
+                control={control}
+                name="file"
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <View tw="z-1 items-center">
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({ mediaTypes: "all" });
+                          onChange(file.file);
+                        }}
+                        tw="h-84 w-84 items-center justify-center rounded-lg"
+                      >
+                        {value ? (
+                          <Preview file={value} tw="h-84 w-84 rounded-2xl" />
+                        ) : (
+                          <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
+                            <ImageIcon
+                              color={
+                                tw.style("bg-black dark:bg-white")
+                                  ?.backgroundColor as string
+                              }
+                              width={40}
+                              height={40}
+                            />
+                            <View tw="mt-4">
+                              <Text tw="font-bold text-gray-600 dark:text-gray-200">
+                                Upload a media file
+                              </Text>
+                            </View>
+                            {errors.file?.message ? (
+                              <View tw="mt-2">
+                                <Text tw="text-sm text-red-500">
+                                  {errors?.file?.message}
+                                </Text>
+                              </View>
+                            ) : null}
+
+                            <View tw="mt-2">
+                              <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
+                                Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
+                              </Text>
+                            </View>
                           </View>
-                        ) : null}
-
-                        <View tw="mt-2">
-                          <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
-                            Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
-                          </Text>
-                        </View>
-                      </View>
-                    )}
-                  </Pressable>
+                        )}
+                      </Pressable>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+            <View>
+              <View tw='lg:ml-4'>
+                {/* <Text>Import media</Text> */}
+                <View tw="mt-4 lg:mt-[0px] flex-row">
+                  <Controller
+                    control={control}
+                    name="title"
+                    render={({ field: { onChange, onBlur, value } }) => {
+                      return (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Title"
+                          placeholder="How would you like to name your NFT?"
+                          onBlur={onBlur}
+                          errorText={errors.title?.message}
+                          value={value}
+                          onChangeText={onChange}
+                        />
+                      );
+                    }}
+                  />
                 </View>
-              );
-            }}
-          />
-          {/* <Text>Import media</Text> */}
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="title"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Title"
-                    placeholder="How would you like to name your NFT?"
-                    onBlur={onBlur}
-                    errorText={errors.title?.message}
-                    value={value}
-                    onChangeText={onChange}
+                <View tw="mt-4 flex-row">
+                  <Controller
+                    control={control}
+                    name="description"
+                    render={({ field: { onChange, onBlur, value } }) => {
+                      return (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Description"
+                          placeholder="What is this NFT drop about?"
+                          onBlur={onBlur}
+                          helperText="You will not be able to edit this after the drop is created"
+                          errorText={errors.description?.message}
+                          value={value}
+                          numberOfLines={7}
+                          onChangeText={onChange}
+                        />
+                      );
+                    }}
                   />
-                );
-              }}
-            />
+                </View>
+              </View>
+            </View>
           </View>
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="description"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Description"
-                    placeholder="What is this NFT drop about?"
-                    onBlur={onBlur}
-                    helperText="You will not be able to edit this after the drop is created"
-                    errorText={errors.description?.message}
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                );
-              }}
-            />
+          <View tw="lg:flex-row justify-between">
+            <View tw="mt-4 flex-row flex-1 mr-4">
+              <Controller
+                control={control}
+                name="royalty"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <Fieldset
+                      tw="flex-1"
+                      label="Your royalties"
+                      onBlur={onBlur}
+                      helperText="How much you’ll earn each time this NFT is sold"
+                      errorText={errors.royalty?.message}
+                      value={value?.toString()}
+                      onChangeText={onChange}
+                    />
+                  );
+                }}
+              />
+            </View>
+            <View tw="mt-4 flex-row flex-1">
+              <Controller
+                control={control}
+                name="editionSize"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <Fieldset
+                      tw="flex-1"
+                      label="Editions"
+                      onBlur={onBlur}
+                      helperText="How many editions will be available to claim"
+                      errorText={errors.editionSize?.message}
+                      value={value?.toString()}
+                      onChangeText={onChange}
+                    />
+                  );
+                }}
+              />
+            </View>
           </View>
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="royalty"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Your royalties"
-                    onBlur={onBlur}
-                    helperText="How much you’ll earn each time this NFT is sold"
-                    errorText={errors.royalty?.message}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                  />
-                );
-              }}
-            />
-          </View>
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="editionSize"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Editions"
-                    onBlur={onBlur}
-                    helperText="How many editions will be available to claim"
-                    errorText={errors.editionSize?.message}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                  />
-                );
-              }}
-            />
-          </View>
-
           <View tw="mt-4 flex-row">
             <Controller
               control={control}
@@ -307,8 +319,8 @@ const DropModal = () => {
               {state.status === "loading"
                 ? "Submitting..."
                 : state.status === "error"
-                ? "Failed. Retry!"
-                : "Submit"}
+                  ? "Failed. Retry!"
+                  : "Submit"}
             </Button>
 
             <View tw="mt-4">
@@ -325,4 +337,5 @@ export const DropScreen = withModalScreen(DropModal, {
   title: "Drop NFT",
   matchingPathname: "/nft/drop",
   matchingQueryParam: "dropNFTModal",
+  tw: "w-full lg:w-200",
 });

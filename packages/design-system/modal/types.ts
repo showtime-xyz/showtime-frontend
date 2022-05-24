@@ -93,18 +93,19 @@ export interface ModalHeaderProps
 
 export interface ModalContainerProps
   extends Pick<
-    ModalProps,
-    | "title"
-    | "isScreen"
-    | "onClose"
-    | "children"
-    | "mobile_snapPoints"
-    | "web_height"
-    | "style"
+  ModalProps,
+  | "title"
+  | "isScreen"
+  | "onClose"
+  | "children"
+  | "mobile_snapPoints"
+  | "web_height"
+  | "style"
   > {
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
   enableContentPanningGesture?: boolean;
+  tw?: string
 }
 
 export interface ModalScreenProps extends ModalProps {
@@ -115,4 +116,4 @@ export interface ModalFooterProps {
   children: JSX.Element;
 }
 
-export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}
+export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> { }
