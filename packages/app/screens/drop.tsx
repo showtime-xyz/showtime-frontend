@@ -224,7 +224,7 @@ const DropModal = () => {
             </View>
           </View>
           <View tw="lg:flex-row justify-between">
-            <View tw="mt-4 flex-row flex-1 mr-4">
+            <View tw="mt-4 flex-row flex-1 lg:mr-4">
               <Controller
                 control={control}
                 name="royalty"
