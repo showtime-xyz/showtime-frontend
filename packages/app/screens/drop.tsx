@@ -23,6 +23,8 @@ import { Pressable } from "design-system/pressable";
 import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 import FlipIcon from "design-system/icon/Flip"
+import { useShare } from "app/hooks/use-share";
+import { useRouter } from "app/navigation/use-router.web";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -85,28 +87,29 @@ const DropModal = () => {
   };
 
   const pickFile = useFilePicker();
+  const share = useShare()
+  const router = useRouter()
 
-  if (state.status === "success") {
+  if (state.status === 'success') {
     return (
-      <View tw="items-center justify-center">
-        <Text tw="text-4xl">🎉</Text>
+      <View tw="items-center justify-center p-4">
+        <Text style={{ fontSize: 100 }}>🎉</Text>
         <View>
-          <View tw="h-4" />
+          <View tw="h-8" />
           <Text tw="text-center text-4xl text-black dark:text-white">
             Congrats!
           </Text>
-
-          <View tw="mt-8 mb-4">
-            <Text tw="text-center text-lg text-black dark:text-white">
+          <View tw="mt-8 mb-10">
+            <Text tw="text-center text-2xl text-black dark:text-white">
               Now share your free NFT drop to the world!
             </Text>
           </View>
-          <TextLink
-            href={`/collection/${state.edition?.contract_address}`}
-            tw="text-center font-bold text-blue-700"
-          >
-            Open URL
-          </TextLink>
+          <Button onPress={() => share({ url: `https://showtime.xyz/collection/${state.edition?.contract_address}` })}>
+            Share NFT with your friends
+          </Button>
+          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+            Skip for now
+          </Button>
         </View>
       </View>
     );
