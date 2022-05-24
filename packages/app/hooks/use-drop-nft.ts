@@ -31,6 +31,7 @@ type State = {
   status: "idle" | "loading" | "success" | "error";
   transactionHash?: string;
   edition?: IEdition;
+  transactionId?: any;
   error?: string;
 };
 
@@ -39,6 +40,7 @@ type Action = {
   type: string;
   transactionHash?: string;
   edition?: IEdition;
+  transactionId?: any
 };
 
 const initialState: State = {
@@ -57,6 +59,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         transactionHash: action.transactionHash,
+        transactionId: action.transactionId
       };
     default:
       return state;
@@ -135,30 +138,8 @@ export const useDropNFT = () => {
         },
       });
 
-      // Polling to check transaction status
-      let intervalMs = 2000;
-      for (let attempts = 0; attempts < 100; attempts++) {
-        Logger.log(`Checking tx... (${attempts + 1} / 100)`);
-        const response = await axios({
-          url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${relayerResponse.relayed_transaction_id}`,
-          method: "GET",
-        });
-        Logger.log(response);
+      await pollTransaction(relayerResponse.relayed_transaction_id)
 
-        dispatch({
-          type: "transactionHash",
-          transactionHash: response.transaction_hash,
-        });
-
-        if (response.is_complete) {
-          dispatch({ type: "success", edition: response.edition });
-          return;
-        }
-
-        await delay(intervalMs);
-      }
-
-      dispatch({ type: "error", error: "polling timed out" });
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
@@ -166,24 +147,33 @@ export const useDropNFT = () => {
     }
   };
 
-  return { dropNFT, state };
-};
+  const pollTransaction = async (transactionId: string) => {
+    // Polling to check transaction status
+    let intervalMs = 2000;
+    for (let attempts = 0; attempts < 100; attempts++) {
+      Logger.log(`Checking tx... (${attempts + 1} / 100)`);
+      const response = await axios({
+        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}`,
+        method: "GET",
+      });
+      Logger.log(response);
 
-export const pollTransaction = async (
-  relayedTransactionId: string,
-  pollEndpointName: string
-) => {
-  let intervalMs = 2000;
-  for (let attempts = 0; attempts < 100; attempts++) {
-    Logger.log(`Checking tx... (${attempts + 1} / 20)`);
-    const response = await axios({
-      url: `/v1/creator-airdrops/${pollEndpointName}?relayed_transaction_id=${relayedTransactionId}`,
-      method: "GET",
-    });
-    Logger.log(response);
-    if (response.is_complete) {
-      return response;
+      dispatch({
+        type: "transactionHash",
+        transactionHash: response.transaction_hash,
+        transactionId,
+      });
+
+      if (response.is_complete) {
+        dispatch({ type: "success", edition: response.edition });
+        return;
+      }
+
+      await delay(intervalMs);
     }
-    await delay(intervalMs);
+
+    dispatch({ type: "error", error: "polling timed out" });
   }
+
+  return { dropNFT, state, pollTransaction };
 };

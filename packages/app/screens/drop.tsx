@@ -1,11 +1,10 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
-
+// import { useEffect } from "react"
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { yup } from "app/lib/yup";
-import { TextLink } from "app/navigation/link";
 
 import {
   View,
@@ -25,6 +24,7 @@ import { tw } from "design-system/tailwind";
 import FlipIcon from "design-system/icon/Flip"
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router.web";
+// import { createParam } from "../navigation/use-param";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -68,6 +68,8 @@ const dropValidationSchema = yup.object({
     .isTrue("You must accept the terms and conditions."),
 });
 
+// const { useParam } = createParam<{ transactionId: string }>()
+
 const DropModal = () => {
   const {
     control,
@@ -79,16 +81,35 @@ const DropModal = () => {
     reValidateMode: "onChange",
     defaultValues,
   });
+  // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT } = useDropNFT();
+  const { state, dropNFT, pollTransaction } = useDropNFT();
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
   };
 
+  // useEffect(() => {
+  //   if (transactionId) {
+  //     pollTransaction(transactionId)
+  //   }
+  // }, [transactionId])
+
+  // useEffect(() => {
+  //   if (state.transactionId) {
+  //     setTransactionId(transactionId)
+  //   }
+  // }, [state.transactionId])
+
   const pickFile = useFilePicker();
   const share = useShare()
   const router = useRouter()
+
+  // if (state.transactionHash) {
+  //   return <View>
+  //     <Text>Loading</Text>
+  //   </View>
+  // }
 
   if (state.status === 'success') {
     return (
