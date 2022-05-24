@@ -26,12 +26,13 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
   onPress: () => void;
+  listId: number | undefined;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   hrefProps?: UrlObject;
 };
 
-function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
+function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
@@ -85,7 +86,7 @@ function Card({ nft, numColumns, tw, onPress, hrefProps }: Props) {
           <View tw="flex-row items-center justify-between px-4 py-2">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nftId={nft.nft_id} />
+              <NFTDropdown nftId={nft.nft_id} listId={listId} />
             </Suspense>
           </View>
 
