@@ -44,10 +44,13 @@ export const useSwitchNetwork = () => {
               "Please manually try to switch to polygon network"
             );
           }
+          throw error
         }
+        throw error
       }
     } catch (e) {
       Logger.error("error switching network ", e);
+      throw e
     }
   };
 
