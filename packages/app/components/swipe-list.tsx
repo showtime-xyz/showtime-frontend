@@ -262,7 +262,6 @@ export const FeedItem = memo(
     itemHeight: number;
     listId?: number;
   }) => {
-    console.log("list id", listId);
     const { width: windowWidth } = useWindowDimensions();
 
     const feedItemStyle = {
@@ -413,7 +412,7 @@ export const FeedItem = memo(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               )}
             >
-              <NFTDetails {...{ nft, listId }} />
+              <NFTDetails nft={nft} listId={listId} />
               <View
                 tw={`${
                   bottomPadding && bottomPadding !== 0
