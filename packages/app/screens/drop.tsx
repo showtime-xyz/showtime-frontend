@@ -22,6 +22,7 @@ import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 import { Pressable } from "design-system/pressable";
 import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
+import FlipIcon from "design-system/icon/Flip"
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -131,7 +132,15 @@ const DropModal = () => {
                         tw="h-84 w-84 items-center justify-center rounded-lg"
                       >
                         {value ? (
-                          <Preview file={value} tw="h-84 w-84 rounded-2xl" />
+                          <View>
+                            <Preview file={value} tw="h-84 w-84 rounded-2xl" />
+                            <View tw="absolute items-center justify-center w-full h-full">
+                              <View tw='shadow-lg flex-row'>
+                                <FlipIcon width={20} height={20} color="white" />
+                                <Text tw='ml-2 text-white text-md'>Replace media</Text>
+                              </View>
+                            </View>
+                          </View>
                         ) : (
                           <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
                             <ImageIcon
@@ -320,7 +329,7 @@ const DropModal = () => {
                 ? "Submitting..."
                 : state.status === "error"
                   ? "Failed. Retry!"
-                  : "Submit"}
+                  : "Drop Free NFT"}
             </Button>
 
             <View tw="mt-4">
