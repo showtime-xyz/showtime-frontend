@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -7,12 +8,16 @@ import { v4 as uuid } from "uuid";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
-import { useWeb3 } from "app/hooks/use-web3";
+import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
+import { useSafeAreaInsets } from "app/lib/safe-area";
+import { useRouter } from "app/navigation/use-router";
 
 import { useAlert } from "design-system/alert";
+import { useSnackbar } from "design-system/snackbar";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -37,7 +42,6 @@ export type MintNFTType = {
   transaction?: string;
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
-  isMagic?: boolean;
   file?: string | File;
   fileType?: string;
 };
@@ -48,7 +52,6 @@ export const initialMintNFTState: MintNFTType = {
   nftIPFSHash: undefined,
   tokenId: undefined,
   transaction: undefined,
-  isMagic: undefined,
   file: undefined,
   fileType: undefined,
 };
@@ -58,7 +61,6 @@ export type ActionPayload = {
   tokenId?: string;
   transaction?: string;
   nftIPFSHash?: string;
-  isMagic?: boolean;
   file?: string | File;
   fileType?: string;
 };
@@ -133,7 +135,6 @@ export const mintNFTReducer = (
         status: "minting",
         tokenId: undefined,
         transaction: undefined,
-        isMagic: action.payload?.isMagic,
       };
     case "mintingSuccess":
       return {
@@ -229,11 +230,14 @@ const getPinataToken = () => {
 export const useMintNFT = () => {
   const Alert = useAlert();
   const { state, dispatch } = useContext(MintContext);
-  let { web3 } = useWeb3();
+  const snackbar = useSnackbar();
+  const { userAddress } = useCurrentUserAddress();
+  const router = useRouter();
+  const { user } = useUser();
+  const insets = useSafeAreaInsets();
+  const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
   const { getSignerAndProvider } = useSignerAndProvider();
-  // TODO: this magic check is incorrect. In future, web3 can be just a normal provider
-  const isMagic = !!web3;
 
   async function uploadMedia() {
     // Media Upload
@@ -308,17 +312,18 @@ export const useMintNFT = () => {
     } catch (error) {
       console.error("media upload failed", error);
       dispatch({ type: "mediaUploadError" });
+      throw error;
     }
   }
 
   async function uploadNFTJson(params: UseMintNFT) {
-    let mediaIpfsHash;
-    // if (state.mediaIPFSHash) {
-    // mediaIpfsHash = state.mediaIPFSHash;
-    // } else {
-    mediaIpfsHash = await uploadMedia();
-    // }
     try {
+      let mediaIpfsHash;
+      // if (state.mediaIPFSHash) {
+      // mediaIpfsHash = state.mediaIPFSHash;
+      // } else {
+      mediaIpfsHash = await uploadMedia();
+      // }
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
         const pinataToken = await getPinataToken();
@@ -350,18 +355,25 @@ export const useMintNFT = () => {
     } catch (e) {
       console.error("NFT upload error ", e);
       dispatch({ type: "nftJSONUploadError" });
+      throw e;
     }
   }
 
   async function mintNFT(params: UseMintNFT) {
-    const nftJsonIpfsHash = await uploadNFTJson(params);
+    snackbar?.show({
+      text: "Creating… This may take a few minutes.",
+      iconStatus: "waiting",
+      bottom,
+    });
 
-    const result = await getSignerAndProvider();
-    if (result) {
-      const { signer, signerAddress, provider } = result;
+    try {
+      const nftJsonIpfsHash = await uploadNFTJson(params);
 
-      try {
-        dispatch({ type: "minting", payload: { isMagic } });
+      const result = await getSignerAndProvider();
+      if (result) {
+        const { signer, signerAddress, provider } = result;
+
+        dispatch({ type: "minting" });
 
         const contract = new ethers.Contract(
           //@ts-ignore
@@ -403,12 +415,6 @@ export const useMintNFT = () => {
         });
 
         provider.once(transaction, (result: any) => {
-          // console.log(
-          //   "token id! ",
-          //   contract.interface
-          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          //     .toNumber()
-          // );
           dispatch({
             type: "mintingSuccess",
             payload: {
@@ -419,13 +425,37 @@ export const useMintNFT = () => {
             },
           });
           track("NFT Created");
-        });
-      } catch (error) {
-        console.error("Minting error ", error);
-        dispatch({
-          type: "mintingError",
+
+          snackbar?.update({
+            text: "Created! Your NFT will appear in a minute!",
+            iconStatus: "done",
+            bottom,
+            hideAfter: 5000,
+            action: {
+              text: "View",
+              onPress: () => {
+                snackbar.hide();
+                router.push(
+                  Platform.OS === "web"
+                    ? `/@${user?.data?.profile?.username ?? userAddress}`
+                    : `/profile`
+                );
+              },
+            },
+          });
         });
       }
+    } catch (error) {
+      snackbar?.update({
+        text: "Something went wrong. Please try again",
+        bottom,
+        iconStatus: "default",
+        hideAfter: 4000,
+      });
+      console.error("Minting error ", error);
+      dispatch({
+        type: "mintingError",
+      });
     }
   }
 
@@ -440,6 +470,7 @@ export const useMintNFT = () => {
 
 function dataURLtoFile(dataurl: string, filename: string) {
   let arr = dataurl.split(","),
+    //@ts-ignore
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,

@@ -8,8 +8,8 @@ const mockUserProfile: Profile = {
   profile_id: 1,
   name: "test",
   verified: false,
-  img_url: "http://showtime.io",
-  cover_url: "http://showtime.io",
+  img_url: "http://showtime.xyz",
+  cover_url: "http://showtime.xyz",
   minting_enabled: false,
   wallet_addresses: ["abc"],
   wallet_addresses_v2: [

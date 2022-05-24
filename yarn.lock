@@ -6036,7 +6036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rudderstack/rudder-sdk-react-native@npm:^1.2.0":
+"@rudderstack/rudder-sdk-react-native@npm:^1.4.0":
   version: 1.4.0
   resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.0"
   dependencies:
@@ -6529,7 +6529,7 @@ __metadata:
     "@react-navigation/stack": ^6.1.0
     "@react-three/drei": ^9.5.3
     "@react-three/fiber": ^8.0.12
-    "@rudderstack/rudder-sdk-react-native": ^1.2.0
+    "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
     "@storybook/addon-actions": ~6.3.12
@@ -6742,7 +6742,7 @@ __metadata:
     rudder-sdk-js: ^2.3.6
     sortablejs: ^1.14.0
     sotez: ^10.0.0
-    swr: ^2.0.0-beta.1
+    swr: 2.0.0-beta.1
     tailwindcss: ^3.0.24
     walletlink: ^2.2.8
     web3modal: ^1.9.4
@@ -6791,6 +6791,7 @@ __metadata:
     expo-system-ui: ~1.1.0
     expo-updates: ~0.13.1
     expo-web-browser: ~10.1.0
+    photoswipe: ^5.2.7
     react: 18.0.0
     react-dom: 18.0.0
     react-native: 0.68.2
@@ -26272,12 +26273,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-tailwindcss@npm:^0.1.10":
-  version: 0.1.11
-  resolution: "prettier-plugin-tailwindcss@npm:0.1.11"
+"prettier-plugin-tailwindcss@npm:0.1.10":
+  version: 0.1.10
+  resolution: "prettier-plugin-tailwindcss@npm:0.1.10"
   peerDependencies:
     prettier: ">=2.2.0"
-  checksum: b06a81a22242407676de7b69342c1d69078e731e6363c7abd5877b044f2ddd83eba7281b085ea77754a49de88dcde164f394c31ae724a99fd46c0f9a4d4547a0
+  checksum: 465a7e02bd2224f9773f35190b6b4d19f281848d0492d4d43eabf403b33117303222faf775d8d569d0ce8bbb75336aa4db005db1935bb78c551ff711a8f89537
   languageName: node
   linkType: hard
 
@@ -29438,7 +29439,7 @@ __metadata:
     husky: ^8.0.1
     patch-package: ^6.4.7
     prettier: ^2.4.1
-    prettier-plugin-tailwindcss: ^0.1.10
+    prettier-plugin-tailwindcss: 0.1.10
     react-native-fast-image: ^8.5.11
     react-native-os: ^1.2.6
     sentry-expo: ^4.1.0
@@ -30641,14 +30642,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^2.0.0-beta.1":
-  version: 2.0.0-beta.3
-  resolution: "swr@npm:2.0.0-beta.3"
-  dependencies:
-    use-sync-external-store: ^1.1.0
+"swr@npm:2.0.0-beta.1":
+  version: 2.0.0-beta.1
+  resolution: "swr@npm:2.0.0-beta.1"
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
-  checksum: c4b24639223976cb8658f98df0bd44a99eaa551b8661b30012649696759bc209b980b1d544c48d865306eb1c157498f825f4bcc55ba4d315e03fe57e457257d6
+  checksum: a2d70d1d71f5e2e8c7f812bbc8982d50ed43ccf5127dde9420df6ab664b154a1853fda6dfbd5a25a3852fb62c46a1f69fce8e4327644c43a968fd5560193a0d2
   languageName: node
   linkType: hard
 
@@ -32283,15 +32282,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
   checksum: 96e64977a573244fd11350a3141b2cf57fb72dd9dd902f387c8a0a565d0a948bc81588bd7378c6ef6defc0d1119f37f73aac4a7a287c8443abd444bd4e7bbea8
-  languageName: node
-  linkType: hard
-
-"use-sync-external-store@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "use-sync-external-store@npm:1.1.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 8993a0b642f91d7fcdbb02b7b3ac984bd3af4769686f38291fe7fcfe73dfb73d6c64d20dfb7e5e7fbf5a6da8f5392d6f8e5b00c243a04975595946e82c02b883
   languageName: node
   linkType: hard
 

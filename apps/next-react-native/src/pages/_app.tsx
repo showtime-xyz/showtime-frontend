@@ -17,7 +17,6 @@ import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
-import { MintSnackbar } from "app/components/mint-snackbar";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
@@ -29,6 +28,7 @@ import { isServer } from "app/lib/is-server";
 import LogRocket from "app/lib/logrocket";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "app/lib/safe-area";
+import { Sentry } from "app/lib/sentry";
 import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
@@ -57,6 +57,11 @@ import { View } from "design-system/view";
 import "../styles/styles.css";
 
 // enableFreeze(true)
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.STAGE,
+});
 
 const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
 const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
@@ -268,7 +273,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <DetailsScreen />
                                     <BuyScreen />
                                     <ActivitiesScreen />
-                                    <MintSnackbar />
                                     <EditProfileScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}

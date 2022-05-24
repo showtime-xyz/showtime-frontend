@@ -26,6 +26,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime/universal.text",
   "@showtime/universal.view",
   "@showtime/universal.tailwind",
+  "sentry-expo",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";

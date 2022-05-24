@@ -6,9 +6,7 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
-import { useWeb3 } from "app/hooks/use-web3";
 import { trackButtonClicked } from "app/lib/analytics";
-import { magic } from "app/lib/magic";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
@@ -24,10 +22,6 @@ export const useLogin = (onLogin?: () => void) => {
     error: walletError,
   } = useWalletLogin();
   const { loginWithEmail, loginWithPhoneNumber } = useMagicLogin();
-  //#endregion
-
-  //#region hooks
-  const { setWeb3 } = useWeb3();
   //#endregion
 
   //#region methods
@@ -65,18 +59,12 @@ export const useLogin = (onLogin?: () => void) => {
         loginSource.current = "magic";
         trackButtonClicked({ name: "Login with email" });
 
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        // @ts-ignore
-        const web3 = new Web3Provider(magic.rpcProvider);
-        setWeb3(web3);
-
         return await loginWithEmail(email);
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure, setWeb3]
+    [loginWithEmail, handleLoginFailure]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
@@ -84,18 +72,12 @@ export const useLogin = (onLogin?: () => void) => {
         loginSource.current = "magic";
         trackButtonClicked({ name: "Login with phone number" });
 
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        // @ts-ignore
-        const web3 = new Web3Provider(magic.rpcProvider);
-        setWeb3(web3);
-
         return await loginWithPhoneNumber(phoneNumber);
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithPhoneNumber, handleLoginFailure, setWeb3]
+    [loginWithPhoneNumber, handleLoginFailure]
   );
 
   /**
