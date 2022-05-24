@@ -160,7 +160,7 @@ export function MessageRow({
   );
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
-  }, []);
+  }, [address, username]);
   //#endregion
 
   //#region styles
