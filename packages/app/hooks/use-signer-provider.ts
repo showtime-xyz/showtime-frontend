@@ -13,7 +13,7 @@ import { getBiconomy } from "app/utilities";
 
 import { useAlert } from "design-system/alert";
 
-import { useSwitchChain } from "./use-switch-chain";
+import { useSwitchNetwork } from "./use-switch-network";
 
 export const useSignerAndProvider = () => {
   const connector = useWalletConnect();
@@ -67,7 +67,7 @@ export const useSignTypedData = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
-  const { switchChain } = useSwitchChain();
+  const { switchNetwork } = useSwitchNetwork();
 
   const signTypedData = async (
     domain: TypedDataDomain,
@@ -121,7 +121,7 @@ export const useSignTypedData = () => {
             },
             {
               text: "Switch chain",
-              onPress: () => switchChain(),
+              onPress: () => switchNetwork(),
             },
           ]
         );
