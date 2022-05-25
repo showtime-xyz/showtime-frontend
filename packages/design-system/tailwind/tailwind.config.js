@@ -1,9 +1,9 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
-
-const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
-const { colors } = require("design-system/tailwind/colors");
-const { textSizes, fontFamily } = require("design-system/typography");
 const { plugin } = require("twrnc");
+const { textSizes, fontFamily } = require("@showtime/universal.typography");
+
+const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("./layout");
+const { colors } = require("./colors");
 
 module.exports = {
   content: [

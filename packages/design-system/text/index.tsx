@@ -2,7 +2,7 @@ import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
 import { tw as tailwind } from "@showtime/universal.tailwind";
-import type { TW } from "@showtime/universal.tailwind/types";
+import type { TW } from "@showtime/universal.tailwind";
 import { ViewProps } from "@showtime/universal.view";
 
 import { Text as UniversalText } from "./text";
