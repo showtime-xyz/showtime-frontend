@@ -125,7 +125,7 @@ export const DropForm = () => {
                             Now share your free NFT drop to the world!
                         </Text>
                     </View>
-                    <Button onPress={() => share({ url: `https://showtime.xyz/collection/${state.edition?.contract_address}` })}>
+                    <Button onPress={() => share({ url: `https://showtime.xyz/claim/${state.edition?.contract_address}` })}>
                         Share NFT with your friends
                     </Button>
                     <Button variant="tertiary" tw="mt-4" onPress={router.pop}>

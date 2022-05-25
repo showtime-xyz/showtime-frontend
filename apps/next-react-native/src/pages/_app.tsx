@@ -38,7 +38,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BuyScreen } from "app/screens/buy";
-import { CollectionScreen } from "app/screens/collection";
+import { ClaimScreen } from "app/screens/claim";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -277,7 +277,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <ActivitiesScreen />
                                     <EditProfileScreen />
                                     <DropScreen />
-                                    <CollectionScreen />
+                                    <ClaimScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}
                                     <LoginScreen />

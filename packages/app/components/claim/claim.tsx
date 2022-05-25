@@ -8,13 +8,12 @@ import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Image, Spinner, Text, View } from "design-system";
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
-const CollectionModal = () => {
+export const Claim = () => {
   const [collectionAddress] = useParam("collectionAddress");
   const { data, loading, error, mutate } =
     useCreatorCollectionDetail(collectionAddress);
@@ -65,7 +64,7 @@ const CollectionModal = () => {
               Now share it with the world!
             </Text>
           </View>
-          <Button onPress={() => share({ url: `https://showtime.xyz/collection/${data?.contract_address}` })}>
+          <Button onPress={() => share({ url: `https://showtime.xyz/claim/${data?.contract_address}` })}>
             Share with your friends
           </Button>
           <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
@@ -141,9 +140,3 @@ const CollectionModal = () => {
 
   return null;
 };
-
-export const CollectionScreen = withModalScreen(CollectionModal, {
-  title: "Claim",
-  matchingPathname: "/collection/[collectionAddress]",
-  matchingQueryParam: "collectionModal",
-});
