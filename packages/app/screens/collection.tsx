@@ -9,6 +9,8 @@ import { formatAddressShort } from "app/utilities";
 
 import { Button, Image, Spinner, Text, View } from "design-system";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+import { useShare } from "app/hooks/use-share";
+import { useRouter } from "app/navigation/use-router";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
@@ -18,6 +20,8 @@ const CollectionModal = () => {
     useCreatorCollectionDetail(collectionAddress);
   // const { web3 } = useWeb3();
   const { state, claimNFT } = useClaimNFT();
+  const share = useShare()
+  const router = useRouter()
 
   const { userAddress } = useCurrentUserAddress();
   // const [ensName, setEnsName] = React.useState<string | null>(null);
@@ -46,16 +50,27 @@ const CollectionModal = () => {
     );
   }
 
-  if (state.status === "success") {
+
+  if (state.status === 'success') {
     return (
-      <View tw="flex-1 items-center justify-center">
-        <Text tw="text-4xl">🎉</Text>
-        <View tw="mt-8">
-          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
-            Your NFT has been claimed!
+      <View tw="items-center justify-center p-4">
+        <Text style={{ fontSize: 100 }}>🎉</Text>
+        <View>
+          <View tw="h-8" />
+          <Text tw="text-center text-4xl text-black dark:text-white">
+            Congrats!
           </Text>
-          <View tw="h-4" />
-          <PolygonScanButton transactionHash={state.transactionHash} />
+          <View tw="mt-8 mb-10">
+            <Text tw="text-center text-2xl text-black dark:text-white">
+              Now share it with the world!
+            </Text>
+          </View>
+          <Button onPress={() => share({ url: `https://showtime.xyz/collection/${data?.contract_address}` })}>
+            Share with your friends
+          </Button>
+          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+            Skip for now
+          </Button>
         </View>
       </View>
     );
@@ -112,8 +127,8 @@ const CollectionModal = () => {
               {state.status === "loading"
                 ? "Claiming..."
                 : state.status === "error"
-                ? "Failed. Retry!"
-                : "Claim for free"}
+                  ? "Failed. Retry!"
+                  : "Claim for free"}
             </Button>
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />

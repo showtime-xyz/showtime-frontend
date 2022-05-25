@@ -23,7 +23,7 @@ import { Preview } from "design-system/preview";
 import { tw } from "design-system/tailwind";
 import FlipIcon from "design-system/icon/Flip"
 import { useShare } from "app/hooks/use-share";
-import { useRouter } from "app/navigation/use-router.web";
+import { useRouter } from "app/navigation/use-router";
 // import { createParam } from "../navigation/use-param";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
