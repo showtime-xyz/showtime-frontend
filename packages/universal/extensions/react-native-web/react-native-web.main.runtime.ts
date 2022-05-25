@@ -9,8 +9,8 @@ import {
   devServerConfigTransformer,
 } from "./webpack/webpack-transformers";
 
-const babelConfig = require("./babel/babel.config");
-const tsConfig = require("./typescript/tsconfig");
+// const babelConfig = require("./babel/babel.config");
+// const tsConfig = require("./typescript/tsconfig");
 
 export class ReactNativeWebMain {
   static slots = [];
@@ -25,17 +25,97 @@ export class ReactNativeWebMain {
     BabelMain
   ]) {
     const babelCompiler = babel.createCompiler({
-      babelTransformOptions: babelConfig,
+      babelTransformOptions: {
+        babelrc: false,
+        configFile: false,
+        presets: [
+          "next/babel",
+          ["babel-preset-expo", { jsxRuntime: "automatic" }],
+        ],
+        plugins: [
+          ["@babel/plugin-proposal-class-properties", { loose: true }],
+          ["@babel/plugin-proposal-private-methods", { loose: true }],
+          [
+            "@babel/plugin-proposal-private-property-in-object",
+            { loose: true },
+          ],
+          "react-native-reanimated/plugin",
+        ],
+      },
     });
 
+    const compilerBuildTask = [babelCompiler.createTask()];
+
+    const overrideObj = {
+      getCompiler: () => babelCompiler,
+      getBuildPipe: () => compilerBuildTask,
+    };
+
+    const compilerTransformer = envs.override(overrideObj);
+
     const templatesReactNativeEnv = envs.compose(reactNative.reactNativeEnv, [
-      // // @ts-ignore
-      // reactNative.overrideCompiler(babelCompiler),
+      compilerTransformer,
 
-      // // @ts-ignore
-      // reactNative.overrideCompilerTasks([babelCompiler.createTask()]),
-
-      // reactNative.overrideTsConfig(tsConfig),
+      reactNative.useTypescript({
+        buildConfig: [
+          (config, context) => {
+            config.setTsConfig({
+              $schema: "https://json.schemastore.org/tsconfig",
+              display: "Expo",
+              compilerOptions: {
+                allowJs: true,
+                esModuleInterop: true,
+                jsx: "react-native",
+                lib: ["DOM", "ESNext"],
+                moduleResolution: "node",
+                noEmit: true,
+                resolveJsonModule: true,
+                skipLibCheck: true,
+                target: "ESNext",
+                strict: true,
+                module: "esnext",
+                sourceMap: true,
+              },
+              exclude: [
+                "node_modules",
+                "babel.config.js",
+                "metro.config.js",
+                "jest.config.js",
+              ],
+            });
+            return config;
+          },
+        ],
+        devConfig: [
+          (config, context) => {
+            config.setTsConfig({
+              $schema: "https://json.schemastore.org/tsconfig",
+              display: "Expo",
+              compilerOptions: {
+                allowJs: true,
+                esModuleInterop: true,
+                jsx: "react-native",
+                lib: ["DOM", "ESNext"],
+                moduleResolution: "node",
+                noEmit: true,
+                resolveJsonModule: true,
+                skipLibCheck: true,
+                target: "ESNext",
+                strict: true,
+                module: "esnext",
+                sourceMap: true,
+              },
+              exclude: [
+                "node_modules",
+                "babel.config.js",
+                "metro.config.js",
+                "jest.config.js",
+              ],
+            });
+            return config;
+          },
+        ],
+      }),
 
       // reactNative.overrideJestConfig(require.resolve('./jest/jest.config')),
 
@@ -77,11 +157,12 @@ export class ReactNativeWebMain {
       /**
        * override dependencies here
        * @example
-       * Uncomment types to include version 17.0.3 of the types package
        */
       reactNative.overrideDependencies({
         devDependencies: {
-          // '@types/react': '17.0.3'
+          "@babel/core": "^7.16.5",
+          "@babel/runtime": "^7.16.5",
+          "babel-preset-expo": "^9.1.0",
         },
       }),
     ]);

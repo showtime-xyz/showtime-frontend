@@ -9,9 +9,9 @@ import {
  * @param config
  * @param _context
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function commonTransformation(
   config: WebpackConfigMutator,
+  // eslint-disable-next-line unused-imports/no-unused-vars
   _context: WebpackConfigTransformContext
 ) {
   // Merge config with the webpack.config.js file - adding handlebars support

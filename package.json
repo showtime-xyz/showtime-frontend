@@ -61,7 +61,7 @@
     "test:expo": "cd apps/expo && yarn test"
   },
   "resolutions": {
-    "babel-preset-expo": "8.5.1",
+    "babel-preset-expo": "9.1.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native-svg": "12.3.0",

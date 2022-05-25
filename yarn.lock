@@ -148,7 +148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.13, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.16.0, @babel/core@npm:^7.16.5, @babel/core@npm:^7.7.5":
+"@babel/core@npm:^7.1.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.13, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.16.0, @babel/core@npm:^7.16.5, @babel/core@npm:^7.7.5":
   version: 7.17.10
   resolution: "@babel/core@npm:7.17.10"
   dependencies:
@@ -11339,17 +11339,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-expo@npm:8.5.1":
-  version: 8.5.1
-  resolution: "babel-preset-expo@npm:8.5.1"
+"babel-preset-expo@npm:9.1.0":
+  version: 9.1.0
+  resolution: "babel-preset-expo@npm:9.1.0"
   dependencies:
     "@babel/plugin-proposal-decorators": ^7.12.9
     "@babel/plugin-transform-react-jsx": ^7.12.17
     "@babel/preset-env": ^7.12.9
     babel-plugin-module-resolver: ^4.1.0
     babel-plugin-react-native-web: ~0.17.1
-    metro-react-native-babel-preset: ~0.64.0
-  checksum: bd3d39d94408ce881323b699bc14b88739e1ddccee09c730f74297165b223d5acf1aea4b68329ff6c7a94ad92335958060834a548fe1acace36e0214e1682c26
+    metro-react-native-babel-preset: ~0.67.0
+  checksum: 534d29a689b5bbe0e35955d471d9131106db707965339bf92f9944517d3326bb27952144ffd4bcc3a4949c2b9ccef7da9b4a1e6cc20ee66839b48cc693c26fd0
   languageName: node
   linkType: hard
 
@@ -23120,7 +23120,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-react-native-babel-preset@npm:0.67.0":
+"metro-react-native-babel-preset@npm:0.67.0, metro-react-native-babel-preset@npm:~0.67.0":
   version: 0.67.0
   resolution: "metro-react-native-babel-preset@npm:0.67.0"
   dependencies:
@@ -23167,55 +23167,6 @@ __metadata:
   peerDependencies:
     "@babel/core": "*"
   checksum: 931105e7c76e1e69663bcf75ed8979161c6d486767ccc48c9c6ca80276adbeae7c2aaec0b5c9829f0a44fbf456e97908f81486bdb04cfe68fde375413acc654f
-  languageName: node
-  linkType: hard
-
-"metro-react-native-babel-preset@npm:~0.64.0":
-  version: 0.64.0
-  resolution: "metro-react-native-babel-preset@npm:0.64.0"
-  dependencies:
-    "@babel/core": ^7.0.0
-    "@babel/plugin-proposal-class-properties": ^7.0.0
-    "@babel/plugin-proposal-export-default-from": ^7.0.0
-    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.0.0
-    "@babel/plugin-proposal-object-rest-spread": ^7.0.0
-    "@babel/plugin-proposal-optional-catch-binding": ^7.0.0
-    "@babel/plugin-proposal-optional-chaining": ^7.0.0
-    "@babel/plugin-syntax-dynamic-import": ^7.0.0
-    "@babel/plugin-syntax-export-default-from": ^7.0.0
-    "@babel/plugin-syntax-flow": ^7.2.0
-    "@babel/plugin-syntax-nullish-coalescing-operator": ^7.0.0
-    "@babel/plugin-syntax-optional-chaining": ^7.0.0
-    "@babel/plugin-transform-arrow-functions": ^7.0.0
-    "@babel/plugin-transform-block-scoping": ^7.0.0
-    "@babel/plugin-transform-classes": ^7.0.0
-    "@babel/plugin-transform-computed-properties": ^7.0.0
-    "@babel/plugin-transform-destructuring": ^7.0.0
-    "@babel/plugin-transform-exponentiation-operator": ^7.0.0
-    "@babel/plugin-transform-flow-strip-types": ^7.0.0
-    "@babel/plugin-transform-for-of": ^7.0.0
-    "@babel/plugin-transform-function-name": ^7.0.0
-    "@babel/plugin-transform-literals": ^7.0.0
-    "@babel/plugin-transform-modules-commonjs": ^7.0.0
-    "@babel/plugin-transform-object-assign": ^7.0.0
-    "@babel/plugin-transform-parameters": ^7.0.0
-    "@babel/plugin-transform-react-display-name": ^7.0.0
-    "@babel/plugin-transform-react-jsx": ^7.0.0
-    "@babel/plugin-transform-react-jsx-self": ^7.0.0
-    "@babel/plugin-transform-react-jsx-source": ^7.0.0
-    "@babel/plugin-transform-regenerator": ^7.0.0
-    "@babel/plugin-transform-runtime": ^7.0.0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0
-    "@babel/plugin-transform-spread": ^7.0.0
-    "@babel/plugin-transform-sticky-regex": ^7.0.0
-    "@babel/plugin-transform-template-literals": ^7.0.0
-    "@babel/plugin-transform-typescript": ^7.5.0
-    "@babel/plugin-transform-unicode-regex": ^7.0.0
-    "@babel/template": ^7.0.0
-    react-refresh: ^0.4.0
-  peerDependencies:
-    "@babel/core": "*"
-  checksum: 9185f4fb7ae8337f1f7619a3f527f97f83132d46a044632ca5fc3f0891b9dec7557f0730e2a656604263da9d412383af7b9c70a704be749c744c5bcf99ca7889
   languageName: node
   linkType: hard
 
