@@ -43,11 +43,13 @@ const fontMetrics = {
 };
 
 const createTextSize = ({
+  fontFamily,
   fontSize,
   lineHeight: leading,
   letterSpacing,
   marginCorrection,
 }: {
+  fontFamily?: string,
   fontSize: number;
   lineHeight: number;
   letterSpacing: number;
@@ -57,6 +59,7 @@ const createTextSize = ({
   };
 }) => {
   const styles = {
+    fontFamily,
     letterSpacing,
     ...capsize({
       fontMetrics,
@@ -71,6 +74,7 @@ const createTextSize = ({
       : 0;
 
   return {
+    fontFamily: styles.fontFamily,
     fontSize: styles.fontSize,
     lineHeight: styles.lineHeight,
     letterSpacing: styles.letterSpacing,
@@ -121,6 +125,7 @@ export const textSizes = {
     },
   }),
   "text-lg": createTextSize({
+    fontFamily: "SpaceGrotesk-Bold",
     fontSize: 18,
     letterSpacing: 0.5,
     lineHeight: 21,
@@ -139,6 +144,7 @@ export const textSizes = {
     },
   }),
   "text-2xl": createTextSize({
+    fontFamily: "SpaceGrotesk-Bold",
     fontSize: 24,
     letterSpacing: 0.6,
     lineHeight: 27,
