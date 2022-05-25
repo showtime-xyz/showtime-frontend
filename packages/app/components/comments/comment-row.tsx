@@ -124,7 +124,6 @@ function CommentRowComponent({
   }, []);
   //#endregion
 
-  console.log("comment", comment);
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
