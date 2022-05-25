@@ -31,7 +31,7 @@ export const DropExplanation = ({onDone}:  {onDone: ()=> void}) => {
   useEffect(() => {
     setInterval(() => {
       setPage(p => (p + 1) % 5)
-    }, 5000)
+    }, 3000)
   }, [])
 
   return (
