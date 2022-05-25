@@ -6,7 +6,7 @@ import { useUser } from "app/hooks/use-user";
 import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
-import { formatAddressShort, getRoundedCount } from "app/utilities";
+import { getRoundedCount } from "app/utilities";
 
 import { MessageMore } from "design-system/messages/message-more";
 import { MessageRow } from "design-system/messages/message-row";
@@ -127,11 +127,8 @@ function CommentRowComponent({
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
-        username={
-          comment.username && comment.username.length > 0
-            ? comment.username
-            : formatAddressShort(comment.address)
-        }
+        address={comment.address}
+        username={comment.username}
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
         content={comment.text}

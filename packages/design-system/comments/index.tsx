@@ -81,7 +81,6 @@ function Comments({ nftId }: Props) {
 
   const renderItem = useCallback(
     ({ item }) => <Text tw="text-black dark:text-white">{item.text}</Text>,
-    // <MessageRow />,
     []
   );
 
