@@ -49,7 +49,7 @@ const createTextSize = ({
   letterSpacing,
   marginCorrection,
 }: {
-  fontFamily?: string,
+  fontFamily?: string;
   fontSize: number;
   lineHeight: number;
   letterSpacing: number;
