@@ -1,18 +1,26 @@
-import { DropForm } from "./drop-form"
-import React from "react"
-import { DropExplanation } from "./drop-explanation"
-import { MMKV } from "react-native-mmkv"
+import React from "react";
+
+import { MMKV } from "react-native-mmkv";
+
+import { DropExplanation } from "./drop-explanation";
+import { DropForm } from "./drop-form";
 
 const store = new MMKV();
-const  STORE_KEY = 'showExplanation'
+const STORE_KEY = "showExplanation";
 
 export const Drop = () => {
-    const [showExplanation, setShowExplanation] = React.useState(() => store.getBoolean(STORE_KEY) ?? true)
-   
-    const hideExplanation = () => {
-        setShowExplanation(false);
-        store.set(STORE_KEY, false)
-    }
+  const [showExplanation, setShowExplanation] = React.useState(
+    () => store.getBoolean(STORE_KEY) ?? true
+  );
 
-    return showExplanation ? <DropExplanation onDone={hideExplanation} /> : <DropForm />
-}
+  const hideExplanation = () => {
+    setShowExplanation(false);
+    store.set(STORE_KEY, false);
+  };
+
+  return showExplanation ? (
+    <DropExplanation onDone={hideExplanation} />
+  ) : (
+    <DropForm />
+  );
+};

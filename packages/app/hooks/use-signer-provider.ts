@@ -100,12 +100,14 @@ export const useSignTypedData = () => {
               text: "Switch chain",
               onPress: async () => {
                 try {
-                  await switchNetwork()
+                  await switchNetwork();
                 } catch (e) {
-                  Alert.alert("Network switching failed", "Please switch network to polygon in your wallet and try again.")
+                  Alert.alert(
+                    "Network switching failed",
+                    "Please switch network to polygon in your wallet and try again."
+                  );
                 }
-
-              }
+              },
             },
           ]
         );

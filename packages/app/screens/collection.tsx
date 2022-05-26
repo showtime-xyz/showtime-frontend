@@ -1,15 +1,14 @@
 import React from "react";
 
-import { Claim } from "app/components/claim";
+import { Collection } from "app/components/collection";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
 
-import { Button, Spinner, View } from "design-system";
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+import { Button, Spinner, Text, View } from "design-system";
 
 const { useParam } = createParam<{ collectionAddress: string }>();
 
-const ClaimModal = () => {
+const CollectionScreen = () => {
   const [collectionAddress] = useParam("collectionAddress");
   const { data, loading, error, mutate } =
     useCreatorCollectionDetail(collectionAddress);
@@ -30,11 +29,7 @@ const ClaimModal = () => {
 
   if (!data) return null;
 
-  return <Claim edition={data} />;
+  return <Collection collection={data} />;
 };
 
-export const ClaimScreen = withModalScreen(ClaimModal, {
-  title: "Claim",
-  matchingPathname: "/claim/[collectionAddress]",
-  matchingQueryParam: "claimModal",
-});
+export default CollectionScreen;
