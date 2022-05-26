@@ -436,9 +436,16 @@ const NFTDetails = ({ nft, listId }: { nft: NFT; listId?: number }) => {
     <View>
       <View tw="h-4" />
 
-      <View tw="px-4">
-        <Creator nft={nft} shouldShowCreatorIndicator={false} />
-      </View>
+      {Platform.OS === "web" ? (
+        <View tw="flex-row items-center justify-between px-4">
+          <Creator nft={nft} shouldShowCreatorIndicator={false} />
+          <BuyButton nft={nft} />
+        </View>
+      ) : (
+        <View tw="px-4">
+          <Creator nft={nft} shouldShowCreatorIndicator={false} />
+        </View>
+      )}
 
       <View tw="h-4" />
 
