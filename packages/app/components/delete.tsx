@@ -109,11 +109,12 @@ function Delete({ nft }: { nft: NFT }) {
   if (state.status === "burningSuccess") {
     return (
       <View tw="mt-4 flex-1 items-center justify-center pb-8">
-        <Text tw="text-4xl">🎉</Text>
         <View>
-          <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
-            Your NFT has been deleted
-          </Text>
+          <View tw="my-8">
+            <Text tw="font-space-bold text-center text-lg text-black dark:text-white">
+              Your NFT has been deleted
+            </Text>
+          </View>
           <PolygonScanButton transactionHash={state.transaction} />
         </View>
       </View>
