@@ -10,58 +10,34 @@
 
 {
     "extensions/react-native-web": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.ts",
         "rootDir": "packages/universal/extensions/react-native-web"
     },
     "tailwind": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.ts",
-        "rootDir": "packages/design-system/tailwind",
-        "config": {
-            "showtime.universal/extensions/react-native-web": {},
-            "teambit.envs/envs": {
-                "env": "showtime.universal/extensions/react-native-web"
-            }
-        }
+        "rootDir": "packages/design-system/tailwind"
     },
     "text": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/text",
-        "config": {
-            "showtime.universal/extensions/react-native-web": {},
-            "teambit.envs/envs": {
-                "env": "showtime.universal/extensions/react-native-web"
-            }
-        }
+        "rootDir": "packages/design-system/text"
     },
     "typography": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/typography",
-        "config": {
-            "showtime.universal/extensions/react-native-web": {},
-            "teambit.envs/envs": {
-                "env": "showtime.universal/extensions/react-native-web"
-            }
-        }
+        "rootDir": "packages/design-system/typography"
     },
     "view": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/view",
-        "config": {
-            "showtime.universal/extensions/react-native-web": {},
-            "teambit.envs/envs": {
-                "env": "showtime.universal/extensions/react-native-web"
-            }
-        }
+        "rootDir": "packages/design-system/view"
     },
     "$schema-version": "14.9.0"
 }
