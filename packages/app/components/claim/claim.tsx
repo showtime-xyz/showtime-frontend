@@ -8,7 +8,9 @@ import { useRouter } from "app/navigation/use-router";
 import { IEdition } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
-import { Button, Image, Text, View } from "design-system";
+import { Button, Media, Text, View } from "design-system";
+
+import { useNFTDetailByTokenId } from "../../hooks/use-nft-detail-by-token-id";
 
 export const Claim = ({ edition }: { edition: IEdition }) => {
   const { state, claimNFT } = useClaimNFT();
@@ -16,6 +18,12 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
   const router = useRouter();
 
   const { userAddress } = useCurrentUserAddress();
+  const { data: nft } = useNFTDetailByTokenId({
+    //@ts-ignore
+    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    tokenId: "0",
+    contractAddress: edition.contract_address,
+  });
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -45,7 +53,9 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
           <Button
             onPress={() =>
               share({
-                url: `https://showtime.xyz/claim/${edition?.contract_address}`,
+                url: `https://showtime.xyz/t/${[
+                  process.env.NEXT_PUBLIC_CHAIN_ID,
+                ]}/${edition?.contract_address}/0`,
               })
             }
           >
@@ -62,14 +72,7 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
   return (
     <View tw="flex-1 items-start p-4">
       <View tw="flex-row">
-        <Image
-          tw="h-20 w-20 rounded-lg"
-          source={{
-            uri:
-              "https://ipfs.io/ipfs/" +
-              edition.image_url.replace("ipfs://", ""),
-          }}
-        />
+        <Media nft={nft} tw="h-20 w-20 rounded-lg" />
         <View tw="ml-4">
           <Text tw="text-xl font-bold text-black dark:text-white">
             {edition.name}

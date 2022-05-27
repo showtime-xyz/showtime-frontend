@@ -86,7 +86,7 @@ export const DropForm = () => {
   });
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT, pollTransaction } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -131,7 +131,9 @@ export const DropForm = () => {
           <Button
             onPress={() =>
               share({
-                url: `https://showtime.xyz/claim/${state.edition?.contract_address}`,
+                url: `https://showtime.xyz/t/${[
+                  process.env.NEXT_PUBLIC_CHAIN_ID,
+                ]}/${state.edition?.contract_address}/0`,
               })
             }
           >
