@@ -43,7 +43,7 @@ const fontMetrics = {
 };
 
 const createTextSize = ({
-  fontFamily,
+  fontFamily: propFontFamily,
   fontSize,
   lineHeight: leading,
   letterSpacing,
@@ -59,7 +59,6 @@ const createTextSize = ({
   };
 }) => {
   const styles = {
-    fontFamily,
     letterSpacing,
     ...capsize({
       fontMetrics,
@@ -73,8 +72,7 @@ const createTextSize = ({
       ? marginCorrection[Platform.OS]
       : 0;
 
-  return {
-    fontFamily: styles.fontFamily,
+  const newStyle = {
     fontSize: styles.fontSize,
     lineHeight: styles.lineHeight,
     letterSpacing: styles.letterSpacing,
@@ -85,6 +83,13 @@ const createTextSize = ({
       styles.marginBottom - marginCorrectionForPlatform
     ),
   };
+
+  if (propFontFamily) {
+    // @ts-ignore
+    newStyle.fontFamily = fontFamily(propFontFamily);
+  }
+
+  return newStyle;
 };
 
 export const textSizes = {
