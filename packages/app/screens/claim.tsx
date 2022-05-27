@@ -35,6 +35,6 @@ const ClaimModal = () => {
 
 export const ClaimScreen = withModalScreen(ClaimModal, {
   title: "Claim",
-  matchingPathname: "/claim/[collectionAddress]",
+  matchingPathname: "/claim/[contractAddress]",
   matchingQueryParam: "claimModal",
 });

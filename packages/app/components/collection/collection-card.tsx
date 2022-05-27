@@ -50,7 +50,7 @@ export const CollectionCard = ({
   bottomPadding: number;
   itemHeight: number;
 }) => {
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const router = useRouter();
   const feedItemStyle = {
     height: itemHeight,
@@ -78,6 +78,29 @@ export const CollectionCard = ({
     return windowWidth - NFT_DETAIL_WIDTH;
   }, [windowWidth]);
 
+  const onClaimPress = () => {
+    const as = `/claim/${nft.contract_address}`;
+
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            contractAddress: nft?.contract_address,
+            claimModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
+      { shallow: true }
+    );
+  };
+
   if (windowWidth >= 768) {
     return (
       <View tw="h-full w-full flex-row">
@@ -90,7 +113,8 @@ export const CollectionCard = ({
         >
           <Image
             source={{ uri: nft.source_url }}
-            style={{ height: 500, width: 500 }}
+            width={windowHeight}
+            height={windowHeight}
             resizeMode="contain"
           />
         </View>
@@ -115,17 +139,9 @@ export const CollectionCard = ({
           <View tw="px-4">
             <Creator nft={nft} />
           </View>
-          {Platform.OS === "web" ? (
-            <View tw="px-4 py-4">
-              <Button
-                onPress={() => {
-                  router.push("/claim/" + nft.contract_address);
-                }}
-              >
-                Claim for free
-              </Button>
-            </View>
-          ) : null}
+          <View tw="px-4 py-4">
+            <Button onPress={onClaimPress}>Claim for free</Button>
+          </View>
           <Owner nft={nft} price={Platform.OS !== "ios"} />
           {/* Comments */}
         </View>
@@ -135,68 +151,14 @@ export const CollectionCard = ({
 
   return (
     <View tw="w-full flex-1">
-      {Platform.OS !== "web" && (
-        <View>
-          {nft.blurhash ? (
-            <Blurhash
-              blurhash={nft.blurhash}
-              decodeWidth={16}
-              decodeHeight={16}
-              decodeAsync={true}
-              style={tw.style("w-full h-full")}
-            />
-          ) : (
-            <Image
-              tw="h-full w-full"
-              source={{
-                uri: nft.source_url,
-              }}
-            />
-          )}
-        </View>
-      )}
-
-      <FeedItemTapGesture toggleHeader={toggleHeader} showHeader={showHeader}>
-        <View
-          tw={`absolute h-[${
-            itemHeight - bottomPadding - 50
-          }px] justify-center`}
-        >
-          <Media
-            item={nft}
-            numColumns={1}
-            tw={
-              Platform.OS === "web"
-                ? ""
-                : `h-[${mediaHeight}px] w-[${windowWidth}px]`
-            }
-            resizeMode="contain"
-            onPinchStart={hideHeader}
-            onPinchEnd={showHeader}
-          />
-        </View>
-      </FeedItemTapGesture>
-
-      <Reanimated.View
-        style={[tw.style("z-1 absolute bottom-0 right-0 left-0"), detailStyle]}
-      >
-        <BlurView
-          tint={tint}
-          intensity={100}
-          style={tw.style(
-            "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
-          )}
-        >
-          <NFTDetails nft={nft} />
-          <View
-            tw={`${
-              bottomPadding && bottomPadding !== 0
-                ? `h-[${bottomPadding - 1}px]`
-                : "h-0"
-            }`}
-          />
-        </BlurView>
-      </Reanimated.View>
+      <Image
+        source={{ uri: nft.source_url }}
+        width={windowHeight - 100}
+        height={windowHeight - 100}
+        resizeMode="contain"
+      />
+      <NFTDetails nft={nft} />
+      <Button onPress={onClaimPress}>Claim for free</Button>
     </View>
   );
 };

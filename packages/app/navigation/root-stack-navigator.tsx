@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
-import { CollectionScreen } from "app/screens/collection";
+import { ClaimScreen } from "app/screens/claim";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
@@ -98,7 +98,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="activities" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
-        <Stack.Screen name="collection" component={CollectionScreen} />
+        <Stack.Screen name="collection" component={ClaimScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
