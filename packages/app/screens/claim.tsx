@@ -7,12 +7,12 @@ import { createParam } from "app/navigation/use-param";
 import { Button, Spinner, View } from "design-system";
 import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
-const { useParam } = createParam<{ collectionAddress: string }>();
+const { useParam } = createParam<{ contractAddress: string }>();
 
 const ClaimModal = () => {
-  const [collectionAddress] = useParam("collectionAddress");
+  const [contractAddress] = useParam("contractAddress");
   const { data, loading, error, mutate } =
-    useCreatorCollectionDetail(collectionAddress);
+    useCreatorCollectionDetail(contractAddress);
 
   if (error) {
     return (

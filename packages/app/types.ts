@@ -36,6 +36,7 @@ export type NFT = {
   token_ko_edition?: string;
   token_edition_identifier?: string;
   source_url: string;
+  creator_airdrop_edition_address?: string;
   still_preview_url: string;
   mime_type: string;
   chain_identifier: string;

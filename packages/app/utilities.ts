@@ -87,31 +87,32 @@ export const getBiconomy = async (connector: any, provider: any) => {
   // Here provider refers to magic rpc provider and connector could be wallet connect's connector instance
   const walletProvider = provider
     ? {
-      walletProvider: provider.provider,
-    }
+        walletProvider: provider.provider,
+      }
     : {
-      signFunction: (signedDataType: string, params: any) => {
-        return new Promise((resolve, reject) => {
-          if (signedDataType === "eth_signTypedData_v4") {
-            connector
-              .signTypedData(params)
-              .then((res: string) => {
-                console.log("received signature from wallet ", res);
-                resolve(res);
-              })
-              .catch((err: any) => {
-                // TODO: this never gets logged!
-                console.log("received error on signing ");
-                console.error(err);
-                reject(err);
-              });
-          }
-        });
-      },
-    };
+        signFunction: (signedDataType: string, params: any) => {
+          return new Promise((resolve, reject) => {
+            if (signedDataType === "eth_signTypedData_v4") {
+              connector
+                .signTypedData(params)
+                .then((res: string) => {
+                  console.log("received signature from wallet ", res);
+                  resolve(res);
+                })
+                .catch((err: any) => {
+                  // TODO: this never gets logged!
+                  console.log("received error on signing ");
+                  console.error(err);
+                  reject(err);
+                });
+            }
+          });
+        },
+      };
   const biconomy = new Biconomy(
     new ethers.providers.JsonRpcProvider(
-      `https://polygon-${process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+      `https://polygon-${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
       }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
     ),
     {
@@ -246,9 +247,9 @@ export const isUserAnOwner = (
       return nftOwnerList?.find(
         (owner) =>
           addressObject.address.toLowerCase() ===
-          owner.address?.toLowerCase() ||
+            owner.address?.toLowerCase() ||
           addressObject.ens_domain?.toLowerCase() ===
-          owner.address?.toLowerCase()
+            owner.address?.toLowerCase()
       );
     })
   );
@@ -318,9 +319,13 @@ export const getMediaUrl = ({
     return "";
   }
 
-  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${nft.chain_name
-    }/${nft.contract_address}/${nft.token_id}?cache_key=1${stillPreview ? "&still_preview=true" : ""
-    }`;
+  const cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+    nft.chain_name
+  }/${nft.contract_address}/${nft.token_id}?cache_key=1${
+    stillPreview ? "&still_preview=true" : ""
+  }`;
+
+  return cdnUrl;
 };
 
 export const CARD_DARK_SHADOW =
@@ -329,8 +334,9 @@ export const CARD_DARK_SHADOW =
     : undefined;
 
 export const getPolygonScanLink = (transactionHash: string) => {
-  return `https://${process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
-    }polygonscan.com/tx/${transactionHash}`;
+  return `https://${
+    process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+  }polygonscan.com/tx/${transactionHash}`;
 };
 
 export const CONTRACTS = {
@@ -453,9 +459,11 @@ export const getBidLink = (item: NFT) => {
     case CONTRACTS.HICETNUNC:
       return `https://www.hicetnunc.art/objkt/${item.token_id}`;
     default:
-      return `https://opensea.io/assets/${item.chain_identifier == 137 ? "matic/" : ""
-        }${item.contract_address}/${item.token_id
-        }?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`;
+      return `https://opensea.io/assets/${
+        item.chain_identifier == 137 ? "matic/" : ""
+      }${item.contract_address}/${
+        item.token_id
+      }?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`;
   }
 };
 

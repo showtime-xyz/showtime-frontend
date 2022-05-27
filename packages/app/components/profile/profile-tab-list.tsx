@@ -50,10 +50,10 @@ export const ProfileTabList = ({
     updateItem,
     isLoadingMore,
   } = useProfileNFTs({
-    listId: list.id,
+    tabType: list.type,
     profileId,
     collectionId: filter.collectionId,
-    sortId: filter.sortId,
+    sortType: filter.sortType,
   });
 
   const onCollectionChange = useCallback(
@@ -73,10 +73,10 @@ export const ProfileTabList = ({
   const onItemPress = useCallback(
     (index: number) => {
       router.push(
-        `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+        `/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
       );
     },
-    [list.id, profileId, filter.collectionId, filter.sortId, router]
+    [list.type, profileId, filter.collectionId, filter.sortType, router]
   );
 
   const ListFooterComponent = useCallback(
@@ -93,7 +93,7 @@ export const ProfileTabList = ({
             onSortChange={onSortChange}
             collectionId={filter.collectionId}
             collections={list.collections}
-            sortId={filter.sortId}
+            sortType={filter.sortType}
           />
         </Hidden>
         {isBlocked ? (
@@ -207,17 +207,17 @@ export const ProfileTabList = ({
             pathname: "/list",
             query: {
               initialScrollIndex: index - 1,
-              listId: list.id,
+              tabType: list.type,
               profileId,
               collectionId: filter.collectionId,
-              sortId: filter.sortId,
+              sortType: filter.sortType,
               type: "profile",
             },
           }}
         />
       );
     },
-    [filter, list.id, profileId, ListHeaderComponent, onItemPress]
+    [filter, list.type, profileId, ListHeaderComponent, onItemPress]
   );
 
   return (

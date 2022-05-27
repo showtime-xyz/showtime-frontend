@@ -3,12 +3,20 @@ import { getSortFields } from "app/utilities";
 
 import { Select, View } from "design-system";
 
+const sortFields = [
+  { label: "Newest", value: "newest" },
+  { label: "Oldest", value: "oldest" },
+  { label: "Likes", value: "likes" },
+  { label: "Comments", value: "comments" },
+  { label: "Custom", value: "custom" },
+];
+
 type FilterProps = {
   onCollectionChange: (id: number) => void;
   collections: Collection[];
-  onSortChange: (id: number) => void;
+  onSortChange: (id: string) => void;
   collectionId: number;
-  sortId: number;
+  sortType: string;
 };
 // Todo: Select support web.
 export const ProfileListFilter = ({
@@ -16,10 +24,8 @@ export const ProfileListFilter = ({
   collections,
   onSortChange,
   collectionId,
-  sortId,
+  sortType,
 }: FilterProps) => {
-  const sortFields = getSortFields();
-
   return (
     <View tw="flex-row justify-around">
       <Select
@@ -34,7 +40,7 @@ export const ProfileListFilter = ({
         tw="mr-2"
       />
       <Select
-        value={sortId}
+        value={sortType}
         onChange={onSortChange}
         options={sortFields}
         size="small"

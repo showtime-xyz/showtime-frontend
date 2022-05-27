@@ -16,6 +16,7 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { BuyButton } from "app/components/buy-button";
+import { ClaimButton } from "app/components/claim/claim-button";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
@@ -23,6 +24,8 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -49,7 +52,6 @@ import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
@@ -257,6 +259,11 @@ export const FeedItem = memo(
     itemHeight: number;
   }) => {
     const { width: windowWidth } = useWindowDimensions();
+    const { data: edition } = useCreatorCollectionDetail(
+      nft.creator_airdrop_edition_address
+    );
+
+    const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
     const feedItemStyle = {
       height: itemHeight,
@@ -325,7 +332,7 @@ export const FeedItem = memo(
               <View tw="mr-4 flex-row justify-between">
                 <Title nft={nft} />
                 <Suspense fallback={<Skeleton width={24} height={24} />}>
-                  <NFTDropdown nftId={nft.nft_id} />
+                  {!isCreatorDrop ? <NFTDropdown nftId={nft.nft_id} /> : null}
                 </Suspense>
               </View>
               <Description nft={nft} />
@@ -334,7 +341,10 @@ export const FeedItem = memo(
               </View>
               {Platform.OS === "web" ? (
                 <View tw="px-4 py-4">
-                  <BuyButton nft={nft} />
+                  {nft.creator_airdrop_edition_address && edition ? (
+                    <ClaimButton edition={edition} />
+                  ) : null}
+                  {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
                 </View>
               ) : null}
               <Owner nft={nft} price={Platform.OS !== "ios"} />

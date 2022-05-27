@@ -16,10 +16,10 @@ type Tab = "following" | "curated" | "" | undefined;
 type Query = {
   type: string;
   tab: Tab;
-  listId: any;
+  tabType: string;
   profileId: any;
   collectionId: any;
-  sortId: any;
+  sortType: string;
   initialScrollIndex: any;
   days: any;
   creatorId: any;
@@ -69,18 +69,18 @@ const FeedSwipeList = ({ tab }: { tab: Tab }) => {
 
 const ProfileSwipeList = () => {
   const { useParam } = createParam<Query>();
-  const [listId] = useParam("listId");
+  const [tabType] = useParam("tabType");
   const [profileId] = useParam("profileId");
   const [collectionId] = useParam("collectionId");
-  const [sortId] = useParam("sortId");
+  const [sortType] = useParam("sortType");
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
   const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
     {
-      listId,
+      tabType,
       profileId,
       collectionId,
-      sortId,
+      sortType,
     }
   );
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
