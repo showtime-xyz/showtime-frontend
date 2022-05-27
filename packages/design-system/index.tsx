@@ -17,7 +17,7 @@ export { Select } from "design-system/select";
 export { Skeleton } from "design-system/skeleton";
 export { Spinner } from "design-system/spinner";
 export { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
-export { Text } from "@showtime/universal.text";
+export { Text } from "@showtime-xyz/universal.text";
 export { TextInput } from "design-system/text-input";
 export { VerificationBadge } from "design-system/verification-badge";
 export { View } from "design-system/view";

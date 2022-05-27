@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Pressable } from "react-native";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { FollowButton } from "app/components/follow-button";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";

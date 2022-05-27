@@ -1,6 +1,6 @@
 import { Linking, Platform } from "react-native";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";

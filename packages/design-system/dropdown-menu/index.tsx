@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
 

@@ -23,10 +23,10 @@ const withTM = require("next-transpile-modules")([
   "@zeego/dropdown-menu",
   "solito",
   "three",
-  "@showtime/universal.text",
-  "@showtime/universal.view",
-  "@showtime/universal.tailwind",
-  "@showtime/universal.typography",
+  "@showtime-xyz/universal.text",
+  "@showtime-xyz/universal.view",
+  "@showtime-xyz/universal.tailwind",
+  "@showtime-xyz/universal.typography",
   "sentry-expo",
 ]);
 
@@ -37,6 +37,7 @@ const nextConfig = {
     optimizeCss: true,
     esmExternals: "loose",
     reactRoot: true,
+    legacyBrowsers: false,
     // nextScriptWorkers: true,
     // TODO: enable `concurrentFeatures: true`
   },

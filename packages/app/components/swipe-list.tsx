@@ -15,7 +15,7 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { BuyButton } from "app/components/buy-button";
 import { CommentButton } from "app/components/feed/comment-button";

@@ -1,8 +1,8 @@
 import { ComponentProps, forwardRef } from "react";
 import { View as ReactNativeView } from "react-native";
 
-import { tw as tailwind } from "@showtime/universal.tailwind";
-import type { TW } from "@showtime/universal.tailwind";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type ViewProps = { tw?: TW } & ComponentProps<typeof ReactNativeView>;
 

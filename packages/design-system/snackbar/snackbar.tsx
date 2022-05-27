@@ -9,7 +9,7 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 

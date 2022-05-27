@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { Button } from "design-system/button";
 import { Spinner } from "design-system/spinner";

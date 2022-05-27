@@ -13,7 +13,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { Check } from "design-system/icon";
 import { PressableScale } from "design-system/pressable-scale";

@@ -23,7 +23,7 @@
      * scope - scope name only, e.g. 'compilation'.
      * owner - owner name in bit.dev, e.g. 'teambit'.
      **/
-    "defaultDirectory": "packages/{scope}/{name}",
+    "defaultDirectory": "packages/design-system/{name}",
     /**
      * default scope for all components in workspace.
      **/
@@ -54,9 +54,13 @@
      * "*" is a special rule which applied on all components in the workspace.
      **/
     "*": {
-      /**
-       * uncomment to apply the chosen environment on all components.
-       **/
+      "teambit.pkg/pkg": {
+        "packageManagerPublishArgs": ["--access public"],
+        "packageJson": {
+          "private": false,
+          "name": "@showtime-xyz/{scope}.{name}"
+        }
+      },
       "showtime.universal/extensions/react-native-web": {}
     },
     "extensions/react-native-web": {

@@ -9,7 +9,7 @@ import {
 
 import { MotiView, AnimatePresence } from "moti";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useSafeAreaInsets } from "app/lib/safe-area";
 

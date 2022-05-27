@@ -11,31 +11,31 @@
 {
     "extensions/react-native-web": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.ts",
         "rootDir": "packages/universal/extensions/react-native-web"
     },
     "tailwind": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/tailwind"
     },
     "text": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/text"
     },
     "typography": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/typography"
     },
     "view": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/view"
     },

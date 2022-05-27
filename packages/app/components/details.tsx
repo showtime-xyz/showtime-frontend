@@ -1,4 +1,4 @@
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import type { NFT } from "app/types";
 

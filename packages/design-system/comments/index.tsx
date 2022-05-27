@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useComments } from "app/hooks/api/use-comments";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";

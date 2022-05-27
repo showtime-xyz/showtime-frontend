@@ -2,7 +2,7 @@ import { Children, cloneElement, useMemo } from "react";
 
 import Animated from "react-native-reanimated";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { PressableScale } from "design-system/pressable-scale";
 import { tw as tailwind } from "design-system/tailwind";

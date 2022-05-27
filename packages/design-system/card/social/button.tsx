@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useOnPress, useOnHover } from "design-system/hooks";
 import { HeartFilled, MessageFilled, Boost } from "design-system/icon";

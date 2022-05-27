@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
 

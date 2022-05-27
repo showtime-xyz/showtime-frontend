@@ -1,6 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { ActivityDropdown } from "app/components/activity/activity-dropdown";
 import { Avatar } from "app/components/activity/avatar";

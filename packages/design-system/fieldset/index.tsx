@@ -1,7 +1,7 @@
 import { MutableRefObject, ComponentType } from "react";
 import { Platform } from "react-native";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { useId } from "design-system/input";

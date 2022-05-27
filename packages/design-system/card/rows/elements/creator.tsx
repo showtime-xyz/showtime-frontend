@@ -1,6 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";

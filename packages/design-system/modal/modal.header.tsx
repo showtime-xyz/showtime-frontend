@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 
-import { Text } from "@showtime/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { Button } from "design-system/button";
 import { Close } from "design-system/icon";
