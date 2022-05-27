@@ -1810,7 +1810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capsizecss/core@npm:^3.0.0":
+"@capsizecss/core@npm:3.0.0, @capsizecss/core@npm:^3.0.0":
   version: 3.0.0
   resolution: "@capsizecss/core@npm:3.0.0"
   checksum: a3332919860573f24d14107bf070d4d9da304b5e22c461bbd3c0b14912a4c6cca6d9a3a6a02b2d8d19858eb709d1efa7eae8ff3c6d58440d40faa19b9b27debe
@@ -6502,6 +6502,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.tailwind@npm:0.0.3, @showtime-xyz/universal.tailwind@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.3"
+  dependencies:
+    "@showtime-xyz/universal.typography": 0.0.2
+    tailwindcss: 3.0.24
+    twrnc: 3.3.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 58e5c3ad030461e1e2d02e1ba173239fffc415caa9290f16ab5c5357ebde771fcf5fedda7a1e5f9cb1b58bf4b6b97a23745a511cdec5e7d25d51ede3f0bdae35
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.text@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.text@npm:0.0.3"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.3
+    "@showtime-xyz/universal.view": 0.0.3
+    "@storybook/react": 6.3.13
+    react-native-web: 0.17.7
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: d8548dfbc90c2d62ca3d41ed4596a668da62b8faf380450ed33a30678dc97ed672b548c9afab2dd7382b9b530d53b605517094e0a14d73bc96e5e6c643be0b40
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.typography@npm:0.0.2, @showtime-xyz/universal.typography@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@showtime-xyz/universal.typography@npm:0.0.2"
+  dependencies:
+    "@capsizecss/core": 3.0.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: bbb6f1c0276a33653933a9d217f9b011a2875aa547f8911d426b40c21bb563e68f814a53cf18c43f23fb8b698d5bdebbea8a01134bfc932b758793c7b2d4cdbc
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.view@npm:0.0.3, @showtime-xyz/universal.view@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.view@npm:0.0.3"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.3
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 78450fc01a754398b20ec79fc99eb1fea0a06ea869fa6fd00b370015044db4a32021f1e528822bd5ded409d694e4d09182808dc3b6c61c19cfabaddfcca66e12
+  languageName: node
+  linkType: hard
+
 "@showtime/expo@workspace:apps/expo":
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
@@ -6532,6 +6593,10 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
+    "@showtime-xyz/universal.tailwind": ^0.0.3
+    "@showtime-xyz/universal.text": ^0.0.3
+    "@showtime-xyz/universal.typography": ^0.0.2
+    "@showtime-xyz/universal.view": ^0.0.3
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next
@@ -8091,7 +8156,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:~6.3.12":
+"@storybook/react@npm:6.3.13, @storybook/react@npm:~6.3.12":
   version: 6.3.13
   resolution: "@storybook/react@npm:6.3.13"
   dependencies:
@@ -30634,7 +30699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:>=2.0.0, tailwindcss@npm:^3.0.24":
+"tailwindcss@npm:3.0.24, tailwindcss@npm:>=2.0.0, tailwindcss@npm:^3.0.24":
   version: 3.0.24
   resolution: "tailwindcss@npm:3.0.24"
   dependencies:
@@ -31617,7 +31682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twrnc@npm:^3.3.2":
+"twrnc@npm:3.3.2, twrnc@npm:^3.3.2":
   version: 3.3.2
   resolution: "twrnc@npm:3.3.2"
   dependencies:

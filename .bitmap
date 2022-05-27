@@ -17,13 +17,13 @@
     },
     "tailwind": {
         "scope": "showtime.universal",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/tailwind"
     },
     "text": {
         "scope": "showtime.universal",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/text"
     },
@@ -35,7 +35,7 @@
     },
     "view": {
         "scope": "showtime.universal",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/view"
     },
