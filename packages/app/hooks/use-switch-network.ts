@@ -2,16 +2,17 @@ import React from "react";
 
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
-import { useWalletConnect } from "app/lib/walletconnect";
 import { MATIC_CHAIN_DETAILS, MATIC_CHAIN_ID } from "app/utilities";
 
 import { useAlert } from "design-system/alert";
 
 export const useSwitchNetwork = () => {
-  const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
-  const [network, setNetwork] = React.useState<{ chainId: number, name: string } | null>(null);
+  const [network, setNetwork] = React.useState<{
+    chainId: number;
+    name: string;
+  } | null>(null);
 
   React.useEffect(() => {
     (async function fetchNetwork() {
@@ -19,7 +20,7 @@ export const useSwitchNetwork = () => {
       if (network) {
         setNetwork(network);
       }
-    })()
+    })();
   }, [web3]);
 
   const switchNetwork = async () => {
@@ -44,13 +45,13 @@ export const useSwitchNetwork = () => {
               "Please manually try to switch to polygon network"
             );
           }
-          throw error
+          throw error;
         }
-        throw error
+        throw error;
       }
     } catch (e) {
       Logger.error("error switching network ", e);
-      throw e
+      throw e;
     }
   };
 

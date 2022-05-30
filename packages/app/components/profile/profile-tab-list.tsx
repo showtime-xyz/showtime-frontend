@@ -39,7 +39,7 @@ export const ProfileTabList = ({
   const { state: mintingState } = useContext(MintContext);
   const { width, height } = useWindowDimensions();
 
-  const { filter, dispatch } = useContext(FilterContext);
+  const { filter } = useContext(FilterContext);
 
   const {
     isLoading,

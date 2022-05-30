@@ -5,14 +5,12 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
-import { useWalletConnect } from "app/lib/walletconnect";
 
 import { useAlert } from "design-system/alert";
 
 import { useSwitchNetwork } from "./use-switch-network";
 
 export const useSignTypedData = () => {
-  const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
   const { switchNetwork } = useSwitchNetwork();

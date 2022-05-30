@@ -63,19 +63,6 @@ const Profile = ({ address }: { address: string | null }) => {
     },
     { ...defaultFilters }
   );
-  const onCollectionChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "collection_change", payload: value });
-    },
-    [dispatch]
-  );
-
-  const onSortChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "sort_change", payload: value });
-    },
-    [dispatch]
-  );
 
   const handleTabOnPress = useCallback(() => {
     Haptics.impactAsync();
