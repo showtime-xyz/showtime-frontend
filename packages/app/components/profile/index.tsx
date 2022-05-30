@@ -98,11 +98,7 @@ const Profile = ({ address }: { address: string | null }) => {
                 {Platform.OS === "web" && (
                   <View tw="-bottom-26 absolute w-full justify-between md:right-10 md:-bottom-10 md:w-auto">
                     <ProfileListFilter
-                      onCollectionChange={onCollectionChange}
-                      onSortChange={onSortChange}
-                      collectionId={filter.collectionId}
                       collections={data?.tabs[selected]?.collections || []}
-                      sortType={filter.sortType}
                     />
                   </View>
                 )}
@@ -115,7 +111,7 @@ const Profile = ({ address }: { address: string | null }) => {
               <Tabs.List
                 onPressCallback={handleTabOnPress}
                 style={tw.style(
-                  `h-[${TAB_LIST_HEIGHT}px] w-full self-center bg-white dark:bg-black`
+                  `h-[${TAB_LIST_HEIGHT}px] bg-white dark:bg-black`
                 )}
               >
                 {data?.tabs.map((list, index) => (

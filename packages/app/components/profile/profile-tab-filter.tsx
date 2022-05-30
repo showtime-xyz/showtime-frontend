@@ -1,7 +1,10 @@
+import { useCallback, useContext } from "react";
+
 import { Collection } from "app/hooks/api-hooks";
-import { getSortFields } from "app/utilities";
 
 import { Select, View } from "design-system";
+
+import { FilterContext } from "./fillter-context";
 
 const sortFields = [
   { label: "Newest", value: "newest" },
@@ -12,24 +15,30 @@ const sortFields = [
 ];
 
 type FilterProps = {
-  onCollectionChange: (id: number) => void;
   collections: Collection[];
-  onSortChange: (id: string) => void;
-  collectionId: number;
-  sortType: string;
 };
 // Todo: Select support web.
-export const ProfileListFilter = ({
-  onCollectionChange,
-  collections,
-  onSortChange,
-  collectionId,
-  sortType,
-}: FilterProps) => {
+export const ProfileListFilter = ({ collections }: FilterProps) => {
+  const { filter, dispatch } = useContext(FilterContext);
+
+  const onCollectionChange = useCallback(
+    (value: number | string) => {
+      dispatch({ type: "collection_change", payload: value });
+    },
+    [dispatch]
+  );
+
+  const onSortChange = useCallback(
+    (value: number | string) => {
+      dispatch({ type: "sort_change", payload: value });
+    },
+    [dispatch]
+  );
+
   return (
     <View tw="flex-row justify-around">
       <Select
-        value={collectionId}
+        value={filter.collectionId}
         onChange={onCollectionChange}
         options={collections.map((collection) => ({
           value: collection.collection_id,
@@ -40,7 +49,7 @@ export const ProfileListFilter = ({
         tw="mr-2"
       />
       <Select
-        value={sortType}
+        value={filter.sortType}
         onChange={onSortChange}
         options={sortFields}
         size="small"

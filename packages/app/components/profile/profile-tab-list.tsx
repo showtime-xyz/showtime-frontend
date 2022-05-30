@@ -56,20 +56,6 @@ export const ProfileTabList = ({
     sortType: filter.sortType,
   });
 
-  const onCollectionChange = useCallback(
-    (value: number | string) => {
-      dispatch({ type: "collection_change", payload: value });
-    },
-    [dispatch]
-  );
-
-  const onSortChange = useCallback(
-    (value: number | string) => {
-      dispatch({ type: "sort_change", payload: value });
-    },
-    [dispatch]
-  );
-
   const onItemPress = useCallback(
     (index: number) => {
       router.push(
@@ -88,13 +74,7 @@ export const ProfileTabList = ({
     () => (
       <View tw="p-4">
         <Hidden platform="web">
-          <ProfileListFilter
-            onCollectionChange={onCollectionChange}
-            onSortChange={onSortChange}
-            collectionId={filter.collectionId}
-            collections={list.collections}
-            sortType={filter.sortType}
-          />
+          <ProfileListFilter collections={list.collections} />
         </Hidden>
         {isBlocked ? (
           <View tw="mt-8 items-center justify-center">
@@ -113,16 +93,7 @@ export const ProfileTabList = ({
         ) : null}
       </View>
     ),
-    [
-      data,
-      username,
-      isLoading,
-      filter,
-      onCollectionChange,
-      onSortChange,
-      list.collections,
-      isBlocked,
-    ]
+    [data, username, isLoading, list.collections, isBlocked]
   );
 
   const newData = useMemo(() => {
