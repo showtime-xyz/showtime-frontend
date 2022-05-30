@@ -2,6 +2,7 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -40,7 +41,7 @@ type Action = {
   type: string;
   transactionHash?: string;
   edition?: IEdition;
-  transactionId?: any
+  transactionId?: any;
 };
 
 const initialState: State = {
@@ -59,7 +60,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         transactionHash: action.transactionHash,
-        transactionId: action.transactionId
+        transactionId: action.transactionId,
       };
     default:
       return state;
@@ -84,6 +85,7 @@ export const useDropNFT = () => {
   const uploadMedia = useUploadMedia();
   const { getUserAddress } = useSignerAndProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const mutate = useMatchMutate();
 
   const dropNFT = async (params: UseDropNFT) => {
     try {
@@ -138,8 +140,7 @@ export const useDropNFT = () => {
         },
       });
 
-      await pollTransaction(relayerResponse.relayed_transaction_id)
-
+      await pollTransaction(relayerResponse.relayed_transaction_id);
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
@@ -166,6 +167,8 @@ export const useDropNFT = () => {
 
       if (response.is_complete) {
         dispatch({ type: "success", edition: response.edition });
+
+        mutate(new RegExp("v2/profile-tabs/nfts/*"));
         return;
       }
 
@@ -173,7 +176,7 @@ export const useDropNFT = () => {
     }
 
     dispatch({ type: "error", error: "polling timed out" });
-  }
+  };
 
   return { dropNFT, state, pollTransaction };
 };

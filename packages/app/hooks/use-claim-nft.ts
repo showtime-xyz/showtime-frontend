@@ -2,6 +2,7 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -55,6 +56,7 @@ export const useClaimNFT = () => {
   const signTypedData = useSignTypedData();
   const { getUserAddress } = useSignerAndProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const mutate = useMatchMutate();
 
   const claimNFT = async (props: { minterAddress: string }) => {
     dispatch({ type: "loading" });
@@ -110,6 +112,8 @@ export const useClaimNFT = () => {
 
           if (response.is_complete) {
             dispatch({ type: "success", mint: response.mint });
+            mutate(new RegExp("v2/profile-tabs/nfts/*"));
+
             return;
           }
 

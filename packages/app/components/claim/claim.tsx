@@ -1,16 +1,16 @@
 import React from "react";
 
 import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
 import { IEdition } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Media, Text, View } from "design-system";
-
-import { useNFTDetailByTokenId } from "../../hooks/use-nft-detail-by-token-id";
 
 export const Claim = ({ edition }: { edition: IEdition }) => {
   const { state, claimNFT } = useClaimNFT();
@@ -24,6 +24,16 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
     tokenId: "0",
     contractAddress: edition.contract_address,
   });
+
+  const { follow } = useMyInfo();
+
+  const handleClaimNFT = () => {
+    if (nft?.data.item.creator_id) {
+      follow(nft?.data.item.creator_id);
+    }
+    claimNFT({ minterAddress: edition.minter_address });
+  };
+
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -107,7 +117,7 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
           <Button
             disabled={state.status === "loading"}
             tw={state.status === "loading" ? "opacity-45" : ""}
-            onPress={() => claimNFT({ minterAddress: edition.minter_address })}
+            onPress={handleClaimNFT}
           >
             {state.status === "loading"
               ? "Claiming..."
