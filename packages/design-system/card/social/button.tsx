@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { useOnPress, useOnHover } from "design-system/hooks";
-import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
+import { Heart, HeartFilled, Message, Boost } from "design-system/icon";
 import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -32,9 +32,11 @@ function Button({
 
   const Icon =
     variant === "like"
-      ? HeartFilled
+      ? active
+        ? HeartFilled
+        : Heart
       : variant === "comment"
-      ? MessageFilled
+      ? Message
       : Boost;
   const backgroundColor = "bg-gray-100";
   const backgroundHoverColor = getBackgroundHoverColor(variant);
