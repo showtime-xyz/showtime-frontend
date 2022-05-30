@@ -8,7 +8,8 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
 
-import { useSignerAndProvider, useSignTypedData } from "./use-signer-provider";
+import { useSignTypedData } from "./use-sign-typed-data";
+import { useSignerAndProvider } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
 
 const editionCreatorABI = [
