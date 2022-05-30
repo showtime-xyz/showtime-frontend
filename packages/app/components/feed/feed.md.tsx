@@ -206,12 +206,7 @@ const NFTScrollList = ({
         <View tw="flex-row justify-center" nativeID="334343">
           <Card
             hrefProps={{
-              pathname: "/list",
-              query: {
-                initialScrollIndex: index,
-                type: "feed",
-                tab,
-              },
+              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
             }}
             nft={item}
             tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}

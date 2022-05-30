@@ -9,6 +9,7 @@ import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
+import type { NFT } from "app/types";
 
 import { Spinner, Text, View } from "design-system";
 import { Card } from "design-system/card";
@@ -203,17 +204,9 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           listId={list.id}
-          onPress={() => onItemPress(index - 1)}
+          onPress={() => onItemPress(index)}
           hrefProps={{
-            pathname: "/list",
-            query: {
-              initialScrollIndex: index - 1,
-              listId: list.id,
-              profileId,
-              collectionId: filter.collectionId,
-              sortId: filter.sortId,
-              type: "profile",
-            },
+            pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
           }}
         />
       );
