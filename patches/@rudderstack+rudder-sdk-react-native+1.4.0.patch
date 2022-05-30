@@ -1,0 +1,26 @@
+diff --git a/node_modules/@rudderstack/rudder-sdk-react-native/RNRudderSdk.podspec b/node_modules/@rudderstack/rudder-sdk-react-native/RNRudderSdk.podspec
+index 0df77b4..15e8f68 100644
+--- a/node_modules/@rudderstack/rudder-sdk-react-native/RNRudderSdk.podspec
++++ b/node_modules/@rudderstack/rudder-sdk-react-native/RNRudderSdk.podspec
+@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
+   s.requires_arc = true
+ 
+   s.dependency "React"
+-  s.dependency "Rudder", ">= 1.6.0"
++  s.dependency "Rudder", "1.6.0"
+ end
+ 
+ 
+diff --git a/node_modules/@rudderstack/rudder-sdk-react-native/ios/RNRudderSdkModule.h b/node_modules/@rudderstack/rudder-sdk-react-native/ios/RNRudderSdkModule.h
+index f9020d1..d2cf7c9 100644
+--- a/node_modules/@rudderstack/rudder-sdk-react-native/ios/RNRudderSdkModule.h
++++ b/node_modules/@rudderstack/rudder-sdk-react-native/ios/RNRudderSdkModule.h
+@@ -1,6 +1,6 @@
+ 
+-#if __has_include("RCTBridgeModule.h")
+-#import "RCTBridgeModule.h"
++#if __has_include(<React/RCTBridgeModule.h>)
++#import <React/RCTBridgeModule.h>
+ #else
+ #import <React/RCTBridgeModule.h>
+ #endif

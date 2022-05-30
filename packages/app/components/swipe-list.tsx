@@ -66,6 +66,7 @@ type Props = {
   refresh: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
+  listId?: number;
 };
 
 export const SwipeList = ({
@@ -75,6 +76,7 @@ export const SwipeList = ({
   refresh,
   initialScrollIndex = 0,
   bottomPadding = 0,
+  listId,
 }: Props) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
@@ -159,6 +161,7 @@ export const SwipeList = ({
             toggleHeader,
             hideHeader,
             showHeader,
+            listId,
           }}
         />
       );
@@ -170,6 +173,7 @@ export const SwipeList = ({
       showHeader,
       toggleHeader,
       detailStyle,
+      listId,
     ]
   );
 
@@ -249,6 +253,7 @@ export const FeedItem = memo(
     showHeader,
     toggleHeader,
     detailStyle,
+    listId,
   }: {
     nft: NFT;
     detailStyle: any;
@@ -257,6 +262,7 @@ export const FeedItem = memo(
     toggleHeader: any;
     bottomPadding: number;
     itemHeight: number;
+    listId?: number;
   }) => {
     const { width: windowWidth } = useWindowDimensions();
     const { data: edition } = useCreatorCollectionDetail(
@@ -332,7 +338,9 @@ export const FeedItem = memo(
               <View tw="mr-4 flex-row justify-between">
                 <Title nft={nft} />
                 <Suspense fallback={<Skeleton width={24} height={24} />}>
-                  {!isCreatorDrop ? <NFTDropdown nftId={nft.nft_id} /> : null}
+                  {!isCreatorDrop ? (
+                    <NFTDropdown nftId={nft.nft_id} listId={listId} />
+                  ) : null}
                 </Suspense>
               </View>
               <Description nft={nft} />
@@ -416,7 +424,7 @@ export const FeedItem = memo(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               )}
             >
-              <NFTDetails nft={nft} />
+              <NFTDetails nft={nft} listId={listId} />
               <View
                 tw={`${
                   bottomPadding && bottomPadding !== 0
@@ -433,15 +441,16 @@ export const FeedItem = memo(
 );
 FeedItem.displayName = "FeedItem";
 
-const NFTDetails = ({ nft }: { nft: NFT }) => {
+const NFTDetails = ({ nft, listId }: { nft: NFT; listId?: number }) => {
   const shareNFT = useShareNFT();
 
   return (
     <View>
       <View tw="h-4" />
 
-      <View tw="px-4">
+      <View tw="flex-row items-center justify-between px-4">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
+        <BuyButton nft={nft} />
       </View>
 
       <View tw="h-4" />
@@ -465,17 +474,27 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
           </View>
 
           <View tw="flex-row">
-            <Pressable onPress={() => shareNFT(nft)}>
-              <Share
-                height={22}
-                width={22}
-                // @ts-ignore
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-              />
-            </Pressable>
-            <View tw="w-8" />
+            {Platform.OS !== "ios" ? (
+              <>
+                <Pressable onPress={() => shareNFT(nft)}>
+                  <Share
+                    height={22}
+                    width={22}
+                    // @ts-ignore
+                    color={
+                      tw.style("bg-gray-900 dark:bg-white").backgroundColor
+                    }
+                  />
+                </Pressable>
+                <View tw="w-8" />
+              </>
+            ) : null}
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nftId={nft?.nft_id} />
+              <NFTDropdown
+                nftId={nft?.nft_id}
+                shouldEnableSharing={false}
+                listId={listId}
+              />
             </Suspense>
           </View>
         </View>

@@ -94,6 +94,7 @@ const ProfileSwipeList = () => {
         refresh={refresh}
         initialScrollIndex={Number(initialScrollIndex)}
         bottomPadding={safeAreaBottom}
+        listId={listId}
       />
     </MutateProvider>
   );
