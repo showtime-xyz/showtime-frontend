@@ -6744,7 +6744,7 @@ __metadata:
     swr: 2.0.0-beta.1
     tailwindcss: ^3.0.24
     walletlink: ^2.2.8
-    web3modal: ^1.9.4
+    web3modal: ^1.9.7
   languageName: unknown
   linkType: soft
 
@@ -32917,7 +32917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web3modal@npm:^1.9.4":
+"web3modal@npm:^1.9.7":
   version: 1.9.7
   resolution: "web3modal@npm:1.9.7"
   dependencies:
