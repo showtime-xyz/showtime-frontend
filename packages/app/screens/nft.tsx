@@ -1,10 +1,11 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import Head from "next/head";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
+import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -61,10 +62,18 @@ const NFTDetail = () => {
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
+  const { data: listing } = useNFTListings(data?.data.item.nft_id);
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
+
+  const nftWithListing = useMemo(() => {
+    return {
+      ...data?.data.item,
+      listing: listing?.card_summary?.[0]?.listing,
+    };
+  }, [data, listing]);
 
   const itemHeight =
     Platform.OS === "web"
@@ -109,7 +118,7 @@ const NFTDetail = () => {
         <FeedItem
           itemHeight={itemHeight}
           bottomPadding={safeAreaBottom}
-          nft={nft}
+          nft={nftWithListing}
         />
       </>
     );
