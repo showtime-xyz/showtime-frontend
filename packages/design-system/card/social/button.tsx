@@ -4,7 +4,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { useOnPress, useOnHover } from "design-system/hooks";
-import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
+import { Heart, HeartFilled, Message, Boost } from "design-system/icon";
 import { PressableScale } from "design-system/pressable-scale";
 
 type Props = {
@@ -33,9 +33,11 @@ function Button({
 
   const Icon =
     variant === "like"
-      ? HeartFilled
+      ? active
+        ? HeartFilled
+        : Heart
       : variant === "comment"
-      ? MessageFilled
+      ? Message
       : Boost;
   const backgroundColor = "bg-gray-100";
   const backgroundHoverColor = getBackgroundHoverColor(variant);

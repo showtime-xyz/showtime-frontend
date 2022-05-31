@@ -201,27 +201,19 @@ const NFTScrollList = ({
     }),
     [height]
   );
-  const _rowRenderer = useCallback(
-    (_type: any, item: any, index: number) => {
-      return (
-        <View tw="flex-row justify-center" nativeID="334343">
-          <Card
-            hrefProps={{
-              pathname: "/list",
-              query: {
-                initialScrollIndex: index,
-                type: "feed",
-                tab,
-              },
-            }}
-            nft={item}
-            tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-          />
-        </View>
-      );
-    },
-    [tab]
-  );
+  const _rowRenderer = useCallback((_type: any, item: any) => {
+    return (
+      <View tw="flex-row justify-center" nativeID="334343">
+        <Card
+          hrefProps={{
+            pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+          }}
+          nft={item}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+        />
+      </View>
+    );
+  }, []);
 
   const videoConfig = useMemo(
     () => ({

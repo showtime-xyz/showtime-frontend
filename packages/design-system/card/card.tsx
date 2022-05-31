@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
@@ -59,9 +59,14 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
     }
   }, [numColumns, contentWidth]);
 
+  const handleOnPress = useCallback(() => {
+    if (isWeb) return null;
+    onPress?.();
+  }, [isWeb, onPress]);
+
   if (width < 768) {
     return (
-      <RouteComponent href={hrefProps} onPress={onPress}>
+      <RouteComponent href={hrefProps} onPress={handleOnPress}>
         <Media item={nft} numColumns={numColumns} />
       </RouteComponent>
     );
@@ -91,11 +96,11 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
             </Suspense>
           </View>
 
-          <RouteComponent href={hrefProps} onPress={onPress}>
+          <RouteComponent href={hrefProps} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
           <View tw="mt-2">
-            <RouteComponent href={hrefProps} onPress={onPress}>
+            <RouteComponent href={hrefProps} onPress={handleOnPress}>
               <Title nft={nft} cardMaxWidth={cardMaxWidth} />
             </RouteComponent>
           </View>

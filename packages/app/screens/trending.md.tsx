@@ -215,12 +215,7 @@ const NFTList = ({ days }: { days: any }) => {
               return (
                 <Card
                   hrefProps={{
-                    pathname: "/list",
-                    query: {
-                      initialScrollIndex: index,
-                      type: "trendingNFTs",
-                      days,
-                    },
+                    pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
                   }}
                   key={`nft-list-card-${index}`}
                   nft={item}

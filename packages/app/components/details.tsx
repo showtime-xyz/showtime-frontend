@@ -23,9 +23,10 @@ function Details({ nft }: { nft: NFT }) {
         )}
       </View>
       <Collection nft={nft} />
-      <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
+      {nft ? (
+        <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
+      ) : null}
       <Owner nft={nft} />
-      <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
     </>
   );
 }
