@@ -2,9 +2,10 @@ import { useState } from "react";
 
 import { Meta } from "@storybook/react";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Button } from "../button";
-import { Text } from "../text";
-import { View } from "../view";
 import { ModalSheet } from "./index";
 
 export default {

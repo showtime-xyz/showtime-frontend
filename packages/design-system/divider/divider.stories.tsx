@@ -1,8 +1,9 @@
 import { Meta } from "@storybook/react";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Divider } from ".";
-import { Text } from "../text";
-import { View } from "../view";
 
 export default {
   component: Divider,

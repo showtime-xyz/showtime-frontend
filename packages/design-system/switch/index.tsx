@@ -5,8 +5,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { Extrapolate } from "react-native-reanimated";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useIsDarkMode } from "../hooks";
-import { View } from "../view";
 
 const width = 50;
 const height = 28;

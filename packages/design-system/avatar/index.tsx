@@ -1,8 +1,9 @@
 import { ReactNode, useMemo } from "react";
 
+import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Image } from "../image";
-import { TW } from "../tailwind/types";
-import { View } from "../view";
 import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
 
 export type AvatarProps = {

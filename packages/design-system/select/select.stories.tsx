@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { View } from "../view";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Select } from "./index";
 
 const options = [
