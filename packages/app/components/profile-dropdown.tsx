@@ -86,7 +86,6 @@ function ProfileDropdown({ user }: Props) {
               isBlocked,
               creatorId: user?.profile_id,
               name: user?.name,
-              onBlocked: () => router.pop(),
             });
           }}
         >
