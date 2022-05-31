@@ -16,11 +16,11 @@ import {
 import { AnimatePresence, MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Divider } from "../divider";
-import { View } from "../view";
 import { AlertOption } from "./alert-option";
 
 type AlertContext = {

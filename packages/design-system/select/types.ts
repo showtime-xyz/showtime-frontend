@@ -1,4 +1,4 @@
-import type { TW } from "design-system/tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
 
 export interface SelectProps<T = string | number> {
   value?: T;

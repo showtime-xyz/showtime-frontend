@@ -1,6 +1,7 @@
 import { memo } from "react";
 
-import { View } from "../view";
+import { View } from "@showtime-xyz/universal.view";
+
 import type { ModalBackdropProps } from "./types";
 
 const BACKDROP_TW = [

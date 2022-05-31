@@ -5,8 +5,9 @@ import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { Source } from "react-native-fast-image";
 import { OnLoadEvent } from "react-native-fast-image";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { Image } from "../image";
-import { View } from "../view";
 import { LightImageProps } from "./light-box-image";
 
 export const LightBoxImg = ({

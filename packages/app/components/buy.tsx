@@ -3,12 +3,15 @@ import { useMemo } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useBuyNFT } from "app/hooks/use-buy-nft";
 import { yup } from "app/lib/yup";
 import { NFT } from "app/types";
 
-import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
+import { Button, Fieldset, Media, Spinner } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
 import { Creator } from "design-system/card/rows/elements/creator";
 

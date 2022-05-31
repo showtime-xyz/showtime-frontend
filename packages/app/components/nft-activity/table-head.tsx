@@ -1,6 +1,5 @@
-import React from "react";
-
-import { Text, View } from "design-system";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 const TableHead = () => {
   return (

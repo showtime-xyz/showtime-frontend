@@ -10,10 +10,11 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { useLike } from "app/context/like-context";
 
 import { HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 const heartContainerStyle = {
   position: "absolute",

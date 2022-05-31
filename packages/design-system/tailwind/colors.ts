@@ -86,15 +86,6 @@ export const colors = {
     900: "#1e3a8a",
   },
   get lightBlue() {
-    if (!warned) {
-      console.log(
-        "warn - As of Tailwind CSS v2.2, `lightBlue` has been renamed to `sky`."
-      );
-      console.log(
-        "warn - Please update your color palette to eliminate this warning."
-      );
-      warned = true;
-    }
     return {
       50: "#f0f9ff",
       100: "#e0f2fe",

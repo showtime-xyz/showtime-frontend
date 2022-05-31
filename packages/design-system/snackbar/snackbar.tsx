@@ -9,10 +9,10 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
+import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 
 import { useIsDarkMode } from "../hooks";
 import { Check } from "../icon";

@@ -15,6 +15,10 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { BuyButton } from "app/components/buy-button";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { CommentButton } from "app/components/feed/comment-button";
@@ -48,9 +52,6 @@ import { Image } from "design-system/image";
 import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 

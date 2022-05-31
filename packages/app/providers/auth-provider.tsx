@@ -72,7 +72,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async function logout() {
       if (Platform.OS === "web") {
         const web3Modal = await getWeb3Modal();
-        web3Modal.clearCachedProvider();
+        await web3Modal.clearCachedProvider();
+        // TODO: dig into this https://github.com/Web3Modal/web3modal/issues/420#issuecomment-1076022849
+        localStorage.removeItem("walletconnect");
       }
 
       const wasUserLoggedIn = loginStorage.getLogin();

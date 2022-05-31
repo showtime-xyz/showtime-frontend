@@ -3,16 +3,19 @@ import { Modal, Platform } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { SafeAreaView } from "app/lib/safe-area";
 import { useSafeAreaInsets } from "app/lib/safe-area";
 import { yup } from "app/lib/yup";
 
-import { CountryCodePicker, PressableScale, Text, View } from "design-system";
+import { CountryCodePicker, PressableScale } from "design-system";
 import { Button } from "design-system/button";
 import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";
 import { Input } from "design-system/input";
-import { tw } from "design-system/tailwind";
 
 import { LoginInputField } from "./login-input-field";
 

@@ -1,8 +1,10 @@
 import { useCallback, useContext } from "react";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { Collection } from "app/hooks/api-hooks";
 
-import { Select, View } from "design-system";
+import { Select } from "design-system";
 
 import { FilterContext } from "./fillter-context";
 

@@ -10,13 +10,13 @@ import {
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useColorScheme, useIsDarkMode, useOnFocus } from "../hooks";
 import { Label } from "../label";
 import { PressableScale, Props as PressableProps } from "../pressable-scale";
-import { tw } from "../tailwind";
-import { colors } from "../tailwind/colors";
-import { Text } from "../text";
-import { View } from "../view";
 
 type InputProps = {
   leftElement?: JSX.Element;

@@ -7,17 +7,20 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
 
-import { Button, Fieldset, Media, Spinner, Text, View } from "design-system";
+import { Button, Fieldset, Media, Spinner } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

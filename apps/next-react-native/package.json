@@ -28,6 +28,7 @@
     "@sentry/integrations": "7.0.0-alpha.1",
     "@sentry/nextjs": "7.0.0-alpha.1",
     "@tippyjs/react": "^4.2.6",
+    "@types/react-stickynode": "^4.0.0",
     "@walletconnect/web3-provider": "^1.7.4",
     "app": "*",
     "array-to-image": "^1.0.0",
@@ -69,10 +70,12 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-mentions": "^4.1.1",
     "react-native-fast-image": "^8.5.11",
+    "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.7",
     "react-player": "^2.8.1",
     "react-scroll": "^1.8.4",
     "react-sortablejs": "^6.0.0",
+    "react-stickynode": "^4.0.0",
     "react-string-replace": "^0.4.4",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
@@ -81,7 +84,7 @@
     "sotez": "^10.0.0",
     "swr": "2.0.0-beta.1",
     "walletlink": "^2.2.8",
-    "web3modal": "^1.9.4"
+    "web3modal": "^1.9.7"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",

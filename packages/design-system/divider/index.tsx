@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, ViewProps, StyleProp, ViewStyle } from "react-native";
 
-import { tw as tailwind } from "../tailwind";
-import { TW } from "../tailwind/types";
-import { View } from "../view";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 export interface DividerProps extends ViewProps {
   /**  Applies style to the divider. */

@@ -1,9 +1,10 @@
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import type { NFT } from "app/types";
 
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 function Details({ nft }: { nft: NFT }) {
   return (

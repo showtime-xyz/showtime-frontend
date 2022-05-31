@@ -6,9 +6,9 @@ import {
 
 import RNSegmentedControl from "@react-native-segmented-control/segmented-control";
 
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+
 import { useIsDarkMode } from "design-system/hooks";
-import { tw } from "design-system/tailwind";
-import { colors } from "design-system/tailwind/colors";
 
 type SegmentedControlProps = {
   values: Array<string>;

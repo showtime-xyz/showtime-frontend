@@ -1,7 +1,9 @@
 import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Skeleton, View } from "design-system";
+import { View } from "@showtime-xyz/universal.view";
+
+import { Skeleton } from "design-system";
 import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 

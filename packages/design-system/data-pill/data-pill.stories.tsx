@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
 
-import { View } from "../view";
+import { View } from "@showtime-xyz/universal.view";
+
 import { DataPill } from "./index";
 
 export default {

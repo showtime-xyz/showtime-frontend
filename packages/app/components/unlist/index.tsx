@@ -1,5 +1,9 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUnlistNFT } from "app/hooks/use-unlist-nft";
@@ -7,11 +11,10 @@ import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { Media, Spinner, Text, View } from "design-system";
+import { Media, Spinner } from "design-system";
 import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";

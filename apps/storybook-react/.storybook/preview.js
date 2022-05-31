@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
 import { linking } from "app/navigation/linking";
 
-import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
-import { View } from "design-system/view";
 
 import "../styles/globals.css";
 

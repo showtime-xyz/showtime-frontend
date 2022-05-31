@@ -1,10 +1,11 @@
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
 
-import { Text } from "design-system";
 import ShowtimeWordmark from "design-system/icon/ShowtimeWordmark";
-import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 export const WebFooter = () => {
   const { social, links } = useFooter();

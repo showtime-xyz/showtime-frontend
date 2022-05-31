@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useLike } from "app/context/like-context";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 
 import { Button } from "design-system/card/social/button";
-import { View } from "design-system/view";
 
 function Social({ nft }: { nft?: NFT }) {
   const router = useRouter();

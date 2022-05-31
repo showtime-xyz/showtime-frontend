@@ -1,9 +1,12 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { yup } from "app/lib/yup";
 
-import { Button, ButtonLabel, Text, View } from "design-system";
+import { Button, ButtonLabel } from "design-system";
 
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";

@@ -26,6 +26,8 @@ import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
@@ -48,7 +50,6 @@ import { Web3Provider } from "app/providers/web3-provider";
 import { AlertProvider } from "design-system/alert";
 import { LightBoxProvider } from "design-system/light-box/index";
 import { SnackbarProvider } from "design-system/snackbar";
-import { tw } from "design-system/tailwind";
 import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);

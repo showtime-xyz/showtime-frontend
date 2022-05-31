@@ -1,10 +1,10 @@
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
+import { ViewProps } from "@showtime-xyz/universal.view";
 
-import { ViewProps } from "../view";
 import { Text as UniversalText } from "./text";
 
 export type TextProps = ComponentProps<typeof UniversalText>;

@@ -115,6 +115,9 @@ apps/expo/service-account-key.json
 !.yarn/sdks
 !.yarn/versions
 
+# Bit
+public
+
 # Turborepo
 .turbo
 

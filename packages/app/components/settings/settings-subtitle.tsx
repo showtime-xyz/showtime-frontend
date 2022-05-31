@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { View } from "design-system";
+import { View } from "@showtime-xyz/universal.view";
 
 type Props = {
   children: ReactNode;

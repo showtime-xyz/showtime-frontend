@@ -7,10 +7,12 @@ import {
 } from "react";
 import { ViewStyle } from "react-native";
 
-import { Button, TextInput, View } from "design-system";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
+import { Button, TextInput } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Send } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 import { Spinner } from "../spinner";
 

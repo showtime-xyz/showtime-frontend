@@ -41,12 +41,12 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
-
-import { tw } from "design-system/tailwind";
 
 import {
   ExtendObject,

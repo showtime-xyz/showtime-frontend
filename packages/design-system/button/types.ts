@@ -1,7 +1,8 @@
 import type React from "react";
 
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
+
 import type { Props as PressableScaleProps } from "design-system/pressable-scale";
-import type { TW } from "design-system/tailwind/types";
 
 export type ButtonVariant =
   | "primary"

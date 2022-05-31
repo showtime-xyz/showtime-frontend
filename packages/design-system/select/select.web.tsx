@@ -3,7 +3,8 @@ import React from "react";
 import { Listbox } from "@headlessui/react";
 
 // import * as RadixSelect from "@radix-ui/react-select";
-import { View } from "../view";
+import { View } from "@showtime-xyz/universal.view";
+
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
 import { SelectList } from "./lib/select-list.web";

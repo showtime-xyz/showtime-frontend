@@ -24,6 +24,10 @@ const withTM = require("next-transpile-modules")([
   "sentry-expo",
   "solito",
   "three",
+  "@showtime-xyz/universal.typography",
+  "@showtime-xyz/universal.tailwind",
+  "@showtime-xyz/universal.view",
+  "@showtime-xyz/universal.text",
   "sentry-expo",
 ]);
 
@@ -34,6 +38,7 @@ const nextConfig = {
     optimizeCss: true,
     esmExternals: "loose",
     reactRoot: true,
+    legacyBrowsers: false,
     // nextScriptWorkers: true,
     // TODO: enable `concurrentFeatures: true`
   },

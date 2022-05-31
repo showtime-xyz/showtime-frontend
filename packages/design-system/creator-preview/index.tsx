@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { Pressable } from "react-native";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { FollowButton } from "app/components/follow-button";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -11,9 +14,7 @@ import { formatAddressShort } from "app/utilities";
 
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
-import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;
