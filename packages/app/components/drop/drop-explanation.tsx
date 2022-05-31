@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { MotiView } from "moti";
 
 import { Button, Text, View } from "design-system";
+import { tw } from "design-system/tailwind";
 
 const values = [
   {
