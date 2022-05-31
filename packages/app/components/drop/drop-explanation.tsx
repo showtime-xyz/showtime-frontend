@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { MotiView } from "moti";
 
 import { Button, Text, View } from "design-system";
-import { tw } from "design-system/tailwind";
 
 const values = [
   {
@@ -64,7 +63,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
         from={{ opacity: 0 }}
         transition={{ duration: 600, type: "timing" }}
         animate={{ opacity: 1 }}
-        style={tw.style("mt-10")}
+        style={{ marginTop: 40 }}
       >
         <Text tw="text-center text-2xl text-gray-900 dark:text-white">
           {values[page].title}
