@@ -82,7 +82,7 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
   return (
     <View tw="flex-1 items-start p-4">
       <View tw="flex-row">
-        <Media nft={nft} tw="h-20 w-20 rounded-lg" />
+        <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
         <View tw="ml-4">
           <Text tw="text-xl font-bold text-black dark:text-white">
             {edition.name}
@@ -129,6 +129,12 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
             <PolygonScanButton transactionHash={state.transactionHash} />
           </View>
         </View>
+
+        {state.error ? (
+          <View tw="mt-4">
+            <Text tw="text-red-500">{state.error}</Text>
+          </View>
+        ) : null}
       </View>
     </View>
   );

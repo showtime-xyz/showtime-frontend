@@ -4,6 +4,7 @@ import { useRouter } from "app/navigation/use-router";
 
 import { ModalMethods } from "design-system/modal";
 import { ModalScreen } from "design-system/modal/modal.screen";
+import { ToastProvider } from "design-system/toast";
 
 import type { ModalScreenOptions } from "./types";
 import { useBackPressHandler } from "./use-back-press-handler";
@@ -23,16 +24,20 @@ function withModalScreen<P>(
     }, [router]);
 
     return (
-      <ModalScreen
-        ref={modalRef}
-        title={title}
-        mobile_snapPoints={snapPoints}
-        isScreen={true}
-        onClose={onClose}
-        {...rest}
-      >
-        <Screen {...props} />
-      </ModalScreen>
+      // Toast provider so we toast shows up on top of modal overlay
+      // TODO: use FullWindowOverlay or Portal instead of Portal
+      <ToastProvider>
+        <ModalScreen
+          ref={modalRef}
+          title={title}
+          mobile_snapPoints={snapPoints}
+          isScreen={true}
+          onClose={onClose}
+          {...rest}
+        >
+          <Screen {...props} />
+        </ModalScreen>
+      </ToastProvider>
     );
   };
 }

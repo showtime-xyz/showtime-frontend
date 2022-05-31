@@ -26,6 +26,8 @@ const MODAL_CONTAINER_TW = [
 
 const MODAL_BODY_TW = "flex-1 overflow-auto";
 
+const noop = () => {};
+
 function ModalContainerComponent({
   title,
   web_height = WEB_HEIGHT,
@@ -33,7 +35,8 @@ function ModalContainerComponent({
   children,
   bodyStyle,
   style,
-  tw: propTw = '',
+  disableBackdropPress,
+  tw: propTw = "",
 }: ModalContainerProps) {
   const modalContainerTW = useMemo(
     () => [...MODAL_CONTAINER_TW, web_height, propTw],
@@ -44,7 +47,7 @@ function ModalContainerComponent({
     <View tw={CONTAINER_TW} style={styles.container}>
       {/* prevent scrolling/shaking when modal is open */}
       <RemoveScrollBar />
-      <ModalBackdrop onClose={onClose} />
+      <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
       <View style={[tw.style(modalContainerTW), style]}>
         <ModalHeader title={title} onClose={onClose} />
         <View style={[tw.style(MODAL_BODY_TW), bodyStyle]}>{children}</View>

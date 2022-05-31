@@ -173,7 +173,7 @@ export const ProfileTabList = ({
         <Card
           nft={item}
           numColumns={3}
-          listId={list.id}
+          listId={list.type}
           onPress={() => onItemPress(index - 1)}
           hrefProps={{
             pathname: "/list",

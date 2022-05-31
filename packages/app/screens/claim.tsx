@@ -37,4 +37,5 @@ export const ClaimScreen = withModalScreen(ClaimModal, {
   title: "Claim",
   matchingPathname: "/claim/[contractAddress]",
   matchingQueryParam: "claimModal",
+  disableBackdropPress: true,
 });

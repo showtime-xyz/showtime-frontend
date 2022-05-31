@@ -74,6 +74,13 @@ export interface ModalProps {
    * @default true
    */
   enableContentPanningGesture?: boolean;
+
+  /**
+   * **WEB ONLY ** prevents modal close on backdrop press
+   * @type boolean
+   * @default false
+   */
+  disableBackdropPress?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -93,19 +100,20 @@ export interface ModalHeaderProps
 
 export interface ModalContainerProps
   extends Pick<
-  ModalProps,
-  | "title"
-  | "isScreen"
-  | "onClose"
-  | "children"
-  | "mobile_snapPoints"
-  | "web_height"
-  | "style"
+    ModalProps,
+    | "title"
+    | "isScreen"
+    | "onClose"
+    | "children"
+    | "mobile_snapPoints"
+    | "web_height"
+    | "style"
   > {
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
   enableContentPanningGesture?: boolean;
-  tw?: string
+  disableBackdropPress?: boolean;
+  tw?: string;
 }
 
 export interface ModalScreenProps extends ModalProps {
@@ -116,4 +124,4 @@ export interface ModalFooterProps {
   children: JSX.Element;
 }
 
-export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> { }
+export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}

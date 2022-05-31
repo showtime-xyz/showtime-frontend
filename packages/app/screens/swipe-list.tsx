@@ -94,7 +94,8 @@ const ProfileSwipeList = () => {
         refresh={refresh}
         initialScrollIndex={Number(initialScrollIndex)}
         bottomPadding={safeAreaBottom}
-        listId={listId}
+        //@ts-ignore TODO: replace hide nft API to v2
+        listId={tabType}
       />
     </MutateProvider>
   );
