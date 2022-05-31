@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { NFT } from "app/types";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Skeleton } from "design-system/skeleton";
-import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

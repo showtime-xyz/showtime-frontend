@@ -1,4 +1,5 @@
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { Link } from "app/navigation/link";
@@ -9,7 +10,6 @@ import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
 import { Skeleton } from "design-system/skeleton";
 import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

@@ -1,5 +1,7 @@
 import { Platform, useWindowDimensions } from "react-native";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
@@ -20,7 +22,6 @@ import {
 import { tw } from "design-system/tailwind";
 import { TW } from "design-system/tailwind/types";
 import { breakpoints } from "design-system/theme";
-import { View } from "design-system/view";
 
 type TabBarIconProps = {
   color?: string;

@@ -1,5 +1,7 @@
 import { useWindowDimensions } from "react-native";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useUser } from "app/hooks/use-user";
 import {
   CameraTabBarIcon,
@@ -12,7 +14,6 @@ import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system/view";
 
 import { WebFooter } from "./links-footer.web";
 

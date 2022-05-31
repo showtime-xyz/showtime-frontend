@@ -14,11 +14,11 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Check } from "design-system/icon";
 import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 import data, { CountryDataType } from "./country-code-data";
 

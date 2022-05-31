@@ -7,6 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
@@ -25,7 +26,6 @@ import { MutateProvider } from "app/providers/mutate-provider";
 import { TabItem, Tabs } from "design-system";
 import { PressableScale } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 export const Feed = () => {
   return (

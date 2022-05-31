@@ -1,3 +1,5 @@
+import { View } from "@showtime-xyz/universal.view";
+
 import {
   Liked,
   Commented,
@@ -6,7 +8,6 @@ import {
   Followed,
 } from "design-system/icon";
 import { Image } from "design-system/image";
-import { View } from "design-system/view";
 
 type Props = {
   url: string;

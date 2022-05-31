@@ -5,9 +5,8 @@ import { Easing } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
 import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
-
-import { View } from "design-system/view";
-import { ViewProps } from "design-system/view";
+import { View } from "@showtime-xyz/universal.view";
+import { ViewProps } from "@showtime-xyz/universal.view";
 
 import { useIsDarkMode } from "../hooks";
 import { Accordion as RNAccordion } from "./lib";

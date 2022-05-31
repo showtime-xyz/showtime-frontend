@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
 import { Text, linkify } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
@@ -12,7 +13,6 @@ import { Avatar } from "design-system/avatar";
 import { Button, TextButton } from "design-system/button";
 import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
 import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 import { colors } from "../tailwind/colors";
 

@@ -7,6 +7,8 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useSafeAreaInsets } from "app/lib/safe-area";
@@ -16,7 +18,6 @@ import { useIsDarkMode } from "design-system/hooks";
 import { Send } from "design-system/icon";
 import { tw as tailwind } from "design-system/tailwind";
 import { TextInput } from "design-system/text-input";
-import { View } from "design-system/view";
 
 export const SCROLL_HEIGHT = 48;
 export const PADDING_HEIGHT = 32;

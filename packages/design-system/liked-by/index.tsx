@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useLikes } from "app/hooks/api/use-likes";
 import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
 
 import { Skeleton } from "design-system/skeleton";
-import { View } from "design-system/view";
 
 import { useIsDarkMode } from "../hooks";
 

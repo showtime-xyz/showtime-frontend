@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -21,7 +23,6 @@ import {
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
-import { View } from "design-system/view";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();

@@ -2,6 +2,7 @@ import { MutableRefObject, ComponentType } from "react";
 import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { useId } from "design-system/input";
@@ -10,7 +11,6 @@ import { Select } from "design-system/select";
 import { SelectProps } from "design-system/select/types";
 import { tw } from "design-system/tailwind";
 import { TextInput, TextInputProps } from "design-system/text-input";
-import { View } from "design-system/view";
 
 type FieldsetProps = {
   errorText?: string;

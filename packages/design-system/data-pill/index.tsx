@@ -1,6 +1,5 @@
 import { Text } from "@showtime-xyz/universal.text";
-
-import { View } from "design-system/view";
+import { View } from "@showtime-xyz/universal.view";
 
 type DataPillProps = {
   type?: "primary" | "secondary";

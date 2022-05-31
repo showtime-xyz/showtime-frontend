@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useComments } from "app/hooks/api/use-comments";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
@@ -14,7 +15,6 @@ import {
   SCROLL_HEIGHT,
   PADDING_HEIGHT,
 } from "design-system/messages";
-import { View } from "design-system/view";
 
 type Props = {
   nftId: number;

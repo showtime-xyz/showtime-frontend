@@ -3,6 +3,8 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
@@ -20,7 +22,6 @@ import { Media } from "design-system/media";
 import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { CARD_DARK_SHADOW } from "design-system/theme";
-import { View } from "design-system/view";
 
 type Props = {
   nft: NFT & { loading?: boolean };

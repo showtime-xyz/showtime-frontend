@@ -3,9 +3,10 @@ import { ComponentProps } from "react";
 import { Blurhash } from "react-native-blurhash";
 import FastImage, { FastImageProps } from "react-native-fast-image";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { View } from "design-system/view";
 
 export type ImgProps = FastImageProps & {
   height?: number;

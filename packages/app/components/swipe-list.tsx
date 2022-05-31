@@ -16,6 +16,7 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { BuyButton } from "app/components/buy-button";
 import { CommentButton } from "app/components/feed/comment-button";
@@ -48,7 +49,6 @@ import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";

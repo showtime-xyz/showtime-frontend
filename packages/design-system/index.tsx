@@ -20,5 +20,5 @@ export { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 export { Text } from "@showtime-xyz/universal.text";
 export { TextInput } from "design-system/text-input";
 export { VerificationBadge } from "design-system/verification-badge";
-export { View } from "design-system/view";
+export { View } from "@showtime-xyz/universal.view";
 export { Pressable } from "design-system/pressable";

@@ -15,6 +15,8 @@ import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
@@ -52,7 +54,6 @@ import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { ToastProvider, useToast } from "design-system/toast";
-import { View } from "design-system/view";
 
 import "../styles/styles.css";
 
