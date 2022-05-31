@@ -6619,7 +6619,7 @@ __metadata:
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.3.3
     react-native-os: ^1.0.1
-    react-native-pager-view: 5.4.15
+    react-native-pager-view: ^5.4.24
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
@@ -6628,6 +6628,7 @@ __metadata:
     react-native-safe-area-context: 4.2.4
     react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
+    react-native-tab-view: ^3.1.1
     react-native-vision-camera: 2.12.0
     react-native-web: 0.17.7
     react-native-webview: 11.18.1
@@ -6683,6 +6684,7 @@ __metadata:
     "@sentry/integrations": 7.0.0-alpha.1
     "@sentry/nextjs": 7.0.0-alpha.1
     "@tippyjs/react": ^4.2.6
+    "@types/react-stickynode": ^4.0.0
     "@walletconnect/web3-provider": ^1.7.4
     app: "*"
     array-to-image: ^1.0.0
@@ -6731,10 +6733,12 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
+    react-native-tab-view: ^3.1.1
     react-native-web: 0.17.7
     react-player: ^2.8.1
     react-scroll: ^1.8.4
     react-sortablejs: ^6.0.0
+    react-stickynode: ^4.0.0
     react-string-replace: ^0.4.4
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
@@ -8939,6 +8943,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 4122d2b08580f775d0aeae9bd10b68248f894096ed14c0ebbc143ef712e21b159e89d0c628bd95dd3329947fc1ee94a0cb1d2d32b32b1d5d225e70030e91e58f
+  languageName: node
+  linkType: hard
+
+"@types/react-stickynode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@types/react-stickynode@npm:4.0.0"
+  dependencies:
+    "@types/react": "*"
+  checksum: e38f4678384d4f60311349ab847a4d5f34dd9fbf923e4a7c607816b13ced6f00c3e4057bab3670f0315f465dfe4c12c2d7603be221b377128638bf811b2143a2
   languageName: node
   linkType: hard
 
@@ -12707,7 +12720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:2.3.1":
+"classnames@npm:2.3.1, classnames@npm:^2.0.0":
   version: 2.3.1
   resolution: "classnames@npm:2.3.1"
   checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
@@ -16514,6 +16527,13 @@ __metadata:
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
+  languageName: node
+  linkType: hard
+
+"eventemitter3@npm:^3.0.0":
+  version: 3.1.2
+  resolution: "eventemitter3@npm:3.1.2"
+  checksum: 81e4e82b8418f5cfd986d2b4a2fa5397ac4eb8134e09bcb47005545e22fdf8e9e61d5c053d34651112245aae411bdfe6d0ad5511da0400743fef5fc38bfcfbe3
   languageName: node
   linkType: hard
 
@@ -26861,7 +26881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raf@npm:^3.4.1":
+"raf@npm:^3.0.0, raf@npm:^3.4.1":
   version: 3.4.1
   resolution: "raf@npm:3.4.1"
   dependencies:
@@ -27457,7 +27477,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-pager-view@npm:5.4.15, react-native-pager-view@npm:^5.4.9":
+"react-native-pager-view@npm:^5.4.24":
+  version: 5.4.24
+  resolution: "react-native-pager-view@npm:5.4.24"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 5f296492ce7f386e5d4fabac4e85e0bc1cea39fe9ac070d1879cc0444f174014e1add708356b6c53a58b2b9bed9b1c1dff1799a8a3ba10b49b2efc2e1fdbda8a
+  languageName: node
+  linkType: hard
+
+"react-native-pager-view@npm:^5.4.9":
   version: 5.4.15
   resolution: "react-native-pager-view@npm:5.4.15"
   peerDependencies:
@@ -27602,6 +27632,17 @@ __metadata:
   version: 1.0.5
   resolution: "react-native-swipe-gestures@npm:1.0.5"
   checksum: d637bc40baa50fa0ce3b6cf2b494efeceaea03cc3875cb7cf7d76922914a21d5e6b098d4a084fb291ce61bfbb0a241c03cff24b15bebf0cfae1c146f4ad10d92
+  languageName: node
+  linkType: hard
+
+"react-native-tab-view@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "react-native-tab-view@npm:3.1.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-pager-view: "*"
+  checksum: 8866e746f989b02243bcf1e5259698c3db50446d2b3a2c717873376734526be7fbeac520014adbe28cc0da116a7b5cd37508a6f56b90f992724be5f6222e0b71
   languageName: node
   linkType: hard
 
@@ -27892,6 +27933,22 @@ __metadata:
     react-dom: ">=16.9.0"
     sortablejs: 1
   checksum: 8dcdd8ea5924e7694a66ed321c0cdb573d72fcf6f08d804e178e79f467e1cf2ae4b99d1db304d4ec22d3ee6cb9e032f14402f3a6a51169e95fb8ad0763ae312a
+  languageName: node
+  linkType: hard
+
+"react-stickynode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-stickynode@npm:4.0.0"
+  dependencies:
+    classnames: ^2.0.0
+    core-js: ^3.6.5
+    prop-types: ^15.6.0
+    shallowequal: ^1.0.0
+    subscribe-ui-event: ^2.0.6
+  peerDependencies:
+    react: ^0.14.2 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    react-dom: ^0.14.2 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 51c0cb132af5875441bcd2d849cd29f21073ace105eef8eac00e2971c5d11050d516b2c78b515f91846b17b0b6c8022fd935385071da66329d0e11fd698523f5
   languageName: node
   linkType: hard
 
@@ -29342,7 +29399,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallowequal@npm:^1.1.0":
+"shallowequal@npm:^1.0.0, shallowequal@npm:^1.1.0":
   version: 1.1.0
   resolution: "shallowequal@npm:1.1.0"
   checksum: f4c1de0837f106d2dbbfd5d0720a5d059d1c66b42b580965c8f06bb1db684be8783538b684092648c981294bf817869f743a066538771dbecb293df78f765e00
@@ -30494,6 +30551,17 @@ __metadata:
     postcss: ^7.0.0
     postcss-selector-parser: ^3.0.0
   checksum: 8acf28ea609bee6d7ba40121bcf53af8d899c1ec04f2c08de9349b8292b84b8aa7f82e14c623ae6956decf5b7a7eeea5472ab8e48de7bdcdb6d76640444f6753
+  languageName: node
+  linkType: hard
+
+"subscribe-ui-event@npm:^2.0.6":
+  version: 2.0.7
+  resolution: "subscribe-ui-event@npm:2.0.7"
+  dependencies:
+    eventemitter3: ^3.0.0
+    lodash: ^4.17.15
+    raf: ^3.0.0
+  checksum: 60c78c1930bedd58cb18fda4b88e271f7181aaf02ee83d6071a414de13a9fdb3941ea1d6222fa92c109d59f16d17d8f7110f88d9afd94609951977fc5c9834b3
   languageName: node
   linkType: hard
 
