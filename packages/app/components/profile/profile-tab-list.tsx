@@ -9,7 +9,6 @@ import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
-import type { NFT } from "app/types";
 
 import { Spinner, Text, View } from "design-system";
 import { Card } from "design-system/card";
@@ -211,7 +210,7 @@ export const ProfileTabList = ({
         />
       );
     },
-    [filter, list.id, profileId, ListHeaderComponent, onItemPress]
+    [list.id, ListHeaderComponent, onItemPress]
   );
 
   return (
