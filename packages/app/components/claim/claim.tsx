@@ -3,35 +3,48 @@ import React from "react";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
+import {
+  CreatorEditionResponse,
+  useCreatorCollectionDetail,
+} from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
-import { IEdition } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Media, Text, View } from "design-system";
 
-export const Claim = ({ edition }: { edition: IEdition }) => {
+export const Claim = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();
   const share = useShare();
   const router = useRouter();
 
   const { userAddress } = useCurrentUserAddress();
+
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
-    contractAddress: edition.contract_address,
+    contractAddress: edition.creator_airdrop_edition.contract_address,
   });
 
   const { follow } = useMyInfo();
 
-  const handleClaimNFT = () => {
+  const { mutate } = useCreatorCollectionDetail(
+    nft?.data.item.creator_airdrop_edition_address
+  );
+
+  const handleClaimNFT = async () => {
     if (nft?.data.item.creator_id) {
       follow(nft?.data.item.creator_id);
     }
-    claimNFT({ minterAddress: edition.minter_address });
+
+    await claimNFT({
+      minterAddress: edition.creator_airdrop_edition.minter_address,
+    });
+
+    mutate();
   };
 
   // const [ensName, setEnsName] = React.useState<string | null>(null);
@@ -65,7 +78,7 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
               share({
                 url: `https://showtime.xyz/t/${[
                   process.env.NEXT_PUBLIC_CHAIN_ID,
-                ]}/${edition?.contract_address}/0`,
+                ]}/${edition?.creator_airdrop_edition.contract_address}/0`,
               })
             }
           >
@@ -85,14 +98,14 @@ export const Claim = ({ edition }: { edition: IEdition }) => {
         <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
         <View tw="ml-4">
           <Text tw="text-xl font-bold text-black dark:text-white">
-            {edition.name}
+            {edition.creator_airdrop_edition.name}
           </Text>
         </View>
       </View>
       <View tw="mt-4 w-full">
         <View tw="mb-4">
           <Text tw="text-gray-900 dark:text-gray-100">
-            {edition.description}
+            {edition.creator_airdrop_edition.description}
           </Text>
         </View>
         <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">

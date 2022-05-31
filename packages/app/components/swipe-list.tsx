@@ -28,7 +28,10 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import {
+  CreatorEditionResponse,
+  useCreatorCollectionDetail,
+} from "app/hooks/use-creator-collection-detail";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { Blurhash } from "app/lib/blurhash";
@@ -36,7 +39,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useSafeAreaFrame } from "app/lib/safe-area";
-import type { IEdition, NFT } from "app/types";
+import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { Collection } from "design-system/card/rows/collection";
@@ -446,7 +449,7 @@ const NFTDetails = ({
   edition,
 }: {
   nft: NFT;
-  edition?: IEdition;
+  edition?: CreatorEditionResponse;
   listId?: number;
 }) => {
   const shareNFT = useShareNFT();

@@ -1,15 +1,21 @@
 import { Platform } from "react-native";
 
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRouter } from "app/navigation/use-router";
-import { IEdition } from "app/types";
 
 import { Button } from "design-system/button";
 
-export const ClaimButton = ({ edition }: { edition: IEdition }) => {
+export const ClaimButton = ({
+  edition,
+}: {
+  edition: CreatorEditionResponse;
+}) => {
   const router = useRouter();
 
+  console.log("edition ", edition);
+
   const onClaimPress = () => {
-    const as = `/claim/${edition.contract_address}`;
+    const as = `/claim/${edition.creator_airdrop_edition.contract_address}`;
 
     router.push(
       Platform.select({
@@ -18,7 +24,7 @@ export const ClaimButton = ({ edition }: { edition: IEdition }) => {
           pathname: router.pathname,
           query: {
             ...router.query,
-            contractAddress: edition?.contract_address,
+            contractAddress: edition?.creator_airdrop_edition.contract_address,
             claimModal: true,
           },
         } as any,
@@ -31,5 +37,9 @@ export const ClaimButton = ({ edition }: { edition: IEdition }) => {
     );
   };
 
-  return <Button onPress={onClaimPress}>Claim for free</Button>;
+  return (
+    <Button onPress={onClaimPress} disabled={edition.is_already_claimed}>
+      {edition.is_already_claimed ? "Already claimed" : "Claim for free"}
+    </Button>
+  );
 };
