@@ -379,8 +379,18 @@ export const EditProfile = () => {
                         value={value}
                         onBlur={onBlur}
                         onChangeText={onChange}
+                        autoCapitalize="none"
                         leftElement={
-                          <Text tw="text-gray-600 dark:text-gray-400">
+                          <Text
+                            tw="text-base text-gray-600 dark:text-gray-400"
+                            style={{
+                              marginTop: Platform.select({
+                                ios: 1,
+                                android: 4,
+                                default: 0,
+                              }),
+                            }}
+                          >
                             {v.prefix}
                           </Text>
                         }
