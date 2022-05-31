@@ -9,6 +9,8 @@ import {
 
 import * as Popover from "@radix-ui/react-popover";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
@@ -26,7 +28,6 @@ import { Button, PressableScale, View } from "design-system";
 import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
 import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
 import { Input } from "design-system/input";
-import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
 
 const SearchInHeader = () => {

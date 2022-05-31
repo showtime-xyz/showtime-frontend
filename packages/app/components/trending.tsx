@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
@@ -22,7 +24,6 @@ import {
   View,
 } from "design-system";
 import { Card } from "design-system/card";
-import { tw } from "design-system/tailwind";
 
 const LIST_HEADER_HEIGHT = 64;
 const LIST_FOOTER_HEIGHT = 80;

@@ -7,10 +7,11 @@ import {
 } from "react";
 import { ViewStyle } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { Button, TextInput, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Send } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 import { Spinner } from "../spinner";
 

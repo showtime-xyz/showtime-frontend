@@ -5,10 +5,9 @@ import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image from "next/image";
 
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
 import { View } from "@showtime-xyz/universal.view";
-
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
 
 import { ImgProps } from ".";
 

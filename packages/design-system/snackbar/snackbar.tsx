@@ -9,11 +9,10 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
-
-import { tw } from "design-system/tailwind";
 
 import { useIsDarkMode } from "../hooks";
 import { Check } from "../icon";

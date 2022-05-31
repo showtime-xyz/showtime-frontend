@@ -16,9 +16,8 @@ import {
 import { AnimatePresence, MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-
-import { tw } from "design-system/tailwind";
 
 import { Divider } from "../divider";
 import { View } from "../view";

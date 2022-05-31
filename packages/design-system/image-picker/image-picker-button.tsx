@@ -1,10 +1,11 @@
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import {
   FilePickerResolveValue,
   useFilePicker,
 } from "design-system/file-picker";
 import { Image } from "design-system/icon";
 import { PressableScale } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 
 export function ImagePickerButton({
   onPick,

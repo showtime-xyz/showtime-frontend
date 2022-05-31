@@ -6,6 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind/colors";
+
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
@@ -28,8 +31,6 @@ import {
 import { useFilePicker } from "design-system/file-picker";
 import { Upload } from "design-system/icon";
 import { Preview } from "design-system/preview";
-import { tw } from "design-system/tailwind";
-import { colors } from "design-system/tailwind/colors";
 
 import { TAB_LIST_HEIGHT } from "../lib/constants";
 import { useSafeAreaInsets } from "../lib/safe-area";

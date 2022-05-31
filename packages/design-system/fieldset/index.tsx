@@ -1,6 +1,7 @@
 import { MutableRefObject, ComponentType } from "react";
 import { Platform } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -9,7 +10,6 @@ import { useId } from "design-system/input";
 import { Label } from "design-system/label";
 import { Select } from "design-system/select";
 import { SelectProps } from "design-system/select/types";
-import { tw } from "design-system/tailwind";
 import { TextInput, TextInputProps } from "design-system/text-input";
 
 type FieldsetProps = {

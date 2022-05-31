@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useReducer } from "react";
 import { Platform } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
   defaultFilters,
@@ -16,7 +18,6 @@ import { createParam } from "app/navigation/use-param";
 import { Skeleton, Spinner, View } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
-import { tw } from "design-system/tailwind";
 
 import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";

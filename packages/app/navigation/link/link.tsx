@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
 
 import { PressableScale } from "design-system/pressable-scale";
-import type { TW } from "design-system/tailwind/types";
 
 type LinkProps = Props & {
   viewProps?: ViewProps;

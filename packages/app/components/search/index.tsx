@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -15,7 +16,6 @@ import { Image } from "design-system/image";
 import { Input } from "design-system/input";
 import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
 export const Search = () => {

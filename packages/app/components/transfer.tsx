@@ -6,6 +6,8 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import useDebounce from "app/hooks/use-debounce";
@@ -29,7 +31,6 @@ import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
 import { ArrowRight, PolygonScan } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
-import { tw } from "design-system/tailwind";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

@@ -2,10 +2,10 @@ import { Children, cloneElement, useMemo } from "react";
 
 import Animated from "react-native-reanimated";
 
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { PressableScale } from "design-system/pressable-scale";
-import { tw as tailwind } from "design-system/tailwind";
 
 import { useIsDarkMode } from "../hooks";
 import {

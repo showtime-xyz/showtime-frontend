@@ -3,6 +3,8 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import reactStringReplace from "react-string-replace";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
@@ -20,7 +22,6 @@ import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
 import { LightBoxImg } from "design-system/light-box/light-box-image";
 import { PressableScale } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";

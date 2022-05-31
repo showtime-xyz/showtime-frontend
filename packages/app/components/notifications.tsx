@@ -3,6 +3,8 @@ import { FlatList } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { colors } from "@showtime-xyz/universal.tailwind/colors";
+
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
@@ -25,7 +27,6 @@ import {
   MessageFilled,
   PlusFilled,
 } from "design-system/icon";
-import { colors } from "design-system/tailwind/colors";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
 

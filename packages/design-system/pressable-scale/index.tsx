@@ -2,8 +2,8 @@ import React, { ComponentProps, useMemo } from "react";
 
 import { MotiPressable, mergeAnimateProp } from "moti/interactions";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
 
 export type Props = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;

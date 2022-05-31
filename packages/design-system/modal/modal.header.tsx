@@ -1,11 +1,11 @@
 import { memo, useMemo } from "react";
 
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Button } from "design-system/button";
 import { Close } from "design-system/icon";
-import { tw as tailwind } from "design-system/tailwind";
 
 import type { ModalHeaderProps } from "./types";
 

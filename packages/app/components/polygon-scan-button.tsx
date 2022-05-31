@@ -1,8 +1,9 @@
 import { Linking } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { Button, Text } from "design-system";
 import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 export const PolygonScanButton = ({
   transactionHash,

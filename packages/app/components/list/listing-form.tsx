@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { ListingValues, ListNFT } from "app/hooks/use-list-nft";
 import { useUser } from "app/hooks/use-user";
@@ -17,7 +19,6 @@ import { Button, Fieldset, Text, View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { Tag } from "design-system/icon";
 import { SelectOption } from "design-system/select/types";
-import { tw } from "design-system/tailwind";
 
 const LISTING_SUPPORTED_CURRENCIES = {
   mumbai: {

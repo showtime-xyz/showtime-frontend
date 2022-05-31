@@ -2,7 +2,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 const { MAX_CONTENT_WIDTH, MAX_HEADER_WIDTH } = require("app/constants/layout");
 // TODO: fix imports from design-system
-// const { colors } = require("design-system/tailwind/colors");
+// const { colors } = require("@showtime-xyz/universal.tailwind/colors");
 // const { textSizes, fontFamily } = require("design-system/typography");
 
 module.exports = {

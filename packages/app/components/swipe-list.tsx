@@ -15,6 +15,7 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -48,7 +49,6 @@ import { Image } from "design-system/image";
 import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
 
 import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";

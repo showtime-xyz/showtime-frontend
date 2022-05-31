@@ -1,5 +1,6 @@
 import { useSWRConfig } from "swr";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -16,7 +17,6 @@ import {
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
 import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 type Props = {
   activity: any; // TODO: add Activity type

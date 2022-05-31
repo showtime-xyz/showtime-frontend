@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AppContext } from "app/context/app-context";
@@ -21,7 +22,6 @@ import {
   DropdownMenuTriggerItem,
 } from "design-system/dropdown-menu";
 import { Settings } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {

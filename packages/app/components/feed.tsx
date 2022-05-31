@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,7 +26,6 @@ import { MutateProvider } from "app/providers/mutate-provider";
 
 import { TabItem, Tabs } from "design-system";
 import { PressableScale } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 
 export const Feed = () => {
   return (

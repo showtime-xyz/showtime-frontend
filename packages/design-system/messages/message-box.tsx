@@ -7,6 +7,7 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
@@ -16,7 +17,6 @@ import { useSafeAreaInsets } from "app/lib/safe-area";
 import { Button } from "design-system/button";
 import { useIsDarkMode } from "design-system/hooks";
 import { Send } from "design-system/icon";
-import { tw as tailwind } from "design-system/tailwind";
 import { TextInput } from "design-system/text-input";
 
 export const SCROLL_HEIGHT = 48;
