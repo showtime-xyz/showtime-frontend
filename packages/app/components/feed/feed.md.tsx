@@ -1,6 +1,9 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
@@ -23,13 +26,11 @@ import {
   SegmentedControl,
   Skeleton,
   Tabs,
-  Text,
 } from "design-system";
 import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
 import { useIsDarkMode } from "design-system/hooks";
 import { CARD_DARK_SHADOW } from "design-system/theme";
-import { View } from "design-system/view";
 
 const CARD_HEIGHT = 890;
 const CARD_CONTAINER_WIDTH = 620;

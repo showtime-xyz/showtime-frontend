@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { FlatList, ScrollView, StyleSheet } from "react-native";
 
-import { View } from "design-system";
+import { View } from "@showtime-xyz/universal.view";
 
 import type { TableProps } from "./nft-activity.types";
 import TableHead from "./table-head";

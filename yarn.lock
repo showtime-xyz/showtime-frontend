@@ -148,7 +148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.13, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.16.0, @babel/core@npm:^7.16.5, @babel/core@npm:^7.7.5":
+"@babel/core@npm:^7.1.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.13, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.16.0, @babel/core@npm:^7.16.5, @babel/core@npm:^7.7.5":
   version: 7.17.10
   resolution: "@babel/core@npm:7.17.10"
   dependencies:
@@ -1810,7 +1810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capsizecss/core@npm:^3.0.0":
+"@capsizecss/core@npm:3.0.0, @capsizecss/core@npm:^3.0.0":
   version: 3.0.0
   resolution: "@capsizecss/core@npm:3.0.0"
   checksum: a3332919860573f24d14107bf070d4d9da304b5e22c461bbd3c0b14912a4c6cca6d9a3a6a02b2d8d19858eb709d1efa7eae8ff3c6d58440d40faa19b9b27debe
@@ -6502,6 +6502,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.tailwind@npm:0.0.5, @showtime-xyz/universal.tailwind@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.5"
+  dependencies:
+    "@showtime-xyz/universal.typography": 0.0.3
+    tailwindcss: 3.0.24
+    twrnc: 3.3.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: dd3b241bd39dc575a408e68dad922cf347a0834c6f5cab6cee1faa938429567266a5c057c6dd5ff5cae0290c160221a73a297ffa247df6de690bfdd98a9d4521
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.text@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.text@npm:0.0.5"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.5
+    "@showtime-xyz/universal.view": 0.0.5
+    "@storybook/react": 6.3.13
+    react-native-web: 0.17.7
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 7106601ea493fdbeae12fffaa5e998def5030dc28135b326b4f53387d1e56e9f4fce88ec86b66831393aa8f1a11d84cbd6d48c55e01c884ca026c57b3a03bdc3
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.typography@npm:0.0.3, @showtime-xyz/universal.typography@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.typography@npm:0.0.3"
+  dependencies:
+    "@capsizecss/core": 3.0.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: c64108ea0091ab36d47a9c2506fde0cd6a92fede35394334e18efa301059bbfde404ee435c3dc14e1542cca1981f539ad0792f6e83c88936d472ea786aec03e1
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.view@npm:0.0.5, @showtime-xyz/universal.view@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.view@npm:0.0.5"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.5
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 08b29c9ce38e7d820493e5855d9b8a10e4e97b1c90fac4396ac58989df46c424f52310c58a50e791965bd30369d13cacd4fd307f8b7850b99df3360462b000b6
+  languageName: node
+  linkType: hard
+
 "@showtime/expo@workspace:apps/expo":
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
@@ -6532,6 +6593,10 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
+    "@showtime-xyz/universal.tailwind": ^0.0.5
+    "@showtime-xyz/universal.text": ^0.0.5
+    "@showtime-xyz/universal.typography": ^0.0.3
+    "@showtime-xyz/universal.view": ^0.0.5
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next
@@ -8094,7 +8159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:~6.3.12":
+"@storybook/react@npm:6.3.13, @storybook/react@npm:~6.3.12":
   version: 6.3.13
   resolution: "@storybook/react@npm:6.3.13"
   dependencies:
@@ -11351,17 +11416,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-expo@npm:8.5.1":
-  version: 8.5.1
-  resolution: "babel-preset-expo@npm:8.5.1"
+"babel-preset-expo@npm:9.1.0":
+  version: 9.1.0
+  resolution: "babel-preset-expo@npm:9.1.0"
   dependencies:
     "@babel/plugin-proposal-decorators": ^7.12.9
     "@babel/plugin-transform-react-jsx": ^7.12.17
     "@babel/preset-env": ^7.12.9
     babel-plugin-module-resolver: ^4.1.0
     babel-plugin-react-native-web: ~0.17.1
-    metro-react-native-babel-preset: ~0.64.0
-  checksum: bd3d39d94408ce881323b699bc14b88739e1ddccee09c730f74297165b223d5acf1aea4b68329ff6c7a94ad92335958060834a548fe1acace36e0214e1682c26
+    metro-react-native-babel-preset: ~0.67.0
+  checksum: 534d29a689b5bbe0e35955d471d9131106db707965339bf92f9944517d3326bb27952144ffd4bcc3a4949c2b9ccef7da9b4a1e6cc20ee66839b48cc693c26fd0
   languageName: node
   linkType: hard
 
@@ -23139,7 +23204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-react-native-babel-preset@npm:0.67.0":
+"metro-react-native-babel-preset@npm:0.67.0, metro-react-native-babel-preset@npm:~0.67.0":
   version: 0.67.0
   resolution: "metro-react-native-babel-preset@npm:0.67.0"
   dependencies:
@@ -23186,55 +23251,6 @@ __metadata:
   peerDependencies:
     "@babel/core": "*"
   checksum: 931105e7c76e1e69663bcf75ed8979161c6d486767ccc48c9c6ca80276adbeae7c2aaec0b5c9829f0a44fbf456e97908f81486bdb04cfe68fde375413acc654f
-  languageName: node
-  linkType: hard
-
-"metro-react-native-babel-preset@npm:~0.64.0":
-  version: 0.64.0
-  resolution: "metro-react-native-babel-preset@npm:0.64.0"
-  dependencies:
-    "@babel/core": ^7.0.0
-    "@babel/plugin-proposal-class-properties": ^7.0.0
-    "@babel/plugin-proposal-export-default-from": ^7.0.0
-    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.0.0
-    "@babel/plugin-proposal-object-rest-spread": ^7.0.0
-    "@babel/plugin-proposal-optional-catch-binding": ^7.0.0
-    "@babel/plugin-proposal-optional-chaining": ^7.0.0
-    "@babel/plugin-syntax-dynamic-import": ^7.0.0
-    "@babel/plugin-syntax-export-default-from": ^7.0.0
-    "@babel/plugin-syntax-flow": ^7.2.0
-    "@babel/plugin-syntax-nullish-coalescing-operator": ^7.0.0
-    "@babel/plugin-syntax-optional-chaining": ^7.0.0
-    "@babel/plugin-transform-arrow-functions": ^7.0.0
-    "@babel/plugin-transform-block-scoping": ^7.0.0
-    "@babel/plugin-transform-classes": ^7.0.0
-    "@babel/plugin-transform-computed-properties": ^7.0.0
-    "@babel/plugin-transform-destructuring": ^7.0.0
-    "@babel/plugin-transform-exponentiation-operator": ^7.0.0
-    "@babel/plugin-transform-flow-strip-types": ^7.0.0
-    "@babel/plugin-transform-for-of": ^7.0.0
-    "@babel/plugin-transform-function-name": ^7.0.0
-    "@babel/plugin-transform-literals": ^7.0.0
-    "@babel/plugin-transform-modules-commonjs": ^7.0.0
-    "@babel/plugin-transform-object-assign": ^7.0.0
-    "@babel/plugin-transform-parameters": ^7.0.0
-    "@babel/plugin-transform-react-display-name": ^7.0.0
-    "@babel/plugin-transform-react-jsx": ^7.0.0
-    "@babel/plugin-transform-react-jsx-self": ^7.0.0
-    "@babel/plugin-transform-react-jsx-source": ^7.0.0
-    "@babel/plugin-transform-regenerator": ^7.0.0
-    "@babel/plugin-transform-runtime": ^7.0.0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0
-    "@babel/plugin-transform-spread": ^7.0.0
-    "@babel/plugin-transform-sticky-regex": ^7.0.0
-    "@babel/plugin-transform-template-literals": ^7.0.0
-    "@babel/plugin-transform-typescript": ^7.5.0
-    "@babel/plugin-transform-unicode-regex": ^7.0.0
-    "@babel/template": ^7.0.0
-    react-refresh: ^0.4.0
-  peerDependencies:
-    "@babel/core": "*"
-  checksum: 9185f4fb7ae8337f1f7619a3f527f97f83132d46a044632ca5fc3f0891b9dec7557f0730e2a656604263da9d412383af7b9c70a704be749c744c5bcf99ca7889
   languageName: node
   linkType: hard
 
@@ -30739,7 +30755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:>=2.0.0, tailwindcss@npm:^3.0.24":
+"tailwindcss@npm:3.0.24, tailwindcss@npm:>=2.0.0, tailwindcss@npm:^3.0.24":
   version: 3.0.24
   resolution: "tailwindcss@npm:3.0.24"
   dependencies:
@@ -31722,7 +31738,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twrnc@npm:^3.3.2":
+"twrnc@npm:3.3.2, twrnc@npm:^3.3.2":
   version: 3.3.2
   resolution: "twrnc@npm:3.3.2"
   dependencies:

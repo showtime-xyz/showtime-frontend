@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { tw } from "../tailwind";
-import { View } from "../view";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
 import { WEB_HEIGHT } from "./constants";
 import { ModalBackdrop } from "./modal.backdrop";
 import { ModalHeader } from "./modal.header";

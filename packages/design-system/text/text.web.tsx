@@ -1,6 +1,7 @@
 import { ComponentProps, forwardRef, useMemo } from "react";
 import { StyleSheet, Text as ReactNativeText } from "react-native";
 
+// @ts-ignore
 import { unstable_createElement } from "react-native-web";
 
 // https://github.com/necolas/react-native-web/blob/master/packages/react-native-web/src/exports/View/index.js#L133
@@ -18,7 +19,7 @@ const textStyle = {
   wordWrap: "break-word",
 };
 
-const Label = (props) => {
+const Label = (props: any) => {
   const style = useMemo(() => {
     return StyleSheet.flatten([textStyle, props.style]);
   }, [props.style]);

@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { ViewStyle } from "react-native";
 
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useIsDarkMode } from "../hooks";
 import { ArrowTop } from "../icon";
-import { tw } from "../tailwind";
-import { colors } from "../tailwind/colors";
-import { Text } from "../text";
-import { View } from "../view";
 import { Placement } from "./get-placement";
 import { TooltipProps } from "./types";
 

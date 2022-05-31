@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { UnlistNFT } from "app/hooks/use-unlist-nft";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, Text, View } from "design-system";
+import { Button } from "design-system";
 
 type Props = {
   listingID?: number;

@@ -1,4 +1,5 @@
-import { View } from "design-system";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Button } from "design-system/button";
 
 interface MessageMoreProps {

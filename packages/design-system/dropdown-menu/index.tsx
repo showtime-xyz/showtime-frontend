@@ -6,11 +6,11 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind/types";
+import { Text } from "@showtime-xyz/universal.text";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
-import { Text } from "design-system/text";
+import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 

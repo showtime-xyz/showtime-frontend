@@ -1,9 +1,10 @@
 import { Meta } from "@storybook/react";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Button } from "design-system/button";
 import { Spinner } from "design-system/spinner";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 import { useToast } from "./index";
 

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Platform } from "react-native";
 
-import type { NFT } from "app/types";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import type { NFT } from "app/types";
 
 import { Tooltip } from "../../tooltip";
 

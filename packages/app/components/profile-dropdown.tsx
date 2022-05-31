@@ -1,5 +1,7 @@
 import { useWindowDimensions } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
@@ -17,7 +19,6 @@ import {
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
 import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 type Props = {
   user: Profile;

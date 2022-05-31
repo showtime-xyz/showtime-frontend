@@ -1,5 +1,8 @@
 import { Linking, Platform } from "react-native";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import {
@@ -10,8 +13,6 @@ import { NFT } from "app/types";
 import { getBidLink, getContractName } from "app/utilities";
 
 import { Button } from "design-system/button";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 export const BuyButton = ({ nft }: { nft: NFT }) => {
   const { user } = useUser();

@@ -3,6 +3,10 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import reactStringReplace from "react-string-replace";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
@@ -15,12 +19,11 @@ import {
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, ModalSheet, Skeleton, Text, View } from "design-system";
+import { Button, ModalSheet, Skeleton } from "design-system";
 import { Hidden } from "design-system/hidden";
 import { useColorScheme } from "design-system/hooks";
 import { LightBoxImg } from "design-system/light-box/light-box-image";
 import { PressableScale } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";

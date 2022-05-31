@@ -5,6 +5,7 @@ module.exports = {
     "raf/polyfill",
     "^(react|react-native)$",
     "<THIRD_PARTY_MODULES>",
+    "^@showtime(.*)$",
     "^app/(.*)$",
     "^design-system(.*)$",
     "^[./]",

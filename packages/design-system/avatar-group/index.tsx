@@ -1,7 +1,8 @@
+import { View } from "@showtime-xyz/universal.view";
+
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 
 import { Image } from "design-system/image";
-import { View } from "design-system/view";
 
 import { useIsDarkMode } from "../hooks";
 

@@ -1,6 +1,10 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
@@ -12,10 +16,7 @@ import { Image } from "design-system/image";
 import { Input } from "design-system/input";
 import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 export const Search = () => {
   const headerHeight = useHeaderHeight();

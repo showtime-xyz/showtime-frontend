@@ -1,7 +1,9 @@
-import React from "react";
 import { Linking } from "react-native";
 
-import { View, Text, PressableScale } from "design-system";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
+import { PressableScale } from "design-system";
 
 export function LoginHeader() {
   return (

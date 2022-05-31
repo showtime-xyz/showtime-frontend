@@ -1,6 +1,7 @@
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import { Button } from "design-system/button";
 import { Heart, HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 
 const getRoundedCount = (count: number = 0) => {
   const digits = `${count}`.split("");
