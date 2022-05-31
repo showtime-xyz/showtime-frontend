@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useTimer } from "use-timer";
 
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Camera } from "app/components/camera";
@@ -14,7 +15,6 @@ import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
-import { Text } from "design-system/text";
 
 function CameraScreen() {
   useTrackPageViewed({ name: "Camera" });
