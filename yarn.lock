@@ -6502,11 +6502,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tailwind@npm:0.0.3, @showtime-xyz/universal.tailwind@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.3"
+"@showtime-xyz/universal.tailwind@npm:0.0.4, @showtime-xyz/universal.tailwind@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.4"
   dependencies:
-    "@showtime-xyz/universal.typography": 0.0.2
+    "@showtime-xyz/universal.typography": 0.0.3
     tailwindcss: 3.0.24
     twrnc: 3.3.2
   peerDependencies:
@@ -6514,16 +6514,16 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 58e5c3ad030461e1e2d02e1ba173239fffc415caa9290f16ab5c5357ebde771fcf5fedda7a1e5f9cb1b58bf4b6b97a23745a511cdec5e7d25d51ede3f0bdae35
+  checksum: a10ad6ac5f3b732e541301643a814e5470671b1a40a0f7bd208857dc63a8a14e9fae883a6e79325835afe8cb2e32952848c60d0455e6f4d9f52b4f22729dac36
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.text@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@showtime-xyz/universal.text@npm:0.0.3"
+"@showtime-xyz/universal.text@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "@showtime-xyz/universal.text@npm:0.0.4"
   dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.3
-    "@showtime-xyz/universal.view": 0.0.3
+    "@showtime-xyz/universal.tailwind": 0.0.4
+    "@showtime-xyz/universal.view": 0.0.4
     "@storybook/react": 6.3.13
     react-native-web: 0.17.7
   peerDependencies:
@@ -6531,13 +6531,13 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: d8548dfbc90c2d62ca3d41ed4596a668da62b8faf380450ed33a30678dc97ed672b548c9afab2dd7382b9b530d53b605517094e0a14d73bc96e5e6c643be0b40
+  checksum: f8870efceb5c5109a22660e947bf2b521ada0040a86574ff68b05a2dee82402c8c68fdaf7677565b0d640268cb0b4196d2dd0cf842a7f84935166fde7f7564c3
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.typography@npm:0.0.2, @showtime-xyz/universal.typography@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@showtime-xyz/universal.typography@npm:0.0.2"
+"@showtime-xyz/universal.typography@npm:0.0.3, @showtime-xyz/universal.typography@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.typography@npm:0.0.3"
   dependencies:
     "@capsizecss/core": 3.0.0
   peerDependencies:
@@ -6545,21 +6545,21 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: bbb6f1c0276a33653933a9d217f9b011a2875aa547f8911d426b40c21bb563e68f814a53cf18c43f23fb8b698d5bdebbea8a01134bfc932b758793c7b2d4cdbc
+  checksum: c64108ea0091ab36d47a9c2506fde0cd6a92fede35394334e18efa301059bbfde404ee435c3dc14e1542cca1981f539ad0792f6e83c88936d472ea786aec03e1
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.view@npm:0.0.3, @showtime-xyz/universal.view@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@showtime-xyz/universal.view@npm:0.0.3"
+"@showtime-xyz/universal.view@npm:0.0.4, @showtime-xyz/universal.view@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "@showtime-xyz/universal.view@npm:0.0.4"
   dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.3
+    "@showtime-xyz/universal.tailwind": 0.0.4
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 78450fc01a754398b20ec79fc99eb1fea0a06ea869fa6fd00b370015044db4a32021f1e528822bd5ded409d694e4d09182808dc3b6c61c19cfabaddfcca66e12
+  checksum: b2604df3f8215472e2f9086beabbadf549483773d0333e004c2faadfe60120a0cc3bef1068430bfb4a2ce4941c02929a8d2ea556f71d02957c7387b10c8a4c3a
   languageName: node
   linkType: hard
 
@@ -6593,10 +6593,10 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
-    "@showtime-xyz/universal.tailwind": ^0.0.3
-    "@showtime-xyz/universal.text": ^0.0.3
-    "@showtime-xyz/universal.typography": ^0.0.2
-    "@showtime-xyz/universal.view": ^0.0.3
+    "@showtime-xyz/universal.tailwind": ^0.0.4
+    "@showtime-xyz/universal.text": ^0.0.4
+    "@showtime-xyz/universal.typography": ^0.0.3
+    "@showtime-xyz/universal.view": ^0.0.4
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next

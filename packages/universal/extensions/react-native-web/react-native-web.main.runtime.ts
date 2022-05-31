@@ -60,16 +60,12 @@ export class ReactNativeWebMain {
         buildConfig: [
           (config, context) => {
             config.setTsConfig({
-              $schema: "https://json.schemastore.org/tsconfig",
-              display: "Expo",
               compilerOptions: {
                 allowJs: true,
                 esModuleInterop: true,
                 jsx: "react-native",
                 lib: ["DOM", "ESNext"],
                 moduleResolution: "node",
-                noEmit: true,
-                resolveJsonModule: true,
                 skipLibCheck: true,
                 target: "ESNext",
                 strict: true,
@@ -89,16 +85,12 @@ export class ReactNativeWebMain {
         devConfig: [
           (config, context) => {
             config.setTsConfig({
-              $schema: "https://json.schemastore.org/tsconfig",
-              display: "Expo",
               compilerOptions: {
                 allowJs: true,
                 esModuleInterop: true,
                 jsx: "react-native",
                 lib: ["DOM", "ESNext"],
                 moduleResolution: "node",
-                noEmit: true,
-                resolveJsonModule: true,
                 skipLibCheck: true,
                 target: "ESNext",
                 strict: true,

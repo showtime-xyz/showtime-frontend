@@ -60,6 +60,9 @@
           "private": false,
           "name": "@showtime-xyz/{scope}.{name}"
         }
+        // "packageJsonProps": {
+        //   "files": ["dist"]
+        // }
       },
       "showtime.universal/extensions/react-native-web": {}
     },
