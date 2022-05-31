@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 
 import { useRouter } from "app/navigation/use-router";
-import { IEdition, NFT } from "app/types";
+import { IEdition } from "app/types";
 
 import { Button } from "design-system/button";
 

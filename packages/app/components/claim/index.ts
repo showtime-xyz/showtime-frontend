@@ -1,1 +1,1 @@
-export { Claim } from "./claim"
+export { Claim } from "./claim";
