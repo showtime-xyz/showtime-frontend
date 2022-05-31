@@ -17,7 +17,6 @@ function commonTransformation(
   // Merge config with the webpack.config.js file - adding handlebars support
   // config.merge([webpackConfig]);
   config.addAliases({
-    "react-native-svg": require.resolve("react-native-svg-web"),
     "react-native-web": require.resolve("react-native-web"),
   });
   return config;
