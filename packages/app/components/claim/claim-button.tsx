@@ -31,7 +31,5 @@ export const ClaimButton = ({ edition }: { edition: IEdition }) => {
     );
   };
 
-  if (Platform.OS !== "web") return null;
-
   return <Button onPress={onClaimPress}>Claim for free</Button>;
 };

@@ -32,7 +32,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useSafeAreaFrame } from "app/lib/safe-area";
-import type { NFT } from "app/types";
+import type { IEdition, NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { Collection } from "design-system/card/rows/collection";
@@ -347,14 +347,12 @@ export const FeedItem = memo(
               <View tw="px-4">
                 <Creator nft={nft} />
               </View>
-              {Platform.OS === "web" ? (
-                <View tw="px-4 py-4">
-                  {nft.creator_airdrop_edition_address && edition ? (
-                    <ClaimButton edition={edition} />
-                  ) : null}
-                  {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
-                </View>
-              ) : null}
+              <View tw="px-4 py-4">
+                {isCreatorDrop && edition ? (
+                  <ClaimButton edition={edition} />
+                ) : null}
+                {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
+              </View>
               <Owner nft={nft} price={Platform.OS !== "ios"} />
               {/* Comments */}
             </View>
@@ -424,7 +422,7 @@ export const FeedItem = memo(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               )}
             >
-              <NFTDetails nft={nft} listId={listId} />
+              <NFTDetails edition={edition} nft={nft} listId={listId} />
               <View
                 tw={`${
                   bottomPadding && bottomPadding !== 0
@@ -441,8 +439,17 @@ export const FeedItem = memo(
 );
 FeedItem.displayName = "FeedItem";
 
-const NFTDetails = ({ nft, listId }: { nft: NFT; listId?: number }) => {
+const NFTDetails = ({
+  nft,
+  listId,
+  edition,
+}: {
+  nft: NFT;
+  edition?: IEdition;
+  listId?: number;
+}) => {
   const shareNFT = useShareNFT();
+  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   return (
     <View>
@@ -450,7 +457,8 @@ const NFTDetails = ({ nft, listId }: { nft: NFT; listId?: number }) => {
 
       <View tw="flex-row items-center justify-between px-4">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
-        <BuyButton nft={nft} />
+        {isCreatorDrop && edition ? <ClaimButton edition={edition} /> : null}
+        {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
       </View>
 
       <View tw="h-4" />

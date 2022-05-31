@@ -98,7 +98,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="activities" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
-        <Stack.Screen name="collection" component={ClaimScreen} />
+        <Stack.Screen name="claim" component={ClaimScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

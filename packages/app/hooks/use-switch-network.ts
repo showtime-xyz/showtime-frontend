@@ -32,7 +32,10 @@ export const useSwitchNetwork = () => {
         });
       } catch (error: any) {
         Logger.error(error);
-        if (error.code === 4902) {
+        if (
+          error.code === 4902 ||
+          (error.message && error.message.includes("chain"))
+        ) {
           try {
             await web3?.provider?.request?.({
               method: "wallet_addEthereumChain",
