@@ -7,6 +7,8 @@ import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -22,9 +24,7 @@ import {
   Fieldset,
   Media,
   ScrollView,
-  Text,
   VerificationBadge,
-  View,
 } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Collection } from "design-system/card/rows/collection";

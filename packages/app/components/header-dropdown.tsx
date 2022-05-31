@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AppContext } from "app/context/app-context";
@@ -10,7 +11,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
-import { Text } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   DropdownMenuContent,

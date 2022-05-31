@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
@@ -25,7 +26,6 @@ import {
   SegmentedControl,
   Skeleton,
   Tabs,
-  Text,
 } from "design-system";
 import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";

@@ -3,12 +3,15 @@ import { FlatList, Platform } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useMyInfo } from "app/hooks/api-hooks";
 import { FollowerUser } from "app/hooks/api/use-followers-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { Skeleton, Text, View } from "design-system";
+import { Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";

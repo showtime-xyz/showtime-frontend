@@ -3,6 +3,8 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import Head from "next/head";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -11,7 +13,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useSafeAreaFrame, useSafeAreaInsets } from "app/lib/safe-area";
 import { createParam } from "app/navigation/use-param";
 
-import { Skeleton, View } from "design-system";
+import { Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 
 type Query = {

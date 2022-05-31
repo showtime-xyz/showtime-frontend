@@ -4,6 +4,8 @@ import { FlatList } from "react-native";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -19,7 +21,7 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link, TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { ModalSheet, Skeleton, Text, View } from "design-system";
+import { ModalSheet, Skeleton } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   HeartFilled,

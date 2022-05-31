@@ -1,4 +1,4 @@
-import { View } from "design-system";
+import { View } from "@showtime-xyz/universal.view";
 
 export const SettingBody: React.FC<{
   children: React.ReactNode;

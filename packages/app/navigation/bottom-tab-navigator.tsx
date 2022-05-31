@@ -7,12 +7,11 @@ import * as Updates from "expo-updates";
 import dynamic from "next/dynamic";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { useUser } from "app/hooks/use-user";
 import { useSafeAreaInsets } from "app/lib/safe-area";
-
-import { View } from "design-system";
 
 import { TabBarButton } from "./tab-bar-button";
 import {

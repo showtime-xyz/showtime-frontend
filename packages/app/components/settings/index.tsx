@@ -5,6 +5,8 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useUser } from "app/hooks/use-user";
@@ -13,7 +15,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
-import { Text, View } from "design-system";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 import packageJson from "../../../../package.json";

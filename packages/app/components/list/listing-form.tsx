@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { ListingValues, ListNFT } from "app/hooks/use-list-nft";
@@ -15,7 +17,7 @@ import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import { Button, Fieldset, Text, View } from "design-system";
+import { Button, Fieldset } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { Tag } from "design-system/icon";
 import { SelectOption } from "design-system/select/types";

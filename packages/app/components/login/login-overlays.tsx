@@ -1,9 +1,11 @@
 import { memo, useEffect, useState } from "react";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import { Relayer } from "app/lib/magic";
 
-import { View, Spinner } from "design-system";
+import { Spinner } from "design-system";
 
 interface LoginOverlaysProps {
   loading?: boolean;

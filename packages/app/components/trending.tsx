@@ -2,6 +2,8 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
@@ -20,8 +22,6 @@ import {
   Spinner,
   TabItem,
   Tabs,
-  Text,
-  View,
 } from "design-system";
 import { Card } from "design-system/card";
 

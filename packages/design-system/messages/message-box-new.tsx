@@ -8,8 +8,9 @@ import {
 import { ViewStyle } from "react-native";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Button, TextInput, View } from "design-system";
+import { Button, TextInput } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Send } from "design-system/icon";
 

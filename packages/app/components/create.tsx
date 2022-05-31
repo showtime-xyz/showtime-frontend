@@ -6,6 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { MintContext } from "app/context/mint-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -16,15 +18,7 @@ import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import {
-  Accordion,
-  Button,
-  Checkbox,
-  Fieldset,
-  Spinner,
-  Text,
-  View,
-} from "design-system";
+import { Accordion, Button, Checkbox, Fieldset, Spinner } from "design-system";
 import { ErrorText } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
