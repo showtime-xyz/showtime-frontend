@@ -6502,9 +6502,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tailwind@npm:0.0.4, @showtime-xyz/universal.tailwind@npm:^0.0.4":
-  version: 0.0.4
-  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.4"
+"@showtime-xyz/universal.tailwind@npm:0.0.5, @showtime-xyz/universal.tailwind@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.5"
   dependencies:
     "@showtime-xyz/universal.typography": 0.0.3
     tailwindcss: 3.0.24
@@ -6514,16 +6514,16 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: a10ad6ac5f3b732e541301643a814e5470671b1a40a0f7bd208857dc63a8a14e9fae883a6e79325835afe8cb2e32952848c60d0455e6f4d9f52b4f22729dac36
+  checksum: dd3b241bd39dc575a408e68dad922cf347a0834c6f5cab6cee1faa938429567266a5c057c6dd5ff5cae0290c160221a73a297ffa247df6de690bfdd98a9d4521
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.text@npm:^0.0.4":
-  version: 0.0.4
-  resolution: "@showtime-xyz/universal.text@npm:0.0.4"
+"@showtime-xyz/universal.text@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.text@npm:0.0.5"
   dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.4
-    "@showtime-xyz/universal.view": 0.0.4
+    "@showtime-xyz/universal.tailwind": 0.0.5
+    "@showtime-xyz/universal.view": 0.0.5
     "@storybook/react": 6.3.13
     react-native-web: 0.17.7
   peerDependencies:
@@ -6531,7 +6531,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: f8870efceb5c5109a22660e947bf2b521ada0040a86574ff68b05a2dee82402c8c68fdaf7677565b0d640268cb0b4196d2dd0cf842a7f84935166fde7f7564c3
+  checksum: 7106601ea493fdbeae12fffaa5e998def5030dc28135b326b4f53387d1e56e9f4fce88ec86b66831393aa8f1a11d84cbd6d48c55e01c884ca026c57b3a03bdc3
   languageName: node
   linkType: hard
 
@@ -6549,17 +6549,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.view@npm:0.0.4, @showtime-xyz/universal.view@npm:^0.0.4":
-  version: 0.0.4
-  resolution: "@showtime-xyz/universal.view@npm:0.0.4"
+"@showtime-xyz/universal.view@npm:0.0.5, @showtime-xyz/universal.view@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "@showtime-xyz/universal.view@npm:0.0.5"
   dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.4
+    "@showtime-xyz/universal.tailwind": 0.0.5
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: b2604df3f8215472e2f9086beabbadf549483773d0333e004c2faadfe60120a0cc3bef1068430bfb4a2ce4941c02929a8d2ea556f71d02957c7387b10c8a4c3a
+  checksum: 08b29c9ce38e7d820493e5855d9b8a10e4e97b1c90fac4396ac58989df46c424f52310c58a50e791965bd30369d13cacd4fd307f8b7850b99df3360462b000b6
   languageName: node
   linkType: hard
 
@@ -6593,10 +6593,10 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.0
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": ^0.1.123
-    "@showtime-xyz/universal.tailwind": ^0.0.4
-    "@showtime-xyz/universal.text": ^0.0.4
+    "@showtime-xyz/universal.tailwind": ^0.0.5
+    "@showtime-xyz/universal.text": ^0.0.5
     "@showtime-xyz/universal.typography": ^0.0.3
-    "@showtime-xyz/universal.view": ^0.0.4
+    "@showtime-xyz/universal.view": ^0.0.5
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next

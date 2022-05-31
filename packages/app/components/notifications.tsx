@@ -3,7 +3,7 @@ import { FlatList } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { colors } from "@showtime-xyz/universal.tailwind/colors";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";

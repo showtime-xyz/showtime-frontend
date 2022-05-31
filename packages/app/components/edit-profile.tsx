@@ -6,8 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind/colors";
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
 
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";

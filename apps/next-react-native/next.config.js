@@ -23,10 +23,10 @@ const withTM = require("next-transpile-modules")([
   "@zeego/dropdown-menu",
   "solito",
   "three",
-  "@showtime-xyz/universal.text",
-  "@showtime-xyz/universal.view",
-  "@showtime-xyz/universal.tailwind",
   "@showtime-xyz/universal.typography",
+  "@showtime-xyz/universal.tailwind",
+  "@showtime-xyz/universal.view",
+  "@showtime-xyz/universal.text",
   "sentry-expo",
 ]);
 

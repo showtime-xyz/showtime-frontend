@@ -7,8 +7,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind/colors";
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { fontFamily } from "@showtime-xyz/universal.typography";
 import { View } from "@showtime-xyz/universal.view";
