@@ -9,7 +9,7 @@ type Props = {
 
 function LinkCore({
   children,
-  href,
+  href = "#",
   as,
   componentProps,
   Component,

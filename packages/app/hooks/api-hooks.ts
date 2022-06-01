@@ -177,6 +177,8 @@ export const defaultFilters = {
   sortId: 2,
 };
 
+export const PROFILE_NFTS_QUERY_KEY = "v1/profile_nfts";
+
 export const useProfileNFTs = (params: UserProfileNFTs) => {
   const {
     profileId,
@@ -190,7 +192,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
-      const url = `v1/profile_nfts?profile_id=${profileId}&page=${
+      const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
       }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
       return url;
