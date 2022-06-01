@@ -172,6 +172,8 @@ export const defaultFilters = {
   sortType: "newest",
 };
 
+export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
+
 export const useProfileNFTs = (params: UserProfileNFTs) => {
   const {
     profileId,
@@ -183,7 +185,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
-      const url = `v2/profile-tabs/nfts?profile_id=${profileId}&page=${
+      const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
       }&limit=${12}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
       return url;

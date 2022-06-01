@@ -16,6 +16,7 @@ import { MutateProvider } from "app/providers/mutate-provider";
 import { Spinner } from "design-system";
 import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
+import { getLocalFileURI } from "design-system/preview";
 import { Tabs } from "design-system/tabs";
 
 import { FilterContext } from "./fillter-context";
@@ -57,15 +58,19 @@ export const ProfileTabList = ({
     profileId,
     collectionId: filter.collectionId,
     sortType: filter.sortType,
+    sortId: filter.sortId,
+    // TODO: remove refresh interval once we have the new indexer.
+    refreshInterval: 2000,
   });
 
   const onItemPress = useCallback(
-    (index: number) => {
+    (nftId: number) => {
+      const index = data.findIndex((v) => v.nft_id === nftId);
       router.push(
         `/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
       );
     },
-    [list.type, profileId, filter.collectionId, filter.sortType, router]
+    [list.type, profileId, filter.collectionId, filter.sortType, router, data]
   );
 
   const ListFooterComponent = useCallback(
@@ -103,7 +108,7 @@ export const ProfileTabList = ({
     let newData: any = ["header"];
     if (isBlocked) return newData;
     if (
-      mintingState.status !== "idle" &&
+      mintingState.loading &&
       mintingState.tokenId !== data?.[0]?.token_id &&
       profileId === user?.data.profile.profile_id
     ) {
@@ -113,8 +118,7 @@ export const ProfileTabList = ({
         chain_name: "polygon",
         contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
         token_id: mintingState.tokenId ?? "1",
-        source_url:
-          typeof mintingState.file === "string" ? mintingState.file : "",
+        source_url: getLocalFileURI(mintingState.file),
         mime_type: mintingState.fileType ?? "image/jpeg",
       });
     }
@@ -124,7 +128,7 @@ export const ProfileTabList = ({
     return newData;
   }, [
     data,
-    mintingState.status,
+    mintingState.loading,
     mintingState.tokenId,
     mintingState.file,
     mintingState.fileType,
@@ -161,7 +165,7 @@ export const ProfileTabList = ({
     [contentWidth, height]
   );
   const _rowRenderer = useCallback(
-    (_type: any, item: any, index: number) => {
+    (_type: any, item: any) => {
       if (_type === "header") {
         return <ListHeaderComponent />;
       }
@@ -177,7 +181,7 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           listId={list.type}
-          onPress={() => onItemPress(index)}
+          onPress={() => onItemPress(item.nft_id)}
           hrefProps={{
             pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
           }}
