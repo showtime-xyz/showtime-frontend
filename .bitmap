@@ -41,7 +41,7 @@
     },
     "checkbox": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/checkbox"
     },
@@ -71,7 +71,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -89,13 +89,13 @@
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },
     "label": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/label"
     },
