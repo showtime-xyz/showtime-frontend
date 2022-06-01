@@ -19,6 +19,9 @@ import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useRouter } from "app/navigation/use-router";
 
+import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
+import { useMatchMutate } from "./use-match-mutate";
+
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
 export type MintNFTStatus =
@@ -39,6 +42,7 @@ export type MintActionType = MintNFTStatus | "reset" | "setMedia";
 export type MintNFTType = {
   status: MintNFTStatus;
   tokenId?: string;
+  loading?: boolean;
   transaction?: string;
   mediaIPFSHash?: string;
   nftIPFSHash?: string;
@@ -54,6 +58,7 @@ export const initialMintNFTState: MintNFTType = {
   transaction: undefined,
   file: undefined,
   fileType: undefined,
+  loading: false,
 };
 
 export type ActionPayload = {
@@ -94,6 +99,7 @@ export const mintNFTReducer = (
         transaction: undefined,
         file: action.payload?.file,
         fileType: action.payload?.fileType,
+        loading: true,
       };
     case "mediaUploadSuccess":
       return {
@@ -142,9 +148,10 @@ export const mintNFTReducer = (
         status: "mintingSuccess",
         tokenId: action.payload?.tokenId,
         transaction: action.payload?.transaction,
+        loading: false,
       };
     case "mintingError":
-      return { ...state, status: "mintingError" };
+      return { ...state, status: "mintingError", loading: false };
     default:
       return state;
   }
@@ -235,6 +242,8 @@ export const useMintNFT = () => {
   const router = useRouter();
   const { user } = useUser();
   const insets = useSafeAreaInsets();
+  const matchMutate = useMatchMutate();
+
   const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
   const { getSignerAndProvider } = useSignerAndProvider();
@@ -425,6 +434,8 @@ export const useMintNFT = () => {
             },
           });
           track("NFT Created");
+
+          matchMutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
 
           snackbar?.update({
             text: "Created! Your NFT will appear in a minute!",
