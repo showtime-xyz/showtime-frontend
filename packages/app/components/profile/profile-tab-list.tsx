@@ -177,22 +177,14 @@ export const ProfileTabList = ({
           nft={item}
           numColumns={3}
           listId={list.type}
-          onPress={() => onItemPress(index - 1)}
+          onPress={() => onItemPress(index)}
           hrefProps={{
-            pathname: "/list",
-            query: {
-              initialScrollIndex: index - 1,
-              tabType: list.type,
-              profileId,
-              collectionId: filter.collectionId,
-              sortType: filter.sortType,
-              type: "profile",
-            },
+            pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
           }}
         />
       );
     },
-    [filter, list.type, profileId, ListHeaderComponent, onItemPress]
+    [list.type, ListHeaderComponent, onItemPress]
   );
 
   return (

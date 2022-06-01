@@ -65,7 +65,7 @@ const SearchInHeader = () => {
   );
 
   return (
-    <Popover.Root modal={false} open={isOpen} onOpenChange={setIsOpen}>
+    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger />
 
       <Popover.Anchor>
@@ -122,7 +122,13 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
+        <View
+          tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
+          style={Platform.select({
+            web: { maxHeight: "calc(100vh - 64px)" },
+            default: {},
+          })}
+        >
           {data ? (
             <FlatList
               data={data}

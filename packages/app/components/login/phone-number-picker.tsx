@@ -93,7 +93,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               tw={`mt-[${Platform.select({
                 ios: ".6",
-                android: ".25",
+                android: ".45",
                 default: "0",
               })}rem] h-7 flex-row items-center justify-center`}
             >
