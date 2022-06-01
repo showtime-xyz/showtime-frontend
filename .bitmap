@@ -11,7 +11,7 @@
 {
     "accordion": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },
@@ -23,31 +23,31 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
     "bottom-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/bottom-sheet"
     },
     "button": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/button"
     },
     "checkbox": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/checkbox"
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -71,25 +71,25 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
     "hooks": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/hooks"
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },
@@ -101,19 +101,19 @@
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -125,13 +125,13 @@
     },
     "pressable": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable"
     },
     "pressable-scale": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable-scale"
     },
@@ -155,13 +155,13 @@
     },
     "segmented-control": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/segmented-control"
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -173,19 +173,19 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
     "spinner": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/spinner"
     },
     "switch": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/switch"
     },
@@ -203,13 +203,13 @@
     },
     "text-input": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/text-input"
     },
     "toast": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
     },

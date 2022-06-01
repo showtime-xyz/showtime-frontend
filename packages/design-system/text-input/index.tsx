@@ -9,7 +9,7 @@ export type TextInputProps = { tw?: TW } & ComponentProps<
 >;
 
 const TextInput = forwardRef<typeof ReactNativeTextInput, TextInputProps>(
-  ({ tw, style, ...props }, ref) => (
+  ({ tw, style, ...props }, ref: any) => (
     <ReactNativeTextInput
       {...props}
       style={[tailwind.style(tw), style]}

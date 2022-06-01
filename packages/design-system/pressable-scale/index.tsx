@@ -18,7 +18,7 @@ export function PressableScale({
   ...props
 }: Props) {
   const animateValues = useMemo(
-    () => (interaction) => {
+    () => (interaction: any) => {
       "worklet";
 
       return mergeAnimateProp(interaction, animate, {

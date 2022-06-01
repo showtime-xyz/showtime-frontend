@@ -105,7 +105,7 @@ export const useOnPress = () => {
   return pressHandler;
 };
 
-export function useUpdateEffect(effect, dependencies = []) {
+export function useUpdateEffect(effect: any, dependencies = []) {
   const isInitialMount = useRef(true);
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export const useLayout = () => {
   const [layout, setLayout] = useState<
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
-  const onLayout = (e) => {
+  const onLayout = (e: any) => {
     setLayout(e.nativeEvent.layout);
   };
 

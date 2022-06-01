@@ -29,7 +29,9 @@ export const Switch = (props: SwitchProps) => {
     <Pressable
       style={styles.pressableStyle}
       onPress={useCallback(() => {
-        onChange(!checked);
+        if (onChange) {
+          onChange(!checked);
+        }
       }, [onChange, checked])}
       accessibilityRole="switch"
       accessibilityState={{ checked }}
@@ -55,6 +57,7 @@ export const Switch = (props: SwitchProps) => {
         animate={{
           translateX: checked ? width - thumbWidth - thumbOffset : thumbOffset,
         }}
+        // @ts-ignore
         transition={{ overshootClamping: Extrapolate.CLAMP }}
       />
     </Pressable>

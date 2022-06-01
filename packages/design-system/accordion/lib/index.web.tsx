@@ -29,10 +29,12 @@ const Root = (props: RootProps) => {
 
   useUpdateEffect(() => {
     setValue(propValue);
+    // @ts-ignore
   }, [propValue]);
 
   return (
     <RootContext.Provider
+      // @ts-ignore
       value={useMemo(
         () => ({ value, handleValueChange }),
         [value, handleValueChange]
