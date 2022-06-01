@@ -58,7 +58,7 @@ export const ProfileTabList = ({
     profileId,
     collectionId: filter.collectionId,
     sortId: filter.sortId,
-    // TODO: remove refresh interval once we have the new indexer
+    // TODO: remove refresh interval once we have the new indexer.
     refreshInterval: 2000,
   });
 
