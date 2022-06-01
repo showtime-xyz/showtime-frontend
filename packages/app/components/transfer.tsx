@@ -6,6 +6,11 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ArrowRight, PolygonScan } from "@showtime-xyz/universal.icon";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,18 +24,11 @@ import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
-import {
-  Button,
-  Fieldset,
-  Media,
-  ScrollView,
-  VerificationBadge,
-} from "design-system";
 import { Avatar } from "design-system/avatar";
 import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
-import { ArrowRight, PolygonScan } from "design-system/icon";
-import { Spinner } from "design-system/spinner";
+import { Media } from "design-system/media";
+import { VerificationBadge } from "design-system/verification-badge";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

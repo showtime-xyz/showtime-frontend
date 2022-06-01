@@ -2,7 +2,7 @@ import React, { Children, ReactElement } from "react";
 
 import { MenuView } from "@react-native-menu/menu";
 
-import { useColorScheme } from "design-system/hooks";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
 
 import {
   flattenChildren,

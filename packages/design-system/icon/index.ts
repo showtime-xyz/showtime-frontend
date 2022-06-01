@@ -81,3 +81,4 @@ export { default as Settings } from "./Settings";
 export { default as Share } from "./Share";
 export { default as ArrowBottom } from "./ArrowBottom";
 export { default as ArrowTop } from "./ArrowTop";
+export { default as ShowtimeWordmark } from "./ShowtimeWordmark";

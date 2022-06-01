@@ -4,7 +4,7 @@ import { Blurhash } from "react-native-blurhash";
 import FastImage, { FastImageProps } from "react-native-fast-image";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 export type ImgProps = FastImageProps & {

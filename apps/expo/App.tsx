@@ -26,7 +26,11 @@ import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { ToastProvider, useToast } from "@showtime-xyz/universal.toast";
 
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -35,7 +39,6 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
-import { SafeAreaProvider } from "app/lib/safe-area";
 import { Sentry } from "app/lib/sentry";
 import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
@@ -47,10 +50,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
-import { AlertProvider } from "design-system/alert";
 import { LightBoxProvider } from "design-system/light-box/index";
-import { SnackbarProvider } from "design-system/snackbar";
-import { ToastProvider, useToast } from "design-system/toast";
 
 enableScreens(true);
 // enableFreeze(true)

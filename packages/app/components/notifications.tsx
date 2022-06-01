@@ -3,6 +3,14 @@ import { FlatList } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 
+import {
+  HeartFilled,
+  MarketFilled,
+  MessageFilled,
+  PlusFilled,
+} from "@showtime-xyz/universal.icon";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -21,14 +29,7 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link, TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { ModalSheet, Skeleton } from "design-system";
 import { Avatar } from "design-system/avatar";
-import {
-  HeartFilled,
-  MarketFilled,
-  MessageFilled,
-  PlusFilled,
-} from "design-system/icon";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
 

@@ -3,11 +3,10 @@ import React, { useCallback, useState } from "react";
 import { AnimatePresence, View as MotiView } from "moti";
 import { TapGestureHandler } from "react-native-gesture-handler";
 
+import { HeartFilled } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
-
-import { HeartFilled } from "design-system/icon";
 
 const heartContainerStyle = {
   position: "absolute",

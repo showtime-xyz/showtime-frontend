@@ -2,17 +2,20 @@ import { useEffect } from "react";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Button } from "@showtime-xyz/universal.button";
+import { DataPill } from "@showtime-xyz/universal.data-pill";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Text } from "@showtime-xyz/universal.text";
+import { useToast } from "@showtime-xyz/universal.toast";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
-
-import { View, Text, Button, Skeleton } from "design-system";
-import { useAlert } from "design-system/alert";
-import { DataPill } from "design-system/data-pill";
-import { useColorScheme } from "design-system/hooks";
-import { Ethereum, Tezos } from "design-system/icon";
-import { useToast } from "design-system/toast";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";

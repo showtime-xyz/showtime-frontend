@@ -15,6 +15,11 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { Divider } from "@showtime-xyz/universal.divider";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Share } from "@showtime-xyz/universal.icon";
+import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -32,7 +37,6 @@ import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
-import { useSafeAreaFrame } from "app/lib/safe-area";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -42,13 +46,9 @@ import { Creator } from "design-system/card/rows/elements/creator";
 import { Owner } from "design-system/card/rows/owner";
 import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
-import { Divider } from "design-system/divider";
-import { useIsDarkMode } from "design-system/hooks";
-import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
 import { LikedBy } from "design-system/liked-by";
 import { Media } from "design-system/media";
-import { Skeleton } from "design-system/skeleton";
 
 import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";

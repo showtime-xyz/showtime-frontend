@@ -1,12 +1,12 @@
-import { View } from "@showtime-xyz/universal.view";
-
 import {
   Liked,
   Commented,
   Transfer,
   Purchased,
   Followed,
-} from "design-system/icon";
+} from "@showtime-xyz/universal.icon";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Image } from "design-system/image";
 
 type Props = {

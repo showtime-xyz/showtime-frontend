@@ -7,5 +7,7 @@ type RootContextType = {
   handleValueChange: (value: string) => void;
 };
 
-export const RootContext = React.createContext(null as RootContextType);
-export const ItemContext = React.createContext(null as ItemProps);
+export const RootContext = React.createContext(
+  null as unknown as RootContextType
+);
+export const ItemContext = React.createContext(null as unknown as ItemProps);

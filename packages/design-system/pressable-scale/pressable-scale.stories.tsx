@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
 
-import { Text } from "../text";
+import { Text } from "@showtime-xyz/universal.text";
+
 import { PressableScale } from "./index";
 
 export default {

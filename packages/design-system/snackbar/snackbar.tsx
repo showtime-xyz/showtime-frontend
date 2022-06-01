@@ -9,16 +9,14 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
+import { useIsDarkMode, useIsMobileWeb } from "@showtime-xyz/universal.hooks";
+import { Check } from "@showtime-xyz/universal.icon";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
-
-import { useIsDarkMode } from "../hooks";
-import { Check } from "../icon";
-import { PressableScale } from "../pressable-scale";
-import { Spinner } from "../spinner";
-import { colors } from "../tailwind/colors";
 import { PRESET_TRANSITION_MAP, SnackbarTransitionType } from "./constants";
 
 export type SnackbarStateType = "default" | "waiting" | "done";

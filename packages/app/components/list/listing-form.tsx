@@ -3,6 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Tag } from "@showtime-xyz/universal.icon";
+import { SelectOption } from "@showtime-xyz/universal.select/types";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -16,11 +21,6 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
-
-import { Button, Fieldset } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
-import { Tag } from "design-system/icon";
-import { SelectOption } from "design-system/select/types";
 
 const LISTING_SUPPORTED_CURRENCIES = {
   mumbai: {

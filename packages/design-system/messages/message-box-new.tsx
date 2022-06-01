@@ -7,12 +7,13 @@ import {
 } from "react";
 import { ViewStyle } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Send } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Button, TextInput } from "design-system";
 import { Avatar } from "design-system/avatar";
-import { Send } from "design-system/icon";
 
 import { Spinner } from "../spinner";
 

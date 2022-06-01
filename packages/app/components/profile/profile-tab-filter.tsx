@@ -1,9 +1,8 @@
+import { Select } from "@showtime-xyz/universal.select";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Collection } from "app/hooks/api-hooks";
 import { getSortFields } from "app/utilities";
-
-import { Select } from "design-system";
 
 type FilterProps = {
   onCollectionChange: (id: number) => void;

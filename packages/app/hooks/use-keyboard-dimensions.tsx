@@ -10,7 +10,7 @@ import {
   ScaledSize,
 } from "react-native";
 
-import { useSafeAreaFrame } from "app/lib/safe-area";
+import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
 /**
  * Utility hook used to calculate keyboard dimensions.
