@@ -4,6 +4,8 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 // import { useEffect } from "react"
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
@@ -25,7 +27,6 @@ import { Image as ImageIcon } from "design-system/icon";
 import FlipIcon from "design-system/icon/Flip";
 import { Pressable } from "design-system/pressable";
 import { Preview } from "design-system/preview";
-import { tw } from "design-system/tailwind";
 
 // import { createParam } from "../navigation/use-param";
 
