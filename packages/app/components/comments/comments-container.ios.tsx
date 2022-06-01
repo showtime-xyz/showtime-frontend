@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform, ViewProps } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 /**
  * extracted these number from react-navigation
