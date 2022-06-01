@@ -4,7 +4,7 @@ import {
   Globe,
   Tag,
   PolygonScan,
-} from "design-system/icon";
+} from "@showtime-xyz/universal.icon";
 
 import { BLOCKCHAIN_TYPES, EVENT_TYPES } from "./nft-activity.constants";
 

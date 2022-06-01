@@ -1,16 +1,15 @@
 import { MutableRefObject, ComponentType } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useId } from "@showtime-xyz/universal.input";
+import { Label } from "@showtime-xyz/universal.label";
+import { Select } from "@showtime-xyz/universal.select";
+import type { SelectProps } from "@showtime-xyz/universal.select";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
-
-import { useIsDarkMode } from "design-system/hooks";
-import { useId } from "design-system/input";
-import { Label } from "design-system/label";
-import { Select } from "design-system/select";
-import { SelectProps } from "design-system/select/types";
-import { TextInput, TextInputProps } from "design-system/text-input";
 
 type FieldsetProps = {
   errorText?: string;

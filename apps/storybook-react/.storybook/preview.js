@@ -5,12 +5,12 @@ import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { linking } from "app/navigation/linking";
 
 import { theme } from "design-system/theme";
-import { ToastProvider } from "design-system/toast";
 
 import "../styles/globals.css";
 

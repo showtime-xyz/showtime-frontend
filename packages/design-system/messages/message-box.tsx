@@ -7,17 +7,16 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Send } from "@showtime-xyz/universal.icon";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
-import { useSafeAreaInsets } from "app/lib/safe-area";
-
-import { Button } from "design-system/button";
-import { useIsDarkMode } from "design-system/hooks";
-import { Send } from "design-system/icon";
-import { TextInput } from "design-system/text-input";
 
 export const SCROLL_HEIGHT = 48;
 export const PADDING_HEIGHT = 32;

@@ -1,3 +1,6 @@
+import { Button } from "@showtime-xyz/universal.button";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -8,9 +11,6 @@ import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
-
-import { Button, Spinner } from "design-system";
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;

@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";

@@ -1,4 +1,9 @@
-import { Discord, Instagram, Twitter, Mail } from "design-system/icon";
+import {
+  Discord,
+  Instagram,
+  Twitter,
+  Mail,
+} from "@showtime-xyz/universal.icon";
 
 const links = [
   {

@@ -1,13 +1,13 @@
 import { Meta } from "@storybook/react";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ArrowRight } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Button } from "../button";
-import { useIsDarkMode } from "../hooks";
-import { ArrowRight } from "../icon";
-import { useToast } from "../toast";
 import { SnackbarProvider, useSnackbar } from "./index";
 
 export default {

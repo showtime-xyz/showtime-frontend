@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 type SpinnerProps = {
   size?: "large" | "medium" | "small";

@@ -1,10 +1,10 @@
 import { useCallback, memo } from "react";
 
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Button } from "@showtime-xyz/universal.button";
+import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 
-import { Button } from "design-system";
-import { useAlert } from "design-system/alert";
-import type { ButtonProps } from "design-system/button/types";
+import { useMyInfo } from "app/hooks/api-hooks";
 
 type ToggleFollowParams = Pick<ButtonProps, "size"> & {
   isFollowing: boolean | 0 | undefined;

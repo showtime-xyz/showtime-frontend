@@ -8,13 +8,13 @@ import {
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { ModalFooter } from "@showtime-xyz/universal.modal";
+
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
-
-import { useAlert } from "design-system/alert";
-import { ModalFooter } from "design-system/modal";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";

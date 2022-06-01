@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Message } from "@showtime-xyz/universal.icon";
+
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
-
-import { Button } from "design-system/button";
-import { Message } from "design-system/icon";
 
 interface CommentButtonProps {
   nft?: NFT;

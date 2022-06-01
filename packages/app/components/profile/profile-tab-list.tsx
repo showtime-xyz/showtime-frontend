@@ -1,6 +1,7 @@
 import { useCallback, useContext, useMemo } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -13,7 +14,6 @@ import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 
-import { Spinner } from "design-system";
 import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";

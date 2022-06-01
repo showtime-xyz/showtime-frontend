@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import {
   LayoutChangeEvent,
   Platform,
@@ -7,7 +7,7 @@ import {
 
 import { useSharedValue } from "react-native-reanimated";
 
-import { useColorScheme as useUserColorScheme } from "app/lib/color-scheme";
+import { useColorScheme as useUserColorScheme } from "./color-scheme";
 
 export const useColorScheme = () => {
   const userColorScheme = useUserColorScheme();
@@ -27,9 +27,9 @@ export const useIsDarkMode = () => {
 export const useOnFocus = () => {
   const focused = useSharedValue(0);
   // use state on web for now till useAnimatedStyle bug is resolved
-  const [state, setFocused] = React.useState(0);
+  const [state, setFocused] = useState(0);
 
-  const focusHandler = React.useMemo(() => {
+  const focusHandler = useMemo(() => {
     return {
       onFocus: () => {
         focused.value = 1;
@@ -54,9 +54,9 @@ export const useOnFocus = () => {
 export const useOnHover = () => {
   const hovered = useSharedValue(0);
   // use state on web for now till useAnimatedStyle bug is resolved
-  const [state, setHovered] = React.useState(0);
+  const [state, setHovered] = useState(0);
 
-  const hoverHandler = React.useMemo(() => {
+  const hoverHandler = useMemo(() => {
     return {
       onHoverIn: () => {
         hovered.value = 1;
@@ -81,9 +81,9 @@ export const useOnHover = () => {
 export const useOnPress = () => {
   const pressed = useSharedValue(0);
   // use state on web for now till useAnimatedStyle bug is resolved
-  const [state, setPressed] = React.useState(0);
+  const [state, setPressed] = useState(0);
 
-  const pressHandler = React.useMemo(() => {
+  const pressHandler = useMemo(() => {
     return {
       onPressIn: () => {
         pressed.value = 1;
@@ -150,4 +150,22 @@ export function useBlurredBackgroundColor(intensity: number): string {
   const isDark = useIsDarkMode();
 
   return getBackgroundColor(intensity, isDark ? "dark" : "light");
+}
+
+export function useIsMobileWeb() {
+  const [userAgent, setUserAgent] = useState("");
+  const [isMobileWeb, setIsMobileWeb] = useState(true);
+
+  useEffect(() => {
+    const userAgent = window?.navigator?.userAgent;
+    setUserAgent(userAgent);
+    setIsMobileWeb(
+      /android/i.test(userAgent) || /iPad|iPhone|iPod|ios/.test(userAgent)
+    );
+  }, []);
+
+  return {
+    userAgent,
+    isMobileWeb,
+  };
 }

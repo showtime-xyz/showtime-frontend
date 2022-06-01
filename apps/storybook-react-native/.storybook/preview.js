@@ -5,10 +5,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useDeviceContext } from "twrnc";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { theme } from "design-system/theme";
-import { ToastProvider } from "design-system/toast";
 
 const FontsLoader = ({ children }) => {
   const [fontsLoaded, error] = useFonts({

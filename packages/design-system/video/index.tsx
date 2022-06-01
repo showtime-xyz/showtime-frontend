@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Video as ExpoVideo } from "expo-av";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";

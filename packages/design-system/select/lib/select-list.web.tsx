@@ -2,8 +2,8 @@ import { forwardRef } from "react";
 
 import { MotiView, AnimatePresence } from "moti";
 
-import { useIsDarkMode } from "../../hooks";
-import { tw } from "../../tailwind";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { tw } from "@showtime-xyz/universal.tailwind";
 
 const DROPDOWN_LIGHT_SHADOW =
   "0px 12px 16px rgba(0, 0, 0, 0.1), 0px 16px 48px rgba(0, 0, 0, 0.1)";

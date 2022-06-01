@@ -1,12 +1,11 @@
 import { useMemo, useCallback } from "react";
 
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { magic } from "app/lib/magic";
-
-import { ModalSheet } from "design-system";
 
 import { EmailInput } from "./email-input";
 

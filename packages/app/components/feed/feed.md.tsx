@@ -1,6 +1,9 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -21,15 +24,10 @@ import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
-import {
-  CreatorPreview,
-  SegmentedControl,
-  Skeleton,
-  Tabs,
-} from "design-system";
 import { Card } from "design-system/card";
+import { CreatorPreview } from "design-system/creator-preview";
 import { Hidden } from "design-system/hidden";
-import { useIsDarkMode } from "design-system/hooks";
+import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const CARD_HEIGHT = 890;

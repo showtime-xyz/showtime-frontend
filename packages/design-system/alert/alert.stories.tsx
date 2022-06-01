@@ -1,9 +1,9 @@
 import { Meta } from "@storybook/react";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { ToastProvider, useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Button } from "../button";
-import { ToastProvider, useToast } from "../toast";
 import { AlertProvider, useAlert } from "./index";
 
 export default {

@@ -3,10 +3,10 @@ import { Pressable, GestureResponderEvent } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import { useIsDarkMode, useOnHover } from "../../hooks";
-import { tw } from "../../tailwind";
-import { colors } from "../../tailwind/colors";
-import { Text } from "../../text";
+import { useIsDarkMode, useOnHover } from "@showtime-xyz/universal.hooks";
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+
 import { SelectProps } from "../types";
 
 interface SelectItemProps<T> extends Pick<SelectProps<T>, "size"> {

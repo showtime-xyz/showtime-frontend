@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -26,7 +27,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { MoreHorizontal } from "design-system/icon";
 
 type Props = {
   nftId?: NFT["nft_id"];

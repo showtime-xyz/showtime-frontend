@@ -1,13 +1,13 @@
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
-import { Button } from "design-system";
 import { breakpoints } from "design-system/theme";
 
 type EmptyPlaceholderProps = {
