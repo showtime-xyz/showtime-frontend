@@ -8,6 +8,7 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
 
+import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
 import { useSignTypedData } from "./use-sign-typed-data";
 import { useSignerAndProvider } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
@@ -168,8 +169,7 @@ export const useDropNFT = () => {
 
       if (response.is_complete) {
         dispatch({ type: "success", edition: response.edition });
-
-        mutate(new RegExp("v2/profile-tabs/nfts/*"));
+        mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;
       }
 
