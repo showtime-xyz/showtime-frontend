@@ -3,9 +3,9 @@ import { Pressable } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
-import { tw } from "../../tailwind";
-import { colors } from "../../tailwind/colors";
 import { Text } from "../../text";
 import { SelectProps } from "../types";
 import { ChevronDownIcon } from "./chevron-down-icon";
