@@ -68,7 +68,8 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
         <Text tw="text-center text-2xl text-gray-900 dark:text-white">
           {values[page].title}
         </Text>
-        <Text tw="mt-4 text-center text-lg text-gray-600 dark:text-gray-400">
+        <View tw="h-4" />
+        <Text tw="text-center text-lg text-gray-600 dark:text-gray-400">
           {values[page].description}
         </Text>
       </MotiView>
