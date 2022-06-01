@@ -18,7 +18,7 @@ const editionCreatorABI = [
 ];
 
 const metaSingleEditionMintableCreator =
-  "0x50C001A33Caa446c8b84C489F371F77754F41024";
+  process.env.NEXT_PUBLIC_META_SINGLE_EDITION_MINTABLE_CREATOR;
 
 type IEdition = {
   contract_address: string;
