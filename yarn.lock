@@ -6670,6 +6670,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.extensions.react-native-web@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "@showtime-xyz/universal.extensions.react-native-web@npm:0.0.6"
+  dependencies:
+    "@teambit/harmony": 0.3.3
+  checksum: cef921e167eb3d08b697d84420821105a1a01fec2bf9f8cc668a1391fb422f135ff69d485797512424d980b76c974327934424fb2fe3d0557c81c92ec40aecd5
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.fieldset@npm:^0.0.7":
   version: 0.0.7
   resolution: "@showtime-xyz/universal.fieldset@npm:0.0.7"
@@ -7166,6 +7175,7 @@ __metadata:
     "@showtime-xyz/universal.country-code-picker": ^0.0.7
     "@showtime-xyz/universal.data-pill": ^0.0.6
     "@showtime-xyz/universal.divider": ^0.0.6
+    "@showtime-xyz/universal.extensions.react-native-web": ^0.0.6
     "@showtime-xyz/universal.fieldset": ^0.0.7
     "@showtime-xyz/universal.hooks": ^0.0.7
     "@showtime-xyz/universal.icon": ^0.0.7
@@ -9001,6 +9011,19 @@ __metadata:
     bs58check: ^2.1.2
     buffer: ^6.0.3
   checksum: 5c8e31e40551ac1e6755718a193d94652b18b15ebe8f4c64c05cfc0bb68065e49647632fd174d8bf3a83e74bd32aeda3188a8fe204c24be3b396e2be8f24ced0
+  languageName: node
+  linkType: hard
+
+"@teambit/harmony@npm:0.3.3":
+  version: 0.3.3
+  resolution: "@teambit/harmony@npm:0.3.3"
+  dependencies:
+    cleargraph: ^5.6.0
+    comment-json: ^3.0.3
+    fs-extra: ^8.1.0
+    reflect-metadata: ^0.1.13
+    user-home: ^2.0.0
+  checksum: a6aaf9a4b98e63b2e34ef7564b3de4f458ffc6de79c340f6031940826da72bf30867b8967ed007fec52f722db52b63f34945e048f59314acac1efdc685a24140
   languageName: node
   linkType: hard
 
@@ -13425,6 +13448,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cleargraph@npm:^5.6.0":
+  version: 5.8.0
+  resolution: "cleargraph@npm:5.8.0"
+  dependencies:
+    graphlib: ^2.1.8
+    lodash: ^4.17.15
+  checksum: cbf6cd32ae57829261841ed4b307c83a6c9251fd43adc7a0e7ca26e8bd1967d8c17bc375588a32400ef7d217979962f9176e33166d0a76fd2486d0243c316185
+  languageName: node
+  linkType: hard
+
 "cli-boxes@npm:^2.2.0":
   version: 2.2.1
   resolution: "cli-boxes@npm:2.2.1"
@@ -13752,6 +13785,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"comment-json@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "comment-json@npm:3.0.3"
+  dependencies:
+    core-util-is: ^1.0.2
+    esprima: ^4.0.1
+    has-own-prop: ^2.0.0
+    repeat-string: ^1.6.1
+  checksum: c8e92e820b73e7bd83890e38680617b21028eca9a7e83a2af72750eae8c7e2570dd40e5848148b1e1d34d58ce62a0cb4e2b5836df0f8daa1d6bceca8666936cd
+  languageName: node
+  linkType: hard
+
 "commondir@npm:^1.0.1":
   version: 1.0.1
   resolution: "commondir@npm:1.0.1"
@@ -14021,7 +14066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-util-is@npm:~1.0.0":
+"core-util-is@npm:^1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.3
   resolution: "core-util-is@npm:1.0.3"
   checksum: 9de8597363a8e9b9952491ebe18167e3b36e7707569eed0ebf14f8bba773611376466ae34575bca8cfe3c767890c859c74056084738f09d4e4a6f902b2ad7d99
@@ -19414,6 +19459,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphlib@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "graphlib@npm:2.1.8"
+  dependencies:
+    lodash: ^4.17.15
+  checksum: 1e0db4dea1c8187d59103d5582ecf32008845ebe2103959a51d22cb6dae495e81fb9263e22c922bca3aaecb56064a45cd53424e15a4626cfb5a0c52d0aff61a8
+  languageName: node
+  linkType: hard
+
 "graphql-tag@npm:^2.10.1":
   version: 2.12.6
   resolution: "graphql-tag@npm:2.12.6"
@@ -19502,6 +19556,13 @@ __metadata:
   dependencies:
     is-glob: ^3.0.0
   checksum: cafad93e599f49f676a9ab444ec90210fcda35ac14ad6c9bb96c08057ad18a1318f1116b053aa6bdc744f19252537006872d3fc76785e842bbe8cc4312447fc8
+  languageName: node
+  linkType: hard
+
+"has-own-prop@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "has-own-prop@npm:2.0.0"
+  checksum: ca6336e85ead2295c9603880cbc199e2d3ff7eaea0e9035d68fbc79892e9cf681abc62c0909520f112c671dad9961be2173b21dff951358cc98425c560e789e0
   languageName: node
   linkType: hard
 
@@ -28841,6 +28902,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"reflect-metadata@npm:^0.1.13":
+  version: 0.1.13
+  resolution: "reflect-metadata@npm:0.1.13"
+  checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
+  languageName: node
+  linkType: hard
+
 "refractor@npm:^3.1.0":
   version: 3.6.0
   resolution: "refractor@npm:3.6.0"
@@ -32974,6 +33042,15 @@ __metadata:
   version: 3.1.1
   resolution: "use@npm:3.1.1"
   checksum: 08a130289f5238fcbf8f59a18951286a6e660d17acccc9d58d9b69dfa0ee19aa038e8f95721b00b432c36d1629a9e32a464bf2e7e0ae6a244c42ddb30bdd8b33
+  languageName: node
+  linkType: hard
+
+"user-home@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "user-home@npm:2.0.0"
+  dependencies:
+    os-homedir: ^1.0.0
+  checksum: a3329faa959fcd9e3e01a03347ca974f7f6b8896e6a634f29c61d8d5b61557d853c6fc5a6dff1a28e2da85b400d0e4490368a28de452ba8c41a2bf3a92cb110a
   languageName: node
   linkType: hard
 

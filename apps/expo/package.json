@@ -76,6 +76,7 @@
     "@showtime-xyz/universal.country-code-picker": "^0.0.7",
     "@showtime-xyz/universal.data-pill": "^0.0.6",
     "@showtime-xyz/universal.divider": "^0.0.6",
+    "@showtime-xyz/universal.extensions.react-native-web": "^0.0.6",
     "@showtime-xyz/universal.fieldset": "^0.0.7",
     "@showtime-xyz/universal.hooks": "^0.0.7",
     "@showtime-xyz/universal.icon": "^0.0.7",

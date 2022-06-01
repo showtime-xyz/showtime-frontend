@@ -67,7 +67,7 @@
         "scope": "showtime.universal",
         "version": "0.0.6",
         "mainFile": "index.ts",
-        "rootDir": "packages/universal/extensions/react-native-web"
+        "rootDir": "packages/design-system/extensions/react-native-web"
     },
     "fieldset": {
         "scope": "showtime.universal",
