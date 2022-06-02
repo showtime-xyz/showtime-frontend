@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
+import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
@@ -318,11 +319,13 @@ export const getMediaUrl = ({
     return "";
   }
 
-  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+  const cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
   }/${nft.contract_address}/${nft.token_id}?cache_key=1${
     stillPreview ? "&still_preview=true" : ""
   }`;
+
+  return cdnUrl;
 };
 
 export const CARD_DARK_SHADOW =
@@ -474,6 +477,25 @@ export const getDropdownShadow = (isDark = false) => {
   return Platform.OS === "web" ? shadow : undefined;
 };
 
+export const MATIC_CHAIN_ID =
+  process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137;
+
+export const MATIC_CHAIN_DETAILS = {
+  chainId: `0x${MATIC_CHAIN_ID.toString(16)}`,
+  chainName:
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? "Mumbai Testnet" : "Polygon",
+  nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+  rpcUrls:
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+      ? ["https://matic-mumbai.chainstacklabs.com"]
+      : ["https://rpc-mainnet.maticvigil.com/"],
+  blockExplorerUrls: [
+    process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+      ? "https://mumbai.polygonscan.com/"
+      : "https://polygonscan.com/",
+  ],
+};
+
 export const getFileFormData = async (
   file: string | File
 ): Promise<Blob | undefined> => {
@@ -566,6 +588,7 @@ const getFileMeta = async (file?: File | string) => {
 };
 function dataURLtoFile(dataurl: string, filename: string) {
   let arr = dataurl.split(","),
+    //@ts-ignore
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
@@ -576,4 +599,16 @@ function dataURLtoFile(dataurl: string, filename: string) {
   }
 
   return new File([u8arr], filename, { type: mime });
+}
+
+export const getPinataToken = () => {
+  return showtimeAPIAxios({
+    url: "/v1/pinata/key",
+    method: "POST",
+    data: {},
+  }).then((res) => res.token);
+};
+
+export async function delay(ms: number) {
+  return await new Promise((resolve) => setTimeout(resolve, ms));
 }

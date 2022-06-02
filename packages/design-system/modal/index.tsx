@@ -15,6 +15,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
       title,
       isScreen = false,
       web_height = WEB_HEIGHT,
+      disableBackdropPress,
       mobile_snapPoints = MOBILE_SNAP_POINTS,
       modalContainer: ModalContainer = BaseModalContainer,
       children,
@@ -56,6 +57,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
         mobile_snapPoints={mobile_snapPoints}
         close={handleClose}
         onClose={handleOnClose}
+        disableBackdropPress={disableBackdropPress}
         {...rest}
       >
         {children}

@@ -21,6 +21,7 @@ const withTM = require("next-transpile-modules")([
   "expo-next-react-navigation",
   "@zeego/menu",
   "@zeego/dropdown-menu",
+  "sentry-expo",
   "solito",
   "three",
   "@showtime-xyz/universal.typography",

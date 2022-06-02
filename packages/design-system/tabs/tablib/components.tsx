@@ -67,6 +67,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
           tw.style("text-sm"),
           { fontFamily: fontFamily("Inter-Bold") },
           getTextStyle,
+          { textTransform: "capitalize" },
         ]}
       >
         {name}

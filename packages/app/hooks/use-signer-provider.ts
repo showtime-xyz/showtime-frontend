@@ -12,6 +12,17 @@ export const useSignerAndProvider = () => {
   let { web3 } = useWeb3();
   const Alert = useAlert();
   const getSignerAndProvider = async () => {
+    let userAddress = await getUserAddress();
+    const biconomy = await (await getBiconomy(connector, web3)).biconomy;
+    return {
+      signer: biconomy.getSignerByAddress(userAddress),
+      provider: biconomy.getEthersProvider(),
+      signerAddress: userAddress,
+      web3,
+    };
+  };
+
+  const getUserAddress = async () => {
     let userAddress;
     if (web3) {
       const addr = await web3.getSigner().getAddress();
@@ -38,13 +49,8 @@ export const useSignerAndProvider = () => {
       Alert.alert("Sorry! seems like you are not connected to the wallet");
       return;
     }
-    const biconomy = await (await getBiconomy(connector, web3)).biconomy;
-    return {
-      signer: biconomy.getSignerByAddress(userAddress),
-      provider: biconomy.getEthersProvider(),
-      signerAddress: userAddress,
-      web3,
-    };
+    return userAddress;
   };
-  return { getSignerAndProvider };
+
+  return { getSignerAndProvider, getUserAddress };
 };

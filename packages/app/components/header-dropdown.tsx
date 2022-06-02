@@ -96,6 +96,35 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
 
         <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
+        <DropdownMenuItem
+          onSelect={() => {
+            router.push(
+              Platform.select({
+                native: "/profile/edit",
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    editProfileModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: "/profile/edit",
+                web: router.asPath,
+              })
+            );
+          }}
+          key="edit-profile"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Edit profile
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
+
         <DropdownMenuRoot>
           <DropdownMenuTriggerItem
             key="nested-group-trigger"

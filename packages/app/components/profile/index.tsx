@@ -36,6 +36,8 @@ const ProfileScreen = ({ username }: { username: string | null }) => {
   return <Profile address={username} />;
 };
 
+type Filter = typeof defaultFilters;
+
 const Profile = ({ address }: { address: string | null }) => {
   const { data: profileData } = useUserProfile({ address });
   const { data, loading: tabsLoading } = useProfileNftTabs({
@@ -52,28 +54,17 @@ const Profile = ({ address }: { address: string | null }) => {
   const colorScheme = useColorScheme();
   const headerHeight = useHeaderHeight();
   const [filter, dispatch] = useReducer(
-    (state: any, action: any) => {
+    (state: Filter, action: any): Filter => {
       switch (action.type) {
         case "collection_change":
           return { ...state, collectionId: action.payload };
         case "sort_change":
-          return { ...state, sortId: action.payload };
+          return { ...state, sortType: action.payload };
+        default:
+          return state;
       }
     },
     { ...defaultFilters }
-  );
-  const onCollectionChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "collection_change", payload: value });
-    },
-    [dispatch]
-  );
-
-  const onSortChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "sort_change", payload: value });
-    },
-    [dispatch]
   );
 
   const handleTabOnPress = useCallback(() => {
@@ -97,13 +88,7 @@ const Profile = ({ address }: { address: string | null }) => {
                 {Platform.OS === "web" && (
                   <View tw="-bottom-26 absolute w-full justify-between md:right-10 md:-bottom-10 md:w-auto">
                     <ProfileListFilter
-                      onCollectionChange={onCollectionChange}
-                      onSortChange={onSortChange}
-                      collectionId={filter.collectionId}
-                      collections={
-                        data?.data?.lists[selected]?.collections || []
-                      }
-                      sortId={filter.sortId}
+                      collections={data?.tabs[selected]?.collections || []}
                     />
                   </View>
                 )}
@@ -111,16 +96,16 @@ const Profile = ({ address }: { address: string | null }) => {
             </View>
           </Tabs.Header>
 
-          {data?.data.lists ? (
+          {data?.tabs ? (
             <>
               <Tabs.List
                 onPressCallback={handleTabOnPress}
                 style={tw.style(
-                  `h-[${TAB_LIST_HEIGHT}px] w-full self-center bg-white dark:bg-black`
+                  `h-[${TAB_LIST_HEIGHT}px] bg-white dark:bg-black`
                 )}
               >
-                {data?.data.lists.map((list, index) => (
-                  <Tabs.Trigger key={list.id}>
+                {data?.tabs.map((list, index) => (
+                  <Tabs.Trigger key={list.type}>
                     <TabItem name={list.name} selected={selected === index} />
                   </Tabs.Trigger>
                 ))}
@@ -128,16 +113,15 @@ const Profile = ({ address }: { address: string | null }) => {
               </Tabs.List>
 
               <Tabs.Pager>
-                {data?.data.lists.map((list) => {
+                {data?.tabs.map((list) => {
                   return (
-                    <ErrorBoundary key={list.id}>
+                    <ErrorBoundary key={list.type}>
                       <Suspense
                         fallback={
                           <View tw="items-center justify-center pt-20">
                             <Spinner size="small" />
                           </View>
                         }
-                        key={list.id}
                       >
                         <ProfileTabList
                           username={profileData?.data.profile.username}
