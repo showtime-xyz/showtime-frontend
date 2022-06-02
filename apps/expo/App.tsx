@@ -27,6 +27,7 @@ import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -49,8 +50,6 @@ import { MintProvider } from "app/providers/mint-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { Web3Provider } from "app/providers/web3-provider";
-
-import { LightBoxProvider } from "design-system/light-box/index";
 
 enableScreens(true);
 // enableFreeze(true)

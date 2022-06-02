@@ -1,15 +1,14 @@
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 import { formatAddressShort } from "app/utilities";
-
-import { Avatar } from "design-system/avatar";
-import { VerificationBadge } from "design-system/verification-badge";
 
 type Props = {
   nft?: NFT;

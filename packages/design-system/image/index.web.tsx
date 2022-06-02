@@ -1,6 +1,7 @@
 import { ComponentProps } from "react";
 import { ImageURISource, ImageResizeMode } from "react-native";
 
+// @ts-ignore
 import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image from "next/image";
@@ -84,6 +85,7 @@ function Img({
             (width != null ? "contain" : "cover")
         )}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
+        // @ts-ignore
         blurDataURL={
           width > 40 && props.blurhash
             ? getBase64Blurhash(props.blurhash)
@@ -97,8 +99,8 @@ function Img({
   }
 
   if (source) {
-    // @ts-ignore
     return (
+      // @ts-ignore
       <Image
         src={source as string}
         loading={loading}
@@ -122,7 +124,12 @@ function StyledImage({ tw, ...props }: ImageProps) {
 
   return (
     <View style={{ borderRadius, overflow: "hidden" }}>
-      <Img className={tw} width={width} height={height} {...props} />
+      <Img
+        {...props}
+        className={Array.isArray(tw) ? tw.join(" ") : tw ?? ""}
+        width={width}
+        height={height}
+      />
     </View>
   );
 }

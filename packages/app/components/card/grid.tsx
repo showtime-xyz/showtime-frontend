@@ -1,9 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { FlatList, Dimensions } from "react-native";
 
+import { Media } from "app/components/media";
 import type { NFT } from "app/types";
-
-import { Media } from "design-system/media";
 
 const GAP_BETWEEN_ITEMS = 2;
 const ITEM_SIZE = Dimensions.get("window").width / 2;

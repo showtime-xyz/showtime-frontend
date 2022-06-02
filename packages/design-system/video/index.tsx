@@ -3,13 +3,12 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 
+import { Image } from "@showtime-xyz/universal.image";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
-
-import { Image } from "design-system/image";
 
 type VideoProps = {
   tw?: TW;

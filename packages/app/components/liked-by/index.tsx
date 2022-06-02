@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -7,8 +8,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { useLikes } from "app/hooks/api/use-likes";
 import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
-
-import { useIsDarkMode } from "../hooks";
 
 interface Props {
   nft?: any;

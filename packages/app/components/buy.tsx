@@ -9,14 +9,13 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Collection } from "app/components/card/rows/collection";
+import { Creator } from "app/components/card/rows/elements/creator";
+import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useBuyNFT } from "app/hooks/use-buy-nft";
 import { yup } from "app/lib/yup";
 import { NFT } from "app/types";
-
-import { Collection } from "design-system/card/rows/collection";
-import { Creator } from "design-system/card/rows/elements/creator";
-import { Media } from "design-system/media";
 
 const defaultValues = {
   quantity: 1,

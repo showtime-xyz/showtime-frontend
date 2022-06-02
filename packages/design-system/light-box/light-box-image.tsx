@@ -16,8 +16,9 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import { Image } from "@showtime-xyz/universal.image";
+
 import { AnimationParams, useLightBox } from ".";
-import { Image } from "../image";
 
 // const AnimatedImage = Animated.createAnimatedComponent(FastImage as any);
 export type ImageBoundingClientRect = {

@@ -18,6 +18,7 @@ import Reanimated, {
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -25,9 +26,17 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BuyButton } from "app/components/buy-button";
+import { Collection } from "app/components/card/rows/collection";
+import { Description } from "app/components/card/rows/description";
+import { Creator } from "app/components/card/rows/elements/creator";
+import { Owner } from "app/components/card/rows/owner";
+import { Title } from "app/components/card/rows/title";
+import { Social } from "app/components/card/social";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
+import { LikedBy } from "app/components/liked-by";
+import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
@@ -39,16 +48,6 @@ import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
-
-import { Collection } from "design-system/card/rows/collection";
-import { Description } from "design-system/card/rows/description";
-import { Creator } from "design-system/card/rows/elements/creator";
-import { Owner } from "design-system/card/rows/owner";
-import { Title } from "design-system/card/rows/title";
-import { Social } from "design-system/card/social";
-import { Image } from "design-system/image";
-import { LikedBy } from "design-system/liked-by";
-import { Media } from "design-system/media";
 
 import { useIsMobileWeb } from "../hooks/use-is-mobile-web";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";

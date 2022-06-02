@@ -5,9 +5,8 @@ import {
   Purchased,
   Followed,
 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Image } from "design-system/image";
 
 type Props = {
   url: string;

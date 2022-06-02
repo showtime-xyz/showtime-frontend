@@ -1,12 +1,11 @@
 // import { Link } from "app/navigation/link";
 import { Platform } from "react-native";
 
+import { Image } from "@showtime-xyz/universal.image";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import type { NFT } from "app/types";
-
-import { Image } from "design-system/image";
 
 type Props = {
   nft?: NFT;

@@ -5,6 +5,8 @@ import { FastImageProps, ImageStyle } from "react-native-fast-image";
 import { ImageBoundingClientRect, TargetImageInfo } from "./light-box-image";
 import { ActiveImageType, LightImageModal } from "./light-box-modal";
 
+export { LightBoxImg } from "./light-box-image";
+
 export type AnimationParams = {
   layout: TargetImageInfo;
   position: ImageBoundingClientRect;

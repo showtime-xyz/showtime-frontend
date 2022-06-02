@@ -7,6 +7,8 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
@@ -17,8 +19,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
-import { Card } from "design-system/card";
-import { CreatorPreview } from "design-system/creator-preview";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 const LIST_HEADER_HEIGHT = 64;

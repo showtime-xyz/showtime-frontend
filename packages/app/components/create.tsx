@@ -18,6 +18,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Preview } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
@@ -29,7 +30,6 @@ import { useRouter } from "app/navigation/use-router";
 
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
-import { Preview } from "design-system/preview";
 
 const defaultValues = {
   editionCount: 1,

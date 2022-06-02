@@ -1,15 +1,14 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
+import { MessageMore } from "app/components/messages/message-more";
+import { MessageRow } from "app/components/messages/message-row";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import { getRoundedCount } from "app/utilities";
-
-import { MessageMore } from "design-system/messages/message-more";
-import { MessageRow } from "design-system/messages/message-row";
 
 interface CommentRowProps {
   comment: CommentType;

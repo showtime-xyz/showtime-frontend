@@ -30,6 +30,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.accordion",
   "@showtime-xyz/universal.activity-indicator",
   "@showtime-xyz/universal.alert",
+  "@showtime-xyz/universal.avatar",
   "@showtime-xyz/universal.bottom-sheet",
   "@showtime-xyz/universal.button",
   "@showtime-xyz/universal.checkbox",
@@ -39,8 +40,10 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.fieldset",
   "@showtime-xyz/universal.hooks",
   "@showtime-xyz/universal.icon",
+  "@showtime-xyz/universal.image",
   "@showtime-xyz/universal.input",
   "@showtime-xyz/universal.label",
+  "@showtime-xyz/universal.light-box",
   "@showtime-xyz/universal.modal",
   "@showtime-xyz/universal.modal-screen",
   "@showtime-xyz/universal.modal-sheet",
@@ -58,6 +61,8 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.switch",
   "@showtime-xyz/universal.text-input",
   "@showtime-xyz/universal.toast",
+  "@showtime-xyz/universal.tooltip",
+  "@showtime-xyz/universal.verification-badge",
   "sentry-expo",
 ]);
 

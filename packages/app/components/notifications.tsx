@@ -3,6 +3,7 @@ import { FlatList } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   HeartFilled,
   MarketFilled,
@@ -28,8 +29,6 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link, TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
-
-import { Avatar } from "design-system/avatar";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
 

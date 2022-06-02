@@ -6,6 +6,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ethers } from "ethers";
 import { Controller, useForm } from "react-hook-form";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ArrowRight, PolygonScan } from "@showtime-xyz/universal.icon";
@@ -13,8 +14,12 @@ import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Collection } from "app/components/card/rows/collection";
+import { Owner } from "app/components/card/rows/owner";
+import { Media } from "app/components/media";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import useDebounce from "app/hooks/use-debounce";
@@ -23,12 +28,6 @@ import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
-
-import { Avatar } from "design-system/avatar";
-import { Collection } from "design-system/card/rows/collection";
-import { Owner } from "design-system/card/rows/owner";
-import { Media } from "design-system/media";
-import { VerificationBadge } from "design-system/verification-badge";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

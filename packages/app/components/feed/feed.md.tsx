@@ -7,6 +7,8 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { CreatorPreview } from "app/components/creator-preview";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
@@ -24,8 +26,6 @@ import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
-import { Card } from "design-system/card";
-import { CreatorPreview } from "design-system/creator-preview";
 import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";

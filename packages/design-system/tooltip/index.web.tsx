@@ -31,6 +31,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       setShow(true);
     }
     timeout.current && clearTimeout(timeout.current);
+    // @ts-ignore
     timeout.current = setTimeout(() => {
       setShow(true);
     }, delay);

@@ -8,6 +8,12 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Collection } from "app/components/card/rows/collection";
+import { Creator } from "app/components/card/rows/elements/creator";
+import { Owner } from "app/components/card/rows/owner";
+import { Title } from "app/components/card/rows/title";
+import { Social } from "app/components/card/social";
+import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
@@ -15,12 +21,6 @@ import useContentWidth from "app/hooks/use-content-width";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 
-import { Collection } from "design-system/card/rows/collection";
-import { Creator } from "design-system/card/rows/elements/creator";
-import { Owner } from "design-system/card/rows/owner";
-import { Title } from "design-system/card/rows/title";
-import { Social } from "design-system/card/social";
-import { Media } from "design-system/media";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 type Props = {

@@ -27,6 +27,12 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
+    "avatar": {
+        "scope": "",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/avatar"
+    },
     "bottom-sheet": {
         "scope": "showtime.universal",
         "version": "0.0.7",
@@ -87,6 +93,12 @@
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
+    "image": {
+        "scope": "",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/image"
+    },
     "input": {
         "scope": "showtime.universal",
         "version": "0.0.8",
@@ -98,6 +110,12 @@
         "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/label"
+    },
+    "light-box": {
+        "scope": "",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
@@ -213,11 +231,23 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
     },
+    "tooltip": {
+        "scope": "",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/tooltip"
+    },
     "typography": {
         "scope": "showtime.universal",
         "version": "0.0.4",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/typography"
+    },
+    "verification-badge": {
+        "scope": "",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/verification-badge"
     },
     "view": {
         "scope": "showtime.universal",

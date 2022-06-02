@@ -3,11 +3,10 @@ import { Platform } from "react-native";
 
 import { View } from "@showtime-xyz/universal.view";
 
+import { Button } from "app/components/card/social/button";
 import { useLike } from "app/context/like-context";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
-
-import { Button } from "design-system/card/social/button";
 
 function Social({ nft }: { nft?: NFT }) {
   const router = useRouter();

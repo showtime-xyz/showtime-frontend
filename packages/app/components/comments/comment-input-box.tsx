@@ -16,14 +16,13 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { CommentType } from "app/hooks/api/use-comments";
-import { useUser } from "app/hooks/use-user";
-import { formatAddressShort } from "app/utilities";
-
 import {
   MessageBox,
   MessageBoxMethods,
-} from "design-system/messages/message-box-new";
+} from "app/components/messages/message-box-new";
+import { CommentType } from "app/hooks/api/use-comments";
+import { useUser } from "app/hooks/use-user";
+import { formatAddressShort } from "app/utilities";
 
 interface CommentInputBoxProps {
   submitting?: boolean;
