@@ -1,3 +1,4 @@
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import Fortmatic from "fortmatic";
 
 import { Magic } from "app/lib/magic";
@@ -11,7 +12,6 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
 
   const WalletConnectProvider = (await import("@walletconnect/web3-provider"))
     .default;
-  const WalletLink = (await import("walletlink")).WalletLink;
   const Web3Modal = (await import("web3modal")).default;
 
   web3ModalCached = new Web3Modal({
@@ -33,24 +33,16 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
           key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY,
         },
       },
-      "custom-walletlink": {
-        display: {
-          logo: "/coinbase.svg",
-          name: "Coinbase",
-          description: "Use the Coinbase Wallet app on your mobile device",
-        },
+      coinbasewallet: {
+        package: CoinbaseWalletSDK,
         options: {
           appName: "Showtime",
-          networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-          chainId: process.env.NEXT_PUBLIC_CHAINID,
-        },
-        package: WalletLink,
-        connector: async (_, options) => {
-          const { appName, networkUrl, chainId } = options;
-          const walletLink = new WalletLink({ appName });
-          const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
-          await provider.enable();
-          return provider;
+          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+          rpc: `https://polygon-${
+            process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+          }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+          chainId: 137,
+          darkMode: false,
         },
       },
       ...(withMagic

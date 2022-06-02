@@ -15,6 +15,7 @@
     "@badrap/bar-of-progress": "^0.1.2",
     "@biconomy/mexa": "2.0.24",
     "@builder.io/partytown": "^0.5.2",
+    "@coinbase/wallet-sdk": "^3.2.0",
     "@google/model-viewer": "^1.9.2",
     "@growthbook/growthbook-react": "^0.7.0",
     "@hapi/iron": "^6.0.0",
