@@ -53,7 +53,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -77,7 +77,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -89,7 +89,7 @@
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
@@ -119,19 +119,19 @@
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -179,7 +179,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -191,7 +191,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -233,7 +233,7 @@
     },
     "tooltip": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tooltip"
     },
