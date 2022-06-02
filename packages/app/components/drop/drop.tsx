@@ -1,5 +1,3 @@
-import React from "react";
-
 import { MMKV } from "react-native-mmkv";
 
 import { DropExplanation } from "./drop-explanation";

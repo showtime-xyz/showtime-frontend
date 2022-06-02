@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Claim } from "app/components/claim";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
