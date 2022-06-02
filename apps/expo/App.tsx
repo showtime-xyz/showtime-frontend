@@ -27,7 +27,7 @@ import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
-import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
+// import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -381,30 +381,30 @@ function App() {
           <Web3Provider>
             <ToastProvider>
               <AlertProvider>
-                <LightBoxProvider>
-                  <SnackbarProvider>
-                    <NavigationProvider>
-                      <SWRProvider>
-                        <AppContextProvider>
-                          <AuthProvider>
-                            <UserProvider>
-                              <MintProvider>
-                                <BottomSheetModalProvider>
-                                  <GrowthBookProvider growthbook={growthbook}>
-                                    <FeedProvider>
-                                      <StatusBar style="auto" />
-                                      <RootStackNavigator />
-                                    </FeedProvider>
-                                  </GrowthBookProvider>
-                                </BottomSheetModalProvider>
-                              </MintProvider>
-                            </UserProvider>
-                          </AuthProvider>
-                        </AppContextProvider>
-                      </SWRProvider>
-                    </NavigationProvider>
-                  </SnackbarProvider>
-                </LightBoxProvider>
+                {/* <LightBoxProvider> */}
+                <SnackbarProvider>
+                  <NavigationProvider>
+                    <SWRProvider>
+                      <AppContextProvider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <MintProvider>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <StatusBar style="auto" />
+                                    <RootStackNavigator />
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </MintProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </AppContextProvider>
+                    </SWRProvider>
+                  </NavigationProvider>
+                </SnackbarProvider>
+                {/* </LightBoxProvider> */}
               </AlertProvider>
             </ToastProvider>
           </Web3Provider>

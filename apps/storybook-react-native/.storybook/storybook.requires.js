@@ -40,7 +40,7 @@ const getStories = () => {
     require("../../../packages/design-system/verification-badge/badge.stories.tsx"),
     require("../../../packages/design-system/snackbar/snackbar.stories.tsx"),
     require("../../../packages/design-system/tooltip/tooltip.stories.tsx"),
-    require("../../../packages/design-system/light-box/light-box.stories"),
+    // require("../../../packages/design-system/light-box/light-box.stories"),
     require("../../../packages/design-system/tab-view/tab-view.stories"),
   ];
 };

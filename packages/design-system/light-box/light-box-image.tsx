@@ -18,7 +18,7 @@ import Animated, {
 
 import { Image } from "@showtime-xyz/universal.image";
 
-import { AnimationParams, useLightBox } from ".";
+import { AnimationParams, useLightBox } from "./index";
 
 // const AnimatedImage = Animated.createAnimatedComponent(FastImage as any);
 export type ImageBoundingClientRect = {
