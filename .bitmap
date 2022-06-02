@@ -28,8 +28,8 @@
         "rootDir": "packages/design-system/alert"
     },
     "avatar": {
-        "scope": "",
-        "version": "0.0.1",
+        "scope": "showtime.universal",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -94,8 +94,8 @@
         "rootDir": "packages/design-system/icon"
     },
     "image": {
-        "scope": "",
-        "version": "0.0.1",
+        "scope": "showtime.universal",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
@@ -112,26 +112,26 @@
         "rootDir": "packages/design-system/label"
     },
     "light-box": {
-        "scope": "",
-        "version": "0.0.1",
+        "scope": "showtime.universal",
+        "version": "0.0.2",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -232,7 +232,7 @@
         "rootDir": "packages/design-system/toast"
     },
     "tooltip": {
-        "scope": "",
+        "scope": "showtime.universal",
         "version": "0.0.1",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tooltip"
@@ -244,7 +244,7 @@
         "rootDir": "packages/design-system/typography"
     },
     "verification-badge": {
-        "scope": "",
+        "scope": "showtime.universal",
         "version": "0.0.1",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/verification-badge"

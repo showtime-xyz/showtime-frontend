@@ -10,7 +10,7 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ImgProps } from ".";
+import { ImgProps } from "./image";
 
 const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
   switch (resizeMode) {
