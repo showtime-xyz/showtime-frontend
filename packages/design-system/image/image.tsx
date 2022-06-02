@@ -24,8 +24,6 @@ function Img({ source, height, width, ...props }: ImgProps) {
             { uri: source.uri, cache: FastImage.cacheControl.immutable }
           : source
       }
-      // width={width}
-      // height={height}
       style={[props.style, { height, width }]}
       {...props}
     />
