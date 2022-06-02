@@ -4986,7 +4986,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-dropdown-menu@npm:^0.1.1":
+"@radix-ui/react-dropdown-menu@npm:0.1.6, @radix-ui/react-dropdown-menu@npm:^0.1.1":
   version: 0.1.6
   resolution: "@radix-ui/react-dropdown-menu@npm:0.1.6"
   dependencies:
@@ -6687,6 +6687,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.dropdown-menu@npm:latest":
+  version: 0.0.1
+  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.1"
+  dependencies:
+    "@radix-ui/react-dropdown-menu": 0.1.6
+    "@react-native-menu/menu": ^0.5.2
+    "@showtime-xyz/universal.hooks": 0.0.7
+    "@showtime-xyz/universal.tailwind": 0.0.6
+    "@showtime-xyz/universal.text": 0.0.6
+    "@zeego/menu": 0.0.2-alpha.28
+    moti: 0.17.1
+    react-native-popper: 0.3.2
+    react-native-reanimated: 2.8.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 965d04ec3f75aab45ae65e65dcf13b032e65d4c3b983026830d7c6beb19cb0825468509320e820ec23ceb3105a96ed3028cb8e11cb3cd15f8e0beb177f4805c4
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.extensions.react-native-web@npm:latest":
   version: 0.0.6
   resolution: "@showtime-xyz/universal.extensions.react-native-web@npm:0.0.6"
@@ -7273,6 +7295,7 @@ __metadata:
     "@showtime-xyz/universal.country-code-picker": latest
     "@showtime-xyz/universal.data-pill": latest
     "@showtime-xyz/universal.divider": latest
+    "@showtime-xyz/universal.dropdown-menu": latest
     "@showtime-xyz/universal.extensions.react-native-web": latest
     "@showtime-xyz/universal.fieldset": latest
     "@showtime-xyz/universal.hooks": latest
@@ -10693,7 +10716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zeego/menu@npm:^0.0.2-alpha.28":
+"@zeego/menu@npm:0.0.2-alpha.28, @zeego/menu@npm:^0.0.2-alpha.28":
   version: 0.0.2-alpha.28
   resolution: "@zeego/menu@npm:0.0.2-alpha.28"
   dependencies:
@@ -28272,7 +28295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-popper@npm:^0.3.2":
+"react-native-popper@npm:0.3.2, react-native-popper@npm:^0.3.2":
   version: 0.3.2
   resolution: "react-native-popper@npm:0.3.2"
   dependencies:
