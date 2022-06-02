@@ -10,7 +10,7 @@ import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { ScrollView } from "@showtime-xyz/universal.scrollview";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
