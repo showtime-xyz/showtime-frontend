@@ -1,9 +1,11 @@
+import { Button } from "@showtime-xyz/universal.button";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Claim } from "app/components/claim";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
-
-import { Button, Spinner, View } from "design-system";
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 const { useParam } = createParam<{ contractAddress: string }>();
 

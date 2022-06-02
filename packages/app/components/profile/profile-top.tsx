@@ -5,11 +5,14 @@ import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
+// import { LightBoxImg } from "@showtime-xyz/universal.light-box";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -25,8 +28,6 @@ import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { Hidden } from "design-system/hidden";
-import { LightBoxImg } from "design-system/light-box/light-box-image";
-import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";
 import { getProfileImage, getProfileName } from "../../utilities";
@@ -140,7 +141,7 @@ export const ProfileTop = ({
             colorMode={colorMode as any}
           >
             {profileData?.data.profile.cover_url && (
-              <LightBoxImg
+              <Image
                 source={{
                   uri: profileData?.data.profile.cover_url,
                 }}
@@ -164,14 +165,14 @@ export const ProfileTop = ({
                   radius={99999}
                 >
                   {profileData && (
-                    <LightBoxImg
+                    <Image
                       source={{
                         uri: getProfileImage(profileData?.data.profile),
                       }}
-                      imgLayout={{
-                        width: 128,
-                        height: 128,
-                      }}
+                      // imgLayout={{
+                      //   width: 128,
+                      //   height: 128,
+                      // }}
                       width={128}
                       height={128}
                       style={tw.style("rounded-full")}

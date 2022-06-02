@@ -3,10 +3,10 @@ import {
   TypedDataField,
 } from "@ethersproject/abstract-signer";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
-
-import { useAlert } from "design-system/alert";
 
 import { useSwitchNetwork } from "./use-switch-network";
 

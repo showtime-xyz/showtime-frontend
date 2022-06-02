@@ -82,4 +82,5 @@ export { default as Share } from "./Share";
 export { default as ArrowBottom } from "./ArrowBottom";
 export { default as ArrowTop } from "./ArrowTop";
 export { default as ShowtimeWordmark } from "./ShowtimeWordmark";
+export { default as FlipIcon } from "./Flip";
 export { default as Gift } from "./Gift";

@@ -23,9 +23,15 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
+    },
+    "avatar": {
+        "scope": "showtime.universal",
+        "version": "0.0.3",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/avatar"
     },
     "bottom-sheet": {
         "scope": "showtime.universal",
@@ -47,7 +53,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -63,6 +69,12 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/divider"
     },
+    "dropdown-menu": {
+        "scope": "showtime.universal",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/dropdown-menu"
+    },
     "extensions/react-native-web": {
         "scope": "showtime.universal",
         "version": "0.0.6",
@@ -71,7 +83,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -83,9 +95,15 @@
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
+    },
+    "image": {
+        "scope": "showtime.universal",
+        "version": "0.0.3",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/image"
     },
     "input": {
         "scope": "showtime.universal",
@@ -99,21 +117,27 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/label"
     },
+    "light-box": {
+        "scope": "showtime.universal",
+        "version": "0.0.3",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/light-box"
+    },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.10",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -161,7 +185,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -173,7 +197,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -209,15 +233,27 @@
     },
     "toast": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
+    },
+    "tooltip": {
+        "scope": "showtime.universal",
+        "version": "0.0.2",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/tooltip"
     },
     "typography": {
         "scope": "showtime.universal",
         "version": "0.0.4",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/typography"
+    },
+    "verification-badge": {
+        "scope": "showtime.universal",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/verification-badge"
     },
     "view": {
         "scope": "showtime.universal",

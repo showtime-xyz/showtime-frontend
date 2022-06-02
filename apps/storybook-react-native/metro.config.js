@@ -20,7 +20,7 @@ config.transformer.getTransformOptions = async () => ({
     inlineRequires: false,
   },
 });
-config.resolver.nodeModulesPath = [
+config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
   path.resolve(workspaceRoot, "node_modules"),
 ];

@@ -1,16 +1,15 @@
 import { Button } from "@showtime-xyz/universal.button";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-
-import { useManageAccount } from "app/hooks/use-manage-account";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
-
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
+} from "@showtime-xyz/universal.dropdown-menu";
+import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+
+import { useManageAccount } from "app/hooks/use-manage-account";
+import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
 type AddressMenuProps = {
   address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;

@@ -1,6 +1,16 @@
 import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuTriggerItem,
+} from "@showtime-xyz/universal.dropdown-menu";
 import { Settings } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -12,16 +22,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
-import { Avatar } from "design-system/avatar";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
-} from "design-system/dropdown-menu";
 import { breakpoints } from "design-system/theme";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {

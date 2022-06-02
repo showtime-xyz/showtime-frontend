@@ -1,10 +1,10 @@
 import React from "react";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
 import { MATIC_CHAIN_DETAILS, MATIC_CHAIN_ID } from "app/utilities";
-
-import { useAlert } from "design-system/alert";
 
 export const useSwitchNetwork = () => {
   let { web3 } = useWeb3();

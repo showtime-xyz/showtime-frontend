@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from "react";
 
+import { preload } from "@showtime-xyz/universal.image";
+
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
-
-import { preload } from "design-system/image";
 
 type FeedAPIResponse = Array<NFT>;
 

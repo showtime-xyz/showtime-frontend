@@ -1,5 +1,6 @@
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   Bell,
   BellFilled,
@@ -20,7 +21,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
-import { Avatar } from "design-system/avatar";
 import { breakpoints } from "design-system/theme";
 
 type TabBarIconProps = {

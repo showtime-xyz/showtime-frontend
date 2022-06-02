@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Drop } from "app/components/drop";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
+import { Drop } from "app/components/drop";
 
 const DropModal = () => {
   return <Drop />;

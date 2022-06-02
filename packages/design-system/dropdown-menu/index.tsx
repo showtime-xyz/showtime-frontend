@@ -10,7 +10,7 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
-import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
+import * as DropdownMenu from "./zeego-menu/dropdown-menu/src/index";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 
@@ -151,8 +151,9 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
     props: ComponentProps<typeof Text> &
       ComponentProps<typeof DropdownMenu.ItemTitle>
   ) => (
-    <StyledDropdownMenuItemTitle>
-      <Text {...props} />
+    <StyledDropdownMenuItemTitle {...props}>
+      {/* <Text {...props} /> */}
+      {props.children}
     </StyledDropdownMenuItemTitle>
   ),
   "ItemTitle"
@@ -166,7 +167,8 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
       ComponentProps<typeof DropdownMenu.ItemSubtitle>
   ) => (
     <StyledDropdownMenuItemSubtitle {...props}>
-      <Text {...props} />
+      {/* <Text {...props} /> */}
+      {props.children}
     </StyledDropdownMenuItemSubtitle>
   ),
   "ItemSubtitle"

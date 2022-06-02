@@ -13,6 +13,7 @@ import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
@@ -24,7 +25,6 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
-import { Preview } from "design-system/preview";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 import { TAB_LIST_HEIGHT } from "../lib/constants";

@@ -1,6 +1,14 @@
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
@@ -10,15 +18,6 @@ import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
-
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
 
 type Props = {
   user: Profile;

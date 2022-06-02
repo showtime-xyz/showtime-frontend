@@ -15,15 +15,14 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Owner } from "app/components/card";
+import { Collection } from "app/components/card/rows/collection";
+import { Media } from "app/components/media";
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
-
-import { Owner } from "design-system/card";
-import { Collection } from "design-system/card/rows/collection";
-import { Media } from "design-system/media";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

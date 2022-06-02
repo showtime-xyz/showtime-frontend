@@ -13,7 +13,7 @@ import { ModalHeader } from "./modal.header";
 
 export default {
   component: ModalHeader,
-  title: "Components/NewModal",
+  title: "Components/Modal",
 } as Meta;
 
 const Container = (props: any) => {

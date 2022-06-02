@@ -7,6 +7,8 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
@@ -14,8 +16,6 @@ import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
-import { Card } from "design-system/card";
-import { CreatorPreview } from "design-system/creator-preview";
 import { Tabs } from "design-system/tabs";
 import { breakpoints } from "design-system/theme";
 
