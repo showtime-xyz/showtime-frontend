@@ -5,7 +5,8 @@ import {
   BottomSheetFooterContainer,
   useBottomSheetInternal,
 } from "@gorhom/bottom-sheet";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import type { ModalFooterProps } from "./types";
 import { useKeyboardOffset } from "./useKeyboardOffset";

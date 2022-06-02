@@ -1,10 +1,10 @@
-import { useSafeAreaInsets } from "app/lib/safe-area";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { TrendingStackParams } from "app/navigation/types";
 import { TrendingScreen } from "app/screens/trending";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 const TrendingStack = createStackNavigator<TrendingStackParams>();
 

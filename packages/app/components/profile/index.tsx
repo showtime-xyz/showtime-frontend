@@ -1,6 +1,9 @@
 import { Suspense, useCallback, useReducer } from "react";
 import { Platform } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,8 +19,6 @@ import { Haptics } from "app/lib/haptics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 
-import { Skeleton, Spinner } from "design-system";
-import { useColorScheme } from "design-system/hooks";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 import { FilterContext } from "./fillter-context";

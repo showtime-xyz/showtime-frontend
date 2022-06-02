@@ -3,6 +3,11 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import reactStringReplace from "react-string-replace";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,11 +24,8 @@ import {
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import { Button, ModalSheet, Skeleton } from "design-system";
 import { Hidden } from "design-system/hidden";
-import { useColorScheme } from "design-system/hooks";
 import { LightBoxImg } from "design-system/light-box/light-box-image";
-import { PressableScale } from "design-system/pressable-scale";
 import { VerificationBadge } from "design-system/verification-badge";
 
 import useContentWidth from "../../hooks/use-content-width";

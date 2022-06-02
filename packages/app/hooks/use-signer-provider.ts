@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
 import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
-
-import { useAlert } from "design-system/alert";
 
 export const useSignerAndProvider = () => {
   const connector = useWalletConnect();

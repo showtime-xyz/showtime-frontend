@@ -1,6 +1,5 @@
+import { Button } from "@showtime-xyz/universal.button";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Button } from "design-system/button";
 
 interface MessageMoreProps {
   count?: number;

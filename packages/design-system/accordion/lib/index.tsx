@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState, useContext } from "react";
 import { Pressable } from "react-native";
 
-import { useUpdateEffect } from "design-system/hooks";
+import { useUpdateEffect } from "@showtime-xyz/universal.hooks";
 
 import { AnimateHeight } from "../animate-height";
 import { RootContext, ItemContext } from "./common";
@@ -21,10 +21,12 @@ const Root = (props: RootProps) => {
 
   useUpdateEffect(() => {
     setValue(propValue);
+    // @ts-ignore
   }, [propValue]);
 
   return (
     <RootContext.Provider
+      // @ts-ignore
       value={useMemo(
         () => ({ value, handleValueChange }),
         [value, handleValueChange]
@@ -49,6 +51,7 @@ const Trigger = (props: TriggerProps) => {
   const handlePress = () => {
     if (!disabled) {
       if (itemValue === selectedValue) {
+        // @ts-ignore
         handleValueChange(null);
       } else {
         handleValueChange(itemValue);

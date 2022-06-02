@@ -1,10 +1,10 @@
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+
 import { Details } from "app/components/details";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
-
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;

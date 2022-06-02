@@ -1,9 +1,8 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 import { BLOCKCHAIN_TYPES } from "./nft-activity.constants";
 import {

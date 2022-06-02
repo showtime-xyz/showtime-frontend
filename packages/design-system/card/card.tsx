@@ -3,6 +3,9 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
@@ -17,10 +20,7 @@ import { Creator } from "design-system/card/rows/elements/creator";
 import { Owner } from "design-system/card/rows/owner";
 import { Title } from "design-system/card/rows/title";
 import { Social } from "design-system/card/social";
-import { useIsDarkMode } from "design-system/hooks";
 import { Media } from "design-system/media";
-import { PressableScale } from "design-system/pressable-scale";
-import { Skeleton } from "design-system/skeleton";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 type Props = {

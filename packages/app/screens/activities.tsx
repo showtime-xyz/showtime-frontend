@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Activities } from "app/components/nft-activity";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
-
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 type Query = {
   tokenId: string;

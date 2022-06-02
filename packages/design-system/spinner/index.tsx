@@ -10,11 +10,11 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 type SpinnerProps = {
   size?: "large" | "medium" | "small";
-  сolor?: string;
+  color?: string;
   secondaryColor?: string;
 };
 
@@ -26,7 +26,7 @@ export const Spinner = (props: SpinnerProps) => {
 
   const {
     size = "medium",
-    сolor = "#8B5CF6",
+    color = "#8B5CF6",
     secondaryColor = isDark ? "#3F3F46" : "#F4F4F5",
   } = props;
   const transition = useSharedValue(0);
@@ -101,7 +101,7 @@ export const Spinner = (props: SpinnerProps) => {
           fill="none"
           r={14}
           strokeWidth={4}
-          stroke={сolor}
+          stroke={color}
           strokeDasharray={80}
           strokeDashoffset={56}
         />

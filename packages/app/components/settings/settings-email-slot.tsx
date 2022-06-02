@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { DataPill } from "@showtime-xyz/universal.data-pill";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -9,10 +13,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
 import { magic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
-
-import { Button, Skeleton } from "design-system";
-import { DataPill } from "design-system/data-pill";
-import { useColorScheme } from "design-system/hooks";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";

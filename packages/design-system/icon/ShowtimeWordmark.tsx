@@ -3,14 +3,7 @@ import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
 const ShowtimeWordmark = (props: SvgProps) => (
-  <Svg
-    width={24}
-    height={24}
-    viewBox="0 0 140 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Svg width={24} height={24} viewBox="0 0 140 24" fill="none" {...props}>
     <Path
       d="M20.591.171A.171.171 0 0 0 20.42 0h-3.776a.172.172 0 0 0-.171.171v22.972c0 .095.077.171.172.171h3.775a.172.172 0 0 0 .171-.171V10.114c0-.094.077-.171.172-.171h3.26a3.43 3.43 0 0 1 3.432 3.428v9.772c0 .095.077.171.172.171h3.775a.172.172 0 0 0 .171-.171V13.37c0-4.165-3.38-7.542-7.55-7.542h-3.26a.171.171 0 0 1-.172-.172V.171ZM90.602 6.343c0-.095.076-.172.171-.172h3.775c.095 0 .172.077.172.172v16.8a.172.172 0 0 1-.172.171h-3.775a.172.172 0 0 1-.171-.171v-16.8Z"
       fill={props.color}

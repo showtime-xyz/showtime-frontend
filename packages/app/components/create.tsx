@@ -5,6 +5,15 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,14 +27,9 @@ import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import { Accordion, Button, Checkbox, Fieldset, Spinner } from "design-system";
-import { ErrorText } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
-import { useIsDarkMode } from "design-system/hooks";
-import { ChevronUp, Image as ImageIcon } from "design-system/icon";
 import { Preview } from "design-system/preview";
-import { Switch } from "design-system/switch";
 
 const defaultValues = {
   editionCount: 1,

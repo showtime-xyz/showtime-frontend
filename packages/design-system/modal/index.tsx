@@ -2,10 +2,12 @@ import { forwardRef, memo, useCallback, useRef } from "react";
 
 import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
 import { ModalContainer as BaseModalContainer } from "./modal.container";
-import type { ModalMethods, ModalProps } from "./types";
+import { ModalMethods, ModalProps } from "./types";
 
+export { ModalHeader } from "./modal.header";
+export { ModalScreen } from "./modal.screen";
 export { ModalFooter } from "./modal.footer";
-export { ModalMethods };
+export { ModalMethods, ModalProps };
 
 const ModalComponent = forwardRef<ModalMethods, ModalProps>(
   function ModalComponent(

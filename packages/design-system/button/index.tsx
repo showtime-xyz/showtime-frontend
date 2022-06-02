@@ -5,6 +5,7 @@ import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
 export { ButtonLabel } from "./button-label";
+export type { ButtonVariant } from "./types";
 
 export function Button({
   tw = "",

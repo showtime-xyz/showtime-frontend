@@ -7,12 +7,12 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { fontFamily } from "@showtime-xyz/universal.typography";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useIsDarkMode } from "design-system/hooks";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 
 const TAB_ITEM_PADDING_HORIZONTAL = 16;

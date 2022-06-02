@@ -1,14 +1,14 @@
 import { useState, useRef, useMemo } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+
 import {
   NavigationContainer,
   LinkingOptions,
 } from "app/lib/react-navigation/native";
 import { linking } from "app/navigation/linking";
 import { NavigationElementsProvider } from "app/navigation/navigation-elements-context";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 function useLinkingConfig(
   trackedLinking: React.MutableRefObject<

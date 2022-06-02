@@ -1,3 +1,5 @@
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -7,8 +9,6 @@ import { NFT } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
-import { useIsDarkMode } from "design-system/hooks";
-import { Skeleton } from "design-system/skeleton";
 import { VerificationBadge } from "design-system/verification-badge";
 
 type Props = {

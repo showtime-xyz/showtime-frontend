@@ -1,12 +1,12 @@
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
+import { Flip, Close, Check } from "@showtime-xyz/universal.icon";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
-import { Flip, Close, Check } from "design-system/icon";
 import { ImagePickerButton } from "design-system/image-picker";
-import { PressableScale } from "design-system/pressable-scale";
 
 type Props = {
   photos: { uri: string }[];

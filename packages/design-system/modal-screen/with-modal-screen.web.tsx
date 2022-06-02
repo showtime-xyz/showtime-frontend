@@ -1,9 +1,7 @@
 import { FC, useCallback, useRef } from "react";
 
-import { useRouter } from "app/navigation/use-router";
-
-import { ModalMethods } from "design-system/modal";
-import { ModalScreen } from "design-system/modal/modal.screen";
+import { ModalMethods, Modal } from "@showtime-xyz/universal.modal";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import type { ModalScreenOptions } from "./types";
 
@@ -33,7 +31,7 @@ function withModalScreen<P>(
     }
 
     return (
-      <ModalScreen
+      <Modal
         ref={modalRef}
         title={title}
         web_height="auto"
@@ -41,7 +39,7 @@ function withModalScreen<P>(
         {...rest}
       >
         <Screen {...props} />
-      </ModalScreen>
+      </Modal>
     );
   };
 }

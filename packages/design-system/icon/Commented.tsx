@@ -3,14 +3,7 @@ import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
 const SvgCommented = (props: SvgProps) => (
-  <Svg
-    width={24}
-    height={24}
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Svg width={24} height={24} viewBox="0 0 20 20" fill="none" {...props}>
     <Path
       d="M0 10C0 4.477 4.477 0 10 0s10 4.477 10 10-4.477 10-10 10S0 15.523 0 10Z"
       fill="#27272A"

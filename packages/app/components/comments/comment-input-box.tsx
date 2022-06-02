@@ -9,17 +9,17 @@ import { ViewStyle } from "react-native";
 
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Button } from "@showtime-xyz/universal.button";
+import { Close } from "@showtime-xyz/universal.icon";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
-import { useSafeAreaInsets } from "app/lib/safe-area";
 import { formatAddressShort } from "app/utilities";
 
-import { Button } from "design-system";
-import { useAlert } from "design-system/alert";
-import { Close } from "design-system/icon";
 import {
   MessageBox,
   MessageBoxMethods,

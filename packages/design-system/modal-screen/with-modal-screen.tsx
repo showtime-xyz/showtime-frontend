@@ -1,10 +1,8 @@
 import { FC, useCallback, useRef } from "react";
 
-import { useRouter } from "app/navigation/use-router";
-
-import { ModalMethods } from "design-system/modal";
-import { ModalScreen } from "design-system/modal/modal.screen";
-import { ToastProvider } from "design-system/toast";
+import { ModalMethods, ModalScreen } from "@showtime-xyz/universal.modal";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import type { ModalScreenOptions } from "./types";
 import { useBackPressHandler } from "./use-back-press-handler";

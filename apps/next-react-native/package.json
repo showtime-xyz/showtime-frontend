@@ -80,6 +80,7 @@
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
     "rudder-sdk-js": "^2.3.6",
+    "setimmediate": "^1.0.5",
     "sortablejs": "^1.14.0",
     "sotez": "^10.0.0",
     "swr": "2.0.0-beta.1",

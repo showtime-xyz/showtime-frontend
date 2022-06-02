@@ -5,9 +5,10 @@ import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
-import { yup } from "app/lib/yup";
+import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 
-import { Button, ButtonLabel, Fieldset } from "design-system";
+import { yup } from "app/lib/yup";
 
 type FormData = {
   data?: string;
