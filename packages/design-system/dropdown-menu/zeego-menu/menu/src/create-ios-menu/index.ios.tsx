@@ -393,6 +393,7 @@ If you want to use a custom component as your <Content />, you can use the menui
     }
 
     return (
+      // @ts-ignore
       <MenuView
         title={menuTitle}
         onPressAction={({ nativeEvent }) => {
@@ -400,6 +401,7 @@ If you want to use a custom component as your <Content />, you can use the menui
           callbacks[nativeEvent.event]();
         }}
         actions={menuItems}
+        // @ts-ignore
         colorMode={colorScheme}
       >
         {/* <View style={styles.button}>

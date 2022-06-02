@@ -288,6 +288,7 @@ const Label = menuify(
   "Label"
 );
 
+// @ts-ignore
 export const createAndroidMenu: typeof createIosMenu = (Menu) => {
   const Content = menuify(
     ({

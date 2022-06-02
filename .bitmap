@@ -23,7 +23,7 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
@@ -68,6 +68,12 @@
         "version": "0.0.6",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/divider"
+    },
+    "dropdown-menu": {
+        "scope": "showtime.universal",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/dropdown-menu"
     },
     "extensions/react-native-web": {
         "scope": "showtime.universal",
@@ -125,7 +131,7 @@
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.9",
+        "version": "0.0.10",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
@@ -191,7 +197,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -227,7 +233,7 @@
     },
     "toast": {
         "scope": "showtime.universal",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
     },

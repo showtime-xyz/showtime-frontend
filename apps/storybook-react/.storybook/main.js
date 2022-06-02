@@ -40,6 +40,7 @@ module.exports = {
           "@showtime-xyz/universal.country-code-picker",
           "@showtime-xyz/universal.data-pill",
           "@showtime-xyz/universal.divider",
+          "@showtime-xyz/universal.dropdown-menu",
           "@showtime-xyz/universal.fieldset",
           "@showtime-xyz/universal.hooks",
           "@showtime-xyz/universal.icon",
