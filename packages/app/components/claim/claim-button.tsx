@@ -1,9 +1,9 @@
 import { Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRouter } from "app/navigation/use-router";
-
-import { Button } from "design-system/button";
 
 export const ClaimButton = ({
   edition,

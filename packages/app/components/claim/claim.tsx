@@ -1,5 +1,10 @@
 import React from "react";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
+import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
@@ -12,8 +17,6 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
 import { formatAddressShort } from "app/utilities";
-
-import { Button, Media, Text, View } from "design-system";
 
 export const Claim = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();

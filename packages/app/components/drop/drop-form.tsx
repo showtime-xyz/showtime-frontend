@@ -4,31 +4,25 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { ScrollView } from "@showtime-xyz/universal.scrollview";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-// import { useEffect } from "react"
 import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { Preview } from "app/components/preview";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 
-import {
-  View,
-  Text,
-  Fieldset,
-  Button,
-  ScrollView,
-  Checkbox,
-} from "design-system";
-import { ErrorText } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
-import { Image as ImageIcon } from "design-system/icon";
-import FlipIcon from "design-system/icon/Flip";
-import { Pressable } from "design-system/pressable";
-import { Preview } from "design-system/preview";
-
-// import { createParam } from "../navigation/use-param";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;

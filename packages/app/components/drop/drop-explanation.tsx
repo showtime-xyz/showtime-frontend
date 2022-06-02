@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 
 import { MotiView } from "moti";
 
-import { Button, Text, View } from "design-system";
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 const values = [
   {
