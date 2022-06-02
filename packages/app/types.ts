@@ -36,6 +36,7 @@ export type NFT = {
   token_ko_edition?: string;
   token_edition_identifier?: string;
   source_url: string;
+  creator_airdrop_edition_address?: string;
   still_preview_url: string;
   mime_type: string;
   chain_identifier: string;
@@ -176,3 +177,15 @@ export interface AllSellers {
   sale_identifier: number;
   quantity: number;
 }
+
+export type IEdition = {
+  id: number;
+  contract_address: string;
+  minter_address: string;
+  description: string;
+  edition_size: string;
+  image_url: string;
+  name: string;
+  owner_address: string;
+  symbol: string;
+};

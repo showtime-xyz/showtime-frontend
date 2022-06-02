@@ -220,23 +220,23 @@ export const ProfileTop = ({
                         onPress={() => {
                           router.push(
                             Platform.select({
-                              native: "/profile/edit",
+                              native: "/drop",
                               web: {
                                 pathname: router.pathname,
                                 query: {
                                   ...router.query,
-                                  editProfileModal: true,
+                                  dropNFTModal: true,
                                 },
                               } as any,
                             }),
                             Platform.select({
-                              native: "/profile/edit",
+                              native: "/drop",
                               web: router.asPath,
                             })
                           );
                         }}
                       >
-                        Edit profile
+                        Create Free drop
                       </Button>
                     ) : null}
                   </>

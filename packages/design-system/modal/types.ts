@@ -74,6 +74,13 @@ export interface ModalProps {
    * @default true
    */
   enableContentPanningGesture?: boolean;
+
+  /**
+   * **WEB ONLY ** prevents modal close on backdrop press
+   * @type boolean
+   * @default false
+   */
+  disableBackdropPress?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -105,6 +112,8 @@ export interface ModalContainerProps
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
   enableContentPanningGesture?: boolean;
+  disableBackdropPress?: boolean;
+  tw?: string;
 }
 
 export interface ModalScreenProps extends ModalProps {

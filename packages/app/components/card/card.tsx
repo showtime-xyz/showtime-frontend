@@ -72,6 +72,8 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
     );
   }
 
+  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
+
   return (
     <LikeContextProvider nft={nft}>
       <View
@@ -92,7 +94,9 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
           <View tw="flex-row items-center justify-between px-4 py-2">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nftId={nft.nft_id} listId={listId} />
+              {!isCreatorDrop ? (
+                <NFTDropdown nftId={nft.nft_id} listId={listId} />
+              ) : null}
             </Suspense>
           </View>
 

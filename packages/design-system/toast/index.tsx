@@ -84,7 +84,7 @@ export const ToastProvider = ({ children }: any) => {
               StyleSheet.absoluteFill,
               //@ts-ignore
               // TODO: improve toast to attach to react portal!
-              Platform.OS === "web" ? { position: "fixed" } : {},
+              Platform.OS === "web" ? { position: "fixed", zIndex: 999 } : {},
             ]}
             pointerEvents="box-none"
           >
