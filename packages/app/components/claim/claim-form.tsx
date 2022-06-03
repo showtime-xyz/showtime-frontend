@@ -68,7 +68,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   if (state.status === "success") {
     return (
       <View tw="items-center justify-center p-4">
-        <Text style={{ fontSize: 100 }}>🎉</Text>
+        <Text tw="text-8xl">🎉</Text>
         <View>
           <View tw="h-8" />
           <Text tw="text-center text-4xl text-black dark:text-white">
