@@ -89,9 +89,15 @@ module.exports = {
         "text-13": textSizes["text-13"],
         "text-sm": textSizes["text-sm"],
         "text-base": textSizes["text-base"],
-        "text-lg": textSizes["text-lg"],
+        "text-lg": {
+          ...textSizes["text-lg"],
+          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+        },
         "text-xl": textSizes["text-xl"],
-        "text-2xl": textSizes["text-2xl"],
+        "text-2xl": {
+          ...textSizes["text-2xl"],
+          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+        },
         "text-3xl": textSizes["text-3xl"],
         "text-4xl": textSizes["text-4xl"],
       });
