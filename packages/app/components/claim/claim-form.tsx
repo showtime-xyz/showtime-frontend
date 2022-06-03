@@ -101,10 +101,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   return (
     <ScrollView>
       <View tw="flex-1 items-start p-4">
-        <View tw="flex-row">
+        <View tw="flex-row flex-wrap">
           <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
-          <View tw="ml-4">
-            <Text tw="text-xl font-bold text-black dark:text-white">
+          <View tw="ml-4 flex-1">
+            <Text
+              tw="text-xl font-bold text-black dark:text-white"
+              numberOfLines={2}
+            >
               {edition.creator_airdrop_edition.name}
             </Text>
             <View tw="h-2" />
