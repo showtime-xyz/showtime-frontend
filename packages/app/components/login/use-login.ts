@@ -58,7 +58,8 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithWallet, handleLoginFailure, isWeb]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [loginWithWallet, handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
