@@ -43,13 +43,11 @@ const fontMetrics = {
 };
 
 const createTextSize = ({
-  fontFamily: propFontFamily,
   fontSize,
   lineHeight: leading,
   letterSpacing,
   marginCorrection,
 }: {
-  fontFamily?: string;
   fontSize: number;
   lineHeight: number;
   letterSpacing: number;
@@ -83,11 +81,6 @@ const createTextSize = ({
       styles.marginBottom - marginCorrectionForPlatform
     ),
   };
-
-  if (propFontFamily) {
-    // @ts-ignore
-    newStyle.fontFamily = fontFamily(propFontFamily);
-  }
 
   return newStyle;
 };
@@ -130,7 +123,6 @@ export const textSizes = {
     },
   }),
   "text-lg": createTextSize({
-    fontFamily: "SpaceGrotesk-Bold",
     fontSize: 18,
     letterSpacing: 0.5,
     lineHeight: 21,
@@ -149,7 +141,6 @@ export const textSizes = {
     },
   }),
   "text-2xl": createTextSize({
-    fontFamily: "SpaceGrotesk-Bold",
     fontSize: 24,
     letterSpacing: 0.6,
     lineHeight: 27,

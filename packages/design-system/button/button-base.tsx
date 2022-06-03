@@ -2,12 +2,11 @@ import { Children, cloneElement, useMemo } from "react";
 
 import Animated from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { PressableScale } from "design-system/pressable-scale";
-
-import { useIsDarkMode } from "../hooks";
 import {
   CONTAINER_HEIGHT_TW,
   CONTAINER_ICON_PADDING_TW,

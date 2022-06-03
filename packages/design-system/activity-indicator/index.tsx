@@ -2,7 +2,7 @@ import { ComponentProps } from "react";
 import { ActivityIndicator as ReactNativeActivityIndicator } from "react-native";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 type ActivityIndicatorProps = { tw?: TW } & ComponentProps<
   typeof ReactNativeActivityIndicator

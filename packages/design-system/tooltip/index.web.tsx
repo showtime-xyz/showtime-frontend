@@ -4,9 +4,9 @@ import { View } from "react-native";
 import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, MotiView } from "moti";
 
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
+import { useIsMobileWeb } from "@showtime-xyz/universal.hooks";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
-import { tw as tailwind } from "../tailwind";
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";
 import { TooltipProps } from "./types";
@@ -31,6 +31,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       setShow(true);
     }
     timeout.current && clearTimeout(timeout.current);
+    // @ts-ignore
     timeout.current = setTimeout(() => {
       setShow(true);
     }, delay);

@@ -1,9 +1,9 @@
 import { Meta } from "@storybook/react";
 import { Svg, Path } from "react-native-svg";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useIsDarkMode } from "../hooks";
 import { Input, InputPressable } from "./index";
 
 const LinkIcon = () => {

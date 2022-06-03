@@ -1,5 +1,7 @@
 import "raf/polyfill";
 
+import "setimmediate";
+
 import { useEffect, useState } from "react";
 import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
@@ -15,7 +17,12 @@ import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { AlertProvider } from "@showtime-xyz/universal.alert";
+// import { enableFreeze } from 'react-native-screens'
+import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { ToastProvider, useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Footer } from "app/components/footer";
@@ -29,8 +36,6 @@ import {
 } from "app/lib/color-scheme";
 import { isServer } from "app/lib/is-server";
 import LogRocket from "app/lib/logrocket";
-// import { enableFreeze } from 'react-native-screens'
-import { SafeAreaProvider } from "app/lib/safe-area";
 import { Sentry } from "app/lib/sentry";
 import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
@@ -41,10 +46,12 @@ import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BuyScreen } from "app/screens/buy";
+import { ClaimScreen } from "app/screens/claim";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowerScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -52,10 +59,6 @@ import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
-
-import { AlertProvider } from "design-system/alert";
-import { SnackbarProvider } from "design-system/snackbar";
-import { ToastProvider, useToast } from "design-system/toast";
 
 import "../styles/styles.css";
 
@@ -283,6 +286,8 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <EditProfileScreen />
                                     <FollowerScreen />
                                     <FollowingScreen />
+                                    <DropScreen />
+                                    <ClaimScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}
                                     <LoginScreen />

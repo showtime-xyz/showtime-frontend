@@ -1,10 +1,14 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
@@ -15,15 +19,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
-import {
-  CreatorPreview,
-  SegmentedControl,
-  SelectedTabIndicator,
-  Spinner,
-  TabItem,
-  Tabs,
-} from "design-system";
-import { Card } from "design-system/card";
+import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 const LIST_HEADER_HEIGHT = 64;
 const LIST_FOOTER_HEIGHT = 80;

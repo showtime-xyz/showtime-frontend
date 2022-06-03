@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from "react-native";
 
 import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
-import type { TW } from "../tailwind/types";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
   close: () => void;
@@ -74,6 +74,13 @@ export interface ModalProps {
    * @default true
    */
   enableContentPanningGesture?: boolean;
+
+  /**
+   * **WEB ONLY ** prevents modal close on backdrop press
+   * @type boolean
+   * @default false
+   */
+  disableBackdropPress?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -105,6 +112,8 @@ export interface ModalContainerProps
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
   enableContentPanningGesture?: boolean;
+  disableBackdropPress?: boolean;
+  tw?: string;
 }
 
 export interface ModalScreenProps extends ModalProps {

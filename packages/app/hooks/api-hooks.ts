@@ -155,54 +155,46 @@ export interface UserProfile {
 
 type UserProfileNFTs = {
   profileId?: number;
-  listId: number;
-  sortId?: number;
-  showDuplicates?: number;
+  tabType?: string;
+  sortType?: string;
   showHidden?: number;
   collectionId?: number;
-  refreshInterval?: number;
 };
 
 type UseProfileNFTs = {
-  data: {
-    items: Array<NFT>;
-    has_more: boolean;
-  };
+  items: Array<NFT>;
+  has_more: boolean;
 };
 
 export const defaultFilters = {
-  showDuplicates: 0,
   showHidden: 0,
   collectionId: 0,
-  sortId: 2,
+  sortType: "newest",
 };
 
-export const PROFILE_NFTS_QUERY_KEY = "v1/profile_nfts";
+export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
   const {
     profileId,
-    listId,
-    sortId = defaultFilters.sortId,
-    showDuplicates = defaultFilters.showDuplicates,
+    tabType,
+    sortType = defaultFilters.sortType,
     showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
-    refreshInterval,
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
+      }&limit=${12}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
       return url;
     },
-    [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
+    [profileId, tabType, sortType, showHidden, collectionId]
   );
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params?.profileId ? trendingCreatorsUrlFn : () => null,
-    refreshInterval
+    params?.profileId && tabType ? trendingCreatorsUrlFn : () => null
   );
 
   const newData = useMemo(() => {
@@ -210,7 +202,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     if (queryState.data) {
       queryState.data.forEach((p) => {
         if (p) {
-          newData = newData.concat(p.data.items);
+          newData = newData.concat(p.items);
         }
       });
     }
@@ -218,7 +210,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   }, [queryState.data]);
 
   const fetchMore = () => {
-    if (queryState.data?.[queryState.data.length - 1].data.has_more) {
+    if (queryState.data?.[queryState.data.length - 1].has_more) {
       queryState.fetchMore();
     }
   };
@@ -229,7 +221,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
         const updatedData = d?.map((d) => {
           return {
             ...d,
-            items: d.data.items.map((item: NFT) => {
+            items: d.items.map((item: NFT) => {
               if (item.nft_id === updatedItem.nft_id) {
                 return updatedItem;
               }
@@ -254,27 +246,23 @@ export type Collection = {
 };
 
 export type List = {
-  id: number;
-  name: string;
-  count_deduplicated_nonhidden: number;
-  count_deduplicated_withhidden: number;
-  count_all_nonhidden: number;
-  count_all_withhidden: number;
-  sort_id: number;
   collections: Array<Collection>;
+  displayed_count: number;
   has_custom_sort: boolean;
+  name: string;
+  sort_type: string;
+  type: string;
+  user_has_hidden_items: boolean;
 };
 
 type ProfileTabsAPI = {
-  data: {
-    default_list_id: number;
-    lists: Array<List>;
-  };
+  default_tab_type: number;
+  tabs: Array<List>;
 };
 
 export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
   const { data, error } = useSWR<ProfileTabsAPI>(
-    profileId ? "/v1/profile_tabs/" + profileId : null,
+    profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
     fetcher
   );
 

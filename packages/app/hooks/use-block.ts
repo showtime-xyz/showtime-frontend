@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 
-import { axios } from "app/lib/axios";
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { useToast } from "@showtime-xyz/universal.toast";
 
-import { useAlert } from "design-system/alert";
-import { useToast } from "design-system/toast";
+import { axios } from "app/lib/axios";
 
 import { useNavigateToLogin } from "../navigation/use-navigate-to";
 import { useUser } from "./use-user";

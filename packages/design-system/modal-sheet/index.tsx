@@ -3,10 +3,8 @@ import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
 
 import { BottomSheetHandleProps } from "@gorhom/bottom-sheet";
 
-import { BottomSheet } from "../bottom-sheet";
-import { Modal } from "../modal";
-import { ModalHeader } from "../modal/modal.header";
-import { ModalProps } from "../modal/types";
+import { BottomSheet } from "@showtime-xyz/universal.bottom-sheet";
+import { Modal, ModalHeader, ModalProps } from "@showtime-xyz/universal.modal";
 
 type Props = Pick<ModalProps, "web_height"> & {
   children: React.ReactElement;

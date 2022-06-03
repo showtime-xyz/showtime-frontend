@@ -9,10 +9,9 @@ import {
 
 import { MotiView, AnimatePresence } from "moti";
 
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-
-import { useSafeAreaInsets } from "app/lib/safe-area";
 
 type ShowParams = {
   message?: string;
@@ -85,7 +84,7 @@ export const ToastProvider = ({ children }: any) => {
               StyleSheet.absoluteFill,
               //@ts-ignore
               // TODO: improve toast to attach to react portal!
-              Platform.OS === "web" ? { position: "fixed" } : {},
+              Platform.OS === "web" ? { position: "fixed", zIndex: 999 } : {},
             ]}
             pointerEvents="box-none"
           >

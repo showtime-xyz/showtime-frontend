@@ -2,14 +2,14 @@ import { useReducer } from "react";
 
 import { useSWRConfig } from "swr";
 
+import { useToast } from "@showtime-xyz/universal.toast";
+
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
 import { magic } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-
-import { useToast } from "design-system/toast";
 
 export type AddWallet = {
   status: "idle" | "connecting" | "connected" | "disconnected" | "error";

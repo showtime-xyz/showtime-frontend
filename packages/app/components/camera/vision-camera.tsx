@@ -26,6 +26,9 @@ import {
   useCameraDevices,
 } from "react-native-vision-camera";
 
+import { Flash, FlashOff } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -36,10 +39,6 @@ import { Haptics } from "app/lib/haptics";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { useRouter } from "app/navigation/use-router";
-
-import { Flash, FlashOff } from "design-system/icon";
-import { Image } from "design-system/image";
-import { PressableScale } from "design-system/pressable-scale";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."

@@ -5,7 +5,7 @@ import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import type { NFT } from "app/types";
 
 type UseNFTDetailByTokenIdParams = {
-  contractAddress: string;
+  contractAddress?: string;
   tokenId: string;
   chainName: string;
 };
@@ -20,7 +20,7 @@ type NFTDetailPayload = {
 
 export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
   const queryState = useSWR<NFTDetailPayload>(
-    params.tokenId
+    params.tokenId && params.contractAddress
       ? `/v2/token/${params.contractAddress}/${params.tokenId}${
           params.chainName
             ? //@ts-ignore

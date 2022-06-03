@@ -3,7 +3,7 @@ import { BackHandler } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import type { ModalMethods } from "design-system/modal";
+import type { ModalMethods } from "@showtime-xyz/universal.modal";
 
 export const useBackPressHandler = (ref: RefObject<ModalMethods>) => {
   return useFocusEffect(

@@ -12,7 +12,7 @@ export default {
 } as Meta;
 
 type IconItemProps = {
-  icon: React.ReactNode;
+  icon: any;
   title: string;
 };
 

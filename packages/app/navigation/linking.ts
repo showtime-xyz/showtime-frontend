@@ -28,6 +28,8 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     screens: {
       login: "login",
       nft: "nft/:chainName/:contractAddress/:tokenId",
+      drop: "drop",
+      claim: "claim/:contractAddress",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
       activities: "nft/:chainName/:contractAddress/:tokenId/activities",
       transfer: "nft/:chainName/:contractAddress/:tokenId/transfer",

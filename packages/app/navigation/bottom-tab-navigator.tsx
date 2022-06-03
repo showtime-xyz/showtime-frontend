@@ -6,12 +6,12 @@ import { BlurView } from "expo-blur";
 import * as Updates from "expo-updates";
 import dynamic from "next/dynamic";
 
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { useUser } from "app/hooks/use-user";
-import { useSafeAreaInsets } from "app/lib/safe-area";
 
 import { TabBarButton } from "./tab-bar-button";
 import {

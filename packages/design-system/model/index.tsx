@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { ResizeMode } from "expo-av";
 
-import { Image } from "design-system/image";
+import { Image } from "@showtime-xyz/universal.image";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";

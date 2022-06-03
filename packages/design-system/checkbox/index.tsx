@@ -5,10 +5,12 @@ import { MotiView } from "moti";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Path, Svg } from "react-native-svg";
 
+import {
+  useOnFocus,
+  useOnHover,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
-
-import { useOnFocus, useOnHover } from "../hooks";
-import { useIsDarkMode } from "../hooks";
 
 type CheckboxProps = {
   onChange: (checked: boolean) => void;

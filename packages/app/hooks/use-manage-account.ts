@@ -2,10 +2,10 @@ import { useCallback } from "react";
 
 import { useSWRConfig } from "swr";
 
+import { useToast } from "@showtime-xyz/universal.toast";
+
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-
-import { useToast } from "design-system/toast";
 
 export function useManageAccount() {
   const toast = useToast();

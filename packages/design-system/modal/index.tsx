@@ -2,10 +2,12 @@ import { forwardRef, memo, useCallback, useRef } from "react";
 
 import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
 import { ModalContainer as BaseModalContainer } from "./modal.container";
-import type { ModalMethods, ModalProps } from "./types";
+import { ModalMethods, ModalProps } from "./types";
 
+export { ModalHeader } from "./modal.header";
+export { ModalScreen } from "./modal.screen";
 export { ModalFooter } from "./modal.footer";
-export { ModalMethods };
+export { ModalMethods, ModalProps };
 
 const ModalComponent = forwardRef<ModalMethods, ModalProps>(
   function ModalComponent(
@@ -13,6 +15,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
       title,
       isScreen = false,
       web_height = WEB_HEIGHT,
+      disableBackdropPress,
       mobile_snapPoints = MOBILE_SNAP_POINTS,
       modalContainer: ModalContainer = BaseModalContainer,
       children,
@@ -54,6 +57,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
         mobile_snapPoints={mobile_snapPoints}
         close={handleClose}
         onClose={handleOnClose}
+        disableBackdropPress={disableBackdropPress}
         {...rest}
       >
         {children}

@@ -1,13 +1,17 @@
 import { Platform } from "react-native";
 
-import { useSafeAreaInsets } from "app/lib/safe-area";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
+import { ClaimScreen } from "app/screens/claim";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
+import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowerScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -22,8 +26,6 @@ import { SettingsScreen } from "app/screens/settings";
 import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -99,6 +101,8 @@ export function RootStackNavigator() {
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="followers" component={FollowerScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
+        <Stack.Screen name="drop" component={DropScreen} />
+        <Stack.Screen name="claim" component={ClaimScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

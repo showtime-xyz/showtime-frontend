@@ -3,18 +3,17 @@ import { useState } from "react";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Meta } from "@storybook/react";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Close } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Button } from "design-system/button";
-import { Close } from "design-system/icon";
 
 import { Modal } from "./index";
 import { ModalHeader } from "./modal.header";
 
 export default {
   component: ModalHeader,
-  title: "Components/NewModal",
+  title: "Components/Modal",
 } as Meta;
 
 const Container = (props: any) => {

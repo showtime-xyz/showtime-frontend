@@ -1,14 +1,6 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { TW } from "@showtime-xyz/universal.tailwind/types";
-import { View } from "@showtime-xyz/universal.view";
-
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
-
-import { Avatar } from "design-system/avatar";
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   Bell,
   BellFilled,
@@ -20,7 +12,15 @@ import {
   HotFilled,
   Plus,
   Showtime,
-} from "design-system/icon";
+} from "@showtime-xyz/universal.icon";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
+
 import { breakpoints } from "design-system/theme";
 
 type TabBarIconProps = {

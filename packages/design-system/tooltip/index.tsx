@@ -3,7 +3,8 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
 
-import { tw as tailwind } from "../tailwind";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+
 import { Placement, PlatformRect } from "./get-placement";
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";

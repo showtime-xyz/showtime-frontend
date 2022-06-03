@@ -1,31 +1,45 @@
+import { useCallback, useContext } from "react";
+
+import { Select } from "@showtime-xyz/universal.select";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Collection } from "app/hooks/api-hooks";
-import { getSortFields } from "app/utilities";
 
-import { Select } from "design-system";
+import { FilterContext } from "./fillter-context";
+
+const sortFields = [
+  { label: "Newest", value: "newest" },
+  { label: "Oldest", value: "oldest" },
+  { label: "Likes", value: "likes" },
+  { label: "Comments", value: "comments" },
+  { label: "Custom", value: "custom" },
+];
 
 type FilterProps = {
-  onCollectionChange: (id: number) => void;
   collections: Collection[];
-  onSortChange: (id: number) => void;
-  collectionId: number;
-  sortId: number;
 };
 // Todo: Select support web.
-export const ProfileListFilter = ({
-  onCollectionChange,
-  collections,
-  onSortChange,
-  collectionId,
-  sortId,
-}: FilterProps) => {
-  const sortFields = getSortFields();
+export const ProfileListFilter = ({ collections }: FilterProps) => {
+  const { filter, dispatch } = useContext(FilterContext);
+
+  const onCollectionChange = useCallback(
+    (value: number | string) => {
+      dispatch({ type: "collection_change", payload: value });
+    },
+    [dispatch]
+  );
+
+  const onSortChange = useCallback(
+    (value: number | string) => {
+      dispatch({ type: "sort_change", payload: value });
+    },
+    [dispatch]
+  );
 
   return (
     <View tw="flex-row justify-around">
       <Select
-        value={collectionId}
+        value={filter.collectionId}
         onChange={onCollectionChange}
         options={collections.map((collection) => ({
           value: collection.collection_id,
@@ -36,7 +50,7 @@ export const ProfileListFilter = ({
         tw="mr-2"
       />
       <Select
-        value={sortId}
+        value={filter.sortType}
         onChange={onSortChange}
         options={sortFields}
         size="small"

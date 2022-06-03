@@ -8,9 +8,12 @@ import {
 } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { getLocalFileURI } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import useContentWidth from "app/hooks/use-content-width";
@@ -20,10 +23,7 @@ import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 
-import { Spinner } from "design-system";
-import { Card } from "design-system/card";
 import { Hidden } from "design-system/hidden";
-import { getLocalFileURI } from "design-system/preview";
 import { TabRecyclerList } from "design-system/tab-view";
 
 import { FilterContext } from "./fillter-context";
@@ -39,6 +39,7 @@ type TabListProps = {
 };
 
 const GAP_BETWEEN_ITEMS = 1;
+
 export type ProfileTabListRef = {
   refresh: () => void;
 };

@@ -1,22 +1,24 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import {
+  Close as CloseIcon,
+  Search as SearchIcon,
+} from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
+import { Input } from "@showtime-xyz/universal.input";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
-
-import { useColorScheme } from "design-system/hooks";
-import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
-import { Image } from "design-system/image";
-import { Input } from "design-system/input";
-import { PressableScale } from "design-system/pressable-scale";
-import { Skeleton } from "design-system/skeleton";
-import { VerificationBadge } from "design-system/verification-badge";
 
 export const Search = () => {
   const headerHeight = useHeaderHeight();

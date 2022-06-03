@@ -1,6 +1,9 @@
 import { useContext, useEffect } from "react";
 import { Platform } from "react-native";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -12,10 +15,7 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { Spinner } from "design-system";
-import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
 
 const CreateModal = () => {
   //#region hooks

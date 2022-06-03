@@ -5,9 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { Extrapolate } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
-
-import { useIsDarkMode } from "../hooks";
 
 const width = 50;
 const height = 28;
@@ -30,7 +29,9 @@ export const Switch = (props: SwitchProps) => {
     <Pressable
       style={styles.pressableStyle}
       onPress={useCallback(() => {
-        onChange(!checked);
+        if (onChange) {
+          onChange(!checked);
+        }
       }, [onChange, checked])}
       accessibilityRole="switch"
       accessibilityState={{ checked }}
@@ -56,6 +57,7 @@ export const Switch = (props: SwitchProps) => {
         animate={{
           translateX: checked ? width - thumbWidth - thumbOffset : thumbOffset,
         }}
+        // @ts-ignore
         transition={{ overshootClamping: Extrapolate.CLAMP }}
       />
     </Pressable>

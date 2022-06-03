@@ -6,10 +6,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Upload } from "@showtime-xyz/universal.icon";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
@@ -20,16 +24,8 @@ import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
 
-import {
-  Button,
-  Fieldset,
-  SelectedTabIndicator,
-  TabItem,
-  Tabs,
-} from "design-system";
 import { useFilePicker } from "design-system/file-picker";
-import { Upload } from "design-system/icon";
-import { Preview } from "design-system/preview";
+import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 import { TAB_LIST_HEIGHT } from "../lib/constants";
 import { useSafeAreaInsets } from "../lib/safe-area";

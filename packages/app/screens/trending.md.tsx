@@ -1,9 +1,14 @@
 import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Card } from "app/components/card";
+import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
@@ -11,9 +16,7 @@ import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
-import { CreatorPreview, SegmentedControl, Spinner, Tabs } from "design-system";
-import { Card } from "design-system/card";
-import { useIsDarkMode } from "design-system/hooks";
+import { Tabs } from "design-system/tabs";
 import { breakpoints } from "design-system/theme";
 
 type Query = {

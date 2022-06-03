@@ -3,7 +3,8 @@ import { StatusBar, StyleSheet, View, Text } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { TabFlatList } from ".";
 import { HeaderTabView } from "./index";

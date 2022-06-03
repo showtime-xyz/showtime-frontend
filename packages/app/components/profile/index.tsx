@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { SceneRendererProps } from "react-native-tab-view";
 
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -14,7 +15,6 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { Spinner } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { HeaderTabView, useTabState } from "design-system/tab-view/index";
 import { HeaderTabViewRef } from "design-system/tab-view/src/index.web";
@@ -35,6 +35,8 @@ const HEADER_DARK_SHADOW =
 const ProfileScreen = ({ username }: { username: string | null }) => {
   return <Profile address={username} />;
 };
+
+type Filter = typeof defaultFilters;
 
 const Profile = ({ address }: { address: string | null }) => {
   const { data: profileData, refresh } = useUserProfile({ address });
@@ -58,16 +60,19 @@ const Profile = ({ address }: { address: string | null }) => {
   const headerHeight = useHeaderHeight();
 
   const [filter, dispatch] = useReducer(
-    (state: any, action: any) => {
+    (state: Filter, action: any): Filter => {
       switch (action.type) {
         case "collection_change":
           return { ...state, collectionId: action.payload };
         case "sort_change":
-          return { ...state, sortId: action.payload };
+          return { ...state, sortType: action.payload };
+        default:
+          return state;
       }
     },
     { ...defaultFilters }
   );
+
   const onCollectionChange = useCallback(
     (value: string | number) => {
       dispatch({ type: "collection_change", payload: value });
@@ -156,6 +161,7 @@ const Profile = ({ address }: { address: string | null }) => {
       </View>
     );
   }, [headerBgLeft, headerShadow, headerHeight, address, isBlocked]);
+
   const routes = useMemo(
     () =>
       data?.data?.lists?.map((item, index) => ({

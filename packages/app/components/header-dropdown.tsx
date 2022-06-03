@@ -1,6 +1,17 @@
 import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuTriggerItem,
+} from "@showtime-xyz/universal.dropdown-menu";
+import { Settings } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -11,17 +22,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
-import { Avatar } from "design-system/avatar";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
-} from "design-system/dropdown-menu";
-import { Settings } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
@@ -91,6 +91,35 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
         >
           <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
             Settings
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
+
+        <DropdownMenuItem
+          onSelect={() => {
+            router.push(
+              Platform.select({
+                native: "/profile/edit",
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    editProfileModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: "/profile/edit",
+                web: router.asPath,
+              })
+            );
+          }}
+          key="edit-profile"
+          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Edit profile
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
