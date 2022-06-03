@@ -16,8 +16,8 @@ export function GiftButton({ nft }: { nft: NFT }) {
   return (
     <Button variant="text" size="regular" tw="h-auto p-0">
       <Gift
-        height={24}
-        width={24}
+        height={20}
+        width={20}
         // @ts-ignore
         color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
       />{" "}

@@ -37,8 +37,8 @@ export const ClaimButton = ({
 
   const status =
     edition &&
-    edition.total_claimed_count.toString() ===
-      edition.creator_airdrop_edition.edition_size.toString()
+    edition.total_claimed_count?.toString() ===
+      edition.creator_airdrop_edition?.edition_size.toString()
       ? "soldout"
       : edition.is_already_claimed
       ? "claimed"
