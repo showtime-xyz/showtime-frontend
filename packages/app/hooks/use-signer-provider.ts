@@ -1,16 +1,19 @@
 import { Platform } from "react-native";
 
+import { useAccount } from "wagmi";
+
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
-import getWeb3Modal from "app/lib/web3-modal";
 import { getBiconomy } from "app/utilities";
 
 export const useSignerAndProvider = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
+  const { data: wagmiData } = useAccount();
+
   const getSignerAndProvider = async () => {
     let userAddress = await getUserAddress();
     const biconomy = await (await getBiconomy(connector, web3)).biconomy;
@@ -24,14 +27,9 @@ export const useSignerAndProvider = () => {
 
   const getUserAddress = async () => {
     let userAddress;
-    if (web3) {
-      const addr = await web3.getSigner().getAddress();
-      userAddress = addr;
-    } else if (Platform.OS === "web") {
-      const Web3Provider = (await import("@ethersproject/providers"))
-        .Web3Provider;
-      const web3Modal = await getWeb3Modal();
-      web3 = new Web3Provider(await web3Modal.connect());
+    if (wagmiData) {
+      userAddress = wagmiData.address;
+    } else if (Platform.OS !== "web" && web3) {
       const addr = await web3.getSigner().getAddress();
       userAddress = addr;
     } else {
@@ -45,6 +43,7 @@ export const useSignerAndProvider = () => {
         return;
       }
     }
+
     if (!userAddress) {
       Alert.alert("Sorry! seems like you are not connected to the wallet");
       return;
