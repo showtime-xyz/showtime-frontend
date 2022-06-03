@@ -6,45 +6,61 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Media } from "app/components/media";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { IEdition } from "app/types";
+import { getCreatorUsernameFromNFT } from "app/utilities";
+
 const values = [
   {
-    title: "Gift your community a NFT",
-    description:
-      "A reward they can showcase. Bonus: engage them with unlockable features!",
+    description: "Showcase the item in your wallet everywhere.",
   },
   {
-    title: "Grow your web3 presence",
-    description: "Claimers will follow you on Showtime.",
+    description: "This is completely free!",
   },
   {
-    title: "Instantly tradable on OpenSea",
-    description: "And it will show up on wallets like Rainbow.",
-  },
-  {
-    title: "Earn royalties each trade",
-    description: "Every resale, you and your fans profit!",
-  },
-  {
-    title: "Share your drop link!",
-    description: "Your following & friends can claim it for free.",
+    description: "This NFT may unlock new features over time.",
   },
 ];
 
-export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
+export const ClaimExplanation = ({
+  onDone,
+  edition,
+}: {
+  onDone: () => void;
+  edition?: IEdition;
+}) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     setInterval(() => {
-      setPage((p) => (p + 1) % values.length);
+      setPage((p) => (p + 1) % 3);
     }, 3000);
   }, []);
 
+  const { data: token } = useNFTDetailByTokenId({
+    //@ts-ignore
+    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    contractAddress: edition?.contract_address,
+    tokenId: "0",
+  });
+
+  console.log("lol ", token);
+
   return (
     <View tw="flex-1 p-8">
-      <View tw="h-30 w-30" />
+      <View tw="my-10 items-center">
+        <View tw="h-60 w-60 rounded-xl shadow-xl">
+          <Media
+            resizeMode="contain"
+            item={token?.data.item}
+            tw="h-60 w-60 overflow-hidden"
+          />
+        </View>
+      </View>
       {/* Preview component here */}
       <Text tw="text-center text-4xl text-gray-900 dark:text-white">
-        Drop Free NFTs to your followers
+        Claim this free NFT from {getCreatorUsernameFromNFT(token?.data.item)}
       </Text>
       <View tw="mt-10 flex-row justify-center">
         {new Array(values.length).fill(0).map((v, i) => {
@@ -67,16 +83,12 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
         animate={{ opacity: 1 }}
         style={{ marginTop: 40 }}
       >
-        <Text tw="text-center text-2xl text-gray-900 dark:text-white">
-          {values[page].title}
-        </Text>
-        <View tw="h-4" />
-        <Text tw="h-20 text-center text-lg text-gray-600 dark:text-gray-400">
+        <Text tw="h-10 text-center text-lg text-gray-600 dark:text-gray-400">
           {values[page].description}
         </Text>
       </MotiView>
-      <View tw="mt-auto pb-10">
-        <Button onPress={onDone}>Let's go</Button>
+      <View tw="mt-auto pb-10 lg:mt-10">
+        <Button onPress={onDone}>Continue</Button>
       </View>
     </View>
   );

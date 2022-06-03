@@ -12,8 +12,6 @@ export const ClaimButton = ({
 }) => {
   const router = useRouter();
 
-  console.log("edition ", edition);
-
   const onClaimPress = () => {
     const as = `/claim/${edition.creator_airdrop_edition.contract_address}`;
 

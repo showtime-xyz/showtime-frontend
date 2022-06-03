@@ -299,7 +299,7 @@ export const DropForm = () => {
               />
             </View>
           </View>
-          <View tw="mt-4 flex-row">
+          <View tw="z-10 mt-4 flex-row">
             <Controller
               control={control}
               name="duration"

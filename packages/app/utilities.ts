@@ -612,3 +612,13 @@ export const getPinataToken = () => {
 export async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export const getCreatorUsernameFromNFT = (nft?: NFT) => {
+  if (!nft) return "";
+
+  return nft.creator_username
+    ? `@${nft.creator_username}`
+    : nft.creator_name
+    ? nft.creator_name
+    : formatAddressShort(nft.creator_address);
+};

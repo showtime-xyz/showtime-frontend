@@ -137,7 +137,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
-export const useUserProfile = ({ address }: { address: string | null }) => {
+export const useUserProfile = ({ address }: { address?: string }) => {
   const { data, error } = useSWR<{ data: UserProfile }>(
     address ? USER_PROFILE_KEY + address : null,
     fetcher

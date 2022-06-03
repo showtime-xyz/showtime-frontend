@@ -7,7 +7,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
-import { formatAddressShort } from "app/utilities";
+import { getCreatorUsernameFromNFT } from "app/utilities";
 
 type Props = {
   nft?: NFT;
@@ -42,11 +42,7 @@ export function Creator({
         <View>
           <View tw="flex flex-row items-center">
             <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
-              {nft.creator_username
-                ? `@${nft.creator_username}`
-                : nft.creator_name
-                ? nft.creator_name
-                : formatAddressShort(nft.creator_address)}
+              {getCreatorUsernameFromNFT(nft)}
             </Text>
             {nft.creator_verified ? (
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
