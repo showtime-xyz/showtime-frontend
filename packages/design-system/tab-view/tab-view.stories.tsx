@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { StatusBar, StyleSheet, View, Text } from "react-native";
+import React, { useCallback, useState } from "react";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
