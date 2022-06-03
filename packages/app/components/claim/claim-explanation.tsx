@@ -45,8 +45,6 @@ export const ClaimExplanation = ({
     tokenId: "0",
   });
 
-  console.log("lol ", token);
-
   return (
     <View tw="flex-1 p-8">
       <View tw="my-10 items-center">
