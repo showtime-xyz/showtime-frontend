@@ -2,38 +2,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Heart, HeartFilled } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
-const getRoundedCount = (count: number = 0) => {
-  const digits = `${count}`.split("");
-
-  if (digits[0] == "0") {
-    return digits[0];
-  }
-
-  switch (digits.length) {
-    case 8:
-      return `${digits.slice(0, 2).join("")}m`;
-
-    case 7:
-      return `${digits[0]}m`;
-
-    case 6:
-      return `${digits.slice(0, 3).join("")}k`;
-
-    case 5:
-      return `${digits.slice(0, 2).join("")}k`;
-
-    case 4:
-      return `${digits[0]}k`;
-
-    case 3:
-    case 2:
-    case 1:
-      return digits.join("");
-
-    default:
-      return "00";
-  }
-};
+import { getRoundedCount } from "app/utilities";
 
 export function LikeButton({
   onPress,

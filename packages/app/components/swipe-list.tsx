@@ -33,6 +33,7 @@ import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
+import { GiftButton } from "app/components/claim/gift-button";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
@@ -482,6 +483,8 @@ const NFTDetails = ({
             <Like nft={nft} />
             <View tw="w-6" />
             <CommentButton nft={nft} />
+            <View tw="w-6" />
+            <GiftButton nft={nft} />
           </View>
 
           <View tw="flex-row">
