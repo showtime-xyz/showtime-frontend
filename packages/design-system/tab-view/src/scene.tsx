@@ -1,6 +1,5 @@
-import type { ComponentClass } from "react";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { ScrollViewProps, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -11,30 +10,11 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useHeaderTabContext } from "./context";
-import { useSharedScrollableRef, useSyncInitialPosition } from "./hooks";
+import { useSharedScrollableRef } from "./hooks/use-shared-scrollable-ref";
+import { useSyncInitialPosition } from "./hooks/use-sync-initial-position";
 import type { SceneProps } from "./types";
 
-export function createCollapsibleScrollView<
-  P extends ComponentClass<any>,
-  T = any
->(Component: P) {
-  const AnimatePageView = Animated.createAnimatedComponent(Component);
-  return React.forwardRef<
-    P,
-    T & {
-      index: number;
-    }
-  >((props, ref) => {
-    return (
-      <SceneComponent
-        {...props}
-        forwardedRef={ref}
-        ContainerView={AnimatePageView}
-      />
-    );
-  });
-}
-function SceneComponent<P extends ScrollViewProps>({
+export function SceneComponent<P extends object>({
   index,
   onScroll,
   onContentSizeChange,
@@ -118,6 +98,7 @@ function SceneComponent<P extends ScrollViewProps>({
           ref={scollViewRef}
           scrollEventThrottle={16}
           directionalLockEnabled
+          // @ts-ignore
           contentContainerStyle={[
             {
               paddingTop: calcHeight,

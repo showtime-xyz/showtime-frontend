@@ -1,13 +1,12 @@
-import React, { useCallback, useRef, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import React, { useRef, useState, useCallback } from "react";
+import { StatusBar, StyleSheet, View, Text } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { SceneRendererProps } from "react-native-tab-view";
 
-import { HeaderTabView, TabFlatList } from "./index";
-import { Route } from "./types";
+import { TabFlatList } from ".";
+import { HeaderTabView } from "./index";
 
 export default {
   component: HeaderTabView,
@@ -42,7 +41,7 @@ const TabScene = ({ route }: any) => {
 export const Basic: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const ref = useRef(null);
-  const [routes] = useState<Route[]>([
+  const [routes] = useState([
     { key: "like", title: "Like", index: 0 },
     { key: "owner", title: "Owner", index: 1 },
     { key: "created", title: "Created", index: 2 },
@@ -51,28 +50,21 @@ export const Basic: React.FC = () => {
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
-  const renderScene = useCallback(
-    ({
-      route,
-    }: SceneRendererProps & {
-      route: Route;
-    }) => {
-      switch (route.key) {
-        case "like":
-          return <TabScene route={route} index={0} />;
+  const renderScene = useCallback(({ route }: any) => {
+    switch (route.key) {
+      case "like":
+        return <TabScene route={route} index={0} />;
 
-        case "owner":
-          return <TabScene route={route} index={1} />;
+      case "owner":
+        return <TabScene route={route} index={1} />;
 
-        case "created":
-          return <TabScene route={route} index={2} />;
+      case "created":
+        return <TabScene route={route} index={2} />;
 
-        default:
-          return null;
-      }
-    },
-    []
-  );
+      default:
+        return null;
+    }
+  }, []);
 
   const onStartRefresh = async () => {
     setIsRefreshing(true);
