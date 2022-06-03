@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, forwardRef } from "react";
 import { Pressable, GestureResponderEvent } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -22,7 +22,9 @@ const BACKGROUND_MAPPER = {
   hover: [colors.gray[800], colors.gray[200]],
 };
 
-export function SelectItem<T>({
+export const SelectItem = forwardRef(SelectItemComponent);
+
+function SelectItemComponent<T>({
   label,
   value,
   disabled,
@@ -47,10 +49,7 @@ export function SelectItem<T>({
     [isDarkMode, hovered, disabled]
   );
   const containerStyle = useMemo(
-    () => [
-      tw`p-2 m-1 items-center justify-between rounded-lg`,
-      containerAnimatedStyle,
-    ],
+    () => [tw`p-2 m-1 justify-between rounded-lg`, containerAnimatedStyle],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
