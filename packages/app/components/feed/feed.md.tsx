@@ -163,7 +163,6 @@ const CuratedFeed = () => {
 const NFTScrollList = ({
   data,
   fetchMore,
-  tab,
 }: {
   data: NFT[];
   fetchMore: any;

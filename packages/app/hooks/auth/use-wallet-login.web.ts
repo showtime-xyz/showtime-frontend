@@ -95,12 +95,14 @@ export function useWalletLogin() {
     } else if (connected && !authenticated && loggedIn) {
       handleLogin();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
 
   useEffect(() => {
     if (signed) {
       handleSignature();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signed]);
 
   return { status, name, error, loginWithWallet: handleLogin };

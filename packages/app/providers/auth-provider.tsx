@@ -105,6 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         router.push("/");
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [connector, mutate, router, setWeb3]
   );
   const doRefreshToken = useCallback(async () => {

@@ -36,14 +36,7 @@ export const NetworkButton = () => {
 export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
   return (
     <RainbotConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        mounted,
-      }) => {
+      {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
         return (
           // @ts-ignore
           <View

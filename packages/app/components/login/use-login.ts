@@ -58,7 +58,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithWallet, handleLoginFailure]
+    [loginWithWallet, handleLoginFailure, isWeb]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
