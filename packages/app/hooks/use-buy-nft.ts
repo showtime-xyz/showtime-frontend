@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
+import { useAccount, useSignTypedData } from "wagmi";
 
 import ierc20MetaTx from "app/abi/IERC20MetaTx.json";
 import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
@@ -12,7 +13,6 @@ import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { SOL_MAX_INT } from "app/lib/constants";
-import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
 import { parseBalance } from "app/utilities";
 
@@ -81,6 +81,8 @@ const buyNFTReducer = (
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const { getSignerAndProvider } = useSignerAndProvider();
+  const { data: wagmiData } = useAccount();
+  const { signTypedDataAsync } = useSignTypedData();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
@@ -184,12 +186,6 @@ export const useBuyNFT = () => {
 
       dispatch({ type: "grantingAllowance" });
       try {
-        const web3Modal = await getWeb3Modal();
-
-        const web3 = new ethers.providers.Web3Provider(
-          await web3Modal.connect()
-        );
-
         if (
           [
             LIST_CURRENCIES.WETH,
@@ -197,7 +193,7 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
-          const userAddress = await web3.getSigner().getAddress();
+          const userAddress = wagmiData?.address;
           let tokenContract, nonce;
 
           if (tokenAddr === LIST_CURRENCIES.USDC) {
@@ -227,8 +223,8 @@ export const useBuyNFT = () => {
             ),
           };
 
-          const signature = await web3.getSigner()._signTypedData(
-            {
+          const signature = await signTypedDataAsync({
+            domain: {
               name: CURRENCY_NAMES[tokenAddr],
               version: "1",
               verifyingContract: tokenAddr,
@@ -237,15 +233,15 @@ export const useBuyNFT = () => {
                   ? "0x0000000000000000000000000000000000000000000000000000000000013881"
                   : "0x0000000000000000000000000000000000000000000000000000000000000089",
             },
-            {
+            types: {
               MetaTransaction: [
                 { name: "nonce", type: "uint256" },
                 { name: "from", type: "address" },
                 { name: "functionSignature", type: "bytes" },
               ],
             },
-            metatx
-          );
+            value: metatx,
+          });
 
           permitRequest = {
             owner: metatx.from,
@@ -260,7 +256,7 @@ export const useBuyNFT = () => {
             infuraPolygonProvider
           );
 
-          const userAddress = await web3.getSigner().getAddress();
+          const userAddress = wagmiData?.address;
           const permit = {
             owner: userAddress,
             spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
@@ -269,15 +265,15 @@ export const useBuyNFT = () => {
             deadline: Date.now() + 120,
           };
 
-          const signature = await web3.getSigner()._signTypedData(
-            {
+          const signature = await signTypedDataAsync({
+            domain: {
               name: CURRENCY_NAMES[tokenAddr],
               version: "1",
               chainId:
                 process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137,
               verifyingContract: tokenAddr,
             },
-            {
+            types: {
               Permit: [
                 { name: "owner", type: "address" },
                 { name: "spender", type: "address" },
@@ -286,8 +282,8 @@ export const useBuyNFT = () => {
                 { name: "deadline", type: "uint256" },
               ],
             },
-            permit
-          );
+            value: permit,
+          });
 
           permitRequest = {
             owner: permit.owner,

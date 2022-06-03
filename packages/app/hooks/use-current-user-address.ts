@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Platform } from "react-native";
+
+import { useAccount } from "wagmi";
 
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
-import { BYPASS_EMAIL_WITH_INSECURE_KEYS } from "app/lib/constants";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 /**
@@ -15,12 +17,15 @@ function useCurrentUserAddress() {
   const [userAddress, setUserAddress] = useState("");
   const { web3 } = useWeb3();
   const connector = useWalletConnect();
+  const { data: wagmiData } = useAccount();
   const connectedAddress = connector?.session?.accounts[0];
 
   useEffect(() => {
     if (connector?.connected && connectedAddress) {
       setUserAddress(connectedAddress);
-    } else if (web3) {
+    } else if (wagmiData) {
+      setUserAddress(wagmiData.address);
+    } else if (Platform.OS !== "web" && web3) {
       const signer = web3.getSigner();
       signer
         .getAddress()
@@ -44,7 +49,7 @@ function useCurrentUserAddress() {
     } else {
       setUserAddress("");
     }
-  }, [user, web3, connectedAddress, connector?.connected]);
+  }, [user, web3, connectedAddress, connector?.connected, wagmiData]);
 
   return { userAddress };
 }

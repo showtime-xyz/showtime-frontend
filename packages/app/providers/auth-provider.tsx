@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
+import { useDisconnect } from "wagmi";
 
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -16,7 +17,6 @@ import { magic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
-import getWeb3Modal from "app/lib/web3-modal";
 import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
@@ -29,6 +29,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   //#region state
   const [authenticationStatus, setAuthenticationStatus] =
     useState<AuthenticationStatus>("IDLE");
+  const { disconnect } = useDisconnect();
+
   //#endregion
 
   //#region hooks
@@ -71,10 +73,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(
     async function logout() {
       if (Platform.OS === "web") {
-        const web3Modal = await getWeb3Modal();
-        await web3Modal.clearCachedProvider();
-        // TODO: dig into this https://github.com/Web3Modal/web3modal/issues/420#issuecomment-1076022849
         localStorage.removeItem("walletconnect");
+        disconnect();
       }
 
       const wasUserLoggedIn = loginStorage.getLogin();
