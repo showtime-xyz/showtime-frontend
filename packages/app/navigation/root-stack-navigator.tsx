@@ -9,6 +9,8 @@ import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
 import { EditProfileScreen } from "app/screens/edit-profile";
+import { FollowerScreen } from "app/screens/followers";
+import { FollowingScreen } from "app/screens/following";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
@@ -95,6 +97,8 @@ export function RootStackNavigator() {
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="activities" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
+        <Stack.Screen name="followers" component={FollowerScreen} />
+        <Stack.Screen name="following" component={FollowingScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -46,6 +46,8 @@ import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
 import { EditProfileScreen } from "app/screens/edit-profile";
+import { FollowerScreen } from "app/screens/followers";
+import { FollowingScreen } from "app/screens/following";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
@@ -257,7 +259,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                         }
                                       />
 
-                                      <View tw="min-h-screen items-center">
+                                      <View
+                                        tw="min-h-screen items-center"
+                                        // @ts-ignore
+                                        style={{ overflowX: "hidden" }}
+                                      >
                                         <Component {...pageProps} />
                                       </View>
 
@@ -275,6 +281,8 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <BuyScreen />
                                     <ActivitiesScreen />
                                     <EditProfileScreen />
+                                    <FollowerScreen />
+                                    <FollowingScreen />
                                     {/* Login should be the last so
                                       it renders on top of others if needed */}
                                     <LoginScreen />
