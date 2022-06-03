@@ -12,8 +12,6 @@ export const ClaimButton = ({
 }) => {
   const router = useRouter();
 
-  console.log("edition ", edition);
-
   const onClaimPress = () => {
     const as = `/claim/${edition.creator_airdrop_edition.contract_address}`;
 
@@ -37,9 +35,28 @@ export const ClaimButton = ({
     );
   };
 
+  const status =
+    edition &&
+    edition.total_claimed_count?.toString() ===
+      edition.creator_airdrop_edition?.edition_size.toString()
+      ? "soldout"
+      : edition.is_already_claimed
+      ? "claimed"
+      : undefined;
+
+  const disabled = status === "claimed" || status === "soldout";
+
   return (
-    <Button onPress={onClaimPress} disabled={edition.is_already_claimed}>
-      {edition.is_already_claimed ? "Already claimed" : "Claim for free"}
+    <Button
+      onPress={onClaimPress}
+      disabled={disabled}
+      tw={disabled ? "opacity-50" : ""}
+    >
+      {status === "claimed"
+        ? "Claimed ✓"
+        : status === "soldout"
+        ? "Sold out"
+        : "Claim for free"}
     </Button>
   );
 };

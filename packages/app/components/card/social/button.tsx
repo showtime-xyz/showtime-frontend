@@ -6,13 +6,14 @@ import {
   HeartFilled,
   Message,
   Boost,
+  Gift,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 type Props = {
-  variant: "like" | "comment" | "boost";
+  variant: "like" | "comment" | "boost" | "gift";
   count: number;
   state?: "default" | "hover" | "tap" | "disabled";
   active?: boolean;
@@ -42,6 +43,8 @@ function Button({
         : Heart
       : variant === "comment"
       ? Message
+      : variant === "gift"
+      ? Gift
       : Boost;
   const backgroundColor = "bg-gray-100";
   const backgroundHoverColor = getBackgroundHoverColor(variant);
@@ -122,6 +125,8 @@ function getBackgroundHoverColor(variant: Props["variant"]) {
       return "bg-indigo-50";
     case "boost":
       return "bg-green-50";
+    case "gift":
+      return "bg-indigo-50";
     default:
       return "";
   }
@@ -136,6 +141,8 @@ function getIconActiveColor(variant: Props["variant"]) {
       return tw.color("indigo-600");
     case "boost":
       return tw.color("green-600");
+    case "gift":
+      return tw.color("indigo-600");
     default:
       return tw.color("gray-400");
   }
@@ -150,6 +157,8 @@ function getTextActiveColor(variant: Props["variant"]) {
       return tw.style("text-indigo-600 dark:text-indigo-500");
     case "boost":
       return tw.style("text-green-600 dark:text-green-500");
+    case "gift":
+      return tw.style("text-indigo-600 dark:text-indigo-500");
     default:
       return tw.style("text-gray-600 dark:text-gray-400");
   }
@@ -164,6 +173,8 @@ function getHoverColor(variant: Props["variant"]) {
       return tw.color("indigo-500");
     case "boost":
       return tw.color("green-500");
+    case "gift":
+      return tw.color("indigo-500");
     default:
       return "";
   }
