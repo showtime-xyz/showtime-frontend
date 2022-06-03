@@ -3,13 +3,13 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import reactStringReplace from "react-string-replace";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
 // import { LightBoxImg } from "@showtime-xyz/universal.light-box";
+import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -166,8 +166,8 @@ export const ProfileTop = ({
           show={loading}
           colorMode={colorMode as any}
         >
-          {profileData?.data.profile.cover_url && (
-            <Image
+          {/* {profileData?.data.profile.cover_url && (
+            <LightBoxImg
               source={{
                 uri: profileData?.data.profile.cover_url,
               }}
@@ -175,10 +175,17 @@ export const ProfileTop = ({
               height={coverHeight}
               resizeMode="cover"
             />
+          )} */}
+          {profileData?.data.profile.cover_url && (
+            <Image
+              source={{ uri: profileData?.data.profile.cover_url }}
+              tw={`h-[${coverHeight}px] w-100 web:object-cover`}
+              alt="Cover image"
+              resizeMode="cover"
+            />
           )}
         </Skeleton>
       </View>
-
       <View tw="mx-2" pointerEvents="box-none">
         <View tw="flex-row justify-between" pointerEvents="box-none">
           <View tw="flex-row items-end">
@@ -190,18 +197,24 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
                 radius={99999}
               >
-                {profileData && (
-                  <Image
+                {/* {profileData && (
+                  <LightBoxImg
                     source={{
                       uri: getProfileImage(profileData?.data.profile),
                     }}
-                    // imgLayout={{
-                    //   width: 128,
-                    //   height: 128,
-                    // }}
+                    imgLayout={{
+                      width: 128,
+                      height: 128,
+                    }}
                     width={128}
                     height={128}
                     style={tw.style("rounded-full")}
+                  />
+                )} */}
+                {profileData && (
+                  <Avatar
+                    url={getProfileImage(profileData?.data.profile)}
+                    size={128}
                   />
                 )}
               </Skeleton>

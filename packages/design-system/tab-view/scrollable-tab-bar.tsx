@@ -176,6 +176,9 @@ export const ScollableTabBar = ({
           />
         );
       }}
+      // Todo: support scroll.
+      // scrollEnabled
+      // tabStyle={{ width: 90 }}
       onTabPress={onTabPress}
       renderTabBarItem={({
         onPress,

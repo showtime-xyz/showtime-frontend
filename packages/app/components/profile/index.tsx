@@ -51,7 +51,6 @@ const Profile = ({ address }: { address: string | null }) => {
   } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-
   const { index, setIndex, setIsRefreshing, isRefreshing } = useTabState([]);
 
   const { getIsBlocked } = useBlock();
@@ -73,19 +72,6 @@ const Profile = ({ address }: { address: string | null }) => {
     { ...defaultFilters }
   );
 
-  const onCollectionChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "collection_change", payload: value });
-    },
-    [dispatch]
-  );
-
-  const onSortChange = useCallback(
-    (value: string | number) => {
-      dispatch({ type: "sort_change", payload: value });
-    },
-    [dispatch]
-  );
   const tabRefs = useRef<ProfileTabListRef[]>([]);
   const headerTabViewRef = useRef<HeaderTabViewRef>(null);
 
@@ -102,7 +88,7 @@ const Profile = ({ address }: { address: string | null }) => {
     }: SceneRendererProps & {
       route: Route;
     }) => {
-      const list = data?.data.lists[index];
+      const list = data?.tabs[index];
       if (!list) return null;
       return (
         <ErrorBoundary>
@@ -126,7 +112,7 @@ const Profile = ({ address }: { address: string | null }) => {
       );
     },
     [
-      data?.data.lists,
+      data,
       isBlocked,
       profileData?.data.profile.profile_id,
       profileData?.data.profile.username,
@@ -164,12 +150,12 @@ const Profile = ({ address }: { address: string | null }) => {
 
   const routes = useMemo(
     () =>
-      data?.data?.lists?.map((item, index) => ({
+      data?.tabs?.map((item, index) => ({
         title: item?.name,
         key: item?.name,
         index,
       })) ?? [],
-    [data?.data?.lists]
+    [data]
   );
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
@@ -210,11 +196,7 @@ const Profile = ({ address }: { address: string | null }) => {
               <>
                 <View tw="absolute -bottom-11 w-full justify-between md:bottom-1.5 md:right-10 md:w-auto">
                   <ProfileListFilter
-                    onCollectionChange={onCollectionChange}
-                    onSortChange={onSortChange}
-                    collectionId={filter.collectionId}
-                    collections={data?.data?.lists[index]?.collections || []}
-                    sortId={filter.sortId}
+                    collections={data?.tabs[index]?.collections || []}
                   />
                 </View>
               </>

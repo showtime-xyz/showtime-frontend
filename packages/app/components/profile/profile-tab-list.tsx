@@ -53,16 +53,14 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     const { state: mintingState } = useContext(MintContext);
     const { width, height } = useWindowDimensions();
 
-    const { filter, dispatch } = useContext(FilterContext);
+    const { filter } = useContext(FilterContext);
 
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
-        listId: list.id,
+        tabType: list.type,
         profileId,
         collectionId: filter.collectionId,
-        sortId: filter.sortId,
-        // TODO: remove refresh interval once we have the new indexer.
-        refreshInterval: 5000,
+        sortType: filter.sortType,
       });
     const tabRef = useRef(null);
 
@@ -73,28 +71,15 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       }),
       [refresh]
     );
-    const onCollectionChange = useCallback(
-      (value: number | string) => {
-        dispatch({ type: "collection_change", payload: value });
-      },
-      [dispatch]
-    );
-
-    const onSortChange = useCallback(
-      (value: number | string) => {
-        dispatch({ type: "sort_change", payload: value });
-      },
-      [dispatch]
-    );
 
     const onItemPress = useCallback(
       (nftId: number) => {
         const index = data.findIndex((v) => v.nft_id === nftId);
         router.push(
-          `/list?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+          `/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
         );
       },
-      [list.id, profileId, filter.collectionId, filter.sortId, router, data]
+      [list.type, profileId, filter.collectionId, filter.sortType, router, data]
     );
 
     const ListFooterComponent = useCallback(
@@ -106,13 +91,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       () => (
         <View tw="p-4">
           <Hidden platform="web">
-            <ProfileListFilter
-              onCollectionChange={onCollectionChange}
-              onSortChange={onSortChange}
-              collectionId={filter.collectionId}
-              collections={list.collections}
-              sortId={filter.sortId}
-            />
+            <ProfileListFilter collections={list.collections} />
           </Hidden>
           {isBlocked ? (
             <View tw="mt-8 items-center justify-center">
@@ -131,16 +110,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           ) : null}
         </View>
       ),
-      [
-        data,
-        username,
-        isLoading,
-        filter,
-        onCollectionChange,
-        onSortChange,
-        list.collections,
-        isBlocked,
-      ]
+      [data, username, isLoading, list.collections, isBlocked]
     );
 
     const newData = useMemo(() => {
@@ -219,7 +189,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           <Card
             nft={item}
             numColumns={3}
-            listId={list.id}
+            listId={list.type}
             onPress={() => onItemPress(item.nft_id)}
             hrefProps={{
               pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
@@ -227,7 +197,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           />
         );
       },
-      [list.id, ListHeaderComponent, onItemPress]
+      [list.type, ListHeaderComponent, onItemPress]
     );
 
     return (
