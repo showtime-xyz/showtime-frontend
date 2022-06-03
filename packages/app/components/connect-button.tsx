@@ -15,7 +15,6 @@ export const NetworkButton = () => {
     <RainbotConnectButton.Custom>
       {({ chain, openChainModal }) => {
         return chain?.unsupported ? (
-          // @ts-ignore
           <View tw="ml-2">
             <Button
               variant="primary"
@@ -38,7 +37,6 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
     <RainbotConnectButton.Custom>
       {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
         return (
-          // @ts-ignore
           <View
             {...(!mounted && {
               "aria-hidden": true,
