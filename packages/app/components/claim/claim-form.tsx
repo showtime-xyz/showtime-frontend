@@ -1,7 +1,9 @@
 import React from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Check } from "@showtime-xyz/universal.icon";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -17,7 +19,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
-import { formatAddressShort } from "app/utilities";
+import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();
@@ -105,6 +107,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             <Text tw="text-xl font-bold text-black dark:text-white">
               {edition.creator_airdrop_edition.name}
             </Text>
+            <View tw="h-2" />
+            <Text tw="text-gray-700 dark:text-gray-400">
+              {getCreatorUsernameFromNFT(nft?.data.item)}
+            </Text>
           </View>
         </View>
         <View tw="mt-4 w-full">
@@ -127,9 +133,21 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 Claim amount
               </Text>
               <Text tw="text-right text-sm font-bold text-gray-900 dark:text-gray-100">
-                1
+                1/{edition.creator_airdrop_edition.edition_size}
               </Text>
             </View>
+          </View>
+
+          <View tw="mt-4 flex-row items-center">
+            <Check
+              height={20}
+              width={20}
+              //@ts-ignore
+              color={tw.style("bg-gray-900 dark:bg-gray-100").backgroundColor}
+            />
+            <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+              You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}
+            </Text>
           </View>
           <View tw="mt-4">
             <Button
