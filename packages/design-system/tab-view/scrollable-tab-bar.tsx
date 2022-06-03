@@ -241,5 +241,6 @@ const styles = StyleSheet.create({
   tabbar: {
     position: "relative",
     shadowOpacity: 0,
+    elevation: 0,
   },
 });

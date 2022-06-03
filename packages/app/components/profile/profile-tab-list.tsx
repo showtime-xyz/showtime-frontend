@@ -231,20 +231,22 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
 
     return (
       <MutateProvider mutate={updateItem}>
-        <TabRecyclerList
-          layoutProvider={_layoutProvider}
-          dataProvider={dataProvider}
-          rowRenderer={_rowRenderer}
-          onEndReached={fetchMore}
-          style={{
-            flex: 1,
-            margin: -GAP_BETWEEN_ITEMS,
-          }}
-          renderFooter={ListFooterComponent}
-          layoutSize={layoutSize}
-          index={index}
-          ref={tabRef}
-        />
+        {dataProvider && dataProvider.getSize() > 0 && (
+          <TabRecyclerList
+            layoutProvider={_layoutProvider}
+            dataProvider={dataProvider}
+            rowRenderer={_rowRenderer}
+            onEndReached={fetchMore}
+            style={{
+              flex: 1,
+              margin: -GAP_BETWEEN_ITEMS,
+            }}
+            renderFooter={ListFooterComponent}
+            layoutSize={layoutSize}
+            index={index}
+            ref={tabRef}
+          />
+        )}
       </MutateProvider>
     );
   }

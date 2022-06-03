@@ -37,12 +37,13 @@ const ProfileScreen = ({ username }: { username: string | null }) => {
 };
 
 const Profile = ({ address }: { address: string | null }) => {
-  const { data: profileData } = useUserProfile({ address });
+  const { data: profileData, refresh } = useUserProfile({ address });
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const {
     data,
+    // Todo: handling loading and error state.
     loading: tabsLoading,
     error,
   } = useProfileNftTabs({
@@ -55,6 +56,7 @@ const Profile = ({ address }: { address: string | null }) => {
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
 
   const headerHeight = useHeaderHeight();
+
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
       switch (action.type) {
@@ -81,11 +83,14 @@ const Profile = ({ address }: { address: string | null }) => {
   );
   const tabRefs = useRef<ProfileTabListRef[]>([]);
   const headerTabViewRef = useRef<HeaderTabViewRef>(null);
-  const onStartRefresh = useCallback(() => {
+
+  const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
+    await refresh();
+    // Todo: use async/await.
     tabRefs.current[index]?.refresh();
     setIsRefreshing(false);
-  }, [index, setIsRefreshing]);
+  }, [index, refresh, setIsRefreshing]);
   const renderScene = useCallback(
     ({
       route: { index },
@@ -132,7 +137,7 @@ const Profile = ({ address }: { address: string | null }) => {
 
   const renderHeader = useCallback(() => {
     return (
-      <View tw="items-center">
+      <View tw="items-center bg-white dark:bg-black">
         {Platform.OS === "web" && (
           <View
             tw="absolute left-0 h-full w-screen bg-white dark:bg-black"
@@ -170,8 +175,14 @@ const Profile = ({ address }: { address: string | null }) => {
           renderScene={renderScene}
           onIndexChange={setIndex}
           renderScrollHeader={renderHeader}
-          minHeaderHeight={headerHeight}
-          refreshControlTop={headerHeight}
+          minHeaderHeight={Platform.select({
+            ios: headerHeight,
+            default: 0,
+          })}
+          refreshControlTop={Platform.select({
+            ios: headerHeight,
+            default: 0,
+          })}
           initialLayout={{
             width: contentWidth,
           }}

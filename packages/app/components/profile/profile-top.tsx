@@ -154,7 +154,7 @@ export const ProfileTop = ({
   );
 
   return (
-    <View pointerEvents="box-none">
+    <>
       <View
         tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:-mx-20 xl:rounded-b-[32px]`}
       >
@@ -328,6 +328,6 @@ export const ProfileTop = ({
           </Hidden>
         </View>
       </View>
-    </View>
+    </>
   );
 };
