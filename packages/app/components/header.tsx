@@ -230,7 +230,7 @@ const HeaderRight = () => {
                 </Button>
               </>
             )}
-            <NetworkButton />
+            {Platform.OS === "web" ? <NetworkButton /> : null}
           </View>
         </View>
       )}
