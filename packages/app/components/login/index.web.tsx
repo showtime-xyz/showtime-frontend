@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
