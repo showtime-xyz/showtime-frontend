@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
-import { useWagmi } from "app/hooks/auth/use-wagmi";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
@@ -11,7 +11,7 @@ export const useSignerAndProvider = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
-  const { address } = useWagmi();
+  const { address } = useWallet();
 
   const getSignerAndProvider = async () => {
     let userAddress = await getUserAddress();

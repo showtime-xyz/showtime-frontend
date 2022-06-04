@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 
-import { useWagmi } from "app/hooks/auth/use-wagmi";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
@@ -16,7 +16,7 @@ function useCurrentUserAddress() {
   const [userAddress, setUserAddress] = useState("");
   const { web3 } = useWeb3();
   const connector = useWalletConnect();
-  const { address } = useWagmi();
+  const { address } = useWallet();
   const connectedAddress = connector?.session?.accounts[0];
 
   useEffect(() => {

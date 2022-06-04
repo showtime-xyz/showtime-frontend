@@ -8,7 +8,7 @@ import ierc20MetaTx from "app/abi/IERC20MetaTx.json";
 import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
-import { useWagmi } from "app/hooks/auth/use-wagmi";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
@@ -81,7 +81,7 @@ const buyNFTReducer = (
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const { getSignerAndProvider } = useSignerAndProvider();
-  const { address, signTypedDataAsync } = useWagmi();
+  const { address, signTypedDataAsync } = useWallet();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;

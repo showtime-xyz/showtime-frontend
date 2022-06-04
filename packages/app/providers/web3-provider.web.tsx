@@ -1,4 +1,4 @@
-import { useWagmi } from "app/hooks/auth/use-wagmi";
+import { useWallet } from "app/hooks/auth/use-wallet";
 
 import { Web3Provider as Web3ProviderBase } from "./web3-provider.tsx";
 
@@ -7,7 +7,7 @@ interface Web3ProviderProps {
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
-  const { connected, provider } = useWagmi();
+  const { connected, provider } = useWallet();
 
   return (
     <Web3ProviderBase connected={connected} provider={provider}>

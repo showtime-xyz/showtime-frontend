@@ -5,7 +5,7 @@ import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
-import { useWagmi } from "./use-wagmi";
+import { useWallet } from "./use-wallet";
 import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
@@ -28,7 +28,7 @@ export function useWalletLogin() {
     signed,
     provider,
     signature,
-  } = useWagmi();
+  } = useWallet();
   const { isAuthenticated } = useUser();
   const accessToken = useAccessToken();
   const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
