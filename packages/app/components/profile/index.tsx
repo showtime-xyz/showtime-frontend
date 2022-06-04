@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { SceneRendererProps } from "react-native-tab-view";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -13,14 +14,12 @@ import {
   useUserProfile,
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import useContentWidth from "app/hooks/use-content-width";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { useIsDarkMode } from "design-system/hooks";
 import { HeaderTabView, useTabState } from "design-system/tab-view/index";
-import { HeaderTabViewRef } from "design-system/tab-view/src/index.web";
 import { Route } from "design-system/tab-view/src/types";
 
-import useContentWidth from "../../hooks/use-content-width";
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
@@ -73,7 +72,6 @@ const Profile = ({ address }: { address: string | null }) => {
   );
 
   const tabRefs = useRef<ProfileTabListRef[]>([]);
-  const headerTabViewRef = useRef<HeaderTabViewRef>(null);
 
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -202,7 +200,6 @@ const Profile = ({ address }: { address: string | null }) => {
               </>
             ) : null
           }
-          ref={headerTabViewRef}
         />
       </View>
     </FilterContext.Provider>
