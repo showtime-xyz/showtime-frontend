@@ -1,6 +1,10 @@
+import { useWindowDimensions } from "react-native";
+
 import { ConnectButton as RainbotConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Button, View } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
+import { Alert } from "design-system/icon";
 
 type ConnectButtonProps = {
   handleSubmitWallet: ({
@@ -11,6 +15,10 @@ type ConnectButtonProps = {
 };
 
 export const NetworkButton = () => {
+  const { width } = useWindowDimensions();
+  const isDark = useIsDarkMode();
+  const isMobileWeb = width > 768;
+
   return (
     <RainbotConnectButton.Custom>
       {({ chain, openChainModal }) => {
@@ -19,11 +27,20 @@ export const NetworkButton = () => {
             <Button
               variant="primary"
               size="regular"
+              tw={isMobileWeb ? "" : "h-8 w-8 p-1"}
               onPress={() => {
                 openChainModal();
               }}
             >
-              Wrong Network
+              {isMobileWeb ? (
+                "Wrong Network"
+              ) : (
+                <Alert
+                  width={24}
+                  height={24}
+                  color={isDark ? "black" : "white"}
+                />
+              )}
             </Button>
           </View>
         ) : null;
