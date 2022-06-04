@@ -5,8 +5,8 @@ import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
+import { useWagmi } from "./use-wagmi";
 import { useWalletLoginState } from "./use-wallet-login-state";
-import { useWagmi } from "./useWagmi";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 

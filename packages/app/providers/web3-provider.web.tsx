@@ -1,0 +1,17 @@
+import { useWagmi } from "app/hooks/auth/use-wagmi";
+
+import { Web3Provider as Web3ProviderBase } from "./web3-provider.tsx";
+
+interface Web3ProviderProps {
+  children: React.ReactNode;
+}
+
+export function Web3Provider({ children }: Web3ProviderProps) {
+  const { connected, provider } = useWagmi();
+
+  return (
+    <Web3ProviderBase connected={connected} provider={provider}>
+      {children}
+    </Web3ProviderBase>
+  );
+}

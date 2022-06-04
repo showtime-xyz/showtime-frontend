@@ -2,53 +2,51 @@ import { useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
-import "@rainbow-me/rainbowkit/styles.css";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { Web3Context } from "app/context/web3-context";
-import { useWagmi } from "app/hooks/auth/useWagmi";
 import { magic, Relayer } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
+  connected?: boolean;
+  provider?: EthersWeb3Provider | undefined;
 }
 
-export function Web3Provider({ children }: Web3ProviderProps) {
-  //#region state
+export function Web3Provider({
+  children,
+  connected,
+  provider,
+}: Web3ProviderProps) {
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
-  const { connected, provider } = useWagmi();
-  //#endregion
 
-  //#region variables
   const Web3ContextValue = useMemo(
     () => ({
       web3,
       setWeb3,
       //@ts-ignore
-      isMagic: web3?.provider?.isMagic,
+      isMagic: web3?.provider.isMagic,
       setMountRelayerOnApp,
     }),
     [web3]
   );
 
   useEffect(() => {
-    if (Platform.OS !== "web") {
-      if (connector.connected) {
-        const walletConnectProvider = new WalletConnectProvider({
-          connector,
-          qrcode: false,
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        });
+    if (connector.connected) {
+      const walletConnectProvider = new WalletConnectProvider({
+        connector,
+        qrcode: false,
+        infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+      });
 
-        (async function setWeb3Provider() {
-          await walletConnectProvider.enable();
-          const ethersProvider = new EthersWeb3Provider(walletConnectProvider);
-          setWeb3(ethersProvider);
-        })();
-      }
+      (async function setWeb3Provider() {
+        await walletConnectProvider.enable();
+        const ethersProvider = new EthersWeb3Provider(walletConnectProvider);
+        setWeb3(ethersProvider);
+      })();
     }
   }, [connector]);
 
@@ -70,7 +68,6 @@ export function Web3Provider({ children }: Web3ProviderProps) {
     }
   }, [connected, provider]);
 
-  //#endregion
   return (
     <Web3Context.Provider value={Web3ContextValue}>
       {children}
