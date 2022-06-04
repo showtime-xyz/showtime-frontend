@@ -1,35 +1,8 @@
 diff --git a/node_modules/react-native-tab-view/src/PanResponderAdapter.tsx b/node_modules/react-native-tab-view/src/PanResponderAdapter.tsx
-index 3d1964a..9cbbf2f 100644
+index 3d1964a..ca73c9c 100644
 --- a/node_modules/react-native-tab-view/src/PanResponderAdapter.tsx
 +++ b/node_modules/react-native-tab-view/src/PanResponderAdapter.tsx
-@@ -1,23 +1,11 @@
- import * as React from 'react';
- import {
--  Animated,
--  PanResponder,
--  Keyboard,
--  StyleSheet,
--  GestureResponderEvent,
--  PanResponderGestureState,
--  I18nManager,
--  View,
-+  Animated, GestureResponderEvent, I18nManager, Keyboard, PanResponder, PanResponderGestureState, StyleSheet, View
- } from 'react-native';
--import useAnimatedValue from './useAnimatedValue';
- import type {
--  NavigationState,
--  Route,
--  Layout,
--  EventEmitterProps,
--  PagerProps,
--  Listener,
-+  EventEmitterProps, Layout, Listener, NavigationState, PagerProps, Route
- } from './types';
-+import useAnimatedValue from './useAnimatedValue';
- 
- type Props<T extends Route> = PagerProps & {
-   layout: Layout;
-@@ -268,14 +256,19 @@ export default function PanResponderAdapter<T extends Route>({
+@@ -268,14 +268,18 @@ export default function PanResponderAdapter<T extends Route>({
    });
  
    const maxTranslate = layout.width * (routes.length - 1);
@@ -41,19 +14,18 @@ index 3d1964a..9cbbf2f 100644
 -    }),
 -    I18nManager.isRTL ? -1 : 1
 -  );
-+
-+  const translateX = React.useMemo(()=>{
-+    if(maxTranslate <=0) return 0
++  const translateX = React.useMemo(() => {
++    if (maxTranslate <= 0) return 0;
 +    return Animated.multiply(
 +      panX.interpolate({
 +        inputRange: [-maxTranslate, 0],
 +        outputRange: [-maxTranslate, 0],
-+        extrapolate: 'clamp',
++        extrapolate: "clamp",
 +      }),
 +      I18nManager.isRTL ? -1 : 1
-+    )
-+  },[maxTranslate,panX]);
-+
++    );
++  }, [maxTranslate, panX]);
++  
  
    return children({
      position: layout.width
