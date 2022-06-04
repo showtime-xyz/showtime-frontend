@@ -1,6 +1,6 @@
 import { useWindowDimensions } from "react-native";
 
-import { ConnectButton as RainbotConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Button, View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
@@ -20,7 +20,7 @@ export const NetworkButton = () => {
   const isMobileWeb = width > 768;
 
   return (
-    <RainbotConnectButton.Custom>
+    <RainbowConnectButton.Custom>
       {({ chain, openChainModal }) => {
         return chain?.unsupported ? (
           <View tw="ml-2">
@@ -45,13 +45,13 @@ export const NetworkButton = () => {
           </View>
         ) : null;
       }}
-    </RainbotConnectButton.Custom>
+    </RainbowConnectButton.Custom>
   );
 };
 
 export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
   return (
-    <RainbotConnectButton.Custom>
+    <RainbowConnectButton.Custom>
       {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
         return (
           <View
@@ -108,6 +108,6 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
           </View>
         );
       }}
-    </RainbotConnectButton.Custom>
+    </RainbowConnectButton.Custom>
   );
 };
