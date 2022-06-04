@@ -3,12 +3,12 @@ import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
-import { useAccount, useSignTypedData } from "wagmi";
 
 import ierc20MetaTx from "app/abi/IERC20MetaTx.json";
 import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
+import { useWagmi } from "app/hooks/auth/use-wagmi";
 import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
@@ -81,8 +81,7 @@ const buyNFTReducer = (
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const { getSignerAndProvider } = useSignerAndProvider();
-  const { data: wagmiData } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { address, signTypedDataAsync } = useWagmi();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
@@ -193,7 +192,6 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
-          const userAddress = wagmiData?.address;
           let tokenContract, nonce;
 
           if (tokenAddr === LIST_CURRENCIES.USDC) {
@@ -203,7 +201,7 @@ export const useBuyNFT = () => {
               infuraPolygonProvider
             );
 
-            nonce = await tokenContract.nonces(userAddress);
+            nonce = await tokenContract.nonces(address);
           } else {
             tokenContract = new ethers.Contract(
               tokenAddr,
@@ -211,12 +209,12 @@ export const useBuyNFT = () => {
               infuraPolygonProvider
             );
 
-            nonce = await tokenContract.getNonce(userAddress);
+            nonce = await tokenContract.getNonce(address);
           }
 
           const metatx = {
             nonce,
-            from: userAddress,
+            from: address,
             functionSignature: tokenContract.interface.encodeFunctionData(
               "approve",
               [process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT]
@@ -256,12 +254,11 @@ export const useBuyNFT = () => {
             infuraPolygonProvider
           );
 
-          const userAddress = wagmiData?.address;
           const permit = {
-            owner: userAddress,
+            owner: address,
             spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
             value: SOL_MAX_INT,
-            nonce: await tokenContract.nonces(userAddress),
+            nonce: await tokenContract.nonces(address),
             deadline: Date.now() + 120,
           };
 

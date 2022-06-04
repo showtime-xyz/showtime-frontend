@@ -1,9 +1,8 @@
 import { Platform } from "react-native";
 
-import { useAccount } from "wagmi";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 
+import { useWagmi } from "app/hooks/auth/use-wagmi";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
@@ -12,7 +11,7 @@ export const useSignerAndProvider = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
   const Alert = useAlert();
-  const { data: wagmiData } = useAccount();
+  const { address } = useWagmi();
 
   const getSignerAndProvider = async () => {
     let userAddress = await getUserAddress();
@@ -27,8 +26,8 @@ export const useSignerAndProvider = () => {
 
   const getUserAddress = async () => {
     let userAddress;
-    if (wagmiData) {
-      userAddress = wagmiData.address;
+    if (address) {
+      userAddress = address;
     } else if (Platform.OS !== "web" && web3) {
       const addr = await web3.getSigner().getAddress();
       userAddress = addr;

@@ -8,7 +8,7 @@ import {
   useSignTypedData,
 } from "wagmi";
 
-const useWagmi = () => {
+const useWallet = () => {
   const { data: wagmiData } = useAccount();
   const { data: wagmiSignData, signMessage } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
@@ -39,4 +39,4 @@ const useWagmi = () => {
   };
 };
 
-export { useWagmi };
+export { useWallet };
