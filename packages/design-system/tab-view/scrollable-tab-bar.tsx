@@ -176,9 +176,8 @@ export const ScollableTabBar = ({
           />
         );
       }}
-      // Todo: support scroll.
-      // scrollEnabled
-      // tabStyle={{ width: 90 }}
+      scrollEnabled
+      tabStyle={styles.tabStyle}
       onTabPress={onTabPress}
       renderTabBarItem={({
         onPress,
@@ -245,5 +244,8 @@ const styles = StyleSheet.create({
     position: "relative",
     shadowOpacity: 0,
     elevation: 0,
+  },
+  tabStyle: {
+    width: "auto",
   },
 });
