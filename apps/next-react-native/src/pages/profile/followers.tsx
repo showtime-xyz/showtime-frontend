@@ -1,3 +1,3 @@
-import { FollowerScreen } from "app/screens/followers";
+import { FollowersScreen } from "app/screens/followers";
 
-export default FollowerScreen;
+export default FollowersScreen;

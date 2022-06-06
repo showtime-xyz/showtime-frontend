@@ -1,8 +1,8 @@
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+
 import { FollowerModal } from "app/components/follow-modal";
 
-import { withModalScreen } from "design-system/modal-screen/with-modal-screen";
-
-export const FollowerScreen = withModalScreen(FollowerModal, {
+export const FollowersScreen = withModalScreen(FollowerModal, {
   title: "followers",
   matchingPathname: "/profile/followers",
   matchingQueryParam: "followersModal",

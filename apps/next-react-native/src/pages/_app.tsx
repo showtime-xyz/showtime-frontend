@@ -53,7 +53,7 @@ import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
-import { FollowerScreen } from "app/screens/followers";
+import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
@@ -284,7 +284,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                                     <BuyScreen />
                                     <ActivitiesScreen />
                                     <EditProfileScreen />
-                                    <FollowerScreen />
+                                    <FollowersScreen />
                                     <FollowingScreen />
                                     <DropScreen />
                                     <ClaimScreen />
