@@ -20,7 +20,7 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { NetworkButton } from "app/components/connect-button";
+// import { NetworkButton } from "app/components/connect-button";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
@@ -230,7 +230,7 @@ const HeaderRight = () => {
                 </Button>
               </>
             )}
-            {Platform.OS === "web" ? <NetworkButton /> : null}
+            {/* {Platform.OS === "web" ? <NetworkButton /> : null} */}
           </View>
         </View>
       )}
