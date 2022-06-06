@@ -14,7 +14,7 @@ import {
   useUserProfile,
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import useContentWidth from "app/hooks/use-content-width";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 

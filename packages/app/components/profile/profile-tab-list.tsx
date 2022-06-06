@@ -16,7 +16,7 @@ import { Card } from "app/components/card";
 import { getLocalFileURI } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
-import useContentWidth from "app/hooks/use-content-width";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";

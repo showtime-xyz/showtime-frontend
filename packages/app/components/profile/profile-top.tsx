@@ -18,13 +18,13 @@ import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { Hidden } from "design-system/hidden";
 
-import useContentWidth from "../../hooks/use-content-width";
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 
