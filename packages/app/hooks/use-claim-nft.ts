@@ -9,8 +9,8 @@ import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
+import { useWallet } from "./auth/use-wallet";
 import { useSignTypedData } from "./use-sign-typed-data";
-import { useSignerAndProvider } from "./use-signer-provider";
 
 const minterABI = ["function mintEdition(address _to)"];
 
@@ -56,7 +56,7 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = () => {
   const signTypedData = useSignTypedData();
-  const { getUserAddress } = useSignerAndProvider();
+  const { getAddress } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
 
@@ -64,7 +64,7 @@ export const useClaimNFT = () => {
     dispatch({ type: "loading" });
     try {
       const targetInterface = new ethers.utils.Interface(minterABI);
-      const userAddress = await getUserAddress();
+      const userAddress = await getAddress();
       if (userAddress) {
         const callData = targetInterface.encodeFunctionData("mintEdition", [
           userAddress,

@@ -9,8 +9,8 @@ import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
+import { useWallet } from "./auth/use-wallet";
 import { useSignTypedData } from "./use-sign-typed-data";
-import { useSignerAndProvider } from "./use-signer-provider";
 import { useUploadMedia } from "./use-upload-media";
 
 const editionCreatorABI = [
@@ -85,7 +85,7 @@ export type UseDropNFT = {
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMedia();
-  const { getUserAddress } = useSignerAndProvider();
+  const { getAddress } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
 
@@ -110,7 +110,7 @@ export const useDropNFT = () => {
         params.duration,
       ]);
 
-      const userAddress = await getUserAddress();
+      const userAddress = await getAddress();
 
       // Sending params to backend to get the signature request
       const forwardRequest = await axios({

@@ -12,8 +12,8 @@ import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
+import { useBiconomy } from "app/hooks/use-biconomy";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useSignerAndProvider } from "app/hooks/use-signer-provider";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
@@ -246,7 +246,7 @@ export const useMintNFT = () => {
 
   const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
-  const { getSignerAndProvider } = useSignerAndProvider();
+  const { getBiconomySigner } = useBiconomy();
 
   async function uploadMedia() {
     // Media Upload
@@ -378,7 +378,7 @@ export const useMintNFT = () => {
     try {
       const nftJsonIpfsHash = await uploadNFTJson(params);
 
-      const result = await getSignerAndProvider();
+      const result = await getBiconomySigner();
       if (result) {
         const { signer, signerAddress, provider } = result;
 

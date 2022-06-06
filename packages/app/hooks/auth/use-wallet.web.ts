@@ -15,6 +15,10 @@ const useWallet = () => {
   const { activeChain } = useNetwork();
   const { signTypedDataAsync } = useSignTypedData();
 
+  const getAddress = async () => {
+    return wagmiData?.address;
+  };
+
   const connected = useMemo(
     () => !!wagmiData && !!activeChain && !!wagmiSigner?.provider,
     [wagmiData, activeChain, wagmiSigner?.provider]
@@ -27,7 +31,7 @@ const useWallet = () => {
   const loggedIn = useMemo(() => connected, [connected]);
 
   return {
-    address: wagmiData?.address,
+    getAddress,
     connected,
     signed,
     loggedIn,

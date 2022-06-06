@@ -9,7 +9,7 @@ import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useWallet } from "app/hooks/auth/use-wallet";
-import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useBiconomy } from "app/hooks/use-biconomy";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { SOL_MAX_INT } from "app/lib/constants";
@@ -80,15 +80,15 @@ const buyNFTReducer = (
 
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
-  const { getSignerAndProvider } = useSignerAndProvider();
-  const { address, signTypedDataAsync } = useWallet();
+  const { getBiconomySigner } = useBiconomy();
+  const { getAddress, signTypedDataAsync } = useWallet();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
     if (Platform.OS !== "web") return;
 
     dispatch({ type: "loading" });
-    const result = await getSignerAndProvider();
+    const result = await getBiconomySigner();
     if (result) {
       const { signer, signerAddress, provider } = result;
 
@@ -192,6 +192,7 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
+          const address = await getAddress();
           let tokenContract, nonce;
 
           if (tokenAddr === LIST_CURRENCIES.USDC) {
@@ -248,6 +249,7 @@ export const useBuyNFT = () => {
             signature,
           };
         } else {
+          const address = await getAddress();
           const tokenContract = new ethers.Contract(
             tokenAddr,
             iercPermit20Abi,

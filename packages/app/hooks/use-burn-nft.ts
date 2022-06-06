@@ -3,7 +3,7 @@ import { useReducer } from "react";
 import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
-import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useBiconomy } from "app/hooks/use-biconomy";
 import { track } from "app/lib/analytics";
 
 type BurnNFTType = {
@@ -55,12 +55,12 @@ export type UseBurnNFT = {
 
 export const useBurnNFT = () => {
   const [state, dispatch] = useReducer(burnNFTReducer, initialBurnNFTState);
-  const { getSignerAndProvider } = useSignerAndProvider();
+  const { getBiconomySigner } = useBiconomy();
 
   async function burnToken({ ...params }: UseBurnNFT) {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<{ transaction: string }>(async (resolve, reject) => {
-      const result = await getSignerAndProvider();
+      const result = await getBiconomySigner();
       if (result) {
         const { provider, signer, signerAddress } = result;
 
