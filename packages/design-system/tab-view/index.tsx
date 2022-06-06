@@ -14,7 +14,6 @@ import { HeaderTabViewProps } from "./src/create-header-tabs";
 import { HeaderTabViewComponent } from "./src/index";
 import { Route } from "./src/types";
 
-export * from "./hooks";
 export * from "./tab-scene";
 
 type TabBarProps<T extends Route> = HeaderTabViewProps<T>;

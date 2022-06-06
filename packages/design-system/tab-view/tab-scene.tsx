@@ -18,8 +18,6 @@ import { createCollapsibleScrollView } from "./src/create-collapsible-scrollView
 import { SceneComponent } from "./src/scene";
 import { SceneProps } from "./src/types";
 
-export * from "./hooks";
-
 export const TabScrollView = createCollapsibleScrollView<
   typeof ScrollView,
   ScrollViewProps
