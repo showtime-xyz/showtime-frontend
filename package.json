@@ -71,8 +71,7 @@
     "jest-runtime": "28.0.3",
     "react-native-reanimated": "2.8.0",
     "@types/react": "18.0.1",
-    "@storybook/react-native": "next",
-    "react-native-tab-view": "^3.1.1"
+    "@storybook/react-native": "next"
   },
   "react-native": {
     "zlib": "browserify-zlib",
