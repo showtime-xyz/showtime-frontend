@@ -49,7 +49,6 @@ export const useLogin = (onLogin?: () => void) => {
         trackButtonClicked({ name: "Login with wallet" });
 
         if (isWeb) {
-          setAuthenticationStatus("AUTHENTICATING");
           onOpenConnectModal?.();
         } else {
           await loginWithWallet();
