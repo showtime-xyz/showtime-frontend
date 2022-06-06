@@ -7423,6 +7423,7 @@ __metadata:
     react-native-safe-area-context: 4.2.4
     react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
+    react-native-tab-view: ^3.1.1
     react-native-vision-camera: 2.12.0
     react-native-web: 0.17.7
     react-native-webview: 11.18.1
@@ -7527,6 +7528,7 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
+    react-native-tab-view: ^3.1.1
     react-native-web: 0.17.7
     react-player: ^2.8.1
     react-scroll: ^1.8.4
@@ -28428,6 +28430,17 @@ __metadata:
   version: 1.0.5
   resolution: "react-native-swipe-gestures@npm:1.0.5"
   checksum: d637bc40baa50fa0ce3b6cf2b494efeceaea03cc3875cb7cf7d76922914a21d5e6b098d4a084fb291ce61bfbb0a241c03cff24b15bebf0cfae1c146f4ad10d92
+  languageName: node
+  linkType: hard
+
+"react-native-tab-view@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "react-native-tab-view@npm:3.1.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-pager-view: "*"
+  checksum: 8866e746f989b02243bcf1e5259698c3db50446d2b3a2c717873376734526be7fbeac520014adbe28cc0da116a7b5cd37508a6f56b90f992724be5f6222e0b71
   languageName: node
   linkType: hard
 
