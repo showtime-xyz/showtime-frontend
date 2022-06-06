@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useMemo, Suspense, useRef } from "react";
+import { useCallback, useReducer, useMemo, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { SceneRendererProps } from "react-native-tab-view";
@@ -15,9 +15,10 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import useContentWidth from "app/hooks/use-content-width";
+import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { HeaderTabView, useTabState } from "design-system/tab-view/index";
+import { HeaderTabView } from "design-system/tab-view/index";
 import { Route } from "design-system/tab-view/src/types";
 
 import { ErrorBoundary } from "../error-boundary";
@@ -50,7 +51,14 @@ const Profile = ({ address }: { address: string | null }) => {
   } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  const { index, setIndex, setIsRefreshing, isRefreshing } = useTabState([]);
+  const {
+    index,
+    setIndex,
+    setIsRefreshing,
+    isRefreshing,
+    setTabRefs,
+    currentTab,
+  } = useTabState<ProfileTabListRef>([]);
 
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
@@ -71,15 +79,13 @@ const Profile = ({ address }: { address: string | null }) => {
     { ...defaultFilters }
   );
 
-  const tabRefs = useRef<ProfileTabListRef[]>([]);
-
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await refresh();
     // Todo: use async/await.
-    tabRefs.current[index]?.refresh();
+    currentTab?.refresh();
     setIsRefreshing(false);
-  }, [index, refresh, setIsRefreshing]);
+  }, [currentTab, refresh, setIsRefreshing]);
   const renderScene = useCallback(
     ({
       route: { index },
@@ -103,17 +109,18 @@ const Profile = ({ address }: { address: string | null }) => {
               isBlocked={isBlocked}
               list={list}
               index={index}
-              ref={(ref) => ref && (tabRefs.current[index] = ref)}
+              ref={setTabRefs}
             />
           </Suspense>
         </ErrorBoundary>
       );
     },
     [
-      data,
+      data?.tabs,
       isBlocked,
       profileData?.data.profile.profile_id,
       profileData?.data.profile.username,
+      setTabRefs,
     ]
   );
   const headerBgLeft = useMemo(() => {
