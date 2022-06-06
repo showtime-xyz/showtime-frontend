@@ -5,15 +5,15 @@ import {
   NavigationState,
   SceneRendererProps,
   TabBar,
-} from "react-native-tab-view/src";
+} from "react-native-tab-view-next/src";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import useContentWidth from "app/hooks/use-content-width";
 import { Haptics } from "app/lib/haptics";
 
-import { Pressable } from "../pressable";
 import { Route } from "./src/types";
 import { memoize } from "./src/utils";
 

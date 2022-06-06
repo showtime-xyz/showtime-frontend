@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { SceneRendererProps } from "react-native-tab-view/src";
+import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";

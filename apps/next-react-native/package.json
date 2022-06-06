@@ -70,7 +70,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-mentions": "^4.1.1",
     "react-native-fast-image": "^8.5.11",
-    "react-native-tab-view": "^3.1.1",
+    "react-native-tab-view-next": "^3.1.2",
     "react-native-web": "0.17.7",
     "react-player": "^2.8.1",
     "react-scroll": "^1.8.4",
