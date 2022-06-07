@@ -1,4 +1,4 @@
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
@@ -6,16 +6,15 @@ import { getBiconomy } from "app/utilities";
 export const useBiconomy = () => {
   const connector = useWalletConnect();
   let { web3 } = useWeb3();
-  const { getAddress } = useWallet();
+  const { userAddress } = useCurrentUserAddress();
 
   const getBiconomySigner = async () => {
-    const address = await getAddress();
     const biconomy = await (await getBiconomy(connector, web3)).biconomy;
 
     return {
-      signer: biconomy.getSignerByAddress(address),
+      signer: biconomy.getSignerByAddress(userAddress),
       provider: biconomy.getEthersProvider(),
-      signerAddress: address,
+      signerAddress: userAddress,
       web3,
     };
   };

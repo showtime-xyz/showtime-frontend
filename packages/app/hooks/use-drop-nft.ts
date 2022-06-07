@@ -2,16 +2,15 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { useUploadMedia } from "app/hooks/use-upload-media";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
-
-import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
-import { useWallet } from "./auth/use-wallet";
-import { useSignTypedData } from "./use-sign-typed-data";
-import { useUploadMedia } from "./use-upload-media";
 
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
@@ -85,7 +84,7 @@ export type UseDropNFT = {
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMedia();
-  const { getAddress } = useWallet();
+  const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
 
@@ -109,8 +108,6 @@ export const useDropNFT = () => {
         params.royalty * 100, // royaltyBPS
         params.duration,
       ]);
-
-      const userAddress = await getAddress();
 
       // Sending params to backend to get the signature request
       const forwardRequest = await axios({

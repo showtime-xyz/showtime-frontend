@@ -10,6 +10,7 @@ import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { useBiconomy } from "app/hooks/use-biconomy";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { SOL_MAX_INT } from "app/lib/constants";
@@ -81,7 +82,8 @@ const buyNFTReducer = (
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const { getBiconomySigner } = useBiconomy();
-  const { getAddress, signTypedDataAsync } = useWallet();
+  const { signTypedDataAsync } = useWallet();
+  const { userAddress } = useCurrentUserAddress();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
@@ -192,7 +194,6 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
-          const address = await getAddress();
           let tokenContract, nonce;
 
           if (tokenAddr === LIST_CURRENCIES.USDC) {
@@ -202,7 +203,7 @@ export const useBuyNFT = () => {
               infuraPolygonProvider
             );
 
-            nonce = await tokenContract.nonces(address);
+            nonce = await tokenContract.nonces(userAddress);
           } else {
             tokenContract = new ethers.Contract(
               tokenAddr,
@@ -210,12 +211,12 @@ export const useBuyNFT = () => {
               infuraPolygonProvider
             );
 
-            nonce = await tokenContract.getNonce(address);
+            nonce = await tokenContract.getNonce(userAddress);
           }
 
           const metatx = {
             nonce,
-            from: address,
+            from: userAddress,
             functionSignature: tokenContract.interface.encodeFunctionData(
               "approve",
               [process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT]
@@ -249,7 +250,6 @@ export const useBuyNFT = () => {
             signature,
           };
         } else {
-          const address = await getAddress();
           const tokenContract = new ethers.Contract(
             tokenAddr,
             iercPermit20Abi,
@@ -257,10 +257,10 @@ export const useBuyNFT = () => {
           );
 
           const permit = {
-            owner: address,
+            owner: userAddress,
             spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
             value: SOL_MAX_INT,
-            nonce: await tokenContract.nonces(address),
+            nonce: await tokenContract.nonces(userAddress),
             deadline: Date.now() + 120,
           };
 
