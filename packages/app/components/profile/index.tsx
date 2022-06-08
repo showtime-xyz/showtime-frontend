@@ -1,6 +1,7 @@
 import { useCallback, useReducer, useMemo, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -59,6 +60,8 @@ const Profile = ({ address }: { address: string | null }) => {
     setTabRefs,
     currentTab,
   } = useTabState<ProfileTabListRef>([]);
+  const animationHeaderPosition = useSharedValue(0);
+  const animationHeaderHeight = useSharedValue(0);
 
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
@@ -147,10 +150,16 @@ const Profile = ({ address }: { address: string | null }) => {
         )}
         <View tw="web:max-w-screen-xl w-full">
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-          <ProfileTop address={address} isBlocked={isBlocked} />
+          <ProfileTop
+            address={address}
+            animationHeaderPosition={animationHeaderPosition}
+            animationHeaderHeight={animationHeaderHeight}
+            isBlocked={isBlocked}
+          />
         </View>
       </View>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerBgLeft, headerShadow, headerHeight, address, isBlocked]);
 
   const routes = useMemo(
@@ -162,6 +171,7 @@ const Profile = ({ address }: { address: string | null }) => {
       })) ?? [],
     [data]
   );
+
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
       <View style={{ width: contentWidth }} tw="flex-1">
@@ -184,6 +194,8 @@ const Profile = ({ address }: { address: string | null }) => {
             width: contentWidth,
           }}
           style={tw.style("z-1")}
+          animationHeaderPosition={animationHeaderPosition}
+          animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={
             Platform.OS === "web" ? (
               <View

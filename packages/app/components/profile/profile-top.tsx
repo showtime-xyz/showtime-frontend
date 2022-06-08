@@ -1,15 +1,19 @@
 import { useMemo, useRef, useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
+import Animated, {
+  useAnimatedStyle,
+  interpolate,
+} from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
 // import { LightBoxImg } from "@showtime-xyz/universal.light-box";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,7 +22,6 @@ import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
@@ -66,9 +69,13 @@ const Follow = ({
 export const ProfileTop = ({
   address,
   isBlocked,
+  animationHeaderPosition,
+  animationHeaderHeight,
 }: {
   address: string | null;
   isBlocked: boolean;
+  animationHeaderPosition: Animated.SharedValue<number>;
+  animationHeaderHeight: Animated.SharedValue<number>;
 }) => {
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -111,7 +118,6 @@ export const ProfileTop = ({
   // banner ratio: w:h=3:1
   const coverHeight = useMemo(() => (width < 768 ? width / 3 : 180), [width]);
 
-  const coverWidth = useContentWidth(-64);
   const onPressFollower = useCallback(
     () =>
       router.push(
@@ -154,7 +160,33 @@ export const ProfileTop = ({
       ),
     [profileId, router]
   );
-
+  const avatarStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: interpolate(
+            animationHeaderPosition.value,
+            [0, animationHeaderHeight.value],
+            [1, 1.5]
+          ),
+        },
+        {
+          translateY: interpolate(
+            animationHeaderPosition.value,
+            [0, animationHeaderHeight.value],
+            [0, -44]
+          ),
+        },
+        {
+          translateX: interpolate(
+            animationHeaderPosition.value,
+            [0, animationHeaderHeight.value],
+            [0, 44]
+          ),
+        },
+      ],
+    };
+  }, []);
   return (
     <>
       <View
@@ -189,7 +221,14 @@ export const ProfileTop = ({
       <View tw="mx-2" pointerEvents="box-none">
         <View tw="flex-row justify-between" pointerEvents="box-none">
           <View tw="flex-row items-end">
-            <View tw="mt-[-72px] rounded-full bg-white p-2 dark:bg-black">
+            <Animated.View
+              style={[
+                tw.style(
+                  "w-32 h-32 rounded-full mt-[-72px]  overflow-hidden border-4 border-white dark:border-black"
+                ),
+                avatarStyle,
+              ]}
+            >
               <Skeleton
                 height={128}
                 width={128}
@@ -212,13 +251,18 @@ export const ProfileTop = ({
                   />
                 )} */}
                 {profileData && (
-                  <Avatar
-                    url={getProfileImage(profileData?.data.profile)}
-                    size={128}
+                  <Image
+                    source={{
+                      uri: getProfileImage(profileData?.data.profile),
+                    }}
+                    width={128}
+                    height={128}
+                    tw={"web:object-cover h-32 w-32"}
+                    style={StyleSheet.absoluteFillObject}
                   />
                 )}
               </Skeleton>
-            </View>
+            </Animated.View>
           </View>
 
           {address ? (
