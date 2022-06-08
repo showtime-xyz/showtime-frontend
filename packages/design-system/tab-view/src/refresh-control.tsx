@@ -10,7 +10,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { useRefreshDerivedValue } from "./hooks";
+import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
 import { RefreshControlProps, RefreshTypeEnum } from "./types";
 
 type RefreshControlContainerProps = {

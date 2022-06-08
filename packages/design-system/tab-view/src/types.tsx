@@ -4,7 +4,7 @@ import type { ScrollViewProps } from "react-native";
 
 import type { NativeGesture } from "react-native-gesture-handler";
 import type Animated from "react-native-reanimated";
-import type { Route as TabViewRoute } from "react-native-tab-view";
+import type { Route as TabViewRoute } from "react-native-tab-view-next/src";
 
 export type Route = TabViewRoute & {
   index: number;
@@ -40,6 +40,15 @@ export type CollapsibleHeaderProps = {
   panHeaderMaxOffset?: number;
   onPullEnough?: () => void;
   refreshControlColor?: string;
+  refreshControlTop?: number;
+  /**
+   * WEB_ONLY: Insert element into tabbar.
+   */
+  insertTabBarElement?: JSX.Element | null;
+  /**
+   * WEB_ONLY: Insert element into tabbar on Sticky.
+   */
+  insertStickyTabBarElement?: JSX.Element | null;
 };
 
 export type GestureContainerProps = CollapsibleHeaderProps & {
@@ -54,7 +63,7 @@ export interface RefreshControlProps {
   refreshControlColor?: string;
 }
 
-export type SceneProps<P extends object> = {
+export type SceneProps<P extends object> = P & {
   ContainerView: React.ComponentClass<Animated.AnimateProps<P>>;
   forwardedRef: any;
   index: number;

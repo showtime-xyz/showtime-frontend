@@ -65,7 +65,7 @@ export const UserList = ({
 
   if (users && users?.length > 0) {
     return Platform.select({
-      default: (
+      android: (
         <BottomSheetFlatList
           data={users}
           keyExtractor={keyExtractor}
@@ -76,7 +76,7 @@ export const UserList = ({
           ItemSeparatorComponent={Separator}
         />
       ),
-      web: (
+      default: (
         <FlatList
           data={users}
           keyExtractor={keyExtractor}

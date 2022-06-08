@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { ViewStyle } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -15,13 +16,21 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
-const heartContainerStyle = {
+const heartContainerStyle: ViewStyle = {
   position: "absolute",
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
   width: "100%",
-} as const;
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.32,
+  shadowRadius: 5.46,
+  elevation: 9,
+};
 
 export const FeedItemTapGesture = ({
   children,
@@ -40,15 +49,6 @@ export const FeedItemTapGesture = ({
     return {
       opacity: heartAnimation.value,
       transform: [{ scale: heartAnimation.value }],
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 0.32,
-      shadowRadius: 5.46,
-
-      elevation: 9,
     };
   });
 

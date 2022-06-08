@@ -42,6 +42,8 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       search: "search",
       profile: "profile/:username",
       editProfile: "profile/edit",
+      followers: "profile/followers",
+      following: "profile/following",
       settings: "settings",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",

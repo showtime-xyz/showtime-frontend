@@ -28,7 +28,8 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeaderTabContext } from "./context";
-import { useRefreshDerivedValue, useSceneInfo } from "./hooks";
+import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
+import { useSceneInfo } from "./hooks/use-scene-info";
 import RefreshControlContainer from "./refresh-control";
 import type { GestureContainerProps } from "./types";
 import { animateToRefresh, mScrollTo } from "./utils";
@@ -63,6 +64,7 @@ export const GestureContainer = React.forwardRef<
     panHeaderMaxOffset,
     onPullEnough,
     refreshControlColor,
+    refreshControlTop = 0,
   },
   forwardedRef
 ) {
@@ -237,7 +239,12 @@ export const GestureContainer = React.forwardRef<
       isPullEnough.value = false;
     })
     .onUpdate((event) => {
-      if (!sceneIsReady.value[curIndexValue.value] || !onStartRefresh) return;
+      if (
+        !sceneIsReady.value[curIndexValue.value] ||
+        !onStartRefresh ||
+        childScrollYTrans[curIndexValue.value]?.value === undefined
+      )
+        return;
       const onReadyToActive = (isPulling: boolean) => {
         dragIndex.value = curIndexValue.value;
         if (isPulling) {
@@ -318,7 +325,7 @@ export const GestureContainer = React.forwardRef<
     if (!onStartRefresh) return;
     return (
       <RefreshControlContainer
-        top={0}
+        top={refreshControlTop}
         refreshHeight={refreshHeight}
         overflowPull={overflowPull}
         refreshValue={tabsTrans}

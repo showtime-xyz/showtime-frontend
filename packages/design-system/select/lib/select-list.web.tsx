@@ -40,11 +40,12 @@ export const SelectList: React.FC<SelectListProps> = forwardRef(
               duration: 250,
             }}
             style={[
-              tw`z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
+              tw`z-20 absolute top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl max-h-[50vh] `,
               {
                 boxShadow: isDark
                   ? DROPDOWN_DRAK_SHADOW
                   : DROPDOWN_LIGHT_SHADOW,
+                overflow: "auto",
               },
             ]}
             {...rest}

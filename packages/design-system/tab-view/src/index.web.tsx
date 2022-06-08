@@ -1,20 +1,10 @@
 import React, {
   useCallback,
   useImperativeHandle,
-  useMemo,
   useState,
+  useRef,
 } from "react";
-import {
-  FlatList,
-  FlatListProps,
-  LayoutChangeEvent,
-  ScrollView,
-  ScrollViewProps,
-  SectionList,
-  SectionListProps,
-  StyleSheet,
-  View,
-} from "react-native";
+import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 import {
@@ -24,29 +14,16 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view";
+} from "react-native-tab-view-next/src";
 import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
-import { createCollapsibleScrollView } from "./create-collapsible-scrollView";
 import { useSceneInfo } from "./hooks";
 import type { CollapsibleHeaderProps } from "./types";
 
-export const TabScrollView = createCollapsibleScrollView<
-  typeof ScrollView,
-  ScrollViewProps
->(ScrollView);
-
-export const TabFlatList = createCollapsibleScrollView<
-  typeof FlatList,
-  FlatListProps<any>
->(FlatList);
-
-export const TabSectionList = createCollapsibleScrollView<
-  typeof SectionList,
-  SectionListProps<any>
->(SectionList);
-export const HeaderTabView = React.forwardRef(CollapsibleHeaderTabView);
+export const HeaderTabViewComponent = React.forwardRef(
+  CollapsibleHeaderTabView
+);
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
@@ -58,11 +35,11 @@ function CollapsibleHeaderTabView<T extends Route>(
     renderTabBar,
     overflowHeight = 0,
     renderScrollHeader,
-    initHeaderHeight = 0,
     initTabbarHeight = 44,
     minHeaderHeight = 0,
-    animationHeaderHeight,
+    insertTabBarElement,
     navigationState,
+    insertStickyTabBarElement,
     ...restProps
   }: HeaderTabViewProps<T>,
   ref?: any
@@ -75,14 +52,11 @@ function CollapsibleHeaderTabView<T extends Route>(
 
   // layout
   const [tabbarHeight, setTabbarHeight] = useState(initTabbarHeight);
-  const [tabviewHeight, setTabviewHeight] = useState(0);
-  const [headerHeight, setHeaderHeight] = useState(
-    initHeaderHeight - overflowHeight
+  const [stickyState, setStickyState] = useState<Sticky.StatusCode>(
+    Sticky.STATUS_ORIGINAL
   );
-  const calcHeight = useMemo(
-    () => headerHeight - minHeaderHeight,
-    [headerHeight, minHeaderHeight]
-  );
+
+  const containeRef = useRef(null);
   useImperativeHandle(ref, () => ({}), []);
   const tabbarOnLayout = useCallback(
     ({
@@ -98,27 +72,6 @@ function CollapsibleHeaderTabView<T extends Route>(
     },
     [tabbarHeight, overflowHeight]
   );
-  const containerOnLayout = useCallback((event: LayoutChangeEvent) => {
-    setTabviewHeight(event.nativeEvent.layout.height);
-  }, []);
-  const headerOnLayout = useCallback(
-    (event: LayoutChangeEvent) => {
-      if (headerHeight === event.nativeEvent.layout.height) return;
-      const height = event.nativeEvent.layout.height - overflowHeight;
-      setHeaderHeight(height);
-      if (animationHeaderHeight) {
-        animationHeaderHeight.value = calcHeight - minHeaderHeight;
-      }
-    },
-    [
-      animationHeaderHeight,
-      calcHeight,
-      headerHeight,
-      minHeaderHeight,
-      overflowHeight,
-    ]
-  );
-
   const _renderTabBar = useCallback(
     (
       tabbarProps: SceneRendererProps & {
@@ -145,17 +98,25 @@ function CollapsibleHeaderTabView<T extends Route>(
       />
     );
   };
+  const onStickyStateChange = useCallback(
+    ({ status }: Sticky.Status) => setStickyState(status),
+    []
+  );
   const _renderTabBarContainer = (children: React.ReactElement) => {
     return (
       <View style={styles.tabbarStyle}>
-        <View style={styles.container}>
-          {renderScrollHeader && (
-            <View onLayout={headerOnLayout}>{renderScrollHeader()}</View>
-          )}
-          <Sticky enabled={true} top={0}>
-            <View onLayout={tabbarOnLayout}>{children}</View>
-          </Sticky>
-        </View>
+        <Sticky
+          enabled={true}
+          onStateChange={onStickyStateChange}
+          top={minHeaderHeight}
+        >
+          {React.isValidElement(insertStickyTabBarElement) &&
+            stickyState === Sticky.STATUS_FIXED &&
+            insertStickyTabBarElement}
+          <View onLayout={tabbarOnLayout}>{children}</View>
+
+          {React.isValidElement(insertTabBarElement) && insertTabBarElement}
+        </Sticky>
       </View>
     );
   };
@@ -167,10 +128,8 @@ function CollapsibleHeaderTabView<T extends Route>(
         shareAnimatedValue,
         headerTrans,
         tabbarHeight,
-        expectHeight: Math.floor(
-          headerHeight + tabviewHeight - minHeaderHeight
-        ),
-        headerHeight,
+        expectHeight: 0,
+        headerHeight: 0,
         refreshHeight: 0,
         overflowPull: 0,
         pullExtendedCoefficient: 0,
@@ -182,12 +141,11 @@ function CollapsibleHeaderTabView<T extends Route>(
         isStartRefreshing,
       }}
     >
-      <View style={styles.container}>
-        <View style={styles.container} onLayout={containerOnLayout}>
-          {renderTabView({
-            renderTabBarContainer: _renderTabBarContainer,
-          })}
-        </View>
+      <View ref={containeRef} style={styles.container}>
+        {renderScrollHeader && renderScrollHeader()}
+        {renderTabView({
+          renderTabBarContainer: _renderTabBarContainer,
+        })}
       </View>
     </HeaderTabContext.Provider>
   );
@@ -196,12 +154,8 @@ function CollapsibleHeaderTabView<T extends Route>(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: "hidden",
   },
   tabbarStyle: {
-    left: 0,
-    position: "absolute",
-    right: 0,
-    zIndex: 10,
+    zIndex: 1,
   },
 });
