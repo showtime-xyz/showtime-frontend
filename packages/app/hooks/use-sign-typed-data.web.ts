@@ -6,8 +6,7 @@ import { useSignTypedData as useWagmiSignTypedData, useNetwork } from "wagmi";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
-const EXPECTED_CHAIN_ID =
-  process.env.NEXT_NEXT_PUBLIC_SIGN_CHAIN_IDPUBLIC_CHAIN_ID || 137;
+const EXPECTED_CHAIN_ID = process.env.NEXT_PUBLIC_SIGN_CHAIN_ID || "137";
 
 export const useSignTypedData = () => {
   const { activeChain, switchNetwork } = useNetwork();
@@ -20,7 +19,7 @@ export const useSignTypedData = () => {
     value: Record<string, any>,
     onError: (e: string) => void
   ) => {
-    if (activeChain?.id !== EXPECTED_CHAIN_ID) {
+    if (activeChain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
       onError(
         "Wallet must point to polygon network to complete the transaction"
       );
@@ -36,7 +35,7 @@ export const useSignTypedData = () => {
             text: "Switch chain",
             onPress: async () => {
               try {
-                switchNetwork?.(EXPECTED_CHAIN_ID);
+                switchNetwork?.(parseInt(EXPECTED_CHAIN_ID));
               } catch (e) {
                 Alert.alert(
                   "Network switching failed",
