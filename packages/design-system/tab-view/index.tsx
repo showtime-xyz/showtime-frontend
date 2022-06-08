@@ -1,10 +1,7 @@
 import { useCallback, forwardRef } from "react";
 import { StatusBar } from "react-native";
 
-import {
-  SceneRendererProps,
-  NavigationState,
-} from "react-native-tab-view-next";
+import { SceneRendererProps, NavigationState } from "react-native-tab-view";
 
 import { colors } from "@showtime-xyz/universal.tailwind";
 
@@ -18,7 +15,7 @@ import { HeaderTabViewComponent } from "./src/index";
 import { Route } from "./src/types";
 
 export * from "./tab-scene";
-export * from "react-native-tab-view-next";
+export * from "react-native-tab-view";
 
 type TabBarProps<T extends Route> = HeaderTabViewProps<T>;
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
