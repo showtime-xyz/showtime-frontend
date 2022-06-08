@@ -2,7 +2,7 @@ import { useCallback, useReducer, useMemo, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { SceneRendererProps } from "react-native-tab-view/src";
+import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";

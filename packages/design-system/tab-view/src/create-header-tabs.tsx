@@ -12,7 +12,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view/src";
+} from "react-native-tab-view-next/src";
 
 import { GestureContainer, GestureContainerRef } from "./gesture-container";
 import type { CollapsibleHeaderProps } from "./types";
