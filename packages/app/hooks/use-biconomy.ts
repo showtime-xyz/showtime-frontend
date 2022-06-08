@@ -5,7 +5,7 @@ import { getBiconomy } from "app/utilities";
 
 export const useBiconomy = () => {
   const connector = useWalletConnect();
-  let { web3 } = useWeb3();
+  const { web3 } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
 
   const getBiconomySigner = async () => {

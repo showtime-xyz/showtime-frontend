@@ -18,7 +18,8 @@ export const useSignTypedData = () => {
   const signTypedData = async (
     domain: TypedDataDomain,
     types: Record<string, Array<TypedDataField>>,
-    value: Record<string, any>
+    value: Record<string, any>,
+    onError: (e: string) => void
   ) => {
     // magic or web
     try {
@@ -30,10 +31,15 @@ export const useSignTypedData = () => {
       }
     } catch (e: any) {
       Logger.error("signing failed with error", e);
+      onError(e);
+
       if (
         e.code === -32603 ||
         (typeof e.message === "string" && e.message.includes("chainId"))
       ) {
+        onError(
+          "Wallet must point to polygon network to complete the transaction"
+        );
         Alert.alert(
           "Switch network",
           "Wallet must point to polygon network to complete the transaction",
