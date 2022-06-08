@@ -86,8 +86,8 @@ export const Trending = () => {
         onIndexChange={setIndex}
         renderScrollHeader={renderHeader}
         minHeaderHeight={Platform.select({
-          ios: headerHeight,
-          default: 0,
+          default: headerHeight,
+          android: 0,
         })}
         refreshControlTop={Platform.select({
           ios: headerHeight,

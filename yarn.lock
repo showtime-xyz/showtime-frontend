@@ -7527,7 +7527,6 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
-    react-native-tab-view: ^3.1.1
     react-native-web: 0.17.7
     react-player: ^2.8.1
     react-scroll: ^1.8.4
@@ -28432,7 +28431,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-tab-view@npm:^3.1.1":
+"react-native-tab-view@npm:3.1.1":
   version: 3.1.1
   resolution: "react-native-tab-view@npm:3.1.1"
   peerDependencies:
@@ -30291,7 +30290,7 @@ __metadata:
     prettier-plugin-tailwindcss: 0.1.10
     react-native-fast-image: ^8.5.11
     react-native-os: ^1.2.6
-    react-native-tab-view: ^3.1.1
+    react-native-tab-view: 3.1.1
     sentry-expo: ^4.1.0
     turbo: ^1.2.8
   languageName: unknown
