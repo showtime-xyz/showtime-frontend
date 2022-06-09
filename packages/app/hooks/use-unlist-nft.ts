@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { track } from "app/lib/analytics";
 
-import { useSignerAndProvider } from "./use-signer-provider";
+import { useBiconomy } from "./use-biconomy";
 
 export type UnlistNFT = {
   status:
@@ -48,7 +48,7 @@ const listNFTReducer = (
 };
 
 export const useUnlistNFT = () => {
-  const { getSignerAndProvider } = useSignerAndProvider();
+  const { getBiconomySigner } = useBiconomy();
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
@@ -66,7 +66,7 @@ export const useUnlistNFT = () => {
 
         dispatch({ type: "status", status: "unlisting" });
 
-        const result = await getSignerAndProvider();
+        const result = await getBiconomySigner();
 
         if (result) {
           const { signer, signerAddress, provider } = result;

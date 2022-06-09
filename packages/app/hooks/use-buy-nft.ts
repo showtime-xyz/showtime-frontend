@@ -8,13 +8,14 @@ import ierc20MetaTx from "app/abi/IERC20MetaTx.json";
 import ierc20MetaTxNonces from "app/abi/IERC20MetaTxNonces.json";
 import iercPermit20Abi from "app/abi/IERC20Permit.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
-import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useBiconomy } from "app/hooks/use-biconomy";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { SOL_MAX_INT } from "app/lib/constants";
-import getWeb3Modal from "app/lib/web3-modal";
 import { NFT } from "app/types";
-import { parseBalance } from "app/utilities";
+import { MATIC_CHAIN_ID, parseBalance } from "app/utilities";
 
 type Status =
   | "idle"
@@ -80,14 +81,16 @@ const buyNFTReducer = (
 
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
-  const { getSignerAndProvider } = useSignerAndProvider();
+  const { getBiconomySigner } = useBiconomy();
+  const signTypedDataAsync = useSignTypedData();
+  const { userAddress } = useCurrentUserAddress();
 
   const buyNFT = async ({ nft, quantity }: { nft: NFT; quantity: number }) => {
     if (!nft || !nft.listing) return;
     if (Platform.OS !== "web") return;
 
     dispatch({ type: "loading" });
-    const result = await getSignerAndProvider();
+    const result = await getBiconomySigner();
     if (result) {
       const { signer, signerAddress, provider } = result;
 
@@ -184,12 +187,6 @@ export const useBuyNFT = () => {
 
       dispatch({ type: "grantingAllowance" });
       try {
-        const web3Modal = await getWeb3Modal();
-
-        const web3 = new ethers.providers.Web3Provider(
-          await web3Modal.connect()
-        );
-
         if (
           [
             LIST_CURRENCIES.WETH,
@@ -197,7 +194,6 @@ export const useBuyNFT = () => {
             LIST_CURRENCIES.USDC,
           ].includes(tokenAddr)
         ) {
-          const userAddress = await web3.getSigner().getAddress();
           let tokenContract, nonce;
 
           if (tokenAddr === LIST_CURRENCIES.USDC) {
@@ -227,7 +223,7 @@ export const useBuyNFT = () => {
             ),
           };
 
-          const signature = await web3.getSigner()._signTypedData(
+          const signature = await signTypedDataAsync(
             {
               name: CURRENCY_NAMES[tokenAddr],
               version: "1",
@@ -244,7 +240,15 @@ export const useBuyNFT = () => {
                 { name: "functionSignature", type: "bytes" },
               ],
             },
-            metatx
+            metatx,
+            (error: string) => {
+              dispatch({
+                type: "error",
+                payload: {
+                  error,
+                },
+              });
+            }
           );
 
           permitRequest = {
@@ -260,7 +264,6 @@ export const useBuyNFT = () => {
             infuraPolygonProvider
           );
 
-          const userAddress = await web3.getSigner().getAddress();
           const permit = {
             owner: userAddress,
             spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
@@ -269,12 +272,11 @@ export const useBuyNFT = () => {
             deadline: Date.now() + 120,
           };
 
-          const signature = await web3.getSigner()._signTypedData(
+          const signature = await signTypedDataAsync(
             {
               name: CURRENCY_NAMES[tokenAddr],
               version: "1",
-              chainId:
-                process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137,
+              chainId: MATIC_CHAIN_ID,
               verifyingContract: tokenAddr,
             },
             {
@@ -286,7 +288,15 @@ export const useBuyNFT = () => {
                 { name: "deadline", type: "uint256" },
               ],
             },
-            permit
+            permit,
+            (error: string) => {
+              dispatch({
+                type: "error",
+                payload: {
+                  error,
+                },
+              });
+            }
           );
 
           permitRequest = {

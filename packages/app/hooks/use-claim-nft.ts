@@ -2,15 +2,14 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
-
-import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
-import { useSignTypedData } from "./use-sign-typed-data";
-import { useSignerAndProvider } from "./use-signer-provider";
 
 const minterABI = ["function mintEdition(address _to)"];
 
@@ -56,7 +55,7 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = () => {
   const signTypedData = useSignTypedData();
-  const { getUserAddress } = useSignerAndProvider();
+  const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
 
@@ -64,7 +63,6 @@ export const useClaimNFT = () => {
     dispatch({ type: "loading" });
     try {
       const targetInterface = new ethers.utils.Interface(minterABI);
-      const userAddress = await getUserAddress();
       if (userAddress) {
         const callData = targetInterface.encodeFunctionData("mintEdition", [
           userAddress,
@@ -83,7 +81,10 @@ export const useClaimNFT = () => {
         const signature = await signTypedData(
           forwardRequest.domain,
           forwardRequest.types,
-          forwardRequest.value
+          forwardRequest.value,
+          (error: string) => {
+            dispatch({ type: "error", error });
+          }
         );
 
         Logger.log("Signature", signature);

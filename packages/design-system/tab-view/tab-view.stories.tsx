@@ -1,12 +1,14 @@
-import React, { useRef, useState, useCallback } from "react";
-import { StatusBar, StyleSheet, View, Text } from "react-native";
+import React, { useCallback, useState } from "react";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
-import { HeaderTabView, TabFlatList } from "./index";
+import { TabFlatList } from ".";
+import { HeaderTabView } from "./index";
+import { Route } from "./src/types";
 
 export default {
   component: HeaderTabView,
@@ -40,8 +42,7 @@ const TabScene = ({ route }: any) => {
 };
 export const Basic: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const ref = useRef(null);
-  const [routes] = useState([
+  const [routes] = useState<Route[]>([
     { key: "like", title: "Like", index: 0 },
     { key: "owner", title: "Owner", index: 1 },
     { key: "created", title: "Created", index: 2 },

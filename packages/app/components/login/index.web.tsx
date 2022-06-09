@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { yup } from "app/lib/yup";
 
+import { ConnectButton } from "../connect-button";
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
@@ -81,13 +81,7 @@ export function Login({ onLogin }: LoginProps) {
         <>
           <LoginHeader />
           <View tw="p-4">
-            <Button
-              onPress={() => handleSubmitWallet()}
-              variant="primary"
-              size="regular"
-            >
-              <ButtonLabel>Sign in with Wallet</ButtonLabel>
-            </Button>
+            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           </View>
           <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
             <View tw="h-2" />

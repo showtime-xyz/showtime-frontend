@@ -7,6 +7,8 @@ import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 // Todo: move to inner-components.
@@ -16,6 +18,9 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
+import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 // import { enableFreeze } from 'react-native-screens'
@@ -71,6 +76,25 @@ Sentry.init({
 
 const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
 const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
+
+const { chains, provider } = configureChains(
+  [chain.polygon],
+  [
+    alchemyProvider({ alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID }),
+    publicProvider(),
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "Showtime",
+  chains,
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider,
+});
 
 function renderEmptyAnalyticsSnippet() {
   return `rudderanalytics=window.rudderanalytics=[];for(var methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],i=0;i<methods.length;i++){var method=methods[i];rudderanalytics[method]=function(a){return function(){rudderanalytics.push([a].concat(Array.prototype.slice.call(arguments)))}}(method)}rudderanalytics.load("${RUDDERSTACK_WRITE_KEY}","${RUDDERSTACK_DATA_PLANE_URL}",{sendAdblockPage:!1,sendAdblockPageOptions:{integrations:{All:!1,Amplitude:!1}},logLevel:"ERROR"}),rudderanalytics.page();`;
@@ -239,71 +263,75 @@ export default function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <SafeAreaProvider>
         <ToastProvider>
-          <AlertProvider>
-            <SnackbarProvider>
-              <SWRProvider>
-                <Web3Provider>
-                  <AppContext.Provider value={injectedGlobalContext}>
-                    <AuthProvider>
-                      <UserProvider>
-                        <CSROnly>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <MintProvider>
-                                    <View tw="bg-gray-100 dark:bg-black">
-                                      <Header
-                                        canGoBack={
-                                          router.pathname === "/search" ||
-                                          router.pathname.split("/").length -
-                                            1 >=
-                                            2
-                                        }
-                                      />
+          <WagmiConfig client={wagmiClient}>
+            <RainbowKitProvider chains={chains}>
+              <AlertProvider>
+                <SnackbarProvider>
+                  <SWRProvider>
+                    <Web3Provider>
+                      <AppContext.Provider value={injectedGlobalContext}>
+                        <AuthProvider>
+                          <UserProvider>
+                            <CSROnly>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <NavigationProvider>
+                                      <MintProvider>
+                                        <View tw="bg-gray-100 dark:bg-black">
+                                          <Header
+                                            canGoBack={
+                                              router.pathname === "/search" ||
+                                              router.pathname.split("/")
+                                                .length -
+                                                1 >=
+                                                2
+                                            }
+                                          />
 
-                                      <View
-                                        tw="min-h-screen items-center"
-                                        // @ts-ignore
-                                        style={{ overflowX: "hidden" }}
-                                      >
-                                        <Component {...pageProps} />
-                                      </View>
+                                          <View
+                                            tw="min-h-screen items-center"
+                                            // @ts-ignore
+                                            style={{ overflowX: "hidden" }}
+                                          >
+                                            <Component {...pageProps} />
+                                          </View>
 
-                                      <Footer />
-                                    </View>
+                                          <Footer />
+                                        </View>
 
-                                    {/* Modals */}
-                                    <CommentsScreen />
-                                    <TransferScreen />
-                                    <CreateScreen />
-                                    <DeleteScreen />
-                                    <ListScreen />
-                                    <UnlistScreen />
-                                    <DetailsScreen />
-                                    <BuyScreen />
-                                    <ActivitiesScreen />
-                                    <EditProfileScreen />
-                                    <FollowersScreen />
-                                    <FollowingScreen />
-                                    <DropScreen />
-                                    <ClaimScreen />
-                                    {/* Login should be the last so
-                                      it renders on top of others if needed */}
-                                    <LoginScreen />
-                                  </MintProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </CSROnly>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContext.Provider>
-                </Web3Provider>
-              </SWRProvider>
-            </SnackbarProvider>
-          </AlertProvider>
+                                        {/* Modals */}
+                                        <CommentsScreen />
+                                        <TransferScreen />
+                                        <CreateScreen />
+                                        <DeleteScreen />
+                                        <ListScreen />
+                                        <UnlistScreen />
+                                        <DetailsScreen />
+                                        <BuyScreen />
+                                        <ActivitiesScreen />
+                                        <EditProfileScreen />
+                                        <FollowersScreen />
+                                        <FollowingScreen />
+                                        <DropScreen />
+                                        <ClaimScreen />
+                                        {/* Login should be the last so it renders on top of others if needed */}
+                                        <LoginScreen />
+                                      </MintProvider>
+                                    </NavigationProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </CSROnly>
+                          </UserProvider>
+                        </AuthProvider>
+                      </AppContext.Provider>
+                    </Web3Provider>
+                  </SWRProvider>
+                </SnackbarProvider>
+              </AlertProvider>
+            </RainbowKitProvider>
+          </WagmiConfig>
         </ToastProvider>
       </SafeAreaProvider>
     </>
