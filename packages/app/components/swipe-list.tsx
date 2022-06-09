@@ -227,6 +227,8 @@ export const SwipeList = ({
 
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
+  if (data.length === 0) return null;
+
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <ViewabilityTrackerRecyclerList
