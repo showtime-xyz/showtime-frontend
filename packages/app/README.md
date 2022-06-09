@@ -82,7 +82,7 @@ Here is a quick overview of the repo.
 
 ### Commands
 
-The monorepo leverages [Turbo](https://turborepo.org/docs) as it's build system. Their are a lot of advantages to Turbo but two deciding factors were
+The monorepo leverages [Turbo](https://turborepo.org/docs) as it's build system. There are a lot of advantages to Turbo but two deciding factors were
 
 1. Faster, incremental builds
 2. Cloud caching, managed by Vercel
