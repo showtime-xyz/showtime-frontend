@@ -6000,9 +6000,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rudderstack/rudder-sdk-react-native@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.0"
+"@rudderstack/rudder-sdk-react-native@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.1"
   dependencies:
     "@babel/runtime": ^7.7.7
     "@types/async-lock": ^1.1.3
@@ -6010,7 +6010,7 @@ __metadata:
     async-lock: ^1.3.0
   peerDependencies:
     react-native: ">=0.41.2 <=0.67.2"
-  checksum: 6f6292f8c1500e9e6f736cdb59a4bb207be096efa1e4b1b59b4baa375774bce1dd1416a5044102e7cb9ddacd2f674b79761b2c96de93475c1cc6f6cf4487d173
+  checksum: 2b828a5a854506f48a632d89c4cd4ed1e75fe79f43cafaf270199296942d750156604fdb6962cc79c0b61ed759ad75ba754a75babe03e68abb788653c6d9e12e
   languageName: node
   linkType: hard
 
@@ -7246,7 +7246,7 @@ __metadata:
     "@react-navigation/stack": ^6.1.0
     "@react-three/drei": ^9.5.3
     "@react-three/fiber": ^8.0.12
-    "@rudderstack/rudder-sdk-react-native": 1.4.0
+    "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^3.3.0
     "@shopify/react-native-skia": 0.1.123
     "@showtime-xyz/universal.accordion": ^0.0.7
