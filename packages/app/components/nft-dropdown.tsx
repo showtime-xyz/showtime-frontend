@@ -110,20 +110,21 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
       >
         {hasOwnership ? (
-          <>
-            <DropdownMenuItem
-              onSelect={() => {
-                hideNFT(nftId, listId);
-              }}
-              key="details"
-              tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-            >
-              <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-                Hide
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-          </>
+          <DropdownMenuItem
+            onSelect={() => {
+              hideNFT(nftId, listId);
+            }}
+            key="hide"
+            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+          >
+            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+              Hide
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
+
+        {hasOwnership ? (
+          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         ) : null}
 
         <DropdownMenuItem
