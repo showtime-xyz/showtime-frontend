@@ -7,20 +7,22 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { Web3Context } from "app/context/web3-context";
 import { magic, Relayer } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
-import getWeb3Modal from "app/lib/web3-modal";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
+  connected?: boolean;
+  provider?: EthersWeb3Provider | undefined;
 }
 
-export function Web3Provider({ children }: Web3ProviderProps) {
-  //#region state
+export function Web3Provider({
+  children,
+  connected,
+  provider,
+}: Web3ProviderProps) {
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
-  //#endregion
 
-  //#region variables
   const Web3ContextValue = useMemo(
     () => ({
       web3,
@@ -33,46 +35,39 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   );
 
   useEffect(() => {
-    if (Platform.OS !== "web") {
-      if (connector.connected) {
-        const walletConnectProvider = new WalletConnectProvider({
-          connector,
-          qrcode: false,
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        });
+    if (connector.connected) {
+      const walletConnectProvider = new WalletConnectProvider({
+        connector,
+        qrcode: false,
+        infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+      });
 
-        (async function setWeb3Provider() {
-          await walletConnectProvider.enable();
-          const ethersProvider = new EthersWeb3Provider(walletConnectProvider);
-          setWeb3(ethersProvider);
-        })();
-      }
+      (async function setWeb3Provider() {
+        await walletConnectProvider.enable();
+        const ethersProvider = new EthersWeb3Provider(walletConnectProvider);
+        setWeb3(ethersProvider);
+      })();
     }
   }, [connector]);
 
   useEffect(() => {
-    magic?.user?.isLoggedIn().then((isLoggedIn) => {
-      if (magic.rpcProvider && isLoggedIn) {
-        //@ts-ignore
-        const provider = new EthersWeb3Provider(magic.rpcProvider);
-        setWeb3(provider);
-      }
-    });
-
-    if (Platform.OS === "web") {
-      (async () => {
-        const web3Modal = await getWeb3Modal();
-
-        if (web3Modal.cachedProvider) {
-          const provider = await web3Modal.connect();
-          const ethersProvider = new EthersWeb3Provider(provider);
-          setWeb3(ethersProvider);
+    if (Platform.OS !== "web") {
+      magic?.user?.isLoggedIn().then((isLoggedIn) => {
+        if (magic.rpcProvider && isLoggedIn) {
+          //@ts-ignore
+          const provider = new EthersWeb3Provider(magic.rpcProvider);
+          setWeb3(provider);
         }
-      })();
+      });
     }
   }, []);
 
-  //#endregion
+  useEffect(() => {
+    if (connected) {
+      setWeb3(provider);
+    }
+  }, [connected, provider]);
+
   return (
     <Web3Context.Provider value={Web3ContextValue}>
       {children}

@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import transfererAbi from "app/abi/ShowtimeMT.json";
-import { useSignerAndProvider } from "app/hooks/use-signer-provider";
+import { useBiconomy } from "app/hooks/use-biconomy";
 import { track } from "app/lib/analytics";
 import { NFT } from "app/types";
 
@@ -72,7 +72,7 @@ export const useTransferNFT = () => {
     initialTransferNFTState
   );
 
-  const { getSignerAndProvider } = useSignerAndProvider();
+  const { getBiconomySigner } = useBiconomy();
 
   const transferToken = async ({
     nft,
@@ -82,7 +82,7 @@ export const useTransferNFT = () => {
     return new Promise<{ transaction: string; tokenId: number }>(
       // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
-        const result = await getSignerAndProvider();
+        const result = await getBiconomySigner();
         if (result) {
           const { signerAddress, signer, provider } = result;
           const contract = new ethers.Contract(

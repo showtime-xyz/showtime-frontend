@@ -1,143 +1,109 @@
-import { useCallback, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 
-import { personalSignMessage } from "app/lib/utilities";
-// @ts-ignore
-import getWeb3Modal from "app/lib/web3-modal";
-
-import { useStableCallback } from "../use-stable-callback";
+import { useAccessToken } from "../../lib/access-token";
+import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
+import { useWallet } from "./use-wallet";
 import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 
 export function useWalletLogin() {
   //#region states
-  const { status, name, address, signature, nonce, error, dispatch } =
-    useWalletLoginState();
+  const { status, name, error, dispatch } = useWalletLoginState();
   //#endregion
 
   //#region hooks
-  const { web3, setWeb3 } = useWeb3();
+  const { setWeb3 } = useWeb3();
   const { getNonce, rotateNonce } = useNonce();
-  const { setAuthenticationStatus, login: _login, logout } = useAuth();
+  const { login: _login } = useAuth();
+  const {
+    address,
+    connected,
+    loggedIn,
+    networkChanged,
+    signMessage,
+    signed,
+    provider,
+    signature,
+  } = useWallet();
+  const { isAuthenticated } = useUser();
+  const accessToken = useAccessToken();
+  const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
   //#endregion
 
   //#region methods
-  const connectToWallet = useCallback(
-    async function connectToWallet() {
-      dispatch("CONNECT_TO_WALLET_REQUEST");
-      let walletName, walletAddress;
+  const fetchNonce = async (_address: string) => {
+    try {
+      const response = await getNonce(_address);
 
-      try {
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        const web3Modal = await getWeb3Modal();
-        const _web3 = new Web3Provider(await web3Modal.connect());
-
-        setWeb3(_web3);
-        //TODO: couldn't find a way to get wallet name
-        walletName = "wallet";
-        walletAddress = await _web3.getSigner().getAddress();
-
-        dispatch("CONNECT_TO_WALLET_SUCCESS", {
-          name: walletName,
-          address: walletAddress,
-        });
-      } catch (error) {
-        dispatch("ERROR", { error });
-      }
-    },
-    [dispatch, setWeb3]
-  );
-  const fetchNonce = useCallback(
-    async function fetchNonce() {
-      dispatch("FETCH_NONCE_REQUEST");
-      try {
-        const response = await getNonce(address!);
-        dispatch("FETCH_NONCE_SUCCESS", {
-          nonce: response,
-        });
-      } catch (error) {
-        dispatch("ERROR", { error });
-      }
-    },
-    [address, dispatch, getNonce]
-  );
-  const expireNonce = useCallback(
-    async function expireNonce() {
-      dispatch("EXPIRE_NONCE_REQUEST");
-      try {
-        await rotateNonce(address!);
-        dispatch("EXPIRE_NONCE_SUCCESS");
-      } catch (error) {
-        dispatch("ERROR", { error });
-      }
-    },
-    [address, dispatch, rotateNonce]
-  );
-  const signPersonalMessage = useCallback(
-    async function signPersonalMessage() {
-      dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
-      try {
-        const _signature = await personalSignMessage(
-          web3,
-          process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce
-        );
-        dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", { signature: _signature });
-      } catch (error) {
-        dispatch("ERROR", { error });
-      }
-    },
-    [web3, nonce, dispatch]
-  );
-  const login = useCallback(
-    async function login() {
-      dispatch("LOG_IN_REQUEST");
-      try {
+      return response;
+    } catch (error) {
+      dispatch("ERROR", { error });
+      return null;
+    }
+  };
+  const expireNonce = async (_address: string) => {
+    try {
+      await rotateNonce(_address);
+      dispatch("EXPIRE_NONCE_SUCCESS");
+    } catch (error) {
+      dispatch("ERROR", { error });
+    }
+  };
+  const handleLogin = async () => {
+    const nonce = await fetchNonce(address);
+    if (nonce) {
+      signMessage({
+        message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
+      });
+    } else {
+      dispatch("ERROR", { error: "Nonce is null" });
+    }
+  };
+  const handleSignature = async () => {
+    try {
+      if (address && signature) {
         await _login(LOGIN_WALLET_ENDPOINT, {
           signature: signature,
           address: address,
         });
-        dispatch("LOG_IN_SUCCESS");
-      } catch (error) {
-        dispatch("ERROR", { error });
+        expireNonce(address);
+      } else {
+        dispatch("ERROR", {
+          error: "Couldn't find address or signature data!",
+        });
       }
-    },
-    [dispatch, address, signature, _login]
-  );
-  const loginWithWallet = useCallback(
-    async function loginWithWallet() {
-      setAuthenticationStatus("AUTHENTICATING");
-      connectToWallet();
-    },
-    [connectToWallet, setAuthenticationStatus]
-  );
-  const continueLoginIn = useStableCallback(() => {
-    if (status === "CONNECTED_TO_WALLET" && (!address || !name)) {
-      connectToWallet();
-    } else if (status === "CONNECTED_TO_WALLET" && address && name) {
-      fetchNonce();
-    } else if (status === "FETCHED_NONCE" && nonce) {
-      signPersonalMessage();
-    } else if (status === "SIGNED_PERSONAL_MESSAGE" && signature) {
-      login();
-    } else if (status === "LOGGED_IN") {
-      expireNonce();
-    } else if (status === "EXPIRED_NONCE") {
-      // do nothing
-    } else if (status === "ERRORED") {
-      console.error("Error logging in with wallet", error);
-      logout();
+    } catch (error) {
+      dispatch("ERROR", { error });
     }
-  });
+  };
   //#endregion
 
-  //#region effects
+  const handleSetWeb3 = () => {
+    setWeb3(provider);
+  };
+
   useEffect(() => {
-    continueLoginIn();
-  }, [continueLoginIn, status]);
-  //#endregion
-  return { loginWithWallet, status, name, error };
+    if (
+      (connected && authenticated) ||
+      (connected && authenticated && !networkChanged)
+    ) {
+      handleSetWeb3();
+    } else if (connected && !authenticated && loggedIn) {
+      handleLogin();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
+
+  useEffect(() => {
+    if (signed) {
+      handleSignature();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signed]);
+
+  return { status, name, error, loginWithWallet: handleLogin };
 }

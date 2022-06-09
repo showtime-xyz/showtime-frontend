@@ -58,7 +58,7 @@ export class ReactNativeWebMain {
 
       reactNative.useTypescript({
         buildConfig: [
-          (config, context) => {
+          (config) => {
             config.setTsConfig({
               compilerOptions: {
                 allowJs: true,
@@ -83,7 +83,7 @@ export class ReactNativeWebMain {
           },
         ],
         devConfig: [
-          (config, context) => {
+          (config) => {
             config.setTsConfig({
               compilerOptions: {
                 allowJs: true,

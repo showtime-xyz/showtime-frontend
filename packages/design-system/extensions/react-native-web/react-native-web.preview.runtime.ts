@@ -1,5 +1,5 @@
 import { PreviewRuntime } from "@teambit/preview";
-import { ReactNativeAspect, ReactNativePreview } from "@teambit/react-native";
+import { ReactNativeAspect } from "@teambit/react-native";
 
 // create your theme and import it here
 // import { ThemeCompositions } from '@my-company/my-scope.theme.theme-compositions';
@@ -10,7 +10,7 @@ export class ReactNativeWebPreviewMain {
 
   static dependencies = [ReactNativeAspect];
 
-  static async provider([reactNative]: [ReactNativePreview]) {
+  static async provider() {
     const reactNativeWebPreviewMain = new ReactNativeWebPreviewMain();
     // uncomment the line below to register a new provider to wrap all compositions using this environment with a custom theme.
     // reactNative.registerProvider([ThemeCompositions]);
