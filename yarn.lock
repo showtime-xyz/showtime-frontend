@@ -28386,16 +28386,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-pager-view@npm:^5.4.9":
-  version: 5.4.15
-  resolution: "react-native-pager-view@npm:5.4.15"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 037257c1c370610c56184e19c5e02dee04fc70a9c4216b14c0611ec9566ff1dfe075e49e3404a0a03b6e4335e5b226d1092b38022eaa36e66c05c35ff909961f
-  languageName: node
-  linkType: hard
-
 "react-native-popper@npm:0.3.2, react-native-popper@npm:^0.3.2":
   version: 0.3.2
   resolution: "react-native-popper@npm:0.3.2"
