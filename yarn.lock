@@ -18013,21 +18013,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-autolinking@npm:~0.7.0":
-  version: 0.7.1
-  resolution: "expo-modules-autolinking@npm:0.7.1"
-  dependencies:
-    chalk: ^4.1.0
-    commander: ^7.2.0
-    fast-glob: ^3.2.5
-    find-up: ^5.0.0
-    fs-extra: ^9.1.0
-  bin:
-    expo-modules-autolinking: bin/expo-modules-autolinking.js
-  checksum: 2893074918151fc76bc2bc22339c1fd1d598f79af9243ea21a710c157f2ca2356f551e76b4e31cc693d32069a3cc7ffb6e70277d665f2e75d1235d379f276890
-  languageName: node
-  linkType: hard
-
 "expo-modules-core@npm:0.9.2, expo-modules-core@npm:~0.9.2":
   version: 0.9.2
   resolution: "expo-modules-core@npm:0.9.2"
