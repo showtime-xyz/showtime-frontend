@@ -74,18 +74,18 @@ function App() {
   }, []);
 
   return (
-    <AppContextProvider>
+    <ThemeProvider>
       <AppProviders>
         <StatusBar style="auto" />
         <RootStackNavigator />
       </AppProviders>
-    </AppContextProvider>
+    </ThemeProvider>
   );
 }
 
 export default App;
 
-function AppContextProvider({
+function ThemeProvider({
   children,
 }: {
   children: React.ReactNode;

@@ -15,7 +15,6 @@ import { AuthProvider } from "app/providers/auth-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MintProvider } from "app/providers/mint-provider";
 import { SWRProvider } from "app/providers/swr-provider";
-import { ThemeProvider } from "app/providers/theme-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
@@ -29,23 +28,21 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
             <SnackbarProvider>
               <SWRProvider>
                 <Web3Provider>
-                  <ThemeProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <CSROnly>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <MintProvider>{children}</MintProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </CSROnly>
-                      </UserProvider>
-                    </AuthProvider>
-                  </ThemeProvider>
+                  <AuthProvider>
+                    <UserProvider>
+                      <CSROnly>
+                        <BottomSheetModalProvider>
+                          <GrowthBookProvider growthbook={growthbook}>
+                            <FeedProvider>
+                              <NavigationProvider>
+                                <MintProvider>{children}</MintProvider>
+                              </NavigationProvider>
+                            </FeedProvider>
+                          </GrowthBookProvider>
+                        </BottomSheetModalProvider>
+                      </CSROnly>
+                    </UserProvider>
+                  </AuthProvider>
                 </Web3Provider>
               </SWRProvider>
             </SnackbarProvider>
