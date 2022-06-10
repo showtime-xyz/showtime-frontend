@@ -52,6 +52,7 @@ Sentry.init({
 export default function App({ Component, pageProps, router }: AppProps) {
   useLogRocket();
 
+  // TODO(enes): Move this logics to a separate file after tailwindcss-react-native transition
   useDeviceContext(tw, { withDeviceColorScheme: false });
   const deviceColorScheme = useDeviceColorScheme();
   const userColorScheme = useUserColorScheme();

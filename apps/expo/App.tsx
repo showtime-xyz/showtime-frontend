@@ -85,6 +85,7 @@ function App() {
 
 export default App;
 
+// TODO(enes): Move this to a separate file after tailwindcss-react-native transition
 function ThemeProvider({
   children,
 }: {
