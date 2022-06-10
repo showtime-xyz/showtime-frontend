@@ -14,14 +14,13 @@ import {
 import { tw } from "design-system/tailwind";
 
 export const useColorSchemeConfig = () => {
-  const [colorTheme, setColorTheme] = useState("");
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
   // User can override color scheme
   const userColorScheme = useUserColorScheme();
   // Use the user color scheme if it's set
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  const [colorScheme, , setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );
@@ -57,7 +56,6 @@ export const useColorSchemeConfig = () => {
     setColorScheme: (newColorScheme: "light" | "dark") => {
       setColorScheme(newColorScheme);
       setUserColorScheme(newColorScheme);
-      setColorTheme(newColorScheme);
     },
   };
 

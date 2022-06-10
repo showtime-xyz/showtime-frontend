@@ -47,8 +47,6 @@ const Profile = ({ address }: { address: string | null }) => {
   const {
     data,
     // Todo: handling loading and error state.
-    loading: tabsLoading,
-    error,
   } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });

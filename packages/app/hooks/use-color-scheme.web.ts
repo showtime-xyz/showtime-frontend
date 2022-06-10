@@ -17,7 +17,7 @@ export const useColorScheme = () => {
   // User can override color scheme
   const userColorScheme = useUserColorScheme();
   // Use the user color scheme if it's set
-  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+  const [colorScheme, , setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );
