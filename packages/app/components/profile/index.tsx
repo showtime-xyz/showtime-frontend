@@ -163,7 +163,7 @@ const Profile = ({ address }: { address: string | null }) => {
   const routes = useMemo(
     () =>
       data?.tabs?.map((item, index) => ({
-        title: item?.name,
+        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
         key: item?.name,
         index,
       })) ?? [],
