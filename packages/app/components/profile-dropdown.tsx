@@ -48,10 +48,7 @@ function ProfileDropdown({ user }: Props) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
+      <DropdownMenuContent loop>
         <DropdownMenuItem
           onSelect={async () => {
             const result = await share({
@@ -69,18 +66,14 @@ function ProfileDropdown({ user }: Props) {
             }
           }}
           key="share"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Share
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           key="block"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           onSelect={() => {
             toggleBlock({
               isBlocked,
@@ -89,12 +82,12 @@ function ProfileDropdown({ user }: Props) {
             });
           }}
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+          <DropdownMenuItemTitle>
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           onSelect={async () => {
@@ -102,11 +95,8 @@ function ProfileDropdown({ user }: Props) {
             router.pop();
           }}
           key="report"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Report
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

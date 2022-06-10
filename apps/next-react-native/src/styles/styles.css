@@ -1,5 +1,8 @@
 @tailwind base;
 
+@tailwind components;
+@tailwind utilities;
+
 @layer base {
   /* clear default iOS styling from inputs */
   input[type="text"] {
@@ -12,11 +15,39 @@
   button:focus {
     @apply outline-none;
   }
+
+  [role="menu"] > div:nth-child(1) {
+    @apply w-60 rounded-2xl bg-white bg-opacity-60 p-2 shadow backdrop-blur-md backdrop-saturate-150;
+  }
+
+  [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
+    @apply shadow-black45 bg-neutral-900 bg-opacity-70 shadow-md;
+  }
+
+  [role="menuitem"] {
+    @apply mb-1 flex-1 overflow-hidden rounded-sm;
+  }
+
+  [role="menuitem"] > div:nth-child(1) {
+    @apply p-2;
+  }
+
+  [role="menuitem"]:hover {
+    @apply cursor-pointer rounded-lg bg-gray-900 bg-opacity-5;
+  }
+
+  [data-color-scheme="dark"] [role="menuitem"]:hover {
+    @apply bg-gray-100 bg-opacity-5;
+  }
+
+  [role="menuitem"] > div > div {
+    @apply font-semibold text-gray-700;
+  }
+
+  [data-color-scheme="dark"] [role="menuitem"] > div > div {
+    @apply text-neutral-300;
+  }
 }
-
-@tailwind components;
-
-@tailwind utilities;
 
 /* SpaceGrotesk Regular */
 @font-face {
