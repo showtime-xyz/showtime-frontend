@@ -1,5 +1,4 @@
 import { ComponentProps, useMemo, useCallback } from "react";
-import { Platform } from "react-native";
 
 import { MotiView } from "moti";
 import Animated, {
@@ -12,8 +11,6 @@ import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import * as DropdownMenu from "./zeego-menu/dropdown-menu/src/index";
-
-const IS_WEB = Platform.OS === "web";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 
@@ -185,10 +182,9 @@ const DropdownMenuItemIndicator = DropdownMenu.menuify(
 );
 
 const DropdownMenuSeparator = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) =>
-    IS_WEB ? null : (
-      <DropdownMenu.Separator {...props} style={tailwind.style(props.tw)} />
-    ),
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => (
+    <DropdownMenu.Separator {...props} style={tailwind.style(props.tw)} />
+  ),
   "Separator"
 );
 

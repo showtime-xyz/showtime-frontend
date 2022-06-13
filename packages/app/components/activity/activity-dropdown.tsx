@@ -1,3 +1,6 @@
+import React, { Fragment } from "react";
+import { Platform } from "react-native";
+
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -7,7 +10,7 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
+  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -16,6 +19,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
+
+const isWeb = Platform.OS === "web";
+const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 type Props = {
   activity: any; // TODO: add Activity type

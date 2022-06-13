@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, Fragment } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator,
+  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
 } from "@showtime-xyz/universal.dropdown-menu";
@@ -23,6 +23,9 @@ import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
 import { breakpoints } from "design-system/theme";
+
+const isWeb = Platform.OS === "web";
+const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();

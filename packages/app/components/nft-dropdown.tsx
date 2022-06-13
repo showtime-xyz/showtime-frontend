@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, Fragment } from "react";
 import { Platform } from "react-native";
 
 import {
@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator,
+  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
@@ -26,6 +26,9 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
+
+const isWeb = Platform.OS === "web";
+const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 type Props = {
   nftId?: NFT["nft_id"];
