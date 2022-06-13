@@ -151,10 +151,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
     props: ComponentProps<typeof Text> &
       ComponentProps<typeof DropdownMenu.ItemTitle>
   ) => (
-    <StyledDropdownMenuItemTitle
-      {...props}
-      style={props.tw ? [tailwind.style(props.tw), props.style] : props.style}
-    >
+    <StyledDropdownMenuItemTitle {...props}>
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemTitle>
@@ -169,10 +166,7 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
     props: ComponentProps<typeof Text> &
       ComponentProps<typeof DropdownMenu.ItemSubtitle>
   ) => (
-    <StyledDropdownMenuItemSubtitle
-      {...props}
-      style={props.tw ? [tailwind.style(props.tw), props.style] : props.style}
-    >
+    <StyledDropdownMenuItemSubtitle {...props}>
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemSubtitle>
