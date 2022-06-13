@@ -65,6 +65,8 @@ export const GestureContainer = React.forwardRef<
     onPullEnough,
     refreshControlColor,
     refreshControlTop = 0,
+    emptyBodyComponent,
+    navigationState,
   },
   forwardedRef
 ) {
@@ -557,13 +559,18 @@ export const GestureContainer = React.forwardRef<
             {renderScrollHeader && (
               <View onLayout={headerOnLayout}>{renderScrollHeader()}</View>
             )}
-
-            <Animated.View
-              style={{ transform: [{ translateY: -overflowHeight }] }}
-              onLayout={tabbarOnLayout}
-            >
-              {children}
-            </Animated.View>
+            {navigationState?.routes.length === 0 && emptyBodyComponent ? (
+              <View style={{ marginTop: tabbarHeight }}>
+                {emptyBodyComponent}
+              </View>
+            ) : (
+              <Animated.View
+                style={{ transform: [{ translateY: -overflowHeight }] }}
+                onLayout={tabbarOnLayout}
+              >
+                {children}
+              </Animated.View>
+            )}
           </Animated.View>
         </GestureDetector>
       </Animated.View>

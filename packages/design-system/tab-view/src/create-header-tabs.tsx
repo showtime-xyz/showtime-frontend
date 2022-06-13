@@ -7,7 +7,6 @@ import React, {
 
 import {
   NavigationState,
-  Route,
   SceneRendererProps,
   TabBar,
   TabView,
@@ -15,7 +14,7 @@ import {
 } from "react-native-tab-view-next/src";
 
 import { GestureContainer, GestureContainerRef } from "./gesture-container";
-import type { CollapsibleHeaderProps } from "./types";
+import type { CollapsibleHeaderProps, Route } from "./types";
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
@@ -78,6 +77,7 @@ function CollapsibleHeaderTabView<T extends Route>({
 
   const renderTabView = (e: { renderTabBarContainer: any }) => {
     const { Component, ...restProps } = props;
+
     return (
       <Component
         {...restProps}

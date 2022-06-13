@@ -5,7 +5,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -21,9 +20,11 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { HeaderTabView } from "design-system/tab-view/index";
 import { Route } from "design-system/tab-view/src/types";
+import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";
+import { Profil404 } from "./profile-404";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
@@ -40,14 +41,16 @@ const ProfileScreen = ({ username }: { username: string | null }) => {
 type Filter = typeof defaultFilters;
 
 const Profile = ({ address }: { address: string | null }) => {
-  const { data: profileData, refresh } = useUserProfile({ address });
+  const {
+    data: profileData,
+    isError,
+    isLoading,
+    refresh,
+  } = useUserProfile({ address });
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
-  const {
-    data,
-    // Todo: handling loading and error state.
-  } = useProfileNftTabs({
+  const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
   const {
@@ -79,7 +82,6 @@ const Profile = ({ address }: { address: string | null }) => {
     },
     { ...defaultFilters }
   );
-
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await refresh();
@@ -87,37 +89,32 @@ const Profile = ({ address }: { address: string | null }) => {
     currentTab?.refresh();
     setIsRefreshing(false);
   }, [currentTab, refresh, setIsRefreshing]);
+
   const renderScene = useCallback(
     ({
       route: { index },
     }: SceneRendererProps & {
       route: Route;
     }) => {
-      const list = data?.tabs[index];
-      if (!list) return null;
       return (
         <ErrorBoundary>
-          <Suspense
-            fallback={
-              <View tw="items-center justify-center pt-20">
-                <Spinner size="small" />
-              </View>
-            }
-          >
-            <ProfileTabList
-              username={profileData?.data.profile.username}
-              profileId={profileData?.data.profile.profile_id}
-              isBlocked={isBlocked}
-              list={list}
-              index={index}
-              ref={setTabRefs}
-            />
+          <Suspense fallback={<TabSpinner index={index} />}>
+            {data?.tabs[index] && (
+              <ProfileTabList
+                username={profileData?.data.profile.username}
+                profileId={profileData?.data.profile.profile_id}
+                isBlocked={isBlocked}
+                list={data?.tabs[index]}
+                index={index}
+                ref={setTabRefs}
+              />
+            )}
           </Suspense>
         </ErrorBoundary>
       );
     },
     [
-      data?.tabs,
+      data,
       isBlocked,
       profileData?.data.profile.profile_id,
       profileData?.data.profile.username,
@@ -153,12 +150,25 @@ const Profile = ({ address }: { address: string | null }) => {
             animationHeaderPosition={animationHeaderPosition}
             animationHeaderHeight={animationHeaderHeight}
             isBlocked={isBlocked}
+            profileData={profileData?.data}
+            isLoading={isLoading}
+            isError={isError}
           />
         </View>
       </View>
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerBgLeft, headerShadow, headerHeight, address, isBlocked]);
+  }, [
+    headerBgLeft,
+    headerShadow,
+    headerHeight,
+    address,
+    animationHeaderPosition,
+    animationHeaderHeight,
+    isBlocked,
+    profileData?.data,
+    isLoading,
+    isError,
+  ]);
 
   const routes = useMemo(
     () =>
@@ -192,6 +202,8 @@ const Profile = ({ address }: { address: string | null }) => {
             width: contentWidth,
           }}
           style={tw.style("z-1")}
+          autoWidthTabBar
+          emptyBodyComponent={isError ? <Profil404 /> : null}
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={

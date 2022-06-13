@@ -20,7 +20,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
-import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
@@ -47,14 +47,14 @@ const Follow = ({
   tw,
 }: FollowProps) => {
   return (
-    <View tw={["flex-row", tw ? tw : ""]} pointerEvents="box-none">
+    <View tw={["flex-row", tw ? tw : ""]}>
       <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
           <Text tw="font-medium">following</Text>
         </Text>
       </PressableScale>
-      <View tw="ml-8 md:ml-4" pointerEvents="box-none">
+      <View tw="ml-8 md:ml-4">
         <PressableScale onPress={onPressFollower}>
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             {`${followersCount ?? 0} `}
@@ -71,24 +71,28 @@ export const ProfileTop = ({
   isBlocked,
   animationHeaderPosition,
   animationHeaderHeight,
+  profileData,
+  isError,
+  isLoading,
 }: {
   address: string | null;
   isBlocked: boolean;
   animationHeaderPosition: Animated.SharedValue<number>;
   animationHeaderHeight: Animated.SharedValue<number>;
+  profileData: UserProfile | undefined;
+  isError: boolean;
+  isLoading: boolean;
 }) => {
   const router = useRouter();
   const userId = useCurrentUserId();
-  const { data: profileData, loading } = useUserProfile({ address });
-  const name = getProfileName(profileData?.data.profile);
-  const username = profileData?.data.profile.username;
-  const bio = profileData?.data.profile.bio;
+  const name = getProfileName(profileData?.profile);
+  const username = profileData?.profile.username;
+  const bio = profileData?.profile.bio;
   const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing } = useMyInfo();
-
-  const profileId = profileData?.data.profile.profile_id;
+  const profileId = profileData?.profile.profile_id;
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
     [profileId, isFollowing]
@@ -190,27 +194,28 @@ export const ProfileTop = ({
   return (
     <>
       <View
-        tw={`overflow-hidden bg-gray-100 dark:bg-gray-900 xl:-mx-20 xl:rounded-b-[32px]`}
+        tw={`overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]`}
       >
         <Skeleton
           height={coverHeight}
           width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
-          show={loading}
+          show={isLoading}
           colorMode={colorMode as any}
+          radius={0}
         >
-          {/* {profileData?.data.profile.cover_url && (
+          {/* {profileData?.profile.cover_url && (
             <LightBoxImg
               source={{
-                uri: profileData?.data.profile.cover_url,
+                uri: profileData?.profile.cover_url,
               }}
               width={coverWidth}
               height={coverHeight}
               resizeMode="cover"
             />
           )} */}
-          {profileData?.data.profile.cover_url && (
+          {profileData?.profile.cover_url && (
             <Image
-              source={{ uri: profileData?.data.profile.cover_url }}
+              source={{ uri: profileData?.profile.cover_url }}
               tw={`h-[${coverHeight}px] w-100 web:object-cover`}
               alt="Cover image"
               resizeMode="cover"
@@ -218,13 +223,13 @@ export const ProfileTop = ({
           )}
         </Skeleton>
       </View>
-      <View tw="mx-2" pointerEvents="box-none">
-        <View tw="flex-row justify-between" pointerEvents="box-none">
+      <View tw="mx-2">
+        <View tw="flex-row justify-between">
           <View tw="flex-row items-end">
             <Animated.View
               style={[
                 tw.style(
-                  "w-32 h-32 rounded-full mt-[-72px]  overflow-hidden border-4 border-white dark:border-black"
+                  "w-32 h-32 rounded-full mt-[-72px]  overflow-hidden border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-900"
                 ),
                 avatarStyle,
               ]}
@@ -232,14 +237,14 @@ export const ProfileTop = ({
               <Skeleton
                 height={128}
                 width={128}
-                show={loading}
+                show={isLoading}
                 colorMode={colorMode as any}
-                radius={99999}
+                radius={0}
               >
                 {/* {profileData && (
                   <LightBoxImg
                     source={{
-                      uri: getProfileImage(profileData?.data.profile),
+                      uri: getProfileImage(profileData?.profile),
                     }}
                     imgLayout={{
                       width: 128,
@@ -253,7 +258,7 @@ export const ProfileTop = ({
                 {profileData && (
                   <Image
                     source={{
-                      uri: getProfileImage(profileData?.data.profile),
+                      uri: getProfileImage(profileData?.profile),
                     }}
                     width={128}
                     height={128}
@@ -265,8 +270,8 @@ export const ProfileTop = ({
             </Animated.View>
           </View>
 
-          {address ? (
-            <View tw="mr-2 flex-row items-center" pointerEvents="box-none">
+          {address && !isError ? (
+            <View tw="mr-2 flex-row items-center">
               {isBlocked ? (
                 <Button
                   size={width < 768 ? "small" : "regular"}
@@ -282,19 +287,19 @@ export const ProfileTop = ({
                     <Follow
                       onPressFollower={onPressFollower}
                       onPressFollowing={onPressFollowing}
-                      followersCount={profileData?.data.followers_count}
-                      followingCount={profileData?.data.following_count}
+                      followersCount={profileData?.followers_count}
+                      followingCount={profileData?.following_count}
                       tw="mr-8"
                     />
                   </Hidden>
                   {profileId && userId !== profileId ? (
                     <>
-                      <ProfileDropdown user={profileData?.data.profile} />
+                      <ProfileDropdown user={profileData?.profile} />
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}
                         isFollowing={isFollowingUser}
-                        name={profileData?.data.profile.name}
+                        name={profileData?.profile.name}
                         profileId={profileId}
                       />
                     </>
@@ -329,42 +334,45 @@ export const ProfileTop = ({
           ) : null}
         </View>
 
-        <View tw="px-2 py-3" pointerEvents="box-none">
-          <View pointerEvents="none">
-            <Skeleton
-              height={24}
-              width={150}
-              show={loading}
-              colorMode={colorMode as any}
-            >
+        <View tw="px-2 py-3">
+          {isLoading ? (
+            <>
+              <Skeleton
+                height={24}
+                width={150}
+                show={true}
+                colorMode={colorMode as any}
+              />
+              <View tw="h-2" />
+              <Skeleton
+                height={12}
+                width={100}
+                show={true}
+                colorMode={colorMode as any}
+              />
+            </>
+          ) : (
+            <>
               <Text
                 tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
                 numberOfLines={1}
               >
                 {name}
               </Text>
-            </Skeleton>
-            <View tw="h-2" />
 
-            <Skeleton
-              height={12}
-              width={100}
-              show={loading}
-              colorMode={colorMode as any}
-            >
-              <View tw="flex-row items-center">
+              <View tw="mt-2 flex-row items-center">
                 <Text tw="text-base font-semibold text-gray-900 dark:text-white">
                   {username ? `@${username}` : null}
                 </Text>
 
-                {profileData?.data.profile.verified ? (
+                {profileData?.profile.verified ? (
                   <View tw="ml-1">
                     <VerificationBadge size={16} />
                   </View>
                 ) : null}
               </View>
-            </Skeleton>
-          </View>
+            </>
+          )}
 
           {bio ? (
             <View
@@ -380,8 +388,8 @@ export const ProfileTop = ({
             <Follow
               onPressFollower={onPressFollower}
               onPressFollowing={onPressFollowing}
-              followersCount={profileData?.data.followers_count}
-              followingCount={profileData?.data.following_count}
+              followersCount={profileData?.followers_count}
+              followingCount={profileData?.following_count}
               tw="mt-4"
             />
           </Hidden>

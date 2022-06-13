@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,8 +24,10 @@ import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 
 import { Hidden } from "design-system/hidden";
-import { TabRecyclerList } from "design-system/tab-view";
+import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
+import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./footer";
 import { ProfileListFilter } from "./profile-tab-filter";
@@ -93,24 +95,9 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           <Hidden platform="web">
             <ProfileListFilter collections={list.collections} />
           </Hidden>
-          {isBlocked ? (
-            <View tw="mt-8 items-center justify-center">
-              <Text tw="text-gray-900 dark:text-white">
-                <Text tw="font-bold">@{username}</Text> is blocked
-              </Text>
-            </View>
-          ) : data.length === 0 && !isLoading ? (
-            <View tw="mt-20 items-center justify-center">
-              <Text tw="text-gray-900 dark:text-white">No results found</Text>
-            </View>
-          ) : isLoading ? (
-            <View tw="mt-20 items-center justify-center">
-              <Spinner />
-            </View>
-          ) : null}
         </View>
       ),
-      [data, username, isLoading, list.collections, isBlocked]
+      [list.collections]
     );
 
     const newData = useMemo(() => {
@@ -199,6 +186,29 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       },
       [list.type, ListHeaderComponent, onItemPress]
     );
+    if (isBlocked) {
+      return (
+        <View tw="mt-8 items-center justify-center">
+          <Text tw="text-gray-900 dark:text-white">
+            <Text tw="font-bold">@{username}</Text> is blocked
+          </Text>
+        </View>
+      );
+    }
+
+    if (isLoading) {
+      return <TabSpinner index={index} />;
+    }
+    if (data.length === 0 && !isLoading) {
+      return (
+        <TabScrollView
+          contentContainerStyle={tw.style("mt-12 items-center")}
+          index={index}
+        >
+          <EmptyPlaceholder title="No results found" />
+        </TabScrollView>
+      );
+    }
 
     return (
       <MutateProvider mutate={updateItem}>
