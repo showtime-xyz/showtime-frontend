@@ -33,4 +33,5 @@ export const DeleteScreen = withModalScreen(DeleteModal, {
   title: "Delete",
   matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/delete",
   matchingQueryParam: "deleteModal",
+  disableBackdropPress: true,
 });

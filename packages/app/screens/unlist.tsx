@@ -65,4 +65,5 @@ export const UnlistScreen = withModalScreen(UnlistModal, {
   title: "Unlist",
   matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/unlist",
   matchingQueryParam: "unlistModal",
+  disableBackdropPress: true,
 });

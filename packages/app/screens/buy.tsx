@@ -34,4 +34,5 @@ export const BuyScreen = withModalScreen(BuyModal, {
   title: "Buy",
   matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/buy",
   matchingQueryParam: "buyModal",
+  disableBackdropPress: true,
 });

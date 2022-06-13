@@ -36,4 +36,5 @@ export const TransferScreen = withModalScreen(TransferModal, {
   title: "Transfer",
   matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/transfer",
   matchingQueryParam: "transferModal",
+  disableBackdropPress: true,
 });

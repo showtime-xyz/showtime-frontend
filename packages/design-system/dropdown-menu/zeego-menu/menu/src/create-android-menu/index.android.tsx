@@ -120,7 +120,7 @@ const Root = menuify(({ children }: MenuRootProps) => {
 
   const trigger = rootTrigger.targetChildren?.[0];
   if (!trigger) {
-    // TODO warn in the future here, but just leave it for now cause doing so breaks it unexpectedly
+    // TODO: warn in the future here, but just leave it for now cause doing so breaks it unexpectedly
   }
 
   return (

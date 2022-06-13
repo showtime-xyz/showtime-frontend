@@ -122,4 +122,5 @@ export const CreateScreen = withModalScreen(CreateModal, {
   title: "Create",
   matchingPathname: "/create",
   matchingQueryParam: "createModal",
+  disableBackdropPress: true,
 });

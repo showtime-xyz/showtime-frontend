@@ -71,4 +71,5 @@ export const ListScreen = withModalScreen(ListModal, {
   title: "List",
   matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/list",
   matchingQueryParam: "listModal",
+  disableBackdropPress: true,
 });
