@@ -1,4 +1,5 @@
 import React from "react";
+import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
@@ -19,7 +20,11 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useRouter } from "app/navigation/use-router";
-import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
+import {
+  formatAddressShort,
+  getCreatorUsernameFromNFT,
+  getTwitterIntent,
+} from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();
@@ -66,6 +71,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   // }, [web3]);
 
   if (state.status === "success") {
+    const claimUrl = `https://showtime.xyz/t/${[
+      process.env.NEXT_PUBLIC_CHAIN_ID,
+    ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
+
+    const isShareAPIAvailable = Platform.select({
+      default: true,
+      web: typeof window !== "undefined" && !!navigator.share,
+    });
+
     return (
       <View tw="items-center justify-center p-4">
         <Text tw="text-8xl">🎉</Text>
@@ -81,14 +95,27 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <Button
             onPress={() =>
+              Linking.openURL(
+                getTwitterIntent({
+                  url: claimUrl,
+                  message: `Claim ${nft?.data.item.token_name} by ${nft?.data.item.creator_name}`,
+                })
+              )
+            }
+          >
+            Share on Twitter
+          </Button>
+          <View tw="h-4" />
+          <Button
+            onPress={() =>
               share({
-                url: `https://showtime.xyz/t/${[
-                  process.env.NEXT_PUBLIC_CHAIN_ID,
-                ]}/${edition?.creator_airdrop_edition.contract_address}/0`,
+                url: claimUrl,
               })
             }
           >
-            Share with your friends
+            {isShareAPIAvailable
+              ? "Share NFT with your friends"
+              : "Copy drop link 🔗"}
           </Button>
           <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
             Skip for now

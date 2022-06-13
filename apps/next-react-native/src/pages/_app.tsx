@@ -23,6 +23,10 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "@showtime-xyz/universal.hooks/color-scheme";
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -35,10 +39,6 @@ import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
-import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "app/lib/color-scheme";
 import { isServer } from "app/lib/is-server";
 import LogRocket from "app/lib/logrocket";
 import { Sentry } from "app/lib/sentry";

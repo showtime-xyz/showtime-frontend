@@ -6,7 +6,11 @@ import { useSignTypedData as useWagmiSignTypedData, useNetwork } from "wagmi";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
-const EXPECTED_CHAIN_ID = process.env.NEXT_PUBLIC_SIGN_CHAIN_ID || "137";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+
+const EXPECTED_CHAIN_ID =
+  //@ts-ignore
+  CHAIN_IDENTIFIERS[process.env.NEXT_PUBLIC_CHAIN_ID || "polygon"];
 
 export const useSignTypedData = () => {
   const { activeChain, switchNetwork } = useNetwork();

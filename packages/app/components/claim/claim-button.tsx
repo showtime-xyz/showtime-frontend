@@ -35,6 +35,11 @@ export const ClaimButton = ({
     );
   };
 
+  let isExpired = false;
+  if (typeof edition?.time_limit === "string") {
+    isExpired = new Date() > new Date(edition.time_limit);
+  }
+
   const status =
     edition &&
     edition.total_claimed_count?.toString() ===
@@ -42,9 +47,11 @@ export const ClaimButton = ({
       ? "soldout"
       : edition.is_already_claimed
       ? "claimed"
+      : isExpired
+      ? "expired"
       : undefined;
 
-  const disabled = status === "claimed" || status === "soldout";
+  const disabled = status === "claimed" || status === "soldout" || isExpired;
 
   return (
     <Button
@@ -56,6 +63,8 @@ export const ClaimButton = ({
         ? "Claimed ✓"
         : status === "soldout"
         ? "Sold out"
+        : status === "expired"
+        ? "Drop expired"
         : "Claim for free"}
     </Button>
   );

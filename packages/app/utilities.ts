@@ -622,3 +622,15 @@ export const getCreatorUsernameFromNFT = (nft?: NFT) => {
     ? nft.creator_name
     : formatAddressShort(nft.creator_address);
 };
+
+export const getTwitterIntent = ({
+  url,
+  message,
+}: {
+  url: string;
+  message: string;
+}) => {
+  return `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+    url
+  )}&text=${encodeURIComponent(message)}`;
+};

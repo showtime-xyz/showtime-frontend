@@ -3,7 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
@@ -35,7 +35,7 @@ type Props = {
 
 function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
   const { width } = useWindowDimensions();
-  const isDark = useIsDarkMode();
+  const colorScheme = useColorScheme();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
@@ -79,7 +79,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
       <View
         style={{
           // @ts-ignore
-          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+          boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
         }}
         tw={[
           size,

@@ -27,6 +27,10 @@ import type { PublicConfiguration } from "swr/dist/types";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "@showtime-xyz/universal.hooks/color-scheme";
 // import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -36,10 +40,6 @@ import { ToastProvider, useToast } from "@showtime-xyz/universal.toast";
 import { AppContext } from "app/context/app-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { track } from "app/lib/analytics";
-import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "app/lib/color-scheme";
 import { Sentry } from "app/lib/sentry";
 import { isUndefined } from "app/lib/swr/helper";
 import { NavigationProvider } from "app/navigation";
