@@ -7388,7 +7388,7 @@ __metadata:
     react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
     react-native-vision-camera: 2.12.0
-    react-native-web: 0.17.7
+    react-native-web: 0.18.0
     react-native-webview: 11.18.1
     react-string-replace: ^0.4.4
     react-test-renderer: 18.0.0
@@ -7492,7 +7492,7 @@ __metadata:
     react-infinite-scroll-component: ^6.1.0
     react-mentions: ^4.1.1
     react-native-fast-image: ^8.5.11
-    react-native-web: 0.17.7
+    react-native-web: 0.18.0
     react-player: ^2.8.1
     react-scroll: ^1.8.4
     react-sortablejs: ^6.0.0
@@ -7574,7 +7574,7 @@ __metadata:
     react-native-screens: ~3.11.1
     react-native-svg: 12.3.0
     react-native-vision-camera: 2.12.0
-    react-native-web: 0.17.7
+    react-native-web: 0.18.0
     three: ^0.139.0
     typescript: 4.5.2
   languageName: unknown
@@ -7603,7 +7603,7 @@ __metadata:
     next: 12.1.5
     react: 18.0.0
     react-dom: 18.0.0
-    react-native-web: 0.17.7
+    react-native-web: 0.18.0
     storybook-addon-next: ^1.6.2
     typescript: 4.5.2
   languageName: unknown
@@ -28563,6 +28563,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-web@npm:0.18.0":
+  version: 0.18.0
+  resolution: "react-native-web@npm:0.18.0"
+  dependencies:
+    create-react-class: ^15.7.0
+    fbjs: ^3.0.0
+    inline-style-prefixer: ^6.0.0
+    normalize-css-color: ^1.0.2
+    postcss-value-parser: ^4.2.0
+    prop-types: ^15.6.0
+    styleq: 0.1.0
+  peerDependencies:
+    react: ">=17.0.2"
+    react-dom: ">=17.0.2"
+  checksum: 951f9e2a37953eb857f0901efd776f97532ab6cb7d58fea754a5edb7bfc25e8232cf9835e56cb7d67d824031c9ff87eba7380e1b801f8d46a0a03b472e5846fa
+  languageName: node
+  linkType: hard
+
 "react-native-webview@npm:11.18.1":
   version: 11.18.1
   resolution: "react-native-webview@npm:11.18.1"
@@ -31475,6 +31493,13 @@ __metadata:
     postcss: ^7.0.0
     postcss-selector-parser: ^3.0.0
   checksum: 8acf28ea609bee6d7ba40121bcf53af8d899c1ec04f2c08de9349b8292b84b8aa7f82e14c623ae6956decf5b7a7eeea5472ab8e48de7bdcdb6d76640444f6753
+  languageName: node
+  linkType: hard
+
+"styleq@npm:0.1.0":
+  version: 0.1.0
+  resolution: "styleq@npm:0.1.0"
+  checksum: 19ad4fd866deda82a6a41a450e229bb68487ed0e5c1e646cde25103dbb788034891ad8dcf2faa68c09566c632303efaa83067346848a9d76a26b5b994f9bd413
   languageName: node
   linkType: hard
 
