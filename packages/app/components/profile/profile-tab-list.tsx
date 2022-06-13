@@ -61,6 +61,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         profileId,
         collectionId: filter.collectionId,
         sortType: filter.sortType,
+        // TODO: remove refresh interval once we have the new indexer.
+        refreshInterval: 5000,
       });
     const tabRef = useRef(null);
 
