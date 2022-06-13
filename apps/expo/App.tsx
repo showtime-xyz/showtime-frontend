@@ -42,6 +42,7 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components",
+  "Sending `onAnimatedValueUpdate` with no listeners registered.", // `react-native-tab-view` waring issue.
 ]);
 
 function App() {
