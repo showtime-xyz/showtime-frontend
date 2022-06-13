@@ -89,7 +89,7 @@ const CreateModal = () => {
 const CreateMD = () => {
   const { state } = useContext(MintContext);
   return (
-    <View tw="flex-1 py-8">
+    <View tw="flex-1">
       {state.status === "transactionInitiated" ? (
         <View tw="items-center justify-center">
           <Spinner />
@@ -103,9 +103,9 @@ const CreateMD = () => {
         </View>
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">
-          <Text tw="text-4xl">🎉</Text>
+          <Text tw="text-6xl">🎉</Text>
           <View>
-            <Text tw="font-space-bold my-8 text-center text-lg text-black dark:text-white">
+            <Text tw="font-space-bold my-6 text-center text-lg text-black dark:text-white">
               Your NFT has been minted on Showtime!
             </Text>
             <PolygonScanButton transactionHash={state.transaction} />

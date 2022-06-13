@@ -15,7 +15,7 @@ export const useLogin = (onLogin?: () => void) => {
   const loginSource = useRef<LoginSource>("undetermined");
 
   //#region hooks
-  const { setAuthenticationStatus, authenticationStatus, logout } = useAuth();
+  const { authenticationStatus, logout } = useAuth();
   const {
     loginWithWallet,
     name: walletName,

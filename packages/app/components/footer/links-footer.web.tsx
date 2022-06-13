@@ -46,7 +46,7 @@ export const WebFooter = memo(function WebFooter() {
             ))}
           </View>
           <View tw="flex flex-col">
-            {social.map((item, i) => (
+            {social.map((item) => (
               <Link
                 tw="mb-6 flex-row items-center"
                 href={item.link}

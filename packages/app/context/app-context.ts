@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 type AppContextType = {
-  colorScheme: "light" | "dark";
+  colorScheme: "light" | "dark" | null | undefined;
   setColorScheme: (colorScheme: "light" | "dark") => void;
 };
 

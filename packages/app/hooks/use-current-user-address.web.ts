@@ -1,8 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useAccount, useNetwork } from "wagmi";
-
-import { useUser } from "app/hooks/use-user";
 
 function useCurrentUserAddress() {
   const { data: wagmiData } = useAccount();

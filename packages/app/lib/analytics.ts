@@ -7,7 +7,7 @@ export function track(
   props?: Record<string, any>,
   options?: Record<string, any>
 ) {
-  rudder.track(event, props, options);
+  rudder?.track(event, props, options);
 }
 
 type ButtonClickedProps = {
