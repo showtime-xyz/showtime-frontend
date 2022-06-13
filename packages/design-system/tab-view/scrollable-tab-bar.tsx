@@ -15,7 +15,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { Haptics } from "app/lib/haptics";
 
 import { Route } from "./src/types";
-import { memoize } from "./src/utils";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {
@@ -33,80 +32,78 @@ export const ScollableTabBar = ({
     [index: number]: number;
   }>({});
 
-  const getActiveOpacityText = memoize(
-    (
-      position: Animated.AnimatedInterpolation,
-      routes: Route[],
-      tabIndex: number
-    ) => {
-      if (routes.length > 1) {
-        const inputRange = routes.map((_, i) => i);
-        const outputRange = inputRange.map((i) => (i === tabIndex ? 1 : 0.6));
-        return position.interpolate({
-          inputRange,
-          outputRange,
-        });
-      } else {
-        return 1;
-      }
-    }
-  );
-
-  const getTranslateX = memoize(
-    (position: Animated.AnimatedInterpolation, routes: Route[]) => {
-      if (
-        routes.length === 0 ||
-        Object.keys(tabsWidth)?.length === 0 ||
-        Object.keys(tabsWidth)?.length !== routes.length
-      ) {
-        return -contentWidth;
-      }
-
-      if (routes.length <= 1) return tabsWidth[0] / 2 + 8 ?? -contentWidth;
+  const getActiveOpacityText = (
+    position: Animated.AnimatedInterpolation,
+    routes: Route[],
+    tabIndex: number
+  ) => {
+    if (routes.length > 1) {
       const inputRange = routes.map((_, i) => i);
-      const indicatorOutputRange = Object.values(tabsWidth).map(
-        (value) => value / contentWidth
-      );
-      // every index contains widths at all previous indices
-      const outputRange = routes.reduce<number[]>((acc, _, i) => {
-        if (i === 0)
-          return [
-            -((contentWidth - contentWidth * indicatorOutputRange[i]) / 2) + 16,
-          ];
+      const outputRange = inputRange.map((i) => (i === tabIndex ? 1 : 0.6));
+      return position.interpolate({
+        inputRange,
+        outputRange,
+      });
+    } else {
+      return 1;
+    }
+  };
+
+  const getTranslateX = (
+    position: Animated.AnimatedInterpolation,
+    routes: Route[]
+  ) => {
+    if (
+      routes.length === 0 ||
+      Object.keys(tabsWidth)?.length === 0 ||
+      Object.keys(tabsWidth)?.length !== routes.length
+    ) {
+      return -contentWidth;
+    }
+
+    if (routes.length <= 1) return tabsWidth[0] / 2 + 8 ?? -contentWidth;
+    const inputRange = routes.map((_, i) => i);
+    const indicatorOutputRange = Object.values(tabsWidth).map(
+      (value) => value / contentWidth
+    );
+    // every index contains widths at all previous indices
+    const outputRange = routes.reduce<number[]>((acc, _, i) => {
+      if (i === 0)
         return [
-          ...acc,
-          acc[i - 1] + (tabsWidth[i - 1] + tabsWidth[i]) / 2 + 32,
+          -((contentWidth - contentWidth * indicatorOutputRange[i]) / 2) + 16,
         ];
-      }, []);
+      return [...acc, acc[i - 1] + (tabsWidth[i - 1] + tabsWidth[i]) / 2 + 32];
+    }, []);
 
-      return position.interpolate({
-        inputRange,
-        outputRange,
-        extrapolate: "clamp",
-      });
-    }
-  );
-  const getIndicatorScaleX = memoize(
-    (position: Animated.AnimatedInterpolation, routes: Route[]) => {
-      if (
-        routes.length === 0 ||
-        Object.keys(tabsWidth)?.length === 0 ||
-        Object.keys(tabsWidth)?.length !== routes.length
-      ) {
-        return 0;
-      }
-      const inputRange = routes.map((_, i) => i);
-      const outputRange = Object.values(tabsWidth).map(
-        (value) => value / contentWidth
-      );
+    return position.interpolate({
+      inputRange,
+      outputRange,
+      extrapolate: "clamp",
+    });
+  };
 
-      return position.interpolate({
-        inputRange,
-        outputRange,
-        extrapolate: "clamp",
-      });
+  const getIndicatorScaleX = (
+    position: Animated.AnimatedInterpolation,
+    routes: Route[]
+  ) => {
+    if (
+      routes.length === 0 ||
+      Object.keys(tabsWidth)?.length === 0 ||
+      Object.keys(tabsWidth)?.length !== routes.length
+    ) {
+      return 0;
     }
-  );
+    const inputRange = routes.map((_, i) => i);
+    const outputRange = Object.values(tabsWidth).map(
+      (value) => value / contentWidth
+    );
+
+    return position.interpolate({
+      inputRange,
+      outputRange,
+      extrapolate: "clamp",
+    });
+  };
 
   const onTabPress = useCallback(() => {
     Haptics.impactAsync();
