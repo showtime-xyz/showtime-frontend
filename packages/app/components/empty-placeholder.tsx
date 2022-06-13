@@ -11,8 +11,8 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { breakpoints } from "design-system/theme";
 
 type EmptyPlaceholderProps = {
-  title?: string;
-  text?: string;
+  title?: string | JSX.Element;
+  text?: string | JSX.Element;
   hideLoginBtn?: boolean;
   tw?: string;
 };
