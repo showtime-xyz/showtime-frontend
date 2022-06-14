@@ -24,7 +24,7 @@ import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";
-import { Profil404 } from "./profile-404";
+import { Profile404 } from "./profile-404";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
@@ -203,7 +203,7 @@ const Profile = ({ address }: { address: string | null }) => {
           }}
           style={tw.style("z-1")}
           autoWidthTabBar
-          emptyBodyComponent={isError ? <Profil404 /> : null}
+          emptyBodyComponent={isError ? <Profile404 /> : null}
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={

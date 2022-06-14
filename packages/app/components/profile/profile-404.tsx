@@ -7,7 +7,7 @@ import { View } from "design-system";
 import { TextLink } from "../../navigation/link";
 import { EmptyPlaceholder } from "../empty-placeholder";
 
-export const Profil404 = memo(function ProfilResult() {
+export const Profile404 = memo(function ProfilResult() {
   return (
     <View tw="items-center justify-center px-4 pt-8">
       <EmptyPlaceholder
