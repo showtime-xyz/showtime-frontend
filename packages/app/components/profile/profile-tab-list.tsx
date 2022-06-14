@@ -205,7 +205,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           contentContainerStyle={tw.style("mt-12 items-center")}
           index={index}
         >
-          <EmptyPlaceholder title="No results found" />
+          <EmptyPlaceholder title="No results found" hideLoginBtn />
         </TabScrollView>
       );
     }
