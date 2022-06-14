@@ -17,11 +17,11 @@
   }
 
   [role="menu"] > div:nth-child(1) {
-    @apply w-60 rounded-2xl bg-white bg-opacity-60 p-2 shadow backdrop-blur-md backdrop-saturate-150;
+    @apply w-60 rounded-2xl bg-white bg-opacity-80 p-2 shadow backdrop-blur-md backdrop-saturate-150;
   }
 
   [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
-    @apply shadow-black45 bg-neutral-900 bg-opacity-70 shadow-md;
+    @apply shadow-black45 bg-neutral-900 bg-opacity-75 shadow-md;
   }
 
   [role="menuitem"] {
