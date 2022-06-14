@@ -70,62 +70,60 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   //     });
   // }, [web3]);
 
-  if (state.status === "success") {
-    const claimUrl = `https://showtime.xyz/t/${[
-      process.env.NEXT_PUBLIC_CHAIN_ID,
-    ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
+  const claimUrl = `https://showtime.xyz/t/${[
+    process.env.NEXT_PUBLIC_CHAIN_ID,
+  ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
 
-    const isShareAPIAvailable = Platform.select({
-      default: true,
-      web: typeof window !== "undefined" && !!navigator.share,
-    });
+  const isShareAPIAvailable = Platform.select({
+    default: true,
+    web: typeof window !== "undefined" && !!navigator.share,
+  });
 
-    return (
-      <View tw="items-center justify-center p-4">
-        <Text tw="text-8xl">🎉</Text>
-        <View>
-          <View tw="h-8" />
-          <Text tw="text-center text-4xl text-black dark:text-white">
-            Congrats!
+  return (
+    <View tw="items-center justify-center p-4">
+      <Text tw="text-8xl">🎉</Text>
+      <View>
+        <View tw="h-8" />
+        <Text tw="text-center text-4xl text-black dark:text-white">
+          Congrats!
+        </Text>
+        <View tw="mt-8 mb-10">
+          <Text tw="text-center text-2xl text-black dark:text-white">
+            Now share it with the world!
           </Text>
-          <View tw="mt-8 mb-10">
-            <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share it with the world!
-            </Text>
-          </View>
-          <Button
-            onPress={() =>
-              Linking.openURL(
-                getTwitterIntent({
-                  url: claimUrl,
-                  message: `I just claimed a free NFT "${nft?.data.item.token_name}" by @${nft?.data.item.creator_name} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
-                })
-              )
-            }
-            tw="bg-[#00ACEE]"
-            variant="text"
-          >
-            Share on Twitter
-          </Button>
-          <View tw="h-4" />
-          <Button
-            onPress={() =>
-              share({
-                url: claimUrl,
-              })
-            }
-          >
-            {isShareAPIAvailable
-              ? "Share NFT with your friends"
-              : "Copy drop link 🔗"}
-          </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
-            Skip for now
-          </Button>
         </View>
+        <Button
+          onPress={() =>
+            Linking.openURL(
+              getTwitterIntent({
+                url: claimUrl,
+                message: `I just claimed a free NFT "${nft?.data.item.token_name}" by @${nft?.data.item.creator_name} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
+              })
+            )
+          }
+          tw="bg-[#00ACEE]"
+          variant="text"
+        >
+          <Text tw="text-white">Share on Twitter</Text>
+        </Button>
+        <View tw="h-4" />
+        <Button
+          onPress={() =>
+            share({
+              url: claimUrl,
+            })
+          }
+        >
+          {isShareAPIAvailable
+            ? "Share NFT with your friends"
+            : "Copy drop link 🔗"}
+        </Button>
+        <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+          Skip for now
+        </Button>
       </View>
-    );
-  }
+    </View>
+  );
 
   return (
     <ScrollView>
