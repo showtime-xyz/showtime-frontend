@@ -129,7 +129,8 @@ export const useClaimNFT = () => {
         dispatch({ type: "error", error: "polling timed out" });
       } else {
         Alert.alert(
-          "Wallet seems to be disconnected. Try signing out and signing in."
+          "Wallet disconnected",
+          "Please logout and login again to complete the transaction"
         );
       }
     } catch (e: any) {

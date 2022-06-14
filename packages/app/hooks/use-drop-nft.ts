@@ -149,7 +149,8 @@ export const useDropNFT = () => {
         await pollTransaction(relayerResponse.relayed_transaction_id);
       } else {
         Alert.alert(
-          "Wallet seems to be disconnected. Try signing out and signing in."
+          "Wallet disconnected",
+          "Please logout and login again to complete the transaction"
         );
       }
     } catch (e: any) {

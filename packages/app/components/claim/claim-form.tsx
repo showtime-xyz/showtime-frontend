@@ -98,10 +98,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `Claim ${nft?.data.item.token_name} by ${nft?.data.item.creator_name}`,
+                  message: `I just claimed a free NFT "${nft?.data.item.token_name}" by @${nft?.data.item.creator_name} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               )
             }
+            tw="bg-[#00ACEE]"
+            variant="text"
           >
             Share on Twitter
           </Button>

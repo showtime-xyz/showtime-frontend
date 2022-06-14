@@ -142,10 +142,12 @@ export const DropForm = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `Claim ${state.edition?.name} by ${user.user?.data.profile.name}`,
+                  message: `I just dropped a free NFT "${state.edition?.name}" by @${user.user?.data.profile.username} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               )
             }
+            tw="bg-[#00ACEE]"
+            variant="text"
           >
             Share on Twitter
           </Button>
