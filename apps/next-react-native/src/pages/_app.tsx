@@ -12,6 +12,10 @@ import Head from "next/head";
 import "photoswipe/dist/photoswipe.css";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "@showtime-xyz/universal.hooks/color-scheme";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -19,10 +23,6 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
 import { useLogRocket } from "app/hooks/use-logrocket";
-import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "app/lib/color-scheme";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";

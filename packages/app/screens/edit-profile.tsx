@@ -13,4 +13,5 @@ export const EditProfileScreen = withModalScreen(EditProfilePage, {
   matchingQueryParam: "editProfileModal",
   enableContentPanningGesture: false,
   snapPoints: ["90%"],
+  disableBackdropPress: true,
 });

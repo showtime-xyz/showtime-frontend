@@ -1,3 +1,5 @@
+import React from "react";
+
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -7,7 +9,6 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -48,10 +49,7 @@ function ActivityDropdown({ activity }: Props) {
         </View>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
+      <DropdownMenuContent loop>
         {isAuthenticated && (
           <DropdownMenuItem
             onSelect={async () => {
@@ -59,16 +57,9 @@ function ActivityDropdown({ activity }: Props) {
               mutate(null);
             }}
             key="unfollow"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Unfollow
-            </DropdownMenuItemTitle>
+            <DropdownMenuItemTitle>Unfollow</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {isAuthenticated && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         <DropdownMenuItem
@@ -76,11 +67,8 @@ function ActivityDropdown({ activity }: Props) {
             report({ activityId: activity.id });
           }}
           key="report"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Report
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

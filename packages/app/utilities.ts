@@ -630,7 +630,20 @@ export const getDomainName = (link?: string) => {
   if (!results) return null;
   return results[results?.length - 1];
 };
+
 export const formatLink = (link: string) => {
   if (link.search(/^http[s]?:\/\//) !== -1) return link;
   return "https://" + link;
+};
+
+export const getTwitterIntent = ({
+  url,
+  message,
+}: {
+  url: string;
+  message: string;
+}) => {
+  return `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+    url
+  )}&text=${encodeURIComponent(message)}`;
 };

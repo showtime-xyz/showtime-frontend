@@ -2,6 +2,8 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -58,12 +60,13 @@ export const useClaimNFT = () => {
   const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const Alert = useAlert();
 
   const claimNFT = async (props: { minterAddress: string }) => {
-    dispatch({ type: "loading" });
     try {
-      const targetInterface = new ethers.utils.Interface(minterABI);
       if (userAddress) {
+        const targetInterface = new ethers.utils.Interface(minterABI);
+        dispatch({ type: "loading" });
         const callData = targetInterface.encodeFunctionData("mintEdition", [
           userAddress,
         ]);
@@ -124,6 +127,11 @@ export const useClaimNFT = () => {
         }
 
         dispatch({ type: "error", error: "polling timed out" });
+      } else {
+        Alert.alert(
+          "Wallet disconnected",
+          "Please logout and login again to complete the transaction"
+        );
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });

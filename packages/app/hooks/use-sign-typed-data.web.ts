@@ -6,51 +6,76 @@ import { useSignTypedData as useWagmiSignTypedData, useNetwork } from "wagmi";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
-const EXPECTED_CHAIN_ID = process.env.NEXT_PUBLIC_SIGN_CHAIN_ID || "137";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+
+const EXPECTED_CHAIN_ID =
+  //@ts-ignore
+  CHAIN_IDENTIFIERS[process.env.NEXT_PUBLIC_CHAIN_ID || "polygon"];
 
 export const useSignTypedData = () => {
-  const { activeChain, switchNetwork } = useNetwork();
+  const { activeChain, switchNetworkAsync } = useNetwork();
   const Alert = useAlert();
   const { signTypedDataAsync } = useWagmiSignTypedData();
 
   const signTypedData = async (
     domain: TypedDataDomain,
     types: Record<string, Array<TypedDataField>>,
-    value: Record<string, any>,
-    onError: (e: string) => void
+    value: Record<string, any>
   ) => {
-    if (activeChain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
-      onError(
-        "Wallet must point to polygon network to complete the transaction"
-      );
-      Alert.alert(
-        "Switch network",
-        "Wallet must point to polygon network to complete the transaction",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Switch chain",
-            onPress: async () => {
-              try {
-                switchNetwork?.(parseInt(EXPECTED_CHAIN_ID));
-              } catch (e) {
-                Alert.alert(
-                  "Network switching failed",
-                  "Please switch network to polygon in your wallet and try again."
-                );
-              }
-            },
-          },
-        ]
-      );
-      return null;
-    } else {
-      const result = await signTypedDataAsync({ domain, types, value });
-      return result;
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await signTypedDataAsync({ domain, types, value });
+        resolve(result);
+      } catch (e) {
+        // Assuming transaction failed due to wrong network because checking error code is buggy
+        // Putting it in error as Rainbow doesn't require switching network while signing chain
+        if (activeChain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
+          Alert.alert(
+            "Switch network",
+            "Wallet must point to polygon network to complete the transaction",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+                onPress: () => {
+                  reject(
+                    new Error(
+                      "Please switch network to polygon in your wallet and try again"
+                    )
+                  );
+                },
+              },
+              {
+                text: "Switch chain",
+                onPress: async () => {
+                  try {
+                    await switchNetworkAsync?.(parseInt(EXPECTED_CHAIN_ID));
+                    const result = await signTypedDataAsync({
+                      domain,
+                      types,
+                      value,
+                    });
+                    resolve(result);
+                  } catch (e) {
+                    reject(
+                      new Error(
+                        "Please switch network to polygon in your wallet and try again"
+                      )
+                    );
+                    Alert.alert(
+                      "Network switching failed",
+                      "Please switch network to polygon in your wallet and try again."
+                    );
+                  }
+                },
+              },
+            ]
+          );
+        } else {
+          reject(e);
+        }
+      }
+    });
   };
 
   return signTypedData;

@@ -1,4 +1,5 @@
 import React from "react";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,8 +20,10 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
+import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
+import { getTwitterIntent } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
@@ -82,6 +85,7 @@ export const DropForm = () => {
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const { state, dropNFT } = useDropNFT();
+  const user = useUser();
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -110,6 +114,15 @@ export const DropForm = () => {
   // }
 
   if (state.status === "success") {
+    const claimUrl = `https://showtime.xyz/t/${[
+      process.env.NEXT_PUBLIC_CHAIN_ID,
+    ]}/${state.edition?.contract_address}/0`;
+
+    const isShareAPIAvailable = Platform.select({
+      default: true,
+      web: typeof window !== "undefined" && !!navigator.share,
+    });
+
     return (
       <View tw="items-center justify-center p-4">
         <Text tw="text-8xl">🎉</Text>
@@ -123,18 +136,40 @@ export const DropForm = () => {
               Now share your free NFT drop to the world!
             </Text>
           </View>
+
+          <Button
+            onPress={() =>
+              Linking.openURL(
+                getTwitterIntent({
+                  url: claimUrl,
+                  message: `I just dropped a free NFT "${state.edition?.name}" by @${user.user?.data.profile.username} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
+                })
+              )
+            }
+            tw="bg-[#00ACEE]"
+            variant="text"
+          >
+            <Text tw="text-white">Share on Twitter</Text>
+          </Button>
+
+          <View tw="h-4" />
+
           <Button
             onPress={() =>
               share({
-                url: `https://showtime.xyz/t/${[
-                  process.env.NEXT_PUBLIC_CHAIN_ID,
-                ]}/${state.edition?.contract_address}/0`,
+                url: claimUrl,
               })
             }
           >
-            Share NFT with your friends
+            {isShareAPIAvailable
+              ? "Share NFT with your friends"
+              : "Copy drop link 🔗"}
           </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+          <Button
+            variant="tertiary"
+            tw="mt-4"
+            onPress={() => router.push(claimUrl)}
+          >
             Skip for now
           </Button>
         </View>

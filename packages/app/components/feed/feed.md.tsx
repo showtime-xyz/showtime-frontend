@@ -2,6 +2,7 @@ import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -15,7 +16,6 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
-import { useColorScheme } from "app/lib/color-scheme";
 import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,

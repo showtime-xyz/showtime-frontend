@@ -14,13 +14,13 @@ import * as SystemUI from "expo-system-ui";
 import { enableScreens } from "react-native-screens";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-
-import { AppContext } from "app/context/app-context";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
-} from "app/lib/color-scheme";
+} from "@showtime-xyz/universal.hooks/color-scheme";
+import { tw } from "@showtime-xyz/universal.tailwind";
+
+import { AppContext } from "app/context/app-context";
 import { growthbook } from "app/lib/growthbook";
 import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";

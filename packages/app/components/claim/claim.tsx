@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { MMKV } from "react-native-mmkv";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
@@ -12,15 +14,25 @@ import { ClaimForm } from "./claim-form";
 
 const { useParam } = createParam<{ contractAddress: string }>();
 
+const store = new MMKV();
+const STORE_KEY = "showClaimExplanation";
+
 export const Claim = () => {
   const [contractAddress] = useParam("contractAddress");
-  const [showExplanation, setShowExplanation] = useState(true);
+  const [showExplanation, setShowExplanation] = useState(
+    () => store.getBoolean(STORE_KEY) ?? true
+  );
   const {
     data: edition,
     loading,
     error,
     mutate,
   } = useCreatorCollectionDetail(contractAddress);
+
+  const hideExplanation = () => {
+    setShowExplanation(false);
+    store.set(STORE_KEY, false);
+  };
 
   if (error) {
     return (
@@ -40,7 +52,7 @@ export const Claim = () => {
     return (
       <ClaimExplanation
         edition={edition?.creator_airdrop_edition}
-        onDone={() => setShowExplanation(false)}
+        onDone={hideExplanation}
       />
     );
   }
