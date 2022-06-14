@@ -11,7 +11,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 const withTM = require("next-transpile-modules")([
-  "react-native",
   "app",
   "@gorhom/bottom-sheet",
   "@gorhom/portal",

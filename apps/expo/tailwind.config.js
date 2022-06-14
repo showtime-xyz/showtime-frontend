@@ -1,12 +1,16 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
-const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
-const { colors } = require("@showtime-xyz/universal.tailwind/colors");
-const {
-  MAX_CONTENT_WIDTH,
-  MAX_HEADER_WIDTH,
-} = require("@showtime-xyz/universal.tailwind/layout");
+// const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
+// const { colors } = require("@showtime-xyz/universal.tailwind");
+// const {
+//   MAX_CONTENT_WIDTH,
+//   MAX_HEADER_WIDTH,
+// } = require("@showtime-xyz/universal.tailwind");
+
+const fontFamily = (font) => {
+  return font;
+};
 
 module.exports = {
   content: [
@@ -19,8 +23,8 @@ module.exports = {
       maxWidth: {
         "screen-3xl": "1680px",
         screen: "100vw",
-        "screen-xl": `${MAX_CONTENT_WIDTH}px`,
-        "screen-2xl": `${MAX_HEADER_WIDTH}px`,
+        // "screen-xl": `${MAX_CONTENT_WIDTH}px`,
+        // "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
       boxShadow: {
         dropdown:
@@ -33,7 +37,7 @@ module.exports = {
       },
       colors: {
         inherit: "inherit",
-        ...colors,
+        // ...colors,
       },
       cursor: {
         copy: "copy",
@@ -61,24 +65,24 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-react-native/plugin"),
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        ".text-xs": textSizes["text-xs"],
-        ".text-13": textSizes["text-13"],
-        ".text-sm": textSizes["text-sm"],
-        ".text-base": textSizes["text-base"],
-        ".text-lg": {
-          ...textSizes["text-lg"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
-        },
-        ".text-xl": textSizes["text-xl"],
-        ".text-2xl": {
-          ...textSizes["text-2xl"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
-        },
-        ".text-3xl": textSizes["text-3xl"],
-        ".text-4xl": textSizes["text-4xl"],
-      });
-    }),
+    // plugin(({ addUtilities }) => {
+    //   addUtilities({
+    //     ".text-xs": textSizes["text-xs"],
+    //     ".text-13": textSizes["text-13"],
+    //     ".text-sm": textSizes["text-sm"],
+    //     ".text-base": textSizes["text-base"],
+    //     ".text-lg": {
+    //       ...textSizes["text-lg"],
+    //       fontFamily: fontFamily("SpaceGrotesk-Bold"),
+    //     },
+    //     ".text-xl": textSizes["text-xl"],
+    //     ".text-2xl": {
+    //       ...textSizes["text-2xl"],
+    //       fontFamily: fontFamily("SpaceGrotesk-Bold"),
+    //     },
+    //     ".text-3xl": textSizes["text-3xl"],
+    //     ".text-4xl": textSizes["text-4xl"],
+    //   });
+    // }),
   ],
 };

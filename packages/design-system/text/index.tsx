@@ -1,7 +1,6 @@
-import { ComponentProps, createContext, forwardRef, useContext } from "react";
+import { ComponentProps, forwardRef } from "react";
 import type { Text as TextType } from "react-native";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { ViewProps } from "@showtime-xyz/universal.view";
 
@@ -28,11 +27,6 @@ export type Props = {
 >;
 
 /**
- * Text should inherit styles from parent text nodes.
- */
-const ParentContext = createContext<{} | undefined>(undefined);
-
-/**
  * Note: You can wrap <Text> in a <View> with a background color
  * to verify if the text is rendered correctly and if Capsize is working well.
  */
@@ -54,14 +48,6 @@ export const Text = forwardRef<TextType, Props>(
     },
     ref
   ) => {
-    const parentTw = useContext(ParentContext);
-
-    // TODO: review this
-    const compoundStyle = {
-      ...tailwind.style(parentTw),
-      ...tailwind.style(tw),
-    };
-
     return (
       <StyledText
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
@@ -78,9 +64,7 @@ export const Text = forwardRef<TextType, Props>(
         htmlFor={htmlFor}
         pointerEvents={pointerEvents}
       >
-        <ParentContext.Provider value={compoundStyle}>
-          {children}
-        </ParentContext.Provider>
+        {children}
       </StyledText>
     );
   }

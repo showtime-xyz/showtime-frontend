@@ -2,11 +2,11 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
 // const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
-const { colors } = require("@showtime-xyz/universal.tailwind/colors");
-const {
-  MAX_CONTENT_WIDTH,
-  MAX_HEADER_WIDTH,
-} = require("@showtime-xyz/universal.tailwind/layout");
+// const { colors } = require("@showtime-xyz/universal.tailwind");
+// const {
+//   MAX_CONTENT_WIDTH,
+//   MAX_HEADER_WIDTH,
+// } = require("@showtime-xyz/universal.tailwind");
 
 const fontFamily = (font) => {
   return `"${font.replace(/-/g, " ")}"`;
@@ -23,8 +23,8 @@ module.exports = {
       maxWidth: {
         "screen-3xl": "1680px",
         screen: "100vw",
-        "screen-xl": `${MAX_CONTENT_WIDTH}px`,
-        "screen-2xl": `${MAX_HEADER_WIDTH}px`,
+        // "screen-xl": `${MAX_CONTENT_WIDTH}px`,
+        // "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
       boxShadow: {
         dropdown:
@@ -37,7 +37,7 @@ module.exports = {
       },
       colors: {
         inherit: "inherit",
-        ...colors,
+        // ...colors,
       },
       cursor: {
         copy: "copy",
