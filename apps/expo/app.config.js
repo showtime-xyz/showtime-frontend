@@ -3,6 +3,8 @@ const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 const { withInfoPlist } = require("@expo/config-plugins");
 
+const url = "showtime.xyz";
+
 require("dotenv").config({
   path: envPath,
 });
