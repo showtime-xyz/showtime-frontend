@@ -151,7 +151,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
     props: ComponentProps<typeof Text> &
       ComponentProps<typeof DropdownMenu.ItemTitle>
   ) => (
-    <StyledDropdownMenuItemTitle {...props}>
+    <StyledDropdownMenuItemTitle {...props} style={tailwind.style(props.tw)}>
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemTitle>

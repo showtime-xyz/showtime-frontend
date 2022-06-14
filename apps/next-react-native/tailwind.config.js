@@ -28,6 +28,7 @@ module.exports = {
         inherit: "inherit",
       },
       colors: {
+        black45: "rgba(0, 0, 0, 0.45)",
         inherit: "inherit",
         stpink: "#e45cff",
         stlink: "rgb(81, 125, 228)",

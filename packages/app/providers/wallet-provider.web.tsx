@@ -1,5 +1,4 @@
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import "@rainbow-me/rainbowkit/styles.css";
 import { configureChains, createClient, allChains, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
