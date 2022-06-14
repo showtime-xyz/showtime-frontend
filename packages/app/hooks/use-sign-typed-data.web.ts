@@ -28,7 +28,7 @@ export const useSignTypedData = () => {
         resolve(result);
       } catch (e) {
         // Assuming transaction failed due to wrong network because checking error code is buggy
-        // Putting it in catch block as Rainbow doesn't require switching network while signing chain id
+        // Putting it in error as Rainbow doesn't require switching network while signing chain
         if (activeChain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
           Alert.alert(
             "Switch network",
