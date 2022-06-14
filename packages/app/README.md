@@ -19,6 +19,7 @@ You'll find included:
 - [SWR](https://swr.vercel.app/docs/getting-started)
 - [Storybook](https://storybook.js.org/docs/react/writing-docs/docs-page)
 - [Turbo](https://turborepo.org/docs)
+- [Solito](https://solito.dev)
 
 ## Architecture
 
