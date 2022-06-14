@@ -6,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
@@ -105,26 +104,16 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
+      <DropdownMenuContent loop>
         {hasOwnership ? (
           <DropdownMenuItem
             onSelect={() => {
               hideNFT(nftId, listId);
             }}
             key="hide"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Hide
-            </DropdownMenuItemTitle>
+            <DropdownMenuItemTitle>Hide</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        ) : null}
-
-        {hasOwnership ? (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         ) : null}
 
         <DropdownMenuItem
@@ -132,49 +121,27 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           key="details"
           tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Details
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={() => openModal("activities")}
           key="activities"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Activity
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        ) : null}
-
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuItem
-            onSelect={() => shareNFT(nft)}
-            key="copy-link"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-          >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Share
-            </DropdownMenuItemTitle>
+          <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+            <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
-
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={() => refreshMetadata(nft)}
           key="refresh-metadata"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Refresh Metadata
-          </DropdownMenuItemTitle>
+          <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         {!hasOwnership && isFollowingUser && (
@@ -188,22 +155,14 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
               }
             }}
             key="unfollow"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Unfollow User
-            </DropdownMenuItemTitle>
+            <DropdownMenuItemTitle>Unfollow User</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {!hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {!hasOwnership ? (
           <DropdownMenuItem
             key="block"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             onSelect={() =>
               toggleBlock({
                 isBlocked,
@@ -212,15 +171,11 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
               })
             }
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+            <DropdownMenuItemTitle>
               {isBlocked ? "Unblock User" : "Block User"}
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
-
-        {!hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
 
         {!hasOwnership && (
           <DropdownMenuItem
@@ -229,64 +184,30 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
               router.pop();
             }}
             key="report"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Report
-            </DropdownMenuItemTitle>
+            <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {hasOwnership && (
           <DropdownMenuItem
             onSelect={() => openModal("transfer")}
             key="transfer"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Transfer
-            </DropdownMenuItemTitle>
+            <DropdownMenuItemTitle>Transfer</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuItem
-            onSelect={() => openModal("list")}
-            key="list"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-          >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              List
-            </DropdownMenuItemTitle>
+          <DropdownMenuItem onSelect={() => openModal("list")} key="list">
+            <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuItem
-            onSelect={() => openModal("unlist")}
-            key="unlist"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-          >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Unlist
-            </DropdownMenuItemTitle>
+          <DropdownMenuItem onSelect={() => openModal("unlist")} key="unlist">
+            <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {hasOwnership && (
@@ -294,7 +215,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             destructive
             onSelect={() => openModal("delete")}
             key="delete"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
             <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
               Delete

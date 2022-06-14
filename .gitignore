@@ -117,6 +117,7 @@ apps/expo/service-account-key.json
 
 # Bit
 public
+.bit/
 
 # Turborepo
 .turbo

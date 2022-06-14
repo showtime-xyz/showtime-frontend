@@ -49,6 +49,7 @@ export function Select<T>({
         value={item.value}
         label={item.label}
         size={size}
+        // @ts-ignore
         onPress={handleSelectItemPress}
       />
     ),
