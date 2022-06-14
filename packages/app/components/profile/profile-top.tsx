@@ -337,7 +337,7 @@ export const ProfileTop = ({
                 >
                   {name}
                 </Text>
-                <View tw="h-2" />
+                <View tw="h-2 md:h-3" />
                 <View tw="flex-row items-center">
                   <Text tw="text-base font-semibold  text-gray-900 dark:text-white md:text-lg">
                     {username ? `@${username}` : null}
