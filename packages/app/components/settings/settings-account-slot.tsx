@@ -1,7 +1,4 @@
-import { useCallback } from "react";
-import { Linking, Platform } from "react-native";
-
-import FastImage from "react-native-fast-image";
+import { Linking } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
@@ -11,10 +8,10 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
+import { ClearCacheBtn } from "./clear-cache-btn";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export const SettingAccountSlotHeader = () => {
@@ -45,30 +42,11 @@ export const SettingAccountSlotFooter = () => {
       Alert.alert("Error", "Something went wrong. Please try again later.");
     }
   };
-  const clearAppCache = useCallback(() => {
-    Alert.alert("Clear app cache?", "", [
-      {
-        text: "Confirm",
-        onPress: async () => {
-          deleteMMKVCache();
-          await FastImage.clearMemoryCache();
-          await FastImage.clearDiskCache();
-        },
-        style: "destructive",
-      },
-      {
-        text: "Cancel",
-      },
-    ]);
-  }, [Alert]);
+
   return (
     <View tw="mt-4 px-4">
       <View tw="flex flex-col items-start">
-        {__DEV__ && Platform.OS !== "web" && (
-          <Button size="small" onPress={clearAppCache}>
-            <ButtonLabel>Clear Cache</ButtonLabel>
-          </Button>
-        )}
+        <ClearCacheBtn />
         <View tw="h-4" />
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
