@@ -62,7 +62,6 @@
     "next-transpile-modules": "^9.0.0",
     "patch-package": "^6.4.7",
     "photoswipe": "^5.2.7",
-    "postcss": "^8.3.6",
     "postinstall-postinstall": "^2.1.0",
     "raf": "^3.4.1",
     "react-autosize-textarea": "^7.1.0",
@@ -84,6 +83,7 @@
     "sortablejs": "^1.14.0",
     "sotez": "^10.0.0",
     "swr": "2.0.0-beta.1",
+    "tailwindcss-react-native": "^1.7.10",
     "wagmi": "^0.4.6",
     "walletlink": "^2.2.8",
     "web3modal": "^1.9.7"
@@ -98,6 +98,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-diff": "^1.0.12",
     "next-compose-plugins": "^2.2.1",
-    "tailwindcss": "^3.0.24"
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.2"
   }
 }

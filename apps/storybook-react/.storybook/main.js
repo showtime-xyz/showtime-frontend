@@ -23,6 +23,7 @@ module.exports = {
           "@zeego/menu",
           "@zeego/dropdown-menu",
           "@showtime-xyz",
+          "tailwindcss-react-native",
         ],
         babelPlugins: ["react-native-reanimated/plugin"],
       },

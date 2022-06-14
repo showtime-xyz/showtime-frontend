@@ -5,9 +5,9 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { ViewProps } from "@showtime-xyz/universal.view";
 
-import { Text as UniversalText } from "./text";
+import { Text as StyledText } from "./text";
 
-export type TextProps = ComponentProps<typeof UniversalText>;
+export type TextProps = ComponentProps<typeof StyledText>;
 
 export type Props = {
   tw?: TW;
@@ -43,7 +43,7 @@ export const Text = forwardRef<TextType, Props>(
       onTextLayout,
       children,
       selectable,
-      tw,
+      tw = "",
       nativeID,
       htmlFor,
       accessibilityRole,
@@ -51,21 +51,20 @@ export const Text = forwardRef<TextType, Props>(
       ellipsizeMode,
       pointerEvents,
       onPress,
-      style,
     },
     ref
   ) => {
     const parentTw = useContext(ParentContext);
 
+    // TODO: review this
     const compoundStyle = {
       ...tailwind.style(parentTw),
       ...tailwind.style(tw),
-      ...(style as object),
     };
 
     return (
-      <UniversalText
-        style={compoundStyle}
+      <StyledText
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
         nativeID={nativeID}
         ref={ref}
         selectable={selectable}
@@ -82,7 +81,7 @@ export const Text = forwardRef<TextType, Props>(
         <ParentContext.Provider value={compoundStyle}>
           {children}
         </ParentContext.Provider>
-      </UniversalText>
+      </StyledText>
     );
   }
 );

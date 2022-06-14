@@ -9,6 +9,8 @@ import { useSharedValue } from "react-native-reanimated";
 
 import { useColorScheme as useUserColorScheme } from "./color-scheme";
 
+export { setColorScheme } from "./color-scheme";
+
 export const useColorScheme = () => {
   const userColorScheme = useUserColorScheme();
   const deviceColorScheme = useDeviceColorScheme();

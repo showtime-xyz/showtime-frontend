@@ -5,7 +5,7 @@ import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { tw, TailwindProvider } from "@showtime-xyz/universal.tailwind";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -39,18 +39,20 @@ const TailwindDeviceContextProvider = ({ children }) => {
 
 export const decorators = [
   (Story) => (
-    <TailwindDeviceContextProvider>
-      <BottomSheetModalProvider>
-        <SafeAreaProvider>
-          <ToastProvider>
-            <NavigationContainer linking={linking}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Storybook" component={Story} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </BottomSheetModalProvider>
-    </TailwindDeviceContextProvider>
+    <TailwindProvider preview={true}>
+      <TailwindDeviceContextProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <ToastProvider>
+              <NavigationContainer linking={linking}>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Storybook" component={Story} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ToastProvider>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
+      </TailwindDeviceContextProvider>
+    </TailwindProvider>
   ),
 ];

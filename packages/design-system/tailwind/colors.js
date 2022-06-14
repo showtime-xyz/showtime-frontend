@@ -1,4 +1,4 @@
-export const colors = {
+const colors = {
   black: "#000",
   white: "#fff",
   rose: {
@@ -279,4 +279,8 @@ export const colors = {
     800: "#1e293b",
     900: "#0f172a",
   },
+};
+
+module.exports = {
+  colors,
 };

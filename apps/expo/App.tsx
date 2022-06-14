@@ -17,7 +17,7 @@ import { useAppColorScheme, useDeviceContext } from "twrnc";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
-} from "@showtime-xyz/universal.hooks/color-scheme";
+} from "@showtime-xyz/universal.hooks";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { AppContext } from "app/context/app-context";

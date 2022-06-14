@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDeviceContext } from "twrnc";
 
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { tw, TailwindProvider } from "@showtime-xyz/universal.tailwind";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -39,19 +39,21 @@ const TailwindDeviceContextProvider = ({ children }) => {
 export const decorators = [
   (Story) => (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TailwindDeviceContextProvider>
-        <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <ToastProvider>
-              <MainAxisCenter>
-                <FontsLoader>
-                  <Story />
-                </FontsLoader>
-              </MainAxisCenter>
-            </ToastProvider>
-          </SafeAreaProvider>
-        </BottomSheetModalProvider>
-      </TailwindDeviceContextProvider>
+      <TailwindProvider>
+        <TailwindDeviceContextProvider>
+          <BottomSheetModalProvider>
+            <SafeAreaProvider>
+              <ToastProvider>
+                <MainAxisCenter>
+                  <FontsLoader>
+                    <Story />
+                  </FontsLoader>
+                </MainAxisCenter>
+              </ToastProvider>
+            </SafeAreaProvider>
+          </BottomSheetModalProvider>
+        </TailwindDeviceContextProvider>
+      </TailwindProvider>
     </GestureHandlerRootView>
   ),
 ];

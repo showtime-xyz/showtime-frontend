@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
-import { Platform } from "react-native";
-
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
+import { TailwindProvider } from "@showtime-xyz/universal.tailwind";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import { growthbook } from "app/lib/growthbook";
@@ -21,16 +19,16 @@ import { Web3Provider } from "app/providers/web3-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SafeAreaProvider>
-      <ToastProvider>
-        <WalletProvider>
-          <AlertProvider>
-            <SnackbarProvider>
-              <SWRProvider>
-                <Web3Provider>
-                  <AuthProvider>
-                    <UserProvider>
-                      <CSROnly>
+    <TailwindProvider preview={true}>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <WalletProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <SWRProvider>
+                  <Web3Provider>
+                    <AuthProvider>
+                      <UserProvider>
                         <BottomSheetModalProvider>
                           <GrowthBookProvider growthbook={growthbook}>
                             <FeedProvider>
@@ -40,33 +38,15 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                             </FeedProvider>
                           </GrowthBookProvider>
                         </BottomSheetModalProvider>
-                      </CSROnly>
-                    </UserProvider>
-                  </AuthProvider>
-                </Web3Provider>
-              </SWRProvider>
-            </SnackbarProvider>
-          </AlertProvider>
-        </WalletProvider>
-      </ToastProvider>
-    </SafeAreaProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </Web3Provider>
+                </SWRProvider>
+              </SnackbarProvider>
+            </AlertProvider>
+          </WalletProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
+    </TailwindProvider>
   );
-};
-
-// TODO: remove CSR after replacing to css tailwind
-const CSROnly = ({ children }: any) => {
-  const [ready, setReady] = useState(() => {
-    if (Platform.OS !== "web") {
-      return true;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (ready) return children;
-
-  return null;
 };

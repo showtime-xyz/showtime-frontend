@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
+import { TailwindProvider } from "@showtime-xyz/universal.tailwind";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import { growthbook } from "app/lib/growthbook";
@@ -21,36 +22,38 @@ import { Web3Provider } from "app/providers/web3-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider style={{ backgroundColor: "black" }}>
-        <WalletProvider>
-          <Web3Provider>
-            <ToastProvider>
-              <AlertProvider>
-                {/* <LightBoxProvider> */}
-                <SnackbarProvider>
-                  <NavigationProvider>
-                    <SWRProvider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <MintProvider>{children}</MintProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </SWRProvider>
-                  </NavigationProvider>
-                </SnackbarProvider>
-                {/* </LightBoxProvider> */}
-              </AlertProvider>
-            </ToastProvider>
-          </Web3Provider>
-        </WalletProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <TailwindProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider style={{ backgroundColor: "black" }}>
+          <WalletProvider>
+            <Web3Provider>
+              <ToastProvider>
+                <AlertProvider>
+                  {/* <LightBoxProvider> */}
+                  <SnackbarProvider>
+                    <NavigationProvider>
+                      <SWRProvider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <MintProvider>{children}</MintProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </SWRProvider>
+                    </NavigationProvider>
+                  </SnackbarProvider>
+                  {/* </LightBoxProvider> */}
+                </AlertProvider>
+              </ToastProvider>
+            </Web3Provider>
+          </WalletProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </TailwindProvider>
   );
 };

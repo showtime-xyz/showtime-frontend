@@ -1,8 +1,7 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
+import { useIsDarkMode, useColorScheme } from "@showtime-xyz/universal.hooks";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
