@@ -62,6 +62,7 @@ export default {
       usesNonExemptEncryption: false,
     },
     bitcode: false, // or "Debug",
+    associatedDomains: [`applinks:${url}`],
   },
   android: {
     package: config.scheme,
@@ -72,6 +73,20 @@ export default {
     },
     jsEngine: "hermes",
     softwareKeyboardLayoutMode: "pan",
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [
+          {
+            scheme: "https",
+            host: `*.${url}`,
+            pathPrefix: "/",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   androidNavigationBar: {
     barStyle: "dark-content",

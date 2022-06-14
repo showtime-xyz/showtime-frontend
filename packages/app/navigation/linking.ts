@@ -3,6 +3,8 @@ import * as Linking from "expo-linking";
 import type { LinkingOptions } from "app/lib/react-navigation/native";
 import { getStateFromPath } from "app/lib/react-navigation/native";
 
+const url = "showtime.xyz";
+
 const withRewrites = (unparsedPath: string): string => {
   if (unparsedPath.startsWith("/@")) {
     const username = unparsedPath.replace("/@", "").split("?")[0].split("/")[0];
@@ -23,7 +25,14 @@ const withRewrites = (unparsedPath: string): string => {
 };
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
-  prefixes: [Linking.createURL("/")],
+  prefixes: [
+    Linking.createURL("/"),
+    `https://${url}/`,
+    `https://*.${url}/`,
+    // http, including subdomains like www.
+    `http://${url}/`,
+    `http://*.${url}/`,
+  ],
   config: {
     screens: {
       login: "login",

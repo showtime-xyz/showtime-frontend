@@ -125,6 +125,11 @@ const nextConfig = {
         destination: "/nft/:path*",
         permanent: true,
       },
+      {
+        source: "/.well-known/:file",
+        destination: "/api/.well-known/:file",
+        permanent: false,
+      },
     ];
   },
   async rewrites() {
