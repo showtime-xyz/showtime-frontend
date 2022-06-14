@@ -9,7 +9,6 @@ import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
-// import { LightBoxImg } from "@showtime-xyz/universal.light-box";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -30,6 +29,7 @@ import { Hidden } from "design-system/hidden";
 
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
+import { ProfileSocial } from "./profile-social";
 
 type FollowProps = {
   onPressFollowing: () => void;
@@ -191,6 +191,7 @@ export const ProfileTop = ({
       ],
     };
   }, []);
+
   return (
     <>
       <View
@@ -203,16 +204,6 @@ export const ProfileTop = ({
           colorMode={colorMode as any}
           radius={0}
         >
-          {/* {profileData?.profile.cover_url && (
-            <LightBoxImg
-              source={{
-                uri: profileData?.profile.cover_url,
-              }}
-              width={coverWidth}
-              height={coverHeight}
-              resizeMode="cover"
-            />
-          )} */}
           {profileData?.profile.cover_url && (
             <Image
               source={{ uri: profileData?.profile.cover_url }}
@@ -241,20 +232,6 @@ export const ProfileTop = ({
                 colorMode={colorMode as any}
                 radius={0}
               >
-                {/* {profileData && (
-                  <LightBoxImg
-                    source={{
-                      uri: getProfileImage(profileData?.profile),
-                    }}
-                    imgLayout={{
-                      width: 128,
-                      height: 128,
-                    }}
-                    width={128}
-                    height={128}
-                    style={tw.style("rounded-full")}
-                  />
-                )} */}
                 {profileData && (
                   <Image
                     source={{
@@ -352,26 +329,29 @@ export const ProfileTop = ({
               />
             </>
           ) : (
-            <>
-              <Text
-                tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
-                numberOfLines={1}
-              >
-                {name}
-              </Text>
-
-              <View tw="mt-2 flex-row items-center">
-                <Text tw="text-base font-semibold text-gray-900 dark:text-white">
-                  {username ? `@${username}` : null}
+            <View tw="flex-row justify-between">
+              <View>
+                <Text
+                  tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
+                  numberOfLines={1}
+                >
+                  {name}
                 </Text>
+                <View tw="h-2" />
+                <View tw="flex-row items-center">
+                  <Text tw="text-base font-semibold  text-gray-900 dark:text-white md:text-lg">
+                    {username ? `@${username}` : null}
+                  </Text>
 
-                {profileData?.profile.verified ? (
-                  <View tw="ml-1">
-                    <VerificationBadge size={16} />
-                  </View>
-                ) : null}
+                  {profileData?.profile.verified ? (
+                    <View tw="ml-1">
+                      <VerificationBadge size={16} />
+                    </View>
+                  ) : null}
+                </View>
               </View>
-            </>
+              <ProfileSocial profile={profileData?.profile} />
+            </View>
           )}
 
           {bio ? (

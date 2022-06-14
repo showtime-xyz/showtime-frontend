@@ -254,6 +254,7 @@ export const colors = {
     700: "#3f3f46",
     800: "#27272a",
     900: "#18181b",
+    darkest: "#0a0a0f",
   },
   coolGray: {
     50: "#f9fafb",
