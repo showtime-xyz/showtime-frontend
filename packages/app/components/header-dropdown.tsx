@@ -1,4 +1,4 @@
-import { useContext, Fragment } from "react";
+import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
 } from "@showtime-xyz/universal.dropdown-menu";
@@ -23,9 +22,6 @@ import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
 import { breakpoints } from "design-system/theme";
-
-const isWeb = Platform.OS === "web";
-const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
@@ -74,16 +70,12 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           </DropdownMenuItem>
         )}
 
-        {type === "profile" && <DropdownMenuSeparator />}
-
         <DropdownMenuItem
           onSelect={() => router.push("/settings")}
           key="your-settings"
         >
           <DropdownMenuItemTitle>Settings</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           onSelect={() => {
@@ -109,8 +101,6 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           <DropdownMenuItemTitle>Edit profile</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-
         <DropdownMenuRoot>
           <DropdownMenuTriggerItem key="nested-group-trigger">
             <DropdownMenuItemTitle>Theme</DropdownMenuItemTitle>
@@ -130,8 +120,6 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuRoot>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
           <DropdownMenuItemTitle>Sign Out</DropdownMenuItemTitle>

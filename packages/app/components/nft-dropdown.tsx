@@ -1,4 +1,4 @@
-import { useMemo, Fragment } from "react";
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import {
@@ -6,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
@@ -26,9 +25,6 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
-
-const isWeb = Platform.OS === "web";
-const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 type Props = {
   nftId?: NFT["nft_id"];
@@ -120,8 +116,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        {hasOwnership ? <DropdownMenuSeparator /> : null}
-
         <DropdownMenuItem
           onSelect={() => openModal("details")}
           key="details"
@@ -129,8 +123,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         >
           <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           onSelect={() => openModal("activities")}
@@ -140,16 +132,10 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         </DropdownMenuItem>
 
         {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuSeparator />
-        ) : null}
-
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
           <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
             <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           onSelect={() => refreshMetadata(nft)}
@@ -174,8 +160,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         )}
 
-        {!hasOwnership && <DropdownMenuSeparator />}
-
         {!hasOwnership ? (
           <DropdownMenuItem
             key="block"
@@ -193,8 +177,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        {!hasOwnership && <DropdownMenuSeparator />}
-
         {!hasOwnership && (
           <DropdownMenuItem
             onSelect={async () => {
@@ -207,8 +189,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && <DropdownMenuSeparator />}
-
         {hasOwnership && (
           <DropdownMenuItem
             onSelect={() => openModal("transfer")}
@@ -219,17 +199,9 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuSeparator />
-        )}
-
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem onSelect={() => openModal("list")} key="list">
             <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuSeparator />
         )}
 
         {hasOwnership && usableContractAddress && hasMatchingListing && (
@@ -237,8 +209,6 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-
-        {hasOwnership && <DropdownMenuSeparator />}
 
         {hasOwnership && (
           <DropdownMenuItem

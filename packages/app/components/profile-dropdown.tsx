@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -7,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
@@ -19,9 +17,6 @@ import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
-
-const isWeb = Platform.OS === "web";
-const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 type Props = {
   user: Profile;
@@ -74,8 +69,6 @@ function ProfileDropdown({ user }: Props) {
           <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-
         <DropdownMenuItem
           key="block"
           onSelect={() => {
@@ -90,8 +83,6 @@ function ProfileDropdown({ user }: Props) {
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem
           onSelect={async () => {

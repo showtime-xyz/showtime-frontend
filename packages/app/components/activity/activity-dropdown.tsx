@@ -1,5 +1,4 @@
-import React, { Fragment } from "react";
-import { Platform } from "react-native";
+import React from "react";
 
 import { useSWRConfig } from "swr";
 
@@ -10,7 +9,6 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  DropdownMenuSeparator as ShowtimeDropdownMenuSeparator,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -19,9 +17,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
-
-const isWeb = Platform.OS === "web";
-const DropdownMenuSeparator = isWeb ? Fragment : ShowtimeDropdownMenuSeparator;
 
 type Props = {
   activity: any; // TODO: add Activity type
@@ -66,8 +61,6 @@ function ActivityDropdown({ activity }: Props) {
             <DropdownMenuItemTitle>Unfollow</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-
-        {isAuthenticated && <DropdownMenuSeparator />}
 
         <DropdownMenuItem
           onSelect={() => {
