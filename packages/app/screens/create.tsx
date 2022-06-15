@@ -104,7 +104,7 @@ const CreateMD = () => {
       ) : state.status === "mintingSuccess" ? (
         <View tw="items-center justify-center">
           <Text tw="text-6xl">🎉</Text>
-          <View>
+          <View tw="my-8">
             <Text tw="font-space-bold my-6 text-center text-lg text-black dark:text-white">
               Your NFT has been minted on Showtime!
             </Text>

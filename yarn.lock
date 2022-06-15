@@ -5238,9 +5238,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^0.2.2":
-  version: 0.2.3
-  resolution: "@rainbow-me/rainbowkit@npm:0.2.3"
+"@rainbow-me/rainbowkit@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@rainbow-me/rainbowkit@npm:0.3.0"
   dependencies:
     "@vanilla-extract/css": 1.7.0
     "@vanilla-extract/dynamic": 2.0.2
@@ -5253,7 +5253,7 @@ __metadata:
     react: ">=17"
     react-dom: ">=17"
     wagmi: ^0.4.2
-  checksum: 1267cc0c5dce65b7be21472058f73c42560a02c237f8a3e6628c58cf704cc78aa1b2e27caf9bf573367631a3e02b6d0a647a800f5cff08cba88030ca6666fb53
+  checksum: cd21e4f0f6157289fe2131abe0e01978295afe498d8e71ffa620d0782a490ec1f1cd256f853178eb204b883fa1ab3e86a60f6c5d99e6bd3c2e55654e2ee939ed
   languageName: node
   linkType: hard
 
@@ -7436,7 +7436,7 @@ __metadata:
     "@magic-sdk/admin": ^1.3.2
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
-    "@rainbow-me/rainbowkit": ^0.2.2
+    "@rainbow-me/rainbowkit": ^0.3.0
     "@react-native-menu/menu": ^0.5.2
     "@react-three/drei": ^9.5.3
     "@react-three/fiber": ^8.0.12
@@ -7506,7 +7506,7 @@ __metadata:
     sotez: ^10.0.0
     swr: 2.0.0-beta.1
     tailwindcss: ^3.1.2
-    wagmi: ^0.4.6
+    wagmi: ^0.4.12
     walletlink: ^2.2.8
     web3modal: ^1.9.7
   languageName: unknown
@@ -10127,9 +10127,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/core@npm:^0.3.7":
-  version: 0.3.7
-  resolution: "@wagmi/core@npm:0.3.7"
+"@wagmi/core@npm:^0.3.8":
+  version: 0.3.8
+  resolution: "@wagmi/core@npm:0.3.8"
   dependencies:
     eventemitter3: ^4.0.7
     zustand: ^4.0.0-rc.1
@@ -10142,7 +10142,7 @@ __metadata:
       optional: true
     "@walletconnect/ethereum-provider":
       optional: true
-  checksum: c8c833785302f9932b7947d9049ebe094a1778d5ecf2f5e2687b2a25937b063ba9829e99c6ee916bca5ded87474c5259c7dbb74ce7a926d21d150209b94e708e
+  checksum: 9be22804a93bc07b5579ad9f9c1f22afce37ba2bf4ae24807dd92cc8d0addddb5c595c5f55e25782611297a34ee2603bd2939d4f3c95ee4b23572212f19b78c7
   languageName: node
   linkType: hard
 
@@ -33707,19 +33707,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wagmi@npm:^0.4.6":
-  version: 0.4.10
-  resolution: "wagmi@npm:0.4.10"
+"wagmi@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "wagmi@npm:0.4.12"
   dependencies:
     "@coinbase/wallet-sdk": ^3.2.0
-    "@wagmi/core": ^0.3.7
+    "@wagmi/core": ^0.3.8
     "@walletconnect/ethereum-provider": ^1.7.8
     react-query: ^4.0.0-beta.23
     use-sync-external-store: ^1.1.0
   peerDependencies:
     ethers: ">=5.5.1"
     react: ">=17.0.0"
-  checksum: 573c0a8ffa5af6a8092391ef311da46859edc8ff8ae3aaffb87da35afd7614306935416a07b9313f66c18bd083ef5b0779dc82282defd1cc3bf1c1c9670473f3
+  checksum: 82184eb4ede770a699056d4a36953894a78accc7d60033602fccfb62cd264d4bbe02b6ea2bf71c1961578bd90e6c710faa9fb796467471d7606937f34054a5ab
   languageName: node
   linkType: hard
 
