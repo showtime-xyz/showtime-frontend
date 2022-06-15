@@ -4,6 +4,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  useMemo,
 } from "react";
 import { ViewStyle } from "react-native";
 
@@ -39,6 +40,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     //#region variables
     const inputRef = useRef<typeof TextInput>();
     const [value, setValue] = useState("");
+    const disable = useMemo(() => !value || /^\s+$/.test(value), [value]);
     //#endregion
 
     //#region callbacks
@@ -90,9 +92,14 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             onFocus={onFocus}
             onBlur={onBlur}
           />
-          <Avatar tw="absolute mt-3 ml-3" size={24} url={userAvatar} />
+          <Avatar tw="absolute mt-1 ml-3" size={24} url={userAvatar} />
         </View>
-        <Button size="regular" iconOnly={true} onPress={handleSubmit}>
+        <Button
+          size="regular"
+          iconOnly={true}
+          disabled={disable}
+          onPress={handleSubmit}
+        >
           {submitting ? <Spinner size="small" /> : <Send />}
         </Button>
       </View>
