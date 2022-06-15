@@ -1,4 +1,5 @@
 import { Children, cloneElement, useMemo } from "react";
+import { ViewStyle } from "react-native";
 
 import Animated from "react-native-reanimated";
 
@@ -27,6 +28,7 @@ export function BaseButton({
   iconColor = ["white", "black"],
   children,
   asChild,
+  disabled,
   ...props
 }: BaseButtonProps) {
   //#region variables
@@ -44,13 +46,14 @@ export function BaseButton({
     ],
     [tw, size, iconOnly]
   );
-  const containerAnimatedStyle = useMemo(
+  const containerAnimatedStyle = useMemo<ViewStyle>(
     () => ({
       backgroundColor: backgroundColors
         ? backgroundColors["default"][isDarkMode ? 1 : 0]
         : "transparent",
+      opacity: disabled ? 0.4 : 1,
     }),
-    [backgroundColors, isDarkMode]
+    [backgroundColors, disabled, isDarkMode]
   );
 
   const labelStyle = useMemo(
@@ -107,6 +110,7 @@ export function BaseButton({
     <PressableScale
       {...props}
       tw={containerStyle}
+      disabled={disabled}
       style={backgroundColors ? containerAnimatedStyle : undefined}
     >
       {renderChildren}
