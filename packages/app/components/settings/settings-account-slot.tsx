@@ -11,6 +11,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
+import { ClearCacheBtn } from "./clear-cache-btn";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export const SettingAccountSlotHeader = () => {
@@ -45,11 +46,13 @@ export const SettingAccountSlotFooter = () => {
   return (
     <View tw="mt-4 px-4">
       <View tw="flex flex-col items-start">
+        <ClearCacheBtn />
+        <View tw="h-4" />
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <View tw="h-1" />
-        <Text tw="text-base text-gray-500 dark:text-white">
+        <View tw="h-2" />
+        <Text tw="text-xs text-gray-500 dark:text-white">
           This action cannot be undone.
         </Text>
         <View tw="h-2" />

@@ -78,8 +78,7 @@ export const FeedList = () => {
       <Hidden until="xl">
         <View
           style={{
-            flex: 1,
-            maxWidth: LEFT_SLIDE_WIDTH,
+            width: LEFT_SLIDE_WIDTH,
             marginRight: LEFT_SLIDE_MARGIN,
           }}
         >
@@ -87,7 +86,7 @@ export const FeedList = () => {
         </View>
       </Hidden>
 
-      <View tw={`flex-2 max-w-[${CARD_CONTAINER_WIDTH}px]`}>
+      <View tw="flex-1" style={{ width: CARD_CONTAINER_WIDTH }}>
         {isAuthenticated ? (
           <>
             <View

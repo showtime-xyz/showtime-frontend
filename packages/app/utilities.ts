@@ -623,6 +623,19 @@ export const getCreatorUsernameFromNFT = (nft?: NFT) => {
     : formatAddressShort(nft.creator_address);
 };
 
+export const getDomainName = (link?: string) => {
+  if (!link) return null;
+  const domainRegexp = /^(?:https?:\/\/)?(?:[^@/\n]+@)?(?:www\.)?([^:/\n]+)/gim;
+  const results = domainRegexp.exec(link);
+  if (!results) return null;
+  return results[results?.length - 1];
+};
+
+export const formatLink = (link: string) => {
+  if (link.search(/^http[s]?:\/\//) !== -1) return link;
+  return "https://" + link;
+};
+
 export const getTwitterIntent = ({
   url,
   message,

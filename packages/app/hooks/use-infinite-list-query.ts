@@ -5,7 +5,7 @@ import useSWRInfinite from "swr/infinite";
 
 import { axios } from "app/lib/axios";
 
-export const fetcher = (url) => {
+export const fetcher = (url: string) => {
   return axios({ url, method: "GET" });
 };
 
@@ -36,6 +36,7 @@ export const useInfiniteListQuerySWR = <T>(
     size,
     setSize,
     isValidating,
+    isLoading,
   } = useSWRInfinite<T>(urlFunction, fetcher, {
     revalidateFirstPage: true,
     suspense: true,
@@ -43,10 +44,9 @@ export const useInfiniteListQuerySWR = <T>(
     revalidateOnMount: true,
   });
 
-  const isLoadingInitialData = !pages && !error;
   const isRefreshingSWR = isValidating && pages && pages.length === size;
   const isLoadingMore =
-    size > 0 && pages && typeof pages[size - 1] === "undefined";
+    (size > 0 && pages && typeof pages[size - 1] === "undefined") ?? false;
 
   useEffect(() => {
     if (!isRefreshingSWR) {
@@ -71,7 +71,7 @@ export const useInfiniteListQuerySWR = <T>(
       }
     }, [isLoadingMore, setSize]),
     retry: mutate,
-    isLoading: isLoadingInitialData,
+    isLoading,
     isLoadingMore,
     isRefreshing,
     mutate,

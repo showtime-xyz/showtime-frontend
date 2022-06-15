@@ -34,12 +34,12 @@ export const Trending = () => {
       index: 0,
     },
     {
-      title: "This Week",
+      title: "This week",
       key: "Week",
       index: 1,
     },
     {
-      title: "This Month",
+      title: "This month",
       key: "Month",
       index: 2,
     },

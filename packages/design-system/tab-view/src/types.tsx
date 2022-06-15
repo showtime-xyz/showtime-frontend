@@ -4,6 +4,7 @@ import type { ScrollViewProps } from "react-native";
 
 import type { NativeGesture } from "react-native-gesture-handler";
 import type Animated from "react-native-reanimated";
+import { TabViewProps } from "react-native-tab-view-next";
 import type { Route as TabViewRoute } from "react-native-tab-view-next/src";
 
 export type Route = TabViewRoute & {
@@ -41,6 +42,7 @@ export type CollapsibleHeaderProps = {
   onPullEnough?: () => void;
   refreshControlColor?: string;
   refreshControlTop?: number;
+  emptyBodyComponent?: JSX.Element | null;
   /**
    * WEB_ONLY: Insert element into tabbar.
    */
@@ -51,10 +53,14 @@ export type CollapsibleHeaderProps = {
   insertStickyTabBarElement?: JSX.Element | null;
 };
 
-export type GestureContainerProps = CollapsibleHeaderProps & {
-  initialPage: number;
-  renderTabView: any;
-};
+export type GestureContainerProps = Pick<
+  TabViewProps<Route>,
+  "navigationState"
+> &
+  CollapsibleHeaderProps & {
+    initialPage: number;
+    renderTabView: any;
+  };
 
 export interface RefreshControlProps {
   refreshValue: Animated.SharedValue<number>;
