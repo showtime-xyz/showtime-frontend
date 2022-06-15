@@ -49,6 +49,7 @@ import {
 } from "app/hooks/use-creator-collection-detail";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useShareNFT } from "app/hooks/use-share-nft";
+import { useUser } from "app/hooks/use-user";
 import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
@@ -84,6 +85,7 @@ export const SwipeList = ({
   bottomPadding = 0,
   listId,
 }: Props) => {
+  const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -97,8 +99,9 @@ export const SwipeList = ({
     Platform.OS === "web"
       ? windowHeight -
         headerHeight -
-        MOBILE_WEB_BOTTOM_NAV_HEIGHT -
-        MOBILE_WEB_TABS_HEIGHT
+        (isAuthenticated
+          ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
+          : 0)
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
