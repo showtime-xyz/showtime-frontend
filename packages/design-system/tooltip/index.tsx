@@ -25,9 +25,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [show, setShow] = useState(false);
   const [triggerRect, setTriggerRect] = useState<PlatformRect>(null);
 
-  const onPress = useCallback(() => {
-    setShow(!show);
-  }, [show, setShow]);
+  const onPress = () => {
+    setShow(current => !current);
+  };
 
   useEffect(() => {
     setShow(Boolean(open));
