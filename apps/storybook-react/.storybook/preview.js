@@ -33,7 +33,7 @@ const TailwindDeviceContextProvider = ({ children }) => {
   useDeviceContext(tw);
 
   return (
-    <View tw="flex-1 h-[95vh] justify-center dark:bg-gray-900">{children}</View>
+    <View tw="flex-1 h-screen justify-center dark:bg-gray-900">{children}</View>
   );
 };
 
