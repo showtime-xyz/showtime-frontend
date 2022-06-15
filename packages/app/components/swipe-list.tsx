@@ -94,7 +94,6 @@ export const SwipeList = ({
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
-  console.log("paddings", windowHeight, headerHeight, bottomPadding);
   const itemHeight =
     Platform.OS === "web"
       ? windowHeight -
