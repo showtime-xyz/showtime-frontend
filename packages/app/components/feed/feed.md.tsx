@@ -30,7 +30,7 @@ import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
-const CARD_HEIGHT = 890;
+const CARD_HEIGHT = 848;
 const CARD_CONTAINER_WIDTH = 620;
 const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
@@ -90,7 +90,7 @@ export const FeedList = () => {
         {isAuthenticated ? (
           <>
             <View
-              tw="mr-2 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
+              tw="mr-2 mb-2 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
               style={{
                 // @ts-ignore
                 boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
@@ -205,7 +205,7 @@ const NFTScrollList = ({
             pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
           }}
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          tw={`w-[${CARD_WIDTH}px] mt-2`}
         />
       </View>
     );

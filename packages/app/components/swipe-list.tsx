@@ -49,6 +49,7 @@ import {
 } from "app/hooks/use-creator-collection-detail";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useShareNFT } from "app/hooks/use-share-nft";
+import { useUser } from "app/hooks/use-user";
 import { Blurhash } from "app/lib/blurhash";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
@@ -62,6 +63,8 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 const NFT_DETAIL_WIDTH = 380;
 const SCROLL_BAR_WIDTH = 15;
+const MOBILE_WEB_TABS_HEIGHT = 50;
+const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
@@ -82,6 +85,7 @@ export const SwipeList = ({
   bottomPadding = 0,
   listId,
 }: Props) => {
+  const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
@@ -92,7 +96,11 @@ export const SwipeList = ({
 
   const itemHeight =
     Platform.OS === "web"
-      ? windowHeight - headerHeight - bottomPadding
+      ? windowHeight -
+        headerHeight -
+        (isAuthenticated
+          ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
+          : 0)
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
