@@ -62,6 +62,8 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 1;
 const NFT_DETAIL_WIDTH = 380;
 const SCROLL_BAR_WIDTH = 15;
+const MOBILE_WEB_TABS_HEIGHT = 50;
+const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
@@ -90,9 +92,13 @@ export const SwipeList = ({
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
+  console.log("paddings", windowHeight, headerHeight, bottomPadding);
   const itemHeight =
     Platform.OS === "web"
-      ? windowHeight - headerHeight - bottomPadding
+      ? windowHeight -
+        headerHeight -
+        MOBILE_WEB_BOTTOM_NAV_HEIGHT -
+        MOBILE_WEB_TABS_HEIGHT
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
