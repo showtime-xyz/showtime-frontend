@@ -5,10 +5,8 @@ import {
 } from "tailwindcss-react-native";
 import { create } from "twrnc";
 
+const { colors } = require("./colors");
 const tw = create(require("./tailwind.config.js"));
 
-export { tw };
-export { TailwindProvider, styled, useTailwind };
-
+export { TailwindProvider, styled, useTailwind, tw, colors };
 export { TW } from "./types";
-export { colors } from "./colors";

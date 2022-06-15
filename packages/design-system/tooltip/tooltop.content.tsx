@@ -84,6 +84,7 @@ export const TooltipContent: React.FC<
     <View
       style={[
         tw.style("relative items-center justify-center rounded-2xl px-4 py-2"),
+        // @ts-ignore
         {
           filter: isDark ? DARK_SHADOW : LIGHT_SHADOW,
           backgroundColor: color,
