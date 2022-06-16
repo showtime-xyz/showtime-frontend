@@ -19,37 +19,41 @@ import { SafeAreaProvider } from "design-system/safe-area";
 import { SnackbarProvider } from "design-system/snackbar";
 import { ToastProvider } from "design-system/toast";
 
+import { ThemeProvider } from "./theme-provider";
+
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SafeAreaProvider>
-      <ToastProvider>
-        <WalletProvider>
-          <AlertProvider>
-            <SnackbarProvider>
-              <SWRProvider>
-                <Web3Provider>
-                  <AuthProvider>
-                    <UserProvider>
-                      <CSROnly>
-                        <BottomSheetModalProvider>
-                          <GrowthBookProvider growthbook={growthbook}>
-                            <FeedProvider>
-                              <NavigationProvider>
-                                <MintProvider>{children}</MintProvider>
-                              </NavigationProvider>
-                            </FeedProvider>
-                          </GrowthBookProvider>
-                        </BottomSheetModalProvider>
-                      </CSROnly>
-                    </UserProvider>
-                  </AuthProvider>
-                </Web3Provider>
-              </SWRProvider>
-            </SnackbarProvider>
-          </AlertProvider>
-        </WalletProvider>
-      </ToastProvider>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <WalletProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <SWRProvider>
+                  <Web3Provider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <CSROnly>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <MintProvider>{children}</MintProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </CSROnly>
+                      </UserProvider>
+                    </AuthProvider>
+                  </Web3Provider>
+                </SWRProvider>
+              </SnackbarProvider>
+            </AlertProvider>
+          </WalletProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 };
 

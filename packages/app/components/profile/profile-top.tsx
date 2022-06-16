@@ -88,7 +88,7 @@ export const ProfileTop = ({
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const hasLinksInBio = useRef<boolean>(false);
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing } = useMyInfo();
   const profileId = profileData?.profile.profile_id;
@@ -200,7 +200,7 @@ export const ProfileTop = ({
           height={coverHeight}
           width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
           show={isLoading}
-          colorMode={colorMode as any}
+          colorMode={colorScheme as any}
           radius={0}
         >
           {profileData?.profile.cover_url && (
@@ -228,7 +228,7 @@ export const ProfileTop = ({
                 height={128}
                 width={128}
                 show={isLoading}
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
@@ -317,14 +317,14 @@ export const ProfileTop = ({
                 height={24}
                 width={150}
                 show={true}
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
               />
               <View tw="h-2" />
               <Skeleton
                 height={12}
                 width={100}
                 show={true}
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
               />
             </>
           ) : (

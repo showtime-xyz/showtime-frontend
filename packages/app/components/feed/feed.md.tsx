@@ -20,8 +20,7 @@ import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import { useIsDarkMode } from "design-system/hooks";
-import { useColorScheme } from "design-system/hooks/color-scheme";
+import { useIsDarkMode, useColorScheme } from "design-system/hooks";
 import { SegmentedControl } from "design-system/segmented-control";
 import { Skeleton } from "design-system/skeleton";
 import { Tabs } from "design-system/tabs";
@@ -259,7 +258,7 @@ const NFTScrollList = ({
 // TODO: move to separate file
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
 
   return (
@@ -279,9 +278,9 @@ const SuggestedUsers = () => {
         <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
-            <Skeleton colorMode={colorMode} width={100} height={20} />
+            <Skeleton colorMode={colorScheme as any} width={100} height={20} />
             <View tw="h-4" />
-            <Skeleton colorMode={colorMode} width={90} height={15} />
+            <Skeleton colorMode={colorScheme as any} width={90} height={15} />
           </View>
         ) : null}
         {data?.map((user, index) => {

@@ -9,6 +9,6 @@ export const withColorScheme =
   <T extends ComponentType<any>>(Comp: T) =>
   // eslint-disable-next-line react/display-name
   (props: any) => {
-    const color = useColorScheme();
-    return <Comp {...props} colorScheme={color} />;
+    const { colorScheme } = useColorScheme();
+    return <Comp {...props} colorScheme={colorScheme} />;
   };

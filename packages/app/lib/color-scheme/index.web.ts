@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 const COLOR_SCHEME_STRING = "color-scheme";
 let listeners: any = [];
 
@@ -20,19 +18,4 @@ export function deleteColorScheme() {
   if (typeof window !== "undefined") {
     localStorage.removeItem(COLOR_SCHEME_STRING);
   }
-}
-
-export function useColorScheme() {
-  const [, setCount] = useState(0);
-  useEffect(() => {
-    const callback = () => {
-      setCount((c) => c + 1);
-    };
-    listeners.push(callback);
-    return () => {
-      listeners = listeners.filter((l: any) => l !== callback);
-    };
-  }, []);
-
-  return getColorScheme();
 }

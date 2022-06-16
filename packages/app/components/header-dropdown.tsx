@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
@@ -16,6 +14,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
 } from "design-system/dropdown-menu";
+import { useColorScheme } from "design-system/hooks";
 import { Settings } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
@@ -25,7 +24,7 @@ import { View } from "design-system/view";
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
   const router = useRouter();
-  const context = useContext(AppContext);
+  const context = useColorScheme();
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();

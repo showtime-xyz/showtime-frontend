@@ -16,7 +16,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 
-import { useColorScheme } from "design-system/hooks/color-scheme";
+import { useColorScheme } from "design-system/hooks";
 import { PressableScale } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
 import { CARD_DARK_SHADOW } from "design-system/theme";
@@ -34,7 +34,7 @@ type Props = {
 
 function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
   const { width } = useWindowDimensions();
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;

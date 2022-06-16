@@ -48,7 +48,7 @@ export const SettingEmailSlotHeader = ({
 };
 
 export const SettingsEmailSkeletonSlot = () => {
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   return (
     <View tw="p-4">
       <View tw="pb-3">
@@ -56,7 +56,7 @@ export const SettingsEmailSkeletonSlot = () => {
           height={16}
           width={128}
           show={true}
-          colorMode={colorMode as any}
+          colorMode={colorScheme as any}
         >
           <Animated.View entering={FadeIn}></Animated.View>
         </Skeleton>
@@ -66,7 +66,7 @@ export const SettingsEmailSkeletonSlot = () => {
           height={32}
           width={300}
           show={true}
-          colorMode={colorMode as any}
+          colorMode={colorScheme as any}
         >
           <Animated.View entering={FadeIn}></Animated.View>
         </Skeleton>

@@ -82,7 +82,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     autocomplete,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
 
   const inputId = useId(props.id);
@@ -93,7 +93,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     return {
       boxShadow:
         Platform.OS === "web" && focused.value
-          ? boxShadow[colorScheme]
+          ? //@ts-ignore
+            boxShadow[colorScheme]
           : undefined,
       opacity: disabled ? 0.75 : 1,
     };
