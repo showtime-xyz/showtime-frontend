@@ -8,6 +8,7 @@ import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -117,6 +118,7 @@ export const useClaimNFT = () => {
           });
 
           if (response.is_complete) {
+            track("NFT Claimed");
             dispatch({ type: "success", mint: response.mint });
             mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
 
