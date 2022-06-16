@@ -9,7 +9,7 @@ import { useAppColorScheme, useDeviceContext } from "twrnc";
 import {
   getColorScheme as getPersistedColorColorSchema,
   setColorScheme as persistColorSchema,
-} from "app/lib/color-scheme";
+} from "app/lib/color-scheme-store";
 
 import { ColorSchemeProvider } from "design-system/color-scheme-provider";
 import { tw } from "design-system/tailwind";

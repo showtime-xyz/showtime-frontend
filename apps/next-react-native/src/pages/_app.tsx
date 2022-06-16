@@ -10,6 +10,7 @@ import "photoswipe/dist/photoswipe.css";
 
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
+import { withColorScheme } from "app/components/memo-with-theme";
 import { useLogRocket } from "app/hooks/use-logrocket";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
@@ -58,7 +59,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         />
       </Head>
       <AppProviders>
-        <View tw="bg-gray-100 dark:bg-black">
+        <Container>
           <Header
             canGoBack={
               router.pathname === "/search" ||
@@ -69,7 +70,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
             <Component {...pageProps} />
           </View>
           <Footer />
-        </View>
+        </Container>
 
         {/* Modals */}
         <CommentsScreen />
@@ -92,3 +93,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
     </>
   );
 }
+
+const Container = withColorScheme(
+  ({ children }: { children: React.ReactChild }) => {
+    return <View tw="bg-gray-100 dark:bg-black">{children}</View>;
+  }
+);
