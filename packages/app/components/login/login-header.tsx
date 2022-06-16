@@ -1,8 +1,8 @@
 import { Linking } from "react-native";
 
-import { PressableScale } from "design-system/pressable-scale";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 export function LoginHeader() {
   return (

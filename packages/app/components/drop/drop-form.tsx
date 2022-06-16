@@ -5,6 +5,18 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useFilePicker } from "@showtime-xyz/universal.file-picker";
+import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
@@ -13,18 +25,6 @@ import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
-
-import { Button } from "design-system/button";
-import { Checkbox } from "design-system/checkbox";
-import { ErrorText } from "design-system/fieldset";
-import { Fieldset } from "design-system/fieldset";
-import { useFilePicker } from "design-system/file-picker";
-import { Image as ImageIcon, FlipIcon } from "design-system/icon";
-import { Pressable } from "design-system/pressable";
-import { ScrollView } from "design-system/scroll-view";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;

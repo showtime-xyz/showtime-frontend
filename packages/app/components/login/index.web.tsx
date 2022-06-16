@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
-import { yup } from "app/lib/yup";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { yup } from "app/lib/yup";
 
 import { ConnectButton } from "../connect-button";
 import { LoginContainer } from "./login-container";

@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState, useContext } from "react";
 import { Pressable } from "react-native";
 
-import { useUpdateEffect } from "design-system/hooks";
+import { useUpdateEffect } from "@showtime-xyz/universal.hooks";
 
 import { AnimateHeight } from "../animate-height";
 import { RootContext, ItemContext } from "./common";

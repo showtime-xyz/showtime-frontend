@@ -4,6 +4,13 @@ import { Platform, useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { HeaderTabView } from "@showtime-xyz/universal.tab-view/index";
+import { Route } from "@showtime-xyz/universal.tab-view/src/types";
+import { TabSpinner } from "@showtime-xyz/universal.tab-view/tab-spinner";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
 import {
   defaultFilters,
   useProfileNftTabs,
@@ -13,13 +20,6 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-
-import { useIsDarkMode } from "design-system/hooks";
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
-import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";

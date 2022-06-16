@@ -3,15 +3,15 @@ import { Platform } from "react-native";
 
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
+import { HeaderTabView } from "@showtime-xyz/universal.tab-view/index";
+import { Route } from "@showtime-xyz/universal.tab-view/src/types";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 import { TabListContainer, TrendingTabListRef } from "./tab-list";
 

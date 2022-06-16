@@ -9,11 +9,11 @@ import {
 
 import * as RadixTabs from "@radix-ui/react-tabs";
 
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
+
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
-
-import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 
 import { TabRootProps } from "./types";
 

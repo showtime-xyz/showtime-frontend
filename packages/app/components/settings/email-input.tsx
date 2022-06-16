@@ -4,11 +4,11 @@ import { Platform, TextInputProps } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
-import { yup } from "app/lib/yup";
+import { BottomSheetTextInput } from "@showtime-xyz/universal.bottom-sheet";
+import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 
-import { BottomSheetTextInput } from "design-system/bottom-sheet";
-import { Button, ButtonLabel } from "design-system/button";
-import { Fieldset } from "design-system/fieldset";
+import { yup } from "app/lib/yup";
 
 type FormData = {
   data?: string;

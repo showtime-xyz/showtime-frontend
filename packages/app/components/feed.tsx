@@ -6,6 +6,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { TabItem, Tabs } from "@showtime-xyz/universal.tabs";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
 import { SwipeList } from "app/components/swipe-list";
@@ -18,13 +25,6 @@ import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
-
-import { PressableScale } from "design-system/pressable-scale";
-import { useSafeAreaInsets } from "design-system/safe-area";
-import { TabItem, Tabs } from "design-system/tabs";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 export const Feed = () => {
   return (

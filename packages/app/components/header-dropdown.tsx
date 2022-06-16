@@ -1,11 +1,6 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { useAuth } from "app/hooks/auth/use-auth";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
-
-import { Avatar } from "design-system/avatar";
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,13 +8,18 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
-} from "design-system/dropdown-menu";
-import { useColorScheme } from "design-system/hooks";
-import { Settings } from "design-system/icon";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { breakpoints } from "design-system/theme";
-import { View } from "design-system/view";
+} from "@showtime-xyz/universal.dropdown-menu";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Settings } from "@showtime-xyz/universal.icon";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { breakpoints } from "@showtime-xyz/universal.theme";
+import { View } from "@showtime-xyz/universal.view";
+
+import { useAuth } from "app/hooks/auth/use-auth";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
+import { useRouter } from "app/navigation/use-router";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();

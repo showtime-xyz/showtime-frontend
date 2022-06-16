@@ -1,4 +1,4 @@
-import { Text, Props as TextProps } from "design-system/text";
+import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
 
 export const Label = (props: TextProps) => (
   <Text

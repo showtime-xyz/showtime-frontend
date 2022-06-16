@@ -2,17 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { DataPill } from "@showtime-xyz/universal.data-pill";
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
 import { magic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
-
-import { Button } from "design-system/button";
-import { DataPill } from "design-system/data-pill";
-import { useColorScheme } from "design-system/hooks";
-import { Skeleton } from "design-system/skeleton";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";

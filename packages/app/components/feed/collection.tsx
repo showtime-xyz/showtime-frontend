@@ -1,8 +1,8 @@
-import type { NFT } from "app/types";
+import { Image } from "@showtime-xyz/universal.image";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Image } from "design-system/image";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import type { NFT } from "app/types";
 
 type Props = {
   nft?: NFT;

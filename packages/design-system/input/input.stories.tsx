@@ -1,8 +1,8 @@
 import { Meta } from "@storybook/react";
 import { Svg, Path } from "react-native-svg";
 
-import { useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system/view";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Input, InputPressable } from "./index";
 

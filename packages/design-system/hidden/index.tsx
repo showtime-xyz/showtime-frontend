@@ -5,7 +5,7 @@ import {
   breakpoints,
   IBreakpoints,
   sortedBreakpointKeys,
-} from "design-system/theme";
+} from "@showtime-xyz/universal.theme";
 
 type HiddenProps = {
   from?: IBreakpoints;

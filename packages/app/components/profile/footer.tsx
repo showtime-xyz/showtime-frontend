@@ -1,10 +1,10 @@
 import { memo } from "react";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { CardSkeleton } from "app/components/card/card-skeleton";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-
-import { View } from "design-system/view";
 
 type ProfileFooterProps = {
   isLoading: boolean;

@@ -2,9 +2,9 @@ import React from "react";
 
 import { Meta } from "@storybook/react";
 
-import { Checkbox } from "design-system/checkbox";
-import { Label } from "design-system/label";
-import { View } from "design-system/view";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { Label } from "@showtime-xyz/universal.label";
+import { View } from "@showtime-xyz/universal.view";
 
 export default {
   component: Checkbox,

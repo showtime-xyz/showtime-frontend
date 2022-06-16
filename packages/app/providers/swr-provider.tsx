@@ -7,10 +7,10 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/dist/types";
 
+import { useToast } from "@showtime-xyz/universal.toast";
+
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isUndefined } from "app/lib/swr/helper";
-
-import { useToast } from "design-system/toast";
 
 function mmkvProvider() {
   const storage = new MMKV();

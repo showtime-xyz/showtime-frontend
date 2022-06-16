@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 
-import { createParam } from "app/navigation/use-param";
+import { Route } from "@showtime-xyz/universal.tab-view/src/types";
 
-import { Route } from "design-system/tab-view/src/types";
+import { createParam } from "app/navigation/use-param";
 
 type Query = {
   tab: number;

@@ -2,9 +2,9 @@ import React, { ComponentProps, useMemo } from "react";
 
 import { MotiPressable } from "moti/interactions";
 
-import { useIsDarkMode, useOnHover } from "design-system/hooks";
-import { tw as tailwind, colors } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind";
+import { useIsDarkMode, useOnHover } from "@showtime-xyz/universal.hooks";
+import { tw as tailwind, colors } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type Props = ComponentProps<typeof MotiPressable> & {
   tw?: TW;

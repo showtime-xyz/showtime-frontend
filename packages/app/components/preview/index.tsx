@@ -3,8 +3,8 @@ import { ImageProps, Platform } from "react-native";
 
 import { Video } from "expo-av";
 
-import { Image } from "design-system/image";
-import { tw as tailwind } from "design-system/tailwind";
+import { Image } from "@showtime-xyz/universal.image";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];

@@ -3,17 +3,17 @@ import { FlatList, Platform } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useMyInfo } from "app/hooks/api-hooks";
 import { FollowerUser } from "app/hooks/api/use-followers-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
-
-import { useColorScheme } from "design-system/hooks";
-import { Image } from "design-system/image";
-import { Skeleton } from "design-system/skeleton";
-import { Text } from "design-system/text";
-import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "./empty-placeholder";
 import { FollowButton } from "./follow-button";

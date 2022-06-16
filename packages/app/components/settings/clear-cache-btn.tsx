@@ -2,10 +2,10 @@ import { useCallback } from "react";
 
 import FastImage from "react-native-fast-image";
 
-import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
 
-import { useAlert } from "design-system/alert";
-import { Button, ButtonLabel } from "design-system/button";
+import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
 
 export const ClearCacheBtn = () => {
   const Alert = useAlert();

@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { Pressable } from "react-native";
 
+import { Image } from "@showtime-xyz/universal.image";
+import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
+import { View } from "@showtime-xyz/universal.view";
+
 import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
@@ -9,11 +14,6 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
-
-import { Image } from "design-system/image";
-import { Text } from "design-system/text";
-import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;

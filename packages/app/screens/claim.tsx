@@ -1,6 +1,6 @@
-import { Claim } from "app/components/claim/claim";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { withModalScreen } from "design-system/modal-screen";
+import { Claim } from "app/components/claim/claim";
 
 const ClaimModal = () => {
   return <Claim />;

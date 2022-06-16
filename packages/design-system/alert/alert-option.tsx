@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { AlertButton } from "react-native";
 
-import { Button } from "design-system/button";
-import type { ButtonVariant } from "design-system/button";
+import { Button } from "@showtime-xyz/universal.button";
+import type { ButtonVariant } from "@showtime-xyz/universal.button";
 
 type AlertBtnType = AlertButton & {
   hide: () => void;

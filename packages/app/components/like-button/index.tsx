@@ -1,8 +1,8 @@
-import { getRoundedCount } from "app/utilities";
+import { Button } from "@showtime-xyz/universal.button";
+import { Heart, HeartFilled } from "@showtime-xyz/universal.icon";
+import { tw } from "@showtime-xyz/universal.tailwind";
 
-import { Button } from "design-system/button";
-import { Heart, HeartFilled } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { getRoundedCount } from "app/utilities";
 
 export function LikeButton({
   onPress,

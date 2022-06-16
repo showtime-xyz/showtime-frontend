@@ -16,10 +16,10 @@ import {
 import { AnimatePresence, MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { Divider } from "design-system/divider";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { Divider } from "@showtime-xyz/universal.divider";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { AlertOption } from "./alert-option";
 

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Platform } from "react-native";
 
-import type { NFT } from "app/types";
+import { Text } from "@showtime-xyz/universal.text";
+import { Tooltip } from "@showtime-xyz/universal.tooltip";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Text } from "design-system/text";
-import { Tooltip } from "design-system/tooltip";
-import { View } from "design-system/view";
+import type { NFT } from "app/types";
 
 type Props = {
   nft?: NFT;

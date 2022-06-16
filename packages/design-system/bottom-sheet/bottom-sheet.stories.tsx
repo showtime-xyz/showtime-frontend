@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import { Meta } from "@storybook/react";
 
-import { Button } from "design-system/button";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheet } from "./index";
 

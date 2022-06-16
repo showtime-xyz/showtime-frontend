@@ -8,6 +8,16 @@ import {
 } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Hidden } from "@showtime-xyz/universal.hidden";
+import {
+  TabRecyclerList,
+  TabScrollView,
+} from "@showtime-xyz/universal.tab-view";
+import { TabSpinner } from "@showtime-xyz/universal.tab-view/tab-spinner";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Card } from "app/components/card";
 import { getLocalFileURI } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
@@ -18,13 +28,6 @@ import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
-
-import { Hidden } from "design-system/hidden";
-import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";

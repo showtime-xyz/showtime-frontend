@@ -1,5 +1,8 @@
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
@@ -23,9 +26,6 @@ import { SettingsScreen } from "app/screens/settings";
 import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
-
-import { useIsDarkMode } from "design-system/hooks";
-import { useSafeAreaInsets } from "design-system/safe-area";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";

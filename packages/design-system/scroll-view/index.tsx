@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
 import { ScrollView as ReactNativeScrollView } from "react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 type ScrollViewProps = { tw?: TW } & ComponentProps<
   typeof ReactNativeScrollView

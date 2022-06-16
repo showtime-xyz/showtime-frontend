@@ -6,6 +6,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useFilePicker } from "@showtime-xyz/universal.file-picker";
+import { Upload } from "@showtime-xyz/universal.icon";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import {
+  SelectedTabIndicator,
+  TabItem,
+  Tabs,
+} from "@showtime-xyz/universal.tabs";
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -17,16 +31,6 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
-
-import { Button } from "design-system/button";
-import { Fieldset } from "design-system/fieldset";
-import { useFilePicker } from "design-system/file-picker";
-import { Upload } from "design-system/icon";
-import { useSafeAreaInsets } from "design-system/safe-area";
-import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
-import { tw, colors } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 const editProfileValidationSchema = yup.object({
   username: yup.string().min(2).nullable(),

@@ -1,22 +1,22 @@
 import { useWindowDimensions } from "react-native";
 
-import { useBlock } from "app/hooks/use-block";
-import { useReport } from "app/hooks/use-report";
-import { useShare } from "app/hooks/use-share";
-import { track } from "app/lib/analytics";
-import { useRouter } from "app/navigation/use-router";
-import type { Profile } from "app/types";
-
-import { Button } from "design-system/button";
+import { Button } from "@showtime-xyz/universal.button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
-import { MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+} from "@showtime-xyz/universal.dropdown-menu";
+import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { tw } from "@showtime-xyz/universal.tailwind";
+
+import { useBlock } from "app/hooks/use-block";
+import { useReport } from "app/hooks/use-report";
+import { useShare } from "app/hooks/use-share";
+import { track } from "app/lib/analytics";
+import { useRouter } from "app/navigation/use-router";
+import type { Profile } from "app/types";
 
 type Props = {
   user: Profile;

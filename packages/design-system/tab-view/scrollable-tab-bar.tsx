@@ -7,10 +7,10 @@ import {
   TabBar,
 } from "react-native-tab-view-next/src";
 
-import { Haptics } from "app/lib/haptics";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
-import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
+import { Haptics } from "app/lib/haptics";
 
 import { Route } from "./src/types";
 

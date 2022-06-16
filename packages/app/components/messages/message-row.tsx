@@ -3,16 +3,21 @@ import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button, TextButton } from "@showtime-xyz/universal.button";
+import {
+  HeartFilled,
+  Heart,
+  MessageFilled,
+  Message,
+} from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text, linkify } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
-
-import { Avatar } from "design-system/avatar";
-import { Button, TextButton } from "design-system/button";
-import { HeartFilled, Heart, MessageFilled, Message } from "design-system/icon";
-import { colors } from "design-system/tailwind";
-import { Text, linkify } from "design-system/text";
-import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 interface MessageRowProps {
   /**

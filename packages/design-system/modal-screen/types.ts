@@ -1,4 +1,4 @@
-import { ModalProps } from "design-system/modal";
+import { ModalProps } from "@showtime-xyz/universal.modal";
 
 export interface ModalScreenOptions extends ModalProps {
   title: string;

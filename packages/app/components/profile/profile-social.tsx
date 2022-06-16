@@ -1,16 +1,20 @@
 import { memo, useMemo, useCallback } from "react";
 import { Linking } from "react-native";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Divider } from "@showtime-xyz/universal.divider";
+import {
+  Twitter,
+  Link as LinkIcon,
+  Instagram,
+} from "@showtime-xyz/universal.icon";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Profile } from "app/types";
 import { getDomainName, formatLink } from "app/utilities";
-
-import { useAlert } from "design-system/alert";
-import { Divider } from "design-system/divider";
-import { Twitter, Link as LinkIcon, Instagram } from "design-system/icon";
-import { PressableScale } from "design-system/pressable-scale";
-import { tw, colors } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 type ProfileSocialProps = {
   profile?: Profile;

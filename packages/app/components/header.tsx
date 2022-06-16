@@ -9,6 +9,18 @@ import {
 
 import * as Popover from "@radix-ui/react-popover";
 
+import { Button } from "@showtime-xyz/universal.button";
+import {
+  useBlurredBackgroundColor,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
+import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
+import { Input } from "@showtime-xyz/universal.input";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { breakpoints } from "@showtime-xyz/universal.theme";
+import { View } from "@showtime-xyz/universal.view";
+
 // import { NetworkButton } from "app/components/connect-button";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
@@ -22,15 +34,6 @@ import {
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
-
-import { Button } from "design-system/button";
-import { useBlurredBackgroundColor, useIsDarkMode } from "design-system/hooks";
-import { ArrowLeft, Close, Plus, Search } from "design-system/icon";
-import { Input } from "design-system/input";
-import { PressableScale } from "design-system/pressable-scale";
-import { tw } from "design-system/tailwind";
-import { breakpoints } from "design-system/theme";
-import { View } from "design-system/view";
 
 const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);

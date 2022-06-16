@@ -6,6 +6,10 @@ import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import { v4 as uuid } from "uuid";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { useSnackbar } from "@showtime-xyz/universal.snackbar";
+
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { MintContext } from "app/context/mint-context";
 import { useBiconomy } from "app/hooks/use-biconomy";
@@ -14,10 +18,6 @@ import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useRouter } from "app/navigation/use-router";
-
-import { useAlert } from "design-system/alert";
-import { useSafeAreaInsets } from "design-system/safe-area";
-import { useSnackbar } from "design-system/snackbar";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
 import { useMatchMutate } from "./use-match-mutate";

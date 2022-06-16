@@ -2,6 +2,8 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -11,8 +13,6 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
-
-import { useAlert } from "design-system/alert";
 
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",

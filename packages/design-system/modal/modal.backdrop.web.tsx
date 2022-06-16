@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { View } from "design-system/view";
+import { View } from "@showtime-xyz/universal.view";
 
 import type { ModalBackdropProps } from "./types";
 

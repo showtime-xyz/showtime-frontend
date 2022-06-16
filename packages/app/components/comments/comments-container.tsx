@@ -1,1 +1,1 @@
-export { View as CommentsContainer } from "design-system/view";
+export { View as CommentsContainer } from "@showtime-xyz/universal.view";

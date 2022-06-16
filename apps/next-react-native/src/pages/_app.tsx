@@ -8,6 +8,8 @@ import Head from "next/head";
 // Todo: move to inner-components.
 import "photoswipe/dist/photoswipe.css";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
@@ -30,8 +32,6 @@ import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
-
-import { View } from "design-system/view";
 
 import "../styles/styles.css";
 

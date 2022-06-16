@@ -1,12 +1,12 @@
 import { Platform } from "react-native";
 
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Image } from "@showtime-xyz/universal.image";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Button, ButtonLabel } from "design-system/button";
-import { Image } from "design-system/image";
-import { ScrollView } from "design-system/scroll-view";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { SettingBody } from "./setting-content";
 import { SettingHeaderSection } from "./setting-header";

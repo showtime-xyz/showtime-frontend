@@ -6,13 +6,13 @@ import { setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme-provider";
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import {
   getColorScheme as getPersistedColorColorSchema,
   setColorScheme as persistColorSchema,
 } from "app/lib/color-scheme-store";
-
-import { ColorSchemeProvider } from "design-system/color-scheme-provider";
-import { tw } from "design-system/tailwind";
 
 export function ThemeProvider({
   children,

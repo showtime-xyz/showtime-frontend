@@ -1,6 +1,15 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Hidden } from "@showtime-xyz/universal.hidden";
+import { useIsDarkMode, useColorScheme } from "@showtime-xyz/universal.hooks";
+import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Tabs } from "@showtime-xyz/universal.tabs";
+import { Text } from "@showtime-xyz/universal.text";
+import { CARD_DARK_SHADOW } from "@showtime-xyz/universal.theme";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
@@ -18,15 +27,6 @@ import {
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
-
-import { Hidden } from "design-system/hidden";
-import { useIsDarkMode, useColorScheme } from "design-system/hooks";
-import { SegmentedControl } from "design-system/segmented-control";
-import { Skeleton } from "design-system/skeleton";
-import { Tabs } from "design-system/tabs";
-import { Text } from "design-system/text";
-import { CARD_DARK_SHADOW } from "design-system/theme";
-import { View } from "design-system/view";
 
 const CARD_HEIGHT = 848;
 const CARD_CONTAINER_WIDTH = 620;

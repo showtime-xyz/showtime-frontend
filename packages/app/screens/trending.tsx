@@ -1,8 +1,8 @@
+import { Hidden } from "@showtime-xyz/universal.hidden";
+
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Trending } from "app/components/trending";
 import { useTrackPageViewed } from "app/lib/analytics";
-
-import { Hidden } from "design-system/hidden";
 
 import { Trending as TrendingMD } from "./trending.md";
 

@@ -5,7 +5,7 @@ import {
   ViewProps,
 } from "react-native";
 
-import { useSafeAreaInsets } from "design-system/safe-area";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { useScrollToEnd } from "./useScrollToEnd";
 

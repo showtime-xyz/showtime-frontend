@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 
 import { MotiView } from "moti";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Media } from "app/components/media";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { IEdition } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
-
-import { Button } from "design-system/button";
-import { ScrollView } from "design-system/scroll-view";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 const values = [
   {

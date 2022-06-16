@@ -1,9 +1,9 @@
 import { MotiView } from "moti";
 import { SvgProps } from "react-native-svg";
 
-import { useIsDarkMode } from "design-system/hooks";
-import { ChevronDown } from "design-system/icon";
-import { colors } from "design-system/tailwind";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ChevronDown } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 interface ChevronDownIconProps extends SvgProps {
   open: boolean;

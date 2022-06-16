@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from "react-native";
 
 import type { BottomSheetProps } from "@gorhom/bottom-sheet";
 
-import type { TW } from "design-system/tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
   close: () => void;

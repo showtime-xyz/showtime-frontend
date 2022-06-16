@@ -1,6 +1,13 @@
 import React from "react";
 import { Linking, Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Check } from "@showtime-xyz/universal.icon";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -18,13 +25,6 @@ import {
   getCreatorUsernameFromNFT,
   getTwitterIntent,
 } from "app/utilities";
-
-import { Button } from "design-system/button";
-import { Check } from "design-system/icon";
-import { ScrollView } from "design-system/scroll-view";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();

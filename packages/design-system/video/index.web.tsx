@@ -3,11 +3,11 @@ import { StyleSheet } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 
-import { useVideoConfig } from "app/context/video-config-context";
+import { Image } from "@showtime-xyz/universal.image";
+import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Image } from "design-system/image";
-import type { TW } from "design-system/tailwind";
-import { View } from "design-system/view";
+import { useVideoConfig } from "app/context/video-config-context";
 
 type VideoProps = {
   tw?: TW;

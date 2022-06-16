@@ -4,10 +4,10 @@ import { MotiView } from "moti";
 import { Easing } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
-import { useIsDarkMode } from "design-system/hooks";
-import { Text, Props as TextProps } from "design-system/text";
-import { View } from "design-system/view";
-import { ViewProps } from "design-system/view";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+import { ViewProps } from "@showtime-xyz/universal.view";
 
 import { Accordion as RNAccordion } from "./lib";
 import { ItemProps } from "./lib/types";

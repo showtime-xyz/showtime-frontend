@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { useLikes } from "app/hooks/api/use-likes";
 import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
-
-import { useIsDarkMode } from "design-system/hooks";
-import { Skeleton } from "design-system/skeleton";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 interface Props {
   nft?: any;

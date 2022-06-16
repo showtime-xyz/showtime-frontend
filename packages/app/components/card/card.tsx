@@ -3,6 +3,12 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
 
+import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { CARD_DARK_SHADOW } from "@showtime-xyz/universal.theme";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Collection } from "app/components/card/rows/collection";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
@@ -15,12 +21,6 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-
-import { useColorScheme } from "design-system/hooks";
-import { PressableScale } from "design-system/pressable-scale";
-import { Skeleton } from "design-system/skeleton";
-import { CARD_DARK_SHADOW } from "design-system/theme";
-import { View } from "design-system/view";
 
 type Props = {
   nft: NFT & { loading?: boolean };

@@ -1,7 +1,7 @@
 import { memo } from "react";
 
-import { Spinner } from "design-system/spinner";
-import { View } from "design-system/view";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { View } from "@showtime-xyz/universal.view";
 
 import { TabScrollView } from "./tab-scene";
 

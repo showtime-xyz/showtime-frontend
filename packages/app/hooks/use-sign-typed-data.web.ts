@@ -4,9 +4,9 @@ import {
 } from "@ethersproject/abstract-signer";
 import { useSignTypedData as useWagmiSignTypedData, useNetwork } from "wagmi";
 
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { useAlert } from "@showtime-xyz/universal.alert";
 
-import { useAlert } from "design-system/alert";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 const EXPECTED_CHAIN_ID =
   //@ts-ignore

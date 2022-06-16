@@ -1,13 +1,13 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
-
-import { Avatar } from "design-system/avatar";
-import { Text } from "design-system/text";
-import { VerificationBadge } from "design-system/verification-badge";
-import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

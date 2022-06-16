@@ -3,6 +3,12 @@ import { useMemo } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Collection } from "app/components/card/rows/collection";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Media } from "app/components/media";
@@ -10,12 +16,6 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useBuyNFT } from "app/hooks/use-buy-nft";
 import { yup } from "app/lib/yup";
 import { NFT } from "app/types";
-
-import { Button } from "design-system/button";
-import { Fieldset } from "design-system/fieldset";
-import { Spinner } from "design-system/spinner";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 const defaultValues = {
   quantity: 1,

@@ -5,6 +5,21 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { useFilePicker } from "@showtime-xyz/universal.file-picker";
+import { Hidden } from "@showtime-xyz/universal.hidden";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { Switch } from "@showtime-xyz/universal.switch";
+import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
+
 import { Preview } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -14,21 +29,6 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
-
-import { Accordion } from "design-system/accordion";
-import { Button } from "design-system/button";
-import { Checkbox } from "design-system/checkbox";
-import { Fieldset } from "design-system/fieldset";
-import { ErrorText } from "design-system/fieldset";
-import { useFilePicker } from "design-system/file-picker";
-import { Hidden } from "design-system/hidden";
-import { useIsDarkMode } from "design-system/hooks";
-import { ChevronUp, Image as ImageIcon } from "design-system/icon";
-import { Spinner } from "design-system/spinner";
-import { Switch } from "design-system/switch";
-import { tw } from "design-system/tailwind";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
 
 const defaultValues = {
   editionCount: 1,

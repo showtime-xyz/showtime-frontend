@@ -15,8 +15,8 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
-import { useSafeAreaInsets } from "design-system/safe-area";
-import { tw as tailwind } from "design-system/tailwind";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
