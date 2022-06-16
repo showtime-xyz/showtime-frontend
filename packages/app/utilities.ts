@@ -11,9 +11,15 @@ import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
+import {
+  NFT,
+  OwnersListOwner,
+  Profile,
+  UserType,
+  WalletAddressesV2,
+} from "./types";
 
-export const formatAddressShort = (address) => {
+export const formatAddressShort = (address?: string) => {
   if (!address) return null;
 
   // Skip over ENS names
@@ -621,6 +627,18 @@ export const getCreatorUsernameFromNFT = (nft?: NFT) => {
     : nft.creator_name
     ? nft.creator_name
     : formatAddressShort(nft.creator_address);
+};
+
+export const getUserDisplayNameFromProfile = (user?: UserType) => {
+  if (!user) return "";
+
+  return user.data.profile.username
+    ? `@${user.data.profile.username}`
+    : user.data.profile.name
+    ? user.data.profile.name
+    : user.data.profile.wallet_addresses_v2?.[0]?.ens_domain
+    ? user.data.profile.wallet_addresses_v2[0].ens_domain
+    : formatAddressShort(user.data.profile.wallet_addresses_v2?.[0]?.address);
 };
 
 export const getDomainName = (link?: string) => {

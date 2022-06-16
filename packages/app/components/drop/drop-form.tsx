@@ -23,7 +23,7 @@ import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
-import { getTwitterIntent } from "app/utilities";
+import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
@@ -53,7 +53,7 @@ const dropValidationSchema = yup.object({
     .required()
     .typeError("Please enter a valid number")
     .min(1)
-    .max(10000)
+    .max(100000)
     .default(defaultValues.editionSize),
   royalty: yup
     .number()
@@ -142,7 +142,11 @@ export const DropForm = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just dropped a free NFT "${state.edition?.name}" by @${user.user?.data.profile.username} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
+                  message: `I just dropped a free NFT "${
+                    state.edition?.name
+                  }" by ${getUserDisplayNameFromProfile(
+                    user.user
+                  )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               )
             }
