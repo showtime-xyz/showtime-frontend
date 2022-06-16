@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+
 import { breakpoints } from "design-system/theme";
 
 import {
   BottomTabBarHeightContext,
   useBottomTabBarHeight,
 } from "../lib/react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "../lib/safe-area/index.web";
 
 export const usePlatformBottomHeight = () => {
   const insets = useSafeAreaInsets();
