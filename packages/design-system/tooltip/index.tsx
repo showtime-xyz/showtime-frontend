@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
@@ -26,7 +26,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [triggerRect, setTriggerRect] = useState<PlatformRect>(null);
 
   const onPress = () => {
-    setShow(current => !current);
+    setShow((current) => !current);
   };
 
   useEffect(() => {
