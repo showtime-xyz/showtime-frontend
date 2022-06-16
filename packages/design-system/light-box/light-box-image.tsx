@@ -16,7 +16,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { Image } from "@showtime-xyz/universal.image";
+import { Image } from "design-system/image";
 
 import { AnimationParams, useLightBox } from "./index";
 

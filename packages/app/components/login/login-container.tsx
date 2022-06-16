@@ -3,7 +3,7 @@ import { Platform, ViewProps } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { useScrollToEnd } from "./useScrollToEnd";
 

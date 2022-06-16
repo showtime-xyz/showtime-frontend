@@ -1,11 +1,10 @@
 import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { useColorScheme, useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { View } from "@showtime-xyz/universal.view";
-
+import { useColorScheme, useIsDarkMode } from "design-system/hooks";
+import { Skeleton } from "design-system/skeleton";
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
+import { View } from "design-system/view";
 
 type CardSkeletonProps = {
   squareSize: number;

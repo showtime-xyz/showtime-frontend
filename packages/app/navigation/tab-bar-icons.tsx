@@ -1,6 +1,10 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
+
+import { Avatar } from "design-system/avatar";
 import {
   Bell,
   BellFilled,
@@ -12,16 +16,11 @@ import {
   HotFilled,
   Plus,
   Showtime,
-} from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
-
+} from "design-system/icon";
+import { tw } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 type TabBarIconProps = {
   color?: string;

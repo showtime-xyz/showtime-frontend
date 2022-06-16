@@ -1,6 +1,6 @@
-import { View } from "@showtime-xyz/universal.view";
-
 import type { NFT } from "app/types";
+
+import { View } from "design-system/view";
 
 import { Ownership } from "./elements/ownership";
 import { Price } from "./elements/price";

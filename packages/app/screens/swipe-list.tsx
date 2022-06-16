@@ -1,7 +1,5 @@
 import { useMemo } from "react";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
@@ -11,6 +9,8 @@ import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 type Tab = "following" | "curated" | "" | undefined;
 

@@ -1,6 +1,6 @@
 import Svg, { G, Path, Defs, ClipPath, SvgProps } from "react-native-svg";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "design-system/hooks";
 
 export const VerificationBadge = ({
   size,

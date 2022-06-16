@@ -2,12 +2,12 @@ import { useState } from "react";
 
 import { MMKV } from "react-native-mmkv";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
+
+import { Button } from "design-system/button";
+import { Spinner } from "design-system/spinner";
+import { View } from "design-system/view";
 
 import { ClaimExplanation } from "./claim-explanation";
 import { ClaimForm } from "./claim-form";

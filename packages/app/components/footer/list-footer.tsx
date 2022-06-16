@@ -1,9 +1,9 @@
 import { memo } from "react";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+
+import { Spinner } from "design-system/spinner";
+import { View } from "design-system/view";
 
 const LIST_FOOTER_HEIGHT = 80;
 type ListFooterProps = {

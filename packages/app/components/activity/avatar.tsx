@@ -4,9 +4,9 @@ import {
   Transfer,
   Purchased,
   Followed,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { View } from "@showtime-xyz/universal.view";
+} from "design-system/icon";
+import { Image } from "design-system/image";
+import { View } from "design-system/view";
 
 type Props = {
   url: string;

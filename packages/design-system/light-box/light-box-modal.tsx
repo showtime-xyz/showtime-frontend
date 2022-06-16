@@ -20,7 +20,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Image } from "@showtime-xyz/universal.image";
+import { Image } from "design-system/image";
 
 import {
   ImageBoundingClientRect,

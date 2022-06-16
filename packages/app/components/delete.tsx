@@ -7,14 +7,6 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { PolygonScan } from "@showtime-xyz/universal.icon";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Owner } from "app/components/card";
 import { Collection } from "app/components/card/rows/collection";
 import { Media } from "app/components/media";
@@ -23,6 +15,14 @@ import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
+
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
+import { PolygonScan } from "design-system/icon";
+import { Spinner } from "design-system/spinner";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 

@@ -4,9 +4,9 @@ import { Blurhash } from "react-native-blurhash";
 import FastImage from "react-native-fast-image";
 import type { FastImageProps } from "react-native-fast-image";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 export type ImgProps = FastImageProps & {
   height?: number;

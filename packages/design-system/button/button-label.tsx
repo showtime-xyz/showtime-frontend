@@ -1,5 +1,5 @@
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { Text, Props } from "@showtime-xyz/universal.text";
+import type { TW } from "design-system/tailwind";
+import { Text, Props } from "design-system/text";
 
 type ButtonLabelProps = {
   labelTW?: TW;

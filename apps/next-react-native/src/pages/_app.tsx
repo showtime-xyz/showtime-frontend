@@ -12,13 +12,6 @@ import Head from "next/head";
 import "photoswipe/dist/photoswipe.css";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "@showtime-xyz/universal.hooks/color-scheme";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { AppContext } from "app/context/app-context";
@@ -41,6 +34,13 @@ import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
+
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "design-system/hooks/color-scheme";
+import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import "../styles/styles.css";
 

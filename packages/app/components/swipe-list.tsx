@@ -15,16 +15,6 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Divider } from "@showtime-xyz/universal.divider";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Share } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { BuyButton } from "app/components/buy-button";
 import { Collection } from "app/components/card/rows/collection";
 import { Description } from "app/components/card/rows/description";
@@ -56,6 +46,16 @@ import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
+
+import { Divider } from "design-system/divider";
+import { useIsDarkMode } from "design-system/hooks";
+import { Share } from "design-system/icon";
+import { Image } from "design-system/image";
+import { useSafeAreaFrame } from "design-system/safe-area";
+import { Skeleton } from "design-system/skeleton";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 

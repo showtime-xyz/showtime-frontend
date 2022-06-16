@@ -1,9 +1,9 @@
 import { Suspense, useCallback, useMemo, useState, forwardRef } from "react";
 
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Haptics } from "app/lib/haptics";
+
+import { SegmentedControl } from "design-system/segmented-control";
 
 import { CreatorsList } from "./creators-list";
 import { ListHeader } from "./list-header";

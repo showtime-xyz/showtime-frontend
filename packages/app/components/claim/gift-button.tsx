@@ -1,10 +1,10 @@
-import { Button } from "@showtime-xyz/universal.button";
-import { Gift } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
-
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
+
+import { Button } from "design-system/button";
+import { Gift } from "design-system/icon";
+import { tw } from "design-system/tailwind";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const { data: edition } = useCreatorCollectionDetail(

@@ -1,12 +1,6 @@
 import { useContext, useEffect } from "react";
 import { Platform } from "react-native";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Create } from "app/components/create";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { MintContext } from "app/context/mint-context";
@@ -15,7 +9,12 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
+import { useAlert } from "design-system/alert";
 import { Hidden } from "design-system/hidden";
+import { withModalScreen } from "design-system/modal-screen";
+import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const CreateModal = () => {
   //#region hooks

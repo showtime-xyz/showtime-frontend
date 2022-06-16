@@ -2,12 +2,12 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import transfererAbi from "app/abi/ShowtimeMT.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
 import { track } from "app/lib/analytics";
 import { NFT } from "app/types";
+
+import { useAlert } from "design-system/alert";
 
 type TransferNFTType = {
   status:

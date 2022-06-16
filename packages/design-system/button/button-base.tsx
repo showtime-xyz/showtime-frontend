@@ -3,10 +3,10 @@ import { ViewStyle } from "react-native";
 
 import Animated from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
+import { useIsDarkMode } from "design-system/hooks";
+import { PressableScale } from "design-system/pressable-scale";
+import { tw as tailwind } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 import {
   CONTAINER_HEIGHT_TW,

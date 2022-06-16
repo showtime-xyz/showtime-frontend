@@ -4,10 +4,6 @@ import { Platform } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -16,6 +12,9 @@ import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import packageJson from "../../../../package.json";
 import { AddEmail } from "./add-email";

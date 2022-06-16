@@ -6,10 +6,10 @@ import {
   NavigationState,
 } from "react-native-tab-view-next";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
-
 import { Haptics } from "app/lib/haptics";
+
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
 
 import { useIsDarkMode } from "../hooks";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";

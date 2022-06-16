@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 
-import { Text } from "@showtime-xyz/universal.text";
+import { Text } from "design-system/text";
 
 import { Pressable } from "./index";
 

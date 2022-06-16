@@ -1,7 +1,5 @@
 import { useCallback, useMemo, useImperativeHandle, forwardRef } from "react";
 
-import { View } from "@showtime-xyz/universal.view";
-
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
@@ -10,6 +8,7 @@ import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 
 import { TabRecyclerList } from "design-system/tab-view";
+import { View } from "design-system/view";
 
 import { ListHeader } from "./list-header";
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";

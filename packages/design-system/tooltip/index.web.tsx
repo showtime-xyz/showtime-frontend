@@ -4,8 +4,8 @@ import { View } from "react-native";
 import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, MotiView } from "moti";
 
-import { useIsMobileWeb } from "@showtime-xyz/universal.hooks";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { useIsMobileWeb } from "design-system/hooks";
+import { tw as tailwind } from "design-system/tailwind";
 
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";

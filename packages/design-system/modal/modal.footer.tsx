@@ -6,7 +6,7 @@ import {
   useBottomSheetInternal,
 } from "@gorhom/bottom-sheet";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 import type { ModalFooterProps } from "./types";
 import { useKeyboardOffset } from "./useKeyboardOffset";

@@ -1,15 +1,15 @@
 import { View } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useUser } from "app/hooks/use-user";
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeStackParams } from "app/navigation/types";
 import { useRouter } from "app/navigation/use-router";
 import { HomeScreen } from "app/screens/home";
+
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 

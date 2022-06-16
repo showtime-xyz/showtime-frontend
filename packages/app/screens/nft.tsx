@@ -3,14 +3,6 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import Head from "next/head";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from "@showtime-xyz/universal.safe-area";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
@@ -18,6 +10,11 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+
+import { useColorScheme } from "design-system/hooks";
+import { useSafeAreaFrame, useSafeAreaInsets } from "design-system/safe-area";
+import { Skeleton } from "design-system/skeleton";
+import { View } from "design-system/view";
 
 type Query = {
   tokenId: string;

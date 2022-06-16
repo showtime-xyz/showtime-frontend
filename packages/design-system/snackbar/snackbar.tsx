@@ -9,13 +9,13 @@ import {
   StyleValueWithReplacedTransforms,
 } from "moti";
 
-import { useIsDarkMode, useIsMobileWeb } from "@showtime-xyz/universal.hooks";
-import { Check } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
+import { useIsDarkMode, useIsMobileWeb } from "design-system/hooks";
+import { Check } from "design-system/icon";
+import { PressableScale } from "design-system/pressable-scale";
+import { Spinner } from "design-system/spinner";
+import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 import { PRESET_TRANSITION_MAP, SnackbarTransitionType } from "./constants";
 

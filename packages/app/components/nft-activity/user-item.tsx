@@ -1,7 +1,7 @@
-import { Image } from "@showtime-xyz/universal.image";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
+import { Image } from "design-system/image";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import type { UserItemProps } from "./nft-activity.types";
 

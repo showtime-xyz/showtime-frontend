@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 // import "photoswipe/dist/photoswipe.css";
 import { LightBoxProvider } from "./index";

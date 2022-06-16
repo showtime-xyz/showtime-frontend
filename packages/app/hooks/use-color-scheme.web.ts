@@ -3,12 +3,12 @@ import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+
+import { tw } from "design-system/tailwind";
 
 export const useColorScheme = () => {
   useDeviceContext(tw, { withDeviceColorScheme: false });

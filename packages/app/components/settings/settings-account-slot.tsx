@@ -1,15 +1,15 @@
 import { Linking } from "react-native";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
+
+import { useAlert } from "design-system/alert";
+import { Button, ButtonLabel } from "design-system/button";
+import { ChevronRight } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { ClearCacheBtn } from "./clear-cache-btn";
 import { SettingSubTitle } from "./settings-subtitle";

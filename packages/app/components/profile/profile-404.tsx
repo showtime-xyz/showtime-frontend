@@ -1,8 +1,7 @@
 import { memo } from "react";
 
-import { Text } from "@showtime-xyz/universal.text";
-
 import { View } from "design-system";
+import { Text } from "design-system/text";
 
 import { TextLink } from "../../navigation/link";
 import { EmptyPlaceholder } from "../empty-placeholder";

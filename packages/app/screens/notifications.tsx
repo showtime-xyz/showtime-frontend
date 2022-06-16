@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });

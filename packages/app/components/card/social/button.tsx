@@ -1,16 +1,10 @@
 import { useMemo } from "react";
 
-import { useOnPress, useOnHover } from "@showtime-xyz/universal.hooks";
-import {
-  Heart,
-  HeartFilled,
-  Message,
-  Boost,
-  Gift,
-} from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
+import { useOnPress, useOnHover } from "design-system/hooks";
+import { Heart, HeartFilled, Message, Boost, Gift } from "design-system/icon";
+import { PressableScale } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 type Props = {
   variant: "like" | "comment" | "boost" | "gift";

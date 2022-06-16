@@ -1,16 +1,6 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
@@ -25,6 +15,16 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
+
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from "design-system/dropdown-menu";
+import { MoreHorizontal } from "design-system/icon";
+import { tw } from "design-system/tailwind";
 
 type Props = {
   nftId?: NFT["nft_id"];

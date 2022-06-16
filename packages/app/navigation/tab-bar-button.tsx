@@ -2,8 +2,8 @@ import { GestureResponderEvent } from "react-native";
 
 import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { View } from "@showtime-xyz/universal.view";
+import { Pressable } from "design-system/pressable";
+import { View } from "design-system/view";
 
 import { Haptics } from "../lib/haptics";
 

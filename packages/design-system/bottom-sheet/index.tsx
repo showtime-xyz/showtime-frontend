@@ -17,10 +17,10 @@ import {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type BottomSheetProps = {
   children?: React.ReactElement;

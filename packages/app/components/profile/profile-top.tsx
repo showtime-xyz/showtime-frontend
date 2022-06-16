@@ -7,16 +7,6 @@ import Animated, {
 } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
@@ -25,7 +15,16 @@ import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
+import { Button } from "design-system/button";
 import { Hidden } from "design-system/hidden";
+import { useColorScheme } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { PressableScale } from "design-system/pressable-scale";
+import { Skeleton } from "design-system/skeleton";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";

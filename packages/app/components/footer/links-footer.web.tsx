@@ -1,12 +1,12 @@
 import { memo } from "react";
 
-import { ShowtimeWordmark } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
+
+import { ShowtimeWordmark } from "design-system/icon";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const WebFooter = memo(function WebFooter() {
   const { social, links } = useFooter();

@@ -1,12 +1,6 @@
 import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
@@ -16,8 +10,13 @@ import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
+import { useIsDarkMode } from "design-system/hooks";
+import { SegmentedControl } from "design-system/segmented-control";
+import { Spinner } from "design-system/spinner";
 import { Tabs } from "design-system/tabs";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 type Query = {
   tab: string;

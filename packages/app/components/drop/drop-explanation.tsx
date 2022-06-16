@@ -3,15 +3,14 @@ import { Dimensions, Platform } from "react-native";
 
 import { MotiView } from "moti";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { ScrollView } from "design-system/scroll-view";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { CARD_DARK_SHADOW } from "design-system/theme";
+import { View } from "design-system/view";
 
 const values = [
   {

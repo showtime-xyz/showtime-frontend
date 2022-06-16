@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { ViewStyle } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowTop } from "@showtime-xyz/universal.icon";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { ArrowTop } from "design-system/icon";
+import { tw, colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { Placement } from "./get-placement";
 import { TooltipProps } from "./types";

@@ -9,13 +9,6 @@ import { ViewStyle } from "react-native";
 
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Close } from "@showtime-xyz/universal.icon";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import {
   MessageBox,
   MessageBoxMethods,
@@ -23,6 +16,13 @@ import {
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
+import { Button } from "design-system/button";
+import { Close } from "design-system/icon";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 interface CommentInputBoxProps {
   submitting?: boolean;

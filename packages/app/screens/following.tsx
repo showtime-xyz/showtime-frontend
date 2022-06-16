@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { FollowingModal } from "app/components/follow-modal";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const FollowingScreen = withModalScreen(FollowingModal, {
   title: "following",

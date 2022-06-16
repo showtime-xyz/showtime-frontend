@@ -1,9 +1,9 @@
 import { Platform } from "react-native";
 
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { ScrollView } from "design-system/scroll-view";
+import { View } from "design-system/view";
 
 import { SettingBody } from "./setting-content";
 import { SettingHeaderSection } from "./setting-header";

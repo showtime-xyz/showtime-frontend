@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { Select } from "./index";
 

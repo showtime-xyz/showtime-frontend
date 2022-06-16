@@ -15,7 +15,7 @@ import {
   useWorkletCallback,
 } from "react-native-reanimated";
 
-import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
+import { useSafeAreaFrame } from "design-system/safe-area";
 
 const KEYBOARD_EVENT_MAPPER = {
   KEYBOARD_SHOW: Platform.select({

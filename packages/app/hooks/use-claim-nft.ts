@@ -2,8 +2,6 @@ import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -12,6 +10,8 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
 
 const minterABI = ["function mintEdition(address _to)"];
 

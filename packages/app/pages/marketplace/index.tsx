@@ -1,10 +1,10 @@
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { MarketplaceStackParams } from "app/navigation/types";
 import { MarketplaceScreen } from "app/screens/marketplace";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 const MarketplaceStack = createStackNavigator<MarketplaceStackParams>();
 

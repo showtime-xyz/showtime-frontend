@@ -1,9 +1,9 @@
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useUser } from "app/hooks/use-user";
 import { NFT } from "app/types";
 import { findUserInOwnerList } from "app/utilities";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

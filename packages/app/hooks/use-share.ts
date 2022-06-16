@@ -1,6 +1,6 @@
 import { Platform, Share as RNShare, ShareAction } from "react-native";
 
-import { useToast } from "@showtime-xyz/universal.toast";
+import { useToast } from "design-system/toast";
 
 export const useShare = () => {
   const toast = useToast();

@@ -7,12 +7,12 @@ import {
   TabBar,
 } from "react-native-tab-view-next/src";
 
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { useContentWidth } from "app/hooks/use-content-width";
 import { Haptics } from "app/lib/haptics";
+
+import { Pressable } from "design-system/pressable";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 import { Route } from "./src/types";
 
