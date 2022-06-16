@@ -1,4 +1,4 @@
-// Based on https://github.com/rainbow-me/rainbow/blob/3e2059381cc30e988196cbadaee6fd0e41673b3d/src/@showtime-xyz/universal.typography/typography.ts
+// Based on https://github.com/rainbow-me/rainbow/blob/3e2059381cc30e988196cbadaee6fd0e41673b3d/src/design-system/typography/typography.ts
 import { Platform, PixelRatio } from "react-native";
 
 import { precomputeValues } from "@capsizecss/core";

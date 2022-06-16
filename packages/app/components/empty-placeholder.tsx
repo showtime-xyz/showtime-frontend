@@ -3,11 +3,12 @@ import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
-import { breakpoints } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+
+import { breakpoints } from "design-system/theme";
 
 type EmptyPlaceholderProps = {
   title?: string | JSX.Element;

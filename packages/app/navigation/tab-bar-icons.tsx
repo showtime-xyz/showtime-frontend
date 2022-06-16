@@ -15,12 +15,13 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { breakpoints } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
+
+import { breakpoints } from "design-system/theme";
 
 type TabBarIconProps = {
   color?: string;

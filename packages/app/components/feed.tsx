@@ -8,7 +8,6 @@ import Animated, {
 
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { TabItem, Tabs } from "@showtime-xyz/universal.tabs";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,6 +24,8 @@ import { PagerView } from "app/lib/pager-view";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
+
+import { TabItem, Tabs } from "design-system/tabs";
 
 export const Feed = () => {
   return (

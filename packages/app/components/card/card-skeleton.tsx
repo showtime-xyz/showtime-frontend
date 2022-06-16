@@ -3,8 +3,9 @@ import { useWindowDimensions } from "react-native";
 
 import { useColorScheme, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { breakpoints, CARD_DARK_SHADOW } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
+
+import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 
 type CardSkeletonProps = {
   squareSize: number;

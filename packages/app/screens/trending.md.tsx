@@ -4,9 +4,7 @@ import { useWindowDimensions } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Tabs } from "@showtime-xyz/universal.tabs";
 import { Text } from "@showtime-xyz/universal.text";
-import { breakpoints } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -17,6 +15,9 @@ import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
+
+import { Tabs } from "design-system/tabs";
+import { breakpoints } from "design-system/theme";
 
 type Query = {
   tab: string;

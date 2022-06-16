@@ -13,13 +13,14 @@ import { useColorScheme } from "@showtime-xyz/universal.hooks";
 import { Settings } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { breakpoints } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
+
+import { breakpoints } from "design-system/theme";
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();

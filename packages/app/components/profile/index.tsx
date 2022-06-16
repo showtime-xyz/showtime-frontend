@@ -5,9 +5,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { HeaderTabView } from "@showtime-xyz/universal.tab-view/index";
-import { Route } from "@showtime-xyz/universal.tab-view/src/types";
-import { TabSpinner } from "@showtime-xyz/universal.tab-view/tab-spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -20,6 +17,10 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { HeaderTabView } from "design-system/tab-view/index";
+import { Route } from "design-system/tab-view/src/types";
+import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";

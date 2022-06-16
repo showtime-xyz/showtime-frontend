@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { breakpoints } from "@showtime-xyz/universal.theme";
+
+import { breakpoints } from "design-system/theme";
 
 import {
   BottomTabBarHeightContext,

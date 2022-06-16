@@ -9,7 +9,6 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useFilePicker } from "@showtime-xyz/universal.file-picker";
 import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
@@ -25,6 +24,8 @@ import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
+
+import { useFilePicker } from "design-system/file-picker";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;

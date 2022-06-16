@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { Hidden } from "@showtime-xyz/universal.hidden";
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -15,6 +14,8 @@ import { useTrackPageViewed } from "app/lib/analytics";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
+
+import { Hidden } from "design-system/hidden";
 
 const CreateModal = () => {
   //#region hooks

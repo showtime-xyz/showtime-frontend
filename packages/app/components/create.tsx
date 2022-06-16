@@ -10,8 +10,6 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { useFilePicker } from "@showtime-xyz/universal.file-picker";
-import { Hidden } from "@showtime-xyz/universal.hidden";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -29,6 +27,9 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
+
+import { useFilePicker } from "design-system/file-picker";
+import { Hidden } from "design-system/hidden";
 
 const defaultValues = {
   editionCount: 1,

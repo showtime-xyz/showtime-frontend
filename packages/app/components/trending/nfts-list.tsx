@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useImperativeHandle, forwardRef } from "react";
 
-import { TabRecyclerList } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -9,6 +8,8 @@ import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
+
+import { TabRecyclerList } from "design-system/tab-view";
 
 import { ListHeader } from "./list-header";
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";

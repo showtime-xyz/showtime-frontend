@@ -10,7 +10,7 @@ import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme-provid
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import {
-  getColorScheme as getPersistedColorColorSchema,
+  getColorScheme as getPersistedColorSchema,
   setColorScheme as persistColorSchema,
 } from "app/lib/color-scheme-store";
 
@@ -23,7 +23,7 @@ export function ThemeProvider({
   const deviceColorScheme = useDeviceColorScheme();
   const [colorScheme, , setColorScheme] = useAppColorScheme(
     tw,
-    getPersistedColorColorSchema() ?? deviceColorScheme
+    getPersistedColorSchema() ?? deviceColorScheme
   );
 
   useState(() => setColorScheme(colorScheme));

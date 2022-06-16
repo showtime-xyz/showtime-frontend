@@ -1,10 +1,11 @@
-import {
-  FilePickerResolveValue,
-  useFilePicker,
-} from "@showtime-xyz/universal.file-picker";
 import { Image } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
+
+import {
+  FilePickerResolveValue,
+  useFilePicker,
+} from "design-system/file-picker";
 
 export function ImagePickerButton({
   onPick,

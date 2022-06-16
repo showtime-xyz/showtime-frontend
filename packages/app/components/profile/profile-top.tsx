@@ -8,7 +8,6 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Hidden } from "@showtime-xyz/universal.hidden";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -25,6 +24,8 @@ import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
+
+import { Hidden } from "design-system/hidden";
 
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";

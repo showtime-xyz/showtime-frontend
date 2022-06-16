@@ -2,16 +2,13 @@ import { useMemo, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
-import {
-  Tabs,
-  TabItem,
-  SelectedTabIndicator,
-} from "@showtime-xyz/universal.tabs";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
+
+import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";

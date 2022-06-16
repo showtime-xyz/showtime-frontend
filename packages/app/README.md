@@ -230,7 +230,7 @@ This is useful if you want to build the iOS app without a Mac, for example.
 
 React Native for Web + Tailwind
 
-- `packages/@showtime-xyz/universal.*`
+- `packages/design-system/*`
 - [Design system on Figma](https://www.figma.com/file/hseAlaaQKC4b7MIZS6TdF9/%F0%9F%93%9A-UI-Library?node-id=1099%3A3333)
 - Learn more: [universal design system](https://axeldelafosse.com/blog/universal-design-system)
 

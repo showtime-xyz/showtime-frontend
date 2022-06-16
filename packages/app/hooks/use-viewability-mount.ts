@@ -3,12 +3,12 @@ import { RefObject, useCallback, useContext, useEffect, useRef } from "react";
 import { Video } from "expo-av";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 
-import { useIsTabFocused } from "@showtime-xyz/universal.tabs/tablib";
-
 import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
+
+import { useIsTabFocused } from "design-system/tabs/tablib";
 
 import { useVideoConfig } from "../context/video-config-context";
 

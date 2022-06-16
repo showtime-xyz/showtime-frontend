@@ -8,14 +8,8 @@ import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useFilePicker } from "@showtime-xyz/universal.file-picker";
 import { Upload } from "@showtime-xyz/universal.icon";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import {
-  SelectedTabIndicator,
-  TabItem,
-  Tabs,
-} from "@showtime-xyz/universal.tabs";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -31,6 +25,9 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
+
+import { useFilePicker } from "design-system/file-picker";
+import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 const editProfileValidationSchema = yup.object({
   username: yup.string().min(2).nullable(),

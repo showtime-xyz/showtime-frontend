@@ -6,7 +6,6 @@ import type { UrlObject } from "url";
 import { useColorScheme } from "@showtime-xyz/universal.hooks";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { CARD_DARK_SHADOW } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Collection } from "app/components/card/rows/collection";
@@ -21,6 +20,8 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
+
+import { CARD_DARK_SHADOW } from "design-system/theme";
 
 type Props = {
   nft: NFT & { loading?: boolean };

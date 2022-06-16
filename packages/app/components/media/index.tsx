@@ -2,14 +2,15 @@ import { ResizeMode } from "expo-av";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { Model } from "@showtime-xyz/universal.model";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
-import { Video } from "@showtime-xyz/universal.video";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
+
+import { Model } from "design-system/model";
+import { Video } from "design-system/video";
 
 type Props = {
   item: NFT & { loading?: boolean };

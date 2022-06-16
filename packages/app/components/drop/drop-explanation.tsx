@@ -9,8 +9,9 @@ import { Image } from "@showtime-xyz/universal.image";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { CARD_DARK_SHADOW } from "@showtime-xyz/universal.theme";
 import { View } from "@showtime-xyz/universal.view";
+
+import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const values = [
   {
