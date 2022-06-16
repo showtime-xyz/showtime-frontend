@@ -4,8 +4,9 @@ import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Alert } from "@showtime-xyz/universal.icon";
 import { View } from "@showtime-xyz/universal.view";
+
+import { Alert } from "design-system/icon";
 
 type ConnectButtonProps = {
   handleSubmitWallet: ({
