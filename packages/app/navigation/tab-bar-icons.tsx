@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -17,7 +18,9 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
@@ -169,22 +172,22 @@ export const NotificationsTabBarIcon = ({
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      {/* <ErrorBoundary>
+      <ErrorBoundary>
         <Suspense fallback={null}>
           <UnreadNotificationIndicator />
         </Suspense>
-      </ErrorBoundary> */}
+      </ErrorBoundary>
     </TabBarIcon>
   );
 };
 
-// const UnreadNotificationIndicator = () => {
-//   const { hasUnreadNotification } = useNotifications();
+const UnreadNotificationIndicator = () => {
+  const { hasUnreadNotification } = useNotifications();
 
-//   return hasUnreadNotification ? (
-//     <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
-//   ) : null;
-// };
+  return hasUnreadNotification ? (
+    <View tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500" />
+  ) : null;
+};
 
 export const ProfileTabBarIcon = () => {
   const { user } = useUser();

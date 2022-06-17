@@ -11,10 +11,7 @@ Sentry.init({
   tracesSampleRate: 0.2,
   integrations: [
     new TracingIntegrations.BrowserTracing({
-      tracingOrigins: [
-        process.env.NEXT_PUBLIC_BACKEND_URL,
-        process.env.NEXT_PUBLIC_NOTIFICATIONS_URL,
-      ],
+      tracingOrigins: [process.env.NEXT_PUBLIC_BACKEND_URL],
     }),
     new ExtraErrorData(),
     new CaptureConsole({
