@@ -19,6 +19,7 @@ import {
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
+import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 import {
   formatAddressShort,
@@ -94,7 +95,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
           <Button
-            onPress={() =>
+            onPress={() => {
+              track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
@@ -104,8 +106,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                     nft?.data.item
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
-              )
-            }
+              );
+            }}
             tw="bg-[#00ACEE]"
             variant="text"
           >
@@ -113,11 +115,20 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </Button>
           <View tw="h-4" />
           <Button
-            onPress={() =>
-              share({
+            onPress={async () => {
+              const result = await share({
                 url: claimUrl,
-              })
-            }
+              });
+
+              if (result.action === "sharedAction") {
+                track(
+                  "Drop Shared",
+                  result.activityType
+                    ? { type: result.activityType }
+                    : undefined
+                );
+              }
+            }}
           >
             {isShareAPIAvailable
               ? "Share NFT with your friends"

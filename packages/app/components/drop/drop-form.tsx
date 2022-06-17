@@ -21,6 +21,7 @@ import { Preview } from "app/components/preview";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
@@ -138,7 +139,8 @@ export const DropForm = () => {
           </View>
 
           <Button
-            onPress={() =>
+            onPress={() => {
+              track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
@@ -148,8 +150,8 @@ export const DropForm = () => {
                     user.user
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
-              )
-            }
+              );
+            }}
             tw="bg-[#00ACEE]"
             variant="text"
           >
@@ -159,11 +161,20 @@ export const DropForm = () => {
           <View tw="h-4" />
 
           <Button
-            onPress={() =>
-              share({
+            onPress={async () => {
+              const result = await share({
                 url: claimUrl,
-              })
-            }
+              });
+
+              if (result.action === "sharedAction") {
+                track(
+                  "Drop Shared",
+                  result.activityType
+                    ? { type: result.activityType }
+                    : undefined
+                );
+              }
+            }}
           >
             {isShareAPIAvailable
               ? "Share NFT with your friends"

@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import { Platform } from "react-native";
 
 type VideoConfigContextType = {
   isMuted: boolean;
@@ -9,7 +10,8 @@ type VideoConfigContextType = {
 export const VideoConfigContext = createContext<VideoConfigContextType | null>({
   isMuted: true,
   useNativeControls: false,
-  previewOnly: true,
+  // Always play the video on web
+  previewOnly: Platform.OS !== "web",
 });
 
 export const useVideoConfig = () => {

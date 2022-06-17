@@ -9,6 +9,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { useUploadMedia } from "app/hooks/use-upload-media";
+import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -178,6 +179,7 @@ export const useDropNFT = () => {
       });
 
       if (response.is_complete) {
+        track("Drop Created");
         dispatch({ type: "success", edition: response.edition });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;
