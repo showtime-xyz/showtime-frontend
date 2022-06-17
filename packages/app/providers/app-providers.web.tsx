@@ -19,37 +19,41 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { ThemeProvider } from "./theme-provider";
+
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SafeAreaProvider>
-      <ToastProvider>
-        <WalletProvider>
-          <AlertProvider>
-            <SnackbarProvider>
-              <SWRProvider>
-                <Web3Provider>
-                  <AuthProvider>
-                    <UserProvider>
-                      <CSROnly>
-                        <BottomSheetModalProvider>
-                          <GrowthBookProvider growthbook={growthbook}>
-                            <FeedProvider>
-                              <NavigationProvider>
-                                <MintProvider>{children}</MintProvider>
-                              </NavigationProvider>
-                            </FeedProvider>
-                          </GrowthBookProvider>
-                        </BottomSheetModalProvider>
-                      </CSROnly>
-                    </UserProvider>
-                  </AuthProvider>
-                </Web3Provider>
-              </SWRProvider>
-            </SnackbarProvider>
-          </AlertProvider>
-        </WalletProvider>
-      </ToastProvider>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <WalletProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <SWRProvider>
+                  <Web3Provider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <CSROnly>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <MintProvider>{children}</MintProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </CSROnly>
+                      </UserProvider>
+                    </AuthProvider>
+                  </Web3Provider>
+                </SWRProvider>
+              </SnackbarProvider>
+            </AlertProvider>
+          </WalletProvider>
+        </ToastProvider>
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 };
 

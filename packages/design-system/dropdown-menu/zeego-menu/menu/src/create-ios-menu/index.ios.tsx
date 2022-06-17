@@ -2,7 +2,7 @@ import React, { Children, ReactElement } from "react";
 
 import { MenuView } from "@react-native-menu/menu";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 
 import {
   flattenChildren,
@@ -170,7 +170,7 @@ If you want to use a custom component as your <Content />, you can use the menui
     const trigger = pickChildren<MenuTriggerProps>(props.children, Trigger);
     const content = pickChildren<MenuContentProps>(props.children, Content)
       .targetChildren?.[0];
-    const colorScheme = useColorScheme();
+    const { colorScheme } = useColorScheme();
 
     const callbacks: Record<string, () => void> = {};
 

@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  LogBox,
-  Platform,
-  useColorScheme as useDeviceColorScheme,
-} from "react-native";
+import { LogBox } from "react-native";
 
 import LogRocket from "@logrocket/react-native";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
-import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
-import { setStatusBarStyle, StatusBar } from "expo-status-bar";
-import * as SystemUI from "expo-system-ui";
+import { StatusBar } from "expo-status-bar";
 import { enableScreens } from "react-native-screens";
-import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "@showtime-xyz/universal.hooks/color-scheme";
-import { tw } from "@showtime-xyz/universal.tailwind";
-
-import { AppContext } from "app/context/app-context";
 import { growthbook } from "app/lib/growthbook";
 import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";
@@ -46,6 +32,7 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
+  const [notification, setNotification] = useState(null);
   useEffect(() => {
     if (process.env.STAGE !== "development") {
       LogRocket.init("oulg1q/showtime", {
@@ -73,58 +60,6 @@ function App() {
         growthbook.setFeatures(json.features);
       });
   }, []);
-
-  return (
-    <ThemeProvider>
-      <AppProviders>
-        <StatusBar style="auto" />
-        <RootStackNavigator />
-      </AppProviders>
-    </ThemeProvider>
-  );
-}
-
-export default App;
-
-// TODO(enes): Move this to a separate file after tailwindcss-react-native transition
-function ThemeProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element {
-  const [notification, setNotification] = useState(null);
-  useDeviceContext(tw, { withDeviceColorScheme: false });
-  const deviceColorScheme = useDeviceColorScheme();
-  const userColorScheme = useUserColorScheme();
-  const [colorScheme, , setColorScheme] = useAppColorScheme(
-    tw,
-    userColorScheme ?? deviceColorScheme
-  );
-
-  useState(() => setColorScheme(colorScheme));
-  const isDark = colorScheme === "dark";
-
-  useEffect(() => {
-    if (isDark) {
-      if (Platform.OS === "android") {
-        NavigationBar.setBackgroundColorAsync("#000");
-        NavigationBar.setButtonStyleAsync("light");
-      }
-
-      tw.setColorScheme("dark");
-      SystemUI.setBackgroundColorAsync("black");
-      setStatusBarStyle("light");
-    } else {
-      if (Platform.OS === "android") {
-        NavigationBar.setBackgroundColorAsync("#FFF");
-        NavigationBar.setButtonStyleAsync("dark");
-      }
-
-      tw.setColorScheme("light");
-      SystemUI.setBackgroundColorAsync("white");
-      setStatusBarStyle("dark");
-    }
-  }, [isDark]);
 
   useEffect(() => {
     let shouldShowNotification = true;
@@ -177,18 +112,12 @@ function ThemeProvider({
     return () => Notifications.removeNotificationSubscription(responseListener);
   }, []);
 
-  const injectedGlobalContext = {
-    colorScheme,
-    setColorScheme: (newColorScheme: "light" | "dark") => {
-      setColorScheme(newColorScheme);
-      setUserColorScheme(newColorScheme);
-    },
-    // TODO: notification?
-  };
-
   return (
-    <AppContext.Provider value={injectedGlobalContext}>
-      {children}
-    </AppContext.Provider>
+    <AppProviders>
+      <StatusBar style="auto" />
+      <RootStackNavigator />
+    </AppProviders>
   );
 }
+
+export default App;

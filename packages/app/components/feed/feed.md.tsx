@@ -1,8 +1,8 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -260,7 +260,7 @@ const NFTScrollList = ({
 // TODO: move to separate file
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
 
   return (
@@ -280,9 +280,9 @@ const SuggestedUsers = () => {
         <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
-            <Skeleton colorMode={colorMode} width={100} height={20} />
+            <Skeleton colorMode={colorScheme as any} width={100} height={20} />
             <View tw="h-4" />
-            <Skeleton colorMode={colorMode} width={90} height={15} />
+            <Skeleton colorMode={colorScheme as any} width={90} height={15} />
           </View>
         ) : null}
         {data?.map((user, index) => {

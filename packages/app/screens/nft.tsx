@@ -3,7 +3,7 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import Head from "next/head";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
@@ -30,7 +30,7 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen() {
   useTrackPageViewed({ name: "NFT" });
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <ErrorBoundary>
@@ -38,12 +38,14 @@ function NftScreen() {
         fallback={
           <View tw="items-center">
             <Skeleton
+              //@ts-ignore
               colorMode={colorScheme}
               height={screenHeight - 300}
               width={screenWidth}
             />
             <View tw="h-2" />
             <Skeleton
+              //@ts-ignore
               colorMode={colorScheme}
               height={300}
               width={screenWidth}

@@ -36,6 +36,8 @@ import { useRouter } from "app/navigation/use-router";
 
 import { breakpoints } from "design-system/theme";
 
+import { withColorScheme } from "./memo-with-theme";
+
 const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
@@ -292,7 +294,7 @@ const HeaderCenter = ({
   );
 };
 
-const Header = ({ canGoBack }: { canGoBack: boolean }) => {
+const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
   const blurredBackgroundColor = useBlurredBackgroundColor(95);
@@ -345,6 +347,6 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       </View>
     </View>
   );
-};
+});
 
 export { Header, HeaderLeft, HeaderCenter, HeaderRight };
