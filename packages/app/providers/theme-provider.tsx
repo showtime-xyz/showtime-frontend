@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 
 import * as NavigationBar from "expo-navigation-bar";
@@ -6,14 +6,13 @@ import { setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
+import { tw } from "@showtime-xyz/universal.tailwind";
+
 import {
-  setColorScheme as setUserColorScheme,
-  useColorScheme as useUserColorScheme,
-} from "app/lib/color-scheme";
-
-import { tw } from "design-system/tailwind";
-
-import { AppContext } from "../context/app-context";
+  getColorScheme as getPersistedColorSchema,
+  setColorScheme as persistColorSchema,
+} from "app/lib/color-scheme-store";
 
 export function ThemeProvider({
   children,
@@ -22,10 +21,9 @@ export function ThemeProvider({
 }): JSX.Element {
   useDeviceContext(tw, { withDeviceColorScheme: false });
   const deviceColorScheme = useDeviceColorScheme();
-  const userColorScheme = useUserColorScheme();
   const [colorScheme, , setColorScheme] = useAppColorScheme(
     tw,
-    userColorScheme ?? deviceColorScheme
+    getPersistedColorSchema() ?? deviceColorScheme
   );
 
   useState(() => setColorScheme(colorScheme));
@@ -51,19 +49,33 @@ export function ThemeProvider({
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
     }
+
+    if (Platform.OS === "web") {
+      document.documentElement.setAttribute(
+        "data-color-scheme",
+        isDark ? "dark" : "light"
+      );
+      if (isDark) {
+        tw.setColorScheme("dark");
+      } else {
+        tw.setColorScheme("light");
+      }
+    }
   }, [isDark]);
 
-  const injectedGlobalContext = {
-    colorScheme,
-    setColorScheme: (newColorScheme: "light" | "dark") => {
+  const handleColorSchemeChange = (newColorScheme: typeof colorScheme) => {
+    if (newColorScheme) {
       setColorScheme(newColorScheme);
-      setUserColorScheme(newColorScheme);
-    },
+      persistColorSchema(newColorScheme);
+    }
   };
 
   return (
-    <AppContext.Provider value={injectedGlobalContext}>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      setColorScheme={handleColorSchemeChange}
+    >
       {children}
-    </AppContext.Provider>
+    </ColorSchemeProvider>
   );
 }

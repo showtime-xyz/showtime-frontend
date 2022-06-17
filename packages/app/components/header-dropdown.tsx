@@ -1,7 +1,7 @@
-import { useContext } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,7 +15,6 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
@@ -26,7 +25,7 @@ import { breakpoints } from "design-system/theme";
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
   const router = useRouter();
-  const context = useContext(AppContext);
+  const context = useColorScheme();
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();

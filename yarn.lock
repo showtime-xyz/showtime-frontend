@@ -6609,6 +6609,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.color-scheme@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@showtime-xyz/universal.color-scheme@npm:0.0.1"
+  dependencies:
+    react: 18.0.0
+  checksum: cb376e6e77506f53a4581ddc92b210ce3e6534f9790613b205bc5bed16c2f3f5a629415b1aae031a831c1996e966b8f8ff0cf5a29ce3855f748692b6d42baacd
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.country-code-picker@npm:^0.0.16":
   version: 0.0.16
   resolution: "@showtime-xyz/universal.country-code-picker@npm:0.0.16"
@@ -7266,6 +7275,7 @@ __metadata:
     "@showtime-xyz/universal.bottom-sheet": ^0.0.11
     "@showtime-xyz/universal.button": ^0.0.11
     "@showtime-xyz/universal.checkbox": ^0.0.11
+    "@showtime-xyz/universal.color-scheme": ^0.0.1
     "@showtime-xyz/universal.country-code-picker": ^0.0.16
     "@showtime-xyz/universal.data-pill": ^0.0.9
     "@showtime-xyz/universal.divider": ^0.0.9

@@ -49,6 +49,7 @@ function Video({ tw, blurhash, resizeMode, ...props }: VideoProps) {
             source={props.source}
             ref={videoRef}
             shouldPlay
+            isLooping
             isMuted={videoConfig?.isMuted}
             {...props}
           />

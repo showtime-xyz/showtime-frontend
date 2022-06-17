@@ -4,8 +4,8 @@ import Animated, { FadeIn } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -77,7 +77,7 @@ export const SettingsWalletSlotHeader = () => {
 };
 
 export const SettingsWalletSlotSkeleton = () => {
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   return (
     <View tw="max-h-[150px] w-full flex-1 flex-row justify-between p-4">
       <View tw="flex justify-center">
@@ -85,7 +85,7 @@ export const SettingsWalletSlotSkeleton = () => {
           height={25}
           width={25}
           show={true}
-          colorMode={colorMode as any}
+          colorMode={colorScheme as any}
           radius="round"
         >
           <Animated.View entering={FadeIn}></Animated.View>
@@ -97,7 +97,7 @@ export const SettingsWalletSlotSkeleton = () => {
             height={16}
             width={128}
             show={true}
-            colorMode={colorMode as any}
+            colorMode={colorScheme as any}
           >
             <Animated.View entering={FadeIn}></Animated.View>
           </Skeleton>
@@ -107,7 +107,7 @@ export const SettingsWalletSlotSkeleton = () => {
             height={16}
             width={256}
             show={true}
-            colorMode={colorMode as any}
+            colorMode={colorScheme as any}
           >
             <Animated.View entering={FadeIn}></Animated.View>
           </Skeleton>
@@ -117,7 +117,7 @@ export const SettingsWalletSlotSkeleton = () => {
             height={32}
             width={300}
             show={true}
-            colorMode={colorMode as any}
+            colorMode={colorScheme as any}
           >
             <Animated.View entering={FadeIn}></Animated.View>
           </Skeleton>
@@ -127,7 +127,7 @@ export const SettingsWalletSlotSkeleton = () => {
             height={16}
             width={300}
             show={true}
-            colorMode={colorMode as any}
+            colorMode={colorScheme as any}
           >
             <Animated.View entering={FadeIn}></Animated.View>
           </Skeleton>
