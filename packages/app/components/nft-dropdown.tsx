@@ -32,7 +32,7 @@ import {
   File,
   UserMinus,
   Flag,
-  Send,
+  Transfer,
   EyeOff,
   Copy,
   Slash,
@@ -239,7 +239,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             onSelect={() => openModal("transfer")}
             key="transfer"
           >
-            <MenuItemIcon Icon={Send} />
+            <MenuItemIcon Icon={Transfer} />
             <DropdownMenuItemTitle>Transfer</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
