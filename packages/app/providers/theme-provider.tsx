@@ -6,7 +6,7 @@ import { setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme-provider";
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import {
