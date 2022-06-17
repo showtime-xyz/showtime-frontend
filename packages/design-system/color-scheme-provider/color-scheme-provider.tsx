@@ -5,7 +5,7 @@ type ColorScheme = "light" | "dark" | null | undefined;
 type SetColorScheme = (colorScheme: ColorScheme) => void;
 
 export const ColorSchemeContext = React.createContext(
-  {} as unknown as {
+  null as unknown as {
     colorScheme: ColorScheme;
     setColorScheme: SetColorScheme;
   }
