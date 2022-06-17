@@ -51,6 +51,12 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/checkbox"
     },
+    "color-scheme": {
+        "scope": "showtime.universal",
+        "version": "0.0.1",
+        "mainFile": "index.ts",
+        "rootDir": "packages/design-system/color-scheme"
+    },
     "country-code-picker": {
         "scope": "showtime.universal",
         "version": "0.0.16",
