@@ -52,8 +52,8 @@
         "rootDir": "packages/design-system/checkbox"
     },
     "color-scheme": {
-        "scope": "",
-        "version": "",
+        "scope": "showtime.universal",
+        "version": "0.0.1",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/color-scheme"
     },
