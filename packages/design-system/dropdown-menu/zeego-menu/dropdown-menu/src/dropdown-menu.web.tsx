@@ -88,7 +88,10 @@ const Item = ({
   onBlur,
   onFocus,
   textValue,
-}: MenuItemProps) => {
+  className,
+}: MenuItemProps & {
+  className?: string;
+}) => {
   return (
     <DropdownMenu.Item
       onFocus={onFocus}
@@ -97,6 +100,7 @@ const Item = ({
       disabled={disabled}
       onSelect={onSelect}
       style={itemStyleReset}
+      className={className}
     >
       <ItemPrimitive style={style}>{children}</ItemPrimitive>
     </DropdownMenu.Item>
