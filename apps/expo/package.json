@@ -74,6 +74,7 @@
     "@showtime-xyz/universal.bottom-sheet": "^0.0.7",
     "@showtime-xyz/universal.button": "^0.0.7",
     "@showtime-xyz/universal.checkbox": "^0.0.8",
+    "@showtime-xyz/universal.color-scheme": "^0.0.1",
     "@showtime-xyz/universal.country-code-picker": "^0.0.8",
     "@showtime-xyz/universal.data-pill": "^0.0.6",
     "@showtime-xyz/universal.divider": "^0.0.6",
