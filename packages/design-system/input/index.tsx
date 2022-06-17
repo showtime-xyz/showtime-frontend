@@ -10,11 +10,8 @@ import {
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import {
-  useColorScheme,
-  useIsDarkMode,
-  useOnFocus,
-} from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode, useOnFocus } from "@showtime-xyz/universal.hooks";
 import { Label } from "@showtime-xyz/universal.label";
 import {
   PressableScale,

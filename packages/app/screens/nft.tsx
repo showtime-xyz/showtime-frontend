@@ -3,7 +3,7 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import Head from "next/head";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,

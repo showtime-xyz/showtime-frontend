@@ -26,3 +26,13 @@ export const ColorSchemeProvider = ({
     </ColorSchemeContext.Provider>
   );
 };
+
+export const useColorScheme = () => {
+  const colorSchemeContext = React.useContext(ColorSchemeContext);
+  if (!colorSchemeContext) {
+    console.error(
+      "Please wrap your app with <ColorSchemeProvider> from @showtime-xyz/universal.color-scheme"
+    );
+  }
+  return colorSchemeContext;
+};

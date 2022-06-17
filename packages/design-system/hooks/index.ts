@@ -1,19 +1,9 @@
-import { useRef, useEffect, useState, useMemo, useContext } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
-import { ColorSchemeContext } from "../color-scheme-provider/color-scheme-provider";
-
-export const useColorScheme = () => {
-  const colorSchemeContext = useContext(ColorSchemeContext);
-  if (!colorSchemeContext) {
-    console.error(
-      "Please wrap your app with <ColorSchemeProvider> from @showtime-xyz/universal.color-scheme-provider"
-    );
-  }
-  return colorSchemeContext;
-};
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 
 export const useIsDarkMode = () => {
   const { colorScheme } = useColorScheme();

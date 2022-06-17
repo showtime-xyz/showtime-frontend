@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { useColorScheme, useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 

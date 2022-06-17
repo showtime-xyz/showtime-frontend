@@ -8,7 +8,7 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";

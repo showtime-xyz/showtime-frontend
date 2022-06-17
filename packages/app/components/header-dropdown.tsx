@@ -1,6 +1,7 @@
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -9,7 +10,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
 import { Settings } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";

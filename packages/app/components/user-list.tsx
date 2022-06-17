@@ -3,7 +3,7 @@ import { FlatList, Platform } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
