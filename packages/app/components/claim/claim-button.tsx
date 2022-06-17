@@ -40,10 +40,15 @@ export const ClaimButton = ({
     isExpired = new Date() > new Date(edition.time_limit);
   }
 
+  // TODO: remove this once API returns accurace claimed edition count
+  let totalClaimedCount = 0;
+  if (edition && typeof edition.total_claimed_count === "number") {
+    totalClaimedCount = edition.total_claimed_count + 1;
+  }
+
   const status =
     edition &&
-    edition.total_claimed_count?.toString() ===
-      edition.creator_airdrop_edition?.edition_size.toString()
+    totalClaimedCount === edition.creator_airdrop_edition?.edition_size
       ? "soldout"
       : edition.is_already_claimed
       ? "claimed"
