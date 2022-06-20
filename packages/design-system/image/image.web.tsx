@@ -40,7 +40,7 @@ type Props = Pick<ImgProps, "source" | "resizeMode" | "onLoad"> & {
   loading: "lazy" | "eager";
   width: number;
   height: number;
-  borderRadius: number;
+  borderRadius?: number;
   layout?: "fixed" | "intrinsic" | "responsive" | "fill";
   alt?: string;
   blurhash?: string;
@@ -132,7 +132,6 @@ function StyledImage({
         {...props}
         className={Array.isArray(tw) ? tw.join(" ") : tw ?? ""}
         width={width}
-        borderRadius={borderRadius}
         height={height}
       />
     </View>
