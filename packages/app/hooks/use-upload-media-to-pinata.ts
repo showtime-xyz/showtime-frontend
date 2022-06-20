@@ -4,10 +4,11 @@ import { v4 as uuid } from "uuid";
 import { Logger } from "app/lib/logger";
 import { getFileFormData, getPinataToken } from "app/utilities";
 
-export const useUploadMedia = () => {
+export const useUploadMediaToPinata = () => {
   const uploadMedia = async (file: File | string) => {
     const formData = new FormData();
     const fileFormData = await getFileFormData(file);
+
     if (!fileFormData) {
       Logger.error("error in generating file form data");
       return;

@@ -8,16 +8,18 @@ import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { useUploadMedia } from "app/hooks/use-upload-media";
+import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { delay } from "app/utilities";
+import { delay, getFileMeta } from "app/utilities";
 
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
 ];
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
 const metaSingleEditionMintableCreator =
   process.env.NEXT_PUBLIC_META_SINGLE_EDITION_MINTABLE_CREATOR;
@@ -86,7 +88,7 @@ export type UseDropNFT = {
 
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
-  const uploadMedia = useUploadMedia();
+  const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -94,66 +96,72 @@ export const useDropNFT = () => {
 
   const dropNFT = async (params: UseDropNFT) => {
     try {
-      if (userAddress) {
-        const targetInterface = new ethers.utils.Interface(editionCreatorABI);
+      const targetInterface = new ethers.utils.Interface(editionCreatorABI);
 
-        dispatch({ type: "loading" });
+      const fileMetaData = await getFileMeta(params.file);
 
-        const ipfsHash = await uploadMedia(params.file);
-        Logger.log("ipfs hash ", ipfsHash, params);
-        const callData = targetInterface.encodeFunctionData("createEdition", [
-          params.title,
-          "SHOWTIME",
-          params.description,
-          "", // animationUrl
-          "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
-          "ipfs://" + ipfsHash, // imageUrl
-          "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
-          params.editionSize, // editionSize
-          params.royalty * 100, // royaltyBPS
-          params.duration,
-        ]);
-
-        // Sending params to backend to get the signature request
-        const forwardRequest = await axios({
-          url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-            callData
-          )}&to_address=${encodeURIComponent(
-            metaSingleEditionMintableCreator
-          )}&from_address=${userAddress}`,
-          method: "GET",
-        });
-
-        Logger.log("Signing... ", forwardRequest);
-        const signature = await signTypedData(
-          forwardRequest.domain,
-          forwardRequest.types,
-          forwardRequest.value,
-          (error) => {
-            dispatch({ type: "error", error });
-          }
-        );
-
-        Logger.log("Signature", signature);
-        Logger.log("Submitting tx...");
-        // Sending signature to backend to initiate the transaction
-        const relayerResponse = await axios({
-          url: `/v1/relayer/forward-request`,
-          method: "POST",
-          data: {
-            forward_request: forwardRequest,
-            signature,
-            from_address: userAddress,
-          },
-        });
-
-        await pollTransaction(relayerResponse.relayed_transaction_id);
-      } else {
+      if (
+        fileMetaData &&
+        typeof fileMetaData.size === "number" &&
+        fileMetaData.size > MAX_FILE_SIZE
+      ) {
         Alert.alert(
-          "Wallet disconnected",
-          "Please logout and login again to complete the transaction"
+          `This file is too big. Please use a file smaller than 50 MB.`
         );
+        return;
       }
+
+      dispatch({ type: "loading" });
+      const ipfsHash = await uploadMedia(params.file);
+      Logger.log("ipfs hash ", ipfsHash, params);
+      const callData = targetInterface.encodeFunctionData("createEdition", [
+        params.title,
+        "SHOWTIME",
+        params.description,
+        "", // animationUrl
+        "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
+        "ipfs://" + ipfsHash, // imageUrl
+        "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
+        params.editionSize, // editionSize
+        params.royalty * 100, // royaltyBPS
+        params.duration,
+      ]);
+
+      // Sending params to backend to get the signature request
+      const forwardRequest = await axios({
+        url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
+          callData
+        )}&to_address=${encodeURIComponent(
+          //@ts-ignore
+          metaSingleEditionMintableCreator
+        )}&from_address=${userAddress}`,
+        method: "GET",
+      });
+
+      Logger.log("Signing... ", forwardRequest);
+      const signature = await signTypedData(
+        forwardRequest.domain,
+        forwardRequest.types,
+        forwardRequest.value,
+        (error) => {
+          dispatch({ type: "error", error });
+        }
+      );
+
+      Logger.log("Signature", signature);
+      Logger.log("Submitting tx...");
+      // Sending signature to backend to initiate the transaction
+      const relayerResponse = await axios({
+        url: `/v1/relayer/forward-request`,
+        method: "POST",
+        data: {
+          forward_request: forwardRequest,
+          signature,
+          from_address: userAddress,
+        },
+      });
+
+      await pollTransaction(relayerResponse.relayed_transaction_id);
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
