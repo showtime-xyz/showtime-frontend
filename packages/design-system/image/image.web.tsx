@@ -34,7 +34,7 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
-type Props = ImgProps & {
+type Props = Pick<ImgProps, "source" | "resizeMode" | "onLoad"> & {
   className: string;
   source: ImageURISource;
   loading: "lazy" | "eager";
@@ -64,7 +64,6 @@ function Img({
 
   if (source?.uri && typeof source?.uri === "string") {
     return (
-      // @ts-ignore
       <Image
         src={source.uri}
         loading={loading}
@@ -85,11 +84,10 @@ function Img({
             (width != null ? "contain" : "cover")
         )}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
-        // @ts-ignore
         blurDataURL={
           width > 40 && props.blurhash
             ? getBase64Blurhash(props.blurhash)
-            : null
+            : undefined
         }
         layout={!hasHeightOrWidth ? "fill" : undefined}
         unoptimized // We already optimize the images with our CDN
@@ -100,7 +98,6 @@ function Img({
 
   if (source) {
     return (
-      // @ts-ignore
       <Image
         src={source as string}
         loading={loading}
@@ -117,10 +114,17 @@ function Img({
 
 type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;
 
-function StyledImage({ tw, ...props }: ImageProps) {
-  const width = Number(tailwind.style(tw).width);
-  const height = Number(tailwind.style(tw).height);
-  const borderRadius = Number(tailwind.style(tw).borderRadius);
+function StyledImage({
+  tw,
+  width: propWidth = 0,
+  height: propHeight = 0,
+  borderRadius: propBorderRadius = 0,
+  ...props
+}: ImageProps) {
+  const width = Number(tailwind.style(tw).width) || propWidth;
+  const height = Number(tailwind.style(tw).height) || propHeight;
+  const borderRadius =
+    Number(tailwind.style(tw).borderRadius) || propBorderRadius;
 
   return (
     <View style={{ borderRadius, overflow: "hidden" }}>
@@ -128,6 +132,7 @@ function StyledImage({ tw, ...props }: ImageProps) {
         {...props}
         className={Array.isArray(tw) ? tw.join(" ") : tw ?? ""}
         width={width}
+        borderRadius={borderRadius}
         height={height}
       />
     </View>
