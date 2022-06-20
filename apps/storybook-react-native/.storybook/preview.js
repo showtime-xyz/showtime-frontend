@@ -8,7 +8,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { theme } from "design-system/theme";
+import { ThemeProvider } from "app/providers/theme-provider";
 
 const FontsLoader = ({ children }) => {
   const [fontsLoaded, error] = useFonts({
@@ -43,11 +43,13 @@ export const decorators = [
         <BottomSheetModalProvider>
           <SafeAreaProvider>
             <ToastProvider>
-              <MainAxisCenter>
-                <FontsLoader>
-                  <Story />
-                </FontsLoader>
-              </MainAxisCenter>
+              <ThemeProvider>
+                <MainAxisCenter>
+                  <FontsLoader>
+                    <Story />
+                  </FontsLoader>
+                </MainAxisCenter>
+              </ThemeProvider>
             </ToastProvider>
           </SafeAreaProvider>
         </BottomSheetModalProvider>

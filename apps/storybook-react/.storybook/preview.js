@@ -10,8 +10,7 @@ import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { linking } from "app/navigation/linking";
-
-import { theme } from "design-system/theme";
+import { ThemeProvider } from "app/providers/theme-provider";
 
 import "../styles/globals.css";
 
@@ -42,13 +41,15 @@ export const decorators = [
     <TailwindDeviceContextProvider>
       <BottomSheetModalProvider>
         <SafeAreaProvider>
-          <ToastProvider>
-            <NavigationContainer linking={linking}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Storybook" component={Story} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ToastProvider>
+          <ThemeProvider>
+            <ToastProvider>
+              <NavigationContainer linking={linking}>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Storybook" component={Story} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ToastProvider>
+          </ThemeProvider>
         </SafeAreaProvider>
       </BottomSheetModalProvider>
     </TailwindDeviceContextProvider>
