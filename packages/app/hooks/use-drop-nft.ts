@@ -101,16 +101,16 @@ export const useDropNFT = () => {
 
         const fileMetaData = await getFileMeta(params.file);
 
-        if (
-          fileMetaData &&
-          typeof fileMetaData.size === "number" &&
-          fileMetaData.size > MAX_FILE_SIZE
-        ) {
-          Alert.alert(
-            `This file is too big. Please use a file smaller than 50 MB.`
-          );
-          return;
-        }
+        // if (
+        //   fileMetaData &&
+        //   typeof fileMetaData.size === "number" &&
+        //   fileMetaData.size > MAX_FILE_SIZE
+        // ) {
+        //   Alert.alert(
+        //     `This file is too big. Please use a file smaller than 50 MB.`
+        //   );
+        //   return;
+        // }
 
         dispatch({ type: "loading" });
         const ipfsHash = await uploadMedia(params.file);
