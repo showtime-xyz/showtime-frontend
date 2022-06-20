@@ -15,7 +15,7 @@ function Social({ nft }: { nft?: NFT }) {
 
   return (
     <View tw="flex-row justify-between bg-white px-4 py-2 dark:bg-black">
-      <View tw="flex-row">
+      <View tw="flex-row items-center">
         <Like nft={nft} />
         <View tw="ml-2" />
         <CommentButton nft={nft} />

@@ -1,6 +1,9 @@
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Check } from "@showtime-xyz/universal.icon";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRouter } from "app/navigation/use-router";
@@ -56,21 +59,32 @@ export const ClaimButton = ({
       ? "expired"
       : undefined;
 
+  const bgIsGreen = status === "claimed" || status === "soldout";
+
   const disabled = status === "claimed" || status === "soldout" || isExpired;
 
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
-      tw={disabled ? "opacity-50" : ""}
+      style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
+      tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
     >
-      {status === "claimed"
-        ? "Claimed ✓"
-        : status === "soldout"
-        ? "Sold out"
-        : status === "expired"
-        ? "Drop expired"
-        : "Claim for free"}
+      {status === "claimed" ? (
+        <View tw="flex-row items-center">
+          <Check color="white" width={18} height={18} />
+          <Text tw="ml-1 text-white">Claimed</Text>
+        </View>
+      ) : status === "soldout" ? (
+        <View tw="flex-row items-center">
+          <Check color="white" width={18} height={18} />
+          <Text tw="ml-1 text-white">Sold out</Text>
+        </View>
+      ) : status === "expired" ? (
+        "Drop expired"
+      ) : (
+        "Claim for free"
+      )}
     </Button>
   );
 };

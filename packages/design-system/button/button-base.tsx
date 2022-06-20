@@ -51,9 +51,8 @@ export function BaseButton({
       backgroundColor: backgroundColors
         ? backgroundColors["default"][isDarkMode ? 1 : 0]
         : "transparent",
-      opacity: disabled ? 0.4 : 1,
     }),
-    [backgroundColors, disabled, isDarkMode]
+    [backgroundColors, isDarkMode]
   );
 
   const labelStyle = useMemo(
@@ -111,7 +110,10 @@ export function BaseButton({
       {...props}
       tw={containerStyle}
       disabled={disabled}
-      style={backgroundColors ? containerAnimatedStyle : undefined}
+      style={[
+        backgroundColors ? containerAnimatedStyle : undefined,
+        props.style,
+      ]}
     >
       {renderChildren}
     </PressableScale>
