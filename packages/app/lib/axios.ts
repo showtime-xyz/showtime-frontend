@@ -2,6 +2,7 @@ import axios from "axios";
 import type { Method, AxiosRequestHeaders } from "axios";
 
 import { getAccessToken } from "app/lib/access-token";
+import { Logger } from "app/lib/logger";
 
 export type AxiosOverrides = {
   forceAccessTokenAuthorization?: boolean;
@@ -58,9 +59,14 @@ const axiosAPI = async ({
 
   try {
     return await axios(request).then((res) => res.data);
-  } catch (error) {
-    console.log("Failed request:", request);
-    console.error(error);
+  } catch (error: any) {
+    Logger.log("Failed request:", request);
+    Logger.error(error);
+
+    if (error.response?.data?.error?.message) {
+      throw new Error(error.response.data.error.message);
+    }
+
     throw error;
   }
 };
