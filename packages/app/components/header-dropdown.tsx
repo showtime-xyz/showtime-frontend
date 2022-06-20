@@ -9,8 +9,8 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
+  DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { Settings } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -20,7 +20,22 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
 
+import { User, Settings, Edit, Moon, Sun, LogOut } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
+
+const MenuItemIcon = ({ Icon }) => {
+  return (
+    <DropdownMenuItemIcon>
+      <Icon
+        width="1em"
+        height="1em"
+        color={
+          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
+        }
+      />
+    </DropdownMenuItemIcon>
+  );
+};
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
@@ -31,15 +46,22 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
+  const isLightTheme = context.colorScheme === "light";
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         {type === "profile" ? (
-          <View tw="rounded-ful flex h-12 cursor-pointer flex-row items-center justify-center">
+          <View
+            tw="flex h-12 flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900"
+            style={{
+              // @ts-ignore
+              cursor: "pointer",
+            }}
+          >
             <Avatar url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
-              <Text tw="ml-2 mr-1 font-semibold dark:text-white">
+              <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
                 {`@${user.data.profile.username}`}
               </Text>
             ) : null}
@@ -65,6 +87,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             }}
             key="your-profile"
           >
+            <MenuItemIcon Icon={User} />
             <DropdownMenuItemTitle>Profile</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
@@ -73,6 +96,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           onSelect={() => router.push("/settings")}
           key="your-settings"
         >
+          <MenuItemIcon Icon={Settings} />
           <DropdownMenuItemTitle>Settings</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
@@ -97,11 +121,13 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           }}
           key="edit-profile"
         >
-          <DropdownMenuItemTitle>Edit profile</DropdownMenuItemTitle>
+          <MenuItemIcon Icon={Edit} />
+          <DropdownMenuItemTitle>Edit Profile</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuRoot>
           <DropdownMenuTriggerItem key="nested-group-trigger">
+            <MenuItemIcon Icon={isLightTheme ? Sun : Moon} />
             <DropdownMenuItemTitle>Theme</DropdownMenuItemTitle>
           </DropdownMenuTriggerItem>
           <DropdownMenuContent tw="w-30">
@@ -109,18 +135,21 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
               onSelect={() => context.setColorScheme("light")}
               key="nested-group-1"
             >
+              <MenuItemIcon Icon={Sun} />
               <DropdownMenuItemTitle>Light</DropdownMenuItemTitle>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => context.setColorScheme("dark")}
               key="nested-group-2"
             >
+              <MenuItemIcon Icon={Moon} />
               <DropdownMenuItemTitle>Dark</DropdownMenuItemTitle>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuRoot>
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
+          <MenuItemIcon Icon={LogOut} />
           <DropdownMenuItemTitle>Sign Out</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>

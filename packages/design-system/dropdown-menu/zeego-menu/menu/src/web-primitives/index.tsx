@@ -9,7 +9,13 @@ import type {
   MenuItemTitleProps,
 } from "../types";
 
-const ItemPrimitive = ({ children, style }: MenuItemProps) => {
+const ItemPrimitive = ({
+  children,
+  style,
+  className,
+}: MenuItemProps & {
+  className?: string;
+}) => {
   const titleChildren = pickChildren(children, ItemTitle);
 
   let title = <></>;
@@ -22,7 +28,8 @@ const ItemPrimitive = ({ children, style }: MenuItemProps) => {
   }
 
   return (
-    <View style={style}>
+    // @ts-ignore
+    <View style={style} className={className}>
       {title}
       {titleChildren.withoutTargetChildren.filter(
         (child) => typeof child != "string"

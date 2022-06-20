@@ -92,7 +92,9 @@ const DropdownMenuItem = DropdownMenu.menuify(
     onBlur,
     onFocus,
     ...props
-  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Item>) => {
+  }: { tw?: TW; className?: string } & ComponentProps<
+    typeof DropdownMenu.Item
+  >) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,

@@ -36,6 +36,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.button",
   "@showtime-xyz/universal.checkbox",
   "@showtime-xyz/universal.country-code-picker",
+  "@showtime-xyz/universal.color-scheme",
   "@showtime-xyz/universal.data-pill",
   "@showtime-xyz/universal.divider",
   "@showtime-xyz/universal.dropdown-menu",
