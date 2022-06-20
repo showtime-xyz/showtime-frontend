@@ -21,7 +21,7 @@ export function ActivitiesModal() {
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
-  const { data } = useNFTDetailByTokenId({
+  const { data: nftDetails } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
@@ -29,8 +29,8 @@ export function ActivitiesModal() {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={() => null}>
-        <Activities nft={data?.data?.item} />
+      <Suspense fallback={null}>
+        <Activities nft={nftDetails?.data?.item} />
       </Suspense>
     </ErrorBoundary>
   );
