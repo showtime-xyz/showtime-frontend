@@ -96,72 +96,79 @@ export const useDropNFT = () => {
 
   const dropNFT = async (params: UseDropNFT) => {
     try {
-      const targetInterface = new ethers.utils.Interface(editionCreatorABI);
+      if (userAddress) {
+        const targetInterface = new ethers.utils.Interface(editionCreatorABI);
 
-      const fileMetaData = await getFileMeta(params.file);
+        const fileMetaData = await getFileMeta(params.file);
 
-      if (
-        fileMetaData &&
-        typeof fileMetaData.size === "number" &&
-        fileMetaData.size > MAX_FILE_SIZE
-      ) {
-        Alert.alert(
-          `This file is too big. Please use a file smaller than 50 MB.`
-        );
-        return;
-      }
-
-      dispatch({ type: "loading" });
-      const ipfsHash = await uploadMedia(params.file);
-      Logger.log("ipfs hash ", ipfsHash, params);
-      const callData = targetInterface.encodeFunctionData("createEdition", [
-        params.title,
-        "SHOWTIME",
-        params.description,
-        "", // animationUrl
-        "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
-        "ipfs://" + ipfsHash, // imageUrl
-        "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
-        params.editionSize, // editionSize
-        params.royalty * 100, // royaltyBPS
-        params.duration,
-      ]);
-
-      // Sending params to backend to get the signature request
-      const forwardRequest = await axios({
-        url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-          callData
-        )}&to_address=${encodeURIComponent(
-          //@ts-ignore
-          metaSingleEditionMintableCreator
-        )}&from_address=${userAddress}`,
-        method: "GET",
-      });
-
-      Logger.log("Signing... ", forwardRequest);
-      const signature = await signTypedData(
-        forwardRequest.domain,
-        forwardRequest.types,
-        forwardRequest.value,
-        (error) => {
-          dispatch({ type: "error", error });
+        if (
+          fileMetaData &&
+          typeof fileMetaData.size === "number" &&
+          fileMetaData.size > MAX_FILE_SIZE
+        ) {
+          Alert.alert(
+            `This file is too big. Please use a file smaller than 50 MB.`
+          );
+          return;
         }
-      );
 
-      Logger.log("Signature", signature);
-      Logger.log("Submitting tx...");
-      // Sending signature to backend to initiate the transaction
-      const relayerResponse = await axios({
-        url: `/v1/relayer/forward-request`,
-        method: "POST",
-        data: {
-          forward_request: forwardRequest,
-          signature,
-          from_address: userAddress,
-        },
-      });
+        dispatch({ type: "loading" });
+        const ipfsHash = await uploadMedia(params.file);
+        Logger.log("ipfs hash ", ipfsHash, params);
+        const callData = targetInterface.encodeFunctionData("createEdition", [
+          params.title,
+          "SHOWTIME",
+          params.description,
+          "", // animationUrl
+          "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
+          "ipfs://" + ipfsHash, // imageUrl
+          "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
+          params.editionSize, // editionSize
+          params.royalty * 100, // royaltyBPS
+          params.duration,
+        ]);
 
-      await pollTransaction(relayerResponse.relayed_transaction_id);
+        // Sending params to backend to get the signature request
+        const forwardRequest = await axios({
+          url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
+            callData
+          )}&to_address=${encodeURIComponent(
+            //@ts-ignore
+            metaSingleEditionMintableCreator
+          )}&from_address=${userAddress}`,
+          method: "GET",
+        });
+
+        Logger.log("Signing... ", forwardRequest);
+        const signature = await signTypedData(
+          forwardRequest.domain,
+          forwardRequest.types,
+          forwardRequest.value,
+          (error) => {
+            dispatch({ type: "error", error });
+          }
+        );
+
+        Logger.log("Signature", signature);
+        Logger.log("Submitting tx...");
+        // Sending signature to backend to initiate the transaction
+        const relayerResponse = await axios({
+          url: `/v1/relayer/forward-request`,
+          method: "POST",
+          data: {
+            forward_request: forwardRequest,
+            signature,
+            from_address: userAddress,
+          },
+        });
+
+        await pollTransaction(relayerResponse.relayed_transaction_id);
+      } else {
+        Alert.alert(
+          "Wallet disconnected",
+          "Please logout and login again to complete the transaction"
+        );
+      }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
