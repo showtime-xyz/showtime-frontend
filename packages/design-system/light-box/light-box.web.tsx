@@ -34,11 +34,7 @@ export const LightBox: React.FC<LightBoxProps> = ({
   width: imgWidth,
   height: imgHeight,
   containerStyle,
-  imgLayout,
   children,
-  onLongPress,
-  tapToClose = true,
-  onTap,
 }) => {
   const animatedRef = useRef<Animated.View>(null);
   const opacity = useSharedValue(1);
