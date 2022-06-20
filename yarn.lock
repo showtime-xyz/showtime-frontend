@@ -6589,20 +6589,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.9":
-  version: 0.0.9
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.9"
+"@showtime-xyz/universal.avatar@npm:^0.0.10":
+  version: 0.0.10
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.10"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.9
+    "@showtime-xyz/universal.image": 0.0.10
     "@showtime-xyz/universal.tailwind": 0.0.12
     "@showtime-xyz/universal.view": 0.0.12
-    "@storybook/react": 6.3.13
+    "@storybook/react": 6.5.9
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 6258702d8d6ed0343d48dd8598f1a31d5e66e7a3eaf490f15886c476feabafa5fb30cd2cefb86b6c16749c3100c4421bf5f7953787ccd1d2cbca47526aaa169e
+  checksum: 3b9c4ab3b1be0e97ab03dd0d7e228935051c30ed089c939668b98bf000ece6832ad9e35494a1b122c59de920e16d9681997f4c0fc86035b34f6b7ed2094af7ad
   languageName: node
   linkType: hard
 
@@ -6831,26 +6831,6 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: 33e894c273da79d1c91e1354423d39443ff8f1807c3f096e1ace8c2483c4990702d1d1a2f496845ac469923bb06206adfe60b5f9a61df363a9599f12f176e3cc
-  languageName: node
-  linkType: hard
-
-"@showtime-xyz/universal.image@npm:0.0.9":
-  version: 0.0.9
-  resolution: "@showtime-xyz/universal.image@npm:0.0.9"
-  dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.12
-    "@showtime-xyz/universal.view": 0.0.12
-    array-to-image: 1.0.0
-    blurhash: 1.1.5
-    next: 12.1.5
-    react-native-blurhash: 1.1.10
-    react-native-fast-image: ^8.5.11
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: 5d858c1098d3da74fd5e6e06a9df176814a284e566972d2808a4595aa5a563e2fb3d5f3db25d0130573e15ac951503683c85f1fe91f3b2fc722b5f2c53a5fdf7
   languageName: node
   linkType: hard
 
@@ -7348,7 +7328,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.13
     "@showtime-xyz/universal.activity-indicator": ^0.0.12
     "@showtime-xyz/universal.alert": ^0.0.15
-    "@showtime-xyz/universal.avatar": ^0.0.9
+    "@showtime-xyz/universal.avatar": ^0.0.10
     "@showtime-xyz/universal.bottom-sheet": ^0.0.14
     "@showtime-xyz/universal.button": ^0.0.14
     "@showtime-xyz/universal.checkbox": ^0.0.14
