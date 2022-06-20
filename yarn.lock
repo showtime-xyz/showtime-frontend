@@ -6589,6 +6589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@showtime-xyz/universal.avatar@npm:^0.0.11":
   version: 0.0.11
   resolution: "@showtime-xyz/universal.avatar@npm:0.0.11"
@@ -6597,12 +6598,26 @@ __metadata:
     "@showtime-xyz/universal.tailwind": 0.0.12
     "@showtime-xyz/universal.view": 0.0.12
     "@storybook/react": 6.5.9
+=======
+"@showtime-xyz/universal.avatar@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.9"
+  dependencies:
+    "@showtime-xyz/universal.image": 0.0.9
+    "@showtime-xyz/universal.tailwind": 0.0.12
+    "@showtime-xyz/universal.view": 0.0.12
+    "@storybook/react": 6.3.13
+>>>>>>> staging
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
+<<<<<<< HEAD
   checksum: 88168e31424eabf76043e79e86b71ea44dfc589f3c14e039ae76c86289fb4980af7beb85f1071b896ae6455b3ff0e50278a4f089c1cd8e24b8eb3a2545ec7073
+=======
+  checksum: 6258702d8d6ed0343d48dd8598f1a31d5e66e7a3eaf490f15886c476feabafa5fb30cd2cefb86b6c16749c3100c4421bf5f7953787ccd1d2cbca47526aaa169e
+>>>>>>> staging
   languageName: node
   linkType: hard
 
@@ -7200,7 +7215,11 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
+<<<<<<< HEAD
   checksum: 8003b89f28373ddcca98600855658d76e80bee421653b3b616e640e8b73468792a4ce01556a6d16e0af393f569c9ee48395b75ff8807bc53fffa33d89607d9d5
+=======
+  checksum: dd555c2a8a22e9e7694fc79c5915eea0fba72485aa91eeee243fe19d8969ef254263dc58775e8e74cf047f5118c3ef181865bbf98715cb76ba6d8f94ba6ab634
+>>>>>>> staging
   languageName: node
   linkType: hard
 
@@ -7383,12 +7402,21 @@ __metadata:
     "@showtime-xyz/universal.dropdown-menu": ^0.0.8
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.9
     "@showtime-xyz/universal.fieldset": ^0.0.22
+<<<<<<< HEAD
     "@showtime-xyz/universal.hooks": ^0.0.12
     "@showtime-xyz/universal.icon": ^0.0.20
     "@showtime-xyz/universal.image": ^0.0.11
     "@showtime-xyz/universal.input": ^0.0.15
     "@showtime-xyz/universal.label": ^0.0.14
     "@showtime-xyz/universal.light-box": ^0.0.12
+=======
+    "@showtime-xyz/universal.hooks": ^0.0.11
+    "@showtime-xyz/universal.icon": ^0.0.20
+    "@showtime-xyz/universal.image": ^0.0.9
+    "@showtime-xyz/universal.input": ^0.0.15
+    "@showtime-xyz/universal.label": ^0.0.14
+    "@showtime-xyz/universal.light-box": ^0.0.9
+>>>>>>> staging
     "@showtime-xyz/universal.modal": ^0.0.22
     "@showtime-xyz/universal.modal-screen": ^0.0.23
     "@showtime-xyz/universal.modal-sheet": ^0.0.22
