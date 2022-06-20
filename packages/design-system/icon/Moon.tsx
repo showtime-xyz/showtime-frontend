@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Svg, { SvgProps, Path } from "react-native-svg";
 
-const SvgFile = (props: SvgProps) => (
+const SvgMoon = (props: SvgProps) => (
   <Svg
     width={24}
     height={24}
@@ -14,9 +14,8 @@ const SvgFile = (props: SvgProps) => (
     strokeLinejoin="round"
     {...props}
   >
-    <Path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <Path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+    <Path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </Svg>
 );
 
-export default SvgFile;
+export default SvgMoon;

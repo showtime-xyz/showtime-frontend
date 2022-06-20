@@ -1,14 +1,6 @@
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useBlock } from "app/hooks/use-block";
@@ -17,6 +9,30 @@ import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
+
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuItemIcon,
+} from "design-system/dropdown-menu";
+import { MoreHorizontal, Copy, Flag, Slash } from "design-system/icon";
+
+const MenuItemIcon = ({ Icon }) => {
+  return (
+    <DropdownMenuItemIcon>
+      <Icon
+        width="1em"
+        height="1em"
+        color={
+          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
+        }
+      />
+    </DropdownMenuItemIcon>
+  );
+};
 
 type Props = {
   user: Profile;
@@ -66,11 +82,13 @@ function ProfileDropdown({ user }: Props) {
           }}
           key="share"
         >
+          <MenuItemIcon Icon={Copy} />
           <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuItem
           key="block"
+          className="danger"
           onSelect={() => {
             toggleBlock({
               isBlocked,
@@ -79,6 +97,7 @@ function ProfileDropdown({ user }: Props) {
             });
           }}
         >
+          <MenuItemIcon Icon={Slash} />
           <DropdownMenuItemTitle>
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
@@ -91,6 +110,7 @@ function ProfileDropdown({ user }: Props) {
           }}
           key="report"
         >
+          <MenuItemIcon Icon={Flag} />
           <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>

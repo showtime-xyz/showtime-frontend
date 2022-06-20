@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -17,7 +18,9 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
@@ -27,21 +30,24 @@ type TabBarIconProps = {
   color?: string;
   focused?: boolean;
   customTw?: TW;
+  onPress?: (e: any) => void;
 };
+
 type TabBarButtonProps = {
   tab: string;
   children: React.ReactNode;
   customTw?: TW;
+  onPress?: (e: any) => void;
 };
 
-function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
+function TabBarIcon({ tab, children, customTw, onPress }: TabBarButtonProps) {
   const isWeb = Platform.OS === "web";
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
   if (isWeb) {
     return (
-      <Link href={tab}>
+      <Link href={tab} onPress={onPress}>
         <View
           tw="h-12 w-12 items-center justify-center rounded-full"
           style={tw.style(
@@ -156,9 +162,10 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 export const NotificationsTabBarIcon = ({
   color,
   focused,
+  onPress,
 }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/notifications">
+    <TabBarIcon tab="/notifications" onPress={onPress}>
       {focused ? (
         <BellFilled
           style={tw.style("z-1")}
@@ -169,22 +176,22 @@ export const NotificationsTabBarIcon = ({
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      {/* <ErrorBoundary>
+      <ErrorBoundary>
         <Suspense fallback={null}>
           <UnreadNotificationIndicator />
         </Suspense>
-      </ErrorBoundary> */}
+      </ErrorBoundary>
     </TabBarIcon>
   );
 };
 
-// const UnreadNotificationIndicator = () => {
-//   const { hasUnreadNotification } = useNotifications();
+const UnreadNotificationIndicator = () => {
+  const { hasUnreadNotification } = useNotifications();
 
-//   return hasUnreadNotification ? (
-//     <View tw="w-2 h-2 absolute rounded-full top-2 right-2 bg-amber-500 dark:bg-violet-500" />
-//   ) : null;
-// };
+  return hasUnreadNotification ? (
+    <View tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500" />
+  ) : null;
+};
 
 export const ProfileTabBarIcon = () => {
   const { user } = useUser();

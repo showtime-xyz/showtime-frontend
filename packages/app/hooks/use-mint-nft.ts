@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
-import * as FileSystem from "expo-file-system";
 import { v4 as uuid } from "uuid";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -18,6 +17,7 @@ import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useRouter } from "app/navigation/use-router";
+import { getFileMeta } from "app/utilities";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
 import { useMatchMutate } from "./use-match-mutate";
@@ -167,64 +167,6 @@ export type UseMintNFT = {
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
-
-const getFileMeta = async (file?: File | string) => {
-  if (!file) {
-    return;
-  }
-
-  if (typeof file === "string") {
-    // Web Camera -  Data URI
-    if (file.startsWith("data")) {
-      const fileExtension = file.substring(
-        file.indexOf(":") + 1,
-        file.indexOf(";")
-      );
-
-      const contentWithoutMime = file.split(",")[1];
-      const sizeInBytes = window.atob(contentWithoutMime).length;
-
-      return {
-        name: "unknown",
-        type: fileExtension,
-        size: sizeInBytes,
-      };
-    }
-
-    // Native - File path
-    else {
-      const fileName = file.split("/").pop();
-      const fileExtension = fileName?.split(".").pop();
-      const fileInfo = await FileSystem.getInfoAsync(file);
-
-      if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
-        return {
-          name: fileName,
-          type: "image/" + fileExtension,
-          size: fileInfo.size,
-        };
-      } else if (
-        fileExtension &&
-        supportedVideoExtensions.includes(fileExtension)
-      ) {
-        return {
-          name: fileName,
-          type: "video/" + fileExtension,
-          size: fileInfo.size,
-        };
-      }
-    }
-  }
-
-  // Web File Picker - File Object
-  else {
-    return {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    };
-  }
-};
 
 const getPinataToken = () => {
   return showtimeAPIAxios({

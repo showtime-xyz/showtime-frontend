@@ -1,14 +1,6 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -25,6 +17,43 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
+
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuItemIcon,
+  DropdownMenuTrigger,
+} from "design-system/dropdown-menu";
+import {
+  MoreHorizontal,
+  Trash,
+  File,
+  UserMinus,
+  Flag,
+  Transfer,
+  EyeOff,
+  Copy,
+  Slash,
+  Refresh,
+  Clock,
+  Menu,
+} from "design-system/icon";
+
+const MenuItemIcon = ({ Icon }) => {
+  return (
+    <DropdownMenuItemIcon>
+      <Icon
+        width="1em"
+        height="1em"
+        color={
+          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
+        }
+      />
+    </DropdownMenuItemIcon>
+  );
+};
 
 type Props = {
   nftId?: NFT["nft_id"];
@@ -94,11 +123,18 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
     );
   };
 
+  const isShareAPIAvailable = Platform.select({
+    default: true,
+    web: typeof window !== "undefined" && !!navigator.share,
+  });
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <MoreHorizontal
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          color={
+            tw.style("bg-gray-600 dark:bg-gray-400")?.backgroundColor as string
+          }
           width={24}
           height={24}
         />
@@ -112,15 +148,13 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             }}
             key="hide"
           >
+            <MenuItemIcon Icon={EyeOff} />
             <DropdownMenuItemTitle>Hide</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
-        <DropdownMenuItem
-          onSelect={() => openModal("details")}
-          key="details"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-        >
+        <DropdownMenuItem onSelect={() => openModal("details")} key="details">
+          <MenuItemIcon Icon={File} />
           <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
@@ -128,12 +162,17 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           onSelect={() => openModal("activities")}
           key="activities"
         >
+          <MenuItemIcon Icon={Clock} />
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         {shouldEnableSharing && Platform.OS !== "ios" ? (
           <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-            <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Copy} />
+
+            <DropdownMenuItemTitle>
+              {isShareAPIAvailable ? "Share" : "Copy Link"}
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
@@ -141,6 +180,8 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           onSelect={() => refreshMetadata(nft)}
           key="refresh-metadata"
         >
+          <MenuItemIcon Icon={Refresh} />
+
           <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
@@ -156,12 +197,14 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             }}
             key="unfollow"
           >
+            <MenuItemIcon Icon={UserMinus} />
             <DropdownMenuItemTitle>Unfollow User</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
         {!hasOwnership ? (
           <DropdownMenuItem
+            className="danger"
             key="block"
             onSelect={() =>
               toggleBlock({
@@ -171,6 +214,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
               })
             }
           >
+            <MenuItemIcon Icon={Slash} />
             <DropdownMenuItemTitle>
               {isBlocked ? "Unblock User" : "Block User"}
             </DropdownMenuItemTitle>
@@ -185,6 +229,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             }}
             key="report"
           >
+            <MenuItemIcon Icon={Flag} />
             <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
@@ -194,12 +239,14 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
             onSelect={() => openModal("transfer")}
             key="transfer"
           >
+            <MenuItemIcon Icon={Transfer} />
             <DropdownMenuItemTitle>Transfer</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
         {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem onSelect={() => openModal("list")} key="list">
+            <MenuItemIcon Icon={Menu} />
             <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
@@ -212,13 +259,13 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
 
         {hasOwnership && (
           <DropdownMenuItem
+            className="danger"
             destructive
             onSelect={() => openModal("delete")}
             key="delete"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Delete
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Trash} />
+            <DropdownMenuItemTitle>Delete</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

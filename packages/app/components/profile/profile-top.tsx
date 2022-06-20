@@ -319,7 +319,7 @@ export const ProfileTop = ({
                         );
                       }}
                     >
-                      Create Free drop
+                      Drop Free NFT
                     </Button>
                   ) : null}
                 </>

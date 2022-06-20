@@ -535,7 +535,7 @@ export const getFileFormData = async (
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getFileMeta = async (file?: File | string) => {
+export const getFileMeta = async (file?: File | string) => {
   if (!file) {
     return;
   }
