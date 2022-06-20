@@ -22,6 +22,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 // import { NetworkButton } from "app/components/connect-button";
 import { HeaderDropdown } from "app/components/header-dropdown";
+import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
@@ -29,6 +30,7 @@ import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
+  NotificationsTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
@@ -132,7 +134,7 @@ const SearchInHeader = () => {
         <View
           tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
           style={Platform.select({
-            web: { maxHeight: "calc(100vh - 64px)" },
+            web: { maxHeight: "calc(50vh - 64px)" },
             default: {},
           })}
         >
@@ -146,6 +148,44 @@ const SearchInHeader = () => {
           ) : loading && term ? (
             <SearchItemSkeleton />
           ) : null}
+        </View>
+      </Popover.Content>
+    </Popover.Root>
+  );
+};
+
+const NotificationsInHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const isDark = useIsDarkMode();
+
+  return (
+    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger />
+
+      <Popover.Anchor>
+        <NotificationsTabBarIcon
+          color={isDark ? "white" : "black"}
+          focused={router.pathname === "/notifications"}
+          onPress={(e: any) => {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }}
+        />
+      </Popover.Anchor>
+
+      <Popover.Content
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <View
+          tw="mt-2 rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
+          style={Platform.select({
+            web: { maxHeight: "calc(50vh - 64px)" },
+            default: {},
+          })}
+        >
+          <Notifications />
         </View>
       </Popover.Content>
     </Popover.Root>
@@ -171,6 +211,9 @@ const HeaderRight = () => {
                   color={isDark ? "white" : "black"}
                   focused={router.pathname === "/trending"}
                 />
+              </View>
+              <View tw="mx-2">
+                <NotificationsInHeader />
               </View>
               <View tw="mx-2">
                 <PressableScale

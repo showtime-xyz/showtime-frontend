@@ -30,21 +30,24 @@ type TabBarIconProps = {
   color?: string;
   focused?: boolean;
   customTw?: TW;
+  onPress?: (e: any) => void;
 };
+
 type TabBarButtonProps = {
   tab: string;
   children: React.ReactNode;
   customTw?: TW;
+  onPress?: (e: any) => void;
 };
 
-function TabBarIcon({ tab, children, customTw }: TabBarButtonProps) {
+function TabBarIcon({ tab, children, customTw, onPress }: TabBarButtonProps) {
   const isWeb = Platform.OS === "web";
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
   if (isWeb) {
     return (
-      <Link href={tab}>
+      <Link href={tab} onPress={onPress}>
         <View
           tw="h-12 w-12 items-center justify-center rounded-full"
           style={tw.style(
@@ -159,9 +162,10 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 export const NotificationsTabBarIcon = ({
   color,
   focused,
+  onPress,
 }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/notifications">
+    <TabBarIcon tab="/notifications" onPress={onPress}>
       {focused ? (
         <BellFilled
           style={tw.style("z-1")}
