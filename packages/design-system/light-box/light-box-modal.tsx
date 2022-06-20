@@ -1,15 +1,7 @@
-import React, { useEffect, useCallback } from "react";
-import {
-  BackHandler,
-  StyleProp,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { BackHandler, StyleSheet, useWindowDimensions } from "react-native";
 
-import { ImageStyle } from "react-native-fast-image";
-// import { useHeaderHeight } from "@react-navigation/elements";
-import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Easing,
   Extrapolate,
@@ -20,18 +12,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Image } from "@showtime-xyz/universal.image";
+import type { TargetImageInfo } from "./light-box";
+import type { AnimationParams } from "./provider";
 
-import {
-  ImageBoundingClientRect,
-  LightImageProps,
-  TargetImageInfo,
-} from "./light-box-image";
-
-export type ActiveImageType = ImageBoundingClientRect & {
+export type ActiveImageType = AnimationParams & {
   layout: TargetImageInfo;
-  style?: StyleProp<ImageStyle>;
-  source: LightImageProps["source"];
+  imageElement: JSX.Element;
+};
+type LightImageModalProps = {
+  activeImage: ActiveImageType;
+  onClose: () => void;
 };
 const timingConfig = {
   duration: 240,
@@ -40,12 +30,10 @@ const timingConfig = {
 export const LightImageModal = ({
   activeImage,
   onClose,
-}: {
-  activeImage: ActiveImageType;
-  onClose: () => void;
-}) => {
-  const { layout, x, y, width, height, imageOpacity, style, source } =
+}: LightImageModalProps) => {
+  const { layout, position, imageElement, onLongPress, tapToClose, onTap } =
     activeImage;
+  const { x, y, width, height, imageOpacity } = position;
   const { width: targetWidth, height: dimensionHeight } = useWindowDimensions();
 
   const scaleFactor = layout.width / targetWidth;
@@ -58,6 +46,7 @@ export const LightImageModal = ({
   const animationProgress = useSharedValue(0);
 
   const backdropOpacity = useSharedValue(0);
+
   const scale = useSharedValue(1);
 
   const targetX = useSharedValue(0);
@@ -67,8 +56,7 @@ export const LightImageModal = ({
 
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
-  // Todo: add pinch zoom
-  const onPan = Gesture.Pan()
+  const panGesture = Gesture.Pan()
     .maxPointers(1)
     .minPointers(1)
     .minDistance(10)
@@ -86,7 +74,7 @@ export const LightImageModal = ({
       backdropOpacity.value = interpolate(
         translateY.value,
         [-100, 0, 100],
-        [0, 1, 0],
+        [0.2, 1, 0.2],
         Extrapolate.CLAMP
       );
     })
@@ -143,6 +131,7 @@ export const LightImageModal = ({
     };
   });
   const closeModal = useCallback(() => {
+    "worklet";
     animationProgress.value = withTiming(0, timingConfig, () => {
       imageOpacity.value = withTiming(
         1,
@@ -176,19 +165,49 @@ export const LightImageModal = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const longPressGesture = Gesture.LongPress()
+    .enabled(!!onLongPress)
+    .maxDistance(10)
+    .onStart(() => {
+      "worklet";
+      if (onLongPress) {
+        runOnJS(onLongPress)();
+      }
+    });
+
+  // Todo: add pinch
+  const pinchGesture = Gesture.Pinch().enabled(false);
+
+  // Todo: add double tab
+  const doubleTapGesture = Gesture.Tap().numberOfTaps(2).enabled(false);
+  const tapGesture = Gesture.Tap()
+    .enabled(tapToClose || !!onTap)
+    .numberOfTaps(1)
+    .maxDistance(10)
+    .onEnd(() => {
+      if (tapToClose) {
+        closeModal();
+      }
+      if (onTap) {
+        runOnJS(onTap)();
+      }
+    });
   return (
-    <View style={StyleSheet.absoluteFillObject}>
-      <Animated.View style={[styles.backdrop, backdropStyles]} />
-      {/* @ts-ignore */}
-      <GestureDetector gesture={onPan}>
-        <Animated.View style={imageStyles}>
-          <Image
-            source={source}
-            style={StyleSheet.flatten([StyleSheet.absoluteFillObject, style])}
-          />
-        </Animated.View>
-      </GestureDetector>
-    </View>
+    //@ts-ignore
+    <GestureDetector
+      gesture={Gesture.Race(
+        Gesture.Simultaneous(
+          longPressGesture,
+          Gesture.Race(panGesture, pinchGesture)
+        ),
+        Gesture.Exclusive(doubleTapGesture, tapGesture)
+      )}
+    >
+      <Animated.View style={StyleSheet.absoluteFillObject}>
+        <Animated.View style={[styles.backdrop, backdropStyles]} />
+        <Animated.View style={imageStyles}>{imageElement}</Animated.View>
+      </Animated.View>
+    </GestureDetector>
   );
 };
 const styles = StyleSheet.create({
