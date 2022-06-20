@@ -1,9 +1,12 @@
+import { Suspense } from "react";
 import { Platform } from "react-native";
 
-import { Text } from "@showtime-xyz/universal.text";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { Notifications } from "app/components/notifications";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
@@ -14,7 +17,7 @@ const NotificationsScreen = withColorScheme(() => {
   return (
     <View tw="w-full">
       {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-      {/* <ErrorBoundary>
+      <ErrorBoundary>
         <Suspense
           fallback={
             <View tw="mt-10 items-center justify-center">
@@ -24,16 +27,7 @@ const NotificationsScreen = withColorScheme(() => {
         >
           <Notifications />
         </Suspense>
-      </ErrorBoundary> */}
-      <View tw="p-4">
-        <Text tw="font-space-bold text-2xl font-extrabold text-black dark:text-white">
-          Notifications
-        </Text>
-        <View tw="h-6" />
-        <Text tw="font-semibold text-gray-600 dark:text-gray-400">
-          🚧 Coming soon
-        </Text>
-      </View>
+      </ErrorBoundary>
     </View>
   );
 });

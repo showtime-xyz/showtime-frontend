@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
-
+// import { formatDistanceToNowStrict } from "date-fns";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   HeartFilled,
@@ -149,9 +148,8 @@ const NotificationDescription = ({
       <View>
         <Text
           //@ts-ignore
-          tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
+          tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
-          style={{ lineHeight: 20, fontSize: 13 }}
         >
           {actors.length == 1 ? (
             <>
@@ -167,7 +165,7 @@ const NotificationDescription = ({
           {actors.length == 3 ? (
             <>
               <ActorLink actor={actors[0]} />,
-              <ActorLink actor={actors[1]} /> , and{" "}
+              <ActorLink actor={actors[1]} />, and{" "}
               <ActorLink actor={actors[2]} />
             </>
           ) : null}
@@ -176,7 +174,7 @@ const NotificationDescription = ({
               <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
               and{" "}
               <Text
-                tw="font-bold text-black dark:text-white"
+                tw="text-13 font-bold text-black dark:text-white"
                 onPress={() => setUsers(actors.slice(2, actors.length))}
               >
                 {actors.length - 2} other{" "}
@@ -185,40 +183,38 @@ const NotificationDescription = ({
             </>
           ) : null}
 
-          {NOTIFICATION_TYPES.LIKED.includes(notification.type_id)
+          {notification.type_name === "FOLLOW" ? "followed you" : null}
+          {notification.type_name === "LIKE_ON_CREATED_NFT" ||
+          notification.type_name === "LIKE_ON_OWNED_NFT"
             ? "liked "
             : null}
-          {NOTIFICATION_TYPES.FOLLOWED.includes(notification.type_id)
-            ? "followed you"
-            : null}
-          {NOTIFICATION_TYPES.COMMENT.includes(notification.type_id)
+          {notification.type_name === "COMMENT_ON_CREATED_NFT" ||
+          notification.type_name === "COMMENT_ON_OWNED_NFT"
             ? "commented on "
             : null}
-          {NOTIFICATION_TYPES.COMMENT_MENTION.includes(notification.type_id)
+          {notification.type_name === "COMMENT_MENTION"
             ? "mentioned you in "
             : null}
-          {NOTIFICATION_TYPES.COMMENT_LIKE.includes(notification.type_id)
+          {notification.type_name === "LIKE_ON_COMMENT"
             ? "liked your comment on "
             : null}
-          {NOTIFICATION_TYPES.BOUGHT.includes(notification.type_id)
-            ? "bought "
-            : null}
+          {notification.type_name === "NFT_SALE" ? "bought " : null}
 
-          {notification.nft__nftdisplay__name ? (
+          {notification.nft_display_name ? (
             <TextLink
-              tw="text-sm font-bold text-black dark:text-white"
+              tw="text-13 font-bold text-black dark:text-white"
               href={notificationInfo.href}
             >
-              {notification.nft__nftdisplay__name}
+              {notification.nft_display_name}
             </TextLink>
           ) : null}
         </Text>
         <View tw="h-1" />
-        <Text tw="text-xs text-gray-500">
+        {/* <Text tw="text-xs text-gray-500">
           {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
             addSuffix: true,
           })}
-        </Text>
+        </Text> */}
       </View>
     );
   }
@@ -230,7 +226,7 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
-      tw="text-sm font-bold text-black dark:text-white"
+      tw="text-13 font-bold text-black dark:text-white"
     >
       {actor.username ? (
         <>@{actor.username}</>
@@ -241,23 +237,14 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   );
 };
 
-const NOTIFICATION_TYPES = {
-  FOLLOWED: [1],
-  LIKED: [2, 3],
-  COMMENT: [4, 5],
-  COMMENT_MENTION: [6],
-  COMMENT_LIKE: [7],
-  BOUGHT: [8],
-};
-
 export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
   const profileLink =
     "/@" +
-    (notification.link_to_profile__address
+    (notification.link_to_profile_address
       ? `${
-          notification.link_to_profile__username ||
-          notification.link_to_profile__address
+          notification.link_to_profile_username ||
+          notification.link_to_profile_address
         }`
       : `${
           myProfile?.user?.data.profile.username ||
@@ -271,32 +258,30 @@ export const useNotificationInfo = (notification: NotificationType) => {
         (key) =>
           //@ts-ignore
           CHAIN_IDENTIFIERS[key] == notification.chain_identifier
-      )}/${notification.nft__contract__address}/${
-        notification.nft__token_identifier
-      }`,
+      )}/${notification.contract_address}/${notification.nft_token_identifier}`,
     [notification]
   );
 
-  switch (notification.type_id) {
-    case 1:
+  switch (notification.type_name) {
+    case "FOLLOW":
       return {
         type: "followed_me",
         icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
         href: profileLink,
       };
-    case 2:
+    case "LIKE_ON_CREATED_NFT":
       return {
         type: "liked_my_creation",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 3:
+    case "LIKE_ON_OWNED_NFT":
       return {
         type: "liked_my_owned",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 4:
+    case "COMMENT_ON_CREATED_NFT":
       return {
         type: "commented_my_creation",
         icon: (
@@ -304,7 +289,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 5:
+    case "COMMENT_ON_OWNED_NFT":
       return {
         type: "commented_my_owned",
         icon: (
@@ -312,7 +297,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 6:
+    case "COMMENT_MENTION":
       return {
         type: "tagged_me_in_comment",
         // TODO: incorrect icon
@@ -321,13 +306,13 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 7:
+    case "LIKE_ON_COMMENT":
       return {
         type: "liked_my_comment",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 8:
+    case "NFT_SALE":
       return {
         type: "bought_my_piece",
         icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,

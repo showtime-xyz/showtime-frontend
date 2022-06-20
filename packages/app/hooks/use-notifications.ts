@@ -17,14 +17,14 @@ export interface NotificationType {
   description?: string;
   id: number;
   img_url: string;
-  link_to_profile__address: string;
-  link_to_profile__username: string;
+  link_to_profile_address: string;
+  link_to_profile_username: string;
   chain_identifier?: any;
-  nft__token_identifier?: any;
-  nft__contract__address?: string;
-  nft__nftdisplay__name?: string;
+  nft_token_identifier?: any;
+  contract_address?: string;
+  nft_display_name?: string;
   to_timestamp: string;
-  type_id: number;
+  type_name: string;
 }
 
 export const useNotifications = () => {
@@ -32,10 +32,9 @@ export const useNotifications = () => {
   const { data: myInfoData } = useMyInfo();
 
   const notificationsFetcher = useCallback(
-    (index) => {
+    (index: number) => {
       const url = isAuthenticated
-        ? process.env.NEXT_PUBLIC_NOTIFICATIONS_URL +
-          `/v1/notifications?page=${index + 1}&limit=15`
+        ? `/v1/notifications?page=${index + 1}&limit=15`
         : null;
       return url;
     },

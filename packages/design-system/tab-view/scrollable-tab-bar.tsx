@@ -30,7 +30,7 @@ export const ScollableTabBar = ({
     <View tw="web:border-b-0 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-black">
       <TabBar
         {...rest}
-        contentContainerStyle={tw.style("item-center")}
+        contentContainerStyle={tw.style("items-center")}
         style={[
           styles.tabbar,
           tw.style("bg-white dark:bg-black shadow-none relative"),
