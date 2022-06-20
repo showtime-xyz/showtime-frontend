@@ -3,6 +3,7 @@ import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
@@ -19,8 +20,7 @@ import { Web3Provider } from "app/providers/web3-provider";
 
 import { ThemeProvider } from "./theme-provider";
 
-// import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
-
+// @
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider>
@@ -30,25 +30,26 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
             <Web3Provider>
               <ToastProvider>
                 <AlertProvider>
-                  {/* <LightBoxProvider> */}
-                  <SnackbarProvider>
-                    <NavigationProvider>
-                      <SWRProvider>
-                        <AuthProvider>
-                          <UserProvider>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <MintProvider>{children}</MintProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </UserProvider>
-                        </AuthProvider>
-                      </SWRProvider>
-                    </NavigationProvider>
-                  </SnackbarProvider>
-                  {/* </LightBoxProvider> */}
+                  <LightBoxProvider>
+                    <SnackbarProvider>
+                      <NavigationProvider>
+                        <SWRProvider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <BottomSheetModalProvider>
+                                {/* @ts-ignore */}
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <MintProvider>{children}</MintProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </SWRProvider>
+                      </NavigationProvider>
+                    </SnackbarProvider>
+                  </LightBoxProvider>
                 </AlertProvider>
               </ToastProvider>
             </Web3Provider>

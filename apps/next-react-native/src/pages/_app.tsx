@@ -5,8 +5,6 @@ import "setimmediate";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
-// Todo: move to inner-components.
-import "photoswipe/dist/photoswipe.css";
 
 import { View } from "@showtime-xyz/universal.view";
 

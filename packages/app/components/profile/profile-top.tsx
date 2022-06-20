@@ -10,6 +10,7 @@ import reactStringReplace from "react-string-replace";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
+import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -205,12 +206,21 @@ export const ProfileTop = ({
           radius={0}
         >
           {profileData?.profile.cover_url && (
-            <Image
-              source={{ uri: profileData?.profile.cover_url }}
-              tw={`h-[${coverHeight}px] w-100 web:object-cover`}
-              alt="Cover image"
-              resizeMode="cover"
-            />
+            <LightBox
+              width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
+              height={coverHeight}
+              imgLayout={{ width, height: coverHeight }}
+              tapToClose
+            >
+              <Image
+                source={{ uri: profileData?.profile.cover_url }}
+                alt="Cover image"
+                resizeMode="cover"
+                width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
+                height={coverHeight}
+                style={StyleSheet.absoluteFillObject}
+              />
+            </LightBox>
           )}
         </Skeleton>
       </View>
@@ -226,22 +236,29 @@ export const ProfileTop = ({
               ]}
             >
               <Skeleton
-                height={128}
-                width={128}
+                height={120}
+                width={120}
                 show={isLoading}
                 colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
-                  <Image
-                    source={{
-                      uri: getProfileImage(profileData?.profile),
-                    }}
-                    width={128}
-                    height={128}
-                    tw={"web:object-cover h-32 w-32"}
-                    style={StyleSheet.absoluteFillObject}
-                  />
+                  <LightBox
+                    width={120}
+                    height={120}
+                    imgLayout={{ width, height: width }}
+                    tapToClose
+                  >
+                    <Image
+                      source={{
+                        uri: getProfileImage(profileData?.profile),
+                      }}
+                      width={120}
+                      height={120}
+                      borderRadius={999}
+                      style={StyleSheet.absoluteFillObject}
+                    />
+                  </LightBox>
                 )}
               </Skeleton>
             </Animated.View>
