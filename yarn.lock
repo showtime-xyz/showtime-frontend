@@ -6814,7 +6814,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.image@npm:0.0.9, @showtime-xyz/universal.image@npm:^0.0.9":
+"@showtime-xyz/universal.image@npm:0.0.10, @showtime-xyz/universal.image@npm:^0.0.10":
+  version: 0.0.10
+  resolution: "@showtime-xyz/universal.image@npm:0.0.10"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.12
+    "@showtime-xyz/universal.view": 0.0.12
+    array-to-image: 1.0.0
+    blurhash: 1.1.5
+    next: 12.1.5
+    react-native-blurhash: 1.1.10
+    react-native-fast-image: ^8.5.11
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 33e894c273da79d1c91e1354423d39443ff8f1807c3f096e1ace8c2483c4990702d1d1a2f496845ac469923bb06206adfe60b5f9a61df363a9599f12f176e3cc
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.image@npm:0.0.9":
   version: 0.0.9
   resolution: "@showtime-xyz/universal.image@npm:0.0.9"
   dependencies:
@@ -6870,15 +6890,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.9":
-  version: 0.0.9
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.9"
+"@showtime-xyz/universal.light-box@npm:^0.0.11":
+  version: 0.0.11
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.11"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.9
+    "@showtime-xyz/universal.image": 0.0.10
     "@showtime-xyz/universal.view": 0.0.12
-    "@storybook/react": 6.3.13
-    photoswipe: 5.2.7
-    react-native-fast-image: ^8.5.11
+    "@storybook/react": 6.5.9
     react-native-gesture-handler: 2.4.1
     react-native-reanimated: 2.8.0
   peerDependencies:
@@ -6886,7 +6904,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: f3ae216b34a66ef88a2527571581ba624f0efdd2678e0cf5bae3b16b6d877bc3bd5684a0756a58f35801ce81f3391feb7b04131e8e8e6365ebbdf3343a09f4d3
+  checksum: 095d8b6d671c06feba6536fa3ae29b68ce56f0a475e875dc619de814e753c8592e4b980b85e10db5f67f2b551f45dd210445f0cc029e8d21b85f08dff62456e5
   languageName: node
   linkType: hard
 
@@ -7343,10 +7361,10 @@ __metadata:
     "@showtime-xyz/universal.fieldset": ^0.0.21
     "@showtime-xyz/universal.hooks": ^0.0.11
     "@showtime-xyz/universal.icon": ^0.0.19
-    "@showtime-xyz/universal.image": ^0.0.9
+    "@showtime-xyz/universal.image": ^0.0.10
     "@showtime-xyz/universal.input": ^0.0.14
     "@showtime-xyz/universal.label": ^0.0.13
-    "@showtime-xyz/universal.light-box": ^0.0.9
+    "@showtime-xyz/universal.light-box": ^0.0.11
     "@showtime-xyz/universal.modal": ^0.0.21
     "@showtime-xyz/universal.modal-screen": ^0.0.22
     "@showtime-xyz/universal.modal-sheet": ^0.0.21
@@ -7562,7 +7580,6 @@ __metadata:
     next-themes: ^0.0.15
     next-transpile-modules: ^9.0.0
     patch-package: ^6.4.7
-    photoswipe: ^5.2.7
     postcss: ^8.3.6
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
@@ -7635,7 +7652,6 @@ __metadata:
     expo-system-ui: ~1.2.0
     expo-updates: ~0.13.2
     expo-web-browser: ~10.2.1
-    photoswipe: ^5.2.7
     react: 18.0.0
     react-dom: 18.0.0
     react-native: 0.68.2
@@ -9606,7 +9622,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:~6.5.9":
+"@storybook/react@npm:6.5.9, @storybook/react@npm:~6.5.9":
   version: 6.5.9
   resolution: "@storybook/react@npm:6.5.9"
   dependencies:
@@ -27482,13 +27498,6 @@ __metadata:
   version: 2.9.3
   resolution: "phin@npm:2.9.3"
   checksum: 7e2abd7be74a54eb7be92dccb1d7a019725c8adaa79ac22a38f25220f9a859393e654ea753a559d326aed7bbc966fadac88270cc8c39d78896f7784219560c47
-  languageName: node
-  linkType: hard
-
-"photoswipe@npm:5.2.7, photoswipe@npm:^5.2.7":
-  version: 5.2.7
-  resolution: "photoswipe@npm:5.2.7"
-  checksum: 62f626a6df0aa95fe8629d0aff2afd936bc8d89b27e9aebc538164e3fd8f81b506932e57ac8f4a824466b2d0d5e096ee2804387ca5cdf84c06701889674c08ad
   languageName: node
   linkType: hard
 
