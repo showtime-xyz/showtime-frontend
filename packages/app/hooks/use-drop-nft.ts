@@ -8,16 +8,18 @@ import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { useUploadMedia } from "app/hooks/use-upload-media";
+import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { delay } from "app/utilities";
+import { delay, getFileMeta } from "app/utilities";
 
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
 ];
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
 const metaSingleEditionMintableCreator =
   process.env.NEXT_PUBLIC_META_SINGLE_EDITION_MINTABLE_CREATOR;
@@ -86,7 +88,7 @@ export type UseDropNFT = {
 
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
-  const uploadMedia = useUploadMedia();
+  const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -97,8 +99,20 @@ export const useDropNFT = () => {
       if (userAddress) {
         const targetInterface = new ethers.utils.Interface(editionCreatorABI);
 
-        dispatch({ type: "loading" });
+        const fileMetaData = await getFileMeta(params.file);
 
+        if (
+          fileMetaData &&
+          typeof fileMetaData.size === "number" &&
+          fileMetaData.size > MAX_FILE_SIZE
+        ) {
+          Alert.alert(
+            `This file is too big. Please use a file smaller than 50 MB.`
+          );
+          return;
+        }
+
+        dispatch({ type: "loading" });
         const ipfsHash = await uploadMedia(params.file);
         Logger.log("ipfs hash ", ipfsHash, params);
         const callData = targetInterface.encodeFunctionData("createEdition", [
@@ -119,6 +133,7 @@ export const useDropNFT = () => {
           url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
             callData
           )}&to_address=${encodeURIComponent(
+            //@ts-ignore
             metaSingleEditionMintableCreator
           )}&from_address=${userAddress}`,
           method: "GET",
