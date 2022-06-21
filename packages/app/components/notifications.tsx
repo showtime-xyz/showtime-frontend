@@ -3,6 +3,7 @@ import { FlatList } from "react-native";
 
 // import { formatDistanceToNowStrict } from "date-fns";
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   HeartFilled,
   MarketFilled,
@@ -36,6 +37,7 @@ export const Notifications = () => {
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const bottomBarHeight = useBottomTabBarHeight();
+  const { colorScheme } = useColorScheme();
 
   const [users, setUsers] = useState([]);
 
@@ -49,11 +51,15 @@ export const Notifications = () => {
 
   const ListFooter = useCallback(() => {
     return isLoadingMore ? (
-      <Skeleton height={bottomBarHeight} width="100%" />
+      <Skeleton
+        colorMode={colorScheme as "dark" | "light"}
+        height={bottomBarHeight}
+        width="100%"
+      />
     ) : (
       <View tw={`h-${bottomBarHeight}px`} />
     );
-  }, [isLoadingMore, bottomBarHeight]);
+  }, [isLoadingMore, bottomBarHeight, colorScheme]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
@@ -62,8 +68,10 @@ export const Notifications = () => {
 
   const ListEmptyComponent = useCallback(
     () => (
-      <View tw="h-full items-center justify-center">
-        <Text tw="text-gray-900 dark:text-gray-100">No new notifications</Text>
+      <View tw="items-center justify-center">
+        <Text tw="p-20 text-gray-900 dark:text-gray-100">
+          No new notifications
+        </Text>
       </View>
     ),
     []
@@ -147,7 +155,6 @@ const NotificationDescription = ({
     return (
       <View>
         <Text
-          //@ts-ignore
           tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
         >
