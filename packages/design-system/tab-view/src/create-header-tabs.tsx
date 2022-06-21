@@ -14,12 +14,16 @@ import {
 } from "react-native-tab-view-next/src";
 
 import { GestureContainer, GestureContainerRef } from "./gesture-container";
-import type { CollapsibleHeaderProps, Route } from "./types";
+import type {
+  CollapsibleHeaderProps,
+  Route,
+  TabViewCustomRenders,
+} from "./types";
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
-  CollapsibleHeaderProps;
+  CollapsibleHeaderProps<T>;
 
 export type ForwardTabViewProps<T extends Route> = HeaderTabViewProps<T> & {
   forwardedRef: React.ForwardedRef<HeaderTabViewRef>;
@@ -75,20 +79,24 @@ function CollapsibleHeaderTabView<T extends Route>({
     [props]
   );
 
-  const renderTabView = (e: { renderTabBarContainer: any }) => {
-    const { Component, ...restProps } = props;
+  const renderTabView = (e: TabViewCustomRenders) => {
+    const { Component, renderScene, ...restProps } = props;
 
     return (
       <Component
         {...restProps}
-        renderTabBar={(tabbarProps) =>
-          e.renderTabBarContainer(_renderTabBar(tabbarProps))
-        }
+        renderTabBar={(
+          tabbarProps: SceneRendererProps & {
+            navigationState: NavigationState<T>;
+          }
+        ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
+        renderScene={(props: any) => e.renderSceneHeader(renderScene(props))}
       />
     );
   };
 
   return (
+    //@ts-ignore
     <GestureContainer
       ref={gestureContainerRef}
       initialPage={initialPageRef.current}

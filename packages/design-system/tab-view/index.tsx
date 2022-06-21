@@ -1,4 +1,4 @@
-import { useCallback, forwardRef } from "react";
+import { useCallback } from "react";
 import { StatusBar } from "react-native";
 
 import {
@@ -26,12 +26,10 @@ type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
-export const HeaderTabView = forwardRef(CommonHeaderTabView);
-
-function CommonHeaderTabView<T extends Route>(
-  { autoWidthTabBar, ...props }: TabBarProps<T>,
-  ref: any
-) {
+export function HeaderTabView<T extends Route>({
+  autoWidthTabBar,
+  ...props
+}: TabBarProps<T>) {
   const insets = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const renderTabBar = useCallback(
@@ -60,7 +58,6 @@ function CommonHeaderTabView<T extends Route>(
       minHeaderHeight={insets.top + StatusBarHeight}
       refreshControlColor={isDark ? colors.gray[400] : colors.gray[700]}
       refreshHeight={60}
-      ref={ref}
       {...props}
     />
   );

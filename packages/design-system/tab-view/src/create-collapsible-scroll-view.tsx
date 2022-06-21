@@ -16,7 +16,7 @@ export function createCollapsibleScrollView<
     T & {
       index: number;
     }
-  >(function tabView(props, ref) {
+  >(function TabViewScene(props, ref) {
     return (
       <SceneComponent
         {...props}

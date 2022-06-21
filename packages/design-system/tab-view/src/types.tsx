@@ -20,7 +20,7 @@ export enum RefreshTypeEnum {
   Cancel,
 }
 
-export type CollapsibleHeaderProps = {
+export type CollapsibleHeaderProps<T extends Route> = {
   initHeaderHeight?: number;
   renderScrollHeader: () => React.ReactElement | null;
   initTabbarHeight?: number;
@@ -51,15 +51,21 @@ export type CollapsibleHeaderProps = {
    * WEB_ONLY: Insert element into tabbar on Sticky.
    */
   insertStickyTabBarElement?: JSX.Element | null;
+  renderSceneHeader?: (props: T) => JSX.Element | null;
 };
 
-export type GestureContainerProps = Pick<
+export type TabViewCustomRenders = {
+  renderTabBarContainer: (children: any) => JSX.Element;
+  renderSceneHeader: (children: any) => JSX.Element;
+};
+
+export type GestureContainerProps<T extends Route> = Pick<
   TabViewProps<Route>,
   "navigationState"
 > &
-  CollapsibleHeaderProps & {
+  CollapsibleHeaderProps<T> & {
     initialPage: number;
-    renderTabView: any;
+    renderTabView: (e: TabViewCustomRenders) => JSX.Element;
   };
 
 export interface RefreshControlProps {
@@ -99,6 +105,7 @@ export type TabHeaderContext = {
   minHeaderHeight: number;
   tabbarHeight: number;
   headerHeight: number;
+  scrollStickyHeaderHeight: number;
   refreshHeight: number;
   overflowPull: number;
   pullExtendedCoefficient: number;

@@ -14,7 +14,7 @@ import { RecyclerListViewProps } from "recyclerlistview";
 
 import { RecyclerListView } from "app/lib/recyclerlistview";
 
-import { createCollapsibleScrollView } from "./src/create-collapsible-scrollView";
+import { createCollapsibleScrollView } from "./src/create-collapsible-scroll-view";
 import { SceneComponent } from "./src/scene";
 import { SceneProps } from "./src/types";
 
