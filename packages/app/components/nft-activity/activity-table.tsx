@@ -3,12 +3,12 @@ import { FlatList, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@showtime-xyz/universal.view";
 
-import type { TableProps } from "./nft-activity.types";
+import type { Activity, TableProps } from "./nft-activity.types";
 import TableHead from "./table-head";
 import TableRow from "./table-row";
 
 const ActivityTable = ({ data }: TableProps) => {
-  const handleRenderItem = useCallback(({ item }) => {
+  const handleRenderItem = useCallback(({ item }: { item: Activity }) => {
     return <TableRow {...item} />;
   }, []);
 

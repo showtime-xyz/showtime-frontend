@@ -9,9 +9,9 @@ export interface NFTDetailsPayload {
   };
 }
 
-const useNFTActivities = ({ nftId }: { nftId: number }) => {
+const useNFTActivities = ({ nftId }: { nftId?: number }) => {
   const { data, error } = useSWR<NFTDetailsPayload>(
-    `/v1/nft_history/${nftId}`,
+    nftId ? `/v1/nft_history/${nftId}` : null,
     fetcher
   );
 
