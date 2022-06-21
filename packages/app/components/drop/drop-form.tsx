@@ -183,7 +183,10 @@ export const DropForm = () => {
           <Button
             variant="tertiary"
             tw="mt-4"
-            onPress={() => router.push(claimUrl)}
+            onPress={Platform.select({
+              web: () => router.push(claimUrl),
+              default: router.pop,
+            })}
           >
             Skip for now
           </Button>
