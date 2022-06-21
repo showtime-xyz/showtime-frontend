@@ -1,12 +1,14 @@
-import { Suspense, useCallback, useMemo, useState, forwardRef } from "react";
+import { forwardRef, Suspense, useContext } from "react";
+import { ViewStyle } from "react-native";
 
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-import { Haptics } from "app/lib/haptics";
 
+import { TabSpinner } from "design-system/tab-view/tab-spinner";
+
+import { TrendingContext } from "./context";
 import { CreatorsList } from "./creators-list";
-import { ListHeader } from "./list-header";
 import { NFTSList } from "./nfts-list";
 
 export type TrendingTabListRef = {
@@ -14,75 +16,28 @@ export type TrendingTabListRef = {
 };
 export type TrendingTabListProps = {
   days: number;
-  SelectionControl?: JSX.Element;
   index: number;
 };
-
+const getTabListStyle = (condition: boolean): ViewStyle => ({
+  display: condition ? "flex" : "none",
+  flex: 1,
+});
+// Todo: lazy load NFTSLIST
 export const TabListContainer = forwardRef<
   TrendingTabListRef,
   TrendingTabListProps
 >(function TabListContainer({ days, index }, ref) {
-  const [selected, setSelected] = useState(0);
-
-  const handleTabChange = useCallback(
-    (index: number) => {
-      Haptics.impactAsync();
-      setSelected(index);
-    },
-    [setSelected]
-  );
-
-  const SelectionControl = useMemo(
-    () => (
-      <SegmentedControl
-        values={["CREATOR", "NFT"]}
-        onChange={handleTabChange}
-        selectedIndex={selected}
-      />
-    ),
-    [selected, handleTabChange]
-  );
-
-  return useMemo(
-    () =>
-      [
-        <ErrorBoundary key="error-boundary-1">
-          <Suspense
-            fallback={
-              <ListHeader
-                isLoading={true}
-                SelectionControl={SelectionControl}
-                length={0}
-              />
-            }
-          >
-            <CreatorsList
-              days={days}
-              index={index}
-              SelectionControl={SelectionControl}
-              ref={ref}
-            />
-          </Suspense>
-        </ErrorBoundary>,
-        <ErrorBoundary key="error-boundary-2">
-          <Suspense
-            fallback={
-              <ListHeader
-                isLoading={true}
-                SelectionControl={SelectionControl}
-                length={0}
-              />
-            }
-          >
-            <NFTSList
-              days={days}
-              index={index}
-              SelectionControl={SelectionControl}
-              ref={ref}
-            />
-          </Suspense>
-        </ErrorBoundary>,
-      ][selected],
-    [SelectionControl, days, index, ref, selected]
+  const selected = useContext(TrendingContext);
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<TabSpinner index={index} />}>
+        <View style={getTabListStyle(selected[index] === 0)}>
+          <CreatorsList days={days} index={index} ref={ref} />
+        </View>
+        <View style={getTabListStyle(selected[index] === 1)}>
+          <NFTSList days={days} index={index} ref={ref} />
+        </View>
+      </Suspense>
+    </ErrorBoundary>
   );
 });

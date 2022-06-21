@@ -1,21 +1,47 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
+import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
+import { Haptics } from "app/lib/haptics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { HeaderTabView } from "design-system/tab-view/index";
 import { Route } from "design-system/tab-view/src/types";
 
+import { TrendingContext } from "./context";
 import { TabListContainer, TrendingTabListRef } from "./tab-list";
 
+type TrendingTabRoute = Route & {
+  days: number;
+};
+const TRENDING_ROUTE = [
+  {
+    title: "Today",
+    key: "Today",
+    index: 0,
+    days: 1,
+  },
+  {
+    title: "This week",
+    key: "Week",
+    index: 1,
+    days: 7,
+  },
+  {
+    title: "This month",
+    key: "Month",
+    index: 2,
+    days: 30,
+  },
+];
 export const Trending = () => {
   const headerHeight = useHeaderHeight();
   const contentWidth = useContentWidth();
@@ -27,23 +53,7 @@ export const Trending = () => {
     routes,
     setTabRefs,
     currentTab,
-  } = useTabState<TrendingTabListRef>([
-    {
-      title: "Today",
-      key: "Today",
-      index: 0,
-    },
-    {
-      title: "This week",
-      key: "Week",
-      index: 1,
-    },
-    {
-      title: "This month",
-      key: "Month",
-      index: 2,
-    },
-  ]);
+  } = useTabState<TrendingTabListRef, TrendingTabRoute>(TRENDING_ROUTE);
 
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -56,13 +66,37 @@ export const Trending = () => {
 
   const renderScene = useCallback(
     ({
-      route: { index },
+      route: { index, days },
     }: SceneRendererProps & {
-      route: Route;
+      route: TrendingTabRoute;
     }) => {
-      return <TabListContainer days={1} index={index} ref={setTabRefs} />;
+      return <TabListContainer days={days} index={index} ref={setTabRefs} />;
     },
     [setTabRefs]
+  );
+  const [selecteds, setSelecteds] = useState({
+    ...TRENDING_ROUTE.map(() => 0),
+  });
+
+  const renderSceneHeader = useCallback(
+    (props: TrendingTabRoute) => {
+      return (
+        <View tw="bg-white p-4 dark:bg-black">
+          <SegmentedControl
+            values={["CREATOR", "NFT"]}
+            onChange={(newIndex) => {
+              Haptics.impactAsync();
+              setSelecteds({
+                ...selecteds,
+                [props.index]: newIndex,
+              });
+            }}
+            selectedIndex={selecteds[props.index]}
+          />
+        </View>
+      );
+    },
+    [selecteds]
   );
   const renderHeader = useCallback(() => {
     return (
@@ -76,28 +110,32 @@ export const Trending = () => {
       </>
     );
   }, [headerHeight]);
+
   return (
-    <View tw="flex-1 bg-white dark:bg-black">
-      <HeaderTabView
-        onStartRefresh={onStartRefresh}
-        isRefreshing={isRefreshing}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        renderScrollHeader={renderHeader}
-        minHeaderHeight={Platform.select({
-          default: headerHeight,
-          android: 0,
-        })}
-        refreshControlTop={Platform.select({
-          ios: headerHeight,
-          default: 0,
-        })}
-        initialLayout={{
-          width: contentWidth,
-        }}
-        style={tw.style("z-1")}
-      />
-    </View>
+    <TrendingContext.Provider value={selecteds}>
+      <View style={{ width: contentWidth }} tw="flex-1">
+        <HeaderTabView<TrendingTabRoute>
+          onStartRefresh={onStartRefresh}
+          isRefreshing={isRefreshing}
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          renderScrollHeader={renderHeader}
+          minHeaderHeight={Platform.select({
+            default: headerHeight,
+            android: 0,
+          })}
+          refreshControlTop={Platform.select({
+            ios: headerHeight,
+            default: 0,
+          })}
+          initialLayout={{
+            width: contentWidth,
+          }}
+          style={tw.style("z-1")}
+          renderSceneHeader={renderSceneHeader}
+        />
+      </View>
+    </TrendingContext.Provider>
   );
 };

@@ -11,13 +11,12 @@ import { useRouter } from "app/navigation/use-router";
 
 import { TabRecyclerList } from "design-system/tab-view";
 
-import { ListHeader } from "./list-header";
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 
 const GAP_BETWEEN_ITEMS = 1;
 
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
-  function NFTSList({ days, SelectionControl, index }, ref) {
+  function NFTSList({ days, index }, ref) {
     const router = useRouter();
     const { data, isLoadingMore, isLoading, refresh, fetchMore } =
       useTrendingNFTS({
@@ -34,37 +33,21 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       () => <ListFooter isLoading={isLoadingMore} />,
       [isLoadingMore]
     );
-    const newData = useMemo(() => ["header", ...data], [data]);
 
     const numColumns = 3;
-
-    const ListHeaderComponent = useCallback(
-      () => (
-        <ListHeader
-          isLoading={isLoading}
-          SelectionControl={SelectionControl}
-          length={data?.length}
-        />
-      ),
-      [SelectionControl, data, isLoading]
-    );
 
     let dataProvider = useMemo(
       () =>
         new DataProvider((r1, r2) => {
           return r1.profile_id !== r2.profile_id;
-        }).cloneWithRows(newData),
-      [newData]
+        }).cloneWithRows(data),
+      [data]
     );
 
-    const _layoutProvider = useNFTCardsListLayoutProvider({ newData });
+    const _layoutProvider = useNFTCardsListLayoutProvider({ newData: data });
 
     const _rowRenderer = useCallback(
       (_type: any, item: any, index: number) => {
-        if (_type === "header") {
-          return <ListHeaderComponent />;
-        }
-
         return (
           <Card
             nft={item}
@@ -80,7 +63,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
           />
         );
       },
-      [ListHeaderComponent, router, days]
+      [router, days]
     );
 
     return (
