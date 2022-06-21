@@ -4,14 +4,14 @@ import { createParam } from "app/navigation/use-param";
 
 import { Route } from "design-system/tab-view/src/types";
 
-type Query = {
-  tab: number;
-};
-const { useParam } = createParam<Query>();
+const { useParam } = createParam();
 
-export function useTabState<PageRef>(routesProps: Route[]) {
+export function useTabState<PageRef, T = Route>(
+  routesProps: T[],
+  params = "tab"
+) {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [index, setIndex] = useParam("tab", {
+  const [index, setIndex] = useParam(params, {
     parse: (v) => Number(v ?? 0),
     initial: 0,
   });
