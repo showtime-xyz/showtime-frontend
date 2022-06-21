@@ -165,7 +165,7 @@ export const NotificationsTabBarIcon = ({
   onPress,
 }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/notifications" onPress={onPress}>
+    <TabBarIcon tab={onPress ? "" : "/notifications"} onPress={onPress}>
       {focused ? (
         <BellFilled
           style={tw.style("z-1")}

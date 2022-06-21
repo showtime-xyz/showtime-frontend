@@ -179,7 +179,7 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
+          tw="mt-2 overflow-hidden rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
           style={Platform.select({
             web: { maxHeight: "calc(50vh - 64px)" },
             default: {},
