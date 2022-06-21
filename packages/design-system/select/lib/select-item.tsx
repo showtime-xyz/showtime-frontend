@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, forwardRef } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Pressable, GestureResponderEvent } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -22,9 +22,7 @@ const BACKGROUND_MAPPER = {
   hover: [colors.gray[800], colors.gray[200]],
 };
 
-export const SelectItem = forwardRef(SelectItemComponent);
-
-function SelectItemComponent<T>({
+export function SelectItem<T>({
   label,
   value,
   disabled,
