@@ -25,7 +25,6 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { BuyButton } from "app/components/buy-button";
 import { Collection } from "app/components/card/rows/collection";
 import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
@@ -365,9 +364,9 @@ export const FeedItem = memo(
                 {isCreatorDrop && edition ? (
                   <ClaimButton edition={edition} />
                 ) : null}
-                {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
+                {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
               </View>
-              <Owner nft={nft} price={Platform.OS !== "ios"} />
+              <Owner nft={nft} price={false} />
               {/* Comments */}
             </View>
           </View>
@@ -472,7 +471,7 @@ const NFTDetails = ({
       <View tw="flex-row items-center justify-between px-4">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
         {isCreatorDrop && edition ? <ClaimButton edition={edition} /> : null}
-        {!isCreatorDrop ? <BuyButton nft={nft} /> : null}
+        {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
 
       <View tw="h-4" />

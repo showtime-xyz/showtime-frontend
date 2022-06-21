@@ -33,15 +33,13 @@ export function Price({ nft }: Props) {
     !nft ||
     !data ||
     (!loading && data.card_summary.length > 0 && !data.card_summary[0].listing)
-  )
+  ) {
     return null;
+  }
 
   return (
     <View tw="flex justify-end">
-      <Text
-        style={{ fontSize: 12 }}
-        tw="text-right font-semibold text-gray-600 dark:text-gray-400"
-      >
+      <Text tw="text-right text-xs font-semibold text-gray-600 dark:text-gray-400">
         🏷 Price
       </Text>
       <View tw="h-1" />
@@ -50,10 +48,7 @@ export function Price({ nft }: Props) {
         height={13}
         colorMode={isDarkMode ? "dark" : "light"}
       >
-        <Text
-          style={{ fontSize: 13, lineHeight: 14 }}
-          tw="text-right font-bold uppercase text-gray-900 dark:text-white"
-        >
+        <Text tw="text-13 text-right font-bold uppercase text-gray-900 dark:text-white">
           {price}
         </Text>
       </Skeleton>
