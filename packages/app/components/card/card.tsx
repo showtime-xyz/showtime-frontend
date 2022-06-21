@@ -111,7 +111,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
 
           <Social nft={nft} />
 
-          <Owner nft={nft} price={Platform.OS !== "ios"} />
+          <Owner nft={nft} price={false} />
 
           <View tw="mx-4 mt-2 h-[1px] bg-gray-100 dark:bg-gray-900" />
           <Collection nft={nft} />
