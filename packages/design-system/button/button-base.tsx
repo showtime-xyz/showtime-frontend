@@ -29,6 +29,7 @@ export function BaseButton({
   children,
   asChild,
   disabled,
+  style: propStyle,
   ...props
 }: BaseButtonProps) {
   //#region variables
@@ -110,10 +111,7 @@ export function BaseButton({
       {...props}
       tw={containerStyle}
       disabled={disabled}
-      style={[
-        backgroundColors ? containerAnimatedStyle : undefined,
-        props.style,
-      ]}
+      style={[backgroundColors ? containerAnimatedStyle : undefined, propStyle]}
     >
       {renderChildren}
     </PressableScale>
