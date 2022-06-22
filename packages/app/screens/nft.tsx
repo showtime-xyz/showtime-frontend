@@ -1,8 +1,6 @@
 import { Suspense, useMemo } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import Head from "next/head";
-
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
@@ -91,42 +89,11 @@ const NFTDetail = () => {
 
   if (nft) {
     return (
-      <>
-        <Head>
-          <title>{nft.token_name} | Showtime</title>
-
-          <meta name="description" content={nft.token_description} />
-          <meta property="og:type" content="website" />
-          <meta name="og:description" content={nft.token_description} />
-          <meta
-            property="og:image"
-            content={
-              nft.token_img_twitter_url
-                ? nft.token_img_twitter_url
-                : nft.token_img_url
-            }
-          />
-          <meta name="og:title" content={nft.token_name} />
-
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={nft.token_name} />
-          <meta name="twitter:description" content={nft.token_description} />
-          <meta
-            name="twitter:image"
-            content={
-              nft.token_img_twitter_url
-                ? nft.token_img_twitter_url
-                : nft.token_img_url
-            }
-          />
-        </Head>
-
-        <FeedItem
-          itemHeight={itemHeight}
-          bottomPadding={safeAreaBottom}
-          nft={nftWithListing}
-        />
-      </>
+      <FeedItem
+        itemHeight={itemHeight}
+        bottomPadding={safeAreaBottom}
+        nft={nftWithListing}
+      />
     );
   }
 
