@@ -9,7 +9,7 @@ import { getMediaUrl } from "app/utilities";
 const NFTPage = ({ nft }: { nft: NFT }) => {
   let metaTags = null;
   if (nft) {
-    // TODO: stillPreview true returnr 404 for drops. This is not optimal for video drop NFTs.
+    // TODO: stillPreview true returns 404 for drops. This is not optimal for video drop NFTs.
     const imageUrl = getMediaUrl({ nft, stillPreview: false });
 
     metaTags = (
