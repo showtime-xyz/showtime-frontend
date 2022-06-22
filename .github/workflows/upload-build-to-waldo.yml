@@ -29,7 +29,7 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Upload build to Waldo
-      - uses: waldoapp/gh-action-upload@v1
+        uses: waldoapp/gh-action-upload@v1
         with:
           build_path: ${{ env.APP_PATH }}
           upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN }}
