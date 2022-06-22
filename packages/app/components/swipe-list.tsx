@@ -16,7 +16,10 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { Divider } from "@showtime-xyz/universal.divider";
-import { useBlurredBackgroundStyles, useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  useBlurredBackgroundStyles,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
