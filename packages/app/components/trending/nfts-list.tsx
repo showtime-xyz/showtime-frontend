@@ -18,10 +18,9 @@ const GAP_BETWEEN_ITEMS = 1;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ days, index }, ref) {
     const router = useRouter();
-    const { data, isLoadingMore, isLoading, refresh, fetchMore } =
-      useTrendingNFTS({
-        days,
-      });
+    const { data, isLoadingMore, refresh, fetchMore } = useTrendingNFTS({
+      days,
+    });
     useImperativeHandle(
       ref,
       () => ({

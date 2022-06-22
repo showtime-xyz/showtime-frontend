@@ -132,10 +132,18 @@ function getBackgroundColor(intensity: number, tint: BlurTint): string {
   }
 }
 
-export function useBlurredBackgroundColor(intensity: number): string {
+export function useBlurredBackgroundStyles(intensity: number): {
+  backgroundColor: string;
+  backdropFilter: string;
+  "-webkit-backdrop-filter": string;
+} {
   const isDark = useIsDarkMode();
 
-  return getBackgroundColor(intensity, isDark ? "dark" : "light");
+  return {
+    backgroundColor: getBackgroundColor(intensity, isDark ? "dark" : "light"),
+    backdropFilter: "blur(20px)",
+    "-webkit-backdrop-filter": "blur(20px)",
+  };
 }
 
 export function useIsMobileWeb() {

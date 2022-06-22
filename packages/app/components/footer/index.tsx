@@ -1,7 +1,7 @@
 import { useWindowDimensions } from "react-native";
 
 import {
-  useBlurredBackgroundColor,
+  useBlurredBackgroundStyles,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,7 +25,7 @@ const Footer = () => {
   const color = isDark ? "white" : "black";
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser();
-  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const { isTabBarHidden } = useNavigationElements();
 
   // Todo: on small screens, only 'marketing' page display this.
@@ -42,8 +42,7 @@ const Footer = () => {
       // @ts-expect-error
       style={{
         position: "fixed",
-        backdropFilter: "blur(20px)",
-        backgroundColor: blurredBackgroundColor,
+        ...blurredBackgroundStyles,
       }}
       tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
     >
