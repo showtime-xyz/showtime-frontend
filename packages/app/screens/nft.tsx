@@ -13,6 +13,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/swipe-list";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
@@ -25,6 +26,7 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
+const BOTTOM_GAP = 128;
 
 function NftScreen() {
   useTrackPageViewed({ name: "NFT" });
@@ -70,7 +72,8 @@ const NFTDetail = () => {
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { user } = useUser();
 
   const nftWithListing = useMemo(() => {
     return {
@@ -85,6 +88,8 @@ const NFTDetail = () => {
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
+  const bottomMargin =
+    Platform.OS === "web" && windowWidth < 768 && !!user ? BOTTOM_GAP : 0;
   const nft = data?.data?.item;
 
   if (nft) {
@@ -92,6 +97,7 @@ const NFTDetail = () => {
       <FeedItem
         itemHeight={itemHeight}
         bottomPadding={safeAreaBottom}
+        bottomMargin={bottomMargin}
         nft={nftWithListing}
       />
     );
