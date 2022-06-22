@@ -42,6 +42,7 @@
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link",
     "test": "jest ./component-tests",
+    "upload-build-to-waldo": "STAGE=development yarn expo:prebuild && cd ios && xcodebuild -workspace Showtime.xcworkspace -scheme Showtime -sdk iphonesimulator -configuration Release",
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
