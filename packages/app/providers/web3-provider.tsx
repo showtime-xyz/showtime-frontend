@@ -23,6 +23,17 @@ export function Web3Provider({
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
 
+  const handleSetWeb3 = async () => {
+    if (Platform.OS === "web" && magic.rpcProvider) {
+      const Web3Provider = (await import("@ethersproject/providers"))
+        .Web3Provider;
+      // @ts-ignore
+      const web3 = new Web3Provider(magic.rpcProvider);
+      console.log("set web3 if", web3);
+      setWeb3(web3);
+    }
+  };
+
   const Web3ContextValue = useMemo(
     () => ({
       web3,
@@ -67,6 +78,10 @@ export function Web3Provider({
       setWeb3(provider);
     }
   }, [connected, provider]);
+
+  useEffect(() => {
+    handleSetWeb3();
+  }, []);
 
   return (
     <Web3Context.Provider value={Web3ContextValue}>
