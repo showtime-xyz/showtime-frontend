@@ -167,8 +167,7 @@ const NotificationsInHeader = () => {
         <NotificationsTabBarIcon
           color={isDark ? "white" : "black"}
           focused={router.pathname === "/notifications"}
-          onPress={(e: any) => {
-            e.preventDefault();
+          onPress={() => {
             setIsOpen(!isOpen);
           }}
         />
