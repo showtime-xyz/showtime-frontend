@@ -430,7 +430,7 @@ export const FeedItem = memo(
 
           <Reanimated.View
             style={[
-              tw.style(`z-1 absolute bottom-0 right-0 left-0`),
+              tw.style("z-1 absolute right-0 left-0"),
               detailStyle,
               { bottom: bottomMargin },
             ]}
