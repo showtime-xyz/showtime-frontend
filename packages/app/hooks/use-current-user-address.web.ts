@@ -18,7 +18,7 @@ function useCurrentUserAddress() {
     } else {
       setUserAddress("");
     }
-  }, [activeChain, wagmiData]);
+  }, [activeChain, wagmiData, user?.data]);
 
   return { userAddress };
 }
