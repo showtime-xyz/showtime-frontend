@@ -139,7 +139,7 @@ const Profile = ({ address }: { address: string | null }) => {
               left: headerBgLeft,
               height: `calc(100% + 44px)`,
               // @ts-ignore
-              boxShadow: headerShadow,
+              boxShadow: data?.tabs?.length > 0 && headerShadow,
             }}
           />
         )}
@@ -159,6 +159,7 @@ const Profile = ({ address }: { address: string | null }) => {
     );
   }, [
     headerBgLeft,
+    data?.tabs?.length,
     headerShadow,
     headerHeight,
     address,
