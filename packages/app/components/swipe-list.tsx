@@ -56,6 +56,8 @@ import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { useBlurredBackgroundStyles } from "design-system/hooks";
+
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
@@ -281,6 +283,7 @@ export const FeedItem = memo(
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
     );
+    const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
 
     const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
@@ -431,9 +434,13 @@ export const FeedItem = memo(
             <BlurView
               tint={tint}
               intensity={100}
-              style={tw.style(
-                "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
-              )}
+              style={{
+                // @ts-ignore
+                ...blurredBackgroundStyles,
+                ...tw.style(
+                  "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
+                ),
+              }}
             >
               <NFTDetails edition={edition} nft={nft} listId={listId} />
               <View

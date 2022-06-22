@@ -10,10 +10,6 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  useBlurredBackgroundColor,
-  useIsDarkMode,
-} from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -36,6 +32,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
+import { useBlurredBackgroundStyles, useIsDarkMode } from "design-system/hooks";
 import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "./memo-with-theme";
@@ -340,7 +337,7 @@ const HeaderCenter = ({
 const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
-  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
 
@@ -374,8 +371,7 @@ const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
       // @ts-expect-error
       style={{
         position: "sticky",
-        backdropFilter: "blur(20px)",
-        backgroundColor: blurredBackgroundColor,
+        ...blurredBackgroundStyles,
       }}
       tw="top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm"
     >
