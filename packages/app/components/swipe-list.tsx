@@ -17,6 +17,7 @@ import Reanimated, {
 
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
@@ -55,8 +56,6 @@ import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
-
-import { useBlurredBackgroundStyles } from "design-system/hooks";
 
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 

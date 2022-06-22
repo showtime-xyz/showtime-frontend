@@ -10,6 +10,10 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  useBlurredBackgroundStyles,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -32,7 +36,6 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { useRouter } from "app/navigation/use-router";
 
-import { useBlurredBackgroundStyles, useIsDarkMode } from "design-system/hooks";
 import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "./memo-with-theme";
