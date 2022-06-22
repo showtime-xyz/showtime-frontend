@@ -6746,7 +6746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.hooks@npm:0.0.14, @showtime-xyz/universal.hooks@npm:^0.0.14":
+"@showtime-xyz/universal.hooks@npm:0.0.14":
   version: 0.0.14
   resolution: "@showtime-xyz/universal.hooks@npm:0.0.14"
   dependencies:
@@ -6758,6 +6758,21 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: f7e8149dd47b6641787299f5abe851cc383ab1e5a36ad6508cc1993e15b9063e5d1c5b150bcc9a0c3cf4c8791452cc579809d3484b9ec62722faca3e10d137fa
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.hooks@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "@showtime-xyz/universal.hooks@npm:0.0.15"
+  dependencies:
+    "@showtime-xyz/universal.color-scheme": 0.0.5
+    react-native-reanimated: 2.8.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: c795096b6ab270f18074b3ae90db3ef9344bd28ce994abfd5795a4250fd0ba511fa4212dd0f0faecee280581195673fd6ffc83fecfc5b8a5ae1d436406bafc98
   languageName: node
   linkType: hard
 
@@ -7303,7 +7318,7 @@ __metadata:
     "@showtime-xyz/universal.dropdown-menu": ^0.0.10
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.9
     "@showtime-xyz/universal.fieldset": ^0.0.26
-    "@showtime-xyz/universal.hooks": ^0.0.14
+    "@showtime-xyz/universal.hooks": ^0.0.15
     "@showtime-xyz/universal.icon": ^0.0.22
     "@showtime-xyz/universal.image": ^0.0.13
     "@showtime-xyz/universal.input": ^0.0.17

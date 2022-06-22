@@ -16,7 +16,10 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { Divider } from "@showtime-xyz/universal.divider";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  useBlurredBackgroundStyles,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
@@ -281,6 +284,7 @@ export const FeedItem = memo(
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
     );
+    const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
 
     const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
@@ -431,9 +435,13 @@ export const FeedItem = memo(
             <BlurView
               tint={tint}
               intensity={100}
-              style={tw.style(
-                "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
-              )}
+              style={{
+                // @ts-ignore
+                ...blurredBackgroundStyles,
+                ...tw.style(
+                  "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
+                ),
+              }}
             >
               <NFTDetails edition={edition} nft={nft} listId={listId} />
               <View

@@ -14,6 +14,7 @@ import {
   Plus,
   Showtime,
 } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,14 +31,14 @@ type TabBarIconProps = {
   color?: string;
   focused?: boolean;
   customTw?: TW;
-  onPress?: (e: any) => void;
+  onPress?: () => void;
 };
 
 type TabBarButtonProps = {
   tab: string;
   children: React.ReactNode;
   customTw?: TW;
-  onPress?: (e: any) => void;
+  onPress?: () => void;
 };
 
 function TabBarIcon({ tab, children, customTw, onPress }: TabBarButtonProps) {
@@ -46,8 +47,25 @@ function TabBarIcon({ tab, children, customTw, onPress }: TabBarButtonProps) {
   const isMdWidth = width >= breakpoints["md"];
 
   if (isWeb) {
+    if (onPress) {
+      return (
+        <Pressable onPress={onPress} disableHoverEffect={true}>
+          <View
+            tw="h-12 w-12 items-center justify-center rounded-full"
+            style={tw.style(
+              `${
+                isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
+              } ${customTw}`
+            )}
+          >
+            {children}
+          </View>
+        </Pressable>
+      );
+    }
+
     return (
-      <Link href={tab} onPress={onPress}>
+      <Link href={tab}>
         <View
           tw="h-12 w-12 items-center justify-center rounded-full"
           style={tw.style(
@@ -165,7 +183,7 @@ export const NotificationsTabBarIcon = ({
   onPress,
 }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab={onPress ? "" : "/notifications"} onPress={onPress}>
+    <TabBarIcon tab="/notifications" onPress={onPress}>
       {focused ? (
         <BellFilled
           style={tw.style("z-1")}
