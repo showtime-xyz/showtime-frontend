@@ -1911,13 +1911,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/wallet-sdk@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@coinbase/wallet-sdk@npm:3.2.0"
+"@coinbase/wallet-sdk@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@coinbase/wallet-sdk@npm:3.3.0"
   dependencies:
     "@metamask/safe-event-emitter": 2.0.0
     bind-decorator: ^1.0.11
     bn.js: ^5.1.1
+    buffer: ^6.0.3
     clsx: ^1.1.0
     eth-block-tracker: 4.4.3
     eth-json-rpc-filters: 4.2.2
@@ -1929,7 +1930,8 @@ __metadata:
     qs: ^6.10.3
     rxjs: ^6.6.3
     stream-browserify: ^3.0.0
-  checksum: e286b137182c222eac5b75b13fcaedcf9d015f991c50d4a3385fabdc0044851af75e42993d76f10c895b804c0cbc035c4f99fa840cdaa73d8fda84bf0e008058
+    util: ^0.12.4
+  checksum: 9d655cd69f21e607ae4bb931d2d80fa743c7c486d0ac8741fa69e296cbaa55c11a550c5885d4e1b80c7b8ac4702075bb190ed2d33bf580c0301036e70d7f8a2f
   languageName: node
   linkType: hard
 
@@ -7485,6 +7487,7 @@ __metadata:
     "@badrap/bar-of-progress": ^0.1.2
     "@biconomy/mexa": 2.0.24
     "@builder.io/partytown": ^0.5.2
+    "@coinbase/wallet-sdk": ^3.3.0
     "@expo/next-adapter": 3.1.7
     "@google/model-viewer": ^1.9.2
     "@growthbook/growthbook-react": ^0.7.0
@@ -10606,7 +10609,7 @@ __metadata:
     eventemitter3: ^4.0.7
     zustand: ^4.0.0-rc.1
   peerDependencies:
-    "@coinbase/wallet-sdk": ">=3.2.0"
+    "@coinbase/wallet-sdk": ">=3.3.0"
     "@walletconnect/ethereum-provider": ">=1.7.5"
     ethers: ">=5.5.1"
   peerDependenciesMeta:
@@ -34490,7 +34493,7 @@ __metadata:
   version: 0.4.12
   resolution: "wagmi@npm:0.4.12"
   dependencies:
-    "@coinbase/wallet-sdk": ^3.2.0
+    "@coinbase/wallet-sdk": ^3.3.0
     "@wagmi/core": ^0.3.8
     "@walletconnect/ethereum-provider": ^1.7.8
     react-query: ^4.0.0-beta.23
