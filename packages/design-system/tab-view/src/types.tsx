@@ -44,10 +44,6 @@ export type CollapsibleHeaderProps<T extends Route> = {
   refreshControlTop?: number;
   emptyBodyComponent?: JSX.Element | null;
   /**
-   * WEB_ONLY: Insert element into tabbar.
-   */
-  insertTabBarElement?: JSX.Element | null;
-  /**
    * WEB_ONLY: Insert element into tabbar on Sticky.
    */
   insertStickyTabBarElement?: JSX.Element | null;
@@ -56,7 +52,7 @@ export type CollapsibleHeaderProps<T extends Route> = {
 
 export type TabViewCustomRenders = {
   renderTabBarContainer: (children: any) => JSX.Element;
-  renderSceneHeader: (children: any) => JSX.Element;
+  renderSceneHeader: (children: any, props: any) => JSX.Element;
 };
 
 export type GestureContainerProps<T extends Route> = Pick<

@@ -90,7 +90,9 @@ function CollapsibleHeaderTabView<T extends Route>({
             navigationState: NavigationState<T>;
           }
         ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
-        renderScene={(props: any) => e.renderSceneHeader(renderScene(props))}
+        renderScene={(props: any) =>
+          e.renderSceneHeader(renderScene(props), props)
+        }
       />
     );
   };
