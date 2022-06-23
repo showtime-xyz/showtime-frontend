@@ -58,9 +58,9 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = () => {
   const signTypedData = useSignTypedData();
-  const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const { userAddress } = useCurrentUserAddress();
   const Alert = useAlert();
 
   const claimNFT = async (props: { minterAddress: string }) => {

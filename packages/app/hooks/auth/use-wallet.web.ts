@@ -6,6 +6,7 @@ import {
   useSigner,
   useNetwork,
   useSignTypedData,
+  useDisconnect,
 } from "wagmi";
 
 const useWallet = () => {
@@ -14,6 +15,7 @@ const useWallet = () => {
   const { data: wagmiSigner } = useSigner();
   const { activeChain } = useNetwork();
   const { signTypedDataAsync } = useSignTypedData();
+  const { disconnect } = useDisconnect();
 
   const getAddress = async () => {
     return wagmiData?.address;
@@ -36,6 +38,7 @@ const useWallet = () => {
     connected,
     signed,
     loggedIn,
+    disconnect,
     networkChanged,
     provider: wagmiSigner?.provider,
     signature: wagmiSignData,
