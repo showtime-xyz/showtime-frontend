@@ -41,35 +41,32 @@ Sentry.init({
 export default function App({ Component, pageProps, router }: AppProps) {
   useLogRocket();
 
-  let metaTags = null;
   const meta = pageProps.meta;
-  if (meta) {
-    metaTags = meta ? (
-      <>
-        <title>{meta.title}</title>
-        <meta key="title" name="title" content={meta.title} />
+  const metaTags = meta ? (
+    <>
+      <title>{meta.title}</title>
+      <meta key="title" name="title" content={meta.title} />
 
-        <meta name="description" content={meta.description} />
+      <meta name="description" content={meta.description} />
 
-        {/* Open graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={meta.title} />
-        <meta property="og:description" content={meta.description} />
-        <meta property="og:image" content={meta.image} />
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@Showtime_xyz" />
-        <meta name="twitter:title" content={meta.title} />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:image" content={meta.image} />
-      </>
-    ) : (
-      <>
-        <title>Showtime</title>
-        <meta key="title" name="title" content="Showtime" />
-      </>
-    );
-  }
+      {/* Open graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={meta.title} />
+      <meta property="og:description" content={meta.description} />
+      <meta property="og:image" content={meta.image} />
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@Showtime_xyz" />
+      <meta name="twitter:title" content={meta.title} />
+      <meta name="twitter:description" content={meta.description} />
+      <meta name="twitter:image" content={meta.image} />
+    </>
+  ) : (
+    <>
+      <title>Showtime</title>
+      <meta key="title" name="title" content="Showtime" />
+    </>
+  );
 
   return (
     <>
