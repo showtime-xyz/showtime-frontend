@@ -85,10 +85,7 @@ export const useClaimNFT = () => {
         const signature = await signTypedData(
           forwardRequest.domain,
           forwardRequest.types,
-          forwardRequest.value,
-          (error: string) => {
-            dispatch({ type: "error", error });
-          }
+          forwardRequest.value
         );
 
         Logger.log("Signature", signature);
