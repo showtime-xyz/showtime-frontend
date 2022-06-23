@@ -117,7 +117,9 @@ export const useAddWallet = () => {
           hideAfter: 4000,
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      // todo: handle error
+    }
   };
 
   return {
