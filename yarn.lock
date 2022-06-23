@@ -1910,31 +1910,7 @@ __metadata:
   checksum: 88f395ca0af2f3c0665b8ce7bb29e83647ec5d141e8735712aeeee4117081555436712966b6957aa1c461f6f826a4d23b0034e379c443a10e919f81c8748bf29
   languageName: node
   linkType: hard
-
-"@coinbase/wallet-sdk@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@coinbase/wallet-sdk@npm:3.3.0"
-  dependencies:
-    "@metamask/safe-event-emitter": 2.0.0
-    bind-decorator: ^1.0.11
-    bn.js: ^5.1.1
-    buffer: ^6.0.3
-    clsx: ^1.1.0
-    eth-block-tracker: 4.4.3
-    eth-json-rpc-filters: 4.2.2
-    eth-rpc-errors: 4.0.2
-    js-sha256: 0.9.0
-    json-rpc-engine: 6.1.0
-    keccak: ^3.0.1
-    preact: ^10.5.9
-    qs: ^6.10.3
-    rxjs: ^6.6.3
-    stream-browserify: ^3.0.0
-    util: ^0.12.4
-  checksum: 9d655cd69f21e607ae4bb931d2d80fa743c7c486d0ac8741fa69e296cbaa55c11a550c5885d4e1b80c7b8ac4702075bb190ed2d33bf580c0301036e70d7f8a2f
-  languageName: node
-  linkType: hard
-
+  
 "@coinbase/wallet-sdk@npm:^3.3.0":
   version: 3.3.0
   resolution: "@coinbase/wallet-sdk@npm:3.3.0"
