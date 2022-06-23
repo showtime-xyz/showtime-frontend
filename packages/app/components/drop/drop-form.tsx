@@ -23,6 +23,7 @@ import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
@@ -92,6 +93,7 @@ export const DropForm = () => {
   const user = useUser();
   const { isAuthenticated } = useUser();
   const { connected } = useWallet();
+  const { web3 } = useWeb3();
   const navigateToLogin = useNavigateToLogin();
 
   const onSubmit = (values: UseDropNFT) => {
@@ -129,7 +131,7 @@ export const DropForm = () => {
   }
 
   // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected) {
+  if (!connected && !web3) {
     return (
       <View tw="p-4">
         <ConnectButton
