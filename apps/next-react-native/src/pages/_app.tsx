@@ -90,7 +90,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="min-h-screen items-center overflow-x-hidden">
+          <View
+            tw="min-h-screen items-center"
+            // @ts-ignore currently overflow-x-hidden doesn't support web
+            style={{ overflowX: "hidden" }}
+          >
             <Component {...pageProps} />
           </View>
           <Footer />

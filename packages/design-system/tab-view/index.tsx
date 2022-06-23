@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, isValidElement } from "react";
 import { Platform, StatusBar, View } from "react-native";
 
 import {
@@ -24,6 +24,7 @@ export * from "react-native-tab-view-next";
 
 type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
   autoWidthTabBar?: boolean;
+  insertTabBarElement?: JSX.Element;
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
@@ -31,6 +32,7 @@ export function HeaderTabView<T extends Route>({
   autoWidthTabBar,
   renderScene,
   navigationState,
+  insertTabBarElement,
   ...props
 }: TabBarProps<T>) {
   const insets = useSafeAreaInsets();
@@ -40,13 +42,17 @@ export function HeaderTabView<T extends Route>({
       props: SceneRendererProps & {
         navigationState: NavigationState<Route>;
       }
-    ) =>
-      autoWidthTabBar ? (
-        <ScollableAutoWidthTabBar {...props} />
-      ) : (
-        <ScollableTabBar {...props} />
-      ),
-    [autoWidthTabBar]
+    ) => (
+      <>
+        {autoWidthTabBar ? (
+          <ScollableAutoWidthTabBar {...props} />
+        ) : (
+          <ScollableTabBar {...props} />
+        )}
+        {isValidElement(insertTabBarElement) && insertTabBarElement}
+      </>
+    ),
+    [autoWidthTabBar, insertTabBarElement]
   );
   const onPullEnough = useCallback(() => {
     Haptics.impactAsync();
