@@ -92,20 +92,20 @@ const Profile = ({ address }: { address: string | null }) => {
 
   const renderScene = useCallback(
     ({
-      route: { index },
+      route: { index: routeIndex },
     }: SceneRendererProps & {
       route: Route;
     }) => {
       return (
-        <ErrorBoundary>
-          <Suspense fallback={<TabSpinner index={index} />}>
-            {data?.tabs[index] && (
+        <ErrorBoundary key={`ProfileTabList-${routeIndex}`}>
+          <Suspense fallback={<TabSpinner index={routeIndex} />}>
+            {data?.tabs[routeIndex] && (
               <ProfileTabList
                 username={profileData?.data.profile.username}
                 profileId={profileData?.data.profile.profile_id}
                 isBlocked={isBlocked}
-                list={data?.tabs[index]}
-                index={index}
+                list={data?.tabs[routeIndex]}
+                index={routeIndex}
                 ref={setTabRefs}
               />
             )}
@@ -139,7 +139,7 @@ const Profile = ({ address }: { address: string | null }) => {
               left: headerBgLeft,
               height: `calc(100% + 44px)`,
               // @ts-ignore
-              boxShadow: headerShadow,
+              boxShadow: data?.tabs?.length > 0 && headerShadow,
             }}
           />
         )}
@@ -159,6 +159,7 @@ const Profile = ({ address }: { address: string | null }) => {
     );
   }, [
     headerBgLeft,
+    data?.tabs?.length,
     headerShadow,
     headerHeight,
     address,

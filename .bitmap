@@ -23,7 +23,7 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.21",
+        "version": "0.0.22",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
@@ -137,7 +137,7 @@
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.28",
+        "version": "0.0.29",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
@@ -203,13 +203,13 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.27",
+        "version": "0.0.28",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
     "spinner": {
         "scope": "showtime.universal",
-        "version": "0.0.15",
+        "version": "0.0.16",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/spinner"
     },
@@ -239,7 +239,7 @@
     },
     "toast": {
         "scope": "showtime.universal",
-        "version": "0.0.21",
+        "version": "0.0.22",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
     },

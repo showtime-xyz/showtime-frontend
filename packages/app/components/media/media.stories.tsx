@@ -1,11 +1,7 @@
-import { Meta } from "@storybook/react";
-
-import { Media } from "./index";
-
-export default {
-  component: Media,
-  title: "Components/Media",
-} as Meta;
+// export default {
+//   component: Media,
+//   title: "Components/Media",
+// } as Meta;
 
 // export const ImageWEBP: React.VFC<{}> = () => (
 //   <Media
