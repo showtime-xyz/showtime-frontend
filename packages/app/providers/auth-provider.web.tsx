@@ -10,9 +10,13 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { disconnect } = useDisconnect();
+  const handleDisconnect = () => {
+    disconnect();
+    localStorage.removeItem("walletconnect");
+  };
 
   return (
-    <AuthProviderBase onWagmiDisconnect={disconnect}>
+    <AuthProviderBase onWagmiDisconnect={handleDisconnect}>
       {children}
     </AuthProviderBase>
   );
