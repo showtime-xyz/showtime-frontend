@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { track } from "app/lib/analytics";
@@ -58,18 +58,18 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = () => {
   const signTypedData = useSignTypedData();
-  const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const { address: walletAddress } = useWallet();
   const Alert = useAlert();
 
   const claimNFT = async (props: { minterAddress: string }) => {
     try {
-      if (userAddress) {
+      if (walletAddress) {
         const targetInterface = new ethers.utils.Interface(minterABI);
         dispatch({ type: "loading" });
         const callData = targetInterface.encodeFunctionData("mintEdition", [
-          userAddress,
+          walletAddress,
         ]);
 
         const forwardRequest = await axios({
@@ -77,7 +77,7 @@ export const useClaimNFT = () => {
             callData
           )}&to_address=${encodeURIComponent(
             props.minterAddress
-          )}&from_address=${encodeURIComponent(userAddress)}`,
+          )}&from_address=${encodeURIComponent(walletAddress)}`,
           method: "GET",
         });
 
@@ -99,7 +99,7 @@ export const useClaimNFT = () => {
           data: {
             forward_request: forwardRequest,
             signature,
-            from_address: userAddress,
+            from_address: walletAddress,
           },
         });
 

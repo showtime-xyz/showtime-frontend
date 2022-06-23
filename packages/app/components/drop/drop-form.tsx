@@ -16,13 +16,16 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
 
@@ -87,6 +90,9 @@ export const DropForm = () => {
 
   const { state, dropNFT } = useDropNFT();
   const user = useUser();
+  const { isAuthenticated } = useUser();
+  const { connected } = useWallet();
+  const navigateToLogin = useNavigateToLogin();
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -113,6 +119,25 @@ export const DropForm = () => {
   //     <Text>Loading</Text>
   //   </View>
   // }
+
+  if (!isAuthenticated) {
+    return (
+      <View tw="p-4">
+        <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
 
   if (state.status === "success") {
     const claimUrl = `https://showtime.xyz/t/${[

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
-import { useDisconnect } from "wagmi";
 
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -23,10 +22,13 @@ import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
   children: React.ReactNode;
+  onWagmiDisconnect?: () => void;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const { disconnect: wagmiDisconnect } = useDisconnect();
+export function AuthProvider({
+  children,
+  onWagmiDisconnect,
+}: AuthProviderProps) {
   //#region state
   const [authenticationStatus, setAuthenticationStatus] =
     useState<AuthenticationStatus>("IDLE");
@@ -72,17 +74,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
    */
   const logout = useCallback(
     async function logout() {
-      if (Platform.OS === "web") {
-        localStorage.removeItem("walletconnect");
-        wagmiDisconnect?.();
-      }
       const wasUserLoggedIn = loginStorage.getLogin();
-
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         track("User Logged Out");
       }
       await rudder?.reset();
 
+      onWagmiDisconnect?.();
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
 
@@ -105,7 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [connector, mutate, router, setWeb3]
+    [connector, mutate, router, setWeb3, onWagmiDisconnect]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");
