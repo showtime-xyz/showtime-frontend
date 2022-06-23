@@ -20,7 +20,7 @@ export function useWalletLogin() {
   const { getNonce, rotateNonce } = useNonce();
   const { login: _login } = useAuth();
   const {
-    address,
+    address: walletAddress,
     connected,
     loggedIn,
     networkChanged,
@@ -29,6 +29,12 @@ export function useWalletLogin() {
     provider,
     signature,
   } = useWallet();
+  const { user } = useUser();
+
+  const getAddress = () => {
+    return walletAddress || user?.data.profile.wallet_addresses[0];
+  };
+
   const { isAuthenticated } = useUser();
   const accessToken = useAccessToken();
   const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
@@ -54,7 +60,8 @@ export function useWalletLogin() {
     }
   };
   const handleLogin = async () => {
-    const nonce = await fetchNonce(address);
+    const address = getAddress();
+    const nonce = await fetchNonce(address as string);
     if (nonce) {
       signMessage({
         message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
@@ -65,6 +72,7 @@ export function useWalletLogin() {
   };
   const handleSignature = async () => {
     try {
+      const address = getAddress();
       if (address && signature) {
         await _login(LOGIN_WALLET_ENDPOINT, {
           signature: signature,

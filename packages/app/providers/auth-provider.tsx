@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
+import { useDisconnect } from "wagmi";
 
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -22,13 +23,10 @@ import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
   children: React.ReactNode;
-  onWagmiDisconnect?: () => void;
 }
 
-export function AuthProvider({
-  children,
-  onWagmiDisconnect,
-}: AuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps) {
+  const { disconnect: wagmiDisconnect } = useDisconnect();
   //#region state
   const [authenticationStatus, setAuthenticationStatus] =
     useState<AuthenticationStatus>("IDLE");
@@ -76,7 +74,7 @@ export function AuthProvider({
     async function logout() {
       if (Platform.OS === "web") {
         localStorage.removeItem("walletconnect");
-        onWagmiDisconnect?.();
+        wagmiDisconnect?.();
       }
       const wasUserLoggedIn = loginStorage.getLogin();
 

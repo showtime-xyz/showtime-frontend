@@ -8,11 +8,14 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
+import { useWeb3 } from "./use-web3";
+
 const EXPECTED_CHAIN_ID =
   //@ts-ignore
   CHAIN_IDENTIFIERS[process.env.NEXT_PUBLIC_CHAIN_ID || "polygon"];
 
 export const useSignTypedData = () => {
+  let { web3 } = useWeb3();
   const { activeChain, switchNetworkAsync } = useNetwork();
   const Alert = useAlert();
   const { signTypedDataAsync } = useWagmiSignTypedData();
@@ -25,8 +28,16 @@ export const useSignTypedData = () => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await signTypedDataAsync({ domain, types, value });
-        resolve(result);
+        if (web3) {
+          const result = await web3
+            .getSigner()
+            ._signTypedData(domain, types, value);
+
+          resolve(result);
+        } else {
+          const result = await signTypedDataAsync({ domain, types, value });
+          resolve(result);
+        }
       } catch (e) {
         // Assuming transaction failed due to wrong network because checking error code is buggy
         // Putting it in error as Rainbow doesn't require switching network while signing chain
