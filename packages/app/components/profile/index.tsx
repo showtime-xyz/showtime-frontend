@@ -208,27 +208,21 @@ const Profile = ({ address }: { address: string | null }) => {
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={
-            Platform.OS === "web" ? (
-              <View
-                tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
-                style={{
-                  left: headerBgLeft,
-                  // @ts-ignore
-                  boxShadow: headerShadow,
-                }}
-              />
-            ) : null
+            <View
+              tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
+              style={{
+                left: headerBgLeft,
+                // @ts-ignore
+                boxShadow: headerShadow,
+              }}
+            />
           }
           insertTabBarElement={
-            Platform.OS === "web" ? (
-              <>
-                <View tw="absolute -bottom-11 w-full justify-between md:bottom-1.5 md:right-10 md:w-auto">
-                  <ProfileListFilter
-                    collections={data?.tabs[index]?.collections || []}
-                  />
-                </View>
-              </>
-            ) : null
+            <View tw="relative my-2 w-full justify-between md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+              <ProfileListFilter
+                collections={data?.tabs[index]?.collections || []}
+              />
+            </View>
           }
         />
       </View>

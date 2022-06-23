@@ -10,7 +10,6 @@ import { useWindowDimensions } from "react-native";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { getLocalFileURI } from "app/components/preview";
@@ -23,14 +22,12 @@ import { DataProvider } from "app/lib/recyclerlistview";
 import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 
-import { Hidden } from "design-system/hidden";
 import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./footer";
-import { ProfileListFilter } from "./profile-tab-filter";
 
 type TabListProps = {
   username?: string;
@@ -91,19 +88,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const ListHeaderComponent = useCallback(
-      () => (
-        <View tw="p-4">
-          <Hidden platform="web">
-            <ProfileListFilter collections={list.collections} />
-          </Hidden>
-        </View>
-      ),
-      [list.collections]
-    );
-
     const newData = useMemo(() => {
-      let newData: any = ["header"];
+      let newData: any = [];
       if (isBlocked) return newData;
       if (
         mintingState.loading &&
@@ -135,13 +121,9 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       user?.data.profile.profile_id,
     ]);
 
-    const headerHeight = useMemo(
-      () => (isBlocked ? 80 : width < 768 ? 80 : 32),
-      [width, isBlocked]
-    );
     const _layoutProvider = useNFTCardsListLayoutProvider({
       newData,
-      headerHeight,
+      headerHeight: 0,
     });
 
     const dataProvider = useMemo(
@@ -164,17 +146,12 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     );
     const _rowRenderer = useCallback(
       (_type: any, item: any) => {
-        if (_type === "header") {
-          return <ListHeaderComponent />;
-        }
-
         // currently minting nft
         if (item.loading) {
           return <Card nft={item} numColumns={3} />;
         }
 
         return (
-          // index - 1 because header takes the initial index!
           <Card
             nft={item}
             numColumns={3}
@@ -186,15 +163,23 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           />
         );
       },
-      [list.type, ListHeaderComponent, onItemPress]
+      [list.type, onItemPress]
     );
     if (isBlocked) {
       return (
-        <View tw="mt-8 items-center justify-center">
-          <Text tw="text-gray-900 dark:text-white">
-            <Text tw="font-bold">@{username}</Text> is blocked
-          </Text>
-        </View>
+        <TabScrollView
+          contentContainerStyle={tw.style("mt-12 items-center")}
+          index={index}
+        >
+          <EmptyPlaceholder
+            title={
+              <Text tw="text-gray-900 dark:text-white">
+                <Text tw="font-bold">@{username}</Text> is blocked
+              </Text>
+            }
+            hideLoginBtn
+          />
+        </TabScrollView>
       );
     }
 
