@@ -264,6 +264,7 @@ export const FeedItem = memo(
   ({
     nft,
     bottomPadding = 0,
+    bottomMargin = 0,
     itemHeight,
     hideHeader,
     showHeader,
@@ -277,6 +278,7 @@ export const FeedItem = memo(
     hideHeader: any;
     toggleHeader: any;
     bottomPadding: number;
+    bottomMargin?: number;
     itemHeight: number;
     listId?: number;
   }) => {
@@ -428,8 +430,9 @@ export const FeedItem = memo(
 
           <Reanimated.View
             style={[
-              tw.style("z-1 absolute bottom-0 right-0 left-0"),
+              tw.style("z-1 absolute right-0 left-0"),
               detailStyle,
+              { bottom: bottomMargin },
             ]}
           >
             <BlurView
