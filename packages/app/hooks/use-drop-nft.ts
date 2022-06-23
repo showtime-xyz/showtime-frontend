@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
@@ -89,14 +89,14 @@ export type UseDropNFT = {
 export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMediaToPinata();
-  const { address: walletAddress } = useWallet();
+  const { userAddress } = useCurrentUserAddress();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const Alert = useAlert();
 
   const dropNFT = async (params: UseDropNFT) => {
     try {
-      if (walletAddress) {
+      if (userAddress) {
         const targetInterface = new ethers.utils.Interface(editionCreatorABI);
 
         const fileMetaData = await getFileMeta(params.file);
@@ -135,7 +135,7 @@ export const useDropNFT = () => {
           )}&to_address=${encodeURIComponent(
             //@ts-ignore
             metaSingleEditionMintableCreator
-          )}&from_address=${walletAddress}`,
+          )}&from_address=${userAddress}`,
           method: "GET",
         });
 
@@ -158,7 +158,7 @@ export const useDropNFT = () => {
           data: {
             forward_request: forwardRequest,
             signature,
-            from_address: walletAddress,
+            from_address: userAddress,
           },
         });
 
