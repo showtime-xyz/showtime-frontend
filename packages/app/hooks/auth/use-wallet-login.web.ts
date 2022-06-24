@@ -1,6 +1,8 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 
-import { useAccessToken } from "../../lib/access-token";
+import { useAccessToken } from "app/lib/access-token";
+import { isMobile } from "app/utilities";
+
 import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
@@ -19,6 +21,7 @@ export function useWalletLogin() {
   const { setWeb3 } = useWeb3();
   const { getNonce, rotateNonce } = useNonce();
   const { login: _login } = useAuth();
+  const [showSignMessage, setShowSignMessage] = useState(false);
   const {
     address: walletAddress,
     connected,
@@ -101,7 +104,13 @@ export function useWalletLogin() {
     ) {
       handleSetWeb3();
     } else if (connected && !authenticated && loggedIn) {
-      handleLogin();
+      // TODO: refactor after getting a better alternative
+      // https://github.com/rainbow-me/rainbowkit/discussions/536
+      if (isMobile()) {
+        setShowSignMessage(true);
+      } else {
+        handleLogin();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
@@ -113,5 +122,12 @@ export function useWalletLogin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signed]);
 
-  return { status, name, error, loginWithWallet: handleLogin };
+  return {
+    status,
+    name,
+    error,
+    loginWithWallet: handleLogin,
+    showSignMessage,
+    verifySignature: handleLogin,
+  };
 }
