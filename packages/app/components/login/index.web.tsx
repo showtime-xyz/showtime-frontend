@@ -87,7 +87,7 @@ export function Login({ onLogin }: LoginProps) {
             cost any gas.
           </Text>
           <Button tw="mt-8" onPress={verifySignature}>
-            Sign a message
+            Sign the message
           </Button>
         </View>
       ) : (
