@@ -48,7 +48,7 @@ export function Creator({
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>
-          {shouldShowDateCreated && nft.token_created ? (
+          {shouldShowDateCreated && nft.token_created && (
             <>
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
@@ -57,7 +57,7 @@ export function Creator({
                 })}
               </Text>
             </>
-          ) : null}
+          )}
         </View>
       </View>
     </Link>
