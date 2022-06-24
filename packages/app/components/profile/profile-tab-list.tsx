@@ -50,7 +50,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     const router = useRouter();
     const { user } = useUser();
     const { state: mintingState } = useContext(MintContext);
-    const { width, height } = useWindowDimensions();
+    const { height } = useWindowDimensions();
 
     const { filter } = useContext(FilterContext);
 
