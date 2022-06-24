@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
-import { Tooltip } from "@showtime-xyz/universal.tooltip";
+import { Tooltip } from "@showtime-xyz/universal.tooltip/index";
 import { View } from "@showtime-xyz/universal.view";
 
 import type { NFT } from "app/types";
@@ -10,10 +10,11 @@ import type { NFT } from "app/types";
 type Props = {
   nft?: NFT;
   cardMaxWidth?: number;
+  disableTooltip?: boolean;
 };
 
-function Title({ nft, cardMaxWidth }: Props) {
-  const [isUseTooltip] = useState(Platform.OS === "web");
+function Title({ nft, cardMaxWidth, disableTooltip = false }: Props) {
+  const [isUseTooltip] = useState(Platform.OS === "web" && !disableTooltip);
   /**
    * Todo: If the content width is greater than the container width, use Tooltip components,
    * but now RecyclerList is used, I can't get valid data, so wait until we replace the list and then implement.
