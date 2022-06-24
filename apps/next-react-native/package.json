@@ -85,8 +85,7 @@
     "sotez": "^10.0.0",
     "swr": "2.0.0-beta.1",
     "wagmi": "^0.4.12",
-    "walletlink": "^2.2.8",
-    "web3modal": "^1.9.7"
+    "walletlink": "^2.2.8"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
