@@ -1,0 +1,13 @@
+diff --git a/node_modules/@rainbow-me/rainbowkit/dist/chunk-S7EOD33A.js b/node_modules/@rainbow-me/rainbowkit/dist/chunk-S7EOD33A.js
+index 9dc7933..5d2b3ba 100644
+--- a/node_modules/@rainbow-me/rainbowkit/dist/chunk-S7EOD33A.js
++++ b/node_modules/@rainbow-me/rainbowkit/dist/chunk-S7EOD33A.js
+@@ -3083,7 +3083,7 @@ function WalletButton({ wallet }) {
+           const mobileUri = await getMobileUri();
+           setWalletConnectDeepLink({ mobileUri, name });
+           if (mobileUri.startsWith("http")) {
+-            window.open(mobileUri, "_blank", "noreferrer,noopener");
++            window.location.href = mobileUri;
+           } else {
+             window.location.href = mobileUri;
+           }
