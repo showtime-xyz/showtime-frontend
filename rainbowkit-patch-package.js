@@ -14,5 +14,4 @@ const result = data.replace(
   "window.location.href = mobileUri;"
 );
 
-console.log("res ", result);
 fs.writeFileSync(rainbowkit, result, { encoding: "utf-8" });
