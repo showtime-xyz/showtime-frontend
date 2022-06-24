@@ -234,6 +234,7 @@ const HeaderRight = () => {
                   }}
                 >
                   <View
+                    testID="mint-nft"
                     tw={[
                       "h-12 w-12 items-center justify-center rounded-full",
                       "bg-black dark:bg-white",
