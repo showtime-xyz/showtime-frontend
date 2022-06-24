@@ -7,7 +7,7 @@ import type { UserItemProps } from "./nft-activity.types";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s112";
+    imgUrl = imgUrl.split("=")[0] + "=s64";
   }
   return imgUrl;
 };
