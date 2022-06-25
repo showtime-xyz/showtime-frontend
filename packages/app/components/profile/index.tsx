@@ -218,7 +218,7 @@ const Profile = ({ address }: { address: string | null }) => {
             />
           }
           insertTabBarElement={
-            <View tw="relative my-2 w-full justify-between md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 relative my-2 w-full justify-between md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
               <ProfileListFilter
                 collections={data?.tabs[index]?.collections || []}
               />
