@@ -11,3 +11,58 @@ index 9dc7933..5d2b3ba 100644
            } else {
              window.location.href = mobileUri;
            }
+diff --git a/node_modules/@rainbow-me/rainbowkit/dist/index.js b/node_modules/@rainbow-me/rainbowkit/dist/index.js
+index 31421a0..70e35f8 100644
+--- a/node_modules/@rainbow-me/rainbowkit/dist/index.js
++++ b/node_modules/@rainbow-me/rainbowkit/dist/index.js
+@@ -418,8 +418,7 @@ var steak = ({ chains }) => ({
+ });
+ 
+ // src/wallets/walletConnectors/trust/trust.ts
+-import { InjectedConnector as InjectedConnector3 } from "wagmi/connectors/injected";
+-var trust = ({ chains, shimDisconnect }) => ({
++var trust = ({ chains }) => ({
+   id: "trust",
+   name: "Trust Wallet",
+   iconUrl: async () => (await import("./trust-V37V6CEN.js")).default,
+@@ -430,16 +429,6 @@ var trust = ({ chains, shimDisconnect }) => ({
+     qrCode: "https://link.trustwallet.com"
+   },
+   createConnector: () => {
+-    var _a;
+-    const inAppBrowser = Boolean(typeof window !== "undefined" && ((_a = window.ethereum) == null ? void 0 : _a.isTrust));
+-    if (inAppBrowser) {
+-      return {
+-        connector: new InjectedConnector3({
+-          chains,
+-          options: { shimDisconnect }
+-        })
+-      };
+-    }
+     const connector = getWalletConnectConnector({ chains });
+     return {
+       connector,
+diff --git a/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/index.d.ts b/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/index.d.ts
+index 62ec7a6..6a932d7 100644
+--- a/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/index.d.ts
++++ b/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/index.d.ts
+@@ -8,6 +8,6 @@ export declare const wallet: {
+     metaMask: ({ chains, shimDisconnect, }: import("./metaMask/metaMask").MetaMaskOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
+     rainbow: ({ chains }: import("./rainbow/rainbow").RainbowOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
+     steak: ({ chains }: import("./steak/steak").SteakOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
+-    trust: ({ chains, shimDisconnect }: import("./trust/trust").TrustOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
++    trust: ({ chains }: import("./trust/trust").TrustOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
+     walletConnect: ({ chains }: import("./walletConnect/walletConnect").WalletConnectOptions) => import("../Wallet").Wallet<import("wagmi").Connector<any, any>>;
+ };
+diff --git a/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/trust/trust.d.ts b/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/trust/trust.d.ts
+index a6e19d5..889777a 100644
+--- a/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/trust/trust.d.ts
++++ b/node_modules/@rainbow-me/rainbowkit/dist/wallets/walletConnectors/trust/trust.d.ts
+@@ -2,6 +2,5 @@ import { Chain } from '../../../components/RainbowKitProvider/RainbowKitChainCon
+ import { Wallet } from '../../Wallet';
+ export interface TrustOptions {
+     chains: Chain[];
+-    shimDisconnect?: boolean;
+ }
+-export declare const trust: ({ chains, shimDisconnect }: TrustOptions) => Wallet;
++export declare const trust: ({ chains }: TrustOptions) => Wallet;
