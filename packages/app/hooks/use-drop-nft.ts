@@ -143,10 +143,7 @@ export const useDropNFT = () => {
         const signature = await signTypedData(
           forwardRequest.domain,
           forwardRequest.types,
-          forwardRequest.value,
-          (error) => {
-            dispatch({ type: "error", error });
-          }
+          forwardRequest.value
         );
 
         Logger.log("Signature", signature);

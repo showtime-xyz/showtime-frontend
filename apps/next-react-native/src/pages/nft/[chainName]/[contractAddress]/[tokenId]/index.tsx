@@ -18,7 +18,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           meta: {
-            title: nft.token_name,
+            title: nft.token_name + " | Showtime",
             description: nft.token_description,
             image: imageUrl,
           },

@@ -15,7 +15,6 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Divider } from "@showtime-xyz/universal.divider";
 import {
   useBlurredBackgroundStyles,
   useIsDarkMode,
@@ -28,11 +27,9 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
-import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { GiftButton } from "app/components/claim/gift-button";
@@ -310,7 +307,6 @@ export const FeedItem = memo(
 
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
-
     const mediaWidth = useMemo(() => {
       if (windowWidth >= MAX_HEADER_WIDTH) {
         return MAX_HEADER_WIDTH - NFT_DETAIL_WIDTH;
@@ -322,7 +318,7 @@ export const FeedItem = memo(
     if (windowWidth >= 768) {
       return (
         <LikeContextProvider nft={nft}>
-          <View tw="h-full w-full flex-row">
+          <View tw="h-full w-full max-w-screen-2xl flex-row">
             <View
               style={[
                 tw.style(
@@ -350,12 +346,12 @@ export const FeedItem = memo(
                 },
               ]}
             >
-              <Collection nft={nft} />
-              <Divider tw="my-2" />
               <Social nft={nft} />
               <LikedBy nft={nft} />
-              <View tw="mr-4 flex-row justify-between">
-                <Title nft={nft} />
+              <View tw="my-4 mr-4 flex-row justify-between px-4">
+                <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
+                  {nft.token_name}
+                </Text>
                 <Suspense fallback={<Skeleton width={24} height={24} />}>
                   {!isCreatorDrop ? (
                     <NFTDropdown nftId={nft.nft_id} listId={listId} />
@@ -363,8 +359,9 @@ export const FeedItem = memo(
                 </Suspense>
               </View>
               <Description nft={nft} />
-              <View tw="px-4">
+              <View tw="item-center flex-row justify-between px-4">
                 <Creator nft={nft} />
+                <Owner nft={nft} price={false} />
               </View>
               <View tw="px-4 py-4">
                 {isCreatorDrop && edition ? (
@@ -372,7 +369,7 @@ export const FeedItem = memo(
                 ) : null}
                 {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
               </View>
-              <Owner nft={nft} price={false} />
+
               {/* Comments */}
             </View>
           </View>
