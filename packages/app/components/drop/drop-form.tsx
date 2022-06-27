@@ -28,7 +28,11 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
+import {
+  getTwitterIntent,
+  getUserDisplayNameFromProfile,
+  isMobile,
+} from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
@@ -148,7 +152,7 @@ export const DropForm = () => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share,
+      web: typeof window !== "undefined" && !!navigator.share && isMobile(),
     });
 
     return (
@@ -348,7 +352,7 @@ export const DropForm = () => {
                   return (
                     <Fieldset
                       tw="flex-1"
-                      label="Your royalties"
+                      label="Your royalties (%)"
                       onBlur={onBlur}
                       helperText="How much you’ll earn each time this NFT is sold"
                       errorText={errors.royalty?.message}
