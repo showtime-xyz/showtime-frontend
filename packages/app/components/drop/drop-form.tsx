@@ -3,15 +3,14 @@ import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -31,6 +30,7 @@ import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
+import { ScrollView } from "design-system/scroll-view";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -115,6 +115,7 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   // if (state.transactionHash) {
   //   return <View>
@@ -224,7 +225,11 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView tw="p-4">
+      <ScrollView
+        tw="p-4"
+        asKeyboardAwareScrollView
+        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
+      >
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
