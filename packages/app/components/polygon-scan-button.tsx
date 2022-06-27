@@ -23,7 +23,7 @@ export const PolygonScanButton = ({
   }
 
   return (
-    <Button onPress={handleOpenPolygonScan} variant="tertiary">
+    <Button onPress={handleOpenPolygonScan} size="regular" variant="tertiary">
       <PolygonScan
         style={tw.style("rounded-lg overflow-hidden ")}
         color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
