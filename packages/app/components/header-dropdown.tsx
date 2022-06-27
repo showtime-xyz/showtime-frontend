@@ -11,6 +11,7 @@ import {
   DropdownMenuTriggerItem,
   DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,7 +19,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
 
 import { User, Settings, Edit, Moon, Sun, LogOut } from "design-system/icon";
 import { breakpoints } from "design-system/theme";

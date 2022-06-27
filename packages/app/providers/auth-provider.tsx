@@ -3,6 +3,8 @@ import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
@@ -16,7 +18,6 @@ import { magic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
-import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
 

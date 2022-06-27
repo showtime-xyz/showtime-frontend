@@ -3,7 +3,7 @@ import {
   HeaderBackButtonProps,
 } from "@react-navigation/elements";
 
-import { useRouter } from "app/navigation/use-router";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 export function HeaderBackButton(props: HeaderBackButtonProps) {
   const router = useRouter();

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useImperativeHandle, forwardRef } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -8,7 +9,6 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingCreators } from "app/hooks/api-hooks";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
-import { useRouter } from "app/navigation/use-router";
 
 import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";

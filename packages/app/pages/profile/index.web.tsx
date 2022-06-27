@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-import { useRouter } from "app/navigation/use-router";
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { ProfileScreen } from "app/screens/profile";
 
 function ProfileRouter() {

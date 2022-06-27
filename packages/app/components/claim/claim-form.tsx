@@ -3,6 +3,7 @@ import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -24,7 +25,6 @@ import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,

@@ -3,8 +3,8 @@ import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Message } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
 

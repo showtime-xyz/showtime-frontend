@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -14,7 +15,6 @@ import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
@@ -118,8 +118,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
       Platform.select({
         native: as,
         web: router.asPath.startsWith("/nft/") ? as : router.asPath,
-      }),
-      { shallow: true }
+      })
     );
   };
 

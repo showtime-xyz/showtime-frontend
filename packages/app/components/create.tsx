@@ -12,6 +12,7 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -26,7 +27,6 @@ import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";

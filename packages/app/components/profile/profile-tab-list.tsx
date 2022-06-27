@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -19,7 +20,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
-import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 
 import { TabRecyclerList, TabScrollView } from "design-system/tab-view";

@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useTimer } from "use-timer";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -12,7 +13,6 @@ import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { useRouter } from "app/navigation/use-router";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
 

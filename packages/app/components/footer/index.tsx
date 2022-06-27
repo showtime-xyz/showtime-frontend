@@ -4,6 +4,7 @@ import {
   useBlurredBackgroundStyles,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
@@ -15,7 +16,6 @@ import {
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-import { useRouter } from "app/navigation/use-router";
 
 import { WebFooter } from "./links-footer.web";
 
