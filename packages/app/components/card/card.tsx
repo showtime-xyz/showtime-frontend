@@ -33,7 +33,7 @@ type Props = {
   hrefProps?: UrlObject;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
+function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
@@ -100,11 +100,11 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
             </Suspense>
           </View>
 
-          <RouteComponent href={hrefProps} onPress={handleOnPress}>
+          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
           <View tw="mt-2">
-            <RouteComponent href={hrefProps} onPress={handleOnPress}>
+            <RouteComponent href={hrefProps!} onPress={handleOnPress}>
               <Title nft={nft} cardMaxWidth={cardMaxWidth} />
             </RouteComponent>
           </View>
