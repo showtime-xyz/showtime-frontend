@@ -1,4 +1,4 @@
-import { Component, seMemo } from "react";
+import { Component } from "react";
 import { ScrollView as ReactNativeScrollView } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
