@@ -83,7 +83,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
         }}
         tw={[
           size,
-          numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
+          numColumns >= 3 ? "mt-8" : numColumns === 2 ? "m-2" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",

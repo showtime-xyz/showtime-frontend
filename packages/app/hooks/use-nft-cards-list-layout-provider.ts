@@ -6,7 +6,7 @@ import { LayoutProvider } from "app/lib/recyclerlistview";
 import { MAX_CONTENT_WIDTH } from "../constants/layout";
 
 const LIST_HEADER_HEIGHT = 80;
-
+const LIST_MARGIN_TOP_LARGE = 32;
 const useNFTCardDimensions = () => {
   const { width } = useWindowDimensions();
 
@@ -14,7 +14,7 @@ const useNFTCardDimensions = () => {
     return { height: width / 3, width: width / 3 };
   }
   return {
-    height: 604,
+    height: 594 + LIST_MARGIN_TOP_LARGE,
     width: (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH) / 3,
   };
 };
