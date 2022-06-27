@@ -90,7 +90,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
           {/* {variant === "activity" && <Activity activity={act} />} */}
-          <View tw="flex-row items-center justify-between px-4 py-2">
+          <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <Suspense fallback={<Skeleton width={24} height={24} />}>
               {!isCreatorDrop ? (
@@ -110,9 +110,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
 
           <Social nft={nft} />
 
-          <View tw="py-2">
-            <Owner nft={nft} price={false} />
-          </View>
+          <Owner nft={nft} price={false} />
         </View>
       </View>
     </LikeContextProvider>
