@@ -11,6 +11,7 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,7 +31,6 @@ import { useRouter } from "app/navigation/use-router";
 import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
-import { ScrollView } from "design-system/scroll-view";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
