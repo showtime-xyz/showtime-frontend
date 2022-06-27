@@ -26,25 +26,5 @@ class ScrollView extends Component<ScrollViewProps> {
     );
   }
 }
-// function ScrollView({
-//   tw,
-//   style,
-//   asKeyboardAwareScrollView,
-//   ...props
-// }: ScrollViewProps) {
-//   const ScrollViewComponent = useMemo(() => {
-//     return asKeyboardAwareScrollView
-//       ? KeyboardAwareScrollView
-//       : ReactNativeScrollView;
-//   }, [asKeyboardAwareScrollView]);
-
-//   return (
-//     <ScrollViewComponent
-//       keyboardShouldPersistTaps="handled"
-//       {...props}
-//       style={[tailwind.style(tw), style]}
-//     />
-//   );
-// }
 
 export { ScrollView };
