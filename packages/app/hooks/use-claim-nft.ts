@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import { ethers } from "ethers";
 
@@ -12,7 +12,7 @@ import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { delay } from "app/utilities";
+import { delay, isMobileWeb } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
 
@@ -62,12 +62,74 @@ export const useClaimNFT = () => {
   const mutate = useMatchMutate();
   const { userAddress } = useCurrentUserAddress();
   const Alert = useAlert();
+  const [signMessageData, setSignMessageData] = useState({
+    status: "idle",
+    data: null,
+  });
+  const shouldShowSignMessage =
+    signMessageData.status === "should_sign" && isMobileWeb();
+
+  // @ts-ignore
+  const signTransaction = async ({ forwardRequest }) => {
+    if (isMobileWeb()) {
+      setSignMessageData({
+        status: "sign_requested",
+        data: { forwardRequest },
+      });
+    }
+
+    const signature = await signTypedData(
+      forwardRequest.domain,
+      forwardRequest.types,
+      forwardRequest.value
+    );
+
+    Logger.log("Signature", signature);
+    Logger.log("Submitting tx...");
+    const relayedTx = await axios({
+      url: `/v1/relayer/forward-request`,
+      method: "POST",
+      data: {
+        forward_request: forwardRequest,
+        signature,
+        from_address: userAddress,
+      },
+    });
+
+    let intervalMs = 2000;
+    for (let attempts = 0; attempts < 100; attempts++) {
+      Logger.log(`Checking tx... (${attempts + 1} / 20)`);
+      const response = await axios({
+        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
+        method: "GET",
+      });
+      Logger.log(response);
+
+      dispatch({
+        type: "transactionHash",
+        transactionHash: response.transaction_hash,
+      });
+
+      if (response.is_complete) {
+        track("NFT Claimed");
+        dispatch({ type: "success", mint: response.mint });
+        mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
+
+        return;
+      }
+
+      await delay(intervalMs);
+    }
+
+    dispatch({ type: "error", error: "polling timed out" });
+  };
 
   const claimNFT = async (props: { minterAddress: string }) => {
     try {
       if (userAddress) {
-        const targetInterface = new ethers.utils.Interface(minterABI);
         dispatch({ type: "loading" });
+
+        const targetInterface = new ethers.utils.Interface(minterABI);
         const callData = targetInterface.encodeFunctionData("mintEdition", [
           userAddress,
         ]);
@@ -82,50 +144,15 @@ export const useClaimNFT = () => {
         });
 
         Logger.log("Signing... ", forwardRequest);
-        const signature = await signTypedData(
-          forwardRequest.domain,
-          forwardRequest.types,
-          forwardRequest.value
-        );
 
-        Logger.log("Signature", signature);
-        Logger.log("Submitting tx...");
-        const relayedTx = await axios({
-          url: `/v1/relayer/forward-request`,
-          method: "POST",
-          data: {
-            forward_request: forwardRequest,
-            signature,
-            from_address: userAddress,
-          },
-        });
-
-        let intervalMs = 2000;
-        for (let attempts = 0; attempts < 100; attempts++) {
-          Logger.log(`Checking tx... (${attempts + 1} / 20)`);
-          const response = await axios({
-            url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
-            method: "GET",
+        if (isMobileWeb()) {
+          setSignMessageData({
+            status: "should_sign",
+            data: { forwardRequest },
           });
-          Logger.log(response);
-
-          dispatch({
-            type: "transactionHash",
-            transactionHash: response.transaction_hash,
-          });
-
-          if (response.is_complete) {
-            track("NFT Claimed");
-            dispatch({ type: "success", mint: response.mint });
-            mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
-
-            return;
-          }
-
-          await delay(intervalMs);
+        } else {
+          signTransaction({ forwardRequest });
         }
-
-        dispatch({ type: "error", error: "polling timed out" });
       } else {
         Alert.alert(
           "Wallet disconnected",
@@ -139,5 +166,11 @@ export const useClaimNFT = () => {
     }
   };
 
-  return { state, claimNFT };
+  return {
+    state,
+    claimNFT,
+    signMessageData,
+    signTransaction,
+    shouldShowSignMessage,
+  };
 };

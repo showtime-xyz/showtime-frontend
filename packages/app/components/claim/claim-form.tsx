@@ -33,27 +33,31 @@ import {
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const { state, claimNFT } = useClaimNFT();
+  const {
+    state,
+    claimNFT,
+    signMessageData,
+    signTransaction,
+    shouldShowSignMessage,
+  } = useClaimNFT();
   const share = useShare();
   const router = useRouter();
-
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
   const { connected } = useWallet();
   const navigateToLogin = useNavigateToLogin();
-
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
-
   const { follow } = useMyInfo();
-
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
+
+  const isSignRequested = signMessageData.status === "sign_requested";
 
   const handleClaimNFT = async () => {
     if (nft?.data.item.creator_id) {
@@ -224,17 +228,43 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
           <View tw="mt-4">
-            <Button
-              disabled={state.status === "loading"}
-              tw={state.status === "loading" ? "opacity-45" : ""}
-              onPress={handleClaimNFT}
-            >
-              {state.status === "loading"
-                ? "Claiming..."
-                : state.status === "error"
-                ? "Failed. Retry!"
-                : "Claim for free"}
-            </Button>
+            {shouldShowSignMessage ? (
+              <View tw="px-2">
+                {!isSignRequested ? (
+                  <Text tw="text-center text-lg dark:text-gray-400">
+                    We need a signature in order to complete the claim. This
+                    won't cost any gas.
+                  </Text>
+                ) : null}
+                <Button
+                  tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
+                  size="regular"
+                  variant="primary"
+                  disabled={isSignRequested}
+                  onPress={() => {
+                    // @ts-ignore
+                    signTransaction(signMessageData.data);
+                  }}
+                >
+                  {isSignRequested ? "Signing..." : "Sign Message"}
+                </Button>
+              </View>
+            ) : (
+              <Button
+                size="regular"
+                variant="primary"
+                disabled={state.status === "loading"}
+                tw={state.status === "loading" ? "opacity-45" : ""}
+                onPress={handleClaimNFT}
+              >
+                {state.status === "loading"
+                  ? "Claiming..."
+                  : state.status === "error"
+                  ? "Failed. Retry!"
+                  : "Claim for free"}
+              </Button>
+            )}
+
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>
