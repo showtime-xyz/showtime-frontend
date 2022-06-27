@@ -686,6 +686,6 @@ export function isIOS(): boolean {
   return isSmallIOS() || isLargeIOS();
 }
 
-export function isMobile(): boolean {
+export function isMobileWeb(): boolean {
   return isAndroid() || isIOS();
 }
