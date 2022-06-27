@@ -1,10 +1,14 @@
 import { ComponentProps, useRef } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
-import { Video as ExpoVideo } from "expo-av";
+import { Video as ExpoVideo, ResizeMode } from "expo-av/src";
+import { BlurView, BlurTint } from "expo-blur";
+import { Source } from "react-native-fast-image";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useVideoConfig } from "app/context/video-config-context";
@@ -14,12 +18,17 @@ type VideoProps = {
   blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, blurhash, resizeMode, ...props }: VideoProps) {
+export function Video({
+  tw,
+  blurhash,
+  resizeMode,
+  posterSource,
+  ...props
+}: VideoProps) {
   const videoConfig = useVideoConfig();
-
-  const videoRef = useRef<ExpoVideo>();
+  const videoRef = useRef<ExpoVideo>(null);
   // useItemVisible({ videoRef });
-
+  const { colorScheme } = useColorScheme();
   return (
     <View>
       {videoConfig?.previewOnly ? (
@@ -27,36 +36,35 @@ function Video({ tw, blurhash, resizeMode, ...props }: VideoProps) {
           tw={tw}
           resizeMode={resizeMode}
           blurhash={blurhash}
-          //@ts-ignore
-          source={props.posterSource}
+          source={posterSource as Source}
         />
       ) : (
-        <>
-          <Image
-            tw={tw}
+        <ImageBackground
+          style={tailwind.style(tw)}
+          source={posterSource as ImageSourcePropType}
+          imageStyle={StyleSheet.absoluteFill}
+          resizeMode="cover"
+        >
+          <BlurView
             style={StyleSheet.absoluteFill}
-            resizeMode={resizeMode}
-            blurhash={blurhash}
-            // @ts-ignore
-            source={props.posterSource}
+            tint={colorScheme as BlurTint}
+            intensity={85}
           />
-
           <ExpoVideo
-            style={StyleSheet.absoluteFill}
+            style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
             useNativeControls={videoConfig?.useNativeControls}
-            resizeMode="cover"
-            posterSource={props.posterSource}
+            resizeMode={ResizeMode.COVER}
+            posterSource={posterSource}
             source={props.source}
             ref={videoRef}
             shouldPlay
             isLooping
             isMuted={videoConfig?.isMuted}
+            videoStyle={tailwind.style("relative")}
             {...props}
           />
-        </>
+        </ImageBackground>
       )}
     </View>
   );
 }
-
-export { Video };
