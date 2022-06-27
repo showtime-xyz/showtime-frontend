@@ -8,7 +8,6 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
@@ -91,7 +90,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
           {/* {variant === "activity" && <Activity activity={act} />} */}
-          <View tw="flex-row items-center justify-between px-4 py-2">
+          <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <Suspense fallback={<Skeleton width={24} height={24} />}>
               {!isCreatorDrop ? (
@@ -112,9 +111,6 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
           <Social nft={nft} />
 
           <Owner nft={nft} price={false} />
-
-          <View tw="mx-4 mt-2 h-[1px] bg-gray-100 dark:bg-gray-900" />
-          <Collection nft={nft} />
         </View>
       </View>
     </LikeContextProvider>

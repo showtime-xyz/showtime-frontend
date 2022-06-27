@@ -15,7 +15,6 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Divider } from "@showtime-xyz/universal.divider";
 import {
   useBlurredBackgroundStyles,
   useIsDarkMode,
@@ -28,7 +27,6 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
@@ -348,8 +346,6 @@ export const FeedItem = memo(
                 },
               ]}
             >
-              <Collection nft={nft} />
-              <Divider tw="my-2" />
               <Social nft={nft} />
               <LikedBy nft={nft} />
               <View tw="my-4 mr-4 flex-row justify-between px-4">

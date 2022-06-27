@@ -16,7 +16,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Owner } from "app/components/card";
-import { Collection } from "app/components/card/rows/collection";
 import { Media } from "app/components/media";
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useUser } from "app/hooks/use-user";
@@ -138,9 +137,6 @@ function Delete({ nft }: { nft: NFT }) {
             <Text tw="text-sm text-black dark:text-white">
               This can't be undone and it will be sent to a burn address.
             </Text>
-          </View>
-          <View tw="-mx-2 border-b border-gray-100 dark:border-gray-900">
-            <Collection nft={nft} />
           </View>
           <View tw="-mx-2 flex-row items-center p-4">
             <View tw="mr-4 h-20 w-20">
