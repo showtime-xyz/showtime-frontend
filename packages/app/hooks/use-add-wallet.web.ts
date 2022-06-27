@@ -95,7 +95,10 @@ export const useAddWallet = () => {
       dispatch({ type: "status", status: "connecting" });
       const provider = await web3Modal?.connect();
 
-      const address = provider?.accounts?.[0] || provider?._addresses?.[0];
+      const address =
+        provider?.accounts?.[0] ||
+        provider?._addresses?.[0] ||
+        provider?.selectedAddress;
 
       if (address) {
         const isNewAddress = checkNewAddress(address);
