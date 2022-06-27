@@ -18,7 +18,7 @@ import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useRouter } from "app/navigation/use-router";
 import { getFileMeta } from "app/utilities";
-import { isMobile } from "app/utilities";
+import { isMobileWeb } from "app/utilities";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
 import { useMatchMutate } from "./use-match-mutate";
@@ -190,6 +190,11 @@ export const useMintNFT = () => {
     status: "idle",
     data: null,
   });
+  const shouldShowSignMessage =
+    (signMessageData.status === "should_sign" || state.status === "minting") &&
+    isMobileWeb()
+      ? true
+      : false;
 
   const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
@@ -274,12 +279,8 @@ export const useMintNFT = () => {
 
   async function uploadNFTJson(params: UseMintNFT) {
     try {
-      let mediaIpfsHash;
-      // if (state.mediaIPFSHash) {
-      // mediaIpfsHash = state.mediaIPFSHash;
-      // } else {
-      mediaIpfsHash = await uploadMedia();
-      // }
+      let mediaIpfsHash = await uploadMedia();
+
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
         const pinataToken = await getPinataToken();
@@ -319,10 +320,10 @@ export const useMintNFT = () => {
   async function signTransaction({ params, nftJsonIpfsHash, result }) {
     console.log("** minting: opening wallet for signing **");
 
-    if (isMobile()) {
+    if (isMobileWeb()) {
       setSignMessageData({
         status: "sign_requested",
-        data: signMessageData.data,
+        data: { params, nftJsonIpfsHash, result },
       });
     }
 
@@ -346,12 +347,6 @@ export const useMintNFT = () => {
       );
 
       dispatch({ type: "minting" });
-      if (isMobile()) {
-        setSignMessageData({
-          status: "idle",
-          data: null,
-        });
-      }
 
       const transaction = await provider
         .send("eth_sendTransaction", [
@@ -420,7 +415,7 @@ export const useMintNFT = () => {
       const nftJsonIpfsHash = await uploadNFTJson(params);
       const result = await getBiconomySigner(); // 5 sn etc.
 
-      if (isMobile()) {
+      if (isMobileWeb()) {
         setSignMessageData({
           status: "should_sign",
           data: { params, nftJsonIpfsHash, result },
@@ -454,6 +449,7 @@ export const useMintNFT = () => {
     setMedia,
     signTransaction,
     signMessageData,
+    shouldShowSignMessage,
   };
 };
 
