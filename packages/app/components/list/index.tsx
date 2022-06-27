@@ -7,7 +7,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Owner } from "app/components/card";
-import { Collection } from "app/components/card/rows/collection";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -75,7 +74,6 @@ const List = ({ nft }: Props) => {
 
   return (
     <View tw="flex-1">
-      <Collection nft={nft} />
       <View tw="p-4">
         <View tw="flex-row items-center">
           <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
