@@ -17,7 +17,6 @@ import {
   Pressable,
   PressableProps,
   RefreshControl,
-  ScrollViewProps,
   StyleProp,
   StyleSheet,
   useWindowDimensions,
@@ -48,6 +47,8 @@ import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
 
+import { ScrollView, ScrollViewProps } from "design-system/scroll-view";
+
 import {
   ExtendObject,
   TabListProps,
@@ -59,6 +60,7 @@ import { usePageScrollHandler } from "./usePagerScrollHandler";
 const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
+const AnimatedScrollView = Reanimated.createAnimatedComponent(ScrollView);
 
 export const TabsContext = React.createContext(
   null as unknown as TabsContextType
@@ -251,7 +253,7 @@ const ListImpl = ({
   }, [style]);
 
   return (
-    <Reanimated.ScrollView
+    <AnimatedScrollView
       onLayout={(e) => {
         listWidth.value = e.nativeEvent.layout.width;
       }}
@@ -263,7 +265,7 @@ const ListImpl = ({
       {...props}
     >
       {newChildren}
-    </Reanimated.ScrollView>
+    </AnimatedScrollView>
   );
 };
 
@@ -582,7 +584,7 @@ type ScrollableScrollViewType = ScrollViewProps & {
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
   ScrollableScrollViewType
->(Reanimated.ScrollView);
+>(AnimatedScrollView);
 
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
