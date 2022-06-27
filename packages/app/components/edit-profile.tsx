@@ -192,7 +192,7 @@ export const EditProfile = () => {
   );
   const extraScrollHeight = useMemo(
     () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
-    []
+    [insets.bottom]
   );
   return (
     <BottomSheetModalProvider>
