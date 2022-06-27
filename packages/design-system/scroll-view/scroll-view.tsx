@@ -1,29 +1,50 @@
-import { tw as tailwind } from '@showtime-xyz/universal.tailwind';
-import { useMemo } from 'react';
-import { ScrollView as ReactNativeScrollView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Component, seMemo } from "react";
+import { ScrollView as ReactNativeScrollView } from "react-native";
 
-import { ScrollViewProps } from './types';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-function ScrollView({
-  tw,
-  style,
-  asKeyboardAwareScrollView,
-  ...props
-}: ScrollViewProps) {
-  const ScrollViewComponent = useMemo(() => {
-    return asKeyboardAwareScrollView
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+
+import { ScrollViewProps } from "./types";
+
+class ScrollView extends Component<ScrollViewProps> {
+  constructor(props: ScrollViewProps) {
+    super(props);
+  }
+  render() {
+    const { style, tw, asKeyboardAwareScrollView, ...props } = this.props;
+    const ScrollViewComponent = asKeyboardAwareScrollView
       ? KeyboardAwareScrollView
       : ReactNativeScrollView;
-  }, [asKeyboardAwareScrollView]);
 
-  return (
-    <ScrollViewComponent
-      keyboardShouldPersistTaps="handled"
-      {...props}
-      style={[tailwind.style(tw), style]}
-    />
-  );
+    return (
+      <ScrollViewComponent
+        keyboardShouldPersistTaps="handled"
+        {...props}
+        style={[tailwind.style(tw), style]}
+      />
+    );
+  }
 }
+// function ScrollView({
+//   tw,
+//   style,
+//   asKeyboardAwareScrollView,
+//   ...props
+// }: ScrollViewProps) {
+//   const ScrollViewComponent = useMemo(() => {
+//     return asKeyboardAwareScrollView
+//       ? KeyboardAwareScrollView
+//       : ReactNativeScrollView;
+//   }, [asKeyboardAwareScrollView]);
+
+//   return (
+//     <ScrollViewComponent
+//       keyboardShouldPersistTaps="handled"
+//       {...props}
+//       style={[tailwind.style(tw), style]}
+//     />
+//   );
+// }
 
 export { ScrollView };

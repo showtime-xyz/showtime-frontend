@@ -1,7 +1,8 @@
-import { tw as tailwind } from '@showtime-xyz/universal.tailwind';
-import { ScrollView as ReactNativeScrollView } from 'react-native';
+import { ScrollView as ReactNativeScrollView } from "react-native";
 
-import { ScrollViewProps } from './types';
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+
+import { ScrollViewProps } from "./types";
 
 function ScrollView({ tw, style, ...props }: ScrollViewProps) {
   return (
