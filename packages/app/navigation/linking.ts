@@ -31,7 +31,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       drop: "drop",
       claim: "claim/:contractAddress",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
-      activities: "nft/:chainName/:contractAddress/:tokenId/activities",
+      activity: "nft/:chainName/:contractAddress/:tokenId/activity",
       transfer: "nft/:chainName/:contractAddress/:tokenId/transfer",
       list: "nft/:chainName/:contractAddress/:tokenId/list",
       buy: "nft/:chainName/:contractAddress/:tokenId/buy",

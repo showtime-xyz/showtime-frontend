@@ -157,10 +157,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onSelect={() => openModal("activities")}
-          key="activities"
-        >
+        <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
           <MenuItemIcon Icon={Clock} />
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
