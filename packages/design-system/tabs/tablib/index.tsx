@@ -40,14 +40,16 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import {
+  ScrollViewProps,
+  ScrollView,
+} from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import { flattenChildren } from "app/utilities";
-
-import { ScrollView, ScrollViewProps } from "design-system/scroll-view";
 
 import {
   ExtendObject,
