@@ -29,7 +29,7 @@ import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
   getTwitterIntent,
-  isMobile,
+  isMobileWeb,
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
@@ -101,7 +101,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobile(),
+      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
     });
 
     return (
