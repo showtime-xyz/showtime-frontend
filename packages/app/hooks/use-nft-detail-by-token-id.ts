@@ -6,8 +6,8 @@ import type { NFT } from "app/types";
 
 type UseNFTDetailByTokenIdParams = {
   contractAddress?: string;
-  tokenId: string;
-  chainName: string;
+  tokenId?: string;
+  chainName?: string;
 };
 
 type Data = {

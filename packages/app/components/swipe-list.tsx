@@ -353,9 +353,7 @@ export const FeedItem = memo(
                   {nft.token_name}
                 </Text>
                 <Suspense fallback={<Skeleton width={24} height={24} />}>
-                  {!isCreatorDrop ? (
-                    <NFTDropdown nftId={nft.nft_id} listId={listId} />
-                  ) : null}
+                  <NFTDropdown nft={nft} listId={listId} />
                 </Suspense>
               </View>
               <Description nft={nft} />
@@ -522,7 +520,7 @@ const NFTDetails = ({
             ) : null}
             <Suspense fallback={<Skeleton width={24} height={24} />}>
               <NFTDropdown
-                nftId={nft?.nft_id}
+                nft={nft}
                 shouldEnableSharing={false}
                 listId={listId}
               />
