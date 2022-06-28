@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@rainbow-me/rainbowkit": "^0.3.3",
     "@react-native-menu/menu": "^0.5.2",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/react-native": "0.67.6",
