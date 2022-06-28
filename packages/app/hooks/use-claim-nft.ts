@@ -62,22 +62,9 @@ export const useClaimNFT = () => {
   const mutate = useMatchMutate();
   const { userAddress } = useCurrentUserAddress();
   const Alert = useAlert();
-  const [signMessageData, setSignMessageData] = useState({
-    status: "idle",
-    data: null,
-  });
-  const shouldShowSignMessage =
-    signMessageData.status === "should_sign" && isMobileWeb();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
-    if (isMobileWeb()) {
-      setSignMessageData({
-        status: "sign_requested",
-        data: { forwardRequest },
-      });
-    }
-
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
@@ -145,14 +132,7 @@ export const useClaimNFT = () => {
 
         Logger.log("Signing... ", forwardRequest);
 
-        if (isMobileWeb()) {
-          setSignMessageData({
-            status: "should_sign",
-            data: { forwardRequest },
-          });
-        } else {
-          signTransaction({ forwardRequest });
-        }
+        signTransaction({ forwardRequest });
       } else {
         Alert.alert(
           "Wallet disconnected",
@@ -169,8 +149,5 @@ export const useClaimNFT = () => {
   return {
     state,
     claimNFT,
-    signMessageData,
-    signTransaction,
-    shouldShowSignMessage,
   };
 };
