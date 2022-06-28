@@ -17,7 +17,6 @@ import {
   Pressable,
   PressableProps,
   RefreshControl,
-  ScrollViewProps,
   StyleProp,
   StyleSheet,
   useWindowDimensions,
@@ -41,6 +40,10 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import {
+  ScrollViewProps,
+  ScrollView,
+} from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
@@ -59,6 +62,7 @@ import { usePageScrollHandler } from "./usePagerScrollHandler";
 const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
+const AnimatedScrollView = Reanimated.createAnimatedComponent(ScrollView);
 
 export const TabsContext = React.createContext(
   null as unknown as TabsContextType
@@ -251,7 +255,7 @@ const ListImpl = ({
   }, [style]);
 
   return (
-    <Reanimated.ScrollView
+    <AnimatedScrollView
       onLayout={(e) => {
         listWidth.value = e.nativeEvent.layout.width;
       }}
@@ -263,7 +267,7 @@ const ListImpl = ({
       {...props}
     >
       {newChildren}
-    </Reanimated.ScrollView>
+    </AnimatedScrollView>
   );
 };
 
@@ -582,7 +586,7 @@ type ScrollableScrollViewType = ScrollViewProps & {
 const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
   ScrollableScrollViewType
->(Reanimated.ScrollView);
+>(AnimatedScrollView);
 
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
