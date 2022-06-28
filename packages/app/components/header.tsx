@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -18,9 +18,12 @@ import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner/index.web";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 // import { NetworkButton } from "app/components/connect-button";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { Notifications } from "app/components/notifications";
@@ -184,7 +187,23 @@ const NotificationsInHeader = () => {
             default: {},
           })}
         >
-          <Notifications />
+          <ErrorBoundary
+            fallback={
+              <View tw="p-4">
+                <Text>Something went wrong</Text>
+              </View>
+            }
+          >
+            <Suspense
+              fallback={
+                <View tw="p-4">
+                  <Spinner />
+                </View>
+              }
+            >
+              <Notifications />
+            </Suspense>
+          </ErrorBoundary>
         </View>
       </Popover.Content>
     </Popover.Root>
