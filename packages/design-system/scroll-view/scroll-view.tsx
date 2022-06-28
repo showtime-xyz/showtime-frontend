@@ -11,6 +11,7 @@ class ScrollView extends Component<ScrollViewProps> {
   constructor(props: ScrollViewProps) {
     super(props);
   }
+
   render() {
     const { style, tw, asKeyboardAwareScrollView, ...props } = this.props;
     const ScrollViewComponent = asKeyboardAwareScrollView
