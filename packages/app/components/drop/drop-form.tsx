@@ -31,7 +31,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   getTwitterIntent,
   getUserDisplayNameFromProfile,
-  isMobile,
+  isMobileWeb,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -161,7 +161,7 @@ export const DropForm = () => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobile(),
+      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
     });
 
     return (
