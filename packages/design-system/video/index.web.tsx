@@ -9,7 +9,6 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
 
 import { useVideoConfig } from "app/context/video-config-context";
 
@@ -29,8 +28,9 @@ export function Video({
   const videoRef = useRef<ExpoVideo>(null);
   // useItemVisible({ videoRef });
   const { colorScheme } = useColorScheme();
+
   return (
-    <View>
+    <>
       {videoConfig?.previewOnly ? (
         <Image
           tw={tw}
@@ -40,11 +40,16 @@ export function Video({
         />
       ) : (
         <ImageBackground
-          style={tailwind.style(tw)}
           source={posterSource as ImageSourcePropType}
           imageStyle={StyleSheet.absoluteFill}
           resizeMode="cover"
         >
+          <Image
+            tw={tw}
+            resizeMode={resizeMode}
+            blurhash={blurhash}
+            source={posterSource as Source}
+          />
           <BlurView
             style={StyleSheet.absoluteFill}
             tint={colorScheme as BlurTint}
@@ -65,6 +70,6 @@ export function Video({
           />
         </ImageBackground>
       )}
-    </View>
+    </>
   );
 }
