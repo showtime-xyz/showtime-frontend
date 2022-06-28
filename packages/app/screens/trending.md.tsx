@@ -113,7 +113,7 @@ const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Pager>
-        <View tw="flex-1" nativeID="12132323">
+        <View tw="flex-1">
           <Suspense fallback={null}>
             <List days={days} selectedTab={selectedTab} />
           </Suspense>
@@ -223,7 +223,7 @@ const NFTList = ({ days }: { days: any }) => {
                   key={`nft-list-card-${index}`}
                   nft={item}
                   tw={`w-[${containerWidth / numColumns - 30}px] h-[${
-                    containerWidth / numColumns + 205
+                    containerWidth / numColumns + 167
                   }px] mb-8`}
                 />
               );
