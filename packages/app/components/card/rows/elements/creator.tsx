@@ -27,7 +27,7 @@ export function Creator({
   return (
     <Link
       href={`/@${nft.creator_username ?? nft.creator_address}`}
-      tw="flex flex-row py-2"
+      tw="flex flex-row py-4"
     >
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">

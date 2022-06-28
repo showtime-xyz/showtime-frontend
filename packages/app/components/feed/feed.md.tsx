@@ -30,7 +30,7 @@ import { Hidden } from "design-system/hidden";
 import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
-const CARD_HEIGHT = 848;
+const CARD_HEIGHT = 825;
 const CARD_CONTAINER_WIDTH = 620;
 const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;

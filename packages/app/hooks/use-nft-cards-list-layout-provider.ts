@@ -14,7 +14,7 @@ const useNFTCardDimensions = () => {
     return { height: width / 3, width: width / 3 };
   }
   return {
-    height: 594 + LIST_MARGIN_TOP_LARGE,
+    height: 548 + LIST_MARGIN_TOP_LARGE,
     width: (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH) / 3,
   };
 };

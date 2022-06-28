@@ -102,11 +102,9 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
           <RouteComponent href={hrefProps!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
-          <View tw="mt-2">
-            <RouteComponent href={hrefProps!} onPress={handleOnPress}>
-              <Title nft={nft} cardMaxWidth={cardMaxWidth} />
-            </RouteComponent>
-          </View>
+          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
+            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+          </RouteComponent>
 
           <Social nft={nft} />
 

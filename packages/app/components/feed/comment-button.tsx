@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { Message } from "@showtime-xyz/universal.icon";
 
+import { useSocialColor } from "app/hooks/use-social-color";
 import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
@@ -14,6 +15,7 @@ interface CommentButtonProps {
 
 export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
+  const { iconColor, textColors } = useSocialColor();
 
   const handleOnPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
@@ -30,7 +32,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
             contractAddress: nft?.contract_address,
             tokenId: nft?.token_id,
           },
-        },
+        } as any,
       }),
       Platform.select({
         native: as,
@@ -50,8 +52,9 @@ export function CommentButton({ nft }: CommentButtonProps) {
       size="regular"
       tw="h-auto p-0"
       onPress={handleOnPress}
+      accentColor={textColors}
     >
-      <Message height={24} width={24} />{" "}
+      <Message height={24} width={24} color={iconColor} />{" "}
       {nft?.comment_count > 0 ? getRoundedCount(nft.comment_count) : ""}
     </Button>
   );
