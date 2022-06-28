@@ -80,7 +80,7 @@ export function Login({ onLogin }: LoginProps) {
     []
   );
   const tabsData = useMemo(
-    () => [{ name: "Phone number" }, { name: "Wallet or email" }],
+    () => [{ name: "Wallet or email" }, { name: "Phone number" }],
     []
   );
   //#endregion
@@ -122,12 +122,6 @@ export function Login({ onLogin }: LoginProps) {
               </View>
               <Tabs.Pager>
                 <Tabs.View style={styles.tabListItemContainer}>
-                  <PhoneNumberPicker
-                    handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-                  />
-                </Tabs.View>
-
-                <Tabs.View style={styles.tabListItemContainer}>
                   <View tw="mb-[16px]">
                     <Button
                       onPress={handleSubmitWallet}
@@ -153,6 +147,11 @@ export function Login({ onLogin }: LoginProps) {
                     textContentType="emailAddress"
                     signInButtonLabel="Send"
                     onSubmit={handleSubmitEmail}
+                  />
+                </Tabs.View>
+                <Tabs.View style={styles.tabListItemContainer}>
+                  <PhoneNumberPicker
+                    handleSubmitPhoneNumber={handleSubmitPhoneNumber}
                   />
                 </Tabs.View>
               </Tabs.Pager>
