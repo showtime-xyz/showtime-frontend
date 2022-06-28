@@ -79,10 +79,9 @@ export function HeaderTabView<T extends Route>({
     );
   };
   return (
-    // @ts-ignore
-    <HeaderTabViewComponent<Route>
-      renderTabBar={renderTabBar as any}
-      lazy={true as any}
+    <HeaderTabViewComponent
+      renderTabBar={renderTabBar}
+      lazy
       onPullEnough={onPullEnough}
       minHeaderHeight={insets.top + StatusBarHeight}
       refreshControlColor={isDark ? colors.gray[400] : colors.gray[700]}

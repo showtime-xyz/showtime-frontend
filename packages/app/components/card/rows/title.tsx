@@ -37,7 +37,7 @@ function Title({ nft, cardMaxWidth, disableTooltip = false }: Props) {
   // }, []);
   if (!nft) return null;
   return (
-    <View tw="bg-white px-4 py-2 dark:bg-black">
+    <View tw="bg-white px-4 pt-4 dark:bg-black">
       {isUseTooltip ? (
         <Tooltip
           delay={300}

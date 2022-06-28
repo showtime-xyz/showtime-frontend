@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import { ImageProps, Platform } from "react-native";
+import { Platform } from "react-native";
 
-import { Video } from "expo-av";
+import { Video, ResizeMode } from "expo-av";
+import type { ResizeMode as ImgResizeMode } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
@@ -14,8 +15,7 @@ type PreviewProps = {
   type?: "image" | "video";
   tw?: string;
   style?: any;
-  resizeMode?: ImageProps["resizeMode"];
-  resizeMethod?: ImageProps["resizeMethod"];
+  resizeMode?: ImgResizeMode | ResizeMode;
 };
 
 export const Preview = ({
@@ -23,7 +23,6 @@ export const Preview = ({
   style,
   type,
   file,
-  resizeMethod,
   resizeMode = "cover",
 }: PreviewProps) => {
   const uri = getLocalFileURI(file);
@@ -50,10 +49,9 @@ export const Preview = ({
         <Image
           tw={tw}
           style={style}
-          resizeMethod={resizeMethod}
-          resizeMode={resizeMode}
+          resizeMode={resizeMode as ImgResizeMode}
           source={{
-            uri,
+            uri: uri as string,
           }}
         />
       );
@@ -62,10 +60,9 @@ export const Preview = ({
     if (fileType === "video") {
       return (
         <Video
-          source={{ uri }}
+          source={{ uri: uri as string }}
           style={[tailwind.style(tw), style]}
-          resizeMode={resizeMode}
-          resizeMethod={resizeMethod}
+          resizeMode={resizeMode as ResizeMode}
           isMuted
           shouldPlay
         />

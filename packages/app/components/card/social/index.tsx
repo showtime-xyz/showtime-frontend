@@ -14,14 +14,14 @@ function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
   return (
-    <View tw="flex-row justify-between bg-white px-4 py-2 dark:bg-black">
+    <View tw="flex-row justify-between bg-white px-4 pt-4 dark:bg-black">
       <View tw="flex-row items-center">
         <Like nft={nft} />
         <View tw="w-4" />
         <CommentButton nft={nft} />
         {edition ? (
           <>
-            <View tw="ml-2" />
+            <View tw="w-4" />
             <GiftButton nft={nft} />
           </>
         ) : null}

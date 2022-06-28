@@ -1,0 +1,48 @@
+diff --git a/node_modules/expo-av/src/Video.tsx b/node_modules/expo-av/src/Video.tsx
+index bd371f2..dad3cfd 100644
+--- a/node_modules/expo-av/src/Video.tsx
++++ b/node_modules/expo-av/src/Video.tsx
+@@ -313,6 +313,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
+         ...Object.keys(status),
+       ]),
+       style: StyleSheet.flatten([_STYLES.base, this.props.style]),
++      videoStyle: StyleSheet.flatten([_STYLES.video, this.props.videoStyle]),
+       source,
+       resizeMode: nativeResizeMode,
+       status,
+@@ -326,7 +327,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
+ 
+     return (
+       <View style={nativeProps.style} pointerEvents="box-none">
+-        <ExponentVideo ref={this._nativeRef} {...nativeProps} style={_STYLES.video} />
++        <ExponentVideo ref={this._nativeRef} {...nativeProps} style={nativeProps.videoStyle} />
+         {this._renderPoster()}
+       </View>
+     );
+diff --git a/node_modules/expo-av/src/Video.types.ts b/node_modules/expo-av/src/Video.types.ts
+index 6cac464..1c0174d 100644
+--- a/node_modules/expo-av/src/Video.types.ts
++++ b/node_modules/expo-av/src/Video.types.ts
+@@ -1,5 +1,5 @@
+ import * as React from 'react';
+-import { ImageProps, ViewProps } from 'react-native';
++import { ImageProps, StyleProp, ViewProps, ViewStyle } from 'react-native';
+ 
+ import {
+   AVPlaybackNativeSource,
+@@ -252,6 +252,7 @@ export type VideoProps = {
+    * @hidden
+    */
+   rotation?: number;
++  videoStyle?:StyleProp<ViewStyle>
+ } & ViewProps;
+ 
+ /**
+@@ -268,6 +269,7 @@ export type VideoNativeProps = {
+   onReadyForDisplay?: (event: { nativeEvent: VideoReadyForDisplayEvent }) => void;
+   onFullscreenUpdate?: (event: { nativeEvent: VideoFullscreenUpdateEvent }) => void;
+   useNativeControls?: boolean;
++  videoStyle?: StyleProp<ViewStyle>
+ } & ViewProps;
+ 
+ // @docsMissing
