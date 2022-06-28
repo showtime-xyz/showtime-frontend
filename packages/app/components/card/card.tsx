@@ -93,9 +93,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              {!isCreatorDrop ? (
-                <NFTDropdown nftId={nft.nft_id} listId={listId} />
-              ) : null}
+              <NFTDropdown nft={nft} listId={listId} />
             </Suspense>
           </View>
 
