@@ -93,12 +93,20 @@ export const DropForm = () => {
   });
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT } = useDropNFT();
+  const {
+    state,
+    dropNFT,
+    shouldShowSignMessage,
+    signMessageData,
+    signTransaction,
+  } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
   const { connected } = useWallet();
   const { web3 } = useWeb3();
   const navigateToLogin = useNavigateToLogin();
+
+  const isSignRequested = signMessageData.status === "sign_requested";
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -445,17 +453,42 @@ export const DropForm = () => {
           </View>
 
           <View tw="mt-8 mb-20">
-            <Button
-              tw={state.status === "loading" ? "opacity-45" : ""}
-              disabled={state.status === "loading"}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading"
-                ? "Submitting..."
-                : state.status === "error"
-                ? "Failed. Retry!"
-                : "Drop Free NFT"}
-            </Button>
+            {shouldShowSignMessage ? (
+              <View tw="px-2">
+                {!isSignRequested ? (
+                  <Text tw="text-center text-lg dark:text-gray-400">
+                    We need a signature in order to complete the drop. This
+                    won't cost any gas.
+                  </Text>
+                ) : null}
+                <Button
+                  tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
+                  size="regular"
+                  variant="primary"
+                  disabled={isSignRequested}
+                  onPress={() => {
+                    // @ts-ignore
+                    signTransaction(signMessageData.data);
+                  }}
+                >
+                  {isSignRequested ? "Signing..." : "Sign Message"}
+                </Button>
+              </View>
+            ) : (
+              <Button
+                variant="primary"
+                size="regular"
+                tw={state.status === "loading" ? "opacity-45" : ""}
+                disabled={state.status === "loading"}
+                onPress={handleSubmit(onSubmit)}
+              >
+                {state.status === "loading"
+                  ? "Submitting..."
+                  : state.status === "error"
+                  ? "Failed. Retry!"
+                  : "Drop Free NFT"}
+              </Button>
+            )}
 
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />

@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from "react";
 
 import { useAccessToken } from "app/lib/access-token";
-import { isMobile } from "app/utilities";
+import { isMobileWeb } from "app/utilities";
 
 import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
@@ -106,7 +106,7 @@ export function useWalletLogin() {
     } else if (connected && !authenticated && loggedIn) {
       // TODO: refactor after getting a better alternative
       // https://github.com/rainbow-me/rainbowkit/discussions/536
-      if (isMobile()) {
+      if (isMobileWeb()) {
         setShowSignMessage(true);
       } else {
         handleLogin();

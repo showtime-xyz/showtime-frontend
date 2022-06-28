@@ -36,21 +36,17 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT } = useClaimNFT();
   const share = useShare();
   const router = useRouter();
-
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
   const { connected } = useWallet();
   const navigateToLogin = useNavigateToLogin();
-
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
-
   const { follow } = useMyInfo();
-
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
@@ -225,6 +221,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <View tw="mt-4">
             <Button
+              size="regular"
+              variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-45" : ""}
               onPress={handleClaimNFT}
@@ -235,6 +233,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Failed. Retry!"
                 : "Claim for free"}
             </Button>
+
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>

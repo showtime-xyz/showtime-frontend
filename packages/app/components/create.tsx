@@ -67,9 +67,16 @@ function Create() {
   const { user } = useUser();
   const { web3 } = useWeb3();
   const { state } = useContext(MintContext);
-  const { setMedia, startMinting } = useMintNFT();
+  const {
+    setMedia,
+    startMinting,
+    signTransaction,
+    signMessageData,
+    shouldShowSignMessage,
+  } = useMintNFT();
   const { userAddress: address } = useCurrentUserAddress();
 
+  const isSignRequested = signMessageData.status === "sign_requested";
   const isNotMagic = !web3;
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
@@ -445,23 +452,47 @@ function Create() {
       </CreateScrollView>
 
       <View tw="mt-8 w-full px-4">
-        <Button
-          variant="primary"
-          size="regular"
-          onPress={handleSubmit(handleSubmitForm)}
-          disabled={!enable}
-          tw={!enable ? "opacity-60" : ""}
-        >
-          {state.status === "idle"
-            ? "Create"
-            : state.status === "mediaUpload" || state.status === "nftJSONUpload"
-            ? "Uploading..."
-            : state.status === "mintingSuccess"
-            ? "Success!"
-            : isError
-            ? "Failed. Retry"
-            : "Minting..."}
-        </Button>
+        {shouldShowSignMessage ? (
+          <View tw="px-2">
+            {!isSignRequested ? (
+              <Text tw="text-center text-lg dark:text-gray-400">
+                We need a signature in order to complete minting. This won't
+                cost any gas.
+              </Text>
+            ) : null}
+            <Button
+              tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
+              size="regular"
+              variant="primary"
+              disabled={isSignRequested}
+              onPress={() => {
+                // @ts-ignore
+                signTransaction(signMessageData.data);
+              }}
+            >
+              {isSignRequested ? "Signing..." : "Sign Message"}
+            </Button>
+          </View>
+        ) : (
+          <Button
+            variant="primary"
+            size="regular"
+            onPress={handleSubmit(handleSubmitForm)}
+            disabled={!enable}
+            tw={!enable ? "opacity-60" : ""}
+          >
+            {state.status === "idle"
+              ? "Create"
+              : state.status === "mediaUpload" ||
+                state.status === "nftJSONUpload"
+              ? "Uploading..."
+              : state.status === "mintingSuccess"
+              ? "Success!"
+              : isError
+              ? "Failed. Retry"
+              : "Minting..."}
+          </Button>
+        )}
 
         <View tw="mt-4 h-12">
           {state.status === "minting" && !isMagic ? (
