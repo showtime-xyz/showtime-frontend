@@ -1,7 +1,8 @@
 import { ComponentProps, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { Video as ExpoVideo } from "expo-av";
+import { Video as ExpoVideo, ResizeMode } from "expo-av";
+import { Source } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
@@ -15,7 +16,7 @@ type VideoProps = {
   blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, blurhash, style, ...props }: VideoProps) {
+function Video({ tw, blurhash, style, posterSource, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const videoConfig = useVideoConfig();
 
@@ -29,8 +30,7 @@ function Video({ tw, blurhash, style, ...props }: VideoProps) {
             tw={tw}
             style={StyleSheet.absoluteFill}
             blurhash={blurhash}
-            // @ts-ignore
-            source={props.posterSource}
+            source={posterSource as Source}
           />
         ) : (
           <>
@@ -38,16 +38,15 @@ function Video({ tw, blurhash, style, ...props }: VideoProps) {
               tw={tw}
               style={StyleSheet.absoluteFill}
               blurhash={blurhash}
-              // @ts-ignore
-              source={props.posterSource}
+              source={posterSource as Source}
             />
 
             <ExpoVideo
               ref={videoRef}
               style={StyleSheet.absoluteFill}
               useNativeControls={videoConfig?.useNativeControls}
-              resizeMode="cover"
-              posterSource={props.posterSource}
+              resizeMode={ResizeMode.COVER}
+              posterSource={posterSource}
             />
           </>
         )}

@@ -1,12 +1,14 @@
 import { Button } from "@showtime-xyz/universal.button";
 import { Gift } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { getRoundedCount } from "app/utilities";
 
 export function GiftButton({ nft }: { nft: NFT }) {
+  const { iconColor, textColors } = useSocialColor();
+
   const { data: edition } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
@@ -14,13 +16,13 @@ export function GiftButton({ nft }: { nft: NFT }) {
   if (!edition) return null;
 
   return (
-    <Button variant="text" size="regular" tw="h-auto p-0">
-      <Gift
-        height={20}
-        width={20}
-        // @ts-ignore
-        color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-      />{" "}
+    <Button
+      variant="text"
+      size="regular"
+      tw="h-auto p-0"
+      accentColor={textColors}
+    >
+      <Gift height={20} width={20} color={iconColor} />{" "}
       {edition?.total_claimed_count > 0
         ? getRoundedCount(edition.total_claimed_count)
         : ""}{" "}

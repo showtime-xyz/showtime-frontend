@@ -235,7 +235,6 @@ function Create() {
                         <View>
                           <Preview
                             file={value.file}
-                            //@ts-ignore
                             type={value.type}
                             tw="h-80 w-80 rounded-2xl"
                           />
