@@ -317,7 +317,7 @@ export const FeedItem = memo(
 
     if (windowWidth >= 768) {
       return (
-        <LikeContextProvider nft={nft}>
+        <LikeContextProvider nft={nft} key={nft.nft_id}>
           <View tw="h-full w-full max-w-screen-2xl flex-row">
             <View
               style={[
@@ -376,7 +376,7 @@ export const FeedItem = memo(
     }
 
     return (
-      <LikeContextProvider nft={nft}>
+      <LikeContextProvider nft={nft} key={nft.nft_id}>
         <View tw="w-full flex-1">
           {Platform.OS !== "web" && (
             <View>
