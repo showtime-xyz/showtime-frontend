@@ -3,14 +3,14 @@ import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -28,7 +28,11 @@ import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useRouter } from "app/navigation/use-router";
-import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
+import {
+  getTwitterIntent,
+  getUserDisplayNameFromProfile,
+  isMobile,
+} from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
@@ -115,6 +119,7 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   // if (state.transactionHash) {
   //   return <View>
@@ -148,7 +153,7 @@ export const DropForm = () => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share,
+      web: typeof window !== "undefined" && !!navigator.share && isMobile(),
     });
 
     return (
@@ -224,7 +229,11 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView tw="p-4">
+      <ScrollView
+        tw="p-4"
+        asKeyboardAwareScrollView
+        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
+      >
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -348,7 +357,7 @@ export const DropForm = () => {
                   return (
                     <Fieldset
                       tw="flex-1"
-                      label="Your royalties"
+                      label="Your royalties (%)"
                       onBlur={onBlur}
                       helperText="How much you’ll earn each time this NFT is sold"
                       errorText={errors.royalty?.message}

@@ -10,7 +10,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -190,6 +190,10 @@ export const EditProfile = () => {
     () => (width < 768 ? width / 3 : 160),
     [width]
   );
+  const extraScrollHeight = useMemo(
+    () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
+    [insets.bottom]
+  );
   return (
     <BottomSheetModalProvider>
       <View tw={`w-full flex-1 pb-${insets.bottom}px`}>
@@ -217,7 +221,11 @@ export const EditProfile = () => {
               overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
             }}
           >
-            <Tabs.ScrollView style={tw.style("flex-1")}>
+            <Tabs.ScrollView
+              style={tw.style("flex-1")}
+              asKeyboardAwareScrollView
+              extraScrollHeight={extraScrollHeight}
+            >
               <Controller
                 control={control}
                 name="coverPicture"
@@ -340,10 +348,8 @@ export const EditProfile = () => {
             </Tabs.ScrollView>
             <Tabs.ScrollView
               style={tw.style("px-4 mt-4")}
-              useKeyboardAvoidingView
-              keyboardVerticalOffset={
-                insets.bottom + (Platform.OS === "ios" ? 120 : 200)
-              }
+              asKeyboardAwareScrollView
+              extraScrollHeight={extraScrollHeight}
             >
               <Controller
                 control={control}
