@@ -1,11 +1,10 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { Animated, Easing } from "react-native";
 
 import { getSpinnerSize, SpinnerView, SpinnerProps } from "./spinner-view";
 
 export const Spinner = ({ size, duration = 750, ...rest }: SpinnerProps) => {
-  const transition = useRef(new Animated.Value(0)).current;
-
+  const transition = useMemo(() => new Animated.Value(0), []);
   const startAnimation = useCallback(() => {
     Animated.timing(transition, {
       toValue: 1,
