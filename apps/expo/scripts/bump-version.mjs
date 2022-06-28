@@ -42,7 +42,7 @@ const hasPlatform = (fileDiffList, reactNativeConfig, configuration) => {
 const bumpVersion = async (versionType) => {
   const inCI = process.env.CI;
   if (inCI) {
-    const versionUpdateResponse = await $`npx --yes bumpp ${versionType} --all --commit "release v" --tag "v" --push --yes`
+    const versionUpdateResponse = await $`npx bumpp ${versionType} --all --commit "release v" --tag "v" --push --yes`
     console.log(versionUpdateResponse)
     const newVersion = versionUpdateResponse.stdout.split("✔")[1].replace('Updated package.json to ', '').trim()
     console.log(`${chalk.green(newVersion)}`)
