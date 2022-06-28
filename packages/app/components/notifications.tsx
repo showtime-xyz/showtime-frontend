@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Platform, useWindowDimensions } from "react-native";
 
 // import { formatDistanceToNowStrict } from "date-fns";
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -26,6 +26,7 @@ import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link, TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
@@ -37,7 +38,10 @@ export const Notifications = () => {
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const bottomBarHeight = useBottomTabBarHeight();
+  const headerHeight = useHeaderHeight();
+  const { height: windowHeight } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
+  const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState([]);
 
@@ -96,6 +100,10 @@ export const Notifications = () => {
     <>
       <FlatList
         data={data}
+        style={Platform.select({
+          native: { height: flatListHeight },
+          default: {},
+        })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}
