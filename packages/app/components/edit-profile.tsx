@@ -9,6 +9,7 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -22,7 +23,6 @@ import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
-import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
 

@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 
-import { NFT } from "app/types";
+import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useRouter } from "./use-router";
+import { NFT } from "app/types";
 
 export const useNavigateToLogin = () => {
   const router = useRouter();

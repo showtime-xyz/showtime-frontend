@@ -1,13 +1,13 @@
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
-import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
 
 import {

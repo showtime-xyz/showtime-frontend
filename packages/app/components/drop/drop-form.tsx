@@ -10,6 +10,7 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -27,7 +28,6 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import {
   getTwitterIntent,
   getUserDisplayNameFromProfile,

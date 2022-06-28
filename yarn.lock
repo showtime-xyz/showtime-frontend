@@ -6920,20 +6920,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-screen@npm:^0.0.30":
-  version: 0.0.30
-  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.30"
+"@showtime-xyz/universal.modal-screen@npm:^0.0.31":
+  version: 0.0.31
+  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.31"
   dependencies:
     "@react-navigation/native": 6.0.10
     "@showtime-xyz/universal.modal": 0.0.27
-    "@showtime-xyz/universal.router": 0.0.11
+    "@showtime-xyz/universal.router": 0.0.12
     "@showtime-xyz/universal.toast": 0.0.23
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 7c64324c14df70ffab42cfa437dd5cb3bb481c89d5cd3d1e928d3141aca4b7dfba0118b36dce875a761041e0a4d2c3c61486d2bfcc06db9fe04565ddad7eab33
+  checksum: f594e15a049cd300eae0125f130b7244fc8f70319c3012448bec8bd202dbb3213199f0923650dfb29c4213e806581f59b16b2e1f208b855a1994e1b9c4148e3d
   languageName: node
   linkType: hard
 
@@ -7030,9 +7030,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.router@npm:0.0.11, @showtime-xyz/universal.router@npm:^0.0.11":
-  version: 0.0.11
-  resolution: "@showtime-xyz/universal.router@npm:0.0.11"
+"@showtime-xyz/universal.router@npm:0.0.12, @showtime-xyz/universal.router@npm:^0.0.12":
+  version: 0.0.12
+  resolution: "@showtime-xyz/universal.router@npm:0.0.12"
   dependencies:
     "@react-navigation/native": 6.0.10
     next: 12.1.5
@@ -7042,7 +7042,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 5b28f76e0d44c6a60afd7ff979cbb2463783c993f929a240dbfa3ca92ddd7531a22645949ef56f70a4c98fd55376564013659f48d7bae70ec7a01abbc0eef8c2
+  checksum: 5879c0782952767b327cb4bdd70f3634fc982f0a71cd90ba415eba63f4f7262aff13d29b576bebb2d49acd8e51581e613d29401e13b9bee51df79eb5c002be35
   languageName: node
   linkType: hard
 
@@ -7380,12 +7380,12 @@ __metadata:
     "@showtime-xyz/universal.label": ^0.0.16
     "@showtime-xyz/universal.light-box": ^0.0.14
     "@showtime-xyz/universal.modal": ^0.0.27
-    "@showtime-xyz/universal.modal-screen": ^0.0.30
+    "@showtime-xyz/universal.modal-screen": ^0.0.31
     "@showtime-xyz/universal.modal-sheet": ^0.0.27
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.11
     "@showtime-xyz/universal.pressable": ^0.0.17
     "@showtime-xyz/universal.pressable-scale": ^0.0.16
-    "@showtime-xyz/universal.router": ^0.0.11
+    "@showtime-xyz/universal.router": ^0.0.12
     "@showtime-xyz/universal.safe-area": ^0.0.11
     "@showtime-xyz/universal.scroll-view": ^0.0.16
     "@showtime-xyz/universal.segmented-control": ^0.0.17

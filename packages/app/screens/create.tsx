@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -13,7 +14,6 @@ import { MintContext } from "app/context/mint-context";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { useRouter } from "app/navigation/use-router";
 
 import { Hidden } from "design-system/hidden";
 

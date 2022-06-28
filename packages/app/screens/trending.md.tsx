@@ -2,6 +2,7 @@ import { Suspense, useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -12,7 +13,6 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
-import { useRouter } from "app/navigation/use-router";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 

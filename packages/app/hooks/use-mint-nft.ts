@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 import { v4 as uuid } from "uuid";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
@@ -16,7 +17,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { useRouter } from "app/navigation/use-router";
 import { getFileMeta } from "app/utilities";
 import { isMobileWeb } from "app/utilities";
 

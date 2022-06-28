@@ -2,11 +2,11 @@ import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useRouter } from "app/navigation/use-router";
 
 export const ClaimButton = ({
   edition,
