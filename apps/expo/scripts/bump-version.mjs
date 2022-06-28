@@ -43,7 +43,7 @@ const bumpVersion = async (versionType) => {
   const inCI = process.env.CI;
   if (inCI) {
     // --tag
-    const versionUpdateResponse = await $`npx bumpp ${versionType} --all --commit "release v" --push`
+    const versionUpdateResponse = await $`npx --yes bumpp ${versionType} --all --commit "release v" --push --yes`
     console.log(versionUpdateResponse)
     const newVersion = versionUpdateResponse.stdout.split("✔")[1].replace('Updated package.json to ', '').trim()
     console.log(`${chalk.green(newVersion)}`)
