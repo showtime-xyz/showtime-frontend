@@ -7060,17 +7060,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.scroll-view@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "@showtime-xyz/universal.scroll-view@npm:0.0.14"
+"@showtime-xyz/universal.scroll-view@npm:^0.0.16":
+  version: 0.0.16
+  resolution: "@showtime-xyz/universal.scroll-view@npm:0.0.16"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.14
+    react-native-keyboard-aware-scroll-view: 0.9.5
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 02114d0b4b54ecb460fcfca91b03f2fda5737038a472d08c93e1ac75ef6f3c599b84b0cba1444ce3f65cf966c2062ca721959cbc54150caa34d2dc576c04a781
+  checksum: ddd321a6ed61717399d725a2fc54bc91647c4cba0db56ccf21234e5a92e9d54463c3fd18ffa8b0cda05bbd9f323723eb42f1d3974bf82f50ed5ea0b255c16905
   languageName: node
   linkType: hard
 
@@ -7386,7 +7387,7 @@ __metadata:
     "@showtime-xyz/universal.pressable-scale": ^0.0.16
     "@showtime-xyz/universal.router": ^0.0.11
     "@showtime-xyz/universal.safe-area": ^0.0.11
-    "@showtime-xyz/universal.scroll-view": ^0.0.14
+    "@showtime-xyz/universal.scroll-view": ^0.0.16
     "@showtime-xyz/universal.segmented-control": ^0.0.17
     "@showtime-xyz/universal.select": ^0.0.26
     "@showtime-xyz/universal.skeleton": ^0.0.15
@@ -29019,7 +29020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyboard-aware-scroll-view@npm:^0.9.5":
+"react-native-keyboard-aware-scroll-view@npm:0.9.5, react-native-keyboard-aware-scroll-view@npm:^0.9.5":
   version: 0.9.5
   resolution: "react-native-keyboard-aware-scroll-view@npm:0.9.5"
   dependencies:

@@ -179,7 +179,7 @@
     },
     "scroll-view": {
         "scope": "showtime.universal",
-        "version": "0.0.14",
+        "version": "0.0.16",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/scroll-view"
     },

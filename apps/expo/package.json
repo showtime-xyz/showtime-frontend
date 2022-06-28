@@ -95,7 +95,7 @@
     "@showtime-xyz/universal.pressable-scale": "^0.0.16",
     "@showtime-xyz/universal.router": "^0.0.11",
     "@showtime-xyz/universal.safe-area": "^0.0.11",
-    "@showtime-xyz/universal.scroll-view": "^0.0.14",
+    "@showtime-xyz/universal.scroll-view": "^0.0.16",
     "@showtime-xyz/universal.segmented-control": "^0.0.17",
     "@showtime-xyz/universal.select": "^0.0.26",
     "@showtime-xyz/universal.skeleton": "^0.0.15",
