@@ -26,7 +26,7 @@ function OwnershipContainer({
   ) : (
     <View
       tw={[
-        "flex h-[32px] w-[32px] flex-row flex-wrap justify-between",
+        "flex h-8 w-8 flex-row flex-wrap justify-between",
         count < 3 ? "content-center" : "content-between",
       ]}
     >
