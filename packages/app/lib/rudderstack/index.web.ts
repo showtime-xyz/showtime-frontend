@@ -8,7 +8,7 @@ if (!isServer) {
 
   //@ts-ignore
   rudderanalytics.load(
-    process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
+    process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY_WEB,
     RUDDERSTACK_DATA_PLANE_URL
   );
 }
