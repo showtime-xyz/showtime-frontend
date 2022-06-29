@@ -18,7 +18,7 @@ import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner/index.web";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
