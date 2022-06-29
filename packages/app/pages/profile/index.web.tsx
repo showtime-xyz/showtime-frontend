@@ -28,6 +28,7 @@ function ProfileRouter() {
       const as = router.asPath.replace("/profile/", "/");
       router.replace(href, as, {
         shallow: true,
+        scroll: false,
       });
     }
   }, [router]);

@@ -118,6 +118,10 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
       Platform.select({
         native: as,
         web: router.asPath.startsWith("/nft/") ? as : router.asPath,
+      }),
+      Platform.select({
+        native: {},
+        web: { scroll: false },
       })
     );
   };
