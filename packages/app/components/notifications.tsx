@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList } from "react-native";
 
-// import { formatDistanceToNowStrict } from "date-fns";
+import { Link } from "solito/link";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
@@ -27,7 +28,7 @@ import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { Link, TextLink } from "app/navigation/link";
+import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
@@ -57,7 +58,7 @@ export const Notifications = () => {
         width="100%"
       />
     ) : (
-      <View tw={`h-${bottomBarHeight}px`} />
+      <View tw={`h-${bottomBarHeight ?? 0}px`} />
     );
   }, [isLoadingMore, bottomBarHeight, colorScheme]);
 
@@ -208,12 +209,11 @@ const NotificationDescription = ({
           {notification.type_name === "NFT_SALE" ? "bought " : null}
 
           {notification.nft_display_name ? (
-            <TextLink
-              tw="text-13 font-bold text-black dark:text-white"
-              href={notificationInfo.href}
-            >
-              {notification.nft_display_name}
-            </TextLink>
+            <Link href={notificationInfo.href}>
+              <Text tw="text-13 font-bold text-black dark:text-white">
+                {notification.nft_display_name}
+              </Text>
+            </Link>
           ) : null}
         </Text>
         <View tw="h-1" />

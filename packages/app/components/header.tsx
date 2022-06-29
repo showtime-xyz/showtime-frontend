@@ -190,7 +190,9 @@ const NotificationsInHeader = () => {
           <ErrorBoundary
             fallback={
               <View tw="p-4">
-                <Text>Something went wrong</Text>
+                <Text tw="text-black dark:text-white">
+                  Something went wrong
+                </Text>
               </View>
             }
           >
