@@ -1,10 +1,11 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 
 import { ethers } from "ethers";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
@@ -12,7 +13,8 @@ import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { delay, isMobileWeb } from "app/utilities";
+import { IEdition } from "app/types";
+import { delay } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
 
@@ -56,10 +58,13 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useClaimNFT = () => {
+export const useClaimNFT = (edition?: IEdition) => {
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const { mutate: mutateEdition } = useCreatorCollectionDetail(
+    edition?.contract_address
+  );
   const { userAddress } = useCurrentUserAddress();
   const Alert = useAlert();
 
@@ -101,6 +106,15 @@ export const useClaimNFT = () => {
         track("NFT Claimed");
         dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
+        mutateEdition((d) => {
+          if (d) {
+            return {
+              ...d,
+              is_already_claimed: true,
+              total_claimed_count: d?.total_claimed_count + 1,
+            };
+          }
+        });
 
         return;
       }

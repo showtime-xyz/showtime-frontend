@@ -71,8 +71,6 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
     );
   }
 
-  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
-
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View

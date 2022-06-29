@@ -33,7 +33,7 @@ import {
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const { state, claimNFT } = useClaimNFT();
+  const { state, claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const share = useShare();
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
