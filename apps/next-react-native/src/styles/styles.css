@@ -53,10 +53,6 @@
     @apply bg-red-500 bg-opacity-20;
   }
 
-  [data-color-scheme="dark"] [role="menuitem"].danger:focus {
-    @apply outline-red-800;
-  }
-
   [role="menuitem"] > div > div:nth-child(1) {
     @apply flex-1 font-semibold text-gray-700;
   }
