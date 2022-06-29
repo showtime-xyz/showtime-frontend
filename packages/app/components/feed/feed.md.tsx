@@ -1,8 +1,6 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import Sticky from "react-stickynode";
-
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
@@ -24,6 +22,7 @@ import {
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
+import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
