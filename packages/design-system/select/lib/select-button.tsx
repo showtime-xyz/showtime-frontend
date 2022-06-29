@@ -54,7 +54,7 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
     const containerStyle = useMemo(
       () => [
         tw`${
-          size === "regular" ? "py-3" : "py-2"
+          size === "regular" ? "py-[11px]" : "py-[7px]"
         } flex-row items-center justify-between rounded-full pl-4 pr-2 border border-gray-200 dark:border-gray-800`,
         containerAnimatedStyle,
       ],

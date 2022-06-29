@@ -89,7 +89,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.27",
+        "version": "0.0.28",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -191,7 +191,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.26",
+        "version": "0.0.27",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
