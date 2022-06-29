@@ -38,6 +38,11 @@
 
   [data-color-scheme="dark"] [role="menuitem"]:hover {
     @apply bg-gray-100 bg-opacity-5;
+    outline: none;
+  }
+
+  [data-color-scheme="dark"] [role="menuitem"]:focus {
+    outline: initial;
   }
 
   [role="menuitem"].danger:hover {
@@ -46,6 +51,10 @@
 
   [data-color-scheme="dark"] [role="menuitem"].danger:hover {
     @apply bg-red-500 bg-opacity-20;
+  }
+
+  [data-color-scheme="dark"] [role="menuitem"].danger:focus {
+    @apply outline-red-800;
   }
 
   [role="menuitem"] > div > div:nth-child(1) {
