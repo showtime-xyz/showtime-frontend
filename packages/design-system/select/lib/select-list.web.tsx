@@ -19,6 +19,7 @@ export const SelectList: React.FC<SelectListProps> = forwardRef(
   ({ open, children, ...rest }, ref) => {
     const isDark = useIsDarkMode();
     return (
+      // @ts-ignore
       <AnimatePresence>
         {open ? (
           <MotiView
