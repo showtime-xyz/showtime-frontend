@@ -6,6 +6,7 @@ import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import {
@@ -218,10 +219,11 @@ const Profile = ({ address }: { address: string | null }) => {
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative my-2 w-full justify-between md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
-              <ProfileListFilter
-                collections={data?.tabs[index]?.collections || []}
-              />
+            <View tw="z-1 relative my-2 w-full flex-row items-center justify-between px-4 md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+              <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
+                {data?.tabs[index]?.displayed_count} ITEMS
+              </Text>
+              <ProfileListFilter />
             </View>
           }
         />
