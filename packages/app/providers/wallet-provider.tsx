@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Linking, Platform } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import WCProvider, {
@@ -75,9 +76,13 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
             return (
               <PressableScale
                 key={`wallet-${i}`}
-                onPress={() =>
-                  props.connectToWalletService(walletService, props.uri)
-                }
+                onPress={() => {
+                  if (Platform.OS === "android" && props.uri) {
+                    Linking.openURL(props.uri);
+                  } else {
+                    props.connectToWalletService(walletService, props.uri);
+                  }
+                }}
                 tw="my-2 flex-row items-center"
               >
                 <Image
