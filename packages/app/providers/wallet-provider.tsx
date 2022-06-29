@@ -85,7 +85,7 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
                   source={{ uri: walletService.image_url.lg }}
                   tw="h-10 w-10 rounded-md"
                 />
-                <View tw="w-2" />
+                <View tw="w-4" />
                 <Text tw="text-lg text-black dark:text-white">
                   {walletService.name}
                 </Text>
