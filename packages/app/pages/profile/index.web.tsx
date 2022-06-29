@@ -16,6 +16,7 @@ function ProfileRouter() {
       const as = router.asPath.replace("/", "/@");
       router.replace(href, as, {
         shallow: true,
+        scroll: false,
       });
     }
 
