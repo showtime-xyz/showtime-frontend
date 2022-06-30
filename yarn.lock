@@ -7416,6 +7416,7 @@ __metadata:
     "@types/react": ^18.0.1
     "@types/three": ^0.139.0
     "@types/uuid": ^8.3.4
+    "@walletconnect/react-native-dapp": ^1.7.8
     "@zeego/dropdown-menu": 0.0.2-alpha.28
     app: "*"
     array-to-image: ^1.0.0
@@ -7557,6 +7558,7 @@ __metadata:
     "@sentry/nextjs": 7.0.0-alpha.1
     "@tippyjs/react": ^4.2.6
     "@types/react-stickynode": ^4.0.0
+    "@walletconnect/react-native-dapp": ^1.7.8
     "@walletconnect/web3-provider": ^1.7.8
     app: "*"
     array-to-image: ^1.0.0
@@ -7646,6 +7648,7 @@ __metadata:
     "@storybook/addon-ondevice-notes": next
     "@storybook/react-native": next
     "@types/three": ^0.139.0
+    "@walletconnect/react-native-dapp": ^1.7.8
     "@zeego/dropdown-menu": ^0.0.2-alpha.28
     design-system: "*"
     expo: ^45.0.2
@@ -7705,6 +7708,7 @@ __metadata:
     "@storybook/react": ~6.5.9
     "@types/node": 16.11.9
     "@types/react": ^18.0.1
+    "@walletconnect/react-native-dapp": ^1.7.8
     babel-loader: ^8.2.3
     babel-plugin-react-native-web: ^0.17.5
     chromatic: ^6.0.6
