@@ -1,0 +1,92 @@
+diff --git a/node_modules/zeego/lib/commonjs/menu/web-primitives/index.js b/node_modules/zeego/lib/commonjs/menu/web-primitives/index.js
+index 0928e39..43336de 100644
+--- a/node_modules/zeego/lib/commonjs/menu/web-primitives/index.js
++++ b/node_modules/zeego/lib/commonjs/menu/web-primitives/index.js
+@@ -18,7 +18,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
+ const ItemPrimitive = _ref => {
+   let {
+     children,
+-    style
++    style,
++    className
+   } = _ref;
+   const titleChildren = (0, _children.pickChildren)(children, ItemTitle);
+ 
+@@ -35,8 +36,9 @@ const ItemPrimitive = _ref => {
+   }
+ 
+   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {
+-    style: style
+-  }, title, titleChildren.withoutTargetChildren.filter(child => typeof child != 'string'));
++    style: style,
++    className: className
++  }, titleChildren.withoutTargetChildren.filter(child => typeof child != 'string'), title);
+ };
+ 
+ exports.ItemPrimitive = ItemPrimitive;
+diff --git a/node_modules/zeego/lib/module/menu/web-primitives/index.js b/node_modules/zeego/lib/module/menu/web-primitives/index.js
+index f0ae44c..795f9b9 100644
+--- a/node_modules/zeego/lib/module/menu/web-primitives/index.js
++++ b/node_modules/zeego/lib/module/menu/web-primitives/index.js
+@@ -6,7 +6,8 @@ import { MenuDisplayName } from '../display-names';
+ const ItemPrimitive = _ref => {
+   let {
+     children,
+-    style
++    style,
++    className
+   } = _ref;
+   const titleChildren = pickChildren(children, ItemTitle);
+   let title = /*#__PURE__*/React.createElement(React.Fragment, null);
+@@ -22,8 +23,9 @@ const ItemPrimitive = _ref => {
+   }
+ 
+   return /*#__PURE__*/React.createElement(View, {
+-    style: style
+-  }, title, titleChildren.withoutTargetChildren.filter(child => typeof child != 'string'));
++    style: style,
++    className: className
++  }, titleChildren.withoutTargetChildren.filter(child => typeof child != 'string'), title);
+ };
+ 
+ const ItemTitle = _ref2 => {
+diff --git a/node_modules/zeego/lib/typescript/menu/web-primitives/index.d.ts b/node_modules/zeego/lib/typescript/menu/web-primitives/index.d.ts
+index 4a69e2e..b5d8045 100644
+--- a/node_modules/zeego/lib/typescript/menu/web-primitives/index.d.ts
++++ b/node_modules/zeego/lib/typescript/menu/web-primitives/index.d.ts
+@@ -1,6 +1,6 @@
+ /// <reference types="react" />
+ import type { MenuItemProps, MenuItemSubtitleProps, MenuItemTitleProps } from '../types';
+-declare const ItemPrimitive: ({ children, style }: MenuItemProps) => JSX.Element;
++declare const ItemPrimitive: ({ children, style, className }: MenuItemProps & { className?: string }) => JSX.Element;
+ declare const ItemTitle: {
+     ({ children, style }: MenuItemTitleProps): JSX.Element;
+     displayName: "ItemTitle";
+diff --git a/node_modules/zeego/src/menu/web-primitives/index.tsx b/node_modules/zeego/src/menu/web-primitives/index.tsx
+index 86764f4..581e2c7 100644
+--- a/node_modules/zeego/src/menu/web-primitives/index.tsx
++++ b/node_modules/zeego/src/menu/web-primitives/index.tsx
+@@ -8,7 +8,7 @@ import { pickChildren } from '../children'
+ import React from 'react'
+ import { MenuDisplayName } from '../display-names'
+ 
+-const ItemPrimitive = ({ children, style }: MenuItemProps) => {
++const ItemPrimitive = ({ children, style, className }: MenuItemProps & { className?:string }) => {
+   const titleChildren = pickChildren(children, ItemTitle)
+ 
+   let title = <></>
+@@ -21,11 +21,12 @@ const ItemPrimitive = ({ children, style }: MenuItemProps) => {
+   }
+ 
+   return (
+-    <View style={style}>
+-      {title}
++    // @ts-ignore
++    <View style={style} className={className}>
+       {titleChildren.withoutTargetChildren.filter(
+         (child) => typeof child != 'string'
+       )}
++      {title}
+     </View>
+   )
+ }
