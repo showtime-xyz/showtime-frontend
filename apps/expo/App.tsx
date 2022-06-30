@@ -18,6 +18,7 @@ enableScreens(true);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
+  enableInExpoDevelopment: false,
 });
 
 LogBox.ignoreLogs([
