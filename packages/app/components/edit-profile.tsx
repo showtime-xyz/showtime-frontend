@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -26,7 +27,6 @@ import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
 
-import { Fieldset } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 

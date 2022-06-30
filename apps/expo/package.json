@@ -80,7 +80,7 @@
     "@showtime-xyz/universal.divider": "^0.0.15",
     "@showtime-xyz/universal.dropdown-menu": "^0.0.10",
     "@showtime-xyz/universal.extensions.react-native-web": "^0.0.9",
-    "@showtime-xyz/universal.fieldset": "^0.0.28",
+    "@showtime-xyz/universal.fieldset": "^0.0.29",
     "@showtime-xyz/universal.hooks": "^0.0.15",
     "@showtime-xyz/universal.icon": "^0.0.22",
     "@showtime-xyz/universal.image": "^0.0.13",
