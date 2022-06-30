@@ -7582,6 +7582,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-diff: ^1.0.12
     ethers: ^5.6.4
+    focus-trap-react: ^9.0.2
     fortmatic: ^2.2.1
     jwt-decode: ^3.1.2
     libsodium-wrappers: ^0.7.9
@@ -19378,6 +19379,29 @@ __metadata:
     inherits: ^2.0.3
     readable-stream: ^2.3.6
   checksum: 42e07747f83bcd4e799da802e621d6039787749ffd41f5517f8c4f786ee967e31ba32b09f8b28a9c6f67bd4f5346772e604202df350e8d99f4141771bae31279
+  languageName: node
+  linkType: hard
+
+"focus-trap-react@npm:^9.0.2":
+  version: 9.0.2
+  resolution: "focus-trap-react@npm:9.0.2"
+  dependencies:
+    focus-trap: ^6.9.4
+    tabbable: ^5.3.3
+  peerDependencies:
+    prop-types: ^15.8.1
+    react: ">=16.3.0"
+    react-dom: ">=16.3.0"
+  checksum: 984a7f1ea831a73018d4dc3af3c2e05611935846ca1c9afad2de08286df566000468786c87bd03e023ff5fff1cf36c2094bd2d0c03c6318bfa54ee3004d42c63
+  languageName: node
+  linkType: hard
+
+"focus-trap@npm:^6.9.4":
+  version: 6.9.4
+  resolution: "focus-trap@npm:6.9.4"
+  dependencies:
+    tabbable: ^5.3.3
+  checksum: 0b4cebcc11010bd9397731092bd59a981e838c710c6497374ba70571875a14ab27c0db7d60f36005ec01bdabc3b9cfeda11d30ddf5b8874596dcc95e18913b3b
   languageName: node
   linkType: hard
 
@@ -32501,6 +32525,13 @@ __metadata:
   version: 2.0.15
   resolution: "synchronous-promise@npm:2.0.15"
   checksum: 6079a6acd37d02eb76f250dc7ce09009151744901b320a8cfbba056b015c3d7cbf4e7467458f2d27c6393634f68521b241ea9e35fd9640f8fb59342740550472
+  languageName: node
+  linkType: hard
+
+"tabbable@npm:^5.3.3":
+  version: 5.3.3
+  resolution: "tabbable@npm:5.3.3"
+  checksum: 1aa56e1bb617cc10616c407f4e756f0607f3e2d30f9803664d70b85db037ca27e75918ed1c71443f3dc902e21dc9f991ce4b52d63a538c9b69b3218d3babcd70
   languageName: node
   linkType: hard
 
