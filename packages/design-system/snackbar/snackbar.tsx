@@ -136,6 +136,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
   );
 
   return (
+    // @ts-ignore
     <AnimatePresence>
       {show && (
         <MotiView
