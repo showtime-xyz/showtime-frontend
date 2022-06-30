@@ -7416,7 +7416,7 @@ __metadata:
     "@types/react": ^18.0.1
     "@types/three": ^0.139.0
     "@types/uuid": ^8.3.4
-    "@walletconnect/react-native-dapp": ^1.7.4
+    "@walletconnect/react-native-dapp": ^1.7.8
     "@zeego/dropdown-menu": 0.0.2-alpha.28
     app: "*"
     array-to-image: ^1.0.0
@@ -7558,6 +7558,7 @@ __metadata:
     "@sentry/nextjs": 7.0.0-alpha.1
     "@tippyjs/react": ^4.2.6
     "@types/react-stickynode": ^4.0.0
+    "@walletconnect/react-native-dapp": ^1.7.8
     "@walletconnect/web3-provider": ^1.7.4
     app: "*"
     array-to-image: ^1.0.0
@@ -10852,7 +10853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/react-native-dapp@npm:^1.7.4":
+"@walletconnect/react-native-dapp@npm:^1.7.8":
   version: 1.7.8
   resolution: "@walletconnect/react-native-dapp@npm:1.7.8"
   dependencies:
