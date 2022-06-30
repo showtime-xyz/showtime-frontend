@@ -3395,9 +3395,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:4.3.0, @gorhom/bottom-sheet@npm:^4.2.2":
-  version: 4.3.0
-  resolution: "@gorhom/bottom-sheet@npm:4.3.0"
+"@gorhom/bottom-sheet@npm:4.3.2":
+  version: 4.3.2
+  resolution: "@gorhom/bottom-sheet@npm:4.3.2"
   dependencies:
     "@gorhom/portal": 1.0.13
     invariant: ^2.2.4
@@ -3408,7 +3408,7 @@ __metadata:
     react-native: "*"
     react-native-gesture-handler: ">=1.10.1"
     react-native-reanimated: ">=2.2.0"
-  checksum: 9b2342e69a5e666f7a98eb02902a8386c89317ed17b7cefda1ddd5d968ddc4d33a3b345c599d6948d7e7de32dc32bdaba6523507c653a4333efd271e0483ef29
+  checksum: e8d4ecb82bd6f6dbc1dd555199bbb62665dfac7e30a1aa0f88664bce0196a4b9d4d2fcb5ec59eff6c319a40541776e71bbbb22c0e1274e68bb07afb3b66fd403
   languageName: node
   linkType: hard
 
@@ -6642,7 +6642,7 @@ __metadata:
   version: 0.0.20
   resolution: "@showtime-xyz/universal.bottom-sheet@npm:0.0.20"
   dependencies:
-    "@gorhom/bottom-sheet": 4.3.0
+    "@gorhom/bottom-sheet": 4.3.2
     "@showtime-xyz/universal.button": 0.0.20
     "@showtime-xyz/universal.safe-area": 0.0.11
     "@showtime-xyz/universal.tailwind": 0.0.14
@@ -6941,7 +6941,7 @@ __metadata:
   version: 0.0.27
   resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.27"
   dependencies:
-    "@gorhom/bottom-sheet": 4.3.0
+    "@gorhom/bottom-sheet": 4.3.2
     "@showtime-xyz/universal.bottom-sheet": 0.0.20
     "@showtime-xyz/universal.button": 0.0.20
     "@showtime-xyz/universal.modal": 0.0.27
@@ -6961,7 +6961,7 @@ __metadata:
   version: 0.0.27
   resolution: "@showtime-xyz/universal.modal@npm:0.0.27"
   dependencies:
-    "@gorhom/bottom-sheet": 4.3.0
+    "@gorhom/bottom-sheet": 4.3.2
     "@showtime-xyz/universal.button": 0.0.20
     "@showtime-xyz/universal.icon": 0.0.22
     "@showtime-xyz/universal.safe-area": 0.0.11
@@ -7096,7 +7096,7 @@ __metadata:
   version: 0.0.27
   resolution: "@showtime-xyz/universal.select@npm:0.0.27"
   dependencies:
-    "@gorhom/bottom-sheet": 4.3.0
+    "@gorhom/bottom-sheet": 4.3.2
     "@headlessui/react": 1.6.1
     "@showtime-xyz/universal.bottom-sheet": 0.0.20
     "@showtime-xyz/universal.hooks": 0.0.15
@@ -7339,7 +7339,7 @@ __metadata:
     "@config-plugins/detox": ^1.1.0
     "@ethersproject/shims": ^5.5.0
     "@expo/xcpretty": ^4.1.0
-    "@gorhom/bottom-sheet": ^4.2.2
+    "@gorhom/bottom-sheet": 4.3.2
     "@growthbook/growthbook-react": ^0.7.0
     "@hookform/resolvers": ^2.8.5
     "@logrocket/react-native": ^1.2.1

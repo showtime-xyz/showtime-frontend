@@ -1,3 +1,3 @@
-import { Modal } from "./index";
+import { Modal } from "./modal";
 
 export const ModalScreen = Modal;
