@@ -3,6 +3,13 @@ import React from "react";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from "@showtime-xyz/universal.dropdown-menu";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -10,14 +17,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
-
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
 
 type Props = {
   activity: any; // TODO: add Activity type

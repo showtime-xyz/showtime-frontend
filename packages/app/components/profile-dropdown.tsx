@@ -1,6 +1,20 @@
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuItemIcon,
+} from "@showtime-xyz/universal.dropdown-menu";
+import {
+  MoreHorizontal,
+  Copy,
+  Flag,
+  Slash,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
@@ -9,16 +23,6 @@ import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import type { Profile } from "app/types";
-
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuItemIcon,
-} from "design-system/dropdown-menu";
-import { MoreHorizontal, Copy, Flag, Slash } from "design-system/icon";
 
 const MenuItemIcon = ({ Icon }) => {
   return (

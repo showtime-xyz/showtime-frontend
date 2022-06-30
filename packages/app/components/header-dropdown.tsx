@@ -2,6 +2,23 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuTriggerItem,
+  DropdownMenuItemIcon,
+} from "@showtime-xyz/universal.dropdown-menu";
+import {
+  User,
+  Settings,
+  Edit,
+  Moon,
+  Sun,
+  LogOut,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -11,16 +28,6 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
-  DropdownMenuItemIcon,
-} from "design-system/dropdown-menu";
-import { User, Settings, Edit, Moon, Sun, LogOut } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 const MenuItemIcon = ({ Icon }) => {
