@@ -1,0 +1,44 @@
+diff --git a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
+index 9b5b1e2..91b462c 100644
+--- a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
++++ b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
+@@ -20,14 +20,6 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+         ? maybeRenderQrcodeModal
+         : defaultRenderQrcodeModal), [maybeRenderQrcodeModal]);
+     const open = React.useCallback(async (uri, cb) => {
+-        if (Platform.OS === 'android') {
+-            const canOpenURL = await Linking.canOpenURL(uri);
+-            if (!canOpenURL) {
+-                Linking.openURL('https://walletconnect.org/wallets');
+-                throw new Error('No wallets found.');
+-            }
+-            await Linking.openURL(uri);
+-        }
+         setState({
+             uri,
+             visible: true,
+@@ -118,7 +110,7 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+                         });
+                         if (maybeMatchingServices.length === 1) {
+                             const [detectedWalletService] = maybeMatchingServices;
+-                            const url = formatWalletServiceUrl(detectedWalletService);
++                            const url = `${formatWalletServiceUrl(detectedWalletService)}/wc`;
+                             if (await Linking.canOpenURL(url)) {
+                                 return Linking.openURL(url);
+                             }
+@@ -132,7 +124,7 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+                 if (!walletService) {
+                     return maybeThrowError(new Error('Cached WalletService not found.'));
+                 }
+-                const url = formatWalletServiceUrl(walletService);
++                const url = `${formatWalletServiceUrl(walletService)}/wc`;
+                 return (await Linking.canOpenURL(url)) && Linking.openURL(url);
+             }
+         });
+@@ -220,5 +212,5 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+     ]);
+     return (React.createElement(WalletConnectContext.Provider, { value: value },
+         !!children && children,
+-        Platform.OS !== 'android' && renderQrcodeModal(modalProps)));
++        renderQrcodeModal(modalProps)));
+ }
