@@ -2,15 +2,6 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
-  DropdownMenuItemIcon,
-} from "@showtime-xyz/universal.dropdown-menu";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -20,6 +11,15 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuTriggerItem,
+  DropdownMenuItemIcon,
+} from "design-system/dropdown-menu";
 import { User, Settings, Edit, Moon, Sun, LogOut } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
@@ -29,9 +29,7 @@ const MenuItemIcon = ({ Icon }) => {
       <Icon
         width="1em"
         height="1em"
-        color={
-          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
-        }
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
       />
     </DropdownMenuItemIcon>
   );

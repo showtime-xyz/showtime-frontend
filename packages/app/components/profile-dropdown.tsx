@@ -26,9 +26,7 @@ const MenuItemIcon = ({ Icon }) => {
       <Icon
         width="1em"
         height="1em"
-        color={
-          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
-        }
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
       />
     </DropdownMenuItemIcon>
   );
