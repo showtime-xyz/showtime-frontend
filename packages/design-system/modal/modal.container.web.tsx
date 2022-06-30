@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
+import FocusTrap from "focus-trap-react";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -45,15 +46,22 @@ function ModalContainerComponent({
   );
 
   return (
-    <View tw={CONTAINER_TW} style={styles.container}>
-      {/* prevent scrolling/shaking when modal is open */}
-      <RemoveScrollBar />
-      <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
-      <View style={[tw.style(modalContainerTW), style]}>
-        <ModalHeader title={title} onClose={onClose} />
-        <View style={[tw.style(MODAL_BODY_TW), bodyStyle]}>{children}</View>
+    <FocusTrap aria-modal>
+      <View tw={CONTAINER_TW} style={styles.container}>
+        {/* prevent scrolling/shaking when modal is open */}
+        <RemoveScrollBar />
+        <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
+        <View style={[tw.style(modalContainerTW), style]}>
+          <ModalHeader title={title} onClose={onClose} />
+          <View
+            style={[tw.style(MODAL_BODY_TW), bodyStyle]}
+            accessibilityViewIsModal
+          >
+            {children}
+          </View>
+        </View>
       </View>
-    </View>
+    </FocusTrap>
   );
 }
 
