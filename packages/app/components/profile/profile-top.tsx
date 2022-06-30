@@ -140,7 +140,8 @@ export const ProfileTop = ({
         Platform.select({
           native: `/profile/followers?profileId=${profileId}`,
           web: router.asPath,
-        })
+        }),
+        { scroll: false }
       ),
     [profileId, router]
   );
@@ -161,7 +162,10 @@ export const ProfileTop = ({
         Platform.select({
           native: `/profile/following?profileId=${profileId}`,
           web: router.asPath,
-        })
+        }),
+        {
+          scroll: false,
+        }
       ),
     [profileId, router]
   );
