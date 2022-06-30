@@ -32,6 +32,18 @@ import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 import { ProfileSocial } from "./profile-social";
 
+function getFullSizeCover(url: string) {
+  if (
+    url &&
+    url.startsWith("https://lh3.googleusercontent.com") &&
+    !url.endsWith("=s0")
+  ) {
+    return url + "=s0";
+  }
+
+  return url;
+}
+
 type FollowProps = {
   onPressFollowing: () => void;
   onPressFollower: () => void;
@@ -213,7 +225,9 @@ export const ProfileTop = ({
               tapToClose
             >
               <Image
-                source={{ uri: profileData?.profile.cover_url + "=s0" }}
+                source={{
+                  uri: getFullSizeCover(profileData?.profile.cover_url),
+                }}
                 alt="Cover image"
                 resizeMode="cover"
                 width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
