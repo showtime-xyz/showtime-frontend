@@ -160,7 +160,7 @@ const NotificationDescription = ({
 }) => {
   const actors = notification.actors;
 
-  if (actors.length > 0) {
+  if (actors && actors.length > 0) {
     return (
       <View>
         <Text
