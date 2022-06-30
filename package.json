@@ -72,8 +72,7 @@
     "jest-runtime": "28.0.3",
     "react-native-reanimated": "2.8.0",
     "@types/react": "18.0.1",
-    "@storybook/react-native": "next",
-    "@walletconnect/react-native-dapp": "^1.7.8"
+    "@storybook/react-native": "next"
   },
   "react-native": {
     "zlib": "browserify-zlib",
@@ -125,5 +124,8 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@walletconnect/react-native-dapp": "^1.7.8"
+  }
 }

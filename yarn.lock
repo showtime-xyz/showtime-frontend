@@ -31239,6 +31239,7 @@ __metadata:
     "@types/react-native": 0.67.6
     "@typescript-eslint/eslint-plugin": 5.23.0
     "@typescript-eslint/parser": 5.23.0
+    "@walletconnect/react-native-dapp": ^1.7.8
     eslint: ^8.15.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-diff: ^1.0.12
