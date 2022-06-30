@@ -78,7 +78,7 @@
     "@showtime-xyz/universal.country-code-picker": "^0.0.22",
     "@showtime-xyz/universal.data-pill": "^0.0.15",
     "@showtime-xyz/universal.divider": "^0.0.15",
-    "@showtime-xyz/universal.dropdown-menu": "^0.0.10",
+    "@showtime-xyz/universal.dropdown-menu": "^0.0.11",
     "@showtime-xyz/universal.extensions.react-native-web": "^0.0.9",
     "@showtime-xyz/universal.fieldset": "^0.0.29",
     "@showtime-xyz/universal.hooks": "^0.0.15",
@@ -114,7 +114,6 @@
     "@testing-library/react-native": "^9.1.0",
     "@tradle/react-native-http": "^2.0.0",
     "@walletconnect/react-native-dapp": "^1.7.8",
-    "@zeego/dropdown-menu": "0.0.2-alpha.28",
     "app": "*",
     "array-to-image": "^1.0.0",
     "assert": "^2.0.0",
@@ -210,7 +209,8 @@
     "uuid": "^8.3.2",
     "vm-browserify": "1.1.2",
     "yup": "^0.32.11",
-    "yup-phone": "^1.3.2"
+    "yup-phone": "^1.3.2",
+    "zeego": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",

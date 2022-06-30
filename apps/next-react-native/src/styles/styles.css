@@ -56,15 +56,15 @@
     @apply bg-red-500 bg-opacity-20;
   }
 
-  [role="menuitem"] > div > div:nth-child(1) {
-    @apply flex-1 font-semibold text-gray-700;
+  [role="menuitem"] > div > div:nth-child(3) {
+    @apply ml-2 flex-1 font-semibold text-gray-700;
   }
 
-  [data-color-scheme="dark"] [role="menuitem"] > div > div:nth-child(1) {
+  [data-color-scheme="dark"] [role="menuitem"] > div > div:nth-child(3) {
     @apply text-neutral-300;
   }
 
-  [role="menuitem"].danger:hover > div > div:nth-child(1),
+  [role="menuitem"].danger:hover > div > div:nth-child(3),
   [role="menuitem"].danger:hover svg > * {
     @apply text-red-500;
   }

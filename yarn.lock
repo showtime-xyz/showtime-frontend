@@ -5018,7 +5018,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-dropdown-menu@npm:0.1.6, @radix-ui/react-dropdown-menu@npm:^0.1.1":
+"@radix-ui/react-dropdown-menu@npm:0.1.6":
   version: 0.1.6
   resolution: "@radix-ui/react-dropdown-menu@npm:0.1.6"
   dependencies:
@@ -6761,25 +6761,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.dropdown-menu@npm:^0.0.10":
-  version: 0.0.10
-  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.10"
+"@showtime-xyz/universal.dropdown-menu@npm:^0.0.11":
+  version: 0.0.11
+  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.11"
   dependencies:
-    "@radix-ui/react-dropdown-menu": 0.1.6
-    "@react-native-menu/menu": ^0.5.2
-    "@showtime-xyz/universal.color-scheme": 0.0.5
     "@showtime-xyz/universal.tailwind": 0.0.14
     "@showtime-xyz/universal.text": 0.0.15
-    "@zeego/menu": 0.0.2-alpha.28
     moti: 0.17.1
-    react-native-popper: 0.3.2
     react-native-reanimated: 2.8.0
+    zeego: 0.4.0
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 1537e0988afc6cc412530e94ed931e7a60e513b3a312c26e3a9bef9e36a1bdc47542c07e54cd1db9576bafc3ba60b6d45aac616cb2360326c46ea53c3866081c
+  checksum: 677a033da6052a7c55f6b0b8ea09da6bc0c0a7460205ef334e43f036a0f31e6014119baa08c5c1daa9ebda80086c93c87ce019523019d4ad3500118e7e26ca87
   languageName: node
   linkType: hard
 
@@ -7370,7 +7366,7 @@ __metadata:
     "@showtime-xyz/universal.country-code-picker": ^0.0.22
     "@showtime-xyz/universal.data-pill": ^0.0.15
     "@showtime-xyz/universal.divider": ^0.0.15
-    "@showtime-xyz/universal.dropdown-menu": ^0.0.10
+    "@showtime-xyz/universal.dropdown-menu": ^0.0.11
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.9
     "@showtime-xyz/universal.fieldset": ^0.0.29
     "@showtime-xyz/universal.hooks": ^0.0.15
@@ -7417,7 +7413,6 @@ __metadata:
     "@types/three": ^0.139.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.7.8
-    "@zeego/dropdown-menu": 0.0.2-alpha.28
     app: "*"
     array-to-image: ^1.0.0
     assert: ^2.0.0
@@ -7528,6 +7523,7 @@ __metadata:
     vm-browserify: 1.1.2
     yup: ^0.32.11
     yup-phone: ^1.3.2
+    zeego: ^0.4.0
     zx: 4.3.0
   languageName: unknown
   linkType: soft
@@ -7647,7 +7643,6 @@ __metadata:
     "@storybook/addon-ondevice-notes": next
     "@storybook/react-native": next
     "@types/three": ^0.139.0
-    "@zeego/dropdown-menu": ^0.0.2-alpha.28
     design-system: "*"
     expo: ^45.0.2
     expo-asset: ~8.5.0
@@ -11315,31 +11310,6 @@ __metadata:
   version: 1.1.0
   resolution: "@yarnpkg/lockfile@npm:1.1.0"
   checksum: 05b881b4866a3546861fee756e6d3812776ea47fa6eb7098f983d6d0eefa02e12b66c3fff931574120f196286a7ad4879ce02743c8bb2be36c6a576c7852083a
-  languageName: node
-  linkType: hard
-
-"@zeego/dropdown-menu@npm:0.0.2-alpha.28, @zeego/dropdown-menu@npm:^0.0.2-alpha.28":
-  version: 0.0.2-alpha.28
-  resolution: "@zeego/dropdown-menu@npm:0.0.2-alpha.28"
-  dependencies:
-    "@radix-ui/react-dropdown-menu": ^0.1.1
-    "@zeego/menu": ^0.0.2-alpha.28
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: ac710dc868f9ad7dadbbe03516aacacfcb7ce817be1ad8a24070cdc2c2b47ec9f77a4370e70e1382be28508cb6727625ea54bf85318b0c94285847c708c50084
-  languageName: node
-  linkType: hard
-
-"@zeego/menu@npm:0.0.2-alpha.28, @zeego/menu@npm:^0.0.2-alpha.28":
-  version: 0.0.2-alpha.28
-  resolution: "@zeego/menu@npm:0.0.2-alpha.28"
-  dependencies:
-    react-native-ios-context-menu: ^1.3.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: e714f7325808d58458870ba792dd4c2ea41650a06f1049c5b254f3e7609f572f894ec1875cdfcdd1309b5e51339a5f9b66ad2f70009fa60c834095149d961f04
   languageName: node
   linkType: hard
 
@@ -29112,7 +29082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-popper@npm:0.3.2, react-native-popper@npm:^0.3.2":
+"react-native-popper@npm:^0.3.2":
   version: 0.3.2
   resolution: "react-native-popper@npm:0.3.2"
   dependencies:
@@ -35973,6 +35943,20 @@ __metadata:
     property-expr: ^2.0.4
     toposort: ^2.0.2
   checksum: 43a16786b47cc910fed4891cebdd89df6d6e31702e9462e8f969c73eac88551ce750732608012201ea6b93802c8847cb0aa27b5d57370640f4ecf30f9f97d4b0
+  languageName: node
+  linkType: hard
+
+"zeego@npm:0.4.0, zeego@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "zeego@npm:0.4.0"
+  dependencies:
+    "@radix-ui/react-dropdown-menu": 0.1.6
+  peerDependencies:
+    "@react-native-menu/menu": "*"
+    react: "*"
+    react-native: "*"
+    react-native-ios-context-menu: "*"
+  checksum: b12c9c74809966282882a09f17037be0980c33ad1de13bd9772c2027d7e8072bf0c8e373791a3687dec18893387073fdd2503a749f96f5ff47c731538896d576
   languageName: node
   linkType: hard
 
