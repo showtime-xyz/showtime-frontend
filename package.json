@@ -124,5 +124,8 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@walletconnect/react-native-dapp": "^1.7.8"
+  }
 }

@@ -1,11 +1,19 @@
 import { memo } from "react";
+import { Linking, Platform } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import WCProvider, {
   RenderQrcodeModalProps,
-  QrcodeModal,
+  WalletService,
 } from "@walletconnect/react-native-dapp";
 import { FullWindowOverlay } from "react-native-screens";
+
+import { Image } from "@showtime-xyz/universal.image";
+import { ModalHeader } from "@showtime-xyz/universal.modal";
+import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 const scheme = `io.showtime${
   process.env.STAGE === "development"
@@ -31,10 +39,24 @@ interface WalletConnectProviderProps {
   children: React.ReactNode;
 }
 
+const WALLETS = [
+  "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96", // MetaMask
+  "cf21952a9bc8108bf13b12c92443751e2cc388d27008be4201b92bbc6d83dd46", // Argent
+  "4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0", // Trust Wallet
+  "1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369", // Rainbow
+  "19177a98252e07ddfc9af2083ba8e07ef627cb6103467ffebb3f8f4205fd7927", // Ledger Live
+];
+
 function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
+  const insets = useSafeAreaInsets();
+
   if (!props.visible) {
     return null;
   }
+
+  const wallets = props.walletServices.filter((wallet) => {
+    return WALLETS.includes(wallet.id);
+  });
 
   return (
     <FullWindowOverlay
@@ -45,7 +67,38 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
         justifyContent: "center",
       }}
     >
-      <QrcodeModal division={4} {...props} />
+      <View tw="flex-1 bg-white dark:bg-black">
+        <View style={{ paddingTop: insets.top }} />
+        <ModalHeader title="Connect my wallet" onClose={props.onDismiss} />
+        <View tw="justify-center bg-white p-4 dark:bg-black">
+          {/* TODO: Coinbase Wallet */}
+          {wallets.map((walletService: WalletService, i: number) => {
+            return (
+              <PressableScale
+                key={`wallet-${i}`}
+                onPress={() => {
+                  if (Platform.OS === "android" && props.uri) {
+                    Linking.openURL(props.uri);
+                  } else {
+                    props.connectToWalletService(walletService, props.uri);
+                  }
+                }}
+                tw="my-2 flex-row items-center"
+              >
+                <Image
+                  // @ts-ignore
+                  source={{ uri: walletService.image_url.lg }}
+                  tw="h-10 w-10 rounded-md"
+                />
+                <View tw="w-4" />
+                <Text tw="text-lg text-black dark:text-white">
+                  {walletService.name}
+                </Text>
+              </PressableScale>
+            );
+          })}
+        </View>
+      </View>
     </FullWindowOverlay>
   );
 }
