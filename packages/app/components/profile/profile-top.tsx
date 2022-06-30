@@ -213,7 +213,7 @@ export const ProfileTop = ({
               tapToClose
             >
               <Image
-                source={{ uri: profileData?.profile.cover_url }}
+                source={{ uri: profileData?.profile.cover_url + "=s0" }}
                 alt="Cover image"
                 resizeMode="cover"
                 width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
