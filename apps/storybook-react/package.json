@@ -11,7 +11,6 @@
     "chromatic": "npx chromatic --project-token=aa4fa9ec8af5"
   },
   "dependencies": {
-    "@walletconnect/react-native-dapp": "^1.7.8",
     "design-system": "*",
     "next": "12.1.5",
     "react": "18.0.0",
