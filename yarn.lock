@@ -7558,7 +7558,7 @@ __metadata:
     "@sentry/nextjs": 7.0.0-alpha.1
     "@tippyjs/react": ^4.2.6
     "@types/react-stickynode": ^4.0.0
-    "@walletconnect/web3-provider": ^1.7.4
+    "@walletconnect/web3-provider": ^1.7.8
     app: "*"
     array-to-image: ^1.0.0
     authereum: ^0.1.0
@@ -10921,7 +10921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/web3-provider@npm:^1.7.4":
+"@walletconnect/web3-provider@npm:^1.7.8":
   version: 1.7.8
   resolution: "@walletconnect/web3-provider@npm:1.7.8"
   dependencies:
@@ -31238,6 +31238,7 @@ __metadata:
     "@types/react-native": 0.67.6
     "@typescript-eslint/eslint-plugin": 5.23.0
     "@typescript-eslint/parser": 5.23.0
+    "@walletconnect/react-native-dapp": ^1.7.8
     eslint: ^8.15.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-diff: ^1.0.12
