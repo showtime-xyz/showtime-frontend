@@ -1,6 +1,28 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuItemIcon,
+  DropdownMenuTrigger,
+} from "@showtime-xyz/universal.dropdown-menu";
+import {
+  MoreHorizontal,
+  Trash,
+  File,
+  UserMinus,
+  Flag,
+  Transfer,
+  EyeOff,
+  Copy,
+  Slash,
+  Refresh,
+  Clock,
+  Menu,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
@@ -18,38 +40,13 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuItemIcon,
-  DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
-import {
-  MoreHorizontal,
-  Trash,
-  File,
-  UserMinus,
-  Flag,
-  Transfer,
-  EyeOff,
-  Copy,
-  Slash,
-  Refresh,
-  Clock,
-  Menu,
-} from "design-system/icon";
-
 const MenuItemIcon = ({ Icon }) => {
   return (
     <DropdownMenuItemIcon>
       <Icon
         width="1em"
         height="1em"
-        color={
-          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
-        }
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
       />
     </DropdownMenuItemIcon>
   );
@@ -130,6 +127,10 @@ function NFTDropdown({
       Platform.select({
         native: as,
         web: router.asPath.startsWith("/nft/") ? as : router.asPath,
+      }),
+      Platform.select({
+        native: {},
+        web: { scroll: false },
       })
     );
   };

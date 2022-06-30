@@ -8,7 +8,10 @@ class Document extends NextDocument {
         <Head>
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
+            rel="stylesheet"
+          />
         </Head>
         <body className="!max-w-screen bg-white dark:bg-black">
           <Main />

@@ -1,5 +1,12 @@
 import { useRouter as useNextRouter } from "next/router";
+import type { NextRouter } from "next/router";
 import { useRouter as useSolitoRouter } from "solito/router";
+
+interface TransitionOptions {
+  shallow?: boolean;
+  locale?: string | false;
+  scroll?: boolean;
+}
 
 export function useRouter() {
   const { replace, back, pathname, query, asPath } = useNextRouter();
@@ -10,6 +17,15 @@ export function useRouter() {
 
   return {
     ...solitoRouter,
+    push: (
+      url: Parameters<NextRouter["push"]>[0],
+      as?: Parameters<NextRouter["push"]>[1],
+      options?: TransitionOptions | undefined
+    ) =>
+      solitoRouter.push(url, as, {
+        ...options,
+        scroll: false,
+      }),
     pop: () => {
       if (modal) {
         // Sometimes we open a modal and we also update the URL to match the
@@ -21,7 +37,7 @@ export function useRouter() {
           ? asPath.split("/").slice(0, -1).join("/")
           : asPath;
 
-        replace(as, as, { shallow: true });
+        replace(as, as, { shallow: true, scroll: false });
       } else {
         back();
       }

@@ -16,6 +16,7 @@ function ProfileRouter() {
       const as = router.asPath.replace("/", "/@");
       router.replace(href, as, {
         shallow: true,
+        scroll: false,
       });
     }
 
@@ -28,6 +29,7 @@ function ProfileRouter() {
       const as = router.asPath.replace("/profile/", "/");
       router.replace(href, as, {
         shallow: true,
+        scroll: false,
       });
     }
   }, [router]);

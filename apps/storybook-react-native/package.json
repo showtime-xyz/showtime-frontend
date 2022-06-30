@@ -38,7 +38,6 @@
     "@storybook/addon-ondevice-controls": "next",
     "@storybook/addon-ondevice-notes": "next",
     "@storybook/react-native": "next",
-    "@zeego/dropdown-menu": "^0.0.2-alpha.28",
     "design-system": "*",
     "expo": "^45.0.2",
     "expo-asset": "~8.5.0",

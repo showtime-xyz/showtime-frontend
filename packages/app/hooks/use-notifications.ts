@@ -13,7 +13,7 @@ export interface Actor {
 }
 
 export interface NotificationType {
-  actors: Actor[];
+  actors?: Actor[];
   description?: string;
   id: number;
   img_url: string;
