@@ -38,6 +38,11 @@
 
   [data-color-scheme="dark"] [role="menuitem"]:hover {
     @apply bg-gray-100 bg-opacity-5;
+    outline: none;
+  }
+
+  [data-color-scheme="dark"] [role="menuitem"]:focus {
+    outline: initial;
   }
 
   [role="menuitem"].danger:hover {
