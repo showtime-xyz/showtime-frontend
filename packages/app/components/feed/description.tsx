@@ -79,9 +79,8 @@ function Description({ nft }: Props) {
   return (
     <View>
       <Text
-        tw="font-space-bold text-2xl text-gray-900 dark:text-white"
+        tw="font-space-bold text-lg text-gray-900 dark:text-white"
         numberOfLines={numberOfLines}
-        style={{ fontSize: 16, lineHeight: 20 }}
         onTextLayout={onTextLayout}
       >
         {description} this is a very long description to test if the view gets
