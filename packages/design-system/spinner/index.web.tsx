@@ -9,6 +9,8 @@ const animate = { rotate: "360deg" };
 export const Spinner = ({ size, duration = 750, ...rest }: SpinnerProps) => {
   return (
     <MotiView
+      // @ts-ignore - chromatic ignore DOM element https://www.chromatic.com/docs/ignoring-elements#ignore-dom-elements
+      dataSet={{ chromatic: "ignore" }}
       from={from}
       animate={animate}
       transition={{
@@ -17,7 +19,6 @@ export const Spinner = ({ size, duration = 750, ...rest }: SpinnerProps) => {
         repeatReverse: false,
         easing: Easing.linear,
         duration,
-        delay: 300,
       }}
       style={{
         height: getSpinnerSize(size),
