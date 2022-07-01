@@ -84,6 +84,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
     () => (isExplore ? colors.white : isDark ? colors.gray[900] : colors.white),
     [isExplore, isDark]
   );
+
   useEffect(() => {
     if (snackbar.hideAfter) {
       hideTimeoutRef.current && clearTimeout(hideTimeoutRef.current);

@@ -6,13 +6,16 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AccessibilityInfo, ViewStyle } from "react-native";
+import { AccessibilityInfo, ViewStyle, Dimensions } from "react-native";
 
 import { MotiTransitionProp, StyleValueWithReplacedTransforms } from "moti";
+
+import { PanToClose } from "design-system/pan-to-close";
 
 import { SnackbarTransitionType } from "./constants";
 import { initSnakbarParams, Snackbar } from "./snackbar";
 
+const { height } = Dimensions.get("window");
 export type SnackbarStateType = "default" | "waiting" | "done";
 
 export type SnackbarShowParams = {
@@ -113,7 +116,18 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   return (
     <SnackbarContext.Provider value={value}>
       {children}
-      <Snackbar {...state} />
+      <PanToClose
+        panCloseDirection={
+          state.snackbar?.bottom
+            ? state.snackbar?.bottom > height / 2
+              ? "top"
+              : "bottom"
+            : "bottom"
+        }
+        onClose={hide}
+      >
+        <Snackbar {...state} />
+      </PanToClose>
     </SnackbarContext.Provider>
   );
 };

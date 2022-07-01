@@ -33,6 +33,7 @@ const Snackbar = () => {
           toggleSnackbar(() =>
             snackbar?.show({
               text: "Minting “A day in the woods...”",
+              bottom: 604,
             })
           )
         }
