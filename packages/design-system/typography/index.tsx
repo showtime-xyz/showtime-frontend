@@ -39,7 +39,7 @@ const fontMetricsInter = {
   capHeight: 2048,
   ascent: 2728,
   descent: -680,
-  lineGap: 0,
+  lineGap: 20,
   unitsPerEm: 2816,
   xHeight: 1536,
 };
@@ -49,7 +49,7 @@ const fontMetricsSpaceGrotesk = {
   capHeight: 700,
   ascent: 984,
   descent: -292,
-  lineGap: 0,
+  lineGap: 20,
   unitsPerEm: 1000,
   xHeight: 486,
 };
@@ -77,7 +77,7 @@ const createTextSize = ({
       fontSize,
       leading,
     }),
-  } as const;
+  };
 
   const marginCorrectionForPlatform =
     Platform.OS === "ios" || Platform.OS === "android"
@@ -103,7 +103,7 @@ export const textSizes = {
   "text-xs": createTextSize({
     fontSize: 12,
     letterSpacing: 0.6,
-    lineHeight: 15,
+    lineHeight: 20,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -113,7 +113,7 @@ export const textSizes = {
   "text-13": createTextSize({
     fontSize: 13,
     letterSpacing: 0.6,
-    lineHeight: 16,
+    lineHeight: 21,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -123,7 +123,7 @@ export const textSizes = {
   "text-sm": createTextSize({
     fontSize: 14,
     letterSpacing: 0.6,
-    lineHeight: 17,
+    lineHeight: 22,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -133,7 +133,7 @@ export const textSizes = {
   "text-base": createTextSize({
     fontSize: 16,
     letterSpacing: 0.5,
-    lineHeight: 19,
+    lineHeight: 24,
     marginCorrection: {
       android: -0.1,
       ios: -0.5,
@@ -143,7 +143,7 @@ export const textSizes = {
   "text-lg": createTextSize({
     fontSize: 18,
     letterSpacing: 0.5,
-    lineHeight: 21,
+    lineHeight: 26,
     marginCorrection: {
       android: 0.2,
       ios: 0,
@@ -153,7 +153,7 @@ export const textSizes = {
   "text-xl": createTextSize({
     fontSize: 20,
     letterSpacing: 0.6,
-    lineHeight: 23,
+    lineHeight: 29,
     marginCorrection: {
       android: 0,
       ios: -0.5,
@@ -163,7 +163,7 @@ export const textSizes = {
   "text-2xl": createTextSize({
     fontSize: 24,
     letterSpacing: 0.6,
-    lineHeight: 27,
+    lineHeight: 30,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,
@@ -173,7 +173,7 @@ export const textSizes = {
   "text-3xl": createTextSize({
     fontSize: 30,
     letterSpacing: 0.6,
-    lineHeight: 33,
+    lineHeight: 36,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,
@@ -183,7 +183,7 @@ export const textSizes = {
   "text-4xl": createTextSize({
     fontSize: 36,
     letterSpacing: 0.6,
-    lineHeight: 41,
+    lineHeight: 46,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,
