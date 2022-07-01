@@ -7,7 +7,6 @@ export const fontFamily = (font: string) => {
   if (Platform.OS === "web") {
     return `"${font.replace(/-/g, " ")}"`;
   }
-
   return font;
 };
 
