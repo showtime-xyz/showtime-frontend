@@ -30,7 +30,7 @@ const capsize = (options: Parameters<typeof precomputeValues>[0]) => {
     marginTop: PixelRatio.roundToNearestPixel(
       capHeightTrimEm * fontSize * fontScale
     ),
-  } as const;
+  };
 };
 
 // Sourced from @capsizecss/metrics
@@ -103,7 +103,7 @@ export const textSizes = {
   "text-xs": createTextSize({
     fontSize: 12,
     letterSpacing: 0.6,
-    lineHeight: 20,
+    lineHeight: 15,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -113,7 +113,7 @@ export const textSizes = {
   "text-13": createTextSize({
     fontSize: 13,
     letterSpacing: 0.6,
-    lineHeight: 21,
+    lineHeight: 16,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -123,7 +123,7 @@ export const textSizes = {
   "text-sm": createTextSize({
     fontSize: 14,
     letterSpacing: 0.6,
-    lineHeight: 22,
+    lineHeight: 17,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -133,7 +133,7 @@ export const textSizes = {
   "text-base": createTextSize({
     fontSize: 16,
     letterSpacing: 0.5,
-    lineHeight: 24,
+    lineHeight: 19,
     marginCorrection: {
       android: -0.1,
       ios: -0.5,
@@ -143,7 +143,7 @@ export const textSizes = {
   "text-lg": createTextSize({
     fontSize: 18,
     letterSpacing: 0.5,
-    lineHeight: 26,
+    lineHeight: 21,
     marginCorrection: {
       android: 0.2,
       ios: 0,
@@ -153,7 +153,7 @@ export const textSizes = {
   "text-xl": createTextSize({
     fontSize: 20,
     letterSpacing: 0.6,
-    lineHeight: 29,
+    lineHeight: 23,
     marginCorrection: {
       android: 0,
       ios: -0.5,
@@ -163,7 +163,7 @@ export const textSizes = {
   "text-2xl": createTextSize({
     fontSize: 24,
     letterSpacing: 0.6,
-    lineHeight: 30,
+    lineHeight: 27,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,
@@ -173,7 +173,7 @@ export const textSizes = {
   "text-3xl": createTextSize({
     fontSize: 30,
     letterSpacing: 0.6,
-    lineHeight: 36,
+    lineHeight: 33,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,
@@ -183,7 +183,7 @@ export const textSizes = {
   "text-4xl": createTextSize({
     fontSize: 36,
     letterSpacing: 0.6,
-    lineHeight: 46,
+    lineHeight: 41,
     marginCorrection: {
       android: -0.3,
       ios: -0.3,

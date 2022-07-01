@@ -483,11 +483,7 @@ const NFTDetails = ({
       <View tw="h-4" />
 
       <View tw="px-4">
-        <Text
-          tw="font-space-bold text-2xl dark:text-white"
-          numberOfLines={3}
-          style={{ fontSize: 17, lineHeight: 22 }}
-        >
+        <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
           {nft.token_name}
         </Text>
 
