@@ -149,13 +149,16 @@ export const useUserProfile = ({ address }: { address: string | null }) => {
     if (
       data?.data &&
       myInfo.data?.data?.profile.profile_id === data?.data?.profile.profile_id
-    )
+    ) {
       return {
         data: {
           ...data.data,
           profile: myInfo.data.data.profile,
         },
       };
+    } else {
+      return data;
+    }
   }, [myInfo, data]);
 
   return {
