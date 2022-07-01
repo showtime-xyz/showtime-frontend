@@ -9,6 +9,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      versionType:
+        description: "Force a major version bump"
+        required: false
 
 concurrency:
   group: expo-production-${{ github.event_name }}-${{ github.ref }}
@@ -60,7 +64,7 @@ jobs:
       - name: Bump the version
         id: version
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: yarn bump-application-version
+        run: yarn bump-application-version ${{ github.event.inputs.versionType }}
 
       - name: Set up Expo
         uses: expo/expo-github-action@v7
