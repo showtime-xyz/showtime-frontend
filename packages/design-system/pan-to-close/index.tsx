@@ -5,27 +5,36 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
+  interpolate,
+  WithSpringConfig,
+  runOnJS,
 } from "react-native-reanimated";
 
-export const SPRING_CONFIG = {
-  mass: 0.5,
-  overshootClamping: true,
+export const SPRING_CONFIG: WithSpringConfig = {
+  mass: 0.3,
 };
-
+const DRAG_TOSS = 0.4;
+const CLOSE_DISTANCE = 60;
 export type PanToCloseProps = {
   children: JSX.Element;
-  panCloseDirection: "top" | "bottom";
+  panCloseDirection?: "up" | "down" | null;
   onClose: () => void;
+  disable?: boolean;
 };
 export const PanToClose: FC<PanToCloseProps> = ({
   children,
-  panCloseDirection = "top",
+  panCloseDirection,
   onClose,
+  disable,
 }) => {
   const transY = useSharedValue(0);
   const panIsVertical = useSharedValue(false);
+  const isSwipeDownToClose = panCloseDirection === "down";
   const animatedStyle = useAnimatedStyle(() => {
+    const distance = isSwipeDownToClose ? transY.value : -transY.value;
+    const opacity = interpolate(distance, [0, CLOSE_DISTANCE * 1.5], [1, 0]);
     return {
+      opacity: opacity,
       transform: [
         {
           translateY: transY.value,
@@ -33,22 +42,39 @@ export const PanToClose: FC<PanToCloseProps> = ({
       ],
     };
   });
+  const snapToPoint = (y: number) => {
+    "worklet";
+    transY.value = withSpring(y, SPRING_CONFIG, () => {
+      if (y !== 0) {
+        runOnJS(onClose)();
+      }
+    });
+  };
   const panGestrue = Gesture.Pan()
     .onStart(({ velocityY, velocityX }) => {
       panIsVertical.value = Math.abs(velocityY) >= Math.abs(velocityX);
     })
-    .onUpdate(({ translationY, velocityY, ...rest }) => {
+    .onUpdate(({ translationY }) => {
       if (!panIsVertical.value) return;
-      if (panCloseDirection === "bottom") {
+      if (isSwipeDownToClose) {
         transY.value = translationY > 0 ? translationY : translationY * 0.2;
       } else {
         transY.value = translationY > 0 ? translationY * 0.2 : translationY;
       }
     })
-    .onEnd(({ velocityY, translationY }, success) => {
+    .onEnd(({ velocityY, translationY }) => {
       if (!panIsVertical.value) return;
-      transY.value = withSpring(0, SPRING_CONFIG);
+      const endOffsetY = transY.value + velocityY * DRAG_TOSS;
+      const isSwipeDown = translationY > 0;
+      const isPanEnough = Math.abs(endOffsetY) > CLOSE_DISTANCE;
+      if (isSwipeDownToClose) {
+        snapToPoint(!isSwipeDown || !isPanEnough ? 0 : endOffsetY);
+      } else {
+        snapToPoint(isSwipeDown || !isPanEnough ? 0 : endOffsetY);
+      }
     });
+  if (!panCloseDirection) return null;
+  if (disable) return children;
   return (
     // @ts-ignore
     <GestureDetector gesture={panGestrue}>
