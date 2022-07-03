@@ -6,16 +6,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AccessibilityInfo, ViewStyle, Dimensions } from "react-native";
+import { AccessibilityInfo, ViewStyle } from "react-native";
 
 import { MotiTransitionProp, StyleValueWithReplacedTransforms } from "moti";
-
-import { PanToClose } from "design-system/pan-to-close";
 
 import { SnackbarTransitionType } from "./constants";
 import { initSnakbarParams, Snackbar } from "./snackbar";
 
-const { height } = Dimensions.get("window");
 export type SnackbarStateType = "default" | "waiting" | "done";
 
 export type SnackbarShowParams = {
@@ -43,6 +40,8 @@ export type SnackbarShowParams = {
   hideAfter?: number;
   /** hide snackbar after in milliseconds */
   preset?: "default" | "explore";
+  /** disable pan gesture to close */
+  disableGestureToClose?: boolean;
 };
 
 type SnackbarContextType = {
@@ -89,6 +88,7 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
             ...rest,
           },
         });
+
         hideTimeoutRef.current && clearTimeout(hideTimeoutRef.current);
         setHideAfter(hideAfter);
         rest.text && AccessibilityInfo.announceForAccessibility(rest.text);
@@ -116,18 +116,7 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   return (
     <SnackbarContext.Provider value={value}>
       {children}
-      <PanToClose
-        panCloseDirection={
-          state.snackbar?.bottom
-            ? state.snackbar?.bottom > height / 2
-              ? "top"
-              : "bottom"
-            : "bottom"
-        }
-        onClose={hide}
-      >
-        <Snackbar {...state} />
-      </PanToClose>
+      <Snackbar {...state} hide={hide} />
     </SnackbarContext.Provider>
   );
 };
