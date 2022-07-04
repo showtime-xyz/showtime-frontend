@@ -50,6 +50,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.modal",
   "@showtime-xyz/universal.modal-screen",
   "@showtime-xyz/universal.modal-sheet",
+  "@showtime-xyz/universal.pan-to-close",
   "@showtime-xyz/universal.pinch-to-zoom",
   "@showtime-xyz/universal.pressable",
   "@showtime-xyz/universal.pressable-scale",
