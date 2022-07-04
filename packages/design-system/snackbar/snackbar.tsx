@@ -6,6 +6,7 @@ import { AnimatePresence, MotiView } from "moti";
 
 import { useIsDarkMode, useIsMobileWeb } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
+import { PanToClose } from "@showtime-xyz/universal.pan-to-close";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -13,7 +14,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { SnackbarShowParams } from ".";
-import { PanToClose } from "../pan-to-close";
 import { PRESET_TRANSITION_MAP } from "./constants";
 
 export type SnackbarStateType = "default" | "waiting" | "done";

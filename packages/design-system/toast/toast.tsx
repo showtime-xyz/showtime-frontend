@@ -3,11 +3,10 @@ import { Platform, LayoutChangeEvent, StyleSheet } from "react-native";
 
 import { MotiView } from "moti";
 
+import { PanToClose } from "@showtime-xyz/universal.pan-to-close";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-
-import { PanToClose } from "../pan-to-close";
 
 type ToastProps = {
   render?: JSX.Element | null;
