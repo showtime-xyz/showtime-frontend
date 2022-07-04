@@ -50,7 +50,7 @@ export const PanToClose: FC<PanToCloseProps> = ({
       }
     });
   };
-  const panGestrue = Gesture.Pan()
+  const panGesture = Gesture.Pan()
     .onStart(({ velocityY, velocityX }) => {
       panIsVertical.value = Math.abs(velocityY) >= Math.abs(velocityX);
     })
@@ -77,7 +77,7 @@ export const PanToClose: FC<PanToCloseProps> = ({
   if (disable) return children;
   return (
     // @ts-ignore
-    <GestureDetector gesture={panGestrue}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View style={animatedStyle}>{children}</Animated.View>
     </GestureDetector>
   );
