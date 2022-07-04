@@ -4,11 +4,15 @@ import { View as MotiView } from "moti";
 
 import { getSpinnerSize, SpinnerView, SpinnerProps } from "./spinner-view";
 
+const from = { rotate: "0deg" };
+const animate = { rotate: "360deg" };
 export const Spinner = ({ size, duration = 750, ...rest }: SpinnerProps) => {
   return (
     <MotiView
-      from={{ rotate: "0deg" }}
-      animate={{ rotate: "360deg" }}
+      // @ts-ignore - chromatic ignore DOM element https://www.chromatic.com/docs/ignoring-elements#ignore-dom-elements
+      dataSet={{ chromatic: "ignore" }}
+      from={from}
+      animate={animate}
       transition={{
         type: "timing",
         loop: true,
