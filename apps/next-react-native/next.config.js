@@ -75,7 +75,6 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     optimizeCss: true,
-    esmExternals: "loose",
     browsersListForSwc: true,
     legacyBrowsers: false,
     forceSwcTransforms: true,
