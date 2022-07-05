@@ -65,16 +65,16 @@ const Profile = ({ address }: { address: string | null }) => {
     if ((router.query as any)?.tab) return (router.query as any)?.tab;
     const createdIndex =
       data?.tabs.findIndex((item) => item.type === "created") ?? 0;
-    const onwedIndex =
+    const ownedIndex =
       data?.tabs.findIndex((item) => item.type === "owned") ?? 0;
-    if (onwedIndex === createdIndex || createdIndex === -1 || onwedIndex === -1)
+    if (ownedIndex === createdIndex || createdIndex === -1 || ownedIndex === -1)
       return 0;
     const createdCount = data?.tabs[createdIndex].displayed_count ?? 0;
-    const ownedCount = data?.tabs[onwedIndex].displayed_count ?? 0;
+    const ownedCount = data?.tabs[ownedIndex].displayed_count ?? 0;
     return createdCount > 0
       ? createdIndex
       : ownedCount > 0
-      ? onwedIndex
+      ? ownedIndex
       : createdIndex;
   }, [data?.tabs, router]);
 
