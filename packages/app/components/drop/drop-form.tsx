@@ -341,6 +341,7 @@ export const DropForm = () => {
                         <Fieldset
                           tw="flex-1"
                           label="Description"
+                          multiline
                           placeholder="What is this NFT drop about?"
                           onBlur={onBlur}
                           helperText="You will not be able to edit this after the drop is created"

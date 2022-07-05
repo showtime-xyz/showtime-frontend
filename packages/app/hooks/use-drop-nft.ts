@@ -183,12 +183,24 @@ export const useDropNFT = () => {
         dispatch({ type: "loading" });
 
         const ipfsHash = await uploadMedia(params.file);
-        Logger.log("ipfs hash ", ipfsHash, params);
+
+        const escapedTitle = JSON.stringify(params.title).slice(1, -1);
+        const escapedDescription = JSON.stringify(params.description).slice(
+          1,
+          -1
+        );
+
+        Logger.log("ipfs hash ", {
+          ipfsHash,
+          params,
+          escapedTitle,
+          escapedDescription,
+        });
 
         const callData = targetInterface.encodeFunctionData("createEdition", [
-          params.title,
+          escapedTitle,
           "SHOWTIME",
-          params.description,
+          escapedDescription,
           "", // animationUrl
           "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
           "ipfs://" + ipfsHash, // imageUrl
