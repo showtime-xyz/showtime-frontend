@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, Suspense } from "react";
+import { memo, useCallback, useMemo, useRef, Suspense, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -279,6 +279,7 @@ export const FeedItem = memo(
     itemHeight: number;
     listId?: number;
   }) => {
+    const [detailHeight, setDetialHeight] = useState(0);
     const { width: windowWidth } = useWindowDimensions();
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
@@ -404,13 +405,13 @@ export const FeedItem = memo(
             showHeader={showHeader}
           >
             <View
-              tw={`absolute  justify-center`}
-              style={Platform.select({
-                web: {},
-                default: {
-                  height: itemHeight - bottomPadding - 50,
-                },
-              })}
+              tw={`absolute justify-center`}
+              style={{
+                height: Platform.select({
+                  web: itemHeight - bottomPadding - detailHeight,
+                  default: itemHeight - bottomPadding - 50,
+                }),
+              }}
             >
               <Media
                 item={nft}
@@ -429,6 +430,14 @@ export const FeedItem = memo(
               detailStyle,
               { bottom: bottomMargin },
             ]}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              if (Platform.OS !== "web") return;
+              setDetialHeight(height);
+            }}
           >
             <BlurView
               tint={tint}
