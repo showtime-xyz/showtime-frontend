@@ -10,10 +10,10 @@ import {
 } from "wagmi";
 
 const useWallet = () => {
-  const { data: wagmiData } = useAccount();
+  const wagmiData = useAccount();
   const { data: wagmiSignData, signMessage } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
-  const { activeChain } = useNetwork();
+  const { chain } = useNetwork();
   const { signTypedDataAsync } = useSignTypedData();
   const { disconnect } = useDisconnect();
 
@@ -22,13 +22,10 @@ const useWallet = () => {
   };
 
   const connected = useMemo(
-    () => !!wagmiData && !!activeChain && !!wagmiSigner?.provider,
-    [wagmiData, activeChain, wagmiSigner?.provider]
+    () => !!wagmiData && !!chain && !!wagmiSigner?.provider,
+    [wagmiData, chain, wagmiSigner?.provider]
   );
-  const networkChanged = useMemo(
-    () => !!activeChain && activeChain.id !== 137,
-    [activeChain]
-  );
+  const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const signed = useMemo(() => !!wagmiSignData, [wagmiSignData]);
   const loggedIn = useMemo(() => connected, [connected]);
 
