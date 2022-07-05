@@ -56,5 +56,5 @@ jobs:
         uses: waldoapp/gh-action-upload@v1
         with:
           build_path: ${{ env.APP_DIR_PATH }}
-          upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN_SIM }}
+          upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN }}
           is_debug_mode: true
