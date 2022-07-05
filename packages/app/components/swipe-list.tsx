@@ -279,7 +279,7 @@ export const FeedItem = memo(
     itemHeight: number;
     listId?: number;
   }) => {
-    const [detailHeight, setDetialHeight] = useState(0);
+    const [detailHeight, setDetailHeight] = useState(0);
     const { width: windowWidth } = useWindowDimensions();
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
@@ -436,7 +436,7 @@ export const FeedItem = memo(
               },
             }) => {
               if (Platform.OS !== "web") return;
-              setDetialHeight(height);
+              setDetailHeight(height);
             }}
           >
             <BlurView
