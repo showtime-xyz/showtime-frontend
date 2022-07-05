@@ -494,7 +494,7 @@ export const MATIC_CHAIN_DETAILS = {
   rpcUrls:
     process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
       ? ["https://matic-mumbai.chainstacklabs.com"]
-      : ["https://rpc-mainnet.maticvigil.com/"],
+      : ["https://polygon-rpc.com"],
   blockExplorerUrls: [
     process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
       ? "https://mumbai.polygonscan.com/"

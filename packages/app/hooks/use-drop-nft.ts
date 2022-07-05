@@ -229,7 +229,7 @@ export const useDropNFT = () => {
             data: { forwardRequest },
           });
         } else {
-          signTransaction({ forwardRequest });
+          await signTransaction({ forwardRequest });
         }
       } else {
         Alert.alert(
