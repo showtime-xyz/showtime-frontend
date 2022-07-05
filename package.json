@@ -64,8 +64,8 @@
   },
   "resolutions": {
     "babel-preset-expo": "9.1.0",
-    "react": "18.0.0",
-    "react-dom": "18.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native-svg": "12.3.0",
     "@jest/create-cache-key-function": "28.0.2",
     "expo-linear-gradient": "11.3.0",

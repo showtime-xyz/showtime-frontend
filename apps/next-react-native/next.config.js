@@ -67,19 +67,20 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.toast",
   "@showtime-xyz/universal.tooltip",
   "@showtime-xyz/universal.verification-badge",
-  "sentry-expo",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig = {
+  swcMinify: true,
   experimental: {
     optimizeCss: true,
     esmExternals: "loose",
-    reactRoot: true,
+    browsersListForSwc: true,
     legacyBrowsers: false,
+    forceSwcTransforms: true,
+    // concurrentFeatures: true,
     // nextScriptWorkers: true,
-    // TODO: enable `concurrentFeatures: true`
   },
   typescript: {
     ignoreDevErrors: true,
@@ -110,11 +111,6 @@ const nextConfig = {
       {
         source: "/discord",
         destination: "https://discord.gg/FBSxXrcnsm",
-        permanent: true,
-      },
-      {
-        source: "/feedback",
-        destination: "https://showtime.nolt.io",
         permanent: true,
       },
       {
