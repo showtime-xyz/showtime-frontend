@@ -48,7 +48,7 @@ class Document extends NextDocument {
     AppRegistry.registerComponent("Main", () => Main);
     const { getStyleElement } = AppRegistry.getApplication("Main");
     const styles = [
-      <style dangerouslySetInnerHTML={{ __html: style }} />,
+      <style dangerouslySetInnerHTML={{ __html: style }} key="rnw" />,
       getStyleElement(),
     ];
 
