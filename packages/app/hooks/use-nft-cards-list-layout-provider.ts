@@ -7,7 +7,7 @@ import { MAX_CONTENT_WIDTH } from "../constants/layout";
 
 const LIST_HEADER_HEIGHT = 80;
 const LIST_MARGIN_TOP_LARGE = 32;
-const CARD_HEIGHT = 548;
+const CARD_HEIGHT = 558;
 const useNFTCardDimensions = () => {
   const { width } = useWindowDimensions();
 
