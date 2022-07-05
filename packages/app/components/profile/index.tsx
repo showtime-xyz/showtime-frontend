@@ -5,6 +5,7 @@ import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -48,12 +49,35 @@ const Profile = ({ address }: { address: string | null }) => {
     isLoading,
     refresh,
   } = useUserProfile({ address });
+  const router = useRouter();
+
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+  /**
+   * defalut tab index.
+   * if Created list = 0, it should go to the Owned section directly.
+   * */
+  const defaultIndex = useMemo(() => {
+    if ((router.query as any)?.tab) return (router.query as any)?.tab;
+    const createdIndex =
+      data?.tabs.findIndex((item) => item.type === "created") ?? 0;
+    const onwedIndex =
+      data?.tabs.findIndex((item) => item.type === "owned") ?? 0;
+    if (onwedIndex === createdIndex || createdIndex === -1 || onwedIndex === -1)
+      return 0;
+    const createdCount = data?.tabs[createdIndex].displayed_count ?? 0;
+    const ownedCount = data?.tabs[onwedIndex].displayed_count ?? 0;
+    return createdCount > 0
+      ? createdIndex
+      : ownedCount > 0
+      ? onwedIndex
+      : createdIndex;
+  }, [data?.tabs, router]);
+
   const {
     index,
     setIndex,
@@ -61,7 +85,7 @@ const Profile = ({ address }: { address: string | null }) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>([]);
+  } = useTabState<ProfileTabListRef>([], { defaultIndex });
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
