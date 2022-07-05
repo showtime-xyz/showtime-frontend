@@ -77,7 +77,15 @@ const Profile = ({ address }: { address: string | null }) => {
       ? ownedIndex
       : createdIndex;
   }, [data?.tabs, router]);
-
+  const routes = useMemo(
+    () =>
+      data?.tabs?.map((item, index) => ({
+        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
+        key: item?.name,
+        index,
+      })) ?? [],
+    [data]
+  );
   const {
     index,
     setIndex,
@@ -85,7 +93,7 @@ const Profile = ({ address }: { address: string | null }) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>([], { defaultIndex });
+  } = useTabState<ProfileTabListRef>(routes, { defaultIndex });
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
@@ -195,16 +203,6 @@ const Profile = ({ address }: { address: string | null }) => {
     isLoading,
     isError,
   ]);
-
-  const routes = useMemo(
-    () =>
-      data?.tabs?.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
-        key: item?.name,
-        index,
-      })) ?? [],
-    [data]
-  );
 
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
