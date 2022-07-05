@@ -38,8 +38,20 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Set up Expo
+        uses: expo/expo-github-action@v7
+        with:
+          eas-version: latest
+          eas-cache: true
+          expo-cache: true
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
       - name: Expo prebuild
-        run: yarn install && STAGE=development yarn expo:prebuild -y
+        run: STAGE=development yarn expo:prebuild
 
       - name: Build with Xcode
         run: |
