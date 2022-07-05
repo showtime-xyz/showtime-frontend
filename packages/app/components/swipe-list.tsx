@@ -404,18 +404,18 @@ export const FeedItem = memo(
             showHeader={showHeader}
           >
             <View
-              tw={`absolute h-[${
-                itemHeight - bottomPadding - 50
-              }px] justify-center`}
+              tw={`absolute  justify-center`}
+              style={Platform.select({
+                web: {},
+                default: {
+                  height: itemHeight - bottomPadding - 50,
+                },
+              })}
             >
               <Media
                 item={nft}
                 numColumns={1}
-                tw={
-                  Platform.OS === "web"
-                    ? ""
-                    : `h-[${mediaHeight}px] w-[${windowWidth}px]`
-                }
+                tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
                 resizeMode="contain"
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
@@ -472,15 +472,11 @@ const NFTDetails = ({
 
   return (
     <View>
-      <View tw="h-4" />
-
       <View tw="flex-row items-center justify-between px-4">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
         {isCreatorDrop && edition ? <ClaimButton edition={edition} /> : null}
         {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
-
-      <View tw="h-4" />
 
       <View tw="px-4">
         <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
