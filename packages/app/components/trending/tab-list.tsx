@@ -1,7 +1,4 @@
-import { forwardRef, Suspense, useContext } from "react";
-import { ViewStyle } from "react-native";
-
-import { View } from "@showtime-xyz/universal.view";
+import { forwardRef, Suspense, useContext, useMemo } from "react";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 
@@ -18,25 +15,22 @@ export type TrendingTabListProps = {
   days: number;
   index: number;
 };
-const getTabListStyle = (condition: boolean): ViewStyle => ({
-  display: condition ? "flex" : "none",
-  flex: 1,
-});
-// Todo: lazy load NFTSLIST
+
+const LIST_MAP = new Map([
+  [0, CreatorsList],
+  [1, NFTSList],
+]);
+
 export const TabListContainer = forwardRef<
   TrendingTabListRef,
   TrendingTabListProps
 >(function TabListContainer({ days, index }, ref) {
   const selected = useContext(TrendingContext);
+  const List = useMemo(() => LIST_MAP.get(selected[index]), [index, selected]);
   return (
     <ErrorBoundary>
       <Suspense fallback={<TabSpinner index={index} />}>
-        <View style={getTabListStyle(selected[index] === 0)}>
-          <CreatorsList days={days} index={index} ref={ref} />
-        </View>
-        <View style={getTabListStyle(selected[index] === 1)}>
-          <NFTSList days={days} index={index} ref={ref} />
-        </View>
+        {List && <List days={days} index={index} ref={ref} />}
       </Suspense>
     </ErrorBoundary>
   );

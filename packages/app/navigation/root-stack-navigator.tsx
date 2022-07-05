@@ -97,7 +97,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="list" component={ListScreen} />
         <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
-        <Stack.Screen name="activities" component={ActivitiesScreen} />
+        <Stack.Screen name="activity" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />

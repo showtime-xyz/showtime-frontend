@@ -9,7 +9,6 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -165,7 +164,6 @@ export const Buy = (props: { nft?: NFT }) => {
 
   return (
     <View>
-      <Collection nft={nft} />
       <View tw="p-4">
         <View tw="flex-row items-center">
           <Media item={nft} tw="h-20 w-20 rounded-2xl" />

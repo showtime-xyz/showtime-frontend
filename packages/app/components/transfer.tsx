@@ -17,7 +17,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Owner } from "app/components/card/rows/owner";
 import { Media } from "app/components/media";
 import { useUserProfile } from "app/hooks/api-hooks";
@@ -174,8 +173,6 @@ function Transfer({ nft }: { nft?: NFT }) {
   return (
     <View tw="flex-1">
       <TransferNftScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <Collection nft={nft} />
-
         <View tw="p-[16px]">
           <View tw="flex-row items-center pb-4">
             <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />

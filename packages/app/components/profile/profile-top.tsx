@@ -12,6 +12,7 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -24,13 +25,24 @@ import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
 import { Hidden } from "design-system/hidden";
 
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 import { ProfileSocial } from "./profile-social";
+
+function getFullSizeCover(url: string) {
+  if (
+    url &&
+    url.startsWith("https://lh3.googleusercontent.com") &&
+    !url.endsWith("=s0")
+  ) {
+    return url + "=s0";
+  }
+
+  return url;
+}
 
 type FollowProps = {
   onPressFollowing: () => void;
@@ -140,7 +152,8 @@ export const ProfileTop = ({
         Platform.select({
           native: `/profile/followers?profileId=${profileId}`,
           web: router.asPath,
-        })
+        }),
+        { scroll: false }
       ),
     [profileId, router]
   );
@@ -161,7 +174,10 @@ export const ProfileTop = ({
         Platform.select({
           native: `/profile/following?profileId=${profileId}`,
           web: router.asPath,
-        })
+        }),
+        {
+          scroll: false,
+        }
       ),
     [profileId, router]
   );
@@ -213,7 +229,9 @@ export const ProfileTop = ({
               tapToClose
             >
               <Image
-                source={{ uri: profileData?.profile.cover_url }}
+                source={{
+                  uri: getFullSizeCover(profileData?.profile.cover_url),
+                }}
                 alt="Cover image"
                 resizeMode="cover"
                 width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}

@@ -14,7 +14,7 @@ export default {
   component: SnackbarProvider,
   title: "Components/Snackbar",
 } as Meta;
-const Snackbar = () => {
+export const Basic: React.VFC<{}> = () => {
   const snackbar = useSnackbar();
   const toast = useToast();
   const isDark = useIsDarkMode();
@@ -33,6 +33,7 @@ const Snackbar = () => {
           toggleSnackbar(() =>
             snackbar?.show({
               text: "Minting “A day in the woods...”",
+              disableGestureToClose: true,
             })
           )
         }
@@ -152,8 +153,3 @@ const Snackbar = () => {
     </View>
   );
 };
-export const Basic: React.VFC<{}> = () => (
-  <SnackbarProvider>
-    <Snackbar />
-  </SnackbarProvider>
-);

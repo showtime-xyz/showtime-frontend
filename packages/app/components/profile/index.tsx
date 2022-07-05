@@ -6,6 +6,7 @@ import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { tw } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import {
@@ -92,20 +93,20 @@ const Profile = ({ address }: { address: string | null }) => {
 
   const renderScene = useCallback(
     ({
-      route: { index },
+      route: { index: routeIndex },
     }: SceneRendererProps & {
       route: Route;
     }) => {
       return (
-        <ErrorBoundary>
-          <Suspense fallback={<TabSpinner index={index} />}>
-            {data?.tabs[index] && (
+        <ErrorBoundary key={`ProfileTabList-${routeIndex}`}>
+          <Suspense fallback={<TabSpinner index={routeIndex} />}>
+            {data?.tabs[routeIndex] && (
               <ProfileTabList
                 username={profileData?.data.profile.username}
                 profileId={profileData?.data.profile.profile_id}
                 isBlocked={isBlocked}
-                list={data?.tabs[index]}
-                index={index}
+                list={data?.tabs[routeIndex]}
+                index={routeIndex}
                 ref={setTabRefs}
               />
             )}
@@ -139,7 +140,7 @@ const Profile = ({ address }: { address: string | null }) => {
               left: headerBgLeft,
               height: `calc(100% + 44px)`,
               // @ts-ignore
-              boxShadow: headerShadow,
+              boxShadow: data?.tabs?.length > 0 && headerShadow,
             }}
           />
         )}
@@ -159,6 +160,7 @@ const Profile = ({ address }: { address: string | null }) => {
     );
   }, [
     headerBgLeft,
+    data?.tabs?.length,
     headerShadow,
     headerHeight,
     address,
@@ -207,27 +209,22 @@ const Profile = ({ address }: { address: string | null }) => {
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={
-            Platform.OS === "web" ? (
-              <View
-                tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
-                style={{
-                  left: headerBgLeft,
-                  // @ts-ignore
-                  boxShadow: headerShadow,
-                }}
-              />
-            ) : null
+            <View
+              tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
+              style={{
+                left: headerBgLeft,
+                // @ts-ignore
+                boxShadow: headerShadow,
+              }}
+            />
           }
           insertTabBarElement={
-            Platform.OS === "web" ? (
-              <>
-                <View tw="absolute -bottom-11 w-full justify-between md:bottom-1.5 md:right-10 md:w-auto">
-                  <ProfileListFilter
-                    collections={data?.tabs[index]?.collections || []}
-                  />
-                </View>
-              </>
-            ) : null
+            <View tw="z-1 relative my-2 w-full flex-row items-center justify-between px-4 md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+              <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
+                {data?.tabs[index]?.displayed_count} ITEMS
+              </Text>
+              <ProfileListFilter />
+            </View>
           }
         />
       </View>

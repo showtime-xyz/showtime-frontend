@@ -38,6 +38,6 @@ export function ActivitiesModal() {
 
 export const ActivitiesScreen = withModalScreen(ActivitiesModal, {
   title: "Activity",
-  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/activities",
-  matchingQueryParam: "activitiesModal",
+  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/activity",
+  matchingQueryParam: "activityModal",
 });

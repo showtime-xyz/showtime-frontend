@@ -12,6 +12,7 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -26,7 +27,6 @@ import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
@@ -67,9 +67,16 @@ function Create() {
   const { user } = useUser();
   const { web3 } = useWeb3();
   const { state } = useContext(MintContext);
-  const { setMedia, startMinting } = useMintNFT();
+  const {
+    setMedia,
+    startMinting,
+    signTransaction,
+    signMessageData,
+    shouldShowSignMessage,
+  } = useMintNFT();
   const { userAddress: address } = useCurrentUserAddress();
 
+  const isSignRequested = signMessageData.status === "sign_requested";
   const isNotMagic = !web3;
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
@@ -235,7 +242,6 @@ function Create() {
                         <View>
                           <Preview
                             file={value.file}
-                            //@ts-ignore
                             type={value.type}
                             tw="h-80 w-80 rounded-2xl"
                           />
@@ -446,23 +452,47 @@ function Create() {
       </CreateScrollView>
 
       <View tw="mt-8 w-full px-4">
-        <Button
-          variant="primary"
-          size="regular"
-          onPress={handleSubmit(handleSubmitForm)}
-          disabled={!enable}
-          tw={!enable ? "opacity-60" : ""}
-        >
-          {state.status === "idle"
-            ? "Create"
-            : state.status === "mediaUpload" || state.status === "nftJSONUpload"
-            ? "Uploading..."
-            : state.status === "mintingSuccess"
-            ? "Success!"
-            : isError
-            ? "Failed. Retry"
-            : "Minting..."}
-        </Button>
+        {shouldShowSignMessage ? (
+          <View tw="px-2">
+            {!isSignRequested ? (
+              <Text tw="text-center text-lg dark:text-gray-400">
+                We need a signature in order to complete minting. This won't
+                cost any gas.
+              </Text>
+            ) : null}
+            <Button
+              tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
+              size="regular"
+              variant="primary"
+              disabled={isSignRequested}
+              onPress={() => {
+                // @ts-ignore
+                signTransaction(signMessageData.data);
+              }}
+            >
+              {isSignRequested ? "Signing..." : "Sign Message"}
+            </Button>
+          </View>
+        ) : (
+          <Button
+            variant="primary"
+            size="regular"
+            onPress={handleSubmit(handleSubmitForm)}
+            disabled={!enable}
+            tw={!enable ? "opacity-60" : ""}
+          >
+            {state.status === "idle"
+              ? "Create"
+              : state.status === "mediaUpload" ||
+                state.status === "nftJSONUpload"
+              ? "Uploading..."
+              : state.status === "mintingSuccess"
+              ? "Success!"
+              : isError
+              ? "Failed. Retry"
+              : "Minting..."}
+          </Button>
+        )}
 
         <View tw="mt-4 h-12">
           {state.status === "minting" && !isMagic ? (

@@ -232,8 +232,7 @@ export function MessageRow({
         <Link href={`/@${username || address}`}>
           <View tw="mb-3 h-[12px] flex-row items-center">
             <Text
-              style={{ fontSize: 13, lineHeight: 15 }}
-              tw="font-semibold text-gray-900 dark:text-white"
+              tw="text-13 font-semibold text-gray-900 dark:text-white"
               onPress={handleOnPressUser}
             >
               @{userNameText}
@@ -244,10 +243,7 @@ export function MessageRow({
           </View>
         </Link>
 
-        <Text
-          tw="text-gray-900 dark:text-gray-100"
-          style={{ fontSize: 13, lineHeight: 15 }}
-        >
+        <Text tw="text-13 text-gray-900 dark:text-gray-100">
           {contentWithTags}
         </Text>
 

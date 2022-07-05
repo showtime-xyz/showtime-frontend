@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Platform, useWindowDimensions } from "react-native";
 
-// import { formatDistanceToNowStrict } from "date-fns";
+import { Link } from "solito/link";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
@@ -26,8 +27,9 @@ import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { Link, TextLink } from "app/navigation/link";
+import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
@@ -37,7 +39,10 @@ export const Notifications = () => {
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const bottomBarHeight = useBottomTabBarHeight();
+  const headerHeight = useHeaderHeight();
+  const { height: windowHeight } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
+  const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState([]);
 
@@ -57,7 +62,7 @@ export const Notifications = () => {
         width="100%"
       />
     ) : (
-      <View tw={`h-${bottomBarHeight}px`} />
+      <View tw={`h-${bottomBarHeight ?? 0}px`} />
     );
   }, [isLoadingMore, bottomBarHeight, colorScheme]);
 
@@ -96,6 +101,10 @@ export const Notifications = () => {
     <>
       <FlatList
         data={data}
+        style={Platform.select({
+          native: { height: flatListHeight },
+          default: {},
+        })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}
@@ -151,7 +160,7 @@ const NotificationDescription = ({
 }) => {
   const actors = notification.actors;
 
-  if (actors.length > 0) {
+  if (actors && actors.length > 0) {
     return (
       <View>
         <Text
@@ -208,12 +217,11 @@ const NotificationDescription = ({
           {notification.type_name === "NFT_SALE" ? "bought " : null}
 
           {notification.nft_display_name ? (
-            <TextLink
-              tw="text-13 font-bold text-black dark:text-white"
-              href={notificationInfo.href}
-            >
-              {notification.nft_display_name}
-            </TextLink>
+            <Link href={notificationInfo.href}>
+              <Text tw="text-13 font-bold text-black dark:text-white">
+                {notification.nft_display_name}
+              </Text>
+            </Link>
           ) : null}
         </Text>
         <View tw="h-1" />

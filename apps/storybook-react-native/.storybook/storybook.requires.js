@@ -24,7 +24,6 @@ const getStories = () => {
     require("../../../packages/design-system/data-pill/data-pill.stories.tsx"),
     require("../../../packages/design-system/fieldset/fieldset.stories.tsx"),
     require("../../../packages/design-system/input/input.stories.tsx"),
-    // require("../../../packages/design-system/media/media.stories.tsx"),
     require("../../../packages/design-system/modal-sheet/modal-sheet.stories.tsx"),
     require("../../../packages/design-system/modal/modal.stories.tsx"),
     require("../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx"),

@@ -7,6 +7,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Tag } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { SelectOption } from "@showtime-xyz/universal.select/types";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -18,7 +19,6 @@ import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
-import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 

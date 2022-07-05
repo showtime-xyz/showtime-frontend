@@ -9,20 +9,21 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
+import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
-import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, SORT_FIELDS } from "app/utilities";
 
@@ -49,6 +50,7 @@ const sortingOptionsList = [
 export const EditProfile = () => {
   const { user } = useUser();
   const { mutate } = useSWRConfig();
+  const matchMutate = useMatchMutate();
   const router = useRouter();
   const [selected, setSelected] = useState(0);
   const { isValid, validate } = useValidateUsername();
@@ -175,11 +177,13 @@ export const EditProfile = () => {
         data: newValues,
       });
 
+      router.pop();
+
       // TODO: optimise to make fewer API calls!
       mutate(MY_INFO_ENDPOINT);
-      mutate(USER_PROFILE_KEY + user?.data.profile.wallet_addresses[0]);
-
-      router.pop();
+      matchMutate(
+        (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
+      );
     } catch (e) {
       setError("submitError", { message: "Something went wrong" });
       console.error("edit profile failed ", e);
@@ -189,6 +193,10 @@ export const EditProfile = () => {
   const coverImageHeight = useMemo(
     () => (width < 768 ? width / 3 : 160),
     [width]
+  );
+  const extraScrollHeight = useMemo(
+    () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
+    [insets.bottom]
   );
   return (
     <BottomSheetModalProvider>
@@ -217,7 +225,11 @@ export const EditProfile = () => {
               overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
             }}
           >
-            <Tabs.ScrollView style={tw.style("flex-1")}>
+            <Tabs.ScrollView
+              style={tw.style("flex-1")}
+              asKeyboardAwareScrollView
+              extraScrollHeight={extraScrollHeight}
+            >
               <Controller
                 control={control}
                 name="coverPicture"
@@ -329,7 +341,9 @@ export const EditProfile = () => {
                       label="About me"
                       placeholder="About me"
                       tw="mt-4"
+                      multiline
                       value={value}
+                      numberOfLines={3}
                       errorText={errors.bio?.message}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -340,10 +354,8 @@ export const EditProfile = () => {
             </Tabs.ScrollView>
             <Tabs.ScrollView
               style={tw.style("px-4 mt-4")}
-              useKeyboardAvoidingView
-              keyboardVerticalOffset={
-                insets.bottom + (Platform.OS === "ios" ? 120 : 200)
-              }
+              asKeyboardAwareScrollView
+              extraScrollHeight={extraScrollHeight}
             >
               <Controller
                 control={control}
@@ -361,39 +373,45 @@ export const EditProfile = () => {
                 )}
               />
 
-              {socialLinks.data?.data.map((v) => {
-                return (
-                  <Controller
-                    control={control}
-                    key={v.id}
-                    name={`links[${v.id}]`}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Fieldset
-                        tw="mt-4"
-                        label={v.name}
-                        value={value}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        autoCapitalize="none"
-                        leftElement={
-                          <Text
-                            tw="text-base text-gray-600 dark:text-gray-400"
-                            style={{
-                              marginTop: Platform.select({
-                                ios: 1,
-                                android: 4,
-                                default: 0,
-                              }),
-                            }}
-                          >
-                            {v.prefix}
-                          </Text>
-                        }
-                      />
-                    )}
-                  />
-                );
-              })}
+              {socialLinks.data?.data
+                .filter(
+                  (link) =>
+                    link.prefix.includes("twitter") ||
+                    link.prefix.includes("instagram")
+                )
+                .map((v) => {
+                  return (
+                    <Controller
+                      control={control}
+                      key={v.id}
+                      name={`links[${v.id}]`}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Fieldset
+                          tw="mt-4"
+                          label={v.name}
+                          value={value}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          autoCapitalize="none"
+                          leftElement={
+                            <Text
+                              tw="text-base text-gray-600 dark:text-gray-400"
+                              style={{
+                                marginTop: Platform.select({
+                                  ios: 1,
+                                  android: 4,
+                                  default: 0,
+                                }),
+                              }}
+                            >
+                              {v.prefix}
+                            </Text>
+                          }
+                        />
+                      )}
+                    />
+                  );
+                })}
             </Tabs.ScrollView>
             <Tabs.ScrollView style={tw.style("px-4 mt-4")}>
               <View tw="z-2">
@@ -461,7 +479,7 @@ export const EditProfile = () => {
             onPress={handleSubmit(handleSubmitForm)}
             size="regular"
           >
-            Done
+            {isSubmitting ? "Submitting..." : "Done"}
           </Button>
           <View tw="h-1" />
           <Text tw="text-center text-sm text-red-500">

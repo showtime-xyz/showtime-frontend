@@ -1,16 +1,14 @@
-import { useEffect } from "react";
-import { Alert, Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import * as Updates from "expo-updates";
 import dynamic from "next/dynamic";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useIsForeground } from "app/hooks/use-is-foreground";
+import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { useUser } from "app/hooks/use-user";
 
 import { TabBarButton } from "./tab-bar-button";
@@ -34,46 +32,11 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isAuthenticated } = useUser();
-  const isForeground = useIsForeground();
-
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  useExpoUpdate();
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
-
-  useEffect(() => {
-    const checkUpdate = async () => {
-      try {
-        const update = await Updates.checkForUpdateAsync();
-        if (update.isAvailable) {
-          await Updates.fetchUpdateAsync();
-
-          // TODO: use Snackbar instead?
-          Alert.alert(
-            "New update available 🎉",
-            "Press 'Reload' to update the app.",
-            [
-              {
-                text: "Cancel",
-                style: "cancel",
-              },
-              {
-                text: "Reload",
-                style: "default",
-                onPress: () => Updates.reloadAsync(),
-              },
-            ]
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    if (Platform.OS === "ios" && !isForeground) {
-      checkUpdate();
-    }
-  }, [isForeground]);
 
   return (
     <BottomTab.Navigator

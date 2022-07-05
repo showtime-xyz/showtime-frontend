@@ -26,6 +26,7 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
+import type { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { HeaderTabContext } from "./context";
 import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
@@ -587,7 +588,10 @@ export const GestureContainer = React.forwardRef<
       </Animated.View>
     );
   };
-  const _renderSceneHeader = (children: React.ReactElement) => {
+  const _renderSceneHeader = (
+    children: React.ReactElement,
+    props: SceneRendererProps & { route: Route }
+  ) => {
     return (
       <View style={{ flex: 1 }}>
         {children}
@@ -607,7 +611,7 @@ export const GestureContainer = React.forwardRef<
             headerStyle,
           ]}
         >
-          {renderSceneHeader?.(children.props as Route)}
+          {renderSceneHeader?.(props.route)}
         </Animated.View>
       </View>
     );

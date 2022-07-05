@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { Login } from "app/components/login";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
-import { useRouter } from "app/navigation/use-router";
 
 type Query = {
   redirect_url: string;

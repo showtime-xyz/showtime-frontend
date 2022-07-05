@@ -40,6 +40,8 @@ export type SnackbarShowParams = {
   hideAfter?: number;
   /** hide snackbar after in milliseconds */
   preset?: "default" | "explore";
+  /** disable pan gesture to close */
+  disableGestureToClose?: boolean;
 };
 
 type SnackbarContextType = {
@@ -57,14 +59,14 @@ export type SnackbarState = { show: boolean; snackbar: SnackbarShowParams };
 export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
-  const [snackbar, setSnackbar] = useState<SnackbarState>({
+  const [state, setState] = useState<SnackbarState>({
     show: false,
     snackbar: initSnakbarParams,
   });
 
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>();
   const hide = () => {
-    setSnackbar({
+    setState({
       show: false,
       snackbar: initSnakbarParams,
     });
@@ -78,24 +80,25 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   const value = useMemo(
     () => ({
       show: ({ hideAfter, ...rest }: SnackbarShowParams) => {
-        if (snackbar.show) return;
-        setSnackbar({
+        if (state.show) return;
+        setState({
           show: true,
           snackbar: {
-            ...snackbar,
+            ...state.snackbar,
             ...rest,
           },
         });
+
         hideTimeoutRef.current && clearTimeout(hideTimeoutRef.current);
         setHideAfter(hideAfter);
         rest.text && AccessibilityInfo.announceForAccessibility(rest.text);
       },
       update: ({ hideAfter, ...rest }: SnackbarShowParams) => {
         rest.text && AccessibilityInfo.announceForAccessibility(rest.text);
-        setSnackbar({
-          ...snackbar,
+        setState({
+          ...state,
           snackbar: {
-            ...snackbar,
+            ...state.snackbar,
             ...rest,
           },
         });
@@ -105,15 +108,15 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
         hide();
         hideTimeoutRef.current && clearTimeout(hideTimeoutRef.current);
       },
-      isVisible: snackbar.show,
+      isVisible: state.show,
     }),
-    [snackbar, setHideAfter]
+    [state, setHideAfter]
   );
 
   return (
     <SnackbarContext.Provider value={value}>
       {children}
-      <Snackbar {...snackbar} />
+      <Snackbar {...state} hide={hide} />
     </SnackbarContext.Provider>
   );
 };

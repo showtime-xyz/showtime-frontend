@@ -3,28 +3,36 @@ import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Image as ImageIcon, FlipIcon } from "@showtime-xyz/universal.icon";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
-import { useRouter } from "app/navigation/use-router";
-import { getTwitterIntent, getUserDisplayNameFromProfile } from "app/utilities";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import {
+  getTwitterIntent,
+  getUserDisplayNameFromProfile,
+  isMobileWeb,
+} from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
@@ -85,8 +93,20 @@ export const DropForm = () => {
   });
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT } = useDropNFT();
+  const {
+    state,
+    dropNFT,
+    shouldShowSignMessage,
+    signMessageData,
+    signTransaction,
+  } = useDropNFT();
   const user = useUser();
+  const { isAuthenticated } = useUser();
+  const { connected } = useWallet();
+  const { web3 } = useWeb3();
+  const navigateToLogin = useNavigateToLogin();
+
+  const isSignRequested = signMessageData.status === "sign_requested";
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -107,12 +127,32 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   // if (state.transactionHash) {
   //   return <View>
   //     <Text>Loading</Text>
   //   </View>
   // }
+
+  if (!isAuthenticated) {
+    return (
+      <View tw="p-4">
+        <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected && !web3) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
 
   if (state.status === "success") {
     const claimUrl = `https://showtime.xyz/t/${[
@@ -121,7 +161,7 @@ export const DropForm = () => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share,
+      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
     });
 
     return (
@@ -197,7 +237,11 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView tw="p-4">
+      <ScrollView
+        tw="p-4"
+        asKeyboardAwareScrollView
+        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
+      >
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -321,7 +365,7 @@ export const DropForm = () => {
                   return (
                     <Fieldset
                       tw="flex-1"
-                      label="Your royalties"
+                      label="Your royalties (%)"
                       onBlur={onBlur}
                       helperText="How much you’ll earn each time this NFT is sold"
                       errorText={errors.royalty?.message}
@@ -409,17 +453,42 @@ export const DropForm = () => {
           </View>
 
           <View tw="mt-8 mb-20">
-            <Button
-              tw={state.status === "loading" ? "opacity-45" : ""}
-              disabled={state.status === "loading"}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading"
-                ? "Submitting..."
-                : state.status === "error"
-                ? "Failed. Retry!"
-                : "Drop Free NFT"}
-            </Button>
+            {shouldShowSignMessage ? (
+              <View tw="px-2">
+                {!isSignRequested ? (
+                  <Text tw="text-center text-lg dark:text-gray-400">
+                    We need a signature in order to complete the drop. This
+                    won't cost any gas.
+                  </Text>
+                ) : null}
+                <Button
+                  tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
+                  size="regular"
+                  variant="primary"
+                  disabled={isSignRequested}
+                  onPress={() => {
+                    // @ts-ignore
+                    signTransaction(signMessageData.data);
+                  }}
+                >
+                  {isSignRequested ? "Signing..." : "Sign Message"}
+                </Button>
+              </View>
+            ) : (
+              <Button
+                variant="primary"
+                size="regular"
+                tw={state.status === "loading" ? "opacity-45" : ""}
+                disabled={state.status === "loading"}
+                onPress={handleSubmit(onSubmit)}
+              >
+                {state.status === "loading"
+                  ? "Submitting..."
+                  : state.status === "error"
+                  ? "Failed. Retry!"
+                  : "Drop Free NFT"}
+              </Button>
+            )}
 
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />

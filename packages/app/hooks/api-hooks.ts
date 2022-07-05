@@ -143,7 +143,30 @@ export const useUserProfile = ({ address }: { address: string | null }) => {
     fetcher
   );
 
-  return { data, isLoading, isError: Boolean(error), refresh: mutate };
+  const myInfo = useMyInfo();
+  // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
+  const userProfile: typeof data = useMemo(() => {
+    if (
+      data?.data &&
+      myInfo.data?.data?.profile.profile_id === data?.data?.profile.profile_id
+    ) {
+      return {
+        data: {
+          ...data.data,
+          profile: myInfo.data.data.profile,
+        },
+      };
+    } else {
+      return data;
+    }
+  }, [myInfo, data]);
+
+  return {
+    data: userProfile,
+    isLoading,
+    isError: Boolean(error),
+    refresh: mutate,
+  };
 };
 
 export interface UserProfile {

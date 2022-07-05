@@ -1,23 +1,6 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
-
-import { useMyInfo } from "app/hooks/api-hooks";
-import { useBlock } from "app/hooks/use-block";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useFeed } from "app/hooks/use-feed";
-import { useNFTDetails } from "app/hooks/use-nft-details";
-import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
-import { useReport } from "app/hooks/use-report";
-import { useShareNFT } from "app/hooks/use-share-nft";
-import { useUser } from "app/hooks/use-user";
-import { SHOWTIME_CONTRACTS } from "app/lib/constants";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
-import type { NFT } from "app/types";
-import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
-
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -25,7 +8,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuItemIcon,
   DropdownMenuTrigger,
-} from "design-system/dropdown-menu";
+} from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
   Trash,
@@ -39,7 +22,23 @@ import {
   Refresh,
   Clock,
   Menu,
-} from "design-system/icon";
+} from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { tw } from "@showtime-xyz/universal.tailwind";
+
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useBlock } from "app/hooks/use-block";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useFeed } from "app/hooks/use-feed";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
+import { useReport } from "app/hooks/use-report";
+import { useShareNFT } from "app/hooks/use-share-nft";
+import { useUser } from "app/hooks/use-user";
+import { SHOWTIME_CONTRACTS } from "app/lib/constants";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import type { NFT } from "app/types";
+import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
 const MenuItemIcon = ({ Icon }) => {
   return (
@@ -47,21 +46,23 @@ const MenuItemIcon = ({ Icon }) => {
       <Icon
         width="1em"
         height="1em"
-        color={
-          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
-        }
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
       />
     </DropdownMenuItemIcon>
   );
 };
 
 type Props = {
-  nftId?: NFT["nft_id"];
+  nft?: NFT;
   listId?: number | undefined;
   shouldEnableSharing?: boolean;
 };
 
-function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
+function NFTDropdown({
+  nft: propNFT,
+  listId,
+  shouldEnableSharing = true,
+}: Props) {
   //#region hooks
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
@@ -70,7 +71,15 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const { refresh } = useFeed("");
-  const { data: nft } = useNFTDetails(nftId);
+  const { data } = useNFTDetailByTokenId({
+    contractAddress: propNFT?.contract_address,
+    tokenId: propNFT?.token_id,
+    chainName: propNFT?.chain_name,
+  });
+
+  const nft = data?.data.item;
+
+  const isCreatorDrop = nft?.creator_airdrop_edition_address;
   const shareNFT = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
@@ -119,7 +128,10 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         native: as,
         web: router.asPath.startsWith("/nft/") ? as : router.asPath,
       }),
-      { shallow: true }
+      Platform.select({
+        native: {},
+        web: { scroll: false },
+      })
     );
   };
 
@@ -141,10 +153,10 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>
-        {hasOwnership ? (
+        {hasOwnership && listId ? (
           <DropdownMenuItem
             onSelect={() => {
-              hideNFT(nftId, listId);
+              hideNFT(nft?.nft_id, listId);
             }}
             key="hide"
           >
@@ -158,10 +170,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onSelect={() => openModal("activities")}
-          key="activities"
-        >
+        <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
           <MenuItemIcon Icon={Clock} />
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -176,14 +185,16 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        <DropdownMenuItem
-          onSelect={() => refreshMetadata(nft)}
-          key="refresh-metadata"
-        >
-          <MenuItemIcon Icon={Refresh} />
+        {!isCreatorDrop && (
+          <DropdownMenuItem
+            onSelect={() => refreshMetadata(nft)}
+            key="refresh-metadata"
+          >
+            <MenuItemIcon Icon={Refresh} />
 
-          <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
-        </DropdownMenuItem>
+            <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
         {!hasOwnership && isFollowingUser && (
           <DropdownMenuItem
@@ -234,7 +245,7 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && (
+        {hasOwnership && !isCreatorDrop && (
           <DropdownMenuItem
             onSelect={() => openModal("transfer")}
             key="transfer"
@@ -244,20 +255,26 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuItem onSelect={() => openModal("list")} key="list">
-            <MenuItemIcon Icon={Menu} />
-            <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
+        {hasOwnership &&
+          usableContractAddress &&
+          !hasMatchingListing &&
+          !isCreatorDrop && (
+            <DropdownMenuItem onSelect={() => openModal("list")} key="list">
+              <MenuItemIcon Icon={Menu} />
+              <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
 
-        {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuItem onSelect={() => openModal("unlist")} key="unlist">
-            <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
+        {hasOwnership &&
+          usableContractAddress &&
+          hasMatchingListing &&
+          !isCreatorDrop && (
+            <DropdownMenuItem onSelect={() => openModal("unlist")} key="unlist">
+              <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
 
-        {hasOwnership && (
+        {hasOwnership && !isCreatorDrop && (
           <DropdownMenuItem
             className="danger"
             destructive

@@ -1,8 +1,12 @@
+import { useMemo } from "react";
+
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { ethers } from "ethers";
 
 import getWeb3Modal from "app/lib/web3-modal.native";
 
 const useWallet = () => {
+  const { connected, killSession, session } = useWalletConnect();
   const signTypedDataAsync = async ({
     domain,
     types,
@@ -18,9 +22,18 @@ const useWallet = () => {
     return await web3.getSigner()._signTypedData(domain, types, value);
   };
 
+  const address = useMemo(() => {
+    if (connected) {
+      return ethers.utils.getAddress(session.accounts[0]);
+    } else {
+      return null;
+    }
+  }, [session, connected]);
+
   return {
-    address: "",
-    connected: false,
+    address,
+    disconnect: killSession,
+    connected,
     loggedIn: null,
     networkChanged: null,
     signMessage: null,

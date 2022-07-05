@@ -40,7 +40,6 @@ function CollapsibleHeaderTabView<T extends Route>(
     renderScrollHeader,
     initTabbarHeight = 44,
     minHeaderHeight = 0,
-    insertTabBarElement,
     navigationState,
     insertStickyTabBarElement,
     emptyBodyComponent,
@@ -103,7 +102,9 @@ function CollapsibleHeaderTabView<T extends Route>(
             navigationState: NavigationState<T>;
           }
         ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
-        renderScene={(props: any) => e.renderSceneHeader(renderScene(props))}
+        renderScene={(props: any) =>
+          e.renderSceneHeader(renderScene(props), props)
+        }
       />
     );
   };
@@ -124,8 +125,6 @@ function CollapsibleHeaderTabView<T extends Route>(
             stickyState === Sticky.STATUS_FIXED &&
             insertStickyTabBarElement}
           <View onLayout={tabbarOnLayout}>{children}</View>
-
-          {React.isValidElement(insertTabBarElement) && insertTabBarElement}
         </Sticky>
       </View>
     );

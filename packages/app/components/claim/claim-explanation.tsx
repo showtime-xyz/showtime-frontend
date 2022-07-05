@@ -84,14 +84,16 @@ export const ClaimExplanation = ({
           from={{ opacity: 0 }}
           transition={{ duration: 600, type: "timing" }}
           animate={{ opacity: 1 }}
-          style={tw.style("mt-10 h-30")}
+          style={tw.style("mt-10 h-16")}
         >
           <Text tw="text-center text-lg text-gray-600 dark:text-gray-400">
             {values[page].description}
           </Text>
         </MotiView>
         <View tw="mt-auto pb-10 lg:mt-10">
-          <Button onPress={onDone}>Continue</Button>
+          <Button size="regular" onPress={onDone}>
+            Continue
+          </Button>
         </View>
       </View>
     </ScrollView>

@@ -3,14 +3,17 @@ import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components/connect-button";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -19,30 +22,31 @@ import {
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
+import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
-import { useRouter } from "app/navigation/use-router";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
   getTwitterIntent,
+  isMobileWeb,
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const { state, claimNFT } = useClaimNFT();
+  const { state, claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const share = useShare();
   const router = useRouter();
-
   const { userAddress } = useCurrentUserAddress();
-
+  const { isAuthenticated } = useUser();
+  const { connected } = useWallet();
+  const navigateToLogin = useNavigateToLogin();
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
-
   const { follow } = useMyInfo();
-
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
@@ -71,6 +75,25 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   //     });
   // }, [web3]);
 
+  if (!isAuthenticated) {
+    return (
+      <View tw="p-4">
+        <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
+
   if (state.status === "success") {
     const claimUrl = `https://showtime.xyz/t/${[
       process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -78,7 +101,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     const isShareAPIAvailable = Platform.select({
       default: true,
-      web: typeof window !== "undefined" && !!navigator.share,
+      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
     });
 
     return (
@@ -198,6 +221,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <View tw="mt-4">
             <Button
+              size="regular"
+              variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-45" : ""}
               onPress={handleClaimNFT}
@@ -208,6 +233,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Failed. Retry!"
                 : "Claim for free"}
             </Button>
+
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>
