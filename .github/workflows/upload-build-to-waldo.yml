@@ -20,16 +20,57 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Generating simulator build
-        run: yarn upload-build-to-waldo
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Set up git user
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Expo prebuild
+        run: STAGE=development yarn expo:prebuild
+
+      - name: Build with Xcode
+        run: |
+          DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen)
+
+          cd ios/ && xcodebuild -workspace Showtime.xcworkspace    \
+                     -scheme Showtime                              \
+                     -configuration Release                        \
+                     -destination 'generic/platform=iOS Simulator' \
+                     -derivedDataPath "$DERIVED_DATA_PATH"         \
+                     clean build
+
+          echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
+
       - name: Upload build to Waldo
         uses: waldoapp/gh-action-upload@v1
         with:
-          build_path: ${{ env.APP_PATH }}
-          upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN }}
+          build_path: ${{ env.APP_DIR_PATH }}
+          upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN_SIM }}
+          is_debug_mode: true
