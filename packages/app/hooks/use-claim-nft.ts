@@ -146,7 +146,7 @@ export const useClaimNFT = (edition?: IEdition) => {
 
         Logger.log("Signing... ", forwardRequest);
 
-        signTransaction({ forwardRequest });
+        await signTransaction({ forwardRequest });
       } else {
         Alert.alert(
           "Wallet disconnected",
