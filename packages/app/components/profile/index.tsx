@@ -58,7 +58,7 @@ const Profile = ({ address }: { address: string | null }) => {
     profileId: profileData?.data?.profile.profile_id,
   });
   /**
-   * defalut tab index.
+   * default tab index.
    * if Created list = 0, it should go to the Owned section directly.
    * */
   const defaultIndex = useMemo(() => {
