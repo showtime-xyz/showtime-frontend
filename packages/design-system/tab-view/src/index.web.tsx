@@ -129,10 +129,13 @@ function CollapsibleHeaderTabView<T extends Route>(
       </View>
     );
   };
-  const _renderSceneHeader = (children: React.ReactElement) => {
+  const _renderSceneHeader = (
+    children: React.ReactElement,
+    props: SceneRendererProps & { route: T }
+  ) => {
     return (
-      <View style={{ flex: 1 }}>
-        {renderSceneHeader?.(children.props as T)}
+      <View style={styles.full}>
+        {renderSceneHeader?.(props.route)}
         {children}
       </View>
     );
@@ -159,7 +162,7 @@ function CollapsibleHeaderTabView<T extends Route>(
         scrollStickyHeaderHeight: 0,
       }}
     >
-      <View ref={containeRef} style={styles.container}>
+      <View ref={containeRef} style={styles.full}>
         {renderScrollHeader && renderScrollHeader()}
 
         {navigationState.routes.length === 0 && emptyBodyComponent ? (
@@ -176,7 +179,7 @@ function CollapsibleHeaderTabView<T extends Route>(
 }
 
 const styles = StyleSheet.create({
-  container: {
+  full: {
     flex: 1,
   },
   tabbarStyle: {
