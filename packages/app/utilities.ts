@@ -634,7 +634,9 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     return `@${twitterUsername}`;
   }
 
-  return profile.name
+  return profile.username
+    ? profile.username
+    : profile.name
     ? profile.name
     : profile.wallet_addresses_v2?.[0]?.ens_domain
     ? profile.wallet_addresses_v2[0].ens_domain
