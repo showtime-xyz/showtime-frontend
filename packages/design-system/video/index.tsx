@@ -1,12 +1,12 @@
 import { ComponentProps, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
 import { Source } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
@@ -24,7 +24,7 @@ function Video({ tw, blurhash, style, posterSource, ...props }: VideoProps) {
 
   return (
     <>
-      <View style={[style, tailwind.style(tw)]}>
+      <View tw={tw}>
         {videoConfig?.previewOnly ? (
           <Image
             tw={tw}

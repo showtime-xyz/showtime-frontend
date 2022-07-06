@@ -3,7 +3,7 @@ import { ScrollView as ReactNativeScrollView } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 
 import { ScrollViewProps } from "./types";
 
@@ -13,16 +13,16 @@ class ScrollView extends Component<ScrollViewProps> {
   }
 
   render() {
-    const { style, tw, asKeyboardAwareScrollView, ...props } = this.props;
-    const ScrollViewComponent = asKeyboardAwareScrollView
-      ? KeyboardAwareScrollView
-      : ReactNativeScrollView;
+    const { tw, asKeyboardAwareScrollView, ...props } = this.props;
+    const StyledScrollViewComponent = asKeyboardAwareScrollView
+      ? styled(KeyboardAwareScrollView)
+      : styled(ReactNativeScrollView);
 
     return (
-      <ScrollViewComponent
+      <StyledScrollViewComponent
         keyboardShouldPersistTaps="handled"
         {...props}
-        style={[tailwind.style(tw), style]}
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
       />
     );
   }

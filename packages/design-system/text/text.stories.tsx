@@ -22,17 +22,17 @@ export const TextXSCapsize: React.VFC<{}> = () => (
 
 export const TextXSBoldAndPurple: React.VFC<{}> = () => (
   <Text tw="text-xs font-bold text-black dark:text-white">
-    Hello <Text tw="text-stpurple text-xs">World</Text>
+    Hello <Text tw="text-xs text-purple-800">World</Text>
   </Text>
 );
 
 export const TextXSBoldAndPurpleCapsize: React.VFC<{}> = () => (
   <View tw="bg-black">
     <Text tw="text-xs font-bold text-black dark:text-white">
-      Hello <Text tw="text-stpurple text-xs">World</Text>
+      Hello <Text tw="text-xs text-purple-800">World</Text>
     </Text>
     <Text tw="text-xs font-bold text-black dark:text-white">
-      Hello <Text tw="text-stpurple text-xs">World</Text>
+      Hello <Text tw="text-xs text-purple-800">World</Text>
     </Text>
   </View>
 );

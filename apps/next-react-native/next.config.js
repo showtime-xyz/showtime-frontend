@@ -68,6 +68,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.tooltip",
   "@showtime-xyz/universal.verification-badge",
   "sentry-expo",
+  "nativewind",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";

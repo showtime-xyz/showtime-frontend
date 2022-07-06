@@ -1,19 +1,21 @@
 import { ComponentProps } from "react";
 import { ActivityIndicator as ReactNativeActivityIndicator } from "react-native";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 type ActivityIndicatorProps = { tw?: TW } & ComponentProps<
   typeof ReactNativeActivityIndicator
 >;
 
-function ActivityIndicator({ tw, style, ...props }: ActivityIndicatorProps) {
+const StyledActivityIndicator = styled(ReactNativeActivityIndicator);
+
+function ActivityIndicator({ tw, ...props }: ActivityIndicatorProps) {
   return (
-    <ReactNativeActivityIndicator
+    <StyledActivityIndicator
       color="#8b5cf6"
       {...props}
-      style={[tailwind.style(tw), style]}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />
   );
 }

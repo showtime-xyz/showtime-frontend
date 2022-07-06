@@ -1,6 +1,6 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
-// const nativewind = require("nativewind/tailwind/css");
+const nativewind = require("nativewind/tailwind/css");
 
 const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
 // const { colors } = require("@showtime-xyz/universal.tailwind");
@@ -319,7 +319,6 @@ module.exports = {
         inherit: "inherit",
       },
       colors: {
-        black45: "rgba(0, 0, 0, 0.45)",
         inherit: "inherit",
         ...colors,
       },
