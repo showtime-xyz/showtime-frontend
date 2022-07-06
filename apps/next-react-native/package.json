@@ -7,8 +7,7 @@
     "build": "STAGE=production next build",
     "build:turbo": "cd ../.. && yarn build",
     "build:analyze": "ANALYZE=true yarn build",
-    "start": "next start",
-    "postinstall": "cd ../.. && yarn patch-package"
+    "start": "next start"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
