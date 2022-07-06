@@ -4,7 +4,7 @@ import { Gift } from "@showtime-xyz/universal.icon";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
-import { getRoundedCount } from "app/utilities";
+import { formatNumber } from "app/utilities";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const { iconColor, textColors } = useSocialColor();
@@ -22,10 +22,10 @@ export function GiftButton({ nft }: { nft: NFT }) {
       tw="h-auto p-0"
       accentColor={textColors}
     >
-      <Gift height={20} width={20} color={iconColor} />{" "}
+      <Gift height={20} width={20} color={iconColor} />
       {edition?.total_claimed_count > 0
-        ? getRoundedCount(edition.total_claimed_count)
-        : ""}{" "}
+        ? ` ${formatNumber(edition.total_claimed_count)}`
+        : ""}
     </Button>
   );
 }
