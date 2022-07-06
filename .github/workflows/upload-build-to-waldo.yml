@@ -46,7 +46,8 @@ jobs:
           cd ios/ && xcodebuild -workspace Showtime.xcworkspace    \
                      -scheme Showtime                              \
                      -configuration Release                        \
-                     -destination 'generic/platform=iOS Simulator' \
+                     -sdk iphonesimulator                          \
+                     ARCHS=i386 ONLY_ACTIVE_ARCH=NO                \
                      -derivedDataPath "$DERIVED_DATA_PATH"         \
                      clean build
 
