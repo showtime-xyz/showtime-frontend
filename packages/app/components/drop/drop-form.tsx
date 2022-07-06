@@ -30,7 +30,7 @@ import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   getTwitterIntent,
-  getUserDisplayNameFromProfile,
+  getTwitterIntentUsername,
   isMobileWeb,
 } from "app/utilities";
 
@@ -186,8 +186,8 @@ export const DropForm = () => {
                   url: claimUrl,
                   message: `I just dropped a free NFT "${
                     state.edition?.name
-                  }" by ${getUserDisplayNameFromProfile(
-                    user.user
+                  }" by ${getTwitterIntentUsername(
+                    user?.user?.data?.profile
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               );
