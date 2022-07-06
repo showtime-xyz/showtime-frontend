@@ -5,7 +5,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -47,9 +46,8 @@ const Profile = ({ address }: { address: string | null }) => {
     data: profileData,
     isError,
     isLoading,
-    refresh,
+    mutate,
   } = useUserProfile({ address });
-  const router = useRouter();
 
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
@@ -57,26 +55,7 @@ const Profile = ({ address }: { address: string | null }) => {
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  /**
-   * default tab index.
-   * if Created list = 0, it should go to the Owned section directly.
-   * */
-  const defaultIndex = useMemo(() => {
-    if ((router.query as any)?.tab) return (router.query as any)?.tab;
-    const createdIndex =
-      data?.tabs.findIndex((item) => item.type === "created") ?? 0;
-    const ownedIndex =
-      data?.tabs.findIndex((item) => item.type === "owned") ?? 0;
-    if (ownedIndex === createdIndex || createdIndex === -1 || ownedIndex === -1)
-      return 0;
-    const createdCount = data?.tabs[createdIndex].displayed_count ?? 0;
-    const ownedCount = data?.tabs[ownedIndex].displayed_count ?? 0;
-    return createdCount > 0
-      ? createdIndex
-      : ownedCount > 0
-      ? ownedIndex
-      : createdIndex;
-  }, [data?.tabs, router]);
+
   const routes = useMemo(
     () =>
       data?.tabs?.map((item, index) => ({
@@ -93,7 +72,7 @@ const Profile = ({ address }: { address: string | null }) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>(routes, { defaultIndex });
+  } = useTabState<ProfileTabListRef>(routes);
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
@@ -117,11 +96,11 @@ const Profile = ({ address }: { address: string | null }) => {
   );
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    await refresh();
+    await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
     setIsRefreshing(false);
-  }, [currentTab, refresh, setIsRefreshing]);
+  }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
     ({

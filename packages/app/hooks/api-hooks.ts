@@ -138,10 +138,12 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address: string | null }) => {
-  const { data, error, mutate, isLoading } = useSWR<{ data: UserProfile }>(
-    address ? USER_PROFILE_KEY + address : null,
+  const queryKey = address ? USER_PROFILE_KEY + address : null;
+  const { data, error, isLoading } = useSWR<{ data: UserProfile }>(
+    queryKey,
     fetcher
   );
+  const { mutate } = useSWRConfig();
 
   const myInfo = useMyInfo();
   // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
@@ -165,7 +167,7 @@ export const useUserProfile = ({ address }: { address: string | null }) => {
     data: userProfile,
     isLoading,
     isError: Boolean(error),
-    refresh: mutate,
+    mutate: () => mutate(queryKey, userProfile),
   };
 };
 
@@ -282,7 +284,7 @@ export type List = {
 };
 
 type ProfileTabsAPI = {
-  default_tab_type: number;
+  default_tab_type: string;
   tabs: Array<List>;
 };
 
