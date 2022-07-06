@@ -429,7 +429,7 @@ export const DropForm = () => {
                 name="hasAcceptedTerms"
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <View tw="flex-1 flex-row">
+                    <View tw="flex-1 flex-row items-center">
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}

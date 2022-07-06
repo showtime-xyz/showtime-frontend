@@ -14,6 +14,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
+import { ledgerWalletHack } from "app/utilities";
 import { delay } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
@@ -76,14 +77,16 @@ export const useClaimNFT = (edition?: IEdition) => {
       forwardRequest.value
     );
 
-    Logger.log("Signature", signature);
+    const newSignature = ledgerWalletHack(signature);
+    Logger.log("Signature", { signature, newSignature });
     Logger.log("Submitting tx...");
+
     const relayedTx = await axios({
       url: `/v1/relayer/forward-request`,
       method: "POST",
       data: {
         forward_request: forwardRequest,
-        signature,
+        signature: newSignature,
         from_address: userAddress,
       },
     });
