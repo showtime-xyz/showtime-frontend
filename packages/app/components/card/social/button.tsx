@@ -12,6 +12,8 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
+import { formatNumber } from "app/utilities";
+
 type Props = {
   variant: "like" | "comment" | "boost" | "gift";
   count: number;
@@ -103,17 +105,6 @@ function Button({
       </Text>
     </PressableScale>
   );
-}
-
-// Format big numbers
-function formatNumber(number: number) {
-  if (number > 1000000) {
-    return `${(number / 1000000).toFixed(1)}m`;
-  } else if (number > 1000) {
-    return `${(number / 1000).toFixed(1)}k`;
-  } else {
-    return number;
-  }
 }
 
 // Get background hover color

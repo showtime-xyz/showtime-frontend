@@ -3,7 +3,7 @@ import { Heart, HeartFilled } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useSocialColor } from "app/hooks/use-social-color";
-import { getRoundedCount } from "app/utilities";
+import { formatNumber } from "app/utilities";
 
 export function LikeButton({
   onPress,
@@ -27,8 +27,8 @@ export function LikeButton({
         <HeartFilled height={24} width={24} color={tw.color("red-500")} />
       ) : (
         <Heart height={24} width={24} color={iconColor} />
-      )}{" "}
-      {likeCount > 0 ? getRoundedCount(likeCount) : ""}
+      )}
+      {likeCount > 0 ? ` ${formatNumber(likeCount)}` : ""}
     </Button>
   );
 }
