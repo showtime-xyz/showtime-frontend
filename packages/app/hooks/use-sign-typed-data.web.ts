@@ -2,7 +2,11 @@ import {
   TypedDataDomain,
   TypedDataField,
 } from "@ethersproject/abstract-signer";
-import { useSignTypedData as useWagmiSignTypedData, useNetwork } from "wagmi";
+import {
+  useSignTypedData as useWagmiSignTypedData,
+  useNetwork,
+  useSwitchNetwork,
+} from "wagmi";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -16,7 +20,8 @@ const EXPECTED_CHAIN_ID =
 
 export const useSignTypedData = () => {
   let { web3 } = useWeb3();
-  const { activeChain, switchNetworkAsync } = useNetwork();
+  const { chain } = useNetwork();
+  const { switchNetworkAsync } = useSwitchNetwork();
   const Alert = useAlert();
   const { signTypedDataAsync } = useWagmiSignTypedData();
 
@@ -41,7 +46,7 @@ export const useSignTypedData = () => {
       } catch (e) {
         // Assuming transaction failed due to wrong network because checking error code is buggy
         // Putting it in error as Rainbow doesn't require switching network while signing chain
-        if (activeChain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
+        if (chain?.id !== parseInt(EXPECTED_CHAIN_ID)) {
           Alert.alert(
             "Switch network",
             "Wallet must point to polygon network to complete the transaction",

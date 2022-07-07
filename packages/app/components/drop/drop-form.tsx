@@ -30,7 +30,7 @@ import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   getTwitterIntent,
-  getUserDisplayNameFromProfile,
+  getTwitterIntentUsername,
   isMobileWeb,
 } from "app/utilities";
 
@@ -186,8 +186,8 @@ export const DropForm = () => {
                   url: claimUrl,
                   message: `I just dropped a free NFT "${
                     state.edition?.name
-                  }" by ${getUserDisplayNameFromProfile(
-                    user.user
+                  }" by ${getTwitterIntentUsername(
+                    user?.user?.data?.profile
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               );
@@ -341,6 +341,7 @@ export const DropForm = () => {
                         <Fieldset
                           tw="flex-1"
                           label="Description"
+                          multiline
                           placeholder="What is this NFT drop about?"
                           onBlur={onBlur}
                           helperText="You will not be able to edit this after the drop is created"
@@ -428,7 +429,7 @@ export const DropForm = () => {
                 name="hasAcceptedTerms"
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <View tw="flex-1 flex-row">
+                    <View tw="flex-1 flex-row items-center">
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}

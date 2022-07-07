@@ -46,14 +46,25 @@ const Profile = ({ address }: { address: string | null }) => {
     data: profileData,
     isError,
     isLoading,
-    refresh,
+    mutate,
   } = useUserProfile({ address });
+
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+
+  const routes = useMemo(
+    () =>
+      data?.tabs?.map((item, index) => ({
+        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
+        key: item?.name,
+        index,
+      })) ?? [],
+    [data]
+  );
   const {
     index,
     setIndex,
@@ -61,7 +72,7 @@ const Profile = ({ address }: { address: string | null }) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>([]);
+  } = useTabState<ProfileTabListRef>(routes);
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
@@ -85,11 +96,11 @@ const Profile = ({ address }: { address: string | null }) => {
   );
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    await refresh();
+    await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
     setIsRefreshing(false);
-  }, [currentTab, refresh, setIsRefreshing]);
+  }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
     ({
@@ -171,16 +182,6 @@ const Profile = ({ address }: { address: string | null }) => {
     isLoading,
     isError,
   ]);
-
-  const routes = useMemo(
-    () =>
-      data?.tabs?.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
-        key: item?.name,
-        index,
-      })) ?? [],
-    [data]
-  );
 
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>

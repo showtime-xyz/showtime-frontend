@@ -7,7 +7,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
-import { getRoundedCount } from "app/utilities";
+import { formatNumber } from "app/utilities";
 
 interface CommentButtonProps {
   nft?: NFT;
@@ -54,8 +54,8 @@ export function CommentButton({ nft }: CommentButtonProps) {
       onPress={handleOnPress}
       accentColor={textColors}
     >
-      <Message height={24} width={24} color={iconColor} />{" "}
-      {nft?.comment_count > 0 ? getRoundedCount(nft.comment_count) : ""}
+      <Message height={24} width={24} color={iconColor} />
+      {nft?.comment_count > 0 ? ` ${formatNumber(nft.comment_count)}` : ""}
     </Button>
   );
 }
