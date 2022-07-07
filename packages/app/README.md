@@ -54,9 +54,9 @@ Expo entrypoint: `apps/expo/App.tsx`
 
 > Web
 
-Next.js entrypoint: `apps/next-react-native/src/pages/_app.tsx`
+Next.js entrypoint: `apps/next/src/pages/_app.tsx`
 
-`cd apps/next-react-native`
+`cd apps/next`
 
 `yarn dev` to start the web app
 
@@ -97,32 +97,32 @@ Turbo pipelines are configured within the root directory [package.json](./packag
 
 - `yarn dev` runs the dev script for every [application](/apps)
 - `yarn dev:expo` runs the dev script for [@showtime/expo](/apps/expo)
-- `yarn dev:next` runs the dev script for [@showtime/next-react-native](/apps/next-react-native)
+- `yarn dev:next` runs the dev script for [@showtime/next](/apps/next)
 - `yarn dev:expo-storybook` runs the dev script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn dev:next-storybook` runs the dev script for [@showtime/next-storybook](/apps/next-storybook)
-- `yarn dev:web` runs both dev scripts for [@showtime/next-react-native](/apps/next-react-native) and [@showtime/next-storybook](/apps/next-storybook)
+- `yarn dev:web` runs both dev scripts for [@showtime/next](/apps/next) and [@showtime/next-storybook](/apps/next-storybook)
 - `yarn dev:mobile` runs both dev scripts for [@showtime/expo](/apps/expo) and [@showtime/storybook-react-native](/apps/storybook-react-native)
 
 #### Build
 
 - `yarn build` runs the build script for every [application](/apps)
 - `yarn build:expo` runs the build script for [@showtime/expo](/apps/expo)
-- `yarn build:next` runs the build script for [@showtime/next-react-native](/apps/next-react-native)
+- `yarn build:next` runs the build script for [@showtime/next](/apps/next)
 - `yarn build:expo-storybook` runs the build script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn build:next-storybook` runs the build script for [@showtime/next-storybook](/apps/next-storybook)
 
 #### Start
 
-- `yarn start:next` runs the start script for [@showtime/next-react-native](/apps/next-react-native)
+- `yarn start:next` runs the start script for [@showtime/next](/apps/next)
 
 #### Lint
 
 - `yarn lint` runs the lint script for every [application](/apps)
 - `yarn lint:expo` runs the lint script for [@showtime/expo](/apps/expo)
-- `yarn lint:next` runs the lint script for [@showtime/next-react-native](/apps/next-react-native)
+- `yarn lint:next` runs the lint script for [@showtime/next](/apps/next)
 - `yarn lint:expo-storybook` runs the lint script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn lint:next-storybook` runs the lint script for [@showtime/next-storybook](/apps/next-storybook)
-- `yarn lint:next-react-native` runs the lint script for [@showtime/next-react-native](/apps/next-react-native)
+- `yarn lint:next` runs the lint script for [@showtime/next](/apps/next)
 
 #### Formatting
 
@@ -139,7 +139,7 @@ To get formatting on save in VS Code, install the `eslint` extension and add the
 #### Graph
 
 - `yarn turbo:graph` generates the current [task graph](https://turborepo.org/docs/reference/command-line-reference#--graph) for all [application](/apps)
-  `yarn turbo:graph:next` generates the current [task graph](https://turborepo.org/docs/reference/command-line-reference#--graph) for [@showtime/next-react-native](/apps/next-react-native)
+  `yarn turbo:graph:next` generates the current [task graph](https://turborepo.org/docs/reference/command-line-reference#--graph) for [@showtime/next](/apps/next)
 
 #### Utility scripts
 
@@ -297,7 +297,7 @@ GitHub Actions
 Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.local` file.
 
 - `.env.development` + `.env.staging` + `.env.production` in `apps/expo`
-- `.env` in `apps/next-react-native`
+- `.env` in `apps/next`
 
 ## Release Cycle
 
