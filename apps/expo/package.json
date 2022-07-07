@@ -22,6 +22,7 @@
     "e2e:android:release": "yarn e2e:android:build:release && yarn e2e:android:test:release",
     "e2e:android:build:release": "yarn detox build --configuration android.emu.release",
     "e2e:android:test:release": "yarn detox test --configuration android.emu.release",
+    "postinstall": "cd ../.. && yarn patch-package",
     "update:development": "STAGE=development eas update --branch default",
     "update:staging": "STAGE=staging eas update --branch staging",
     "update:production": "STAGE=production eas update --branch production",

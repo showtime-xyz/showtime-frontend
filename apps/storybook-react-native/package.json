@@ -11,6 +11,7 @@
     "expo:prebuild": "expo prebuild --skip-dependency-update react && yarn react-native link",
     "ios": "yarn expo:prebuild && EXPO_USE_APPLE_DEVICE=0 expo run:ios",
     "android": "yarn expo:prebuild && expo run:android",
+    "postinstall": "cd ../.. && yarn patch-package",
     "update:development": "STAGE=development eas update --branch default",
     "build": "yarn build:development",
     "build:development": "STAGE=development eas build --profile development --platform all",
