@@ -6,7 +6,7 @@ const { withExpo } = require("@expo/next-adapter");
 const withFonts = require("next-fonts");
 const withImages = require("next-images");
 const withPlugins = require("next-compose-plugins");
-const withSentryConfig = require("@sentry/nextjs");
+const { withSentryConfig } = require("@sentry/nextjs");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
