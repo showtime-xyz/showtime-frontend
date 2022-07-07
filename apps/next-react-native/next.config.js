@@ -149,7 +149,7 @@ module.exports = withPlugins(
     withFonts,
     withImages,
     withBundleAnalyzer,
-    withSentryConfig,
+    !isDev ? withSentryConfig : null,
     [withExpo, { projectRoot: __dirname + "/../.." }],
   ].filter(Boolean),
   nextConfig
