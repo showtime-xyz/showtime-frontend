@@ -37,6 +37,9 @@ Introduction: [Universal Design System](https://axeldelafosse.com/blog/universal
 
 `cd packages/design-system`
 
+[Read more](https://github.com/showtime-xyz/showtime-frontend/tree/staging/packages/design-system#readme)
+about the design system.
+
 ### Expo
 
 > React Native
@@ -329,6 +332,12 @@ Pro tip: Ignore a list of commits within `git-blame` by default on version `>2.2
 ```
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 ```
+
+## Troubleshooting
+
+If Vercel is not deploying after updating or adding a patch package, you need to
+click on "Redeploy" on Vercel and don’t select "Use the same cache". Most of the
+time, it is a cache issue.
 
 ### Root
 
