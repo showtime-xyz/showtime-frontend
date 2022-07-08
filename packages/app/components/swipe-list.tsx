@@ -358,7 +358,7 @@ export const FeedItem = memo(
                 </Suspense>
               </View>
               <Description nft={nft} />
-              <View tw="item-centers flex-row justify-between px-4">
+              <View tw="flex-row items-center justify-between px-4">
                 <Creator nft={nft} />
                 <Owner nft={nft} price={false} />
               </View>
