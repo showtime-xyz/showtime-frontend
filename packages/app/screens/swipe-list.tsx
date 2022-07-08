@@ -107,23 +107,20 @@ const TrendingNFTsSwipeList = () => {
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
-  const { data, updateItem, isRefreshing, refresh, fetchMore } =
-    useTrendingNFTS({
-      days,
-    });
+  const { data } = useTrendingNFTS({
+    days,
+  });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <SwipeList
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-      />
-    </MutateProvider>
+    <SwipeList
+      data={data}
+      // fetchMore={fetchMore}
+      // isRefreshing={isRefreshing}
+      // refresh={refresh}
+      initialScrollIndex={Number(initialScrollIndex)}
+      bottomPadding={safeAreaBottom}
+    />
   );
 };
 
