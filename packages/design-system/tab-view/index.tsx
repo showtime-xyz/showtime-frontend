@@ -28,7 +28,7 @@ type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
-export function HeaderTabView<T extends Route>({
+function HeaderTabView<T extends Route>({
   autoWidthTabBar,
   renderScene,
   navigationState,
@@ -92,3 +92,4 @@ export function HeaderTabView<T extends Route>({
     />
   );
 }
+export { Route, HeaderTabView };

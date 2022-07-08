@@ -46,16 +46,14 @@ export const SettingAccountSlotFooter = () => {
   return (
     <View tw="mt-4 px-4">
       <View tw="flex flex-col items-start">
-        <ClearCacheBtn />
-        <View tw="h-4" />
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <View tw="h-2" />
+        <View tw="h-4" />
         <Text tw="text-xs text-gray-500 dark:text-white">
           This action cannot be undone.
         </Text>
-        <View tw="h-2" />
+        <View tw="h-4" />
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
             <Button variant="danger" size="small" onPress={handleDeleteAccount}>
@@ -63,6 +61,8 @@ export const SettingAccountSlotFooter = () => {
             </Button>
           </Link>
         </View>
+        <View tw="h-4" />
+        <ClearCacheBtn />
       </View>
     </View>
   );
@@ -90,7 +90,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
       ]}
     >
       <View tw="flex flex-col">
-        <Text tw="text-md text-gray-900 dark:text-white">{props.title}</Text>
+        <Text tw="text-sm text-gray-900 dark:text-white">{props.title}</Text>
       </View>
       <View tw="h-8 w-8 items-center justify-center">
         <ChevronRight

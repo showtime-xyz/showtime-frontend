@@ -28,6 +28,7 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
+import { AddEmailScreen } from "app/screens/settings-add-email";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
 
@@ -113,6 +114,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <EditProfileScreen />
         <FollowersScreen />
         <FollowingScreen />
+        <AddEmailScreen />
         <DropScreen />
         <ClaimScreen />
         {/* Login should be the last so it renders on top of others if needed */}
