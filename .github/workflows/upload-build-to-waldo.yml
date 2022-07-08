@@ -7,8 +7,8 @@ defaults:
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "staging" branch
-  pull_request:
+  # Triggers the workflow on push/merge request events but only for the "staging" branch
+  push:
     branches: ["staging"]
 
   # Allows you to run this workflow manually from the Actions tab
