@@ -20,11 +20,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
@@ -92,6 +91,7 @@ export const DropForm = () => {
     defaultValues,
   });
   // const [transactionId, setTransactionId] = useParam('transactionId')
+  const { userAddress } = useCurrentUserAddress();
 
   const {
     state,
@@ -102,8 +102,6 @@ export const DropForm = () => {
   } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
-  const { connected } = useWallet();
-  const { web3 } = useWeb3();
   const navigateToLogin = useNavigateToLogin();
 
   const isSignRequested = signMessageData.status === "sign_requested";
@@ -144,7 +142,7 @@ export const DropForm = () => {
   }
 
   // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected && !web3) {
+  if (!userAddress) {
     return (
       <View tw="p-4">
         <ConnectButton

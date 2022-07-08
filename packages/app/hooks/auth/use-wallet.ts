@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { ethers } from "ethers";
 
@@ -22,16 +20,8 @@ const useWallet = () => {
     return await web3.getSigner()._signTypedData(domain, types, value);
   };
 
-  const address = useMemo(() => {
-    if (connected) {
-      return ethers.utils.getAddress(session.accounts[0]);
-    } else {
-      return null;
-    }
-  }, [session, connected]);
-
   return {
-    address,
+    address: connected ? ethers.utils.getAddress(session.accounts[0]) : null,
     disconnect: killSession,
     connected,
     loggedIn: null,

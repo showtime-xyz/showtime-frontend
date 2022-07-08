@@ -31,7 +31,7 @@ const useWallet = () => {
 
   return {
     getAddress,
-    address: wagmiData?.address,
+    address: wagmiData.isConnected ? wagmiData?.address : null,
     connected,
     signed,
     loggedIn,
