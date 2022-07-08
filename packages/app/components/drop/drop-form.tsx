@@ -268,7 +268,7 @@ export const DropForm = () => {
                                   height={20}
                                   color="white"
                                 />
-                                <Text tw="text-md ml-2 text-white">
+                                <Text tw=" ml-2 text-sm text-white">
                                   Replace media
                                 </Text>
                               </View>
