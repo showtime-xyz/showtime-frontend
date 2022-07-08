@@ -17,7 +17,7 @@ export const Basic: React.FC<{}> = () => {
     <PortalProvider>
       <View tw="flex-1 items-center bg-gray-400 ">
         <Tooltip tw="mt-12" placement={Placement.top} text="Tooltip top">
-          <Text tw="text-md font-bold text-white">Tooltip Top</Text>
+          <Text tw="text-sm font-bold text-white">Tooltip Top</Text>
         </Tooltip>
 
         <Tooltip
@@ -26,11 +26,11 @@ export const Basic: React.FC<{}> = () => {
           text="Tooltip delay:0"
           tw="mt-8"
         >
-          <Text tw="text-md font-bold text-white">Tooltip Bottom delay:0</Text>
+          <Text tw="text-sm font-bold text-white">Tooltip Bottom delay:0</Text>
         </Tooltip>
 
         <Tooltip tw="mt-8" placement={Placement.bottom} text="TooltipTooltip!">
-          <Text tw="text-md font-bold text-white">Tooltip</Text>
+          <Text tw="text-sm font-bold text-white">Tooltip</Text>
         </Tooltip>
         <Tooltip
           tw="mt-8"
@@ -38,7 +38,7 @@ export const Basic: React.FC<{}> = () => {
           offset={20}
           text="TooltipTooltip!"
         >
-          <Text tw="text-md font-bold text-white">Tooltip offset:20</Text>
+          <Text tw="text-sm font-bold text-white">Tooltip offset:20</Text>
         </Tooltip>
         <Tooltip
           placement={Placement.bottom}
@@ -46,7 +46,7 @@ export const Basic: React.FC<{}> = () => {
           text="TooltipTooltipTooltip!"
           tw="mt-8"
         >
-          <Text tw="text-md font-bold text-white">Web only: delayDuration</Text>
+          <Text tw="text-sm font-bold text-white">Web only: delayDuration</Text>
         </Tooltip>
 
         <Tooltip
@@ -54,7 +54,7 @@ export const Basic: React.FC<{}> = () => {
           placement={Placement.bottom}
           text="Tooltip very very very very very very very very very very very very very very very very long text"
         >
-          <Text tw="text-md font-bold text-white">Tooltip long text</Text>
+          <Text tw="text-sm font-bold text-white">Tooltip long text</Text>
         </Tooltip>
         <Tooltip
           tw="mt-8"
@@ -62,7 +62,7 @@ export const Basic: React.FC<{}> = () => {
           textTw="text-red-900"
           text="Tooltip"
         >
-          <Text tw="text-md font-bold text-white">Custom text style</Text>
+          <Text tw="text-sm font-bold text-white">Custom text style</Text>
         </Tooltip>
         <Tooltip
           tw="mt-8"
@@ -73,7 +73,7 @@ export const Basic: React.FC<{}> = () => {
             </View>
           }
         >
-          <Text tw="text-md font-bold text-white">Custom content</Text>
+          <Text tw="text-sm font-bold text-white">Custom content</Text>
         </Tooltip>
       </View>
     </PortalProvider>
