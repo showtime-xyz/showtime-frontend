@@ -13,6 +13,7 @@ import { ConnectButton } from "app/components/connect-button";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -38,6 +39,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
+  const { connected } = useWallet();
   const navigateToLogin = useNavigateToLogin();
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
@@ -88,7 +90,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   }
 
   // TODO: remove this after imperative login modal API in rainbowkit
-  if (!userAddress) {
+  if (!connected) {
     return (
       <View tw="p-4">
         <ConnectButton

@@ -20,6 +20,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
@@ -103,6 +104,7 @@ export const DropForm = () => {
   const user = useUser();
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
+  const { connected } = useWallet();
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -142,7 +144,7 @@ export const DropForm = () => {
   }
 
   // TODO: remove this after imperative login modal API in rainbowkit
-  if (!userAddress) {
+  if (!connected) {
     return (
       <View tw="p-4">
         <ConnectButton
