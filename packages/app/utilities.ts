@@ -11,13 +11,7 @@ import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import {
-  NFT,
-  OwnersListOwner,
-  Profile,
-  UserType,
-  WalletAddressesV2,
-} from "./types";
+import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
 
 export const formatAddressShort = (address?: string) => {
   if (!address) return null;
@@ -184,39 +178,6 @@ export const overrideMagicInstance = (email: string) => {
   }
 
   return magic;
-};
-
-export const getRoundedCount = (count: number = 0) => {
-  const digits = `${count}`.split("");
-
-  if (digits[0] == "0") {
-    return digits[0];
-  }
-
-  switch (digits.length) {
-    case 8:
-      return `${digits.slice(0, 2).join("")}m`;
-
-    case 7:
-      return `${digits[0]}m`;
-
-    case 6:
-      return `${digits.slice(0, 3).join("")}k`;
-
-    case 5:
-      return `${digits.slice(0, 2).join("")}k`;
-
-    case 4:
-      return `${digits[0]}k`;
-
-    case 3:
-    case 2:
-    case 1:
-      return digits.join("");
-
-    default:
-      return "00";
-  }
 };
 
 // Format big numbers
@@ -629,16 +590,24 @@ export const getCreatorUsernameFromNFT = (nft?: NFT) => {
     : formatAddressShort(nft.creator_address);
 };
 
-export const getUserDisplayNameFromProfile = (user?: UserType) => {
-  if (!user) return "";
+export const getTwitterIntentUsername = (profile?: Profile) => {
+  if (!profile) return "";
 
-  return user.data.profile.username
-    ? `@${user.data.profile.username}`
-    : user.data.profile.name
-    ? user.data.profile.name
-    : user.data.profile.wallet_addresses_v2?.[0]?.ens_domain
-    ? user.data.profile.wallet_addresses_v2[0].ens_domain
-    : formatAddressShort(user.data.profile.wallet_addresses_v2?.[0]?.address);
+  const twitterUsername = profile.links.find(
+    (l) => l.type__name.toLowerCase() === "twitter"
+  )?.user_input;
+
+  if (twitterUsername) {
+    return `@${twitterUsername}`;
+  }
+
+  return profile.username
+    ? profile.username
+    : profile.name
+    ? profile.name
+    : profile.wallet_addresses_v2?.[0]?.ens_domain
+    ? profile.wallet_addresses_v2[0].ens_domain
+    : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
 };
 
 export const getDomainName = (link?: string) => {

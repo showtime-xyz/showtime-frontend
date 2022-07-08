@@ -9,7 +9,7 @@ import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { getRoundedCount } from "app/utilities";
+import { formatNumber } from "app/utilities";
 
 interface CommentRowProps {
   comment: CommentType;
@@ -132,9 +132,9 @@ function CommentRowComponent({
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
         content={comment.text}
-        likeCount={getRoundedCount(Math.max(0, likeCount))}
+        likeCount={formatNumber(Math.max(0, likeCount))}
         replayCount={
-          isReply ? undefined : getRoundedCount(comment.replies?.length)
+          isReply ? undefined : formatNumber(comment.replies?.length ?? 0)
         }
         hasReplies={
           isReply ? false : comment.replies && comment.replies.length > 0

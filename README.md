@@ -5,7 +5,7 @@
 Showtime is a web3 social network ✨
 
 - Web: [showtime.xyz](https://showtime.xyz)
-- iOS: [testflight.apple.com/join/gK6e2Kn2](https://testflight.apple.com/join/gK6e2Kn2)
+- iOS: [apps.apple.com/us/app/showtime-nft-social-network](https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688)
 - Android: [play.google.com/store/apps/details?id=io.showtime](https://play.google.com/store/apps/details?id=io.showtime)
 
 ## [Universal Design System](/packages/design-system/README.md)
