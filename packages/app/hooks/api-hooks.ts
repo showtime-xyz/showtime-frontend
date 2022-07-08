@@ -98,7 +98,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 
   const { data, isLoading, error } = useSWR<any>(trendingUrlFn, fetcher);
 
-  return { data, isLoading, error };
+  return { data: data ?? [], isLoading, error };
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
