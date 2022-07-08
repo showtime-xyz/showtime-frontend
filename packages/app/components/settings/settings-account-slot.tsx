@@ -50,7 +50,7 @@ export const SettingAccountSlotFooter = () => {
           Delete Account
         </Text>
         <View tw="h-4" />
-        <Text tw="text-xs text-gray-500 dark:text-white">
+        <Text tw="text-xs text-gray-500 dark:text-white md:text-sm">
           This action cannot be undone.
         </Text>
         <View tw="h-4" />
