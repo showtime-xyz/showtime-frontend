@@ -53,10 +53,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
             numColumns={numColumns}
             onPress={() =>
               router.push(
-                `/list?initialScrollIndex=${
-                  // index - 1 because header takes the initial index!
-                  index - 1
-                }&days=${days}&type=trendingNFTs`
+                `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
               )
             }
           />
