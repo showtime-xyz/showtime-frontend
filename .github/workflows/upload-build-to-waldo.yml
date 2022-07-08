@@ -37,17 +37,17 @@ jobs:
         run: yarn install --immutable
 
       - name: Expo prebuild
-        run: STAGE=development yarn expo:prebuild
+        run: STAGE=development expo prebuild
 
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen)
 
-          cd ios/ && xcodebuild -workspace Showtime.xcworkspace    \
+          cd ios/ && STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
                      -scheme Showtime                              \
                      -configuration Release                        \
                      -sdk iphonesimulator                          \
-                     ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO                \
+                     ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO              \
                      -derivedDataPath "$DERIVED_DATA_PATH"         \
                      clean build
 
