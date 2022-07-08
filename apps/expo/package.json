@@ -2,6 +2,7 @@
   "main": "index.js",
   "name": "@showtime/expo",
   "scripts": {
+    "waldo:build": "STAGE=development expo prebuild --skip-dependency-update react",
     "dev": "yarn start:dev-client",
     "start": "STAGE=development expo start --dev-client",
     "start:dev-client": "yarn expo:prebuild && yarn expo start --dev-client",
@@ -233,6 +234,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "detox": "^19.4.1",
     "esbuild": "^0.14.11",
+    "expo-cli": "^5.4.12",
     "jest": "^28.0.3",
     "jest-circus": "^28.0.3",
     "jest-expo": "^45.0.0-beta.2",
