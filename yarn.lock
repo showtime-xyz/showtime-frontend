@@ -7815,7 +7815,7 @@ __metadata:
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.3.3
     react-native-os: ^1.0.1
-    react-native-pager-view: ^5.4.24
+    react-native-pager-view: ^5.4.25
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
@@ -7971,7 +7971,7 @@ __metadata:
     react-native-gesture-handler: 2.5.0
     react-native-ios-context-menu: 1.3.0
     react-native-mmkv: ^2.3.3
-    react-native-pager-view: ^5.4.24
+    react-native-pager-view: ^5.4.25
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.3
     react-native-randombytes: ^3.6.1
@@ -29800,13 +29800,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-pager-view@npm:^5.4.24":
-  version: 5.4.24
-  resolution: "react-native-pager-view@npm:5.4.24"
+"react-native-pager-view@npm:^5.4.25":
+  version: 5.4.25
+  resolution: "react-native-pager-view@npm:5.4.25"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 5f296492ce7f386e5d4fabac4e85e0bc1cea39fe9ac070d1879cc0444f174014e1add708356b6c53a58b2b9bed9b1c1dff1799a8a3ba10b49b2efc2e1fdbda8a
+  checksum: 2b5c8667b40897001d30ff2b19545cac34637c9dfa1ff54cad8e8ddedc3b3437a45af951b19f8e3c6a114cb6fdcff68f4ce18cf46752ed5fefde42d4e0461578
   languageName: node
   linkType: hard
 
