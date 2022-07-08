@@ -36,7 +36,6 @@
   ],
   "scripts": {
     "dev": "yarn turbo run dev --parallel --no-cache",
-    "waldo:build": "STAGE=development expo prebuild",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
     "dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
