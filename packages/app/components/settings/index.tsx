@@ -215,13 +215,13 @@ const SettingsTabs = () => {
             boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
           }}
         >
-          <View tw="web:self-center w-full max-w-screen-2xl flex-row justify-between px-4 py-2 md:py-0 md:py-2">
+          <View tw="w-full max-w-screen-2xl flex-row justify-between self-center px-4 py-4 md:py-0">
             <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
               Settings
             </Text>
             {!isWeb ? (
               <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
-                {Constants?.manifest?.version ?? packageJson?.version}
+                v{Constants?.manifest?.version ?? packageJson?.version}
               </Text>
             ) : (
               <Hidden until="md">

@@ -167,50 +167,52 @@ export const SettingsWalletSlot = (props: Props) => {
     userAddress.toLowerCase() === address?.toLowerCase();
 
   return (
-    <View
-      tw="w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white"
-      style={
-        isMdWidth &&
-        Platform.select({
-          web: {
-            // @ts-ignore
-            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-          } as any,
-          default: {},
-        })
-      }
-    >
-      <View tw="justify-center">
-        <Button iconOnly={true} variant="secondary">
-          {isEthereumAddress ? <Ethereum /> : <Tezos />}
-        </Button>
-      </View>
-      <View tw="flex-1 px-4">
-        <View tw="md:mb-3 md:flex-row">
-          <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
-            {display}
-          </Text>
-          <View tw="my-2 flex flex-row md:my-0">
-            {isConnectedAddress ? (
-              <DataPill label="Current" tw="md:ml-2" type="secondary" />
-            ) : null}
-            {mintingEnabled ? (
-              <DataPill
-                label="🔨 Minting Enabled"
-                tw="md:ml-2"
-                type="primary"
-              />
-            ) : null}
-          </View>
+    <View tw="md:px-4">
+      <View
+        tw="w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black "
+        style={
+          isMdWidth &&
+          Platform.select({
+            web: {
+              // @ts-ignore
+              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+            } as any,
+            default: {},
+          })
+        }
+      >
+        <View tw="justify-center">
+          <Button iconOnly={true} variant="secondary">
+            {isEthereumAddress ? <Ethereum /> : <Tezos />}
+          </Button>
         </View>
-        <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
-      </View>
-      <View tw="flex justify-center">
-        <AddressMenu
-          address={address}
-          ctaCopy="Delete Wallet"
-          isCurrent={isConnectedAddress}
-        />
+        <View tw="flex-1 px-4">
+          <View tw="md:mb-3 md:flex-row">
+            <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
+              {display}
+            </Text>
+            <View tw="my-2 flex flex-row md:my-0">
+              {isConnectedAddress ? (
+                <DataPill label="Current" tw="md:ml-2" type="secondary" />
+              ) : null}
+              {mintingEnabled ? (
+                <DataPill
+                  label="🔨 Minting Enabled"
+                  tw="md:ml-2"
+                  type="primary"
+                />
+              ) : null}
+            </View>
+          </View>
+          <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
+        </View>
+        <View tw="flex justify-center">
+          <AddressMenu
+            address={address}
+            ctaCopy="Delete Wallet"
+            isCurrent={isConnectedAddress}
+          />
+        </View>
       </View>
     </View>
   );
