@@ -17,8 +17,8 @@ export type TrendingTabListProps = {
 };
 
 const LIST_MAP = new Map([
-  [0, CreatorsList],
-  [1, NFTSList],
+  [0, NFTSList],
+  [1, CreatorsList],
 ]);
 
 export const TabListContainer = forwardRef<
