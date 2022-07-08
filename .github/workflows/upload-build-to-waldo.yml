@@ -33,7 +33,7 @@ jobs:
           node-version: 14.x
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
       - name: Expo prebuild
         run: yarn waldo:build
