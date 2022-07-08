@@ -21,20 +21,14 @@ const useWallet = () => {
     return wagmiData?.address;
   };
 
-  const connected = useMemo(
-    () => !!wagmiData && !!chain && !!wagmiSigner?.provider,
-    [wagmiData, chain, wagmiSigner?.provider]
-  );
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const signed = useMemo(() => !!wagmiSignData, [wagmiSignData]);
-  const loggedIn = useMemo(() => connected, [connected]);
 
   return {
     getAddress,
-    address: wagmiData?.address,
-    connected,
+    address: wagmiData.isConnected ? wagmiData?.address : null,
+    connected: wagmiData.isConnected,
     signed,
-    loggedIn,
     disconnect,
     networkChanged,
     provider: wagmiSigner?.provider,

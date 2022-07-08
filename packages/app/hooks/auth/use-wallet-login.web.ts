@@ -25,7 +25,6 @@ export function useWalletLogin() {
   const {
     address: walletAddress,
     connected,
-    loggedIn,
     networkChanged,
     signMessage,
     signed,
@@ -103,7 +102,7 @@ export function useWalletLogin() {
       (connected && authenticated && !networkChanged)
     ) {
       handleSetWeb3();
-    } else if (connected && !authenticated && loggedIn) {
+    } else if (connected && !authenticated) {
       // TODO: refactor after getting a better alternative
       // https://github.com/rainbow-me/rainbowkit/discussions/536
       if (isMobileWeb()) {
@@ -113,7 +112,7 @@ export function useWalletLogin() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
+  }, [accessToken, connected, authenticated, networkChanged]);
 
   useEffect(() => {
     if (signed) {
