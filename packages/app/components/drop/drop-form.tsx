@@ -21,7 +21,6 @@ import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { useWallet } from "app/hooks/auth/use-wallet";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
@@ -92,7 +91,6 @@ export const DropForm = () => {
     defaultValues,
   });
   // const [transactionId, setTransactionId] = useParam('transactionId')
-  const { userAddress } = useCurrentUserAddress();
 
   const {
     state,
