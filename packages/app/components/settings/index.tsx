@@ -165,7 +165,7 @@ const SettingsTabs = () => {
                   onAddEmail={() =>
                     router.push(
                       Platform.select({
-                        native: `/settings/addEmail`,
+                        native: `/settings/add-email`,
                         web: {
                           pathname: router.pathname,
                           query: {
@@ -175,7 +175,7 @@ const SettingsTabs = () => {
                         } as any,
                       }),
                       Platform.select({
-                        native: `/settings/addEmail`,
+                        native: `/settings/add-email`,
                         web: router.asPath,
                       }),
                       { scroll: false }
