@@ -67,9 +67,9 @@ const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
-  fetchMore: () => void;
-  isRefreshing: boolean;
-  refresh: () => void;
+  fetchMore?: () => void;
+  isRefreshing?: boolean;
+  refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
   listId?: number;

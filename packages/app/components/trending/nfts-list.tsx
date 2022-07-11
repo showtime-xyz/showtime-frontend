@@ -49,6 +49,9 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
                 `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
               )
             }
+            hrefProps={{
+              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+            }}
           />
         );
       },

@@ -22,7 +22,7 @@ type Query = {
   collectionId: any;
   sortType: string;
   initialScrollIndex: any;
-  days: any;
+  days: string;
   creatorId: any;
 };
 
@@ -108,7 +108,7 @@ const TrendingNFTsSwipeList = () => {
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
   const { data } = useTrendingNFTS({
-    days,
+    days: Number(days),
   });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
@@ -131,7 +131,7 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   const [creatorId] = useParam("creatorId");
 
   const { data, mutate } = useTrendingCreators({
-    days,
+    days: Number(days),
   });
 
   const creatorTopNFTs = useMemo(() => {
