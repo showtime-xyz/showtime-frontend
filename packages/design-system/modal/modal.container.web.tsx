@@ -22,7 +22,7 @@ const MODAL_CONTAINER_TW = [
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
-  "max-h-100vh",
+  "max-h-82vh", // refer to figma
 ];
 
 const MODAL_BODY_TW = "flex-1 overflow-auto";
