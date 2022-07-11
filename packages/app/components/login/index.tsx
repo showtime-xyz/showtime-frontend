@@ -22,7 +22,7 @@ interface LoginProps {
 }
 
 const CONTENT_HEIGHT = Platform.select({
-  android: [281, 397],
+  android: [389, 397],
   default: [389, 389],
 });
 
