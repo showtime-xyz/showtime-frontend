@@ -77,7 +77,7 @@
     url("/fonts/woff/SpaceGrotesk-Regular-subset.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
-  font-display: fallback;
+  font-display: swap;
 }
 
 /* SpaceGrotesk Bold */
@@ -87,7 +87,7 @@
     url("/fonts/woff2/SpaceGrotesk-Bold-subset.woff2") format("woff2");
   font-weight: 700;
   font-style: bold;
-  font-display: fallback;
+  font-display: swap;
 }
 
 .web3modal-modal-lightbox {
