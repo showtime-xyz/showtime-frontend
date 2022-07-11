@@ -1,26 +1,25 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useWallet } from "app/hooks/auth/use-wallet";
-import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 
 function useCurrentUserAddress() {
-  const { user } = useUser();
   const [userAddress, setUserAddress] = useState("");
   const { address } = useWallet();
-
-  const getCurrentUserAddress = useCallback(async () => {
-    if (address) {
-      setUserAddress(address);
-    } else if (user?.data && user?.data.profile.wallet_addresses_v2[0]) {
-      setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
-    } else {
-      setUserAddress("");
-    }
-  }, [user, address]);
+  const { web3 } = useWeb3();
 
   useEffect(() => {
-    getCurrentUserAddress();
-  }, [getCurrentUserAddress]);
+    (async function fetchUserAddress() {
+      if (address) {
+        setUserAddress(address);
+      } else if (web3) {
+        const userAddress = await web3.getSigner().getAddress();
+        setUserAddress(userAddress);
+      } else {
+        setUserAddress("");
+      }
+    })();
+  }, [web3, address]);
 
   return { userAddress };
 }

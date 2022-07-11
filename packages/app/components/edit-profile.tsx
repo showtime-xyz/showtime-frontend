@@ -252,7 +252,6 @@ export const EditProfile = () => {
                       <Preview
                         file={value}
                         tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
-                        resizeMethod="resize"
                         resizeMode="cover"
                       />
                     )}

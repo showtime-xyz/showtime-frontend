@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Platform, useWindowDimensions } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -6,6 +7,7 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -16,6 +18,9 @@ import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
+
+import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
+import { breakpoints } from "design-system/theme";
 
 import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
@@ -31,18 +36,19 @@ export const SettingsWalletSlotHeader = () => {
   const toast = useToast();
   const { state, addWallet } = useAddWallet();
 
-  const connectionError = state.status === "error";
-  const walletCTA = connectionError ? "Connect Lost, Retry" : "Add Wallet";
+  const walletCTA =
+    state.status === "error" ? "Connect Lost, Retry" : "Add Wallet";
 
   useEffect(() => {
-    if (connectionError) {
+    if (state.status === "error") {
       // TODO: Possible force logout
       toast?.show({
         message: "Wallet connection lost please try again",
         hideAfter: 4000,
       });
     }
-  }, [state.status, connectionError, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.status]);
 
   const triggerAddWallet = async () => {
     Alert.alert(
@@ -148,7 +154,9 @@ export const SettingsWalletSlotPlaceholder = () => {
 export const SettingsWalletSlot = (props: Props) => {
   const address = props.address;
   const ensDomain = props.ensDomain;
-
+  const isDark = useIsDarkMode();
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const { userAddress } = useCurrentUserAddress();
 
   const mintingEnabled = props.mintingEnabled;
@@ -157,36 +165,54 @@ export const SettingsWalletSlot = (props: Props) => {
 
   const isConnectedAddress =
     userAddress.toLowerCase() === address?.toLowerCase();
-  const multiplePills = isConnectedAddress && mintingEnabled;
 
   return (
-    <View tw="max-h-[150px] w-full flex-1 flex-row justify-between p-4">
-      <View tw="justify-center">
-        <Button iconOnly={true} variant="secondary">
-          {isEthereumAddress ? <Ethereum /> : <Tezos />}
-        </Button>
-      </View>
-      <View tw="flex-1 px-4">
-        <Text tw="pb-3 text-base font-bold text-gray-900 dark:text-white">
-          {display}
-        </Text>
-        <View tw="flex flex-row pb-3">
-          {isConnectedAddress ? (
-            <DataPill label="Current" type="secondary" />
-          ) : null}
-          {multiplePills ? <View tw="pr-2" /> : null}
-          {mintingEnabled ? (
-            <DataPill label="🔨 Minting Enabled" type="primary" />
-          ) : null}
+    <View tw="md:px-4">
+      <View
+        tw="w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black "
+        style={
+          isMdWidth &&
+          Platform.select({
+            web: {
+              // @ts-ignore
+              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+            } as any,
+            default: {},
+          })
+        }
+      >
+        <View tw="justify-center">
+          <Button iconOnly={true} variant="secondary">
+            {isEthereumAddress ? <Ethereum /> : <Tezos />}
+          </Button>
         </View>
-        <Text tw="pb-3 text-xs text-gray-900 dark:text-white">{address}</Text>
-      </View>
-      <View tw="flex justify-center">
-        <AddressMenu
-          address={address}
-          ctaCopy="Delete Wallet"
-          isCurrent={isConnectedAddress}
-        />
+        <View tw="flex-1 px-4">
+          <View tw="md:mb-3 md:flex-row">
+            <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
+              {display}
+            </Text>
+            <View tw="my-2 flex flex-row md:my-0">
+              {isConnectedAddress ? (
+                <DataPill label="Current" tw="md:ml-2" type="secondary" />
+              ) : null}
+              {mintingEnabled ? (
+                <DataPill
+                  label="🔨 Minting Enabled"
+                  tw="md:ml-2"
+                  type="primary"
+                />
+              ) : null}
+            </View>
+          </View>
+          <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
+        </View>
+        <View tw="flex justify-center">
+          <AddressMenu
+            address={address}
+            ctaCopy="Delete Wallet"
+            isCurrent={isConnectedAddress}
+          />
+        </View>
       </View>
     </View>
   );

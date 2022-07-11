@@ -89,59 +89,26 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
 };
 
 export const useTrendingNFTS = ({ days }: { days: number }) => {
-  const trendingCreatorsUrlFn = useCallback(() => {
-    const url = `/v2/featured?days=${days}&limit=150`;
+  const trendingUrlFn = useCallback(() => {
+    const url = `/v2/trending/nfts?timeframe=${
+      days === 1 ? "day" : days === 7 ? "week" : days === 30 ? "month" : "all"
+    }`;
     return url;
   }, [days]);
 
-  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const { data, isLoading, error } = useSWR<any>(trendingUrlFn, fetcher);
 
-  const newData = useMemo(() => {
-    let newData: NFT[] = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
-    }
-    return newData;
-  }, [queryState.data]);
-
-  const updateItem = useCallback(
-    (updatedItem: NFT) => {
-      queryState.mutate((d) => {
-        const updatedData = d?.map((d) => {
-          return {
-            ...d,
-            items: d.data.items.map((item: NFT) => {
-              if (item.nft_id === updatedItem.nft_id) {
-                return updatedItem;
-              }
-              return item;
-            }),
-          };
-        });
-        return updatedData;
-      });
-    },
-    [queryState]
-  );
-
-  return {
-    ...queryState,
-    data: newData,
-    updateItem,
-    fetchMore: () => {},
-  };
+  return { data: data ?? [], isLoading, error };
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
-export const useUserProfile = ({ address }: { address: string | null }) => {
-  const { data, error, mutate, isLoading } = useSWR<{ data: UserProfile }>(
-    address ? USER_PROFILE_KEY + address : null,
+export const useUserProfile = ({ address }: { address?: string }) => {
+  const queryKey = address ? USER_PROFILE_KEY + address : null;
+  const { data, error, isLoading } = useSWR<{ data: UserProfile }>(
+    queryKey,
     fetcher
   );
+  const { mutate } = useSWRConfig();
 
   const myInfo = useMyInfo();
   // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
@@ -165,7 +132,7 @@ export const useUserProfile = ({ address }: { address: string | null }) => {
     data: userProfile,
     isLoading,
     isError: Boolean(error),
-    refresh: mutate,
+    mutate: () => mutate(queryKey, userProfile),
   };
 };
 
@@ -282,7 +249,7 @@ export type List = {
 };
 
 type ProfileTabsAPI = {
-  default_tab_type: number;
+  default_tab_type: string;
   tabs: Array<List>;
 };
 

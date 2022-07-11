@@ -43,12 +43,7 @@ export function SceneComponent<P extends ScrollViewProps>({
       scrollEventThrottle={16}
       directionalLockEnabled
       style={[styles.container, style]}
-      contentContainerStyle={[
-        {
-          paddingTop: tabbarHeight,
-        },
-        contentContainerStyle,
-      ]}
+      contentContainerStyle={[contentContainerStyle]}
       bounces={false}
       {...restProps}
     />
