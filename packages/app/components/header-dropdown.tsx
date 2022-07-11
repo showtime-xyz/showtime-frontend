@@ -11,6 +11,14 @@ import {
   DropdownMenuTriggerItem,
   DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
+import {
+  User,
+  Settings,
+  Edit,
+  Moon,
+  Sun,
+  LogOut,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -20,7 +28,6 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 
-import { User, Settings, Edit, Moon, Sun, LogOut } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 const MenuItemIcon = ({ Icon }) => {
@@ -29,9 +36,7 @@ const MenuItemIcon = ({ Icon }) => {
       <Icon
         width="1em"
         height="1em"
-        color={
-          tw.style("bg-gray-400 dark:bg-gray-500")?.backgroundColor as string
-        }
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
       />
     </DropdownMenuItemIcon>
   );

@@ -25,12 +25,9 @@ export function useWalletLogin() {
   const {
     address: walletAddress,
     connected,
-    loggedIn,
     networkChanged,
-    signMessage,
-    signed,
+    signMessageAsync,
     provider,
-    signature,
   } = useWallet();
   const { user } = useUser();
 
@@ -66,14 +63,15 @@ export function useWalletLogin() {
     const address = getAddress();
     const nonce = await fetchNonce(address as string);
     if (nonce) {
-      signMessage({
+      const signature = await signMessageAsync({
         message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
       });
+      handleSignature(signature);
     } else {
       dispatch("ERROR", { error: "Nonce is null" });
     }
   };
-  const handleSignature = async () => {
+  const handleSignature = async (signature?: string) => {
     try {
       const address = getAddress();
       if (address && signature) {
@@ -103,7 +101,7 @@ export function useWalletLogin() {
       (connected && authenticated && !networkChanged)
     ) {
       handleSetWeb3();
-    } else if (connected && !authenticated && loggedIn) {
+    } else if (connected && !authenticated) {
       // TODO: refactor after getting a better alternative
       // https://github.com/rainbow-me/rainbowkit/discussions/536
       if (isMobileWeb()) {
@@ -113,14 +111,7 @@ export function useWalletLogin() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
-
-  useEffect(() => {
-    if (signed) {
-      handleSignature();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signed]);
+  }, [accessToken, connected, authenticated, networkChanged]);
 
   return {
     status,

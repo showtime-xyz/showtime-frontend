@@ -23,12 +23,13 @@ export function trackButtonClicked({ name }: ButtonClickedProps) {
 
 type PageViewedProps = {
   name: string;
+  type?: string;
 };
 
 // Page Viewed
-export function useTrackPageViewed({ name }: PageViewedProps) {
+export function useTrackPageViewed({ name, type }: PageViewedProps) {
   useEffect(() => {
-    track("Page Viewed", { name });
+    track("Page Viewed", { name, type });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

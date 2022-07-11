@@ -10,7 +10,7 @@ export type ConnectButtonProps = {
   }) => void;
 };
 
-export const ConnectButton = () => {
+export const ConnectButton = (_props: ConnectButtonProps) => {
   const { connect } = useWalletConnect();
   return <Button onPress={connect}>Connect Wallet</Button>;
 };

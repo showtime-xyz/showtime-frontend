@@ -1,32 +1,43 @@
-import { useEffect, useMemo, useState } from "react";
-import { Platform } from "react-native";
+import { useEffect, useMemo, useCallback } from "react";
+import { Platform, useWindowDimensions } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Constants from "expo-constants";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
-import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
+import { Hidden } from "design-system/hidden";
+import {
+  HeaderTabView,
+  Route,
+  SceneRendererProps,
+  TabScrollView,
+  TabFlatList,
+} from "design-system/tab-view";
+import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
+import { ScollableTabBar } from "design-system/tab-view/scrollable-tab-bar";
+import {
+  breakpoints,
+  CARD_DARK_SHADOW,
+  CARD_LIGHT_SHADOW,
+} from "design-system/theme";
 
 import packageJson from "../../../../package.json";
-import { AddEmail } from "./add-email";
 import {
   AccountSettingItem,
-  AccountSettingItemProps,
   SettingAccountSlotFooter,
   SettingAccountSlotHeader,
 } from "./settings-account-slot";
 import {
-  EmailSlotProps,
   SettingEmailSlotHeader,
   SettingsEmailSkeletonSlot,
   SettingsEmailSlot,
@@ -40,37 +51,34 @@ import {
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
 
-const renderSettingRoutes = ({ item }: { item: AccountSettingItemProps }) => {
-  return <AccountSettingItem {...item} />;
-};
-
-const renderEmail = ({ item }: { item: EmailSlotProps }) => {
-  const email = item.email;
-  const backendAddress = item.address;
-  return <SettingsEmailSlot email={email} address={backendAddress} />;
-};
-
-const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
-  const address = item.address;
-  const ensDomain = item.ens_domain;
-  const mintingEnabled = item.minting_enabled;
-
-  return (
-    <SettingsWalletSlot
-      address={address}
-      ensDomain={ensDomain}
-      mintingEnabled={mintingEnabled}
-    />
-  );
-};
+const SETTINGS_ROUTE = [
+  {
+    title: "Wallets",
+    key: "Wallets",
+    index: 0,
+  },
+  {
+    title: "Email",
+    key: "Email",
+    index: 1,
+  },
+  {
+    title: "Account",
+    key: "Account",
+    index: 2,
+  },
+];
 
 const SettingsTabs = () => {
-  const [selected, setSelected] = useState(0);
+  const { width } = useWindowDimensions();
+
+  const isMdWidth = width >= breakpoints["md"];
+
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+  const isDark = useIsDarkMode();
   const isWeb = Platform.OS === "web";
-  const [viewAddEmail, setViewAddEmail] = useState(false);
 
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
@@ -101,100 +109,158 @@ const SettingsTabs = () => {
     }
   }, [isAuthenticated, router]);
 
-  return (
-    <View tw="web:items-center h-[100vh] w-full">
-      <Tabs.Root
-        onIndexChange={setSelected}
-        initialIndex={selected}
-        tabListHeight={TAB_LIST_HEIGHT}
-        lazy
-      >
-        <Tabs.Header>
-          {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
-          <View tw="items-center bg-white dark:bg-black">
-            <View tw="w-full max-w-screen-2xl flex-row justify-between py-4 px-4">
-              <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
-                Settings
-              </Text>
-              {!isWeb ? (
-                <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
-                  v{Constants?.manifest?.version ?? packageJson?.version}
-                </Text>
-              ) : null}
-            </View>
-          </View>
-        </Tabs.Header>
-        <Tabs.List
-          style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 md:absolute md:-top-[${TAB_LIST_HEIGHT}px] right-0 xl:-right-24 2xl:-right-36 ios:w-screen android:w-screen`
-          )}
+  const { index, setIndex, routes } = useTabState(SETTINGS_ROUTE);
+  const renderScene = useCallback(
+    ({
+      route: { index, key },
+    }: SceneRendererProps & {
+      route: Route;
+    }) => {
+      switch (key) {
+        case "Wallets":
+          return (
+            <TabFlatList
+              data={wallets}
+              keyExtractor={keyExtractor}
+              renderItem={({ item }) => (
+                <SettingsWalletSlot
+                  address={item.address}
+                  ensDomain={item.ens_domain}
+                  mintingEnabled={item.minting_enabled}
+                />
+              )}
+              ListEmptyComponent={() => {
+                const hasNoWallet = Boolean(wallets);
+                if (hasNoWallet) {
+                  return <SettingsWalletSlotPlaceholder />;
+                }
+                return <SettingsWalletSlotSkeleton />;
+              }}
+              ListHeaderComponent={<SettingsWalletSlotHeader />}
+              ItemSeparatorComponent={() => <SlotSeparator />}
+              index={index}
+            />
+          );
+        case "Email":
+          return (
+            <TabFlatList
+              data={emailWallets}
+              keyExtractor={keyExtractor}
+              renderItem={({ item }) => (
+                <SettingsEmailSlot
+                  email={item.email}
+                  address={item.backendAddress}
+                />
+              )}
+              ListEmptyComponent={() => {
+                const hasNoEmails = Boolean(emailWallets);
+                if (hasNoEmails) {
+                  return <SettingsEmailSlotPlaceholder />;
+                }
+                return <SettingsEmailSkeletonSlot />;
+              }}
+              ListHeaderComponent={
+                <SettingEmailSlotHeader
+                  hasEmail={Boolean(emailWallets?.length)}
+                  onAddEmail={() =>
+                    router.push(
+                      Platform.select({
+                        native: `/settings/add-email`,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            addEmailModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({
+                        native: `/settings/add-email`,
+                        web: router.asPath,
+                      }),
+                      { scroll: false }
+                    )
+                  }
+                />
+              }
+              ItemSeparatorComponent={() => <SlotSeparator />}
+              index={index}
+            />
+          );
+        case "Account":
+          return (
+            <TabScrollView index={index}>
+              <SettingAccountSlotHeader />
+              {accountSettings?.length > 0 &&
+                accountSettings.map((item) => (
+                  <AccountSettingItem {...item} key={item.id} />
+                ))}
+              <SettingAccountSlotFooter />
+            </TabScrollView>
+          );
+        default:
+          return null;
+      }
+    },
+    [accountSettings, emailWallets, router, wallets]
+  );
+  const renderHeader = useCallback(() => {
+    return (
+      <>
+        {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+        <View
+          tw="items-center bg-white dark:bg-black md:mb-4"
+          style={{
+            // @ts-ignore
+            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+          }}
         >
-          <Tabs.Trigger>
-            <TabItem name="Wallets" selected={selected === 0} />
-          </Tabs.Trigger>
-          <Tabs.Trigger>
-            <TabItem name="Email Addresses" selected={selected === 1} />
-          </Tabs.Trigger>
-          <Tabs.Trigger>
-            <TabItem name="Account" selected={selected === 2} />
-          </Tabs.Trigger>
-          <SelectedTabIndicator />
-        </Tabs.List>
-        <Tabs.Pager tw="mt-8">
-          <Tabs.FlatList
-            data={wallets}
-            keyExtractor={keyExtractor}
-            renderItem={renderWallet}
-            removeClippedSubviews={Platform.OS !== "web"}
-            ListEmptyComponent={() => {
-              const hasNoWallet = Boolean(wallets);
-              if (hasNoWallet) {
-                return <SettingsWalletSlotPlaceholder />;
-              }
-              return <SettingsWalletSlotSkeleton />;
-            }}
-            ListHeaderComponent={<SettingsWalletSlotHeader />}
-            alwaysBounceVertical={false}
-            ItemSeparatorComponent={() => <SlotSeparator />}
-          />
-
-          <Tabs.FlatList
-            data={emailWallets}
-            keyExtractor={keyExtractor}
-            renderItem={renderEmail}
-            removeClippedSubviews={Platform.OS !== "web"}
-            ListEmptyComponent={() => {
-              const hasNoEmails = Boolean(emailWallets);
-              if (hasNoEmails) {
-                return <SettingsEmailSlotPlaceholder />;
-              }
-              return <SettingsEmailSkeletonSlot />;
-            }}
-            ListHeaderComponent={
-              <SettingEmailSlotHeader
-                hasEmail={Boolean(emailWallets?.length)}
-                onAddEmail={() => setViewAddEmail(true)}
-              />
-            }
-            alwaysBounceVertical={false}
-            ItemSeparatorComponent={() => <SlotSeparator />}
-          />
-
-          <Tabs.FlatList
-            data={accountSettings}
-            keyExtractor={(item) => item.id}
-            renderItem={renderSettingRoutes}
-            removeClippedSubviews={Platform.OS !== "web"}
-            ListHeaderComponent={<SettingAccountSlotHeader />}
-            ListFooterComponent={<SettingAccountSlotFooter />}
-            alwaysBounceVertical={false}
-            ItemSeparatorComponent={() => <SlotSeparator />}
-          />
-        </Tabs.Pager>
-      </Tabs.Root>
-      <AddEmail
-        visibility={viewAddEmail}
-        dismiss={() => setViewAddEmail(false)}
+          <View tw="w-full max-w-screen-2xl flex-row justify-between self-center px-4 py-4 md:py-0">
+            <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
+              Settings
+            </Text>
+            {!isWeb ? (
+              <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
+                v{Constants?.manifest?.version ?? packageJson?.version}
+              </Text>
+            ) : (
+              <Hidden until="md">
+                <IndependentTabBar
+                  onPress={(i) => {
+                    setIndex(i);
+                  }}
+                  routes={SETTINGS_ROUTE}
+                  index={index}
+                />
+              </Hidden>
+            )}
+          </View>
+        </View>
+      </>
+    );
+  }, [headerHeight, index, isDark, isWeb, setIndex]);
+  return (
+    <View style={{ width }} tw="flex-1">
+      <HeaderTabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        renderScrollHeader={renderHeader}
+        minHeaderHeight={Platform.select({
+          default: headerHeight,
+          android: 0,
+        })}
+        sceneContainerStyle={tw.style("max-w-screen-xl web:self-center")}
+        renderTabBar={(props) => (
+          <Hidden from="md">
+            <ScollableTabBar {...props} />
+          </Hidden>
+        )}
+        swipeEnabled={!isMdWidth}
+        initialLayout={{
+          width: width,
+        }}
+        style={tw.style("z-1")}
       />
     </View>
   );
@@ -202,10 +268,8 @@ const SettingsTabs = () => {
 
 export function Settings() {
   return (
-    <BottomSheetModalProvider>
-      <ErrorBoundary>
-        <SettingsTabs />
-      </ErrorBoundary>
-    </BottomSheetModalProvider>
+    <ErrorBoundary>
+      <SettingsTabs />
+    </ErrorBoundary>
   );
 }

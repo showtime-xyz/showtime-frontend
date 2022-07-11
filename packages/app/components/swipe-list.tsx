@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, Suspense } from "react";
+import { memo, useCallback, useMemo, useRef, Suspense, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -67,9 +67,9 @@ const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
-  fetchMore: () => void;
-  isRefreshing: boolean;
-  refresh: () => void;
+  fetchMore?: () => void;
+  isRefreshing?: boolean;
+  refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
   listId?: number;
@@ -279,6 +279,7 @@ export const FeedItem = memo(
     itemHeight: number;
     listId?: number;
   }) => {
+    const [detailHeight, setDetailHeight] = useState(0);
     const { width: windowWidth } = useWindowDimensions();
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
@@ -357,7 +358,7 @@ export const FeedItem = memo(
                 </Suspense>
               </View>
               <Description nft={nft} />
-              <View tw="item-center flex-row justify-between px-4">
+              <View tw="flex-row items-center justify-between px-4">
                 <Creator nft={nft} />
                 <Owner nft={nft} price={false} />
               </View>
@@ -404,18 +405,18 @@ export const FeedItem = memo(
             showHeader={showHeader}
           >
             <View
-              tw={`absolute h-[${
-                itemHeight - bottomPadding - 50
-              }px] justify-center`}
+              tw={`absolute justify-center`}
+              style={{
+                height: Platform.select({
+                  web: itemHeight - bottomPadding - detailHeight,
+                  default: itemHeight - bottomPadding - 50,
+                }),
+              }}
             >
               <Media
                 item={nft}
                 numColumns={1}
-                tw={
-                  Platform.OS === "web"
-                    ? ""
-                    : `h-[${mediaHeight}px] w-[${windowWidth}px]`
-                }
+                tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
                 resizeMode="contain"
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
@@ -429,6 +430,14 @@ export const FeedItem = memo(
               detailStyle,
               { bottom: bottomMargin },
             ]}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              if (Platform.OS !== "web") return;
+              setDetailHeight(height);
+            }}
           >
             <BlurView
               tint={tint}
@@ -472,22 +481,14 @@ const NFTDetails = ({
 
   return (
     <View>
-      <View tw="h-4" />
-
       <View tw="flex-row items-center justify-between px-4">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
         {isCreatorDrop && edition ? <ClaimButton edition={edition} /> : null}
         {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
 
-      <View tw="h-4" />
-
       <View tw="px-4">
-        <Text
-          tw="font-space-bold text-2xl dark:text-white"
-          numberOfLines={3}
-          style={{ fontSize: 17, lineHeight: 22 }}
-        >
+        <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
           {nft.token_name}
         </Text>
 

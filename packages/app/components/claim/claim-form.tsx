@@ -12,7 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ConnectButton } from "app/components/connect-button";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
@@ -29,6 +29,7 @@ import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
   getTwitterIntent,
+  getTwitterIntentUsername,
   isMobileWeb,
 } from "app/utilities";
 
@@ -46,6 +47,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
+
+  const { data: creatorProfile } = useUserProfile({
+    address: nft?.data.item.creator_address,
+  });
+
   const { follow } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
@@ -125,8 +131,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                   url: claimUrl,
                   message: `I just claimed a free NFT "${
                     nft?.data.item.token_name
-                  }" by ${getCreatorUsernameFromNFT(
-                    nft?.data.item
+                  }" by ${getTwitterIntentUsername(
+                    creatorProfile?.data?.profile
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               );

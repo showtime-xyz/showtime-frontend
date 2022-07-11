@@ -409,6 +409,7 @@ export const useMintNFT = () => {
       text: "Creating… This may take a few minutes.",
       iconStatus: "waiting",
       bottom,
+      disableGestureToClose: true,
     });
 
     try {

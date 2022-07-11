@@ -24,13 +24,12 @@ import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   getTwitterIntent,
-  getUserDisplayNameFromProfile,
+  getTwitterIntentUsername,
   isMobileWeb,
 } from "app/utilities";
 
@@ -102,9 +101,8 @@ export const DropForm = () => {
   } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
-  const { connected } = useWallet();
-  const { web3 } = useWeb3();
   const navigateToLogin = useNavigateToLogin();
+  const { connected } = useWallet();
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -144,7 +142,7 @@ export const DropForm = () => {
   }
 
   // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected && !web3) {
+  if (!connected) {
     return (
       <View tw="p-4">
         <ConnectButton
@@ -186,8 +184,8 @@ export const DropForm = () => {
                   url: claimUrl,
                   message: `I just dropped a free NFT "${
                     state.edition?.name
-                  }" by ${getUserDisplayNameFromProfile(
-                    user.user
+                  }" by ${getTwitterIntentUsername(
+                    user?.user?.data?.profile
                   )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
                 })
               );
@@ -268,7 +266,7 @@ export const DropForm = () => {
                                   height={20}
                                   color="white"
                                 />
-                                <Text tw="text-md ml-2 text-white">
+                                <Text tw=" ml-2 text-sm text-white">
                                   Replace media
                                 </Text>
                               </View>
@@ -341,6 +339,7 @@ export const DropForm = () => {
                         <Fieldset
                           tw="flex-1"
                           label="Description"
+                          multiline
                           placeholder="What is this NFT drop about?"
                           onBlur={onBlur}
                           helperText="You will not be able to edit this after the drop is created"
@@ -428,7 +427,7 @@ export const DropForm = () => {
                 name="hasAcceptedTerms"
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <View tw="flex-1 flex-row">
+                    <View tw="flex-1 flex-row items-center">
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}

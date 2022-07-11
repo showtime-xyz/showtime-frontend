@@ -13,7 +13,12 @@ import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { delay, getFileMeta, isMobileWeb } from "app/utilities";
+import {
+  delay,
+  getFileMeta,
+  isMobileWeb,
+  ledgerWalletHack,
+} from "app/utilities";
 
 const editionCreatorABI = [
   "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
@@ -145,7 +150,8 @@ export const useDropNFT = () => {
       forwardRequest.value
     );
 
-    Logger.log("Signature", signature);
+    const newSignature = ledgerWalletHack(signature);
+    Logger.log("Signature", { signature, newSignature });
     Logger.log("Submitting tx...");
 
     // Sending signature to backend to initiate the transaction
@@ -154,7 +160,7 @@ export const useDropNFT = () => {
       method: "POST",
       data: {
         forward_request: forwardRequest,
-        signature,
+        signature: newSignature,
         from_address: userAddress,
       },
     });
@@ -183,12 +189,24 @@ export const useDropNFT = () => {
         dispatch({ type: "loading" });
 
         const ipfsHash = await uploadMedia(params.file);
-        Logger.log("ipfs hash ", ipfsHash, params);
+
+        const escapedTitle = JSON.stringify(params.title).slice(1, -1);
+        const escapedDescription = JSON.stringify(params.description).slice(
+          1,
+          -1
+        );
+
+        Logger.log("ipfs hash ", {
+          ipfsHash,
+          params,
+          escapedTitle,
+          escapedDescription,
+        });
 
         const callData = targetInterface.encodeFunctionData("createEdition", [
-          params.title,
+          escapedTitle,
           "SHOWTIME",
-          params.description,
+          escapedDescription,
           "", // animationUrl
           "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
           "ipfs://" + ipfsHash, // imageUrl
@@ -217,7 +235,7 @@ export const useDropNFT = () => {
             data: { forwardRequest },
           });
         } else {
-          signTransaction({ forwardRequest });
+          await signTransaction({ forwardRequest });
         }
       } else {
         Alert.alert(

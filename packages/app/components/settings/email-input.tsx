@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { Platform, TextInputProps } from "react-native";
+import { TextInputProps } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
@@ -84,10 +84,6 @@ export const EmailInput = (props: EmailInputProps) => {
             keyboardType={keyboardType}
             textContentType={textContentType}
             returnKeyType="go"
-            Component={Platform.select({
-              web: undefined,
-              default: BottomSheetTextInput,
-            })}
             componentRef={ref}
           />
         )}

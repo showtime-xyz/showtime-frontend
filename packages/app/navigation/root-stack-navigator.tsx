@@ -23,6 +23,7 @@ import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
+import { AddEmailScreen } from "app/screens/settings-add-email";
 import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
@@ -101,6 +102,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
+        <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
       </Stack.Group>

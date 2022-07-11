@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "27.0.4",
+  "version": "30.0.1",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -9,6 +9,7 @@
     "@types/react-native": "0.67.6",
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
+    "@walletconnect/react-native-dapp": "^1.7.8",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-diff": "^1.0.12",
@@ -28,7 +29,7 @@
   },
   "workspaces": [
     "apps/expo",
-    "apps/next-react-native",
+    "apps/next",
     "apps/storybook-react",
     "apps/storybook-react-native",
     "packages/*"
@@ -36,17 +37,17 @@
   "scripts": {
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
-    "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react-native",
+    "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
     "dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
     "dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
-    "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react-native --scope=@showtime/storybook-react",
+    "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next --scope=@showtime/storybook-react",
     "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
     "build": "yarn turbo run build",
     "build:expo": "yarn turbo run build --scope=@showtime/expo",
-    "build:next": "yarn turbo run build --scope=@showtime/next-react-native",
+    "build:next": "yarn turbo run build --scope=@showtime/next",
     "build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
     "build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
-    "start:next": "yarn turbo run start --scope=@showtime/next-react-native",
+    "start:next": "yarn turbo run start --scope=@showtime/next",
     "lint": "yarn turbo run lint",
     "lint:fix": "yarn turbo run lint:fix",
     "lint:report": "yarn turbo run lint:report",
