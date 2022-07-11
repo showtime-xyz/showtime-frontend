@@ -26,10 +26,8 @@ export function useWalletLogin() {
     address: walletAddress,
     connected,
     networkChanged,
-    signMessage,
-    signed,
+    signMessageAsync,
     provider,
-    signature,
   } = useWallet();
   const { user } = useUser();
 
@@ -65,14 +63,15 @@ export function useWalletLogin() {
     const address = getAddress();
     const nonce = await fetchNonce(address as string);
     if (nonce) {
-      signMessage({
+      const signature = await signMessageAsync({
         message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
       });
+      handleSignature(signature);
     } else {
       dispatch("ERROR", { error: "Nonce is null" });
     }
   };
-  const handleSignature = async () => {
+  const handleSignature = async (signature?: string) => {
     try {
       const address = getAddress();
       if (address && signature) {
@@ -113,13 +112,6 @@ export function useWalletLogin() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, connected, authenticated, networkChanged]);
-
-  useEffect(() => {
-    if (signed) {
-      handleSignature();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signed]);
 
   return {
     status,
