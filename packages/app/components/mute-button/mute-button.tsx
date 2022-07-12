@@ -8,7 +8,7 @@ export const MuteButton = ({
   onPress,
 }: {
   muted: boolean;
-  onPress: any;
+  onPress: () => void;
 }) => {
   return (
     <Pressable
