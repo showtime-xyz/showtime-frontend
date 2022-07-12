@@ -36,7 +36,7 @@ type NotificationsStackParams = {
 
 type ProfileStackParams = {
   walletAddress: undefined;
-  profile: { walletAddress: number };
+  profile: { username: string };
   login: undefined;
   nft: { id: number };
   settings: undefined;
