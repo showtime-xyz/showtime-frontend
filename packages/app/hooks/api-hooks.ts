@@ -102,7 +102,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
-export const useUserProfile = ({ address }: { address?: string }) => {
+export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
   const { data, error, isLoading } = useSWR<{ data: UserProfile }>(
     queryKey,

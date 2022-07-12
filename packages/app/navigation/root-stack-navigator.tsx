@@ -28,6 +28,7 @@ import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
 
+import { ProfileScreenProps } from "../components/profile";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 
@@ -47,14 +48,11 @@ export function RootStackNavigator() {
       />
 
       {/* Screens accessible in most of the navigators */}
-      <Stack.Group
-        // @ts-ignore
-        screenOptions={screenOptions({ safeAreaTop, isDark })}
-      >
+      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
-          getId={({ params }) => params?.username}
+          getId={({ params }) => (params as ProfileScreenProps)?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen

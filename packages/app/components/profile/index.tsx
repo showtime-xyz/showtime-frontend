@@ -22,6 +22,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { HeaderTabView } from "design-system/tab-view/index";
 import { Route } from "design-system/tab-view/src/types";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
+import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
 import { FilterContext } from "./fillter-context";
@@ -30,24 +31,23 @@ import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
-const HEADER_LIGHT_SHADOW =
-  "0px 2px 4px rgba(0, 0, 0, 0.05), 0px 4px 8px rgba(0, 0, 0, 0.05)";
-const HEADER_DARK_SHADOW =
-  "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)";
+export type ProfileScreenProps = {
+  username: string;
+};
 
-const ProfileScreen = ({ username }: { username: string | null }) => {
-  return <Profile address={username} />;
+const ProfileScreen = ({ username }: ProfileScreenProps) => {
+  return <Profile username={username} />;
 };
 
 type Filter = typeof defaultFilters;
 
-const Profile = ({ address }: { address: string | null }) => {
+const Profile = ({ username }: ProfileScreenProps) => {
   const {
     data: profileData,
     isError,
     isLoading,
     mutate,
-  } = useUserProfile({ address });
+  } = useUserProfile({ address: username });
 
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
@@ -138,7 +138,7 @@ const Profile = ({ address }: { address: string | null }) => {
   }, [contentWidth, width]);
 
   const headerShadow = useMemo(() => {
-    return isDark ? HEADER_DARK_SHADOW : HEADER_LIGHT_SHADOW;
+    return isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW;
   }, [isDark]);
 
   const renderHeader = useCallback(() => {
@@ -158,7 +158,7 @@ const Profile = ({ address }: { address: string | null }) => {
         <View tw="web:max-w-screen-xl w-full">
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <ProfileTop
-            address={address}
+            address={username}
             animationHeaderPosition={animationHeaderPosition}
             animationHeaderHeight={animationHeaderHeight}
             isBlocked={isBlocked}
@@ -174,7 +174,7 @@ const Profile = ({ address }: { address: string | null }) => {
     data?.tabs?.length,
     headerShadow,
     headerHeight,
-    address,
+    username,
     animationHeaderPosition,
     animationHeaderHeight,
     isBlocked,
