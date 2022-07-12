@@ -82,6 +82,7 @@ const nextConfig = {
     esmExternals: true,
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
+    swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
   },
   typescript: {
     ignoreDevErrors: true,
