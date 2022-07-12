@@ -37,7 +37,7 @@
     "logrocket": "^2.2.1",
     "magic-sdk": "^7.0.0",
     "mixpanel-browser": "^2.42.0",
-    "next": "12.2.3-canary.0",
+    "next": "12.2.3-canary.2",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.2",
     "next-transpile-modules": "^9.0.0",
@@ -53,7 +53,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "rudder-sdk-js": "^2.3.6",
     "setimmediate": "^1.0.5",
-    "swr": "2.0.0-beta.1",
+    "swr": "2.0.0-beta.6",
     "wagmi": "^0.5.6",
     "web3modal": "^1.9.8"
   },

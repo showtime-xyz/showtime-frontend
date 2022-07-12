@@ -73,11 +73,13 @@ const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig = {
   swcMinify: true,
+  reactStrictMode: true,
   experimental: {
     optimizeCss: true,
     browsersListForSwc: true,
     legacyBrowsers: false,
     forceSwcTransforms: true,
+    esmExternals: true,
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
   },
