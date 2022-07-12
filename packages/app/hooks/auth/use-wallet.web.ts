@@ -21,7 +21,7 @@ const useWallet = (): UseWalletReturnType => {
 
   return {
     address: wagmiData.isConnected ? wagmiData?.address : undefined,
-    connected: wagmiData.isConnected,
+    connected: wagmiData.isConnected && !!wagmiSigner?.provider && !!chain,
     disconnect,
     networkChanged,
     provider: wagmiSigner?.provider,
