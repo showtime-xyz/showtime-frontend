@@ -5,36 +5,27 @@ import {
   useSignMessage,
   useSigner,
   useNetwork,
-  useSignTypedData,
   useDisconnect,
 } from "wagmi";
 
-const useWallet = () => {
+import { UseWalletReturnType } from "./use-wallet";
+
+const useWallet = (): UseWalletReturnType => {
   const wagmiData = useAccount();
-  const { data: wagmiSignData, signMessage } = useSignMessage();
+  const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
-  const { signTypedDataAsync } = useSignTypedData();
   const { disconnect } = useDisconnect();
 
-  const getAddress = async () => {
-    return wagmiData?.address;
-  };
-
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
-  const signed = useMemo(() => !!wagmiSignData, [wagmiSignData]);
 
   return {
-    getAddress,
-    address: wagmiData.isConnected ? wagmiData?.address : null,
-    connected: wagmiData.isConnected,
-    signed,
+    address: wagmiData.isConnected ? wagmiData?.address : undefined,
+    connected: wagmiData.isConnected && !!wagmiSigner?.provider && !!chain,
     disconnect,
     networkChanged,
     provider: wagmiSigner?.provider,
-    signature: wagmiSignData,
-    signMessage,
-    signTypedDataAsync,
+    signMessageAsync,
   };
 };
 
