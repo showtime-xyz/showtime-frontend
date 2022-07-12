@@ -1,6 +1,7 @@
 import { Platform, Pressable, StyleSheet } from "react-native";
 
-import { Muted, Unmuted } from "design-system/icon";
+import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
+
 import { colors } from "design-system/tailwind";
 
 export const MuteButton = ({
