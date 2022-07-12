@@ -59,14 +59,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <Button variant="tertiary" tw="p-0">
-            <View
-              tw="flex h-12 flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900"
-              style={{
-                // @ts-ignore
-                cursor: "pointer",
-              }}
-              accessible={true}
-            >
+            <View tw="flex h-12 flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
               <Avatar url={user?.data?.profile?.img_url} />
               {isWeb && isMdWidth && user?.data?.profile?.username ? (
                 <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
