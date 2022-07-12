@@ -2,11 +2,12 @@ import { memo, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
-import FocusTrap from "focus-trap-react";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
+
+import FocusTrap from "app/lib/focus-trap-react";
 
 import { WEB_HEIGHT } from "./constants";
 import { ModalBackdrop } from "./modal.backdrop";
@@ -24,7 +25,7 @@ const MODAL_CONTAINER_TW = [
   "bg-white dark:bg-black",
   "shadow-xl shadow-black dark:shadow-white",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
-  "max-h-70vh sm:max-h-90vh",
+  "max-h-70vh sm:max-h-82vh",
 ];
 
 const MODAL_BODY_TW = "flex-1 overflow-auto";
