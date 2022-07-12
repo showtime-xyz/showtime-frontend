@@ -56,15 +56,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
     profileId: profileData?.data?.profile.profile_id,
   });
 
-  const routes = useMemo(
-    () =>
-      data?.tabs?.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
-        key: item?.name,
-        index,
-      })) ?? [],
-    [data]
-  );
+  const routes =
+    data?.tabs.map((item, index) => ({
+      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
+      key: item?.name,
+      index,
+    })) ?? [];
+
   const {
     index,
     setIndex,
@@ -72,7 +70,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>(routes);
+  } = useTabState<ProfileTabListRef>(routes, {
+    defaultIndex: data?.tabs.findIndex(
+      (item) => item.type === data?.default_tab_type
+    ),
+  });
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
