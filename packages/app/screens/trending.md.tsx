@@ -13,7 +13,6 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
 import { CARD_DARK_SHADOW } from "app/utilities";
 
 import { Tabs } from "design-system/tabs";
@@ -29,15 +28,15 @@ const { useParam } = createParam<Query>();
 export const Trending = () => {
   const [tab, setTab] = useParam("tab");
   const isDark = useIsDarkMode();
-  const selected = tab === "nft" ? 1 : 0;
+  const selected = tab === "creator" ? 1 : 0;
 
   const handleTabChange = useCallback(
     (index: number) => {
       Haptics.impactAsync();
       if (index === 0) {
-        setTab("following");
-      } else {
         setTab("nft");
+      } else {
+        setTab("creator");
       }
     },
     [setTab]
@@ -60,13 +59,13 @@ export const Trending = () => {
             }}
           >
             <SegmentedControl
-              values={["CREATOR", "NFT"]}
+              values={["NFT", "CREATOR"]}
               onChange={handleTabChange}
               selectedIndex={selected}
             />
           </View>
         </View>
-        <TrendingTabs selectedTab={selected === 0 ? "creator" : "nft"} />
+        <TrendingTabs selectedTab={selected === 0 ? "nft" : "creator"} />
       </View>
     </View>
   );
@@ -167,7 +166,7 @@ const CreatorsList = ({ days }: { days: any }) => {
           <Spinner />
         </View>
       ) : null}
-      {data.length > 0 && containerWidth
+      {data?.length > 0 && containerWidth
         ? data.map((item: any) => {
             return (
               <View
@@ -194,7 +193,7 @@ const CreatorsList = ({ days }: { days: any }) => {
 };
 
 const NFTList = ({ days }: { days: any }) => {
-  const { data, updateItem, isLoading } = useTrendingNFTS({
+  const { data, isLoading } = useTrendingNFTS({
     days,
   });
   const [containerWidth, setContainerWidth] = useState(0);
@@ -203,33 +202,31 @@ const NFTList = ({ days }: { days: any }) => {
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <View
-        tw="mt-4 flex-1 flex-row flex-wrap justify-between"
-        onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
-      >
-        {isLoading ? (
-          <View tw="mx-auto p-10">
-            <Spinner />
-          </View>
-        ) : null}
-        {data.length > 0 && containerWidth
-          ? data.map((item, index) => {
-              return (
-                <Card
-                  hrefProps={{
-                    pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-                  }}
-                  key={`nft-list-card-${index}`}
-                  nft={item}
-                  tw={`w-[${containerWidth / numColumns - 30}px] h-[${
-                    containerWidth / numColumns + 167
-                  }px] mb-8`}
-                />
-              );
-            })
-          : null}
-      </View>
-    </MutateProvider>
+    <View
+      tw="mt-4 flex-1 flex-row flex-wrap justify-between"
+      onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+    >
+      {isLoading ? (
+        <View tw="mx-auto p-10">
+          <Spinner />
+        </View>
+      ) : null}
+      {data?.length > 0 && containerWidth
+        ? data.map((item, index) => {
+            return (
+              <Card
+                hrefProps={{
+                  pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+                }}
+                key={`nft-list-card-${index}`}
+                nft={item}
+                tw={`w-[${containerWidth / numColumns - 30}px] h-[${
+                  containerWidth / numColumns + 167
+                }px] mb-8`}
+              />
+            );
+          })
+        : null}
+    </View>
   );
 };

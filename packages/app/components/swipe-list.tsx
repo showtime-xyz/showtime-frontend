@@ -67,9 +67,9 @@ const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
-  fetchMore: () => void;
-  isRefreshing: boolean;
-  refresh: () => void;
+  fetchMore?: () => void;
+  isRefreshing?: boolean;
+  refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
   listId?: number;
@@ -358,7 +358,7 @@ export const FeedItem = memo(
                 </Suspense>
               </View>
               <Description nft={nft} />
-              <View tw="item-center flex-row justify-between px-4">
+              <View tw="flex-row items-center justify-between px-4">
                 <Creator nft={nft} />
                 <Owner nft={nft} price={false} />
               </View>

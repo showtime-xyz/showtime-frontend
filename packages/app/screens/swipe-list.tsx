@@ -22,7 +22,7 @@ type Query = {
   collectionId: any;
   sortType: string;
   initialScrollIndex: any;
-  days: any;
+  days: string;
   creatorId: any;
 };
 
@@ -107,23 +107,20 @@ const TrendingNFTsSwipeList = () => {
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
 
-  const { data, updateItem, isRefreshing, refresh, fetchMore } =
-    useTrendingNFTS({
-      days,
-    });
+  const { data } = useTrendingNFTS({
+    days: Number(days),
+  });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <SwipeList
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-      />
-    </MutateProvider>
+    <SwipeList
+      data={data}
+      // fetchMore={fetchMore}
+      // isRefreshing={isRefreshing}
+      // refresh={refresh}
+      initialScrollIndex={Number(initialScrollIndex)}
+      bottomPadding={safeAreaBottom}
+    />
   );
 };
 
@@ -134,7 +131,7 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   const [creatorId] = useParam("creatorId");
 
   const { data, mutate } = useTrendingCreators({
-    days,
+    days: Number(days),
   });
 
   const creatorTopNFTs = useMemo(() => {

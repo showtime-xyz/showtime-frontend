@@ -23,11 +23,13 @@ export const TabScrollView = createCollapsibleScrollView<
   ScrollViewProps
 >(ScrollView);
 
+// Todo: Imporve ts type (support generics type)
 export const TabFlatList = createCollapsibleScrollView<
   typeof FlatList,
   FlatListProps<any>
 >(FlatList);
 
+// Todo: Imporve ts type (support generics type)
 export const TabSectionList = createCollapsibleScrollView<
   typeof SectionList,
   SectionListProps<any>

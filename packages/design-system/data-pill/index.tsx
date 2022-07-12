@@ -4,18 +4,21 @@ import { View } from "@showtime-xyz/universal.view";
 type DataPillProps = {
   type?: "primary" | "secondary";
   label?: string;
+  tw?: string;
 };
 
 export const DataPill = (props: DataPillProps) => {
-  const { type = "primary", label } = props;
+  const { type = "primary", label, tw = "" } = props;
 
   return (
     <View
-      tw={`items-center justify-center rounded-full py-2 px-2 ${
-        type === "primary"
-          ? "bg-gray-100 dark:bg-gray-900 "
-          : " bg-gray-900 dark:bg-gray-100"
-      }`}
+      tw={[
+        `items-center justify-center rounded-full py-2 px-2 ${
+          type === "primary"
+            ? "bg-gray-100 dark:bg-gray-900 "
+            : " bg-gray-900 dark:bg-gray-100"
+        } ${tw}`,
+      ]}
     >
       <Text
         tw={`text-xs font-medium ${

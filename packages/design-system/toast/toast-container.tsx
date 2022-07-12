@@ -16,7 +16,7 @@ export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
     // @ts-ignore
     <AnimatePresence>
       {show && (
-        <View style={[StyleSheet.absoluteFillObject]}>
+        <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
           <Toast render={render} message={message} hide={hide} />
         </View>
       )}
