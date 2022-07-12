@@ -35,24 +35,23 @@
     @apply flex flex-1 flex-row items-center p-2;
   }
 
-  [role="menuitem"]:hover {
+  [role="menuitem"]:hover,
+  [role="menuitem"]:focus {
     @apply cursor-pointer rounded-lg bg-gray-900 bg-opacity-5;
   }
 
-  [data-color-scheme="dark"] [role="menuitem"]:hover {
-    @apply bg-gray-100 bg-opacity-5;
-    outline: none;
-  }
-
+  [data-color-scheme="dark"] [role="menuitem"]:hover,
   [data-color-scheme="dark"] [role="menuitem"]:focus {
-    outline: initial;
+    @apply bg-gray-100 bg-opacity-5;
   }
 
-  [role="menuitem"].danger:hover {
+  [role="menuitem"].danger:hover,
+  [role="menuitem"].danger:focus {
     @apply bg-red-500 bg-opacity-20;
   }
 
-  [data-color-scheme="dark"] [role="menuitem"].danger:hover {
+  [data-color-scheme="dark"] [role="menuitem"].danger:hover,
+  [data-color-scheme="dark"] [role="menuitem"].danger:focus {
     @apply bg-red-500 bg-opacity-20;
   }
 
@@ -65,7 +64,9 @@
   }
 
   [role="menuitem"].danger:hover > div > div:nth-child(3),
-  [role="menuitem"].danger:hover svg > * {
+  [role="menuitem"].danger:hover svg > *,
+  [role="menuitem"].danger:focus > div > div:nth-child(3),
+  [role="menuitem"].danger:focus svg > * {
     @apply text-red-500;
   }
 }
