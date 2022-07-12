@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
+import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 import FocusTrap from "focus-trap-react";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
@@ -44,6 +45,11 @@ function ModalContainerComponent({
     () => [...MODAL_CONTAINER_TW, web_height, propTw],
     [web_height, propTw]
   );
+
+  useEscapeKeydown((event) => {
+    event.preventDefault();
+    return disableBackdropPress ? noop() : onClose?.();
+  });
 
   return (
     <FocusTrap aria-modal>
