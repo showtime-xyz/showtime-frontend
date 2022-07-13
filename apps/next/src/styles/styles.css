@@ -19,8 +19,12 @@
     @apply outline-none;
   }
 
+  [data-radix-popper-content-wrapper] {
+    @apply rounded-2xl backdrop-filter backdrop-blur-md backdrop-saturate-150;
+  }
+
   [role="menu"] > div:nth-child(1) {
-    @apply w-60 rounded-2xl bg-white bg-opacity-80 p-2 shadow backdrop-blur-md backdrop-saturate-150;
+    @apply w-60 rounded-2xl bg-white bg-opacity-80 p-2 shadow;
   }
 
   [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
