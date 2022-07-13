@@ -100,30 +100,26 @@ export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
     }
   }, [contentRef]);
 
+  const onStartNodeFocus = useCallback(
+    () => contentRef.current && moveFocusWithin(contentRef.current, "end"),
+    []
+  );
+
+  const onEndNodeFocus = useCallback(
+    () => contentRef.current && moveFocusWithin(contentRef.current, "start"),
+    []
+  );
+
   return (
     <>
-      <div
-        onFocus={useCallback(
-          () =>
-            contentRef.current && moveFocusWithin(contentRef.current, "end"),
-          []
-        )}
-        tabIndex={0}
-      />
+      <div onFocus={onStartNodeFocus} tabIndex={0} />
       <div
         ref={contentRef}
         style={{ outline: "none" }}
         tabIndex={-1}
         {...props}
       />
-      <div
-        onFocus={useCallback(
-          () =>
-            contentRef.current && moveFocusWithin(contentRef.current, "start"),
-          []
-        )}
-        tabIndex={0}
-      />
+      <div onFocus={onEndNodeFocus} tabIndex={0} />
     </>
   );
 }
