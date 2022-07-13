@@ -20,7 +20,6 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -187,15 +186,7 @@ const NotificationsInHeader = () => {
             default: {},
           })}
         >
-          <ErrorBoundary
-            fallback={
-              <View tw="p-4">
-                <Text tw="text-black dark:text-white">
-                  Something went wrong
-                </Text>
-              </View>
-            }
-          >
+          <ErrorBoundary>
             <Suspense
               fallback={
                 <View tw="p-4">

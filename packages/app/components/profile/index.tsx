@@ -25,6 +25,7 @@ import { TabSpinner } from "design-system/tab-view/tab-spinner";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
+import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
 import { Profile404 } from "./profile-404";
 import { ProfileListFilter } from "./profile-tab-filter";
@@ -111,7 +112,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
       route: Route;
     }) => {
       return (
-        <ErrorBoundary key={`ProfileTabList-${routeIndex}`}>
+        <ErrorBoundary
+          renderFallback={(props) => (
+            <TabFallback {...props} index={routeIndex} />
+          )}
+          key={`ProfileTabList-${routeIndex}`}
+        >
           <Suspense fallback={<TabSpinner index={routeIndex} />}>
             {data?.tabs[routeIndex] && (
               <ProfileTabList
@@ -222,7 +228,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative my-2 w-full flex-row items-center justify-between px-4 md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {data?.tabs[index]?.displayed_count} ITEMS
               </Text>
