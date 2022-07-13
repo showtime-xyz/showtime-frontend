@@ -16,7 +16,7 @@ import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 const GAP_BETWEEN_ITEMS = 1;
 
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
-  function NFTSList({ days, index }, ref) {
+  function NFTSList({ days, index }) {
     const router = useRouter();
     const { data } = useTrendingNFTS({
       days,
