@@ -2,12 +2,11 @@ import { memo, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
+import FocusTrap from "focus-trap-react";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
-
-import FocusTrap from "app/lib/focus-trap-react";
 
 import { WEB_HEIGHT } from "./constants";
 import { ModalBackdrop } from "./modal.backdrop";
