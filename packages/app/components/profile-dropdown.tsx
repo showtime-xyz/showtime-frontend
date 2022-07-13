@@ -55,7 +55,6 @@ function ProfileDropdown({ user }: Props) {
           variant="tertiary"
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
-          asChild
         >
           <MoreHorizontal
             color={
