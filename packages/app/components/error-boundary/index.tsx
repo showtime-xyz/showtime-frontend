@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { captureException } from "app/lib/sentry";
+
 import { Fallback } from "./fallback";
 
 const changedArray = (a: Array<unknown> = [], b: Array<unknown> = []) =>
@@ -46,7 +48,7 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     if (!this.props.disableCaptureException) {
-      // Todo: maybe we can reported the error log to the server
+      captureException(error);
     }
     this.props.onError?.(error, info);
   }
