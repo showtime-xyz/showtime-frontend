@@ -18,6 +18,7 @@ export type NFT = {
   creator_name: string;
   creator_address: string;
   creator_address_nonens: string;
+  owner_address_nonens?: string;
   creator_img_url?: any;
   token_created: Date;
   multiple_owners: number;

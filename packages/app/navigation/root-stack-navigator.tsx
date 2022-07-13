@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
+import type { ProfileScreenProps } from "app/components/profile";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
@@ -47,14 +48,11 @@ export function RootStackNavigator() {
       />
 
       {/* Screens accessible in most of the navigators */}
-      <Stack.Group
-        // @ts-ignore
-        screenOptions={screenOptions({ safeAreaTop, isDark })}
-      >
+      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
-          getId={({ params }) => params?.username}
+          getId={({ params }) => (params as ProfileScreenProps)?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen

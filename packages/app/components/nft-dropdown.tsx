@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -143,13 +144,16 @@ function NFTDropdown({
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <MoreHorizontal
-          color={
-            tw.style("bg-gray-600 dark:bg-gray-400")?.backgroundColor as string
-          }
-          width={24}
-          height={24}
-        />
+        <Button variant="text" tw="p-0" iconOnly={true}>
+          <MoreHorizontal
+            color={
+              tw.style("bg-gray-600 dark:bg-gray-400")
+                ?.backgroundColor as string
+            }
+            width={24}
+            height={24}
+          />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>
