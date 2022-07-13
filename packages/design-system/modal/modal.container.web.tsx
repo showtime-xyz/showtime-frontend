@@ -51,7 +51,7 @@ function ModalContainerComponent({
   });
 
   return (
-    <FocusTrap>
+    <FocusTrap aria-modal>
       <View tw={CONTAINER_TW} style={styles.container}>
         {/* prevent scrolling/shaking when modal is open */}
         <RemoveScrollBar />
