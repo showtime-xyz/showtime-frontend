@@ -16,7 +16,11 @@ Then if you want to publish a new version you can run:
 - `bit tag --force-deploy`
 - `bit export`
 
-Then you can install the new version of the packages in `apps/expo/package.json` using `yarn upgrade:design-system`.
+Then you can install the new version of the packages in `apps/expo/package.json`:
+
+- `yarn up '@showtime-xyz/universal.*'`
+  or
+- `yarn upgrade:design-system` if you are working in the Showtime monorepo.
 
 You can run `bit status` at all times to check the status of the components.
 
