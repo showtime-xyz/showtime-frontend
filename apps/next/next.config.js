@@ -72,14 +72,13 @@ const withTM = require("next-transpile-modules")([
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig = {
-  swcMinify: true,
+  swcMinify: false,
   reactStrictMode: true,
   experimental: {
     optimizeCss: true,
     browsersListForSwc: true,
     legacyBrowsers: false,
     forceSwcTransforms: true,
-    esmExternals: true,
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
     swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
