@@ -60,14 +60,16 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
 
     return (
       <View tw="flex-1 bg-white dark:bg-black">
-        <TabRecyclerList
-          layoutProvider={_layoutProvider}
-          dataProvider={dataProvider}
-          rowRenderer={_rowRenderer}
-          style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
-          renderFooter={ListFooterComponent}
-          index={index}
-        />
+        {dataProvider && dataProvider.getSize() > 0 && (
+          <TabRecyclerList
+            layoutProvider={_layoutProvider}
+            dataProvider={dataProvider}
+            rowRenderer={_rowRenderer}
+            style={{ margin: -GAP_BETWEEN_ITEMS }}
+            renderFooter={ListFooterComponent}
+            index={index}
+          />
+        )}
       </View>
     );
   }

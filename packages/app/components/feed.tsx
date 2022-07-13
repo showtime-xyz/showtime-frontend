@@ -16,6 +16,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderCenter } from "app/components/header";
 import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
+import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -170,18 +171,13 @@ const AlgorithmicFeed = () => {
 };
 
 const CuratedFeed = () => {
-  const queryState = useFeed("/curated");
+  // const queryState = useFeed("/curated");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { data } = useTrendingNFTS({
+    days: 1,
+  });
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <SwipeList
-        {...queryState}
-        bottomPadding={safeAreaBottom}
-        data={queryState.data}
-      />
-    </MutateProvider>
-  );
+  return <SwipeList bottomPadding={safeAreaBottom} data={data} />;
 };
 
 const WebFeed = () => {

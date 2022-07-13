@@ -13,6 +13,7 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
@@ -153,13 +154,12 @@ const AlgorithmicFeed = () => {
 };
 
 const CuratedFeed = () => {
-  const queryState = useFeed("/curated");
+  // const queryState = useFeed("/curated");
+  const { data } = useTrendingNFTS({
+    days: 1,
+  });
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} tab="curated" />
-    </MutateProvider>
-  );
+  return <NFTScrollList data={data} tab="curated" fetchMore={() => null} />;
 };
 
 const NFTScrollList = ({
