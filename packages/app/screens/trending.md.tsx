@@ -13,10 +13,9 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
-import { CARD_DARK_SHADOW } from "app/utilities";
 
 import { Tabs } from "design-system/tabs";
-import { breakpoints } from "design-system/theme";
+import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 
 type Query = {
   tab: string;

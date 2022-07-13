@@ -116,7 +116,7 @@ apps/expo/service-account-key.json
 !.yarn/versions
 
 # Bit
-public
+./public
 .bit/
 
 # Turborepo

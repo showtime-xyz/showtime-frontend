@@ -88,7 +88,7 @@ export const ProfileTop = ({
   isError,
   isLoading,
 }: {
-  address: string | null;
+  address: string;
   isBlocked: boolean;
   animationHeaderPosition: Animated.SharedValue<number>;
   animationHeaderHeight: Animated.SharedValue<number>;
