@@ -88,7 +88,7 @@
     "@showtime-xyz/universal.input": "^0.0.22",
     "@showtime-xyz/universal.label": "^0.0.20",
     "@showtime-xyz/universal.light-box": "^0.0.18",
-    "@showtime-xyz/universal.modal": "^0.0.33",
+    "@showtime-xyz/universal.modal": "^0.0.34",
     "@showtime-xyz/universal.modal-screen": "^0.0.39",
     "@showtime-xyz/universal.modal-sheet": "^0.0.33",
     "@showtime-xyz/universal.pan-to-close": "^0.0.2",

@@ -6978,6 +6978,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.button@npm:0.0.25":
+  version: 0.0.25
+  resolution: "@showtime-xyz/universal.button@npm:0.0.25"
+  dependencies:
+    "@showtime-xyz/universal.hooks": 0.0.17
+    "@showtime-xyz/universal.pressable-scale": 0.0.21
+    "@showtime-xyz/universal.tailwind": 0.0.19
+    "@showtime-xyz/universal.text": 0.0.20
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-reanimated: ">=2.0.0"
+    react-native-web: ^0.16.0
+  checksum: 1878463848f5be1f6dc26bc92bce2d1726d0d9ff17464606ec096caa0d063ef64b9d31a850de4f18bc889c603c802ff14c170ec1ab77616c0041cb3193ac79d3
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.checkbox@npm:^0.0.22":
   version: 0.0.22
   resolution: "@showtime-xyz/universal.checkbox@npm:0.0.22"
@@ -7144,6 +7162,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.icon@npm:0.0.29":
+  version: 0.0.29
+  resolution: "@showtime-xyz/universal.icon@npm:0.0.29"
+  dependencies:
+    "@showtime-xyz/universal.text": 0.0.20
+    "@showtime-xyz/universal.view": 0.0.19
+    "@storybook/react": 6.5.9
+    react-native-svg: 12.3.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 88ab7c18409c7c23863ae3e551792fcf08140d612fcc971c7be7b6a41f54632f63a5a30f89f6775c2a3d65314b3cb478eee63a45de4970a64a8c0f7a0412ea8a
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.image@npm:0.0.17, @showtime-xyz/universal.image@npm:^0.0.17":
   version: 0.0.17
   resolution: "@showtime-xyz/universal.image@npm:0.0.17"
@@ -7255,7 +7290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal@npm:0.0.33, @showtime-xyz/universal.modal@npm:^0.0.33":
+"@showtime-xyz/universal.modal@npm:0.0.33":
   version: 0.0.33
   resolution: "@showtime-xyz/universal.modal@npm:0.0.33"
   dependencies:
@@ -7275,6 +7310,31 @@ __metadata:
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
   checksum: fceb38599b00c526137dbf7ab2c2c56a5fa87ba2dd5b36d988a5cfad123ff71079b0f1565b92298a523915e1f5a215b8ddad9b43277dfac93c7c9404c81caea7
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.modal@npm:^0.0.34":
+  version: 0.0.34
+  resolution: "@showtime-xyz/universal.modal@npm:0.0.34"
+  dependencies:
+    "@gorhom/bottom-sheet": 4.3.2
+    "@radix-ui/react-use-escape-keydown": 0.1.0
+    "@showtime-xyz/universal.button": 0.0.25
+    "@showtime-xyz/universal.icon": 0.0.29
+    "@showtime-xyz/universal.safe-area": 0.0.11
+    "@showtime-xyz/universal.tailwind": 0.0.19
+    "@showtime-xyz/universal.text": 0.0.20
+    "@showtime-xyz/universal.view": 0.0.19
+    "@storybook/react": 6.5.9
+    focus-trap-react: 9.0.2
+    react-remove-scroll-bar: 2.3.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-reanimated: ">=2.0.0"
+    react-native-web: ^0.16.0
+  checksum: b5b03a01de8a1c9eb62664ca099f1ed35936f42d0a6459ba78586814dd812b20c70c233bbae7dd3eb588757f7b3c23773fffee9ec1b916ae7de874bc3d2838aa
   languageName: node
   linkType: hard
 
@@ -7320,6 +7380,23 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: a14834688f97304f1361148b661b183788fc223f76ae7b7c391fe7b68033cbfddf8fd0e16fc159ea4d4a453c48a5b991452eb6054fbe1a9a533c0740eac2ed63
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.pressable-scale@npm:0.0.21":
+  version: 0.0.21
+  resolution: "@showtime-xyz/universal.pressable-scale@npm:0.0.21"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.19
+    "@showtime-xyz/universal.text": 0.0.20
+    "@storybook/react": 6.5.9
+    moti: 0.17.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 8efd0a7e6a1054c6b83f31d43bb7429926ef796cac241d35f54744739c402035e7134edf094debb34c05234d3e86dc542abe0f6847d1744b580be7bc437e0330
   languageName: node
   linkType: hard
 
@@ -7522,6 +7599,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.tailwind@npm:0.0.19":
+  version: 0.0.19
+  resolution: "@showtime-xyz/universal.tailwind@npm:0.0.19"
+  dependencies:
+    "@showtime-xyz/universal.typography": 0.0.13
+    tailwindcss: 3.1.4
+    twrnc: 3.3.3
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: e87bc71ea61e57ff069dedb464f6952a49778ee8ca0cfff49e1939111da98d840db93cc881cddee7aa20ab7667da4a9007a6073590deff3b28f50e7b8d569f90
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.text-input@npm:0.0.19, @showtime-xyz/universal.text-input@npm:^0.0.19":
   version: 0.0.19
   resolution: "@showtime-xyz/universal.text-input@npm:0.0.19"
@@ -7550,6 +7643,23 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: 230426b26da43635420c06b7127bb1784a19d118bd50ffaa5a3566b524a35707e0c7a4f18c78e9af6129f070ab16faa9ece4d0c9dff40c2f2f7f6b61a0fcfd0b
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.text@npm:0.0.20":
+  version: 0.0.20
+  resolution: "@showtime-xyz/universal.text@npm:0.0.20"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.19
+    "@showtime-xyz/universal.view": 0.0.19
+    "@storybook/react": 6.5.9
+    react-native-web: 0.18.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: c844262076c03425f52c4cf2c5bf8178634bd17797ac5b45ee8c86a1d4fe92cd3ccbc0644345f8f634f8316f2b0f9836db502362283f29d63cb0d98ab19fbab5
   languageName: node
   linkType: hard
 
@@ -7643,6 +7753,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.view@npm:0.0.19":
+  version: 0.0.19
+  resolution: "@showtime-xyz/universal.view@npm:0.0.19"
+  dependencies:
+    "@showtime-xyz/universal.tailwind": 0.0.19
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 4cbff8a6a5acf5e32c642cc1a250dafe26bd62d69c2f09da9355e5b30dbc1fe43303cc823e7a67369786787358e8a2ea10c4854f61d02159c746d00759e70d80
+  languageName: node
+  linkType: hard
+
 "@showtime/expo@workspace:apps/expo":
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
@@ -7693,7 +7817,7 @@ __metadata:
     "@showtime-xyz/universal.input": ^0.0.22
     "@showtime-xyz/universal.label": ^0.0.20
     "@showtime-xyz/universal.light-box": ^0.0.18
-    "@showtime-xyz/universal.modal": ^0.0.33
+    "@showtime-xyz/universal.modal": ^0.0.34
     "@showtime-xyz/universal.modal-screen": ^0.0.39
     "@showtime-xyz/universal.modal-sheet": ^0.0.33
     "@showtime-xyz/universal.pan-to-close": ^0.0.2
@@ -19805,7 +19929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"focus-trap-react@npm:^9.0.2":
+"focus-trap-react@npm:9.0.2, focus-trap-react@npm:^9.0.2":
   version: 9.0.2
   resolution: "focus-trap-react@npm:9.0.2"
   dependencies:
@@ -33429,41 +33553,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:>=2.0.0":
-  version: 3.0.24
-  resolution: "tailwindcss@npm:3.0.24"
-  dependencies:
-    arg: ^5.0.1
-    chokidar: ^3.5.3
-    color-name: ^1.1.4
-    detective: ^5.2.0
-    didyoumean: ^1.2.2
-    dlv: ^1.1.3
-    fast-glob: ^3.2.11
-    glob-parent: ^6.0.2
-    is-glob: ^4.0.3
-    lilconfig: ^2.0.5
-    normalize-path: ^3.0.0
-    object-hash: ^3.0.0
-    picocolors: ^1.0.0
-    postcss: ^8.4.12
-    postcss-js: ^4.0.0
-    postcss-load-config: ^3.1.4
-    postcss-nested: 5.0.6
-    postcss-selector-parser: ^6.0.10
-    postcss-value-parser: ^4.2.0
-    quick-lru: ^5.1.1
-    resolve: ^1.22.0
-  peerDependencies:
-    postcss: ^8.0.9
-  bin:
-    tailwind: lib/cli.js
-    tailwindcss: lib/cli.js
-  checksum: 52a21192b70ab90678d6cec24ca6f93b3a396599e2d842f6077b670be14e577b1e3fbae8776e64505d383118746287353ed99d2a047258254f4ce3879b996b58
-  languageName: node
-  linkType: hard
-
-"tailwindcss@npm:^3.1.2":
+"tailwindcss@npm:3.1.4, tailwindcss@npm:^3.1.2":
   version: 3.1.4
   resolution: "tailwindcss@npm:3.1.4"
   dependencies:
@@ -33495,6 +33585,40 @@ __metadata:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
   checksum: 716b7d80e51c4904d845920cbb88483114ae6f14b20328b9206f49fd642bbcd390b9764fc574f85901b0377184c5d4eb94c00bcf73e280f81e772cf621d390a5
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:>=2.0.0":
+  version: 3.0.24
+  resolution: "tailwindcss@npm:3.0.24"
+  dependencies:
+    arg: ^5.0.1
+    chokidar: ^3.5.3
+    color-name: ^1.1.4
+    detective: ^5.2.0
+    didyoumean: ^1.2.2
+    dlv: ^1.1.3
+    fast-glob: ^3.2.11
+    glob-parent: ^6.0.2
+    is-glob: ^4.0.3
+    lilconfig: ^2.0.5
+    normalize-path: ^3.0.0
+    object-hash: ^3.0.0
+    picocolors: ^1.0.0
+    postcss: ^8.4.12
+    postcss-js: ^4.0.0
+    postcss-load-config: ^3.1.4
+    postcss-nested: 5.0.6
+    postcss-selector-parser: ^6.0.10
+    postcss-value-parser: ^4.2.0
+    quick-lru: ^5.1.1
+    resolve: ^1.22.0
+  peerDependencies:
+    postcss: ^8.0.9
+  bin:
+    tailwind: lib/cli.js
+    tailwindcss: lib/cli.js
+  checksum: 52a21192b70ab90678d6cec24ca6f93b3a396599e2d842f6077b670be14e577b1e3fbae8776e64505d383118746287353ed99d2a047258254f4ce3879b996b58
   languageName: node
   linkType: hard
 
