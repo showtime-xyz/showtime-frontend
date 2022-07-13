@@ -8101,7 +8101,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-native-web: 0.18.0
-    storybook-addon-next: ^1.6.6
+    storybook-addon-next: ^1.6.7
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -32816,9 +32816,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-addon-next@npm:^1.6.6":
-  version: 1.6.6
-  resolution: "storybook-addon-next@npm:1.6.6"
+"storybook-addon-next@npm:^1.6.7":
+  version: 1.6.7
+  resolution: "storybook-addon-next@npm:1.6.7"
   dependencies:
     "@storybook/addons": ^6.4.10
     image-size: ^1.0.0
@@ -32835,7 +32835,7 @@ __metadata:
     next: ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 1f0881b3af8161c0c9289a8991d97632aa9946e14b16fb7e7b6abb13654404d897344f6c7b6e786e654c25d2d5841eb5c16d820e1cc292d0e55c6ecf66fb3c7f
+  checksum: 6fc2fd813cdf60c678d7d8798f7722c414d51f6f336edb487a7c69f9e53d23ebab7d8866d4dc840de9728ad3bb7dcbc1642c01e91a622e6c3afc4eec5b07669d
   languageName: node
   linkType: hard
 

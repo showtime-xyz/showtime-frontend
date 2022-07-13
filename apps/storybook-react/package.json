@@ -34,7 +34,7 @@
     "eslint": "7",
     "eslint-config-next": "^12.2.0",
     "path-browserify": "^1.0.1",
-    "storybook-addon-next": "^1.6.6",
+    "storybook-addon-next": "^1.6.7",
     "typescript": "4.7.4"
   }
 }
