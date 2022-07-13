@@ -34,7 +34,6 @@
     "date-fns": "^2.26.0",
     "design-system": "*",
     "ethers": "^5.6.4",
-    "focus-trap-react": "^9.0.2",
     "fortmatic": "^2.2.1",
     "logrocket": "^2.2.1",
     "magic-sdk": "^7.0.0",

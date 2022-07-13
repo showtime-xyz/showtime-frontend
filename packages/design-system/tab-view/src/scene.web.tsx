@@ -21,7 +21,7 @@ export function SceneComponent<P extends ScrollViewProps>({
       `Don't support the custom onScroll, please use the 'useHeaderTabContext' hooks!`
     );
   }
-  const { tabbarHeight, updateSceneInfo } = useHeaderTabContext();
+  const { updateSceneInfo } = useHeaderTabContext();
   const scollViewRef =
     useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
   const scrollY = useSharedValue(0);
