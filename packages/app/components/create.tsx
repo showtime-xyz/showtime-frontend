@@ -19,8 +19,10 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components/connect-button";
 import { Preview } from "app/components/preview";
 import { MintContext } from "app/context/mint-context";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
@@ -75,6 +77,7 @@ function Create() {
     shouldShowSignMessage,
   } = useMintNFT();
   const { userAddress: address } = useCurrentUserAddress();
+  const { connected } = useWallet();
 
   const isSignRequested = signMessageData.status === "sign_requested";
   const isNotMagic = !web3;
@@ -138,6 +141,17 @@ function Create() {
     },
     [state.status, user, address, router]
   );
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1">
