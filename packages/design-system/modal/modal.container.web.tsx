@@ -90,13 +90,9 @@ export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
 
   useEffect(() => {
     if (contentRef.current) {
-      const elementToFocus =
-        contentRef.current.querySelector("[data-auto-focus]");
-      if (elementToFocus) {
-        (elementToFocus as HTMLElement).focus();
-      } else {
-        contentRef.current.focus();
-      }
+      contentRef.current.focus({
+        preventScroll: true,
+      });
     }
   }, [contentRef]);
 
@@ -126,7 +122,7 @@ export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
 
 const moveFocusWithin = (element: HTMLElement, position: "start" | "end") => {
   const focusableElements = element.querySelectorAll(
-    "button:not(:disabled), a[href]"
+    `button:not(:disabled), [tabindex = "0"], a[href]`
   ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>;
 
   if (focusableElements.length === 0) return;
