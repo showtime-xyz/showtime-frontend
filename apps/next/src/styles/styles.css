@@ -15,6 +15,7 @@
   a {
     @apply text-inherit no-underline;
   }
+
   button:focus {
     @apply outline-none;
   }
@@ -40,22 +41,22 @@
   }
 
   [role="menuitem"]:hover,
-  [role="menuitem"]:focus {
-    @apply cursor-pointer rounded-lg bg-gray-900 bg-opacity-5;
+  [role="menuitem"]:focus-within {
+    @apply outline-none cursor-pointer rounded-lg bg-gray-900 bg-opacity-5;
   }
 
   [data-color-scheme="dark"] [role="menuitem"]:hover,
-  [data-color-scheme="dark"] [role="menuitem"]:focus {
+  [data-color-scheme="dark"] [role="menuitem"]:focus-within {
     @apply bg-gray-100 bg-opacity-5;
   }
 
   [role="menuitem"].danger:hover,
-  [role="menuitem"].danger:focus {
+  [role="menuitem"].danger:focus-within {
     @apply bg-red-500 bg-opacity-20;
   }
 
   [data-color-scheme="dark"] [role="menuitem"].danger:hover,
-  [data-color-scheme="dark"] [role="menuitem"].danger:focus {
+  [data-color-scheme="dark"] [role="menuitem"].danger:focus-within {
     @apply bg-red-500 bg-opacity-20;
   }
 
@@ -69,8 +70,8 @@
 
   [role="menuitem"].danger:hover > div > div:nth-child(3),
   [role="menuitem"].danger:hover svg > *,
-  [role="menuitem"].danger:focus > div > div:nth-child(3),
-  [role="menuitem"].danger:focus svg > * {
+  [role="menuitem"].danger:focus-within > div > div:nth-child(3),
+  [role="menuitem"].danger:focus-within svg > * {
     @apply text-red-500;
   }
 }
