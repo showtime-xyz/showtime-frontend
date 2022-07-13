@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 import { ShowtimeWordmark } from "@showtime-xyz/universal.icon";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -8,7 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useFooter } from "app/hooks/use-footer";
 import { Link } from "app/navigation/link";
 
-export const WebFooter = memo(function WebFooter() {
+export const WebFooter = () => {
   const { social, links } = useFooter();
   return (
     <View tw="w-full items-center bg-white dark:bg-black">
@@ -72,4 +70,4 @@ export const WebFooter = memo(function WebFooter() {
       </View>
     </View>
   );
-});
+};
