@@ -5,6 +5,7 @@ import { useDeviceContext } from "twrnc";
 
 import { ThemeProvider } from "app/providers/theme-provider";
 
+import { AlertProvider } from "design-system/alert";
 import { SafeAreaProvider } from "design-system/safe-area";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
@@ -45,13 +46,15 @@ export const decorators = [
           <ThemeProvider>
             <SafeAreaProvider>
               <ToastProvider>
-                <SnackbarProvider>
-                  <MainAxisCenter>
-                    <FontsLoader>
-                      <Story />
-                    </FontsLoader>
-                  </MainAxisCenter>
-                </SnackbarProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <MainAxisCenter>
+                      <FontsLoader>
+                        <Story />
+                      </FontsLoader>
+                    </MainAxisCenter>
+                  </SnackbarProvider>
+                </AlertProvider>
               </ToastProvider>
             </SafeAreaProvider>
           </ThemeProvider>

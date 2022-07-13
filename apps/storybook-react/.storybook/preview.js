@@ -7,6 +7,7 @@ import { useDeviceContext } from "twrnc";
 import { linking } from "app/navigation/linking";
 import { ThemeProvider } from "app/providers/theme-provider";
 
+import { AlertProvider } from "design-system/alert";
 import { SafeAreaProvider } from "design-system/safe-area";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
@@ -44,13 +45,15 @@ export const decorators = [
         <SafeAreaProvider>
           <ThemeProvider>
             <ToastProvider>
-              <SnackbarProvider>
-                <NavigationContainer linking={linking}>
-                  <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Storybook" component={Story} />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </SnackbarProvider>
+              <AlertProvider>
+                <SnackbarProvider>
+                  <NavigationContainer linking={linking}>
+                    <Stack.Navigator screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="Storybook" component={Story} />
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </SnackbarProvider>
+              </AlertProvider>
             </ToastProvider>
           </ThemeProvider>
         </SafeAreaProvider>
