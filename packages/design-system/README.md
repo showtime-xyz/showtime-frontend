@@ -16,7 +16,9 @@ Then if you want to publish a new version you can run:
 - `bit tag --force-deploy`
 - `bit export`
 
-Then you can install the new version of the packages in `apps/expo/package.json`.
+Then you can install the new version of the packages in `apps/expo/package.json`:
+
+- `yarn up '@showtime-xyz/*'`
 
 You can run `bit status` at all times to check the status of the components.
 
