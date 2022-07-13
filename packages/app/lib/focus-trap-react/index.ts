@@ -1,6 +1,6 @@
-import FocusTrapWeb from "./index.web";
+import { Props } from "focus-trap-react";
 
-const FocusTrap: React.FC<FocusTrapWeb.Props> = () => {
+const FocusTrap: React.FC<Props> = () => {
   return null;
 };
 
