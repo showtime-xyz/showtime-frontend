@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Platform } from "react-native";
 
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -22,17 +21,6 @@ export function Web3Provider({
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
-
-  const handleSetWeb3 = async () => {
-    if (Platform.OS === "web" && magic.rpcProvider) {
-      const Web3Provider = (await import("@ethersproject/providers"))
-        .Web3Provider;
-      // @ts-ignore
-      const web3 = new Web3Provider(magic.rpcProvider);
-      console.log("set web3 if", web3);
-      setWeb3(web3);
-    }
-  };
 
   const Web3ContextValue = useMemo(
     () => ({
@@ -62,15 +50,13 @@ export function Web3Provider({
   }, [connector]);
 
   useEffect(() => {
-    if (Platform.OS !== "web") {
-      magic?.user?.isLoggedIn().then((isLoggedIn) => {
-        if (magic.rpcProvider && isLoggedIn) {
-          //@ts-ignore
-          const provider = new EthersWeb3Provider(magic.rpcProvider);
-          setWeb3(provider);
-        }
-      });
-    }
+    magic?.user?.isLoggedIn().then((isLoggedIn) => {
+      if (magic.rpcProvider && isLoggedIn) {
+        //@ts-ignore
+        const provider = new EthersWeb3Provider(magic.rpcProvider);
+        setWeb3(provider);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -78,10 +64,6 @@ export function Web3Provider({
       setWeb3(provider);
     }
   }, [connected, provider]);
-
-  useEffect(() => {
-    handleSetWeb3();
-  }, []);
 
   return (
     <Web3Context.Provider value={Web3ContextValue}>
