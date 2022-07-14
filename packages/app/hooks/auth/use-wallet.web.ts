@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import {
   useAccount,
@@ -8,6 +8,8 @@ import {
   useDisconnect,
 } from "wagmi";
 
+import { useWeb3 } from "app/hooks/use-web3";
+
 import { UseWalletReturnType } from "./use-wallet";
 
 const useWallet = (): UseWalletReturnType => {
@@ -16,15 +18,32 @@ const useWallet = (): UseWalletReturnType => {
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
   const { disconnect } = useDisconnect();
+  const { web3, isMagic } = useWeb3();
 
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
+  const [address, setAddress] = useState<string | undefined>();
+
+  useEffect(() => {
+    (async function fetchUserAddress() {
+      if (wagmiData?.address) {
+        setAddress(wagmiData?.address);
+      } else if (web3) {
+        const address = await web3.getSigner().getAddress();
+        setAddress(address);
+      } else {
+        setAddress(undefined);
+      }
+    })();
+  }, [web3, wagmiData?.address]);
+
+  const connected =
+    (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
 
   return {
-    address: wagmiData.isConnected ? wagmiData?.address : undefined,
-    connected: wagmiData.isConnected && !!wagmiSigner?.provider && !!chain,
+    address,
+    connected,
     disconnect,
     networkChanged,
-    provider: wagmiSigner?.provider,
     signMessageAsync,
   };
 };

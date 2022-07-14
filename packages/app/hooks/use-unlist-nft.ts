@@ -48,7 +48,7 @@ const listNFTReducer = (
 };
 
 export const useUnlistNFT = () => {
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
@@ -65,8 +65,6 @@ export const useUnlistNFT = () => {
         }
 
         dispatch({ type: "status", status: "unlisting" });
-
-        const result = await getBiconomySigner();
 
         if (result) {
           const { signer, signerAddress, provider } = result;

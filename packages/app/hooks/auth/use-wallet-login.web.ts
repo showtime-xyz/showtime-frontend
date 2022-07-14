@@ -1,5 +1,7 @@
 import { useMemo, useEffect, useState } from "react";
 
+import { useSigner } from "wagmi";
+
 import { useAccessToken } from "app/lib/access-token";
 import { isMobileWeb } from "app/utilities";
 
@@ -27,8 +29,8 @@ export function useWalletLogin() {
     connected,
     networkChanged,
     signMessageAsync,
-    provider,
   } = useWallet();
+  const wagmiSigner = useSigner();
   const { user } = useUser();
 
   const getAddress = () => {
@@ -91,8 +93,12 @@ export function useWalletLogin() {
   };
   //#endregion
 
-  const handleSetWeb3 = () => {
-    setWeb3(provider);
+  // TODO: below thing doesn't work. Keeping it for now
+  const handleSetWeb3 = async () => {
+    if (wagmiSigner.data?.provider) {
+      //@ts-ignore
+      setWeb3(wagmiSigner.data.provider);
+    }
   };
 
   useEffect(() => {
