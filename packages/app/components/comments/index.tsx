@@ -42,7 +42,7 @@ export function Comments({ nft }: { nft: NFT }) {
     unlikeComment,
     deleteComment,
     newComment,
-  } = useComments(nft?.nft_id);
+  } = useComments(nft.nft_id);
   //#endregion
 
   //#region variables

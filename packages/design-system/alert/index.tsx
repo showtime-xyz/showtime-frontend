@@ -13,7 +13,7 @@ import {
   Modal,
 } from "react-native";
 
-import { AnimatePresence, MotiView } from "moti";
+import { MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { Divider } from "@showtime-xyz/universal.divider";
@@ -106,40 +106,38 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
       >
         {/* prevent scrolling/shaking when modal is open */}
         {Platform.OS === "web" && <RemoveScrollBar />}
-        <AnimatePresence>
+        <MotiView
+          style={tw.style("h-full w-full bg-black bg-opacity-60 absolute")}
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ type: "timing", duration: 120 }}
+        />
+        <View tw="h-full w-full items-center justify-center">
           <MotiView
-            style={tw.style("h-full w-full bg-black bg-opacity-60 absolute")}
-            from={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            style={tw.style(
+              "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
+            )}
+            from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
+            animate={{ transform: [{ scale: 1 }], opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ type: "timing", duration: 120 }}
-          />
-          <View tw="h-full w-full items-center justify-center">
-            <MotiView
-              style={tw.style(
-                "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
-              )}
-              from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
-              animate={{ transform: [{ scale: 1 }], opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: "timing", duration: 250 }}
-            >
-              <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
-                {title}
-              </Text>
-              {Boolean(message) && (
-                <>
-                  <View tw="h-4" />
-                  <Text tw="text-center text-base text-gray-900 dark:text-white">
-                    {message}
-                  </Text>
-                </>
-              )}
-              <Divider tw="my-4" />
-              {renderBtns}
-            </MotiView>
-          </View>
-        </AnimatePresence>
+            transition={{ type: "timing", duration: 250 }}
+          >
+            <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
+              {title}
+            </Text>
+            {Boolean(message) && (
+              <>
+                <View tw="h-4" />
+                <Text tw="text-center text-base text-gray-900 dark:text-white">
+                  {message}
+                </Text>
+              </>
+            )}
+            <Divider tw="my-4" />
+            {renderBtns}
+          </MotiView>
+        </View>
       </Modal>
     </AlertContext.Provider>
   );

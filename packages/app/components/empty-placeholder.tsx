@@ -37,6 +37,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
         <>
           <View tw="h-4" />
           <Text tw="text-sm text-gray-600 dark:text-gray-400">{text}</Text>
+          <View tw="h-1" />
         </>
       )}
       {!isAuthenticated && !hideLoginBtn && (

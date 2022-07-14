@@ -1,17 +1,22 @@
+import { Platform } from "react-native";
+
 import { Meta } from "@storybook/react";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ToastProvider, useToast } from "@showtime-xyz/universal.toast";
+import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AlertProvider, useAlert } from "./index";
+import { AlertProvider, useAlert, useCustomAlert } from "./index";
 
 export default {
   component: AlertProvider,
   title: "Components/Alert",
 } as Meta;
-const Alert = () => {
+
+export const Basic: React.VFC<{}> = () => {
   const Alert = useAlert();
+  const customAlert = useCustomAlert();
+
   const toast = useToast();
   return (
     <View tw="flex-1 items-center justify-center">
@@ -91,13 +96,32 @@ const Alert = () => {
       >
         Alert 3-Button
       </Button>
+
+      {/* Custom Alert */}
+      {Platform.OS !== "web" && (
+        <Button
+          tw="mb-4"
+          onPress={() =>
+            customAlert.alert("Alert label", "Some copy goes here...", [
+              {
+                text: "Cancel",
+                onPress: () => {
+                  toast?.show({ message: "Cancel", hideAfter: 1000 });
+                },
+                style: "cancel",
+              },
+              {
+                text: "Confirm",
+                onPress: () => {
+                  toast?.show({ message: "Confirm", hideAfter: 1000 });
+                },
+              },
+            ])
+          }
+        >
+          Custom Alert
+        </Button>
+      )}
     </View>
   );
 };
-export const Basic: React.VFC<{}> = () => (
-  <ToastProvider>
-    <AlertProvider>
-      <Alert />
-    </AlertProvider>
-  </ToastProvider>
-);
