@@ -33,7 +33,7 @@ function CommentsModal() {
       <Suspense
         fallback={<CommentsStatus isLoading={true} error={undefined} />}
       >
-        <Comments nft={data?.data?.item} />
+        {data?.data?.item && <Comments nft={data?.data.item} />}
       </Suspense>
     </ErrorBoundary>
   );

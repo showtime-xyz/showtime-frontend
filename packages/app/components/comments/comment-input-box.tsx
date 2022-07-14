@@ -21,6 +21,7 @@ import {
   MessageBoxMethods,
 } from "app/components/messages/message-box-new";
 import { CommentType } from "app/hooks/api/use-comments";
+import { useKeyboardVisible } from "app/hooks/use-keyboard-visible";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/utilities";
 
@@ -43,6 +44,7 @@ export const CommentInputBox = forwardRef<
 >(function CommentInputBox({ submitting, submit }, ref) {
   //#region variables
   const Alert = useAlert();
+  const { visible } = useKeyboardVisible();
   const inputRef = useRef<MessageBoxMethods>(null);
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null
@@ -80,7 +82,6 @@ export const CommentInputBox = forwardRef<
     },
     [Alert, submit, selectedComment]
   );
-
   const handleOnBlur = useCallback(() => {
     if (context) {
       context.shouldHandleKeyboardEvents.value = false;
@@ -108,7 +109,6 @@ export const CommentInputBox = forwardRef<
   useImperativeHandle(ref, () => ({
     reply: handleReply,
   }));
-
   return (
     <>
       {selectedComment && (
@@ -131,7 +131,7 @@ export const CommentInputBox = forwardRef<
         submitting={submitting}
         style={{
           paddingHorizontal: 16,
-          marginBottom: Math.max(0, bottom - 16),
+          marginBottom: Math.max(0, bottom - (visible ? 8 : 0)),
           paddingBottom: 0,
         }}
         onSubmit={handleOnSubmitComment}

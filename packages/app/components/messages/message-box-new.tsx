@@ -16,6 +16,8 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useAutoSizeInput } from "app/hooks/use-auto-size-input";
+
 interface MessageBoxProps {
   submitting?: boolean;
   userAvatar?: string;
@@ -39,6 +41,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
   ) {
     //#region variables
     const inputRef = useRef<typeof TextInput>();
+    useAutoSizeInput(inputRef);
     const [value, setValue] = useState("");
     const disable = useMemo(() => !value || /^\s+$/.test(value), [value]);
     //#endregion
@@ -85,10 +88,8 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             }
             multiline={true}
             keyboardType="twitter"
-            returnKeyType="send"
-            tw="rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
+            tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
             onChangeText={handleTextChange}
-            onSubmitEditing={handleSubmit}
             onFocus={onFocus}
             onBlur={onBlur}
           />
@@ -99,6 +100,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           iconOnly={true}
           disabled={disable}
           onPress={handleSubmit}
+          style={{ opacity: disable ? 0.4 : 1 }}
         >
           {submitting ? <Spinner size="small" /> : <Send />}
         </Button>
