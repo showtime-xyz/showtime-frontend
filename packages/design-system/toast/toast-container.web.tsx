@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence } from "moti";
@@ -19,11 +19,8 @@ export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
       {show && (
         <Portal.Root>
           <View
-            style={[
-              StyleSheet.absoluteFillObject,
-              { position: "fixed" as any },
-            ]}
-            pointerEvents="box-none"
+            style={[{ position: "fixed" as any, left: 0, right: 0 }]}
+            pointerEvents="none"
           >
             <Toast render={render} message={message} hide={hide} />
           </View>

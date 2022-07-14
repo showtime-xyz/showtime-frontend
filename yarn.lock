@@ -4991,13 +4991,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/env@npm:12.1.5"
-  checksum: 21a6345ad6ff39edd76630484af3f2a87a0984d06be19ca88d9758583a1c724905f1ea6c0d110a4c825430e5bcda835f7197ee820c7173c428416fb615ff97e6
-  languageName: node
-  linkType: hard
-
 "@next/env@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/env@npm:12.2.3-canary.2"
@@ -5014,24 +5007,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm-eabi@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-android-arm-eabi@npm:12.1.5"
-  conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@next/swc-android-arm-eabi@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-android-arm-eabi@npm:12.2.3-canary.2"
   conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@next/swc-android-arm64@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-android-arm64@npm:12.1.5"
-  conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -5042,24 +5021,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-darwin-arm64@npm:12.1.5"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
 "@next/swc-darwin-arm64@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-darwin-arm64@npm:12.2.3-canary.2"
   conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@next/swc-darwin-x64@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-darwin-x64@npm:12.1.5"
-  conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
@@ -5077,24 +5042,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm-gnueabihf@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.5"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@next/swc-linux-arm-gnueabihf@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-linux-arm-gnueabihf@npm:12.2.3-canary.2"
   conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@next/swc-linux-arm64-gnu@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-linux-arm64-gnu@npm:12.1.5"
-  conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
@@ -5105,24 +5056,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-linux-arm64-musl@npm:12.1.5"
-  conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
 "@next/swc-linux-arm64-musl@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-linux-arm64-musl@npm:12.2.3-canary.2"
   conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
-"@next/swc-linux-x64-gnu@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-linux-x64-gnu@npm:12.1.5"
-  conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
@@ -5133,24 +5070,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-linux-x64-musl@npm:12.1.5"
-  conditions: os=linux & cpu=x64 & libc=musl
-  languageName: node
-  linkType: hard
-
 "@next/swc-linux-x64-musl@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-linux-x64-musl@npm:12.2.3-canary.2"
   conditions: os=linux & cpu=x64 & libc=musl
-  languageName: node
-  linkType: hard
-
-"@next/swc-win32-arm64-msvc@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-win32-arm64-msvc@npm:12.1.5"
-  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -5161,24 +5084,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-win32-ia32-msvc@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-win32-ia32-msvc@npm:12.1.5"
-  conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
 "@next/swc-win32-ia32-msvc@npm:12.2.3-canary.2":
   version: 12.2.3-canary.2
   resolution: "@next/swc-win32-ia32-msvc@npm:12.2.3-canary.2"
   conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
-"@next/swc-win32-x64-msvc@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@next/swc-win32-x64-msvc@npm:12.1.5"
-  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -6999,15 +6908,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.alert@npm:^0.0.30":
-  version: 0.0.30
-  resolution: "@showtime-xyz/universal.alert@npm:0.0.30"
+"@showtime-xyz/universal.alert@npm:^0.0.31":
+  version: 0.0.31
+  resolution: "@showtime-xyz/universal.alert@npm:0.0.31"
   dependencies:
     "@showtime-xyz/universal.button": 0.0.25
     "@showtime-xyz/universal.divider": 0.0.20
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.text": 0.0.20
-    "@showtime-xyz/universal.toast": 0.0.30
+    "@showtime-xyz/universal.toast": 0.0.31
     "@showtime-xyz/universal.view": 0.0.19
     "@storybook/react": 6.5.9
     moti: 0.17.1
@@ -7017,15 +6926,15 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 11994142dc7bd8972ad3a87196f0b1e0c9afaa0b64b3906a93d46bb383d7c375525e49805e173ff0d18aa0c6e0b5345ebf247965b09e377724fbe93a2ca7c925
+  checksum: 95aaf71604a91e4192b3bd0c5f2e4c2a21b410bba06db6ddeb3d607b3fa091c5ebeee018d710bb29ccc11b23325f5e2ace2758bb45a55b3b409c6e60c69a0124
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.18":
-  version: 0.0.18
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.18"
+"@showtime-xyz/universal.avatar@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.19"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.18
+    "@showtime-xyz/universal.image": 0.0.19
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.view": 0.0.19
     "@storybook/react": 6.5.9
@@ -7034,7 +6943,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 405013a112959c18e5c9be2d3b8673af86fda85926cdbc268f900bc7ab2aefafad526cce1dacda2354b6b662cc26a7e9b10f9dd943ef74ae99d8783473a3c656
+  checksum: 0c87e828a3776a5fbd837adbbac2ddc1976e0b48f212bea439704256f3c3de93591990724c2bd15deab81955642d2a32b229ba16fb48f0d70bee636364aa6011
   languageName: node
   linkType: hard
 
@@ -7242,15 +7151,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.image@npm:0.0.18, @showtime-xyz/universal.image@npm:^0.0.18":
-  version: 0.0.18
-  resolution: "@showtime-xyz/universal.image@npm:0.0.18"
+"@showtime-xyz/universal.image@npm:0.0.19, @showtime-xyz/universal.image@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "@showtime-xyz/universal.image@npm:0.0.19"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.view": 0.0.19
     array-to-image: 1.0.0
     blurhash: 1.1.5
-    next: 12.1.5
+    next: 12.2.3-canary.2
     react-native-blurhash: 1.1.10
     react-native-fast-image: ^8.5.11
   peerDependencies:
@@ -7258,7 +7167,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: a06380370fe14176f7d97ad1817f10435502938ccb4fbf25c671ce7cb0e855ece1352e6f5d5e4820957a0c9318f87928ec733d6ffb11433f6e0aad7c06e43d70
+  checksum: af9dc7cb6fe28e42d1acbd289a78150f2b2651bfebba3909315cbb9694231b0b6b5562fd7b6e7fcb7e05667f6fa10fcb249270e4daf0b18f8c8008b21d87eace
   languageName: node
   linkType: hard
 
@@ -7298,11 +7207,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.19":
-  version: 0.0.19
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.19"
+"@showtime-xyz/universal.light-box@npm:^0.0.20":
+  version: 0.0.20
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.20"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.18
+    "@showtime-xyz/universal.image": 0.0.19
     "@showtime-xyz/universal.view": 0.0.19
     "@storybook/react": 6.5.9
   peerDependencies:
@@ -7312,30 +7221,30 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 47fed757f4b57402186bac8346d61863cfcc1b4700a1e055c1c2e2d6d86dd204a28a54f28d2cd347b7a2989935f985a9132b0fb6dc194232cae811ec91020fb6
+  checksum: f11d1ce6289a2df57bf19f5c5d18ce68eba176b67b4a815e5fab158820d093334b98fc0bd5950217b52383a82a2ebfa36d204d8a9187da5503413adf7fb7fa52
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-screen@npm:^0.0.42":
-  version: 0.0.42
-  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.42"
+"@showtime-xyz/universal.modal-screen@npm:^0.0.44":
+  version: 0.0.44
+  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.44"
   dependencies:
     "@react-navigation/native": 6.0.10
     "@showtime-xyz/universal.modal": 0.0.36
-    "@showtime-xyz/universal.router": 0.0.14
-    "@showtime-xyz/universal.toast": 0.0.30
+    "@showtime-xyz/universal.router": 0.0.15
+    "@showtime-xyz/universal.toast": 0.0.31
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 57a783f976daa1a60f78ba7aba868ff5e2003ed519687bca11cb2425d48f8204ff35d957050b30f00c8f8ffa0d416102f456e78621c9d9e63312af079147ef9d
+  checksum: 17db8b49ca08bb6b2d654689e026eb658728def1d44204d0e4463a1e89a7a7bf30c8674bc21870811b6f6bce9d69881368502d5d17ef53d9e27bcf9ea8fccc48
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-sheet@npm:^0.0.36":
-  version: 0.0.36
-  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.36"
+"@showtime-xyz/universal.modal-sheet@npm:^0.0.38":
+  version: 0.0.38
+  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.38"
   dependencies:
     "@gorhom/bottom-sheet": 4.3.2
     "@showtime-xyz/universal.bottom-sheet": 0.0.25
@@ -7349,7 +7258,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 99d00da50520fa951627f30edcff4533f712c9ae10ded26f6d48d90515261257db7f0bb1fd1277d18fa82130738769f8d1c2f095ceaa6abf2ef196456b738c91
+  checksum: 776a94553e214be87c30897a8939f84579e88ec0daf30a97cf0667a48dfc3da77a30c2c690d446ca02f01abe1dc225922916e3ab8743d5383950969c2674e547
   languageName: node
   linkType: hard
 
@@ -7440,19 +7349,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.router@npm:0.0.14, @showtime-xyz/universal.router@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "@showtime-xyz/universal.router@npm:0.0.14"
+"@showtime-xyz/universal.router@npm:0.0.15, @showtime-xyz/universal.router@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "@showtime-xyz/universal.router@npm:0.0.15"
   dependencies:
     "@react-navigation/native": 6.0.10
-    next: 12.1.5
+    next: 12.2.3-canary.2
     solito: 0.0.24
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 9dae76c5295755a9eda9d0666c0c7c6a291376593f3445db533e7fd7eb552422a73a3a507bf88824a0c5cbcf756cff53bec59998d6eaa4008f4772f480c5f226
+  checksum: ea8f4549d874b6476d9e53924d0249120c145dc964a7fae82428adf42370ba84dd22d4584d7d7f17ce5f444bdc77a73641b8d88a3151916b32925572e94aac46
   languageName: node
   linkType: hard
 
@@ -7542,9 +7451,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.snackbar@npm:^0.0.38":
-  version: 0.0.38
-  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.38"
+"@showtime-xyz/universal.snackbar@npm:^0.0.39":
+  version: 0.0.39
+  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.39"
   dependencies:
     "@showtime-xyz/universal.button": 0.0.25
     "@showtime-xyz/universal.hooks": 0.0.17
@@ -7554,7 +7463,7 @@ __metadata:
     "@showtime-xyz/universal.spinner": 0.0.20
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.text": 0.0.20
-    "@showtime-xyz/universal.toast": 0.0.30
+    "@showtime-xyz/universal.toast": 0.0.31
     "@showtime-xyz/universal.view": 0.0.19
     "@storybook/react": 6.5.9
     expo-blur: 11.1.0
@@ -7564,7 +7473,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: d3f7f5cfaa19013420cd025ef35b30fff9759d201d387fa0d601f020fba18223721eb63948c001fd826602172406be8892ed3fc2499907d6314c364c5984ac05
+  checksum: 369e0c571724182d592d2ca7ce9ef242a22ffc92ddf71c6218ab6e617114c190cbf9e9d4e14e2ff272709517545aa336c82aabb4c924c7debd0cd5ecb05ffc95
   languageName: node
   linkType: hard
 
@@ -7652,9 +7561,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.toast@npm:0.0.30, @showtime-xyz/universal.toast@npm:^0.0.30":
-  version: 0.0.30
-  resolution: "@showtime-xyz/universal.toast@npm:0.0.30"
+"@showtime-xyz/universal.toast@npm:0.0.31, @showtime-xyz/universal.toast@npm:^0.0.31":
+  version: 0.0.31
+  resolution: "@showtime-xyz/universal.toast@npm:0.0.31"
   dependencies:
     "@radix-ui/react-portal": 0.1.4
     "@showtime-xyz/universal.button": 0.0.25
@@ -7671,7 +7580,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 3752ff5e23b0f90e2fd5f5037c3b6faaa40af6539d5938d73c9b12ff65ef76b1fa6165d24f77d5e3421571b056a7dfc977d51f2b5c88dc8af2c45481af247366
+  checksum: 3db2a012d93e4238ea68ee3997bcf6748f819a57a6ce07bf9ef44be27216aa657595c5dae2c13032541b01c149ccf7132d895f879365ba470d8d21e45fdbeadb
   languageName: node
   linkType: hard
 
@@ -7774,8 +7683,8 @@ __metadata:
     "@shopify/react-native-skia": 0.1.123
     "@showtime-xyz/universal.accordion": ^0.0.22
     "@showtime-xyz/universal.activity-indicator": ^0.0.19
-    "@showtime-xyz/universal.alert": ^0.0.30
-    "@showtime-xyz/universal.avatar": ^0.0.18
+    "@showtime-xyz/universal.alert": ^0.0.31
+    "@showtime-xyz/universal.avatar": ^0.0.19
     "@showtime-xyz/universal.bottom-sheet": ^0.0.25
     "@showtime-xyz/universal.button": ^0.0.25
     "@showtime-xyz/universal.checkbox": ^0.0.23
@@ -7788,30 +7697,30 @@ __metadata:
     "@showtime-xyz/universal.fieldset": ^0.0.36
     "@showtime-xyz/universal.hooks": ^0.0.17
     "@showtime-xyz/universal.icon": ^0.0.29
-    "@showtime-xyz/universal.image": ^0.0.18
+    "@showtime-xyz/universal.image": ^0.0.19
     "@showtime-xyz/universal.input": ^0.0.23
     "@showtime-xyz/universal.label": ^0.0.21
-    "@showtime-xyz/universal.light-box": ^0.0.19
+    "@showtime-xyz/universal.light-box": ^0.0.20
     "@showtime-xyz/universal.modal": ^0.0.36
-    "@showtime-xyz/universal.modal-screen": ^0.0.42
-    "@showtime-xyz/universal.modal-sheet": ^0.0.36
+    "@showtime-xyz/universal.modal-screen": ^0.0.44
+    "@showtime-xyz/universal.modal-sheet": ^0.0.38
     "@showtime-xyz/universal.pan-to-close": ^0.0.2
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.13
     "@showtime-xyz/universal.pressable": ^0.0.22
     "@showtime-xyz/universal.pressable-scale": ^0.0.21
-    "@showtime-xyz/universal.router": ^0.0.14
+    "@showtime-xyz/universal.router": ^0.0.15
     "@showtime-xyz/universal.safe-area": ^0.0.11
     "@showtime-xyz/universal.scroll-view": ^0.0.21
     "@showtime-xyz/universal.segmented-control": ^0.0.22
     "@showtime-xyz/universal.select": ^0.0.34
     "@showtime-xyz/universal.skeleton": ^0.0.20
-    "@showtime-xyz/universal.snackbar": ^0.0.38
+    "@showtime-xyz/universal.snackbar": ^0.0.39
     "@showtime-xyz/universal.spinner": ^0.0.20
     "@showtime-xyz/universal.switch": ^0.0.22
     "@showtime-xyz/universal.tailwind": ^0.0.19
     "@showtime-xyz/universal.text": ^0.0.20
     "@showtime-xyz/universal.text-input": ^0.0.20
-    "@showtime-xyz/universal.toast": ^0.0.30
+    "@showtime-xyz/universal.toast": ^0.0.31
     "@showtime-xyz/universal.tooltip": ^0.0.25
     "@showtime-xyz/universal.typography": ^0.0.13
     "@showtime-xyz/universal.verification-badge": ^0.0.11
@@ -14334,7 +14243,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001283, caniuse-lite@npm:^1.0.30001332":
+"caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001332":
   version: 1.0.30001341
   resolution: "caniuse-lite@npm:1.0.30001341"
   checksum: 7262b093fb0bf49dbc5328418f5ce4e3dbb0b13e39c015f986ba1807634c123ac214efc94df7d095a336f57f86852b4b63ee61838f18dcc3a4a35f87b390c8f5
@@ -26131,7 +26040,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.23, nanoid@npm:^3.1.30, nanoid@npm:^3.3.1, nanoid@npm:^3.3.3, nanoid@npm:^3.3.4":
+"nanoid@npm:^3.1.23, nanoid@npm:^3.3.1, nanoid@npm:^3.3.3, nanoid@npm:^3.3.4":
   version: 3.3.4
   resolution: "nanoid@npm:3.3.4"
   bin:
@@ -26268,70 +26177,6 @@ __metadata:
     enhanced-resolve: ^5.7.0
     escalade: ^3.1.1
   checksum: 9a5d86d80cedc2404b2b1d5bd4994f2f7bf60e5e20f24e8cc5cfec34da1418b4a439916f37a95ca336bcf6d81094c3647354ac6a0c6737b3df59e62b6380507d
-  languageName: node
-  linkType: hard
-
-"next@npm:12.1.5":
-  version: 12.1.5
-  resolution: "next@npm:12.1.5"
-  dependencies:
-    "@next/env": 12.1.5
-    "@next/swc-android-arm-eabi": 12.1.5
-    "@next/swc-android-arm64": 12.1.5
-    "@next/swc-darwin-arm64": 12.1.5
-    "@next/swc-darwin-x64": 12.1.5
-    "@next/swc-linux-arm-gnueabihf": 12.1.5
-    "@next/swc-linux-arm64-gnu": 12.1.5
-    "@next/swc-linux-arm64-musl": 12.1.5
-    "@next/swc-linux-x64-gnu": 12.1.5
-    "@next/swc-linux-x64-musl": 12.1.5
-    "@next/swc-win32-arm64-msvc": 12.1.5
-    "@next/swc-win32-ia32-msvc": 12.1.5
-    "@next/swc-win32-x64-msvc": 12.1.5
-    caniuse-lite: ^1.0.30001283
-    postcss: 8.4.5
-    styled-jsx: 5.0.1
-  peerDependencies:
-    fibers: ">= 3.1.0"
-    node-sass: ^6.0.0 || ^7.0.0
-    react: ^17.0.2 || ^18.0.0-0
-    react-dom: ^17.0.2 || ^18.0.0-0
-    sass: ^1.3.0
-  dependenciesMeta:
-    "@next/swc-android-arm-eabi":
-      optional: true
-    "@next/swc-android-arm64":
-      optional: true
-    "@next/swc-darwin-arm64":
-      optional: true
-    "@next/swc-darwin-x64":
-      optional: true
-    "@next/swc-linux-arm-gnueabihf":
-      optional: true
-    "@next/swc-linux-arm64-gnu":
-      optional: true
-    "@next/swc-linux-arm64-musl":
-      optional: true
-    "@next/swc-linux-x64-gnu":
-      optional: true
-    "@next/swc-linux-x64-musl":
-      optional: true
-    "@next/swc-win32-arm64-msvc":
-      optional: true
-    "@next/swc-win32-ia32-msvc":
-      optional: true
-    "@next/swc-win32-x64-msvc":
-      optional: true
-  peerDependenciesMeta:
-    fibers:
-      optional: true
-    node-sass:
-      optional: true
-    sass:
-      optional: true
-  bin:
-    next: dist/bin/next
-  checksum: a70e70f7863035d9b2d5bb70ede6b165d4022c75d8e3b44411097eb20e4a4d9b34205873cb2d0088a76986fe3e0f160edad0ff7602fc269994e02dc4d21d035c
   languageName: node
   linkType: hard
 
@@ -28692,17 +28537,6 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: fe58766ff32e4becf65a7d57678995cfd239df6deed2fe0557f038b47c94e4132e7e5f68b5aa820c13adfec32e523b693efaeb65798efb995ce49ccd83953816
-  languageName: node
-  linkType: hard
-
-"postcss@npm:8.4.5":
-  version: 8.4.5
-  resolution: "postcss@npm:8.4.5"
-  dependencies:
-    nanoid: ^3.1.30
-    picocolors: ^1.0.0
-    source-map-js: ^1.0.1
-  checksum: b78abdd89c10f7b48f4bdcd376104a19d6e9c7495ab521729bdb3df315af6c211360e9f06887ad3bc0ab0f61a04b91d68ea11462997c79cced58b9ccd66fac07
   languageName: node
   linkType: hard
 
@@ -32489,7 +32323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
+"source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
@@ -33300,20 +33134,6 @@ __metadata:
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
   checksum: 05a664dfe423c2906959a0f3f47f9b1ad630e493eb2e06deea0dc0906af33ba5ca17277b98948a6c9642e73894d6533391aebf45576489f5afe920c974e9f8eb
-  languageName: node
-  linkType: hard
-
-"styled-jsx@npm:5.0.1":
-  version: 5.0.1
-  resolution: "styled-jsx@npm:5.0.1"
-  peerDependencies:
-    react: ">= 16.8.0 || 17.x.x || ^18.0.0-0"
-  peerDependenciesMeta:
-    "@babel/core":
-      optional: true
-    babel-plugin-macros:
-      optional: true
-  checksum: b85eb03da76b566065b10911a24396659b45a34efa16eef87ed8ff2ce3ea7b9b6a9c0c92c3b2113f92cbca9ab12496690d72329cb9932759ea98d0386acb38a9
   languageName: node
   linkType: hard
 

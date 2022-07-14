@@ -3,10 +3,11 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDeviceContext } from "twrnc";
 
+import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+
 import { ThemeProvider } from "app/providers/theme-provider";
 
 import { AlertProvider } from "design-system/alert";
-import { SafeAreaProvider } from "design-system/safe-area";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { ToastProvider } from "design-system/toast";
