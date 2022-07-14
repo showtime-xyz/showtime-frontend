@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Platform } from "react-native";
 
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -33,8 +34,9 @@ export function Web3Provider({
     [web3]
   );
 
+  // (Native only) initialises wallet connect native web3 provider
   useEffect(() => {
-    if (connector.connected) {
+    if (Platform.OS !== "web" && connector.connected) {
       const walletConnectProvider = new WalletConnectProvider({
         connector,
         qrcode: false,
@@ -49,6 +51,7 @@ export function Web3Provider({
     }
   }, [connector]);
 
+  // (Web/Native) initialises magic web3 provider
   useEffect(() => {
     magic?.user?.isLoggedIn().then((isLoggedIn) => {
       if (magic.rpcProvider && isLoggedIn) {
@@ -59,8 +62,9 @@ export function Web3Provider({
     });
   }, []);
 
+  // (Web only) initialises web3 provider from wagmi
   useEffect(() => {
-    if (connected) {
+    if (Platform.OS === "web" && connected) {
       setWeb3(provider);
     }
   }, [connected, provider]);
