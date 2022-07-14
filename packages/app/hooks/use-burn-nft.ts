@@ -55,12 +55,11 @@ export type UseBurnNFT = {
 
 export const useBurnNFT = () => {
   const [state, dispatch] = useReducer(burnNFTReducer, initialBurnNFTState);
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
 
   async function burnToken({ ...params }: UseBurnNFT) {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<{ transaction: string }>(async (resolve, reject) => {
-      const result = await getBiconomySigner();
       if (result) {
         const { provider, signer, signerAddress } = result;
 

@@ -11,6 +11,7 @@ import { ToastProvider } from "@showtime-xyz/universal.toast";
 import { growthbook } from "app/lib/growthbook";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
+import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MintProvider } from "app/providers/mint-provider";
 import { SWRProvider } from "app/providers/swr-provider";
@@ -40,7 +41,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 {/* @ts-ignore */}
                                 <GrowthBookProvider growthbook={growthbook}>
                                   <FeedProvider>
-                                    <MintProvider>{children}</MintProvider>
+                                    <BiconomyProvider>
+                                      <MintProvider>{children}</MintProvider>
+                                    </BiconomyProvider>
                                   </FeedProvider>
                                 </GrowthBookProvider>
                               </BottomSheetModalProvider>

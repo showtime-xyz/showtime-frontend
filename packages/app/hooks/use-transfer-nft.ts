@@ -72,7 +72,7 @@ export const useTransferNFT = () => {
     initialTransferNFTState
   );
 
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
 
   const transferToken = async ({
     nft,
@@ -82,7 +82,6 @@ export const useTransferNFT = () => {
     return new Promise<{ transaction: string; tokenId: number }>(
       // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
-        const result = await getBiconomySigner();
         if (result) {
           const { signerAddress, signer, provider } = result;
           const contract = new ethers.Contract(
