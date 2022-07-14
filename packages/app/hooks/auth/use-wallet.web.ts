@@ -39,6 +39,14 @@ const useWallet = (): UseWalletReturnType => {
   const connected =
     (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
 
+  console.log(
+    "wallet connection status ",
+    wagmiData,
+    wagmiSigner,
+    chain,
+    connected
+  );
+
   return {
     address,
     connected,
