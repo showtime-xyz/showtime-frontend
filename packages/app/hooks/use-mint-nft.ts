@@ -198,7 +198,7 @@ export const useMintNFT = () => {
 
   const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
 
   async function uploadMedia() {
     // Media Upload
@@ -414,7 +414,6 @@ export const useMintNFT = () => {
 
     try {
       const nftJsonIpfsHash = await uploadNFTJson(params);
-      const result = await getBiconomySigner(); // 5 sn etc.
 
       if (isMobileWeb()) {
         setSignMessageData({
