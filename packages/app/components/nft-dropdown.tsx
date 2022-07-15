@@ -11,7 +11,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuItemIcon,
   DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
@@ -26,7 +25,6 @@ import {
   Refresh,
   Clock,
   Menu,
-  Share,
   Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -185,27 +183,25 @@ function NFTDropdown({
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
         {shouldEnableSharing && (
-          <DropdownMenuRoot>
-            <DropdownMenuTriggerItem key="nested-group-trigger">
-              <MenuItemIcon Icon={Share} />
-              <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
-            </DropdownMenuTriggerItem>
-            <DropdownMenuContent tw="w-42">
+          <>
+            {!isShareAPIAvailable && (
               <DropdownMenuItem
                 onSelect={() => shareNFTOnTwitter(nft)}
-                key="nested-group-1"
+                key="share-twitter"
               >
                 <MenuItemIcon Icon={Twitter} />
+
                 <DropdownMenuItemTitle>Share on Twitter</DropdownMenuItemTitle>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-                <MenuItemIcon Icon={Copy} />
-                <DropdownMenuItemTitle>
-                  {isShareAPIAvailable ? "Share" : "Copy Link"}
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
+            )}
+            <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+              <MenuItemIcon Icon={Copy} />
+
+              <DropdownMenuItemTitle>
+                {isShareAPIAvailable ? "Share" : "Copy Link"}
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </>
         )}
 
         {!isCreatorDrop && (
