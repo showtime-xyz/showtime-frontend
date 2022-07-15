@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
+import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
 import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { Biconomy } from "app/lib/biconomy/src";
 import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 

@@ -44,7 +44,11 @@ async function populateTransaction(
   const gasLimit =
     transaction.gasLimit ?? (await provider.estimateGas(transaction));
 
-  return { ...transaction, gasLimit };
+  return {
+    ...transaction,
+    //@ts-ignore
+    txGas: gasLimit,
+  };
 }
 
 export type MintNFTStatus =
@@ -306,7 +310,7 @@ export const useMintNFT = () => {
     if (signData) {
       const {
         params,
-        // populatedTransaction,
+        populatedTransaction,
         contract,
         nftJsonIpfsHash,
         result,
@@ -323,22 +327,16 @@ export const useMintNFT = () => {
 
       if (result) {
         const { signerAddress, provider } = result;
-        // const signer = provider.getSigner(signerAddress);
 
         dispatch({ type: "minting" });
 
-        // await provider.send
-        // const transaction = await provider.sendTransaction({
-        //   ...populatedTransaction,
-        //   // signatureType: "EIP712_SIGN",
-        // });
         const transaction = await provider
           .send("eth_sendTransaction", [
             {
-              // ...populatedTransaction,
               data: contractCallData,
               from: signerAddress,
               to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+              ...populatedTransaction,
               signatureType: "EIP712_SIGN",
             },
           ])

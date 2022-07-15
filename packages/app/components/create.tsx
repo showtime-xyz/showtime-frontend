@@ -149,8 +149,11 @@ function Create() {
         </Text>
         <View tw="mt-8 mb-4">
           <Text tw="font-space-bold my-6 text-center text-lg text-black dark:text-white ">
-            Your NFT has been minted on Showtime! It'll appear in your profile
-            in few seconds.
+            Your NFT has been minted on Showtime!
+          </Text>
+          <View tw="h-4" />
+          <Text tw="text-center text-base text-black dark:text-white ">
+            It'll appear in your profile in few seconds.
           </Text>
           <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
