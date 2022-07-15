@@ -10,7 +10,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
-  DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
@@ -25,23 +24,12 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 
 import { breakpoints } from "design-system/theme";
-
-const MenuItemIcon = ({ Icon }) => {
-  return (
-    <DropdownMenuItemIcon>
-      <Icon
-        width="1em"
-        height="1em"
-        color={tw.style("bg-gray-500")?.backgroundColor as string}
-      />
-    </DropdownMenuItemIcon>
-  );
-};
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();

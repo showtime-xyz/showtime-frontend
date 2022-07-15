@@ -1,5 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, ComponentType } from "react";
 import { Platform } from "react-native";
+
+import { SvgProps } from "react-native-svg";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -9,6 +11,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuItemIcon,
   DropdownMenuTrigger,
+  DropdownMenuTriggerItem,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
@@ -23,6 +26,8 @@ import {
   Refresh,
   Clock,
   Menu,
+  Share,
+  Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -41,13 +46,14 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
-const MenuItemIcon = ({ Icon }) => {
+const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
     <DropdownMenuItemIcon>
       <Icon
         width="1em"
         height="1em"
         color={tw.style("bg-gray-500")?.backgroundColor as string}
+        {...rest}
       />
     </DropdownMenuItemIcon>
   );
@@ -81,7 +87,7 @@ function NFTDropdown({
   const nft = data?.data.item;
 
   const isCreatorDrop = nft?.creator_airdrop_edition_address;
-  const shareNFT = useShareNFT();
+  const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
@@ -178,16 +184,29 @@ function NFTDropdown({
           <MenuItemIcon Icon={Clock} />
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-            <MenuItemIcon Icon={Copy} />
-
-            <DropdownMenuItemTitle>
-              {isShareAPIAvailable ? "Share" : "Copy Link"}
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        ) : null}
+        {shouldEnableSharing && (
+          <DropdownMenuRoot>
+            <DropdownMenuTriggerItem key="nested-group-trigger">
+              <MenuItemIcon Icon={Share} />
+              <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
+            </DropdownMenuTriggerItem>
+            <DropdownMenuContent tw="w-42">
+              <DropdownMenuItem
+                onSelect={() => shareNFTOnTwitter(nft)}
+                key="nested-group-1"
+              >
+                <MenuItemIcon Icon={Twitter} />
+                <DropdownMenuItemTitle>Share on Twitter</DropdownMenuItemTitle>
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+                <MenuItemIcon Icon={Copy} />
+                <DropdownMenuItemTitle>
+                  {isShareAPIAvailable ? "Share" : "Copy Link"}
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenuRoot>
+        )}
 
         {!isCreatorDrop && (
           <DropdownMenuItem
