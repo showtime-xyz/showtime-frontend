@@ -28,6 +28,7 @@ import { TextLink } from "app/navigation/link";
 
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
+import { useRouter } from "design-system/router";
 
 const defaultValues = {
   editionCount: 1,
@@ -101,7 +102,7 @@ function Create() {
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
-  const { isMagic } = useWeb3();
+  const router = useRouter();
 
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
@@ -157,6 +158,13 @@ function Create() {
           </Text>
           <View tw="h-8" />
           <PolygonScanButton transactionHash={state.transaction} />
+          <Button
+            variant="tertiary"
+            tw="mt-4"
+            onPress={() => router.push("/profile")}
+          >
+            Go to profile
+          </Button>
         </View>
       </View>
     );
