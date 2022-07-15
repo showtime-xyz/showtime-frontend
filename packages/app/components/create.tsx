@@ -129,7 +129,7 @@ function Create() {
       <View tw="items-center justify-center">
         <Spinner />
         <View tw="h-10" />
-        <Text tw="px-4 text-center text-sm text-black dark:text-white">
+        <Text tw="text-md px-4 text-center text-black dark:text-white">
           Your NFT is being minted on Polygon network. Feel free to navigate
           away from this screen.
         </Text>

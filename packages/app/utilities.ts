@@ -119,6 +119,7 @@ export const getBiconomy = async (connector: any, provider: any) => {
       apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
       // TODO: add walletconnect connector instance support in biconomy
       ...walletProvider,
+      // debug: true,
     }
   );
 
