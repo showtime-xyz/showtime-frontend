@@ -521,6 +521,12 @@ function Create() {
               ? "Failed. Retry"
               : "Minting..."}
           </Button>
+
+          {state.error ? (
+            <View tw="mt-4">
+              <Text tw="text-red-500">{state.error}</Text>
+            </View>
+          ) : null}
         </View>
       </CreateScrollView>
     </View>

@@ -8,14 +8,11 @@ import { Deferrable, resolveProperties } from "ethers/lib/utils";
 import { v4 as uuid } from "uuid";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -77,6 +74,7 @@ export type MintNFTType = {
   nftIPFSHash?: string;
   file?: string | File;
   fileType?: string;
+  error?: string;
 };
 
 let initialMintNFTState: MintNFTType = {
@@ -105,6 +103,7 @@ export type ActionPayload = {
   nftIPFSHash?: string;
   file?: string | File;
   fileType?: string;
+  error?: string;
 };
 
 export const mintNFTReducer = (
@@ -137,6 +136,7 @@ export const mintNFTReducer = (
         file: action.payload?.file,
         fileType: action.payload?.fileType,
         loading: true,
+        error: undefined,
       };
     case "mediaUploadSuccess":
       return {
@@ -188,7 +188,12 @@ export const mintNFTReducer = (
         loading: false,
       };
     case "mintingError":
-      return { ...state, status: "mintingError", loading: false };
+      return {
+        ...state,
+        status: "mintingError",
+        loading: false,
+        error: action.payload?.error,
+      };
     default:
       return state;
   }
@@ -219,9 +224,6 @@ export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
 
   const snackbar = useSnackbar();
-  const { userAddress } = useCurrentUserAddress();
-  const router = useRouter();
-  const { user } = useUser();
   const insets = useSafeAreaInsets();
   const matchMutate = useMatchMutate();
   const [signMessageData, setSignMessageData] = useState({
@@ -424,7 +426,7 @@ export const useMintNFT = () => {
           });
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       captureException(error);
       snackbar?.update({
         text: "Something went wrong. Please try again",
@@ -435,6 +437,9 @@ export const useMintNFT = () => {
       Logger.error("Minting error ", error);
       dispatch({
         type: "mintingError",
+        payload: {
+          error: error?.message,
+        },
       });
     }
   }
