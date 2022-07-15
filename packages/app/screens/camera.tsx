@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useFocusEffect } from "@react-navigation/native";
 import { useTimer } from "use-timer";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -12,6 +11,7 @@ import { Camera } from "app/components/camera";
 import { setInitialMedia } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
+import { useFocusEffect } from "app/lib/react-navigation/native";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 

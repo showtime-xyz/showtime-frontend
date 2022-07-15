@@ -17,6 +17,8 @@ import { useBiconomy } from "app/hooks/use-biconomy";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
+import { Logger } from "app/lib/logger";
+import { captureException } from "app/lib/sentry";
 import { getFileMeta, getPinataToken } from "app/utilities";
 import { isMobileWeb } from "app/utilities";
 
@@ -249,7 +251,7 @@ export const useMintNFT = () => {
         return;
       }
 
-      console.log("Received file meta data ", fileMetaData);
+      Logger.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData && state.file) {
         dispatch({
@@ -261,7 +263,7 @@ export const useMintNFT = () => {
         return mediaIPFSHash;
       }
     } catch (error) {
-      console.error("media upload failed", error);
+      Logger.error("media upload failed", error);
       dispatch({ type: "mediaUploadError" });
       throw error;
     }
@@ -296,11 +298,11 @@ export const useMintNFT = () => {
           )
           .then((res: any) => res.data.IpfsHash);
         dispatch({ type: "nftJSONUploadSuccess", payload: { nftIPFSHash } });
-        console.log("Uploaded nft json to ipfs ", nftIPFSHash);
+        Logger.log("Uploaded nft json to ipfs ", nftIPFSHash);
         return nftIPFSHash;
       }
     } catch (e) {
-      console.error("NFT upload error ", e);
+      Logger.error("NFT upload error ", e);
       dispatch({ type: "nftJSONUploadError" });
       throw e;
     }
@@ -316,7 +318,7 @@ export const useMintNFT = () => {
         result,
         contractCallData,
       } = signData;
-      console.log("** minting: opening wallet for signing **");
+      Logger.log("** minting: opening wallet for signing **");
 
       if (isMobileWeb()) {
         setSignMessageData({
@@ -341,7 +343,7 @@ export const useMintNFT = () => {
             },
           ])
           .catch((error: any) => {
-            console.error("eth send transaction failure ", error);
+            Logger.error("eth send transaction failure ", error);
             throw error;
           });
 
@@ -365,24 +367,6 @@ export const useMintNFT = () => {
           track("NFT Created");
 
           matchMutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
-
-          snackbar?.update({
-            text: "Created! Your NFT will appear in a minute!",
-            iconStatus: "done",
-            bottom,
-            hideAfter: 5000,
-            action: {
-              text: "View",
-              onPress: () => {
-                snackbar.hide();
-                router.push(
-                  Platform.OS === "web"
-                    ? `/@${user?.data?.profile?.username ?? userAddress}`
-                    : `/profile`
-                );
-              },
-            },
-          });
         });
       }
     }
@@ -441,20 +425,21 @@ export const useMintNFT = () => {
         }
       }
     } catch (error) {
+      captureException(error);
       snackbar?.update({
         text: "Something went wrong. Please try again",
         bottom,
         iconStatus: "default",
         hideAfter: 4000,
       });
-      console.error("Minting error ", error);
+      Logger.error("Minting error ", error);
       dispatch({
         type: "mintingError",
       });
     }
   }
 
-  console.log("minting state ", state);
+  Logger.log("minting state ", state);
 
   const setMedia = ({ file, fileType }: { file: any; fileType: any }) => {
     dispatch({ type: "setMedia", payload: { file, fileType } });
