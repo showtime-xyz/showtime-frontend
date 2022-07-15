@@ -141,8 +141,8 @@ function Create() {
 
   if (state.status === "mintingSuccess") {
     return (
-      <View tw="items-center justify-center">
-        <Text tw="text-6xl">🎉</Text>
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="text-8xl">🎉</Text>
         <View tw="h-8" />
         <Text tw="text-center text-4xl text-black dark:text-white">
           Congrats!
@@ -510,20 +510,6 @@ function Create() {
                 : "Minting..."}
             </Button>
           )}
-        </View>
-
-        <View tw="mt-4 h-12">
-          {state.status === "minting" && !isMagic ? (
-            <Button
-              onPress={handleSubmit(handleSubmitForm)}
-              tw="h-12"
-              variant="tertiary"
-            >
-              <Text tw="text-sm text-gray-900 dark:text-white">
-                Didn't receive the signature request yet?
-              </Text>
-            </Button>
-          ) : null}
         </View>
       </CreateScrollView>
     </View>
