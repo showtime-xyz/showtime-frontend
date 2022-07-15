@@ -41,7 +41,7 @@ export const useShareNFT = () => {
         message: ``,
       })
     );
-    track("NFT Shared on Twitter", { type: "Twitter" });
+    track("NFT Shared", { type: "Twitter" });
   };
 
   return { shareNFT, shareNFTOnTwitter };
