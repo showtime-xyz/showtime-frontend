@@ -1,4 +1,3 @@
-import { useContext, useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -12,7 +11,6 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -20,18 +18,17 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ConnectButton } from "app/components/connect-button";
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { MintContext } from "app/context/mint-context";
 import { useWallet } from "app/hooks/auth/use-wallet";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
-import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
 
 import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
+import { useRouter } from "design-system/router";
 
 const defaultValues = {
   editionCount: 1,
@@ -65,18 +62,15 @@ const createNFTValidationSchema = yup.object({
 });
 
 function Create() {
-  const router = useRouter();
-  const { user } = useUser();
   const { web3 } = useWeb3();
-  const { state } = useContext(MintContext);
   const {
+    state,
     setMedia,
     startMinting,
     signTransaction,
     signMessageData,
     shouldShowSignMessage,
   } = useMintNFT();
-  const { userAddress: address } = useCurrentUserAddress();
   const { connected } = useWallet();
 
   const isSignRequested = signMessageData.status === "sign_requested";
@@ -105,12 +99,10 @@ function Create() {
     },
   });
 
-  //#endregion
-
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
-  const { isMagic } = useWeb3();
+  const router = useRouter();
 
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
@@ -122,26 +114,6 @@ function Create() {
     state.status === "mintingError";
   const enable = state.status === "idle" || isError;
 
-  useEffect(
-    function redirect() {
-      if (
-        (state.status === "mediaUpload" || state.status === "nftJSONUpload") &&
-        Platform.OS !== "web"
-      ) {
-        // TODO: save the file in the user gallery (if taken from camera)
-        setTimeout(() => {
-          router.pop();
-          router.replace(
-            Platform.OS === "web"
-              ? `/@${user?.data?.profile?.username ?? address}`
-              : `/profile`
-          );
-        }, 1000);
-      }
-    },
-    [state.status, user, address, router]
-  );
-
   // TODO: remove this after imperative login modal API in rainbowkit
   if (!connected) {
     return (
@@ -149,6 +121,74 @@ function Create() {
         <ConnectButton
           handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
         />
+      </View>
+    );
+  }
+
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+        <View tw="h-10" />
+        <Text tw="px-5 text-center text-base text-black dark:text-white">
+          Your NFT is being minted on Polygon network. Feel free to navigate
+          away from this screen.
+        </Text>
+        <View tw="h-4" />
+        <PolygonScanButton transactionHash={state.transaction} />
+      </View>
+    );
+  }
+
+  if (shouldShowSignMessage) {
+    return (
+      <View tw="flex-1 items-center justify-center p-4">
+        <Text tw="bold py-4 text-center text-base dark:text-gray-400">
+          We need a signature in order to complete minting. This won't cost any
+          gas.
+        </Text>
+        <Button
+          tw={`mt-4 px-8 ${isSignRequested ? "opacity-60" : ""}`}
+          size="regular"
+          variant="primary"
+          disabled={isSignRequested}
+          onPress={() => {
+            signTransaction(signMessageData.data);
+          }}
+        >
+          {isSignRequested ? "Signing..." : "Sign"}
+        </Button>
+      </View>
+    );
+  }
+
+  if (state.status === "mintingSuccess") {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="text-8xl">🎉</Text>
+        <View tw="h-8" />
+        <Text tw="text-center text-4xl text-black dark:text-white">
+          Congrats!
+        </Text>
+        <View tw="mt-8 mb-4">
+          <Text tw="font-space-bold my-6 text-center text-lg text-black dark:text-white ">
+            Your NFT has been minted on Showtime!
+          </Text>
+          <View tw="h-4" />
+          <Text tw="text-center text-base text-black dark:text-white ">
+            It'll appear in your profile in few seconds.
+          </Text>
+          <View tw="h-8" />
+          <PolygonScanButton transactionHash={state.transaction} />
+          <Button
+            variant="tertiary"
+            tw="mt-4"
+            size="regular"
+            onPress={() => router.push("/profile")}
+          >
+            Go to profile
+          </Button>
+        </View>
       </View>
     );
   }
@@ -463,31 +503,8 @@ function Create() {
             )}
           />
         </View>
-      </CreateScrollView>
 
-      <View tw="mt-8 w-full px-4">
-        {shouldShowSignMessage ? (
-          <View tw="px-2">
-            {!isSignRequested ? (
-              <Text tw="text-center text-lg dark:text-gray-400">
-                We need a signature in order to complete minting. This won't
-                cost any gas.
-              </Text>
-            ) : null}
-            <Button
-              tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
-              size="regular"
-              variant="primary"
-              disabled={isSignRequested}
-              onPress={() => {
-                // @ts-ignore
-                signTransaction(signMessageData.data);
-              }}
-            >
-              {isSignRequested ? "Signing..." : "Sign Message"}
-            </Button>
-          </View>
-        ) : (
+        <View tw="mt-8 w-full px-4">
           <Button
             variant="primary"
             size="regular"
@@ -500,28 +517,18 @@ function Create() {
               : state.status === "mediaUpload" ||
                 state.status === "nftJSONUpload"
               ? "Uploading..."
-              : state.status === "mintingSuccess"
-              ? "Success!"
               : isError
               ? "Failed. Retry"
               : "Minting..."}
           </Button>
-        )}
 
-        <View tw="mt-4 h-12">
-          {state.status === "minting" && !isMagic ? (
-            <Button
-              onPress={handleSubmit(handleSubmitForm)}
-              tw="h-12"
-              variant="tertiary"
-            >
-              <Text tw="text-sm text-gray-900 dark:text-white">
-                Didn't receive the signature request yet?
-              </Text>
-            </Button>
+          {state.error ? (
+            <View tw="mt-4">
+              <Text tw="text-red-500">{state.error}</Text>
+            </View>
           ) : null}
         </View>
-      </View>
+      </CreateScrollView>
     </View>
   );
 }

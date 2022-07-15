@@ -8,9 +8,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Camera } from "app/components/camera";
-import { useMintNFT } from "app/hooks/use-mint-nft";
+import { setInitialMedia } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
+import { useFocusEffect } from "app/lib/react-navigation/native";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 
@@ -27,11 +28,18 @@ function CameraScreen() {
   const [photos, setPhotos] = useState([]);
   const [canPop, setCanPop] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { setMedia } = useMintNFT();
+
+  // Reset state on focus
+  useFocusEffect(
+    useCallback(() => {
+      setPhotos([]);
+      setIsLoading(false);
+    }, [])
+  );
 
   const postPhoto = useCallback(
     (param: FilePickerResolveValue) => {
-      setMedia({ file: param.file, fileType: param.type });
+      setInitialMedia({ file: param.file, fileType: param.type });
 
       const createPostURL = `/create`;
       if (isAuthenticated) {
@@ -68,7 +76,7 @@ function CameraScreen() {
         );
       }
     },
-    [router, isAuthenticated, setMedia]
+    [router, isAuthenticated]
   );
 
   const burstCaptureTimer = useTimer({

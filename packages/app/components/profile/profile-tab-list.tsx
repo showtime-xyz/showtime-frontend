@@ -13,12 +13,9 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Card } from "app/components/card";
-import { getLocalFileURI } from "app/components/preview";
-import { MintContext } from "app/context/mint-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
-import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { MutateProvider } from "app/providers/mutate-provider";
 
@@ -48,8 +45,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     ref
   ) {
     const router = useRouter();
-    const { user } = useUser();
-    const { state: mintingState } = useContext(MintContext);
     const { height } = useWindowDimensions();
 
     const { filter } = useContext(FilterContext);
@@ -88,41 +83,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const newData = useMemo(() => {
-      let newData: any = [];
-      if (isBlocked) return newData;
-      if (
-        mintingState.loading &&
-        mintingState.tokenId !== data?.[0]?.token_id &&
-        profileId === user?.data.profile.profile_id
-      ) {
-        //@ts-ignore
-        newData.push({
-          loading: true,
-          chain_name: "polygon",
-          contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
-          token_id: mintingState.tokenId ?? "1",
-          source_url: getLocalFileURI(mintingState.file),
-          mime_type: mintingState.fileType ?? "image/jpeg",
-        });
-      }
-
-      newData = newData.concat(data);
-
-      return newData;
-    }, [
-      data,
-      mintingState.loading,
-      mintingState.tokenId,
-      mintingState.file,
-      mintingState.fileType,
-      isBlocked,
-      profileId,
-      user?.data.profile.profile_id,
-    ]);
-
     const _layoutProvider = useNFTCardsListLayoutProvider({
-      newData,
+      newData: data,
       headerHeight: 0,
     });
 
@@ -132,8 +94,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           return typeof r1 === "string" && typeof r2 === "string"
             ? r1 !== r2
             : r1.nft_id !== r2.nft_id;
-        }).cloneWithRows(newData),
-      [newData]
+        }).cloneWithRows(data),
+      [data]
     );
     const contentWidth = useContentWidth();
 
