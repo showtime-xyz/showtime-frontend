@@ -469,9 +469,9 @@ export const getFileFormData = async (
     // Web Camera -  Data URI
     if (file?.startsWith("data")) {
       //@ts-ignore
-      const file = dataURLtoFile(file, "unknown");
+      const newFile = dataURLtoFile(file, "unknown");
 
-      return file;
+      return newFile;
     }
     // Native - File path string
     else {
