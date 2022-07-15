@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState, useReducer } from "react";
 import { Platform } from "react-native";
 
 import axios from "axios";
@@ -11,17 +11,16 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
-import { MintContext } from "app/context/mint-context";
 import { useBiconomy } from "app/hooks/use-biconomy";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
-import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { getFileMeta } from "app/utilities";
+import { getFileMeta, getPinataToken } from "app/utilities";
 import { isMobileWeb } from "app/utilities";
 
 import { PROFILE_NFTS_QUERY_KEY } from "./api-hooks";
 import { useMatchMutate } from "./use-match-mutate";
+import { useUploadMediaToPinata } from "./use-upload-media-to-pinata";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -166,20 +165,21 @@ export type UseMintNFT = {
   royaltiesPercentage: number;
 };
 
+type SignatureFunctionType = {
+  params: UseMintNFT;
+  nftJsonIpfsHash: string;
+  contractCallData?: string;
+  contract?: ethers.Contract;
+  result: ReturnType<typeof useBiconomy>;
+} | null;
+
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getPinataToken = () => {
-  return showtimeAPIAxios({
-    url: "/v1/pinata/key",
-    method: "POST",
-    data: {},
-  }).then((res) => res.token);
-};
-
 export const useMintNFT = () => {
   const Alert = useAlert();
-  const { state, dispatch } = useContext(MintContext);
+  const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
+
   const snackbar = useSnackbar();
   const { userAddress } = useCurrentUserAddress();
   const router = useRouter();
@@ -188,19 +188,15 @@ export const useMintNFT = () => {
   const matchMutate = useMatchMutate();
   const [signMessageData, setSignMessageData] = useState({
     status: "idle",
-    data: null,
+    data: null as SignatureFunctionType,
   });
-  const shouldShowSignMessage =
-    (signMessageData.status === "should_sign" || state.status === "minting") &&
-    isMobileWeb()
-      ? true
-      : false;
 
   const bottom = Platform.OS === "web" ? insets.bottom : insets.bottom + 64;
 
   const result = useBiconomy();
+  const uploadMedia = useUploadMediaToPinata();
 
-  async function uploadMedia() {
+  async function uploadMediaFn() {
     // Media Upload
     try {
       const fileMetaData = await getFileMeta(state.file);
@@ -219,54 +215,12 @@ export const useMintNFT = () => {
 
       console.log("Received file meta data ", fileMetaData);
 
-      if (fileMetaData) {
+      if (fileMetaData && state.file) {
         dispatch({
           type: "mediaUpload",
           payload: { file: state.file, fileType: fileMetaData.type },
         });
-
-        const pinataToken = await getPinataToken();
-        const formData = new FormData();
-
-        if (typeof state.file === "string") {
-          // Web Camera -  Data URI
-          if (state.file?.startsWith("data")) {
-            const file = dataURLtoFile(state.file, "unknown");
-
-            formData.append("file", file);
-          }
-          // Native - File path string
-          else {
-            formData.append("file", {
-              //@ts-ignore
-              uri: state.file,
-              name: fileMetaData.name,
-              type: fileMetaData.type,
-            });
-          }
-        }
-
-        // Web File Picker - File Object
-        else if (state.file) {
-          formData.append("file", state.file);
-        }
-
-        formData.append(
-          "pinataMetadata",
-          JSON.stringify({
-            name: uuid(),
-          })
-        );
-
-        const mediaIPFSHash = await axios
-          .post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
-            headers: {
-              Authorization: `Bearer ${pinataToken}`,
-              "Content-Type": `multipart/form-data`,
-            },
-          })
-          .then((res: any) => res.data.IpfsHash);
-        console.log("Uploaded file to ipfs ", mediaIPFSHash);
+        const mediaIPFSHash = await uploadMedia(state.file);
         dispatch({ type: "mediaUploadSuccess", payload: { mediaIPFSHash } });
         return mediaIPFSHash;
       }
@@ -279,7 +233,7 @@ export const useMintNFT = () => {
 
   async function uploadNFTJson(params: UseMintNFT) {
     try {
-      let mediaIpfsHash = await uploadMedia();
+      const mediaIpfsHash = await uploadMediaFn();
 
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
@@ -316,91 +270,78 @@ export const useMintNFT = () => {
     }
   }
 
-  // @ts-ignore
-  async function signTransaction({ params, nftJsonIpfsHash, result }) {
-    console.log("** minting: opening wallet for signing **");
+  async function signTransaction(signData: SignatureFunctionType) {
+    if (signData) {
+      const { params, contract, nftJsonIpfsHash, result, contractCallData } =
+        signData;
+      console.log("** minting: opening wallet for signing **");
 
-    if (isMobileWeb()) {
-      setSignMessageData({
-        status: "sign_requested",
-        data: { params, nftJsonIpfsHash, result },
-      });
-    }
-
-    if (result) {
-      const { signer, signerAddress, provider } = result;
-
-      const contract = new ethers.Contract(
-        //@ts-ignore
-        process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-        minterAbi,
-        signer
-      );
-
-      const { data } = await contract.populateTransaction.issueToken(
-        signerAddress,
-        params.editionCount,
-        nftJsonIpfsHash,
-        0,
-        signerAddress,
-        params.royaltiesPercentage * 100
-      );
-
-      dispatch({ type: "minting" });
-
-      const transaction = await provider
-        .send("eth_sendTransaction", [
-          {
-            data,
-            from: signerAddress,
-            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-            signatureType: "EIP712_SIGN",
-          },
-        ])
-        .catch((error: any) => {
-          console.error("eth send transaction failure ", error);
-          throw error;
+      if (isMobileWeb()) {
+        setSignMessageData({
+          status: "sign_requested",
+          data: { params, nftJsonIpfsHash, result },
         });
+      }
 
-      dispatch({
-        type: "transactionInitiated",
-        payload: {
-          transaction,
-        },
-      });
+      if (result) {
+        const { signerAddress, provider } = result;
 
-      provider.once(transaction, (result: any) => {
-        dispatch({
-          type: "mintingSuccess",
-          payload: {
-            tokenId: contract.interface
-              .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-              .toString(),
-            transaction: transaction,
-          },
-        });
-        track("NFT Created");
+        dispatch({ type: "minting" });
 
-        matchMutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
-
-        snackbar?.update({
-          text: "Created! Your NFT will appear in a minute!",
-          iconStatus: "done",
-          bottom,
-          hideAfter: 5000,
-          action: {
-            text: "View",
-            onPress: () => {
-              snackbar.hide();
-              router.push(
-                Platform.OS === "web"
-                  ? `/@${user?.data?.profile?.username ?? userAddress}`
-                  : `/profile`
-              );
+        const transaction = await provider
+          .send("eth_sendTransaction", [
+            {
+              data: contractCallData,
+              from: signerAddress,
+              to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+              signatureType: "EIP712_SIGN",
             },
+          ])
+          .catch((error: any) => {
+            console.error("eth send transaction failure ", error);
+            throw error;
+          });
+
+        dispatch({
+          type: "transactionInitiated",
+          payload: {
+            transaction,
           },
         });
-      });
+
+        provider.once(transaction, (result: any) => {
+          dispatch({
+            type: "mintingSuccess",
+            payload: {
+              tokenId: contract?.interface
+                .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+                .toString(),
+              transaction: transaction,
+            },
+          });
+          track("NFT Created");
+
+          matchMutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
+
+          snackbar?.update({
+            text: "Created! Your NFT will appear in a minute!",
+            iconStatus: "done",
+            bottom,
+            hideAfter: 5000,
+            action: {
+              text: "View",
+              onPress: () => {
+                snackbar.hide();
+                router.push(
+                  Platform.OS === "web"
+                    ? `/@${user?.data?.profile?.username ?? userAddress}`
+                    : `/profile`
+                );
+              },
+            },
+          });
+        });
+      }
     }
   }
 
@@ -414,14 +355,46 @@ export const useMintNFT = () => {
 
     try {
       const nftJsonIpfsHash = await uploadNFTJson(params);
+      if (result) {
+        const { signer, signerAddress } = result;
 
-      if (isMobileWeb()) {
-        setSignMessageData({
-          status: "should_sign",
-          data: { params, nftJsonIpfsHash, result },
-        });
-      } else {
-        signTransaction({ params, nftJsonIpfsHash, result });
+        const contract = new ethers.Contract(
+          //@ts-ignore
+          process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+          minterAbi,
+          signer
+        );
+
+        const { data: contractCallData } =
+          await contract.populateTransaction.issueToken(
+            signerAddress,
+            params.editionCount,
+            nftJsonIpfsHash,
+            0,
+            signerAddress,
+            params.royaltiesPercentage * 100
+          );
+
+        if (isMobileWeb()) {
+          setSignMessageData({
+            status: "should_sign",
+            data: {
+              params,
+              nftJsonIpfsHash,
+              result,
+              contract,
+              contractCallData,
+            },
+          });
+        } else {
+          await signTransaction({
+            params,
+            nftJsonIpfsHash,
+            result,
+            contract,
+            contractCallData,
+          });
+        }
       }
     } catch (error) {
       snackbar?.update({
@@ -449,21 +422,6 @@ export const useMintNFT = () => {
     setMedia,
     signTransaction,
     signMessageData,
-    shouldShowSignMessage,
+    shouldShowSignMessage: signMessageData.status === "should_sign",
   };
 };
-
-function dataURLtoFile(dataurl: string, filename: string) {
-  let arr = dataurl.split(","),
-    //@ts-ignore
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-}
