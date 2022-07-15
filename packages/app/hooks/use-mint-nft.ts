@@ -346,6 +346,11 @@ export const useMintNFT = () => {
   }
 
   async function mintNFT(params: UseMintNFT) {
+    if (Platform.OS !== "web") {
+      router.pop();
+      router.replace("/profile");
+    }
+
     snackbar?.show({
       text: "Creating… This may take a few minutes.",
       iconStatus: "waiting",

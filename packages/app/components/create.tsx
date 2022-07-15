@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -12,7 +11,6 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronUp, Image as ImageIcon } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -20,11 +18,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ConnectButton } from "app/components/connect-button";
+import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { useWallet } from "app/hooks/auth/use-wallet";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMintNFT, UseMintNFT } from "app/hooks/use-mint-nft";
-import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { TextLink } from "app/navigation/link";
@@ -64,18 +61,15 @@ const createNFTValidationSchema = yup.object({
 });
 
 function Create() {
-  const router = useRouter();
-  const { user } = useUser();
   const { web3 } = useWeb3();
-  const { state } = useMintNFT();
   const {
+    state,
     setMedia,
     startMinting,
     signTransaction,
     signMessageData,
     shouldShowSignMessage,
   } = useMintNFT();
-  const { userAddress: address } = useCurrentUserAddress();
   const { connected } = useWallet();
 
   const isSignRequested = signMessageData.status === "sign_requested";
@@ -104,8 +98,6 @@ function Create() {
     },
   });
 
-  //#endregion
-
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
@@ -121,26 +113,6 @@ function Create() {
     state.status === "mintingError";
   const enable = state.status === "idle" || isError;
 
-  useEffect(
-    function redirect() {
-      if (
-        (state.status === "mediaUpload" || state.status === "nftJSONUpload") &&
-        Platform.OS !== "web"
-      ) {
-        // TODO: save the file in the user gallery (if taken from camera)
-        setTimeout(() => {
-          router.pop();
-          router.replace(
-            Platform.OS === "web"
-              ? `/@${user?.data?.profile?.username ?? address}`
-              : `/profile`
-          );
-        }, 1000);
-      }
-    },
-    [state.status, user, address, router]
-  );
-
   // TODO: remove this after imperative login modal API in rainbowkit
   if (!connected) {
     return (
@@ -148,6 +120,41 @@ function Create() {
         <ConnectButton
           handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
         />
+      </View>
+    );
+  }
+
+  if (state.status === "transactionInitiated") {
+    return (
+      <View tw="items-center justify-center">
+        <Spinner />
+        <View tw="h-10" />
+        <Text tw="px-4 text-center text-sm text-black dark:text-white">
+          Your NFT is being minted on Polygon network. Feel free to navigate
+          away from this screen.
+        </Text>
+        <View tw="h-4" />
+        <PolygonScanButton transactionHash={state.transaction} />
+      </View>
+    );
+  }
+
+  if (state.status === "mintingSuccess") {
+    return (
+      <View tw="items-center justify-center">
+        <Text tw="text-6xl">🎉</Text>
+        <View tw="h-8" />
+        <Text tw="text-center text-4xl text-black dark:text-white">
+          Congrats!
+        </Text>
+        <View tw="mt-8 mb-4">
+          <Text tw="font-space-bold my-6 text-center text-lg text-black dark:text-white ">
+            Your NFT has been minted on Showtime! It'll appear in your profile
+            in few seconds.
+          </Text>
+          <View tw="h-8" />
+          <PolygonScanButton transactionHash={state.transaction} />
+        </View>
       </View>
     );
   }
@@ -496,8 +503,6 @@ function Create() {
               : state.status === "mediaUpload" ||
                 state.status === "nftJSONUpload"
               ? "Uploading..."
-              : state.status === "mintingSuccess"
-              ? "Success!"
               : isError
               ? "Failed. Retry"
               : "Minting..."}
