@@ -4,8 +4,7 @@ import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { NFT } from "app/types";
-
-import { getTwitterIntent } from "../utilities";
+import { getTwitterIntent } from "app/utilities";
 
 const findTokenChainName = (chainId: string) =>
   Object.keys(CHAIN_IDENTIFIERS).find(
