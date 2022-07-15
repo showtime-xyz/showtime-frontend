@@ -215,6 +215,12 @@ const NotificationDescription = ({
             ? "liked your comment on "
             : null}
           {notification.type_name === "NFT_SALE" ? "bought " : null}
+          {notification.type_name === "NEW_CREATOR_AIRDROP_FROM_FOLLOWING"
+            ? "created a new drop "
+            : null}
+          {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
+            ? "claimed the drop "
+            : null}
 
           {notification.nft_display_name ? (
             <Link href={notificationInfo.href}>
@@ -331,6 +337,18 @@ export const useNotificationInfo = (notification: NotificationType) => {
       return {
         type: "bought_my_piece",
         icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,
+        href: nftLink,
+      };
+    case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "NEW_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
+        href: nftLink,
+      };
+    case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
         href: nftLink,
       };
     default:
