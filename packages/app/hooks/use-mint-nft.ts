@@ -333,10 +333,10 @@ export const useMintNFT = () => {
         const transaction = await provider
           .send("eth_sendTransaction", [
             {
+              ...populatedTransaction,
               data: contractCallData,
               from: signerAddress,
               to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-              ...populatedTransaction,
               signatureType: "EIP712_SIGN",
             },
           ])
@@ -389,18 +389,6 @@ export const useMintNFT = () => {
   }
 
   async function mintNFT(params: UseMintNFT) {
-    if (Platform.OS !== "web") {
-      router.pop();
-      router.replace("/profile");
-    }
-
-    snackbar?.show({
-      text: "Creating… This may take a few minutes.",
-      iconStatus: "waiting",
-      bottom,
-      disableGestureToClose: true,
-    });
-
     try {
       const nftJsonIpfsHash = await uploadNFTJson(params);
       if (result) {
