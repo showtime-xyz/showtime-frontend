@@ -140,6 +140,28 @@ function Create() {
     );
   }
 
+  if (shouldShowSignMessage) {
+    return (
+      <View tw="flex-1 items-center justify-center p-4">
+        <Text tw="bold py-4 text-center text-base dark:text-gray-400">
+          We need a signature in order to complete minting. This won't cost any
+          gas.
+        </Text>
+        <Button
+          tw={`mt-4 px-8 ${isSignRequested ? "opacity-60" : ""}`}
+          size="regular"
+          variant="primary"
+          disabled={isSignRequested}
+          onPress={() => {
+            signTransaction(signMessageData.data);
+          }}
+        >
+          {isSignRequested ? "Signing..." : "Sign"}
+        </Button>
+      </View>
+    );
+  }
+
   if (state.status === "mintingSuccess") {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -161,6 +183,7 @@ function Create() {
           <Button
             variant="tertiary"
             tw="mt-4"
+            size="regular"
             onPress={() => router.push("/profile")}
           >
             Go to profile
@@ -482,42 +505,22 @@ function Create() {
         </View>
 
         <View tw="mt-8 w-full px-4">
-          {shouldShowSignMessage ? (
-            <View tw="px-2">
-              <Text tw="text-center text-lg dark:text-gray-400">
-                We need a signature in order to complete minting. This won't
-                cost any gas.
-              </Text>
-              <Button
-                tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
-                size="regular"
-                variant="primary"
-                disabled={isSignRequested}
-                onPress={() => {
-                  signTransaction(signMessageData.data);
-                }}
-              >
-                {isSignRequested ? "Signing..." : "Sign Message"}
-              </Button>
-            </View>
-          ) : (
-            <Button
-              variant="primary"
-              size="regular"
-              onPress={handleSubmit(handleSubmitForm)}
-              disabled={!enable}
-              tw={!enable ? "opacity-60" : ""}
-            >
-              {state.status === "idle"
-                ? "Create"
-                : state.status === "mediaUpload" ||
-                  state.status === "nftJSONUpload"
-                ? "Uploading..."
-                : isError
-                ? "Failed. Retry"
-                : "Minting..."}
-            </Button>
-          )}
+          <Button
+            variant="primary"
+            size="regular"
+            onPress={handleSubmit(handleSubmitForm)}
+            disabled={!enable}
+            tw={!enable ? "opacity-60" : ""}
+          >
+            {state.status === "idle"
+              ? "Create"
+              : state.status === "mediaUpload" ||
+                state.status === "nftJSONUpload"
+              ? "Uploading..."
+              : isError
+              ? "Failed. Retry"
+              : "Minting..."}
+          </Button>
         </View>
       </CreateScrollView>
     </View>
