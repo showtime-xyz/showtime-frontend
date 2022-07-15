@@ -7,7 +7,6 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
@@ -18,23 +17,12 @@ import {
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
 import type { Profile } from "app/types";
-
-const MenuItemIcon = ({ Icon }) => {
-  return (
-    <DropdownMenuItemIcon>
-      <Icon
-        width="1em"
-        height="1em"
-        color={tw.style("bg-gray-500")?.backgroundColor as string}
-      />
-    </DropdownMenuItemIcon>
-  );
-};
 
 type Props = {
   user: Profile;
