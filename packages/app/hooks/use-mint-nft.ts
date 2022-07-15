@@ -3,6 +3,8 @@ import { Platform } from "react-native";
 
 import axios from "axios";
 import { ethers } from "ethers";
+import { providers } from "ethers";
+import { Deferrable, resolveProperties } from "ethers/lib/utils";
 import { v4 as uuid } from "uuid";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -23,6 +25,27 @@ import { useMatchMutate } from "./use-match-mutate";
 import { useUploadMediaToPinata } from "./use-upload-media-to-pinata";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
+
+async function populateTransaction(
+  provider: providers.Provider,
+  deferrableTransaction: Deferrable<providers.TransactionRequest>
+): Promise<providers.TransactionRequest> {
+  const resolvedTransaction = await resolveProperties(deferrableTransaction);
+
+  const to = resolvedTransaction.to
+    ? await provider.resolveName(resolvedTransaction.to)
+    : undefined;
+
+  const transaction = {
+    ...resolvedTransaction,
+    ...(to && { to }),
+  };
+
+  const gasLimit =
+    transaction.gasLimit ?? (await provider.estimateGas(transaction));
+
+  return { ...transaction, gasLimit };
+}
 
 export type MintNFTStatus =
   | "idle"
@@ -50,7 +73,7 @@ export type MintNFTType = {
   fileType?: string;
 };
 
-export const initialMintNFTState: MintNFTType = {
+let initialMintNFTState: MintNFTType = {
   status: "idle" as MintNFTStatus,
   mediaIPFSHash: undefined,
   nftIPFSHash: undefined,
@@ -59,6 +82,14 @@ export const initialMintNFTState: MintNFTType = {
   file: undefined,
   fileType: undefined,
   loading: false,
+};
+
+export const setInitialMedia = (media: { file: any; fileType?: string }) => {
+  initialMintNFTState = {
+    ...initialMintNFTState,
+    file: media.file,
+    fileType: media.fileType,
+  };
 };
 
 export type ActionPayload = {
@@ -170,6 +201,7 @@ type SignatureFunctionType = {
   nftJsonIpfsHash: string;
   contractCallData?: string;
   contract?: ethers.Contract;
+  populatedTransaction?: ethers.providers.TransactionRequest;
   result: ReturnType<typeof useBiconomy>;
 } | null;
 
@@ -272,8 +304,14 @@ export const useMintNFT = () => {
 
   async function signTransaction(signData: SignatureFunctionType) {
     if (signData) {
-      const { params, contract, nftJsonIpfsHash, result, contractCallData } =
-        signData;
+      const {
+        params,
+        // populatedTransaction,
+        contract,
+        nftJsonIpfsHash,
+        result,
+        contractCallData,
+      } = signData;
       console.log("** minting: opening wallet for signing **");
 
       if (isMobileWeb()) {
@@ -285,12 +323,19 @@ export const useMintNFT = () => {
 
       if (result) {
         const { signerAddress, provider } = result;
+        // const signer = provider.getSigner(signerAddress);
 
         dispatch({ type: "minting" });
 
+        // await provider.send
+        // const transaction = await provider.sendTransaction({
+        //   ...populatedTransaction,
+        //   // signatureType: "EIP712_SIGN",
+        // });
         const transaction = await provider
           .send("eth_sendTransaction", [
             {
+              // ...populatedTransaction,
               data: contractCallData,
               from: signerAddress,
               to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
@@ -361,7 +406,7 @@ export const useMintNFT = () => {
     try {
       const nftJsonIpfsHash = await uploadNFTJson(params);
       if (result) {
-        const { signer, signerAddress } = result;
+        const { signer, signerAddress, provider } = result;
 
         const contract = new ethers.Contract(
           //@ts-ignore
@@ -380,6 +425,12 @@ export const useMintNFT = () => {
             params.royaltiesPercentage * 100
           );
 
+        const populatedTransaction = await populateTransaction(provider, {
+          data: contractCallData,
+          from: signerAddress,
+          to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+        });
+
         if (isMobileWeb()) {
           setSignMessageData({
             status: "should_sign",
@@ -389,6 +440,7 @@ export const useMintNFT = () => {
               result,
               contract,
               contractCallData,
+              populatedTransaction,
             },
           });
         } else {
@@ -398,6 +450,7 @@ export const useMintNFT = () => {
             result,
             contract,
             contractCallData,
+            populatedTransaction,
           });
         }
       }
