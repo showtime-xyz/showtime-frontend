@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 
+import { useFocusEffect } from "@react-navigation/native";
 import { useTimer } from "use-timer";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -27,6 +28,14 @@ function CameraScreen() {
   const [photos, setPhotos] = useState([]);
   const [canPop, setCanPop] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Reset state on focus
+  useFocusEffect(
+    useCallback(() => {
+      setPhotos([]);
+      setIsLoading(false);
+    }, [])
+  );
 
   const postPhoto = useCallback(
     (param: FilePickerResolveValue) => {

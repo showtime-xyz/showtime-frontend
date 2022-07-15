@@ -126,10 +126,10 @@ function Create() {
 
   if (state.status === "transactionInitiated") {
     return (
-      <View tw="items-center justify-center">
+      <View tw="flex-1 items-center justify-center">
         <Spinner />
         <View tw="h-10" />
-        <Text tw="text-md px-4 text-center text-black dark:text-white">
+        <Text tw="px-5 text-center text-base text-black dark:text-white">
           Your NFT is being minted on Polygon network. Feel free to navigate
           away from this screen.
         </Text>
