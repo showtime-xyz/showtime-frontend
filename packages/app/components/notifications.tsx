@@ -13,8 +13,7 @@ import {
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner/index";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,10 +24,10 @@ import {
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { TextLink } from "app/navigation/link";
@@ -40,7 +39,7 @@ export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
   const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
@@ -102,7 +101,7 @@ export const Notifications = () => {
         data={data}
         style={Platform.select({
           native: { height: flatListHeight },
-          default: tw.style("md:max-w-sm"),
+          default: {},
         })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
@@ -110,6 +109,10 @@ export const Notifications = () => {
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
+        contentContainerStyle={Platform.select({
+          web: tw.style("md:max-w-sm"),
+          default: {},
+        })}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
@@ -160,7 +163,7 @@ const NotificationDescription = ({
   const router = useRouter();
   if (actors && actors.length > 0) {
     return (
-      <View>
+      <View tw="flex-1">
         <Text
           tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"

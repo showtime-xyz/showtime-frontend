@@ -18,11 +18,11 @@ import { SwipeList } from "app/components/swipe-list";
 import { FeedContext } from "app/context/feed-context";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { Haptics } from "app/lib/haptics";
 import { PagerView } from "app/lib/pager-view";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 
@@ -142,7 +142,7 @@ const HeaderFeed = () => {
 
 const FollowingFeed = () => {
   const queryState = useFeed("/following");
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
 
   return (
     <MutateProvider mutate={queryState.updateItem}>
@@ -157,7 +157,7 @@ const FollowingFeed = () => {
 
 const AlgorithmicFeed = () => {
   const queryState = useFeed("");
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
 
   return (
     <MutateProvider mutate={queryState.updateItem}>
