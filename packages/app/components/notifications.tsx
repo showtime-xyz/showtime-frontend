@@ -4,7 +4,6 @@ import { FlatList, Platform, useWindowDimensions } from "react-native";
 import { Link } from "solito/link";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   HeartFilled,
   MarketFilled,
@@ -44,7 +43,6 @@ export const Notifications = () => {
   const bottomBarHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
-  const { colorScheme } = useColorScheme();
   const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState([]);
@@ -137,7 +135,7 @@ const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
       {notificationInfo.icon}
       <View tw="mx-2">
         <Link href={notificationInfo.href}>
-          <Avatar url={notification.actors?.[0].img_url} size={24} />
+          <Avatar url={notification.img_url} size={24} />
         </Link>
       </View>
       <NotificationDescription
