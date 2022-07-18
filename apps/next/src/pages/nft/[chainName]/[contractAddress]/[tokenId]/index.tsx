@@ -13,7 +13,11 @@ export async function getServerSideProps(context) {
     );
 
     const nft = res.data?.data?.item as NFT;
-    const imageUrl = getMediaUrl({ nft, stillPreview: false });
+    const imageUrl = getMediaUrl({
+      nft,
+      stillPreview: nft?.mime_type?.startsWith("video"),
+    });
+
     if (nft) {
       return {
         props: {
