@@ -12,7 +12,9 @@ import {
   PlusFilled,
 } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner/index";
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -20,6 +22,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
+  Actor,
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
@@ -56,15 +59,13 @@ export const Notifications = () => {
 
   const ListFooter = useCallback(() => {
     return isLoadingMore ? (
-      <Skeleton
-        colorMode={colorScheme as "dark" | "light"}
-        height={bottomBarHeight}
-        width="100%"
-      />
+      <View tw="items-center">
+        <Spinner size="small" />
+      </View>
     ) : (
       <View tw={`h-${bottomBarHeight ?? 0}px`} />
     );
-  }, [isLoadingMore, bottomBarHeight, colorScheme]);
+  }, [isLoadingMore, bottomBarHeight]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
@@ -103,7 +104,7 @@ export const Notifications = () => {
         data={data}
         style={Platform.select({
           native: { height: flatListHeight },
-          default: {},
+          default: tw.style("md:max-w-sm"),
         })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
@@ -131,13 +132,12 @@ export const Notifications = () => {
 
 const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   const notificationInfo = useNotificationInfo(notification);
-
   return (
     <View tw="flex-row items-center p-4">
       {notificationInfo.icon}
       <View tw="mx-2">
         <Link href={notificationInfo.href}>
-          <Avatar url={notification.img_url} size={24} />
+          <Avatar url={notification.actors?.[0].img_url} size={24} />
         </Link>
       </View>
       <NotificationDescription
@@ -159,7 +159,7 @@ const NotificationDescription = ({
   setUsers: any;
 }) => {
   const actors = notification.actors;
-
+  const router = useRouter();
   if (actors && actors.length > 0) {
     return (
       <View>
@@ -223,11 +223,14 @@ const NotificationDescription = ({
             : null}
 
           {notification.nft_display_name ? (
-            <Link href={notificationInfo.href}>
-              <Text tw="text-13 font-bold text-black dark:text-white">
-                {notification.nft_display_name}
-              </Text>
-            </Link>
+            <Text
+              onPress={() => {
+                router.push(notificationInfo.href);
+              }}
+              tw="text-13 font-bold text-black dark:text-white"
+            >
+              {notification.nft_display_name}
+            </Text>
           ) : null}
         </Text>
         <View tw="h-1" />
@@ -243,7 +246,7 @@ const NotificationDescription = ({
   return null;
 };
 
-const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
+const ActorLink = ({ actor }: { actor: Actor }) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}

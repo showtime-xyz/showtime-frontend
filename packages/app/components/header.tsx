@@ -38,7 +38,11 @@ import {
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import { breakpoints } from "design-system/theme";
+import {
+  breakpoints,
+  CARD_DARK_SHADOW,
+  CARD_LIGHT_SHADOW,
+} from "design-system/theme";
 
 import { withColorScheme } from "./memo-with-theme";
 
@@ -180,9 +184,12 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 overflow-hidden rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
+          tw="mt-2 overflow-hidden rounded-3xl bg-white dark:bg-black "
           style={Platform.select({
-            web: { maxHeight: "calc(50vh - 64px)" },
+            web: {
+              maxHeight: "calc(50vh - 64px)",
+              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+            },
             default: {},
           })}
         >
