@@ -1,8 +1,8 @@
 diff --git a/node_modules/expo-av/src/Video.tsx b/node_modules/expo-av/src/Video.tsx
-index bd371f2..dad3cfd 100644
+index fbc5f1b..88c8056 100644
 --- a/node_modules/expo-av/src/Video.tsx
 +++ b/node_modules/expo-av/src/Video.tsx
-@@ -313,6 +313,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
+@@ -334,6 +334,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
          ...Object.keys(status),
        ]),
        style: StyleSheet.flatten([_STYLES.base, this.props.style]),
@@ -10,7 +10,7 @@ index bd371f2..dad3cfd 100644
        source,
        resizeMode: nativeResizeMode,
        status,
-@@ -326,7 +327,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
+@@ -347,7 +348,7 @@ class Video extends React.Component<VideoProps, VideoState> implements Playback
  
      return (
        <View style={nativeProps.style} pointerEvents="box-none">
@@ -20,7 +20,7 @@ index bd371f2..dad3cfd 100644
        </View>
      );
 diff --git a/node_modules/expo-av/src/Video.types.ts b/node_modules/expo-av/src/Video.types.ts
-index 6cac464..1c0174d 100644
+index cf52ae0..8fd524e 100644
 --- a/node_modules/expo-av/src/Video.types.ts
 +++ b/node_modules/expo-av/src/Video.types.ts
 @@ -1,5 +1,5 @@
@@ -30,19 +30,19 @@ index 6cac464..1c0174d 100644
  
  import {
    AVPlaybackNativeSource,
-@@ -252,6 +252,7 @@ export type VideoProps = {
+@@ -242,6 +242,7 @@ export type VideoProps = {
     * @hidden
     */
    rotation?: number;
-+  videoStyle?:StyleProp<ViewStyle>
++  videoStyle?: StyleProp<ViewStyle>;
  } & ViewProps;
  
  /**
-@@ -268,6 +269,7 @@ export type VideoNativeProps = {
+@@ -258,6 +259,7 @@ export type VideoNativeProps = {
    onReadyForDisplay?: (event: { nativeEvent: VideoReadyForDisplayEvent }) => void;
    onFullscreenUpdate?: (event: { nativeEvent: VideoFullscreenUpdateEvent }) => void;
    useNativeControls?: boolean;
-+  videoStyle?: StyleProp<ViewStyle>
++  videoStyle?: StyleProp<ViewStyle>;
  } & ViewProps;
  
  // @docsMissing
