@@ -1,6 +1,7 @@
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   DropdownMenuContent,
@@ -9,7 +10,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
-  DropdownMenuItemIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
@@ -24,23 +24,12 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 
 import { breakpoints } from "design-system/theme";
-
-const MenuItemIcon = ({ Icon }) => {
-  return (
-    <DropdownMenuItemIcon>
-      <Icon
-        width="1em"
-        height="1em"
-        color={tw.style("bg-gray-500")?.backgroundColor as string}
-      />
-    </DropdownMenuItemIcon>
-  );
-};
 
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
@@ -57,20 +46,16 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         {type === "profile" ? (
-          <View
-            tw="flex h-12 flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900"
-            style={{
-              // @ts-ignore
-              cursor: "pointer",
-            }}
-          >
-            <Avatar url={user?.data?.profile?.img_url} />
-            {isWeb && isMdWidth && user?.data?.profile?.username ? (
-              <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
-                {`@${user.data.profile.username}`}
-              </Text>
-            ) : null}
-          </View>
+          <Button variant="tertiary" tw="p-0">
+            <View tw="flex h-12 flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
+              <Avatar url={user?.data?.profile?.img_url} />
+              {isWeb && isMdWidth && user?.data?.profile?.username ? (
+                <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
+                  {`@${user.data.profile.username}`}
+                </Text>
+              ) : null}
+            </View>
+          </Button>
         ) : (
           <View tw="h-8 w-8 items-center justify-center rounded-full">
             <Settings

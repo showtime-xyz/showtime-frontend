@@ -4,10 +4,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
+import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+
 import { linking } from "app/navigation/linking";
 import { ThemeProvider } from "app/providers/theme-provider";
 
-import { SafeAreaProvider } from "design-system/safe-area";
+import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { ToastProvider } from "design-system/toast";
@@ -44,13 +46,15 @@ export const decorators = [
         <SafeAreaProvider>
           <ThemeProvider>
             <ToastProvider>
-              <SnackbarProvider>
-                <NavigationContainer linking={linking}>
-                  <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Storybook" component={Story} />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </SnackbarProvider>
+              <AlertProvider>
+                <SnackbarProvider>
+                  <NavigationContainer linking={linking}>
+                    <Stack.Navigator screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="Storybook" component={Story} />
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </SnackbarProvider>
+              </AlertProvider>
             </ToastProvider>
           </ThemeProvider>
         </SafeAreaProvider>

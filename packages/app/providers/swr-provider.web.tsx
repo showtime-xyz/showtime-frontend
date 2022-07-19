@@ -33,7 +33,8 @@ export const SWRProvider = ({
       value={{
         provider: isServer ? () => new Map() : localStorageProvider,
         onError: (err) => {
-          if (err?.message) {
+          if (err?.message && __DEV__) {
+            console.error(err);
             toast?.show({
               message: err.message,
               hideAfter: 4000,

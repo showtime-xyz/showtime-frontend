@@ -1,6 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, ComponentType } from "react";
 import { Platform } from "react-native";
 
+import { SvgProps } from "react-native-svg";
+
+import { Button } from "@showtime-xyz/universal.button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -22,6 +25,7 @@ import {
   Refresh,
   Clock,
   Menu,
+  Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -40,13 +44,14 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
-const MenuItemIcon = ({ Icon }) => {
+const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
     <DropdownMenuItemIcon>
       <Icon
         width="1em"
         height="1em"
         color={tw.style("bg-gray-500")?.backgroundColor as string}
+        {...rest}
       />
     </DropdownMenuItemIcon>
   );
@@ -80,7 +85,7 @@ function NFTDropdown({
   const nft = data?.data.item;
 
   const isCreatorDrop = nft?.creator_airdrop_edition_address;
-  const shareNFT = useShareNFT();
+  const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
@@ -143,13 +148,16 @@ function NFTDropdown({
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <MoreHorizontal
-          color={
-            tw.style("bg-gray-600 dark:bg-gray-400")?.backgroundColor as string
-          }
-          width={24}
-          height={24}
-        />
+        <Button variant="text" tw="p-0" iconOnly={true}>
+          <MoreHorizontal
+            color={
+              tw.style("bg-gray-600 dark:bg-gray-400")
+                ?.backgroundColor as string
+            }
+            width={24}
+            height={24}
+          />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>
@@ -174,16 +182,27 @@ function NFTDropdown({
           <MenuItemIcon Icon={Clock} />
           <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
+        {shouldEnableSharing && (
+          <>
+            {!isShareAPIAvailable && (
+              <DropdownMenuItem
+                onSelect={() => shareNFTOnTwitter(nft)}
+                key="share-twitter"
+              >
+                <MenuItemIcon Icon={Twitter} />
 
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-            <MenuItemIcon Icon={Copy} />
+                <DropdownMenuItemTitle>Share on Twitter</DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+              <MenuItemIcon Icon={Copy} />
 
-            <DropdownMenuItemTitle>
-              {isShareAPIAvailable ? "Share" : "Copy Link"}
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        ) : null}
+              <DropdownMenuItemTitle>
+                {isShareAPIAvailable ? "Share" : "Copy Link"}
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </>
+        )}
 
         {!isCreatorDrop && (
           <DropdownMenuItem

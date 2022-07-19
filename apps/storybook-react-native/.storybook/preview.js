@@ -3,9 +3,11 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDeviceContext } from "twrnc";
 
+import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+
 import { ThemeProvider } from "app/providers/theme-provider";
 
-import { SafeAreaProvider } from "design-system/safe-area";
+import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
 import { ToastProvider } from "design-system/toast";
@@ -45,13 +47,15 @@ export const decorators = [
           <ThemeProvider>
             <SafeAreaProvider>
               <ToastProvider>
-                <SnackbarProvider>
-                  <MainAxisCenter>
-                    <FontsLoader>
-                      <Story />
-                    </FontsLoader>
-                  </MainAxisCenter>
-                </SnackbarProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <MainAxisCenter>
+                      <FontsLoader>
+                        <Story />
+                      </FontsLoader>
+                    </MainAxisCenter>
+                  </SnackbarProvider>
+                </AlertProvider>
               </ToastProvider>
             </SafeAreaProvider>
           </ThemeProvider>

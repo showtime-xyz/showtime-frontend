@@ -35,9 +35,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { track } from "app/lib/analytics";
 import { Haptics } from "app/lib/haptics";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useIsFocused } from "app/lib/react-navigation/native";
 
 // Multi camera on Android not yet supported by CameraX
@@ -76,7 +76,7 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = usePlatformBottomHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);

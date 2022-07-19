@@ -67,9 +67,9 @@ const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
-  fetchMore: () => void;
-  isRefreshing: boolean;
-  refresh: () => void;
+  fetchMore?: () => void;
+  isRefreshing?: boolean;
+  refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
   listId?: number;
@@ -358,7 +358,7 @@ export const FeedItem = memo(
                 </Suspense>
               </View>
               <Description nft={nft} />
-              <View tw="item-center flex-row justify-between px-4">
+              <View tw="flex-row items-center justify-between px-4">
                 <Creator nft={nft} />
                 <Owner nft={nft} price={false} />
               </View>
@@ -476,7 +476,7 @@ const NFTDetails = ({
   edition?: CreatorEditionResponse;
   listId?: number;
 }) => {
-  const shareNFT = useShareNFT();
+  const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   return (
@@ -504,27 +504,18 @@ const NFTDetails = ({
           </View>
 
           <View tw="flex-row">
-            {Platform.OS !== "ios" ? (
-              <>
-                <Pressable onPress={() => shareNFT(nft)}>
-                  <Share
-                    height={22}
-                    width={22}
-                    // @ts-ignore
-                    color={
-                      tw.style("bg-gray-900 dark:bg-white").backgroundColor
-                    }
-                  />
-                </Pressable>
-                <View tw="w-8" />
-              </>
-            ) : null}
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown
-                nft={nft}
-                shouldEnableSharing={false}
-                listId={listId}
+            <Pressable onPress={() => shareNFT(nft)}>
+              <Share
+                height={22}
+                width={22}
+                // @ts-ignore
+                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
               />
+            </Pressable>
+            <View tw="w-8" />
+
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown nft={nft} listId={listId} />
             </Suspense>
           </View>
         </View>

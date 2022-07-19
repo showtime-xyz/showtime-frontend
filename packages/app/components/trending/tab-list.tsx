@@ -4,6 +4,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
+import { TabFallback } from "../error-boundary/tab-fallback";
 import { TrendingContext } from "./context";
 import { CreatorsList } from "./creators-list";
 import { NFTSList } from "./nfts-list";
@@ -17,8 +18,8 @@ export type TrendingTabListProps = {
 };
 
 const LIST_MAP = new Map([
-  [0, CreatorsList],
-  [1, NFTSList],
+  [0, NFTSList],
+  [1, CreatorsList],
 ]);
 
 export const TabListContainer = forwardRef<
@@ -28,7 +29,9 @@ export const TabListContainer = forwardRef<
   const selected = useContext(TrendingContext);
   const List = useMemo(() => LIST_MAP.get(selected[index]), [index, selected]);
   return (
-    <ErrorBoundary>
+    <ErrorBoundary
+      renderFallback={(props) => <TabFallback {...props} index={index} />}
+    >
       <Suspense fallback={<TabSpinner index={index} />}>
         {List && <List days={days} index={index} ref={ref} />}
       </Suspense>

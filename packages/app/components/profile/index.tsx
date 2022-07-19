@@ -5,7 +5,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,33 +22,33 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { HeaderTabView } from "design-system/tab-view/index";
 import { Route } from "design-system/tab-view/src/types";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
+import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
+import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
 import { Profile404 } from "./profile-404";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
-const HEADER_LIGHT_SHADOW =
-  "0px 2px 4px rgba(0, 0, 0, 0.05), 0px 4px 8px rgba(0, 0, 0, 0.05)";
-const HEADER_DARK_SHADOW =
-  "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)";
+export type ProfileScreenProps = {
+  username: string;
+};
 
-const ProfileScreen = ({ username }: { username: string | null }) => {
-  return <Profile address={username} />;
+const ProfileScreen = ({ username }: ProfileScreenProps) => {
+  return <Profile username={username} />;
 };
 
 type Filter = typeof defaultFilters;
 
-const Profile = ({ address }: { address: string | null }) => {
+const Profile = ({ username }: ProfileScreenProps) => {
   const {
     data: profileData,
     isError,
     isLoading,
-    refresh,
-  } = useUserProfile({ address });
-  const router = useRouter();
+    mutate,
+  } = useUserProfile({ address: username });
 
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
@@ -57,35 +56,14 @@ const Profile = ({ address }: { address: string | null }) => {
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-  /**
-   * default tab index.
-   * if Created list = 0, it should go to the Owned section directly.
-   * */
-  const defaultIndex = useMemo(() => {
-    if ((router.query as any)?.tab) return (router.query as any)?.tab;
-    const createdIndex =
-      data?.tabs.findIndex((item) => item.type === "created") ?? 0;
-    const ownedIndex =
-      data?.tabs.findIndex((item) => item.type === "owned") ?? 0;
-    if (ownedIndex === createdIndex || createdIndex === -1 || ownedIndex === -1)
-      return 0;
-    const createdCount = data?.tabs[createdIndex].displayed_count ?? 0;
-    const ownedCount = data?.tabs[ownedIndex].displayed_count ?? 0;
-    return createdCount > 0
-      ? createdIndex
-      : ownedCount > 0
-      ? ownedIndex
-      : createdIndex;
-  }, [data?.tabs, router]);
-  const routes = useMemo(
-    () =>
-      data?.tabs?.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
-        key: item?.name,
-        index,
-      })) ?? [],
-    [data]
-  );
+
+  const routes =
+    data?.tabs.map((item, index) => ({
+      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
+      key: item?.name,
+      index,
+    })) ?? [];
+
   const {
     index,
     setIndex,
@@ -93,7 +71,11 @@ const Profile = ({ address }: { address: string | null }) => {
     isRefreshing,
     setTabRefs,
     currentTab,
-  } = useTabState<ProfileTabListRef>(routes, { defaultIndex });
+  } = useTabState<ProfileTabListRef>(routes, {
+    defaultIndex: data?.tabs.findIndex(
+      (item) => item.type === data?.default_tab_type
+    ),
+  });
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
 
@@ -117,11 +99,11 @@ const Profile = ({ address }: { address: string | null }) => {
   );
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    await refresh();
+    await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
     setIsRefreshing(false);
-  }, [currentTab, refresh, setIsRefreshing]);
+  }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
     ({
@@ -130,7 +112,12 @@ const Profile = ({ address }: { address: string | null }) => {
       route: Route;
     }) => {
       return (
-        <ErrorBoundary key={`ProfileTabList-${routeIndex}`}>
+        <ErrorBoundary
+          renderFallback={(props) => (
+            <TabFallback {...props} index={routeIndex} />
+          )}
+          key={`ProfileTabList-${routeIndex}`}
+        >
           <Suspense fallback={<TabSpinner index={routeIndex} />}>
             {data?.tabs[routeIndex] && (
               <ProfileTabList
@@ -159,7 +146,7 @@ const Profile = ({ address }: { address: string | null }) => {
   }, [contentWidth, width]);
 
   const headerShadow = useMemo(() => {
-    return isDark ? HEADER_DARK_SHADOW : HEADER_LIGHT_SHADOW;
+    return isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW;
   }, [isDark]);
 
   const renderHeader = useCallback(() => {
@@ -179,7 +166,7 @@ const Profile = ({ address }: { address: string | null }) => {
         <View tw="web:max-w-screen-xl w-full">
           {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
           <ProfileTop
-            address={address}
+            address={username}
             animationHeaderPosition={animationHeaderPosition}
             animationHeaderHeight={animationHeaderHeight}
             isBlocked={isBlocked}
@@ -195,7 +182,7 @@ const Profile = ({ address }: { address: string | null }) => {
     data?.tabs?.length,
     headerShadow,
     headerHeight,
-    address,
+    username,
     animationHeaderPosition,
     animationHeaderHeight,
     isBlocked,
@@ -241,7 +228,7 @@ const Profile = ({ address }: { address: string | null }) => {
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative my-2 w-full flex-row items-center justify-between px-4 md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {data?.tabs[index]?.displayed_count} ITEMS
               </Text>

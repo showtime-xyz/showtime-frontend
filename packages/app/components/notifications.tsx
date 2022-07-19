@@ -4,7 +4,6 @@ import { FlatList, Platform, useWindowDimensions } from "react-native";
 import { Link } from "solito/link";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   HeartFilled,
   MarketFilled,
@@ -12,21 +11,23 @@ import {
   PlusFilled,
 } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
+  Actor,
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { TextLink } from "app/navigation/link";
@@ -38,10 +39,9 @@ export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
-  const { colorScheme } = useColorScheme();
   const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState([]);
@@ -56,15 +56,13 @@ export const Notifications = () => {
 
   const ListFooter = useCallback(() => {
     return isLoadingMore ? (
-      <Skeleton
-        colorMode={colorScheme as "dark" | "light"}
-        height={bottomBarHeight}
-        width="100%"
-      />
+      <View tw="items-center">
+        <Spinner size="small" />
+      </View>
     ) : (
       <View tw={`h-${bottomBarHeight ?? 0}px`} />
     );
-  }, [isLoadingMore, bottomBarHeight, colorScheme]);
+  }, [isLoadingMore, bottomBarHeight]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
@@ -111,6 +109,10 @@ export const Notifications = () => {
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
+        contentContainerStyle={Platform.select({
+          web: tw.style("md:max-w-sm"),
+          default: {},
+        })}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
@@ -131,7 +133,6 @@ export const Notifications = () => {
 
 const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   const notificationInfo = useNotificationInfo(notification);
-
   return (
     <View tw="flex-row items-center p-4">
       {notificationInfo.icon}
@@ -159,10 +160,10 @@ const NotificationDescription = ({
   setUsers: any;
 }) => {
   const actors = notification.actors;
-
+  const router = useRouter();
   if (actors && actors.length > 0) {
     return (
-      <View>
+      <View tw="flex-1">
         <Text
           tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
@@ -215,13 +216,22 @@ const NotificationDescription = ({
             ? "liked your comment on "
             : null}
           {notification.type_name === "NFT_SALE" ? "bought " : null}
+          {notification.type_name === "NEW_CREATOR_AIRDROP_FROM_FOLLOWING"
+            ? "created a new drop "
+            : null}
+          {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
+            ? "claimed the drop "
+            : null}
 
           {notification.nft_display_name ? (
-            <Link href={notificationInfo.href}>
-              <Text tw="text-13 font-bold text-black dark:text-white">
-                {notification.nft_display_name}
-              </Text>
-            </Link>
+            <Text
+              onPress={() => {
+                router.push(notificationInfo.href);
+              }}
+              tw="text-13 font-bold text-black dark:text-white"
+            >
+              {notification.nft_display_name}
+            </Text>
           ) : null}
         </Text>
         <View tw="h-1" />
@@ -237,7 +247,7 @@ const NotificationDescription = ({
   return null;
 };
 
-const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
+const ActorLink = ({ actor }: { actor: Actor }) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
@@ -331,6 +341,18 @@ export const useNotificationInfo = (notification: NotificationType) => {
       return {
         type: "bought_my_piece",
         icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,
+        href: nftLink,
+      };
+    case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "NEW_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
+        href: nftLink,
+      };
+    case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
         href: nftLink,
       };
     default:

@@ -81,7 +81,7 @@ const buyNFTReducer = (
 
 export const useBuyNFT = () => {
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
   const signTypedDataAsync = useSignTypedData();
   const { userAddress } = useCurrentUserAddress();
 
@@ -90,7 +90,6 @@ export const useBuyNFT = () => {
     if (Platform.OS !== "web") return;
 
     dispatch({ type: "loading" });
-    const result = await getBiconomySigner();
     if (result) {
       const { signer, signerAddress, provider } = result;
 

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useImperativeHandle, forwardRef } from "react";
+import { useCallback, useMemo, forwardRef } from "react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
@@ -16,21 +16,14 @@ import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 const GAP_BETWEEN_ITEMS = 1;
 
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
-  function NFTSList({ days, index }, ref) {
+  function NFTSList({ days, index }) {
     const router = useRouter();
-    const { data, isLoadingMore, refresh, fetchMore } = useTrendingNFTS({
+    const { data } = useTrendingNFTS({
       days,
     });
-    useImperativeHandle(
-      ref,
-      () => ({
-        refresh,
-      }),
-      [refresh]
-    );
     const ListFooterComponent = useCallback(
-      () => <ListFooter isLoading={isLoadingMore} />,
-      [isLoadingMore]
+      () => <ListFooter isLoading={false} />,
+      []
     );
 
     const numColumns = 3;
@@ -53,12 +46,12 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
             numColumns={numColumns}
             onPress={() =>
               router.push(
-                `/list?initialScrollIndex=${
-                  // index - 1 because header takes the initial index!
-                  index - 1
-                }&days=${days}&type=trendingNFTs`
+                `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
               )
             }
+            hrefProps={{
+              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+            }}
           />
         );
       },
@@ -67,15 +60,16 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
 
     return (
       <View tw="flex-1 bg-white dark:bg-black">
-        <TabRecyclerList
-          layoutProvider={_layoutProvider}
-          dataProvider={dataProvider}
-          rowRenderer={_rowRenderer}
-          style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
-          onEndReached={fetchMore}
-          renderFooter={ListFooterComponent}
-          index={index}
-        />
+        {dataProvider && dataProvider.getSize() > 0 && (
+          <TabRecyclerList
+            layoutProvider={_layoutProvider}
+            dataProvider={dataProvider}
+            rowRenderer={_rowRenderer}
+            style={{ margin: -GAP_BETWEEN_ITEMS }}
+            renderFooter={ListFooterComponent}
+            index={index}
+          />
+        )}
       </View>
     );
   }

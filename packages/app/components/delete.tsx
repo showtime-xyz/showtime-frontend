@@ -16,8 +16,10 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components//connect-button";
 import { Owner } from "app/components/card";
 import { Media } from "app/components/media";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
@@ -36,6 +38,7 @@ function Delete({ nft }: { nft: NFT }) {
   const { startBurning, state } = useBurnNFT();
   const { userAddress } = useCurrentUserAddress();
   const { alert } = useAlert();
+  const { connected } = useWallet();
 
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
     startBurning({ ...values, tokenId: nft.token_id });
@@ -80,6 +83,17 @@ function Delete({ nft }: { nft: NFT }) {
 
   // enable submission only on idle or error state.
   const enable = state.status === "idle" || state.status === "burningError";
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
 
   if (state.status === "transactionInitiated") {
     return (
@@ -129,14 +143,14 @@ function Delete({ nft }: { nft: NFT }) {
     );
   }
 
-  const handleBurnNFT = () => {
-    if (nft?.creator_address !== userAddress) {
+  const handleBurnNFT = (e: any) => {
+    if (nft?.owner_address_nonens !== userAddress) {
       alert(
         "Switch Wallet",
-        "Please log in with the wallet that created this NFT."
+        "Please log in with the wallet that owns this NFT."
       );
     } else {
-      handleSubmit(handleSubmitForm);
+      handleSubmit(handleSubmitForm)(e);
     }
   };
 

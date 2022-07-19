@@ -29,12 +29,17 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   const navigateToLogin = useNavigateToLogin();
 
   return (
-    <View tw={`items-center justify-center p-4 ${tw}`}>
-      <Text tw="font-space-bold text-lg text-gray-900 dark:text-gray-100">
+    <View tw={`items-center justify-center pt-4 ${tw}`}>
+      <Text tw="text-lg font-extrabold text-gray-900 dark:text-gray-100">
         {title}
       </Text>
-      <View tw="h-4" />
-      <Text tw="text-sm text-gray-600 dark:text-gray-400">{text}</Text>
+      {Boolean(text) && (
+        <>
+          <View tw="h-4" />
+          <Text tw="text-sm text-gray-600 dark:text-gray-400">{text}</Text>
+          <View tw="h-1" />
+        </>
+      )}
       {!isAuthenticated && !hideLoginBtn && (
         <>
           <View tw="h-4" />

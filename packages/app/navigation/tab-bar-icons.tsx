@@ -194,7 +194,7 @@ export const NotificationsTabBarIcon = ({
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      <ErrorBoundary>
+      <ErrorBoundary renderFallback={() => <></>}>
         <Suspense fallback={null}>
           <UnreadNotificationIndicator />
         </Suspense>

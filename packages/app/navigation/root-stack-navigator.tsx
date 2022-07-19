@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
+import type { ProfileScreenProps } from "app/components/profile";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
@@ -23,6 +24,7 @@ import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
+import { AddEmailScreen } from "app/screens/settings-add-email";
 import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferScreen } from "app/screens/transfer";
 import { UnlistScreen } from "app/screens/unlist";
@@ -46,14 +48,11 @@ export function RootStackNavigator() {
       />
 
       {/* Screens accessible in most of the navigators */}
-      <Stack.Group
-        // @ts-ignore
-        screenOptions={screenOptions({ safeAreaTop, isDark })}
-      >
+      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
-          getId={({ params }) => params?.username}
+          getId={({ params }) => (params as ProfileScreenProps)?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
@@ -101,6 +100,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
+        <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
       </Stack.Group>

@@ -1,0 +1,14 @@
+diff --git a/node_modules/zx/package.json b/node_modules/zx/package.json
+index 8f0bc55..af17e60 100644
+--- a/node_modules/zx/package.json
++++ b/node_modules/zx/package.json
+@@ -11,7 +11,8 @@
+     "./globals": {
+       "import": "./globals.mjs",
+       "require": "./dist/globals.cjs"
+-    }
++    },
++    "./package.json": "./package.json"
+   },
+   "types": "index.d.ts",
+   "bin": {

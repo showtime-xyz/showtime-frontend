@@ -1,46 +1,58 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import {
   useAccount,
   useSignMessage,
   useSigner,
   useNetwork,
-  useSignTypedData,
   useDisconnect,
 } from "wagmi";
 
-const useWallet = () => {
+import { useWeb3 } from "app/hooks/use-web3";
+
+import { UseWalletReturnType } from "./use-wallet";
+
+const useWallet = (): UseWalletReturnType => {
   const wagmiData = useAccount();
-  const { data: wagmiSignData, signMessage } = useSignMessage();
+  const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
-  const { signTypedDataAsync } = useSignTypedData();
   const { disconnect } = useDisconnect();
+  const { web3, isMagic } = useWeb3();
 
-  const getAddress = async () => {
-    return wagmiData?.address;
-  };
-
-  const connected = useMemo(
-    () => !!wagmiData && !!chain && !!wagmiSigner?.provider,
-    [wagmiData, chain, wagmiSigner?.provider]
-  );
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
-  const signed = useMemo(() => !!wagmiSignData, [wagmiSignData]);
-  const loggedIn = useMemo(() => connected, [connected]);
+  const [address, setAddress] = useState<string | undefined>();
+
+  useEffect(() => {
+    (async function fetchUserAddress() {
+      if (wagmiData?.address) {
+        setAddress(wagmiData?.address);
+      } else if (web3) {
+        const address = await web3.getSigner().getAddress();
+        setAddress(address);
+      } else {
+        setAddress(undefined);
+      }
+    })();
+  }, [web3, wagmiData?.address]);
+
+  const connected =
+    (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
+
+  console.log(
+    "wallet connection status ",
+    wagmiData,
+    wagmiSigner,
+    chain,
+    connected
+  );
 
   return {
-    getAddress,
-    address: wagmiData?.address,
+    address,
     connected,
-    signed,
-    loggedIn,
     disconnect,
     networkChanged,
-    provider: wagmiSigner?.provider,
-    signature: wagmiSignData,
-    signMessage,
-    signTypedDataAsync,
+    signMessageAsync,
   };
 };
 
