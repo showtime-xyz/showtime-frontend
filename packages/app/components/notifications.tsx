@@ -12,7 +12,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner/index";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
