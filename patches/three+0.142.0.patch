@@ -1,0 +1,14 @@
+diff --git a/node_modules/three/package.json b/node_modules/three/package.json
+index eed47fe..45cf472 100644
+--- a/node_modules/three/package.json
++++ b/node_modules/three/package.json
+@@ -12,7 +12,8 @@
+     },
+     "./examples/fonts/*": "./examples/fonts/*",
+     "./examples/jsm/*": "./examples/jsm/*",
+-    "./src/*": "./src/*"
++    "./src/*": "./src/*",
++    "./package.json": "./package.json"
+   },
+   "repository": {
+     "type": "git",
