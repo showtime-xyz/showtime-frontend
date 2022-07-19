@@ -8020,11 +8020,11 @@ __metadata:
     process: ^0.11.0
     punycode: ^2.1.1
     querystring-es3: ~0.2.0
-    react: 18.0.0
+    react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.1
-    react-native-blob-jsi-helper: ^0.2.1
+    react-native-blob-jsi-helper: ^0.2.2
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
     react-native-crypto: ^2.1.0
@@ -8187,7 +8187,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-native: 0.69.1
-    react-native-blob-jsi-helper: ^0.2.1
+    react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
@@ -30135,13 +30135,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-blob-jsi-helper@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "react-native-blob-jsi-helper@npm:0.2.1"
+"react-native-blob-jsi-helper@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "react-native-blob-jsi-helper@npm:0.2.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: ee49b08617e1e2fdc0171801be70a6ce18bedd6fc2941ca0d9cb6f2de9b514cdc6081ddae7f3e9ffa5a62849cdbd8dcc89e27b1be4c1ac7ca136c2feebab8ec4
+  checksum: 7a3484c262f813c9275929fc2bab13f688cec2bb3c44a18b2a684197a7c93ca5df1df3a80f118aaa14c0bee10cc32cc60393e766ed8105f9e666e9f96d951e15
   languageName: node
   linkType: hard
 
