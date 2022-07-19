@@ -43,7 +43,6 @@
     "submit:android": "STAGE=production eas submit --platform android",
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
-    "eas-build-post-install": "react-native link",
     "test": "jest ./component-tests",
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
@@ -185,7 +184,7 @@
     "react-native-quick-base64": "^2.0.2",
     "react-native-random-values-jsi-helper": "^1.0.3",
     "react-native-randombytes": "^3.6.1",
-    "react-native-reanimated": "2.9.1",
+    "react-native-reanimated": "2.8.0",
     "react-native-safe-area-context": "4.2.4",
     "react-native-screens": "~3.11.1",
     "react-native-svg": "12.3.0",
