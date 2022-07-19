@@ -7956,7 +7956,7 @@ __metadata:
     expo: next
     expo-app-loading: ~2.0.0
     expo-application: ~4.1.0
-    expo-av: ~11.2.3
+    expo-av: next
     expo-blur: ~11.1.0
     expo-camera: ~12.2.0
     expo-cli: ^5.5.1
@@ -7965,7 +7965,7 @@ __metadata:
     expo-dev-client: ~1.0.1
     expo-device: ~4.2.0
     expo-font: ~10.1.0
-    expo-gl: ~11.3.0
+    expo-gl: next
     expo-haptics: ~11.2.0
     expo-image-picker: ~13.1.1
     expo-linear-gradient: ~11.3.0
@@ -7991,11 +7991,11 @@ __metadata:
     process: ^0.11.0
     punycode: ^2.1.1
     querystring-es3: ~0.2.0
-    react: 18.0.0
+    react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.1
-    react-native-blob-jsi-helper: ^0.2.1
+    react-native-blob-jsi-helper: ^0.2.2
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
     react-native-crypto: ^2.1.0
@@ -8138,13 +8138,13 @@ __metadata:
     design-system: "*"
     expo: next
     expo-asset: ~8.5.0
-    expo-av: ~11.2.3
+    expo-av: next
     expo-blur: ~11.1.0
     expo-community-flipper: ^45.0.0
     expo-constants: ~13.1.1
     expo-dev-client: ~1.0.1
     expo-font: ~10.1.0
-    expo-gl: ~11.3.0
+    expo-gl: next
     expo-haptics: ~11.2.0
     expo-image-picker: ~13.1.1
     expo-linear-gradient: ~11.3.0
@@ -8158,7 +8158,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-native: 0.69.1
-    react-native-blob-jsi-helper: ^0.2.1
+    react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
@@ -18802,14 +18802,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-av@npm:~11.2.3":
-  version: 11.2.3
-  resolution: "expo-av@npm:11.2.3"
+"expo-av@npm:next":
+  version: 12.0.2
+  resolution: "expo-av@npm:12.0.2"
   dependencies:
-    "@expo/config-plugins": ^4.0.14
+    "@expo/config-plugins": ~5.0.0
   peerDependencies:
     expo: "*"
-  checksum: 86071b88c2d9481cada733a40a5d07d4e9cce81322c16e3ffea3c5e1aec0ba46ed01d63f170eff71103c8d34bd5e6f105e527c77157421900e983c57be55f6dc
+  checksum: bb1d0defe68f5e09f5bb541840a80c3f959ffb64835b363b4042bd6d387718e4c5f5b67437577bde3d65d6f0c22c94349e9b4297cf2412a34bdc9819768c1989
   languageName: node
   linkType: hard
 
@@ -19050,24 +19050,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-gl-cpp@npm:~11.3.0":
-  version: 11.3.0
-  resolution: "expo-gl-cpp@npm:11.3.0"
+"expo-gl-cpp@npm:~11.4.0":
+  version: 11.4.0
+  resolution: "expo-gl-cpp@npm:11.4.0"
   peerDependencies:
     expo: "*"
-  checksum: 647e6b1f33a6f22b3ab10227bdf95cdc8186652605bfa929d07f000ae0ca1e12bc63a4085366851745fd5339de953151755721548d7ffc93649e3fe15f4817d1
+  checksum: 685d4ac34c79d2397304357b3e68610ccd7694cc8874bba2c64cad3deae208ba776e151cd4d2b79c5ef9592698365dab7f53e92aa6cad6a89007eae8544e2516
   languageName: node
   linkType: hard
 
-"expo-gl@npm:~11.3.0":
-  version: 11.3.0
-  resolution: "expo-gl@npm:11.3.0"
+"expo-gl@npm:next":
+  version: 11.4.0
+  resolution: "expo-gl@npm:11.4.0"
   dependencies:
-    expo-gl-cpp: ~11.3.0
+    expo-gl-cpp: ~11.4.0
     invariant: ^2.2.4
   peerDependencies:
     expo: "*"
-  checksum: dc46a9dfb2d7facc491fa114de6fc2efad9925d7c8d5bf5598e93e4db8bebe055d91e61a8c1aabf3d1a31c9ec18e14771d2bbef8eb710f2f63143973044615d6
+  checksum: 144bd174597e2cc27a88ccaa76328d368ca0f3fec45abe1961624e168533c9ff26567889c72fcc11ea69b0027d4fe4adb5692f49b91fa69ff05d386f2721fbd0
   languageName: node
   linkType: hard
 
@@ -30048,13 +30048,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-blob-jsi-helper@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "react-native-blob-jsi-helper@npm:0.2.1"
+"react-native-blob-jsi-helper@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "react-native-blob-jsi-helper@npm:0.2.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: ee49b08617e1e2fdc0171801be70a6ce18bedd6fc2941ca0d9cb6f2de9b514cdc6081ddae7f3e9ffa5a62849cdbd8dcc89e27b1be4c1ac7ca136c2feebab8ec4
+  checksum: 7a3484c262f813c9275929fc2bab13f688cec2bb3c44a18b2a684197a7c93ca5df1df3a80f118aaa14c0bee10cc32cc60393e766ed8105f9e666e9f96d951e15
   languageName: node
   linkType: hard
 
