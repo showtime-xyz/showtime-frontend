@@ -1,5 +1,5 @@
 import { ComponentProps, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
 import { Source } from "react-native-fast-image";
@@ -21,7 +21,6 @@ type VideoProps = {
 function Video({
   tw,
   blurhash,
-  style,
   posterSource,
   showMuteButton,
   ...props
