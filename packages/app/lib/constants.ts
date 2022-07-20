@@ -238,3 +238,7 @@ export const CURRENCY_NAMES = {
   },
   //@ts-ignore
 }[process.env.NEXT_PUBLIC_CHAIN_ID];
+
+export const HIDE_LINK_FOOTER_ROUTER_LIST = [
+  "/nft/[chainName]/[contractAddress]/[tokenId]",
+];
