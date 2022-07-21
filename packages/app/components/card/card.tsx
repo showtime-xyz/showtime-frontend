@@ -12,6 +12,7 @@ import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
+import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -74,6 +75,10 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
+        //@ts-ignore
+        // TODO: add accessibility types for RNW
+        accessibilityRole="article"
+        dataSet={Platform.select({ web: { testId: "nft-card" } })}
         style={{
           // @ts-ignore
           boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
@@ -90,9 +95,11 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
           {/* {variant === "activity" && <Activity activity={act} />} */}
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nft={nft} listId={listId} />
-            </Suspense>
+            <ErrorBoundary renderFallback={() => null}>
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown nft={nft} listId={listId} />
+              </Suspense>
+            </ErrorBoundary>
           </View>
 
           <RouteComponent href={hrefProps!} onPress={handleOnPress}>

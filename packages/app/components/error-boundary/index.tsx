@@ -20,7 +20,7 @@ export interface ErrorBoundaryProps {
   onReset?: (...args: Array<unknown>) => void;
   onError?: (error: Error, info: { componentStack: string }) => void;
   resetKeys?: Array<unknown>;
-  renderFallback?: (props: FallbackProps) => JSX.Element;
+  renderFallback?: (props: FallbackProps) => React.ReactNode;
   disableCaptureException?: boolean;
 }
 
