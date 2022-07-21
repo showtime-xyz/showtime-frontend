@@ -1,11 +1,13 @@
 import { Suspense } from "react";
 
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { SwipeList } from "app/components/swipe-list";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 
 export const Feed = () => {
   return (
@@ -20,10 +22,17 @@ export const Feed = () => {
 };
 
 const FeedList = () => {
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const bottomBarHeight = usePlatformBottomHeight();
+  const { isAuthenticated } = useUser();
   const { data } = useFeed();
 
-  return <SwipeList bottomPadding={bottomBarHeight} data={data} />;
+  return (
+    <SwipeList
+      bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
+      data={data}
+    />
+  );
 };
 
 // export const FeedList = () => {
