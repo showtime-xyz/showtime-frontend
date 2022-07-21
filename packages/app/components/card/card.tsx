@@ -78,6 +78,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
         //@ts-ignore
         // TODO: add accessibility types for RNW
         accessibilityRole="article"
+        dataSet={Platform.select({ web: { testId: "nft-card" } })}
         style={{
           // @ts-ignore
           boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
