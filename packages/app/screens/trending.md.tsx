@@ -50,7 +50,7 @@ export const Trending = () => {
               Trending
             </Text>
           </View>
-          <View
+          {/* <View
             tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black"
             style={{
               // @ts-ignore
@@ -62,7 +62,7 @@ export const Trending = () => {
               onChange={handleTabChange}
               selectedIndex={selected}
             />
-          </View>
+          </View> */}
         </View>
         <TrendingTabs selectedTab={selected === 0 ? "nft" : "creator"} />
       </View>
