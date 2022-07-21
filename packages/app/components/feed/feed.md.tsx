@@ -254,15 +254,17 @@ const NFTScrollList = ({
           overflowX: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <RecyclerListView
-          dataProvider={dataProvider}
-          layoutProvider={_layoutProvider}
-          useWindowScroll
-          rowRenderer={_rowRenderer}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={300}
-          layoutSize={layoutSize}
-        />
+        {dataProvider && dataProvider.getSize() > 0 && (
+          <RecyclerListView
+            dataProvider={dataProvider}
+            layoutProvider={_layoutProvider}
+            useWindowScroll
+            rowRenderer={_rowRenderer}
+            onEndReached={fetchMore}
+            onEndReachedThreshold={300}
+            layoutSize={layoutSize}
+          />
+        )}
       </View>
     </VideoConfigContext.Provider>
   );
