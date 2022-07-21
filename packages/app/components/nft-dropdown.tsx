@@ -33,7 +33,6 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
@@ -75,7 +74,7 @@ function NFTDropdown({
   const { unfollow, isFollowing, hide: hideNFT } = useMyInfo();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
-  const { refresh } = useFeed("");
+  // const { refresh } = useFeed("");
   const { data } = useNFTDetailByTokenId({
     contractAddress: propNFT?.contract_address,
     tokenId: propNFT?.token_id,
@@ -220,7 +219,7 @@ function NFTDropdown({
             onSelect={async () => {
               if (isAuthenticated) {
                 await unfollow(nft?.creator_id);
-                refresh();
+                // refresh();
               } else {
                 navigateToLogin();
               }

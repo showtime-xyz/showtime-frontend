@@ -3,7 +3,6 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -13,23 +12,17 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { useUser } from "app/hooks/use-user";
-import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
 import { Sticky } from "app/lib/stickynode";
-import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const CARD_HEIGHT = 825;
@@ -39,11 +32,11 @@ const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
-type Tab = "following" | "curated" | "" | undefined;
+// type Tab = "following" | "curated" | "" | undefined;
 
-type Query = {
-  tab: number;
-};
+// type Query = {
+//   tab: number;
+// };
 
 export const Feed = () => {
   return (
@@ -57,23 +50,23 @@ export const Feed = () => {
   );
 };
 
-const { useParam } = createParam<Query>();
+// const { useParam } = createParam<Query>();
 
 export const FeedList = () => {
-  const { isAuthenticated } = useUser();
-  const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v ?? 1),
-    initial: 1,
-  });
-  const isDark = useIsDarkMode();
+  // const { isAuthenticated } = useUser();
+  // const [selected, setSelected] = useParam("tab", {
+  //   parse: (v) => Number(v ?? 1),
+  //   initial: 1,
+  // });
+  // const isDark = useIsDarkMode();
 
-  const handleTabChange = useCallback(
-    (index: number) => {
-      Haptics.impactAsync();
-      setSelected(index);
-    },
-    [setSelected]
-  );
+  // const handleTabChange = useCallback(
+  //   (index: number) => {
+  //     Haptics.impactAsync();
+  //     setSelected(index);
+  //   },
+  //   [setSelected]
+  // );
 
   return (
     <View tw="flex-row">
@@ -91,7 +84,7 @@ export const FeedList = () => {
       </Hidden>
 
       <View tw="flex-1" style={{ width: CARD_CONTAINER_WIDTH }}>
-        {isAuthenticated ? (
+        {/* {isAuthenticated ? (
           <>
             <View
               tw="mr-2 mb-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
@@ -127,39 +120,51 @@ export const FeedList = () => {
           </>
         ) : (
           <CuratedFeed />
-        )}
+        )} */}
+
+        <ErrorBoundary>
+          <Suspense fallback={<View />}>
+            <HomeFeed />
+          </Suspense>
+        </ErrorBoundary>
       </View>
     </View>
   );
 };
 
-const FollowingFeed = () => {
-  const queryState = useFeed("/following");
+// const FollowingFeed = () => {
+//   const queryState = useFeed("/following");
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} tab="following" />
-    </MutateProvider>
-  );
-};
+//   return (
+//     <MutateProvider mutate={queryState.updateItem}>
+//       <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+//     </MutateProvider>
+//   );
+// };
 
-const AlgorithmicFeed = () => {
-  const queryState = useFeed("");
+// const AlgorithmicFeed = () => {
+//   const queryState = useFeed("");
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} />
-    </MutateProvider>
-  );
-};
+//   return (
+//     <MutateProvider mutate={queryState.updateItem}>
+//       <NFTScrollList {...queryState} data={queryState.data} />
+//     </MutateProvider>
+//   );
+// };
 
-const CuratedFeed = () => {
-  // const queryState = useFeed("/curated");
-  const { data } = useTrendingNFTS({
-    days: 1,
-  });
+// const CuratedFeed = () => {
+//   // const queryState = useFeed("/curated");
+//   const { data } = useTrendingNFTS({
+//     days: 1,
+//   });
 
-  return <NFTScrollList data={data} tab="curated" fetchMore={() => null} />;
+//   return <NFTScrollList data={data} tab="curated" fetchMore={() => null} />;
+// };
+
+const HomeFeed = () => {
+  const { data } = useFeed();
+
+  return <NFTScrollList data={data} fetchMore={() => null} />;
 };
 
 const NFTScrollList = ({
@@ -168,7 +173,7 @@ const NFTScrollList = ({
 }: {
   data: NFT[];
   fetchMore: any;
-  tab?: Tab;
+  // tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
   const isDark = useIsDarkMode();

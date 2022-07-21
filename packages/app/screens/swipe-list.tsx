@@ -48,23 +48,16 @@ export const SwipeListScreen = withColorScheme(() => {
 
 const FeedSwipeList = ({ tab }: { tab: Tab }) => {
   const { useParam } = createParam<Query>();
-  const { data, updateItem, fetchMore, isRefreshing, refresh } = useFeed(
-    tab ? `/${tab}` : ""
-  );
+  const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <SwipeList
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-      />
-    </MutateProvider>
+    <SwipeList
+      data={data}
+      initialScrollIndex={Number(initialScrollIndex)}
+      bottomPadding={safeAreaBottom}
+    />
   );
 };
 
