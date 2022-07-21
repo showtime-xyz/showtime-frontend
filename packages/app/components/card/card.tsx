@@ -105,7 +105,11 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
           <RouteComponent href={hrefProps!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
-          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
+          <RouteComponent
+            dataSet={{ testId: "nft-card-title-link" }}
+            href={hrefProps!}
+            onPress={handleOnPress}
+          >
             <Title nft={nft} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
 
