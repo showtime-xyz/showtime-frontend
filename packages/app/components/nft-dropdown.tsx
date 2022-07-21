@@ -147,7 +147,12 @@ function NFTDropdown({
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="text" tw="p-0" iconOnly={true}>
+        <Button
+          accessibilityLabel="nft card item menu"
+          variant="text"
+          tw="p-0"
+          iconOnly={true}
+        >
           <MoreHorizontal
             color={
               tw.style("bg-gray-600 dark:bg-gray-400")
