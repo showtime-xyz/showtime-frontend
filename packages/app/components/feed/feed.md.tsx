@@ -162,16 +162,20 @@ export const FeedList = () => {
 // };
 
 const HomeFeed = () => {
-  const { data } = useFeed();
+  const { data, isLoading } = useFeed();
 
-  return <NFTScrollList data={data} fetchMore={() => null} />;
+  return (
+    <NFTScrollList data={data} isLoading={isLoading} fetchMore={() => null} />
+  );
 };
 
 const NFTScrollList = ({
   data,
+  isLoading,
   fetchMore,
 }: {
   data: NFT[];
+  isLoading: boolean;
   fetchMore: any;
   // tab?: Tab;
 }) => {
@@ -198,6 +202,7 @@ const NFTScrollList = ({
       ),
     [screenWidth]
   );
+
   const layoutSize = useMemo(
     () => ({
       width: CARD_CONTAINER_WIDTH,
@@ -205,6 +210,7 @@ const NFTScrollList = ({
     }),
     [height]
   );
+
   const _rowRenderer = useCallback((_type: any, item: any) => {
     return (
       <View tw="flex-row justify-center" nativeID="334343">
@@ -227,7 +233,8 @@ const NFTScrollList = ({
     }),
     []
   );
-  if (data?.length === 0) {
+
+  if (data?.length === 0 && !isLoading) {
     return (
       <View
         tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
@@ -243,6 +250,7 @@ const NFTScrollList = ({
       </View>
     );
   }
+
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
