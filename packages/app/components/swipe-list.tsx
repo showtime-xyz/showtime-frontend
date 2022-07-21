@@ -497,7 +497,7 @@ const NFTDetails = ({
 
         <View tw="h-4" />
 
-        <View tw="flex-row justify-between">
+        <View tw="h-6 flex-row justify-between">
           <View tw="flex-row">
             <Like nft={nft} />
             <View tw="w-6" />
@@ -515,11 +515,14 @@ const NFTDetails = ({
                 color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
               />
             </Pressable>
+
             <View tw="w-8" />
 
             <ErrorBoundary renderFallback={() => null}>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown nft={nft} listId={listId} />
+                <View tw="-mt-1">
+                  <NFTDropdown nft={nft} listId={listId} />
+                </View>
               </Suspense>
             </ErrorBoundary>
           </View>

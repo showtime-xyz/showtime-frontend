@@ -15,11 +15,12 @@ export function LikeButton({
   likeCount: number;
 }) {
   const { iconColor, textColors } = useSocialColor();
+
   return (
     <Button
       variant="text"
       size="regular"
-      tw="h-auto p-0"
+      tw="h-6 p-0"
       onPress={onPress}
       accentColor={textColors}
     >
