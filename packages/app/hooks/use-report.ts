@@ -8,7 +8,7 @@ import { axios } from "app/lib/axios";
 
 type Report = {
   userId?: number;
-  nftId?: string;
+  nftId?: number;
   activityId?: number;
   description?: string;
 };
