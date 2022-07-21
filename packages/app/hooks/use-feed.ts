@@ -1,26 +1,21 @@
-import { useCallback, useMemo } from "react";
-
 import useSWR from "swr";
 
-import { preload } from "@showtime-xyz/universal.image";
-
 import { useAuth } from "app/hooks/auth/use-auth";
-import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { NFT } from "app/types";
-import { getMediaUrl } from "app/utilities";
 
 type FeedAPIResponse = Array<NFT>;
 
 // type FeedType = "/following" | "/curated" | "";
 
 const useFeed = () => {
-  const { data, isLoading, error } = useSWR<FeedAPIResponse>(
-    "/v4/feed/nfts",
+  const { accessToken } = useAuth();
+  const { data, isLoading, mutate, error } = useSWR<FeedAPIResponse>(
+    accessToken ? "/v4/feed/nfts" : "/v2/trending/nfts?timeframe=day",
     fetcher
   );
 
-  return { data: data ?? [], isLoading, error };
+  return { data: data ?? [], isLoading, mutate, error };
 };
 
 export { useFeed };

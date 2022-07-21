@@ -9,7 +9,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 
 export const Feed = () => {
   return (
-    <View tw="flex-1" testID="homeFeed">
+    <View tw="w-full flex-1" testID="homeFeed">
       <ErrorBoundary>
         <Suspense fallback={<View />}>
           <FeedList />

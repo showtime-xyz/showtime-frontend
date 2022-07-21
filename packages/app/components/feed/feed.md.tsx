@@ -162,25 +162,20 @@ export const FeedList = () => {
 // };
 
 const HomeFeed = () => {
-  const { data, isLoading } = useFeed();
+  const { data } = useFeed();
 
-  return (
-    <NFTScrollList data={data} isLoading={isLoading} fetchMore={() => null} />
-  );
+  return <NFTScrollList data={data} fetchMore={() => null} />;
 };
 
 const NFTScrollList = ({
   data,
-  isLoading,
   fetchMore,
 }: {
   data: NFT[];
-  isLoading: boolean;
   fetchMore: any;
   // tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-  const isDark = useIsDarkMode();
   let dataProvider = useMemo(
     () =>
       new DataProvider((r1, r2) => {
@@ -234,22 +229,22 @@ const NFTScrollList = ({
     []
   );
 
-  if (data?.length === 0 && !isLoading) {
-    return (
-      <View
-        tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
-        style={{
-          // @ts-ignore
-          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-        }}
-      >
-        <EmptyPlaceholder
-          title="No results found"
-          text="You can try to follow some users"
-        />
-      </View>
-    );
-  }
+  // if (data?.length === 0 && !isLoading) {
+  //   return (
+  //     <View
+  //       tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
+  //       style={{
+  //         // @ts-ignore
+  //         boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+  //       }}
+  //     >
+  //       <EmptyPlaceholder
+  //         title="No results found"
+  //         text="You can try to follow some users"
+  //       />
+  //     </View>
+  //   );
+  // }
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
