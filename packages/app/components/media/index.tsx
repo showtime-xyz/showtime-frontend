@@ -65,6 +65,7 @@ function Media({
               uri: mediaUri,
             }}
             tw={size}
+            data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
           />
@@ -88,6 +89,8 @@ function Media({
             source={{
               uri: mediaUri,
             }}
+            //@ts-ignore
+            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
