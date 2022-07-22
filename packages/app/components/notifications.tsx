@@ -220,7 +220,7 @@ const NotificationDescription = ({
             ? "created a new drop "
             : null}
           {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
-            ? "claimed the drop "
+            ? "claimed "
             : null}
 
           {notification.nft_display_name ? (
@@ -233,6 +233,13 @@ const NotificationDescription = ({
               {notification.nft_display_name}
             </Text>
           ) : null}
+          {/* Todo: currently we miss @Z(NFT Creator) field */}
+          {/* {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
+            ? ` by ${
+                notification.link_to_profile_username ||
+                notification.link_to_profile_address
+              }`
+            : null} */}
         </Text>
         <View tw="h-1" />
         {/* <Text tw="text-xs text-gray-500">
@@ -244,10 +251,21 @@ const NotificationDescription = ({
     );
   }
 
-  return null;
+  return (
+    <ActorLink
+      actor={{
+        username: notification.link_to_profile_username,
+        wallet_address: notification.link_to_profile_address,
+      }}
+    />
+  );
 };
 
-const ActorLink = ({ actor }: { actor: Actor }) => {
+const ActorLink = ({
+  actor,
+}: {
+  actor: Pick<Actor, "username" | "wallet_address">;
+}) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
