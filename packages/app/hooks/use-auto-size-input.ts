@@ -229,6 +229,7 @@ export const useAutoSizeInput = (
     | ForwardRefExoticComponent<
         TextInputProps & RefAttributes<typeof TextInput>
       >
+    | HTMLElement
     | undefined
   >
 ) => {
