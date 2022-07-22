@@ -7079,7 +7079,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@shopify/react-native-skia@npm:0.1.123":
   version: 0.1.123
   resolution: "@shopify/react-native-skia@npm:0.1.123"
@@ -7096,11 +7095,6 @@ __metadata:
 "@showtime-xyz/universal.accordion@npm:^0.0.23":
   version: 0.0.23
   resolution: "@showtime-xyz/universal.accordion@npm:0.0.23"
-=======
-"@showtime-xyz/universal.accordion@npm:^0.0.22":
-  version: 0.0.22
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.22"
->>>>>>> staging
   dependencies:
     "@radix-ui/react-accordion": 0.1.6
     "@showtime-xyz/universal.hooks": 0.0.18
@@ -7907,12 +7901,8 @@ __metadata:
     "@react-three/fiber": ^8.0.12
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^3.3.0
-<<<<<<< HEAD
     "@shopify/react-native-skia": 0.1.123
     "@showtime-xyz/universal.accordion": ^0.0.23
-=======
-    "@showtime-xyz/universal.accordion": ^0.0.22
->>>>>>> staging
     "@showtime-xyz/universal.activity-indicator": ^0.0.19
     "@showtime-xyz/universal.alert": ^0.0.32
     "@showtime-xyz/universal.avatar": ^0.0.19
@@ -30607,6 +30597,19 @@ __metadata:
     react-native:
       optional: true
   checksum: 8641dae996167ec5bd2a020310b1b1540650a2323673722d9ffd882bb28fbd40f09d1ca3e6990f9e27d5878e152c9544a35d4fdb7014fc25a86937e07949aede
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.26.2":
+  version: 0.26.2
+  resolution: "react-reconciler@npm:0.26.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    scheduler: ^0.20.2
+  peerDependencies:
+    react: ^17.0.2
+  checksum: 2ebceace56f547f51eaf142becefef9cca980eae4f42d90ee5a966f54a375f5082d78b71b00c40bbd9bca69e0e0f698c7d4e81cc7373437caa19831fddc1d01b
   languageName: node
   linkType: hard
 
