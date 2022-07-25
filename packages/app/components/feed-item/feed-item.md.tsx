@@ -2,7 +2,7 @@ import { memo, useMemo, Suspense, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Close, Maximize } from "@showtime-xyz/universal.icon";
+import { Close } from "@showtime-xyz/universal.icon";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -100,16 +100,17 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     return windowWidth - NFT_DETAIL_WIDTH;
   }, [windowWidth]);
 
-  const onFullScreen = () => {
-    // Todo
-    container.current?.requestFullscreen();
-  };
+  // Todo: add full screen feature, but not sure why it is black screen on fullscreen.
+  // const onFullScreen = () => {
+  //   setShowFullScreen(true);
+  // };
   const onClose = () => {
-    if (showFullScreen) {
-      setShowFullScreen(false);
-    } else {
-      router.pop();
-    }
+    router.pop();
+    // if (showFullScreen) {
+    //   setShowFullScreen(false);
+    // } else {
+    //   router.pop();
+    // }
   };
   const TabScene = useMemo(() => TAB_SCENES_MAP.get(index), [index]);
 
@@ -134,7 +135,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
-              <Button
+              {/* <Button
                 variant="tertiary"
                 size="regular"
                 onPress={onFullScreen}
@@ -142,7 +143,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 style={tw.style("dark:bg-gray-900 bg-white mr-4 px-3")}
               >
                 <Maximize width={24} height={24} />
-              </Button>
+              </Button> */}
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   btnProps={{
