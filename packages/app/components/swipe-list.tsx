@@ -33,6 +33,7 @@ import { Owner } from "app/components/card/rows/owner";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { GiftButton } from "app/components/claim/gift-button";
+import { ErrorBoundary } from "app/components/error-boundary";
 import { CommentButton } from "app/components/feed/comment-button";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Like } from "app/components/feed/like";
@@ -353,9 +354,11 @@ export const FeedItem = memo(
                 <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
                   {nft.token_name}
                 </Text>
-                <Suspense fallback={<Skeleton width={24} height={24} />}>
-                  <NFTDropdown nft={nft} listId={listId} />
-                </Suspense>
+                <ErrorBoundary renderFallback={() => null}>
+                  <Suspense fallback={<Skeleton width={24} height={24} />}>
+                    <NFTDropdown nft={nft} listId={listId} />
+                  </Suspense>
+                </ErrorBoundary>
               </View>
               <Description nft={nft} />
               <View tw="flex-row items-center justify-between px-4">
@@ -494,7 +497,7 @@ const NFTDetails = ({
 
         <View tw="h-4" />
 
-        <View tw="flex-row justify-between">
+        <View tw="h-6 flex-row justify-between">
           <View tw="flex-row">
             <Like nft={nft} />
             <View tw="w-6" />
@@ -512,11 +515,16 @@ const NFTDetails = ({
                 color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
               />
             </Pressable>
+
             <View tw="w-8" />
 
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nft={nft} listId={listId} />
-            </Suspense>
+            <ErrorBoundary renderFallback={() => null}>
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <View tw="-mt-1">
+                  <NFTDropdown nft={nft} listId={listId} />
+                </View>
+              </Suspense>
+            </ErrorBoundary>
           </View>
         </View>
       </View>

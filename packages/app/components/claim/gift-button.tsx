@@ -16,12 +16,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   if (!edition) return null;
 
   return (
-    <Button
-      variant="text"
-      size="regular"
-      tw="h-auto p-0"
-      accentColor={textColors}
-    >
+    <Button variant="text" size="regular" tw="h-6 p-0" accentColor={textColors}>
       <Gift height={20} width={20} color={iconColor} />
       {edition?.total_claimed_count > 0
         ? ` ${formatNumber(edition.total_claimed_count)}`

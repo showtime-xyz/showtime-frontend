@@ -1,10 +1,12 @@
 import type { ComponentProps, ComponentType } from "react";
+import { Platform } from "react-native";
 
 import NextLink from "next/link";
 
 type Props = {
   children: React.ReactNode;
   onPress?: (e: any) => void;
+  dataSet?: any;
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({
@@ -13,6 +15,7 @@ function LinkCore({
   as,
   componentProps,
   Component,
+  dataSet,
   ...props
 }: Props & {
   Component: ComponentType<any>;
@@ -20,7 +23,11 @@ function LinkCore({
 }) {
   return (
     <NextLink {...props} href={href} as={as} passHref>
-      <Component {...componentProps} onClick={componentProps?.onPress}>
+      <Component
+        {...componentProps}
+        onClick={componentProps?.onPress}
+        dataSet={Platform.select({ web: dataSet })}
+      >
         {children}
       </Component>
     </NextLink>

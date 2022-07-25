@@ -133,7 +133,7 @@ export const Trending = () => {
             width: contentWidth,
           }}
           style={tw.style("z-1")}
-          renderSceneHeader={renderSceneHeader}
+          // renderSceneHeader={renderSceneHeader}
         />
       </View>
     </TrendingContext.Provider>
