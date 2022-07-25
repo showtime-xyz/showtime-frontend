@@ -2170,13 +2170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:7.18.8":
-  version: 7.18.8
-  resolution: "@babel/types@npm:7.18.8"
+"@babel/types@npm:7.18.9, @babel/types@npm:^7.18.9":
+  version: 7.18.9
+  resolution: "@babel/types@npm:7.18.9"
   dependencies:
     "@babel/helper-validator-identifier": ^7.18.6
     to-fast-properties: ^2.0.0
-  checksum: a485531faa9ff3b83ea94ba6502321dd66e39202c46d7765e4336cb4aff2ff69ebc77d97b17e21331a8eedde1f5490ce00e8a430c1041fc26854d636e6701919
+  checksum: f0e0147267895fd8a5b82133e711ce7ce99941f3ce63647e0e3b00656a7afe48a8aa48edbae27543b701794d2b29a562a08f51f88f41df401abce7c3acc5e13a
   languageName: node
   linkType: hard
 
@@ -2197,16 +2197,6 @@ __metadata:
     "@babel/helper-validator-identifier": ^7.18.6
     to-fast-properties: ^2.0.0
   checksum: 3114ce161c4ebcb70271e168aa5af5cecedf3278209161d5ba6124bd3f9cb02e3f3ace587ad1b53f7baa153b6b3714720721c72a9ef3ec451663862f9cc1f014
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:^7.18.9":
-  version: 7.18.9
-  resolution: "@babel/types@npm:7.18.9"
-  dependencies:
-    "@babel/helper-validator-identifier": ^7.18.6
-    to-fast-properties: ^2.0.0
-  checksum: f0e0147267895fd8a5b82133e711ce7ce99941f3ce63647e0e3b00656a7afe48a8aa48edbae27543b701794d2b29a562a08f51f88f41df401abce7c3acc5e13a
   languageName: node
   linkType: hard
 
@@ -8024,7 +8014,7 @@ __metadata:
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
     moti: ^0.17.1
-    nativewind: ^2.0.0-next.49
+    nativewind: ^2.0.0-next.52
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
     process: ^0.11.0
@@ -26556,12 +26546,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nativewind@npm:^2.0.0-next.49":
-  version: 2.0.0-next.49
-  resolution: "nativewind@npm:2.0.0-next.49"
+"nativewind@npm:^2.0.0-next.52":
+  version: 2.0.0-next.52
+  resolution: "nativewind@npm:2.0.0-next.52"
   dependencies:
     "@babel/generator": ^7.18.7
-    "@babel/types": 7.18.8
+    "@babel/types": 7.18.9
     css-mediaquery: ^0.1.2
     css-to-react-native: ^3.0.0
     micromatch: ^4.0.5
@@ -26574,7 +26564,7 @@ __metadata:
     use-sync-external-store: ^1.1.0
   peerDependencies:
     tailwindcss: ~3
-  checksum: e6535100cd0251b0a9630c4623317f5c46be5d9327295eda2085756a953688ad1aba236cf442b3d89a71c6b49b94fb080693dfa0c1bf34ee70e3adf06e75f860
+  checksum: 14da5220b7f539add4b47ac35c3042a092d8037e222ee1c1969ab1b7b9ff1687d5f2d92a873d316a4a70a9c0ed794037b9c2044a40f69ab819e70a3c07fe94ce
   languageName: node
   linkType: hard
 
