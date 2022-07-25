@@ -2,6 +2,7 @@ import { memo, useMemo, Suspense, useRef } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Close } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -29,6 +30,7 @@ import { createParam } from "app/navigation/use-param";
 
 import { useRouter } from "design-system/router/use-router";
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
+import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
 
@@ -51,6 +53,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   listId,
 }) {
   const router = useRouter();
+  const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
   const { index, setIndex, routes } = useTabState([
     {
@@ -165,11 +168,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         </View>
         <View
           style={[
-            tw.style(
-              "bg-white dark:bg-black shadow-lg shadow-black/5 dark:shadow-white/50"
-            ),
+            tw.style("bg-white dark:bg-black"),
             {
               width: NFT_DETAIL_WIDTH,
+              // @ts-ignore Todo: will use tailwind config when switch to NativeWind.
+              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
           ]}
         >
