@@ -88,7 +88,7 @@
     "@showtime-xyz/universal.image": "^0.0.19",
     "@showtime-xyz/universal.input": "^0.0.24",
     "@showtime-xyz/universal.label": "^0.0.21",
-    "@showtime-xyz/universal.light-box": "^0.0.21",
+    "@showtime-xyz/universal.light-box": "^0.0.22",
     "@showtime-xyz/universal.modal": "^0.0.37",
     "@showtime-xyz/universal.modal-screen": "^0.0.45",
     "@showtime-xyz/universal.modal-sheet": "^0.0.39",

@@ -7426,11 +7426,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.21"
+"@showtime-xyz/universal.light-box@npm:^0.0.22":
+  version: 0.0.22
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.22"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 0.1.0
+    "@showtime-xyz/universal.icon": 0.0.29
     "@showtime-xyz/universal.image": 0.0.19
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.view": 0.0.19
@@ -7442,7 +7443,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: b7a09373562372ce618696d6b6e1297a84697a5d7234f897c09b3fbce3bf1eb74c3e600eb000a8bf4280b6f6766fff36cc717c01b254f794189cc29b14a05c69
+  checksum: 097e2f6cf1c46bf88f58e7b5e6d05c71cce4a70e3b5676396686c5f6a6002da7740fd9147b9bf690a5ded7e6e82011bc7551cb8ef8bf8beb10f130e9664230b3
   languageName: node
   linkType: hard
 
@@ -7921,7 +7922,7 @@ __metadata:
     "@showtime-xyz/universal.image": ^0.0.19
     "@showtime-xyz/universal.input": ^0.0.24
     "@showtime-xyz/universal.label": ^0.0.21
-    "@showtime-xyz/universal.light-box": ^0.0.21
+    "@showtime-xyz/universal.light-box": ^0.0.22
     "@showtime-xyz/universal.modal": ^0.0.37
     "@showtime-xyz/universal.modal-screen": ^0.0.45
     "@showtime-xyz/universal.modal-sheet": ^0.0.39
