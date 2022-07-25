@@ -3,7 +3,6 @@ import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
-import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -157,18 +156,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-          <LightBox
-            width={mediaWidth}
-            height={mediaHeight}
-            imgLayout={{ width: windowWidth, height }}
-          >
-            <Media
-              item={nft}
-              numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${Math.min(mediaWidth, 800)}px]`}
-              resizeMode="contain"
-            />
-          </LightBox>
+
+          <Media
+            item={nft}
+            numColumns={1}
+            tw={`h-[${mediaHeight}px] w-[${Math.min(mediaWidth, 800)}px]`}
+            resizeMode="contain"
+          />
         </View>
         <View
           style={[
