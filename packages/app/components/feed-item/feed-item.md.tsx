@@ -1,4 +1,4 @@
-import { memo, useMemo, Suspense, useRef, useState } from "react";
+import { memo, useMemo, Suspense, useRef } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -23,7 +23,6 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useFullScreen } from "app/hooks/use-full-screen";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTabState } from "app/hooks/use-tab-state";
 import { createParam } from "app/navigation/use-param";
@@ -52,7 +51,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   listId,
 }) {
   const router = useRouter();
-  const [showFullScreen, setShowFullScreen] = useState(false);
+  // const [showFullScreen, setShowFullScreen] = useState(false);
   const { index, setIndex, routes } = useTabState([
     {
       title: "Comments",
@@ -66,7 +65,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
       index: 1,
     },
   ]);
-  const { width: windowWidth, height } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -80,7 +79,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   });
 
   const container = useRef<HTMLElement | null>(null);
-  useFullScreen(container?.current as HTMLElement, showFullScreen);
+  // useFullScreen(container?.current as HTMLElement, showFullScreen);
 
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
