@@ -77,7 +77,7 @@
     },
     "dropdown-menu": {
         "scope": "showtime.universal",
-        "version": "0.0.18",
+        "version": "0.0.20",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/dropdown-menu"
     },
