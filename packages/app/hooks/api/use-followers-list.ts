@@ -6,9 +6,9 @@ export interface FollowerUser {
   img_url?: string;
   name?: string;
   profile_id: number;
-  timestamp: string;
-  username?: null;
-  verified: 0 | 1;
+  timestamp?: string;
+  username?: string;
+  verified?: 0 | 1;
   wallet_address?: string;
 }
 
