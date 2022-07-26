@@ -302,27 +302,28 @@ export const useMyInfo = () => {
       }
 
       if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              follows: [...data.data.follows, { profile_id: profileId }],
+            },
+          },
+          false
+        );
+
         try {
           await axios({
             url: `/v2/follow/${profileId}`,
             method: "POST",
             data: {},
           });
-          mutate(
-            queryKey,
-            {
-              data: {
-                ...data.data,
-                follows: [...data.data.follows, { profile_id: profileId }],
-              },
-            },
-            false
-          );
         } catch (err) {
           console.error(err);
         }
 
-        await mutate(queryKey);
+        mutate(queryKey);
       }
     },
     [accessToken, data, mutate, navigateToLogin]
@@ -331,29 +332,30 @@ export const useMyInfo = () => {
   const unfollow = useCallback(
     async (profileId?: number) => {
       if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              follows: data.data.follows.filter(
+                (follow) => follow.profile_id !== profileId
+              ),
+            },
+          },
+          false
+        );
+
         try {
           await axios({
             url: `/v2/unfollow/${profileId}`,
             method: "POST",
             data: {},
           });
-          mutate(
-            queryKey,
-            {
-              data: {
-                ...data.data,
-                follows: data.data.follows.filter(
-                  (follow) => follow.profile_id !== profileId
-                ),
-              },
-            },
-            false
-          );
         } catch (err) {
           console.error(err);
         }
 
-        await mutate(queryKey);
+        mutate(queryKey);
       }
     },
     [data, mutate]
