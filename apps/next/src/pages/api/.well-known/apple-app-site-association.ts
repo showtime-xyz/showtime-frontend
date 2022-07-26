@@ -9,12 +9,7 @@ const association = {
     details: [
       {
         appID: `${TEAM_ID}.${BUNDLE_ID}`,
-        paths: [
-          // this makes every path open your app
-          // this is often not desired
-          // see the Apple docs to configure this with granularity
-          "/nft/*",
-        ],
+        paths: ["/nft/*"],
       },
     ],
   },
