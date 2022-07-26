@@ -39,7 +39,7 @@ export const FollowButton = memo<ToggleFollowParams>(
         await follow(profileId);
         onToggleFollow?.();
       }
-    }, [Alert, follow, unfollow, isFollowing, profileId, name, toggleFollow]);
+    }, [Alert, follow, unfollow, isFollowing, profileId, name, onToggleFollow]);
     if (data?.data?.profile?.profile_id === profileId) return null;
     return (
       <Button
