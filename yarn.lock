@@ -2232,12 +2232,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bacons/link-assets@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@bacons/link-assets@npm:1.0.0"
+"@bacons/link-assets@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@bacons/link-assets@npm:1.1.0"
   dependencies:
     mime: ^3.0.0
-  checksum: 4aa4b2dc3d2c2af5709e7cbb8040617265da6f0f3224e6daf79ed8ed97d98a2e8d897238319abbc46d5fe73c109860395f8ef6df4623efb351eb63a3e3de307a
+  checksum: 9c3cd111ce050092602b3388e3b65e3f3c976709bb8b38d2dd6dfae03705af220eaa398a3733b8c74a03edc99e1c43aee0de59bb7f78406411c9fc49c1dc5a0a
   languageName: node
   linkType: hard
 
@@ -7808,7 +7808,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.16.5
     "@babel/runtime": ^7.16.5
-    "@bacons/link-assets": ^1.0.0
+    "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
     "@config-plugins/detox": ^1.1.0
     "@ethersproject/shims": ^5.5.0
