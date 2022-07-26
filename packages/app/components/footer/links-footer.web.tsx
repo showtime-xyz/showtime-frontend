@@ -1,4 +1,5 @@
 import { ShowtimeWordmark } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -6,8 +7,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { useFooter } from "app/hooks/use-footer";
 import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import { Link } from "app/navigation/link";
-
-import { useRouter } from "design-system/router/use-router";
 
 export const WebFooter = () => {
   const { social, links } = useFooter();

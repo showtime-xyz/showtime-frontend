@@ -4,6 +4,7 @@ import { useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Close } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -28,7 +29,6 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTabState } from "app/hooks/use-tab-state";
 import { createParam } from "app/navigation/use-param";
 
-import { useRouter } from "design-system/router/use-router";
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
