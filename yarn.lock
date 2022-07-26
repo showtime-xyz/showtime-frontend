@@ -7969,7 +7969,7 @@ __metadata:
     react-string-replace: ^0.4.4
     react-test-renderer: 18.2.0
     readable-stream: 3.6.0
-    recyclerlistview: ^3.0.5
+    recyclerlistview: ^4.1.1
     remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.0
@@ -15398,13 +15398,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^1.0.0":
-  version: 1.2.7
-  resolution: "core-js@npm:1.2.7"
-  checksum: 0b76371bfa98708351cde580f9287e2360d2209920e738ae950ae74ad08639a2e063541020bf666c28778956fc356ed9fe56d962129c88a87a6a4a0612526c75
-  languageName: node
-  linkType: hard
-
 "core-js@npm:^3.0.1, core-js@npm:^3.0.4, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.22.5
   resolution: "core-js@npm:3.22.5"
@@ -17059,7 +17052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding@npm:^0.1.11, encoding@npm:^0.1.13":
+"encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
   dependencies:
@@ -19594,21 +19587,6 @@ __metadata:
   version: 1.0.2
   resolution: "fbjs-css-vars@npm:1.0.2"
   checksum: 72baf6d22c45b75109118b4daecb6c8016d4c83c8c0f23f683f22e9d7c21f32fff6201d288df46eb561e3c7d4bb4489b8ad140b7f56444c453ba407e8bd28511
-  languageName: node
-  linkType: hard
-
-"fbjs@npm:^0.8.9":
-  version: 0.8.18
-  resolution: "fbjs@npm:0.8.18"
-  dependencies:
-    core-js: ^1.0.0
-    isomorphic-fetch: ^2.1.1
-    loose-envify: ^1.0.0
-    object-assign: ^4.1.0
-    promise: ^7.1.1
-    setimmediate: ^1.0.5
-    ua-parser-js: ^0.7.30
-  checksum: 668731b946a765908c9cbe51d5160f973abb78004b3d122587c3e930e3e1ddcc0ce2b17f2a8637dc9d733e149aa580f8d3035a35cc2d3bc78b78f1b19aab90e2
   languageName: node
   linkType: hard
 
@@ -22664,7 +22642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-stream@npm:^1.0.1, is-stream@npm:^1.1.0":
+"is-stream@npm:^1.1.0":
   version: 1.1.0
   resolution: "is-stream@npm:1.1.0"
   checksum: 063c6bec9d5647aa6d42108d4c59723d2bd4ae42135a2d4db6eadbd49b7ea05b750fd69d279e5c7c45cf9da753ad2c00d8978be354d65aa9f6bb434969c6a2ae
@@ -22847,16 +22825,6 @@ __metadata:
   version: 4.0.0
   resolution: "isobject@npm:4.0.0"
   checksum: bbcb522e46d54fb22418ba49fb9a82057ffa201c8401fb6e018c042e2c98cf7d9c7b185aff88e035ec8adea0814506dc2aeff2d08891bbc158e1671a49e99c06
-  languageName: node
-  linkType: hard
-
-"isomorphic-fetch@npm:^2.1.1":
-  version: 2.2.1
-  resolution: "isomorphic-fetch@npm:2.2.1"
-  dependencies:
-    node-fetch: ^1.0.1
-    whatwg-fetch: ">=0.10.0"
-  checksum: bb5daa7c3785d6742f4379a81e55b549a469503f7c9bf9411b48592e86632cf5e8fe8ea878dba185c0f33eb7c510c23abdeb55aebfdf5d3c70f031ced68c5424
   languageName: node
   linkType: hard
 
@@ -26651,16 +26619,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^1.0.1":
-  version: 1.7.3
-  resolution: "node-fetch@npm:1.7.3"
-  dependencies:
-    encoding: ^0.1.11
-    is-stream: ^1.0.1
-  checksum: 3bb0528c05d541316ebe52770d71ee25a6dce334df4231fd55df41a644143e07f068637488c18a5b0c43f05041dbd3346752f9e19b50df50569a802484544d5b
-  languageName: node
-  linkType: hard
-
 "node-forge@npm:0.10.0, node-forge@npm:^0.10.0":
   version: 0.10.0
   resolution: "node-forge@npm:0.10.0"
@@ -29235,16 +29193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.5.8":
-  version: 15.5.8
-  resolution: "prop-types@npm:15.5.8"
-  dependencies:
-    fbjs: ^0.8.9
-  checksum: b64fcb5770c665e66e57663940864425529ea2b8c7821fb86068d1879d7b2c85778948b9a1294912e0d58f55075d1f3e19f44ae4fd5f5cd988c3bf833fa3e1f6
-  languageName: node
-  linkType: hard
-
-"prop-types@npm:^15.0.0, prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -30904,17 +30853,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recyclerlistview@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "recyclerlistview@npm:3.0.5"
+"recyclerlistview@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "recyclerlistview@npm:4.1.1"
   dependencies:
     lodash.debounce: 4.0.8
-    prop-types: 15.5.8
+    prop-types: 15.8.1
     ts-object-utils: 0.0.5
   peerDependencies:
     react: ">= 15.2.1"
     react-native: ">= 0.30.0"
-  checksum: 68fe28f044a42d30ea92f2a2a37d3d96bfb5f57cb2aea763edd37c52f1c735a7e4c559b6ab88339b4ce04cd043490fdaf210a43e0e3eb0eb00fcc25fd0f9ccfe
+  checksum: 9c8e1bf8f939abf78871ca22e22339207f6262d2b9d95a03f2568e005587c3418412cd71037cd517f0a485b7f9e0df487fe2dc123a32e57498820c45c9956996
   languageName: node
   linkType: hard
 
@@ -36438,17 +36387,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-fetch@npm:>=0.10.0, whatwg-fetch@npm:^3.0.0":
-  version: 3.6.2
-  resolution: "whatwg-fetch@npm:3.6.2"
-  checksum: ee976b7249e7791edb0d0a62cd806b29006ad7ec3a3d89145921ad8c00a3a67e4be8f3fb3ec6bc7b58498724fd568d11aeeeea1f7827e7e1e5eae6c8a275afed
-  languageName: node
-  linkType: hard
-
 "whatwg-fetch@npm:^2.0.4":
   version: 2.0.4
   resolution: "whatwg-fetch@npm:2.0.4"
   checksum: de7c65a68d7d62e2f144a6b30293370b3ad82b65ebcd68f2ac8e8bbe7ede90febd98ba9486b78c1cbc950e0e8838fa5c2727f939899ab3fc7b71a04be52d33a5
+  languageName: node
+  linkType: hard
+
+"whatwg-fetch@npm:^3.0.0":
+  version: 3.6.2
+  resolution: "whatwg-fetch@npm:3.6.2"
+  checksum: ee976b7249e7791edb0d0a62cd806b29006ad7ec3a3d89145921ad8c00a3a67e4be8f3fb3ec6bc7b58498724fd568d11aeeeea1f7827e7e1e5eae6c8a275afed
   languageName: node
   linkType: hard
 
