@@ -22,7 +22,7 @@ index 0d4cee7..9e39534 100644
        if (part instanceof Blob) {
          return {
 diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
-index c58dfba..2f3aa15 100644
+index c58dfba..4fc64dd 100644
 --- a/node_modules/react-native/Libraries/Blob/FileReader.js
 +++ b/node_modules/react-native/Libraries/Blob/FileReader.js
 @@ -10,6 +10,7 @@
