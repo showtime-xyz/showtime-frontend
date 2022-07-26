@@ -50,6 +50,11 @@ export const IndependentTabBar = ({
           >
             <Text tw="text-sm font-bold text-black dark:text-white">
               {item.title}
+              {Boolean(item.subtitle) && (
+                <Text tw="text-xs font-semibold text-gray-400">
+                  {` ${item.subtitle}`}
+                </Text>
+              )}
             </Text>
           </View>
         </Pressable>

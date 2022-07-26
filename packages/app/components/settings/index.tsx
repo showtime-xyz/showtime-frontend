@@ -51,7 +51,7 @@ import {
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
 
-const SETTINGS_ROUTE = [
+const SETTINGS_ROUTES = [
   {
     title: "Wallets",
     key: "Wallets",
@@ -109,7 +109,7 @@ const SettingsTabs = () => {
     }
   }, [isAuthenticated, router]);
 
-  const { index, setIndex, routes } = useTabState(SETTINGS_ROUTE);
+  const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
   const renderScene = useCallback(
     ({
       route: { index, key },
@@ -229,7 +229,7 @@ const SettingsTabs = () => {
                   onPress={(i) => {
                     setIndex(i);
                   }}
-                  routes={SETTINGS_ROUTE}
+                  routes={SETTINGS_ROUTES}
                   index={index}
                 />
               </Hidden>

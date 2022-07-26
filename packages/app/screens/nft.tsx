@@ -10,13 +10,14 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-import { FeedItem } from "app/components/swipe-list";
+import { FeedItem } from "app/components/feed-item";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+import type { NFT } from "app/types";
 
 type Query = {
   tokenId: string;
@@ -98,7 +99,7 @@ const NFTDetail = () => {
         itemHeight={itemHeight}
         bottomPadding={safeAreaBottom}
         bottomMargin={bottomMargin}
-        nft={nftWithListing}
+        nft={nftWithListing as NFT}
       />
     );
   }

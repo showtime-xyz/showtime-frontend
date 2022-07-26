@@ -1,6 +1,7 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { MessageMore } from "app/components/messages/message-more";
@@ -31,6 +32,11 @@ function CommentRowComponent({
   deleteComment,
   reply,
 }: CommentRowProps) {
+  /**
+   * we used memo, so needs to add this hooks to here,
+   * otherwise some page switching theme will be invalid
+   */
+  useIsDarkMode();
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [displayedRepliesCount, setDisplayedRepliesCount] =
@@ -123,7 +129,6 @@ function CommentRowComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //#endregion
-
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow

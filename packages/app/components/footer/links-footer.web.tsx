@@ -1,13 +1,19 @@
 import { ShowtimeWordmark } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useFooter } from "app/hooks/use-footer";
+import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import { Link } from "app/navigation/link";
 
 export const WebFooter = () => {
   const { social, links } = useFooter();
+  const router = useRouter();
+  if (HIDE_LINK_FOOTER_ROUTER_LIST.includes(router.pathname)) {
+    return null;
+  }
   return (
     <View tw="w-full items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-2xl flex-col-reverse justify-between p-4 md:flex-row md:p-12 ">
