@@ -13,7 +13,7 @@ import { magic, Magic } from "app/lib/magic";
 
 import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
 
-export const formatAddressShort = (address?: string) => {
+export const formatAddressShort = (address?: string | null) => {
   if (!address) return null;
 
   // Skip over ENS names
