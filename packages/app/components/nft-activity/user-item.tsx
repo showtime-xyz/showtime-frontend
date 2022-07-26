@@ -1,7 +1,11 @@
+import { Link } from "solito/link";
+
 import { Image } from "@showtime-xyz/universal.image";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
+
+import { formatAddressShort } from "app/utilities";
 
 import type { UserItemProps } from "./nft-activity.types";
 
@@ -12,24 +16,32 @@ const getProfileImageUrl = (imgUrl: string) => {
   return imgUrl;
 };
 
-const UserItem = ({ imageUrl, title, verified }: UserItemProps) => {
+const UserItem = ({
+  imageUrl,
+  userAddress,
+  username,
+  verified,
+}: UserItemProps) => {
+  const link = username ? `@${username}` : userAddress;
+  const linkText = username ? `@${username}` : formatAddressShort(userAddress);
+
   return (
     <View tw="flex flex-row items-center">
-      <View
-        tw={`mr-2 h-6 w-6 overflow-hidden rounded-full ${
-          imageUrl ? "" : "bg-white"
-        }`}
-      >
-        {imageUrl ? (
+      {imageUrl ? (
+        <View tw="mr-2 h-6 w-6 overflow-hidden rounded-full bg-white">
           <Image
             width={24}
             height={24}
             tw="h-full w-full"
             source={{ uri: getProfileImageUrl(imageUrl) }}
           />
-        ) : null}
-      </View>
-      <Text tw={"mr-1 text-xs text-black dark:text-white"}>{`@${title}`}</Text>
+        </View>
+      ) : null}
+      <Link href={"/" + link}>
+        <Text tw={"mr-1 text-sm text-blue-600 dark:text-blue-400"}>
+          {linkText}
+        </Text>
+      </Link>
       {verified ? <VerificationBadge size={12} /> : null}
     </View>
   );

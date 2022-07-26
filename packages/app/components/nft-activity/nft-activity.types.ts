@@ -25,6 +25,7 @@ export type TableRowProps = Activity;
 
 export type UserItemProps = {
   imageUrl: string | null;
-  title: string | null;
   verified: number | null;
+  username?: string | null;
+  userAddress?: string | null;
 };

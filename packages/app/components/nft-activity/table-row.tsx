@@ -29,14 +29,16 @@ const TableRow = ({ ...props }: TableRowProps) => {
       <View tw="min-w-[128px] flex-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
         <UserItem
           imageUrl={props.from_img_url}
-          title={props.from_username}
+          username={props.from_username}
+          userAddress={props.from_address}
           verified={props.from_verified}
         />
       </View>
       <View tw="min-w-[128px] flex-1 text-xs font-semibold text-gray-600 dark:text-gray-400">
         <UserItem
           imageUrl={props.to_img_url}
-          title={props.to_username}
+          username={props.to_username}
+          userAddress={props.to_address}
           verified={props.to_verified}
         />
       </View>
