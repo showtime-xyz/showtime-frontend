@@ -2241,12 +2241,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@builder.io/partytown@npm:^0.5.2":
-  version: 0.5.4
-  resolution: "@builder.io/partytown@npm:0.5.4"
+"@builder.io/partytown@npm:^0.6.4":
+  version: 0.6.4
+  resolution: "@builder.io/partytown@npm:0.6.4"
   bin:
     partytown: bin/partytown.cjs
-  checksum: 2935390013f82e731160465a3b1d229cedfafec6b8c2ac7aad65e67012da0711962d9619bdffea1dbbae42b6109a89b501a655ef13a7c432bf95876f59f71f76
+  checksum: 000133b6ab1adcbe6ab9686a8d7af554449f68002ec7ff14cb069d5af674c172c44cd3fad5731939dea9fe7c817f8cd944458aa42c63e2ca954126f3e0f39403
   languageName: node
   linkType: hard
 
@@ -5143,12 +5143,95 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@motify/components@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "@motify/components@npm:0.18.0"
+  dependencies:
+    "@motify/core": ^0.18.0
+  checksum: 9574858ea7da7c4c3eb2a99318e82b3cf1167795131357f5e5359ac217615b35c5dee6fa84a0e82456c35016555c2d8335cfe0e8db4b936fbc1ecf3e60ed0024
+  languageName: node
+  linkType: hard
+
 "@motify/core@npm:^0.17.1":
   version: 0.17.1
   resolution: "@motify/core@npm:0.17.1"
   dependencies:
     framer-motion: ^3.9.1
   checksum: 68848cc83114ad5208a3581069468f1fc9b90ecf2a1724c32f637304b0ec820014ab3ab180052d9fda2df00af6cd7d116160037874c954b0a401c1822559e379
+  languageName: node
+  linkType: hard
+
+"@motify/core@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "@motify/core@npm:0.18.0"
+  dependencies:
+    framer-motion: ^6.3.0
+  checksum: bcca1381c9b54380e150b7ca32a95e5a5fddc77bac3de59dcc40547e2ae9b6793543833245ced2d0440c4d31077685d66379fcaa027037408ac7cd13c3aaf0af
+  languageName: node
+  linkType: hard
+
+"@motionone/animation@npm:^10.12.0":
+  version: 10.13.1
+  resolution: "@motionone/animation@npm:10.13.1"
+  dependencies:
+    "@motionone/easing": ^10.13.1
+    "@motionone/types": ^10.13.0
+    "@motionone/utils": ^10.13.1
+    tslib: ^2.3.1
+  checksum: bf3f95f1c100a18e170fd55fa3d16c6f674fe02dd0f344e78a8ae7e6ffac3510612e9f0b7a5a73fae3bb91b7c3d4e287f605e4feeb8a92538c3588d3ab8a4a70
+  languageName: node
+  linkType: hard
+
+"@motionone/dom@npm:10.12.0":
+  version: 10.12.0
+  resolution: "@motionone/dom@npm:10.12.0"
+  dependencies:
+    "@motionone/animation": ^10.12.0
+    "@motionone/generators": ^10.12.0
+    "@motionone/types": ^10.12.0
+    "@motionone/utils": ^10.12.0
+    hey-listen: ^1.0.8
+    tslib: ^2.3.1
+  checksum: 123356f28e44362c4f081aae3df22e576f46bfcb07e01257b2ac64a115668448f29b8de67e4b6e692c5407cffb78ffe7cf9fa1bc064007482bab5dd23a69d380
+  languageName: node
+  linkType: hard
+
+"@motionone/easing@npm:^10.13.1":
+  version: 10.13.1
+  resolution: "@motionone/easing@npm:10.13.1"
+  dependencies:
+    "@motionone/utils": ^10.13.1
+    tslib: ^2.3.1
+  checksum: 04d3c2d1458795d207067a8341ac23b5037b11d9e7160f91bb953438551255d072012dd22aaed678d0f88792143ad16c9566e131003ec047ef7938529a27b485
+  languageName: node
+  linkType: hard
+
+"@motionone/generators@npm:^10.12.0":
+  version: 10.13.1
+  resolution: "@motionone/generators@npm:10.13.1"
+  dependencies:
+    "@motionone/types": ^10.13.0
+    "@motionone/utils": ^10.13.1
+    tslib: ^2.3.1
+  checksum: d4b91d0352c00275644c5e33bf031545212f94821aa6f7fdc26fa92f054138c76ff89c77a3b10ca167b447e4cf7c019a9628688c9635a21528da2ea260724fbc
+  languageName: node
+  linkType: hard
+
+"@motionone/types@npm:^10.12.0, @motionone/types@npm:^10.13.0":
+  version: 10.13.0
+  resolution: "@motionone/types@npm:10.13.0"
+  checksum: 4c0a4593562f3c8fa30660a3b796ec012d592029137fc35f3029b34e69e5c364efa24c2016dd66b21db580d0a9d4107730b30f55496b416b2ed9dbe437865eab
+  languageName: node
+  linkType: hard
+
+"@motionone/utils@npm:^10.12.0, @motionone/utils@npm:^10.13.1":
+  version: 10.13.1
+  resolution: "@motionone/utils@npm:10.13.1"
+  dependencies:
+    "@motionone/types": ^10.13.0
+    hey-listen: ^1.0.8
+    tslib: ^2.3.1
+  checksum: 2ec2de91d07f7bd1dcb157d96c0c0f7565d1e8c6ac9adec0ce33811a321fea72d45a4c51833d2c3e432c26b3904e17e3296d553ad87b4b6705d6fba93cd22aca
   languageName: node
   linkType: hard
 
@@ -7814,8 +7897,8 @@ __metadata:
     "@testing-library/react-native": ^9.1.0
     "@tradle/react-native-http": ^2.0.0
     "@types/jest": ^27.4.1
-    "@types/react": ^18.0.1
-    "@types/three": ^0.141.0
+    "@types/react": ^18.0.15
+    "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.7.8
     app: "*"
@@ -7868,7 +7951,7 @@ __metadata:
     jest-expo: ^45.0.1
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: ^0.17.1
+    moti: ^0.18.0
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
     process: ^0.11.0
@@ -7939,7 +8022,7 @@ __metadata:
   dependencies:
     "@babel/eslint-parser": ^7.16.3
     "@biconomy/mexa": 2.0.24
-    "@builder.io/partytown": ^0.5.2
+    "@builder.io/partytown": ^0.6.4
     "@coinbase/wallet-sdk": ^3.3.0
     "@expo/next-adapter": 4.0.8
     "@growthbook/growthbook-react": ^0.9.0
@@ -7967,7 +8050,7 @@ __metadata:
     eslint-config-next: ^12.2.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-diff: ^1.0.12
-    ethers: ^5.6.4
+    ethers: ^5.6.9
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
     magic-sdk: ^7.0.0
@@ -7987,7 +8070,7 @@ __metadata:
     react-string-replace: ^0.4.4
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
-    rudder-sdk-js: ^2.3.6
+    rudder-sdk-js: ^2.9.2
     setimmediate: ^1.0.5
     swr: 2.0.0-beta.6
     tailwindcss: ^3.1.2
@@ -8017,7 +8100,7 @@ __metadata:
     "@storybook/addon-ondevice-controls": next
     "@storybook/addon-ondevice-notes": next
     "@storybook/react-native": next
-    "@types/three": ^0.141.0
+    "@types/three": ^0.142.0
     design-system: "*"
     expo: next
     expo-asset: ~8.5.0
@@ -8075,7 +8158,7 @@ __metadata:
     "@storybook/manager-webpack5": ~6.5.9
     "@storybook/react": ~6.5.9
     "@types/node": 16.11.9
-    "@types/react": ^18.0.1
+    "@types/react": ^18.0.15
     babel-loader: ^8.2.3
     babel-plugin-react-native-web: ^0.17.5
     chromatic: ^6.0.6
@@ -10560,12 +10643,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-native@npm:0.67.6":
-  version: 0.67.6
-  resolution: "@types/react-native@npm:0.67.6"
+"@types/react-native@npm:0.69.3":
+  version: 0.69.3
+  resolution: "@types/react-native@npm:0.69.3"
   dependencies:
     "@types/react": "*"
-  checksum: e138b3165e45f7048bfd3ae7926dc6586ffcac05a2815429ef3c3eeb7ce60e929240e7f0eec0120680f1ed1fe99a9e8d4fab1ee7db4b81547a1c48ed3201600c
+  checksum: 7d5aa4b30385e232fed74bdebeba1c7ee73b4237ca5a310fee6f9b98432ed2f3a737f2755c528fd5b03485278e98bd0b152692df5e146cb2603827ab939841dc
   languageName: node
   linkType: hard
 
@@ -10669,12 +10752,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/three@npm:^0.141.0":
-  version: 0.141.0
-  resolution: "@types/three@npm:0.141.0"
+"@types/three@npm:^0.142.0":
+  version: 0.142.0
+  resolution: "@types/three@npm:0.142.0"
   dependencies:
     "@types/webxr": "*"
-  checksum: b4d1fd19eec01a15374a9e0a181207f0b2a27df881f3cfc63ce167b36b214c6926d80ac0eeb80c365832f69e7180db514a859808150ece1c1503a4eb58d4ac1e
+  checksum: 69e2c5635772ebe8c9b1e274a8546d7354759dde80467c9f2e3195722aa598fc895e58a7e0dc4840f134bdc934f01edece2a9a320f4150a794429111ca1da565
   languageName: node
   linkType: hard
 
@@ -18356,7 +18439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.0.24, ethers@npm:^5.6.4":
+"ethers@npm:^5.0.24, ethers@npm:^5.6.9":
   version: 5.6.9
   resolution: "ethers@npm:5.6.9"
   dependencies:
@@ -20055,10 +20138,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^6.3.0":
+  version: 6.5.1
+  resolution: "framer-motion@npm:6.5.1"
+  dependencies:
+    "@emotion/is-prop-valid": ^0.8.2
+    "@motionone/dom": 10.12.0
+    framesync: 6.0.1
+    hey-listen: ^1.0.8
+    popmotion: 11.0.3
+    style-value-types: 5.0.0
+    tslib: ^2.1.0
+  peerDependencies:
+    react: ">=16.8 || ^17.0.0 || ^18.0.0"
+    react-dom: ">=16.8 || ^17.0.0 || ^18.0.0"
+  dependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+  checksum: 737959063137b4ccafe01e0ac0c9e5a9531bf3f729f62c34ca7a5d7955e6664f70affd22b044f7db51df41acb21d120a4f71a860e17a80c4db766ad66f2153a1
+  languageName: node
+  linkType: hard
+
 "framesync@npm:5.2.0":
   version: 5.2.0
   resolution: "framesync@npm:5.2.0"
   checksum: 5c5383e9719273057c1d19ae2718b3e5070f6174ad108556efae1c378313dba5882c55416f4bca04fc1d12da7752c800f0d203425f2e99a4caf60477e4eccf92
+  languageName: node
+  linkType: hard
+
+"framesync@npm:6.0.1":
+  version: 6.0.1
+  resolution: "framesync@npm:6.0.1"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: a23ebe8f7e20a32c0b99c2f8175b6f07af3ec6316aad52a2316316a6d011d717af8d2175dcc2827031c59fabb30232ed3e19a720a373caba7f070e1eae436325
   languageName: node
   linkType: hard
 
@@ -26157,13 +26270,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:0.17.1, moti@npm:^0.17.1":
+"moti@npm:0.17.1":
   version: 0.17.1
   resolution: "moti@npm:0.17.1"
   dependencies:
     "@motify/components": ^0.17.1
     "@motify/core": ^0.17.1
   checksum: 9f0f16f377f320e9ea3266556d2fea6bcd28c3f1275d3a45f75e47ab8071d9628ed363a45440b692a62d82bc9bc3ad610c5e20ea9316e1b640e9c546d5b9d230
+  languageName: node
+  linkType: hard
+
+"moti@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "moti@npm:0.18.0"
+  dependencies:
+    "@motify/components": ^0.18.0
+    "@motify/core": ^0.18.0
+  checksum: cef1e439faaa98fc0600fe3e65e37e57edadc1378fea315221a9d1574517f5beb53a01ff9d2c4a09026c1bdaeebd0eb561e92c7081fd41a2c58d0f22af11eb43
   languageName: node
   linkType: hard
 
@@ -28197,6 +28320,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"popmotion@npm:11.0.3":
+  version: 11.0.3
+  resolution: "popmotion@npm:11.0.3"
+  dependencies:
+    framesync: 6.0.1
+    hey-listen: ^1.0.8
+    style-value-types: 5.0.0
+    tslib: ^2.1.0
+  checksum: 9fe7d03b4ec0e85bfb9dadc23b745147bfe42e16f466ba06e6327197d0e38b72015afc2f918a8051dedc3680310417f346ffdc463be6518e2e92e98f48e30268
+  languageName: node
+  linkType: hard
+
 "popmotion@npm:9.3.1":
   version: 9.3.1
   resolution: "popmotion@npm:9.3.1"
@@ -28899,6 +29034,15 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: 48d08dde8e9fb1f5bccdd205baa7f192e9fc8bc98f86e1b97d919de804e28c806b0e6cc685e4a88211aa7987fa9668f30baae19580d87ced3ed0f2ec6572106f
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
   languageName: node
   linkType: hard
 
@@ -31599,10 +31743,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rudder-sdk-js@npm:^2.3.6":
-  version: 2.8.0
-  resolution: "rudder-sdk-js@npm:2.8.0"
-  checksum: 31c410d23c7bd686d2dea70574f67a56f0f60131cf4d6080b8a9086fd4648a2125067b5a6c04e5795ffebbd5a1dc29c1b7f908323f0fe9b1c20437f91559b849
+"rudder-sdk-js@npm:^2.9.2":
+  version: 2.9.2
+  resolution: "rudder-sdk-js@npm:2.9.2"
+  checksum: 3c9d02e21a0ac4cfaf485df82124acdf1f5b251eac5bfb9ecf8029ade2cbcc898f607da1daa2afe3cd4102624f7c957d3da00437395055dc62a38b508cd70ac5
   languageName: node
   linkType: hard
 
@@ -32262,7 +32406,7 @@ __metadata:
   dependencies:
     "@react-native-menu/menu": ^0.5.2
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
-    "@types/react-native": 0.67.6
+    "@types/react-native": 0.69.3
     "@typescript-eslint/eslint-plugin": 5.23.0
     "@typescript-eslint/parser": 5.23.0
     "@walletconnect/react-native-dapp": ^1.7.8
@@ -32276,7 +32420,7 @@ __metadata:
     eslint-plugin-unused-imports: 1.1.5
     husky: ^8.0.1
     patch-package: ^6.4.7
-    prettier: ^2.4.1
+    prettier: ^2.7.1
     prettier-plugin-tailwindcss: 0.1.10
     react-native-fast-image: ^8.5.11
     react-native-os: ^1.2.6
@@ -33337,6 +33481,16 @@ __metadata:
     hey-listen: ^1.0.8
     tslib: ^1.10.0
   checksum: b7d2c3dd668bb6c1e7f29032b2bf72c4bb3104abdfb59ceb683fa68cc11da669d3808110763ec01d6104f1c68d34f839ea6bab9e257401dc908bfe3a420787ff
+  languageName: node
+  linkType: hard
+
+"style-value-types@npm:5.0.0":
+  version: 5.0.0
+  resolution: "style-value-types@npm:5.0.0"
+  dependencies:
+    hey-listen: ^1.0.8
+    tslib: ^2.1.0
+  checksum: 16d198302cd102edf9dba94e7752a2364c93b1eaa5cc7c32b42b28eef4af4ccb5149a3f16bc2a256adc02616a2404f4612bd15f3081c1e8ca06132cae78be6c0
   languageName: node
   linkType: hard
 
@@ -34461,7 +34615,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113

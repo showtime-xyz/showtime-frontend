@@ -6,7 +6,7 @@
   "devDependencies": {
     "@react-native-menu/menu": "^0.5.2",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
-    "@types/react-native": "0.67.6",
+    "@types/react-native": "0.69.3",
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
     "@walletconnect/react-native-dapp": "^1.7.8",
@@ -20,7 +20,7 @@
     "eslint-plugin-unused-imports": "1.1.5",
     "husky": "^8.0.1",
     "patch-package": "^6.4.7",
-    "prettier": "^2.4.1",
+    "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "0.1.10",
     "react-native-fast-image": "^8.5.11",
     "react-native-os": "^1.2.6",
