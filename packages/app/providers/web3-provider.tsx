@@ -34,8 +34,9 @@ export function Web3Provider({
     [web3]
   );
 
+  // (Native only) initialises wallet connect native web3 provider
   useEffect(() => {
-    if (connector.connected) {
+    if (Platform.OS !== "web" && connector.connected) {
       const walletConnectProvider = new WalletConnectProvider({
         connector,
         qrcode: false,
@@ -50,20 +51,20 @@ export function Web3Provider({
     }
   }, [connector]);
 
+  // (Web/Native) initialises magic web3 provider
   useEffect(() => {
-    if (Platform.OS !== "web") {
-      magic?.user?.isLoggedIn().then((isLoggedIn) => {
-        if (magic.rpcProvider && isLoggedIn) {
-          //@ts-ignore
-          const provider = new EthersWeb3Provider(magic.rpcProvider);
-          setWeb3(provider);
-        }
-      });
-    }
+    magic?.user?.isLoggedIn().then((isLoggedIn) => {
+      if (magic.rpcProvider && isLoggedIn) {
+        //@ts-ignore
+        const provider = new EthersWeb3Provider(magic.rpcProvider);
+        setWeb3(provider);
+      }
+    });
   }, []);
 
+  // (Web only) initialises web3 provider from wagmi
   useEffect(() => {
-    if (connected) {
+    if (Platform.OS === "web" && connected) {
       setWeb3(provider);
     }
   }, [connected, provider]);

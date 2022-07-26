@@ -1,39 +1,75 @@
-import { useMemo } from "react";
+import { useMemo, ComponentType } from "react";
 import { Platform } from "react-native";
 
+import { SvgProps } from "react-native-svg";
+
+import { Button } from "@showtime-xyz/universal.button";
+import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator,
+  DropdownMenuItemIcon,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import {
+  MoreHorizontal,
+  Trash,
+  File,
+  UserMinus,
+  Flag,
+  Transfer,
+  EyeOff,
+  Copy,
+  Slash,
+  Refresh,
+  Clock,
+  Menu,
+  Twitter,
+} from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useFeed } from "app/hooks/use-feed";
-import { useNFTDetails } from "app/hooks/use-nft-details";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
-type Props = {
-  nftId?: NFT["nft_id"];
-  listId?: number | undefined;
-  shouldEnableSharing?: boolean;
+const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
+  return (
+    <DropdownMenuItemIcon>
+      <Icon
+        width="1em"
+        height="1em"
+        color={tw.style("bg-gray-500")?.backgroundColor as string}
+        {...rest}
+      />
+    </DropdownMenuItemIcon>
+  );
 };
 
-function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
+type Props = {
+  nft?: NFT;
+  listId?: number | undefined;
+  shouldEnableSharing?: boolean;
+  btnProps?: ButtonProps;
+};
+
+function NFTDropdown({
+  nft: propNFT,
+  listId,
+  shouldEnableSharing = true,
+  btnProps,
+}: Props) {
   //#region hooks
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
@@ -41,9 +77,17 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
   const { unfollow, isFollowing, hide: hideNFT } = useMyInfo();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
-  const { refresh } = useFeed("");
-  const { data: nft } = useNFTDetails(nftId);
-  const shareNFT = useShareNFT();
+  // const { refresh } = useFeed("");
+  const { data } = useNFTDetailByTokenId({
+    contractAddress: propNFT?.contract_address,
+    tokenId: propNFT?.token_id,
+    chainName: propNFT?.chain_name,
+  });
+
+  const nft = data?.data.item;
+
+  const isCreatorDrop = nft?.creator_airdrop_edition_address;
+  const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
@@ -91,119 +135,116 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
         native: as,
         web: router.asPath.startsWith("/nft/") ? as : router.asPath,
       }),
-      { shallow: true }
+      Platform.select({
+        native: {},
+        web: { scroll: false },
+      })
     );
   };
+
+  const isShareAPIAvailable = Platform.select({
+    default: true,
+    web: typeof window !== "undefined" && !!navigator.share,
+  });
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <MoreHorizontal
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-          width={24}
-          height={24}
-        />
+        <Button
+          variant="text"
+          tw="p-0"
+          accessibilityLabel="nft card item menu"
+          iconOnly
+          {...btnProps}
+        >
+          <MoreHorizontal
+            color={
+              tw.style(
+                "bg-gray-600 dark:bg-gray-400 md:dark:bg-white md:bg-gray-900"
+              )?.backgroundColor as string
+            }
+            width={24}
+            height={24}
+          />
+        </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
-        {hasOwnership ? (
+      <DropdownMenuContent loop>
+        {hasOwnership && listId ? (
           <DropdownMenuItem
             onSelect={() => {
-              hideNFT(nftId, listId);
+              hideNFT(nft?.nft_id, listId);
             }}
             key="hide"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Hide
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={EyeOff} />
+            <DropdownMenuItemTitle>Hide</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
-        {hasOwnership ? (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        ) : null}
-
-        <DropdownMenuItem
-          onSelect={() => openModal("details")}
-          key="details"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-        >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Details
-          </DropdownMenuItemTitle>
+        <DropdownMenuItem onSelect={() => openModal("details")} key="details">
+          <MenuItemIcon Icon={File} />
+          <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-
-        <DropdownMenuItem
-          onSelect={() => openModal("activities")}
-          key="activities"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-        >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Activity
-          </DropdownMenuItemTitle>
+        <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
+          <MenuItemIcon Icon={Clock} />
+          <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
         </DropdownMenuItem>
+        {shouldEnableSharing && (
+          <>
+            {!isShareAPIAvailable && (
+              <DropdownMenuItem
+                onSelect={() => shareNFTOnTwitter(nft)}
+                key="share-twitter"
+              >
+                <MenuItemIcon Icon={Twitter} />
 
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        ) : null}
+                <DropdownMenuItemTitle>Share on Twitter</DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+              <MenuItemIcon Icon={Copy} />
 
-        {shouldEnableSharing && Platform.OS !== "ios" ? (
+              <DropdownMenuItemTitle>
+                {isShareAPIAvailable ? "Share" : "Copy Link"}
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </>
+        )}
+
+        {!isCreatorDrop && (
           <DropdownMenuItem
-            onSelect={() => shareNFT(nft)}
-            key="copy-link"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+            onSelect={() => refreshMetadata(nft)}
+            key="refresh-metadata"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Share
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Refresh} />
+
+            <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        ) : null}
-
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-
-        <DropdownMenuItem
-          onSelect={() => refreshMetadata(nft)}
-          key="refresh-metadata"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-        >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Refresh Metadata
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        )}
 
         {!hasOwnership && isFollowingUser && (
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
                 await unfollow(nft?.creator_id);
-                refresh();
+                // refresh();
               } else {
                 navigateToLogin();
               }
             }}
             key="unfollow"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Unfollow User
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={UserMinus} />
+            <DropdownMenuItemTitle>Unfollow User</DropdownMenuItemTitle>
           </DropdownMenuItem>
-        )}
-
-        {!hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
         )}
 
         {!hasOwnership ? (
           <DropdownMenuItem
+            className="danger"
             key="block"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
             onSelect={() =>
               toggleBlock({
                 isBlocked,
@@ -212,93 +253,64 @@ function NFTDropdown({ nftId, listId, shouldEnableSharing = true }: Props) {
               })
             }
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+            <MenuItemIcon Icon={Slash} />
+            <DropdownMenuItemTitle>
               {isBlocked ? "Unblock User" : "Block User"}
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
         {!hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {!hasOwnership && (
           <DropdownMenuItem
             onSelect={async () => {
-              await report({ nftId: nft?.token_id });
+              await report({ nftId: nft?.nft_id });
               router.pop();
             }}
             key="report"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Report
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Flag} />
+            <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {hasOwnership && (
+        {hasOwnership && !isCreatorDrop && (
           <DropdownMenuItem
             onSelect={() => openModal("transfer")}
             key="transfer"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Transfer
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Transfer} />
+            <DropdownMenuItemTitle>Transfer</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
+        {hasOwnership &&
+          usableContractAddress &&
+          !hasMatchingListing &&
+          !isCreatorDrop && (
+            <DropdownMenuItem onSelect={() => openModal("list")} key="list">
+              <MenuItemIcon Icon={Menu} />
+              <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
 
-        {hasOwnership && usableContractAddress && !hasMatchingListing && (
+        {hasOwnership &&
+          usableContractAddress &&
+          hasMatchingListing &&
+          !isCreatorDrop && (
+            <DropdownMenuItem onSelect={() => openModal("unlist")} key="unlist">
+              <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
+
+        {hasOwnership && !isCreatorDrop && (
           <DropdownMenuItem
-            onSelect={() => openModal("list")}
-            key="list"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-          >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              List
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
-
-        {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {hasOwnership && usableContractAddress && hasMatchingListing && (
-          <DropdownMenuItem
-            onSelect={() => openModal("unlist")}
-            key="unlist"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
-          >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Unlist
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
-
-        {hasOwnership && (
-          <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
-        )}
-
-        {hasOwnership && (
-          <DropdownMenuItem
+            className="danger"
             destructive
             onSelect={() => openModal("delete")}
             key="delete"
-            tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           >
-            <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-              Delete
-            </DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Trash} />
+            <DropdownMenuItemTitle>Delete</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

@@ -37,18 +37,24 @@ export function SceneComponent<P extends object>({
     curIndexValue,
     refHasChanged,
     updateSceneInfo,
+    scrollStickyHeaderHeight,
   } = useHeaderTabContext();
   const scollViewRef =
     useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
 
   const nativeGestureRef = useRef(Gesture.Native());
   const scrollY = useSharedValue(0);
+
   const { opacityValue, initialPosition } =
     useSyncInitialPosition(scollViewRef);
 
   const calcHeight = useMemo(() => {
     return tabbarHeight + headerHeight;
   }, [tabbarHeight, headerHeight]);
+
+  const scrollViewPaddingTop = useMemo(() => {
+    return calcHeight + scrollStickyHeaderHeight;
+  }, [calcHeight, scrollStickyHeaderHeight]);
 
   const onScrollAnimateEvent = useAnimatedScrollHandler({
     onScroll: (e) => {
@@ -89,6 +95,7 @@ export function SceneComponent<P extends object>({
       opacity: withTiming(opacityValue.value),
     };
   }, [opacityValue]);
+
   return (
     <Animated.View style={[styles.container, sceneStyle]}>
       {/* @ts-ignore */}
@@ -101,7 +108,7 @@ export function SceneComponent<P extends object>({
           // @ts-ignore
           contentContainerStyle={[
             {
-              paddingTop: calcHeight,
+              paddingTop: scrollViewPaddingTop,
               minHeight: expectHeight,
             },
             contentContainerStyle,

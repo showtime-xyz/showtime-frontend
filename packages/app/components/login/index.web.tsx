@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,6 +27,8 @@ export function Login({ onLogin }: LoginProps) {
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
+    showSignMessage,
+    verifySignature,
   } = useLogin(onLogin);
   //#endregion
 
@@ -76,6 +79,16 @@ export function Login({ onLogin }: LoginProps) {
               ? `Pushed a request to ${walletName}... Please check your wallet.`
               : `Pushed a request to your wallet...`}
           </Text>
+        </View>
+      ) : showSignMessage ? (
+        <View tw="py-20 px-10">
+          <Text tw="text-center text-lg dark:text-gray-400">
+            We need a signature in order to verify your identity. This won't
+            cost any gas.
+          </Text>
+          <Button tw="mt-8" onPress={verifySignature}>
+            Sign the message
+          </Button>
         </View>
       ) : (
         <>

@@ -2,7 +2,7 @@ import { ComponentProps } from "react";
 
 import { Blurhash } from "react-native-blurhash";
 import FastImage from "react-native-fast-image";
-import type { FastImageProps } from "react-native-fast-image";
+import type { FastImageProps, Source } from "react-native-fast-image";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -11,38 +11,21 @@ import { View } from "@showtime-xyz/universal.view";
 export type ImgProps = FastImageProps & {
   height?: number;
   width?: number;
+  borderRadius?: number;
 };
 
-function Img({ source, height, width, ...props }: ImgProps) {
+function Img({ source, height, width, borderRadius, ...props }: ImgProps) {
   return (
-    // @ts-ignore
     <FastImage
       source={
-        // @ts-ignore
-        source.uri
-          ? // @ts-ignore
-            { uri: source.uri, cache: FastImage.cacheControl.immutable }
+        Object.prototype.hasOwnProperty.call(source, "uri")
+          ? { ...(source as Source), cache: FastImage.cacheControl.immutable }
           : source
       }
-      style={[props.style, { height, width }]}
+      style={[props.style, { height, width, borderRadius }]}
       {...props}
     />
   );
-  // return (
-  //   <ReactNativeImage
-  //     // @ts-ignore
-  //     source={source.uri ? { uri: source.uri, cache: "force-cache" } : source}
-  //     width={width}
-  //     height={height}
-  //     resizeMode="cover" // Default
-  //     // @ts-ignore
-  //     cache="force-cache" // iOS
-  //     // resizeMethod="resize" // Android
-  //     progressiveRenderingEnabled={true} // Android
-  //     fadeDuration={0} // Android
-  //     {...props}
-  //   />
-  // );
 }
 
 type ImageProps = {
@@ -51,12 +34,19 @@ type ImageProps = {
   blurhash?: string;
 } & ComponentProps<typeof Img>;
 
-function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
-  const width = Number(tailwind.style(tw).width);
-  const height = Number(tailwind.style(tw).height);
-  // const borderRadius = Number(tailwind.style(tw).borderRadius) ?? 0
-
-  // <View style={{ borderRadius, overflow: 'hidden' }}>
+function StyledImage({
+  tw,
+  style,
+  width: propWidth = 0,
+  height: propHeight = 0,
+  borderRadius: propBorderRadius = 0,
+  blurhash,
+  ...props
+}: ImageProps) {
+  const width = Number(tailwind.style(tw).width) || propWidth;
+  const height = Number(tailwind.style(tw).height) || propHeight;
+  const borderRadius =
+    Number(tailwind.style(tw).borderRadius) || propBorderRadius;
 
   if (blurhash) {
     return (
@@ -71,10 +61,11 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
           />
         </View>
         <Img
+          {...props}
           style={[style, tailwind.style(tw)]}
           width={width}
           height={height}
-          {...props}
+          borderRadius={borderRadius}
         />
       </View>
     );
@@ -85,6 +76,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
       style={[style, tailwind.style(tw)]}
       width={width}
       height={height}
+      borderRadius={borderRadius}
       {...props}
     />
   );

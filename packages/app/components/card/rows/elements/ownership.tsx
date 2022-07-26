@@ -26,7 +26,7 @@ function OwnershipContainer({
   ) : (
     <View
       tw={[
-        "flex h-[30px] w-[30px] flex-row flex-wrap justify-between",
+        "flex h-8 w-8 flex-row flex-wrap justify-between",
         count < 3 ? "content-center" : "content-between",
       ]}
     >
@@ -37,7 +37,7 @@ function OwnershipContainer({
 
 export function Ownership({ nft }: Props) {
   const isDarkMode = useIsDarkMode();
-  const { data, loading } = useNFTDetails(nft.nft_id);
+  const { data, loading } = useNFTDetails(nft?.nft_id);
 
   if (!nft) return null;
 
@@ -84,7 +84,7 @@ export function Ownership({ nft }: Props) {
           <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             Owners
           </Text>
-          <View tw="h-1" />
+          <View tw="h-2" />
           <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
             Multiple
           </Text>

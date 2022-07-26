@@ -11,6 +11,7 @@ import { LinkCore, Props } from "app/navigation/link/link-core";
 type LinkProps = Props & {
   viewProps?: ViewProps;
   tw?: TW;
+  dataSet?: any;
   // react-native-web only types
   hrefAttrs?: {
     rel: "noreferrer";

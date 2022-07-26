@@ -1,8 +1,9 @@
+const connector = {
+  connect: () => {},
+};
+
 const useWalletConnect = () => {
-  return {
-    connector: null,
-    connect: () => {},
-  };
+  return connector;
 };
 
 export { useWalletConnect };

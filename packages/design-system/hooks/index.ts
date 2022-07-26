@@ -1,27 +1,13 @@
-import { useRef, useEffect, useState, useMemo } from "react";
-import {
-  LayoutChangeEvent,
-  Platform,
-  useColorScheme as useDeviceColorScheme,
-} from "react-native";
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
+import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
-import { useColorScheme as useUserColorScheme } from "./color-scheme";
-
-export const useColorScheme = () => {
-  const userColorScheme = useUserColorScheme();
-  const deviceColorScheme = useDeviceColorScheme();
-
-  return userColorScheme ?? deviceColorScheme;
-};
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 
 export const useIsDarkMode = () => {
-  const userColorScheme = useUserColorScheme();
-  const deviceColorScheme = useDeviceColorScheme();
-  return userColorScheme
-    ? userColorScheme === "dark"
-    : deviceColorScheme === "dark";
+  const { colorScheme } = useColorScheme();
+  return colorScheme === "dark";
 };
 
 export const useOnFocus = () => {
@@ -146,10 +132,18 @@ function getBackgroundColor(intensity: number, tint: BlurTint): string {
   }
 }
 
-export function useBlurredBackgroundColor(intensity: number): string {
+export function useBlurredBackgroundStyles(intensity: number): {
+  backgroundColor: string;
+  backdropFilter: string;
+  "-webkit-backdrop-filter": string;
+} {
   const isDark = useIsDarkMode();
 
-  return getBackgroundColor(intensity, isDark ? "dark" : "light");
+  return {
+    backgroundColor: getBackgroundColor(intensity, isDark ? "dark" : "light"),
+    backdropFilter: "blur(20px)",
+    "-webkit-backdrop-filter": "blur(20px)",
+  };
 }
 
 export function useIsMobileWeb() {
@@ -169,3 +163,16 @@ export function useIsMobileWeb() {
     isMobileWeb,
   };
 }
+
+export const usePlatformResize = (onResize: (evt: Event) => any) => {
+  useLayoutEffect(() => {
+    const handleResize = (evt: Event) => {
+      onResize(evt);
+    };
+    Platform.OS === "web" && window.addEventListener("resize", handleResize);
+    return function cleanup() {
+      Platform.OS === "web" &&
+        window.removeEventListener("resize", handleResize);
+    };
+  }, [onResize]);
+};

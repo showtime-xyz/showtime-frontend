@@ -10,11 +10,7 @@ import {
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import {
-  useColorScheme,
-  useIsDarkMode,
-  useOnFocus,
-} from "@showtime-xyz/universal.hooks";
+import { useOnFocus, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Label } from "@showtime-xyz/universal.label";
 import {
   PressableScale,
@@ -43,15 +39,8 @@ type InputProps = {
   autocomplete?: "on" | "off";
 };
 
-const borderColor = {
-  dark: "#52525B",
-  light: "#E4E4E7",
-};
-
-const boxShadow = {
-  dark: borderColor.dark + " 0px 0px 0px 4px",
-  light: borderColor.light + " 0px 0px 0px 4px",
-};
+const BOX_SHADOW_LIGNT = "#E4E4E7 0px 0px 0px 4px";
+const BOX_SHADOW_DARK = "#52525B 0px 0px 0px 4px";
 
 let idCounter = 0;
 // Replace this with useId from React 18. Currently we're doing client side rendering, so probably this is safe!
@@ -86,9 +75,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     autocomplete,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
-  const colorScheme = useColorScheme();
   const isDark = useIsDarkMode();
-
   const inputId = useId(props.id);
   const helperTextId = useId();
   const errorTextId = useId();
@@ -97,7 +84,9 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     return {
       boxShadow:
         Platform.OS === "web" && focused.value
-          ? boxShadow[colorScheme]
+          ? isDark
+            ? BOX_SHADOW_DARK
+            : BOX_SHADOW_LIGNT
           : undefined,
       opacity: disabled ? 0.75 : 1,
     };

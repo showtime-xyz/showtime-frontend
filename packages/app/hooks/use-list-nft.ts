@@ -56,7 +56,7 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
 export const useListNFT = () => {
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
-  const { getBiconomySigner } = useBiconomy();
+  const result = useBiconomy();
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
   const MINTING_ADDRESS = process.env.NEXT_PUBLIC_MINTING_CONTRACT;
 
@@ -195,7 +195,6 @@ export const useListNFT = () => {
   const listNFT = async (listingValues: ListingValues) => {
     try {
       dispatch({ type: "status", status: "approvalChecking" });
-      const result = await getBiconomySigner();
       if (result) {
         await requestingListingApproval(result);
         await listingToMarketPlace({ ...result, listingValues });

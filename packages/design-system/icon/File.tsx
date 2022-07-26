@@ -2,17 +2,21 @@ import * as React from "react";
 
 import Svg, { SvgProps, Path } from "react-native-svg";
 
-function SvgFile(props: SvgProps) {
-  return (
-    <Svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" {...props}>
-      <Path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M3.879 1.879A3 3 0 016 1h7a1 1 0 01.707.293l7 7A1 1 0 0121 9v11a3 3 0 01-3 3H6a3 3 0 01-3-3V4a3 3 0 01.879-2.121zM6 3a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V10h-6a1 1 0 01-1-1V3H6zm8 1.414L17.586 8H14V4.414z"
-        fill={props.color}
-      />
-    </Svg>
-  );
-}
+const SvgFile = (props: SvgProps) => (
+  <Svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <Path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <Path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+  </Svg>
+);
 
 export default SvgFile;

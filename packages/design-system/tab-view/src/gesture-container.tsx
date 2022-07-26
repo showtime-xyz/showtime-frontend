@@ -26,12 +26,13 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
+import type { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { HeaderTabContext } from "./context";
 import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
 import { useSceneInfo } from "./hooks/use-scene-info";
 import RefreshControlContainer from "./refresh-control";
-import type { GestureContainerProps } from "./types";
+import type { GestureContainerProps, Route } from "./types";
 import { animateToRefresh, mScrollTo } from "./utils";
 
 const { width } = Dimensions.get("window");
@@ -42,7 +43,7 @@ export type GestureContainerRef = {
 
 export const GestureContainer = React.forwardRef<
   GestureContainerRef,
-  GestureContainerProps
+  GestureContainerProps<Route>
 >(function Container(
   {
     refreshHeight = 80,
@@ -65,6 +66,9 @@ export const GestureContainer = React.forwardRef<
     onPullEnough,
     refreshControlColor,
     refreshControlTop = 0,
+    emptyBodyComponent,
+    navigationState,
+    renderSceneHeader,
   },
   forwardedRef
 ) {
@@ -81,6 +85,7 @@ export const GestureContainer = React.forwardRef<
   const [headerHeight, setHeaderHeight] = useState(
     initHeaderHeight - overflowHeight
   );
+  const [scrollStickyHeaderHeight, setStickyHeaderHeight] = useState(0);
 
   // ref
   const [childGestures, setChildRefs] = useState<NativeGesture[]>([]);
@@ -547,6 +552,15 @@ export const GestureContainer = React.forwardRef<
       opacity: opacityValue.value,
     };
   });
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: headerTransValue.value,
+        },
+      ],
+    };
+  });
 
   const _renderTabBarContainer = (children: React.ReactElement) => {
     return (
@@ -557,16 +571,49 @@ export const GestureContainer = React.forwardRef<
             {renderScrollHeader && (
               <View onLayout={headerOnLayout}>{renderScrollHeader()}</View>
             )}
-
-            <Animated.View
-              style={{ transform: [{ translateY: -overflowHeight }] }}
-              onLayout={tabbarOnLayout}
-            >
-              {children}
-            </Animated.View>
+            {navigationState?.routes.length === 0 && emptyBodyComponent ? (
+              <View style={{ marginTop: tabbarHeight }}>
+                {emptyBodyComponent}
+              </View>
+            ) : (
+              <Animated.View
+                style={{ transform: [{ translateY: -overflowHeight }] }}
+                onLayout={tabbarOnLayout}
+              >
+                {children}
+              </Animated.View>
+            )}
           </Animated.View>
         </GestureDetector>
       </Animated.View>
+    );
+  };
+  const _renderSceneHeader = (
+    children: React.ReactElement,
+    props: SceneRendererProps & { route: Route }
+  ) => {
+    return (
+      <View style={{ flex: 1 }}>
+        {children}
+        <Animated.View
+          onLayout={({
+            nativeEvent: {
+              layout: { height },
+            },
+          }) => {
+            setStickyHeaderHeight(height);
+          }}
+          style={[
+            {
+              top: headerHeight + tabbarHeight,
+              ...styles.tabbarStyle,
+            },
+            headerStyle,
+          ]}
+        >
+          {renderSceneHeader?.(props.route)}
+        </Animated.View>
+      </View>
     );
   };
 
@@ -599,6 +646,7 @@ export const GestureContainer = React.forwardRef<
         updateSceneInfo,
         isSlidingHeader,
         isStartRefreshing,
+        scrollStickyHeaderHeight,
       }}
     >
       {/* @ts-ignore */}
@@ -610,6 +658,7 @@ export const GestureContainer = React.forwardRef<
           >
             {renderTabView({
               renderTabBarContainer: _renderTabBarContainer,
+              renderSceneHeader: _renderSceneHeader,
             })}
           </Animated.View>
           {renderRefreshControl()}

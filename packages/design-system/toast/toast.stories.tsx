@@ -5,10 +5,10 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useToast } from "./index";
+import { useToast, ToastProvider } from "./index";
 
 export default {
-  component: Spinner,
+  component: ToastProvider,
   title: "Components/Toast",
 } as Meta;
 

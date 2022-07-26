@@ -5,12 +5,11 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import * as DropdownMenu from "zeego/dropdown-menu";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-
-import * as DropdownMenu from "./zeego-menu/dropdown-menu/src/index";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 
@@ -92,7 +91,9 @@ const DropdownMenuItem = DropdownMenu.menuify(
     onBlur,
     onFocus,
     ...props
-  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Item>) => {
+  }: { tw?: TW; className?: string } & ComponentProps<
+    typeof DropdownMenu.Item
+  >) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -151,7 +152,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
     props: ComponentProps<typeof Text> &
       ComponentProps<typeof DropdownMenu.ItemTitle>
   ) => (
-    <StyledDropdownMenuItemTitle {...props}>
+    <StyledDropdownMenuItemTitle {...props} style={tailwind.style(props.tw)}>
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemTitle>

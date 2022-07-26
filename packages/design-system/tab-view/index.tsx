@@ -1,31 +1,40 @@
-import { useCallback, forwardRef } from "react";
-import { StatusBar } from "react-native";
+import { useCallback, isValidElement } from "react";
+import { Platform, StatusBar, View } from "react-native";
 
 import {
   SceneRendererProps,
   NavigationState,
 } from "react-native-tab-view-next";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { Haptics } from "app/lib/haptics";
-import { useSafeAreaInsets } from "app/lib/safe-area/index";
 
-import { useIsDarkMode } from "../hooks";
+import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
 import { HeaderTabViewProps } from "./src/create-header-tabs";
 import { HeaderTabViewComponent } from "./src/index";
 import { Route } from "./src/types";
+import { TabSpinner } from "./tab-spinner";
 
 export * from "./tab-scene";
 export * from "react-native-tab-view-next";
 
-type TabBarProps<T extends Route> = HeaderTabViewProps<T>;
+type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
+  autoWidthTabBar?: boolean;
+  insertTabBarElement?: JSX.Element;
+};
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
-export const HeaderTabView = forwardRef(CommonHeaderTabView);
-
-function CommonHeaderTabView<T extends Route>(props: TabBarProps<T>, ref: any) {
+function HeaderTabView<T extends Route>({
+  autoWidthTabBar,
+  renderScene,
+  navigationState,
+  insertTabBarElement,
+  ...props
+}: TabBarProps<T>) {
   const insets = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const renderTabBar = useCallback(
@@ -33,24 +42,54 @@ function CommonHeaderTabView<T extends Route>(props: TabBarProps<T>, ref: any) {
       props: SceneRendererProps & {
         navigationState: NavigationState<Route>;
       }
-    ) => <ScollableTabBar {...props} />,
-    []
+    ) => (
+      <>
+        {autoWidthTabBar ? (
+          <ScollableAutoWidthTabBar {...props} />
+        ) : (
+          <ScollableTabBar {...props} />
+        )}
+        {isValidElement(insertTabBarElement) && insertTabBarElement}
+      </>
+    ),
+    [autoWidthTabBar, insertTabBarElement]
   );
   const onPullEnough = useCallback(() => {
     Haptics.impactAsync();
   }, []);
-
+  const _renderScene = (
+    props: SceneRendererProps & {
+      route: Route;
+    }
+  ) => {
+    const focused =
+      navigationState.index === props.route?.index || Platform.OS !== "web";
+    return (
+      <>
+        <View style={{ flex: 1, display: focused ? "flex" : "none" }}>
+          {renderScene(props as any)}
+        </View>
+        {Platform.OS === "web" && (
+          <TabSpinner
+            index={props.route?.index}
+            style={{ display: focused ? "none" : "flex" }}
+          />
+        )}
+      </>
+    );
+  };
   return (
-    // @ts-ignore
     <HeaderTabViewComponent
-      renderTabBar={renderTabBar as any}
-      lazy={true as any}
+      renderTabBar={renderTabBar}
+      lazy
       onPullEnough={onPullEnough}
       minHeaderHeight={insets.top + StatusBarHeight}
       refreshControlColor={isDark ? colors.gray[400] : colors.gray[700]}
       refreshHeight={60}
-      ref={ref}
+      renderScene={_renderScene}
+      navigationState={navigationState}
       {...props}
     />
   );
 }
+export { Route, HeaderTabView };

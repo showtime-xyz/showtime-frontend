@@ -1,12 +1,16 @@
-import { ComponentProps, useRef } from "react";
-import { StyleSheet } from "react-native";
+import { ComponentProps, useRef, useState } from "react";
+import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
-import { Video as ExpoVideo } from "expo-av";
+import { Video as ExpoVideo } from "expo-av/src";
+import { BlurView, BlurTint } from "expo-blur";
+import { Source } from "react-native-fast-image";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
+import { MuteButton } from "app/components/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
 
 type VideoProps = {
@@ -14,48 +18,61 @@ type VideoProps = {
   blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, blurhash, resizeMode, ...props }: VideoProps) {
+export function Video({
+  tw,
+  blurhash,
+  resizeMode,
+  posterSource,
+  ...props
+}: VideoProps) {
   const videoConfig = useVideoConfig();
-
-  const videoRef = useRef<ExpoVideo>();
+  const videoRef = useRef<ExpoVideo>(null);
   // useItemVisible({ videoRef });
+  const { colorScheme } = useColorScheme();
+  const [muted, setMuted] = useState(true);
 
   return (
-    <View>
+    <>
       {videoConfig?.previewOnly ? (
         <Image
           tw={tw}
           resizeMode={resizeMode}
           blurhash={blurhash}
-          //@ts-ignore
-          source={props.posterSource}
+          source={posterSource as Source}
         />
       ) : (
-        <>
+        <ImageBackground
+          source={posterSource as ImageSourcePropType}
+          imageStyle={StyleSheet.absoluteFill}
+          resizeMode="cover"
+        >
           <Image
             tw={tw}
-            style={StyleSheet.absoluteFill}
             resizeMode={resizeMode}
             blurhash={blurhash}
-            // @ts-ignore
-            source={props.posterSource}
+            source={posterSource as Source}
           />
-
-          <ExpoVideo
+          <BlurView
             style={StyleSheet.absoluteFill}
+            tint={colorScheme as BlurTint}
+            intensity={85}
+          />
+          <ExpoVideo
+            style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
             useNativeControls={videoConfig?.useNativeControls}
-            resizeMode="cover"
-            posterSource={props.posterSource}
+            resizeMode={resizeMode}
+            posterSource={posterSource}
             source={props.source}
             ref={videoRef}
             shouldPlay
-            isMuted={videoConfig?.isMuted}
+            isLooping
+            isMuted={muted}
+            videoStyle={tailwind.style("relative")}
             {...props}
           />
-        </>
+          <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+        </ImageBackground>
       )}
-    </View>
+    </>
   );
 }
-
-export { Video };

@@ -7,6 +7,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { PolygonScan } from "@showtime-xyz/universal.icon";
@@ -15,10 +16,12 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components//connect-button";
 import { Owner } from "app/components/card";
-import { Collection } from "app/components/card/rows/collection";
 import { Media } from "app/components/media";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
@@ -33,6 +36,9 @@ const defaultValues = {
 function Delete({ nft }: { nft: NFT }) {
   const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
+  const { userAddress } = useCurrentUserAddress();
+  const { alert } = useAlert();
+  const { connected } = useWallet();
 
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
     startBurning({ ...values, tokenId: nft.token_id });
@@ -77,6 +83,17 @@ function Delete({ nft }: { nft: NFT }) {
 
   // enable submission only on idle or error state.
   const enable = state.status === "idle" || state.status === "burningError";
+
+  // TODO: remove this after imperative login modal API in rainbowkit
+  if (!connected) {
+    return (
+      <View tw="p-4">
+        <ConnectButton
+          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+        />
+      </View>
+    );
+  }
 
   if (state.status === "transactionInitiated") {
     return (
@@ -126,21 +143,29 @@ function Delete({ nft }: { nft: NFT }) {
     );
   }
 
+  const handleBurnNFT = (e: any) => {
+    if (nft?.owner_address_nonens !== userAddress) {
+      alert(
+        "Switch Wallet",
+        "Please log in with the wallet that owns this NFT."
+      );
+    } else {
+      handleSubmit(handleSubmitForm)(e);
+    }
+  };
+
   return (
     <View tw="flex-1">
       <CreateScrollView>
         <View tw="flex-1 px-3 py-4">
-          <View tw="mb-4">
+          <View tw="mb-4 px-2">
             <Text tw="text-xl font-bold text-black dark:text-white">
               Are you sure you want to delete this NFT?
             </Text>
             <View tw="h-4" />
-            <Text tw="text-sm text-black dark:text-white">
+            <Text tw="text-sm text-gray-600 dark:text-gray-400">
               This can't be undone and it will be sent to a burn address.
             </Text>
-          </View>
-          <View tw="-mx-2 border-b border-gray-100 dark:border-gray-900">
-            <Collection nft={nft} />
           </View>
           <View tw="-mx-2 flex-row items-center p-4">
             <View tw="mr-4 h-20 w-20">
@@ -150,7 +175,7 @@ function Delete({ nft }: { nft: NFT }) {
               <Text tw="font-space-bold mb-2 text-lg font-medium text-black dark:text-white">
                 {nft?.token_name}
               </Text>
-              <View tw="flex-row items-center">
+              <View tw="mt-2 flex-row items-center">
                 <PolygonScan
                   width={16}
                   height={16}
@@ -204,7 +229,7 @@ function Delete({ nft }: { nft: NFT }) {
       </CreateScrollView>
       <View tw="w-full p-4">
         <Button
-          onPress={handleSubmit(handleSubmitForm)}
+          onPress={handleBurnNFT}
           tw="h-12 rounded-full"
           disabled={!enable}
         >

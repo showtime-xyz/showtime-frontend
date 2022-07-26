@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { ResizeMode } from "expo-av";
 
 import { Play } from "@showtime-xyz/universal.icon";
@@ -63,6 +65,7 @@ function Media({
               uri: mediaUri,
             }}
             tw={size}
+            data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
           />
@@ -76,7 +79,8 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {numColumns > 1 && (
+          {/* we show play icon only on native because videos are not auto played on native */}
+          {numColumns > 1 && Platform.OS !== "web" && (
             <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
@@ -85,12 +89,16 @@ function Media({
             source={{
               uri: mediaUri,
             }}
+            //@ts-ignore
+            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
             tw={size}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
+            //  we always show mute button on web because videos are auto played on web
+            showMuteButton={numColumns === 1 || Platform.OS === "web"}
           />
         </PinchToZoom>
       ) : null}

@@ -1,5 +1,4 @@
 import { useRef, useState, useCallback, useEffect } from "react";
-import { StyleSheet } from "react-native";
 
 import { Camera as ExpoCamera } from "expo-camera";
 import { AnimatePresence, View as MotiView } from "moti";
@@ -103,63 +102,64 @@ export function Camera({
   }, [form]);
 
   return (
-    <View tw="w-full flex-1 content-center justify-center">
-      <View style={{ height: "70%" }}>
-        {isActive && (
-          <ExpoCamera
-            ref={camera}
-            style={StyleSheet.absoluteFill}
-            useCamera2Api={false}
-            autoFocus={true}
-            type={cameraPosition}
-          />
-        )}
-
-        <AnimatePresence>
-          {showPop && (
-            <MotiView
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                zIndex: 1,
-                backgroundColor: "white",
-              }}
-              from={{ opacity: 0.8 }}
-              animate={{ opacity: 1 }}
-              exit={{
-                opacity: 0,
-              }}
+    <>
+      <View tw="w-full flex-1 content-center justify-center">
+        <View style={{ height: "58vh" }}>
+          {isActive && !photoUri && (
+            <ExpoCamera
+              ref={camera}
+              style={{ flex: 1 }}
+              useCamera2Api={false}
+              autoFocus={true}
+              type={cameraPosition}
             />
           )}
-        </AnimatePresence>
 
-        {photoUri && (
-          <View
-            style={{ height: "100%" }}
-            tw="w-screen bg-gray-100 opacity-95 dark:bg-gray-900"
-          >
-            <img
-              src={photoUri}
-              style={{ height: "100%", objectFit: "contain" }}
-            />
-          </View>
-        )}
+          <AnimatePresence>
+            {showPop && (
+              <MotiView
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  zIndex: 1,
+                  backgroundColor: "white",
+                }}
+                from={{ opacity: 0.8 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                }}
+              />
+            )}
+          </AnimatePresence>
+
+          {photoUri && (
+            <View
+              style={{ height: "100%" }}
+              tw="w-screen bg-gray-100 opacity-95 dark:bg-gray-900"
+            >
+              <img
+                src={photoUri}
+                style={{ height: "100%", objectFit: "contain" }}
+              />
+            </View>
+          )}
+        </View>
+        <CameraButtons
+          photos={photos}
+          setPhotos={setPhotos}
+          canPop={canPop}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          takePhoto={takePhoto}
+          setCameraPosition={setCameraPosition}
+          cameraPosition={cameraPosition}
+          postPhoto={postPhoto}
+        />
       </View>
-
-      <CameraButtons
-        photos={photos}
-        setPhotos={setPhotos}
-        canPop={canPop}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-        takePhoto={takePhoto}
-        setCameraPosition={setCameraPosition}
-        cameraPosition={cameraPosition}
-        postPhoto={postPhoto}
-      />
-    </View>
+    </>
   );
 }

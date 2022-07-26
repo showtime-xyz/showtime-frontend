@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Platform, useWindowDimensions } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import { Link } from "solito/link";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
@@ -11,23 +11,26 @@ import {
   PlusFilled,
 } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner";
+import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
+  Actor,
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { Link, TextLink } from "app/navigation/link";
+import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 type NotificationCardProp = { notification: NotificationType; setUsers: any };
@@ -36,7 +39,10 @@ export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
+  const headerHeight = useHeaderHeight();
+  const { height: windowHeight } = useWindowDimensions();
+  const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState([]);
 
@@ -50,9 +56,11 @@ export const Notifications = () => {
 
   const ListFooter = useCallback(() => {
     return isLoadingMore ? (
-      <Skeleton height={bottomBarHeight} width="100%" />
+      <View tw="items-center">
+        <Spinner size="small" />
+      </View>
     ) : (
-      <View tw={`h-${bottomBarHeight}px`} />
+      <View tw={`h-${bottomBarHeight ?? 0}px`} />
     );
   }, [isLoadingMore, bottomBarHeight]);
 
@@ -63,8 +71,10 @@ export const Notifications = () => {
 
   const ListEmptyComponent = useCallback(
     () => (
-      <View tw="h-full items-center justify-center">
-        <Text tw="text-gray-900 dark:text-gray-100">No new notifications</Text>
+      <View tw="items-center justify-center">
+        <Text tw="p-20 text-gray-900 dark:text-gray-100">
+          No new notifications
+        </Text>
       </View>
     ),
     []
@@ -89,12 +99,20 @@ export const Notifications = () => {
     <>
       <FlatList
         data={data}
+        style={Platform.select({
+          native: { height: flatListHeight },
+          default: {},
+        })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
+        contentContainerStyle={Platform.select({
+          web: tw.style("md:max-w-sm"),
+          default: {},
+        })}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
@@ -115,7 +133,6 @@ export const Notifications = () => {
 
 const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   const notificationInfo = useNotificationInfo(notification);
-
   return (
     <View tw="flex-row items-center p-4">
       {notificationInfo.icon}
@@ -133,6 +150,19 @@ const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   );
 };
 
+const NOTIFICATION_TYPE_COPY = new Map([
+  ["FOLLOW", "followed you"],
+  ["LIKE_ON_CREATED_NFT", "liked "],
+  ["LIKE_ON_OWNED_NFT", "liked "],
+  ["COMMENT_ON_CREATED_NFT", "commented on "],
+  ["COMMENT_ON_OWNED_NFT", "commented on "],
+  ["COMMENT_MENTION", "mentioned you in "],
+  ["LIKE_ON_COMMENT", "liked your comment on "],
+  ["NFT_SALE", "bought "],
+  ["NEW_CREATOR_AIRDROP_FROM_FOLLOWING", "created a new drop "],
+  ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "claimed "],
+]);
+
 const NotificationDescription = ({
   notification,
   notificationInfo,
@@ -143,94 +173,103 @@ const NotificationDescription = ({
   setUsers: any;
 }) => {
   const actors = notification.actors;
+  const router = useRouter();
+  const renderActors = () => {
+    if (!actors) {
+      return (
+        <>
+          <ActorLink
+            actor={{
+              username: notification.link_to_profile_username,
+              wallet_address: notification.link_to_profile_address,
+            }}
+          />{" "}
+        </>
+      );
+    }
+    if (actors.length == 1) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} />{" "}
+        </>
+      );
+    }
+    if (actors.length == 2) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        </>
+      );
+    }
+    if (actors.length == 3) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        </>
+      );
+    }
+    if (actors.length > 3) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />, and{" "}
+          <Text
+            tw="text-13 font-bold text-black dark:text-white"
+            onPress={() => setUsers(actors.slice(2, actors.length))}
+          >
+            {actors.length - 2} other{" "}
+            {actors.length - 2 == 1 ? "person " : "people "}
+          </Text>
+        </>
+      );
+    }
+    return null;
+  };
 
-  if (actors.length > 0) {
-    return (
-      <View>
-        <Text
-          //@ts-ignore
-          tw="max-w-[69vw] text-gray-600 dark:text-gray-400"
-          ellipsizeMode="tail"
-          style={{ lineHeight: 20, fontSize: 13 }}
-        >
-          {actors.length == 1 ? (
-            <>
-              <ActorLink actor={actors[0]} />{" "}
-            </>
-          ) : null}
-          {actors.length == 2 ? (
-            <>
-              <ActorLink actor={actors[0]} /> and{" "}
-              <ActorLink actor={actors[1]} />{" "}
-            </>
-          ) : null}
-          {actors.length == 3 ? (
-            <>
-              <ActorLink actor={actors[0]} />,
-              <ActorLink actor={actors[1]} /> , and{" "}
-              <ActorLink actor={actors[2]} />
-            </>
-          ) : null}
-          {actors.length > 3 ? (
-            <>
-              <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
-              and{" "}
-              <Text
-                tw="font-bold text-black dark:text-white"
-                onPress={() => setUsers(actors.slice(2, actors.length))}
-              >
-                {actors.length - 2} other{" "}
-                {actors.length - 2 == 1 ? "person " : "people "}
-              </Text>
-            </>
-          ) : null}
-
-          {NOTIFICATION_TYPES.LIKED.includes(notification.type_id)
-            ? "liked "
-            : null}
-          {NOTIFICATION_TYPES.FOLLOWED.includes(notification.type_id)
-            ? "followed you"
-            : null}
-          {NOTIFICATION_TYPES.COMMENT.includes(notification.type_id)
-            ? "commented on "
-            : null}
-          {NOTIFICATION_TYPES.COMMENT_MENTION.includes(notification.type_id)
-            ? "mentioned you in "
-            : null}
-          {NOTIFICATION_TYPES.COMMENT_LIKE.includes(notification.type_id)
-            ? "liked your comment on "
-            : null}
-          {NOTIFICATION_TYPES.BOUGHT.includes(notification.type_id)
-            ? "bought "
-            : null}
-
-          {notification.nft__nftdisplay__name ? (
-            <TextLink
-              tw="text-sm font-bold text-black dark:text-white"
-              href={notificationInfo.href}
-            >
-              {notification.nft__nftdisplay__name}
-            </TextLink>
-          ) : null}
-        </Text>
-        <View tw="h-1" />
-        <Text tw="text-xs text-gray-500">
-          {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
-            addSuffix: true,
-          })}
-        </Text>
-      </View>
-    );
-  }
-
-  return null;
+  return (
+    <View tw="flex-1">
+      <Text
+        tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
+        ellipsizeMode="tail"
+      >
+        {renderActors()}
+        {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
+        {notification.nft_display_name ? (
+          <Text
+            onPress={() => {
+              router.push(notificationInfo.href);
+            }}
+            tw="text-13 font-bold text-black dark:text-white"
+          >
+            {notification.nft_display_name}
+          </Text>
+        ) : null}
+        {/* Todo: currently we miss @Z(NFT Creator) field */}
+        {/* {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
+          ? ` by ${
+              notification.link_to_profile_username ||
+              notification.link_to_profile_address
+            }`
+          : null} */}
+      </Text>
+      <View tw="h-1" />
+      {/* <Text tw="text-xs text-gray-500">
+        {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
+          addSuffix: true,
+        })}
+      </Text> */}
+    </View>
+  );
 };
 
-const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
+const ActorLink = ({
+  actor,
+}: {
+  actor: Pick<Actor, "username" | "wallet_address">;
+}) => {
   return (
     <TextLink
       href={`/@${actor.username ?? actor.wallet_address}`}
-      tw="text-sm font-bold text-black dark:text-white"
+      tw="text-13 font-bold text-black dark:text-white"
     >
       {actor.username ? (
         <>@{actor.username}</>
@@ -241,23 +280,14 @@ const ActorLink = ({ actor }: { actor: NotificationType["actors"][0] }) => {
   );
 };
 
-const NOTIFICATION_TYPES = {
-  FOLLOWED: [1],
-  LIKED: [2, 3],
-  COMMENT: [4, 5],
-  COMMENT_MENTION: [6],
-  COMMENT_LIKE: [7],
-  BOUGHT: [8],
-};
-
 export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
   const profileLink =
     "/@" +
-    (notification.link_to_profile__address
+    (notification.link_to_profile_address
       ? `${
-          notification.link_to_profile__username ||
-          notification.link_to_profile__address
+          notification.link_to_profile_username ||
+          notification.link_to_profile_address
         }`
       : `${
           myProfile?.user?.data.profile.username ||
@@ -271,32 +301,30 @@ export const useNotificationInfo = (notification: NotificationType) => {
         (key) =>
           //@ts-ignore
           CHAIN_IDENTIFIERS[key] == notification.chain_identifier
-      )}/${notification.nft__contract__address}/${
-        notification.nft__token_identifier
-      }`,
+      )}/${notification.contract_address}/${notification.nft_token_identifier}`,
     [notification]
   );
 
-  switch (notification.type_id) {
-    case 1:
+  switch (notification.type_name) {
+    case "FOLLOW":
       return {
         type: "followed_me",
         icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
         href: profileLink,
       };
-    case 2:
+    case "LIKE_ON_CREATED_NFT":
       return {
         type: "liked_my_creation",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 3:
+    case "LIKE_ON_OWNED_NFT":
       return {
         type: "liked_my_owned",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 4:
+    case "COMMENT_ON_CREATED_NFT":
       return {
         type: "commented_my_creation",
         icon: (
@@ -304,7 +332,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 5:
+    case "COMMENT_ON_OWNED_NFT":
       return {
         type: "commented_my_owned",
         icon: (
@@ -312,7 +340,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 6:
+    case "COMMENT_MENTION":
       return {
         type: "tagged_me_in_comment",
         // TODO: incorrect icon
@@ -321,16 +349,28 @@ export const useNotificationInfo = (notification: NotificationType) => {
         ),
         href: nftLink,
       };
-    case 7:
+    case "LIKE_ON_COMMENT":
       return {
         type: "liked_my_comment",
         icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
         href: nftLink,
       };
-    case 8:
+    case "NFT_SALE":
       return {
         type: "bought_my_piece",
         icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,
+        href: nftLink,
+      };
+    case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "NEW_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
+        href: nftLink,
+      };
+    case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
+      return {
+        type: "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING",
+        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
         href: nftLink,
       };
     default:

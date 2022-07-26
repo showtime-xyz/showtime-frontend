@@ -1,46 +1,58 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import {
   useAccount,
   useSignMessage,
   useSigner,
   useNetwork,
-  useSignTypedData,
+  useDisconnect,
 } from "wagmi";
 
-const useWallet = () => {
-  const { data: wagmiData } = useAccount();
-  const { data: wagmiSignData, signMessage } = useSignMessage();
+import { useWeb3 } from "app/hooks/use-web3";
+
+import { UseWalletReturnType } from "./use-wallet";
+
+const useWallet = (): UseWalletReturnType => {
+  const wagmiData = useAccount();
+  const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
-  const { activeChain } = useNetwork();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { chain } = useNetwork();
+  const { disconnect } = useDisconnect();
+  const { web3, isMagic } = useWeb3();
 
-  const getAddress = async () => {
-    return wagmiData?.address;
-  };
+  const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
+  const [address, setAddress] = useState<string | undefined>();
 
-  const connected = useMemo(
-    () => !!wagmiData && !!activeChain && !!wagmiSigner?.provider,
-    [wagmiData, activeChain, wagmiSigner?.provider]
+  useEffect(() => {
+    (async function fetchUserAddress() {
+      if (wagmiData?.address) {
+        setAddress(wagmiData?.address);
+      } else if (web3) {
+        const address = await web3.getSigner().getAddress();
+        setAddress(address);
+      } else {
+        setAddress(undefined);
+      }
+    })();
+  }, [web3, wagmiData?.address]);
+
+  const connected =
+    (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
+
+  console.log(
+    "wallet connection status ",
+    wagmiData,
+    wagmiSigner,
+    chain,
+    connected
   );
-  const networkChanged = useMemo(
-    () => !!activeChain && activeChain.id !== 137,
-    [activeChain]
-  );
-  const signed = useMemo(() => !!wagmiSignData, [wagmiSignData]);
-  const loggedIn = useMemo(() => connected, [connected]);
 
   return {
-    getAddress,
-    address: wagmiData?.address,
+    address,
     connected,
-    signed,
-    loggedIn,
+    disconnect,
     networkChanged,
-    provider: wagmiSigner?.provider,
-    signature: wagmiSignData,
-    signMessage,
-    signTypedDataAsync,
+    signMessageAsync,
   };
 };
 

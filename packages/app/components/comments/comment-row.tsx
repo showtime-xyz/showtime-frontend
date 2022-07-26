@@ -1,14 +1,16 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useRouter } from "app/navigation/use-router";
-import { getRoundedCount } from "app/utilities";
+import { formatNumber } from "app/utilities";
 
 interface CommentRowProps {
   comment: CommentType;
@@ -30,6 +32,11 @@ function CommentRowComponent({
   deleteComment,
   reply,
 }: CommentRowProps) {
+  /**
+   * we used memo, so needs to add this hooks to here,
+   * otherwise some page switching theme will be invalid
+   */
+  useIsDarkMode();
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [displayedRepliesCount, setDisplayedRepliesCount] =
@@ -122,7 +129,6 @@ function CommentRowComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //#endregion
-
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
@@ -131,9 +137,9 @@ function CommentRowComponent({
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
         content={comment.text}
-        likeCount={getRoundedCount(Math.max(0, likeCount))}
+        likeCount={formatNumber(Math.max(0, likeCount))}
         replayCount={
-          isReply ? undefined : getRoundedCount(comment.replies?.length)
+          isReply ? undefined : formatNumber(comment.replies?.length ?? 0)
         }
         hasReplies={
           isReply ? false : comment.replies && comment.replies.length > 0

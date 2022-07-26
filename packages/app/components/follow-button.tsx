@@ -14,7 +14,8 @@ type ToggleFollowParams = Pick<ButtonProps, "size"> & {
 
 export const FollowButton = memo<ToggleFollowParams>(
   ({ isFollowing, profileId, name, ...rest }) => {
-    const { unfollow, follow } = useMyInfo();
+    const { unfollow, follow, data } = useMyInfo();
+
     const Alert = useAlert();
 
     const toggleFollow = useCallback(() => {
@@ -36,7 +37,7 @@ export const FollowButton = memo<ToggleFollowParams>(
         follow(profileId);
       }
     }, [Alert, follow, unfollow, isFollowing, profileId, name]);
-
+    if (data?.data?.profile?.profile_id === profileId) return null;
     return (
       <Button
         variant={isFollowing ? "tertiary" : "primary"}

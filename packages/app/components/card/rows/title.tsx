@@ -10,10 +10,11 @@ import type { NFT } from "app/types";
 type Props = {
   nft?: NFT;
   cardMaxWidth?: number;
+  disableTooltip?: boolean;
 };
 
-function Title({ nft, cardMaxWidth }: Props) {
-  const [isUseTooltip] = useState(Platform.OS === "web");
+function Title({ nft, cardMaxWidth, disableTooltip = false }: Props) {
+  const [isUseTooltip] = useState(Platform.OS === "web" && !disableTooltip);
   /**
    * Todo: If the content width is greater than the container width, use Tooltip components,
    * but now RecyclerList is used, I can't get valid data, so wait until we replace the list and then implement.
@@ -34,9 +35,11 @@ function Title({ nft, cardMaxWidth }: Props) {
   // );
   // }
   // }, []);
+
   if (!nft) return null;
+
   return (
-    <View tw="bg-white px-4 py-2 dark:bg-black">
+    <View tw="px-4 pt-4">
       {isUseTooltip ? (
         <Tooltip
           delay={300}
@@ -46,7 +49,7 @@ function Title({ nft, cardMaxWidth }: Props) {
           }}
         >
           <Text
-            tw="font-space-bold text-lg text-black dark:text-white"
+            tw="font-space-bold text-lg leading-8 text-black dark:text-white"
             numberOfLines={1}
           >
             {nft.token_name}
@@ -54,7 +57,7 @@ function Title({ nft, cardMaxWidth }: Props) {
         </Tooltip>
       ) : (
         <Text
-          tw="font-space-bold text-lg text-black dark:text-white"
+          tw="font-space-bold text-lg leading-8 text-black dark:text-white"
           numberOfLines={1}
         >
           {nft.token_name}

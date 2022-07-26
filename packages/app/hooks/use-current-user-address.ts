@@ -1,27 +1,25 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useUser } from "app/hooks/use-user";
-import { useWalletConnect } from "app/lib/walletconnect";
+import { useWallet } from "app/hooks/auth/use-wallet";
+import { useWeb3 } from "app/hooks/use-web3";
 
 function useCurrentUserAddress() {
-  const { user } = useUser();
   const [userAddress, setUserAddress] = useState("");
-  const connector = useWalletConnect();
-  const connectedAddress = connector?.session?.accounts[0];
-
-  const getCurrentUserAddress = useCallback(async () => {
-    if (connector?.connected && connectedAddress) {
-      setUserAddress(connectedAddress);
-    } else if (user?.data && user?.data.profile.wallet_addresses_v2[0]) {
-      setUserAddress(user.data.profile.wallet_addresses_v2[0].address);
-    } else {
-      setUserAddress("");
-    }
-  }, [user, connectedAddress, connector?.connected]);
+  const { address } = useWallet();
+  const { web3 } = useWeb3();
 
   useEffect(() => {
-    getCurrentUserAddress();
-  }, [getCurrentUserAddress]);
+    (async function fetchUserAddress() {
+      if (address) {
+        setUserAddress(address);
+      } else if (web3) {
+        const userAddress = await web3.getSigner().getAddress();
+        setUserAddress(userAddress);
+      } else {
+        setUserAddress("");
+      }
+    })();
+  }, [web3, address]);
 
   return { userAddress };
 }

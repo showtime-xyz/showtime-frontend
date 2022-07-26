@@ -9,7 +9,6 @@ import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import {
   NavigationState,
-  Route,
   SceneRendererProps,
   TabBar,
   TabView,
@@ -19,7 +18,11 @@ import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
 import { useSceneInfo } from "./hooks";
-import type { CollapsibleHeaderProps } from "./types";
+import type {
+  CollapsibleHeaderProps,
+  Route,
+  TabViewCustomRenders,
+} from "./types";
 
 export const HeaderTabViewComponent = React.forwardRef(
   CollapsibleHeaderTabView
@@ -28,7 +31,7 @@ export const HeaderTabViewComponent = React.forwardRef(
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
-  CollapsibleHeaderProps;
+  CollapsibleHeaderProps<T>;
 
 function CollapsibleHeaderTabView<T extends Route>(
   {
@@ -37,9 +40,11 @@ function CollapsibleHeaderTabView<T extends Route>(
     renderScrollHeader,
     initTabbarHeight = 44,
     minHeaderHeight = 0,
-    insertTabBarElement,
     navigationState,
     insertStickyTabBarElement,
+    emptyBodyComponent,
+    renderScene,
+    renderSceneHeader,
     ...restProps
   }: HeaderTabViewProps<T>,
   ref?: any
@@ -87,13 +92,18 @@ function CollapsibleHeaderTabView<T extends Route>(
     [renderTabBar]
   );
 
-  const renderTabView = (e: { renderTabBarContainer: any }) => {
+  const renderTabView = (e: TabViewCustomRenders) => {
     return (
       <TabView
         navigationState={navigationState}
         {...restProps}
-        renderTabBar={(tabbarProps: any) =>
-          e.renderTabBarContainer(_renderTabBar(tabbarProps))
+        renderTabBar={(
+          tabbarProps: SceneRendererProps & {
+            navigationState: NavigationState<T>;
+          }
+        ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
+        renderScene={(props: any) =>
+          e.renderSceneHeader(renderScene(props), props)
         }
       />
     );
@@ -102,6 +112,7 @@ function CollapsibleHeaderTabView<T extends Route>(
     ({ status }: Sticky.Status) => setStickyState(status),
     []
   );
+
   const _renderTabBarContainer = (children: React.ReactElement) => {
     return (
       <View style={styles.tabbarStyle}>
@@ -114,9 +125,18 @@ function CollapsibleHeaderTabView<T extends Route>(
             stickyState === Sticky.STATUS_FIXED &&
             insertStickyTabBarElement}
           <View onLayout={tabbarOnLayout}>{children}</View>
-
-          {React.isValidElement(insertTabBarElement) && insertTabBarElement}
         </Sticky>
+      </View>
+    );
+  };
+  const _renderSceneHeader = (
+    children: React.ReactElement,
+    props: SceneRendererProps & { route: T }
+  ) => {
+    return (
+      <View style={styles.full}>
+        {renderSceneHeader?.(props.route)}
+        {children}
       </View>
     );
   };
@@ -139,20 +159,27 @@ function CollapsibleHeaderTabView<T extends Route>(
         updateSceneInfo,
         isSlidingHeader,
         isStartRefreshing,
+        scrollStickyHeaderHeight: 0,
       }}
     >
-      <View ref={containeRef} style={styles.container}>
+      <View ref={containeRef} style={styles.full}>
         {renderScrollHeader && renderScrollHeader()}
-        {renderTabView({
-          renderTabBarContainer: _renderTabBarContainer,
-        })}
+
+        {navigationState.routes.length === 0 && emptyBodyComponent ? (
+          <View style={{ marginTop: tabbarHeight }}>{emptyBodyComponent}</View>
+        ) : (
+          renderTabView({
+            renderTabBarContainer: _renderTabBarContainer,
+            renderSceneHeader: _renderSceneHeader,
+          })
+        )}
       </View>
     </HeaderTabContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  full: {
     flex: 1,
   },
   tabbarStyle: {

@@ -3,16 +3,16 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import type { UrlObject } from "url";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Collection } from "app/components/card/rows/collection";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
+import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -33,9 +33,9 @@ type Props = {
   hrefProps?: UrlObject;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
+function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
   const { width } = useWindowDimensions();
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
@@ -72,18 +72,20 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
     );
   }
 
-  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
-
   return (
-    <LikeContextProvider nft={nft}>
+    <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
+        //@ts-ignore
+        // TODO: add accessibility types for RNW
+        accessibilityRole="article"
+        dataSet={Platform.select({ web: { testId: "nft-card" } })}
         style={{
           // @ts-ignore
           boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
         }}
         tw={[
           size,
-          numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
+          numColumns >= 3 ? "mt-8" : numColumns === 2 ? "m-2" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",
@@ -91,30 +93,29 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps }: Props) {
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
           {/* {variant === "activity" && <Activity activity={act} />} */}
-          <View tw="flex-row items-center justify-between px-4 py-2">
+          <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              {!isCreatorDrop ? (
-                <NFTDropdown nftId={nft.nft_id} listId={listId} />
-              ) : null}
-            </Suspense>
+            <ErrorBoundary renderFallback={() => null}>
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown nft={nft} listId={listId} />
+              </Suspense>
+            </ErrorBoundary>
           </View>
 
-          <RouteComponent href={hrefProps} onPress={handleOnPress}>
+          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
-          <View tw="mt-2">
-            <RouteComponent href={hrefProps} onPress={handleOnPress}>
-              <Title nft={nft} cardMaxWidth={cardMaxWidth} />
-            </RouteComponent>
-          </View>
+          <RouteComponent
+            dataSet={{ testId: "nft-card-title-link" }}
+            href={hrefProps!}
+            onPress={handleOnPress}
+          >
+            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+          </RouteComponent>
 
           <Social nft={nft} />
 
-          <Owner nft={nft} price={Platform.OS !== "ios"} />
-
-          <View tw="mx-4 h-[1px] bg-gray-100 dark:bg-gray-900" />
-          <Collection nft={nft} />
+          <Owner nft={nft} price={false} />
         </View>
       </View>
     </LikeContextProvider>

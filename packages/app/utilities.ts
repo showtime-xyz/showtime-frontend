@@ -13,7 +13,7 @@ import { magic, Magic } from "app/lib/magic";
 
 import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
 
-export const formatAddressShort = (address) => {
+export const formatAddressShort = (address?: string) => {
   if (!address) return null;
 
   // Skip over ENS names
@@ -180,39 +180,6 @@ export const overrideMagicInstance = (email: string) => {
   return magic;
 };
 
-export const getRoundedCount = (count: number = 0) => {
-  const digits = `${count}`.split("");
-
-  if (digits[0] == "0") {
-    return digits[0];
-  }
-
-  switch (digits.length) {
-    case 8:
-      return `${digits.slice(0, 2).join("")}m`;
-
-    case 7:
-      return `${digits[0]}m`;
-
-    case 6:
-      return `${digits.slice(0, 3).join("")}k`;
-
-    case 5:
-      return `${digits.slice(0, 2).join("")}k`;
-
-    case 4:
-      return `${digits[0]}k`;
-
-    case 3:
-    case 2:
-    case 1:
-      return digits.join("");
-
-    default:
-      return "00";
-  }
-};
-
 // Format big numbers
 export function formatNumber(number: number) {
   if (number > 1000000) {
@@ -327,11 +294,6 @@ export const getMediaUrl = ({
 
   return cdnUrl;
 };
-
-export const CARD_DARK_SHADOW =
-  Platform.OS === "web"
-    ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
-    : undefined;
 
 export const getPolygonScanLink = (transactionHash: string) => {
   return `https://${
@@ -488,7 +450,7 @@ export const MATIC_CHAIN_DETAILS = {
   rpcUrls:
     process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
       ? ["https://matic-mumbai.chainstacklabs.com"]
-      : ["https://rpc-mainnet.maticvigil.com/"],
+      : ["https://polygon-rpc.com"],
   blockExplorerUrls: [
     process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
       ? "https://mumbai.polygonscan.com/"
@@ -507,9 +469,9 @@ export const getFileFormData = async (
     // Web Camera -  Data URI
     if (file?.startsWith("data")) {
       //@ts-ignore
-      const file = dataURLtoFile(file, "unknown");
+      const newFile = dataURLtoFile(file, "unknown");
 
-      return file;
+      return newFile;
     }
     // Native - File path string
     else {
@@ -529,7 +491,7 @@ export const getFileFormData = async (
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
-const getFileMeta = async (file?: File | string) => {
+export const getFileMeta = async (file?: File | string) => {
   if (!file) {
     return;
   }
@@ -623,6 +585,39 @@ export const getCreatorUsernameFromNFT = (nft?: NFT) => {
     : formatAddressShort(nft.creator_address);
 };
 
+export const getTwitterIntentUsername = (profile?: Profile) => {
+  if (!profile) return "";
+
+  const twitterUsername = profile.links.find(
+    (l) => l.type__name.toLowerCase() === "twitter"
+  )?.user_input;
+
+  if (twitterUsername) {
+    return `@${twitterUsername}`;
+  }
+
+  return profile.username
+    ? profile.username
+    : profile.name
+    ? profile.name
+    : profile.wallet_addresses_v2?.[0]?.ens_domain
+    ? profile.wallet_addresses_v2[0].ens_domain
+    : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
+};
+
+export const getDomainName = (link?: string) => {
+  if (!link) return null;
+  const domainRegexp = /^(?:https?:\/\/)?(?:[^@/\n]+@)?(?:www\.)?([^:/\n]+)/gim;
+  const results = domainRegexp.exec(link);
+  if (!results) return null;
+  return results[results?.length - 1];
+};
+
+export const formatLink = (link: string) => {
+  if (link.search(/^http[s]?:\/\//) !== -1) return link;
+  return "https://" + link;
+};
+
 export const getTwitterIntent = ({
   url,
   message,
@@ -633,4 +628,42 @@ export const getTwitterIntent = ({
   return `https://twitter.com/intent/tweet?url=${encodeURIComponent(
     url
   )}&text=${encodeURIComponent(message)}`;
+};
+
+export function isAndroid(): boolean {
+  return (
+    typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)
+  );
+}
+
+export function isSmallIOS(): boolean {
+  return (
+    typeof navigator !== "undefined" && /iPhone|iPod/.test(navigator.userAgent)
+  );
+}
+
+export function isLargeIOS(): boolean {
+  return typeof navigator !== "undefined" && /iPad/.test(navigator.userAgent);
+}
+
+export function isIOS(): boolean {
+  return isSmallIOS() || isLargeIOS();
+}
+
+export function isMobileWeb(): boolean {
+  return isAndroid() || isIOS();
+}
+
+// TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
+export const ledgerWalletHack = (signature?: string) => {
+  if (signature) {
+    const lastByteOfSignature = signature.slice(-2);
+    if (lastByteOfSignature === "00" || lastByteOfSignature === "01") {
+      const temp = parseInt(lastByteOfSignature, 16) + 27;
+      const newSignature = signature.slice(0, -2) + temp.toString(16);
+      return newSignature;
+    }
+  }
+
+  return signature;
 };

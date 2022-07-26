@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -11,17 +11,21 @@ import * as Popover from "@radix-ui/react-popover";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
-  useBlurredBackgroundColor,
+  useBlurredBackgroundStyles,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 // import { NetworkButton } from "app/components/connect-button";
 import { HeaderDropdown } from "app/components/header-dropdown";
+import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
@@ -29,12 +33,18 @@ import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
+  NotificationsTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-import { useRouter } from "app/navigation/use-router";
 
-import { breakpoints } from "design-system/theme";
+import {
+  breakpoints,
+  CARD_DARK_SHADOW,
+  CARD_LIGHT_SHADOW,
+} from "design-system/theme";
+
+import { withColorScheme } from "./memo-with-theme";
 
 const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -130,7 +140,7 @@ const SearchInHeader = () => {
         <View
           tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
           style={Platform.select({
-            web: { maxHeight: "calc(100vh - 64px)" },
+            web: { maxHeight: "calc(50vh - 64px)" },
             default: {},
           })}
         >
@@ -144,6 +154,56 @@ const SearchInHeader = () => {
           ) : loading && term ? (
             <SearchItemSkeleton />
           ) : null}
+        </View>
+      </Popover.Content>
+    </Popover.Root>
+  );
+};
+
+const NotificationsInHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const isDark = useIsDarkMode();
+
+  return (
+    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger />
+
+      <Popover.Anchor>
+        <NotificationsTabBarIcon
+          color={isDark ? "white" : "black"}
+          focused={router.pathname === "/notifications"}
+          onPress={() => {
+            setIsOpen(!isOpen);
+          }}
+        />
+      </Popover.Anchor>
+
+      <Popover.Content
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <View
+          tw="mt-2 overflow-hidden rounded-3xl bg-white dark:bg-black "
+          style={Platform.select({
+            web: {
+              maxHeight: "calc(50vh - 64px)",
+              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+            },
+            default: {},
+          })}
+        >
+          <ErrorBoundary>
+            <Suspense
+              fallback={
+                <View tw="p-4">
+                  <Spinner />
+                </View>
+              }
+            >
+              <Notifications />
+            </Suspense>
+          </ErrorBoundary>
         </View>
       </Popover.Content>
     </Popover.Root>
@@ -171,6 +231,9 @@ const HeaderRight = () => {
                 />
               </View>
               <View tw="mx-2">
+                <NotificationsInHeader />
+              </View>
+              <View tw="mx-2">
                 <PressableScale
                   onPress={() => {
                     router.push(
@@ -190,6 +253,7 @@ const HeaderRight = () => {
                   }}
                 >
                   <View
+                    testID="mint-nft"
                     tw={[
                       "h-12 w-12 items-center justify-center rounded-full",
                       "bg-black dark:bg-white",
@@ -292,10 +356,10 @@ const HeaderCenter = ({
   );
 };
 
-const Header = ({ canGoBack }: { canGoBack: boolean }) => {
+const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
-  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
 
@@ -329,8 +393,7 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       // @ts-expect-error
       style={{
         position: "sticky",
-        backdropFilter: "blur(20px)",
-        backgroundColor: blurredBackgroundColor,
+        ...blurredBackgroundStyles,
       }}
       tw="top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm"
     >
@@ -345,6 +408,6 @@ const Header = ({ canGoBack }: { canGoBack: boolean }) => {
       </View>
     </View>
   );
-};
+});
 
 export { Header, HeaderLeft, HeaderCenter, HeaderRight };

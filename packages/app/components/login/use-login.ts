@@ -21,6 +21,10 @@ export const useLogin = (onLogin?: () => void) => {
     name: walletName,
     status: walletStatus,
     error: walletError,
+    //@ts-ignore web only
+    showSignMessage,
+    //@ts-ignore web only
+    verifySignature,
   } = useWalletLogin();
   const { loginWithEmail, loginWithPhoneNumber } = useMagicLogin();
   const isWeb = Platform.OS === "web";
@@ -131,5 +135,7 @@ export const useLogin = (onLogin?: () => void) => {
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
+    showSignMessage,
+    verifySignature,
   };
 };

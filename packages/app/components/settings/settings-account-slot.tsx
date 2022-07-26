@@ -4,13 +4,14 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 
+import { ClearCacheBtn } from "./clear-cache-btn";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export const SettingAccountSlotHeader = () => {
@@ -48,11 +49,11 @@ export const SettingAccountSlotFooter = () => {
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           Delete Account
         </Text>
-        <View tw="h-1" />
-        <Text tw="text-base text-gray-500 dark:text-white">
+        <View tw="h-4" />
+        <Text tw="text-xs text-gray-500 dark:text-white md:text-sm">
           This action cannot be undone.
         </Text>
-        <View tw="h-2" />
+        <View tw="h-4" />
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
             <Button variant="danger" size="small" onPress={handleDeleteAccount}>
@@ -60,6 +61,8 @@ export const SettingAccountSlotFooter = () => {
             </Button>
           </Link>
         </View>
+        <View tw="h-4" />
+        <ClearCacheBtn />
       </View>
     </View>
   );
@@ -87,7 +90,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
       ]}
     >
       <View tw="flex flex-col">
-        <Text tw="text-md text-gray-900 dark:text-white">{props.title}</Text>
+        <Text tw="text-sm text-gray-900 dark:text-white">{props.title}</Text>
       </View>
       <View tw="h-8 w-8 items-center justify-center">
         <ChevronRight

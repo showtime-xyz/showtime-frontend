@@ -1,9 +1,8 @@
 import React, { Suspense, useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useColorScheme } from "@showtime-xyz/universal.hooks/color-scheme";
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -15,33 +14,29 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { useUser } from "app/hooks/use-user";
-import { Haptics } from "app/lib/haptics";
 import {
   DataProvider,
   LayoutProvider,
   RecyclerListView,
 } from "app/lib/recyclerlistview";
-import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
+import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import { Tabs } from "design-system/tabs";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
-const CARD_HEIGHT = 890;
+const CARD_HEIGHT = 825;
 const CARD_CONTAINER_WIDTH = 620;
 const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
-type Tab = "following" | "curated" | "" | undefined;
+// type Tab = "following" | "curated" | "" | undefined;
 
-type Query = {
-  tab: number;
-};
+// type Query = {
+//   tab: number;
+// };
 
 export const Feed = () => {
   return (
@@ -55,43 +50,44 @@ export const Feed = () => {
   );
 };
 
-const { useParam } = createParam<Query>();
+// const { useParam } = createParam<Query>();
 
 export const FeedList = () => {
-  const { isAuthenticated } = useUser();
-  const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v ?? 1),
-    initial: 1,
-  });
-  const isDark = useIsDarkMode();
+  // const { isAuthenticated } = useUser();
+  // const [selected, setSelected] = useParam("tab", {
+  //   parse: (v) => Number(v ?? 1),
+  //   initial: 1,
+  // });
+  // const isDark = useIsDarkMode();
 
-  const handleTabChange = useCallback(
-    (index: number) => {
-      Haptics.impactAsync();
-      setSelected(index);
-    },
-    [setSelected]
-  );
+  // const handleTabChange = useCallback(
+  //   (index: number) => {
+  //     Haptics.impactAsync();
+  //     setSelected(index);
+  //   },
+  //   [setSelected]
+  // );
 
   return (
     <View tw="flex-row">
       <Hidden until="xl">
         <View
           style={{
-            flex: 1,
-            maxWidth: LEFT_SLIDE_WIDTH,
+            width: LEFT_SLIDE_WIDTH,
             marginRight: LEFT_SLIDE_MARGIN,
           }}
         >
-          <SuggestedUsers />
+          <Sticky enabled>
+            <SuggestedUsers />
+          </Sticky>
         </View>
       </Hidden>
 
-      <View tw={`flex-2 max-w-[${CARD_CONTAINER_WIDTH}px]`}>
-        {isAuthenticated ? (
+      <View tw="flex-1" style={{ width: CARD_CONTAINER_WIDTH }}>
+        {/* {isAuthenticated ? (
           <>
             <View
-              tw="mr-2 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
+              tw="mr-2 mb-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
               style={{
                 // @ts-ignore
                 boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
@@ -124,40 +120,51 @@ export const FeedList = () => {
           </>
         ) : (
           <CuratedFeed />
-        )}
+        )} */}
+
+        <ErrorBoundary>
+          <Suspense fallback={<View />}>
+            <HomeFeed />
+          </Suspense>
+        </ErrorBoundary>
       </View>
     </View>
   );
 };
 
-const FollowingFeed = () => {
-  const queryState = useFeed("/following");
+// const FollowingFeed = () => {
+//   const queryState = useFeed("/following");
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} tab="following" />
-    </MutateProvider>
-  );
-};
+//   return (
+//     <MutateProvider mutate={queryState.updateItem}>
+//       <NFTScrollList {...queryState} data={queryState.data} tab="following" />
+//     </MutateProvider>
+//   );
+// };
 
-const AlgorithmicFeed = () => {
-  const queryState = useFeed("");
+// const AlgorithmicFeed = () => {
+//   const queryState = useFeed("");
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} />
-    </MutateProvider>
-  );
-};
+//   return (
+//     <MutateProvider mutate={queryState.updateItem}>
+//       <NFTScrollList {...queryState} data={queryState.data} />
+//     </MutateProvider>
+//   );
+// };
 
-const CuratedFeed = () => {
-  const queryState = useFeed("/curated");
+// const CuratedFeed = () => {
+//   // const queryState = useFeed("/curated");
+//   const { data } = useTrendingNFTS({
+//     days: 1,
+//   });
 
-  return (
-    <MutateProvider mutate={queryState.updateItem}>
-      <NFTScrollList {...queryState} data={queryState.data} tab="curated" />
-    </MutateProvider>
-  );
+//   return <NFTScrollList data={data} tab="curated" fetchMore={() => null} />;
+// };
+
+const HomeFeed = () => {
+  const { data } = useFeed();
+
+  return <NFTScrollList data={data} fetchMore={() => null} />;
 };
 
 const NFTScrollList = ({
@@ -166,10 +173,9 @@ const NFTScrollList = ({
 }: {
   data: NFT[];
   fetchMore: any;
-  tab?: Tab;
+  // tab?: Tab;
 }) => {
   const { width: screenWidth, height } = useWindowDimensions();
-  const isDark = useIsDarkMode();
   let dataProvider = useMemo(
     () =>
       new DataProvider((r1, r2) => {
@@ -191,6 +197,7 @@ const NFTScrollList = ({
       ),
     [screenWidth]
   );
+
   const layoutSize = useMemo(
     () => ({
       width: CARD_CONTAINER_WIDTH,
@@ -198,6 +205,7 @@ const NFTScrollList = ({
     }),
     [height]
   );
+
   const _rowRenderer = useCallback((_type: any, item: any) => {
     return (
       <View tw="flex-row justify-center" nativeID="334343">
@@ -206,7 +214,7 @@ const NFTScrollList = ({
             pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
           }}
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
+          tw={`w-[${CARD_WIDTH}px] mt-2`}
         />
       </View>
     );
@@ -220,22 +228,24 @@ const NFTScrollList = ({
     }),
     []
   );
-  if (data?.length === 0) {
-    return (
-      <View
-        tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
-        style={{
-          // @ts-ignore
-          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-        }}
-      >
-        <EmptyPlaceholder
-          title="No results found"
-          text="You can try to follow some users"
-        />
-      </View>
-    );
-  }
+
+  // if (data?.length === 0 && !isLoading) {
+  //   return (
+  //     <View
+  //       tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
+  //       style={{
+  //         // @ts-ignore
+  //         boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+  //       }}
+  //     >
+  //       <EmptyPlaceholder
+  //         title="No results found"
+  //         text="You can try to follow some users"
+  //       />
+  //     </View>
+  //   );
+  // }
+
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
@@ -244,15 +254,17 @@ const NFTScrollList = ({
           overflowX: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <RecyclerListView
-          dataProvider={dataProvider}
-          layoutProvider={_layoutProvider}
-          useWindowScroll
-          rowRenderer={_rowRenderer}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={300}
-          layoutSize={layoutSize}
-        />
+        {dataProvider && dataProvider.getSize() > 0 && (
+          <RecyclerListView
+            dataProvider={dataProvider}
+            layoutProvider={_layoutProvider}
+            useWindowScroll
+            rowRenderer={_rowRenderer}
+            onEndReached={fetchMore}
+            onEndReachedThreshold={300}
+            layoutSize={layoutSize}
+          />
+        )}
       </View>
     </VideoConfigContext.Provider>
   );
@@ -261,29 +273,29 @@ const NFTScrollList = ({
 // TODO: move to separate file
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
 
   return (
     <>
-      <Text tw="font-space-bold p-4 text-2xl text-black dark:text-white">
-        Home
-      </Text>
+      <View tw="h-16 justify-center">
+        <Text tw="font-space-bold text-2xl text-black dark:text-white">
+          Home
+        </Text>
+      </View>
       <View
         tw="mt-8 rounded-2xl bg-white dark:bg-black"
-        // @ts-ignore
         style={{
-          position: Platform.OS === "web" ? "sticky" : null,
-          top: 100,
+          // @ts-ignore
           boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
         }}
       >
         <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
-            <Skeleton colorMode={colorMode} width={100} height={20} />
+            <Skeleton colorMode={colorScheme as any} width={100} height={20} />
             <View tw="h-4" />
-            <Skeleton colorMode={colorMode} width={90} height={15} />
+            <Skeleton colorMode={colorScheme as any} width={90} height={15} />
           </View>
         ) : null}
         {data?.map((user, index) => {

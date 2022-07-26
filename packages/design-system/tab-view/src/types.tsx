@@ -4,10 +4,12 @@ import type { ScrollViewProps } from "react-native";
 
 import type { NativeGesture } from "react-native-gesture-handler";
 import type Animated from "react-native-reanimated";
+import { TabViewProps } from "react-native-tab-view-next";
 import type { Route as TabViewRoute } from "react-native-tab-view-next/src";
 
 export type Route = TabViewRoute & {
   index: number;
+  subtitle?: string | number;
 };
 
 export enum RefreshTypeEnum {
@@ -19,7 +21,7 @@ export enum RefreshTypeEnum {
   Cancel,
 }
 
-export type CollapsibleHeaderProps = {
+export type CollapsibleHeaderProps<T extends Route> = {
   initHeaderHeight?: number;
   renderScrollHeader: () => React.ReactElement | null;
   initTabbarHeight?: number;
@@ -41,20 +43,27 @@ export type CollapsibleHeaderProps = {
   onPullEnough?: () => void;
   refreshControlColor?: string;
   refreshControlTop?: number;
-  /**
-   * WEB_ONLY: Insert element into tabbar.
-   */
-  insertTabBarElement?: JSX.Element | null;
+  emptyBodyComponent?: JSX.Element | null;
   /**
    * WEB_ONLY: Insert element into tabbar on Sticky.
    */
   insertStickyTabBarElement?: JSX.Element | null;
+  renderSceneHeader?: (props: T) => JSX.Element | null;
 };
 
-export type GestureContainerProps = CollapsibleHeaderProps & {
-  initialPage: number;
-  renderTabView: any;
+export type TabViewCustomRenders = {
+  renderTabBarContainer: (children: any) => JSX.Element;
+  renderSceneHeader: (children: any, props: any) => JSX.Element;
 };
+
+export type GestureContainerProps<T extends Route> = Pick<
+  TabViewProps<Route>,
+  "navigationState"
+> &
+  CollapsibleHeaderProps<T> & {
+    initialPage: number;
+    renderTabView: (e: TabViewCustomRenders) => JSX.Element;
+  };
 
 export interface RefreshControlProps {
   refreshValue: Animated.SharedValue<number>;
@@ -93,6 +102,7 @@ export type TabHeaderContext = {
   minHeaderHeight: number;
   tabbarHeight: number;
   headerHeight: number;
+  scrollStickyHeaderHeight: number;
   refreshHeight: number;
   overflowPull: number;
   pullExtendedCoefficient: number;

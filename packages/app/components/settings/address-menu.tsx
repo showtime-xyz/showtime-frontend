@@ -1,15 +1,18 @@
 import { Button } from "@showtime-xyz/universal.button";
+import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { useManageAccount } from "app/hooks/use-manage-account";
+import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-
-import { useManageAccount } from "app/hooks/use-manage-account";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+} from "design-system/dropdown-menu";
+import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {
   address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
@@ -31,21 +34,17 @@ export const AddressMenu = (props: AddressMenuProps) => {
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
+      <DropdownMenuContent loop>
         <DropdownMenuItem
           // @ts-ignore
           onSelect={() => removeAccount(address)}
+          className="danger"
           disabled={disable}
           key="your-profile"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
           destructive
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            {ctaCopy}
-          </DropdownMenuItemTitle>
+          <MenuItemIcon Icon={Trash} />
+          <DropdownMenuItemTitle>{ctaCopy}</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

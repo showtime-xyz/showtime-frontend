@@ -1,7 +1,7 @@
-apps/next-react-native @axeldelafosse @intergalacticspacehighway
+apps/next @axeldelafosse @intergalacticspacehighway
 apps/expo @intergalacticspacehighway
 apps/storybook-react @axeldelafosse
 apps/storybook-react-native @axeldelafosse
-packages/app @axeldelafosse @intergalacticspacehighway
+packages/app @axeldelafosse @intergalacticspacehighway @alantoa
 packages/design-system @axeldelafosse
 .github/workflows @axeldelafosse

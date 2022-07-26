@@ -4,8 +4,9 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  useMemo,
 } from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
@@ -14,6 +15,8 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useAutoSizeInput } from "app/hooks/use-auto-size-input";
 
 interface MessageBoxProps {
   submitting?: boolean;
@@ -37,8 +40,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     ref
   ) {
     //#region variables
-    const inputRef = useRef<typeof TextInput>();
+    const inputRef = useRef<typeof TextInput | HTMLElement>();
+    useAutoSizeInput(inputRef);
     const [value, setValue] = useState("");
+    const disable = useMemo(() => !value || /^\s+$/.test(value), [value]);
     //#endregion
 
     //#region callbacks
@@ -54,6 +59,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     const handleTextChange = (text: string) => setValue(text);
     const handleSubmit = async function handleSubmit() {
       await onSubmit?.(value);
+      if (Platform.OS === "web") {
+        (inputRef.current as HTMLElement).style.height = "auto";
+      }
     };
     //#endregion
 
@@ -83,16 +91,20 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             }
             multiline={true}
             keyboardType="twitter"
-            returnKeyType="send"
-            tw="rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
+            tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
             onChangeText={handleTextChange}
-            onSubmitEditing={handleSubmit}
             onFocus={onFocus}
             onBlur={onBlur}
           />
-          <Avatar tw="absolute mt-3 ml-3" size={24} url={userAvatar} />
+          <Avatar tw="absolute mt-1 ml-3" size={24} url={userAvatar} />
         </View>
-        <Button size="regular" iconOnly={true} onPress={handleSubmit}>
+        <Button
+          size="regular"
+          iconOnly={true}
+          disabled={disable}
+          onPress={handleSubmit}
+          style={{ opacity: disable ? 0.4 : 1 }}
+        >
           {submitting ? <Spinner size="small" /> : <Send />}
         </Button>
       </View>

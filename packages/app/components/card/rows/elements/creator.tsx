@@ -27,7 +27,7 @@ export function Creator({
   return (
     <Link
       href={`/@${nft.creator_username ?? nft.creator_address}`}
-      tw="flex flex-row py-2"
+      tw="flex flex-row py-4"
     >
       <Avatar url={nft.creator_img_url} />
       <View tw="ml-2 justify-center">
@@ -48,7 +48,7 @@ export function Creator({
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>
-          {shouldShowDateCreated && nft.token_created ? (
+          {Boolean(shouldShowDateCreated && nft.token_created) && (
             <>
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
@@ -57,7 +57,7 @@ export function Creator({
                 })}
               </Text>
             </>
-          ) : null}
+          )}
         </View>
       </View>
     </Link>

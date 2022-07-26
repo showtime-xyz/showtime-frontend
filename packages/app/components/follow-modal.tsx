@@ -2,9 +2,10 @@ import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { createParam } from "app/navigation/use-param";
 
-import { useRouter } from "../navigation/use-router";
 import { FollowersList, FollowingList } from "./following-user-list";
 
 type Query = {

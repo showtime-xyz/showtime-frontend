@@ -1,9 +1,10 @@
 import { useWindowDimensions } from "react-native";
 
 import {
-  useBlurredBackgroundColor,
+  useBlurredBackgroundStyles,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
@@ -15,7 +16,6 @@ import {
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-import { useRouter } from "app/navigation/use-router";
 
 import { WebFooter } from "./links-footer.web";
 
@@ -25,10 +25,9 @@ const Footer = () => {
   const color = isDark ? "white" : "black";
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser();
-  const blurredBackgroundColor = useBlurredBackgroundColor(95);
+  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const { isTabBarHidden } = useNavigationElements();
 
-  // Todo: on small screens, only 'marketing' page display this.
   if (width >= 768) {
     return <WebFooter />;
   }
@@ -42,8 +41,7 @@ const Footer = () => {
       // @ts-expect-error
       style={{
         position: "fixed",
-        backdropFilter: "blur(20px)",
-        backgroundColor: blurredBackgroundColor,
+        ...blurredBackgroundStyles,
       }}
       tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
     >

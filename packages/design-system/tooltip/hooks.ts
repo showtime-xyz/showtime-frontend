@@ -43,16 +43,3 @@ export const useWebClientRect = (ele: RefObject<HTMLElement | View | null>) => {
     typeof updateClientRect
   ];
 };
-
-export const usePlatformResize = (onResize: (evt: Event) => any) => {
-  useLayoutEffect(() => {
-    const handleResize = (evt: Event) => {
-      onResize(evt);
-    };
-    Platform.OS === "web" && window.addEventListener("resize", handleResize);
-    return function cleanup() {
-      Platform.OS === "web" &&
-        window.removeEventListener("resize", handleResize);
-    };
-  }, [onResize]);
-};

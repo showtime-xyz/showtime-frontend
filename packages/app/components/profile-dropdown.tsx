@@ -6,17 +6,22 @@ import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import {
+  MoreHorizontal,
+  Copy,
+  Flag,
+  Slash,
+} from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
-import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
 
 type Props = {
@@ -38,7 +43,6 @@ function ProfileDropdown({ user }: Props) {
           variant="tertiary"
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
-          asChild
         >
           <MoreHorizontal
             color={
@@ -48,10 +52,7 @@ function ProfileDropdown({ user }: Props) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        loop
-        tw="w-60 rounded-2xl bg-white p-2 shadow dark:bg-gray-900"
-      >
+      <DropdownMenuContent loop>
         <DropdownMenuItem
           onSelect={async () => {
             const result = await share({
@@ -69,18 +70,14 @@ function ProfileDropdown({ user }: Props) {
             }
           }}
           key="share"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Share
-          </DropdownMenuItemTitle>
+          <MenuItemIcon Icon={Copy} />
+          <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           key="block"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
+          className="danger"
           onSelect={() => {
             toggleBlock({
               isBlocked,
@@ -89,12 +86,11 @@ function ProfileDropdown({ user }: Props) {
             });
           }}
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
+          <MenuItemIcon Icon={Slash} />
+          <DropdownMenuItemTitle>
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuSeparator tw="m-1 h-[1px] bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={async () => {
@@ -102,11 +98,9 @@ function ProfileDropdown({ user }: Props) {
             router.pop();
           }}
           key="report"
-          tw="h-8 flex-1 overflow-hidden rounded-sm p-2"
         >
-          <DropdownMenuItemTitle tw="font-semibold text-black dark:text-white">
-            Report
-          </DropdownMenuItemTitle>
+          <MenuItemIcon Icon={Flag} />
+          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

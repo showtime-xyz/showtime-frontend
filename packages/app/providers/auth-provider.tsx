@@ -3,6 +3,8 @@ import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
@@ -16,7 +18,6 @@ import { magic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
-import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
 
@@ -74,17 +75,13 @@ export function AuthProvider({
    */
   const logout = useCallback(
     async function logout() {
-      if (Platform.OS === "web") {
-        localStorage.removeItem("walletconnect");
-        onWagmiDisconnect?.();
-      }
       const wasUserLoggedIn = loginStorage.getLogin();
-
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         track("User Logged Out");
       }
       await rudder?.reset();
 
+      onWagmiDisconnect?.();
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
 
@@ -106,8 +103,7 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [connector, mutate, router, setWeb3]
+    [connector, mutate, router, setWeb3, onWagmiDisconnect]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

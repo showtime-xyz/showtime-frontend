@@ -1,4 +1,3 @@
-// import { Link } from "app/navigation/link";
 import { Platform } from "react-native";
 
 import { Image } from "@showtime-xyz/universal.image";
@@ -13,9 +12,7 @@ type Props = {
 
 function Collection({ nft }: Props) {
   if (!nft) return null;
-
   return (
-    // <Link href={`/c/${nft.collection_slug}`}>
     <View tw="h-9 flex-row items-center justify-between bg-white px-4 py-2 dark:bg-black">
       <View tw="flex-1 flex-row items-center">
         {nft.collection_img_url && (
@@ -39,7 +36,6 @@ function Collection({ nft }: Props) {
           tw={[
             nft.collection_img_url ? "ml-2" : "",
             "text-xs font-bold text-gray-600 dark:text-gray-400",
-            // w-[65vw]
           ]}
           numberOfLines={1}
         >
@@ -52,7 +48,6 @@ function Collection({ nft }: Props) {
           : `${nft.token_count} Editions`}
       </Text>
     </View>
-    // </Link>
   );
 }
 

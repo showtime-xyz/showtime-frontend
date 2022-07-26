@@ -1,6 +1,10 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 
-import { useAccessToken } from "../../lib/access-token";
+import { useSigner } from "wagmi";
+
+import { useAccessToken } from "app/lib/access-token";
+import { isMobileWeb } from "app/utilities";
+
 import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
@@ -19,16 +23,20 @@ export function useWalletLogin() {
   const { setWeb3 } = useWeb3();
   const { getNonce, rotateNonce } = useNonce();
   const { login: _login } = useAuth();
+  const [showSignMessage, setShowSignMessage] = useState(false);
   const {
-    address,
+    address: walletAddress,
     connected,
-    loggedIn,
     networkChanged,
-    signMessage,
-    signed,
-    provider,
-    signature,
+    signMessageAsync,
   } = useWallet();
+  const wagmiSigner = useSigner();
+  const { user } = useUser();
+
+  const getAddress = () => {
+    return walletAddress || user?.data.profile.wallet_addresses[0];
+  };
+
   const { isAuthenticated } = useUser();
   const accessToken = useAccessToken();
   const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
@@ -54,17 +62,20 @@ export function useWalletLogin() {
     }
   };
   const handleLogin = async () => {
-    const nonce = await fetchNonce(address);
+    const address = getAddress();
+    const nonce = await fetchNonce(address as string);
     if (nonce) {
-      signMessage({
+      const signature = await signMessageAsync({
         message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
       });
+      handleSignature(signature);
     } else {
       dispatch("ERROR", { error: "Nonce is null" });
     }
   };
-  const handleSignature = async () => {
+  const handleSignature = async (signature?: string) => {
     try {
+      const address = getAddress();
       if (address && signature) {
         await _login(LOGIN_WALLET_ENDPOINT, {
           signature: signature,
@@ -82,8 +93,12 @@ export function useWalletLogin() {
   };
   //#endregion
 
-  const handleSetWeb3 = () => {
-    setWeb3(provider);
+  // TODO: below thing doesn't work. Keeping it for now
+  const handleSetWeb3 = async () => {
+    if (wagmiSigner.data?.provider) {
+      //@ts-ignore
+      setWeb3(wagmiSigner.data.provider);
+    }
   };
 
   useEffect(() => {
@@ -92,18 +107,24 @@ export function useWalletLogin() {
       (connected && authenticated && !networkChanged)
     ) {
       handleSetWeb3();
-    } else if (connected && !authenticated && loggedIn) {
-      handleLogin();
+    } else if (connected && !authenticated) {
+      // TODO: refactor after getting a better alternative
+      // https://github.com/rainbow-me/rainbowkit/discussions/536
+      if (isMobileWeb()) {
+        setShowSignMessage(true);
+      } else {
+        handleLogin();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn, accessToken, connected, authenticated, networkChanged]);
+  }, [accessToken, connected, authenticated, networkChanged]);
 
-  useEffect(() => {
-    if (signed) {
-      handleSignature();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signed]);
-
-  return { status, name, error, loginWithWallet: handleLogin };
+  return {
+    status,
+    name,
+    error,
+    loginWithWallet: handleLogin,
+    showSignMessage,
+    verifySignature: handleLogin,
+  };
 }

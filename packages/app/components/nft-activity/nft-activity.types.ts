@@ -18,7 +18,7 @@ export type Activity = {
 };
 
 export type TableProps = {
-  data: Array<Activity>;
+  data?: Array<Activity>;
 };
 
 export type TableRowProps = Activity;

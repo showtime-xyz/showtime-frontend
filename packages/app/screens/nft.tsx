@@ -1,9 +1,7 @@
 import { Suspense, useMemo } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import Head from "next/head";
-
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
@@ -12,12 +10,14 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-import { FeedItem } from "app/components/swipe-list";
+import { FeedItem } from "app/components/feed-item";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+import type { NFT } from "app/types";
 
 type Query = {
   tokenId: string;
@@ -27,10 +27,11 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
+const BOTTOM_GAP = 128;
 
 function NftScreen() {
   useTrackPageViewed({ name: "NFT" });
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <ErrorBoundary>
@@ -38,12 +39,14 @@ function NftScreen() {
         fallback={
           <View tw="items-center">
             <Skeleton
+              //@ts-ignore
               colorMode={colorScheme}
               height={screenHeight - 300}
               width={screenWidth}
             />
             <View tw="h-2" />
             <Skeleton
+              //@ts-ignore
               colorMode={colorScheme}
               height={300}
               width={screenWidth}
@@ -70,7 +73,8 @@ const NFTDetail = () => {
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { user } = useUser();
 
   const nftWithListing = useMemo(() => {
     return {
@@ -85,46 +89,18 @@ const NFTDetail = () => {
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
+  const bottomMargin =
+    Platform.OS === "web" && windowWidth < 768 && !!user ? BOTTOM_GAP : 0;
   const nft = data?.data?.item;
 
   if (nft) {
     return (
-      <>
-        <Head>
-          <title>{nft.token_name} | Showtime</title>
-
-          <meta name="description" content={nft.token_description} />
-          <meta property="og:type" content="website" />
-          <meta name="og:description" content={nft.token_description} />
-          <meta
-            property="og:image"
-            content={
-              nft.token_img_twitter_url
-                ? nft.token_img_twitter_url
-                : nft.token_img_url
-            }
-          />
-          <meta name="og:title" content={nft.token_name} />
-
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={nft.token_name} />
-          <meta name="twitter:description" content={nft.token_description} />
-          <meta
-            name="twitter:image"
-            content={
-              nft.token_img_twitter_url
-                ? nft.token_img_twitter_url
-                : nft.token_img_url
-            }
-          />
-        </Head>
-
-        <FeedItem
-          itemHeight={itemHeight}
-          bottomPadding={safeAreaBottom}
-          nft={nftWithListing}
-        />
-      </>
+      <FeedItem
+        itemHeight={itemHeight}
+        bottomPadding={safeAreaBottom}
+        bottomMargin={bottomMargin}
+        nft={nftWithListing as NFT}
+      />
     );
   }
 

@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { FlatList, Keyboard, Platform, TextInput } from "react-native";
 
-import { useColorScheme } from "@showtime-xyz/universal.hooks";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   Close as CloseIcon,
   Search as SearchIcon,
@@ -162,7 +162,7 @@ export const SearchItem = ({
 };
 
 export const SearchItemSkeleton = () => {
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <View tw="px-4 pb-4">
@@ -174,7 +174,7 @@ export const SearchItemSkeleton = () => {
                 width={32}
                 height={32}
                 show
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
               />
             </View>
             <View>
@@ -182,14 +182,14 @@ export const SearchItemSkeleton = () => {
                 width={100}
                 height={14}
                 show
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
               />
               <View tw="h-1" />
               <Skeleton
                 width={80}
                 height={14}
                 show
-                colorMode={colorMode as any}
+                colorMode={colorScheme as any}
               />
             </View>
           </View>

@@ -4,11 +4,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDeviceContext } from "twrnc";
 
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
-import { ToastProvider } from "@showtime-xyz/universal.toast";
-import { View } from "@showtime-xyz/universal.view";
 
-import { theme } from "design-system/theme";
+import { ThemeProvider } from "app/providers/theme-provider";
+
+import { AlertProvider } from "design-system/alert";
+import { SnackbarProvider } from "design-system/snackbar";
+import { tw } from "design-system/tailwind";
+import { ToastProvider } from "design-system/toast";
+import { View } from "design-system/view";
 
 const FontsLoader = ({ children }) => {
   const [fontsLoaded, error] = useFonts({
@@ -41,15 +44,21 @@ export const decorators = [
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TailwindDeviceContextProvider>
         <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <ToastProvider>
-              <MainAxisCenter>
-                <FontsLoader>
-                  <Story />
-                </FontsLoader>
-              </MainAxisCenter>
-            </ToastProvider>
-          </SafeAreaProvider>
+          <ThemeProvider>
+            <SafeAreaProvider>
+              <ToastProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <MainAxisCenter>
+                      <FontsLoader>
+                        <Story />
+                      </FontsLoader>
+                    </MainAxisCenter>
+                  </SnackbarProvider>
+                </AlertProvider>
+              </ToastProvider>
+            </SafeAreaProvider>
+          </ThemeProvider>
         </BottomSheetModalProvider>
       </TailwindDeviceContextProvider>
     </GestureHandlerRootView>

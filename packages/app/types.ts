@@ -18,6 +18,7 @@ export type NFT = {
   creator_name: string;
   creator_address: string;
   creator_address_nonens: string;
+  owner_address_nonens?: string;
   creator_img_url?: any;
   token_created: Date;
   multiple_owners: number;
@@ -183,7 +184,7 @@ export type IEdition = {
   contract_address: string;
   minter_address: string;
   description: string;
-  edition_size: string;
+  edition_size: number;
   image_url: string;
   name: string;
   owner_address: string;

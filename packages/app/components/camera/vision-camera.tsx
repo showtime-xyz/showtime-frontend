@@ -29,16 +29,16 @@ import {
 import { Flash, FlashOff } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { track } from "app/lib/analytics";
 import { Haptics } from "app/lib/haptics";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useIsFocused } from "app/lib/react-navigation/native";
-import { useRouter } from "app/navigation/use-router";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -76,7 +76,7 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = usePlatformBottomHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
