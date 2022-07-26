@@ -15,7 +15,7 @@
     "next": "12.2.3-canary.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native-web": "0.18.6"
+    "react-native-web": "0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -27,7 +27,7 @@
     "@storybook/manager-webpack5": "~6.5.9",
     "@storybook/react": "~6.5.9",
     "@types/node": "16.11.9",
-    "@types/react": "^18.0.1",
+    "@types/react": "^18.0.15",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-native-web": "^0.17.5",
     "chromatic": "^6.0.6",
