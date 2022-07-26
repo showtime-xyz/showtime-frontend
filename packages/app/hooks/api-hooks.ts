@@ -104,29 +104,28 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
-  const { data, error, isLoading } = useSWR<{ data: UserProfile }>(
-    queryKey,
-    fetcher
-  );
+  const { data, error, isLoading, isValidating } = useSWR<{
+    data: UserProfile;
+  }>(queryKey, fetcher);
   const { mutate } = useSWRConfig();
 
-  const myInfo = useMyInfo();
+  const { data: myInfoData } = useMyInfo();
   // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
   const userProfile: typeof data = useMemo(() => {
     if (
       data?.data &&
-      myInfo.data?.data?.profile.profile_id === data?.data?.profile.profile_id
+      myInfoData?.data?.profile.profile_id === data?.data?.profile.profile_id
     ) {
       return {
         data: {
           ...data.data,
-          profile: myInfo.data.data.profile,
+          profile: myInfoData.data.profile,
         },
       };
     } else {
       return data;
     }
-  }, [myInfo, data]);
+  }, [myInfoData?.data, data, isValidating]);
 
   return {
     data: userProfile,
@@ -303,28 +302,27 @@ export const useMyInfo = () => {
       }
 
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              follows: [...data.data.follows, { profile_id: profileId }],
-            },
-          },
-          false
-        );
-
         try {
           await axios({
             url: `/v2/follow/${profileId}`,
             method: "POST",
             data: {},
           });
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                follows: [...data.data.follows, { profile_id: profileId }],
+              },
+            },
+            false
+          );
         } catch (err) {
           console.error(err);
         }
 
-        mutate(queryKey);
+        await mutate(queryKey);
       }
     },
     [accessToken, data, mutate, navigateToLogin]
@@ -333,30 +331,29 @@ export const useMyInfo = () => {
   const unfollow = useCallback(
     async (profileId?: number) => {
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              follows: data.data.follows.filter(
-                (follow) => follow.profile_id !== profileId
-              ),
-            },
-          },
-          false
-        );
-
         try {
           await axios({
             url: `/v2/unfollow/${profileId}`,
             method: "POST",
             data: {},
           });
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                follows: data.data.follows.filter(
+                  (follow) => follow.profile_id !== profileId
+                ),
+              },
+            },
+            false
+          );
         } catch (err) {
           console.error(err);
         }
 
-        mutate(queryKey);
+        await mutate(queryKey);
       }
     },
     [data, mutate]
