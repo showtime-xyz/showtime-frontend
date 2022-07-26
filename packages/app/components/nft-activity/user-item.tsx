@@ -3,6 +3,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { formatAddressShort } from "app/utilities";
+
 import type { UserItemProps } from "./nft-activity.types";
 
 const getProfileImageUrl = (imgUrl: string) => {
@@ -12,7 +14,12 @@ const getProfileImageUrl = (imgUrl: string) => {
   return imgUrl;
 };
 
-const UserItem = ({ imageUrl, title, verified }: UserItemProps) => {
+const UserItem = ({
+  imageUrl,
+  userAddress,
+  username,
+  verified,
+}: UserItemProps) => {
   return (
     <View tw="flex flex-row items-center">
       <View
@@ -29,7 +36,9 @@ const UserItem = ({ imageUrl, title, verified }: UserItemProps) => {
           />
         ) : null}
       </View>
-      <Text tw={"mr-1 text-xs text-black dark:text-white"}>{`@${title}`}</Text>
+      <Text tw={"mr-1 text-xs text-black dark:text-white"}>
+        {username ? `@${username}` : formatAddressShort(userAddress)}
+      </Text>
       {verified ? <VerificationBadge size={12} /> : null}
     </View>
   );
