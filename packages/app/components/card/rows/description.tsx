@@ -1,4 +1,11 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { LayoutAnimation, UIManager, Platform } from "react-native";
 
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -19,10 +26,13 @@ const animation = LayoutAnimation.create(
 );
 
 function Description({ nft }: Props) {
+  const textRef = useRef<Element | Text>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);
-  const [numberOfLines, setNumberOfLines] = useState(undefined);
+  const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -38,6 +48,29 @@ function Description({ nft }: Props) {
     }
   }, []);
 
+  const countLines = useCallback((ele: Element | null) => {
+    if (!ele) return 0;
+    const styles = window.getComputedStyle(ele, null);
+    const lh = parseInt(styles.lineHeight, 10);
+    const h = parseInt(styles.height, 10);
+    const lc = Math.round(h / lh);
+    return lc;
+  }, []);
+
+  const onTextLayout = useCallback(
+    (lines: number) => {
+      if (lines > 3 && !isExpanded) {
+        setShowMore(true);
+        setNumberOfLines(3);
+      }
+    },
+    [isExpanded]
+  );
+
+  useLayoutEffect(() => {
+    onTextLayout(countLines(textRef.current as Element));
+  }, [countLines, isExpanded, onTextLayout]);
+
   const description = useMemo(
     () =>
       nft && nft.token_description
@@ -46,22 +79,12 @@ function Description({ nft }: Props) {
     [nft]
   );
 
-  const onTextLayout = useCallback(
-    (e) => {
-      if (e.nativeEvent.lines.length > 3 && !isExpanded) {
-        setShowMore(true);
-        setNumberOfLines(3);
-      }
-    },
-    [isExpanded]
-  );
-
   const onShowMore = useCallback(() => {
     LayoutAnimation.configureNext(animation);
     setShowMore(false);
     setShowLess(true);
     setIsExpanded(true);
-    setNumberOfLines(undefined);
+    setNumberOfLines(0);
   }, []);
 
   const onShowLess = useCallback(() => {
@@ -81,7 +104,9 @@ function Description({ nft }: Props) {
       <Text
         tw="text-sm text-gray-600 dark:text-gray-400"
         numberOfLines={numberOfLines}
-        onTextLayout={onTextLayout}
+        ref={textRef as any}
+        // onTextLayout only support native
+        onTextLayout={(e) => onTextLayout(e.nativeEvent.lines.length)}
       >
         {description}
       </Text>

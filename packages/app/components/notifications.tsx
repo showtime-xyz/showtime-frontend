@@ -150,6 +150,19 @@ const NotificationCard = ({ notification, setUsers }: NotificationCardProp) => {
   );
 };
 
+const NOTIFICATION_TYPE_COPY = new Map([
+  ["FOLLOW", "followed you"],
+  ["LIKE_ON_CREATED_NFT", "liked "],
+  ["LIKE_ON_OWNED_NFT", "liked "],
+  ["COMMENT_ON_CREATED_NFT", "commented on "],
+  ["COMMENT_ON_OWNED_NFT", "commented on "],
+  ["COMMENT_MENTION", "mentioned you in "],
+  ["LIKE_ON_COMMENT", "liked your comment on "],
+  ["NFT_SALE", "bought "],
+  ["NEW_CREATOR_AIRDROP_FROM_FOLLOWING", "created a new drop "],
+  ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "claimed "],
+]);
+
 const NotificationDescription = ({
   notification,
   notificationInfo,
@@ -161,103 +174,90 @@ const NotificationDescription = ({
 }) => {
   const actors = notification.actors;
   const router = useRouter();
-  if (actors && actors.length > 0) {
-    return (
-      <View tw="flex-1">
-        <Text
-          tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
-          ellipsizeMode="tail"
-        >
-          {actors.length == 1 ? (
-            <>
-              <ActorLink actor={actors[0]} />{" "}
-            </>
-          ) : null}
-          {actors.length == 2 ? (
-            <>
-              <ActorLink actor={actors[0]} /> and{" "}
-              <ActorLink actor={actors[1]} />{" "}
-            </>
-          ) : null}
-          {actors.length == 3 ? (
-            <>
-              <ActorLink actor={actors[0]} />,
-              <ActorLink actor={actors[1]} />, and{" "}
-              <ActorLink actor={actors[2]} />
-            </>
-          ) : null}
-          {actors.length > 3 ? (
-            <>
-              <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
-              and{" "}
-              <Text
-                tw="text-13 font-bold text-black dark:text-white"
-                onPress={() => setUsers(actors.slice(2, actors.length))}
-              >
-                {actors.length - 2} other{" "}
-                {actors.length - 2 == 1 ? "person " : "people "}
-              </Text>
-            </>
-          ) : null}
-
-          {notification.type_name === "FOLLOW" ? "followed you" : null}
-          {notification.type_name === "LIKE_ON_CREATED_NFT" ||
-          notification.type_name === "LIKE_ON_OWNED_NFT"
-            ? "liked "
-            : null}
-          {notification.type_name === "COMMENT_ON_CREATED_NFT" ||
-          notification.type_name === "COMMENT_ON_OWNED_NFT"
-            ? "commented on "
-            : null}
-          {notification.type_name === "COMMENT_MENTION"
-            ? "mentioned you in "
-            : null}
-          {notification.type_name === "LIKE_ON_COMMENT"
-            ? "liked your comment on "
-            : null}
-          {notification.type_name === "NFT_SALE" ? "bought " : null}
-          {notification.type_name === "NEW_CREATOR_AIRDROP_FROM_FOLLOWING"
-            ? "created a new drop "
-            : null}
-          {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
-            ? "claimed "
-            : null}
-
-          {notification.nft_display_name ? (
-            <Text
-              onPress={() => {
-                router.push(notificationInfo.href);
-              }}
-              tw="text-13 font-bold text-black dark:text-white"
-            >
-              {notification.nft_display_name}
-            </Text>
-          ) : null}
-          {/* Todo: currently we miss @Z(NFT Creator) field */}
-          {/* {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
-            ? ` by ${
-                notification.link_to_profile_username ||
-                notification.link_to_profile_address
-              }`
-            : null} */}
-        </Text>
-        <View tw="h-1" />
-        {/* <Text tw="text-xs text-gray-500">
-          {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
-            addSuffix: true,
-          })}
-        </Text> */}
-      </View>
-    );
-  }
+  const renderActors = () => {
+    if (!actors) {
+      return (
+        <>
+          <ActorLink
+            actor={{
+              username: notification.link_to_profile_username,
+              wallet_address: notification.link_to_profile_address,
+            }}
+          />{" "}
+        </>
+      );
+    }
+    if (actors.length == 1) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} />{" "}
+        </>
+      );
+    }
+    if (actors.length == 2) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        </>
+      );
+    }
+    if (actors.length == 3) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        </>
+      );
+    }
+    if (actors.length > 3) {
+      return (
+        <>
+          <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />, and{" "}
+          <Text
+            tw="text-13 font-bold text-black dark:text-white"
+            onPress={() => setUsers(actors.slice(2, actors.length))}
+          >
+            {actors.length - 2} other{" "}
+            {actors.length - 2 == 1 ? "person " : "people "}
+          </Text>
+        </>
+      );
+    }
+    return null;
+  };
 
   return (
-    <ActorLink
-      actor={{
-        username: notification.link_to_profile_username,
-        wallet_address: notification.link_to_profile_address,
-      }}
-    />
+    <View tw="flex-1">
+      <Text
+        tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
+        ellipsizeMode="tail"
+      >
+        {renderActors()}
+        {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
+        {notification.nft_display_name ? (
+          <Text
+            onPress={() => {
+              router.push(notificationInfo.href);
+            }}
+            tw="text-13 font-bold text-black dark:text-white"
+          >
+            {notification.nft_display_name}
+          </Text>
+        ) : null}
+        {/* Todo: currently we miss @Z(NFT Creator) field */}
+        {/* {notification.type_name === "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING"
+          ? ` by ${
+              notification.link_to_profile_username ||
+              notification.link_to_profile_address
+            }`
+          : null} */}
+      </Text>
+      <View tw="h-1" />
+      {/* <Text tw="text-xs text-gray-500">
+        {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
+          addSuffix: true,
+        })}
+      </Text> */}
+    </View>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   useState,
   useMemo,
 } from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
@@ -40,7 +40,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     ref
   ) {
     //#region variables
-    const inputRef = useRef<typeof TextInput>();
+    const inputRef = useRef<typeof TextInput | HTMLElement>();
     useAutoSizeInput(inputRef);
     const [value, setValue] = useState("");
     const disable = useMemo(() => !value || /^\s+$/.test(value), [value]);
@@ -59,6 +59,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     const handleTextChange = (text: string) => setValue(text);
     const handleSubmit = async function handleSubmit() {
       await onSubmit?.(value);
+      if (Platform.OS === "web") {
+        (inputRef.current as HTMLElement).style.height = "auto";
+      }
     };
     //#endregion
 
