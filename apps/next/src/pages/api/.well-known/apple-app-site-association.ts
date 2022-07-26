@@ -14,7 +14,6 @@ const association = {
           // this is often not desired
           // see the Apple docs to configure this with granularity
           "/nft/*",
-          "/",
         ],
       },
     ],
