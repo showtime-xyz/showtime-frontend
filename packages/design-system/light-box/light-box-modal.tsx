@@ -19,7 +19,7 @@ export type ActiveImageType = AnimationParams & {
   layout: TargetImageInfo;
   imageElement: JSX.Element;
 };
-type LightImageModalProps = {
+export type LightImageModalProps = {
   activeImage: ActiveImageType;
   onClose: () => void;
 };

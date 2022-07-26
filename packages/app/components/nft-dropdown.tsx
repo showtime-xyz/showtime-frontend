@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import { Button } from "@showtime-xyz/universal.button";
+import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -60,12 +61,14 @@ type Props = {
   nft?: NFT;
   listId?: number | undefined;
   shouldEnableSharing?: boolean;
+  btnProps?: ButtonProps;
 };
 
 function NFTDropdown({
   nft: propNFT,
   listId,
   shouldEnableSharing = true,
+  btnProps,
 }: Props) {
   //#region hooks
   const userId = useCurrentUserId();
@@ -148,15 +151,17 @@ function NFTDropdown({
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <Button
-          accessibilityLabel="nft card item menu"
           variant="text"
           tw="p-0"
-          iconOnly={true}
+          accessibilityLabel="nft card item menu"
+          iconOnly
+          {...btnProps}
         >
           <MoreHorizontal
             color={
-              tw.style("bg-gray-600 dark:bg-gray-400")
-                ?.backgroundColor as string
+              tw.style(
+                "bg-gray-600 dark:bg-gray-400 md:dark:bg-white md:bg-gray-900"
+              )?.backgroundColor as string
             }
             width={24}
             height={24}
