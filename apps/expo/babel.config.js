@@ -12,6 +12,16 @@ module.exports = function (api) {
   let plugins = [
     ["inline-dotenv", { path: envPath }],
     "react-native-reanimated/plugin",
+    [
+      "module-resolver",
+      {
+        alias: {
+          crypto: "react-native-quick-crypto",
+          stream: "stream-browserify",
+          buffer: "@craftzdog/react-native-buffer",
+        },
+      },
+    ],
   ];
 
   if (process.env.NODE_ENV === "test") {
