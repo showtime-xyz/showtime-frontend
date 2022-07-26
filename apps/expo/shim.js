@@ -26,10 +26,6 @@ if (typeof localStorage !== "undefined") {
   localStorage.debug = isDev ? "*" : "";
 }
 
-// If using the crypto shim, uncomment the following line to ensure
-// crypto is loaded first, so it can populate global.crypto
-// require('crypto')
-
 if (Platform.OS !== "web") {
   global.atob = atob;
   global.btoa = btoa;
