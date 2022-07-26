@@ -29,7 +29,7 @@ index c58dfba..2f3aa15 100644
  
  const Blob = require('./Blob');
  const EventTarget = require('event-target-shim');
-+const { toByteArray } = require('base64-js');
++const { toByteArray } = require('react-native-quick-base64');
  
  import NativeFileReaderModule from './NativeFileReaderModule';
  
