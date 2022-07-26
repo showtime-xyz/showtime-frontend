@@ -104,7 +104,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
-  const { data, error, isLoading, isValidating } = useSWR<{
+  const { data, error, isLoading } = useSWR<{
     data: UserProfile;
   }>(queryKey, fetcher);
   const { mutate } = useSWRConfig();
@@ -125,7 +125,7 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
     } else {
       return data;
     }
-  }, [myInfoData?.data, data, isValidating]);
+  }, [myInfoData?.data, data]);
 
   return {
     data: userProfile,
