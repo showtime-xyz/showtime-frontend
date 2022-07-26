@@ -7208,9 +7208,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.dropdown-menu@npm:^0.0.17":
-  version: 0.0.17
-  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.17"
+"@showtime-xyz/universal.dropdown-menu@npm:^0.0.18":
+  version: 0.0.18
+  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.18"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.19
     "@showtime-xyz/universal.text": 0.0.21
@@ -7222,7 +7222,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 64b047eaf0a0c96d01dd592ff031f03fe597df7f340dc545258e5ce1e948bd2231f5db08ddf5af1f1ab68456c8ba610caf74ee512620ec533ad445f534cc2e6a
+  checksum: 92dba96ea760274daade21c7b7fa7d82b7fe1453e42378f6db449fac59219ed776ec7b34edeaddb8de46c6d34584c8548fef4ae2c6f05d94526acda9623314da
   languageName: node
   linkType: hard
 
@@ -7832,7 +7832,7 @@ __metadata:
     "@showtime-xyz/universal.country-code-picker": ^0.0.30
     "@showtime-xyz/universal.data-pill": ^0.0.22
     "@showtime-xyz/universal.divider": ^0.0.21
-    "@showtime-xyz/universal.dropdown-menu": ^0.0.17
+    "@showtime-xyz/universal.dropdown-menu": ^0.0.18
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.9
     "@showtime-xyz/universal.fieldset": ^0.0.38
     "@showtime-xyz/universal.hooks": ^0.0.18
