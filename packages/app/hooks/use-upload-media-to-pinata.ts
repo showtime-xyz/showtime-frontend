@@ -5,7 +5,13 @@ import { Logger } from "app/lib/logger";
 import { getFileFormData, getPinataToken } from "app/utilities";
 
 export const useUploadMediaToPinata = () => {
-  const uploadMedia = async (file: File | string) => {
+  const uploadMedia = async ({
+    file,
+    notSafeForWork,
+  }: {
+    file: File | string;
+    notSafeForWork: boolean;
+  }) => {
     const formData = new FormData();
     const fileFormData = await getFileFormData(file);
 
@@ -21,6 +27,12 @@ export const useUploadMediaToPinata = () => {
         name: uuid(),
       })
     );
+    if (notSafeForWork) {
+      formData.append(
+        "pinataContent",
+        JSON.stringify({ attributes: [{ value: "NSFW" }] })
+      );
+    }
 
     const pinataToken = await getPinataToken();
     const res = await axios.post(

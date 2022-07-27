@@ -13,6 +13,7 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -44,6 +45,7 @@ const defaultValues = {
   editionSize: 5000,
   duration: SECONDS_IN_A_WEEK,
   hasAcceptedTerms: false,
+  notSafeForWork: false,
 };
 
 const durationOptions = [
@@ -75,6 +77,7 @@ const dropValidationSchema = yup.object({
     .default(defaultValues.hasAcceptedTerms)
     .required()
     .isTrue("You must accept the terms and conditions."),
+  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
@@ -366,7 +369,7 @@ export const DropForm = () => {
                       tw="flex-1"
                       label="Your royalties (%)"
                       onBlur={onBlur}
-                      helperText="How much you’ll earn each time this NFT is sold"
+                      helperText="How much you'll earn each time this NFT is sold"
                       errorText={errors.royalty?.message}
                       value={value?.toString()}
                       onChangeText={onChange}
@@ -420,6 +423,24 @@ export const DropForm = () => {
               }}
             />
           </View>
+
+          <View tw="mt-4 flex-row justify-between">
+            <View>
+              <Text tw="text-sm font-bold text-black dark:text-white">
+                Explicit content
+              </Text>
+              <View tw="h-2" />
+              <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
+            </View>
+            <Controller
+              control={control}
+              name="notSafeForWork"
+              render={({ field: { onChange, value } }) => (
+                <Switch checked={value} onChange={onChange} />
+              )}
+            />
+          </View>
+
           <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
               <Controller
@@ -451,7 +472,7 @@ export const DropForm = () => {
             ) : null}
           </View>
 
-          <View tw="mt-8 mb-20">
+          <View tw="mt-8">
             {shouldShowSignMessage ? (
               <View tw="px-2">
                 {!isSignRequested ? (
@@ -489,9 +510,11 @@ export const DropForm = () => {
               </Button>
             )}
 
-            <View tw="mt-4">
-              <PolygonScanButton transactionHash={state.transactionHash} />
-            </View>
+            {state.transactionHash ? (
+              <View tw="mt-4">
+                <PolygonScanButton transactionHash={state.transactionHash} />
+              </View>
+            ) : null}
 
             {state.error ? (
               <View tw="mt-4">

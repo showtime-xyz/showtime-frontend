@@ -236,7 +236,7 @@ export const useMintNFT = () => {
   const result = useBiconomy();
   const uploadMedia = useUploadMediaToPinata();
 
-  async function uploadMediaFn() {
+  async function uploadMediaFn(params: UseMintNFT) {
     // Media Upload
     try {
       const fileMetaData = await getFileMeta(state.file);
@@ -260,7 +260,10 @@ export const useMintNFT = () => {
           type: "mediaUpload",
           payload: { file: state.file, fileType: fileMetaData.type },
         });
-        const mediaIPFSHash = await uploadMedia(state.file);
+        const mediaIPFSHash = await uploadMedia({
+          file: state.file,
+          notSafeForWork: params.notSafeForWork,
+        });
         dispatch({ type: "mediaUploadSuccess", payload: { mediaIPFSHash } });
         return mediaIPFSHash;
       }
@@ -273,7 +276,7 @@ export const useMintNFT = () => {
 
   async function uploadNFTJson(params: UseMintNFT) {
     try {
-      const mediaIpfsHash = await uploadMediaFn();
+      const mediaIpfsHash = await uploadMediaFn(params);
 
       if (mediaIpfsHash) {
         dispatch({ type: "nftJSONUpload" });
