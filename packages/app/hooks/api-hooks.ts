@@ -104,29 +104,28 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
-  const { data, error, isLoading } = useSWR<{ data: UserProfile }>(
-    queryKey,
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR<{
+    data: UserProfile;
+  }>(queryKey, fetcher);
   const { mutate } = useSWRConfig();
 
-  const myInfo = useMyInfo();
+  const { data: myInfoData } = useMyInfo();
   // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
   const userProfile: typeof data = useMemo(() => {
     if (
       data?.data &&
-      myInfo.data?.data?.profile.profile_id === data?.data?.profile.profile_id
+      myInfoData?.data?.profile.profile_id === data?.data?.profile.profile_id
     ) {
       return {
         data: {
           ...data.data,
-          profile: myInfo.data.data.profile,
+          profile: myInfoData.data.profile,
         },
       };
     } else {
       return data;
     }
-  }, [myInfo, data]);
+  }, [myInfoData?.data, data]);
 
   return {
     data: userProfile,

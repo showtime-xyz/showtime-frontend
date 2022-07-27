@@ -10,6 +10,7 @@ import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useFollow } from "app/hooks/use-follow";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
@@ -28,6 +29,8 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     () => isFollowing(creatorId),
     [creatorId, isFollowing]
   );
+
+  const { onToggleFollow } = useFollow({ username: props.creator.username });
 
   return (
     <View tw="p-4">
@@ -64,6 +67,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
             isFollowing={isFollowingCreator}
             name={props.creator.name}
             profileId={creatorId}
+            onToggleFollow={onToggleFollow}
           />
         </View>
       </View>

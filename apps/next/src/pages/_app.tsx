@@ -34,6 +34,12 @@ import { UnlistScreen } from "app/screens/unlist";
 
 import "../styles/styles.css";
 
+// TODO: remove this once Reanimated ship a fix
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window._frameTimestamp = null;
+}
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,

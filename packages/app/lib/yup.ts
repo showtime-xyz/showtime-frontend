@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import "yup-phone";
+import "yup-phone-lite";
 
 yup.addMethod(yup.string, "or", function (schemas, msg) {
   return this.test({

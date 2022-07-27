@@ -64,7 +64,7 @@ const axiosAPI = async ({
     Logger.error(error);
 
     if (error.response?.data?.error?.message) {
-      throw new Error(error.response.data.error.message);
+      throw { ...error, message: error.response?.data?.error?.message };
     }
 
     throw error;
