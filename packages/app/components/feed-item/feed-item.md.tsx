@@ -1,4 +1,4 @@
-import { memo, useMemo, Suspense, useRef } from "react";
+import { memo, useMemo, Suspense, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -26,7 +26,6 @@ import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { useTabState } from "app/hooks/use-tab-state";
 import { createParam } from "app/navigation/use-param";
 
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
@@ -55,7 +54,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const router = useRouter();
   const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
-  const { index, setIndex, routes } = useTabState([
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
     {
       title: "Comments",
       key: "Comments",

@@ -12,19 +12,22 @@ export interface Actor {
   wallet_address: string;
 }
 
-export interface NotificationType {
-  actors?: Actor[];
-  description?: string;
+export interface NotificationNFT {
   id: number;
-  img_url: string;
-  link_to_profile_address: string;
-  link_to_profile_username: string;
-  chain_identifier?: any;
-  nft_token_identifier?: any;
-  contract_address?: string;
-  nft_display_name?: string;
+  token_identifier: string;
+  display_name: string;
+  chain_identifier: string;
+  contract_address: string;
+  creator: Actor;
+}
+export interface NotificationType {
+  id: number;
   to_timestamp: string;
+  img_url: string;
+  description?: string;
   type_name: string;
+  actors: Actor[];
+  nfts: NotificationNFT[];
 }
 
 export const useNotifications = () => {
