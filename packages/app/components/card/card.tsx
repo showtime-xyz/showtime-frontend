@@ -6,6 +6,7 @@ import type { UrlObject } from "url";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
@@ -97,7 +98,14 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown nft={nft} listId={listId} />
+                <NFTDropdown
+                  btnProps={{
+                    style: tailwind.style("dark:bg-gray-900 bg-gray-100 px-1"),
+                    size: "small",
+                  }}
+                  nft={nft}
+                  listId={listId}
+                />
               </Suspense>
             </ErrorBoundary>
           </View>
@@ -106,6 +114,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
           <RouteComponent
+            // @ts-ignore
             dataSet={{ testId: "nft-card-title-link" }}
             href={hrefProps!}
             onPress={handleOnPress}
