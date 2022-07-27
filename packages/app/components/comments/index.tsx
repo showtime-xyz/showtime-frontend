@@ -115,6 +115,7 @@ export function Comments({ nft }: { nft: NFT }) {
       <EmptyPlaceholder
         text="Be the first to add a comment!"
         title="💬 No comments yet..."
+        tw="flex-1 items-center justify-center"
       />
     ),
     []
@@ -162,5 +163,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 16,
+    flex: 1,
   },
 });
