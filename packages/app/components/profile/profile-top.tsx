@@ -331,7 +331,7 @@ export const ProfileTop = ({
                               pathname: router.pathname,
                               query: {
                                 ...router.query,
-                                dropNFTModal: true,
+                                dropModal: true,
                               },
                             } as any,
                           }),

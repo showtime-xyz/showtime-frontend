@@ -238,15 +238,15 @@ const HeaderRight = () => {
                   onPress={() => {
                     router.push(
                       Platform.select({
-                        native: "/camera",
+                        native: "/drop",
                         web: {
                           pathname: router.pathname,
-                          query: { ...router.query, createModal: true },
+                          query: { ...router.query, dropModal: true },
                         } as any,
                       }),
                       Platform.select({
-                        native: "/camera",
-                        web: router.asPath === "/" ? "/create" : router.asPath,
+                        native: "/drop",
+                        web: router.asPath === "/" ? "/drop" : router.asPath,
                       }),
                       { shallow: true }
                     );
