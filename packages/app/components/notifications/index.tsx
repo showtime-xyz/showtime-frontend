@@ -7,6 +7,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationItem } from "app/components/notifications/notification-item";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
@@ -18,8 +19,6 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-
-import { NotificationItem } from "./notification-item";
 
 export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =

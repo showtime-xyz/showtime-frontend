@@ -14,11 +14,10 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { findTokenChainName } from "app/lib/utilities";
-
-import { Actors } from "./actors";
 
 export type NotificationItemProp = {
   notification: NotificationType;
