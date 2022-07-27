@@ -106,7 +106,8 @@ const NotificationDescription = ({
 
 export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
-  const actor = notification.actors[0];
+  const actor =
+    notification.actors?.length > 0 ? notification?.actors[0] : null;
   const nft = notification.nfts[0];
 
   const profileLink =
