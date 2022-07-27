@@ -9,7 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
 import {
-  CameraTabBarIcon,
+  CreateTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
@@ -53,7 +53,7 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/trending"}
       />
-      <CameraTabBarIcon color={color} focused={router.pathname === "/camera"} />
+      <CreateTabBarIcon color={color} focused={router.pathname === "/drop"} />
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}

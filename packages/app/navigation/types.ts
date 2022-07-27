@@ -27,6 +27,13 @@ type CameraStackParams = {
   create: undefined;
 };
 
+type CreateStackParams = {
+  login: undefined;
+  nft: { id: number };
+  create: undefined;
+  drop: undefined;
+};
+
 type NotificationsStackParams = {
   notifications: undefined;
   login: undefined;
@@ -67,6 +74,7 @@ export type {
   HomeStackParams,
   TrendingStackParams,
   CameraStackParams,
+  CreateStackParams,
   NotificationsStackParams,
   ProfileStackParams,
   BottomTabNavigatorParams,
