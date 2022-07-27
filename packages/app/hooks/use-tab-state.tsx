@@ -11,7 +11,7 @@ type TabState = {
   params?: string;
   defaultIndex?: number;
 };
-export function useTabState<PageRef, T = Route>(
+export function useTabState<PageRef, T extends Route>(
   routesProps: T[],
   props?: TabState
 ) {

@@ -1,7 +1,7 @@
 import { ComponentProps, useRef, useState } from "react";
 import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
-import { Video as ExpoVideo, ResizeMode } from "expo-av/src";
+import { Video as ExpoVideo } from "expo-av/src";
 import { BlurView, BlurTint } from "expo-blur";
 import { Source } from "react-native-fast-image";
 
@@ -60,7 +60,7 @@ export function Video({
           <ExpoVideo
             style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
             useNativeControls={videoConfig?.useNativeControls}
-            resizeMode={ResizeMode.COVER}
+            resizeMode={resizeMode}
             posterSource={posterSource}
             source={props.source}
             ref={videoRef}

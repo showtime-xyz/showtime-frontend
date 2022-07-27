@@ -28,7 +28,6 @@ const Footer = () => {
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const { isTabBarHidden } = useNavigationElements();
 
-  // Todo: on small screens, only 'marketing' page display this.
   if (width >= 768) {
     return <WebFooter />;
   }

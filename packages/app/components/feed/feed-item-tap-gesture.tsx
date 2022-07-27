@@ -31,15 +31,16 @@ const heartContainerStyle: ViewStyle = {
   elevation: 9,
 };
 
+type FeedItemTapGestureProps = {
+  children: JSX.Element;
+  toggleHeader?: () => void;
+  showHeader?: () => void;
+};
 export const FeedItemTapGesture = ({
   children,
   toggleHeader,
   showHeader,
-}: {
-  children: any;
-  toggleHeader: any;
-  showHeader: any;
-}) => {
+}: FeedItemTapGestureProps) => {
   const { like } = useLike();
 
   const heartAnimation = useSharedValue(0);
@@ -53,7 +54,7 @@ export const FeedItemTapGesture = ({
 
   const doubleTapHandleOnJS = useCallback(() => {
     like();
-    showHeader();
+    showHeader?.();
   }, [like, showHeader]);
 
   const doubleTapHandle = Gesture.Tap()
@@ -67,7 +68,9 @@ export const FeedItemTapGesture = ({
     });
 
   const singleTapHandler = Gesture.Tap().onEnd(() => {
-    runOnJS(toggleHeader)();
+    if (toggleHeader) {
+      runOnJS(toggleHeader)();
+    }
   });
   const gesture = Gesture.Exclusive(doubleTapHandle, singleTapHandler);
 

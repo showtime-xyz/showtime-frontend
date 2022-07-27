@@ -9,6 +9,7 @@ import type { Route as TabViewRoute } from "react-native-tab-view-next/src";
 
 export type Route = TabViewRoute & {
   index: number;
+  subtitle?: string | number;
 };
 
 export enum RefreshTypeEnum {

@@ -24,6 +24,7 @@ import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useFollow } from "app/hooks/use-follow";
 import { TextLink } from "app/navigation/link";
 
 import { Hidden } from "design-system/hidden";
@@ -111,6 +112,9 @@ export const ProfileTop = ({
     [profileId, isFollowing]
   );
   const { unblock } = useBlock();
+  const { onToggleFollow } = useFollow({
+    username: profileData?.profile.username,
+  });
 
   const bioWithMentions = useMemo(
     () =>
@@ -313,6 +317,7 @@ export const ProfileTop = ({
                         isFollowing={isFollowingUser}
                         name={profileData?.profile.name}
                         profileId={profileId}
+                        onToggleFollow={onToggleFollow}
                       />
                     </>
                   ) : userId === profileId ? (

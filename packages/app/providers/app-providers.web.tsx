@@ -2,6 +2,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
@@ -23,29 +24,33 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
     <ThemeProvider>
       <SafeAreaProvider>
         <ToastProvider>
-          <WalletProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <SWRProvider>
-                  <Web3Provider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <BottomSheetModalProvider>
-                          <GrowthBookProvider growthbook={growthbook}>
-                            <FeedProvider>
-                              <NavigationProvider>
-                                <BiconomyProvider>{children}</BiconomyProvider>
-                              </NavigationProvider>
-                            </FeedProvider>
-                          </GrowthBookProvider>
-                        </BottomSheetModalProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </Web3Provider>
-                </SWRProvider>
-              </SnackbarProvider>
-            </AlertProvider>
-          </WalletProvider>
+          <LightBoxProvider>
+            <WalletProvider>
+              <AlertProvider>
+                <SnackbarProvider>
+                  <SWRProvider>
+                    <Web3Provider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <BiconomyProvider>
+                                    {children}
+                                  </BiconomyProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </Web3Provider>
+                  </SWRProvider>
+                </SnackbarProvider>
+              </AlertProvider>
+            </WalletProvider>
+          </LightBoxProvider>
         </ToastProvider>
       </SafeAreaProvider>
     </ThemeProvider>

@@ -3,8 +3,10 @@ import { LayoutChangeEvent, Platform, View as NativeWiew } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
+import { usePlatformResize } from "@showtime-xyz/universal.hooks";
+
 import { Placement, getPosition, PlatformRect } from "./get-placement";
-import { useWebClientRect, useWebScroll, usePlatformResize } from "./hooks";
+import { useWebClientRect, useWebScroll } from "./hooks";
 
 interface IPositionProps {
   triggerRef: RefObject<HTMLElement | NativeWiew | null>;

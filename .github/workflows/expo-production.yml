@@ -81,4 +81,4 @@ jobs:
 
       - name: Build on EAS
         if: steps.version.outputs.type == 'major'
-        run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit
+        run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit --resource-class=large

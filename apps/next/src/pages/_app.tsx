@@ -34,6 +34,12 @@ import { UnlistScreen } from "app/screens/unlist";
 
 import "../styles/styles.css";
 
+// TODO: remove this once Reanimated ship a fix
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window._frameTimestamp = null;
+}
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
@@ -92,9 +98,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
             }
           />
           <View
-            tw="min-h-screen items-center"
-            // @ts-ignore currently overflow-x-hidden doesn't support web
-            style={{ overflowX: "hidden" }}
+            tw="items-center"
+            // @ts-ignore currently overflow-x-hidden doesn't support web, and minHeight we need to subtract Header height.
+            style={{ overflowX: "hidden", minHeight: "calc(100vh - 64px)" }}
           >
             <Component {...pageProps} />
           </View>

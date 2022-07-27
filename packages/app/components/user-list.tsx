@@ -12,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { FollowerUser } from "app/hooks/api/use-followers-list";
+import { useFollow } from "app/hooks/use-follow";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -109,6 +110,11 @@ const FollowingListUser = memo(
     isFollowingUser,
     hideSheet,
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
+    const { data } = useMyInfo();
+
+    const { onToggleFollow } = useFollow({
+      username: data?.data.profile.username,
+    });
     return (
       <View
         tw={`flex-row items-center justify-between h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
@@ -163,6 +169,7 @@ const FollowingListUser = memo(
           isFollowing={isFollowingUser}
           profileId={item.profile_id}
           name={item.name}
+          onToggleFollow={onToggleFollow}
         />
       </View>
     );

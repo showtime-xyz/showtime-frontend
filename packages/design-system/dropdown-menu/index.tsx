@@ -32,19 +32,13 @@ const DropdownMenuContent = DropdownMenu.menuify(
   "Content"
 );
 
-type UseMotiAnimate<T> = T extends Animated.SharedValue<any>
-  ? never
-  : NonNullable<T>;
-
 const DropdownItemFocusRing = ({
   isFocused,
 }: {
   isFocused: Animated.SharedValue<boolean>;
 }) => {
   // TODO moti should provide this
-  const state = useDerivedValue<
-    UseMotiAnimate<React.ComponentProps<typeof MotiView>["animate"]>
-  >(() => {
+  const state = useDerivedValue(() => {
     return {
       opacity: isFocused.value ? 1 : 0,
     };

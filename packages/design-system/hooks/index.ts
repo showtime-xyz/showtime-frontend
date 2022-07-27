@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
 import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -163,3 +163,16 @@ export function useIsMobileWeb() {
     isMobileWeb,
   };
 }
+
+export const usePlatformResize = (onResize: (evt: Event) => any) => {
+  useLayoutEffect(() => {
+    const handleResize = (evt: Event) => {
+      onResize(evt);
+    };
+    Platform.OS === "web" && window.addEventListener("resize", handleResize);
+    return function cleanup() {
+      Platform.OS === "web" &&
+        window.removeEventListener("resize", handleResize);
+    };
+  }, [onResize]);
+};
