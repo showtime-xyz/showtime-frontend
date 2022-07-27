@@ -1,4 +1,4 @@
-import { useCallback, useMemo, forwardRef } from "react";
+import { useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
@@ -16,11 +16,14 @@ import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 const GAP_BETWEEN_ITEMS = 1;
 
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
-  function NFTSList({ days, index }) {
+  function NFTSList({ days, index }, ref) {
     const router = useRouter();
-    const { data } = useTrendingNFTS({
+    const { data, mutate } = useTrendingNFTS({
       days,
     });
+    useImperativeHandle(ref, () => ({
+      refresh: mutate,
+    }));
     const ListFooterComponent = useCallback(
       () => <ListFooter isLoading={false} />,
       []
