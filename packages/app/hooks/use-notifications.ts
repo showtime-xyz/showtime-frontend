@@ -18,7 +18,7 @@ export interface NotificationNFT {
   display_name: string;
   chain_identifier: string;
   contract_address: string;
-  creator: Actor[];
+  creator: Actor;
 }
 export interface NotificationType {
   id: number;

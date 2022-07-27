@@ -14,7 +14,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Actors } from "app/components/notifications/actors";
+import { ActorLink, Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { findTokenChainName } from "app/lib/utilities";
@@ -89,8 +89,12 @@ const NotificationDescription = ({
               {item.display_name}
             </Text>
             {notification.type_name ===
-              "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING" &&
-              ` by ${(<Actors actors={item.creator} setUsers={setUsers} />)}`}
+              "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING" && (
+              <>
+                {" by "}
+                <ActorLink actor={item.creator} />
+              </>
+            )}
           </>
         ))}
       </Text>
