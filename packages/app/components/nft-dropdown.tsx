@@ -159,9 +159,7 @@ function NFTDropdown({
         >
           <MoreHorizontal
             color={
-              tw.style(
-                "bg-gray-600 dark:bg-gray-400 md:dark:bg-white md:bg-gray-900"
-              )?.backgroundColor as string
+              tw.style("dark:bg-white bg-gray-900")?.backgroundColor as string
             }
             width={24}
             height={24}
