@@ -85,6 +85,7 @@ export type UseDropNFT = {
   editionSize: number;
   royalty: number;
   duration: number;
+  notSafeForWork: boolean;
   symbol?: string;
   animationUrl?: string;
   animationHash?: string;
@@ -188,7 +189,10 @@ export const useDropNFT = () => {
 
         dispatch({ type: "loading" });
 
-        const ipfsHash = await uploadMedia(params.file);
+        const ipfsHash = await uploadMedia({
+          file: params.file,
+          notSafeForWork: params.notSafeForWork,
+        });
 
         const escapedTitle = JSON.stringify(params.title).slice(1, -1);
         const escapedDescription = JSON.stringify(params.description).slice(
