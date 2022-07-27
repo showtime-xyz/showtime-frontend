@@ -51,14 +51,14 @@
     "react-string-replace": "^0.4.4",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
-    "rudder-sdk-js": "^2.9.2",
+    "rudder-sdk-js": "^2.9.4",
     "setimmediate": "^1.0.5",
     "swr": "2.0.0-beta.6",
-    "wagmi": "^0.5.11",
+    "wagmi": "^0.6.0",
     "web3modal": "^1.9.8"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.3",
+    "@babel/eslint-parser": "^7.18.9",
     "@expo/next-adapter": "4.0.8",
     "autoprefixer": "^10.4.7",
     "critters": "^0.0.16",
@@ -68,6 +68,6 @@
     "eslint-plugin-diff": "^1.0.12",
     "next-compose-plugins": "^2.2.1",
     "postcss": "^8.4.14",
-    "tailwindcss": "^3.1.4"
+    "tailwindcss": "^3.1.6"
   }
 }

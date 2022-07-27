@@ -21,7 +21,7 @@
     "husky": "^8.0.1",
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
-    "prettier-plugin-tailwindcss": "0.1.10",
+    "prettier-plugin-tailwindcss": "0.1.13",
     "react-native-fast-image": "^8.5.11",
     "react-native-os": "^1.2.6",
     "sentry-expo": "^5.0.0",
@@ -77,7 +77,8 @@
     "@storybook/react-native": "next",
     "@react-navigation/native": "6.0.11",
     "react-native-safe-area-context": "4.3.1",
-    "expo-blur": "~11.2.0"
+    "expo-blur": "~11.2.0",
+    "metro-react-native-babel-preset": "0.71.3"
   },
   "react-native": {
     "zlib": "browserify-zlib",
