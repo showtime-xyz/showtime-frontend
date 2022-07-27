@@ -78,7 +78,7 @@ const NotificationDescription = ({
       >
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
-        {notification.nfts.map((item) => (
+        {notification.nfts?.map((item) => (
           <>
             <Text
               onPress={() => {
@@ -108,7 +108,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
   const myProfile = useUser();
   const actor =
     notification.actors?.length > 0 ? notification?.actors[0] : null;
-  const nft = notification.nfts[0];
+  const nft = notification.nfts?.length > 0 ? notification.nfts[0] : null;
 
   const profileLink =
     "/@" +

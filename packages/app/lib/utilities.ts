@@ -129,8 +129,10 @@ export const buildFormData = (data) => {
 
 export const toWei = (number: number) => Math.floor(number * 10 ** 9);
 
-export const findTokenChainName = (chainId: string) =>
-  Object.keys(CHAIN_IDENTIFIERS).find(
+export const findTokenChainName = (chainId?: string) => {
+  if (!chainId) return null;
+  return Object.keys(CHAIN_IDENTIFIERS).find(
     (key: string) =>
       CHAIN_IDENTIFIERS[key as keyof typeof CHAIN_IDENTIFIERS] == chainId
   );
+};
