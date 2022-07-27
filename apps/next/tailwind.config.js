@@ -299,6 +299,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "../../packages/**/*.{js,ts,jsx,tsx}",
+    "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
   ],
   important: "html",
   theme: {
