@@ -102,7 +102,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 source={{
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
-              />
+              >
+                <BlurView
+                  tint={tint}
+                  intensity={100}
+                  style={tw.style("h-full w-full")}
+                />
+              </Image>
             )}
           </View>
         )}
