@@ -39,8 +39,8 @@ export type FeedItemProps = {
   bottomPadding?: number;
   bottomMargin?: number;
   itemHeight: number;
-  listId?: number;
 };
+
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,

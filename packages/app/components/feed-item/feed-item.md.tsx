@@ -50,7 +50,6 @@ const { useParam } = createParam<Query>();
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
   itemHeight,
-  listId,
 }) {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -160,7 +159,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     size: "regular",
                   }}
                   nft={nft}
-                  listId={listId}
                 />
               </Suspense>
             </View>

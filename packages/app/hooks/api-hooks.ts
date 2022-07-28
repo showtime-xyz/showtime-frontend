@@ -413,18 +413,46 @@ export const useMyInfo = () => {
   );
 
   const hide = useCallback(
-    async (nftId: number | undefined, listId: number | undefined) => {
+    async (nftId: number | undefined) => {
       if (!accessToken) {
         navigateToLogin();
         return false;
       }
 
-      if (data && nftId && listId) {
+      if (data && nftId) {
         try {
           await axios({
-            url: `/v1/hide_nft/${nftId}/${listId}`,
+            url: `/v2/profile-tabs/hide-nft`,
             method: "POST",
-            data: {},
+            data: {
+              nft_id: nftId,
+            },
+          });
+
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+    },
+    [data, accessToken, navigateToLogin]
+  );
+
+  const unhide = useCallback(
+    async (nftId: number | undefined) => {
+      if (!accessToken) {
+        navigateToLogin();
+        return false;
+      }
+
+      if (data && nftId) {
+        try {
+          await axios({
+            url: `/v2/profile-tabs/unhide-nft`,
+            method: "POST",
+            data: {
+              nft_id: nftId,
+            },
           });
 
           return true;
@@ -491,5 +519,6 @@ export const useMyInfo = () => {
     isLiked,
     refetchMyInfo,
     hide,
+    unhide,
   };
 };
