@@ -69,8 +69,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     setIndex,
     setIsRefreshing,
     isRefreshing,
-    setTabRefs,
     currentTab,
+    tabRefs,
   } = useTabState<ProfileTabListRef>(routes, {
     defaultIndex: data?.tabs.findIndex(
       (item) => item.type === data?.default_tab_type
@@ -126,7 +126,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 isBlocked={isBlocked}
                 list={data?.tabs[routeIndex]}
                 index={routeIndex}
-                ref={setTabRefs}
+                ref={(ref) => (tabRefs.current[index] = ref)}
               />
             )}
           </Suspense>
@@ -134,11 +134,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
       );
     },
     [
-      data,
+      data?.tabs,
+      index,
       isBlocked,
       profileData?.data.profile.profile_id,
       profileData?.data.profile.username,
-      setTabRefs,
+      tabRefs,
     ]
   );
   const headerBgLeft = useMemo(() => {

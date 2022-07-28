@@ -51,7 +51,7 @@ export const Trending = () => {
     setIsRefreshing,
     isRefreshing,
     routes,
-    setTabRefs,
+    tabRefs,
     currentTab,
   } = useTabState<TrendingTabListRef, TrendingTabRoute>(TRENDING_ROUTE);
 
@@ -70,9 +70,15 @@ export const Trending = () => {
     }: SceneRendererProps & {
       route: TrendingTabRoute;
     }) => {
-      return <TabListContainer days={days} index={index} ref={setTabRefs} />;
+      return (
+        <TabListContainer
+          days={days}
+          index={index}
+          ref={(ref) => (tabRefs.current[index] = ref)}
+        />
+      );
     },
-    [setTabRefs]
+    [tabRefs]
   );
   const [selecteds, setSelecteds] = useState({
     ...TRENDING_ROUTE.map(() => 0),
