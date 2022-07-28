@@ -2,7 +2,7 @@ import useSWR from "swr";
 
 import { fetcher } from "../use-infinite-list-query";
 
-export interface FollowerUser {
+export interface UserItemType {
   img_url?: string;
   name?: string;
   profile_id: number;
@@ -12,16 +12,31 @@ export interface FollowerUser {
   wallet_address?: string;
 }
 
-interface FollowersData {
+interface FollowData {
   data: {
-    list: FollowerUser[];
+    list: UserItemType[];
   };
 }
 
 export function useFollowersList(profileId?: number) {
-  const { data, error } = useSWR<FollowersData>(
+  const { data, error } = useSWR<FollowData>(
     profileId
       ? "/v1/people?want=followers&limit=500&profile_id=" + profileId
+      : null,
+    fetcher
+  );
+
+  return {
+    data: data?.data,
+    loading: !data,
+    error,
+  };
+}
+
+export function useFollowingList(profileId?: number) {
+  const { data, error } = useSWR<FollowData>(
+    profileId
+      ? "/v1/people?want=following&limit=500&profile_id=" + profileId
       : null,
     fetcher
   );
