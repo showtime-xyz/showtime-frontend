@@ -14,7 +14,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ActorLink, Actors } from "app/components/notifications/actors";
+import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { findTokenChainName } from "app/lib/utilities";
@@ -79,23 +79,15 @@ const NotificationDescription = ({
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
         {notification.nfts?.map((item) => (
-          <>
-            <Text
-              onPress={() => {
-                router.push(notificationInfo.href);
-              }}
-              tw="text-13 font-bold text-black dark:text-white"
-            >
-              {item.display_name}
-            </Text>
-            {notification.type_name ===
-              "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING" && (
-              <>
-                {" by "}
-                <ActorLink actor={item.creator} />
-              </>
-            )}
-          </>
+          <Text
+            onPress={() => {
+              router.push(notificationInfo.href);
+            }}
+            key={item.id}
+            tw="text-13 font-bold text-black dark:text-white"
+          >
+            {item.display_name}
+          </Text>
         ))}
       </Text>
       <View tw="h-1" />
