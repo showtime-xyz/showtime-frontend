@@ -422,11 +422,9 @@ export const useMyInfo = () => {
       if (data && nftId) {
         try {
           await axios({
-            url: `/v2/profile-tabs/hide-nft`,
+            url: `/v2/profile-tabs/hide-nft/${nftId}`,
             method: "POST",
-            data: {
-              nft_id: nftId,
-            },
+            data: {},
           });
 
           return true;
@@ -448,11 +446,9 @@ export const useMyInfo = () => {
       if (data && nftId) {
         try {
           await axios({
-            url: `/v2/profile-tabs/unhide-nft`,
+            url: `/v2/profile-tabs/unhide-nft/${nftId}`,
             method: "POST",
-            data: {
-              nft_id: nftId,
-            },
+            data: {},
           });
 
           return true;
