@@ -182,7 +182,7 @@
     "react-native-pager-view": "^5.4.25",
     "react-native-popper": "^0.3.2",
     "react-native-quick-base64": "^2.0.5",
-    "react-native-quick-crypto": "^0.4.3",
+    "react-native-quick-crypto": "^0.4.4",
     "react-native-random-values-jsi-helper": "^1.0.3",
     "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "2.9.1",
@@ -217,7 +217,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
-    "@babel/plugin-proposal-numeric-separator": "^7.18.6",
     "@babel/runtime": "^7.16.5",
     "@config-plugins/detox": "^1.1.0",
     "@expo/xcpretty": "^4.2.2",

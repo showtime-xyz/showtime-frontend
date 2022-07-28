@@ -10,7 +10,6 @@ module.exports = function (api) {
   });
 
   let plugins = [
-    "@babel/plugin-proposal-numeric-separator",
     ["inline-dotenv", { path: envPath }],
     "react-native-reanimated/plugin",
     [

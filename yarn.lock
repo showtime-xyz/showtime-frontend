@@ -1020,18 +1020,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-numeric-separator@npm:^7.18.6":
-  version: 7.18.6
-  resolution: "@babel/plugin-proposal-numeric-separator@npm:7.18.6"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.18.6
-    "@babel/plugin-syntax-numeric-separator": ^7.10.4
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: f370ea584c55bf4040e1f78c80b4eeb1ce2e6aaa74f87d1a48266493c33931d0b6222d8cee3a082383d6bb648ab8d6b7147a06f974d3296ef3bc39c7851683ec
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-proposal-object-rest-spread@npm:7.12.1":
   version: 7.12.1
   resolution: "@babel/plugin-proposal-object-rest-spread@npm:7.12.1"
@@ -7819,7 +7807,6 @@ __metadata:
   resolution: "@showtime/expo@workspace:apps/expo"
   dependencies:
     "@babel/core": ^7.16.5
-    "@babel/plugin-proposal-numeric-separator": ^7.18.6
     "@babel/runtime": ^7.16.5
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
@@ -7979,7 +7966,7 @@ __metadata:
     react-native-pager-view: ^5.4.25
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
-    react-native-quick-crypto: ^0.4.3
+    react-native-quick-crypto: ^0.4.4
     react-native-random-values-jsi-helper: ^1.0.3
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
@@ -30191,9 +30178,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "react-native-quick-crypto@npm:0.4.3"
+"react-native-quick-crypto@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "react-native-quick-crypto@npm:0.4.4"
   dependencies:
     "@craftzdog/react-native-buffer": ^6.0.4
     "@types/node": ^17.0.31
@@ -30205,7 +30192,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 05325bcbbd068f0cbaa740454ed3794226c14e06bde46100c4f620cd0006bb5eb6c6826c60ddff19603443e59ce6d2988940e4e37d3e4e9e063a486577203ff2
+  checksum: ba001221e6c212a1a2521d1c5c26fd0284810d3a52e4fa1439016e30443917d3eb103df6da60f746f27657a741863580abcb6f4dbebdd4dd9521024232c8c27d
   languageName: node
   linkType: hard
 
