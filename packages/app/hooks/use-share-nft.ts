@@ -2,15 +2,9 @@ import { Linking } from "react-native";
 
 import { useShare } from "app/hooks/use-share";
 import { track } from "app/lib/analytics";
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { findTokenChainName } from "app/lib/utilities";
 import { NFT } from "app/types";
 import { getTwitterIntent } from "app/utilities";
-
-const findTokenChainName = (chainId: string) =>
-  Object.keys(CHAIN_IDENTIFIERS).find(
-    (key: string) =>
-      CHAIN_IDENTIFIERS[key as keyof typeof CHAIN_IDENTIFIERS] == chainId
-  );
 
 export const useShareNFT = () => {
   const share = useShare();

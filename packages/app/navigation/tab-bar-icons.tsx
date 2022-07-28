@@ -130,16 +130,9 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
   );
 };
 
-export const CameraTabBarIcon = ({ focused }: TabBarIconProps) => {
-  const { width } = useWindowDimensions();
-
+export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon
-      tab={Platform.select({
-        default: "/camera",
-        web: width >= breakpoints["md"] ? "/create" : "/camera",
-      })}
-    >
+    <TabBarIcon tab="/drop">
       <View
         tw={[
           "h-12 w-12 items-center justify-center rounded-full",

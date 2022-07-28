@@ -13,7 +13,7 @@ import { useUser } from "app/hooks/use-user";
 
 import { TabBarButton } from "./tab-bar-button";
 import {
-  CameraTabBarIcon,
+  CreateTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
@@ -23,7 +23,7 @@ import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
-const CameraNavigator = dynamic(() => import("../pages/camera"));
+const CreateNavigator = dynamic(() => import("../pages/create"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
@@ -104,12 +104,12 @@ export function BottomTabNavigator() {
       />
       {width < 768 && (
         <BottomTab.Screen
-          name="cameraTab"
-          component={CameraNavigator}
+          name="createTab"
+          component={CreateNavigator}
           options={{
             tabBarButton: TabBarButton,
-            tabBarIcon: CameraTabBarIcon,
-            headerShown: false,
+            tabBarIcon: CreateTabBarIcon,
+            // headerShown: false,
           }}
         />
       )}

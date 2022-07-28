@@ -15,7 +15,11 @@ function withModalScreen<P>(
     const router = useRouter();
 
     const onClose = useCallback(() => {
-      if (router.asPath === "/login" || router.asPath === "/create") {
+      if (
+        router.asPath === "/login" ||
+        router.asPath === "/create" ||
+        router.asPath === "/drop"
+      ) {
         router.push("/");
       } else {
         router.pop();

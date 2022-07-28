@@ -3,6 +3,8 @@ const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 const { withInfoPlist } = require("@expo/config-plugins");
 
+const url = "showtime.xyz";
+
 require("dotenv").config({
   path: envPath,
 });
@@ -62,6 +64,7 @@ export default {
       usesNonExemptEncryption: false,
     },
     bitcode: false, // or "Debug",
+    associatedDomains: [`applinks:${url}`],
   },
   android: {
     package: config.scheme,
@@ -72,6 +75,20 @@ export default {
     },
     jsEngine: "hermes",
     softwareKeyboardLayoutMode: "pan",
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [
+          {
+            scheme: "https",
+            host: `*.${url}`,
+            pathPrefix: "/",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   androidNavigationBar: {
     barStyle: "dark-content",
