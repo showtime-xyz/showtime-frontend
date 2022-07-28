@@ -24,6 +24,7 @@ import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
+import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
@@ -31,7 +32,6 @@ import { createParam } from "app/navigation/use-param";
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
-import { useComments } from "../../hooks/api/use-comments";
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;

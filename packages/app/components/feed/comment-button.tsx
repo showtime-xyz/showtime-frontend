@@ -5,11 +5,10 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Message } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useComments } from "app/hooks/api/use-comments";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
-
-import { useComments } from "../../hooks/api/use-comments";
 
 interface CommentButtonProps {
   nft?: NFT;
