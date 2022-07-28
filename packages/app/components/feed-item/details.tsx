@@ -19,12 +19,10 @@ import type { NFT } from "app/types";
 
 export const NFTDetails = ({
   nft,
-  listId,
   edition,
 }: {
   nft: NFT;
   edition?: CreatorEditionResponse;
-  listId?: number;
 }) => {
   const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
@@ -65,7 +63,7 @@ export const NFTDetails = ({
             <View tw="w-8" />
 
             <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nft={nft} listId={listId} />
+              <NFTDropdown nft={nft} />
             </Suspense>
           </View>
         </View>
