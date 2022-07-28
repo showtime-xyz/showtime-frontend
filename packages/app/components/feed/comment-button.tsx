@@ -5,6 +5,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Message } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useComments } from "app/hooks/api/use-comments";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
@@ -16,6 +17,7 @@ interface CommentButtonProps {
 export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
   const { iconColor, textColors } = useSocialColor();
+  const { commentsCount } = useComments(nft?.nft_id ?? -Infinity);
 
   const handleOnPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
@@ -55,7 +57,7 @@ export function CommentButton({ nft }: CommentButtonProps) {
       accentColor={textColors}
     >
       <Message height={24} width={24} color={iconColor} />
-      {nft?.comment_count > 0 ? ` ${formatNumber(nft.comment_count)}` : ""}
+      {commentsCount > 0 ? ` ${formatNumber(commentsCount)}` : ""}
     </Button>
   );
 }

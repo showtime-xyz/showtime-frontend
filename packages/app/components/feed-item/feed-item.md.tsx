@@ -24,6 +24,7 @@ import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
+import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
@@ -54,20 +55,26 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const router = useRouter();
   const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
+  const { commentsCount } = useComments(nft.nft_id);
+  const routes = useMemo(
+    () => [
+      {
+        title: "Comments",
+        key: "Comments",
+        index: 0,
+        subtitle: commentsCount,
+      },
+      {
+        title: "Activity",
+        key: "Activity",
+        index: 1,
+      },
+    ],
+    [commentsCount]
+  );
+
   const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    {
-      title: "Comments",
-      key: "Comments",
-      index: 0,
-      subtitle: nft.comment_count,
-    },
-    {
-      title: "Activity",
-      key: "Activity",
-      index: 1,
-    },
-  ]);
+
   const { width: windowWidth } = useWindowDimensions();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
