@@ -18,7 +18,7 @@ import { AppProviders } from "app/providers/app-providers";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BuyScreen } from "app/screens/buy";
 import { ClaimScreen } from "app/screens/claim";
-import { ClaimersScreen } from "app/screens/cliamers";
+import { ClaimersScreen } from "app/screens/claimers";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";

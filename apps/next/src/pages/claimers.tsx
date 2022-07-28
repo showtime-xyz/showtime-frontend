@@ -1,3 +1,3 @@
-import { ClaimersScreen } from "app/screens/cliamers";
+import { ClaimersScreen } from "app/screens/claimers";
 
 export default ClaimersScreen;
