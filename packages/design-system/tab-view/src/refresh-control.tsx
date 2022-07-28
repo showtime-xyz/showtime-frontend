@@ -1,9 +1,7 @@
 import React, { memo } from "react";
-import { ActivityIndicator, StyleSheet, TextInput } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 
 import Animated, {
-  createAnimatedPropAdapter,
-  useAnimatedProps,
   useAnimatedReaction,
   useAnimatedStyle,
   useDerivedValue,
@@ -122,40 +120,12 @@ const RefreshControlContainer: React.FC<RefreshControlContainerProps> = ({
 };
 
 export default RefreshControlContainer;
-const AnimatedText = Animated.createAnimatedComponent(TextInput);
-const TextInputAdapter = createAnimatedPropAdapter(
-  (props) => {
-    "worklet";
-    const keys = Object.keys(props);
-    if (keys.includes("value")) {
-      props.text = props.value;
-      delete props.value;
-    }
-  },
-  ["text"]
-);
-const RefreshControlNormal = memo<RefreshControlProps>(
-  function RefreshControlNormal({ progress, refreshControlColor }) {
-    const textInputProps = useAnimatedProps(
-      () => {
-        return {
-          value: Math.round(progress.value * 100) + "%",
-        };
-      },
-      null,
-      [TextInputAdapter]
-    );
 
+const RefreshControlNormal = memo<RefreshControlProps>(
+  function RefreshControlNormal({ refreshControlColor }) {
     return (
       <Animated.View style={styles.baseControl}>
         <ActivityIndicator color={refreshControlColor} />
-        <AnimatedText
-          allowFontScaling={false}
-          caretHidden
-          editable={false}
-          animatedProps={textInputProps}
-          style={[styles.textStyle, { color: refreshControlColor }]}
-        />
       </Animated.View>
     );
   }
