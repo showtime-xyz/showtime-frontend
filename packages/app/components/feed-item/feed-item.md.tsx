@@ -32,6 +32,7 @@ import { createParam } from "app/navigation/use-param";
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
+import { useComments } from "../../hooks/api/use-comments";
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
@@ -55,19 +56,26 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const router = useRouter();
   const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
-  const { index, setIndex, routes } = useTabState([
-    {
-      title: "Comments",
-      key: "Comments",
-      index: 0,
-      subtitle: nft.comment_count,
-    },
-    {
-      title: "Activity",
-      key: "Activity",
-      index: 1,
-    },
-  ]);
+  const { commentsCount } = useComments(nft.nft_id);
+  const routes = useMemo(
+    () => [
+      {
+        title: "Comments",
+        key: "Comments",
+        index: 0,
+        subtitle: commentsCount,
+      },
+      {
+        title: "Activity",
+        key: "Activity",
+        index: 1,
+      },
+    ],
+    [commentsCount]
+  );
+
+  const { index, setIndex } = useTabState(routes);
+
   const { width: windowWidth } = useWindowDimensions();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address

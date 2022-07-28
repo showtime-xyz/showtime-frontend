@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useMemo, useCallback, useState } from "react";
 
 import { useSWRConfig } from "swr";
 
@@ -59,6 +59,7 @@ export const useComments = (nftId: number) => {
     },
     [nftId]
   );
+
   const {
     data,
     isLoading,
@@ -69,6 +70,9 @@ export const useComments = (nftId: number) => {
     refresh,
     mutate: mutateComments,
   } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL);
+  const commentsCount = useMemo(() => {
+    return data?.[0].data?.comments?.length ?? 0;
+  }, [data]);
   //#endregion
 
   //#region callbacks
@@ -197,6 +201,8 @@ export const useComments = (nftId: number) => {
     isLoading,
     isLoadingMore,
     isRefreshing,
+
+    commentsCount,
 
     refresh,
     fetchMore,
