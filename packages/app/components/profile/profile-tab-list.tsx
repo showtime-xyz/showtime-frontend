@@ -4,7 +4,6 @@ import {
   useMemo,
   forwardRef,
   useImperativeHandle,
-  useRef,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
@@ -58,15 +57,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         // TODO: remove refresh interval once we have the new indexer.
         refreshInterval: 5000,
       });
-    const tabRef = useRef(null);
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        refresh,
-      }),
-      [refresh]
-    );
+    useImperativeHandle(ref, () => ({
+      refresh,
+    }));
 
     const onItemPress = useCallback(
       (nftId: number) => {
@@ -174,7 +168,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             renderFooter={ListFooterComponent}
             layoutSize={layoutSize}
             index={index}
-            ref={tabRef}
           />
         )}
       </MutateProvider>

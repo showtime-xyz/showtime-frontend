@@ -11,7 +11,7 @@ type TabState = {
   params?: string;
   defaultIndex?: number;
 };
-export function useTabState<PageRef, T extends Route>(
+export function useTabState<PageRef, T = Route>(
   routesProps: T[],
   props?: TabState
 ) {
@@ -36,11 +36,8 @@ export function useTabState<PageRef, T extends Route>(
       : // eslint-disable-next-line react-hooks/rules-of-hooks
         useState(defaultIndex);
   const [routes, setRoute] = useState(routesProps);
-  const tabRefs = useRef<PageRef[]>([]);
-  const setTabRefs = (ref: PageRef) => {
-    if (!ref) return;
-    tabRefs.current[index] = ref;
-  };
+  const tabRefs = useRef<PageRef[] | null[]>([]);
+
   return {
     index,
     setIndex,
@@ -48,7 +45,7 @@ export function useTabState<PageRef, T extends Route>(
     setRoute,
     isRefreshing,
     setIsRefreshing,
-    setTabRefs,
     currentTab: tabRefs.current[index] ?? undefined,
+    tabRefs,
   };
 }
