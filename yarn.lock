@@ -2960,7 +2960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/shims@npm:^5.5.0":
+"@ethersproject/shims@npm:^5.6.0":
   version: 5.6.0
   resolution: "@ethersproject/shims@npm:5.6.0"
   checksum: aa224261cdd6a0507db5483a38a26b0f56952e66088d880ad228b1e70023e7708d452da7995b04db5e0cdcfa026854ab57485e378298d948de1ac34f6f82149c
@@ -5959,9 +5959,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "@rainbow-me/rainbowkit@npm:0.4.4"
+"@rainbow-me/rainbowkit@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@rainbow-me/rainbowkit@npm:0.4.5"
   dependencies:
     "@vanilla-extract/css": 1.7.0
     "@vanilla-extract/dynamic": 2.0.2
@@ -5973,8 +5973,8 @@ __metadata:
     ethers: ">=5.5.1"
     react: ">=17"
     react-dom: ">=17"
-    wagmi: 0.5.x
-  checksum: 520012439dc6f3a4aa13f353bbb9d3c35cf28cd24784b9a032f29189cf0b575ba6ae833cd2b41ef14092115acc9dc7c6c4d5a466ac976400f362eac319ca57e4
+    wagmi: 0.5.x || 0.6.x
+  checksum: f956f9a440494404205de251ba89e45d1c5090ce9419a05e90025b1d83251ba707ca7fbc97a861cf52c5009d044035b9690dc31c4e14812650d9dc6233c0a3d5
   languageName: node
   linkType: hard
 
@@ -7811,7 +7811,7 @@ __metadata:
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
     "@config-plugins/detox": ^1.1.0
-    "@ethersproject/shims": ^5.5.0
+    "@ethersproject/shims": ^5.6.0
     "@expo/xcpretty": ^4.2.2
     "@gorhom/bottom-sheet": 4.4.2
     "@hookform/resolvers": ^2.8.5
@@ -8020,7 +8020,7 @@ __metadata:
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
     "@radix-ui/react-use-escape-keydown": ^0.1.0
-    "@rainbow-me/rainbowkit": ^0.4.4
+    "@rainbow-me/rainbowkit": ^0.4.5
     "@react-native-menu/menu": ^0.5.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
@@ -8064,7 +8064,7 @@ __metadata:
     setimmediate: ^1.0.5
     swr: 2.0.0-beta.6
     tailwindcss: ^3.1.2
-    wagmi: ^0.5.11
+    wagmi: ^0.6.0
     web3modal: ^1.9.8
   languageName: unknown
   linkType: soft
@@ -11092,9 +11092,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/core@npm:^0.4.9":
-  version: 0.4.9
-  resolution: "@wagmi/core@npm:0.4.9"
+"@wagmi/core@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@wagmi/core@npm:0.5.0"
   dependencies:
     eventemitter3: ^4.0.7
     zustand: ^4.0.0-rc.1
@@ -11107,7 +11107,7 @@ __metadata:
       optional: true
     "@walletconnect/ethereum-provider":
       optional: true
-  checksum: ea31970d4a34fbf07aff94e51e9ee060ccfc0c72d0b8dd6bfaa932181b4d88b9b048dc9bd264b73fd0fe4710c0a44fb0ec2599578f6e45c3ef22955a630a3535
+  checksum: d8e2822e32089f0acf566f5bddec12688eb34376ede503a5177b7a5fb67109ff235860f112631643b2b7fdfb6499bc2b93c0bae0ee74cfa5541b2f190dfdab2c
   languageName: node
   linkType: hard
 
@@ -35742,19 +35742,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wagmi@npm:^0.5.11":
-  version: 0.5.11
-  resolution: "wagmi@npm:0.5.11"
+"wagmi@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "wagmi@npm:0.6.0"
   dependencies:
     "@coinbase/wallet-sdk": ^3.3.0
-    "@wagmi/core": ^0.4.9
+    "@wagmi/core": ^0.5.0
     "@walletconnect/ethereum-provider": ^1.7.8
     react-query: 4.0.0-beta.23
     use-sync-external-store: ^1.2.0
   peerDependencies:
     ethers: ">=5.5.1"
     react: ">=17.0.0"
-  checksum: c05abf4bc29d3019cf818187e538e727650ff4201748c880130c5a285e52a61dbea8547fc4ab2b6301a96d38caa0fb9f7247faa60ad8fc8121cabcfa94d57441
+  checksum: a97edead84d0596a6e3ecefecf2784734ee0df047ca31176ed01b27c9f0c2201fa34ff4a07282722fbe0fadaed729d31a435d309a8395a75978b04cc79a8f820
   languageName: node
   linkType: hard
 
