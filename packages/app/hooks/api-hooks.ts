@@ -96,7 +96,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     return url;
   }, [days]);
 
-  const { data, isLoading, error, mutate } = useSWR<any>(
+  const { data, isLoading, error, mutate } = useSWR<NFT[]>(
     trendingUrlFn,
     fetcher
   );

@@ -3,18 +3,18 @@ import { useWindowDimensions } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
+import { ErrorBoundary } from "app/components/error-boundary";
+import { TRENDING_ROUTE } from "app/components/trending";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
-import { Haptics } from "app/lib/haptics";
 import { createParam } from "app/navigation/use-param";
 
-import { Tabs } from "design-system/tabs";
+import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 
 type Query = {
@@ -26,21 +26,39 @@ const { useParam } = createParam<Query>();
 
 export const Trending = () => {
   const [tab, setTab] = useParam("tab");
-  const isDark = useIsDarkMode();
+  // const isDark = useIsDarkMode();
   const selected = tab === "creator" ? 1 : 0;
 
-  const handleTabChange = useCallback(
+  // const handleTabChange = useCallback(
+  //   (index: number) => {
+  //     Haptics.impactAsync();
+  //     if (index === 0) {
+  //       setTab("nft");
+  //     } else {
+  //       setTab("creator");
+  //     }
+  //   },
+  //   [setTab]
+  // );
+  const [days, setDays] = useParam("days", {
+    initial: 1,
+    parse: (value) => Number(value ?? 1),
+  });
+
+  const handleDaysChange = useCallback(
     (index: number) => {
-      Haptics.impactAsync();
       if (index === 0) {
-        setTab("nft");
+        setDays(1);
+      } else if (index === 1) {
+        setDays(7);
       } else {
-        setTab("creator");
+        setDays(30);
       }
     },
-    [setTab]
+    [setDays]
   );
 
+  const index = days === 1 ? 0 : days === 7 ? 1 : 2;
   return (
     <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
       <View tw="mx-auto w-[90%] py-8">
@@ -64,70 +82,30 @@ export const Trending = () => {
             />
           </View> */}
         </View>
-        <TrendingTabs selectedTab={selected === 0 ? "nft" : "creator"} />
+        {/* <TrendingTabs selectedTab={selected === 0 ? "nft" : "creator"} /> */}
+        <IndependentTabBar
+          onPress={(i) => {
+            handleDaysChange(i);
+          }}
+          routes={TRENDING_ROUTE}
+          index={index}
+        />
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <View tw="mt-10 items-center justify-center">
+                <Spinner size="small" />
+              </View>
+            }
+          >
+            <List
+              days={days}
+              selectedTab={selected === 0 ? "nft" : "creator"}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </View>
     </View>
-  );
-};
-
-const TrendingTabs = ({ selectedTab }: { selectedTab: "nft" | "creator" }) => {
-  const [days, setDays] = useParam("days", {
-    initial: 1,
-    parse: (value) => Number(value ?? 1),
-  });
-
-  const handleDaysChange = useCallback(
-    (index: number) => {
-      if (index === 0) {
-        setDays(1);
-      } else if (index === 1) {
-        setDays(7);
-      } else {
-        setDays(30);
-      }
-    },
-    [setDays]
-  );
-
-  const index = days === 1 ? 0 : days === 7 ? 1 : 2;
-
-  return (
-    <Tabs.Root onIndexChange={handleDaysChange} index={index} lazy>
-      <Tabs.List
-        scrollEnabled={false}
-        style={{ backgroundColor: "transparent" }}
-        contentContainerStyle={{ backgroundColor: "transparent" }}
-      >
-        <Tabs.Trigger>
-          <Text tw="p-4 text-black dark:text-white">Today</Text>
-        </Tabs.Trigger>
-
-        <Tabs.Trigger>
-          <Text tw="p-4 text-black dark:text-white">This week</Text>
-        </Tabs.Trigger>
-
-        <Tabs.Trigger>
-          <Text tw="p-4 text-black dark:text-white">This month</Text>
-        </Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Pager>
-        <View tw="flex-1">
-          <Suspense fallback={null}>
-            <List days={days} selectedTab={selectedTab} />
-          </Suspense>
-        </View>
-        <View tw="flex-1">
-          <Suspense fallback={null}>
-            <List days={days} selectedTab={selectedTab} />
-          </Suspense>
-        </View>
-        <View tw="flex-1">
-          <Suspense fallback={null}>
-            <List days={days} selectedTab={selectedTab} />
-          </Suspense>
-        </View>
-      </Tabs.Pager>
-    </Tabs.Root>
   );
 };
 

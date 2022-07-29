@@ -22,7 +22,7 @@ import { TabListContainer, TrendingTabListRef } from "./tab-list";
 type TrendingTabRoute = Route & {
   days: number;
 };
-const TRENDING_ROUTE = [
+export const TRENDING_ROUTE = [
   {
     title: "Today",
     key: "Today",
