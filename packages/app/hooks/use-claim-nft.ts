@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect, useRef } from "react";
 
 import { ethers } from "ethers";
 
@@ -18,6 +18,29 @@ import { ledgerWalletHack } from "app/utilities";
 import { delay } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
+
+const getForwarderRequest = async ({
+  minterAddress,
+  userAddress,
+}: {
+  minterAddress: string;
+  userAddress: string;
+}) => {
+  const targetInterface = new ethers.utils.Interface(minterABI);
+  const callData = targetInterface.encodeFunctionData("mintEdition", [
+    userAddress,
+  ]);
+  const res = await axios({
+    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
+      callData
+    )}&to_address=${encodeURIComponent(
+      minterAddress
+    )}&from_address=${encodeURIComponent(userAddress)}`,
+    method: "GET",
+  });
+
+  return res;
+};
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
@@ -128,24 +151,43 @@ export const useClaimNFT = (edition?: IEdition) => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
-  const claimNFT = async (props: { minterAddress: string }) => {
+  const forwarderRequestCached = useRef<any>();
+
+  useEffect(() => {
+    let timeout: any;
+    async function initialiseForwardRequest() {
+      if (edition?.minter_address && userAddress) {
+        forwarderRequestCached.current = await getForwarderRequest({
+          userAddress,
+          minterAddress: edition?.minter_address,
+        });
+      }
+
+      // clear cached forwarderRequest because nonce might have changed!
+      timeout = setTimeout(() => {
+        forwarderRequestCached.current = null;
+      }, 20000);
+    }
+    initialiseForwardRequest();
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [edition?.minter_address, userAddress]);
+
+  const claimNFT = async () => {
     try {
-      if (userAddress) {
+      if (userAddress && edition?.minter_address) {
         dispatch({ type: "loading" });
 
-        const targetInterface = new ethers.utils.Interface(minterABI);
-        const callData = targetInterface.encodeFunctionData("mintEdition", [
-          userAddress,
-        ]);
-
-        const forwardRequest = await axios({
-          url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-            callData
-          )}&to_address=${encodeURIComponent(
-            props.minterAddress
-          )}&from_address=${encodeURIComponent(userAddress)}`,
-          method: "GET",
-        });
+        let forwardRequest: any;
+        if (forwarderRequestCached.current) {
+          forwardRequest = forwarderRequestCached.current;
+        } else {
+          forwardRequest = await getForwarderRequest({
+            minterAddress: edition?.minter_address,
+            userAddress,
+          });
+        }
 
         Logger.log("Signing... ", forwardRequest);
 
@@ -158,6 +200,7 @@ export const useClaimNFT = (edition?: IEdition) => {
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
+      forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
       captureException(e);
     }
