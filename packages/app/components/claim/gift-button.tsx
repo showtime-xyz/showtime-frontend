@@ -1,9 +1,9 @@
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Gift } from "@showtime-xyz/universal.icon";
+import { GiftSolid, Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
 
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
@@ -17,7 +17,13 @@ export function GiftButton({ nft }: { nft: NFT }) {
     nft?.creator_airdrop_edition_address
   );
 
+  const GiftIcon = useMemo(
+    () => (edition?.is_already_claimed ? GiftSolid : Gift),
+    [edition?.is_already_claimed]
+  );
+
   if (!edition) return null;
+
   return (
     <Button
       variant="text"
@@ -48,12 +54,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
       }}
       accentColor={textColors}
     >
-      {edition?.is_already_claimed ? (
-        <Text tw="h-5 w-6 text-center text-xl">🎁</Text>
-      ) : (
-        <Gift height={20} width={20} color={iconColor} />
-      )}
-
+      <GiftIcon height={24} width={24} color={iconColor} />
       {edition?.total_claimed_count > 0
         ? ` ${formatNumber(edition.total_claimed_count)}`
         : ""}

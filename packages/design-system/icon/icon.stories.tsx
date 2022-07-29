@@ -32,7 +32,7 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 
 export const Default = () => {
   return (
-    <View tw="flex flex-row flex-wrap justify-center">
+    <View tw="flex flex-row flex-wrap justify-center bg-white">
       <IconItem icon={Icon.ArrowTop} title="ArrowTop" />
       <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />
       <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" />
@@ -116,6 +116,7 @@ export const Default = () => {
       <IconItem icon={Icon.Play} title="Play" />
       <IconItem icon={Icon.Settings} title="Settings" />
       <IconItem icon={Icon.Share} title="Share" />
+      <IconItem icon={Icon.GiftSolid} title="GiftSolid" />
     </View>
   );
 };
