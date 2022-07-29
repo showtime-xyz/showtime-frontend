@@ -11,7 +11,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
-import { FollowerUser } from "app/hooks/api/use-followers-list";
+import { UserItemType } from "app/hooks/api/use-followers-list";
 import { useFollow } from "app/hooks/use-follow";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
@@ -30,19 +30,19 @@ export const UserList = ({
   loading,
   onClose,
 }: {
-  users?: FollowerUser[];
+  users?: UserItemType[];
   onClose: () => void;
   loading: boolean;
 }) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
 
   const keyExtractor = useCallback(
-    (item: FollowerUser) => `${item.profile_id}`,
+    (item: UserItemType) => `${item.profile_id}`,
     []
   );
 
   const getItemLayout = useCallback(
-    (_: FollowerUser[] | null | undefined, index: number) => ({
+    (_: UserItemType[] | null | undefined, index: number) => ({
       length: ITEM_HEIGHT,
       offset: ITEM_HEIGHT * index,
       index,
@@ -50,7 +50,7 @@ export const UserList = ({
     []
   );
   const renderItem = useCallback(
-    ({ item }: { item: FollowerUser }) => {
+    ({ item }: { item: UserItemType }) => {
       return (
         <FollowingListUser
           item={item}
@@ -109,7 +109,7 @@ const FollowingListUser = memo(
     item,
     isFollowingUser,
     hideSheet,
-  }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
+  }: { item: UserItemType; isFollowingUser: boolean } & FollowingListProp) => {
     const { data } = useMyInfo();
 
     const { onToggleFollow } = useFollow({

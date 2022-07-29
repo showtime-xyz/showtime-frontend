@@ -54,14 +54,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth } = useWindowDimensions();
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
-  const feedItemStyle = {
-    height: itemHeight,
-    width: windowWidth,
-  };
 
   let mediaHeight =
     windowWidth /
@@ -71,7 +68,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   const mediaContainerHeight = Math.min(
     mediaHeight,
-    feedItemStyle.height * mediaMaxHeightRelativeToScreen
+    itemHeight * mediaMaxHeightRelativeToScreen
   );
 
   mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
@@ -98,7 +95,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               />
             ) : (
               <Image
-                tw="h-full w-full"
+                tw="h-full w-full "
                 source={{
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
