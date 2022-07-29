@@ -19,7 +19,7 @@ const EXPECTED_CHAIN_ID =
   CHAIN_IDENTIFIERS[process.env.NEXT_PUBLIC_CHAIN_ID || "polygon"];
 
 export const useSignTypedData = () => {
-  let { web3 } = useWeb3();
+  let { web3, isMagic } = useWeb3();
   const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
   const Alert = useAlert();
@@ -33,7 +33,7 @@ export const useSignTypedData = () => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        if (web3) {
+        if (web3 && isMagic) {
           const result = await web3
             .getSigner()
             ._signTypedData(domain, types, value);
