@@ -7900,6 +7900,7 @@ __metadata:
     "@tradle/react-native-http": ^2.0.1
     "@types/jest": ^27.4.1
     "@types/react": ^18.0.15
+    "@types/remove-markdown": ^0.3.1
     "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.7.8
@@ -10706,6 +10707,13 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: ede927ed3766fef5fec513fe75e79180bb3c97d21ca7707321e969193c596bc4a531160238546a845e4131df02ec9be7803277a268bc270156362d16b29b4ffb
+  languageName: node
+  linkType: hard
+
+"@types/remove-markdown@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@types/remove-markdown@npm:0.3.1"
+  checksum: a673aafa3a3722d959b4ad1d4e95b33f04f037a8bb95a82e843d6005b12b51f9b1bfd5954cd5c8707fbbb2f1d8865f7e632f02f99389ab83d0dcfd2cb1920dbb
   languageName: node
   linkType: hard
 
