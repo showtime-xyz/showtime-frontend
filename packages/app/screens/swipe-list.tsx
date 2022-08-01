@@ -29,7 +29,6 @@ type Query = {
 export const SwipeListScreen = withColorScheme(() => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
-  const [tab] = useParam("tab");
   useTrackPageViewed({ name: "Swipe List", type });
 
   switch (type) {
