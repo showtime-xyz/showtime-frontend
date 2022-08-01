@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { Link } from "solito/link";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -9,7 +7,6 @@ import {
   MessageFilled,
   PlusFilled,
 } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -17,7 +14,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
-import { findTokenChainName } from "app/lib/utilities";
+
+import { NFTSDisolayName } from "./nfts-display-name";
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -40,18 +38,27 @@ export const NotificationItem = ({
   notification,
   setUsers,
 }: NotificationItemProp) => {
-  const notificationInfo = useNotificationInfo(notification);
-
+  const myProfile = useUser();
+  const icon = useNotificationIcon(notification.type_name);
+  const actor =
+    notification.actors?.length > 0 ? notification?.actors[0] : null;
+  const avatarLink =
+    "/@" +
+    (actor?.wallet_address
+      ? `${actor?.username || actor?.wallet_address}`
+      : `${
+          myProfile?.user?.data.profile.username ||
+          myProfile?.user?.data.profile.wallet_addresses[0]
+        }`);
   return (
     <View tw="flex-row items-center p-4">
-      {notificationInfo.icon}
+      {icon}
       <View tw="mx-2">
-        <Link href={notificationInfo.href}>
+        <Link href={avatarLink}>
           <Avatar url={notification.img_url} size={24} />
         </Link>
       </View>
       <NotificationDescription
-        notificationInfo={notificationInfo}
         notification={notification}
         setUsers={setUsers}
       />
@@ -61,15 +68,12 @@ export const NotificationItem = ({
 
 type NotificationDescriptionProps = {
   notification: NotificationType;
-  notificationInfo: any;
   setUsers: NotificationItemProp["setUsers"];
 };
 const NotificationDescription = ({
   notification,
-  notificationInfo,
   setUsers,
 }: NotificationDescriptionProps) => {
-  const router = useRouter();
   return (
     <View tw="flex-1">
       <Text
@@ -78,17 +82,7 @@ const NotificationDescription = ({
       >
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
-        {notification.nfts?.map((item) => (
-          <Text
-            onPress={() => {
-              router.push(notificationInfo.href);
-            }}
-            key={item.id}
-            tw="text-13 font-bold text-black dark:text-white"
-          >
-            {item.display_name}
-          </Text>
-        ))}
+        <NFTSDisolayName nfts={notification.nfts} />
       </Text>
       <View tw="h-1" />
       {/* <Text tw="text-xs text-gray-500">
@@ -100,91 +94,35 @@ const NotificationDescription = ({
   );
 };
 
-export const useNotificationInfo = (notification: NotificationType) => {
-  const myProfile = useUser();
-  const actor =
-    notification.actors?.length > 0 ? notification?.actors[0] : null;
-  const nft = notification.nfts?.length > 0 ? notification.nfts[0] : null;
-
-  const profileLink =
-    "/@" +
-    (actor?.wallet_address
-      ? `${actor?.username || actor?.wallet_address}`
-      : `${
-          myProfile?.user?.data.profile.username ||
-          myProfile?.user?.data.profile.wallet_addresses[0]
-        }`);
-  const nftLink = useMemo(
-    () =>
-      "/nft/" +
-      `${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
-        nft?.token_identifier
-      }`,
-    [nft?.chain_identifier, nft?.contract_address, nft?.token_identifier]
-  );
-
-  switch (notification.type_name) {
+export const useNotificationIcon = (type_name: string) => {
+  switch (type_name) {
     case "FOLLOW":
-      return {
-        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
-        href: profileLink,
-      };
+      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
     case "LIKE_ON_CREATED_NFT":
-      return {
-        icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
-        href: nftLink,
-      };
+      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
     case "LIKE_ON_OWNED_NFT":
-      return {
-        icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
-        href: nftLink,
-      };
+      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
     case "COMMENT_ON_CREATED_NFT":
-      return {
-        icon: (
-          <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-        ),
-        href: nftLink,
-      };
+      return (
+        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
+      );
     case "COMMENT_ON_OWNED_NFT":
-      return {
-        icon: (
-          <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-        ),
-        href: nftLink,
-      };
+      return (
+        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
+      );
     case "COMMENT_MENTION":
-      return {
-        // TODO: incorrect icon
-        icon: (
-          <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-        ),
-        href: nftLink,
-      };
+      return (
+        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
+      );
     case "LIKE_ON_COMMENT":
-      return {
-        icon: <HeartFilled width={20} height={20} color={colors.rose[500]} />,
-        href: nftLink,
-      };
+      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
     case "NFT_SALE":
-      return {
-        icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,
-        href: nftLink,
-      };
+      return <MarketFilled width={20} height={20} color={colors.amber[500]} />;
     case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return {
-        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
-        href: nftLink,
-      };
+      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
     case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return {
-        icon: <PlusFilled width={20} height={20} color={colors.teal[500]} />,
-        href: nftLink,
-      };
+      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
     default:
-      return {
-        icon: undefined,
-        href: profileLink,
-      };
+      return undefined;
   }
 };
