@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 

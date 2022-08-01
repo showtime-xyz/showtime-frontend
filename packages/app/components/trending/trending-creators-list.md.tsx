@@ -21,7 +21,7 @@ export function TrendingCreatorsList({ days }: TrendingMDListProps) {
   });
 
   const router = useRouter();
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [containerWidth] = useState(0);
   const isDark = useIsDarkMode();
 
   const keyExtractor = useCallback((item: any) => {

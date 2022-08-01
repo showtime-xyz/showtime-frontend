@@ -21,7 +21,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 export const Trending = () => {
-  const [tab, setTab] = useParam("tab");
+  const [tab] = useParam("tab");
   // const isDark = useIsDarkMode();
 
   // const handleTabChange = (index: number) => {

@@ -3,6 +3,7 @@ import { ListRenderItemInfo } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -221,6 +222,7 @@ const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
   const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
+  const router = useRouter();
 
   return (
     <>
@@ -248,7 +250,12 @@ const SuggestedUsers = () => {
           return (
             <CreatorPreview
               creator={user}
-              onMediaPress={() => {}}
+              onMediaPress={(index: number) => {
+                const item = user?.top_items[index];
+                router.push(
+                  `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`
+                );
+              }}
               mediaSize={90}
               key={`CreatorPreview-${index}`}
             />
