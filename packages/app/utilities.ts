@@ -656,3 +656,21 @@ export const ledgerWalletHack = (signature?: string) => {
 
   return signature;
 };
+
+export function isClassComponent(component: any) {
+  return (
+    typeof component === "function" && !!component.prototype.isReactComponent
+  );
+}
+
+export function isFunctionComponent(component: any) {
+  return (
+    typeof component === "function" &&
+    String(component).includes("return React.createElement")
+  );
+}
+
+export function isReactComponent(component: any) {
+  if (!component) return false;
+  return isClassComponent(component) || isFunctionComponent(component);
+}

@@ -22,10 +22,10 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { SORT_FIELDS, TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-import { getFileFormData, SORT_FIELDS } from "app/utilities";
+import { getFileFormData } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";

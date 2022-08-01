@@ -1,8 +1,6 @@
 import { Suspense, useMemo, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import type { UrlObject } from "url";
-
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -31,10 +29,10 @@ type Props = {
   listId: number | undefined;
   tw?: string;
   variant?: "nft" | "activity" | "market";
-  hrefProps?: UrlObject;
+  hrefProps?: string;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
+function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
