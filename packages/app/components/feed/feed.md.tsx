@@ -1,5 +1,5 @@
-import React, { Suspense, useCallback, useMemo } from "react";
-import { ListRenderItemInfo } from "react-native";
+import React, { useCallback, useMemo } from "react";
+import { ListRenderItemInfo, Platform } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -39,9 +39,7 @@ export const Feed = () => {
   return (
     <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
       <ErrorBoundary>
-        <Suspense fallback={<View />}>
-          <FeedList />
-        </Suspense>
+        <FeedList />
       </ErrorBoundary>
     </View>
   );
@@ -120,9 +118,7 @@ export const FeedList = () => {
         )} */}
 
         <ErrorBoundary>
-          <Suspense fallback={<View />}>
-            <HomeFeed />
-          </Suspense>
+          <HomeFeed />
         </ErrorBoundary>
       </View>
     </View>
@@ -183,13 +179,15 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
 
   const renderItem = useCallback(({ item }: ListRenderItemInfo<NFT>) => {
     return (
-      <Card
-        hrefProps={{
-          pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-        }}
-        nft={item}
-        tw={`w-[${CARD_WIDTH}px] mb-8`}
-      />
+      <View tw="p-2">
+        <Card
+          hrefProps={{
+            pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+          }}
+          nft={item}
+          tw={`w-[${CARD_WIDTH}px] mb-4`}
+        />
+      </View>
     );
   }, []);
   const keyExtractor = useCallback((item: NFT) => {
@@ -197,22 +195,29 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
   }, []);
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <InfiniteScrollList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        overscan={{
-          main: CARD_HEIGHT,
-          reverse: CARD_HEIGHT,
+      <View
+        style={{
+          //@ts-ignore
+          overflowY: Platform.OS === "web" ? "hidden" : undefined,
         }}
-        ListEmptyComponent={
-          isLoading ? (
-            <View tw="mx-auto p-10">
-              <Spinner />
-            </View>
-          ) : null
-        }
-      />
+      >
+        <InfiniteScrollList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          overscan={{
+            main: CARD_HEIGHT,
+            reverse: CARD_HEIGHT,
+          }}
+          ListEmptyComponent={
+            isLoading ? (
+              <View tw="mx-auto p-10">
+                <Spinner />
+              </View>
+            ) : null
+          }
+        />
+      </View>
     </VideoConfigContext.Provider>
   );
 };

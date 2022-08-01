@@ -1,6 +1,5 @@
-import { Suspense, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -78,15 +77,7 @@ export const Trending = () => {
           index={index}
         />
         <ErrorBoundary>
-          <Suspense
-            fallback={
-              <View tw="mt-10 items-center justify-center">
-                <Spinner size="small" />
-              </View>
-            }
-          >
-            <List days={days} selectedTab={tab} />
-          </Suspense>
+          <List days={days} selectedTab={tab} />
         </ErrorBoundary>
       </View>
     </View>
