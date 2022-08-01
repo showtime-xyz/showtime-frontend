@@ -23,6 +23,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
   const contentWidth = useContentWidth();
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
+  const cardHeight = contentWidth / numColumns + 156;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {
       return (
@@ -33,14 +34,12 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
             }}
             key={`nft-list-card-${index}`}
             nft={item}
-            tw={`w-full h-[${
-              contentWidth / numColumns + 156
-            }px] bg-white dark:bg-black`}
+            tw={`w-full h-[${cardHeight}px] bg-white dark:bg-black`}
           />
         </View>
       );
     },
-    [contentWidth, numColumns]
+    [cardHeight]
   );
   const keyExtractor = useCallback((item: NFT) => {
     return item.nft_id?.toFixed();
@@ -52,6 +51,10 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
       renderItem={renderItem}
       numColumns={numColumns}
       keyExtractor={keyExtractor}
+      overscan={{
+        reverse: cardHeight,
+        main: cardHeight,
+      }}
       ListEmptyComponent={
         isLoading ? (
           <View tw="mx-auto p-10">

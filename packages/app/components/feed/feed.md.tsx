@@ -1,24 +1,20 @@
 import React, { Suspense, useCallback, useMemo } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { ListRenderItemInfo } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
-import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import {
-  DataProvider,
-  LayoutProvider,
-  RecyclerListView,
-} from "app/lib/recyclerlistview";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
@@ -162,64 +158,19 @@ export const FeedList = () => {
 // };
 
 const HomeFeed = () => {
-  const { data } = useFeed();
-
-  return <NFTScrollList data={data} fetchMore={() => null} />;
+  const { data, isLoading } = useFeed();
+  return (
+    <NFTScrollList data={data} fetchMore={() => null} isLoading={isLoading} />
+  );
 };
 
-const NFTScrollList = ({
-  data,
-  fetchMore,
-}: {
+type NFTScrollListProps = {
   data: NFT[];
-  fetchMore: any;
+  fetchMore: () => void;
+  isLoading: boolean;
   // tab?: Tab;
-}) => {
-  const { width: screenWidth, height } = useWindowDimensions();
-  let dataProvider = useMemo(
-    () =>
-      new DataProvider((r1, r2) => {
-        return r1.nft_id !== r2.nft_id;
-      }).cloneWithRows(data),
-    [data]
-  );
-
-  const _layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        () => {
-          return "item";
-        },
-        (_type, dim) => {
-          dim.width = screenWidth;
-          dim.height = CARD_HEIGHT;
-        }
-      ),
-    [screenWidth]
-  );
-
-  const layoutSize = useMemo(
-    () => ({
-      width: CARD_CONTAINER_WIDTH,
-      height,
-    }),
-    [height]
-  );
-
-  const _rowRenderer = useCallback((_type: any, item: any) => {
-    return (
-      <View tw="flex-row justify-center" nativeID="334343">
-        <Card
-          hrefProps={{
-            pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-          }}
-          nft={item}
-          tw={`w-[${CARD_WIDTH}px] mt-2`}
-        />
-      </View>
-    );
-  }, []);
-
+};
+const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -229,43 +180,38 @@ const NFTScrollList = ({
     []
   );
 
-  // if (data?.length === 0 && !isLoading) {
-  //   return (
-  //     <View
-  //       tw="mt-4 h-[60vh] w-full justify-center rounded-2xl"
-  //       style={{
-  //         // @ts-ignore
-  //         boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-  //       }}
-  //     >
-  //       <EmptyPlaceholder
-  //         title="No results found"
-  //         text="You can try to follow some users"
-  //       />
-  //     </View>
-  //   );
-  // }
-
+  const renderItem = useCallback(({ item }: ListRenderItemInfo<NFT>) => {
+    return (
+      <Card
+        hrefProps={{
+          pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+        }}
+        nft={item}
+        tw={`w-[${CARD_WIDTH}px] mb-8`}
+      />
+    );
+  }, []);
+  const keyExtractor = useCallback((item: NFT) => {
+    return item.nft_id?.toFixed();
+  }, []);
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <View
-        style={{
-          //@ts-ignore
-          overflowX: Platform.OS === "web" ? "hidden" : undefined,
+      <InfiniteScrollList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        overscan={{
+          main: CARD_HEIGHT,
+          reverse: CARD_HEIGHT,
         }}
-      >
-        {dataProvider && dataProvider.getSize() > 0 && (
-          <RecyclerListView
-            dataProvider={dataProvider}
-            layoutProvider={_layoutProvider}
-            useWindowScroll
-            rowRenderer={_rowRenderer}
-            onEndReached={fetchMore}
-            onEndReachedThreshold={300}
-            layoutSize={layoutSize}
-          />
-        )}
-      </View>
+        ListEmptyComponent={
+          isLoading ? (
+            <View tw="mx-auto p-10">
+              <Spinner />
+            </View>
+          ) : null
+        }
+      />
     </VideoConfigContext.Provider>
   );
 };

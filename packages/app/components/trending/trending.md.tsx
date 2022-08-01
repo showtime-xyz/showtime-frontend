@@ -105,6 +105,7 @@ const LIST_MAP = new Map<Query["tab"], React.FC<TrendingMDListProps>>([
 
 const List = ({ selectedTab = "nft", ...rest }: TrendingMDListProps) => {
   const List = useMemo(() => LIST_MAP.get(selectedTab), [selectedTab]);
+
   if (!List) return null;
   return <List {...rest} />;
 };

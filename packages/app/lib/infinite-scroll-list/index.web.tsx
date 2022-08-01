@@ -1,48 +1,23 @@
 import React, { CSSProperties, useMemo } from "react";
-import { FlatListProps } from "react-native";
 
-import {
-  VirtuosoGrid,
+import { VirtuosoGrid } from "react-virtuoso";
+import type {
   VirtuosoGridProps,
-  GridItem,
   GridListProps,
   GridComponents,
+  GridItem,
 } from "react-virtuoso";
 
 import { isReactComponent } from "app/utilities";
 
-export type InfiniteScrollListProps<T> = Omit<
-  FlatListProps<T>,
+import type { InfiniteScrollListProps } from ".";
+
+export type InfiniteScrollListWebProps<T> = Omit<
+  InfiniteScrollListProps<T>,
   "onEndReached"
 > & {
   onEndReached?: VirtuosoGridProps["endReached"];
 };
-
-const ListContainer = React.forwardRef(function ListContainer(
-  props: GridListProps,
-  ref: React.LegacyRef<HTMLDivElement>
-) {
-  return (
-    <div
-      {...props}
-      style={{ ...props.style, display: "flex", flexWrap: "wrap" }}
-      ref={ref}
-    />
-  );
-});
-
-type ItemContainerProps = GridItem & {
-  style?: CSSProperties;
-  numColumns?: number;
-};
-
-const ItemContainer = React.forwardRef(function ItemContainer(
-  props: ItemContainerProps,
-  ref: React.LegacyRef<HTMLDivElement>
-) {
-  const width = props.numColumns ? `${100 / props.numColumns}%` : "100%";
-  return <div {...props} style={{ ...props.style, width }} ref={ref} />;
-});
 
 export function InfiniteScrollList<T extends any>({
   renderItem,
@@ -53,7 +28,8 @@ export function InfiniteScrollList<T extends any>({
   ItemSeparatorComponent,
   ListEmptyComponent,
   numColumns,
-}: InfiniteScrollListProps<T>) {
+  overscan,
+}: InfiniteScrollListWebProps<T>) {
   const renderItemContent = React.useCallback(
     (index: number) => {
       if (data && data[index]) {
@@ -104,8 +80,35 @@ export function InfiniteScrollList<T extends any>({
         components={components}
         endReached={onEndReached}
         itemContent={renderItemContent}
+        overscan={overscan}
       />
       {React.isValidElement(ListFooterComponent) && ListFooterComponent}
     </>
   );
 }
+
+const ListContainer = React.forwardRef(function ListContainer(
+  props: GridListProps,
+  ref: React.LegacyRef<HTMLDivElement>
+) {
+  return (
+    <div
+      {...props}
+      style={{ ...props.style, display: "flex", flexWrap: "wrap" }}
+      ref={ref}
+    />
+  );
+});
+
+type ItemContainerProps = GridItem & {
+  style?: CSSProperties;
+  numColumns?: number;
+};
+
+const ItemContainer = React.forwardRef(function ItemContainer(
+  props: ItemContainerProps,
+  ref: React.LegacyRef<HTMLDivElement>
+) {
+  const width = props.numColumns ? `${100 / props.numColumns}%` : "100%";
+  return <div {...props} style={{ ...props.style, width }} ref={ref} />;
+});
