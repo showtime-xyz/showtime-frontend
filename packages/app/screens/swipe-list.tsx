@@ -40,13 +40,13 @@ export const SwipeListScreen = withColorScheme(() => {
     case "trendingCreator":
       return <TrendingCreatorSwipeList />;
     case "feed":
-      return <FeedSwipeList tab={tab} />;
+      return <FeedSwipeList />;
     default:
       return null;
   }
 });
 
-const FeedSwipeList = ({ tab }: { tab: Tab }) => {
+const FeedSwipeList = () => {
   const { useParam } = createParam<Query>();
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
