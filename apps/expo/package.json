@@ -178,7 +178,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-level-fs": "^3.0.0",
     "react-native-localhost": "^1.0.0",
-    "react-native-mmkv": "2.3.3",
+    "react-native-mmkv": "^2.4.3",
     "react-native-os": "^1.0.1",
     "react-native-pager-view": "^5.4.25",
     "react-native-popper": "^0.3.2",
