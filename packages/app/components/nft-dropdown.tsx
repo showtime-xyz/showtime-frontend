@@ -59,22 +59,27 @@ const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
 
 type Props = {
   nft?: NFT;
-  listId?: number | undefined;
   shouldEnableSharing?: boolean;
   btnProps?: ButtonProps;
+  listId?: string;
 };
 
 function NFTDropdown({
   nft: propNFT,
-  listId,
   shouldEnableSharing = true,
   btnProps,
+  listId,
 }: Props) {
   //#region hooks
   const userId = useCurrentUserId();
   const { user, isAuthenticated } = useUser();
   const { report } = useReport();
-  const { unfollow, isFollowing, hide: hideNFT } = useMyInfo();
+  const {
+    unfollow,
+    isFollowing,
+    hide: hideNFT,
+    unhide: unhideNFT,
+  } = useMyInfo();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   // const { refresh } = useFeed("");
@@ -168,15 +173,27 @@ function NFTDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>
-        {hasOwnership && listId ? (
+        {hasOwnership && listId !== "hidden" ? (
           <DropdownMenuItem
             onSelect={() => {
-              hideNFT(nft?.nft_id, listId);
+              hideNFT(nft?.nft_id);
             }}
             key="hide"
           >
             <MenuItemIcon Icon={EyeOff} />
             <DropdownMenuItemTitle>Hide</DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
+
+        {hasOwnership && listId === "hidden" ? (
+          <DropdownMenuItem
+            onSelect={() => {
+              unhideNFT(nft?.nft_id);
+            }}
+            key="unhide"
+          >
+            <MenuItemIcon Icon={EyeOff} />
+            <DropdownMenuItemTitle>Unhide</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 

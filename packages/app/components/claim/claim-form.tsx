@@ -62,9 +62,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
       follow(nft?.data.item.creator_id);
     }
 
-    await claimNFT({
-      minterAddress: edition.creator_airdrop_edition.minter_address,
-    });
+    await claimNFT();
 
     mutate();
   };

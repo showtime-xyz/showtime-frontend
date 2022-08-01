@@ -26,7 +26,7 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
   onPress: () => void;
-  listId: number | undefined;
+  listId?: string;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   hrefProps?: string;

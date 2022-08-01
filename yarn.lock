@@ -1020,18 +1020,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-numeric-separator@npm:^7.18.6":
-  version: 7.18.6
-  resolution: "@babel/plugin-proposal-numeric-separator@npm:7.18.6"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.18.6
-    "@babel/plugin-syntax-numeric-separator": ^7.10.4
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: f370ea584c55bf4040e1f78c80b4eeb1ce2e6aaa74f87d1a48266493c33931d0b6222d8cee3a082383d6bb648ab8d6b7147a06f974d3296ef3bc39c7851683ec
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-proposal-object-rest-spread@npm:7.12.1":
   version: 7.12.1
   resolution: "@babel/plugin-proposal-object-rest-spread@npm:7.12.1"
@@ -2387,16 +2375,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftzdog/react-native-buffer@npm:^6.0.4":
-  version: 6.0.5
-  resolution: "@craftzdog/react-native-buffer@npm:6.0.5"
-  dependencies:
-    ieee754: ^1.2.1
-    react-native-quick-base64: ^2.0.5
-  checksum: 921b8bc7f84778e355e81e475792399276d611a346a7e51b6266a45cf4aa82194beb3a8106af796ed143d958c8476070c59e3720c0eec0a3c31e368fbb08b350
-  languageName: node
-  linkType: hard
-
 "@discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -2972,7 +2950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/shims@npm:^5.5.0":
+"@ethersproject/shims@npm:^5.6.0":
   version: 5.6.0
   resolution: "@ethersproject/shims@npm:5.6.0"
   checksum: aa224261cdd6a0507db5483a38a26b0f56952e66088d880ad228b1e70023e7708d452da7995b04db5e0cdcfa026854ab57485e378298d948de1ac34f6f82149c
@@ -5971,9 +5949,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "@rainbow-me/rainbowkit@npm:0.4.4"
+"@rainbow-me/rainbowkit@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@rainbow-me/rainbowkit@npm:0.4.5"
   dependencies:
     "@vanilla-extract/css": 1.7.0
     "@vanilla-extract/dynamic": 2.0.2
@@ -5985,8 +5963,8 @@ __metadata:
     ethers: ">=5.5.1"
     react: ">=17"
     react-dom: ">=17"
-    wagmi: 0.5.x
-  checksum: 520012439dc6f3a4aa13f353bbb9d3c35cf28cd24784b9a032f29189cf0b575ba6ae833cd2b41ef14092115acc9dc7c6c4d5a466ac976400f362eac319ca57e4
+    wagmi: 0.5.x || 0.6.x
+  checksum: f956f9a440494404205de251ba89e45d1c5090ce9419a05e90025b1d83251ba707ca7fbc97a861cf52c5009d044035b9690dc31c4e14812650d9dc6233c0a3d5
   languageName: node
   linkType: hard
 
@@ -7819,12 +7797,11 @@ __metadata:
   resolution: "@showtime/expo@workspace:apps/expo"
   dependencies:
     "@babel/core": ^7.16.5
-    "@babel/plugin-proposal-numeric-separator": ^7.18.6
     "@babel/runtime": ^7.16.5
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
     "@config-plugins/detox": ^1.1.0
-    "@ethersproject/shims": ^5.5.0
+    "@ethersproject/shims": ^5.6.0
     "@expo/xcpretty": ^4.2.2
     "@gorhom/bottom-sheet": 4.4.2
     "@hookform/resolvers": ^2.8.5
@@ -7964,10 +7941,10 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.3
-    react-native-bignumber: ^0.1.7
-    react-native-blob-jsi-helper: ^0.2.2
+    react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
+    react-native-crypto: ^2.2.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
@@ -7975,13 +7952,12 @@ __metadata:
     react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-level-fs: ^3.0.0
     react-native-localhost: ^1.0.0
-    react-native-mmkv: 2.3.3
+    react-native-mmkv: ^2.4.3
     react-native-os: ^1.0.1
     react-native-pager-view: ^5.4.25
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
-    react-native-quick-crypto: ^0.4.3
-    react-native-random-values-jsi-helper: ^1.0.3
+    react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
     react-native-safe-area-context: 4.3.1
@@ -8034,7 +8010,7 @@ __metadata:
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
     "@radix-ui/react-use-escape-keydown": ^0.1.0
-    "@rainbow-me/rainbowkit": ^0.4.4
+    "@rainbow-me/rainbowkit": ^0.4.5
     "@react-native-menu/menu": ^0.5.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
@@ -8079,7 +8055,7 @@ __metadata:
     setimmediate: ^1.0.5
     swr: 2.0.0-beta.6
     tailwindcss: ^3.1.2
-    wagmi: ^0.5.11
+    wagmi: ^0.6.0
     web3modal: ^1.9.8
   languageName: unknown
   linkType: soft
@@ -8134,10 +8110,10 @@ __metadata:
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
     react-native-ios-context-menu: 1.3.0
-    react-native-mmkv: ^2.3.3
+    react-native-mmkv: ^2.4.3
     react-native-pager-view: ^5.4.25
     react-native-quick-base64: ^2.0.2
-    react-native-random-values-jsi-helper: ^1.0.3
+    react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
     react-native-safe-area-context: 4.3.1
@@ -10553,13 +10529,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^17.0.31":
-  version: 17.0.45
-  resolution: "@types/node@npm:17.0.45"
-  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^9.4.6":
   version: 9.6.61
   resolution: "@types/node@npm:9.6.61"
@@ -11114,6 +11083,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@virtuoso.dev/react-urx@npm:^0.2.12":
   version: 0.2.13
   resolution: "@virtuoso.dev/react-urx@npm:0.2.13"
@@ -11135,6 +11105,11 @@ __metadata:
 "@wagmi/core@npm:^0.4.9":
   version: 0.4.9
   resolution: "@wagmi/core@npm:0.4.9"
+=======
+"@wagmi/core@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@wagmi/core@npm:0.5.0"
+>>>>>>> staging
   dependencies:
     eventemitter3: ^4.0.7
     zustand: ^4.0.0-rc.1
@@ -11147,7 +11122,7 @@ __metadata:
       optional: true
     "@walletconnect/ethereum-provider":
       optional: true
-  checksum: ea31970d4a34fbf07aff94e51e9ee060ccfc0c72d0b8dd6bfaa932181b4d88b9b048dc9bd264b73fd0fe4710c0a44fb0ec2599578f6e45c3ef22955a630a3535
+  checksum: d8e2822e32089f0acf566f5bddec12688eb34376ede503a5177b7a5fb67109ff235860f112631643b2b7fdfb6499bc2b93c0bae0ee74cfa5541b2f190dfdab2c
   languageName: node
   linkType: hard
 
@@ -15687,7 +15662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.11.0, crypto-browserify@npm:^3.12.0":
+"crypto-browserify@npm:^3.11.0":
   version: 3.12.0
   resolution: "crypto-browserify@npm:3.12.0"
   dependencies:
@@ -29938,18 +29913,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-bignumber@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "react-native-bignumber@npm:0.1.7"
-  dependencies:
-    "@craftzdog/react-native-buffer": ^6.0.4
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: a78d0cd983f1457091dfb77f4a6abccfd5dce2622874b3ec3e3b10b9dadd15b34b9f4faffe963cad7458d4794de329bd6883baac6464b9f3ece93412d0ceff42
-  languageName: node
-  linkType: hard
-
 "react-native-blob-jsi-helper@npm:^0.2.2":
   version: 0.2.2
   resolution: "react-native-blob-jsi-helper@npm:0.2.2"
@@ -29957,6 +29920,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 7a3484c262f813c9275929fc2bab13f688cec2bb3c44a18b2a684197a7c93ca5df1df3a80f118aaa14c0bee10cc32cc60393e766ed8105f9e666e9f96d951e15
+  languageName: node
+  linkType: hard
+
+"react-native-blob-jsi-helper@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "react-native-blob-jsi-helper@npm:0.2.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 0464f3629abc31f3cc8124388db6c66f5d3b26ca9405038c03c943df83ca94b8220059153c6230ee69b2ed8cc91aa566e2844398b2bc128ca593bda7ff982440
   languageName: node
   linkType: hard
 
@@ -29992,7 +29965,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-crypto@npm:^2.0.1":
+"react-native-crypto@npm:^2.0.1, react-native-crypto@npm:^2.2.0":
   version: 2.2.0
   resolution: "react-native-crypto@npm:2.2.0"
   dependencies:
@@ -30108,23 +30081,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:2.3.3":
-  version: 2.3.3
-  resolution: "react-native-mmkv@npm:2.3.3"
+"react-native-mmkv@npm:^2.4.3":
+  version: 2.4.3
+  resolution: "react-native-mmkv@npm:2.4.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: d0d5861af23d6aea995f16cd265f8fa69d9d6b125656c245b4fe5a057e2f7b99d73ebc181e040d21b40e5814a136da63cce19b4c0815b37a94ed30a5fddf6e61
-  languageName: node
-  linkType: hard
-
-"react-native-mmkv@npm:^2.3.3":
-  version: 2.4.1
-  resolution: "react-native-mmkv@npm:2.4.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: f6e947a176a75aa4aef2d355dec46da3a9a4667e2a1e8f71f73ed06259293f46afbe5ef9dca822f9ab5b6b4d3e258866f68ccb0aff53803b0f0472f2d3feb6fd
+  checksum: d01cda411babfaabd6389c26d0ea403b36b5203d82b8a4fe4800317d4192aaa805fcafedd5945692c7893c6c95b01e1d57e8871a76dcd92ab594ed9c84c5faa3
   languageName: node
   linkType: hard
 
@@ -30218,31 +30181,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "react-native-quick-crypto@npm:0.4.3"
-  dependencies:
-    "@craftzdog/react-native-buffer": ^6.0.4
-    "@types/node": ^17.0.31
-    crypto-browserify: ^3.12.0
-    events: ^3.3.0
-    react-native-quick-base64: ^2.0.2
-    stream-browserify: ^3.0.0
-    string_decoder: ^1.3.0
+"react-native-random-values-jsi-helper@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "react-native-random-values-jsi-helper@npm:1.0.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 05325bcbbd068f0cbaa740454ed3794226c14e06bde46100c4f620cd0006bb5eb6c6826c60ddff19603443e59ce6d2988940e4e37d3e4e9e063a486577203ff2
-  languageName: node
-  linkType: hard
-
-"react-native-random-values-jsi-helper@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "react-native-random-values-jsi-helper@npm:1.0.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 11180da51dea39d591d275ac9d4c98fa5386959aa2ec264a5286fc8e4ccc08d731bb117a66232bffeec476ba86302fe7912a2d3faeefa64a4296a08edbfc02f9
+  checksum: 27b1bd7b971b59f0d21ddbe92ad49ca461a94f45dc4660a9ee3a64aebc637039b0c92b3aba54c87c39483d44964ecea556af77a76388756d5bf5385283b9c5b9
   languageName: node
   linkType: hard
 
@@ -33250,7 +33195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0, string_decoder@npm:~1.3.0":
+"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:~1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
@@ -35795,19 +35740,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wagmi@npm:^0.5.11":
-  version: 0.5.11
-  resolution: "wagmi@npm:0.5.11"
+"wagmi@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "wagmi@npm:0.6.0"
   dependencies:
     "@coinbase/wallet-sdk": ^3.3.0
-    "@wagmi/core": ^0.4.9
+    "@wagmi/core": ^0.5.0
     "@walletconnect/ethereum-provider": ^1.7.8
     react-query: 4.0.0-beta.23
     use-sync-external-store: ^1.2.0
   peerDependencies:
     ethers: ">=5.5.1"
     react: ">=17.0.0"
-  checksum: c05abf4bc29d3019cf818187e538e727650ff4201748c880130c5a285e52a61dbea8547fc4ab2b6301a96d38caa0fb9f7247faa60ad8fc8121cabcfa94d57441
+  checksum: a97edead84d0596a6e3ecefecf2784734ee0df047ca31176ed01b27c9f0c2201fa34ff4a07282722fbe0fadaed729d31a435d309a8395a75978b04cc79a8f820
   languageName: node
   linkType: hard
 
