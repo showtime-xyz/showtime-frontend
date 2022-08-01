@@ -3209,7 +3209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.5":
+"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.4, @expo/config-plugins@npm:~4.1.5":
   version: 4.1.5
   resolution: "@expo/config-plugins@npm:4.1.5"
   dependencies:
@@ -7904,6 +7904,7 @@ __metadata:
     expo-application: ~4.2.2
     expo-av: next
     expo-blur: ~11.2.0
+    expo-build-properties: ^0.2.0
     expo-camera: ~12.3.0
     expo-cli: ^5.5.1
     expo-community-flipper: ^45.0.0
@@ -12068,7 +12069,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.1, ajv@npm:^8.6.3":
+"ajv@npm:^8.0.1, ajv@npm:^8.11.0, ajv@npm:^8.6.3":
   version: 8.11.0
   resolution: "ajv@npm:8.11.0"
   dependencies:
@@ -18775,6 +18776,19 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 8acd08b9c7bc2e74d833ef6689d50e5118eff3ed6fbd0de0689005515eb7c15de00e781b258630e239a78df021eafdd9e7a5e573223072eb1d78c55e5d6618f2
+  languageName: node
+  linkType: hard
+
+"expo-build-properties@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "expo-build-properties@npm:0.2.0"
+  dependencies:
+    "@expo/config-plugins": ~4.1.4
+    ajv: ^8.11.0
+    semver: ^7.3.5
+  peerDependencies:
+    expo: "*"
+  checksum: 38a7e2b90556d614562bc3c5c84009887f6521f80045eaf1257a0480ebcdac48d402366c18e1821ae2f93052b5c5513d86488fb8874dc8d27949a87c6d590fd6
   languageName: node
   linkType: hard
 

@@ -7,7 +7,6 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from "wagmi";
-import { useSigner } from "wagmi";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -25,7 +24,6 @@ export const useSignTypedData = () => {
   const { switchNetworkAsync } = useSwitchNetwork();
   const Alert = useAlert();
   const { signTypedDataAsync } = useWagmiSignTypedData();
-  const { data: signer } = useSigner();
 
   const signTypedData = async (
     domain: TypedDataDomain,
@@ -35,13 +33,7 @@ export const useSignTypedData = () => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        if (signer) {
-          // https://docs.ethers.io/v5/api/signer/#Signer-signTypedData
-          //@ts-ignore
-          const result = await signer._signTypedData(domain, types, value);
-
-          resolve(result);
-        } else if (web3) {
+        if (web3) {
           const result = await web3
             .getSigner()
             ._signTypedData(domain, types, value);
@@ -75,11 +67,7 @@ export const useSignTypedData = () => {
                 onPress: async () => {
                   try {
                     await switchNetworkAsync?.(parseInt(EXPECTED_CHAIN_ID));
-                    const result = await signTypedDataAsync({
-                      domain,
-                      types,
-                      value,
-                    });
+                    const result = await signTypedData(domain, types, value);
                     resolve(result);
                   } catch (e) {
                     reject(
