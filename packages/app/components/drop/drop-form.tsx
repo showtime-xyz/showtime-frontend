@@ -68,7 +68,6 @@ const dropValidationSchema = yup.object({
   royalty: yup
     .number()
     .required()
-    .min(1)
     .typeError("Please enter a valid number")
     .max(69)
     .default(defaultValues.royalty),
