@@ -3,13 +3,13 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
-import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
@@ -275,6 +275,7 @@ const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
   const { colorScheme } = useColorScheme();
   const isDark = useIsDarkMode();
+  const router = useRouter();
 
   return (
     <>
@@ -302,7 +303,12 @@ const SuggestedUsers = () => {
           return (
             <CreatorPreview
               creator={user}
-              onMediaPress={() => {}}
+              onMediaPress={(index: number) => {
+                const item = user?.top_items[index];
+                router.push(
+                  `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`
+                );
+              }}
               mediaSize={90}
               key={`CreatorPreview-${index}`}
             />
