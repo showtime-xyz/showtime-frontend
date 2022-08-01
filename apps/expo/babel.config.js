@@ -18,8 +18,8 @@ module.exports = function (api) {
         alias: {
           crypto: "react-native-crypto", // "react-native-quick-crypto",
           stream: "stream-browserify",
-          buffer: "@craftzdog/react-native-buffer",
-          "bn.js": "react-native-bignumber",
+          // buffer: "@craftzdog/react-native-buffer",
+          // "bn.js": "react-native-bignumber",
         },
       },
     ],

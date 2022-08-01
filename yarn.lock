@@ -2375,16 +2375,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftzdog/react-native-buffer@npm:^6.0.4":
-  version: 6.0.5
-  resolution: "@craftzdog/react-native-buffer@npm:6.0.5"
-  dependencies:
-    ieee754: ^1.2.1
-    react-native-quick-base64: ^2.0.5
-  checksum: 921b8bc7f84778e355e81e475792399276d611a346a7e51b6266a45cf4aa82194beb3a8106af796ed143d958c8476070c59e3720c0eec0a3c31e368fbb08b350
-  languageName: node
-  linkType: hard
-
 "@discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -7950,7 +7940,6 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.3
-    react-native-bignumber: ^0.1.8
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
@@ -29888,18 +29877,6 @@ __metadata:
   version: 1.1.0
   resolution: "react-merge-refs@npm:1.1.0"
   checksum: 90884352999002d868ab9f1bcfe3222fb0f2178ed629f1da7e98e5a9b02a2c96b4aa72800db92aabd69d2483211b4be57a2088e89a11a0b660e7ada744d4ddf7
-  languageName: node
-  linkType: hard
-
-"react-native-bignumber@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "react-native-bignumber@npm:0.1.8"
-  dependencies:
-    "@craftzdog/react-native-buffer": ^6.0.4
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 8ef7b59d324b805a436dc7e740baa90e10effbbaf949fec7f32030a9ee8b62aeb67ac4079651cb02cf282281141b399c2a989cce5b789b477785b3f3010ea4e1
   languageName: node
   linkType: hard
 
