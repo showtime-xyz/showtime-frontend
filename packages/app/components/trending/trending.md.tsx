@@ -12,6 +12,8 @@ import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { TRENDING_ROUTE } from "app/components/trending";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { useContentWidth } from "app/hooks/use-content-width";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { createParam } from "app/navigation/use-param";
 
 import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
@@ -119,7 +121,6 @@ const List = ({
   if (selectedTab === "creator") {
     return <CreatorsList days={days} />;
   }
-
   return <NFTList days={days} />;
 };
 
@@ -173,37 +174,47 @@ const NFTList = ({ days }: { days: any }) => {
   const { data, isLoading } = useTrendingNFTS({
     days,
   });
-  const [containerWidth, setContainerWidth] = useState(0);
+
   const { width } = useWindowDimensions();
+  const contentWidth = useContentWidth();
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
+  const renderItem = useCallback(
+    ({ item, index }: any) => {
+      return (
+        <View tw="my-4 flex-1 px-2">
+          <Card
+            hrefProps={{
+              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
+            }}
+            key={`nft-list-card-${index}`}
+            nft={item}
+            tw={`w-full h-[${
+              contentWidth / numColumns + 156
+            }px] bg-white dark:bg-black`}
+          />
+        </View>
+      );
+    },
+    [contentWidth, numColumns]
+  );
+  const keyExtractor = useCallback((item: any) => {
+    return item.nft_id;
+  }, []);
 
   return (
-    <View
-      tw="mt-4 flex-1 flex-row flex-wrap justify-between"
-      onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
-    >
-      {isLoading ? (
-        <View tw="mx-auto p-10">
-          <Spinner />
-        </View>
-      ) : null}
-      {data?.length > 0 && containerWidth
-        ? data.map((item, index) => {
-            return (
-              <Card
-                hrefProps={{
-                  pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-                }}
-                key={`nft-list-card-${index}`}
-                nft={item}
-                tw={`w-[${containerWidth / numColumns - 30}px] h-[${
-                  containerWidth / numColumns + 167
-                }px] mb-8`}
-              />
-            );
-          })
-        : null}
-    </View>
+    <InfiniteScrollList
+      data={data}
+      renderItem={renderItem}
+      numColumns={numColumns}
+      keyExtractor={keyExtractor}
+      ListEmptyComponent={
+        isLoading ? (
+          <View tw="mx-auto p-10">
+            <Spinner />
+          </View>
+        ) : null
+      }
+    />
   );
 };

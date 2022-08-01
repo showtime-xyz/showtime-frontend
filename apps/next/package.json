@@ -50,6 +50,7 @@
     "react-native-web": "0.18.7",
     "react-stickynode": "^4.0.0",
     "react-string-replace": "^0.4.4",
+    "react-virtuoso": "^2.16.6",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
     "rudder-sdk-js": "^2.9.2",
