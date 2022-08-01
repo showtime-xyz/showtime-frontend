@@ -11083,7 +11083,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@virtuoso.dev/react-urx@npm:^0.2.12":
   version: 0.2.13
   resolution: "@virtuoso.dev/react-urx@npm:0.2.13"
@@ -11102,14 +11101,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/core@npm:^0.4.9":
-  version: 0.4.9
-  resolution: "@wagmi/core@npm:0.4.9"
-=======
 "@wagmi/core@npm:^0.5.0":
   version: 0.5.0
   resolution: "@wagmi/core@npm:0.5.0"
->>>>>>> staging
   dependencies:
     eventemitter3: ^4.0.7
     zustand: ^4.0.0-rc.1
