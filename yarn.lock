@@ -7951,7 +7951,7 @@ __metadata:
     react-hook-form: ^7.27.1
     react-native: 0.69.3
     react-native-bignumber: ^0.1.8
-    react-native-blob-jsi-helper: ^0.2.2
+    react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
     react-native-crypto: ^2.2.0
@@ -29910,6 +29910,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 7a3484c262f813c9275929fc2bab13f688cec2bb3c44a18b2a684197a7c93ca5df1df3a80f118aaa14c0bee10cc32cc60393e766ed8105f9e666e9f96d951e15
+  languageName: node
+  linkType: hard
+
+"react-native-blob-jsi-helper@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "react-native-blob-jsi-helper@npm:0.2.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 0464f3629abc31f3cc8124388db6c66f5d3b26ca9405038c03c943df83ca94b8220059153c6230ee69b2ed8cc91aa566e2844398b2bc128ca593bda7ff982440
   languageName: node
   linkType: hard
 
