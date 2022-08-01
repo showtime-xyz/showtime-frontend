@@ -1,6 +1,5 @@
 import { Suspense, useCallback, useMemo } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,13 +22,12 @@ const { useParam } = createParam<Query>();
 
 export const Trending = () => {
   const [tab, setTab] = useParam("tab");
-  const isDark = useIsDarkMode();
-  const selected = tab === "creator" ? 1 : 0;
+  // const isDark = useIsDarkMode();
 
-  const handleTabChange = (index: number) => {
-    // Haptics.impactAsync();
-    setTab(index !== 0 ? "creator" : "nft");
-  };
+  // const handleTabChange = (index: number) => {
+  //   Haptics.impactAsync();
+  //   setTab(index !== 0 ? "creator" : "nft");
+  // };
   const [days, setDays] = useParam("days", {
     initial: 1,
     parse: (value) => Number(value ?? 1),
@@ -87,10 +85,7 @@ export const Trending = () => {
               </View>
             }
           >
-            <List
-              days={days}
-              selectedTab={selected === 0 ? "nft" : "creator"}
-            />
+            <List days={days} selectedTab={tab} />
           </Suspense>
         </ErrorBoundary>
       </View>
@@ -110,5 +105,6 @@ const LIST_MAP = new Map<Query["tab"], React.FC<TrendingMDListProps>>([
 
 const List = ({ selectedTab = "nft", ...rest }: TrendingMDListProps) => {
   const List = useMemo(() => LIST_MAP.get(selectedTab), [selectedTab]);
-  return List ? <List {...rest} /> : null;
+  if (!List) return null;
+  return <List {...rest} />;
 };
