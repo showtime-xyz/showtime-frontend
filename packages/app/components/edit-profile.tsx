@@ -67,14 +67,16 @@ export const EditProfile = () => {
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(() =>
+    userHasIncompleteExternalLinks(user?.data?.profile) ? 1 : 0
+  );
   const { isValid, validate } = useValidateUsername();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
   const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
-    useState(false);
+    useState(selected === 1);
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -232,6 +234,7 @@ export const EditProfile = () => {
           onIndexChange={setSelected}
           tabListHeight={TAB_LIST_HEIGHT}
           index={selected}
+          initialIndex={selected}
           lazy
         >
           <Tabs.List

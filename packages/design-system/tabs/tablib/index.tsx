@@ -77,9 +77,7 @@ const Root = ({
   lazy,
 }: TabRootProps) => {
   const pagerRef = React.useRef();
-  const index = useSharedValue(
-    typeof indexProp === "number" ? indexProp : initialIndex ?? 0
-  );
+  const index = useSharedValue(initialIndex ?? 0);
   const position = useSharedValue(0);
   const offset = useSharedValue(0);
   const translateY = useSharedValue(0);
