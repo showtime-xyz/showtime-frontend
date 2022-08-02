@@ -26,7 +26,8 @@ export const Actors = ({ actors, setUsers }: ActorsProps) => {
   if (actors?.length === 3) {
     return (
       <>
-        <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} /> and{" "}
+        <ActorLink actor={actors[2]} />{" "}
       </>
     );
   }
