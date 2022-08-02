@@ -63,7 +63,6 @@ export default {
         photosPermission: "$(PRODUCT_NAME) needs access to your photos.",
       },
     ],
-    ["./plugins/with-compile-sdk-version.js", 31],
     [
       "./plugins/with-pick-first.js",
       {
@@ -82,5 +81,16 @@ export default {
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
+    [
+      "expo-build-properties",
+      {
+        android: {
+          compileSdkVersion: 31,
+          targetSdkVersion: 31,
+          buildToolsVersion: "31.0.0",
+          kotlinVersion: "1.6.10",
+        },
+      },
+    ],
   ],
 };

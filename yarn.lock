@@ -2375,16 +2375,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftzdog/react-native-buffer@npm:^6.0.4":
-  version: 6.0.5
-  resolution: "@craftzdog/react-native-buffer@npm:6.0.5"
-  dependencies:
-    ieee754: ^1.2.1
-    react-native-quick-base64: ^2.0.5
-  checksum: 921b8bc7f84778e355e81e475792399276d611a346a7e51b6266a45cf4aa82194beb3a8106af796ed143d958c8476070c59e3720c0eec0a3c31e368fbb08b350
-  languageName: node
-  linkType: hard
-
 "@discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -3219,7 +3209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.5":
+"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.4, @expo/config-plugins@npm:~4.1.5":
   version: 4.1.5
   resolution: "@expo/config-plugins@npm:4.1.5"
   dependencies:
@@ -7913,6 +7903,7 @@ __metadata:
     expo-application: ~4.2.2
     expo-av: next
     expo-blur: ~11.2.0
+    expo-build-properties: ^0.2.0
     expo-camera: ~12.3.0
     expo-cli: ^5.5.1
     expo-community-flipper: ^45.0.0
@@ -7950,10 +7941,10 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.3
-    react-native-bignumber: ^0.1.7
-    react-native-blob-jsi-helper: ^0.2.2
+    react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
+    react-native-crypto: ^2.2.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
@@ -7961,13 +7952,12 @@ __metadata:
     react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-level-fs: ^3.0.0
     react-native-localhost: ^1.0.0
-    react-native-mmkv: 2.3.3
+    react-native-mmkv: ^2.4.3
     react-native-os: ^1.0.1
     react-native-pager-view: ^5.4.25
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
-    react-native-quick-crypto: ^0.4.4
-    react-native-random-values-jsi-helper: ^1.0.3
+    react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
     react-native-safe-area-context: 4.3.1
@@ -8119,10 +8109,10 @@ __metadata:
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
     react-native-ios-context-menu: 1.3.0
-    react-native-mmkv: ^2.3.3
+    react-native-mmkv: ^2.4.3
     react-native-pager-view: ^5.4.25
     react-native-quick-base64: ^2.0.2
-    react-native-random-values-jsi-helper: ^1.0.3
+    react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
     react-native-safe-area-context: 4.3.1
@@ -10538,13 +10528,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^17.0.31":
-  version: 17.0.45
-  resolution: "@types/node@npm:17.0.45"
-  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^9.4.6":
   version: 9.6.61
   resolution: "@types/node@npm:9.6.61"
@@ -12059,7 +12042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.1, ajv@npm:^8.6.3":
+"ajv@npm:^8.0.1, ajv@npm:^8.11.0, ajv@npm:^8.6.3":
   version: 8.11.0
   resolution: "ajv@npm:8.11.0"
   dependencies:
@@ -15647,7 +15630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.11.0, crypto-browserify@npm:^3.12.0":
+"crypto-browserify@npm:^3.11.0":
   version: 3.12.0
   resolution: "crypto-browserify@npm:3.12.0"
   dependencies:
@@ -18766,6 +18749,19 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 8acd08b9c7bc2e74d833ef6689d50e5118eff3ed6fbd0de0689005515eb7c15de00e781b258630e239a78df021eafdd9e7a5e573223072eb1d78c55e5d6618f2
+  languageName: node
+  linkType: hard
+
+"expo-build-properties@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "expo-build-properties@npm:0.2.0"
+  dependencies:
+    "@expo/config-plugins": ~4.1.4
+    ajv: ^8.11.0
+    semver: ^7.3.5
+  peerDependencies:
+    expo: "*"
+  checksum: 38a7e2b90556d614562bc3c5c84009887f6521f80045eaf1257a0480ebcdac48d402366c18e1821ae2f93052b5c5513d86488fb8874dc8d27949a87c6d590fd6
   languageName: node
   linkType: hard
 
@@ -29898,18 +29894,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-bignumber@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "react-native-bignumber@npm:0.1.7"
-  dependencies:
-    "@craftzdog/react-native-buffer": ^6.0.4
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: a78d0cd983f1457091dfb77f4a6abccfd5dce2622874b3ec3e3b10b9dadd15b34b9f4faffe963cad7458d4794de329bd6883baac6464b9f3ece93412d0ceff42
-  languageName: node
-  linkType: hard
-
 "react-native-blob-jsi-helper@npm:^0.2.2":
   version: 0.2.2
   resolution: "react-native-blob-jsi-helper@npm:0.2.2"
@@ -29917,6 +29901,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 7a3484c262f813c9275929fc2bab13f688cec2bb3c44a18b2a684197a7c93ca5df1df3a80f118aaa14c0bee10cc32cc60393e766ed8105f9e666e9f96d951e15
+  languageName: node
+  linkType: hard
+
+"react-native-blob-jsi-helper@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "react-native-blob-jsi-helper@npm:0.2.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 0464f3629abc31f3cc8124388db6c66f5d3b26ca9405038c03c943df83ca94b8220059153c6230ee69b2ed8cc91aa566e2844398b2bc128ca593bda7ff982440
   languageName: node
   linkType: hard
 
@@ -29952,7 +29946,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-crypto@npm:^2.0.1":
+"react-native-crypto@npm:^2.0.1, react-native-crypto@npm:^2.2.0":
   version: 2.2.0
   resolution: "react-native-crypto@npm:2.2.0"
   dependencies:
@@ -30068,23 +30062,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:2.3.3":
-  version: 2.3.3
-  resolution: "react-native-mmkv@npm:2.3.3"
+"react-native-mmkv@npm:^2.4.3":
+  version: 2.4.3
+  resolution: "react-native-mmkv@npm:2.4.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: d0d5861af23d6aea995f16cd265f8fa69d9d6b125656c245b4fe5a057e2f7b99d73ebc181e040d21b40e5814a136da63cce19b4c0815b37a94ed30a5fddf6e61
-  languageName: node
-  linkType: hard
-
-"react-native-mmkv@npm:^2.3.3":
-  version: 2.4.1
-  resolution: "react-native-mmkv@npm:2.4.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: f6e947a176a75aa4aef2d355dec46da3a9a4667e2a1e8f71f73ed06259293f46afbe5ef9dca822f9ab5b6b4d3e258866f68ccb0aff53803b0f0472f2d3feb6fd
+  checksum: d01cda411babfaabd6389c26d0ea403b36b5203d82b8a4fe4800317d4192aaa805fcafedd5945692c7893c6c95b01e1d57e8871a76dcd92ab594ed9c84c5faa3
   languageName: node
   linkType: hard
 
@@ -30178,31 +30162,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "react-native-quick-crypto@npm:0.4.4"
-  dependencies:
-    "@craftzdog/react-native-buffer": ^6.0.4
-    "@types/node": ^17.0.31
-    crypto-browserify: ^3.12.0
-    events: ^3.3.0
-    react-native-quick-base64: ^2.0.2
-    stream-browserify: ^3.0.0
-    string_decoder: ^1.3.0
+"react-native-random-values-jsi-helper@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "react-native-random-values-jsi-helper@npm:1.0.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: ba001221e6c212a1a2521d1c5c26fd0284810d3a52e4fa1439016e30443917d3eb103df6da60f746f27657a741863580abcb6f4dbebdd4dd9521024232c8c27d
-  languageName: node
-  linkType: hard
-
-"react-native-random-values-jsi-helper@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "react-native-random-values-jsi-helper@npm:1.0.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 11180da51dea39d591d275ac9d4c98fa5386959aa2ec264a5286fc8e4ccc08d731bb117a66232bffeec476ba86302fe7912a2d3faeefa64a4296a08edbfc02f9
+  checksum: 27b1bd7b971b59f0d21ddbe92ad49ca461a94f45dc4660a9ee3a64aebc637039b0c92b3aba54c87c39483d44964ecea556af77a76388756d5bf5385283b9c5b9
   languageName: node
   linkType: hard
 
@@ -33197,7 +33163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0, string_decoder@npm:~1.3.0":
+"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:~1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:

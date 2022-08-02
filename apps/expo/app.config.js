@@ -133,7 +133,6 @@ export default {
           "$(PRODUCT_NAME) needs to access your camera roll so that you can upload photos on Showtime.",
       },
     ],
-    ["./plugins/with-compile-sdk-version.js", 31],
     [
       "./plugins/with-pick-first.js",
       {
@@ -178,6 +177,17 @@ export default {
         "./assets/fonts/SpaceGrotesk-Bold.otf",
         "./assets/fonts/SpaceGrotesk-Regular.otf",
       ],
+    ],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          compileSdkVersion: 31,
+          targetSdkVersion: 31,
+          buildToolsVersion: "31.0.0",
+          kotlinVersion: "1.6.10",
+        },
+      },
     ],
   ],
   hooks: {
