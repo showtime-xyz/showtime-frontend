@@ -87,7 +87,7 @@ export function UserProvider({ children }: UserProviderProps) {
   // TODO: temp workaround - https://github.com/rainbow-me/rainbow/issues/3870
   useEffect(() => {
     if (!isMounted.current) {
-      disconnect();
+      disconnect?.();
       isMounted.current = true;
     }
   }, [disconnect]);

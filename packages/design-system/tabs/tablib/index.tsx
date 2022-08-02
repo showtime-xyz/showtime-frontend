@@ -97,7 +97,9 @@ const Root = ({
   };
 
   useEffect(() => {
-    if (typeof indexProp === "number") index.value = indexProp;
+    if (typeof indexProp === "number") {
+      pagerRef.current.setPage(indexProp);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indexProp]);
 
@@ -228,7 +230,7 @@ const ListImpl = ({
 
   const scrollTo = (x) => {
     // @ts-ignore getNode will be removed in future, need to update typings
-    tabListRef.current.scrollTo({ x });
+    tabListRef.current?.scrollTo?.({ x });
   };
 
   useDerivedValue(() => {

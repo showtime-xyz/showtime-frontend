@@ -41,7 +41,7 @@ const editProfileValidationSchema = yup.object({
     .max(300)
     .required("about me is a required field")
     .typeError("Please enter a valid about me"),
-  name: yup.string().max(40).required().typeError("Please enter a valid name"),
+  name: yup.string().max(40),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
 
@@ -69,6 +69,8 @@ export const EditProfile = () => {
   const { width } = useWindowDimensions();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
+  const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
+    useState(false);
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -137,67 +139,79 @@ export const EditProfile = () => {
       default_owned_sort_id: values.default_owned_sort_id,
     };
 
-    try {
-      if (
-        values.coverPicture &&
-        values.coverPicture !== defaultValues.coverPicture
-      ) {
-        const coverPictureFormData = await getFileFormData(values.coverPicture);
-        const formData = new FormData();
-        if (coverPictureFormData) {
-          formData.append("image", coverPictureFormData);
+    const hasUserSubmittedLink =
+      newValues.website_url || links.some((l) => l.user_input);
 
-          await axios({
-            url: "/v1/profile/photo/cover",
-            method: "POST",
-            headers: {
-              "Content-Type": `multipart/form-data`,
-            },
-            data: formData,
-          });
+    if (!hasUserSubmittedLink) {
+      setHasNotSubmittedExternalLink(true);
+      setSelected(1);
+    } else {
+      setHasNotSubmittedExternalLink(false);
+
+      try {
+        if (
+          values.coverPicture &&
+          values.coverPicture !== defaultValues.coverPicture
+        ) {
+          const coverPictureFormData = await getFileFormData(
+            values.coverPicture
+          );
+          const formData = new FormData();
+          if (coverPictureFormData) {
+            formData.append("image", coverPictureFormData);
+
+            await axios({
+              url: "/v1/profile/photo/cover",
+              method: "POST",
+              headers: {
+                "Content-Type": `multipart/form-data`,
+              },
+              data: formData,
+            });
+          }
         }
-      }
 
-      if (
-        values.profilePicture &&
-        values.profilePicture !== defaultValues.profilePicture
-      ) {
-        const formData = new FormData();
+        if (
+          values.profilePicture &&
+          values.profilePicture !== defaultValues.profilePicture
+        ) {
+          const formData = new FormData();
 
-        const profilePictureFormData = await getFileFormData(
-          values.profilePicture
+          const profilePictureFormData = await getFileFormData(
+            values.profilePicture
+          );
+
+          if (profilePictureFormData) {
+            formData.append("image", profilePictureFormData);
+
+            await axios({
+              url: "/v1/profile/photo",
+              method: "POST",
+              headers: {
+                "Content-Type": `multipart/form-data`,
+              },
+              data: formData,
+            });
+          }
+        }
+
+        await axios({
+          url: "/v1/editname",
+          method: "POST",
+          data: newValues,
+        });
+
+        router.pop();
+
+        // TODO: optimise to make fewer API calls!
+        mutate(MY_INFO_ENDPOINT);
+        matchMutate(
+          (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
         );
-
-        if (profilePictureFormData) {
-          formData.append("image", profilePictureFormData);
-
-          await axios({
-            url: "/v1/profile/photo",
-            method: "POST",
-            headers: {
-              "Content-Type": `multipart/form-data`,
-            },
-            data: formData,
-          });
-        }
+      } catch (e) {
+        setError("submitError", { message: "Something went wrong" });
+        console.error("edit profile failed ", e);
       }
-
-      await axios({
-        url: "/v1/editname",
-        method: "POST",
-        data: newValues,
-      });
-
-      router.pop();
-
-      // TODO: optimise to make fewer API calls!
-      mutate(MY_INFO_ENDPOINT);
-      matchMutate(
-        (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
-      );
-    } catch (e) {
-      setError("submitError", { message: "Something went wrong" });
-      console.error("edit profile failed ", e);
     }
   };
   // cover down to twitter banner ratio: w:h=3:1
@@ -215,7 +229,7 @@ export const EditProfile = () => {
         <Tabs.Root
           onIndexChange={setSelected}
           tabListHeight={TAB_LIST_HEIGHT}
-          initialIndex={0}
+          index={selected}
           lazy
         >
           <Tabs.List
@@ -376,6 +390,12 @@ export const EditProfile = () => {
               asKeyboardAwareScrollView
               extraScrollHeight={extraScrollHeight}
             >
+              {hasNotSubmittedExternalLink ? (
+                <>
+                  <ErrorText>Please add atleast one link from below</ErrorText>
+                  <View tw="h-4" />
+                </>
+              ) : null}
               <Controller
                 control={control}
                 name="website_url"
