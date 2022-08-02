@@ -94,7 +94,7 @@ export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
   }
   return (
     <>
-      {nfts?.map((nft) => (
+      {nfts?.map((nft, index) => (
         <Text
           onPress={() => {
             router.push(
@@ -106,7 +106,9 @@ export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
           key={nft.id}
           tw="text-13 font-bold text-black dark:text-white"
         >
-          {`${nft.display_name}, `}
+          {index < nfts.length - 1
+            ? `${nft.display_name}, `
+            : `${nft.display_name}`}
         </Text>
       ))}
     </>
