@@ -11,7 +11,7 @@ import {
 type ViewabilityItemsContextType = any[];
 
 const viewabilityConfig = {
-  minimumViewTime: 100,
+  minimumViewTime: 50,
   itemVisiblePercentThreshold: 50,
 };
 
