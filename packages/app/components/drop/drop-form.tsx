@@ -27,6 +27,8 @@ import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
@@ -93,6 +95,7 @@ export const DropForm = () => {
     reValidateMode: "onChange",
     defaultValues,
   });
+  const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const {
@@ -107,6 +110,7 @@ export const DropForm = () => {
   const navigateToLogin = useNavigateToLogin();
   const { connected } = useWallet();
   const { data: userProfile } = useMyInfo();
+  const headerHeight = useHeaderHeight();
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -259,6 +263,7 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
+      {Platform.OS === "ios" ? <View style={{ height: headerHeight }} /> : null}
       <ScrollView
         tw="p-4"
         asKeyboardAwareScrollView
@@ -278,11 +283,11 @@ export const DropForm = () => {
                           const file = await pickFile({ mediaTypes: "all" });
                           onChange(file.file);
                         }}
-                        tw="h-84 w-84 items-center justify-center rounded-lg"
+                        tw="h-80 w-80 items-center justify-center rounded-lg"
                       >
                         {value ? (
                           <View>
-                            <Preview file={value} tw="h-84 w-84 rounded-2xl" />
+                            <Preview file={value} tw="h-80 w-80 rounded-2xl" />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row shadow-lg">
                                 <FlipIcon
@@ -364,6 +369,7 @@ export const DropForm = () => {
                           tw="flex-1"
                           label="Description"
                           multiline
+                          textAlignVertical="top"
                           placeholder="What is this NFT drop about?"
                           onBlur={onBlur}
                           helperText="You will not be able to edit this after the drop is created"
@@ -543,6 +549,8 @@ export const DropForm = () => {
               </View>
             ) : null}
           </View>
+
+          <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </ScrollView>
     </BottomSheetModalProvider>

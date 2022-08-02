@@ -67,6 +67,8 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.toast",
   "@showtime-xyz/universal.tooltip",
   "@showtime-xyz/universal.verification-badge",
+  "@shopify/flash-list",
+  "recyclerlistview",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";

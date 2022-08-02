@@ -27,7 +27,7 @@ export const useViewabilityMount = ({
   let isListFocused = useIsTabFocused();
 
   const loadPlayOrPause = useCallback(
-    async (shouldPlay) => {
+    async (shouldPlay: boolean) => {
       // if (__DEV__) console.log("📽 : loading ", shouldPlay, id, source.uri);
       if (!loaded.current) {
         await videoRef.current?.loadAsync(source, {

@@ -4,6 +4,7 @@ import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
 
 import { colors } from "design-system/tailwind";
 
+const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 export const MuteButton = ({
   muted,
   onPress,
@@ -14,6 +15,7 @@ export const MuteButton = ({
   return (
     <Pressable
       style={muteButtonStyle.style}
+      hitSlop={hitSlop}
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();

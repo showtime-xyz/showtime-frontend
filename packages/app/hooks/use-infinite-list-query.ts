@@ -39,7 +39,7 @@ export const useInfiniteListQuerySWR = <T>(
     isLoading,
   } = useSWRInfinite<T>(urlFunction, fetcher, {
     revalidateFirstPage: true,
-    suspense: true,
+    // suspense: true,
     refreshInterval,
     revalidateOnMount: true,
   });
