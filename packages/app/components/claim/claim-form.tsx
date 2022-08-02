@@ -95,9 +95,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   ) {
     return (
       <View tw="items-center px-10 text-center">
-        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-lg">Hold on!</Text>
+        <Text tw="py-4 text-lg text-gray-900 dark:text-gray-100">Hold on!</Text>
         <Text style={{ fontSize: 80 }}>✏️</Text>
-        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-base">
+        <Text tw="py-4 text-base text-gray-900 dark:text-gray-100">
           Please complete your profile before claiming the drop
         </Text>
         <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
