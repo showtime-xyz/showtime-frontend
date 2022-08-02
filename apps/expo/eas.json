@@ -8,12 +8,13 @@
         "image": "latest"
       },
       "env": {
-        "STAGE": "production"
+        "STAGE": "production",
+        "FLIPPER_DISABLE": true
       },
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "preview": {
@@ -29,7 +30,7 @@
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "development": {
@@ -44,7 +45,7 @@
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "simulator": {
@@ -57,7 +58,7 @@
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     }
   },
