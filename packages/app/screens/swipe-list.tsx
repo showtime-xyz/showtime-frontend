@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
@@ -32,18 +32,22 @@ export const SwipeListScreen = withColorScheme(() => {
   const [tab] = useParam("tab");
   useTrackPageViewed({ name: "Swipe List", type });
 
-  switch (type) {
-    case "profile":
-      return <ProfileSwipeList />;
-    case "trendingNFTs":
-      return <TrendingNFTsSwipeList />;
-    case "trendingCreator":
-      return <TrendingCreatorSwipeList />;
-    case "feed":
-      return <FeedSwipeList tab={tab} />;
-    default:
-      return null;
-  }
+  const renderComponent = () => {
+    switch (type) {
+      case "profile":
+        return <ProfileSwipeList />;
+      case "trendingNFTs":
+        return <TrendingNFTsSwipeList />;
+      case "trendingCreator":
+        return <TrendingCreatorSwipeList />;
+      case "feed":
+        return <FeedSwipeList tab={tab} />;
+      default:
+        return null;
+    }
+  };
+
+  return <Suspense fallback={null}>{renderComponent()}</Suspense>;
 });
 
 const FeedSwipeList = ({ tab }: { tab: Tab }) => {
