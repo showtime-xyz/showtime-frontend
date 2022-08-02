@@ -25,7 +25,8 @@
         "image": "latest"
       },
       "env": {
-        "STAGE": "staging"
+        "STAGE": "staging",
+        "FLIPPER_DISABLE": "true"
       },
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
