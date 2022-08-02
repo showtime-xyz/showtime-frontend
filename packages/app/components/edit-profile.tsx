@@ -68,7 +68,13 @@ export const EditProfile = () => {
   const matchMutate = useMatchMutate();
   const router = useRouter();
   const [selected, setSelected] = useState(() =>
-    userHasIncompleteExternalLinks(user?.data?.profile) ? 1 : 0
+    !user?.data?.profile.username ||
+    !user?.data?.profile.bio ||
+    !user?.data?.profile.img_url
+      ? 0
+      : userHasIncompleteExternalLinks(user?.data?.profile)
+      ? 1
+      : 0
   );
   const { isValid, validate } = useValidateUsername();
   const insets = useSafeAreaInsets();
