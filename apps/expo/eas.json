@@ -9,7 +9,7 @@
       },
       "env": {
         "STAGE": "production",
-        "FLIPPER_DISABLE": true
+        "FLIPPER_DISABLE": "true"
       },
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
