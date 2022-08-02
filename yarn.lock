@@ -2375,6 +2375,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@craftzdog/react-native-buffer@npm:^6.0.4":
+  version: 6.0.5
+  resolution: "@craftzdog/react-native-buffer@npm:6.0.5"
+  dependencies:
+    ieee754: ^1.2.1
+    react-native-quick-base64: ^2.0.5
+  checksum: 921b8bc7f84778e355e81e475792399276d611a346a7e51b6266a45cf4aa82194beb3a8106af796ed143d958c8476070c59e3720c0eec0a3c31e368fbb08b350
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -8011,10 +8021,10 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.3
+    react-native-bignumber: ^0.1.8
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
-    react-native-crypto: ^2.2.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.5.0
@@ -8027,6 +8037,7 @@ __metadata:
     react-native-pager-view: ^5.4.25
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
+    react-native-quick-crypto: ^0.4.5
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.9.1
@@ -10595,6 +10606,13 @@ __metadata:
   version: 16.11.35
   resolution: "@types/node@npm:16.11.35"
   checksum: c06e8716f579ba41e65f27bfc8a90276f2b0c3324f33372dab75ca73a11971da12dbfb89fffd2289d890b3ec31136c55c2bf6afdf5ae06183d0f4590512ec3db
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^17.0.31":
+  version: 17.0.45
+  resolution: "@types/node@npm:17.0.45"
+  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
   languageName: node
   linkType: hard
 
@@ -15643,7 +15661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.11.0":
+"crypto-browserify@npm:^3.11.0, crypto-browserify@npm:^3.12.0":
   version: 3.12.0
   resolution: "crypto-browserify@npm:3.12.0"
   dependencies:
@@ -29848,6 +29866,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-bignumber@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "react-native-bignumber@npm:0.1.8"
+  dependencies:
+    "@craftzdog/react-native-buffer": ^6.0.4
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 8ef7b59d324b805a436dc7e740baa90e10effbbaf949fec7f32030a9ee8b62aeb67ac4079651cb02cf282281141b399c2a989cce5b789b477785b3f3010ea4e1
+  languageName: node
+  linkType: hard
+
 "react-native-blob-jsi-helper@npm:^0.2.2":
   version: 0.2.2
   resolution: "react-native-blob-jsi-helper@npm:0.2.2"
@@ -29900,7 +29930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-crypto@npm:^2.0.1, react-native-crypto@npm:^2.2.0":
+"react-native-crypto@npm:^2.0.1":
   version: 2.2.0
   resolution: "react-native-crypto@npm:2.2.0"
   dependencies:
@@ -30113,6 +30143,24 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 964599ad68d54dd741357850c72b4a5e08f247fa294590f18866896662107b734b6810703fdd972560cee8087095f14f06fc6ef69944c59c41dbbd885a7832bb
+  languageName: node
+  linkType: hard
+
+"react-native-quick-crypto@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "react-native-quick-crypto@npm:0.4.5"
+  dependencies:
+    "@craftzdog/react-native-buffer": ^6.0.4
+    "@types/node": ^17.0.31
+    crypto-browserify: ^3.12.0
+    events: ^3.3.0
+    react-native-quick-base64: ^2.0.2
+    stream-browserify: ^3.0.0
+    string_decoder: ^1.3.0
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 7a09112c82b501b1ac37d70866cb2f8e5825abb89d72ced3deb7a37265218f0dc4e8fceb7afd708e9683475076284210621cbb49b9e020f0cf1bf46693c317f8
   languageName: node
   linkType: hard
 
@@ -33117,7 +33165,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:~1.3.0":
+"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0, string_decoder@npm:~1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
