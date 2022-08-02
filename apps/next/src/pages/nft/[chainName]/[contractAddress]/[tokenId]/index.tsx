@@ -25,6 +25,7 @@ export async function getServerSideProps(context) {
             title: nft.token_name + " | Showtime",
             description: nft.token_description,
             image: imageUrl,
+            deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
           },
         },
       };
