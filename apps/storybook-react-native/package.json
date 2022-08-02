@@ -42,7 +42,7 @@
     "expo-asset": "~8.5.0",
     "expo-av": "next",
     "expo-blur": "~11.2.0",
-    "expo-community-flipper": "^45.0.0",
+    "expo-community-flipper": "^45.1.0",
     "expo-constants": "~13.2.3",
     "expo-dev-client": "~1.1.0",
     "expo-font": "~10.2.0",

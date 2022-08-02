@@ -7986,7 +7986,7 @@ __metadata:
     expo-build-properties: ^0.2.0
     expo-camera: ~12.3.0
     expo-cli: ^6.0.1
-    expo-community-flipper: ^45.0.0
+    expo-community-flipper: ^45.1.0
     expo-constants: ~13.2.3
     expo-dev-client: ~1.1.0
     expo-device: ~4.3.0
@@ -8167,7 +8167,7 @@ __metadata:
     expo-asset: ~8.5.0
     expo-av: next
     expo-blur: ~11.2.0
-    expo-community-flipper: ^45.0.0
+    expo-community-flipper: ^45.1.0
     expo-constants: ~13.2.3
     expo-dev-client: ~1.1.0
     expo-font: ~10.2.0
@@ -18862,13 +18862,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-community-flipper@npm:^45.0.0":
-  version: 45.0.0
-  resolution: "expo-community-flipper@npm:45.0.0"
+"expo-community-flipper@npm:^45.1.0":
+  version: 45.1.0
+  resolution: "expo-community-flipper@npm:45.1.0"
   dependencies:
     "@expo/config-plugins": ^4.0.15
     resolve-from: ^5.0.0
-  checksum: 4735d801a0f9032fc4ca87a43e95194aae6533bd8187832da25c0896c884d46591d4c0f203bc25606736b29452b972aa4bd7da110e57b1e1fd84f5acf586d8e1
+  checksum: 723b2d249bcbde051b141e8b14c78b0d7104b901243953b0a139c04088566ac751f062ec01b47c5fe62488e02ec77b23b2ba75425ca91764f0322b94696cd2c6
   languageName: node
   linkType: hard
 
