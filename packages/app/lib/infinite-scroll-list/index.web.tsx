@@ -1,6 +1,6 @@
 import React, { CSSProperties, useMemo } from "react";
 
-import { VirtuosoGrid } from "react-virtuoso";
+import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   VirtuosoGridProps,
   GridListProps,
@@ -27,7 +27,7 @@ export function InfiniteScrollList<T extends any>({
   ListFooterComponent,
   ItemSeparatorComponent,
   ListEmptyComponent,
-  numColumns,
+  numColumns = 1,
   overscan,
 }: InfiniteScrollListWebProps<T>) {
   const renderItemContent = React.useCallback(
@@ -59,7 +59,7 @@ export function InfiniteScrollList<T extends any>({
     [data, ItemSeparatorComponent, renderItem]
   );
 
-  const components = useMemo<GridComponents<T>>(
+  const gridComponents = useMemo<GridComponents<T>>(
     () => ({
       Item: (props: ItemContainerProps) => (
         <ItemContainer {...props} numColumns={numColumns} />
@@ -73,16 +73,41 @@ export function InfiniteScrollList<T extends any>({
   }
   return (
     <>
-      {React.isValidElement(ListHeaderComponent) && ListHeaderComponent}
-      <VirtuosoGrid
-        useWindowScroll
-        totalCount={data?.length || 0}
-        components={components}
-        endReached={onEndReached}
-        itemContent={renderItemContent}
-        overscan={overscan}
-      />
-      {React.isValidElement(ListFooterComponent) && ListFooterComponent}
+      {React.isValidElement(ListHeaderComponent) &&
+        numColumns > 1 &&
+        ListHeaderComponent}
+
+      {numColumns === 1 ? (
+        <Virtuoso
+          useWindowScroll
+          totalCount={data?.length || 0}
+          endReached={onEndReached}
+          itemContent={renderItemContent}
+          components={{
+            Footer: () =>
+              React.isValidElement(ListFooterComponent)
+                ? ListFooterComponent
+                : null,
+            Header: () =>
+              React.isValidElement(ListHeaderComponent)
+                ? ListHeaderComponent
+                : null,
+          }}
+          overscan={overscan}
+        />
+      ) : (
+        <VirtuosoGrid
+          useWindowScroll
+          totalCount={data?.length || 0}
+          components={gridComponents}
+          endReached={onEndReached}
+          itemContent={renderItemContent}
+          overscan={overscan}
+        />
+      )}
+      {React.isValidElement(ListFooterComponent) &&
+        numColumns > 1 &&
+        ListFooterComponent}
     </>
   );
 }

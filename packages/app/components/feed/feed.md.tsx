@@ -209,6 +209,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
             main: CARD_HEIGHT,
             reverse: CARD_HEIGHT,
           }}
+          onEndReached={fetchMore}
           ListEmptyComponent={
             isLoading ? (
               <View tw="mx-auto p-10">
