@@ -36,7 +36,11 @@ const editProfileValidationSchema = yup.object({
     .min(2)
     .required()
     .typeError("Please enter a valid username"),
-  bio: yup.string().max(300).required().typeError("Please enter a valid bio"),
+  bio: yup
+    .string()
+    .max(300)
+    .required("about me is a required field")
+    .typeError("Please enter a valid about me"),
   name: yup.string().max(40).required().typeError("Please enter a valid name"),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
