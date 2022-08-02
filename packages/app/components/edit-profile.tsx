@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -31,9 +31,16 @@ import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 const editProfileValidationSchema = yup.object({
-  username: yup.string().min(2).nullable(),
-  bio: yup.string().max(300).nullable(),
+  username: yup
+    .string()
+    .min(2)
+    .required()
+    .typeError("Please enter a valid username"),
+  bio: yup.string().max(300).required().typeError("Please enter a valid bio"),
+  name: yup.string().max(40).required().typeError("Please enter a valid name"),
+  profilePicture: yup.mixed().required("Please add a profile picture"),
 });
+
 const tabs = ["Profile", "Links", "Page Settings"];
 
 const nftList = [
@@ -264,27 +271,36 @@ export const EditProfile = () => {
                   control={control}
                   name="profilePicture"
                   render={({ field: { onChange, value } }) => (
-                    <Pressable
-                      onPress={async () => {
-                        const file = await pickFile({ mediaTypes: "image" });
-                        onChange(file.file);
-                      }}
-                      style={tw.style(
-                        "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
-                      )}
-                    >
-                      {value && (
-                        <Preview
-                          file={value}
-                          tw={"h-[94px] w-[94px] rounded-full"}
-                        />
-                      )}
-                      <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                        <View tw="rounded-full bg-gray-800/70 p-2">
-                          <Upload height={20} width={20} color={colors.white} />
+                    <>
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({ mediaTypes: "image" });
+                          onChange(file.file);
+                        }}
+                        style={tw.style(
+                          "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
+                        )}
+                      >
+                        {value && (
+                          <Preview
+                            file={value}
+                            tw={"h-[94px] w-[94px] rounded-full"}
+                          />
+                        )}
+                        <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                          <View tw="rounded-full bg-gray-800/70 p-2">
+                            <Upload
+                              height={20}
+                              width={20}
+                              color={colors.white}
+                            />
+                          </View>
                         </View>
-                      </View>
-                    </Pressable>
+                      </Pressable>
+                      {errors.profilePicture?.message ? (
+                        <ErrorText>{errors.profilePicture.message}</ErrorText>
+                      ) : null}
+                    </>
                   )}
                 />
 
