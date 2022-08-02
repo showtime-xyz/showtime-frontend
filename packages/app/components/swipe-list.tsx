@@ -14,7 +14,6 @@ import {
 } from "react-native-reanimated";
 
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { FeedItem } from "app/components/feed-item";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
@@ -26,7 +25,7 @@ import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
-import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
+import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const SCROLL_BAR_WIDTH = 15;
@@ -206,7 +205,7 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <ViewabilityTrackerRecyclerList
+      {/* <ViewabilityTrackerRecyclerList
         layoutProvider={_layoutProvider}
         dataProvider={dataProvider}
         rowRenderer={_rowRenderer}
@@ -220,6 +219,29 @@ export const SwipeList = ({
         scrollViewProps={scrollViewProps}
         extendedState={extendedState}
         layoutSize={layoutSize}
+      /> */}
+      <ViewabilityTrackerFlashList
+        data={data}
+        onEndReached={fetchMore}
+        initialScrollIndex={initialScrollIndex}
+        ref={listRef}
+        extraData={extendedState}
+        renderItem={({ item }) => (
+          <FeedItem
+            nft={item}
+            {...{
+              itemHeight,
+              bottomPadding,
+              detailStyle,
+              toggleHeader,
+              hideHeader,
+              showHeader,
+              listId,
+            }}
+          />
+        )}
+        estimatedItemSize={itemHeight}
+        pagingEnabled
       />
     </VideoConfigContext.Provider>
   );

@@ -82,7 +82,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full flex-1">
+      <View tw="w-full" style={{ height: itemHeight }}>
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (
