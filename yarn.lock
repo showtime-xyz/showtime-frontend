@@ -7011,6 +7011,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@shopify/flash-list@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@shopify/flash-list@npm:1.2.0"
+  dependencies:
+    recyclerlistview: 4.1.1
+    tslib: 2.4.0
+  peerDependencies:
+    "@babel/runtime": "*"
+    react: "*"
+    react-native: "*"
+  checksum: 5aceaa61b17ae61ade613bf6107e5de4e3f3e03f4d2e6cce22de4bfe65fd7f9f9410b5a3a356cdc83f50e8d58706078090300dd0bfce068072697b426c0b73db
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.accordion@npm:^0.0.24":
   version: 0.0.24
   resolution: "@showtime-xyz/universal.accordion@npm:0.0.24"
@@ -7821,6 +7835,7 @@ __metadata:
     "@react-three/fiber": ^8.2.1
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^4.2.0
+    "@shopify/flash-list": ^1.2.0
     "@showtime-xyz/universal.accordion": ^0.0.24
     "@showtime-xyz/universal.activity-indicator": ^0.0.19
     "@showtime-xyz/universal.alert": ^0.0.33
@@ -30919,7 +30934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recyclerlistview@npm:^4.1.1":
+"recyclerlistview@npm:4.1.1, recyclerlistview@npm:^4.1.1":
   version: 4.1.1
   resolution: "recyclerlistview@npm:4.1.1"
   dependencies:
@@ -34529,17 +34544,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.4.0, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.0.0, tslib@npm:^1.10.0, tslib@npm:^1.6.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
