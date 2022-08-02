@@ -61,7 +61,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
         Platform.OS !== "web" && animatedStyle,
       ]}
     >
-      <Text tw="capitalize text-sm font-bold text-gray-900 dark:text-white">
+      <Text tw="text-sm font-bold capitalize text-gray-900 dark:text-white">
         {name}
       </Text>
       {count ? (
