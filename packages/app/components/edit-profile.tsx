@@ -39,7 +39,7 @@ const editProfileValidationSchema = yup.object({
   bio: yup
     .string()
     .max(300)
-    .required("about me is a required field")
+    .required("About me is a required field")
     .typeError("Please enter a valid about me"),
   name: yup.string().max(40).nullable(),
   profilePicture: yup.mixed().required("Please add a profile picture"),
