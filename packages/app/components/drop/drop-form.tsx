@@ -157,7 +157,7 @@ export const DropForm = () => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="justify-center items-center px-10 text-center flex-1">
+      <View tw="flex-1 items-center justify-center px-10 text-center">
         <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
           Hold on!
         </Text>
