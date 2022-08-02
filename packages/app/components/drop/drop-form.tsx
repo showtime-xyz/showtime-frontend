@@ -35,6 +35,7 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
+  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -151,7 +152,7 @@ export const DropForm = () => {
 
   if (
     !userProfile?.data.profile.username ||
-    !userProfile?.data.profile.name ||
+    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
     !userProfile?.data.profile.bio ||
     !userProfile?.data.profile.img_url
   ) {

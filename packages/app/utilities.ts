@@ -667,3 +667,13 @@ export const ledgerWalletHack = (signature?: string) => {
 
   return signature;
 };
+
+export const userHasIncompleteExternalLinks = (profile: {
+  links: Profile["links"];
+  website_url: Profile["website_url"];
+}) => {
+  if (!profile.website_url || !profile.links.some((l) => l.user_input)) {
+    return true;
+  }
+  return false;
+};

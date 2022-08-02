@@ -31,6 +31,7 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
+  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
@@ -89,7 +90,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
   if (
     !userProfile?.data.profile.username ||
-    !userProfile?.data.profile.name ||
+    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
     !userProfile?.data.profile.bio ||
     !userProfile?.data.profile.img_url
   ) {
