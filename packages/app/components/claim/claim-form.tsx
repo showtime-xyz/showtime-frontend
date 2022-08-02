@@ -95,10 +95,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="items-center px-10 text-center">
-        <Text tw="py-4 text-lg text-gray-900 dark:text-gray-100">Hold on!</Text>
-        <Text style={{ fontSize: 80 }}>✏️</Text>
-        <Text tw="py-4 text-base text-gray-900 dark:text-gray-100">
+      <View tw="justify-center items-center px-10 text-center flex-1">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          Hold on!
+        </Text>
+        <Text style={{ fontSize: 100 }}>✏️</Text>
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
           Please complete your profile before claiming the drop
         </Text>
         <Button tw="my-4" onPress={() => router.push("/profile/edit")}>

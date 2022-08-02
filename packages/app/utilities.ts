@@ -674,8 +674,6 @@ export const userHasIncompleteExternalLinks = (profile?: {
 }) => {
   if (
     profile &&
-    profile.website_url &&
-    profile.links &&
     (profile.website_url || profile.links.some((l) => l.user_input))
   ) {
     return false;
