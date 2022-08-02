@@ -52,7 +52,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     address: nft?.data.item.creator_address,
   });
 
-  const { follow } = useMyInfo();
+  const { follow, data: userProfile } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
@@ -83,6 +83,26 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     return (
       <View tw="p-4">
         <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  if (
+    !userProfile?.data.profile.username ||
+    !userProfile?.data.profile.name ||
+    !userProfile?.data.profile.bio ||
+    !userProfile?.data.profile.img_url
+  ) {
+    return (
+      <View tw="items-center px-10 text-center">
+        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-lg">Hold on!</Text>
+        <Text style={{ fontSize: 80 }}>✏️</Text>
+        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-base">
+          Please complete your profile before claiming the drop
+        </Text>
+        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
+          Complete your profile
+        </Button>
       </View>
     );
   }

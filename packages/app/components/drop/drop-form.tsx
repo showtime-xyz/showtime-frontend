@@ -21,6 +21,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
@@ -105,6 +106,7 @@ export const DropForm = () => {
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
   const { connected } = useWallet();
+  const { data: userProfile } = useMyInfo();
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -139,6 +141,26 @@ export const DropForm = () => {
     return (
       <View tw="p-4">
         <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  if (
+    !userProfile?.data.profile.username ||
+    !userProfile?.data.profile.name ||
+    !userProfile?.data.profile.bio ||
+    !userProfile?.data.profile.img_url
+  ) {
+    return (
+      <View tw="items-center px-10 text-center">
+        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-lg">Hold on!</Text>
+        <Text style={{ fontSize: 80 }}>✏️</Text>
+        <Text tw="py-4 dark:text-gray-100 text-gray-900 text-base">
+          Please complete your profile before claiming the drop
+        </Text>
+        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
+          Complete your profile
+        </Button>
       </View>
     );
   }

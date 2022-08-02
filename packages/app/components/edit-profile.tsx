@@ -227,7 +227,7 @@ export const EditProfile = () => {
             <SelectedTabIndicator />
           </Tabs.List>
           <Tabs.Pager
-            tw="web:max-h-60vh"
+            tw="web:h-55vh"
             style={{
               overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
             }}
