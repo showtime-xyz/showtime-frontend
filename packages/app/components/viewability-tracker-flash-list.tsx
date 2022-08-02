@@ -38,13 +38,20 @@ export const ViewabilityTrackerFlashList = forwardRef(
     );
 
     const renderItem = useCallback(
-      (params: any) => (
-        <ItemKeyContext.Provider
-          value={keyExtractor?.(params.item, params.index)}
-        >
-          {_renderItem?.(params)}
-        </ItemKeyContext.Provider>
-      ),
+      (params: any) => {
+        return (
+          <ItemKeyContext.Provider
+            value={
+              keyExtractor
+                ? keyExtractor(params.item, params.index)
+                : params.index
+            }
+          >
+            {_renderItem?.(params)}
+          </ItemKeyContext.Provider>
+        );
+      },
+
       [_renderItem, keyExtractor]
     );
 
