@@ -41,7 +41,7 @@ const editProfileValidationSchema = yup.object({
     .max(300)
     .required("about me is a required field")
     .typeError("Please enter a valid about me"),
-  name: yup.string().max(40),
+  name: yup.string().max(40).nullable(),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
 
@@ -245,7 +245,7 @@ export const EditProfile = () => {
             <SelectedTabIndicator />
           </Tabs.List>
           <Tabs.Pager
-            tw="web:h-55vh"
+            tw="web:h-58vh"
             style={{
               overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
             }}
@@ -516,7 +516,6 @@ export const EditProfile = () => {
             disabled={isSubmitting}
             tw={isSubmitting ? "opacity-50" : ""}
             onPress={handleSubmit(handleSubmitForm)}
-            size="regular"
           >
             {isSubmitting ? "Submitting..." : "Done"}
           </Button>
