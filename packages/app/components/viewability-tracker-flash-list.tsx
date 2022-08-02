@@ -35,7 +35,6 @@ export const ViewabilityTrackerFlashList = forwardRef(
 
           const newWindow = [prevIndex, visibleIndex, nextIndex];
           visibleItems.value = newWindow;
-          console.log("new visible window ", newWindow);
         }
       },
       [props.data, visibleItems]
