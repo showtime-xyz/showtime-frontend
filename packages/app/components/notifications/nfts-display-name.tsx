@@ -29,88 +29,20 @@ export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
       </Text>
     );
   }
-  if (nfts.length === 2) {
-    const nft = nfts[0];
-    const nft_1 = nfts[1];
 
-    return (
-      <>
-        <Text
-          onPress={() => {
-            router.push(getNFTLink(nft));
-          }}
-          key={nft.id}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {nft.display_name}
-        </Text>
-        {` and `}
-        <Text
-          onPress={() => {
-            router.push(getNFTLink(nft_1));
-          }}
-          key={nft_1.id}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {nft_1.display_name}
-        </Text>
-      </>
-    );
-  }
-  if (nfts.length === 3) {
-    const nft = nfts[0];
-    const nft_1 = nfts[1];
-    const nft_2 = nfts[2];
-
-    return (
-      <>
-        <Text
-          onPress={() => {
-            router.push(getNFTLink(nft));
-          }}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {nft.display_name}
-        </Text>
-        {`, `}
-        <Text
-          onPress={() => {
-            router.push(getNFTLink(nft_1));
-          }}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {nft_1.display_name}
-        </Text>
-        <Text
-          onPress={() => {
-            router.push(getNFTLink(nft_2));
-          }}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {nft_2.display_name}
-        </Text>
-      </>
-    );
-  }
+  const nft = nfts[0];
   return (
     <>
-      {nfts?.map((nft, index) => (
-        <Text
-          onPress={() => {
-            router.push(
-              `/nft/${findTokenChainName(nft?.chain_identifier)}/${
-                nft?.contract_address
-              }/${nft?.token_identifier}`
-            );
-          }}
-          key={nft.id}
-          tw="text-13 font-bold text-black dark:text-white"
-        >
-          {index < nfts.length - 1
-            ? `${nft.display_name}, `
-            : `${nft.display_name}`}
-        </Text>
-      ))}
+      <Text
+        onPress={() => {
+          router.push(getNFTLink(nft));
+        }}
+        key={nft.id}
+        tw="text-13 font-bold text-black dark:text-white"
+      >
+        {nft.display_name}
+      </Text>
+      {` and more`}
     </>
   );
 };
