@@ -28,8 +28,6 @@ import { getMediaUrl } from "app/utilities";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 
-const mediaMaxHeightRelativeToScreen = 1;
-
 export type FeedItemProps = {
   nft: NFT;
   detailStyle?: StyleProp<ViewStyle>;
@@ -66,12 +64,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       ? 1
       : Number(nft.token_aspect_ratio));
 
-  const mediaContainerHeight = Math.min(
-    mediaHeight,
-    itemHeight * mediaMaxHeightRelativeToScreen
-  );
-
-  mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
+  mediaHeight = Math.min(mediaHeight, itemHeight - detailHeight);
 
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
@@ -82,7 +75,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full flex-1">
+      <View tw="w-full" style={{ height: itemHeight }}>
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (
