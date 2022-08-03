@@ -24,13 +24,14 @@ import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
-export const Notifications = () => {
+export const Notifications = ({ useWindowScroll = true }) => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
+
   const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState<Pick<Actor, "profile_id" | "username">[]>(
@@ -92,7 +93,7 @@ export const Notifications = () => {
   return (
     <>
       <InfiniteScrollList
-        useWindowScroll={false}
+        useWindowScroll={useWindowScroll}
         data={data}
         style={Platform.select({
           native: { height: flatListHeight },
