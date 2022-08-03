@@ -9,11 +9,10 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ConnectButton } from "app/components/connect-button";
 import { Media } from "app/components/media";
+import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -23,6 +22,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
@@ -40,8 +40,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
-  const { connected } = useWallet();
   const navigateToLogin = useNavigateToLogin();
+  const { isMagic } = useWeb3();
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -106,17 +106,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
           Complete your profile
         </Button>
-      </View>
-    );
-  }
-
-  // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected) {
-    return (
-      <View tw="p-4">
-        <ConnectButton
-          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
-        />
       </View>
     );
   }
@@ -265,6 +254,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>
           </View>
+
+          {state.signaturePrompt && !isMagic ? (
+            <MissingSignatureMessage />
+          ) : null}
 
           {state.error ? (
             <View tw="mt-4">
