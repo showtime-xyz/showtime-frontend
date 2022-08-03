@@ -8,7 +8,7 @@ import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
+import { BYPASS_EMAIL, LIST_CURRENCIES, SORT_FIELDS } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
 import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
@@ -61,26 +61,12 @@ export const getProfileImage = (profile?: Profile) => {
   return profile?.img_url ?? DEFAULT_PROFILE_PIC;
 };
 
-export const SORT_FIELDS = {
-  LIKE_COUNT: { label: "Popularity", key: "like_count", id: 1, value: 1 },
-  NEWEST: {
-    label: "Newest",
-    key: "newest",
-    id: 2,
-    value: 2,
-  },
-  OLDEST: {
-    label: "Oldest",
-    key: "oldest",
-    id: 3,
-    value: 3,
-  },
-  COMMENT_COUNT: { label: "Comments", key: "comment_count", id: 4, value: 4 },
-  // CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
-};
-
 export const getSortFields = () => {
-  return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
+  return [
+    ...Object.keys(SORT_FIELDS).map(
+      (key: string) => SORT_FIELDS[key as keyof typeof SORT_FIELDS]
+    ),
+  ];
 };
 
 export const getBiconomy = async (connector: any, provider: any) => {
@@ -170,10 +156,13 @@ export const overrideMagicInstance = (email: string) => {
       customNodeOptions.chainId = 80001;
     }
 
-    const testMagic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
-      network: customNodeOptions,
-      testMode: true,
-    });
+    const testMagic = new Magic(
+      (process.env as any).NEXT_PUBLIC_MAGIC_PUB_KEY,
+      {
+        network: customNodeOptions,
+        testMode: true,
+      }
+    );
     return testMagic;
   }
 
@@ -422,7 +411,7 @@ export const getBidLink = (item: NFT) => {
       return `https://www.hicetnunc.art/objkt/${item.token_id}`;
     default:
       return `https://opensea.io/assets/${
-        item.chain_identifier == 137 ? "matic/" : ""
+        item.chain_identifier == "137" ? "matic/" : ""
       }${item.contract_address}/${
         item.token_id
       }?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`;
@@ -667,6 +656,24 @@ export const ledgerWalletHack = (signature?: string) => {
 
   return signature;
 };
+
+export function isClassComponent(component: any) {
+  return (
+    typeof component === "function" && !!component.prototype.isReactComponent
+  );
+}
+
+export function isFunctionComponent(component: any) {
+  return (
+    typeof component === "function" &&
+    String(component).includes("return React.createElement")
+  );
+}
+
+export function isReactComponent(component: any) {
+  if (!component) return false;
+  return isClassComponent(component) || isFunctionComponent(component);
+}
 
 export const userHasIncompleteExternalLinks = (profile?: {
   links: Profile["links"];

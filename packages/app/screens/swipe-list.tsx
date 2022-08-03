@@ -1,4 +1,4 @@
-import { useMemo, Suspense } from "react";
+import { useMemo } from "react";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
@@ -29,28 +29,23 @@ type Query = {
 export const SwipeListScreen = withColorScheme(() => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
-  const [tab] = useParam("tab");
   useTrackPageViewed({ name: "Swipe List", type });
 
-  const renderComponent = () => {
-    switch (type) {
-      case "profile":
-        return <ProfileSwipeList />;
-      case "trendingNFTs":
-        return <TrendingNFTsSwipeList />;
-      case "trendingCreator":
-        return <TrendingCreatorSwipeList />;
-      case "feed":
-        return <FeedSwipeList tab={tab} />;
-      default:
-        return null;
-    }
-  };
-
-  return <Suspense fallback={null}>{renderComponent()}</Suspense>;
+  switch (type) {
+    case "profile":
+      return <ProfileSwipeList />;
+    case "trendingNFTs":
+      return <TrendingNFTsSwipeList />;
+    case "trendingCreator":
+      return <TrendingCreatorSwipeList />;
+    case "feed":
+      return <FeedSwipeList />;
+    default:
+      return null;
+  }
 });
 
-const FeedSwipeList = ({ tab }: { tab: Tab }) => {
+const FeedSwipeList = () => {
   const { useParam } = createParam<Query>();
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");

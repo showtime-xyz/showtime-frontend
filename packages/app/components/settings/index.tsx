@@ -23,8 +23,8 @@ import {
   TabScrollView,
   TabFlatList,
 } from "design-system/tab-view";
-import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
 import { ScollableTabBar } from "design-system/tab-view/scrollable-tab-bar";
+import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import {
   breakpoints,
   CARD_DARK_SHADOW,
@@ -225,7 +225,7 @@ const SettingsTabs = () => {
               </Text>
             ) : (
               <Hidden until="md">
-                <IndependentTabBar
+                <TabBarSingle
                   onPress={(i) => {
                     setIndex(i);
                   }}
