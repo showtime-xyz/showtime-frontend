@@ -1,5 +1,5 @@
-import React from "react";
-import { Linking, Platform } from "react-native";
+import React, { useRef } from "react";
+import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
@@ -41,6 +41,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
+  const scrollViewRef = useRef<RNScrollView>(null);
   const { isMagic } = useWeb3();
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
@@ -182,7 +183,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row flex-wrap">
           <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
@@ -256,7 +257,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
 
           {state.signaturePrompt && !isMagic ? (
-            <MissingSignatureMessage />
+            <MissingSignatureMessage
+              onMount={() => {
+                scrollViewRef.current?.scrollToEnd();
+              }}
+            />
           ) : null}
 
           {state.error ? (

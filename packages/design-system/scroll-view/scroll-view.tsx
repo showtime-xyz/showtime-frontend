@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, forwardRef } from "react";
 import { ScrollView as ReactNativeScrollView } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -7,7 +7,7 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { ScrollViewProps } from "./types";
 
-class ScrollView extends Component<ScrollViewProps> {
+class ScrollViewClass extends Component<ScrollViewProps> {
   constructor(props: ScrollViewProps) {
     super(props);
   }
@@ -22,10 +22,22 @@ class ScrollView extends Component<ScrollViewProps> {
       <ScrollViewComponent
         keyboardShouldPersistTaps="handled"
         {...props}
+        //@ts-ignore
+        ref={this.props.innerRef}
         style={[tailwind.style(tw), style]}
       />
     );
   }
 }
+
+const ScrollView = forwardRef((props: ScrollViewProps, ref: any) => (
+  <ScrollViewClass
+    //@ts-ignore
+    innerRef={ref}
+    {...props}
+  />
+));
+
+ScrollView.displayName = "ScrollView";
 
 export { ScrollView };
