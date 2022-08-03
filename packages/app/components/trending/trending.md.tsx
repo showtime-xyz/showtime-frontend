@@ -7,7 +7,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { TRENDING_ROUTE } from "app/components/trending";
 import { createParam } from "app/navigation/use-param";
 
-import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
+import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 
 import { TrendingCreatorsList } from "./trending-creators-list.md";
 import { TrendingNFTSList } from "./trending-nfts-list.md";
@@ -69,7 +69,7 @@ export const Trending = () => {
             />
           </View> */}
         </View>
-        <IndependentTabBar
+        <TabBarSingle
           onPress={(i) => {
             handleDaysChange(i);
           }}

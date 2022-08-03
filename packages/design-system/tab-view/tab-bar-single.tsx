@@ -19,7 +19,7 @@ const PADDING_X = 16;
 const getTextColor = (isFocus: boolean) =>
   isFocus ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-400";
 
-export const IndependentTabBar = ({
+export const TabBarSingle = ({
   routes,
   index: propIndex,
   onPress,
@@ -42,12 +42,17 @@ export const IndependentTabBar = ({
           key={item.key}
         >
           <View
-            onLayout={({ nativeEvent: { layout } }) => {
-              setTabsWidth(
-                Object.assign(tabsWidth, {
-                  [index]: layout.width,
-                })
-              );
+            onLayout={({
+              nativeEvent: {
+                layout: { width },
+              },
+            }) => {
+              const tabs = Object.assign(tabsWidth, {
+                [index]: width,
+              });
+              if (Object.keys(tabsWidth).length === routes.length) {
+                setTabsWidth({ ...tabs });
+              }
             }}
             tw="py-4"
           >
@@ -65,12 +70,12 @@ export const IndependentTabBar = ({
           </View>
         </Pressable>
       ))}
-      {/* @ts-ignore */}
       <AnimatePresence>
         <MotiView
           style={[
             tw.style("absolute bottom-0 h-0.5 bg-gray-900 dark:bg-white"),
           ]}
+          from={{ opacity: 0 }}
           animate={{
             width: tabsWidth[propIndex],
             transform: [
@@ -78,8 +83,9 @@ export const IndependentTabBar = ({
                 translateX: outputRange[propIndex],
               },
             ],
+            opacity: 1,
           }}
-          transition={{ type: "timing" }}
+          transition={{ type: "timing", duration: 300 }}
         />
       </AnimatePresence>
     </View>
