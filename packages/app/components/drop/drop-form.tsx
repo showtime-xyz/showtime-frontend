@@ -21,6 +21,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ConnectButton } from "app/components/connect-button";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
@@ -34,6 +35,7 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
+  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -108,6 +110,7 @@ export const DropForm = () => {
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
   const { connected } = useWallet();
+  const { data: userProfile } = useMyInfo();
   const headerHeight = useHeaderHeight();
 
   const isSignRequested = signMessageData.status === "sign_requested";
@@ -143,6 +146,28 @@ export const DropForm = () => {
     return (
       <View tw="p-4">
         <Button onPress={navigateToLogin}>Please login to continue</Button>
+      </View>
+    );
+  }
+
+  if (
+    !userProfile?.data.profile.username ||
+    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
+    !userProfile?.data.profile.bio ||
+    !userProfile?.data.profile.img_url
+  ) {
+    return (
+      <View tw="flex-1 items-center justify-center px-10 text-center">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          Hold on!
+        </Text>
+        <Text style={{ fontSize: 100 }}>✏️</Text>
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
+          Please complete your profile before creating a drop
+        </Text>
+        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
+          Complete your profile
+        </Button>
       </View>
     );
   }

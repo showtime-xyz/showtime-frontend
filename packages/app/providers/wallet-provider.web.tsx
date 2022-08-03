@@ -6,6 +6,7 @@ import { publicProvider } from "wagmi/providers/public";
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet, chain.polygon, chain.polygonMumbai],
   [
+    //@ts-ignore
     alchemyProvider({ alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID }),
     publicProvider(),
   ]
@@ -25,7 +26,16 @@ const wagmiClient = createClient({
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider
+        initialChain={
+          process.env.NEXT_PUBLIC_CHAIN_ID === "polygon"
+            ? chain.polygon.id
+            : chain.polygonMumbai.id
+        }
+        chains={chains}
+      >
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   );
 };

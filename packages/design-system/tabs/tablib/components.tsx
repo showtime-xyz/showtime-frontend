@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Platform, Text as RNText } from "react-native";
+import { Platform } from "react-native";
 
 import Animated, {
   Extrapolate,
@@ -10,7 +10,6 @@ import Animated, {
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { fontFamily } from "@showtime-xyz/universal.typography";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
@@ -62,16 +61,9 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
         Platform.OS !== "web" && animatedStyle,
       ]}
     >
-      <RNText
-        style={[
-          tw.style("text-sm"),
-          { fontFamily: fontFamily("Inter-Bold") },
-          getTextStyle,
-          { textTransform: "capitalize" },
-        ]}
-      >
+      <Text tw="text-sm font-bold capitalize text-gray-900 dark:text-white">
         {name}
-      </RNText>
+      </Text>
       {count ? (
         <Text
           style={{ fontWeight: "400" }}

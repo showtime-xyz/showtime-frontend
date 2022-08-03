@@ -674,3 +674,16 @@ export function isReactComponent(component: any) {
   if (!component) return false;
   return isClassComponent(component) || isFunctionComponent(component);
 }
+
+export const userHasIncompleteExternalLinks = (profile?: {
+  links: Profile["links"];
+  website_url: Profile["website_url"];
+}) => {
+  if (
+    profile &&
+    (profile.website_url || profile.links.some((l) => l.user_input))
+  ) {
+    return false;
+  }
+  return true;
+};
