@@ -112,7 +112,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   //   setShowFullScreen(true);
   // };
   const onClose = () => {
-    router.pop();
+    if (history?.length > 1) {
+      router.pop();
+    } else {
+      router.push("/");
+    }
+
     // if (showFullScreen) {
     //   setShowFullScreen(false);
     // } else {
