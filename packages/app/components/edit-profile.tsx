@@ -34,8 +34,11 @@ const editProfileValidationSchema = yup.object({
   username: yup
     .string()
     .min(2)
-    .required()
-    .typeError("Please enter a valid username"),
+    .max(30)
+    .matches(
+      /([0-9a-zA-Z_]{2,30})+$/,
+      "Invalid username. Can only contain letters, numbers, and underscores (_)."
+    ),
   bio: yup
     .string()
     .max(300)
@@ -126,6 +129,7 @@ export const EditProfile = () => {
   }, [reset, defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
+    if (!isValid) return;
     const links = Object.keys(values.links)
       .filter((key) => values.links[key]?.trim())
       .map((key) => {
@@ -447,6 +451,10 @@ export const EditProfile = () => {
                                   ios: 1,
                                   android: 4,
                                   default: 0,
+                                }),
+                                marginBottom: Platform.select({
+                                  default: 4,
+                                  web: 0,
                                 }),
                               }}
                             >
