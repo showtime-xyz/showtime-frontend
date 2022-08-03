@@ -1,5 +1,5 @@
-import React from "react";
-import { Linking, Platform } from "react-native";
+import React, { useRef } from "react";
+import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -112,6 +112,7 @@ export const DropForm = () => {
   const { data: userProfile } = useMyInfo();
   const headerHeight = useHeaderHeight();
   const { isMagic } = useWeb3();
+  const scrollViewRef = useRef<RNScrollView>(null);
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -258,6 +259,7 @@ export const DropForm = () => {
       {Platform.OS === "ios" ? <View style={{ height: headerHeight }} /> : null}
       <ScrollView
         tw="p-4"
+        ref={scrollViewRef}
         asKeyboardAwareScrollView
         extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
       >
@@ -536,7 +538,11 @@ export const DropForm = () => {
             ) : null}
 
             {state.signaturePrompt && !isMagic ? (
-              <MissingSignatureMessage />
+              <MissingSignatureMessage
+                onMount={() => {
+                  scrollViewRef.current?.scrollToEnd();
+                }}
+              />
             ) : null}
 
             {state.error ? (

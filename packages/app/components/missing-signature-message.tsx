@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -7,8 +8,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useWallet } from "app/hooks/auth/use-wallet";
 
-export const MissingSignatureMessage = () => {
+export const MissingSignatureMessage = ({ onMount }: { onMount?: any }) => {
   const { disconnect, connect } = useWallet();
+  const mounted = useRef(false);
   const router = useRouter();
   const handleReconnect = async () => {
     disconnect();
@@ -20,6 +22,13 @@ export const MissingSignatureMessage = () => {
       router.push("/login");
     }
   };
+
+  useEffect(() => {
+    if (!mounted.current) {
+      onMount?.();
+      mounted.current = true;
+    }
+  }, [onMount]);
 
   return (
     <View tw="mt-2 flex-row flex-wrap items-center">
