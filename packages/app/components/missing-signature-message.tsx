@@ -31,7 +31,7 @@ export const MissingSignatureMessage = ({ onMount }: { onMount?: any }) => {
   }, [onMount]);
 
   return (
-    <View tw="mt-2 flex-row flex-wrap items-center">
+    <View tw="mt-2 items-center">
       <Text tw="py-4 pr-2 text-sm text-gray-900 dark:text-white">
         Haven't received a signature request yet?
       </Text>
