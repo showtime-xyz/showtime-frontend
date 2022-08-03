@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -8,6 +10,7 @@ export const MissingSignatureMessage = () => {
   const { disconnect, connect } = useWallet();
   const handleReconnect = async () => {
     await disconnect();
+    if (Platform.OS === "web") localStorage.removeItem("walletconnect");
     connect?.();
   };
 
