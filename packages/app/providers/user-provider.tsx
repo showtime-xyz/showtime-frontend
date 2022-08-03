@@ -1,10 +1,11 @@
-import { useEffect, useMemo, ReactNode } from "react";
+import { useEffect, useMemo, ReactNode, useRef } from "react";
 import { Platform } from "react-native";
 
 import useSWR from "swr";
 
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { axios } from "app/lib/axios";
 import LogRocket from "app/lib/logrocket";
 import { mixpanel } from "app/lib/mixpanel";
@@ -25,6 +26,7 @@ export function UserProvider({ children }: UserProviderProps) {
     accessToken ? MY_INFO_ENDPOINT : null,
     (url) => axios({ url, method: "GET" })
   );
+  const { disconnect } = useWallet();
   //#endregion
 
   //#region variables
@@ -79,6 +81,16 @@ export function UserProvider({ children }: UserProviderProps) {
     identifyAndRegisterPushNotification();
   }, [data]);
   //#endregion
+
+  const isMounted = useRef(false);
+
+  // TODO: temp workaround - https://github.com/rainbow-me/rainbow/issues/3870
+  useEffect(() => {
+    if (!isMounted.current) {
+      disconnect?.();
+      isMounted.current = true;
+    }
+  }, [disconnect]);
 
   return (
     <UserContext.Provider value={userContextValue}>

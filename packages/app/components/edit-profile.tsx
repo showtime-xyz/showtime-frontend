@@ -25,7 +25,11 @@ import { axios } from "app/lib/axios";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-import { getFileFormData, SORT_FIELDS } from "app/utilities";
+import {
+  getFileFormData,
+  SORT_FIELDS,
+  userHasIncompleteExternalLinks,
+} from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
@@ -36,8 +40,12 @@ const editProfileValidationSchema = yup.object({
     .min(2)
     .required()
     .typeError("Please enter a valid username"),
-  bio: yup.string().max(300).required().typeError("Please enter a valid bio"),
-  name: yup.string().max(40).required().typeError("Please enter a valid name"),
+  bio: yup
+    .string()
+    .max(300)
+    .required("About me is a required field")
+    .typeError("Please enter a valid about me"),
+  name: yup.string().max(40).nullable(),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
 
@@ -59,12 +67,22 @@ export const EditProfile = () => {
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(() =>
+    !user?.data?.profile.username ||
+    !user?.data?.profile.bio ||
+    !user?.data?.profile.img_url
+      ? 0
+      : userHasIncompleteExternalLinks(user?.data?.profile)
+      ? 1
+      : 0
+  );
   const { isValid, validate } = useValidateUsername();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
+  const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
+    useState(selected === 1);
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -133,67 +151,77 @@ export const EditProfile = () => {
       default_owned_sort_id: values.default_owned_sort_id,
     };
 
-    try {
-      if (
-        values.coverPicture &&
-        values.coverPicture !== defaultValues.coverPicture
-      ) {
-        const coverPictureFormData = await getFileFormData(values.coverPicture);
-        const formData = new FormData();
-        if (coverPictureFormData) {
-          formData.append("image", coverPictureFormData);
+    //@ts-ignore
+    if (userHasIncompleteExternalLinks(newValues)) {
+      setHasNotSubmittedExternalLink(true);
+      setSelected(1);
+    } else {
+      setHasNotSubmittedExternalLink(false);
 
-          await axios({
-            url: "/v1/profile/photo/cover",
-            method: "POST",
-            headers: {
-              "Content-Type": `multipart/form-data`,
-            },
-            data: formData,
-          });
+      try {
+        if (
+          values.coverPicture &&
+          values.coverPicture !== defaultValues.coverPicture
+        ) {
+          const coverPictureFormData = await getFileFormData(
+            values.coverPicture
+          );
+          const formData = new FormData();
+          if (coverPictureFormData) {
+            formData.append("image", coverPictureFormData);
+
+            await axios({
+              url: "/v1/profile/photo/cover",
+              method: "POST",
+              headers: {
+                "Content-Type": `multipart/form-data`,
+              },
+              data: formData,
+            });
+          }
         }
-      }
 
-      if (
-        values.profilePicture &&
-        values.profilePicture !== defaultValues.profilePicture
-      ) {
-        const formData = new FormData();
+        if (
+          values.profilePicture &&
+          values.profilePicture !== defaultValues.profilePicture
+        ) {
+          const formData = new FormData();
 
-        const profilePictureFormData = await getFileFormData(
-          values.profilePicture
+          const profilePictureFormData = await getFileFormData(
+            values.profilePicture
+          );
+
+          if (profilePictureFormData) {
+            formData.append("image", profilePictureFormData);
+
+            await axios({
+              url: "/v1/profile/photo",
+              method: "POST",
+              headers: {
+                "Content-Type": `multipart/form-data`,
+              },
+              data: formData,
+            });
+          }
+        }
+
+        await axios({
+          url: "/v1/editname",
+          method: "POST",
+          data: newValues,
+        });
+
+        router.pop();
+
+        // TODO: optimise to make fewer API calls!
+        mutate(MY_INFO_ENDPOINT);
+        matchMutate(
+          (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
         );
-
-        if (profilePictureFormData) {
-          formData.append("image", profilePictureFormData);
-
-          await axios({
-            url: "/v1/profile/photo",
-            method: "POST",
-            headers: {
-              "Content-Type": `multipart/form-data`,
-            },
-            data: formData,
-          });
-        }
+      } catch (e) {
+        setError("submitError", { message: "Something went wrong" });
+        console.error("edit profile failed ", e);
       }
-
-      await axios({
-        url: "/v1/editname",
-        method: "POST",
-        data: newValues,
-      });
-
-      router.pop();
-
-      // TODO: optimise to make fewer API calls!
-      mutate(MY_INFO_ENDPOINT);
-      matchMutate(
-        (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
-      );
-    } catch (e) {
-      setError("submitError", { message: "Something went wrong" });
-      console.error("edit profile failed ", e);
     }
   };
   // cover down to twitter banner ratio: w:h=3:1
@@ -211,7 +239,8 @@ export const EditProfile = () => {
         <Tabs.Root
           onIndexChange={setSelected}
           tabListHeight={TAB_LIST_HEIGHT}
-          initialIndex={0}
+          index={selected}
+          initialIndex={selected}
           lazy
         >
           <Tabs.List
@@ -227,7 +256,7 @@ export const EditProfile = () => {
             <SelectedTabIndicator />
           </Tabs.List>
           <Tabs.Pager
-            tw="web:max-h-60vh"
+            tw="web:h-58vh"
             style={{
               overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
             }}
@@ -372,6 +401,12 @@ export const EditProfile = () => {
               asKeyboardAwareScrollView
               extraScrollHeight={extraScrollHeight}
             >
+              {hasNotSubmittedExternalLink ? (
+                <>
+                  <ErrorText>Please add atleast one link from below</ErrorText>
+                  <View tw="h-4" />
+                </>
+              ) : null}
               <Controller
                 control={control}
                 name="website_url"
@@ -492,7 +527,6 @@ export const EditProfile = () => {
             disabled={isSubmitting}
             tw={isSubmitting ? "opacity-50" : ""}
             onPress={handleSubmit(handleSubmitForm)}
-            size="regular"
           >
             {isSubmitting ? "Submitting..." : "Done"}
           </Button>

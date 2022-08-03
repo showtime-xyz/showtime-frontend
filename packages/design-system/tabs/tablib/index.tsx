@@ -77,9 +77,7 @@ const Root = ({
   lazy,
 }: TabRootProps) => {
   const pagerRef = React.useRef();
-  const index = useSharedValue(
-    typeof indexProp === "number" ? indexProp : initialIndex ?? 0
-  );
+  const index = useSharedValue(initialIndex ?? 0);
   const position = useSharedValue(0);
   const offset = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -97,7 +95,9 @@ const Root = ({
   };
 
   useEffect(() => {
-    if (typeof indexProp === "number") index.value = indexProp;
+    if (typeof indexProp === "number") {
+      pagerRef.current.setPage(indexProp);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indexProp]);
 
@@ -228,7 +228,7 @@ const ListImpl = ({
 
   const scrollTo = (x) => {
     // @ts-ignore getNode will be removed in future, need to update typings
-    tabListRef.current.scrollTo({ x });
+    tabListRef.current?.scrollTo?.({ x });
   };
 
   useDerivedValue(() => {
