@@ -28,7 +28,9 @@ export const useActivity = ({
     [typeId, limit, accessToken]
   );
 
-  const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
+  const queryState = useInfiniteListQuerySWR<any>(activityURLFn, {
+    pageSize: limit,
+  });
 
   const newData = useMemo(() => {
     let newData: any = [];
@@ -60,15 +62,20 @@ export const useActivity = ({
 };
 
 export const useTrendingCreators = ({ days }: { days: number }) => {
+  const PAGE_SIZE = 15;
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
-      const url = `/v1/leaderboard?page=${index + 1}&days=${days}&limit=15`;
+      const url = `/v1/leaderboard?page=${
+        index + 1
+      }&days=${days}&limit=${PAGE_SIZE}`;
       return url;
     },
     [days]
   );
 
-  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn, {
+    pageSize: PAGE_SIZE,
+  });
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
@@ -168,6 +175,7 @@ export const defaultFilters = {
 export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
+  const PAGE_SIZE = 12;
   const {
     profileId,
     tabType,
@@ -181,7 +189,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${12}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
+      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
       return url;
     },
     [profileId, tabType, sortType, showHidden, collectionId]
@@ -189,7 +197,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
     params?.profileId && tabType ? trendingCreatorsUrlFn : () => null,
-    refreshInterval
+    { refreshInterval, pageSize: PAGE_SIZE }
   );
 
   const newData = useMemo(() => {
@@ -264,12 +272,15 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 };
 
 export const useComments = ({ nftId }: { nftId: number }) => {
+  const PAGE_SIZE = 10;
   const commentsUrlFn = useCallback(() => {
-    const url = `/v2/comments/${nftId}?limit=10`;
+    const url = `/v2/comments/${nftId}?limit=${PAGE_SIZE}`;
     return url;
   }, [nftId]);
 
-  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
+  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn, {
+    pageSize: PAGE_SIZE,
+  });
 
   return queryState;
 };

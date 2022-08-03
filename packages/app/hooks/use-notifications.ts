@@ -31,21 +31,27 @@ export interface NotificationType {
 }
 
 export const useNotifications = () => {
+  const PAGE_SIZE = 15;
   const { isAuthenticated } = useUser();
   const { data: myInfoData } = useMyInfo();
 
   const notificationsFetcher = useCallback(
-    (index: number) => {
+    (index: number, previousPageData: []) => {
+      if (previousPageData && !previousPageData.length) return null;
       const url = isAuthenticated
-        ? `/v1/notifications?page=${index + 1}&limit=15`
+        ? `/v1/notifications?page=${index + 1}&limit=${PAGE_SIZE}`
         : null;
       return url;
     },
     [isAuthenticated]
   );
 
-  const queryState =
-    useInfiniteListQuerySWR<NotificationType>(notificationsFetcher);
+  const queryState = useInfiniteListQuerySWR<NotificationType>(
+    notificationsFetcher,
+    {
+      pageSize: PAGE_SIZE,
+    }
+  );
 
   const newData = useMemo(() => {
     let newData: NotificationType[] = [];
