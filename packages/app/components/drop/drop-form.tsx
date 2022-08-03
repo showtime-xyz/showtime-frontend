@@ -18,14 +18,14 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ConnectButton } from "app/components/connect-button";
+import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -109,9 +109,9 @@ export const DropForm = () => {
   const user = useUser();
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
-  const { connected } = useWallet();
   const { data: userProfile } = useMyInfo();
   const headerHeight = useHeaderHeight();
+  const { isMagic } = useWeb3();
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -168,17 +168,6 @@ export const DropForm = () => {
         <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
           Complete your profile
         </Button>
-      </View>
-    );
-  }
-
-  // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected) {
-    return (
-      <View tw="p-4">
-        <ConnectButton
-          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
-        />
       </View>
     );
   }
@@ -544,6 +533,10 @@ export const DropForm = () => {
               <View tw="mt-4">
                 <PolygonScanButton transactionHash={state.transactionHash} />
               </View>
+            ) : null}
+
+            {state.signaturePrompt && !isMagic ? (
+              <MissingSignatureMessage />
             ) : null}
 
             {state.error ? (

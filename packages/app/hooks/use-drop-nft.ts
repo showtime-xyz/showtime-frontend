@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
@@ -45,6 +46,7 @@ type State = {
   edition?: IEdition;
   transactionId?: any;
   error?: string;
+  signaturePrompt?: boolean;
 };
 
 type Action = {
@@ -57,6 +59,7 @@ type Action = {
 
 const initialState: State = {
   status: "idle",
+  signaturePrompt: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -66,13 +69,30 @@ const reducer = (state: State, action: Action): State => {
     case "success":
       return { ...state, status: "success", edition: action.edition };
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        error: action.error,
+        signaturePrompt: false,
+      };
     case "transactionHash":
       return {
         ...state,
         transactionHash: action.transactionHash,
         transactionId: action.transactionId,
       };
+    case "signaturePrompt": {
+      return {
+        ...state,
+        signaturePrompt: true,
+      };
+    }
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
+      };
+    }
     default:
       return state;
   }
@@ -96,12 +116,13 @@ export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
+  const { connect } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const Alert = useAlert();
   const [signMessageData, setSignMessageData] = useState({
     status: "idle",
-    data: null,
+    data: null as any,
   });
   const shouldShowSignMessage =
     signMessageData.status === "should_sign" && isMobileWeb();
@@ -145,11 +166,14 @@ export const useDropNFT = () => {
       });
     }
 
+    dispatch({ type: "signaturePrompt" });
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });
@@ -242,10 +266,8 @@ export const useDropNFT = () => {
           await signTransaction({ forwardRequest });
         }
       } else {
-        Alert.alert(
-          "Wallet disconnected",
-          "Please logout and login again to complete the transaction"
-        );
+        // user is probably not connected to wallet
+        connect?.();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });

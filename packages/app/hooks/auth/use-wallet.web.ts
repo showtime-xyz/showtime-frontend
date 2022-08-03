@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   useAccount,
   useSignMessage,
@@ -17,6 +18,7 @@ const useWallet = (): UseWalletReturnType => {
   const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
+  const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const { web3, isMagic } = useWeb3();
 
@@ -41,6 +43,7 @@ const useWallet = (): UseWalletReturnType => {
 
   return {
     address,
+    connect: openConnectModal,
     connected,
     disconnect,
     networkChanged,

@@ -2,9 +2,8 @@ import { useReducer, useEffect, useRef } from "react";
 
 import { ethers } from "ethers";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -47,6 +46,7 @@ type State = {
   error?: string;
   transactionHash?: string;
   mint?: any;
+  signaturePrompt?: boolean;
 };
 
 type Action = {
@@ -58,6 +58,7 @@ type Action = {
 
 const initialState: State = {
   status: "idle",
+  signaturePrompt: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -75,8 +76,25 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         transactionHash: action.transactionHash,
       };
+    case "signaturePrompt": {
+      return {
+        ...state,
+        signaturePrompt: true,
+      };
+    }
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
+      };
+    }
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        signaturePrompt: false,
+        error: action.error,
+      };
     default:
       return state;
   }
@@ -89,16 +107,20 @@ export const useClaimNFT = (edition?: IEdition) => {
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
+  const { connect } = useWallet();
   const { userAddress } = useCurrentUserAddress();
-  const Alert = useAlert();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
+    dispatch({ type: "signaturePrompt" });
+
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });
@@ -176,27 +198,27 @@ export const useClaimNFT = (edition?: IEdition) => {
 
   const claimNFT = async () => {
     try {
-      if (userAddress && edition?.minter_address) {
-        dispatch({ type: "loading" });
+      if (userAddress) {
+        if (edition?.minter_address) {
+          dispatch({ type: "loading" });
 
-        let forwardRequest: any;
-        if (forwarderRequestCached.current) {
-          forwardRequest = forwarderRequestCached.current;
-        } else {
-          forwardRequest = await getForwarderRequest({
-            minterAddress: edition?.minter_address,
-            userAddress,
-          });
+          let forwardRequest: any;
+          if (forwarderRequestCached.current) {
+            forwardRequest = forwarderRequestCached.current;
+          } else {
+            forwardRequest = await getForwarderRequest({
+              minterAddress: edition?.minter_address,
+              userAddress,
+            });
+          }
+
+          Logger.log("Signing... ", forwardRequest);
+
+          await signTransaction({ forwardRequest });
         }
-
-        Logger.log("Signing... ", forwardRequest);
-
-        await signTransaction({ forwardRequest });
       } else {
-        Alert.alert(
-          "Wallet disconnected",
-          "Please logout and login again to complete the transaction"
-        );
+        // user is probably not connected to wallet
+        connect?.();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
