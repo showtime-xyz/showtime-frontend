@@ -1,10 +1,17 @@
+import React from "react";
 import { FlatList, FlatListProps } from "react-native";
 
 import type { VirtuosoGridProps } from "react-virtuoso";
 
 export type InfiniteScrollListProps<T> = FlatListProps<T> &
-  Pick<VirtuosoGridProps, "overscan">;
+  Pick<VirtuosoGridProps, "overscan" | "useWindowScroll">;
 
-export function InfiniteScrollList<T>(props: InfiniteScrollListProps<T>) {
-  return <FlatList {...props} />;
+export function RNFlatList<T>(props: InfiniteScrollListProps<T>, ref: any) {
+  return <FlatList {...props} ref={ref} />;
 }
+
+export const InfiniteScrollList = React.forwardRef(RNFlatList) as <T>(
+  props: InfiniteScrollListProps<T> & {
+    ref?: React.Ref<FlatList<T>>;
+  }
+) => React.ReactElement;
