@@ -15,7 +15,7 @@ export const MissingSignatureMessage = () => {
   };
 
   return (
-    <View tw="mt-2 flex-row items-center">
+    <View tw="mt-2 flex-row items-center flex-wrap">
       <Text tw="py-4 pr-2 text-sm text-gray-900 dark:text-white">
         Haven't received a signature request yet?
       </Text>
