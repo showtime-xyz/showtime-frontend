@@ -1,5 +1,9 @@
 import { useReducer, useState } from "react";
 
+import type {
+  TypedDataDomain,
+  TypedDataField,
+} from "@ethersproject/abstract-signer";
 import { ethers } from "ethers";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -127,13 +131,21 @@ export const useDropNFT = () => {
   const shouldShowSignMessage =
     signMessageData.status === "should_sign" && isMobileWeb();
 
-  const pollTransaction = async (transactionId: string) => {
+  const pollTransaction = async ({
+    transactionId,
+    notSafeForWork,
+  }: {
+    transactionId: string;
+    notSafeForWork: boolean;
+  }) => {
     // Polling to check transaction status
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
       Logger.log(`Checking tx... (${attempts + 1} / 100)`);
       const response = await axios({
-        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}`,
+        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}${
+          notSafeForWork ? "&nsfw=true" : ""
+        }`,
         method: "GET",
       });
       Logger.log(response);
@@ -158,11 +170,21 @@ export const useDropNFT = () => {
   };
 
   // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
+  const signTransaction = async ({
+    forwardRequest,
+    notSafeForWork,
+  }: {
+    forwardRequest: {
+      domain: TypedDataDomain;
+      types: Record<string, Array<TypedDataField>>;
+      value: Record<string, string | number>;
+    };
+    notSafeForWork: boolean;
+  }) => {
     if (isMobileWeb()) {
       setSignMessageData({
         status: "sign_requested",
-        data: { forwardRequest },
+        data: { forwardRequest, notSafeForWork },
       });
     }
 
@@ -190,7 +212,10 @@ export const useDropNFT = () => {
       },
     });
 
-    await pollTransaction(relayerResponse.relayed_transaction_id);
+    await pollTransaction({
+      transactionId: relayerResponse.relayed_transaction_id,
+      notSafeForWork,
+    });
   };
 
   const dropNFT = async (params: UseDropNFT) => {
@@ -260,10 +285,13 @@ export const useDropNFT = () => {
         if (isMobileWeb()) {
           setSignMessageData({
             status: "should_sign",
-            data: { forwardRequest },
+            data: { forwardRequest, notSafeForWork: params.notSafeForWork },
           });
         } else {
-          await signTransaction({ forwardRequest });
+          await signTransaction({
+            forwardRequest,
+            notSafeForWork: params.notSafeForWork,
+          });
         }
       } else {
         // user is probably not connected to wallet
