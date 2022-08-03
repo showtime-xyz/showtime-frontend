@@ -12,8 +12,8 @@ export const MissingSignatureMessage = () => {
   };
 
   return (
-    <View tw="flex-row items-center mt-2">
-      <Text tw="text-sm dark:text-white text-gray-900 py-4 pr-2">
+    <View tw="mt-2 flex-row items-center">
+      <Text tw="py-4 pr-2 text-sm text-gray-900 dark:text-white">
         Haven't received a signature request yet?
       </Text>
       <Button onPress={handleReconnect}>Reconnect your wallet</Button>
