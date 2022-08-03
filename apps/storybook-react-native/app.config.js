@@ -71,6 +71,8 @@ export default {
           "lib/**/libreact_nativemodule_core.so",
           "lib/**/libfbjni.so",
           "lib/**/libturbomodulejsijni.so",
+          "lib/**/libcrypto.so",
+          "lib/**/libssl.so",
         ],
       },
     ],
