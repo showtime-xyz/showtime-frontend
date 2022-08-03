@@ -58,7 +58,7 @@ export function UserProvider({ children }: UserProviderProps) {
     const identifyAndRegisterPushNotification = async () => {
       if (data) {
         // Identify user
-        mixpanel.identify(data.data.profile.profile_id.toString());
+        mixpanel.identify(data.data?.profile.profile_id.toString());
         LogRocket.identify(data.data.profile.profile_id.toString());
         rudder.identify(data.data.profile.profile_id.toString(), {});
 

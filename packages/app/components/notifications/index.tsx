@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FlatList, Platform, useWindowDimensions } from "react-native";
+import {
+  ListRenderItemInfo,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -17,39 +20,44 @@ import {
 } from "app/hooks/use-notifications";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
-export const Notifications = () => {
+export const Notifications = ({ useWindowScroll = true }) => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
+
   const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState<Pick<Actor, "profile_id" | "username">[]>(
     []
   );
 
-  const renderItem = useCallback(({ item }: { item: NotificationType }) => {
-    return <NotificationItem notification={item} setUsers={setUsers} />;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<NotificationType>) => {
+      return <NotificationItem notification={item} setUsers={setUsers} />;
+    },
+    []
+  );
 
   const keyExtractor = useCallback((item: NotificationType) => {
     return item.id.toString();
   }, []);
 
-  const ListFooter = useCallback(() => {
-    return isLoadingMore ? (
-      <View tw="items-center">
-        <Spinner size="small" />
-      </View>
-    ) : (
-      <View tw={`h-${bottomBarHeight ?? 0}px`} />
-    );
-  }, [isLoadingMore, bottomBarHeight]);
+  const ListFooterComponent = useCallback(() => {
+    if (isLoadingMore)
+      return (
+        <View tw="items-center pb-4">
+          <Spinner size="small" />
+        </View>
+      );
+    return null;
+  }, [isLoadingMore]);
 
   const Separator = useCallback(
     () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
@@ -84,23 +92,24 @@ export const Notifications = () => {
 
   return (
     <>
-      <FlatList
+      <InfiniteScrollList
+        useWindowScroll={useWindowScroll}
         data={data}
         style={Platform.select({
           native: { height: flatListHeight },
           default: {},
         })}
+        overscan={{
+          main: 100,
+          reverse: 100,
+        }}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
-        contentContainerStyle={Platform.select({
-          web: tw.style("md:max-w-sm"),
-          default: {},
-        })}
-        ListFooterComponent={ListFooter}
+        ListFooterComponent={ListFooterComponent}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
       />

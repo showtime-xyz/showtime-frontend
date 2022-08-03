@@ -1,11 +1,11 @@
 import useSWR from "swr";
 
-import { Profile } from "app/types";
+import { Creator } from "app/types";
 
 import { fetcher } from "./use-infinite-list-query";
 
 export interface NFTDetailsPayload {
-  data: Profile[];
+  data: Creator[];
 }
 
 export function useFollowSuggestions() {

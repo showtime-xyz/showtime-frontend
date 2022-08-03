@@ -15,7 +15,7 @@ const NotificationsScreen = withColorScheme(() => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <View tw="w-full">
+    <View tw="w-full max-w-screen-2xl md:px-6">
       {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       <ErrorBoundary>
         <Suspense

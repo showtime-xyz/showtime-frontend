@@ -29,7 +29,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
 
-import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
+import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
@@ -112,7 +112,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   //   setShowFullScreen(true);
   // };
   const onClose = () => {
-    router.pop();
+    if (history?.length > 1) {
+      router.pop();
+    } else {
+      router.push("/");
+    }
+
     // if (showFullScreen) {
     //   setShowFullScreen(false);
     // } else {
@@ -199,7 +204,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             ) : null}
             {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
           </View>
-          <IndependentTabBar
+          <TabBarSingle
             onPress={(i) => {
               setIndex(i);
             }}

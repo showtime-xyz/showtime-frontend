@@ -7957,6 +7957,7 @@ __metadata:
     "@tradle/react-native-http": ^2.0.1
     "@types/jest": ^27.4.1
     "@types/react": ^18.0.15
+    "@types/remove-markdown": ^0.3.1
     "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.7.8
@@ -8129,6 +8130,7 @@ __metadata:
     react-native-web: 0.18.7
     react-stickynode: ^4.0.0
     react-string-replace: ^0.4.4
+    react-virtuoso: ^2.16.6
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
     rudder-sdk-js: ^2.9.2
@@ -10760,6 +10762,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/remove-markdown@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@types/remove-markdown@npm:0.3.1"
+  checksum: a673aafa3a3722d959b4ad1d4e95b33f04f037a8bb95a82e843d6005b12b51f9b1bfd5954cd5c8707fbbb2f1d8865f7e632f02f99389ab83d0dcfd2cb1920dbb
+  languageName: node
+  linkType: hard
+
 "@types/responselike@npm:*, @types/responselike@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/responselike@npm:1.0.0"
@@ -11153,6 +11162,24 @@ __metadata:
   peerDependencies:
     "@vanilla-extract/css": ^1.0.0
   checksum: e72407ca6afad27c9e609ec3b23f8216c17374f40728ed8f8fc4decc0ea65216d9fb0f74daf31b846dffc7a90c0fe8f40a16d0b468c8f81a0600eea570a437bf
+  languageName: node
+  linkType: hard
+
+"@virtuoso.dev/react-urx@npm:^0.2.12":
+  version: 0.2.13
+  resolution: "@virtuoso.dev/react-urx@npm:0.2.13"
+  dependencies:
+    "@virtuoso.dev/urx": ^0.2.13
+  peerDependencies:
+    react: ">=16"
+  checksum: 173e91c21f6a8cd506ad3b72af10656897fe1951124ed9eeb1fd85575534993bea2f97cba3f81c08ae1e88a2613df348e2c80d0ceecb3021f8c8c8fe0e053ee2
+  languageName: node
+  linkType: hard
+
+"@virtuoso.dev/urx@npm:^0.2.12, @virtuoso.dev/urx@npm:^0.2.13":
+  version: 0.2.13
+  resolution: "@virtuoso.dev/urx@npm:0.2.13"
+  checksum: 682a99cf40ccc429241268dd37495cd1ed4695ae58b5a1169c75df1630d5dc3fd8eb3aaa655f71c37f39ba9c23c0aaf4401b76d8a986986d1a38a422d596a6ba
   languageName: node
   linkType: hard
 
@@ -30690,6 +30717,19 @@ __metadata:
     react: ">=16.13"
     react-dom: ">=16.13"
   checksum: b8e8939229d463c3c505f7b617925c0228efae0cd6f651371f463846417b06c9170be57df51293a61027c41770f8a090fdb8a08717c4e36290ccb496e0318f1f
+  languageName: node
+  linkType: hard
+
+"react-virtuoso@npm:^2.16.6":
+  version: 2.16.6
+  resolution: "react-virtuoso@npm:2.16.6"
+  dependencies:
+    "@virtuoso.dev/react-urx": ^0.2.12
+    "@virtuoso.dev/urx": ^0.2.12
+  peerDependencies:
+    react: ">=16 || >=17 || >= 18"
+    react-dom: ">=16 || >=17 || >= 18"
+  checksum: 01bfa5a68419c1ee083d5db52a271c394f791aca334451fc554463627926f003d5469d57bed91264ab7d79b6a8f84a3f8c1efe698667a6305bcceee1766594de
   languageName: node
   linkType: hard
 

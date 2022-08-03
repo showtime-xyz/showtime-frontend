@@ -68,6 +68,27 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />
+      <meta name="twitter:app:name:iphone" content="Showtime" />
+      <meta name="twitter:app:id:iphone" content="1606611688" />
+
+      {meta.deeplinkUrl && (
+        <meta
+          name="twitter:app:url:iphone"
+          content={"io.showtime://" + meta.deeplinkUrl}
+        />
+      )}
+
+      <meta name="twitter:app:name:ipad" content="Showtime" />
+      <meta name="twitter:app:id:ipad" content="1606611688" />
+
+      <meta name="twitter:app:name:googleplay" content="Showtime" />
+      <meta name="twitter:app:id:googleplay" content="io.showtime" />
+      {meta.deeplinkUrl && (
+        <meta
+          name="twitter:app:url:googleplay"
+          content={"https://showtime.xyz/" + meta.deeplinkUrl}
+        />
+      )}
     </>
   ) : (
     <>

@@ -98,7 +98,6 @@ export function SceneComponent<P extends object>({
 
   return (
     <Animated.View style={[styles.container, sceneStyle]}>
-      {/* @ts-ignore */}
       <GestureDetector gesture={nativeGestureRef.current}>
         {/* @ts-ignore */}
         <ContainerView
