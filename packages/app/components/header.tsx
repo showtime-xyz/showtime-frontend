@@ -184,10 +184,10 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 overflow-hidden rounded-3xl bg-white dark:bg-black "
+          tw="mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
-              maxHeight: "calc(50vh - 64px)",
+              height: "calc(50vh - 64px)",
               boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
             default: {},
