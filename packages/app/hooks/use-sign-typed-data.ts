@@ -1,4 +1,4 @@
-import {
+import type {
   TypedDataDomain,
   TypedDataField,
 } from "@ethersproject/abstract-signer";
@@ -18,7 +18,7 @@ export const useSignTypedData = () => {
   const signTypedData = async (
     domain: TypedDataDomain,
     types: Record<string, Array<TypedDataField>>,
-    value: Record<string, any>
+    value: Record<string, string | number>
   ) => {
     // magic or web
     try {
