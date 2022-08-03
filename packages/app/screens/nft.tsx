@@ -1,6 +1,8 @@
 import { Suspense, useMemo } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { useSharedValue } from "react-native-reanimated";
+
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
@@ -11,6 +13,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/feed-item";
+import {
+  ItemKeyContext,
+  ViewabilityItemsContext,
+} from "app/components/viewability-tracker-flatlist";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useUser } from "app/hooks/use-user";
@@ -18,6 +24,8 @@ import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
+
+import { VideoConfigContext } from "../context/video-config-context";
 
 type Query = {
   tokenId: string;
@@ -32,30 +40,46 @@ const BOTTOM_GAP = 128;
 function NftScreen() {
   useTrackPageViewed({ name: "NFT" });
   const { colorScheme } = useColorScheme();
+  const videoConfig = useMemo(
+    () => ({
+      isMuted: true,
+      useNativeControls: false,
+      previewOnly: false,
+    }),
+    []
+  );
 
+  const dummyId = 1;
+  const visibileItems = useSharedValue([undefined, dummyId, undefined]);
   return (
     <ErrorBoundary>
-      <Suspense
-        fallback={
-          <View tw="items-center">
-            <Skeleton
-              //@ts-ignore
-              colorMode={colorScheme}
-              height={screenHeight - 300}
-              width={screenWidth}
-            />
-            <View tw="h-2" />
-            <Skeleton
-              //@ts-ignore
-              colorMode={colorScheme}
-              height={300}
-              width={screenWidth}
-            />
-          </View>
-        }
-      >
-        <NFTDetail />
-      </Suspense>
+      <VideoConfigContext.Provider value={videoConfig}>
+        <ItemKeyContext.Provider value={dummyId}>
+          <ViewabilityItemsContext.Provider value={visibileItems}>
+            <Suspense
+              fallback={
+                <View tw="items-center">
+                  <Skeleton
+                    //@ts-ignore
+                    colorMode={colorScheme}
+                    height={screenHeight - 300}
+                    width={screenWidth}
+                  />
+                  <View tw="h-2" />
+                  <Skeleton
+                    //@ts-ignore
+                    colorMode={colorScheme}
+                    height={300}
+                    width={screenWidth}
+                  />
+                </View>
+              }
+            >
+              <NFTDetail />
+            </Suspense>
+          </ViewabilityItemsContext.Provider>
+        </ItemKeyContext.Provider>
+      </VideoConfigContext.Provider>
     </ErrorBoundary>
   );
 }
