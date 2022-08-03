@@ -69,7 +69,12 @@ const reducer = (state: State, action: Action): State => {
     case "success":
       return { ...state, status: "success", edition: action.edition };
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        error: action.error,
+        signaturePrompt: false,
+      };
     case "transactionHash":
       return {
         ...state,
@@ -80,6 +85,12 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         signaturePrompt: true,
+      };
+    }
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
       };
     }
     default:
@@ -161,6 +172,8 @@ export const useDropNFT = () => {
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });

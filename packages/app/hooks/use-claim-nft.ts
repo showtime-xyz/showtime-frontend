@@ -82,8 +82,19 @@ const reducer = (state: State, action: Action): State => {
         signaturePrompt: true,
       };
     }
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
+      };
+    }
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        signaturePrompt: false,
+        error: action.error,
+      };
     default:
       return state;
   }
@@ -108,6 +119,8 @@ export const useClaimNFT = (edition?: IEdition) => {
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });
