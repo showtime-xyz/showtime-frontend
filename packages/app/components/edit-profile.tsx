@@ -15,7 +15,7 @@ import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Preview } from "app/components/preview";
+import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -29,6 +29,8 @@ import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
+
+import { MediaCropper } from "./media-cropper";
 
 const editProfileValidationSchema = yup.object({
   username: yup
@@ -66,6 +68,13 @@ export const EditProfile = () => {
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
+  // edit media regin
+  const [selectedImg, setSelectedImg] = useState<any>(null);
+
+  const [currentCropField, setCurrentCropField] = useState<
+    null | "coverPicture" | "profilePicture"
+  >(null);
+
   const [selected, setSelected] = useState(() =>
     !user?.data?.profile.username ||
     !user?.data?.profile.bio ||
@@ -77,6 +86,7 @@ export const EditProfile = () => {
   );
   const { isValid, validate } = useValidateUsername();
   const insets = useSafeAreaInsets();
+
   const { width } = useWindowDimensions();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
@@ -117,6 +127,7 @@ export const EditProfile = () => {
     setError,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
   } = useForm<any>({
     resolver: yupResolver(editProfileValidationSchema),
     mode: "onBlur",
@@ -234,265 +245,295 @@ export const EditProfile = () => {
     [insets.bottom]
   );
   return (
-    <BottomSheetModalProvider>
-      <View tw={`w-full flex-1 pb-${insets.bottom}px`}>
-        <Tabs.Root
-          onIndexChange={setSelected}
-          tabListHeight={TAB_LIST_HEIGHT}
-          index={selected}
-          initialIndex={selected}
-          lazy
-        >
-          <Tabs.List
-            style={tw.style(
-              `h-[${TAB_LIST_HEIGHT}px] ios:w-screen android:w-screen`
-            )}
+    <>
+      <BottomSheetModalProvider>
+        <View tw={`w-full flex-1 pb-${insets.bottom}px`}>
+          <Tabs.Root
+            onIndexChange={setSelected}
+            tabListHeight={TAB_LIST_HEIGHT}
+            index={selected}
+            initialIndex={selected}
+            lazy
           >
-            {tabs.map((name, index) => (
-              <Tabs.Trigger key={name}>
-                <TabItem name={name} selected={selected === index} />
-              </Tabs.Trigger>
-            ))}
-            <SelectedTabIndicator />
-          </Tabs.List>
-          <Tabs.Pager
-            tw="web:h-58vh"
-            style={{
-              overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
-            }}
-          >
-            <Tabs.ScrollView
-              style={tw.style("flex-1")}
-              asKeyboardAwareScrollView
-              extraScrollHeight={extraScrollHeight}
+            <Tabs.List
+              style={tw.style(
+                `h-[${TAB_LIST_HEIGHT}px] ios:w-screen android:w-screen`
+              )}
             >
-              <Controller
-                control={control}
-                name="coverPicture"
-                render={({ field: { onChange, value } }) => (
-                  <Pressable
-                    onPress={async () => {
-                      const file = await pickFile({ mediaTypes: "image" });
-                      onChange(file.file);
-                    }}
-                    style={tw.style(
-                      `w-full h-[${coverImageHeight}px] flex-row `
-                    )}
-                  >
-                    <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
-                      <View tw="rounded-full bg-gray-800/70 p-2">
-                        <Upload height={20} width={20} color={colors.white} />
-                      </View>
-                    </View>
-                    {value && (
-                      <Preview
-                        file={value}
-                        tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
-                        resizeMode="cover"
-                      />
-                    )}
-                  </Pressable>
-                )}
-              />
-
-              <View tw={`-mt-12 px-4`}>
+              {tabs.map((name, index) => (
+                <Tabs.Trigger key={name}>
+                  <TabItem name={name} selected={selected === index} />
+                </Tabs.Trigger>
+              ))}
+              <SelectedTabIndicator />
+            </Tabs.List>
+            <Tabs.Pager
+              tw="web:h-48vh"
+              style={{
+                overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
+              }}
+            >
+              <Tabs.ScrollView
+                style={tw.style("flex-1")}
+                asKeyboardAwareScrollView
+                extraScrollHeight={extraScrollHeight}
+              >
                 <Controller
                   control={control}
-                  name="profilePicture"
+                  name="coverPicture"
                   render={({ field: { onChange, value } }) => (
-                    <>
-                      <Pressable
-                        onPress={async () => {
-                          const file = await pickFile({ mediaTypes: "image" });
-                          onChange(file.file);
-                        }}
-                        style={tw.style(
-                          "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
-                        )}
-                      >
-                        {value && (
-                          <Preview
-                            file={value}
-                            tw={"h-[94px] w-[94px] rounded-full"}
-                          />
-                        )}
-                        <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                          <View tw="rounded-full bg-gray-800/70 p-2">
-                            <Upload
-                              height={20}
-                              width={20}
-                              color={colors.white}
-                            />
-                          </View>
+                    <Pressable
+                      onPress={async () => {
+                        const file = await pickFile({ mediaTypes: "image" });
+                        const uri = getLocalFileURI(file.file);
+
+                        setSelectedImg(uri);
+                        setCurrentCropField("coverPicture");
+                        onChange(file.file);
+                      }}
+                      style={tw.style(
+                        `w-full h-[${coverImageHeight}px] flex-row `
+                      )}
+                    >
+                      <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                        <View tw="rounded-full bg-gray-800/70 p-2">
+                          <Upload height={20} width={20} color={colors.white} />
                         </View>
-                      </Pressable>
-                      {errors.profilePicture?.message ? (
-                        <ErrorText>{errors.profilePicture.message}</ErrorText>
-                      ) : null}
-                    </>
+                      </View>
+                      {value && (
+                        <Preview
+                          file={value}
+                          tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
+                          resizeMode="cover"
+                        />
+                      )}
+                    </Pressable>
                   )}
                 />
 
-                <View tw="mt-4 flex-row">
+                <View tw={`-mt-12 px-4`}>
                   <Controller
                     control={control}
-                    name="name"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Fieldset
-                        tw="mr-4 flex-1"
-                        label="Name"
-                        placeholder="Your display name"
-                        value={value}
-                        textContentType="name"
-                        errorText={errors.name?.message}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                      />
+                    name="profilePicture"
+                    render={({ field: { onChange, value } }) => (
+                      <>
+                        <Pressable
+                          onPress={async () => {
+                            const file = await pickFile({
+                              mediaTypes: "image",
+                            });
+
+                            setSelectedImg(getLocalFileURI(file.file));
+                            setCurrentCropField("profilePicture");
+                            onChange(file.file);
+                          }}
+                          style={tw.style(
+                            "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
+                          )}
+                        >
+                          {value && (
+                            <Preview
+                              file={value}
+                              tw={"h-[94px] w-[94px] rounded-full"}
+                            />
+                          )}
+                          <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                            <View tw="rounded-full bg-gray-800/70 p-2">
+                              <Upload
+                                height={20}
+                                width={20}
+                                color={colors.white}
+                              />
+                            </View>
+                          </View>
+                        </Pressable>
+                        {errors.profilePicture?.message ? (
+                          <ErrorText>{errors.profilePicture.message}</ErrorText>
+                        ) : null}
+                      </>
                     )}
                   />
 
+                  <View tw="mt-4 flex-row">
+                    <Controller
+                      control={control}
+                      name="name"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Fieldset
+                          tw="mr-4 flex-1"
+                          label="Name"
+                          placeholder="Your display name"
+                          value={value}
+                          textContentType="name"
+                          errorText={errors.name?.message}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      control={control}
+                      rules={{
+                        onChange: (v) => {
+                          validate(v.target.value);
+                        },
+                      }}
+                      name="username"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Username"
+                          placeholder="Enter your username"
+                          value={value}
+                          textContentType="username"
+                          errorText={errors.username?.message}
+                          onBlur={onBlur}
+                          helperText={
+                            !isValid ? "username not available" : undefined
+                          }
+                          onChangeText={onChange}
+                        />
+                      )}
+                    />
+                  </View>
+
                   <Controller
                     control={control}
-                    rules={{
-                      onChange: (v) => {
-                        validate(v.target.value);
-                      },
-                    }}
-                    name="username"
+                    name="bio"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Fieldset
-                        tw="flex-1"
-                        label="Username"
-                        placeholder="Enter your username"
+                        label="About me"
+                        placeholder="About me"
+                        tw="mt-4"
+                        multiline
                         value={value}
-                        textContentType="username"
-                        errorText={errors.username?.message}
+                        numberOfLines={3}
+                        errorText={errors.bio?.message}
                         onBlur={onBlur}
-                        helperText={
-                          !isValid ? "username not available" : undefined
-                        }
                         onChangeText={onChange}
                       />
                     )}
                   />
                 </View>
-
+              </Tabs.ScrollView>
+              <Tabs.ScrollView
+                style={tw.style("px-4 mt-4")}
+                asKeyboardAwareScrollView
+                extraScrollHeight={extraScrollHeight}
+              >
+                {hasNotSubmittedExternalLink ? (
+                  <>
+                    <ErrorText>
+                      Please add atleast one link from below
+                    </ErrorText>
+                    <View tw="h-4" />
+                  </>
+                ) : null}
                 <Controller
                   control={control}
-                  name="bio"
+                  name="website_url"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Fieldset
-                      label="About me"
-                      placeholder="About me"
-                      tw="mt-4"
-                      multiline
+                      label="Website"
+                      keyboardType="url"
+                      textContentType="URL"
+                      placeholder="Your url"
                       value={value}
-                      numberOfLines={3}
-                      errorText={errors.bio?.message}
                       onBlur={onBlur}
                       onChangeText={onChange}
                     />
                   )}
                 />
-              </View>
-            </Tabs.ScrollView>
-            <Tabs.ScrollView
-              style={tw.style("px-4 mt-4")}
-              asKeyboardAwareScrollView
-              extraScrollHeight={extraScrollHeight}
-            >
-              {hasNotSubmittedExternalLink ? (
-                <>
-                  <ErrorText>Please add atleast one link from below</ErrorText>
-                  <View tw="h-4" />
-                </>
-              ) : null}
-              <Controller
-                control={control}
-                name="website_url"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Fieldset
-                    label="Website"
-                    keyboardType="url"
-                    textContentType="URL"
-                    placeholder="Your url"
-                    value={value}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
 
-              {socialLinks.data?.data
-                .filter(
-                  (link) =>
-                    link.prefix.includes("twitter") ||
-                    link.prefix.includes("instagram")
-                )
-                .map((v) => {
-                  return (
-                    <Controller
-                      control={control}
-                      key={v.id}
-                      name={`links[${v.id}]`}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          tw="mt-4"
-                          label={v.name}
-                          value={value}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          autoCapitalize="none"
-                          leftElement={
-                            <Text
-                              tw="text-base text-gray-600 dark:text-gray-400"
-                              style={{
-                                marginTop: Platform.select({
-                                  ios: 1,
-                                  android: 4,
-                                  default: 0,
-                                }),
-                                marginBottom: Platform.select({
-                                  default: 4,
-                                  web: 0,
-                                }),
-                              }}
-                            >
-                              {v.prefix}
-                            </Text>
-                          }
-                        />
-                      )}
-                    />
-                  );
-                })}
-            </Tabs.ScrollView>
-            <Tabs.ScrollView style={tw.style("px-4 mt-4")}>
-              <View tw="z-2">
+                {socialLinks.data?.data
+                  .filter(
+                    (link) =>
+                      link.prefix.includes("twitter") ||
+                      link.prefix.includes("instagram")
+                  )
+                  .map((v) => {
+                    return (
+                      <Controller
+                        control={control}
+                        key={v.id}
+                        name={`links[${v.id}]`}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Fieldset
+                            tw="mt-4"
+                            label={v.name}
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            autoCapitalize="none"
+                            leftElement={
+                              <Text
+                                tw="text-base text-gray-600 dark:text-gray-400"
+                                style={{
+                                  marginTop: Platform.select({
+                                    ios: 1,
+                                    android: 4,
+                                    default: 0,
+                                  }),
+                                  marginBottom: Platform.select({
+                                    default: 4,
+                                    web: 0,
+                                  }),
+                                }}
+                              >
+                                {v.prefix}
+                              </Text>
+                            }
+                          />
+                        )}
+                      />
+                    );
+                  })}
+              </Tabs.ScrollView>
+              <Tabs.ScrollView style={tw.style("px-4 mt-4")}>
+                <View tw="z-2">
+                  <Controller
+                    control={control}
+                    name="default_list_id"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        label="Default NFT List"
+                        selectOnly
+                        select={{
+                          options: nftList,
+                          placeholder: "Select",
+                          value: value,
+                          onChange: onChange,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
+                <View tw="z-1">
+                  <Controller
+                    control={control}
+                    name="default_created_sort_id"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        label="Sort Created By"
+                        selectOnly
+                        tw="mt-4"
+                        select={{
+                          options: sortingOptionsList,
+                          placeholder: "Select",
+                          value: value,
+                          onChange: onChange,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
                 <Controller
                   control={control}
-                  name="default_list_id"
+                  name="default_owned_sort_id"
                   render={({ field: { onChange, value } }) => (
                     <Fieldset
-                      label="Default NFT List"
-                      selectOnly
-                      select={{
-                        options: nftList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
-                    />
-                  )}
-                />
-              </View>
-              <View tw="z-1">
-                <Controller
-                  control={control}
-                  name="default_created_sort_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Sort Created By"
+                      label="Sort Owned By"
                       selectOnly
                       tw="mt-4"
                       select={{
@@ -504,42 +545,42 @@ export const EditProfile = () => {
                     />
                   )}
                 />
-              </View>
-              <Controller
-                control={control}
-                name="default_owned_sort_id"
-                render={({ field: { onChange, value } }) => (
-                  <Fieldset
-                    label="Sort Owned By"
-                    selectOnly
-                    tw="mt-4"
-                    select={{
-                      options: sortingOptionsList,
-                      placeholder: "Select",
-                      value: value,
-                      onChange: onChange,
-                    }}
-                  />
-                )}
-              />
-            </Tabs.ScrollView>
-          </Tabs.Pager>
-        </Tabs.Root>
+              </Tabs.ScrollView>
+            </Tabs.Pager>
+          </Tabs.Root>
 
-        <View tw={`mt-2.5 px-4`}>
-          <Button
-            disabled={isSubmitting}
-            tw={isSubmitting ? "opacity-50" : ""}
-            onPress={handleSubmit(handleSubmitForm)}
-          >
-            {isSubmitting ? "Submitting..." : "Done"}
-          </Button>
-          <View tw="h-1" />
-          <Text tw="text-center text-sm text-red-500">
-            {errors.submitError?.message}
-          </Text>
+          <View tw={`mt-2.5 px-4`}>
+            <Button
+              disabled={isSubmitting}
+              tw={isSubmitting ? "opacity-50" : ""}
+              onPress={handleSubmit(handleSubmitForm)}
+            >
+              {isSubmitting ? "Submitting..." : "Done"}
+            </Button>
+            <View tw="h-1" />
+            <Text tw="text-center text-sm text-red-500">
+              {errors.submitError?.message}
+            </Text>
+          </View>
         </View>
-      </View>
-    </BottomSheetModalProvider>
+      </BottomSheetModalProvider>
+      <MediaCropper
+        src={selectedImg}
+        visible={!!selectedImg}
+        onClose={() => setSelectedImg(null)}
+        aspect={currentCropField === "coverPicture" ? 3 / 1 : 1}
+        onApply={async (e) => {
+          if (!currentCropField) return;
+          const timestamp = new Date().valueOf();
+          const imgFile = new File([e], timestamp.toString(), {
+            lastModified: timestamp,
+            type: e.type,
+          });
+
+          setValue(currentCropField, imgFile);
+          setSelectedImg(null);
+        }}
+      />
+    </>
   );
 };
