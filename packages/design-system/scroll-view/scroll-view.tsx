@@ -7,13 +7,14 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { ScrollViewProps } from "./types";
 
-class ScrollViewClass extends Component<ScrollViewProps> {
+class ScrollViewClass extends Component<ScrollViewProps & { innerRef?: any }> {
   constructor(props: ScrollViewProps) {
     super(props);
   }
 
   render() {
-    const { style, tw, asKeyboardAwareScrollView, ...props } = this.props;
+    const { style, tw, asKeyboardAwareScrollView, innerRef, ...props } =
+      this.props;
     const ScrollViewComponent = asKeyboardAwareScrollView
       ? KeyboardAwareScrollView
       : ReactNativeScrollView;
@@ -23,7 +24,7 @@ class ScrollViewClass extends Component<ScrollViewProps> {
         keyboardShouldPersistTaps="handled"
         {...props}
         //@ts-ignore
-        ref={this.props.innerRef}
+        ref={innerRef}
         style={[tailwind.style(tw), style]}
       />
     );
