@@ -21,7 +21,7 @@
   }
 
   [data-radix-popper-content-wrapper] {
-    @apply rounded-2xl backdrop-filter backdrop-blur-md backdrop-saturate-150;
+    @apply rounded-2xl backdrop-blur-md backdrop-saturate-150 backdrop-filter;
   }
 
   [role="menu"] > div:nth-child(1) {
@@ -42,7 +42,7 @@
 
   [role="menuitem"]:hover,
   [role="menuitem"]:focus-within {
-    @apply outline-none cursor-pointer rounded-lg bg-gray-900 bg-opacity-5;
+    @apply cursor-pointer rounded-lg bg-gray-900 bg-opacity-5 outline-none;
   }
 
   [data-color-scheme="dark"] [role="menuitem"]:hover,
@@ -113,4 +113,9 @@ body {
 [data-color-scheme="light"] {
   color-scheme: light;
   background-color: #fff;
+}
+
+div.reactEasyCrop_CropAreaGrid::before,
+div.reactEasyCrop_CropAreaGrid::after {
+  all: unset;
 }
