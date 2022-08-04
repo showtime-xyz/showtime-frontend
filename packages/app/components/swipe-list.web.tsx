@@ -7,12 +7,6 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
-
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
@@ -94,40 +88,6 @@ export const SwipeList = ({
     [itemHeight]
   );
 
-  const opacity = useSharedValue(1);
-
-  const detailStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-    };
-  }, []);
-
-  const hideHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: false,
-      });
-      opacity.value = withTiming(0);
-    }
-  }, [navigation, opacity]);
-
-  const showHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: true,
-      });
-      opacity.value = withTiming(1);
-    }
-  }, [navigation, opacity]);
-
-  const toggleHeader = useCallback(() => {
-    if (opacity.value === 1) {
-      hideHeader();
-    } else {
-      showHeader();
-    }
-  }, [hideHeader, showHeader, opacity]);
-
   const _rowRenderer = useCallback(
     (_type: any, item: any) => {
       return (
@@ -136,24 +96,12 @@ export const SwipeList = ({
           {...{
             itemHeight,
             bottomPadding,
-            detailStyle,
-            toggleHeader,
-            hideHeader,
-            showHeader,
             listId,
           }}
         />
       );
     },
-    [
-      itemHeight,
-      bottomPadding,
-      hideHeader,
-      showHeader,
-      toggleHeader,
-      detailStyle,
-      listId,
-    ]
+    [itemHeight, bottomPadding, listId]
   );
 
   const contentWidth = useMemo(() => {
@@ -183,12 +131,11 @@ export const SwipeList = ({
     () => ({
       pagingEnabled: true,
       showsVerticalScrollIndicator: false,
-      onMomentumScrollEnd: showHeader,
       refreshControl: (
         <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
       ),
     }),
-    [isRefreshing, refresh, showHeader]
+    [isRefreshing, refresh]
   );
 
   const videoConfig = useMemo(
