@@ -6,19 +6,13 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
-
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
 import { FeedItem } from "app/components/feed-item";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
 import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
@@ -50,9 +44,12 @@ export const SwipeList = ({
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
-  const navigation = useNavigation();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
+  const momentumScrollCallback = useRef(undefined);
+  const setMomentumScrollCallback = useCallback((cb: any) => {
+    momentumScrollCallback.current = cb;
+  }, []);
 
   const itemHeight =
     Platform.OS === "web"
@@ -65,40 +62,6 @@ export const SwipeList = ({
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
 
-  const opacity = useSharedValue(1);
-
-  const detailStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-    };
-  }, []);
-
-  const hideHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: false,
-      });
-      opacity.value = withTiming(0);
-    }
-  }, [navigation, opacity]);
-
-  const showHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: true,
-      });
-      opacity.value = withTiming(1);
-    }
-  }, [navigation, opacity]);
-
-  const toggleHeader = useCallback(() => {
-    if (opacity.value === 1) {
-      hideHeader();
-    } else {
-      showHeader();
-    }
-  }, [hideHeader, showHeader, opacity]);
-
   const renderItem = useCallback(
     ({ item }: { item: NFT }) => (
       <FeedItem
@@ -106,23 +69,12 @@ export const SwipeList = ({
         {...{
           itemHeight,
           bottomPadding,
-          detailStyle,
-          toggleHeader,
-          hideHeader,
-          showHeader,
           listId,
+          setMomentumScrollCallback,
         }}
       />
     ),
-    [
-      itemHeight,
-      bottomPadding,
-      detailStyle,
-      toggleHeader,
-      hideHeader,
-      showHeader,
-      listId,
-    ]
+    [itemHeight, bottomPadding, listId, setMomentumScrollCallback]
   );
 
   const videoConfig = useMemo(
@@ -148,7 +100,7 @@ export const SwipeList = ({
         ref={listRef}
         onRefresh={refresh}
         extraData={extendedState}
-        onMomentumScrollEnd={showHeader}
+        onMomentumScrollEnd={momentumScrollCallback.current}
         refreshing={isRefreshing}
         pagingEnabled
         renderItem={renderItem}

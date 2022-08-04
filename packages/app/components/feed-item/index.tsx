@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import {
   Platform,
   StyleProp,
@@ -8,6 +8,11 @@ import {
 
 import { BlurView } from "expo-blur";
 import Reanimated from "react-native-reanimated";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 import {
   useBlurredBackgroundStyles,
@@ -22,6 +27,7 @@ import { Media } from "app/components/media";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { Blurhash } from "app/lib/blurhash";
+import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -31,12 +37,11 @@ import { FeedItemMD } from "./feed-item.md";
 export type FeedItemProps = {
   nft: NFT;
   detailStyle?: StyleProp<ViewStyle>;
-  showHeader?: () => void;
-  hideHeader?: () => void;
-  toggleHeader?: () => void;
   bottomPadding?: number;
   bottomMargin?: number;
   itemHeight: number;
+  listId?: any;
+  setMomentumScrollCallback?: (callback: any) => void;
 };
 
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
@@ -44,14 +49,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   bottomPadding = 0,
   bottomMargin = 0,
   itemHeight,
-  hideHeader,
-  showHeader,
-  toggleHeader,
-  detailStyle,
   listId,
+  setMomentumScrollCallback,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth } = useWindowDimensions();
+  const navigation = useNavigation();
 
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
@@ -65,6 +68,44 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       : Number(nft.token_aspect_ratio));
 
   mediaHeight = Math.min(mediaHeight, itemHeight - detailHeight);
+
+  const opacity = useSharedValue(1);
+
+  const detailStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  const hideHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+      });
+      opacity.value = withTiming(0);
+    }
+  }, [navigation, opacity]);
+
+  const showHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+      opacity.value = withTiming(1);
+    }
+  }, [navigation, opacity]);
+
+  const toggleHeader = useCallback(() => {
+    if (opacity.value === 1) {
+      hideHeader();
+    } else {
+      showHeader();
+    }
+  }, [hideHeader, showHeader, opacity]);
+
+  useEffect(() => {
+    setMomentumScrollCallback?.(showHeader);
+  }, [setMomentumScrollCallback, showHeader]);
 
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
