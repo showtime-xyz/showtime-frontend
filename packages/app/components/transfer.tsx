@@ -20,13 +20,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { Owner } from "app/components/card/rows/owner";
 import { Media } from "app/components/media";
 import { useUserProfile } from "app/hooks/api-hooks";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import useDebounce from "app/hooks/use-debounce";
 import { useTransferNFT } from "app/hooks/use-transfer-nft";
-import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
-import { findAddressInOwnerList } from "app/utilities";
 
 import { PolygonScanButton } from "./polygon-scan-button";
 
@@ -37,18 +34,8 @@ type FormData = {
 
 function Transfer({ nft }: { nft?: NFT }) {
   const { startTransfer, state } = useTransferNFT();
-  const { userAddress } = useCurrentUserAddress();
-  const { user } = useUser();
 
-  const ownerListItem = findAddressInOwnerList(
-    userAddress,
-    user?.data.profile.wallet_addresses_v2,
-    nft?.multiple_owners_list
-  );
-
-  const maxQuantity = ownerListItem?.quantity || 1;
-  const hideCopiesInput = maxQuantity === 1;
-  const copiesHelperText = `1 by default, you own ${maxQuantity}`;
+  const copiesHelperText = `1 by default`;
 
   const defaultValues = {
     quantity: 1,
@@ -61,7 +48,6 @@ function Transfer({ nft }: { nft?: NFT }) {
       .typeError("Must be a number")
       .required("Please enter number of copies")
       .min(1)
-      .max(maxQuantity)
       .default(defaultValues.quantity),
     receiverAddress: yup
       .string()
@@ -203,33 +189,28 @@ function Transfer({ nft }: { nft?: NFT }) {
 
           <Owner nft={nft} price={true} tw="px-0" />
 
-          {!hideCopiesInput && (
-            <View tw="mt-4 flex-row">
-              <Controller
-                control={control}
-                name="quantity"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  const errorText = errors.quantity?.message
-                    ? `Copies amount must be between 1 and ${maxQuantity}`
-                    : undefined;
-                  return (
-                    <Fieldset
-                      tw="flex-1"
-                      label="Copies"
-                      placeholder="1"
-                      helperText={copiesHelperText}
-                      onBlur={onBlur}
-                      keyboardType="numeric"
-                      errorText={errorText}
-                      value={value?.toString()}
-                      onChangeText={onChange}
-                      returnKeyType="done"
-                    />
-                  );
-                }}
-              />
-            </View>
-          )}
+          <View tw="mt-4 flex-row">
+            <Controller
+              control={control}
+              name="quantity"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Copies"
+                    placeholder="1"
+                    helperText={copiesHelperText}
+                    onBlur={onBlur}
+                    keyboardType="numeric"
+                    errorText={errors.quantity?.message}
+                    value={value?.toString()}
+                    onChangeText={onChange}
+                    returnKeyType="done"
+                  />
+                );
+              }}
+            />
+          </View>
 
           <View tw="mt-4 flex-row">
             <Controller

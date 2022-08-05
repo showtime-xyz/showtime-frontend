@@ -121,8 +121,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
           <Suspense fallback={<TabSpinner index={routeIndex} />}>
             {data?.tabs[routeIndex] && (
               <ProfileTabList
-                username={profileData?.data.profile.username}
-                profileId={profileData?.data.profile.profile_id}
+                username={profileData?.data?.profile.username}
+                profileId={profileData?.data?.profile.profile_id}
                 isBlocked={isBlocked}
                 list={data?.tabs[routeIndex]}
                 index={routeIndex}
@@ -137,8 +137,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
       data?.tabs,
       index,
       isBlocked,
-      profileData?.data.profile.profile_id,
-      profileData?.data.profile.username,
+      profileData?.data?.profile.profile_id,
+      profileData?.data?.profile.username,
       tabRefs,
     ]
   );

@@ -42,7 +42,7 @@ import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
-import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
+import { findListingItemByOwner } from "app/utilities";
 
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
@@ -99,10 +99,7 @@ function NFTDropdown({
 
   //#region variables
   const hasMatchingListing = findListingItemByOwner(nft, userId);
-  const hasOwnership = isUserAnOwner(
-    user?.data.profile.wallet_addresses_v2,
-    nft?.multiple_owners_list
-  );
+  const hasOwnership = nft?.is_user_owner;
 
   // Prevent web3 actions on incorrect contracts caused by environment syncs
   const usableContractAddress = SHOWTIME_CONTRACTS.includes(

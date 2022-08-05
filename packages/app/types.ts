@@ -1,5 +1,6 @@
 export type NFT = {
   nft_id: number;
+  is_user_owner: boolean;
   contract_address: string;
   token_id: string;
   like_count: number;
