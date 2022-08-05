@@ -8,7 +8,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
-import { formatNumber } from "app/utilities";
+
+import { getClaimStatus, ClaimStatus, formatClaimNumber } from ".";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
@@ -23,7 +24,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   );
 
   if (!edition) return null;
-
+  const status = getClaimStatus(edition);
   return (
     <Button
       variant="text"
@@ -55,9 +56,11 @@ export function GiftButton({ nft }: { nft: NFT }) {
       accentColor={textColors}
     >
       <GiftIcon height={24} width={24} color={iconColor} />
-      {edition?.total_claimed_count > 0
-        ? ` ${formatNumber(edition.total_claimed_count)}`
-        : ""}
+      {status === ClaimStatus.Soldout
+        ? ` ${formatClaimNumber(edition.total_claimed_count)}`
+        : ` ${formatClaimNumber(edition.total_claimed_count)}/${
+            edition.creator_airdrop_edition.edition_size
+          }`}
     </Button>
   );
 }

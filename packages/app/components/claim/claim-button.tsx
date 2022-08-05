@@ -8,6 +8,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
+import { ClaimStatus, getClaimStatus } from ".";
+
 export const ClaimButton = ({
   edition,
 }: {
@@ -43,20 +45,15 @@ export const ClaimButton = ({
     isExpired = new Date() > new Date(edition.time_limit);
   }
 
-  const status =
-    edition &&
-    edition.total_claimed_count ===
-      edition.creator_airdrop_edition?.edition_size
-      ? "soldout"
-      : edition.is_already_claimed
-      ? "claimed"
-      : isExpired
-      ? "expired"
-      : undefined;
+  const status = getClaimStatus(edition);
 
-  const bgIsGreen = status === "claimed" || status === "soldout";
+  const bgIsGreen =
+    status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
-  const disabled = status === "claimed" || status === "soldout" || isExpired;
+  const disabled =
+    status === ClaimStatus.Claimed ||
+    status === ClaimStatus.Soldout ||
+    isExpired;
 
   return (
     <Button
@@ -65,17 +62,17 @@ export const ClaimButton = ({
       style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
       tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
     >
-      {status === "claimed" ? (
+      {status === ClaimStatus.Claimed ? (
         <View tw="w-auto flex-row items-center">
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 text-white">Claimed</Text>
         </View>
-      ) : status === "soldout" ? (
+      ) : status === ClaimStatus.Soldout ? (
         <View tw="w-auto flex-row items-center">
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 text-white">Sold out</Text>
         </View>
-      ) : status === "expired" ? (
+      ) : status === ClaimStatus.Expired ? (
         "Drop expired"
       ) : (
         "Claim for free"
