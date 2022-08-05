@@ -63,6 +63,9 @@ export const MediaCropper = ({
     }
   }, [src, croppedAreaPixels, rotation, onApply]);
   return (
+    /**
+     * Modal instead of ModalSheet is used here because ModalSheet only supports open 1 sheet on mobile.
+     */
     <Modal
       animationType="fade"
       transparent
