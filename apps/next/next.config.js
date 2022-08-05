@@ -16,8 +16,6 @@ const withTM = require("next-transpile-modules")([
   "@gorhom/portal",
   "twrnc",
   "moti",
-  "@motify/components",
-  "@motify/core",
   "expo-next-react-navigation",
   "zeego",
   "sentry-expo",
