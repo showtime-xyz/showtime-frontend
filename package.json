@@ -128,8 +128,5 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0",
-  "dependencies": {
-    "moti": "0.19.0-alpha.6"
-  }
+  "packageManager": "yarn@3.2.0"
 }
