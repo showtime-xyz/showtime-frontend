@@ -10,6 +10,8 @@ import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
+import { getClaimStatus, ClaimStatus } from ".";
+
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { iconColor, textColors } = useSocialColor();
@@ -23,7 +25,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   );
 
   if (!edition) return null;
-
+  const status = getClaimStatus(edition);
   return (
     <Button
       variant="text"
@@ -55,9 +57,11 @@ export function GiftButton({ nft }: { nft: NFT }) {
       accentColor={textColors}
     >
       <GiftIcon height={24} width={24} color={iconColor} />
-      {edition?.total_claimed_count > 0
+      {status === ClaimStatus.Soldout
         ? ` ${formatNumber(edition.total_claimed_count)}`
-        : ""}
+        : ` ${formatNumber(edition.total_claimed_count)}/${
+            edition.creator_airdrop_edition.edition_size
+          }`}
     </Button>
   );
 }
