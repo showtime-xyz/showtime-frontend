@@ -5230,24 +5230,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@motify/components@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "@motify/components@npm:0.18.0"
-  dependencies:
-    "@motify/core": ^0.18.0
-  checksum: 9574858ea7da7c4c3eb2a99318e82b3cf1167795131357f5e5359ac217615b35c5dee6fa84a0e82456c35016555c2d8335cfe0e8db4b936fbc1ecf3e60ed0024
-  languageName: node
-  linkType: hard
-
-"@motify/core@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "@motify/core@npm:0.18.0"
-  dependencies:
-    framer-motion: ^6.3.0
-  checksum: bcca1381c9b54380e150b7ca32a95e5a5fddc77bac3de59dcc40547e2ae9b6793543833245ced2d0440c4d31077685d66379fcaa027037408ac7cd13c3aaf0af
-  languageName: node
-  linkType: hard
-
 "@motionone/animation@npm:^10.12.0":
   version: 10.13.1
   resolution: "@motionone/animation@npm:10.13.1"
@@ -8013,7 +7995,7 @@ __metadata:
     jest-expo: ^45.0.1
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: ^0.18.0
+    moti: canary
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
     process: ^0.11.0
@@ -20172,7 +20154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^6.3.0":
+"framer-motion@npm:^6.5.1":
   version: 6.5.1
   resolution: "framer-motion@npm:6.5.1"
   dependencies:
@@ -26228,13 +26210,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:0.18.0, moti@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "moti@npm:0.18.0"
+"moti@npm:0.19.0-alpha.6":
+  version: 0.19.0-alpha.6
+  resolution: "moti@npm:0.19.0-alpha.6"
   dependencies:
-    "@motify/components": ^0.18.0
-    "@motify/core": ^0.18.0
-  checksum: cef1e439faaa98fc0600fe3e65e37e57edadc1378fea315221a9d1574517f5beb53a01ff9d2c4a09026c1bdaeebd0eb561e92c7081fd41a2c58d0f22af11eb43
+    framer-motion: ^6.5.1
+  peerDependencies:
+    react-native-reanimated: "*"
+  checksum: f1e7bf5957442c56c3564f3e0a2125f4b9f07924b1bf9f2e690abcb3936a07c263abc1a7e2aec28d3b39e4a7511dbf1485457f955d690104a347af0a0d1ce286
   languageName: node
   linkType: hard
 
@@ -32381,6 +32364,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.5.0
     eslint-plugin-unused-imports: 1.1.5
     husky: ^8.0.1
+    moti: 0.19.0-alpha.6
     patch-package: ^6.4.7
     prettier: ^2.7.1
     prettier-plugin-tailwindcss: 0.1.10
