@@ -37,7 +37,7 @@ export function useExpoUpdate() {
           await Updates.fetchUpdateAsync();
           store.set(LAST_SHOW_UPDATE_KEY, now.toISOString());
           if (isAutomatic) {
-            Updates.reloadAsync();
+            await Updates.reloadAsync();
           } else {
             snackbar?.show({
               text: "New update available 🎉",
