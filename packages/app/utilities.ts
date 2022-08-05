@@ -171,10 +171,8 @@ export const overrideMagicInstance = (email: string) => {
 
 // Format big numbers
 export function formatNumber(number: number) {
-  if (!number) return 0;
-  // for the edge case of 100k, our max supply, put “100k”, no decimals
-  if (number >= 100000) {
-    return `100k`;
+  if (number > 1000000) {
+    return `${(number / 1000000).toFixed(1)}m`;
   } else if (number > 1000) {
     return `${(number / 1000).toFixed(1)}k`;
   } else {
