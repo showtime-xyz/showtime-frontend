@@ -186,7 +186,10 @@ export const DropForm = () => {
     });
 
     return (
-      <View tw="items-center justify-center p-4" style={modalScreenViewStyle}>
+      <View
+        tw="items-center justify-center px-4 pt-8"
+        style={modalScreenViewStyle}
+      >
         <Text tw="text-8xl">🎉</Text>
         <View>
           <View tw="h-8" />
