@@ -23,6 +23,7 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -136,6 +137,7 @@ export const DropForm = () => {
   const share = useShare();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
   //   return <View>
@@ -184,7 +186,7 @@ export const DropForm = () => {
     });
 
     return (
-      <View tw="items-center justify-center p-4">
+      <View tw="items-center justify-center p-4" style={modalScreenViewStyle}>
         <Text tw="text-8xl">🎉</Text>
         <View>
           <View tw="h-8" />

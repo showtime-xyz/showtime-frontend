@@ -11,6 +11,8 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
+
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const values = [
@@ -52,9 +54,11 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   const previewWidth = previewHeight * previewAspectRatio;
 
   const isDark = useIsDarkMode();
+
+  const modalScreenViewStyle = useModalScreenViewStyle();
   return (
     <ScrollView>
-      <View tw="flex-1 p-8">
+      <View tw="px-8" style={modalScreenViewStyle}>
         <View tw="mb-10 items-center">
           <View
             tw="rounded-xl shadow-xl"
