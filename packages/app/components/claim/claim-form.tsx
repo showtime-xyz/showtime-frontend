@@ -35,7 +35,9 @@ import {
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const { state, claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
+  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
+    edition?.creator_airdrop_edition
+  );
   const share = useShare();
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
@@ -256,18 +258,19 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </View>
           </View>
 
-          {state.signaturePrompt && !isMagic ? (
-            <MissingSignatureMessage
-              onMount={() => {
-                scrollViewRef.current?.scrollToEnd();
-              }}
-            />
-          ) : null}
-
           {state.error ? (
             <View tw="mt-4">
               <Text tw="text-red-500">{state.error}</Text>
             </View>
+          ) : null}
+
+          {state.signaturePrompt && !isMagic ? (
+            <MissingSignatureMessage
+              onReconnectWallet={onReconnectWallet}
+              onMount={() => {
+                scrollViewRef.current?.scrollToEnd();
+              }}
+            />
           ) : null}
         </View>
       </View>

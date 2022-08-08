@@ -8,20 +8,45 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useWallet } from "app/hooks/auth/use-wallet";
 
-export const MissingSignatureMessage = ({ onMount }: { onMount?: any }) => {
+export const MissingSignatureMessage = ({
+  onMount,
+  onReconnectWallet,
+}: {
+  onMount?: any;
+  onReconnectWallet?: any;
+}) => {
   const { disconnect, connect } = useWallet();
+  const openConnectModalAfterDisconnect = useRef(false);
+
   const mounted = useRef(false);
   const router = useRouter();
   const handleReconnect = async () => {
-    disconnect();
+    await disconnect();
     if (Platform.OS === "web") {
       localStorage.removeItem("walletconnect");
-      connect?.();
+      if (connect) {
+        connect();
+      } else {
+        openConnectModalAfterDisconnect.current = true;
+      }
     } else {
       // TODO: wallet selection modal is only on login screen on native
       router.push("/login");
+      onReconnectWallet?.();
     }
   };
+
+  useEffect(() => {
+    // Below snippet will only run on web.
+    // TODO: due to some reason rainbowkit sets openAccountModal undefined if the wallet is in `connected` state, so we did some hacks here
+    if (connect && openConnectModalAfterDisconnect.current) {
+      setTimeout(() => {
+        connect();
+        onReconnectWallet?.();
+      });
+      openConnectModalAfterDisconnect.current = false;
+    }
+  }, [connect, onReconnectWallet]);
 
   useEffect(() => {
     if (!mounted.current) {

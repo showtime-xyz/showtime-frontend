@@ -105,6 +105,7 @@ export const DropForm = () => {
     shouldShowSignMessage,
     signMessageData,
     signTransaction,
+    onReconnectWallet,
   } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
@@ -537,18 +538,19 @@ export const DropForm = () => {
               </View>
             ) : null}
 
-            {state.signaturePrompt && !isMagic ? (
-              <MissingSignatureMessage
-                onMount={() => {
-                  scrollViewRef.current?.scrollToEnd();
-                }}
-              />
-            ) : null}
-
             {state.error ? (
               <View tw="mt-4">
                 <Text tw="text-red-500">{state.error}</Text>
               </View>
+            ) : null}
+
+            {state.signaturePrompt && !isMagic ? (
+              <MissingSignatureMessage
+                onReconnectWallet={onReconnectWallet}
+                onMount={() => {
+                  scrollViewRef.current?.scrollToEnd();
+                }}
+              />
             ) : null}
           </View>
 

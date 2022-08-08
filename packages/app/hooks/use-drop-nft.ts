@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer, useState, useCallback } from "react";
 
 import type {
   TypedDataDomain,
@@ -310,6 +310,13 @@ export const useDropNFT = () => {
     }
   };
 
+  const onReconnectWallet = useCallback(() => {
+    dispatch({
+      type: "error",
+      error: "Please retry creating a drop",
+    });
+  }, []);
+
   return {
     dropNFT,
     state,
@@ -317,5 +324,6 @@ export const useDropNFT = () => {
     shouldShowSignMessage,
     signMessageData,
     signTransaction,
+    onReconnectWallet,
   };
 };

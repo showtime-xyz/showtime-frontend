@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef } from "react";
+import { useReducer, useEffect, useRef, useCallback } from "react";
 
 import { ethers } from "ethers";
 
@@ -82,6 +82,7 @@ const reducer = (state: State, action: Action): State => {
         signaturePrompt: true,
       };
     }
+
     case "signatureSuccess": {
       return {
         ...state,
@@ -228,8 +229,16 @@ export const useClaimNFT = (edition?: IEdition) => {
     }
   };
 
+  const onReconnectWallet = useCallback(() => {
+    dispatch({
+      type: "error",
+      error: "Please retry claiming the drop",
+    });
+  }, []);
+
   return {
     state,
     claimNFT,
+    onReconnectWallet,
   };
 };
