@@ -4,9 +4,11 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
+import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
+import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -67,6 +69,7 @@ const ProfileSwipeList = () => {
   const [collectionId] = useParam("collectionId");
   const [sortType] = useParam("sortType");
   const [initialScrollIndex] = useParam("initialScrollIndex");
+  const { user } = useUser();
 
   const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
     {
@@ -80,16 +83,22 @@ const ProfileSwipeList = () => {
 
   return (
     <MutateProvider mutate={updateItem}>
-      <SwipeList
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-        //@ts-ignore TODO: replace hide nft API to v2
-        listId={tabType}
-      />
+      <ProfileTabsNFTProvider
+        tabType={
+          user.data?.profile?.profile_id?.toString() === profileId
+            ? tabType
+            : undefined
+        }
+      >
+        <SwipeList
+          data={data}
+          fetchMore={fetchMore}
+          isRefreshing={isRefreshing}
+          refresh={refresh}
+          initialScrollIndex={Number(initialScrollIndex)}
+          bottomPadding={safeAreaBottom}
+        />
+      </ProfileTabsNFTProvider>
     </MutateProvider>
   );
 };

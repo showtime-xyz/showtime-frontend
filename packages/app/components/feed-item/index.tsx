@@ -40,7 +40,6 @@ export type FeedItemProps = {
   bottomPadding?: number;
   bottomMargin?: number;
   itemHeight: number;
-  listId?: any;
   setMomentumScrollCallback?: (callback: any) => void;
 };
 
@@ -49,7 +48,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   bottomPadding = 0,
   bottomMargin = 0,
   itemHeight,
-  listId,
   setMomentumScrollCallback,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
@@ -191,7 +189,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               ),
             }}
           >
-            <NFTDetails edition={edition} nft={nft} listId={listId} />
+            <NFTDetails edition={edition} nft={nft} />
             <View
               tw={`${
                 bottomPadding && bottomPadding !== 0

@@ -28,7 +28,6 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  listId?: number;
 };
 
 export const SwipeList = ({
@@ -38,7 +37,6 @@ export const SwipeList = ({
   refresh,
   initialScrollIndex = 0,
   bottomPadding = 0,
-  listId,
 }: Props) => {
   const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
@@ -69,12 +67,11 @@ export const SwipeList = ({
         {...{
           itemHeight,
           bottomPadding,
-          listId,
           setMomentumScrollCallback,
         }}
       />
     ),
-    [itemHeight, bottomPadding, listId, setMomentumScrollCallback]
+    [itemHeight, bottomPadding, setMomentumScrollCallback]
   );
 
   const videoConfig = useMemo(

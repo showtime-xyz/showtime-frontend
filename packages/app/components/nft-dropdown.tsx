@@ -28,9 +28,10 @@ import {
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
+import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
@@ -56,25 +57,19 @@ type Props = {
   nft?: NFT;
   shouldEnableSharing?: boolean;
   btnProps?: ButtonProps;
-  listId?: string;
 };
 
 function NFTDropdown({
   nft: propNFT,
   shouldEnableSharing = true,
   btnProps,
-  listId,
 }: Props) {
   //#region hooks
-  const userId = useCurrentUserId();
-  const { user, isAuthenticated } = useUser();
+  const tabType = useProfileTabType();
+  const { isAuthenticated } = useUser();
   const { report } = useReport();
-  const {
-    unfollow,
-    isFollowing,
-    hide: hideNFT,
-    unhide: unhideNFT,
-  } = useMyInfo();
+  const { unfollow, isFollowing } = useMyInfo();
+  const { hideNFT, unhideNFT } = useHideNFT();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   // const { refresh } = useFeed("");
@@ -159,7 +154,7 @@ function NFTDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>
-        {hasOwnership && listId !== "hidden" ? (
+        {tabType && tabType !== "hidden" ? (
           <DropdownMenuItem
             onSelect={() => {
               hideNFT(nft?.nft_id);
@@ -171,7 +166,7 @@ function NFTDropdown({
           </DropdownMenuItem>
         ) : null}
 
-        {hasOwnership && listId === "hidden" ? (
+        {tabType && tabType === "hidden" ? (
           <DropdownMenuItem
             onSelect={() => {
               unhideNFT(nft?.nft_id);

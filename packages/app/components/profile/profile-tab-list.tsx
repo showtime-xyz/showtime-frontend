@@ -12,9 +12,11 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Card } from "app/components/card";
+import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
+import { useUser } from "app/hooks/use-user";
 import { DataProvider } from "app/lib/recyclerlistview";
 import { MutateProvider } from "app/providers/mutate-provider";
 
@@ -58,6 +60,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         refreshInterval: 5000,
       });
 
+    const { user } = useUser();
     useImperativeHandle(ref, () => ({
       refresh,
     }));
@@ -111,7 +114,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           <Card
             nft={item}
             numColumns={3}
-            listId={list.type}
             onPress={() => onItemPress(item.nft_id)}
             hrefProps={{
               pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
@@ -119,7 +121,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           />
         );
       },
-      [list.type, onItemPress]
+      [onItemPress]
     );
     if (isBlocked) {
       return (
@@ -155,21 +157,27 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
 
     return (
       <MutateProvider mutate={updateItem}>
-        {dataProvider && dataProvider.getSize() > 0 && (
-          <TabRecyclerList
-            layoutProvider={_layoutProvider}
-            dataProvider={dataProvider}
-            rowRenderer={_rowRenderer}
-            onEndReached={fetchMore}
-            style={{
-              flex: 1,
-              margin: -GAP_BETWEEN_ITEMS,
-            }}
-            renderFooter={ListFooterComponent}
-            layoutSize={layoutSize}
-            index={index}
-          />
-        )}
+        <ProfileTabsNFTProvider
+          tabType={
+            user.data.profile.profile_id === profileId ? list.type : undefined
+          }
+        >
+          {dataProvider && dataProvider.getSize() > 0 && (
+            <TabRecyclerList
+              layoutProvider={_layoutProvider}
+              dataProvider={dataProvider}
+              rowRenderer={_rowRenderer}
+              onEndReached={fetchMore}
+              style={{
+                flex: 1,
+                margin: -GAP_BETWEEN_ITEMS,
+              }}
+              renderFooter={ListFooterComponent}
+              layoutSize={layoutSize}
+              index={index}
+            />
+          )}
+        </ProfileTabsNFTProvider>
       </MutateProvider>
     );
   }
