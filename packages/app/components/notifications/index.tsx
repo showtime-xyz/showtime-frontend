@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  ListRenderItemInfo,
-  Platform,
-  useWindowDimensions,
-} from "react-native";
+import { ListRenderItemInfo, useWindowDimensions } from "react-native";
 
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -95,10 +91,7 @@ export const Notifications = ({ useWindowScroll = true }) => {
       <InfiniteScrollList
         useWindowScroll={useWindowScroll}
         data={data}
-        style={Platform.select({
-          native: { height: flatListHeight },
-          default: {},
-        })}
+        style={{ height: flatListHeight }}
         overscan={{
           main: 100,
           reverse: 100,

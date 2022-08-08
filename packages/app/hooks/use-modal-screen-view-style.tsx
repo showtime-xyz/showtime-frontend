@@ -1,4 +1,4 @@
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
@@ -19,7 +19,14 @@ export const useModalScreenViewStyle = (
   const mode = options?.mode ?? "padding";
   const offset = options?.offset ?? 0;
   const isModalScreen = router.pathname !== "/";
-  const top = isModalScreen ? 0 : headerHeight + 16 + offset;
+  const top = isModalScreen
+    ? 0
+    : Platform.select({
+        ios: headerHeight,
+        default: 0,
+      }) +
+      16 +
+      offset;
   const bottom = isModalScreen ? 0 : bottomHeight + offset;
 
   if (mode === "margin") {
