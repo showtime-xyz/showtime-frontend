@@ -9,6 +9,10 @@ import {
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
 import { FeedItem } from "app/components/feed-item";
+import {
+  MOBILE_WEB_BOTTOM_NAV_HEIGHT,
+  MOBILE_WEB_TABS_HEIGHT,
+} from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -18,8 +22,6 @@ import type { NFT } from "app/types";
 import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
 
 const { height: screenHeight } = Dimensions.get("screen");
-const MOBILE_WEB_TABS_HEIGHT = 50;
-const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
