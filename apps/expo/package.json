@@ -157,7 +157,7 @@
     "https-browserify": "~1.0.0",
     "inherits": "^2.0.1",
     "moti": "^0.18.0",
-    "nativewind": "^2.0.0-next.53",
+    "nativewind": "^2.0.0-next.56",
     "node-libs-react-native": "^1.2.1",
     "path-browserify": "1.0.1",
     "process": "^0.11.0",
