@@ -17,6 +17,7 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
+import { MOBILE_WEB_BOTTOM_NAV_HEIGHT } from "app/constants/layout";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useUser } from "app/hooks/use-user";
@@ -98,7 +99,7 @@ const NFTDetail = () => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-  const { user } = useUser();
+  const { isAuthenticated } = useUser();
 
   const nftWithListing = useMemo(() => {
     return {
@@ -109,12 +110,12 @@ const NFTDetail = () => {
 
   const itemHeight =
     Platform.OS === "web"
-      ? windowHeight - headerHeight - safeAreaBottom
+      ? windowHeight -
+        headerHeight -
+        (isAuthenticated ? MOBILE_WEB_BOTTOM_NAV_HEIGHT : 0)
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
-  const bottomMargin =
-    Platform.OS === "web" && windowWidth < 768 && !!user ? BOTTOM_GAP : 0;
   const nft = data?.data?.item;
 
   if (nft) {
@@ -122,7 +123,6 @@ const NFTDetail = () => {
       <FeedItem
         itemHeight={itemHeight}
         bottomPadding={safeAreaBottom}
-        bottomMargin={bottomMargin}
         nft={nftWithListing as NFT}
       />
     );

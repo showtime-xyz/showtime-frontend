@@ -11,7 +11,11 @@ import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { FeedItem } from "app/components/feed-item";
-import { MAX_HEADER_WIDTH } from "app/constants/layout";
+import {
+  MAX_HEADER_WIDTH,
+  MOBILE_WEB_BOTTOM_NAV_HEIGHT,
+  MOBILE_WEB_TABS_HEIGHT,
+} from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useUser } from "app/hooks/use-user";
@@ -24,8 +28,6 @@ import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const SCROLL_BAR_WIDTH = 15;
-const MOBILE_WEB_TABS_HEIGHT = 50;
-const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
 
 type Props = {
   data: NFT[];
