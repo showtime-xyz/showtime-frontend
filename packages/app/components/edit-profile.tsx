@@ -287,6 +287,7 @@ export const EditProfile = () => {
                         const file = await pickFile({
                           mediaTypes: "image",
                           option: Platform.select({
+                            // aspect option only support android.
                             android: { allowsEditing: true, aspect: [3, 1] },
                             default: {},
                           }),
