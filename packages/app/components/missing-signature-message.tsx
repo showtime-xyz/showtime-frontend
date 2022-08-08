@@ -7,6 +7,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useWallet } from "app/hooks/auth/use-wallet";
+import { useWalletConnect } from "app/lib/walletconnect";
 
 export const MissingSignatureMessage = ({
   onMount,
@@ -15,30 +16,25 @@ export const MissingSignatureMessage = ({
   onMount?: any;
   onReconnectWallet?: any;
 }) => {
-  const { disconnect, connect } = useWallet();
-  const openConnectModalAfterDisconnect = useRef(false);
+  const connector = useWalletConnect();
 
+  const { connect, connected, disconnect } = useWallet();
+  const openConnectModalAfterDisconnect = useRef(false);
   const mounted = useRef(false);
   const router = useRouter();
+
   const handleReconnect = async () => {
-    await disconnect();
     if (Platform.OS === "web") {
+      disconnect();
       localStorage.removeItem("walletconnect");
-      if (connect) {
-        connect();
-      } else {
-        openConnectModalAfterDisconnect.current = true;
-      }
     } else {
-      // TODO: wallet selection modal is only on login screen on native
-      router.push("/login");
-      onReconnectWallet?.();
+      connector.killSession();
     }
+    openConnectModalAfterDisconnect.current = true;
   };
 
   useEffect(() => {
-    // Below snippet will only run on web.
-    // TODO: due to some reason rainbowkit sets openAccountModal undefined if the wallet is in `connected` state, so we did some hacks here
+    // TODO: rainbowkit sets openAccountModal undefined if the wallet is in `connected` state, so we did some hacks here
     if (connect && openConnectModalAfterDisconnect.current) {
       setTimeout(() => {
         connect();
@@ -47,6 +43,16 @@ export const MissingSignatureMessage = ({
       openConnectModalAfterDisconnect.current = false;
     }
   }, [connect, onReconnectWallet]);
+
+  useEffect(() => {
+    // TODO: wallet connect stays connected even after we await in disconnect so we do this hack
+    if (!connected && openConnectModalAfterDisconnect.current) {
+      // TODO: wallet selection modal is only on login screen on native
+      router.push("/login");
+      onReconnectWallet?.();
+      openConnectModalAfterDisconnect.current = false;
+    }
+  }, [connected, onReconnectWallet, router]);
 
   useEffect(() => {
     if (!mounted.current) {
