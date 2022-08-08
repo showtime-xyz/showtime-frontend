@@ -284,7 +284,13 @@ export const EditProfile = () => {
                   render={({ field: { onChange, value } }) => (
                     <Pressable
                       onPress={async () => {
-                        const file = await pickFile({ mediaTypes: "image" });
+                        const file = await pickFile({
+                          mediaTypes: "image",
+                          option: Platform.select({
+                            android: { allowsEditing: true, aspect: [3, 1] },
+                            default: {},
+                          }),
+                        });
                         const uri = getLocalFileURI(file.file);
 
                         setSelectedImg(uri);
@@ -321,6 +327,7 @@ export const EditProfile = () => {
                           onPress={async () => {
                             const file = await pickFile({
                               mediaTypes: "image",
+                              option: { allowsEditing: true, aspect: [1, 1] },
                             });
 
                             setSelectedImg(getLocalFileURI(file.file));
