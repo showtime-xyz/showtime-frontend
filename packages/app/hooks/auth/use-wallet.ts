@@ -17,7 +17,8 @@ export type UseWalletReturnType = {
 };
 
 const useWallet = (): UseWalletReturnType => {
-  const { connected, killSession, session, connect } = useWalletConnect();
+  const connector = useWalletConnect();
+  const { connected, session } = connector;
   const { web3, isMagic } = useWeb3();
   const [address, setAddress] = useState<string | undefined>();
 
@@ -36,8 +37,8 @@ const useWallet = (): UseWalletReturnType => {
 
   return {
     address,
-    connect,
-    disconnect: killSession,
+    connect: connector.connect,
+    disconnect: connector.killSession,
     connected: connected || isMagic,
     networkChanged: undefined,
     signMessageAsync: async (args: {
