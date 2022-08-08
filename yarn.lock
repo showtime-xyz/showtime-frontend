@@ -8005,7 +8005,7 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.69.3
-    react-native-bignumber: ^0.1.8
+    react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
@@ -29898,15 +29898,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-bignumber@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "react-native-bignumber@npm:0.1.8"
+"react-native-bignumber@npm:^0.1.9":
+  version: 0.1.9
+  resolution: "react-native-bignumber@npm:0.1.9"
   dependencies:
     "@craftzdog/react-native-buffer": ^6.0.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 8ef7b59d324b805a436dc7e740baa90e10effbbaf949fec7f32030a9ee8b62aeb67ac4079651cb02cf282281141b399c2a989cce5b789b477785b3f3010ea4e1
+  checksum: da29231f33040dc829b91e39389cbd72e570ea16d8053b10d058fa695fe74b457462900d8fe0ddbd55639dfe2d9f602f80a7de6213ba59ec9ad1a58af640ec33
   languageName: node
   linkType: hard
 
