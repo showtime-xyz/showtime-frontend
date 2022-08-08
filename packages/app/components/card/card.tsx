@@ -26,13 +26,12 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
   onPress: () => void;
-  listId?: string;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   hrefProps?: string;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
+function Card({ nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
@@ -102,7 +101,6 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
                     size: "small",
                   }}
                   nft={nft}
-                  listId={listId}
                 />
               </Suspense>
             </ErrorBoundary>
