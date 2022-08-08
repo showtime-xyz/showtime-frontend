@@ -119,7 +119,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           />
         );
       },
-      [onItemPress]
+      [onItemPress, list.type]
     );
     if (isBlocked) {
       return (
