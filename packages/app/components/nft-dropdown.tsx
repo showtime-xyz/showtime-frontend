@@ -15,17 +15,14 @@ import {
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
-  Trash,
   File,
   UserMinus,
   Flag,
-  Transfer,
   EyeOff,
   Copy,
   Slash,
   Refresh,
   Clock,
-  Menu,
   Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -39,10 +36,8 @@ import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
-import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
-import { findListingItemByOwner } from "app/utilities";
 
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
@@ -98,13 +93,7 @@ function NFTDropdown({
   //#endregion
 
   //#region variables
-  const hasMatchingListing = findListingItemByOwner(nft, userId);
   const hasOwnership = nft?.is_user_owner;
-
-  // Prevent web3 actions on incorrect contracts caused by environment syncs
-  const usableContractAddress = SHOWTIME_CONTRACTS.includes(
-    nft?.contract_address
-  );
 
   const isFollowingUser = useMemo(
     () => nft?.owner_id && isFollowing(nft?.creator_id),
@@ -282,47 +271,6 @@ function NFTDropdown({
           >
             <MenuItemIcon Icon={Flag} />
             <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
-
-        {hasOwnership && !isCreatorDrop && (
-          <DropdownMenuItem
-            onSelect={() => openModal("transfer")}
-            key="transfer"
-          >
-            <MenuItemIcon Icon={Transfer} />
-            <DropdownMenuItemTitle>Transfer</DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
-
-        {hasOwnership &&
-          usableContractAddress &&
-          !hasMatchingListing &&
-          !isCreatorDrop && (
-            <DropdownMenuItem onSelect={() => openModal("list")} key="list">
-              <MenuItemIcon Icon={Menu} />
-              <DropdownMenuItemTitle>List</DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
-
-        {hasOwnership &&
-          usableContractAddress &&
-          hasMatchingListing &&
-          !isCreatorDrop && (
-            <DropdownMenuItem onSelect={() => openModal("unlist")} key="unlist">
-              <DropdownMenuItemTitle>Unlist</DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
-
-        {hasOwnership && !isCreatorDrop && (
-          <DropdownMenuItem
-            className="danger"
-            destructive
-            onSelect={() => openModal("delete")}
-            key="delete"
-          >
-            <MenuItemIcon Icon={Trash} />
-            <DropdownMenuItemTitle>Delete</DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

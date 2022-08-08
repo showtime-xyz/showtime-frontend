@@ -46,7 +46,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
 const defaultValues = {
   royalty: 10,
-  editionSize: 5000,
+  editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
   hasAcceptedTerms: false,
   notSafeForWork: false,
