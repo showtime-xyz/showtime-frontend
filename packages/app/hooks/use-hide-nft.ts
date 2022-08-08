@@ -25,6 +25,10 @@ export const useHideNFT = () => {
           if (router.pathname.includes("list") && Platform.OS !== "web") {
             router.pop();
           }
+
+          if (router.pathname.includes("/nft/") && Platform.OS === "web") {
+            router.pop();
+          }
           return true;
         } catch (error) {
           return false;
@@ -50,6 +54,9 @@ export const useHideNFT = () => {
             router.pop();
           }
 
+          if (router.pathname.includes("/nft/") && Platform.OS === "web") {
+            router.pop();
+          }
           return true;
         } catch (error) {
           return false;
