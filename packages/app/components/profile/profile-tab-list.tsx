@@ -115,13 +115,11 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             nft={item}
             numColumns={3}
             onPress={() => onItemPress(item.nft_id)}
-            hrefProps={{
-              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-            }}
+            href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}?tabType=${list.type}`}
           />
         );
       },
-      [onItemPress]
+      [onItemPress, list.type]
     );
     if (isBlocked) {
       return (
