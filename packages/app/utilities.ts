@@ -629,7 +629,11 @@ export const userHasIncompleteExternalLinks = (profile?: {
   return true;
 };
 
-export const convertUTCDateToLocalDate = (date: Date) => {
+export const convertUTCDateToLocalDate = (dateStr: string) => {
+  if (typeof dateStr !== "string") return new Date();
+  const date = new Date(dateStr);
+  // will be old UTC +0 time if include Z, so return time directly
+  if (dateStr.includes("Z")) return date;
   const newDate = new Date(
     date.getTime() + date.getTimezoneOffset() * 60 * 1000
   );

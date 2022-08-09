@@ -138,7 +138,7 @@ export function MessageRow({
     if (!createdAt) return undefined;
 
     const currentTime = new Date();
-    const createdAtDate = convertUTCDateToLocalDate(new Date(createdAt));
+    const createdAtDate = convertUTCDateToLocalDate(createdAt);
 
     if (differenceInSeconds(currentTime, createdAtDate) < 10) {
       return "now";
