@@ -18,7 +18,7 @@ const NotificationsScreen = withColorScheme(() => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   return (
-    <View tw="w-full max-w-screen-2xl md:px-6">
+    <View tw="w-full max-w-screen-2xl flex-1 md:px-6">
       {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       <ErrorBoundary>
         <Suspense

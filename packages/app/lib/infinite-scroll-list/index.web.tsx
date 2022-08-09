@@ -48,11 +48,7 @@ export function VirtuosoList<T>(
         const element = renderItem?.({
           item: data[index],
           index,
-          separators: {
-            highlight: () => false,
-            unhighlight: () => false,
-            updateProps: () => false,
-          },
+          target: "Cell",
         });
         return (
           <>
