@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
-import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
@@ -67,53 +65,6 @@ export const getSortFields = () => {
       (key: string) => SORT_FIELDS[key as keyof typeof SORT_FIELDS]
     ),
   ];
-};
-
-export const getBiconomy = async (connector: any, provider: any) => {
-  // Here provider refers to magic rpc provider and connector could be wallet connect's connector instance
-  const walletProvider = provider
-    ? {
-        walletProvider: provider.provider,
-      }
-    : {
-        signFunction: (signedDataType: string, params: any) => {
-          return new Promise((resolve, reject) => {
-            if (signedDataType === "eth_signTypedData_v4") {
-              connector
-                .signTypedData(params)
-                .then((res: string) => {
-                  console.log("received signature from wallet ", res);
-                  resolve(res);
-                })
-                .catch((err: any) => {
-                  // TODO: this never gets logged!
-                  console.log("received error on signing ");
-                  console.error(err);
-                  reject(err);
-                });
-            }
-          });
-        },
-      };
-  const biconomy = new Biconomy(
-    new ethers.providers.JsonRpcProvider(
-      `https://polygon-${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-    ),
-    {
-      apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
-      // TODO: add walletconnect connector instance support in biconomy
-      ...walletProvider,
-      // debug: true,
-    }
-  );
-
-  await new Promise((resolve, reject) =>
-    biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject)
-  );
-
-  return { biconomy, connector };
 };
 
 export const NFT_DETAIL_API = "/v2/nft_detail";

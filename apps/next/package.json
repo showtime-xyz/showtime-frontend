@@ -11,7 +11,6 @@
     "postinstall": "cd ../.. && yarn patch-package"
   },
   "dependencies": {
-    "@biconomy/mexa": "2.0.24",
     "@builder.io/partytown": "^0.6.4",
     "@coinbase/wallet-sdk": "^3.3.0",
     "@growthbook/growthbook-react": "^0.9.1",
