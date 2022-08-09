@@ -2,6 +2,8 @@ import { useReducer, useEffect, useRef, useCallback } from "react";
 
 import { ethers } from "ethers";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -105,6 +107,7 @@ export const useClaimNFT = (edition?: IEdition) => {
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const Alert = useAlert();
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
@@ -225,6 +228,14 @@ export const useClaimNFT = (edition?: IEdition) => {
       dispatch({ type: "error", error: e?.message });
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
+
+      if (e?.response?.status === 500) {
+        Alert.alert(
+          "Oops. An error occured.",
+          "We are currently experiencing a lot of usage. Please try again in one hour!"
+        );
+      }
+
       captureException(e);
     }
   };
