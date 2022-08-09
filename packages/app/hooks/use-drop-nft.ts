@@ -79,6 +79,9 @@ const reducer = (state: State, action: Action): State => {
         error: action.error,
         signaturePrompt: false,
       };
+    case "reset": {
+      return initialState;
+    }
     case "transactionHash":
       return {
         ...state,
@@ -317,6 +320,10 @@ export const useDropNFT = () => {
     });
   }, []);
 
+  const reset = useCallback(() => {
+    dispatch({ type: "reset" });
+  }, []);
+
   return {
     dropNFT,
     state,
@@ -325,5 +332,6 @@ export const useDropNFT = () => {
     signMessageData,
     signTransaction,
     onReconnectWallet,
+    reset,
   };
 };
