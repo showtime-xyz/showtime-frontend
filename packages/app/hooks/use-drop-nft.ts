@@ -300,12 +300,21 @@ export const useDropNFT = () => {
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
+
       if (e?.response?.status === 420) {
         Alert.alert(
-          "Drop creation failed",
+          "Oops. An error occured.",
           "Only one drop per day is allowed. Please try again tomorrow!"
         );
       }
+
+      if (e?.response?.status === 500) {
+        Alert.alert(
+          "Oops. An error occured.",
+          "We are currently experiencing a lot of usage. Please try again in one hour!"
+        );
+      }
+
       captureException(e);
     }
   };
