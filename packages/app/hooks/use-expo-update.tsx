@@ -27,36 +27,34 @@ export function useExpoUpdate() {
   const bottom = usePlatformBottomHeight();
   const isForeground = useIsForeground();
   const snackbar = useSnackbar();
-
+  const checkUpdate = async (isAutomatic = false) => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        store.set(LAST_SHOW_UPDATE_KEY, new Date().toISOString());
+        if (isAutomatic) {
+          await Updates.reloadAsync();
+        } else {
+          snackbar?.show({
+            text: "New update available 🎉",
+            bottom: bottom + 64,
+            action: {
+              text: "Reload",
+              onPress: () => Updates.reloadAsync(),
+            },
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
   useEffect(() => {
     const now = new Date();
-    const checkUpdate = async (isAutomatic = false) => {
-      try {
-        const update = await Updates.checkForUpdateAsync();
-        if (update.isAvailable) {
-          await Updates.fetchUpdateAsync();
-          store.set(LAST_SHOW_UPDATE_KEY, now.toISOString());
-          if (isAutomatic) {
-            await Updates.reloadAsync();
-          } else {
-            snackbar?.show({
-              text: "New update available 🎉",
-              bottom: bottom + 64,
-              action: {
-                text: "Reload",
-                onPress: () => Updates.reloadAsync(),
-              },
-            });
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
     if (isForeground) {
       if (__DEV__) return;
       if (Platform.OS !== "ios") return;
-
       const lastUpdateTime = store.getString(LAST_SHOW_UPDATE_KEY);
       const diffDays = lastUpdateTime
         ? differenceInDays(now, Date.parse(lastUpdateTime))
@@ -74,6 +72,7 @@ export function useExpoUpdate() {
       if (diffSeconds < SWITCH_TO_FOREGROUND_INTERVAL) return;
       // if between 3am and 5am, will auto-update.
       const currentHours = now.getHours();
+
       checkUpdate(currentHours > 3 && currentHours < 5);
     } else {
       store.set(BACKGROUND_START_TIME_KEY, now.toISOString());

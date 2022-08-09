@@ -17,13 +17,11 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { useShareNFT } from "app/hooks/use-share-nft";
 import type { NFT } from "app/types";
 
-export const NFTDetails = ({
-  nft,
-  edition,
-}: {
+type NFTDetailsProps = {
   nft: NFT;
   edition?: CreatorEditionResponse;
-}) => {
+};
+export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
   const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 

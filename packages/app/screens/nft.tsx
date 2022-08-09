@@ -27,6 +27,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 
+import { breakpoints } from "design-system/theme";
+
 import { VideoConfigContext } from "../context/video-config-context";
 
 type Query = {
@@ -102,7 +104,7 @@ const NFTDetail = () => {
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const { isAuthenticated } = useUser();
-
+  const isMdWidth = windowWidth >= breakpoints["md"];
   const nftWithListing = useMemo(() => {
     return {
       ...data?.data.item,
@@ -114,7 +116,7 @@ const NFTDetail = () => {
     Platform.OS === "web"
       ? windowHeight -
         headerHeight -
-        (isAuthenticated ? MOBILE_WEB_BOTTOM_NAV_HEIGHT : 0)
+        (isAuthenticated && !isMdWidth ? MOBILE_WEB_BOTTOM_NAV_HEIGHT : 0)
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;

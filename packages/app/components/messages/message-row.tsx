@@ -17,7 +17,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
-import { formatAddressShort } from "app/utilities";
+import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
 
 interface MessageRowProps {
   /**
@@ -137,13 +137,14 @@ export function MessageRow({
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
 
-    const createdAtDate = new Date(createdAt);
+    const currentTime = new Date();
+    const createdAtDate = convertUTCDateToLocalDate(createdAt);
 
-    if (differenceInSeconds(new Date(), createdAtDate) < 10) {
+    if (differenceInSeconds(currentTime, createdAtDate) < 10) {
       return "now";
     }
 
-    return formatDistanceToNowStrict(new Date(createdAt), {
+    return formatDistanceToNowStrict(createdAtDate, {
       addSuffix: true,
     });
   }, [createdAt]);
