@@ -147,7 +147,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             tw={`absolute justify-center`}
             style={{
               height: Platform.select({
-                web: itemHeight - bottomPadding - detailHeight,
+                web: itemHeight - detailHeight,
                 default: itemHeight - bottomPadding - 50,
               }),
             }}
@@ -187,16 +187,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               ...tw.style(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               ),
+              paddingBottom: bottomPadding,
             }}
           >
             <NFTDetails edition={edition} nft={nft} />
-            <View
-              tw={`${
-                bottomPadding && bottomPadding !== 0
-                  ? `h-[${bottomPadding - 1}px]`
-                  : "h-0"
-              }`}
-            />
           </BlurView>
         </Reanimated.View>
       </View>

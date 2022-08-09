@@ -157,7 +157,9 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       <MutateProvider mutate={updateItem}>
         <ProfileTabsNFTProvider
           tabType={
-            user.data.profile.profile_id === profileId ? list.type : undefined
+            user?.data?.profile?.profile_id === profileId
+              ? list.type
+              : undefined
           }
         >
           {dataProvider && dataProvider.getSize() > 0 && (
