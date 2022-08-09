@@ -91,6 +91,7 @@ export const DropForm = () => {
     control,
     handleSubmit,
     formState: { errors },
+    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
@@ -107,6 +108,7 @@ export const DropForm = () => {
     signMessageData,
     signTransaction,
     onReconnectWallet,
+    reset,
   } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
@@ -177,9 +179,10 @@ export const DropForm = () => {
   }
 
   if (state.status === "success") {
-    const claimUrl = `https://showtime.xyz/t/${[
-      process.env.NEXT_PUBLIC_CHAIN_ID,
-    ]}/${state.edition?.contract_address}/0`;
+    const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
+      state.edition?.contract_address
+    }/0`;
+    const claimUrl = `https://showtime.xyz${claimPath}`;
 
     const isShareAPIAvailable = Platform.select({
       default: true,
@@ -250,7 +253,15 @@ export const DropForm = () => {
             tw="mt-4"
             onPress={Platform.select({
               web: () => router.push(claimUrl),
-              default: router.pop,
+              default: () => {
+                if (router.pathname === "/") {
+                  router.push(claimPath);
+                  resetForm();
+                  reset();
+                } else {
+                  router.pop();
+                }
+              },
             })}
           >
             Skip for now

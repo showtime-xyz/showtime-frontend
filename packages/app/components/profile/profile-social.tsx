@@ -3,18 +3,21 @@ import { Linking } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Divider } from "@showtime-xyz/universal.divider";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Twitter,
   Link as LinkIcon,
   Instagram,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Profile } from "app/types";
 import { getDomainName, formatLink } from "app/utilities";
+
+import { Hidden } from "design-system/hidden";
 
 type ProfileSocialProps = {
   profile?: Profile;
@@ -23,6 +26,8 @@ type ProfileSocialProps = {
 export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   profile,
 }) {
+  useIsDarkMode();
+
   const Alert = useAlert();
   const twitter = useMemo(
     () => profile?.links?.find((item) => item.type__name === "Twitter"),
@@ -47,7 +52,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   );
 
   return (
-    <View tw="flex-row items-center">
+    <View tw="items-center justify-center sm:flex-row">
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
@@ -56,7 +61,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
           accessibilityRole="link"
         >
           <LinkIcon
-            color={colors.gray.darkest}
+            color={tw.style("text-gray-900 dark:text-white").color as string}
             width={16}
             height={16}
             style={tw.style("mr-1 -mt-0.5")}
@@ -66,45 +71,50 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
           </Text>
         </PressableScale>
       )}
-      {websiteLink && (twitter?.user_input || instagram?.user_input) && (
-        <Divider orientation="vertical" height={16} tw="mx-4" />
-      )}
 
-      {twitter?.user_input && (
-        <PressableScale
-          onPress={() =>
-            onPressLink(
-              `https://${twitter?.type__prefix}${twitter?.user_input}`
-            )
-          }
-          accessibilityLabel="Twitter"
-          accessibilityRole="link"
-        >
-          <Twitter
-            width={16}
-            height={16}
-            color={tw.style("text-gray-900 dark:text-white").color as string}
-          />
-        </PressableScale>
-      )}
-      {instagram?.user_input && (
-        <PressableScale
-          tw="ml-4"
-          onPress={() =>
-            onPressLink(
-              `https://${instagram?.type__prefix}${instagram?.user_input}`
-            )
-          }
-          accessibilityLabel="Instagram"
-          accessibilityRole="link"
-        >
-          <Instagram
-            width={16}
-            height={16}
-            color={tw.style("text-gray-900 dark:text-white").color as string}
-          />
-        </PressableScale>
-      )}
+      <Hidden until="sm">
+        {websiteLink && (twitter?.user_input || instagram?.user_input) && (
+          <Divider orientation="vertical" height={16} tw="mx-4" />
+        )}
+      </Hidden>
+
+      <View tw="mt-4 flex-row items-center justify-center sm:mt-0 sm:mt-0">
+        {twitter?.user_input && (
+          <PressableScale
+            onPress={() =>
+              onPressLink(
+                `https://${twitter?.type__prefix}${twitter?.user_input}`
+              )
+            }
+            accessibilityLabel="Twitter"
+            accessibilityRole="link"
+          >
+            <Twitter
+              width={16}
+              height={16}
+              color={tw.style("text-gray-900 dark:text-white").color as string}
+            />
+          </PressableScale>
+        )}
+        {instagram?.user_input && (
+          <PressableScale
+            tw="ml-4"
+            onPress={() =>
+              onPressLink(
+                `https://${instagram?.type__prefix}${instagram?.user_input}`
+              )
+            }
+            accessibilityLabel="Instagram"
+            accessibilityRole="link"
+          >
+            <Instagram
+              width={16}
+              height={16}
+              color={tw.style("text-gray-900 dark:text-white").color as string}
+            />
+          </PressableScale>
+        )}
+      </View>
     </View>
   );
 });
