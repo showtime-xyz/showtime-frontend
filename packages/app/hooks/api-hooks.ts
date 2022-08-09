@@ -302,7 +302,6 @@ export const useMyInfo = () => {
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const navigateToLogin = useNavigateToLogin();
-
   const { data, error } = useSWR<MyInfo>(
     accessToken ? queryKey : null,
     fetcher
@@ -423,54 +422,6 @@ export const useMyInfo = () => {
     [data, accessToken, mutate, navigateToLogin]
   );
 
-  const hide = useCallback(
-    async (nftId: number | undefined) => {
-      if (!accessToken) {
-        navigateToLogin();
-        return false;
-      }
-
-      if (data && nftId) {
-        try {
-          await axios({
-            url: `/v2/profile-tabs/hide-nft/${nftId}`,
-            method: "POST",
-            data: {},
-          });
-
-          return true;
-        } catch (error) {
-          return false;
-        }
-      }
-    },
-    [data, accessToken, navigateToLogin]
-  );
-
-  const unhide = useCallback(
-    async (nftId: number | undefined) => {
-      if (!accessToken) {
-        navigateToLogin();
-        return false;
-      }
-
-      if (data && nftId) {
-        try {
-          await axios({
-            url: `/v2/profile-tabs/unhide-nft/${nftId}`,
-            method: "POST",
-            data: {},
-          });
-
-          return true;
-        } catch (error) {
-          return false;
-        }
-      }
-    },
-    [data, accessToken, navigateToLogin]
-  );
-
   const unlike = useCallback(
     async (nftId: number) => {
       if (data) {
@@ -525,7 +476,5 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
-    hide,
-    unhide,
   };
 };

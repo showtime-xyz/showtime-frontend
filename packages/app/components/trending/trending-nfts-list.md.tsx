@@ -29,9 +29,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
       return (
         <View tw="my-4 flex-1 px-2">
           <Card
-            hrefProps={{
-              pathname: `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`,
-            }}
+            href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
             key={`nft-list-card-${index}`}
             nft={item}
             tw={`w-full h-[${cardHeight}px] bg-white dark:bg-black`}

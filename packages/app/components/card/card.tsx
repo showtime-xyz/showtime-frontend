@@ -1,6 +1,8 @@
 import { Suspense, useMemo, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { Link } from "solito/link";
+
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -17,7 +19,6 @@ import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 
 import { CARD_DARK_SHADOW } from "design-system/theme";
@@ -26,13 +27,12 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
   onPress: () => void;
-  listId?: string;
   tw?: string;
   variant?: "nft" | "activity" | "market";
-  hrefProps?: string;
+  href?: string;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
+function Card({ nft, numColumns, tw, onPress, href = "" }: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
@@ -65,7 +65,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
 
   if (width < 768) {
     return (
-      <RouteComponent href={hrefProps} onPress={handleOnPress}>
+      <RouteComponent href={href} onPress={handleOnPress}>
         <Media item={nft} numColumns={numColumns} />
       </RouteComponent>
     );
@@ -102,19 +102,18 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = "" }: Props) {
                     size: "small",
                   }}
                   nft={nft}
-                  listId={listId}
                 />
               </Suspense>
             </ErrorBoundary>
           </View>
 
-          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
+          <RouteComponent href={href!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
           <RouteComponent
             // @ts-ignore
             dataSet={{ testId: "nft-card-title-link" }}
-            href={hrefProps!}
+            href={href!}
             onPress={handleOnPress}
           >
             <Title nft={nft} cardMaxWidth={cardMaxWidth} />

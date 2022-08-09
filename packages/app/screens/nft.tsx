@@ -18,6 +18,7 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { MOBILE_WEB_BOTTOM_NAV_HEIGHT } from "app/constants/layout";
+import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useUser } from "app/hooks/use-user";
@@ -34,6 +35,7 @@ type Query = {
   tokenId: string;
   contractAddress: string;
   chainName: string;
+  tabType?: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -90,6 +92,7 @@ const NFTDetail = () => {
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
+  const [tabType] = useParam("tabType");
   const { data } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
@@ -121,11 +124,13 @@ const NFTDetail = () => {
 
   if (nft) {
     return (
-      <FeedItem
-        itemHeight={itemHeight}
-        bottomPadding={safeAreaBottom}
-        nft={nftWithListing as NFT}
-      />
+      <ProfileTabsNFTProvider tabType={tabType}>
+        <FeedItem
+          itemHeight={itemHeight}
+          bottomPadding={safeAreaBottom}
+          nft={nftWithListing as NFT}
+        />
+      </ProfileTabsNFTProvider>
     );
   }
 
