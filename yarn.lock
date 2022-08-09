@@ -3158,7 +3158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.4, @expo/config-plugins@npm:~4.1.5":
+"@expo/config-plugins@npm:4.1.5, @expo/config-plugins@npm:^4.0.15, @expo/config-plugins@npm:^4.1.0, @expo/config-plugins@npm:~4.1.4":
   version: 4.1.5
   resolution: "@expo/config-plugins@npm:4.1.5"
   dependencies:
@@ -3239,7 +3239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-types@npm:^46.0.0":
+"@expo/config-types@npm:^46.0.0, @expo/config-types@npm:^46.0.1":
   version: 46.0.1
   resolution: "@expo/config-types@npm:46.0.1"
   checksum: 2f5b1b03d4636893f406fb934ef76e9ed0b71161bc27f2c53e94223525655111b60ed83e803065f666cca88d2d11e38f604b5513efd641805a9bde4a852b06cb
@@ -6198,33 +6198,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-hermes@npm:^8.0.4":
-  version: 8.0.4
-  resolution: "@react-native-community/cli-hermes@npm:8.0.4"
+"@react-native-community/cli-hermes@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "@react-native-community/cli-hermes@npm:8.0.5"
   dependencies:
-    "@react-native-community/cli-platform-android": ^8.0.4
+    "@react-native-community/cli-platform-android": ^8.0.5
     "@react-native-community/cli-tools": ^8.0.4
     chalk: ^4.1.2
     hermes-profile-transformer: ^0.0.6
     ip: ^1.1.5
-  checksum: 3c2a6811953bfd35085fcf7932b05c118688d4733126b61792528f2946ea5cc68f351b7fe51e4c63e96a01ba1da8482f360877331594f696336b28b6bd3c1b3b
-  languageName: node
-  linkType: hard
-
-"@react-native-community/cli-platform-android@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "@react-native-community/cli-platform-android@npm:8.0.2"
-  dependencies:
-    "@react-native-community/cli-tools": ^8.0.0
-    chalk: ^4.1.2
-    execa: ^1.0.0
-    fs-extra: ^8.1.0
-    glob: ^7.1.3
-    jetifier: ^1.6.2
-    lodash: ^4.17.15
-    logkitty: ^0.7.1
-    slash: ^3.0.0
-  checksum: 1e3ea384d29db8f1b4b89ab7778bde17755860955bf129c3b51ef2f50879f774db57a94f0be6a1300529aada2c4602b4d94e43b40e5ee865880707a922f0fe51
+  checksum: d98cb53b062bf2b61c4c6f861112d4a5ebc3736a0d352f7cc31efa33352a102b4f45a8fef8ddc940d0142142ba14db716d1be8a709174d5321a3fac6dec783b2
   languageName: node
   linkType: hard
 
@@ -6245,19 +6228,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-ios@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "@react-native-community/cli-platform-ios@npm:8.0.2"
+"@react-native-community/cli-platform-android@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "@react-native-community/cli-platform-android@npm:8.0.5"
   dependencies:
-    "@react-native-community/cli-tools": ^8.0.0
+    "@react-native-community/cli-tools": ^8.0.4
     chalk: ^4.1.2
     execa: ^1.0.0
+    fs-extra: ^8.1.0
     glob: ^7.1.3
-    js-yaml: ^3.13.1
+    jetifier: ^1.6.2
     lodash: ^4.17.15
-    ora: ^5.4.1
-    plist: ^3.0.2
-  checksum: 10c99047575be7645eedaf9b5196e9e7912601ce730251c9f1337f24139ec0b7a66cf710cacfbaf6a4e55acc8526be6277ecfc04e82e7476a5dc6890125c3281
+    logkitty: ^0.7.1
+    slash: ^3.0.0
+  checksum: 84166b2fba5d09add581abffd1d1b68feac0cf9b849ba19f79b2b2672b66bc73dd9f93fa4e6c17bc2d75ad0f78ede1bbd4fe7678928c94b212278eec7072be36
   languageName: node
   linkType: hard
 
@@ -6312,23 +6296,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-tools@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@react-native-community/cli-tools@npm:8.0.0"
-  dependencies:
-    appdirsjs: ^1.2.4
-    chalk: ^4.1.2
-    lodash: ^4.17.15
-    mime: ^2.4.1
-    node-fetch: ^2.6.0
-    open: ^6.2.0
-    ora: ^5.4.1
-    semver: ^6.3.0
-    shell-quote: ^1.7.3
-  checksum: e57127dd539e3dd366b76e16ba80e55a9d2a37b5d57fe410c7ce246faed300968bfa55b6655dff2400b81a21d72ab533f6e57b0b358f08327ea7bc003caedd84
-  languageName: node
-  linkType: hard
-
 "@react-native-community/cli-tools@npm:^8.0.4":
   version: 8.0.4
   resolution: "@react-native-community/cli-tools@npm:8.0.4"
@@ -6356,15 +6323,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli@npm:^8.0.3":
-  version: 8.0.4
-  resolution: "@react-native-community/cli@npm:8.0.4"
+"@react-native-community/cli@npm:^8.0.4":
+  version: 8.0.5
+  resolution: "@react-native-community/cli@npm:8.0.5"
   dependencies:
     "@react-native-community/cli-clean": ^8.0.4
     "@react-native-community/cli-config": ^8.0.4
     "@react-native-community/cli-debugger-ui": ^8.0.0
     "@react-native-community/cli-doctor": ^8.0.4
-    "@react-native-community/cli-hermes": ^8.0.4
+    "@react-native-community/cli-hermes": ^8.0.5
     "@react-native-community/cli-plugin-metro": ^8.0.4
     "@react-native-community/cli-server-api": ^8.0.4
     "@react-native-community/cli-tools": ^8.0.4
@@ -6384,7 +6351,7 @@ __metadata:
     react-native: "*"
   bin:
     react-native: build/bin.js
-  checksum: a46a0eaf041c1fefd8471cbef5e4f7c8181884aac8a1caa4a76865d095aa7d7bc5c1a981d6a4eb6729b7ac080ef6829b34116aa510d25ceb7f29517c9ccabd0b
+  checksum: 19bfd94f543c8d0bed992b9ae5592872cbc7efdef6115ece6f11add8a2b520455924a4bf6c73e8af2212c72dd3eadb1f9fdb10a31713226c58cbf30228413e44
   languageName: node
   linkType: hard
 
@@ -6780,7 +6747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.7.0, @sentry/browser@npm:^7.7.0":
+"@sentry/browser@npm:7.7.0":
   version: 7.7.0
   resolution: "@sentry/browser@npm:7.7.0"
   dependencies:
@@ -6849,7 +6816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:7.7.0, @sentry/integrations@npm:^7.7.0":
+"@sentry/integrations@npm:7.7.0":
   version: 7.7.0
   resolution: "@sentry/integrations@npm:7.7.0"
   dependencies:
@@ -6902,7 +6869,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react-native@npm:^4.1.3, @sentry/react-native@npm:^4.2.0":
+"@sentry/react-native@npm:4.2.2":
+  version: 4.2.2
+  resolution: "@sentry/react-native@npm:4.2.2"
+  dependencies:
+    "@sentry/browser": 7.7.0
+    "@sentry/cli": 1.74.4
+    "@sentry/core": 7.7.0
+    "@sentry/hub": 7.7.0
+    "@sentry/integrations": 7.7.0
+    "@sentry/react": 7.7.0
+    "@sentry/tracing": 7.7.0
+    "@sentry/types": 7.7.0
+    "@sentry/utils": 7.7.0
+    "@sentry/wizard": 1.2.17
+  peerDependencies:
+    react: ">=16.4.1"
+    react-native: ">=0.56.0"
+  checksum: 715244c15fab7d7093f98436701c8993a2848997c9ea28ced84cb01694736950bdc2fafacae2fbc50e6e0486d021935cf20aca964d191763683262d1acb696f1
+  languageName: node
+  linkType: hard
+
+"@sentry/react-native@npm:^4.2.0":
   version: 4.2.0
   resolution: "@sentry/react-native@npm:4.2.0"
   dependencies:
@@ -6950,7 +6938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.7.0, @sentry/types@npm:^7.7.0":
+"@sentry/types@npm:7.7.0":
   version: 7.7.0
   resolution: "@sentry/types@npm:7.7.0"
   checksum: 1f26c23617e9370cf32269ea5d5aa0f75fe86c34aede4fc07ae3bdae08803a788d628d0bba6f2e22c03d0430dcf63cc19453468ae086406448da07e13f36da70
@@ -7943,7 +7931,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
-    react-native: 0.69.3
+    react-native: 0.69.4
     react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
@@ -7977,7 +7965,7 @@ __metadata:
     recyclerlistview: ^4.1.1
     remove-markdown: ^0.3.0
     semver: ^7.3.5
-    sentry-expo: ^5.0.0
+    sentry-expo: ^5.0.2
     solito: ^0.0.24
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
@@ -8108,7 +8096,7 @@ __metadata:
     expo-web-browser: ~10.2.1
     react: 18.2.0
     react-dom: 18.2.0
-    react-native: 0.69.3
+    react-native: 0.69.4
     react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
@@ -30209,14 +30197,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.69.3":
-  version: 0.69.3
-  resolution: "react-native@npm:0.69.3"
+"react-native@npm:0.69.4":
+  version: 0.69.4
+  resolution: "react-native@npm:0.69.4"
   dependencies:
     "@jest/create-cache-key-function": ^27.0.1
-    "@react-native-community/cli": ^8.0.3
-    "@react-native-community/cli-platform-android": ^8.0.2
-    "@react-native-community/cli-platform-ios": ^8.0.2
+    "@react-native-community/cli": ^8.0.4
+    "@react-native-community/cli-platform-android": ^8.0.4
+    "@react-native-community/cli-platform-ios": ^8.0.4
     "@react-native/assets": 1.0.0
     "@react-native/normalize-color": 2.0.0
     "@react-native/polyfills": 2.0.0
@@ -30250,7 +30238,7 @@ __metadata:
     react: 18.0.0
   bin:
     react-native: cli.js
-  checksum: 49153ee9ec7bec8d181f98c5ba2d4dbd2d9a7fd53ff3a45108290651af4df19db972619c12db1b7e2d98b19f30ada59f3811951ef5cc78348e03ef9145c03dea
+  checksum: dcc520f9aebf709b2fd5e4b4b73136347d7d99d8bdcd10f9b1bfd57ffa1e31e3acdccf22ff7ad7395ec6f74d941bdd1a43954cad2121cc9c0d29ca800bc506fe
   languageName: node
   linkType: hard
 
@@ -31939,17 +31927,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sentry-expo@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "sentry-expo@npm:5.0.0"
+"sentry-expo@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "sentry-expo@npm:5.0.2"
   dependencies:
-    "@expo/config-plugins": ~4.1.5
-    "@expo/config-types": ^45.0.0
+    "@expo/config-plugins": ~5.0.0
+    "@expo/config-types": ^46.0.1
     "@expo/spawn-async": ^1.6.0
-    "@sentry/browser": ^7.7.0
-    "@sentry/integrations": ^7.7.0
-    "@sentry/react-native": ^4.1.3
-    "@sentry/types": ^7.7.0
+    "@sentry/browser": 7.7.0
+    "@sentry/integrations": 7.7.0
+    "@sentry/react-native": 4.2.2
+    "@sentry/types": 7.7.0
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
   peerDependencies:
@@ -31957,7 +31945,7 @@ __metadata:
     expo-constants: "*"
     expo-device: "*"
     expo-updates: "*"
-  checksum: d3b27d761ae42b574e3abec7e4a13d58528d38843c9c179289a742571b18b4979a0c55bc6bbfc2291a34463a4fc5bdb39559ea8c2944c2f3cc050c9be2bbb8fd
+  checksum: f19fd2b65ec30131db2cfd239374cddbb5db78fe071c20cdf03bce21e361362246eb74d24521ecca70821f4498993db75d657f6162f9e0b39126f5908847401b
   languageName: node
   linkType: hard
 
@@ -32217,7 +32205,7 @@ __metadata:
     prettier-plugin-tailwindcss: 0.1.10
     react-native-fast-image: ^8.5.11
     react-native-os: ^1.2.6
-    sentry-expo: ^5.0.0
+    sentry-expo: ^5.0.2
     turbo: ^1.2.8
   languageName: unknown
   linkType: soft
