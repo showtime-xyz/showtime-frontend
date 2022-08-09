@@ -11,16 +11,11 @@ import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { FeedItem } from "app/components/feed-item";
-import {
-  MAX_HEADER_WIDTH,
-  MOBILE_WEB_BOTTOM_NAV_HEIGHT,
-  MOBILE_WEB_TABS_HEIGHT,
-} from "app/constants/layout";
+import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
-import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
@@ -46,22 +41,16 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   bottomPadding = 0,
 }: Props) => {
-  const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
-  const navigation = useNavigation();
   const { isMobileWeb } = useIsMobileWeb();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
   const itemHeight =
     Platform.OS === "web"
-      ? windowHeight -
-        headerHeight -
-        (isAuthenticated
-          ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
-          : 0)
+      ? windowHeight - headerHeight
       : Platform.OS === "android"
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;

@@ -85,7 +85,7 @@ const ProfileSwipeList = () => {
     <MutateProvider mutate={updateItem}>
       <ProfileTabsNFTProvider
         tabType={
-          user.data?.profile?.profile_id?.toString() === profileId
+          user?.data?.profile?.profile_id?.toString() === profileId
             ? tabType
             : undefined
         }
