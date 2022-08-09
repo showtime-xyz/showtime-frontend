@@ -191,7 +191,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               ),
             }}
           >
-            <NFTDetails edition={edition} nft={nft} listId={listId} />
+            <NFTDetails edition={edition} nft={nft} />
             <View
               tw={`${
                 bottomPadding && bottomPadding !== 0
