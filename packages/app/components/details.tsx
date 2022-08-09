@@ -14,7 +14,7 @@ function Details({ nft }: { nft: NFT }) {
         {nft?.token_description && (
           <>
             <View tw="h-4" />
-            <Text tw="text-sm font-medium text-gray-400 dark:text-gray-600">
+            <Text tw="text-sm font-medium text-gray-500 dark:text-gray-500">
               {nft?.token_description}
             </Text>
           </>
