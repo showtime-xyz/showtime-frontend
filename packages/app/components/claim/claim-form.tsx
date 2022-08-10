@@ -3,6 +3,7 @@ import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -102,9 +103,16 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
           Hold on!
         </Text>
-        <Text style={{ fontSize: 100 }}>✏️</Text>
+        <Image
+          source={Platform.select({
+            web: { uri: require("../drop/complete-profile.png") },
+            default: require("../drop/complete-profile.png"),
+          })}
+          tw={`h-25 w-25 rounded-xl`}
+          resizeMode="contain"
+        />
         <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          Please complete your profile before claiming the drop
+          Please complete your profile before claiming this drop.
         </Text>
         <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
           Complete your profile
