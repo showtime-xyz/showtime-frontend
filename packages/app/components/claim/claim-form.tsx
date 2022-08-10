@@ -62,8 +62,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     nft?.data.item.creator_airdrop_edition_address
   );
 
+  const { user } = useUser();
   const handleClaimNFT = async () => {
-    if (nft?.data.item.creator_id) {
+    if (
+      nft?.data.item.creator_id &&
+      user?.data?.profile.profile_id !== nft?.data.item.creator_id
+    ) {
       follow(nft?.data.item.creator_id);
     }
 
