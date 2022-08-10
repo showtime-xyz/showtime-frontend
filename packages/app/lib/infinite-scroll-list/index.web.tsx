@@ -39,7 +39,7 @@ const renderComponent = (Component: any) => {
   return <Component />;
 };
 
-const ViewablityTracker = ({
+const ViewabilityTracker = ({
   index,
   item,
   children,
@@ -121,7 +121,7 @@ export function VirtuosoList<T>(
           },
         });
         return (
-          <ViewablityTracker
+          <ViewabilityTracker
             index={index}
             item={data[index]}
             visibleItems={visibleItems}
@@ -133,7 +133,7 @@ export function VirtuosoList<T>(
               isReactComponent(ItemSeparatorComponent) && (
                 <ItemSeparatorComponent />
               )}
-          </ViewablityTracker>
+          </ViewabilityTracker>
         );
       }
 
