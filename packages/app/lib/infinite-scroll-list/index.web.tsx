@@ -1,12 +1,19 @@
-import React, { CSSProperties, useMemo } from "react";
+import React, {
+  CSSProperties,
+  useMemo,
+  useRef,
+  useEffect,
+  MutableRefObject,
+} from "react";
+import { FlatListProps, ViewToken } from "react-native";
 
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
-  VirtuosoGridProps,
   GridListProps,
   GridComponents,
   GridItem,
   VirtuosoHandle,
+  VirtuosoGridProps,
   VirtuosoGridHandle,
 } from "react-virtuoso";
 
@@ -14,16 +21,72 @@ import { isReactComponent } from "app/utilities";
 
 import type { InfiniteScrollListProps } from ".";
 
+const ioConfiguration = {
+  // will trigger intersection callback when item is 70% visible
+  threshold: 0.7,
+};
+
 export type InfiniteScrollListWebProps<T> = Omit<
   InfiniteScrollListProps<T>,
   "onEndReached"
 > & {
   onEndReached?: VirtuosoGridProps["endReached"];
+  onViewableItemsChanged?: FlatListProps<any>["onViewableItemsChanged"];
 };
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (React.isValidElement(Component)) return Component;
   return <Component />;
+};
+
+const ViewablityTracker = ({
+  index,
+  item,
+  children,
+  onViewableItemsChanged,
+  visibleItems,
+}: {
+  index: number;
+  item: any;
+  children: any;
+  onViewableItemsChanged: FlatListProps<any>["onViewableItemsChanged"];
+  visibleItems: MutableRefObject<ViewToken[]>;
+}) => {
+  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    if (onViewableItemsChanged) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          if (!visibleItems.current.find((v) => v.index === index))
+            visibleItems.current.push({
+              item,
+              index,
+              isViewable: true,
+              key: index.toString(),
+            });
+        } else {
+          visibleItems.current = visibleItems.current.filter(
+            (v) => v.index !== index
+          );
+        }
+
+        onViewableItemsChanged?.({
+          viewableItems: visibleItems.current,
+
+          // TODO: implement changed
+          changed: [],
+        });
+      }, ioConfiguration);
+
+      observer.observe(ref.current);
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [onViewableItemsChanged, visibleItems, index, item]);
+
+  return <div ref={ref}>{children}</div>;
 };
 
 export function VirtuosoList<T>(
@@ -39,9 +102,12 @@ export function VirtuosoList<T>(
     overscan,
     useWindowScroll = true,
     style,
+    onViewableItemsChanged,
   }: InfiniteScrollListWebProps<T>,
   ref: React.Ref<VirtuosoHandle> | React.Ref<VirtuosoGridHandle>
 ) {
+  const visibleItems = useRef<ViewToken[]>([]);
+
   const renderItemContent = React.useCallback(
     (index: number) => {
       if (data && data[index]) {
@@ -55,20 +121,25 @@ export function VirtuosoList<T>(
           },
         });
         return (
-          <>
+          <ViewablityTracker
+            index={index}
+            item={data[index]}
+            visibleItems={visibleItems}
+            onViewableItemsChanged={onViewableItemsChanged}
+          >
             {element}
             {index < data.length - 1 &&
               ItemSeparatorComponent &&
               isReactComponent(ItemSeparatorComponent) && (
                 <ItemSeparatorComponent />
               )}
-          </>
+          </ViewablityTracker>
         );
       }
 
       return null;
     },
-    [data, ItemSeparatorComponent, renderItem]
+    [data, ItemSeparatorComponent, renderItem, onViewableItemsChanged]
   );
 
   const gridComponents = useMemo<GridComponents<T>>(
