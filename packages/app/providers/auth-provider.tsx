@@ -78,8 +78,8 @@ export function AuthProvider({
       const wasUserLoggedIn = loginStorage.getLogin();
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         track("User Logged Out");
+        await rudder?.reset();
       }
-      await rudder?.reset();
 
       onWagmiDisconnect?.();
       loginStorage.deleteLogin();
