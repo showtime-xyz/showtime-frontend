@@ -111,11 +111,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
-        <Script
-          src="https://cdn.rudderlabs.com/v1.1/rudder-analytics.min.js"
-          strategy="worker"
-        />
       </Head>
+      <Script
+        src="https://cdn.rudderlabs.com/v1.1/rudder-analytics.min.js"
+        strategy="worker"
+      />
       <AppProviders>
         <Container>
           <Header
