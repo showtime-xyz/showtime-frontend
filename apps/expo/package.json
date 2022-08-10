@@ -215,7 +215,6 @@
     "uuid": "^8.3.2",
     "vm-browserify": "1.1.2",
     "yup": "^0.32.11",
-    "yup-phone-lite": "^1.1.2",
     "zeego": "^0.4.0"
   },
   "devDependencies": {
