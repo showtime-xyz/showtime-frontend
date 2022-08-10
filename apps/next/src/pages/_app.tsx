@@ -5,6 +5,7 @@ import "setimmediate";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 
 import { View } from "@showtime-xyz/universal.view";
 
@@ -109,6 +110,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
         />
         <script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
+        />
+        <Script
+          src="https://cdn.rudderlabs.com/v1.1/rudder-analytics.min.js"
+          strategy="worker"
         />
       </Head>
       <AppProviders>
