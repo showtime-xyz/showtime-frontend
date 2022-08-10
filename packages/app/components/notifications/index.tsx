@@ -107,6 +107,7 @@ export const Notifications = ({ useWindowScroll = true }) => {
         ListFooterComponent={ListFooterComponent}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
+        estimatedItemSize={56}
       />
 
       <ModalSheet

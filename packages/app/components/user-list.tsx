@@ -1,7 +1,4 @@
 import { memo, useCallback } from "react";
-import { FlatList, Platform } from "react-native";
-
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
@@ -11,8 +8,10 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
-import { UserItemType } from "app/hooks/api/use-followers-list";
+import { UserItemType } from "app/hooks/api/use-follow-list";
 import { useFollow } from "app/hooks/use-follow";
+import { useModalListProps } from "app/hooks/use-modal-list-props";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -35,20 +34,13 @@ export const UserList = ({
   loading: boolean;
 }) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
+  const modalListProps = useModalListProps();
 
   const keyExtractor = useCallback(
     (item: UserItemType) => `${item.profile_id}`,
     []
   );
 
-  const getItemLayout = useCallback(
-    (_: UserItemType[] | null | undefined, index: number) => ({
-      length: ITEM_HEIGHT,
-      offset: ITEM_HEIGHT * index,
-      index,
-    }),
-    []
-  );
   const renderItem = useCallback(
     ({ item }: { item: UserItemType }) => {
       return (
@@ -63,32 +55,18 @@ export const UserList = ({
     },
     [isFollowing, unfollow, follow, onClose]
   );
-
   if (users && users?.length > 0) {
-    return Platform.select({
-      android: (
-        <BottomSheetFlatList
-          data={users}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          windowSize={10}
-          initialNumToRender={10}
-          getItemLayout={getItemLayout}
-          ItemSeparatorComponent={Separator}
-        />
-      ),
-      default: (
-        <FlatList
-          data={users}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          windowSize={10}
-          initialNumToRender={10}
-          getItemLayout={getItemLayout}
-          ItemSeparatorComponent={Separator}
-        />
-      ),
-    });
+    return (
+      <InfiniteScrollList
+        data={users}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        estimatedItemSize={64}
+        overscan={64}
+        ItemSeparatorComponent={Separator}
+        {...modalListProps}
+      />
+    );
   } else if (loading) {
     return <FollowingUserItemLoadingIndicator />;
   } else if (users?.length === 0) {

@@ -1,19 +1,19 @@
 import { useCallback, useMemo, useRef } from "react";
-import {
-  FlatList as RNFlatList,
-  ListRenderItemInfo,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { FlatList as RNFlatList, Platform, StyleSheet } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { ModalFooter } from "@showtime-xyz/universal.modal";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
+import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { useUser } from "app/hooks/use-user";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
@@ -43,6 +43,8 @@ export function Comments({ nft }: { nft: NFT }) {
     deleteComment,
     newComment,
   } = useComments(nft.nft_id);
+  const modalListProps = useModalListProps();
+  const { bottom } = useSafeAreaInsets();
   //#endregion
 
   //#region variables
@@ -110,6 +112,7 @@ export function Comments({ nft }: { nft: NFT }) {
     ),
     [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
+
   const listEmptyComponent = useCallback(
     () => (
       <EmptyPlaceholder
@@ -127,19 +130,19 @@ export function Comments({ nft }: { nft: NFT }) {
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <>
-          <FlatList
+          <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            initialNumToRender={6}
-            maxToRenderPerBatch={3}
-            windowSize={6}
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
+            estimatedItemSize={98}
+            overscan={98}
             keyboardDismissMode="on-drag"
-            enableFooterMarginAdjustment={true}
             ListEmptyComponent={listEmptyComponent}
+            ListFooterComponent={
+              <View style={{ height: Math.max(bottom, 20) }} />
+            }
+            {...modalListProps}
           />
           {isAuthenticated && (
             <ModalFooter>
@@ -162,7 +165,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    paddingHorizontal: 16,
     flex: 1,
   },
 });

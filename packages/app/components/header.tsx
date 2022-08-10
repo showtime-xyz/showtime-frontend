@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
-import {
-  FlatList,
-  ListRenderItemInfo,
-  Platform,
-  TextInput,
-  useWindowDimensions,
-} from "react-native";
+import { Platform, TextInput, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -29,6 +24,7 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
@@ -50,6 +46,7 @@ const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
+  const router = useRouter();
   const inputRef = useRef<TextInput>();
 
   useEffect(() => {
@@ -145,11 +142,16 @@ const SearchInHeader = () => {
           })}
         >
           {data ? (
-            <FlatList
+            <InfiniteScrollList
               data={data}
               renderItem={renderItem}
               ItemSeparatorComponent={Separator}
               keyboardShouldPersistTaps="handled"
+              estimatedItemSize={64}
+              overscan={{
+                main: 64,
+                reverse: 64,
+              }}
             />
           ) : loading && term ? (
             <SearchItemSkeleton />
