@@ -7,7 +7,7 @@ import { Image } from "@showtime-xyz/universal.image";
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";
 
-type Props = {
+export type Props = {
   url: string;
   fallbackUrl: string;
   tw?: string;
