@@ -20,6 +20,7 @@ export type InfiniteScrollListWebProps<T> = Omit<
 > & {
   onEndReached?: VirtuosoGridProps["endReached"];
 };
+
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (React.isValidElement(Component)) return Component;
@@ -76,10 +77,10 @@ export function VirtuosoList<T>(
     }),
     [numColumns]
   );
-  if (data?.length === 0) {
-    return ListEmptyComponent;
-  }
 
+  if (data?.length === 0) {
+    return renderComponent(ListEmptyComponent);
+  }
   return (
     <>
       {React.isValidElement(ListHeaderComponent) &&

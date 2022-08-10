@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
-import { FlatList as RNFlatList, Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -22,8 +21,6 @@ import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
-
-const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
 export function Comments({ nft }: { nft: NFT }) {
   //#region refs
@@ -46,12 +43,12 @@ export function Comments({ nft }: { nft: NFT }) {
   const modalListProps = useModalListProps();
   const { bottom } = useSafeAreaInsets();
   //#endregion
-
   //#region variables
   const dataReversed = useMemo(
     () => data?.comments.slice().reverse() || [],
     [data]
   );
+
   //#endregion
 
   //#region callbacks
@@ -123,7 +120,6 @@ export function Comments({ nft }: { nft: NFT }) {
     ),
     []
   );
-
   return (
     <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
