@@ -19,7 +19,7 @@ interface LoginInputFieldProps
   label?: string;
   placeholder?: string;
   signInButtonLabel?: string;
-  validationSchema: yup.AnyObjectSchema;
+  validationSchema?: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
   onSubmit: (value: string) => void;
 }
@@ -43,7 +43,7 @@ export function LoginInputField({
     watch,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: yupResolver(validationSchema),
+    resolver: validationSchema ? yupResolver(validationSchema) : undefined,
     mode: "onBlur",
     reValidateMode: "onChange",
   });

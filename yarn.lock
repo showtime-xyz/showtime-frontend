@@ -7982,7 +7982,6 @@ __metadata:
     uuid: ^8.3.2
     vm-browserify: 1.1.2
     yup: ^0.32.11
-    yup-phone-lite: ^1.1.2
     zeego: ^0.4.0
     zx: 4.3.0
   languageName: unknown
@@ -8025,7 +8024,6 @@ __metadata:
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
     magic-sdk: ^8.1.1
-    mixpanel-browser: ^2.42.0
     next: 12.2.3-canary.2
     next-compose-plugins: ^2.2.1
     next-fonts: ^1.5.1
@@ -10850,13 +10848,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
-  languageName: node
-  linkType: hard
-
-"@types/yup@npm:^0.29.14":
-  version: 0.29.14
-  resolution: "@types/yup@npm:0.29.14"
-  checksum: 291b6c2f06761bfb2be4c551e2c675a0b48512192850ca547837389de8422707b2a2cf50f50e64ea3caf5ddf41cfa36f0ce4bdb820f86ba1f074eabd0e272c2b
   languageName: node
   linkType: hard
 
@@ -24479,13 +24470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libphonenumber-js@npm:^1.10.8":
-  version: 1.10.9
-  resolution: "libphonenumber-js@npm:1.10.9"
-  checksum: 4c2940149d403d92c23c9db25ba719651dd20b3f2e3af220c6d1ca04ca2d4456ff1d660a6576bfbf29cba99128e091d749db5e629e207ec2a1e9988c6d05e941
-  languageName: node
-  linkType: hard
-
 "lie@npm:3.1.1":
   version: 3.1.1
   resolution: "lie@npm:3.1.1"
@@ -26009,13 +25993,6 @@ __metadata:
     for-in: ^1.0.2
     is-extendable: ^1.0.1
   checksum: 820d5a51fcb7479f2926b97f2c3bb223546bc915e6b3a3eb5d906dda871bba569863595424a76682f2b15718252954644f3891437cb7e3f220949bed54b1750d
-  languageName: node
-  linkType: hard
-
-"mixpanel-browser@npm:^2.42.0":
-  version: 2.45.0
-  resolution: "mixpanel-browser@npm:2.45.0"
-  checksum: 43722dd5019ece65302e933f3d5812ea015aff8525b3ba5347da9cd8694871ed85179047bf2bc7f47cd58c050158ea4ce84cc2810e128988c151fe4457f52f55
   languageName: node
   linkType: hard
 
@@ -36969,18 +36946,6 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"yup-phone-lite@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "yup-phone-lite@npm:1.1.2"
-  dependencies:
-    "@types/yup": ^0.29.14
-    libphonenumber-js: ^1.10.8
-  peerDependencies:
-    yup: ">0.32.0"
-  checksum: bf36c936649924ae4b5d08d10f794f484da8c0df6fb42e265464fe25739be4c95cf41f47904e6a6407b2a3aa060b4dbb27087bff6aa791364fdd58799b3724fa
   languageName: node
   linkType: hard
 
