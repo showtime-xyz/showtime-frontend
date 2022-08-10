@@ -44,13 +44,13 @@ const ViewabilityTracker = ({
   item,
   children,
   onViewableItemsChanged,
-  visibleItems,
+  viewableItems,
 }: {
   index: number;
   item: any;
   children: any;
   onViewableItemsChanged: FlatListProps<any>["onViewableItemsChanged"];
-  visibleItems: MutableRefObject<ViewToken[]>;
+  viewableItems: MutableRefObject<ViewToken[]>;
 }) => {
   const ref = useRef<any>(null);
 
@@ -58,21 +58,21 @@ const ViewabilityTracker = ({
     if (onViewableItemsChanged) {
       const observer = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
-          if (!visibleItems.current.find((v) => v.index === index))
-            visibleItems.current.push({
+          if (!viewableItems.current.find((v) => v.index === index))
+            viewableItems.current.push({
               item,
               index,
               isViewable: true,
               key: index.toString(),
             });
         } else {
-          visibleItems.current = visibleItems.current.filter(
+          viewableItems.current = viewableItems.current.filter(
             (v) => v.index !== index
           );
         }
 
         onViewableItemsChanged?.({
-          viewableItems: visibleItems.current,
+          viewableItems: viewableItems.current,
 
           // TODO: implement changed
           changed: [],
@@ -84,7 +84,7 @@ const ViewabilityTracker = ({
         observer.disconnect();
       };
     }
-  }, [onViewableItemsChanged, visibleItems, index, item]);
+  }, [onViewableItemsChanged, viewableItems, index, item]);
 
   return <div ref={ref}>{children}</div>;
 };
@@ -106,7 +106,7 @@ export function VirtuosoList<T>(
   }: InfiniteScrollListWebProps<T>,
   ref: React.Ref<VirtuosoHandle> | React.Ref<VirtuosoGridHandle>
 ) {
-  const visibleItems = useRef<ViewToken[]>([]);
+  const viewableItems = useRef<ViewToken[]>([]);
 
   const renderItemContent = React.useCallback(
     (index: number) => {
@@ -124,7 +124,7 @@ export function VirtuosoList<T>(
           <ViewabilityTracker
             index={index}
             item={data[index]}
-            visibleItems={visibleItems}
+            viewableItems={viewableItems}
             onViewableItemsChanged={onViewableItemsChanged}
           >
             {element}
