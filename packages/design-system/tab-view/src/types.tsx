@@ -71,9 +71,8 @@ export interface RefreshControlProps {
   progress: Animated.SharedValue<number>;
   refreshControlColor?: string;
 }
-
 export type SceneProps<P extends object> = P & {
-  ContainerView: React.ComponentClass<Animated.AnimateProps<P>>;
+  ContainerView: any;
   forwardedRef: any;
   index: number;
 } & ScrollViewProps;

@@ -19,6 +19,7 @@ import { HeaderTabViewComponent } from "./src/index";
 import { Route } from "./src/types";
 import { TabSpinner } from "./tab-spinner";
 
+export * from "./src";
 export * from "./tab-scene";
 export * from "react-native-tab-view-next";
 
