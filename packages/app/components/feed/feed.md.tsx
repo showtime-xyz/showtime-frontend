@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo } from "react";
-import { ListRenderItemInfo, Platform } from "react-native";
+import { Platform } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -207,6 +209,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
             main: CARD_HEIGHT,
             reverse: CARD_HEIGHT,
           }}
+          estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
           ListEmptyComponent={
             isLoading ? (

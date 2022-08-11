@@ -1,5 +1,7 @@
 import { useCallback } from "react";
-import { useWindowDimensions, ListRenderItemInfo } from "react-native";
+import { useWindowDimensions } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
@@ -53,6 +55,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
         reverse: cardHeight,
         main: cardHeight,
       }}
+      estimatedItemSize={cardHeight}
       ListEmptyComponent={
         isLoading ? (
           <View tw="mx-auto p-10">

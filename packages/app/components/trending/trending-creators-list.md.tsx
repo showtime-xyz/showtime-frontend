@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { ListRenderItemInfo } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -57,6 +58,11 @@ export function TrendingCreatorsList({ days }: TrendingMDListProps) {
       renderItem={renderItem}
       numColumns={1}
       keyExtractor={keyExtractor}
+      // estimatedItemSize={}
+      // overscan={{
+      //   main: ,
+      //   reverse: ,
+      // }}
       ListEmptyComponent={
         isLoading ? (
           <View tw="mx-auto p-10">

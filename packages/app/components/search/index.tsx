@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState } from "react";
-import { FlatList, Keyboard, Platform, TextInput } from "react-native";
+import { Keyboard, Platform, TextInput } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
@@ -16,6 +18,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
@@ -31,9 +34,12 @@ export const Search = () => {
   );
   const isiOS = Platform.OS === "ios";
 
-  const renderItem = useCallback(({ item }) => {
-    return <SearchItem item={item} />;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
+      return <SearchItem item={item} />;
+    },
+    []
+  );
 
   // https://github.com/facebook/react-native/issues/23364#issuecomment-642518054
   // PR - https://github.com/facebook/react-native/pull/31943
@@ -86,7 +92,7 @@ export const Search = () => {
         />
       </View>
       {data ? (
-        <FlatList
+        <InfiniteScrollList
           data={data}
           contentContainerStyle={tw.style(`pb-[${headerHeight}px]`)}
           ListFooterComponent={
@@ -95,6 +101,11 @@ export const Search = () => {
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
+          estimatedItemSize={64}
+          overscan={{
+            main: 64,
+            reverse: 64,
+          }}
           {...keyboardDismissProp}
         />
       ) : loading && term ? (
@@ -109,7 +120,7 @@ export const SearchItem = ({
   onPress,
 }: {
   item: SearchResponseItem;
-  onPress: () => void;
+  onPress?: () => void;
 }) => {
   return (
     <Link

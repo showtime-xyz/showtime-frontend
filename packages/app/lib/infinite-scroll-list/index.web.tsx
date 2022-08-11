@@ -33,6 +33,7 @@ export type InfiniteScrollListWebProps<T> = Omit<
   onEndReached?: VirtuosoGridProps["endReached"];
   onViewableItemsChanged?: FlatListProps<any>["onViewableItemsChanged"];
 };
+
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (React.isValidElement(Component)) return Component;
@@ -114,11 +115,7 @@ export function VirtuosoList<T>(
         const element = renderItem?.({
           item: data[index],
           index,
-          separators: {
-            highlight: () => false,
-            unhighlight: () => false,
-            updateProps: () => false,
-          },
+          target: "Cell",
         });
         return (
           <ViewabilityTracker
@@ -151,10 +148,10 @@ export function VirtuosoList<T>(
     }),
     [numColumns]
   );
-  if (data?.length === 0) {
-    return ListEmptyComponent;
-  }
 
+  if (data?.length === 0) {
+    return renderComponent(ListEmptyComponent);
+  }
   return (
     <>
       {React.isValidElement(ListHeaderComponent) &&

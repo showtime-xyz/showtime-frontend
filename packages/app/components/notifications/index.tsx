@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ListRenderItemInfo, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -105,6 +107,7 @@ export const Notifications = ({ useWindowScroll = true }) => {
         ListFooterComponent={ListFooterComponent}
         ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
+        estimatedItemSize={56}
       />
 
       <ModalSheet
