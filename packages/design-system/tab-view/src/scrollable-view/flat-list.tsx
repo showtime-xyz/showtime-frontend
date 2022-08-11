@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated";
 import { SceneComponent } from "../scene";
 
 const AnimatePageView = Animated.createAnimatedComponent(RNFlatList);
-type TabFlatListProps<T> = FlatListProps<T> & {
+export type TabFlatListProps<T> = FlatListProps<T> & {
   index: number;
 };
 function FlatList<T>(props: TabFlatListProps<T>, ref: any) {

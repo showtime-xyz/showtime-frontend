@@ -24,14 +24,23 @@ import type {
   TabViewCustomRenders,
 } from "./types";
 
-export const HeaderTabViewComponent = React.forwardRef(
-  CollapsibleHeaderTabView
-);
+export {
+  TabFlatList,
+  TabScrollView,
+  TabSectionList,
+  TabScrollViewProps,
+  TabFlatListProps,
+  TabSectionListProps,
+} from "./scrollable-view";
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
   CollapsibleHeaderProps<T>;
+
+export function createHeaderTabsComponent() {
+  return React.forwardRef(CollapsibleHeaderTabView);
+}
 
 function CollapsibleHeaderTabView<T extends Route>(
   {
@@ -164,7 +173,6 @@ function CollapsibleHeaderTabView<T extends Route>(
     >
       <View ref={containeRef} style={styles.full}>
         {renderScrollHeader && renderScrollHeader()}
-
         {navigationState.routes.length === 0 && emptyBodyComponent ? (
           <View style={{ marginTop: tabbarHeight }}>{emptyBodyComponent}</View>
         ) : (

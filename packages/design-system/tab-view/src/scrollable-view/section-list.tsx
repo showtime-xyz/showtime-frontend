@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated";
 import { SceneComponent } from "../scene";
 
 const AnimatePageView = Animated.createAnimatedComponent(RNSectionList);
-type TabSectionListProps<T, SectionT> = SectionListProps<T, SectionT> & {
+export type TabSectionListProps<T, SectionT> = SectionListProps<T, SectionT> & {
   index: number;
 };
 function SectionList<T, SectionT>(
