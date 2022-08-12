@@ -22,6 +22,9 @@ export function Web3Provider({
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
+  const [magicWalletAddress, setMagicWalletAddress] = useState<
+    string | undefined
+  >(undefined);
 
   const Web3ContextValue = useMemo(
     () => ({
@@ -30,8 +33,9 @@ export function Web3Provider({
       //@ts-ignore
       isMagic: web3?.provider.isMagic,
       setMountRelayerOnApp,
+      magicWalletAddress,
     }),
-    [web3]
+    [web3, magicWalletAddress]
   );
 
   // (Native only) initialises wallet connect native web3 provider
@@ -57,6 +61,12 @@ export function Web3Provider({
       if (magic.rpcProvider && isLoggedIn) {
         //@ts-ignore
         const provider = new EthersWeb3Provider(magic.rpcProvider);
+        provider
+          .getSigner()
+          .getAddress()
+          .then((address) => {
+            setMagicWalletAddress(address);
+          });
         setWeb3(provider);
       }
     });
