@@ -186,14 +186,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             },
           ]}
         >
-          <Social nft={nft} />
+          <View tw="px-4 pt-4">
+            <Social nft={nft} />
+          </View>
           <LikedBy nft={nft} />
           <View tw="my-4 mr-4 flex-row justify-between px-4">
             <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
               {nft.token_name}
             </Text>
           </View>
-          <Description nft={nft} />
+          <Description
+            descriptionText={nft?.token_description}
+            tw="px-4 pb-4"
+          />
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} />
             <Owner nft={nft} price={false} />
