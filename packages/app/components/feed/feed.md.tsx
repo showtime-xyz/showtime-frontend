@@ -14,10 +14,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { ViewabilityTrackerInfiniteScrollList } from "app/components/viewability-tracker-infinite-scroll-list";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
@@ -190,9 +190,6 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
       </View>
     );
   }, []);
-  const keyExtractor = useCallback((item: NFT) => {
-    return item.nft_id?.toFixed();
-  }, []);
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
@@ -201,10 +198,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
           overflowY: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <InfiniteScrollList
+        <ViewabilityTrackerInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          keyExtractor={keyExtractor}
           overscan={{
             main: CARD_HEIGHT,
             reverse: CARD_HEIGHT,

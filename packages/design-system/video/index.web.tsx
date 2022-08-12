@@ -12,6 +12,7 @@ import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { MuteButton } from "app/components/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
+import { useItemVisible } from "app/hooks/use-viewability-mount";
 
 type VideoProps = {
   tw?: TW;
@@ -30,6 +31,7 @@ export function Video({
   // useItemVisible({ videoRef });
   const { colorScheme } = useColorScheme();
   const [muted, setMuted] = useState(true);
+  const { id } = useItemVisible({ videoRef });
 
   return (
     <>
@@ -64,7 +66,7 @@ export function Video({
             posterSource={posterSource}
             source={props.source}
             ref={videoRef}
-            shouldPlay
+            shouldPlay={typeof id === "undefined"}
             isLooping
             isMuted={muted}
             videoStyle={tailwind.style("relative")}
