@@ -135,7 +135,7 @@
     "expo": "next",
     "expo-app-loading": "~2.1.0",
     "expo-application": "~4.2.2",
-    "expo-av": "next",
+    "expo-av": "12.0.4",
     "expo-blur": "~11.2.0",
     "expo-build-properties": "^0.2.0",
     "expo-camera": "~12.3.0",
