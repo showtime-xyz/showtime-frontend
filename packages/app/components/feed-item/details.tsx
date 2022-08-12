@@ -42,7 +42,7 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
       />
       <View tw="h-4" />
 
-      <View tw="flex-row justify-between">
+      <View tw="mb-1 flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
           <View tw="w-6" />
@@ -61,7 +61,6 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
             />
           </Pressable>
           <View tw="w-8" />
-
           <Suspense fallback={<Skeleton width={24} height={24} />}>
             <NFTDropdown nft={nft} />
           </Suspense>

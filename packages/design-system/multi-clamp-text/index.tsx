@@ -58,7 +58,7 @@ export const MultiClampText = ({ text = "", tw, numberOfLines = 3 }: Props) => {
           onPress={showMore ? onShowMore : onShowLess}
           tw="text-sm font-bold text-gray-900 dark:text-white"
         >
-          {showMore ? "More" : "Less"}
+          {showMore ? " More" : " Less"}
         </Text>
       )}
     </Text>
