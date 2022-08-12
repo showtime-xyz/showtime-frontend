@@ -186,6 +186,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
           href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
           nft={item}
           tw={`w-[${CARD_WIDTH}px] mb-4`}
+          showClaimButton
         />
       </View>
     );
