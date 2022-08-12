@@ -13,12 +13,14 @@ import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
+import { ClaimButton } from "app/components/claim/claim-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 
 import { CARD_DARK_SHADOW } from "design-system/theme";
@@ -30,15 +32,25 @@ type Props = {
   tw?: string;
   variant?: "nft" | "activity" | "market";
   href?: string;
+  showClaimButton?: Boolean;
 };
 
-function Card({ nft, numColumns, tw, onPress, href = "" }: Props) {
+function Card({
+  nft,
+  numColumns,
+  tw,
+  onPress,
+  href = "",
+  showClaimButton = false,
+}: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
-
+  const { data: edition } = useCreatorCollectionDetail(
+    nft.creator_airdrop_edition_address
+  );
   const size = tw
     ? tw
     : numColumns === 3
@@ -118,8 +130,14 @@ function Card({ nft, numColumns, tw, onPress, href = "" }: Props) {
           >
             <Title nft={nft} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
-
-          <Social nft={nft} />
+          <View tw="flex-row justify-between px-4 pt-4">
+            <Social nft={nft} />
+            {showClaimButton &&
+            !!nft.creator_airdrop_edition_address &&
+            edition ? (
+              <ClaimButton edition={edition} />
+            ) : null}
+          </View>
 
           <Owner nft={nft} price={false} />
         </View>

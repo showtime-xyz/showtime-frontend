@@ -9,7 +9,7 @@ function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
   return (
-    <View tw="flex-row justify-between bg-white px-4 pt-4 dark:bg-black">
+    <View tw="flex-row justify-between bg-white  dark:bg-black">
       <View tw="flex-row items-center">
         <Like nft={nft} />
         <View tw="w-4" />
