@@ -8075,7 +8075,7 @@ __metadata:
     design-system: "*"
     expo: next
     expo-asset: ~8.5.0
-    expo-av: next
+    expo-av: 12.0.4
     expo-blur: ~11.2.0
     expo-community-flipper: ^45.1.0
     expo-constants: ~13.2.3
@@ -18626,17 +18626,6 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 5d985ab18159f45e1a2857af8b671285d940c457797eef489888c019fb1a760e1dcc01ea7eaff6f06cd80d4d9b17f2573568cd4c01799e6f054df76f89e312ec
-  languageName: node
-  linkType: hard
-
-"expo-av@npm:next":
-  version: 12.0.2
-  resolution: "expo-av@npm:12.0.2"
-  dependencies:
-    "@expo/config-plugins": ~5.0.0
-  peerDependencies:
-    expo: "*"
-  checksum: bb1d0defe68f5e09f5bb541840a80c3f959ffb64835b363b4042bd6d387718e4c5f5b67437577bde3d65d6f0c22c94349e9b4297cf2412a34bdc9819768c1989
   languageName: node
   linkType: hard
 
