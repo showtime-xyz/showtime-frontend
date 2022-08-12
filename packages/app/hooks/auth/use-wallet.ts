@@ -19,13 +19,15 @@ export type UseWalletReturnType = {
 const useWallet = (): UseWalletReturnType => {
   const connector = useWalletConnect();
   const { connected, session } = connector;
-  const { web3, isMagic } = useWeb3();
+  const { web3, isMagic, magicWalletAddress } = useWeb3();
   const [address, setAddress] = useState<string | undefined>();
 
   useEffect(() => {
     (async function fetchUserAddress() {
       if (session?.accounts?.[0]) {
         setAddress(ethers.utils.getAddress(session.accounts[0]));
+      } else if (magicWalletAddress) {
+        setAddress(magicWalletAddress);
       } else if (web3) {
         const address = await web3.getSigner().getAddress();
         setAddress(address);
@@ -33,7 +35,7 @@ const useWallet = (): UseWalletReturnType => {
         setAddress(undefined);
       }
     })();
-  }, [web3, session]);
+  }, [web3, session, magicWalletAddress]);
 
   return {
     address,
