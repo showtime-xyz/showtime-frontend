@@ -7,7 +7,6 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 
 export const useModalListProps = () => {
   const router = useRouter();
-  router;
   return {
     // Todo: react-virtuoso‘s list height does not adapt when in Modal, so set min-height to fix it first. and dig reason later.
     style:
