@@ -1,38 +1,33 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, ScrollViewProps } from "react-native";
+
+import Animated from "react-native-reanimated";
 
 import {
-  FlashList as FlashListCore,
-  FlashListProps,
-  AnimatedFlashList,
-} from "@shopify/flash-list";
-import Animated from "react-native-reanimated";
-import { RecyclerListViewProps } from "recyclerlistview";
-
-import { RecyclerListView } from "app/lib/recyclerlistview";
+  RecyclerListView,
+  RecyclerListViewProps,
+} from "app/lib/recyclerlistview";
 
 import { SceneComponent } from "./src/scene";
 
-type TabFlashListProps<T> = FlashListProps<T> & {
+const AnimateRecyclerList = Animated.createAnimatedComponent(RecyclerListView);
+
+type TabScrollViewProps = ScrollViewProps & {
   index: number;
 };
-function FlashList<T>(props: TabFlashListProps<T>, ref: any) {
+function TabFlashListScrollViewComponent(props: TabScrollViewProps, ref: any) {
   return (
     <SceneComponent
       {...props}
       forwardedRef={ref}
-      ContainerView={AnimatedFlashList}
+      ContainerView={Animated.ScrollView}
     />
   );
 }
 
-export const TabFlashList = React.forwardRef(FlashList) as <T>(
-  props: TabFlashListProps<T> & {
-    ref?: React.Ref<FlashListCore<T>>;
-  }
-) => React.ReactElement;
-
-const AnimateRecyclerList = Animated.createAnimatedComponent(RecyclerListView);
+export const TabFlashListScrollView = React.forwardRef(
+  TabFlashListScrollViewComponent
+);
 
 function RecyclerList(props: any, ref: any) {
   return (

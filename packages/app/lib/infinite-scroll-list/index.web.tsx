@@ -152,11 +152,10 @@ export function VirtuosoList<T>(
   if (data?.length === 0) {
     return renderComponent(ListEmptyComponent);
   }
+
   return (
     <>
-      {React.isValidElement(ListHeaderComponent) &&
-        numColumns > 1 &&
-        ListHeaderComponent}
+      {numColumns > 1 && renderComponent(ListHeaderComponent)}
       {numColumns === 1 ? (
         <Virtuoso
           useWindowScroll={useWindowScroll}
@@ -183,9 +182,7 @@ export function VirtuosoList<T>(
           ref={ref as React.Ref<VirtuosoGridHandle>}
         />
       )}
-      {React.isValidElement(ListFooterComponent) &&
-        numColumns > 1 &&
-        ListFooterComponent}
+      {numColumns > 1 && renderComponent(ListFooterComponent)}
     </>
   );
 }

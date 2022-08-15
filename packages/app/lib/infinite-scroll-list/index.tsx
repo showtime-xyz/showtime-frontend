@@ -9,7 +9,9 @@ import type { VirtuosoGridProps } from "react-virtuoso";
 import { View } from "@showtime-xyz/universal.view";
 
 export type InfiniteScrollListProps<T> = FlashListProps<T> &
-  Pick<VirtuosoGridProps, "overscan" | "useWindowScroll">;
+  Pick<VirtuosoGridProps, "overscan" | "useWindowScroll"> & {
+    index?: number;
+  };
 
 export function FlashList<T>(
   { style, ...props }: InfiniteScrollListProps<T>,

@@ -198,7 +198,6 @@
     "react-native-webview": "11.23.0",
     "react-string-replace": "^0.4.4",
     "readable-stream": "3.6.0",
-    "recyclerlistview": "^4.1.3",
     "remove-markdown": "^0.3.0",
     "sentry-expo": "^5.0.2",
     "solito": "^0.0.24",

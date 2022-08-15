@@ -1,11 +1,12 @@
 import {
   useCallback,
   useContext,
-  useMemo,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from "react";
-import { useWindowDimensions } from "react-native";
+
+import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -15,12 +16,13 @@ import { Card } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
-import { DataProvider } from "app/lib/recyclerlistview";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
+import { NFT } from "app/types";
 
-import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
+import { TabFlashListScrollView, TabScrollView } from "design-system/tab-view";
+import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
@@ -35,21 +37,17 @@ type TabListProps = {
   index: number;
 };
 
-const GAP_BETWEEN_ITEMS = 1;
-
 export type ProfileTabListRef = {
   refresh: () => void;
 };
+
 export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   function ProfileTabList(
     { username, profileId, isBlocked, list, index },
     ref
   ) {
     const router = useRouter();
-    const { height } = useWindowDimensions();
-
     const { filter } = useContext(FilterContext);
-
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
         tabType: list.type,
@@ -59,8 +57,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         // TODO: remove refresh interval once we have the new indexer.
         refreshInterval: 5000,
       });
-
+    const contentWidht = useContentWidth();
     const { user } = useUser();
+    const listRef = useRef(null);
+    useScrollToTop(listRef);
     useImperativeHandle(ref, () => ({
       refresh,
     }));
@@ -80,31 +80,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const _layoutProvider = useNFTCardsListLayoutProvider({
-      newData: data,
-      headerHeight: 0,
-    });
+    const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
 
-    const dataProvider = useMemo(
-      () =>
-        new DataProvider((r1, r2) => {
-          return typeof r1 === "string" && typeof r2 === "string"
-            ? r1 !== r2
-            : r1.nft_id !== r2.nft_id;
-        }).cloneWithRows(data),
-      [data]
-    );
-    const contentWidth = useContentWidth();
-
-    const layoutSize = useMemo(
-      () => ({
-        width: contentWidth,
-        height,
-      }),
-      [contentWidth, height]
-    );
-    const _rowRenderer = useCallback(
-      (_type: any, item: any) => {
+    const renderItem = useCallback(
+      ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         // currently minting nft
         if (item.loading) {
           return <Card nft={item} numColumns={3} />;
@@ -121,6 +100,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       },
       [onItemPress, list.type]
     );
+
     if (isBlocked) {
       return (
         <TabScrollView
@@ -162,21 +142,22 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
               : undefined
           }
         >
-          {dataProvider && dataProvider.getSize() > 0 && (
-            <TabRecyclerList
-              layoutProvider={_layoutProvider}
-              dataProvider={dataProvider}
-              rowRenderer={_rowRenderer}
-              onEndReached={fetchMore}
-              style={{
-                flex: 1,
-                margin: -GAP_BETWEEN_ITEMS,
-              }}
-              renderFooter={ListFooterComponent}
-              layoutSize={layoutSize}
-              index={index}
-            />
-          )}
+          <TabInfiniteScrollList
+            numColumns={3}
+            data={data}
+            ref={listRef}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            estimatedItemSize={contentWidht / 3}
+            overscan={{
+              main: contentWidht / 3,
+              reverse: contentWidht / 3,
+            }}
+            renderScrollComponent={TabFlashListScrollView}
+            ListFooterComponent={ListFooterComponent}
+            onEndReached={fetchMore}
+            index={index}
+          />
         </ProfileTabsNFTProvider>
       </MutateProvider>
     );

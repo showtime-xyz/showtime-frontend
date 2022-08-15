@@ -229,7 +229,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 native:py-2 native:px-4 relative w-full flex-row items-center justify-between bg-white dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {data?.tabs[index]?.displayed_count} ITEMS
               </Text>
