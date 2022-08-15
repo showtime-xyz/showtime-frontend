@@ -15,11 +15,15 @@ export function FlashList<T>(
   { style, ...props }: InfiniteScrollListProps<T>,
   ref: any
 ) {
-  return (
-    <View style={style} tw="h-full">
-      <FlashListCore {...props} ref={ref} />
-    </View>
-  );
+  if (style) {
+    return (
+      <View style={style} tw="h-full">
+        <FlashListCore {...props} ref={ref} />
+      </View>
+    );
+  } else {
+    return <FlashListCore {...props} ref={ref} />;
+  }
 }
 
 export const InfiniteScrollList = React.forwardRef(FlashList) as <T>(
