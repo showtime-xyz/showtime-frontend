@@ -35,21 +35,22 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
     );
 
     const renderItem = useCallback(
-      ({ item }: ListRenderItemInfo<NFT>) => {
+      ({ item, index: itemIndex }: ListRenderItemInfo<NFT>) => {
         return (
           <Card
             nft={item}
             numColumns={NUM_COLUMNS}
-            onPress={() =>
+            onPress={() => {
+              console.log(itemIndex);
               router.push(
-                `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
-              )
-            }
+                `/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`
+              );
+            }}
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
           />
         );
       },
-      [router, index, days]
+      [router, days]
     );
     const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
     const contentWidth = useContentWidth();
