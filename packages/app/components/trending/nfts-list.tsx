@@ -52,7 +52,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       [router, index, days]
     );
     const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
-    const contentWidht = useContentWidth();
+    const contentWidth = useContentWidth();
 
     return (
       <TabInfiniteScrollList
@@ -61,10 +61,10 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         ref={listRef}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        estimatedItemSize={contentWidht / NUM_COLUMNS}
+        estimatedItemSize={contentWidth / NUM_COLUMNS}
         overscan={{
-          main: contentWidht / NUM_COLUMNS,
-          reverse: contentWidht / NUM_COLUMNS,
+          main: contentWidth / NUM_COLUMNS,
+          reverse: contentWidth / NUM_COLUMNS,
         }}
         renderScrollComponent={TabFlashListScrollView}
         ListFooterComponent={ListFooterComponent}

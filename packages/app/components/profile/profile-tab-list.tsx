@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+import { Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -24,6 +25,7 @@ import { NFT } from "app/types";
 import { TabFlashListScrollView, TabScrollView } from "design-system/tab-view";
 import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
+import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
@@ -48,6 +50,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   ) {
     const router = useRouter();
     const { filter } = useContext(FilterContext);
+
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
         tabType: list.type,
@@ -55,9 +58,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         collectionId: filter.collectionId,
         sortType: filter.sortType,
         // TODO: remove refresh interval once we have the new indexer.
-        refreshInterval: 5000,
+        // refreshInterval: 5000,
       });
-    const contentWidht = useContentWidth();
+    const contentWidth = useContentWidth();
+
     const { user } = useUser();
     const listRef = useRef(null);
     useScrollToTop(listRef);
@@ -133,6 +137,15 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       );
     }
 
+    const numColumns = Platform.select({
+      default: 3,
+      web:
+        contentWidth <= breakpoints["md"]
+          ? 3
+          : contentWidth >= breakpoints["lg"]
+          ? 3
+          : 2,
+    });
     return (
       <MutateProvider mutate={updateItem}>
         <ProfileTabsNFTProvider
@@ -143,15 +156,15 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           }
         >
           <TabInfiniteScrollList
-            numColumns={3}
+            numColumns={numColumns}
             data={data}
             ref={listRef}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            estimatedItemSize={contentWidht / 3}
+            estimatedItemSize={contentWidth / numColumns}
             overscan={{
-              main: contentWidht / 3,
-              reverse: contentWidht / 3,
+              main: contentWidth / numColumns,
+              reverse: contentWidth / numColumns,
             }}
             renderScrollComponent={TabFlashListScrollView}
             ListFooterComponent={ListFooterComponent}
