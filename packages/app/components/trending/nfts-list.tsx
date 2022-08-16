@@ -40,12 +40,11 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
           <Card
             nft={item}
             numColumns={NUM_COLUMNS}
-            onPress={() => {
-              console.log(itemIndex);
+            onPress={() =>
               router.push(
                 `/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`
-              );
-            }}
+              )
+            }
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
           />
         );
