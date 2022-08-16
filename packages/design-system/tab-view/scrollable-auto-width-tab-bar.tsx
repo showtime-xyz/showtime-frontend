@@ -173,6 +173,7 @@ export const ScollableAutoWidthTabBar = ({
           />
         );
       }}
+      scrollEnabled
       tabStyle={styles.tabStyle}
       onTabPress={onTabPress}
       renderTabBarItem={({
@@ -192,6 +193,7 @@ export const ScollableAutoWidthTabBar = ({
             onPress={onPress}
             onLongPress={onLongPress}
             key={key}
+            onLayout={onLayout}
           >
             <Animated.View
               style={{
@@ -207,7 +209,6 @@ export const ScollableAutoWidthTabBar = ({
                   navigationState,
                   width: e.nativeEvent.layout.width,
                 });
-                onLayout?.(e);
               }}
             >
               <Text tw="text-sm font-bold text-gray-900 dark:text-white">

@@ -5,13 +5,17 @@ import Constants from "expo-constants";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
@@ -23,7 +27,6 @@ import {
   TabScrollView,
   TabFlatList,
 } from "design-system/tab-view";
-import { ScollableTabBar } from "design-system/tab-view/scrollable-tab-bar";
 import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import {
   breakpoints,
@@ -67,6 +70,11 @@ const SETTINGS_ROUTES = [
     key: "Account",
     index: 2,
   },
+  {
+    title: "Push Notifications",
+    key: "Push Notifications",
+    index: 3,
+  },
 ];
 
 const SettingsTabs = () => {
@@ -79,7 +87,8 @@ const SettingsTabs = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const isWeb = Platform.OS === "web";
-
+  const pushNotificationsPreferences = usePushNotificationsPreferences();
+  const bottomHeight = usePlatformBottomHeight();
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
@@ -110,6 +119,7 @@ const SettingsTabs = () => {
   }, [isAuthenticated, router]);
 
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
+
   const renderScene = useCallback(
     ({
       route: { index, key },
@@ -120,7 +130,7 @@ const SettingsTabs = () => {
         case "Wallets":
           return (
             <TabFlatList
-              data={wallets}
+              data={wallets as []}
               keyExtractor={keyExtractor}
               renderItem={({ item }) => (
                 <SettingsWalletSlot
@@ -198,12 +208,63 @@ const SettingsTabs = () => {
               <SettingAccountSlotFooter />
             </TabScrollView>
           );
+        case "Push Notifications":
+          return (
+            <TabScrollView index={index}>
+              {Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
+                Object.entries(pushNotificationsPreferences?.data).map(
+                  (item, index) => {
+                    const [key, value] = item;
+                    if (key === "created_at" || key === "updated_at") {
+                      return null;
+                    }
+                    return (
+                      <>
+                        <View
+                          key={index.toString()}
+                          tw="flex-row items-center justify-between p-4"
+                        >
+                          <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
+                            {key.toUpperCase().replace(/_/g, " ")}
+                          </Text>
+                          <View tw="w-2" />
+                          <Switch
+                            checked={value as boolean}
+                            onChange={async () => {
+                              await axios({
+                                url: "/v1/notifications/preferences/push",
+                                method: "PATCH",
+                                data: {
+                                  [key]: !value,
+                                },
+                              });
+                              pushNotificationsPreferences?.refresh();
+                            }}
+                          />
+                        </View>
+                        {index <
+                          Object.entries(pushNotificationsPreferences?.data)
+                            ?.length -
+                            1 && <SlotSeparator />}
+                      </>
+                    );
+                  }
+                )}
+            </TabScrollView>
+          );
         default:
           return null;
       }
     },
-    [accountSettings, emailWallets, router, wallets]
+    [
+      accountSettings,
+      emailWallets,
+      router,
+      wallets,
+      pushNotificationsPreferences,
+    ]
   );
+
   const renderHeader = useCallback(() => {
     return (
       <>
@@ -239,6 +300,7 @@ const SettingsTabs = () => {
       </>
     );
   }, [headerHeight, index, isDark, isWeb, setIndex]);
+
   return (
     <View style={{ width }} tw="flex-1">
       <HeaderTabView
@@ -251,17 +313,15 @@ const SettingsTabs = () => {
           android: 0,
         })}
         sceneContainerStyle={tw.style("max-w-screen-xl web:self-center")}
-        renderTabBar={(props) => (
-          <Hidden from="md">
-            <ScollableTabBar {...props} />
-          </Hidden>
-        )}
+        autoWidthTabBar
+        hideTabBar={isMdWidth}
         swipeEnabled={!isMdWidth}
         initialLayout={{
           width: width,
         }}
         style={tw.style("z-1")}
       />
+      <View style={{ height: bottomHeight }} />
     </View>
   );
 };
