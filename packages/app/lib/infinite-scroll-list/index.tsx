@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { StyleSheet, View, ViewProps } from "react-native";
+import { View, ViewProps, StyleSheet } from "react-native";
 
 import {
   FlashList as FlashListCore,
@@ -34,12 +34,15 @@ export function FlashList<T>(
     },
     [gridItemProps, propRenderItem]
   );
-
-  return (
-    <View style={StyleSheet.flatten([{ height: "100%" }, style])}>
-      <FlashListCore {...rest} ref={ref} renderItem={renderItem} />
-    </View>
-  );
+  if (style) {
+    return (
+      <View style={StyleSheet.flatten([{ height: "100%" }, style])}>
+        <FlashListCore {...rest} ref={ref} renderItem={renderItem} />
+      </View>
+    );
+  } else {
+    return <FlashListCore {...rest} renderItem={renderItem} ref={ref} />;
+  }
 }
 
 export const InfiniteScrollList = React.forwardRef(FlashList) as <T>(
