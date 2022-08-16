@@ -11,13 +11,17 @@ import type { VirtuosoGridProps } from "react-virtuoso";
 export type InfiniteScrollListProps<T> = FlashListProps<T> &
   Pick<VirtuosoGridProps, "overscan" | "useWindowScroll"> & {
     index?: number;
-    gridItemProps?: ViewProps;
+    /**
+     * grid layout item view props, it only valid if numColumns > 1
+     */
+    gridItemProps?: ViewProps | null;
   };
 
 export function FlashList<T>(
   {
     style,
     renderItem: propRenderItem,
+    numColumns,
     gridItemProps,
     ...rest
   }: InfiniteScrollListProps<T>,
@@ -26,22 +30,34 @@ export function FlashList<T>(
   const renderItem = useCallback(
     (props: ListRenderItemInfo<T>) => {
       if (!propRenderItem) return null;
-      if (gridItemProps) {
+      if (gridItemProps && numColumns && numColumns > 1) {
         return <View {...gridItemProps}>{propRenderItem(props)}</View>;
       } else {
         return propRenderItem(props);
       }
     },
-    [gridItemProps, propRenderItem]
+    [gridItemProps, numColumns, propRenderItem]
   );
   if (style) {
     return (
       <View style={StyleSheet.flatten([{ height: "100%" }, style])}>
-        <FlashListCore {...rest} ref={ref} renderItem={renderItem} />
+        <FlashListCore
+          {...rest}
+          numColumns={numColumns}
+          ref={ref}
+          renderItem={renderItem}
+        />
       </View>
     );
   } else {
-    return <FlashListCore {...rest} renderItem={renderItem} ref={ref} />;
+    return (
+      <FlashListCore
+        {...rest}
+        numColumns={numColumns}
+        renderItem={renderItem}
+        ref={ref}
+      />
+    );
   }
 }
 

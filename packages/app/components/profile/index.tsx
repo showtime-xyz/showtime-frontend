@@ -236,6 +236,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
               <ProfileListFilter />
             </View>
           }
+          sceneContainerStyle={Platform.select({
+            web: tw.style("md:mt-0 md:mt-4"),
+            default: null,
+          })}
         />
       </View>
     </FilterContext.Provider>

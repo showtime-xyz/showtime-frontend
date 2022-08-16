@@ -170,6 +170,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             ListFooterComponent={ListFooterComponent}
             onEndReached={fetchMore}
             index={index}
+            gridItemProps={Platform.select({
+              default: null,
+              web: { style: tw.style("px-0 md:px-4") },
+            })}
           />
         </ProfileTabsNFTProvider>
       </MutateProvider>

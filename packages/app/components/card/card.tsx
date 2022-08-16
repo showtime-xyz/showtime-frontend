@@ -88,6 +88,7 @@ function Card({
           boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
         }}
         tw={[
+          numColumns >= 3 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",
