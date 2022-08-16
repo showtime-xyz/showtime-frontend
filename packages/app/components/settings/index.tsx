@@ -5,13 +5,16 @@ import Constants from "expo-constants";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
@@ -67,6 +70,11 @@ const SETTINGS_ROUTES = [
     key: "Account",
     index: 2,
   },
+  {
+    title: "Push Notifications",
+    key: "Push Notifications",
+    index: 3,
+  },
 ];
 
 const SettingsTabs = () => {
@@ -79,6 +87,7 @@ const SettingsTabs = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const isWeb = Platform.OS === "web";
+  const pushNotificationsPreferences = usePushNotificationsPreferences();
 
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
@@ -110,6 +119,7 @@ const SettingsTabs = () => {
   }, [isAuthenticated, router]);
 
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
+
   const renderScene = useCallback(
     ({
       route: { index, key },
@@ -198,12 +208,59 @@ const SettingsTabs = () => {
               <SettingAccountSlotFooter />
             </TabScrollView>
           );
+        case "Push Notifications":
+          return (
+            <TabFlatList
+              data={Object.entries(pushNotificationsPreferences?.data)}
+              renderItem={({ item }) => {
+                const [key, value] = item;
+
+                if (key === "created_at" || key === "updated_at") {
+                  return null;
+                }
+
+                return (
+                  <View tw="flex-row items-center">
+                    <Text tw="text-white">
+                      {key.toUpperCase().replace(/_/g, " ")}
+                    </Text>
+
+                    <View tw="w-2" />
+
+                    <Switch
+                      checked={value}
+                      onChange={async () => {
+                        await axios({
+                          url: "/v1/notifications/preferences/push",
+                          method: "PATCH",
+                          data: {
+                            [key]: !value,
+                          },
+                        });
+
+                        pushNotificationsPreferences?.refresh();
+                      }}
+                    />
+                  </View>
+                );
+              }}
+              ItemSeparatorComponent={() => <SlotSeparator />}
+              index={index}
+            />
+          );
         default:
           return null;
       }
     },
-    [accountSettings, emailWallets, router, wallets]
+    [
+      accountSettings,
+      emailWallets,
+      router,
+      wallets,
+      pushNotificationsPreferences,
+    ]
   );
+
   const renderHeader = useCallback(() => {
     return (
       <>
@@ -239,6 +296,7 @@ const SettingsTabs = () => {
       </>
     );
   }, [headerHeight, index, isDark, isWeb, setIndex]);
+
   return (
     <View style={{ width }} tw="flex-1">
       <HeaderTabView

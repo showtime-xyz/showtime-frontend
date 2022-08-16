@@ -164,7 +164,7 @@ export const SettingsWalletSlot = (props: Props) => {
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
-    userAddress.toLowerCase() === address?.toLowerCase();
+    userAddress?.toLowerCase() === address?.toLowerCase();
 
   return (
     <View tw="md:px-4">
