@@ -85,24 +85,32 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     );
 
     const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
-
+    const numColumns = Platform.select({
+      default: 3,
+      web:
+        contentWidth <= breakpoints["md"]
+          ? 3
+          : contentWidth >= breakpoints["lg"]
+          ? 3
+          : 2,
+    });
     const renderItem = useCallback(
       ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         // currently minting nft
         if (item.loading) {
-          return <Card nft={item} numColumns={3} />;
+          return <Card nft={item} numColumns={numColumns} />;
         }
 
         return (
           <Card
             nft={item}
-            numColumns={3}
+            numColumns={numColumns}
             onPress={() => onItemPress(item.nft_id)}
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}?tabType=${list.type}`}
           />
         );
       },
-      [onItemPress, list.type]
+      [list.type, numColumns, onItemPress]
     );
 
     if (isBlocked) {
@@ -137,15 +145,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       );
     }
 
-    const numColumns = Platform.select({
-      default: 3,
-      web:
-        contentWidth <= breakpoints["md"]
-          ? 3
-          : contentWidth >= breakpoints["lg"]
-          ? 3
-          : 2,
-    });
     return (
       <MutateProvider mutate={updateItem}>
         <ProfileTabsNFTProvider

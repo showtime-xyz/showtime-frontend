@@ -67,7 +67,13 @@ function Card({
     if (isWeb) return null;
     onPress?.();
   }, [isWeb, onPress]);
-
+  const size = tw
+    ? tw
+    : numColumns === 3
+    ? "w-[350px] max-w-[30vw]"
+    : numColumns === 2
+    ? "w-[46vw]"
+    : "w-[100vw]";
   if (width < 768) {
     return (
       <RouteComponent href={href} onPress={handleOnPress}>
@@ -88,7 +94,8 @@ function Card({
           boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
         }}
         tw={[
-          numColumns >= 3 ? "my-4" : "",
+          size,
+          numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",
