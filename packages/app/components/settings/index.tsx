@@ -11,6 +11,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
@@ -26,7 +27,6 @@ import {
   TabScrollView,
   TabFlatList,
 } from "design-system/tab-view";
-import { ScollableTabBar } from "design-system/tab-view/scrollable-tab-bar";
 import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import {
   breakpoints,
@@ -88,7 +88,7 @@ const SettingsTabs = () => {
   const isDark = useIsDarkMode();
   const isWeb = Platform.OS === "web";
   const pushNotificationsPreferences = usePushNotificationsPreferences();
-
+  const bottomHeight = usePlatformBottomHeight();
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
@@ -130,7 +130,7 @@ const SettingsTabs = () => {
         case "Wallets":
           return (
             <TabFlatList
-              data={wallets}
+              data={wallets as []}
               keyExtractor={keyExtractor}
               renderItem={({ item }) => (
                 <SettingsWalletSlot
@@ -210,43 +210,47 @@ const SettingsTabs = () => {
           );
         case "Push Notifications":
           return (
-            <TabFlatList
-              data={Object.entries(pushNotificationsPreferences?.data)}
-              renderItem={({ item }) => {
-                const [key, value] = item;
-
-                if (key === "created_at" || key === "updated_at") {
-                  return null;
-                }
-
-                return (
-                  <View tw="flex-row items-center">
-                    <Text tw="text-white">
-                      {key.toUpperCase().replace(/_/g, " ")}
-                    </Text>
-
-                    <View tw="w-2" />
-
-                    <Switch
-                      checked={value}
-                      onChange={async () => {
-                        await axios({
-                          url: "/v1/notifications/preferences/push",
-                          method: "PATCH",
-                          data: {
-                            [key]: !value,
-                          },
-                        });
-
-                        pushNotificationsPreferences?.refresh();
-                      }}
-                    />
-                  </View>
-                );
-              }}
-              ItemSeparatorComponent={() => <SlotSeparator />}
-              index={index}
-            />
+            <TabScrollView index={index}>
+              {Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
+                Object.entries(pushNotificationsPreferences?.data).map(
+                  (item, index) => {
+                    const [key, value] = item;
+                    if (key === "created_at" || key === "updated_at") {
+                      return null;
+                    }
+                    return (
+                      <>
+                        <View
+                          key={index.toString()}
+                          tw="flex-row items-center justify-between p-4"
+                        >
+                          <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
+                            {key.toUpperCase().replace(/_/g, " ")}
+                          </Text>
+                          <View tw="w-2" />
+                          <Switch
+                            checked={value as boolean}
+                            onChange={async () => {
+                              await axios({
+                                url: "/v1/notifications/preferences/push",
+                                method: "PATCH",
+                                data: {
+                                  [key]: !value,
+                                },
+                              });
+                              pushNotificationsPreferences?.refresh();
+                            }}
+                          />
+                        </View>
+                        {index <
+                          Object.entries(pushNotificationsPreferences?.data)
+                            ?.length -
+                            1 && <SlotSeparator />}
+                      </>
+                    );
+                  }
+                )}
+            </TabScrollView>
           );
         default:
           return null;
@@ -309,17 +313,15 @@ const SettingsTabs = () => {
           android: 0,
         })}
         sceneContainerStyle={tw.style("max-w-screen-xl web:self-center")}
-        renderTabBar={(props) => (
-          <Hidden from="md">
-            <ScollableTabBar {...props} />
-          </Hidden>
-        )}
+        autoWidthTabBar
+        hideTabBar={isMdWidth}
         swipeEnabled={!isMdWidth}
         initialLayout={{
           width: width,
         }}
         style={tw.style("z-1")}
       />
+      <View style={{ height: bottomHeight }} />
     </View>
   );
 };
