@@ -1,8 +1,10 @@
 import { Suspense } from "react";
+import { StyleSheet, ViewStyle } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
 import { Image } from "@showtime-xyz/universal.image";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";
@@ -31,6 +33,7 @@ function Model({ url }: { url: string }) {
       preset="rembrandt"
     >
       <primitive object={scene} />
+
       <OrbitControls enableZoom={false} />
     </Stage>
   );
@@ -69,7 +72,14 @@ function ModelViewer({
   }
 
   return (
-    <Canvas>
+    <Canvas
+      style={
+        StyleSheet.flatten([
+          tailwind.style("mx-auto"),
+          tailwind.style(tw),
+        ]) as ViewStyle
+      }
+    >
       <ambientLight />
       <Suspense fallback={null}>
         <Model url={url} />
