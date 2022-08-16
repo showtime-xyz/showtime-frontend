@@ -1,26 +1,31 @@
-import { useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
+import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
+
+import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
-import { DataProvider } from "app/lib/recyclerlistview";
+import { useContentWidth } from "app/hooks/use-content-width";
+import { useScrollToTop } from "app/lib/react-navigation/native";
+import { NFT } from "app/types";
 
-import { TabRecyclerList } from "design-system/tab-view";
+import { TabFlashListScrollView } from "design-system/tab-view";
+import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
 
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 
-const GAP_BETWEEN_ITEMS = 1;
-
+const NUM_COLUMNS = 3;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ days, index }, ref) {
     const router = useRouter();
+
     const { data, mutate } = useTrendingNFTS({
       days,
     });
+    const listRef = useRef(null);
+    useScrollToTop(listRef);
     useImperativeHandle(ref, () => ({
       refresh: mutate,
     }));
@@ -29,24 +34,12 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       []
     );
 
-    const numColumns = 3;
-
-    let dataProvider = useMemo(
-      () =>
-        new DataProvider((r1, r2) => {
-          return r1.profile_id !== r2.profile_id;
-        }).cloneWithRows(data),
-      [data]
-    );
-
-    const _layoutProvider = useNFTCardsListLayoutProvider({ newData: data });
-
-    const _rowRenderer = useCallback(
-      (_type: any, item: any, index: number) => {
+    const renderItem = useCallback(
+      ({ item }: ListRenderItemInfo<NFT>) => {
         return (
           <Card
             nft={item}
-            numColumns={numColumns}
+            numColumns={NUM_COLUMNS}
             onPress={() =>
               router.push(
                 `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
@@ -56,22 +49,27 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
           />
         );
       },
-      [router, days]
+      [router, index, days]
     );
+    const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
+    const contentWidth = useContentWidth();
 
     return (
-      <View tw="flex-1 bg-white dark:bg-black">
-        {dataProvider && dataProvider.getSize() > 0 && (
-          <TabRecyclerList
-            layoutProvider={_layoutProvider}
-            dataProvider={dataProvider}
-            rowRenderer={_rowRenderer}
-            style={{ margin: -GAP_BETWEEN_ITEMS }}
-            renderFooter={ListFooterComponent}
-            index={index}
-          />
-        )}
-      </View>
+      <TabInfiniteScrollList
+        numColumns={NUM_COLUMNS}
+        data={data}
+        ref={listRef}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        estimatedItemSize={contentWidth / NUM_COLUMNS}
+        overscan={{
+          main: contentWidth / NUM_COLUMNS,
+          reverse: contentWidth / NUM_COLUMNS,
+        }}
+        renderScrollComponent={TabFlashListScrollView}
+        ListFooterComponent={ListFooterComponent}
+        index={index}
+      />
     );
   }
 );

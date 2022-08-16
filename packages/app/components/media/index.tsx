@@ -114,21 +114,19 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw={numColumns > 1 ? size : "h-screen w-screen"}>
-          <ErrorBoundary>
-            <Suspense fallback={null}>
-              <Dynamic3dModel
-                url={item?.source_url}
-                // TODO: update this to get a preview from CDN v2
-                fallbackUrl={item?.still_preview_url}
-                numColumns={numColumns}
-                tw={size}
-                blurhash={item?.blurhash}
-                resizeMode={resizeMode}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        </View>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <Dynamic3dModel
+              url={item?.source_url}
+              // TODO: update this to get a preview from CDN v2
+              fallbackUrl={item?.still_preview_url}
+              numColumns={numColumns}
+              tw={size}
+              blurhash={item?.blurhash}
+              resizeMode={resizeMode}
+            />
+          </Suspense>
+        </ErrorBoundary>
       ) : null}
     </View>
   );

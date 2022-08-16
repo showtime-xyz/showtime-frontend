@@ -5,6 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { TRENDING_ROUTE } from "app/components/trending";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { createParam } from "app/navigation/use-param";
 
 import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
@@ -21,6 +22,8 @@ const { useParam } = createParam<Query>();
 
 export const Trending = () => {
   const [tab] = useParam("tab");
+  const contentWidth = useContentWidth();
+
   // const isDark = useIsDarkMode();
 
   // const handleTabChange = (index: number) => {
@@ -47,14 +50,12 @@ export const Trending = () => {
 
   const index = days === 1 ? 0 : days === 7 ? 1 : 2;
   return (
-    <View tw="w-full max-w-screen-xl bg-gray-100 dark:bg-black">
-      <View tw="mx-auto w-[90%] py-8">
+    <View style={{ width: contentWidth }} tw="w-full bg-gray-100 dark:bg-black">
+      <View tw="py-8">
         <View tw="flex-row items-center justify-between pb-8">
-          <View>
-            <Text tw="font-space-bold text-2xl text-black dark:text-white">
-              Trending
-            </Text>
-          </View>
+          <Text tw="font-space-bold px-4 text-2xl text-black dark:text-white">
+            Trending
+          </Text>
           {/* <View
             tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black"
             style={{

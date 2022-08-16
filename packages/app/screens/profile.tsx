@@ -28,11 +28,13 @@ const ProfileScreen = withColorScheme(() => {
     <BottomSheetModalProvider>
       <ErrorBoundary>
         <Profile
-          username={Platform.select({
-            web: cleanedUsername ?? userAddress,
-            default:
-              cleanedUsername ?? user?.data?.profile?.username ?? userAddress,
-          })}
+          username={
+            Platform.select({
+              web: cleanedUsername ?? userAddress,
+              default:
+                cleanedUsername ?? user?.data?.profile?.username ?? userAddress,
+            }) as string
+          }
         />
       </ErrorBoundary>
     </BottomSheetModalProvider>

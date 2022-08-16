@@ -42,7 +42,7 @@ export const useSceneInfo = (curIndexValue: Animated.SharedValue<number>) => {
   const updateIsReady = useCallback(() => {
     const mIndex = curIndexValue.value;
     const isReady = aArray.every((item) =>
-      Object.prototype.hasOwnProperty.bind(item, mIndex)
+      Object.prototype.hasOwnProperty.call(item, mIndex)
     );
 
     if (isReady) {

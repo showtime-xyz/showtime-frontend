@@ -5,8 +5,8 @@ import React, {
   useEffect,
   MutableRefObject,
 } from "react";
-import { FlatListProps, ViewToken } from "react-native";
 
+import { FlashListProps, ViewToken } from "@shopify/flash-list";
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   GridListProps,
@@ -31,7 +31,8 @@ export type InfiniteScrollListWebProps<T> = Omit<
   "onEndReached"
 > & {
   onEndReached?: VirtuosoGridProps["endReached"];
-  onViewableItemsChanged?: FlatListProps<any>["onViewableItemsChanged"];
+  onViewableItemsChanged?: FlashListProps<T>["onViewableItemsChanged"];
+  gridItemProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
 const renderComponent = (Component: any) => {
@@ -50,7 +51,7 @@ const ViewabilityTracker = ({
   index: number;
   item: any;
   children: any;
-  onViewableItemsChanged: FlatListProps<any>["onViewableItemsChanged"];
+  onViewableItemsChanged: FlashListProps<any>["onViewableItemsChanged"];
   viewableItems: MutableRefObject<ViewToken[]>;
 }) => {
   const ref = useRef<any>(null);
@@ -65,6 +66,7 @@ const ViewabilityTracker = ({
               index,
               isViewable: true,
               key: index.toString(),
+              timestamp: new Date().valueOf(),
             });
         } else {
           viewableItems.current = viewableItems.current.filter(
@@ -104,6 +106,7 @@ export function VirtuosoList<T>(
     useWindowScroll = true,
     style,
     onViewableItemsChanged,
+    gridItemProps = {},
   }: InfiniteScrollListWebProps<T>,
   ref: React.Ref<VirtuosoHandle> | React.Ref<VirtuosoGridHandle>
 ) {
@@ -142,21 +145,25 @@ export function VirtuosoList<T>(
   const gridComponents = useMemo<GridComponents<T>>(
     () => ({
       Item: (props: ItemContainerProps) => (
-        <ItemContainer {...props} numColumns={numColumns} />
+        <ItemContainer
+          {...props}
+          numColumns={numColumns}
+          ItemSeparatorComponent={ItemSeparatorComponent}
+          {...(gridItemProps as {})}
+        />
       ),
       List: ListContainer,
     }),
-    [numColumns]
+    [ItemSeparatorComponent, gridItemProps, numColumns]
   );
 
   if (data?.length === 0) {
     return renderComponent(ListEmptyComponent);
   }
+
   return (
     <>
-      {React.isValidElement(ListHeaderComponent) &&
-        numColumns > 1 &&
-        ListHeaderComponent}
+      {numColumns > 1 && renderComponent(ListHeaderComponent)}
       {numColumns === 1 ? (
         <Virtuoso
           useWindowScroll={useWindowScroll}
@@ -183,9 +190,7 @@ export function VirtuosoList<T>(
           ref={ref as React.Ref<VirtuosoGridHandle>}
         />
       )}
-      {React.isValidElement(ListFooterComponent) &&
-        numColumns > 1 &&
-        ListFooterComponent}
+      {numColumns > 1 && renderComponent(ListFooterComponent)}
     </>
   );
 }
@@ -204,15 +209,22 @@ const ListContainer = React.forwardRef(function ListContainer(
   );
 });
 
-type ItemContainerProps = GridItem & {
-  style?: CSSProperties;
-  numColumns?: number;
-};
+type ItemContainerProps = GridItem &
+  Pick<FlashListProps<any>, "ItemSeparatorComponent"> & {
+    style?: CSSProperties;
+    numColumns?: number;
+    children?: JSX.Element;
+  } & React.HTMLAttributes<HTMLDivElement>;
 
 const ItemContainer = React.forwardRef(function ItemContainer(
-  props: ItemContainerProps,
+  { style, ...rest }: ItemContainerProps,
   ref: React.LegacyRef<HTMLDivElement>
 ) {
-  const width = props.numColumns ? `${100 / props.numColumns}%` : "100%";
-  return <div {...props} style={{ ...props.style, width }} ref={ref} />;
+  const width = rest.numColumns ? `${100 / rest.numColumns}%` : "100%";
+  return (
+    <div {...rest} style={{ ...style, width }} ref={ref}>
+      {rest.children}
+      {renderComponent(rest.ItemSeparatorComponent)}
+    </div>
+  );
 });

@@ -7843,7 +7843,6 @@ __metadata:
     react-string-replace: ^0.4.4
     react-test-renderer: 18.2.0
     readable-stream: 3.6.0
-    recyclerlistview: ^4.1.3
     remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
@@ -29904,20 +29903,6 @@ __metadata:
   dependencies:
     minimatch: 3.0.4
   checksum: a6b22994d76458443d4a27f5fd7147ac63ad31bba972666a291d511d4d819ee40ff71ba7524c14f6a565b8cfaf7f48b318f971804b913cf538d58f04e25d1fee
-  languageName: node
-  linkType: hard
-
-"recyclerlistview@npm:4.1.2":
-  version: 4.1.2
-  resolution: "recyclerlistview@npm:4.1.2"
-  dependencies:
-    lodash.debounce: 4.0.8
-    prop-types: 15.8.1
-    ts-object-utils: 0.0.5
-  peerDependencies:
-    react: ">= 15.2.1"
-    react-native: ">= 0.30.0"
-  checksum: e18e36c0783b528b5244ed0b7eabf231c49ec7b0a97c947a6f596900165a4d7bbc3216b23084a8a2cb8d33b98fb38fc4a64254cf0b6431a0d0fa3ca2e7129fbc
   languageName: node
   linkType: hard
 

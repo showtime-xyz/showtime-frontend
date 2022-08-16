@@ -51,13 +51,6 @@ function Card({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[350px] max-w-[30vw]"
-    : numColumns === 2
-    ? "w-[50vw]"
-    : "w-[100vw]";
 
   const cardMaxWidth = useMemo(() => {
     switch (numColumns) {
@@ -74,7 +67,13 @@ function Card({
     if (isWeb) return null;
     onPress?.();
   }, [isWeb, onPress]);
-
+  const size = tw
+    ? tw
+    : numColumns === 3
+    ? "w-[350px] max-w-[30vw]"
+    : numColumns === 2
+    ? "w-[46vw]"
+    : "w-[100vw]";
   if (width < 768) {
     return (
       <RouteComponent href={href} onPress={handleOnPress}>
@@ -96,7 +95,7 @@ function Card({
         }}
         tw={[
           size,
-          numColumns >= 3 ? "mt-8" : numColumns === 2 ? "m-2" : "",
+          numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",
@@ -128,7 +127,7 @@ function Card({
             href={href!}
             onPress={handleOnPress}
           >
-            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+            <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
           <View tw="flex-row justify-between px-4 pt-4">
             <Social nft={nft} />

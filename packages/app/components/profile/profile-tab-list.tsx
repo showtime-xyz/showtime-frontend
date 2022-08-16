@@ -1,11 +1,13 @@
 import {
   useCallback,
   useContext,
-  useMemo,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
+
+import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -15,13 +17,15 @@ import { Card } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useNFTCardsListLayoutProvider } from "app/hooks/use-nft-cards-list-layout-provider";
 import { useUser } from "app/hooks/use-user";
-import { DataProvider } from "app/lib/recyclerlistview";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
+import { NFT } from "app/types";
 
-import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
+import { TabFlashListScrollView, TabScrollView } from "design-system/tab-view";
+import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
+import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
@@ -35,19 +39,16 @@ type TabListProps = {
   index: number;
 };
 
-const GAP_BETWEEN_ITEMS = 1;
-
 export type ProfileTabListRef = {
   refresh: () => void;
 };
+
 export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   function ProfileTabList(
     { username, profileId, isBlocked, list, index },
     ref
   ) {
     const router = useRouter();
-    const { height } = useWindowDimensions();
-
     const { filter } = useContext(FilterContext);
 
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
@@ -57,10 +58,13 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         collectionId: filter.collectionId,
         sortType: filter.sortType,
         // TODO: remove refresh interval once we have the new indexer.
-        refreshInterval: 5000,
+        // refreshInterval: 5000,
       });
+    const contentWidth = useContentWidth();
 
     const { user } = useUser();
+    const listRef = useRef(null);
+    useScrollToTop(listRef);
     useImperativeHandle(ref, () => ({
       refresh,
     }));
@@ -80,47 +84,35 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const _layoutProvider = useNFTCardsListLayoutProvider({
-      newData: data,
-      headerHeight: 0,
+    const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
+    const numColumns = Platform.select({
+      default: 3,
+      web:
+        contentWidth <= breakpoints["md"]
+          ? 3
+          : contentWidth >= breakpoints["lg"]
+          ? 3
+          : 2,
     });
-
-    const dataProvider = useMemo(
-      () =>
-        new DataProvider((r1, r2) => {
-          return typeof r1 === "string" && typeof r2 === "string"
-            ? r1 !== r2
-            : r1.nft_id !== r2.nft_id;
-        }).cloneWithRows(data),
-      [data]
-    );
-    const contentWidth = useContentWidth();
-
-    const layoutSize = useMemo(
-      () => ({
-        width: contentWidth,
-        height,
-      }),
-      [contentWidth, height]
-    );
-    const _rowRenderer = useCallback(
-      (_type: any, item: any) => {
+    const renderItem = useCallback(
+      ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         // currently minting nft
         if (item.loading) {
-          return <Card nft={item} numColumns={3} />;
+          return <Card nft={item} numColumns={numColumns} />;
         }
 
         return (
           <Card
             nft={item}
-            numColumns={3}
+            numColumns={numColumns}
             onPress={() => onItemPress(item.nft_id)}
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}?tabType=${list.type}`}
           />
         );
       },
-      [onItemPress, list.type]
+      [list.type, numColumns, onItemPress]
     );
+
     if (isBlocked) {
       return (
         <TabScrollView
@@ -162,21 +154,26 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
               : undefined
           }
         >
-          {dataProvider && dataProvider.getSize() > 0 && (
-            <TabRecyclerList
-              layoutProvider={_layoutProvider}
-              dataProvider={dataProvider}
-              rowRenderer={_rowRenderer}
-              onEndReached={fetchMore}
-              style={{
-                flex: 1,
-                margin: -GAP_BETWEEN_ITEMS,
-              }}
-              renderFooter={ListFooterComponent}
-              layoutSize={layoutSize}
-              index={index}
-            />
-          )}
+          <TabInfiniteScrollList
+            numColumns={numColumns}
+            data={data}
+            ref={listRef}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            estimatedItemSize={contentWidth / numColumns}
+            overscan={{
+              main: contentWidth / numColumns,
+              reverse: contentWidth / numColumns,
+            }}
+            renderScrollComponent={TabFlashListScrollView}
+            ListFooterComponent={ListFooterComponent}
+            onEndReached={fetchMore}
+            index={index}
+            gridItemProps={Platform.select({
+              default: null,
+              web: { style: tw.style("px-0 md:px-4") },
+            })}
+          />
         </ProfileTabsNFTProvider>
       </MutateProvider>
     );
