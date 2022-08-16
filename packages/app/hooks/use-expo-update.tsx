@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 import * as Updates from "expo-updates";
 import { MMKV } from "react-native-mmkv";
 
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
-import { useIsForeground } from "app/hooks/use-is-foreground";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { captureException } from "app/lib/sentry";
 
@@ -24,31 +23,35 @@ const LAST_SHOW_UPDATE_KEY = "lastShowUpdateTime";
 
 export function useExpoUpdate() {
   const bottom = usePlatformBottomHeight();
-  const isForeground = useIsForeground();
+  // const isForeground = useIsForeground();
   const snackbar = useSnackbar();
-  const checkUpdate = async (isAutomatic = false) => {
-    try {
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        store.set(LAST_SHOW_UPDATE_KEY, new Date().toISOString());
-        if (isAutomatic) {
-          await Updates.reloadAsync();
-        } else {
-          snackbar?.show({
-            text: "New update available 🎉",
-            bottom: bottom + 64,
-            action: {
-              text: "Reload",
-              onPress: () => Updates.reloadAsync(),
-            },
-          });
+  const checkUpdate = useCallback(
+    async (isAutomatic = false) => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          store.set(LAST_SHOW_UPDATE_KEY, new Date().toISOString());
+          if (isAutomatic) {
+            await Updates.reloadAsync();
+          } else {
+            snackbar?.show({
+              text: "New update available 🎉",
+              bottom: bottom + 64,
+              action: {
+                text: "Reload",
+                onPress: () => Updates.reloadAsync(),
+              },
+            });
+          }
         }
+      } catch (error) {
+        captureException(error);
       }
-    } catch (error) {
-      captureException(error);
-    }
-  };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bottom]
+  );
   useEffect(() => {
     const now = new Date();
     const currentHours = now.getHours();
@@ -79,6 +82,5 @@ export function useExpoUpdate() {
     // } else {
     //   store.set(BACKGROUND_START_TIME_KEY, now.toISOString());
     // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bottom, isForeground]);
+  }, [checkUpdate]);
 }
