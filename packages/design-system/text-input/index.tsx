@@ -1,7 +1,7 @@
 import { ComponentProps, forwardRef } from "react";
-import { TextInput as ReactNativeTextInput } from "react-native";
+import { Platform, TextInput as ReactNativeTextInput } from "react-native";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { styled, tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type TextInputProps = { tw?: TW } & ComponentProps<
@@ -11,9 +11,10 @@ export type TextInputProps = { tw?: TW } & ComponentProps<
 const StyledTextInput = styled(ReactNativeTextInput);
 
 const TextInput = forwardRef<typeof ReactNativeTextInput, TextInputProps>(
-  ({ tw, ...props }, ref: any) => (
+  ({ tw, style, ...props }, ref: any) => (
     <StyledTextInput
       {...props}
+      style={Platform.OS === "web" ? style : [tailwind.style(tw), style]}
       tw={Array.isArray(tw) ? tw.join(" ") : tw}
       ref={ref}
     />

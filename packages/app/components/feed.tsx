@@ -21,21 +21,18 @@ export const Feed = () => {
   );
 };
 
-// TODO: revert this once we fix NativeWind
 const FeedList = () => {
-  // const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  // const bottomBarHeight = usePlatformBottomHeight();
-  // const { isAuthenticated } = useUser();
-  // const { data } = useFeed();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const bottomBarHeight = usePlatformBottomHeight();
+  const { isAuthenticated } = useUser();
+  const { data } = useFeed();
 
-  // return (
-  //   <SwipeList
-  //     bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
-  //     data={data}
-  //   />
-  // );
-
-  return null;
+  return (
+    <SwipeList
+      bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
+      data={data}
+    />
+  );
 };
 
 // export const FeedList = () => {

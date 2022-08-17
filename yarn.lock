@@ -7879,7 +7879,7 @@ __metadata:
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
     moti: canary
-    nativewind: ^2.0.0-next.56
+    nativewind: ^2.0.0-next.60
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
     process: ^0.11.0
@@ -8000,7 +8000,7 @@ __metadata:
     rudder-sdk-js: ^2.9.4
     setimmediate: ^1.0.5
     swr: 2.0.0-beta.6
-    tailwindcss: ^3.1.6
+    tailwindcss: ^3.1.8
     wagmi: ^0.6.0
     web3modal: ^1.9.8
   languageName: unknown
@@ -23870,6 +23870,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lilconfig@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "lilconfig@npm:2.0.6"
+  checksum: 40a3cd72f103b1be5975f2ac1850810b61d4053e20ab09be8d3aeddfe042187e1ba70b4651a7e70f95efa1642e7dc8b2ae395b317b7d7753b241b43cef7c0f7d
+  languageName: node
+  linkType: hard
+
 "lines-and-columns@npm:^1.1.6":
   version: 1.2.4
   resolution: "lines-and-columns@npm:1.2.4"
@@ -25516,9 +25523,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nativewind@npm:^2.0.0-next.56":
-  version: 2.0.0-next.56
-  resolution: "nativewind@npm:2.0.0-next.56"
+"nativewind@npm:^2.0.0-next.60":
+  version: 2.0.0-next.60
+  resolution: "nativewind@npm:2.0.0-next.60"
   dependencies:
     "@babel/generator": ^7.18.7
     "@babel/types": 7.18.10
@@ -25534,7 +25541,7 @@ __metadata:
     use-sync-external-store: ^1.1.0
   peerDependencies:
     tailwindcss: ~3
-  checksum: cc362f290420f5e8cb1709234e86b5cf363c7cff329307269444a9e3a2850d30872ee072513e9b4ab7555e569136a95cbf5608492433de3f87ebd48b2ee98dc8
+  checksum: b95eec3ceba7c20dc4a38fafcbfa0771b3aff4834f0d9768ff496bd94d360b07df27e34c8fcb8cf0fb6fdb03d10bf91988cf47da6fcf7ef484abeffa45957bf1
   languageName: node
   linkType: hard
 
@@ -32660,9 +32667,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.1.6":
-  version: 3.1.6
-  resolution: "tailwindcss@npm:3.1.6"
+"tailwindcss@npm:^3.1.8":
+  version: 3.1.8
+  resolution: "tailwindcss@npm:3.1.8"
   dependencies:
     arg: ^5.0.2
     chokidar: ^3.5.3
@@ -32673,7 +32680,7 @@ __metadata:
     fast-glob: ^3.2.11
     glob-parent: ^6.0.2
     is-glob: ^4.0.3
-    lilconfig: ^2.0.5
+    lilconfig: ^2.0.6
     normalize-path: ^3.0.0
     object-hash: ^3.0.0
     picocolors: ^1.0.0
@@ -32691,7 +32698,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 90719c6fd0dcdda5c8e2882ad421048c9dd90890e0c118d12ff3ec31adba53eb2df8fed1ed203e728e5b32297e1cc207df463a6b196d37344a63fde9f67c52b6
+  checksum: 86480301fc6ae1e392c2aba8264ab425bd919078176b010fda724518a7c265e950da5f4120c69c9041509c318207985fa9d680b6f5021e23f8214135a61a54b6
   languageName: node
   linkType: hard
 

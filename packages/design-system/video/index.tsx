@@ -22,6 +22,7 @@ type VideoProps = {
 function Video({
   tw,
   blurhash,
+  style,
   posterSource,
   showMuteButton,
   ...props
@@ -35,7 +36,7 @@ function Video({
 
   return (
     <>
-      <View tw={tw}>
+      <View style={style} tw={tw}>
         {videoConfig?.previewOnly ? (
           <Image
             tw={tw}
