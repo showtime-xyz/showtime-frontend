@@ -107,6 +107,7 @@ export const overrideMagicInstance = (email: string) => {
       customNodeOptions.chainId = 80001;
     }
 
+    //@ts-ignore
     const testMagic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
       network: customNodeOptions,
       testMode: true,
