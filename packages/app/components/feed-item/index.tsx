@@ -112,7 +112,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       opacity: opacity.value,
     };
   }, []);
-  const contentStyle = useAnimatedStyle(() => {
+  const contentStyle = useAnimatedStyle<ViewStyle>(() => {
+    if (Platform.OS === "web") {
+      return {
+        justifyContent: "center",
+      };
+    }
     return {
       transform: [
         {
