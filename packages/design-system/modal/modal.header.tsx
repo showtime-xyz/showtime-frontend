@@ -14,6 +14,7 @@ const MODAL_HEADER_TITLE_TW = "dark:text-white font-bold text-center";
 function ModalHeaderComponent({
   title,
   endContentComponent: EndContentComponent,
+  startContentComponent: StartContentComponent,
   tw,
   onClose,
 }: ModalHeaderProps) {
@@ -31,9 +32,13 @@ function ModalHeaderComponent({
   );
   return (
     <View style={containerStyle}>
-      <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
-        <Close width={20} height={24} />
-      </Button>
+      {StartContentComponent ? (
+        <StartContentComponent />
+      ) : (
+        <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
+          <Close width={20} height={24} />
+        </Button>
+      )}
 
       <Text tw={[MODAL_HEADER_TITLE_TW, "font-space-bold text-lg"]}>
         {title}

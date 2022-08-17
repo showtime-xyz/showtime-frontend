@@ -5,7 +5,6 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { useWalletConnect } from "app/lib/walletconnect";
-import { getBiconomy } from "app/utilities";
 
 type BiconomyContextValue = {
   signer: any;
@@ -25,10 +24,9 @@ export const BiconomyProvider = ({ children }: { children: any }) => {
   useEffect(() => {
     async function initializeSigner() {
       try {
-        const biconomy = await (await getBiconomy(connector, web3)).biconomy;
         const value = {
-          signer: biconomy.getSignerByAddress(userAddress),
-          provider: biconomy.getEthersProvider(),
+          signer: web3?.getSigner(),
+          provider: web3,
           signerAddress: userAddress,
         };
 

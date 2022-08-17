@@ -1,5 +1,6 @@
 export type NFT = {
   nft_id: number;
+  is_user_owner: boolean;
   contract_address: string;
   token_id: string;
   like_count: number;
@@ -20,7 +21,7 @@ export type NFT = {
   creator_address_nonens: string;
   owner_address_nonens?: string;
   creator_img_url?: any;
-  token_created: Date;
+  token_created: string;
   multiple_owners: number;
   owner_id: number;
   owner_name: string;
@@ -63,6 +64,7 @@ export type Creator = {
 };
 
 export interface WalletAddressesV2 {
+  backendAddress: string;
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;

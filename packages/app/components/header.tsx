@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
-import {
-  FlatList,
-  ListRenderItemInfo,
-  Platform,
-  TextInput,
-  useWindowDimensions,
-} from "react-native";
+import { Platform, TextInput, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -29,6 +24,7 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
@@ -50,6 +46,7 @@ const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
+  const router = useRouter();
   const inputRef = useRef<TextInput>();
 
   useEffect(() => {
@@ -145,11 +142,16 @@ const SearchInHeader = () => {
           })}
         >
           {data ? (
-            <FlatList
+            <InfiniteScrollList
               data={data}
               renderItem={renderItem}
               ItemSeparatorComponent={Separator}
               keyboardShouldPersistTaps="handled"
+              estimatedItemSize={64}
+              overscan={{
+                main: 64,
+                reverse: 64,
+              }}
             />
           ) : loading && term ? (
             <SearchItemSkeleton />
@@ -164,6 +166,18 @@ const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const isDark = useIsDarkMode();
+  const prevPath = useRef<any>(null);
+
+  useEffect(() => {
+    if (
+      Platform.OS === "web" &&
+      isOpen &&
+      prevPath.current !== router.pathname
+    ) {
+      setIsOpen(false);
+    }
+    prevPath.current = router.pathname;
+  }, [router.pathname, isOpen]);
 
   return (
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
@@ -184,10 +198,10 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 overflow-hidden rounded-3xl bg-white dark:bg-black "
+          tw="mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
-              maxHeight: "calc(50vh - 64px)",
+              height: "calc(50vh - 64px)",
               boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
             default: {},
@@ -201,7 +215,7 @@ const NotificationsInHeader = () => {
                 </View>
               }
             >
-              <Notifications />
+              <Notifications useWindowScroll={false} />
             </Suspense>
           </ErrorBoundary>
         </View>
@@ -238,15 +252,15 @@ const HeaderRight = () => {
                   onPress={() => {
                     router.push(
                       Platform.select({
-                        native: "/camera",
+                        native: "/drop",
                         web: {
                           pathname: router.pathname,
-                          query: { ...router.query, createModal: true },
+                          query: { ...router.query, dropModal: true },
                         } as any,
                       }),
                       Platform.select({
-                        native: "/camera",
-                        web: router.asPath === "/" ? "/create" : router.asPath,
+                        native: "/drop",
+                        web: router.asPath === "/" ? "/drop" : router.asPath,
                       }),
                       { shallow: true }
                     );

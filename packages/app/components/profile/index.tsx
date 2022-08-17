@@ -69,8 +69,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     setIndex,
     setIsRefreshing,
     isRefreshing,
-    setTabRefs,
     currentTab,
+    tabRefs,
   } = useTabState<ProfileTabListRef>(routes, {
     defaultIndex: data?.tabs.findIndex(
       (item) => item.type === data?.default_tab_type
@@ -121,12 +121,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
           <Suspense fallback={<TabSpinner index={routeIndex} />}>
             {data?.tabs[routeIndex] && (
               <ProfileTabList
-                username={profileData?.data.profile.username}
-                profileId={profileData?.data.profile.profile_id}
+                username={profileData?.data?.profile.username}
+                profileId={profileData?.data?.profile.profile_id}
                 isBlocked={isBlocked}
                 list={data?.tabs[routeIndex]}
                 index={routeIndex}
-                ref={setTabRefs}
+                ref={(ref) => (tabRefs.current[index] = ref)}
               />
             )}
           </Suspense>
@@ -134,11 +134,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
       );
     },
     [
-      data,
+      data?.tabs,
+      index,
       isBlocked,
-      profileData?.data.profile.profile_id,
-      profileData?.data.profile.username,
-      setTabRefs,
+      profileData?.data?.profile.profile_id,
+      profileData?.data?.profile.username,
+      tabRefs,
     ]
   );
   const headerBgLeft = useMemo(() => {
@@ -228,13 +229,17 @@ const Profile = ({ username }: ProfileScreenProps) => {
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {data?.tabs[index]?.displayed_count} ITEMS
               </Text>
               <ProfileListFilter />
             </View>
           }
+          sceneContainerStyle={Platform.select({
+            web: tw.style("md:mt-0 md:mt-4"),
+            default: null,
+          })}
         />
       </View>
     </FilterContext.Provider>

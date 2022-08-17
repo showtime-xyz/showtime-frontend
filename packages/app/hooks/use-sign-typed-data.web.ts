@@ -67,11 +67,7 @@ export const useSignTypedData = () => {
                 onPress: async () => {
                   try {
                     await switchNetworkAsync?.(parseInt(EXPECTED_CHAIN_ID));
-                    const result = await signTypedDataAsync({
-                      domain,
-                      types,
-                      value,
-                    });
+                    const result = await signTypedData(domain, types, value);
                     resolve(result);
                   } catch (e) {
                     reject(

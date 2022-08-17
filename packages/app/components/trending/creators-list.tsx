@@ -115,7 +115,7 @@ export const CreatorsList = forwardRef<
       </TabScrollView>
     );
   }
-
+  // Todo: replace to TabInfiniteScrollList when re-enabled this page.
   return (
     <TabRecyclerList
       layoutProvider={_layoutProvider}

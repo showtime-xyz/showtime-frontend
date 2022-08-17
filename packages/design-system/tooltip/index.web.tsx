@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import { View } from "react-native";
 
 import * as Portal from "@radix-ui/react-portal";
@@ -21,7 +21,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   style,
   ...rest
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(open);
   const triggerEl = useRef<View>(null);
   const timeout = useRef<NodeJS.Timeout | null>(null);
   const { isMobileWeb } = useIsMobileWeb();
@@ -41,10 +41,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
     setShow(false);
     timeout.current && clearTimeout(timeout.current);
   }, []);
-
-  useEffect(() => {
-    setShow(Boolean(open));
-  }, [open]);
 
   return (
     <>

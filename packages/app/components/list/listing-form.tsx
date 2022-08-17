@@ -20,7 +20,6 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { NFT } from "app/types";
-import { findAddressInOwnerList } from "app/utilities";
 
 const LISTING_SUPPORTED_CURRENCIES = {
   mumbai: {
@@ -67,7 +66,7 @@ const defaultListingValues = {
   currency: defaultCurrency,
 };
 
-const options: SelectOption[] = Object.entries(
+const options: SelectOption<any>[] = Object.entries(
   LISTING_SUPPORTED_CURRENCIES
 ).map((currency) => {
   const [value, label] = currency;
@@ -87,15 +86,7 @@ export const ListingForm = (props: Props) => {
   const [currentPrice, setCurrentPrice] = useState<number | string>(
     defaultListingValues.price
   );
-  const ownerListItem = findAddressInOwnerList(
-    address,
-    user?.data.profile.wallet_addresses_v2,
-    nft?.multiple_owners_list
-  );
 
-  const ownedAmount = ownerListItem?.quantity || 1;
-  const hideCopiesInput = ownedAmount === 1;
-  const copiesHelperText = `1 by default, you own ${ownedAmount}`;
   const currencySymbol = LISTING_SUPPORTED_CURRENCIES[currentCurrencyAddress];
   const isNotMagic = !web3;
 
@@ -116,9 +107,9 @@ export const ListingForm = (props: Props) => {
           .string()
           .required()
           .default(LIST_CURRENCIES[defaultListingValues.currency]),
-        editions: yup.number().required().min(1).max(ownedAmount).default(1),
+        editions: yup.number().required().min(1).default(1),
       }),
-    [ownedAmount]
+    []
   );
 
   const { control, handleSubmit, formState } = useForm<any>({
@@ -167,33 +158,27 @@ export const ListingForm = (props: Props) => {
 
   return (
     <View>
-      {!hideCopiesInput && (
-        <View tw="flex-row">
-          <Controller
-            control={control}
-            name="editions"
-            render={({ field: { onChange, onBlur, value } }) => {
-              const errorText = formState.errors.editions?.message
-                ? `Copies amount must be between 1 and ${ownedAmount}`
-                : undefined;
-              return (
-                <Fieldset
-                  tw="flex-1 bg-gray-100"
-                  label="Copies"
-                  placeholder="1"
-                  helperText={copiesHelperText}
-                  onBlur={onBlur}
-                  keyboardType="numeric"
-                  errorText={errorText}
-                  value={value?.toString()}
-                  onChangeText={(v) => onChange(v)}
-                  returnKeyType="done"
-                />
-              );
-            }}
-          />
-        </View>
-      )}
+      <View tw="flex-row">
+        <Controller
+          control={control}
+          name="editions"
+          render={({ field: { onChange, onBlur, value } }) => {
+            return (
+              <Fieldset
+                tw="flex-1 bg-gray-100"
+                label="Copies"
+                placeholder="1"
+                onBlur={onBlur}
+                keyboardType="numeric"
+                errorText={formState.errors.editions?.message}
+                value={value?.toString()}
+                onChangeText={(v) => onChange(v)}
+                returnKeyType="done"
+              />
+            );
+          }}
+        />
+      </View>
 
       <View tw="mt-4 flex-row rounded-full bg-gray-100 dark:bg-gray-900">
         <Controller
@@ -243,7 +228,7 @@ export const ListingForm = (props: Props) => {
                     placeholder: defaultCurrency,
                     value,
                     size: "regular",
-                    onChange: (v) => {
+                    onChange: (v: any) => {
                       onChange(v);
                       setCurrentCurrency(v);
                     },

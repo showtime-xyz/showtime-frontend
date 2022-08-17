@@ -28,7 +28,9 @@ export const useActivity = ({
     [typeId, limit, accessToken]
   );
 
-  const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
+  const queryState = useInfiniteListQuerySWR<any>(activityURLFn, {
+    pageSize: limit,
+  });
 
   const newData = useMemo(() => {
     let newData: any = [];
@@ -60,15 +62,20 @@ export const useActivity = ({
 };
 
 export const useTrendingCreators = ({ days }: { days: number }) => {
+  const PAGE_SIZE = 15;
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
-      const url = `/v1/leaderboard?page=${index + 1}&days=${days}&limit=15`;
+      const url = `/v1/leaderboard?page=${
+        index + 1
+      }&days=${days}&limit=${PAGE_SIZE}`;
       return url;
     },
     [days]
   );
 
-  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn, {
+    pageSize: PAGE_SIZE,
+  });
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
@@ -96,16 +103,19 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     return url;
   }, [days]);
 
-  const { data, isLoading, error } = useSWR<any>(trendingUrlFn, fetcher);
+  const { data, isLoading, error, mutate } = useSWR<NFT[]>(
+    trendingUrlFn,
+    fetcher
+  );
 
-  return { data: data ?? [], isLoading, error };
+  return { data: data ?? [], isLoading, error, mutate };
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
   const { data, error, isLoading } = useSWR<{
-    data: UserProfile;
+    data?: UserProfile;
   }>(queryKey, fetcher);
   const { mutate } = useSWRConfig();
 
@@ -165,6 +175,7 @@ export const defaultFilters = {
 export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
+  const PAGE_SIZE = 12;
   const {
     profileId,
     tabType,
@@ -178,7 +189,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${12}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
+      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
       return url;
     },
     [profileId, tabType, sortType, showHidden, collectionId]
@@ -186,7 +197,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
     params?.profileId && tabType ? trendingCreatorsUrlFn : () => null,
-    refreshInterval
+    { refreshInterval, pageSize: PAGE_SIZE }
   );
 
   const newData = useMemo(() => {
@@ -261,12 +272,15 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 };
 
 export const useComments = ({ nftId }: { nftId: number }) => {
+  const PAGE_SIZE = 10;
   const commentsUrlFn = useCallback(() => {
-    const url = `/v2/comments/${nftId}?limit=10`;
+    const url = `/v2/comments/${nftId}?limit=${PAGE_SIZE}`;
     return url;
   }, [nftId]);
 
-  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
+  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn, {
+    pageSize: PAGE_SIZE,
+  });
 
   return queryState;
 };
@@ -288,7 +302,6 @@ export const useMyInfo = () => {
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const navigateToLogin = useNavigateToLogin();
-
   const { data, error } = useSWR<MyInfo>(
     accessToken ? queryKey : null,
     fetcher
@@ -409,30 +422,6 @@ export const useMyInfo = () => {
     [data, accessToken, mutate, navigateToLogin]
   );
 
-  const hide = useCallback(
-    async (nftId: number | undefined, listId: number | undefined) => {
-      if (!accessToken) {
-        navigateToLogin();
-        return false;
-      }
-
-      if (data && nftId && listId) {
-        try {
-          await axios({
-            url: `/v1/hide_nft/${nftId}/${listId}`,
-            method: "POST",
-            data: {},
-          });
-
-          return true;
-        } catch (error) {
-          return false;
-        }
-      }
-    },
-    [data, accessToken, navigateToLogin]
-  );
-
   const unlike = useCallback(
     async (nftId: number) => {
       if (data) {
@@ -487,6 +476,5 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
-    hide,
   };
 };

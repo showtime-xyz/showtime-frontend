@@ -99,3 +99,8 @@ export { default as FlipIcon } from "./Flip";
 export { default as Gift } from "./Gift";
 export { default as Unmuted } from "./Unmuted";
 export { default as Muted } from "./Muted";
+export { default as GiftSolid } from "./GiftSolid";
+export { default as ZoomIn } from "./ZoomIn";
+export { default as ZoomOut } from "./ZoomOut";
+export { default as RotateCcw } from "./RotateCcw";
+export { default as RotateCw } from "./RotateCw";

@@ -5,6 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 
 type Props = {
   mediaTypes?: "image" | "video" | "all";
+  option?: ImagePicker.ImagePickerOptions;
 };
 
 export type FilePickerResolveValue = {
@@ -23,7 +24,7 @@ export const useFilePicker = () => {
     };
   }, []);
 
-  const pickFile = ({ mediaTypes = "all" }: Props) => {
+  const pickFile = ({ mediaTypes = "all", option = {} }: Props) => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<FilePickerResolveValue>(async (resolve, reject) => {
       if (Platform.OS === "web") {
@@ -72,6 +73,7 @@ export const useFilePicker = () => {
                 : ImagePicker.MediaTypeOptions.All,
             allowsMultipleSelection: false,
             quality: 1,
+            ...option,
           });
 
           if (result.cancelled) return;

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import type { KeyedMutator } from "swr";
 import useSWRInfinite from "swr/infinite";
@@ -15,38 +15,46 @@ type UseInfiniteListQueryReturn<T> = {
   isLoading: boolean;
   isRefreshing: boolean;
   isLoadingMore: boolean;
+  isReachingEnd: boolean;
   fetchMore: () => void;
   refresh: () => void;
   retry: () => void;
   mutate: KeyedMutator<T[]>;
 };
-
+type UseInfiniteListConfig = {
+  refreshInterval?: number;
+  pageSize?: number;
+};
 export const useInfiniteListQuerySWR = <T>(
-  urlFunction: (page: number) => string | null,
-  refreshInterval: number = 0
+  urlFunction: (pageIndex: number, previousPageData: []) => string | null,
+  config?: UseInfiniteListConfig
 ): UseInfiniteListQueryReturn<T> => {
+  const refreshInterval = config?.refreshInterval ?? 0;
+  const PAGE_SIZE = config?.pageSize ?? 0;
   // Todo:: on Refresh, swr will refetch all the page APIs. This may appear weird at first, but I guess could be better for UX
   // We don't want to show loading indicator till all of the requests succeed, so we'll add our refreshing state
   // and set it to false even when first request is completed.
   const [isRefreshing, setRefreshing] = useState(false);
-  const {
-    data: pages,
-    error,
-    mutate,
-    size,
-    setSize,
-    isValidating,
-    isLoading,
-  } = useSWRInfinite<T>(urlFunction, fetcher, {
-    revalidateFirstPage: true,
-    suspense: true,
-    refreshInterval,
-    revalidateOnMount: true,
-  });
+  const { data, error, mutate, size, setSize, isValidating, isLoading } =
+    useSWRInfinite<T>(urlFunction, fetcher, {
+      revalidateFirstPage: true,
+      // suspense: true,
+      refreshInterval,
+      revalidateOnMount: true,
+    });
 
-  const isRefreshingSWR = isValidating && pages && pages.length === size;
+  const isRefreshingSWR = isValidating && data && data.length === size;
+  const isLoadingInitialData = !data && !error;
   const isLoadingMore =
-    (size > 0 && pages && typeof pages[size - 1] === "undefined") ?? false;
+    (isLoadingInitialData ||
+      (size > 0 && data && typeof data[size - 1] === "undefined")) ??
+    false;
+  const isEmpty = (data?.[0] as any)?.length === 0;
+
+  const isReachingEnd = !PAGE_SIZE
+    ? true
+    : isEmpty ||
+      ((data && (data[data.length - 1] as any)?.length < PAGE_SIZE) ?? true);
 
   useEffect(() => {
     if (!isRefreshingSWR) {
@@ -54,8 +62,13 @@ export const useInfiniteListQuerySWR = <T>(
     }
   }, [isRefreshingSWR]);
 
+  const fetchMore = () => {
+    if (isLoadingMore || isReachingEnd) return;
+    setSize((size) => size + 1);
+  };
+
   return {
-    data: pages,
+    data,
     error,
     refresh: () => {
       setRefreshing(true);
@@ -65,16 +78,13 @@ export const useInfiniteListQuerySWR = <T>(
         setRefreshing(false);
       }, 4000);
     },
-    fetchMore: useCallback(() => {
-      if (!isLoadingMore) {
-        setSize((size) => size + 1);
-      }
-    }, [isLoadingMore, setSize]),
+    fetchMore,
     retry: mutate,
     isLoading,
     isLoadingMore,
     isRefreshing,
     mutate,
+    isReachingEnd,
   };
 };
 

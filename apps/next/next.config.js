@@ -16,8 +16,6 @@ const withTM = require("next-transpile-modules")([
   "@gorhom/portal",
   "twrnc",
   "moti",
-  "@motify/components",
-  "@motify/core",
   "expo-next-react-navigation",
   "zeego",
   "sentry-expo",
@@ -68,6 +66,8 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.tooltip",
   "@showtime-xyz/universal.verification-badge",
   "nativewind",
+  "@shopify/flash-list",
+  "recyclerlistview",
 ]);
 
 const isDev = process.env.NODE_ENV === "development";
@@ -124,6 +124,11 @@ const nextConfig = {
         source: "/token/:path*",
         destination: "/nft/:path*",
         permanent: true,
+      },
+      {
+        source: "/.well-known/:file",
+        destination: "/api/.well-known/:file",
+        permanent: false,
       },
     ];
   },

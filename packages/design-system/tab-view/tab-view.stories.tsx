@@ -6,8 +6,8 @@ import { useSharedValue } from "react-native-reanimated";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
-import { TabFlatList } from ".";
 import { HeaderTabView } from "./index";
+import { TabFlatList } from "./src/index";
 import { Route } from "./src/types";
 
 export default {

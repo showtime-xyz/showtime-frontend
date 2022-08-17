@@ -1,48 +1,37 @@
-import { forwardRef } from "react";
-import {
-  FlatList,
-  FlatListProps,
-  ScrollView,
-  ScrollViewProps,
-  SectionList,
-  SectionListProps,
-} from "react-native";
-import { Platform } from "react-native";
+import React from "react";
+import { Platform, ScrollViewProps } from "react-native";
 
 import Animated from "react-native-reanimated";
-import { RecyclerListViewProps } from "recyclerlistview";
 
-import { RecyclerListView } from "app/lib/recyclerlistview";
+import {
+  RecyclerListView,
+  RecyclerListViewProps,
+} from "app/lib/recyclerlistview";
 
-import { createCollapsibleScrollView } from "./src/create-collapsible-scroll-view";
 import { SceneComponent } from "./src/scene";
-import { SceneProps } from "./src/types";
-
-export const TabScrollView = createCollapsibleScrollView<
-  typeof ScrollView,
-  ScrollViewProps
->(ScrollView);
-
-// Todo: Imporve ts type (support generics type)
-export const TabFlatList = createCollapsibleScrollView<
-  typeof FlatList,
-  FlatListProps<any>
->(FlatList);
-
-// Todo: Imporve ts type (support generics type)
-export const TabSectionList = createCollapsibleScrollView<
-  typeof SectionList,
-  SectionListProps<any>
->(SectionList);
 
 const AnimateRecyclerList = Animated.createAnimatedComponent(RecyclerListView);
 
-export const TabRecyclerList = forwardRef<
-  typeof RecyclerListView,
-  Omit<SceneProps<RecyclerListViewProps>, "ContainerView" | "forwardedRef">
->(function TabRecyclerList(props, ref) {
+type TabScrollViewProps = ScrollViewProps & {
+  index: number;
+};
+function TabFlashListScrollViewComponent(props: TabScrollViewProps, ref: any) {
   return (
-    <SceneComponent<RecyclerListViewProps>
+    <SceneComponent
+      {...props}
+      forwardedRef={ref}
+      ContainerView={Animated.ScrollView}
+    />
+  );
+}
+
+export const TabFlashListScrollView = React.forwardRef(
+  TabFlashListScrollViewComponent
+);
+
+function RecyclerList(props: any, ref: any) {
+  return (
+    <SceneComponent<any>
       {...props}
       forwardedRef={ref}
       scrollViewProps={props}
@@ -50,4 +39,11 @@ export const TabRecyclerList = forwardRef<
       ContainerView={AnimateRecyclerList}
     />
   );
-});
+}
+
+export const TabRecyclerList = React.forwardRef(RecyclerList) as (
+  props: RecyclerListViewProps & {
+    ref?: React.Ref<typeof RecyclerListView>;
+    index: number;
+  }
+) => React.ReactElement;

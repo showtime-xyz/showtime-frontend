@@ -7,10 +7,9 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
+import { useVideoConfig } from "app/context/video-config-context";
 
 import { useIsTabFocused } from "design-system/tabs/tablib";
-
-import { useVideoConfig } from "../context/video-config-context";
 
 export const useViewabilityMount = ({
   videoRef,
@@ -27,7 +26,7 @@ export const useViewabilityMount = ({
   let isListFocused = useIsTabFocused();
 
   const loadPlayOrPause = useCallback(
-    async (shouldPlay) => {
+    async (shouldPlay: boolean) => {
       // if (__DEV__) console.log("📽 : loading ", shouldPlay, id, source.uri);
       if (!loaded.current) {
         await videoRef.current?.loadAsync(source, {

@@ -1,19 +1,19 @@
-import React from "react";
-import { Linking, Platform } from "react-native";
+import React, { useRef } from "react";
+import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Check } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ConnectButton } from "app/components/connect-button";
 import { Media } from "app/components/media";
+import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -23,6 +23,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
@@ -31,16 +32,20 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
+  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const { state, claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
+  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
+    edition?.creator_airdrop_edition
+  );
   const share = useShare();
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
   const { isAuthenticated } = useUser();
-  const { connected } = useWallet();
   const navigateToLogin = useNavigateToLogin();
+  const scrollViewRef = useRef<RNScrollView>(null);
+  const { isMagic } = useWeb3();
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -52,19 +57,21 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     address: nft?.data.item.creator_address,
   });
 
-  const { follow } = useMyInfo();
+  const { follow, data: userProfile } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
 
+  const { user } = useUser();
   const handleClaimNFT = async () => {
-    if (nft?.data.item.creator_id) {
+    if (
+      nft?.data.item.creator_id &&
+      user?.data?.profile.profile_id !== nft?.data.item.creator_id
+    ) {
       follow(nft?.data.item.creator_id);
     }
 
-    await claimNFT({
-      minterAddress: edition.creator_airdrop_edition.minter_address,
-    });
+    await claimNFT();
 
     mutate();
   };
@@ -89,13 +96,31 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
-  // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected) {
+  if (
+    !userProfile?.data.profile.username ||
+    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
+    !userProfile?.data.profile.bio ||
+    !userProfile?.data.profile.img_url
+  ) {
     return (
-      <View tw="p-4">
-        <ConnectButton
-          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+      <View tw="flex-1 items-center justify-center px-10 text-center">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          Hold on!
+        </Text>
+        <Image
+          source={Platform.select({
+            web: { uri: require("../drop/complete-profile.png") },
+            default: require("../drop/complete-profile.png"),
+          })}
+          tw={`h-25 w-25 rounded-xl`}
+          resizeMode="contain"
         />
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
+          Please complete your profile before claiming this drop.
+        </Text>
+        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
+          Complete your profile
+        </Button>
       </View>
     );
   }
@@ -172,7 +197,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row flex-wrap">
           <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
@@ -249,6 +274,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             <View tw="mt-4">
               <Text tw="text-red-500">{state.error}</Text>
             </View>
+          ) : null}
+
+          {state.signaturePrompt && !isMagic ? (
+            <MissingSignatureMessage
+              onReconnectWallet={onReconnectWallet}
+              onMount={() => {
+                scrollViewRef.current?.scrollToEnd();
+              }}
+            />
           ) : null}
         </View>
       </View>

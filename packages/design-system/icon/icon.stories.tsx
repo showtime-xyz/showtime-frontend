@@ -22,7 +22,7 @@ const IconItem = ({ icon, title }: IconItemProps) => {
       {React.createElement(icon, {
         width: 32,
         height: 32,
-        fill: "black",
+        color: "black",
       })}
       <View tw="h-2" />
       <Text>{title}</Text>
@@ -32,7 +32,7 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 
 export const Default = () => {
   return (
-    <View tw="flex flex-row flex-wrap justify-center">
+    <View tw="flex flex-row flex-wrap justify-center bg-white">
       <IconItem icon={Icon.ArrowTop} title="ArrowTop" />
       <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />
       <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" />
@@ -116,6 +116,11 @@ export const Default = () => {
       <IconItem icon={Icon.Play} title="Play" />
       <IconItem icon={Icon.Settings} title="Settings" />
       <IconItem icon={Icon.Share} title="Share" />
+      <IconItem icon={Icon.GiftSolid} title="GiftSolid" />
+      <IconItem icon={Icon.ZoomIn} title="ZoomIn" />
+      <IconItem icon={Icon.ZoomOut} title="ZoomOut" />
+      <IconItem icon={Icon.RotateCcw} title="RotateCcw" />
+      <IconItem icon={Icon.RotateCw} title="RotateCw" />
     </View>
   );
 };

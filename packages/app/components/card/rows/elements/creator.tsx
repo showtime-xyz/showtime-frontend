@@ -7,7 +7,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
-import { getCreatorUsernameFromNFT } from "app/utilities";
+import {
+  convertUTCDateToLocalDate,
+  getCreatorUsernameFromNFT,
+} from "app/utilities";
 
 type Props = {
   nft?: NFT;
@@ -52,9 +55,12 @@ export function Creator({
             <>
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
-                  addSuffix: true,
-                })}
+                {formatDistanceToNowStrict(
+                  convertUTCDateToLocalDate(nft.token_created),
+                  {
+                    addSuffix: true,
+                  }
+                )}
               </Text>
             </>
           )}

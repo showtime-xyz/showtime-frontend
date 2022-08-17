@@ -1,10 +1,15 @@
-import { useReducer, useState } from "react";
+import { useReducer, useState, useCallback } from "react";
 
+import type {
+  TypedDataDomain,
+  TypedDataField,
+} from "@ethersproject/abstract-signer";
 import { ethers } from "ethers";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
@@ -45,6 +50,7 @@ type State = {
   edition?: IEdition;
   transactionId?: any;
   error?: string;
+  signaturePrompt?: boolean;
 };
 
 type Action = {
@@ -57,6 +63,7 @@ type Action = {
 
 const initialState: State = {
   status: "idle",
+  signaturePrompt: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -66,13 +73,33 @@ const reducer = (state: State, action: Action): State => {
     case "success":
       return { ...state, status: "success", edition: action.edition };
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        error: action.error,
+        signaturePrompt: false,
+      };
+    case "reset": {
+      return initialState;
+    }
     case "transactionHash":
       return {
         ...state,
         transactionHash: action.transactionHash,
         transactionId: action.transactionId,
       };
+    case "signaturePrompt": {
+      return {
+        ...state,
+        signaturePrompt: true,
+      };
+    }
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
+      };
+    }
     default:
       return state;
   }
@@ -85,6 +112,7 @@ export type UseDropNFT = {
   editionSize: number;
   royalty: number;
   duration: number;
+  notSafeForWork: boolean;
   symbol?: string;
   animationUrl?: string;
   animationHash?: string;
@@ -95,23 +123,32 @@ export const useDropNFT = () => {
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
+  const { connect } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const Alert = useAlert();
   const [signMessageData, setSignMessageData] = useState({
     status: "idle",
-    data: null,
+    data: null as any,
   });
   const shouldShowSignMessage =
     signMessageData.status === "should_sign" && isMobileWeb();
 
-  const pollTransaction = async (transactionId: string) => {
+  const pollTransaction = async ({
+    transactionId,
+    notSafeForWork,
+  }: {
+    transactionId: string;
+    notSafeForWork: boolean;
+  }) => {
     // Polling to check transaction status
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
       Logger.log(`Checking tx... (${attempts + 1} / 100)`);
       const response = await axios({
-        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}`,
+        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}${
+          notSafeForWork ? "&nsfw=true" : ""
+        }`,
         method: "GET",
       });
       Logger.log(response);
@@ -136,19 +173,32 @@ export const useDropNFT = () => {
   };
 
   // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
+  const signTransaction = async ({
+    forwardRequest,
+    notSafeForWork,
+  }: {
+    forwardRequest: {
+      domain: TypedDataDomain;
+      types: Record<string, Array<TypedDataField>>;
+      value: Record<string, string | number>;
+    };
+    notSafeForWork: boolean;
+  }) => {
     if (isMobileWeb()) {
       setSignMessageData({
         status: "sign_requested",
-        data: { forwardRequest },
+        data: { forwardRequest, notSafeForWork },
       });
     }
 
+    dispatch({ type: "signaturePrompt" });
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });
@@ -165,7 +215,10 @@ export const useDropNFT = () => {
       },
     });
 
-    await pollTransaction(relayerResponse.relayed_transaction_id);
+    await pollTransaction({
+      transactionId: relayerResponse.relayed_transaction_id,
+      notSafeForWork,
+    });
   };
 
   const dropNFT = async (params: UseDropNFT) => {
@@ -188,7 +241,10 @@ export const useDropNFT = () => {
 
         dispatch({ type: "loading" });
 
-        const ipfsHash = await uploadMedia(params.file);
+        const ipfsHash = await uploadMedia({
+          file: params.file,
+          notSafeForWork: params.notSafeForWork,
+        });
 
         const escapedTitle = JSON.stringify(params.title).slice(1, -1);
         const escapedDescription = JSON.stringify(params.description).slice(
@@ -232,23 +288,50 @@ export const useDropNFT = () => {
         if (isMobileWeb()) {
           setSignMessageData({
             status: "should_sign",
-            data: { forwardRequest },
+            data: { forwardRequest, notSafeForWork: params.notSafeForWork },
           });
         } else {
-          await signTransaction({ forwardRequest });
+          await signTransaction({
+            forwardRequest,
+            notSafeForWork: params.notSafeForWork,
+          });
         }
       } else {
-        Alert.alert(
-          "Wallet disconnected",
-          "Please logout and login again to complete the transaction"
-        );
+        // user is probably not connected to wallet
+        connect?.();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);
+
+      if (e?.response?.status === 420) {
+        Alert.alert(
+          "Oops. An error occured.",
+          "Only one drop per day is allowed. Please try again tomorrow!"
+        );
+      }
+
+      if (e?.response?.status === 500) {
+        Alert.alert(
+          "Oops. An error occured.",
+          "We are currently experiencing a lot of usage. Please try again in one hour!"
+        );
+      }
+
       captureException(e);
     }
   };
+
+  const onReconnectWallet = useCallback(() => {
+    dispatch({
+      type: "error",
+      error: "Please retry creating a drop",
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    dispatch({ type: "reset" });
+  }, []);
 
   return {
     dropNFT,
@@ -257,5 +340,7 @@ export const useDropNFT = () => {
     shouldShowSignMessage,
     signMessageData,
     signTransaction,
+    onReconnectWallet,
+    reset,
   };
 };

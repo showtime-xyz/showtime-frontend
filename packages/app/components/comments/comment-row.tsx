@@ -1,8 +1,9 @@
-import { Fragment, memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
 
 import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
@@ -130,7 +131,7 @@ function CommentRowComponent({
   }, []);
   //#endregion
   return (
-    <Fragment key={comment.comment_id}>
+    <View tw="px-4" key={comment.comment_id}>
       <MessageRow
         address={comment.address}
         username={comment.username}
@@ -174,7 +175,7 @@ function CommentRowComponent({
           onPress={handelOnLoadMoreRepliesPress}
         />
       ) : null}
-    </Fragment>
+    </View>
   );
 }
 

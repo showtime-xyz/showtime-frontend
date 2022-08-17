@@ -1,5 +1,10 @@
 import { ComponentProps, useRef, useState } from "react";
-import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
+import {
+  StyleSheet,
+  ImageBackground,
+  ImageSourcePropType,
+  View,
+} from "react-native";
 
 import { Video as ExpoVideo } from "expo-av/src";
 import { BlurView, BlurTint } from "expo-blur";
@@ -70,7 +75,15 @@ export function Video({
             videoStyle={tailwind.style("relative")}
             {...props}
           />
-          <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+          <View
+            style={{
+              bottom: 10,
+              right: 10,
+              position: "absolute",
+            }}
+          >
+            <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+          </View>
         </ImageBackground>
       )}
     </>

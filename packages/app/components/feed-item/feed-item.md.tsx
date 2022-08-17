@@ -1,4 +1,4 @@
-import { memo, useMemo, Suspense, useRef } from "react";
+import { memo, useMemo, Suspense, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -24,12 +24,12 @@ import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
+import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { useTabState } from "app/hooks/use-tab-state";
 import { createParam } from "app/navigation/use-param";
 
-import { IndependentTabBar } from "design-system/tab-view/independent-tab-bar";
+import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
@@ -50,24 +50,30 @@ const { useParam } = createParam<Query>();
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
   itemHeight,
-  listId,
 }) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
-  const { index, setIndex, routes } = useTabState([
-    {
-      title: "Comments",
-      key: "Comments",
-      index: 0,
-      subtitle: nft.comment_count,
-    },
-    {
-      title: "Activity",
-      key: "Activity",
-      index: 1,
-    },
-  ]);
+  const { commentsCount } = useComments(nft.nft_id);
+  const routes = useMemo(
+    () => [
+      {
+        title: "Comments",
+        key: "Comments",
+        index: 0,
+        subtitle: commentsCount,
+      },
+      {
+        title: "Activity",
+        key: "Activity",
+        index: 1,
+      },
+    ],
+    [commentsCount]
+  );
+
+  const [index, setIndex] = useState(0);
+
   const { width: windowWidth } = useWindowDimensions();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
@@ -106,7 +112,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   //   setShowFullScreen(true);
   // };
   const onClose = () => {
-    router.pop();
+    if (history?.length > 1) {
+      router.pop();
+    } else {
+      router.push("/");
+    }
+
     // if (showFullScreen) {
     //   setShowFullScreen(false);
     // } else {
@@ -153,7 +164,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     size: "regular",
                   }}
                   nft={nft}
-                  listId={listId}
                 />
               </Suspense>
             </View>
@@ -176,14 +186,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             },
           ]}
         >
-          <Social nft={nft} />
+          <View tw="px-4 pt-4">
+            <Social nft={nft} />
+          </View>
           <LikedBy nft={nft} />
           <View tw="my-4 mr-4 flex-row justify-between px-4">
             <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
               {nft.token_name}
             </Text>
           </View>
-          <Description nft={nft} />
+          <Description
+            descriptionText={nft?.token_description}
+            tw="px-4 pb-4"
+          />
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} />
             <Owner nft={nft} price={false} />
@@ -194,7 +209,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             ) : null}
             {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
           </View>
-          <IndependentTabBar
+          <TabBarSingle
             onPress={(i) => {
               setIndex(i);
             }}

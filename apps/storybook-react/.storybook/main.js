@@ -18,8 +18,6 @@ module.exports = {
           "@gorhom/portal",
           "twrnc",
           "moti",
-          "@motify/components",
-          "@motify/core",
           "zeego",
           "@showtime-xyz",
         ],

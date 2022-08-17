@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -8,11 +9,13 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
-export const ClaimButton = ({
-  edition,
-}: {
+import { ClaimStatus, getClaimStatus } from ".";
+
+type ClaimButtonProps = {
   edition: CreatorEditionResponse;
-}) => {
+  size?: ButtonProps["size"];
+};
+export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const router = useRouter();
 
   const onClaimPress = () => {
@@ -43,39 +46,35 @@ export const ClaimButton = ({
     isExpired = new Date() > new Date(edition.time_limit);
   }
 
-  const status =
-    edition &&
-    edition.total_claimed_count ===
-      edition.creator_airdrop_edition?.edition_size
-      ? "soldout"
-      : edition.is_already_claimed
-      ? "claimed"
-      : isExpired
-      ? "expired"
-      : undefined;
+  const status = getClaimStatus(edition);
 
-  const bgIsGreen = status === "claimed" || status === "soldout";
+  const bgIsGreen =
+    status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
-  const disabled = status === "claimed" || status === "soldout" || isExpired;
+  const disabled =
+    status === ClaimStatus.Claimed ||
+    status === ClaimStatus.Soldout ||
+    isExpired;
 
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
       style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
+      size={size}
       tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
     >
-      {status === "claimed" ? (
+      {status === ClaimStatus.Claimed ? (
         <View tw="w-auto flex-row items-center">
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 text-white">Claimed</Text>
         </View>
-      ) : status === "soldout" ? (
+      ) : status === ClaimStatus.Soldout ? (
         <View tw="w-auto flex-row items-center">
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 text-white">Sold out</Text>
         </View>
-      ) : status === "expired" ? (
+      ) : status === ClaimStatus.Expired ? (
         "Drop expired"
       ) : (
         "Claim for free"

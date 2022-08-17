@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import {
   Platform,
   StyleProp,
@@ -8,6 +8,11 @@ import {
 
 import { BlurView } from "expo-blur";
 import Reanimated from "react-native-reanimated";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 import {
   useBlurredBackgroundStyles,
@@ -19,49 +24,41 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
+import { MuteButtonOffsetProvider } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { Blurhash } from "app/lib/blurhash";
+import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 
-const mediaMaxHeightRelativeToScreen = 1;
-
 export type FeedItemProps = {
   nft: NFT;
   detailStyle?: StyleProp<ViewStyle>;
-  showHeader?: () => void;
-  hideHeader?: () => void;
-  toggleHeader?: () => void;
   bottomPadding?: number;
   bottomMargin?: number;
   itemHeight: number;
-  listId?: number;
+  setMomentumScrollCallback?: (callback: any) => void;
 };
+
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,
   bottomMargin = 0,
   itemHeight,
-  hideHeader,
-  showHeader,
-  toggleHeader,
-  detailStyle,
-  listId,
+  setMomentumScrollCallback,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth } = useWindowDimensions();
+  const navigation = useNavigation();
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
-  const feedItemStyle = {
-    height: itemHeight,
-    width: windowWidth,
-  };
 
   let mediaHeight =
     windowWidth /
@@ -69,12 +66,45 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       ? 1
       : Number(nft.token_aspect_ratio));
 
-  const mediaContainerHeight = Math.min(
-    mediaHeight,
-    feedItemStyle.height * mediaMaxHeightRelativeToScreen
-  );
+  mediaHeight = Math.min(mediaHeight, itemHeight - detailHeight);
 
-  mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
+  const opacity = useSharedValue(1);
+
+  const detailStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  const hideHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+      });
+      opacity.value = withTiming(0);
+    }
+  }, [navigation, opacity]);
+
+  const showHeader = useCallback(() => {
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+      opacity.value = withTiming(1);
+    }
+  }, [navigation, opacity]);
+
+  const toggleHeader = useCallback(() => {
+    if (opacity.value === 1) {
+      hideHeader();
+    } else {
+      showHeader();
+    }
+  }, [hideHeader, showHeader, opacity]);
+
+  useEffect(() => {
+    setMomentumScrollCallback?.(showHeader);
+  }, [setMomentumScrollCallback, showHeader]);
 
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
@@ -83,9 +113,14 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
   }
 
+  const mediaEndY =
+    (itemHeight - bottomPadding - mediaHeight) / 2 + mediaHeight;
+  const detailStartY = itemHeight - bottomMargin - detailHeight;
+  const muteButtonOffsetY = mediaEndY - detailStartY;
+
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full flex-1">
+      <View tw="w-full" style={{ height: itemHeight }}>
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (
@@ -98,11 +133,17 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               />
             ) : (
               <Image
-                tw="h-full w-full"
+                tw="h-full w-full "
                 source={{
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
-              />
+              >
+                <BlurView
+                  tint={tint}
+                  intensity={100}
+                  style={tw.style("h-full w-full")}
+                />
+              </Image>
             )}
           </View>
         )}
@@ -112,19 +153,25 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             tw={`absolute justify-center`}
             style={{
               height: Platform.select({
-                web: itemHeight - bottomPadding - detailHeight,
-                default: itemHeight - bottomPadding - 50,
+                web: itemHeight - detailHeight,
+                default: itemHeight - bottomPadding,
               }),
             }}
           >
-            <Media
-              item={nft}
-              numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
-              resizeMode="contain"
-              onPinchStart={hideHeader}
-              onPinchEnd={showHeader}
-            />
+            <MuteButtonOffsetProvider
+              bottomOffset={
+                !isNaN(muteButtonOffsetY) ? muteButtonOffsetY + 10 : 0
+              }
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
+                resizeMode="contain"
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
+            </MuteButtonOffsetProvider>
           </View>
         </FeedItemTapGesture>
 
@@ -139,7 +186,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               layout: { height },
             },
           }) => {
-            if (Platform.OS !== "web") return;
             setDetailHeight(height);
           }}
         >
@@ -152,16 +198,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               ...tw.style(
                 "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
               ),
+              paddingBottom: bottomPadding,
             }}
           >
-            <NFTDetails edition={edition} nft={nft} listId={listId} />
-            <View
-              tw={`${
-                bottomPadding && bottomPadding !== 0
-                  ? `h-[${bottomPadding - 1}px]`
-                  : "h-0"
-              }`}
-            />
+            <NFTDetails edition={edition} nft={nft} />
           </BlurView>
         </Reanimated.View>
       </View>

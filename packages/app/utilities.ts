@@ -1,17 +1,15 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
-import { ethers } from "ethers";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { BYPASS_EMAIL, LIST_CURRENCIES } from "app/lib/constants";
+import { BYPASS_EMAIL, LIST_CURRENCIES, SORT_FIELDS } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import { NFT, OwnersListOwner, Profile, WalletAddressesV2 } from "./types";
+import { NFT, Profile } from "./types";
 
 export const formatAddressShort = (address?: string | null) => {
   if (!address) return null;
@@ -61,73 +59,12 @@ export const getProfileImage = (profile?: Profile) => {
   return profile?.img_url ?? DEFAULT_PROFILE_PIC;
 };
 
-export const SORT_FIELDS = {
-  LIKE_COUNT: { label: "Popularity", key: "like_count", id: 1, value: 1 },
-  NEWEST: {
-    label: "Newest",
-    key: "newest",
-    id: 2,
-    value: 2,
-  },
-  OLDEST: {
-    label: "Oldest",
-    key: "oldest",
-    id: 3,
-    value: 3,
-  },
-  COMMENT_COUNT: { label: "Comments", key: "comment_count", id: 4, value: 4 },
-  // CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
-};
-
 export const getSortFields = () => {
-  return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
-};
-
-export const getBiconomy = async (connector: any, provider: any) => {
-  // Here provider refers to magic rpc provider and connector could be wallet connect's connector instance
-  const walletProvider = provider
-    ? {
-        walletProvider: provider.provider,
-      }
-    : {
-        signFunction: (signedDataType: string, params: any) => {
-          return new Promise((resolve, reject) => {
-            if (signedDataType === "eth_signTypedData_v4") {
-              connector
-                .signTypedData(params)
-                .then((res: string) => {
-                  console.log("received signature from wallet ", res);
-                  resolve(res);
-                })
-                .catch((err: any) => {
-                  // TODO: this never gets logged!
-                  console.log("received error on signing ");
-                  console.error(err);
-                  reject(err);
-                });
-            }
-          });
-        },
-      };
-  const biconomy = new Biconomy(
-    new ethers.providers.JsonRpcProvider(
-      `https://polygon-${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+  return [
+    ...Object.keys(SORT_FIELDS).map(
+      (key: string) => SORT_FIELDS[key as keyof typeof SORT_FIELDS]
     ),
-    {
-      apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
-      // TODO: add walletconnect connector instance support in biconomy
-      ...walletProvider,
-      // debug: true,
-    }
-  );
-
-  await new Promise((resolve, reject) =>
-    biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject)
-  );
-
-  return { biconomy, connector };
+  ];
 };
 
 export const NFT_DETAIL_API = "/v2/nft_detail";
@@ -200,65 +137,6 @@ export const findListingItemByOwner = (
   });
 
   return listedNFT;
-};
-
-/**
- * Check if ANY of the users associated addresses exist in the NFT's owners list.
- */
-export const isUserAnOwner = (
-  userAddresses?: Profile["wallet_addresses_v2"],
-  nftOwnerList?: NFT["multiple_owners_list"]
-): boolean => {
-  return Boolean(
-    userAddresses?.find((addressObject) => {
-      return nftOwnerList?.find(
-        (owner) =>
-          addressObject.address.toLowerCase() ===
-            owner.address?.toLowerCase() ||
-          addressObject.ens_domain?.toLowerCase() ===
-            owner.address?.toLowerCase()
-      );
-    })
-  );
-};
-
-/**
- *
- * Returns A list of all user wallet addresses that own an edition of the NFT.
- */
-export const findUserInOwnerList = (
-  userAddresses?: Profile["wallet_addresses_v2"],
-  nftOwnerList?: NFT["multiple_owners_list"]
-): WalletAddressesV2[] | undefined => {
-  const ownedList = userAddresses?.filter((addressObject) => {
-    const hasMatch = nftOwnerList?.find(
-      (owner) =>
-        addressObject.address.toLowerCase() === owner.address?.toLowerCase() ||
-        addressObject.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
-    );
-    return hasMatch ? true : false;
-  });
-
-  return ownedList;
-};
-
-/**
- * Returns a wallet address if the passed in address owns an edition of the NFT.
- */
-export const findAddressInOwnerList = (
-  address?: string,
-  userAddresses?: Profile["wallet_addresses_v2"],
-  nftOwnerList?: NFT["multiple_owners_list"]
-): OwnersListOwner | undefined => {
-  const userAddress = userAddresses?.find((addressObject) => {
-    return addressObject.address.toLowerCase() === address?.toLowerCase();
-  });
-
-  return nftOwnerList?.find(
-    (owner) =>
-      userAddress?.address?.toLowerCase() === owner.address?.toLowerCase() ||
-      userAddress?.ens_domain?.toLowerCase() === owner.address?.toLowerCase()
-  );
 };
 
 // All our supported currencies have 18 decimals, except for USDC which has 6
@@ -422,7 +300,7 @@ export const getBidLink = (item: NFT) => {
       return `https://www.hicetnunc.art/objkt/${item.token_id}`;
     default:
       return `https://opensea.io/assets/${
-        item.chain_identifier == 137 ? "matic/" : ""
+        item.chain_identifier == "137" ? "matic/" : ""
       }${item.contract_address}/${
         item.token_id
       }?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`;
@@ -666,4 +544,51 @@ export const ledgerWalletHack = (signature?: string) => {
   }
 
   return signature;
+};
+
+export function isClassComponent(component: any) {
+  return (
+    typeof component === "function" && !!component.prototype.isReactComponent
+  );
+}
+
+export function isFunctionComponent(component: any) {
+  return (
+    typeof component === "function" &&
+    String(component).includes("return React.createElement")
+  );
+}
+
+export function isReactComponent(component: any) {
+  if (!component) return false;
+  return isClassComponent(component) || isFunctionComponent(component);
+}
+
+export const userHasIncompleteExternalLinks = (profile?: {
+  links: Profile["links"];
+  website_url: Profile["website_url"];
+}) => {
+  if (
+    profile &&
+    (profile.website_url || profile.links.some((l) => l.user_input))
+  ) {
+    return false;
+  }
+  return true;
+};
+
+export const convertUTCDateToLocalDate = (dateStr: string) => {
+  if (typeof dateStr !== "string") return new Date();
+  const date = new Date(dateStr);
+  // will be old UTC +0 time if include Z, so return time directly
+  if (dateStr.includes("Z")) return date;
+  const newDate = new Date(
+    date.getTime() + date.getTimezoneOffset() * 60 * 1000
+  );
+  const offset = date.getTimezoneOffset() / 60;
+  const hours = date.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;
 };

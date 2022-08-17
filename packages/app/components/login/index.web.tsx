@@ -1,11 +1,9 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { StyleSheet } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
-
-import { yup } from "app/lib/yup";
 
 import { ConnectButton } from "../connect-button";
 import { LoginContainer } from "./login-container";
@@ -32,30 +30,6 @@ export function Login({ onLogin }: LoginProps) {
   } = useLogin(onLogin);
   //#endregion
 
-  //#region variables
-  const contactDetailsValidationSchema = useMemo(
-    () =>
-      yup
-        .object({
-          contact: yup
-            .string()
-            // @ts-ignore
-            .or([
-              yup
-                .string()
-                .email("Please enter a valid email address or phone number."),
-              yup
-                .string()
-                .phone(
-                  "US",
-                  false,
-                  "Please enter a valid email address or phone number."
-                ),
-            ]),
-        })
-        .required(),
-    []
-  );
   //#endregion
 
   //#region callbacks
@@ -109,7 +83,6 @@ export function Login({ onLogin }: LoginProps) {
               label="Contact details"
               placeholder="Enter your email or phone number"
               signInButtonLabel="Sign in"
-              validationSchema={contactDetailsValidationSchema}
               onSubmit={handleSubmitContactDetails}
             />
           </View>

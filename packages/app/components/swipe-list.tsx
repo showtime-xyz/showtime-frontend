@@ -3,35 +3,25 @@ import {
   Dimensions,
   FlatList,
   Platform,
-  RefreshControl,
   useWindowDimensions,
 } from "react-native";
 
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
-
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { FeedItem } from "app/components/feed-item";
-import { MAX_HEADER_WIDTH } from "app/constants/layout";
+import {
+  MOBILE_WEB_BOTTOM_NAV_HEIGHT,
+  MOBILE_WEB_TABS_HEIGHT,
+} from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
-import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
-import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
+import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
 
-const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
-const SCROLL_BAR_WIDTH = 15;
-const MOBILE_WEB_TABS_HEIGHT = 50;
-const MOBILE_WEB_BOTTOM_NAV_HEIGHT = 64;
+const { height: screenHeight } = Dimensions.get("screen");
 
 type Props = {
   data: NFT[];
@@ -40,7 +30,6 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  listId?: number;
 };
 
 export const SwipeList = ({
@@ -50,16 +39,17 @@ export const SwipeList = ({
   refresh,
   initialScrollIndex = 0,
   bottomPadding = 0,
-  listId,
 }: Props) => {
   const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
-  const navigation = useNavigation();
-  const { isMobileWeb } = useIsMobileWeb();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { height: windowHeight } = useWindowDimensions();
+  const momentumScrollCallback = useRef(undefined);
+  const setMomentumScrollCallback = useCallback((cb: any) => {
+    momentumScrollCallback.current = cb;
+  }, []);
 
   const itemHeight =
     Platform.OS === "web"
@@ -72,123 +62,18 @@ export const SwipeList = ({
       ? safeAreaFrameHeight - headerHeight
       : screenHeight;
 
-  let dataProvider = useMemo(
-    () =>
-      new DataProvider((r1, r2) => {
-        return r1.nft_id !== r2.nft_id;
-      }).cloneWithRows(data),
-    [data]
-  );
-
-  const _layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        () => {
-          return "item";
-        },
-        (_type, dim) => {
-          dim.width = screenWidth;
-          dim.height = itemHeight;
-        }
-      ),
-    [itemHeight]
-  );
-
-  const opacity = useSharedValue(1);
-
-  const detailStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-    };
-  }, []);
-
-  const hideHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: false,
-      });
-      opacity.value = withTiming(0);
-    }
-  }, [navigation, opacity]);
-
-  const showHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: true,
-      });
-      opacity.value = withTiming(1);
-    }
-  }, [navigation, opacity]);
-
-  const toggleHeader = useCallback(() => {
-    if (opacity.value === 1) {
-      hideHeader();
-    } else {
-      showHeader();
-    }
-  }, [hideHeader, showHeader, opacity]);
-
-  const _rowRenderer = useCallback(
-    (_type: any, item: any) => {
-      return (
-        <FeedItem
-          nft={item}
-          {...{
-            itemHeight,
-            bottomPadding,
-            detailStyle,
-            toggleHeader,
-            hideHeader,
-            showHeader,
-            listId,
-          }}
-        />
-      );
-    },
-    [
-      itemHeight,
-      bottomPadding,
-      hideHeader,
-      showHeader,
-      toggleHeader,
-      detailStyle,
-      listId,
-    ]
-  );
-
-  const contentWidth = useMemo(() => {
-    const scorllBarWidth = isMobileWeb ? 0 : SCROLL_BAR_WIDTH;
-    return windowWidth < MAX_HEADER_WIDTH
-      ? windowWidth - scorllBarWidth
-      : MAX_HEADER_WIDTH;
-  }, [windowWidth, isMobileWeb]);
-
-  const layoutSize = useMemo(
-    () => ({
-      width: contentWidth,
-      height: windowHeight,
-    }),
-    [contentWidth, windowHeight]
-  );
-  // const ListFooterComponent = useCallback(() => {
-  //   const colorMode = useColorScheme();
-  //   return isLoadingMore ? (
-  //     <View tw="w-full">
-  //       <Skeleton height={100} width={screenWidth} colorMode={colorMode} />
-  //     </View>
-  //   ) : null;
-  // }, [isLoadingMore, bottomBarHeight, screenWidth]);
-
-  const scrollViewProps = useMemo(
-    () => ({
-      pagingEnabled: true,
-      showsVerticalScrollIndicator: false,
-      onMomentumScrollEnd: showHeader,
-      refreshControl: (
-        <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
-      ),
-    }),
-    [isRefreshing, refresh, showHeader]
+  const renderItem = useCallback(
+    ({ item }: { item: NFT }) => (
+      <FeedItem
+        nft={item}
+        {...{
+          itemHeight,
+          bottomPadding,
+          setMomentumScrollCallback,
+        }}
+      />
+    ),
+    [itemHeight, bottomPadding, setMomentumScrollCallback]
   );
 
   const videoConfig = useMemo(
@@ -206,20 +91,19 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <ViewabilityTrackerRecyclerList
-        layoutProvider={_layoutProvider}
-        dataProvider={dataProvider}
-        rowRenderer={_rowRenderer}
-        disableRecycling={Platform.OS === "android"}
-        ref={listRef}
-        initialRenderIndex={initialScrollIndex}
-        style={tw.style("flex-1 dark:bg-gray-900 bg-gray-100")}
-        renderAheadOffset={itemHeight}
+      <ViewabilityTrackerFlashList
+        data={data}
         onEndReached={fetchMore}
-        onEndReachedThreshold={itemHeight}
-        scrollViewProps={scrollViewProps}
-        extendedState={extendedState}
-        layoutSize={layoutSize}
+        initialScrollIndex={initialScrollIndex}
+        showsVerticalScrollIndicator={false}
+        ref={listRef}
+        onRefresh={refresh}
+        extraData={extendedState}
+        onMomentumScrollEnd={momentumScrollCallback.current}
+        refreshing={isRefreshing}
+        pagingEnabled
+        renderItem={renderItem}
+        estimatedItemSize={itemHeight}
       />
     </VideoConfigContext.Provider>
   );

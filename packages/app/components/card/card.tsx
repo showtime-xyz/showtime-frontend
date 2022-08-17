@@ -1,24 +1,26 @@
 import { Suspense, useMemo, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import type { UrlObject } from "url";
+import { Link } from "solito/link";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
+import { ClaimButton } from "app/components/claim/claim-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { Link } from "app/navigation/link";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 
 import { CARD_DARK_SHADOW } from "design-system/theme";
@@ -27,26 +29,28 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
   onPress: () => void;
-  listId: number | undefined;
   tw?: string;
   variant?: "nft" | "activity" | "market";
-  hrefProps?: UrlObject;
+  href?: string;
+  showClaimButton?: Boolean;
 };
 
-function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
+function Card({
+  nft,
+  numColumns,
+  tw,
+  onPress,
+  href = "",
+  showClaimButton = false,
+}: Props) {
   const { width } = useWindowDimensions();
   const { colorScheme } = useColorScheme();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
-
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[350px] max-w-[30vw]"
-    : numColumns === 2
-    ? "w-[50vw]"
-    : "w-[100vw]";
+  const { data: edition } = useCreatorCollectionDetail(
+    nft.creator_airdrop_edition_address
+  );
 
   const cardMaxWidth = useMemo(() => {
     switch (numColumns) {
@@ -63,10 +67,16 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
     if (isWeb) return null;
     onPress?.();
   }, [isWeb, onPress]);
-
+  const size = tw
+    ? tw
+    : numColumns === 3
+    ? "w-[350px] max-w-[30vw]"
+    : numColumns === 2
+    ? "w-[46vw]"
+    : "w-[100vw]";
   if (width < 768) {
     return (
-      <RouteComponent href={hrefProps} onPress={handleOnPress}>
+      <RouteComponent href={href} onPress={handleOnPress}>
         <Media item={nft} numColumns={numColumns} />
       </RouteComponent>
     );
@@ -85,7 +95,7 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
         }}
         tw={[
           size,
-          numColumns >= 3 ? "mt-8" : numColumns === 2 ? "m-2" : "",
+          numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl shadow-lg",
           "self-center justify-self-center",
@@ -97,23 +107,36 @@ function Card({ listId, nft, numColumns, tw, onPress, hrefProps = {} }: Props) {
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown nft={nft} listId={listId} />
+                <NFTDropdown
+                  btnProps={{
+                    style: tailwind.style("dark:bg-gray-900 bg-gray-100 px-1"),
+                    size: "small",
+                  }}
+                  nft={nft}
+                />
               </Suspense>
             </ErrorBoundary>
           </View>
 
-          <RouteComponent href={hrefProps!} onPress={handleOnPress}>
+          <RouteComponent href={href!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
           </RouteComponent>
           <RouteComponent
+            // @ts-ignore
             dataSet={{ testId: "nft-card-title-link" }}
-            href={hrefProps!}
+            href={href!}
             onPress={handleOnPress}
           >
-            <Title nft={nft} cardMaxWidth={cardMaxWidth} />
+            <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
-
-          <Social nft={nft} />
+          <View tw="flex-row justify-between px-4 pt-4">
+            <Social nft={nft} />
+            {showClaimButton &&
+            !!nft.creator_airdrop_edition_address &&
+            edition ? (
+              <ClaimButton edition={edition} />
+            ) : null}
+          </View>
 
           <Owner nft={nft} price={false} />
         </View>

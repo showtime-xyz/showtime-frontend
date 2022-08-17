@@ -3,9 +3,9 @@ import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
 const SvgGift = (props: SvgProps) => (
-  <Svg width={20} height={20} viewBox="0 0 20 20" fill="none" {...props}>
+  <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
     <Path
-      d="M3 10v7a2 2 0 002 2h10a2 2 0 002-2v-7m-7-4v13V6zm0 0V4a2 2 0 112 2h-2zm0 0V3.5A2.5 2.5 0 107.5 6H10zm-7 4h14H3zm0 0a2 2 0 110-4h14a2 2 0 010 4H3z"
+      d="M12 8v13m0-13V6a2 2 0 1 1 2 2h-2Zm0 0V5.5A2.5 2.5 0 1 0 9.5 8H12Zm-7 4h14M5 12a2 2 0 1 1 0-4h14a2 2 0 1 1 0 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
       stroke={props.color}
       strokeWidth={2}
       strokeLinecap="round"

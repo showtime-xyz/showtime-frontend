@@ -48,68 +48,7 @@ export const SORT_FIELDS = {
     value: 3,
   },
   COMMENT_COUNT: { label: "Comments", key: "comment_count", id: 4, value: 4 },
-  CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
-};
-
-export const getNotificationInfo = (type) => {
-  switch (type) {
-    case 1:
-      return {
-        type: "followed_me",
-        icon: "user",
-        goTo: "profile",
-        color: colors.green,
-      };
-    case 2:
-      return {
-        type: "liked_my_creation",
-        icon: "heart",
-        goTo: "nft",
-        color: colors.red,
-      };
-    case 3:
-      return {
-        type: "liked_my_owned",
-        icon: "heart",
-        goTo: "nft",
-        color: colors.red,
-      };
-    case 4:
-      return {
-        type: "commented_my_creation",
-        icon: "comment",
-        goTo: "nft",
-        color: colors.blue,
-      };
-    case 5:
-      return {
-        type: "commented_my_owned",
-        icon: "comment",
-        goTo: "nft",
-        color: colors.blue,
-      };
-    case 6:
-      return {
-        type: "tagged_me_in_comment",
-        icon: "at",
-        goTo: "nft",
-        color: colors.blue,
-      };
-    case 7:
-      return {
-        type: "liked_my_comment",
-        icon: "heart",
-        goTo: "nft",
-        color: colors.red,
-      };
-    default:
-      return {
-        type: "no_type_exists",
-        icon: "user",
-        goTo: "profile",
-        color: "#6bd464",
-      };
-  }
+  // CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
 };
 
 export const ACTIVITY_TYPES = {

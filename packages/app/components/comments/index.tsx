@@ -1,19 +1,18 @@
 import { useCallback, useMemo, useRef } from "react";
-import {
-  FlatList as RNFlatList,
-  ListRenderItemInfo,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { StyleSheet } from "react-native";
 
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { ModalFooter } from "@showtime-xyz/universal.modal";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
+import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { useUser } from "app/hooks/use-user";
+import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
@@ -22,8 +21,6 @@ import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
-
-const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
 export function Comments({ nft }: { nft: NFT }) {
   //#region refs
@@ -43,13 +40,15 @@ export function Comments({ nft }: { nft: NFT }) {
     deleteComment,
     newComment,
   } = useComments(nft.nft_id);
+  const modalListProps = useModalListProps();
+  const { bottom } = useSafeAreaInsets();
   //#endregion
-
   //#region variables
   const dataReversed = useMemo(
     () => data?.comments.slice().reverse() || [],
     [data]
   );
+
   //#endregion
 
   //#region callbacks
@@ -110,35 +109,36 @@ export function Comments({ nft }: { nft: NFT }) {
     ),
     [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
   );
+
   const listEmptyComponent = useCallback(
     () => (
       <EmptyPlaceholder
         text="Be the first to add a comment!"
         title="💬 No comments yet..."
+        tw="flex-1 items-center justify-center"
       />
     ),
     []
   );
-
   return (
     <CommentsContainer style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <>
-          <FlatList
+          <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            initialNumToRender={6}
-            maxToRenderPerBatch={3}
-            windowSize={6}
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
+            estimatedItemSize={98}
+            overscan={98}
             keyboardDismissMode="on-drag"
-            enableFooterMarginAdjustment={true}
             ListEmptyComponent={listEmptyComponent}
+            ListFooterComponent={
+              <View style={{ height: Math.max(bottom, 20) }} />
+            }
+            {...modalListProps}
           />
           {isAuthenticated && (
             <ModalFooter>
@@ -161,6 +161,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    paddingHorizontal: 16,
+    flex: 1,
   },
 });

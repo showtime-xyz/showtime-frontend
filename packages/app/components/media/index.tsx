@@ -1,18 +1,28 @@
+import { Suspense } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { Model } from "design-system/model";
+import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
+
+const Dynamic3dModel = dynamic<ModelProps>(
+  () => import("design-system/model").then((mod) => mod.Model),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   item: NFT & { loading?: boolean };
@@ -104,17 +114,19 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw={numColumns > 1 ? size : "h-screen w-screen"}>
-          <Model
-            url={item?.source_url}
-            // TODO: update this to get a preview from CDN v2
-            fallbackUrl={item?.still_preview_url}
-            numColumns={numColumns}
-            tw={size}
-            blurhash={item?.blurhash}
-            resizeMode={resizeMode}
-          />
-        </View>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <Dynamic3dModel
+              url={item?.source_url}
+              // TODO: update this to get a preview from CDN v2
+              fallbackUrl={item?.still_preview_url}
+              numColumns={numColumns}
+              tw={size}
+              blurhash={item?.blurhash}
+              resizeMode={resizeMode}
+            />
+          </Suspense>
+        </ErrorBoundary>
       ) : null}
     </View>
   );

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { Drop } from "app/components/drop";
@@ -9,9 +7,9 @@ const DropModal = () => {
 };
 
 export const DropScreen = withModalScreen(DropModal, {
-  title: "Drop NFT",
-  matchingPathname: "/nft/drop",
-  matchingQueryParam: "dropNFTModal",
+  title: "Drop",
+  matchingPathname: "/drop",
+  matchingQueryParam: "dropModal",
   tw: "w-full lg:w-200",
   disableBackdropPress: true,
 });

@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
@@ -22,7 +23,7 @@ import { TabListContainer, TrendingTabListRef } from "./tab-list";
 type TrendingTabRoute = Route & {
   days: number;
 };
-const TRENDING_ROUTE = [
+export const TRENDING_ROUTE = [
   {
     title: "Today",
     key: "Today",
@@ -51,7 +52,7 @@ export const Trending = () => {
     setIsRefreshing,
     isRefreshing,
     routes,
-    setTabRefs,
+    tabRefs,
     currentTab,
   } = useTabState<TrendingTabListRef, TrendingTabRoute>(TRENDING_ROUTE);
 
@@ -70,9 +71,15 @@ export const Trending = () => {
     }: SceneRendererProps & {
       route: TrendingTabRoute;
     }) => {
-      return <TabListContainer days={days} index={index} ref={setTabRefs} />;
+      return (
+        <TabListContainer
+          days={days}
+          index={index}
+          ref={(ref) => (tabRefs.current[index] = ref)}
+        />
+      );
     },
-    [setTabRefs]
+    [tabRefs]
   );
   const [selecteds, setSelecteds] = useState({
     ...TRENDING_ROUTE.map(() => 0),

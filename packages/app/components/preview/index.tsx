@@ -53,6 +53,9 @@ export const Preview = ({
           source={{
             uri: uri as string,
           }}
+          onLoad={() => {
+            revokeObjectURL(uri);
+          }}
         />
       );
     }
@@ -65,6 +68,9 @@ export const Preview = ({
           resizeMode={resizeMode as ResizeMode}
           isMuted
           shouldPlay
+          onLoad={() => {
+            revokeObjectURL(uri);
+          }}
         />
       );
     }
@@ -78,7 +84,18 @@ export const getLocalFileURI = (file?: string | File) => {
 
   if (typeof file === "string") return file;
 
-  if (Platform.OS === "web") return URL.createObjectURL(file);
+  if (Platform.OS === "web") return (URL || webkitURL).createObjectURL(file);
 
   return file;
+};
+/**
+ * Browsers will release object URLs automatically when the document is unloaded;
+ * for optimal performance and memory usage
+ * if there are safe times when you can explicitly unload them, you should do so.
+ * @param uri
+ * @returns
+ */
+export const revokeObjectURL = (uri: any) => {
+  if (!uri || Platform.OS !== "web" || typeof uri !== "string") return;
+  (URL || webkitURL).revokeObjectURL(uri);
 };

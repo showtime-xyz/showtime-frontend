@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
@@ -10,12 +10,15 @@ import { Notifications } from "app/components/notifications";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
+import { breakpoints } from "design-system/theme";
+
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });
   const headerHeight = useHeaderHeight();
-
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   return (
-    <View tw="w-full">
+    <View tw="w-full max-w-screen-2xl flex-1 md:px-6">
       {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
       <ErrorBoundary>
         <Suspense
@@ -25,7 +28,7 @@ const NotificationsScreen = withColorScheme(() => {
             </View>
           }
         >
-          <Notifications />
+          <Notifications useWindowScroll={isMdWidth} />
         </Suspense>
       </ErrorBoundary>
     </View>

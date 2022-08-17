@@ -33,7 +33,7 @@ function useBlock() {
         ? false
         : user?.data.blocked_profile_ids.includes(userId) ?? false;
     },
-    [user?.data.blocked_profile_ids]
+    [user?.data?.blocked_profile_ids]
   );
   const block = useCallback(
     async function block(userId?: number) {

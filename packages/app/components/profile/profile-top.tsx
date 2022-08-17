@@ -287,7 +287,7 @@ export const ProfileTop = ({
           </View>
 
           {address && !isError ? (
-            <View tw="mr-2 flex-row items-center">
+            <View tw="flex-row items-center">
               {isBlocked ? (
                 <Button
                   size={width < 768 ? "small" : "regular"}
@@ -331,7 +331,7 @@ export const ProfileTop = ({
                               pathname: router.pathname,
                               query: {
                                 ...router.query,
-                                dropNFTModal: true,
+                                dropModal: true,
                               },
                             } as any,
                           }),
@@ -369,11 +369,11 @@ export const ProfileTop = ({
               />
             </>
           ) : (
-            <View tw="flex-row justify-between">
+            <View tw="flex-row items-start justify-between">
               <View>
                 <Text
-                  tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white"
-                  numberOfLines={1}
+                  tw="font-space-bold max-w-45 text-2xl font-extrabold text-gray-900 dark:text-white"
+                  numberOfLines={2}
                 >
                   {name}
                 </Text>

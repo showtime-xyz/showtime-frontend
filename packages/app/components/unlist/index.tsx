@@ -9,11 +9,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { Owner } from "app/components/card";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUnlistNFT } from "app/hooks/use-unlist-nft";
-import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
-import { findAddressInOwnerList } from "app/utilities";
 
 import { UnlistingSubmit } from "./unlisting-submit";
 import { UnlistingTitle } from "./unlisting-title";
@@ -24,23 +21,11 @@ type Props = {
 };
 
 const Unlist = ({ nft }: Props) => {
-  const { user } = useUser();
-  const { userAddress: address } = useCurrentUserAddress();
-
   const { state, unlistNFT } = useUnlistNFT();
 
   const listingId = nft?.listing?.sale_identifier;
-  const hasMultipleOwners = nft?.multiple_owners_list
-    ? nft?.multiple_owners_list.length > 1
-    : false;
 
-  const isActiveAddressAnOwner = Boolean(
-    findAddressInOwnerList(
-      address,
-      user?.data.profile.wallet_addresses_v2,
-      nft?.multiple_owners_list
-    )
-  );
+  const isActiveAddressAnOwner = nft?.is_user_owner;
 
   if (state.status === "unlistingSuccess") {
     return (
@@ -102,7 +87,7 @@ const Unlist = ({ nft }: Props) => {
             </View>
           </View>
         </View>
-        <Owner nft={nft} price={!hasMultipleOwners} tw="my-4 px-0" />
+        <Owner nft={nft} tw="my-4 px-0" />
         {isActiveAddressAnOwner ? (
           <UnlistingSubmit
             listingID={listingId}
@@ -110,7 +95,7 @@ const Unlist = ({ nft }: Props) => {
             unlistNFT={unlistNFT}
           />
         ) : (
-          <UnlistingUnavailable nft={nft} />
+          <UnlistingUnavailable />
         )}
       </View>
     </View>

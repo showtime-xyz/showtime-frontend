@@ -1,6 +1,8 @@
 import { UserList } from "app/components/user-list";
-import { useFollowersList } from "app/hooks/api/use-followers-list";
-import { useFollowingList } from "app/hooks/api/use-following-list";
+import {
+  useFollowingList,
+  useFollowersList,
+} from "app/hooks/api/use-follow-list";
 
 export const FollowersList = (props: {
   profileId?: number;

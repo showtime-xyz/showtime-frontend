@@ -1,10 +1,11 @@
-import { useReducer } from "react";
+import { useReducer, useEffect, useRef, useCallback } from "react";
 
 import { ethers } from "ethers";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -19,11 +20,35 @@ import { delay } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
 
+const getForwarderRequest = async ({
+  minterAddress,
+  userAddress,
+}: {
+  minterAddress: string;
+  userAddress: string;
+}) => {
+  const targetInterface = new ethers.utils.Interface(minterABI);
+  const callData = targetInterface.encodeFunctionData("mintEdition", [
+    userAddress,
+  ]);
+  const res = await axios({
+    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
+      callData
+    )}&to_address=${encodeURIComponent(
+      minterAddress
+    )}&from_address=${encodeURIComponent(userAddress)}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
 type State = {
   status: "idle" | "loading" | "success" | "error";
   error?: string;
   transactionHash?: string;
   mint?: any;
+  signaturePrompt?: boolean;
 };
 
 type Action = {
@@ -35,6 +60,7 @@ type Action = {
 
 const initialState: State = {
   status: "idle",
+  signaturePrompt: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -52,8 +78,26 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         transactionHash: action.transactionHash,
       };
+    case "signaturePrompt": {
+      return {
+        ...state,
+        signaturePrompt: true,
+      };
+    }
+
+    case "signatureSuccess": {
+      return {
+        ...state,
+        signaturePrompt: false,
+      };
+    }
     case "error":
-      return { ...state, status: "error", error: action.error };
+      return {
+        ...state,
+        status: "error",
+        signaturePrompt: false,
+        error: action.error,
+      };
     default:
       return state;
   }
@@ -63,19 +107,24 @@ export const useClaimNFT = (edition?: IEdition) => {
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
+  const Alert = useAlert();
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
+  const { connect } = useWallet();
   const { userAddress } = useCurrentUserAddress();
-  const Alert = useAlert();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
+    dispatch({ type: "signaturePrompt" });
+
     const signature = await signTypedData(
       forwardRequest.domain,
       forwardRequest.types,
       forwardRequest.value
     );
+
+    dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
     Logger.log("Signature", { signature, newSignature });
@@ -128,43 +177,79 @@ export const useClaimNFT = (edition?: IEdition) => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
-  const claimNFT = async (props: { minterAddress: string }) => {
+  const forwarderRequestCached = useRef<any>();
+
+  useEffect(() => {
+    let timeout: any;
+    async function initialiseForwardRequest() {
+      if (edition?.minter_address && userAddress) {
+        forwarderRequestCached.current = await getForwarderRequest({
+          userAddress,
+          minterAddress: edition?.minter_address,
+        });
+      }
+
+      // clear cached forwarderRequest because nonce might have changed!
+      timeout = setTimeout(() => {
+        forwarderRequestCached.current = null;
+      }, 20000);
+    }
+    initialiseForwardRequest();
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [edition?.minter_address, userAddress]);
+
+  const claimNFT = async () => {
     try {
       if (userAddress) {
-        dispatch({ type: "loading" });
+        if (edition?.minter_address) {
+          dispatch({ type: "loading" });
 
-        const targetInterface = new ethers.utils.Interface(minterABI);
-        const callData = targetInterface.encodeFunctionData("mintEdition", [
-          userAddress,
-        ]);
+          let forwardRequest: any;
+          if (forwarderRequestCached.current) {
+            forwardRequest = forwarderRequestCached.current;
+          } else {
+            forwardRequest = await getForwarderRequest({
+              minterAddress: edition?.minter_address,
+              userAddress,
+            });
+          }
 
-        const forwardRequest = await axios({
-          url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-            callData
-          )}&to_address=${encodeURIComponent(
-            props.minterAddress
-          )}&from_address=${encodeURIComponent(userAddress)}`,
-          method: "GET",
-        });
+          Logger.log("Signing... ", forwardRequest);
 
-        Logger.log("Signing... ", forwardRequest);
-
-        await signTransaction({ forwardRequest });
+          await signTransaction({ forwardRequest });
+        }
       } else {
-        Alert.alert(
-          "Wallet disconnected",
-          "Please logout and login again to complete the transaction"
-        );
+        // user is probably not connected to wallet
+        connect?.();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
+      forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
+
+      if (e?.response?.status === 500) {
+        Alert.alert(
+          "Oops. An error occured.",
+          "We are currently experiencing a lot of usage. Please try again in one hour!"
+        );
+      }
+
       captureException(e);
     }
   };
 
+  const onReconnectWallet = useCallback(() => {
+    dispatch({
+      type: "error",
+      error: "Please retry claiming the drop",
+    });
+  }, []);
+
   return {
     state,
     claimNFT,
+    onReconnectWallet,
   };
 };

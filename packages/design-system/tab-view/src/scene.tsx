@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  runOnJS,
 } from "react-native-reanimated";
 
 import { useHeaderTabContext } from "./context";
@@ -16,7 +17,7 @@ import type { SceneProps } from "./types";
 
 export function SceneComponent<P extends object>({
   index,
-  onScroll,
+  onScroll: propOnScroll,
   onContentSizeChange,
   ContainerView,
   contentContainerStyle,
@@ -24,11 +25,6 @@ export function SceneComponent<P extends object>({
   forwardedRef,
   ...restProps
 }: SceneProps<P>) {
-  if (onScroll !== undefined) {
-    console.warn(
-      `Don't support the custom onScroll, please use the 'useHeaderTabContext' hooks!`
-    );
-  }
   const {
     shareAnimatedValue,
     tabbarHeight,
@@ -62,6 +58,9 @@ export function SceneComponent<P extends object>({
       scrollY.value = Math.max(moveY, 0);
       if (curIndexValue.value !== index) return;
       shareAnimatedValue.value = moveY;
+      if (propOnScroll) {
+        runOnJS(propOnScroll as any)({ nativeEvent: e });
+      }
     },
   });
 
@@ -98,21 +97,21 @@ export function SceneComponent<P extends object>({
 
   return (
     <Animated.View style={[styles.container, sceneStyle]}>
-      {/* @ts-ignore */}
       <GestureDetector gesture={nativeGestureRef.current}>
         {/* @ts-ignore */}
         <ContainerView
+          {...restProps}
           ref={scollViewRef}
           scrollEventThrottle={16}
           directionalLockEnabled
           // @ts-ignore
-          contentContainerStyle={[
+          contentContainerStyle={StyleSheet.flatten([
+            contentContainerStyle,
             {
               paddingTop: scrollViewPaddingTop,
               minHeight: expectHeight,
             },
-            contentContainerStyle,
-          ]}
+          ])}
           onContentSizeChange={_onContentSizeChange}
           onScroll={onScrollAnimateEvent}
           scrollIndicatorInsets={{

@@ -3,38 +3,49 @@
     "production": {
       "channel": "production",
       "distribution": "store",
+      "ios": {
+        "image": "latest"
+      },
       "android": {
         "buildType": "app-bundle",
         "image": "latest"
       },
       "env": {
-        "STAGE": "production"
+        "STAGE": "production",
+        "FLIPPER_DISABLE": "1"
       },
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "preview": {
       "channel": "staging",
       "distribution": "internal",
+      "ios": {
+        "image": "latest"
+      },
       "android": {
         "buildType": "apk",
         "image": "latest"
       },
       "env": {
-        "STAGE": "staging"
+        "STAGE": "staging",
+        "FLIPPER_DISABLE": "1"
       },
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "ios": {
+        "image": "latest"
+      },
       "android": {
         "image": "latest"
       },
@@ -44,12 +55,16 @@
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     },
     "simulator": {
       "ios": {
-        "simulator": true
+        "simulator": true,
+        "image": "latest"
+      },
+      "android": {
+        "image": "latest"
       },
       "env": {
         "STAGE": "staging"
@@ -57,7 +72,7 @@
       "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
-        "key": "showtime-2"
+        "key": "showtime-3"
       }
     }
   },

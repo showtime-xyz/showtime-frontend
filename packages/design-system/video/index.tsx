@@ -9,6 +9,7 @@ import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MuteButton } from "app/components/mute-button";
+import { useMuteButtonBottomOffset } from "app/components/mute-button/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 
@@ -30,6 +31,7 @@ function Video({
   const [muted, setMuted] = useState(true);
 
   const { id } = useViewabilityMount({ videoRef, source: props.source });
+  const bottomOffset = useMuteButtonBottomOffset();
 
   return (
     <>
@@ -59,7 +61,15 @@ function Video({
               isMuted={muted}
             />
             {showMuteButton ? (
-              <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+              <View
+                style={{
+                  bottom: bottomOffset,
+                  right: 10,
+                  position: "absolute",
+                }}
+              >
+                <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+              </View>
             ) : null}
           </>
         )}

@@ -3,6 +3,8 @@ const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 const { withInfoPlist } = require("@expo/config-plugins");
 
+const url = "showtime.xyz";
+
 require("dotenv").config({
   path: envPath,
 });
@@ -62,6 +64,7 @@ export default {
       usesNonExemptEncryption: false,
     },
     bitcode: false, // or "Debug",
+    associatedDomains: [`applinks:${url}`],
   },
   android: {
     package: config.scheme,
@@ -72,6 +75,20 @@ export default {
     },
     jsEngine: "hermes",
     softwareKeyboardLayoutMode: "pan",
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [
+          {
+            scheme: "https",
+            host: `*.${url}`,
+            pathPrefix: "/",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   androidNavigationBar: {
     barStyle: "dark-content",
@@ -116,7 +133,6 @@ export default {
           "$(PRODUCT_NAME) needs to access your camera roll so that you can upload photos on Showtime.",
       },
     ],
-    ["./plugins/with-compile-sdk-version.js", 31],
     [
       "./plugins/with-pick-first.js",
       {
@@ -125,6 +141,8 @@ export default {
           "lib/**/libreact_nativemodule_core.so",
           "lib/**/libfbjni.so",
           "lib/**/libturbomodulejsijni.so",
+          "lib/**/libcrypto.so",
+          "lib/**/libssl.so",
         ],
       },
     ],
@@ -161,6 +179,17 @@ export default {
         "./assets/fonts/SpaceGrotesk-Bold.otf",
         "./assets/fonts/SpaceGrotesk-Regular.otf",
       ],
+    ],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          compileSdkVersion: 31,
+          targetSdkVersion: 31,
+          buildToolsVersion: "31.0.0",
+          kotlinVersion: "1.6.10",
+        },
+      },
     ],
   ],
   hooks: {

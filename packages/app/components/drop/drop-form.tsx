@@ -1,5 +1,5 @@
-import React from "react";
-import { Linking, Platform } from "react-native";
+import React, { useRef } from "react";
+import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,28 +9,35 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ConnectButton } from "app/components/connect-button";
+import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { track } from "app/lib/analytics";
+import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
+  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -41,9 +48,10 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
 const defaultValues = {
   royalty: 10,
-  editionSize: 5000,
+  editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
   hasAcceptedTerms: false,
+  notSafeForWork: false,
 };
 
 const durationOptions = [
@@ -66,7 +74,6 @@ const dropValidationSchema = yup.object({
   royalty: yup
     .number()
     .required()
-    .min(1)
     .typeError("Please enter a valid number")
     .max(69)
     .default(defaultValues.royalty),
@@ -75,6 +82,7 @@ const dropValidationSchema = yup.object({
     .default(defaultValues.hasAcceptedTerms)
     .required()
     .isTrue("You must accept the terms and conditions."),
+  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
@@ -84,12 +92,14 @@ export const DropForm = () => {
     control,
     handleSubmit,
     formState: { errors },
+    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
     defaultValues,
   });
+  const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const {
@@ -98,11 +108,16 @@ export const DropForm = () => {
     shouldShowSignMessage,
     signMessageData,
     signTransaction,
+    onReconnectWallet,
+    reset,
   } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
-  const { connected } = useWallet();
+  const { data: userProfile } = useMyInfo();
+  const headerHeight = useHeaderHeight();
+  const { isMagic } = useWeb3();
+  const scrollViewRef = useRef<RNScrollView>(null);
 
   const isSignRequested = signMessageData.status === "sign_requested";
 
@@ -126,6 +141,7 @@ export const DropForm = () => {
   const share = useShare();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
   //   return <View>
@@ -141,21 +157,40 @@ export const DropForm = () => {
     );
   }
 
-  // TODO: remove this after imperative login modal API in rainbowkit
-  if (!connected) {
+  if (
+    !userProfile?.data.profile.username ||
+    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
+    !userProfile?.data.profile.bio ||
+    !userProfile?.data.profile.img_url
+  ) {
     return (
-      <View tw="p-4">
-        <ConnectButton
-          handleSubmitWallet={({ onOpenConnectModal }) => onOpenConnectModal()}
+      <View tw="flex-1 items-center justify-center px-10 text-center">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          Hold on!
+        </Text>
+        <Image
+          source={Platform.select({
+            web: { uri: require("./complete-profile.png") },
+            default: require("./complete-profile.png"),
+          })}
+          tw={`h-25 w-25 rounded-xl`}
+          resizeMode="contain"
         />
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
+          Please complete your profile before creating a drop.
+        </Text>
+        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
+          Complete your profile
+        </Button>
       </View>
     );
   }
 
   if (state.status === "success") {
-    const claimUrl = `https://showtime.xyz/t/${[
-      process.env.NEXT_PUBLIC_CHAIN_ID,
-    ]}/${state.edition?.contract_address}/0`;
+    const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
+      state.edition?.contract_address
+    }/0`;
+    const claimUrl = `https://showtime.xyz${claimPath}`;
 
     const isShareAPIAvailable = Platform.select({
       default: true,
@@ -163,7 +198,10 @@ export const DropForm = () => {
     });
 
     return (
-      <View tw="items-center justify-center p-4">
+      <View
+        tw="items-center justify-center px-4 pt-8"
+        style={modalScreenViewStyle}
+      >
         <Text tw="text-8xl">🎉</Text>
         <View>
           <View tw="h-8" />
@@ -223,7 +261,15 @@ export const DropForm = () => {
             tw="mt-4"
             onPress={Platform.select({
               web: () => router.push(claimUrl),
-              default: router.pop,
+              default: () => {
+                if (router.pathname === "/") {
+                  router.push(claimPath);
+                  resetForm();
+                  reset();
+                } else {
+                  router.pop();
+                }
+              },
             })}
           >
             Skip for now
@@ -235,8 +281,10 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
+      {Platform.OS === "ios" ? <View style={{ height: headerHeight }} /> : null}
       <ScrollView
         tw="p-4"
+        ref={scrollViewRef}
         asKeyboardAwareScrollView
         extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
       >
@@ -254,11 +302,11 @@ export const DropForm = () => {
                           const file = await pickFile({ mediaTypes: "all" });
                           onChange(file.file);
                         }}
-                        tw="h-84 w-84 items-center justify-center rounded-lg"
+                        tw="h-80 w-80 items-center justify-center rounded-lg"
                       >
                         {value ? (
                           <View>
-                            <Preview file={value} tw="h-84 w-84 rounded-2xl" />
+                            <Preview file={value} tw="h-80 w-80 rounded-2xl" />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row shadow-lg">
                                 <FlipIcon
@@ -340,6 +388,7 @@ export const DropForm = () => {
                           tw="flex-1"
                           label="Description"
                           multiline
+                          textAlignVertical="top"
                           placeholder="What is this NFT drop about?"
                           onBlur={onBlur}
                           helperText="You will not be able to edit this after the drop is created"
@@ -366,7 +415,7 @@ export const DropForm = () => {
                       tw="flex-1"
                       label="Your royalties (%)"
                       onBlur={onBlur}
-                      helperText="How much you’ll earn each time this NFT is sold"
+                      helperText="How much you'll earn each time this NFT is sold"
                       errorText={errors.royalty?.message}
                       value={value?.toString()}
                       onChangeText={onChange}
@@ -420,6 +469,24 @@ export const DropForm = () => {
               }}
             />
           </View>
+
+          <View tw="mt-4 flex-row justify-between">
+            <View>
+              <Text tw="text-sm font-bold text-black dark:text-white">
+                Explicit content
+              </Text>
+              <View tw="h-2" />
+              <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
+            </View>
+            <Controller
+              control={control}
+              name="notSafeForWork"
+              render={({ field: { onChange, value } }) => (
+                <Switch checked={value} onChange={onChange} />
+              )}
+            />
+          </View>
+
           <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
               <Controller
@@ -451,7 +518,7 @@ export const DropForm = () => {
             ) : null}
           </View>
 
-          <View tw="mt-8 mb-20">
+          <View tw="mt-8">
             {shouldShowSignMessage ? (
               <View tw="px-2">
                 {!isSignRequested ? (
@@ -489,16 +556,29 @@ export const DropForm = () => {
               </Button>
             )}
 
-            <View tw="mt-4">
-              <PolygonScanButton transactionHash={state.transactionHash} />
-            </View>
+            {state.transactionHash ? (
+              <View tw="mt-4">
+                <PolygonScanButton transactionHash={state.transactionHash} />
+              </View>
+            ) : null}
 
             {state.error ? (
               <View tw="mt-4">
                 <Text tw="text-red-500">{state.error}</Text>
               </View>
             ) : null}
+
+            {state.signaturePrompt && !isMagic ? (
+              <MissingSignatureMessage
+                onReconnectWallet={onReconnectWallet}
+                onMount={() => {
+                  scrollViewRef.current?.scrollToEnd();
+                }}
+              />
+            ) : null}
           </View>
+
+          <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </ScrollView>
     </BottomSheetModalProvider>

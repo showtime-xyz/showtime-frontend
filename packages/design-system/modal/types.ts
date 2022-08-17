@@ -87,6 +87,12 @@ export interface ModalHeaderProps
   extends Pick<ModalProps, "title" | "onClose"> {
   /**
    * Defines the component to be placed
+   * at the start of the header.
+   * @default <Close /> button
+   */
+  startContentComponent?: FC<any>;
+  /**
+   * Defines the component to be placed
    * at the end of the header.
    * @default undefined
    */
