@@ -141,7 +141,7 @@
     "expo-camera": "~12.3.0",
     "expo-community-flipper": "^45.1.0",
     "expo-constants": "~13.2.3",
-    "expo-dev-client": "~1.2.0",
+    "expo-dev-client": "~1.2.1",
     "expo-device": "~4.3.0",
     "expo-font": "~10.2.0",
     "expo-gl": "11.4.0",
