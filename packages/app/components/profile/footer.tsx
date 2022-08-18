@@ -19,7 +19,7 @@ export const ProfileFooter = memo(
 
     if (isLoading) {
       return (
-        <View tw={`flex-row mb-[${tabBarHeight}px]`}>
+        <View tw={`flex-row mb-[${tabBarHeight}px] mt-4`}>
           {new Array(numColumns).fill(0).map((_, i) => (
             <CardSkeleton
               squareSize={squareSize}

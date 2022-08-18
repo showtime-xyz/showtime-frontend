@@ -67,16 +67,27 @@ export const FeedItemTapGesture = ({
       runOnJS(doubleTapHandleOnJS)();
     });
 
-  const singleTapHandler = Gesture.Tap().onEnd(() => {
-    if (toggleHeader) {
-      runOnJS(toggleHeader)();
-    }
-  });
-  const gesture = Gesture.Exclusive(doubleTapHandle, singleTapHandler);
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(300)
+    .maxDistance(9999)
+    .onStart(() => {
+      "worklet";
+      if (toggleHeader) {
+        runOnJS(toggleHeader)();
+      }
+    })
+    .onEnd(() => {
+      if (toggleHeader) {
+        runOnJS(toggleHeader)();
+      }
+    });
+  const gesture = Gesture.Race(
+    longPressGesture,
+    Gesture.Exclusive(doubleTapHandle)
+  );
 
   return (
     <>
-      {/* @ts-ignore */}
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
       <Animated.View
         style={[heartContainerStyle, heartStyle]}

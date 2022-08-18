@@ -18,6 +18,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { MuteProvider } from "./mute-provider";
 import { ThemeProvider } from "./theme-provider";
 
 // @
@@ -41,7 +42,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 <GrowthBookProvider growthbook={growthbook}>
                                   <FeedProvider>
                                     <BiconomyProvider>
-                                      {children}
+                                      <MuteProvider>{children}</MuteProvider>
                                     </BiconomyProvider>
                                   </FeedProvider>
                                 </GrowthBookProvider>

@@ -4,6 +4,7 @@ import { useWindowDimensions } from "react-native";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
@@ -11,10 +12,11 @@ import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
 type CardSkeletonProps = {
   squareSize: number;
   spacing: number;
+  tw?: string;
 };
 
 export const CardSkeleton = memo<CardSkeletonProps>(
-  ({ squareSize, spacing = 0 }) => {
+  ({ squareSize, spacing = 0, tw = "" }) => {
     const { colorScheme } = useColorScheme();
     const isDark = useIsDarkMode();
     const { width } = useWindowDimensions();
@@ -23,13 +25,16 @@ export const CardSkeleton = memo<CardSkeletonProps>(
       return (
         <View
           tw="mb-4 overflow-hidden rounded-2xl shadow-lg"
-          style={{
-            width: squareSize - spacing,
-            marginRight: spacing,
-            marginTop: spacing,
-            // @ts-ignore
-            boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-          }}
+          style={[
+            {
+              width: squareSize - spacing,
+              marginRight: spacing / 2,
+              marginLeft: spacing / 2,
+              // @ts-ignore
+              boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
+            },
+            tailwind.style(tw),
+          ]}
         >
           <View tw="py-2 px-4">
             <View tw="flex-row">

@@ -6,7 +6,7 @@ import {
 } from "react-native";
 
 const animation = LayoutAnimation.create(
-  300,
+  200,
   LayoutAnimation.Types.easeOut,
   LayoutAnimation.Properties.opacity
 );
@@ -21,9 +21,9 @@ export const useClampText = ({
   text = "",
   rows = 3,
   ellipsis = "...",
-  expandButtonWidth = 6,
+  expandButtonWidth = 10,
 }: ClampTextProps) => {
-  const [innerText, setInnerText] = useState(text);
+  const [innerText, setInnerText] = useState(text.replace(/[\r\n]/g, " "));
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);
   const collapseText = useRef("");

@@ -46,12 +46,7 @@ export const MultiClampText = ({ text = "", tw, numberOfLines = 3 }: Props) => {
   }
 
   return (
-    <Text
-      tw={tw}
-      ref={textRef as any}
-      // onTextLayout only support native
-      onTextLayout={onTextLayout}
-    >
+    <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
       {innerText}
       {(showMore || showLess) && (
         <Text
