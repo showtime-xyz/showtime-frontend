@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { Platform } from "react-native";
-
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
@@ -35,19 +32,17 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                     <Web3Provider>
                       <AuthProvider>
                         <UserProvider>
-                          <CSROnly>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <NavigationProvider>
-                                    <BiconomyProvider>
-                                      {children}
-                                    </BiconomyProvider>
-                                  </NavigationProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </CSROnly>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <BiconomyProvider>
+                                    {children}
+                                  </BiconomyProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
                         </UserProvider>
                       </AuthProvider>
                     </Web3Provider>
@@ -60,22 +55,4 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
       </SafeAreaProvider>
     </ThemeProvider>
   );
-};
-
-// TODO: remove CSR after replacing to css tailwind
-const CSROnly = ({ children }: any) => {
-  const [ready, setReady] = useState(() => {
-    if (Platform.OS !== "web") {
-      return true;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (ready) return children;
-
-  return null;
 };

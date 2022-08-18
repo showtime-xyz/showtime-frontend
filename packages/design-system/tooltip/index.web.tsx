@@ -49,7 +49,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         ref={triggerEl}
-        style={[tailwind.style(tw), style]}
+        style={style}
+        tw={tw}
       >
         {children}
       </View>

@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as DropdownMenu from "zeego/dropdown-menu";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { tw as tailwind, styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -17,9 +17,17 @@ const DropdownMenuGroup = DropdownMenu.Group;
 
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
+const StyledDropdownMenuContent = styled(DropdownMenu.Content);
+
 const DropdownMenuContent = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
-    <DropdownMenu.Content {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
+    <StyledDropdownMenuContent
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "Content"
 );
@@ -78,6 +86,8 @@ const useFocusedItem = ({
   };
 };
 
+const StyledDropdownMenuItem = styled(DropdownMenu.Item);
+
 const DropdownMenuItem = DropdownMenu.menuify(
   ({
     tw,
@@ -94,19 +104,21 @@ const DropdownMenuItem = DropdownMenu.menuify(
     });
 
     return (
-      <DropdownMenu.Item
+      <StyledDropdownMenuItem
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         {children}
-      </DropdownMenu.Item>
+      </StyledDropdownMenuItem>
     );
   },
   "Item"
 );
+
+const StyledDropdownMenuCheckboxItem = styled(DropdownMenu.CheckboxItem);
 
 const DropdownMenuCheckboxItem = DropdownMenu.menuify(
   ({
@@ -122,31 +134,35 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
     });
 
     return (
-      <DropdownMenu.CheckboxItem
+      <StyledDropdownMenuCheckboxItem
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         <DropdownMenu.ItemIndicator>
           {/* <Icon name="checkmark" color="textContrast" /> */}
         </DropdownMenu.ItemIndicator>
         {children}
-      </DropdownMenu.CheckboxItem>
+      </StyledDropdownMenuCheckboxItem>
     );
   },
   "CheckboxItem"
 );
 
-const StyledDropdownMenuItemTitle = DropdownMenu.ItemTitle;
+const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle);
 
 const DropdownMenuItemTitle = DropdownMenu.menuify(
-  (
-    props: ComponentProps<typeof Text> &
-      ComponentProps<typeof DropdownMenu.ItemTitle>
-  ) => (
-    <StyledDropdownMenuItemTitle {...props} style={tailwind.style(props.tw)}>
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof Text> &
+    ComponentProps<typeof DropdownMenu.ItemTitle>) => (
+    <StyledDropdownMenuItemTitle
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    >
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemTitle>
@@ -154,14 +170,18 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
   "ItemTitle"
 );
 
-const StyledDropdownMenuItemSubtitle = DropdownMenu.ItemSubtitle;
+const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle);
 
 const DropdownMenuItemSubtitle = DropdownMenu.menuify(
-  (
-    props: ComponentProps<typeof Text> &
-      ComponentProps<typeof DropdownMenu.ItemSubtitle>
-  ) => (
-    <StyledDropdownMenuItemSubtitle {...props}>
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof Text> &
+    ComponentProps<typeof DropdownMenu.ItemSubtitle>) => (
+    <StyledDropdownMenuItemSubtitle
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    >
       {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemSubtitle>
@@ -169,19 +189,37 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
   "ItemSubtitle"
 );
 
+const StyledDropdownMenuItemIndicator = styled(DropdownMenu.ItemIndicator);
+
 const DropdownMenuItemIndicator = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => (
-    <DropdownMenu.ItemIndicator {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => (
+    <StyledDropdownMenuItemIndicator
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "ItemIndicator"
 );
 
+const StyledDropdownMenuSeparator = styled(DropdownMenu.Separator);
+
 const DropdownMenuSeparator = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => (
-    <DropdownMenu.Separator {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => (
+    <StyledDropdownMenuSeparator
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "Separator"
 );
+
+const StyledDropdownMenuTriggerItem = styled(DropdownMenu.TriggerItem);
 
 const DropdownMenuTriggerItem = DropdownMenu.menuify(
   ({
@@ -197,37 +235,61 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
     });
 
     return (
-      <DropdownMenu.TriggerItem
+      <StyledDropdownMenuTriggerItem
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={tailwind.style(tw)}
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         {children}
-      </DropdownMenu.TriggerItem>
+      </StyledDropdownMenuTriggerItem>
     );
   },
   "TriggerItem"
 );
 
+const StyledDropdownMenuItemIcon = styled(DropdownMenu.ItemIcon);
+
 const DropdownMenuItemIcon = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIcon>) => (
-    <DropdownMenu.ItemIcon {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIcon>) => (
+    <StyledDropdownMenuItemIcon
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "ItemIcon"
 );
 
+const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
+
 const DropdownMenuItemImage = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemImage>) => (
-    <DropdownMenu.ItemImage {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemImage>) => (
+    <StyledDropdownMenuItemImage
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "ItemImage"
 );
 
+const StyledDropdownMenuLabel = styled(DropdownMenu.Label);
+
 const DropdownMenuLabel = DropdownMenu.menuify(
-  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Label>) => (
-    <DropdownMenu.Label {...props} style={tailwind.style(props.tw)} />
+  ({
+    tw,
+    ...props
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Label>) => (
+    <StyledDropdownMenuLabel
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   ),
   "Label"
 );

@@ -25,7 +25,7 @@
   }
 
   [role="menu"] > div:nth-child(1) {
-    @apply w-60 rounded-2xl bg-white bg-opacity-80 p-2 shadow;
+    @apply rounded-2xl bg-white bg-opacity-80 p-2 shadow;
   }
 
   [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
@@ -94,10 +94,6 @@
   font-weight: 700;
   font-style: bold;
   font-display: swap;
-}
-
-.web3modal-modal-lightbox {
-  z-index: 99999 !important;
 }
 
 body {

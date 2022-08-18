@@ -1,7 +1,6 @@
-/** @type {import('tailwindcss').Config} */
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
-// const nativewind = require("nativewind/tailwind/css");
+const nativewind = require("nativewind/tailwind/css");
 
 const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
 // const { colors } = require("@showtime-xyz/universal.tailwind");
@@ -298,8 +297,10 @@ const MAX_HEADER_WIDTH = 1440;
 
 module.exports = {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./index.js",
+    "./App.tsx",
     "../../packages/**/*.{js,ts,jsx,tsx}",
+    "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
   ],
   important: "html",
   theme: {
@@ -310,17 +311,16 @@ module.exports = {
         "screen-xl": `${MAX_CONTENT_WIDTH}px`,
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
-      boxShadow: {
-        dropdown:
-          "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
-        modal:
-          "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
-      },
+      // boxShadow: {
+      //   dropdown:
+      //     "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
+      //   modal:
+      //     "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
+      // },
       borderRadius: {
         inherit: "inherit",
       },
       colors: {
-        black45: "rgba(0, 0, 0, 0.45)",
         inherit: "inherit",
         ...colors,
       },

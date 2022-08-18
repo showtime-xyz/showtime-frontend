@@ -1,12 +1,12 @@
 import { ComponentProps, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
 import { Source } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { MuteButton } from "app/components/mute-button";
 import { useMuteButtonBottomOffset } from "app/components/mute-button/mute-button";
@@ -50,7 +50,7 @@ function Video({
 
   return (
     <>
-      <View style={[style, tailwind.style(tw)]}>
+      <View style={style} tw={tw}>
         {videoConfig?.previewOnly ? (
           <Image
             tw={tw}

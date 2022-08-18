@@ -45,7 +45,7 @@ export function Title({ title, cardMaxWidth, disableTooltip = false }: Props) {
           }}
         >
           <Text
-            tw="font-space-bold text-lg leading-8 text-black dark:text-white"
+            tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
             numberOfLines={1}
           >
             {title}
@@ -53,7 +53,7 @@ export function Title({ title, cardMaxWidth, disableTooltip = false }: Props) {
         </Tooltip>
       ) : (
         <Text
-          tw="font-space-bold text-lg leading-8 text-black dark:text-white"
+          tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
           numberOfLines={1}
         >
           {title}

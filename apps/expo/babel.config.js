@@ -23,6 +23,7 @@ module.exports = function (api) {
         },
       },
     ],
+    ["nativewind/babel", { mode: "compileOnly" }],
   ];
 
   if (process.env.NODE_ENV === "test") {

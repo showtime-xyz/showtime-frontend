@@ -65,6 +65,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.toast",
   "@showtime-xyz/universal.tooltip",
   "@showtime-xyz/universal.verification-badge",
+  "nativewind",
   "@shopify/flash-list",
   "recyclerlistview",
 ]);

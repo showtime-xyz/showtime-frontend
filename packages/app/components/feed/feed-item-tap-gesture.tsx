@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { ViewStyle } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -12,7 +12,6 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeartFilled } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
@@ -94,7 +93,7 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color={tw.color("white")} />
+        <HeartFilled width={90} height={90} color="#fff" />
       </Animated.View>
     </>
   );
