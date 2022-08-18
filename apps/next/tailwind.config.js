@@ -297,6 +297,7 @@ const MAX_CONTENT_WIDTH = 1140;
 const MAX_HEADER_WIDTH = 1440;
 
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "../../packages/**/*.{js,ts,jsx,tsx}",
