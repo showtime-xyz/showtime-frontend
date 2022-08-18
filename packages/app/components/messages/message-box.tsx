@@ -166,8 +166,9 @@ function MessageBox({
         <View tw="w-[80vw] rounded-full bg-gray-100 px-5 dark:bg-gray-900">
           <TextInput
             ref={inputRef}
+            style={{ height: scrollHeight }}
             tw={[
-              `w-full h-[${scrollHeight}px] pt-2`,
+              `w-full pt-2`,
               "text-base font-semibold text-black dark:text-white",
               "web:resize-none web:outline-none",
             ]}
