@@ -60,14 +60,14 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
     "@expo/next-adapter": "4.0.8",
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.8",
     "critters": "^0.0.16",
     "eslint": "7.32.0",
     "eslint-config-next": "^12.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-diff": "^1.0.12",
     "next-compose-plugins": "^2.2.1",
-    "postcss": "^8.4.14",
+    "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8"
   }
 }

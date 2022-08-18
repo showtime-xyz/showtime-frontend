@@ -28,13 +28,16 @@
     "@storybook/react": "~6.5.9",
     "@types/node": "16.11.9",
     "@types/react": "^18.0.15",
+    "autoprefixer": "^10.4.8",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-native-web": "^0.17.5",
     "chromatic": "^6.0.6",
     "eslint": "7",
     "eslint-config-next": "^12.2.0",
     "path-browserify": "^1.0.1",
+    "postcss": "^8.4.16",
     "storybook-addon-next": "^1.6.7",
+    "tailwindcss": "^3.1.8",
     "typescript": "4.7.4"
   }
 }
