@@ -172,7 +172,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           <Media
             item={nft}
             numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${Math.min(mediaWidth, 800)}px]`}
+            sizeStyle={{
+              height: mediaHeight,
+              width: Math.min(mediaWidth, 800),
+            }}
             resizeMode="contain"
           />
         </View>

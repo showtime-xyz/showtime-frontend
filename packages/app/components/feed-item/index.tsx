@@ -223,7 +223,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               <Media
                 item={nft}
                 numColumns={1}
-                tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
                 resizeMode={Platform.select({
                   web: "contain",
                   default: "cover",

@@ -148,13 +148,13 @@ function MessageBox({
   return (
     <View
       ref={inputContainerRef}
-      tw={[
-        "ios:absolute android:absolute web:fixed w-full flex-1 bg-white py-4 dark:bg-black",
-        `h-[${scrollHeight + PADDING_HEIGHT}px]`,
-        `bottom-[${messageBoxBottom}px] right-0 left-0`,
-      ]}
+      tw="ios:absolute android:absolute web:fixed w-full flex-1 bg-white py-4 dark:bg-black"
       // @ts-expect-error
       style={{
+        height: scrollHeight + PADDING_HEIGHT,
+        bottom: messageBoxBottom,
+        right: 0,
+        left: 0,
         ...Platform.select({
           web: {
             transform: "translate3d(0, 0, 0)",

@@ -82,7 +82,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
                 key={item.nft_id}
                 item={item}
                 numColumns={3}
-                tw={`w-[${props.mediaSize}px] h-[${props.mediaSize}px]`}
+                tw={`w-[30vw] h-[30vw]`}
               />
             </Pressable>
           );

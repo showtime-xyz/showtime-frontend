@@ -49,7 +49,7 @@ export const BlockedList = () => {
 
   return (
     <ScrollView tw="w-full">
-      {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
+      {shouldRenderHeaderGap && <View style={{ height: headerHeight }} />}
       <SettingHeaderSection title="Blocked List" />
       <SettingBody>
         <View tw="flex-1 px-4 pt-4">

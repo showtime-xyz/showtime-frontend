@@ -50,7 +50,7 @@ export const Search = () => {
 
   return (
     <>
-      {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
+      {isiOS ? <View style={{ height: headerHeight }} /> : null}
       <View tw="px-4 py-2">
         <Input
           placeholder="Search for @name or name.eth"

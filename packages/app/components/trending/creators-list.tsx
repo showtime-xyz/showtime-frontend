@@ -38,7 +38,12 @@ export const CreatorsList = forwardRef<
   );
 
   const ItemSeparatorComponent = useCallback(
-    () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
+    () => (
+      <View
+        tw={`bg-gray-200 dark:bg-gray-800`}
+        style={{ height: separatorHeight }}
+      />
+    ),
     []
   );
 
