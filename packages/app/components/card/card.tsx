@@ -3,7 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { Link } from "solito/link";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
@@ -23,7 +23,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 
-import { CARD_DARK_SHADOW } from "design-system/theme";
+import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 type Props = {
   nft: NFT & { loading?: boolean };
@@ -44,7 +44,7 @@ function Card({
   showClaimButton = false,
 }: Props) {
   const { width } = useWindowDimensions();
-  const { colorScheme } = useColorScheme();
+  const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
@@ -91,13 +91,13 @@ function Card({
         dataSet={Platform.select({ web: { testId: "nft-card" } })}
         style={{
           // @ts-ignore
-          boxShadow: colorScheme === "dark" ? CARD_DARK_SHADOW : undefined,
+          boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
         }}
         tw={[
           size,
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
-          "overflow-hidden rounded-2xl shadow-lg",
+          "overflow-hidden rounded-2xl",
           "self-center justify-self-center",
         ]}
       >
