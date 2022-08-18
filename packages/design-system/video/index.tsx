@@ -12,6 +12,7 @@ import { MuteButton } from "app/components/mute-button";
 import { useMuteButtonBottomOffset } from "app/components/mute-button/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
+import { useMuted } from "app/providers/mute-provider";
 
 type VideoProps = {
   tw?: TW;
@@ -29,10 +30,23 @@ function Video({
 }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const videoConfig = useVideoConfig();
+  const mutedContext = useMuted();
   const [muted, setMuted] = useState(true);
+  const isMuted = mutedContext ? mutedContext[0] : muted;
 
-  const { id } = useViewabilityMount({ videoRef, source: props.source });
+  const { id } = useViewabilityMount({
+    videoRef,
+    source: props.source,
+    isMuted,
+  });
   const bottomOffset = useMuteButtonBottomOffset();
+  const handleMuteChange = () => {
+    if (mutedContext) {
+      mutedContext[1](!isMuted);
+    } else {
+      setMuted(!isMuted);
+    }
+  };
 
   return (
     <>
@@ -59,7 +73,7 @@ function Video({
               useNativeControls={videoConfig?.useNativeControls}
               resizeMode={ResizeMode.COVER}
               posterSource={posterSource}
-              isMuted={muted}
+              isMuted={isMuted}
             />
             {showMuteButton ? (
               <View
@@ -69,7 +83,7 @@ function Video({
                   position: "absolute",
                 }}
               >
-                <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+                <MuteButton onPress={handleMuteChange} muted={isMuted} />
               </View>
             ) : null}
           </>
