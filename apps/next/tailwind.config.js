@@ -310,6 +310,7 @@ module.exports = {
         screen: "100vw",
         "screen-xl": `${MAX_CONTENT_WIDTH}px`,
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
+        60: "240px",
       },
       boxShadow: {
         dropdown:
@@ -319,6 +320,7 @@ module.exports = {
       },
       borderRadius: {
         inherit: "inherit",
+        4: "16px",
       },
       colors: {
         black45: "rgba(0, 0, 0, 0.45)",
