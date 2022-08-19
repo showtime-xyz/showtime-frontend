@@ -7311,20 +7311,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-screen@npm:^0.0.55":
-  version: 0.0.55
-  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.55"
+"@showtime-xyz/universal.modal-screen@npm:^0.0.56":
+  version: 0.0.56
+  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.56"
   dependencies:
     "@react-navigation/native": 6.0.11
     "@showtime-xyz/universal.modal": 0.0.47
-    "@showtime-xyz/universal.router": 0.0.17
+    "@showtime-xyz/universal.router": 0.0.18
     "@showtime-xyz/universal.toast": 0.0.38
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: e70860de196c3d5f2a0f8d5355a98702ad5885c04ef33168c58986820bd44a8ceae7da0176b650d48f92f2015297ce705449b241885e64a499845ef5d2009366
+  checksum: 2fb34b3e036702122632652beb60b713ae8c4d59a2ed519fcfecdd31944aa50596e722aa9670ca65e12b9501abe8d086e80a0ebb9d606ad8f2c6e40a5e646aba
   languageName: node
   linkType: hard
 
@@ -7435,19 +7435,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.router@npm:0.0.17, @showtime-xyz/universal.router@npm:^0.0.17":
-  version: 0.0.17
-  resolution: "@showtime-xyz/universal.router@npm:0.0.17"
+"@showtime-xyz/universal.router@npm:0.0.18, @showtime-xyz/universal.router@npm:^0.0.18":
+  version: 0.0.18
+  resolution: "@showtime-xyz/universal.router@npm:0.0.18"
   dependencies:
     "@react-navigation/native": 6.0.11
     next: 12.2.3-canary.2
-    solito: 0.0.24
+    solito: 0.0.26
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 9c7dde2e567142f237dd1b04ee49db0eab1bd2917563b16668debd14829be00963b6b2557d8126ad04b90e45774bf56ee491f5ccefe678c07eea621d06883db0
+  checksum: 25f30f17cca65017785f0d4592b1d302209feecfee605f1e7a3de18c61b6ceb1f528e3a0e8afcf0489ce2686a4ca9aafc5ce4e5235c6924fa89ea5c3c17bae63
   languageName: node
   linkType: hard
 
@@ -7790,13 +7790,13 @@ __metadata:
     "@showtime-xyz/universal.label": ^0.0.23
     "@showtime-xyz/universal.light-box": ^0.0.29
     "@showtime-xyz/universal.modal": ^0.0.47
-    "@showtime-xyz/universal.modal-screen": ^0.0.55
+    "@showtime-xyz/universal.modal-screen": ^0.0.56
     "@showtime-xyz/universal.modal-sheet": ^0.0.49
     "@showtime-xyz/universal.pan-to-close": ^0.0.3
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.14
     "@showtime-xyz/universal.pressable": ^0.0.26
     "@showtime-xyz/universal.pressable-scale": ^0.0.24
-    "@showtime-xyz/universal.router": ^0.0.17
+    "@showtime-xyz/universal.router": ^0.0.18
     "@showtime-xyz/universal.safe-area": ^0.0.13
     "@showtime-xyz/universal.scroll-view": ^0.0.24
     "@showtime-xyz/universal.segmented-control": ^0.0.24
@@ -7923,7 +7923,7 @@ __metadata:
     remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
-    solito: ^0.0.24
+    solito: ^0.0.26
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     three: ^0.142.0
@@ -31561,10 +31561,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solito@npm:0.0.24, solito@npm:^0.0.24":
-  version: 0.0.24
-  resolution: "solito@npm:0.0.24"
-  checksum: 484cc67222cf557bf05cb191a1028cb457ff7573a9201282d7f05cf2213565796761aeaf7f9bc236afd1d6a97ec1e235c2e38829b9839c1a222c664ee1c2c06d
+"solito@npm:0.0.26, solito@npm:^0.0.26":
+  version: 0.0.26
+  resolution: "solito@npm:0.0.26"
+  checksum: c3cbee8e33bd9849d85bbe3e1c9d862eca06b17a2b76cd9d856d39cea01755faad92a2cfe37c77a8419ca8efa133b93935034996a3bc14522c270cb727a297d0
   languageName: node
   linkType: hard
 
