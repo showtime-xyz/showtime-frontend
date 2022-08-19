@@ -34,7 +34,7 @@ interface AuthProviderProps {
 }
 
 // 6 hours
-const REFRESH_TOKEN_MAX_INTERVAL_MILLISECONDS = 6 * 60 * 60 * 1000;
+const REFRESH_TOKEN_MAX_INTERVAL_MILLISECONDS = 8 * 60 * 60 * 1000;
 
 export function AuthProvider({
   children,
@@ -126,8 +126,7 @@ export function AuthProvider({
     try {
       await refreshTokens();
       setAuthenticationStatus("AUTHENTICATED");
-      lastRefreshTokenSuccessTimestamp.current =
-        new Date().getUTCMilliseconds();
+      lastRefreshTokenSuccessTimestamp.current = new Date().getTime();
     } catch (error: any) {
       setAuthenticationStatus("UNAUTHENTICATED");
       console.log(
@@ -167,8 +166,7 @@ export function AuthProvider({
         // Re-request refresh token after 6 hours
         if (
           lastRefreshTokenSuccessTimestamp.current &&
-          new Date().getUTCMilliseconds() -
-            lastRefreshTokenSuccessTimestamp.current >
+          new Date().getTime() - lastRefreshTokenSuccessTimestamp.current >
             REFRESH_TOKEN_MAX_INTERVAL_MILLISECONDS
         ) {
           doRefreshToken();
