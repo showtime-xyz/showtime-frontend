@@ -19,8 +19,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
+import { HeaderTabView, Route } from "design-system/tab-view";
 import { TabSpinner } from "design-system/tab-view/tab-spinner";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 

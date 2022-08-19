@@ -14,8 +14,7 @@ import { useTabState } from "app/hooks/use-tab-state";
 import { Haptics } from "app/lib/haptics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
+import { HeaderTabView, Route } from "design-system/tab-view/index";
 
 import { TrendingContext } from "./context";
 import { TabListContainer, TrendingTabListRef } from "./tab-list";

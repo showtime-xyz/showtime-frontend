@@ -64,7 +64,7 @@ function CollapsibleHeaderTabView<T extends Route>({
     }),
     []
   );
-  const _renderTabBar = useCallback(
+  const renderTabBar = useCallback(
     (
       tabbarProps: SceneRendererProps & {
         navigationState: NavigationState<T>;
@@ -89,7 +89,7 @@ function CollapsibleHeaderTabView<T extends Route>({
           tabbarProps: SceneRendererProps & {
             navigationState: NavigationState<T>;
           }
-        ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
+        ) => e.renderTabBarContainer(renderTabBar(tabbarProps))}
         renderScene={(props: any) =>
           e.renderSceneHeader(renderScene(props), props)
         }

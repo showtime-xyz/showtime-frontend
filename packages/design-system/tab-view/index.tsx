@@ -10,17 +10,17 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { Haptics } from "app/lib/haptics";
+import { Route } from "design-system/tab-view-core";
+import { HeaderTabView as HeaderTabViewCore } from "design-system/tab-view-core";
+import { HeaderTabViewProps } from "design-system/tab-view-core";
 
+import { Haptics } from "./haptics";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
-import { HeaderTabViewProps } from "./src/create-header-tabs";
-import { HeaderTabViewComponent } from "./src/index";
-import { Route } from "./src/types";
 import { TabSpinner } from "./tab-spinner";
 
-export * from "./src";
-export * from "./tab-scene";
+export * from "design-system/tab-view-core";
+export * from "./tab-flash-list-scroll-view";
 export * from "react-native-tab-view-next";
 
 type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
@@ -86,7 +86,7 @@ function HeaderTabView<T extends Route>({
     );
   };
   return (
-    <HeaderTabViewComponent
+    <HeaderTabViewCore
       renderTabBar={renderTabBar}
       lazy
       onPullEnough={onPullEnough}

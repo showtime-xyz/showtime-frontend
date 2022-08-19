@@ -7,7 +7,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Route } from "./src/types";
+import { Route } from "design-system/tab-view-core";
 
 type IndependentTabBarProps = {
   routes: Route[];

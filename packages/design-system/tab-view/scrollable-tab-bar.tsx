@@ -5,14 +5,14 @@ import {
   NavigationState,
   SceneRendererProps,
   TabBar,
-} from "react-native-tab-view-next/src";
+} from "react-native-tab-view-next";
 
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Haptics } from "app/lib/haptics";
+import { Route } from "design-system/tab-view";
 
-import { Route } from "./src/types";
+import { Haptics } from "./haptics";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {

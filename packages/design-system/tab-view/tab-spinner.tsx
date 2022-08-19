@@ -4,7 +4,7 @@ import { StyleProp, ViewStyle } from "react-native";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TabScrollView } from "./src";
+import { TabScrollView } from "design-system/tab-view-core";
 
 type TabLoadingProps = {
   index: number;

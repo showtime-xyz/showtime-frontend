@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 
 import { createParam } from "app/navigation/use-param";
 
-import { Route } from "design-system/tab-view/src/types";
+import { Route } from "design-system/tab-view";
 
 const { useParam } = createParam();
 
