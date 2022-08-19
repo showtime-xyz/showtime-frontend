@@ -4,15 +4,13 @@ import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
-import { HeaderTabView } from "./index";
+import { CollapsibleTabView } from "./index";
 import { TabFlatList } from "./index";
 import { Route } from "./types";
 
 export default {
-  component: HeaderTabView,
-  title: "Components/TabView",
+  component: CollapsibleTabView,
+  title: "Components/CollapsibleTabView",
 } as Meta;
 
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
@@ -78,10 +76,9 @@ export const Basic: React.FC = () => {
     <View style={{ height: 300, backgroundColor: "#000" }}></View>
   );
 
-  const insets = useSafeAreaInsets();
   return (
     <View style={styles.container}>
-      <HeaderTabView
+      <CollapsibleTabView
         onStartRefresh={onStartRefresh}
         isRefreshing={isRefreshing}
         navigationState={{ index, routes }}
@@ -89,7 +86,7 @@ export const Basic: React.FC = () => {
         onIndexChange={setIndex}
         lazy
         renderScrollHeader={renderHeader}
-        minHeaderHeight={insets.top + StatusBarHeight}
+        minHeaderHeight={44 + StatusBarHeight}
         animationHeaderPosition={animationHeaderPosition}
         animationHeaderHeight={animationHeaderHeight}
       />

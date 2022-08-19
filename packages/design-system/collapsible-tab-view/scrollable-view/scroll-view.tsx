@@ -10,6 +10,7 @@ const AnimatePageView = Animated.createAnimatedComponent(RNScrollView);
 export type TabScrollViewProps = ScrollViewProps & {
   index: number;
 };
+
 function ScrollView(props: TabScrollViewProps, ref: any) {
   return (
     <SceneComponent

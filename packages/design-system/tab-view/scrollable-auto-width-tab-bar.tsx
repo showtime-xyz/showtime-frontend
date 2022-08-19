@@ -7,15 +7,13 @@ import {
   TabBar,
 } from "react-native-tab-view-next";
 
+import { Route } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { useContentWidth } from "app/hooks/use-content-width";
-
-import { Route } from "design-system/tab-view-core";
-
-import { Haptics } from "./haptics";
+import { Haptics } from "app/lib/haptics";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {

@@ -51,6 +51,12 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/checkbox"
     },
+    "collapsible-tab-view": {
+        "scope": "showtime.universal",
+        "version": "0.0.8",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/collapsible-tab-view"
+    },
     "color-scheme": {
         "scope": "showtime.universal",
         "version": "0.0.6",
@@ -113,7 +119,7 @@
     },
     "infinite-scroll-list": {
         "scope": "showtime.universal",
-        "version": "0.0.3",
+        "version": "0.0.6",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },

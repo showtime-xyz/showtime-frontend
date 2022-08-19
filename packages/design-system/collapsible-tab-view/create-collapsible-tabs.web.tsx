@@ -13,7 +13,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view-next/src";
+} from "react-native-tab-view-next";
 import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
@@ -38,7 +38,7 @@ export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
   CollapsibleHeaderProps<T>;
 
-export function createHeaderTabsComponent() {
+export function createCollapsibleTabsComponent() {
   return React.forwardRef(CollapsibleHeaderTabView);
 }
 

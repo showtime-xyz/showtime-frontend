@@ -6,22 +6,25 @@ import {
   NavigationState,
 } from "react-native-tab-view-next";
 
+import {
+  Route,
+  CollapsibleTabView,
+  HeaderTabViewProps,
+} from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { Route } from "design-system/tab-view-core";
-import { HeaderTabView as HeaderTabViewCore } from "design-system/tab-view-core";
-import { HeaderTabViewProps } from "design-system/tab-view-core";
+import { Haptics } from "app/lib/haptics";
 
-import { Haptics } from "./haptics";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
 import { TabSpinner } from "./tab-spinner";
 
-export * from "design-system/tab-view-core";
-export * from "./tab-flash-list-scroll-view";
+export * from "@showtime-xyz/universal.collapsible-tab-view";
+export * from "./tab-flash-list";
 export * from "react-native-tab-view-next";
+export * from "./tab-flash-list-scroll-view";
 
 type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
   autoWidthTabBar?: boolean;
@@ -86,7 +89,7 @@ function HeaderTabView<T extends Route>({
     );
   };
   return (
-    <HeaderTabViewCore
+    <CollapsibleTabView
       renderTabBar={renderTabBar}
       lazy
       onPullEnough={onPullEnough}

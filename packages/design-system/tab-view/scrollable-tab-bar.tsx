@@ -10,9 +10,9 @@ import {
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Route } from "design-system/tab-view";
+import { Haptics } from "app/lib/haptics";
 
-import { Haptics } from "./haptics";
+import { Route } from "design-system/tab-view";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {

@@ -3,7 +3,7 @@ import { ScrollViewProps } from "react-native";
 
 import Animated from "react-native-reanimated";
 
-import { SceneComponent } from "design-system/tab-view-core";
+import { SceneComponent } from "@showtime-xyz/universal.collapsible-tab-view";
 
 type TabScrollViewProps = ScrollViewProps & {
   index: number;

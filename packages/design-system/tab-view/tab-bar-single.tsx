@@ -2,12 +2,11 @@ import { useState } from "react";
 
 import { AnimatePresence, View as MotiView } from "moti";
 
+import { Route } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Route } from "design-system/tab-view-core";
 
 type IndependentTabBarProps = {
   routes: Route[];

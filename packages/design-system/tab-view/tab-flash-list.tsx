@@ -2,12 +2,11 @@ import React from "react";
 
 import { FlashList } from "@shopify/flash-list";
 
+import type { TabScrollViewProps } from "@showtime-xyz/universal.collapsible-tab-view";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
-
-import type { TabScrollViewProps } from "design-system/tab-view-core";
 
 export type TabInfiniteScrollListProps<T> = Omit<
   InfiniteScrollListProps<T>,
