@@ -1,20 +1,22 @@
 import { forwardRef } from "react";
 import { ScrollView as ReactNativeScrollView } from "react-native";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 
 import { ScrollViewProps } from "./types";
 
+const StyledScrollView = styled(ReactNativeScrollView);
+
 const ScrollView = forwardRef(function ScrollView(
-  { tw, style, ...props }: ScrollViewProps,
+  { tw, ...props }: ScrollViewProps,
   ref: any
 ) {
   return (
-    <ReactNativeScrollView
+    <StyledScrollView
       keyboardShouldPersistTaps="handled"
       {...props}
       ref={ref}
-      style={[tailwind.style(tw), style]}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />
   );
 });

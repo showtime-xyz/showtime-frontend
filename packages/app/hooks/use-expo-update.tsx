@@ -26,13 +26,13 @@ export function useExpoUpdate() {
   // const isForeground = useIsForeground();
   const snackbar = useSnackbar();
   const checkUpdate = useCallback(
-    async (isAutomatic = false) => {
+    async (isAutoUpdate = false) => {
       try {
         const update = await Updates.checkForUpdateAsync();
-        if (update.isAvailable) {
-          await Updates.fetchUpdateAsync();
-          store.set(LAST_SHOW_UPDATE_KEY, new Date().toISOString());
-          if (isAutomatic) {
+        if (!update.isAvailable) return;
+        const result = await Updates.fetchUpdateAsync();
+        if (result.isNew) {
+          if (isAutoUpdate) {
             await Updates.reloadAsync();
           } else {
             snackbar?.show({
@@ -40,8 +40,9 @@ export function useExpoUpdate() {
               bottom: bottom + 64,
               action: {
                 text: "Reload",
-                onPress: () => Updates.reloadAsync(),
+                onPress: async () => await Updates.reloadAsync(),
               },
+              hideAfter: 5000,
             });
           }
         }
@@ -55,7 +56,6 @@ export function useExpoUpdate() {
   useEffect(() => {
     const now = new Date();
     const currentHours = now.getHours();
-
     checkUpdate(currentHours > 3 && currentHours < 5);
     // if (isForeground) {
     //   if (__DEV__) return;

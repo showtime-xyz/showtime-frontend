@@ -134,15 +134,10 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View
-          tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
-          style={Platform.select({
-            web: { maxHeight: "calc(50vh - 64px)" },
-            default: {},
-          })}
-        >
+        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
           {data ? (
             <InfiniteScrollList
+              useWindowScroll={false}
               data={data}
               renderItem={renderItem}
               ItemSeparatorComponent={Separator}
@@ -152,6 +147,10 @@ const SearchInHeader = () => {
                 main: 64,
                 reverse: 64,
               }}
+              style={Platform.select({
+                web: { height: "calc(50vh - 64px)" },
+                default: {},
+              })}
             />
           ) : loading && term ? (
             <SearchItemSkeleton />

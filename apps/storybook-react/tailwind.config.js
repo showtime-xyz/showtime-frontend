@@ -297,7 +297,6 @@ const MAX_CONTENT_WIDTH = 1140;
 const MAX_HEADER_WIDTH = 1440;
 
 module.exports = {
-  darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "../../packages/**/*.{js,ts,jsx,tsx}",
@@ -310,7 +309,6 @@ module.exports = {
         screen: "100vw",
         "screen-xl": `${MAX_CONTENT_WIDTH}px`,
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
-        60: "240px",
       },
       boxShadow: {
         dropdown:
@@ -320,7 +318,6 @@ module.exports = {
       },
       borderRadius: {
         inherit: "inherit",
-        4: "16px",
       },
       colors: {
         black45: "rgba(0, 0, 0, 0.45)",

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { ViewStyle } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -12,7 +12,6 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeartFilled } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
@@ -68,22 +67,33 @@ export const FeedItemTapGesture = ({
       runOnJS(doubleTapHandleOnJS)();
     });
 
-  const singleTapHandler = Gesture.Tap().onEnd(() => {
-    if (toggleHeader) {
-      runOnJS(toggleHeader)();
-    }
-  });
-  const gesture = Gesture.Exclusive(doubleTapHandle, singleTapHandler);
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(300)
+    .maxDistance(9999)
+    .onStart(() => {
+      "worklet";
+      if (toggleHeader) {
+        runOnJS(toggleHeader)();
+      }
+    })
+    .onEnd(() => {
+      if (toggleHeader) {
+        runOnJS(toggleHeader)();
+      }
+    });
+  const gesture = Gesture.Race(
+    longPressGesture,
+    Gesture.Exclusive(doubleTapHandle)
+  );
 
   return (
     <>
-      {/* @ts-ignore */}
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
       <Animated.View
         style={[heartContainerStyle, heartStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color={tw.color("white")} />
+        <HeartFilled width={90} height={90} color="#fff" />
       </Animated.View>
     </>
   );

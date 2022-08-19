@@ -43,6 +43,7 @@ export const SwipeList = ({
   const { isAuthenticated } = useUser();
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
+  const headerHeightRef = useRef(headerHeight);
   useScrollToTop(listRef);
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
@@ -51,16 +52,16 @@ export const SwipeList = ({
     momentumScrollCallback.current = cb;
   }, []);
 
-  const itemHeight =
-    Platform.OS === "web"
-      ? windowHeight -
-        headerHeight -
-        (isAuthenticated
-          ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
-          : 0)
-      : Platform.OS === "android"
-      ? safeAreaFrameHeight - headerHeight
-      : screenHeight;
+  const itemHeight = Platform.select({
+    web:
+      windowHeight -
+      headerHeight -
+      (isAuthenticated
+        ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
+        : 0),
+    android: safeAreaFrameHeight - headerHeight,
+    default: screenHeight,
+  });
 
   const renderItem = useCallback(
     ({ item }: { item: NFT }) => (
@@ -70,6 +71,7 @@ export const SwipeList = ({
           itemHeight,
           bottomPadding,
           setMomentumScrollCallback,
+          headerHeight: headerHeightRef.current,
         }}
       />
     ),

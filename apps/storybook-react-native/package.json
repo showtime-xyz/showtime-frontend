@@ -44,7 +44,7 @@
     "expo-blur": "~11.2.0",
     "expo-community-flipper": "^45.1.0",
     "expo-constants": "~13.2.3",
-    "expo-dev-client": "~1.1.0",
+    "expo-dev-client": "~1.2.1",
     "expo-font": "~10.2.0",
     "expo-gl": "11.4.0",
     "expo-haptics": "~11.3.0",
@@ -79,7 +79,7 @@
     "three": "^0.142.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
+    "@babel/core": "^7.18.9",
     "@types/three": "^0.142.0",
     "typescript": "4.7.4"
   },

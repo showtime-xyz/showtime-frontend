@@ -16,6 +16,7 @@ export type Props = {
   blurhash?: string;
   resizeMode?: ResizeMode;
   numColumns: number;
+  style?: object;
 };
 
 function Model({ url }: { url: string }) {
@@ -56,6 +57,7 @@ function ModelViewer({
   tw,
   blurhash,
   resizeMode,
+  style,
   numColumns,
 }: Props) {
   if (fallbackUrl && numColumns > 1) {
@@ -65,6 +67,7 @@ function ModelViewer({
           uri: fallbackUrl,
         }}
         tw={tw}
+        style={style}
         blurhash={blurhash}
         resizeMode={resizeMode}
       />
@@ -77,6 +80,7 @@ function ModelViewer({
         StyleSheet.flatten([
           tailwind.style("mx-auto"),
           tailwind.style(tw),
+          style,
         ]) as ViewStyle
       }
     >

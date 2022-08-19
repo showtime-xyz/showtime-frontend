@@ -406,10 +406,8 @@ export function Camera({
       </View>
 
       <View
-        tw={[
-          "absolute right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900",
-          `bottom-[${tabBarHeight - 1}px]`,
-        ]}
+        tw={["absolute right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900"]}
+        style={{ bottom: tabBarHeight - 1 }}
       >
         <CameraButtons
           photos={photos}

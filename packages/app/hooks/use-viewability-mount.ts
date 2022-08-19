@@ -7,22 +7,22 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
-import { useVideoConfig } from "app/context/video-config-context";
 
 import { useIsTabFocused } from "design-system/tabs/tablib";
 
 export const useViewabilityMount = ({
   videoRef,
   source,
+  isMuted,
 }: {
   videoRef: RefObject<Video>;
   source: any;
+  isMuted: boolean;
 }) => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
   const loaded = useRef(false);
-  const videoConfig = useVideoConfig();
   let isListFocused = useIsTabFocused();
 
   const loadPlayOrPause = useCallback(
@@ -31,7 +31,7 @@ export const useViewabilityMount = ({
       if (!loaded.current) {
         await videoRef.current?.loadAsync(source, {
           isLooping: true,
-          isMuted: videoConfig?.isMuted,
+          isMuted,
         });
       }
 
@@ -43,7 +43,7 @@ export const useViewabilityMount = ({
 
       loaded.current = true;
     },
-    [source, videoRef, videoConfig?.isMuted]
+    [source, videoRef, isMuted]
   );
 
   const unload = useCallback(() => {

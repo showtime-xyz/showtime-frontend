@@ -1,13 +1,13 @@
-import { ComponentProps, createContext, forwardRef, useContext } from "react";
-import type { Text as TextType } from "react-native";
+import { ComponentProps, forwardRef } from "react";
+import { Platform, Text as TextType } from "react-native";
 
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { ViewProps } from "@showtime-xyz/universal.view";
 
-import { Text as UniversalText } from "./text";
+import { Text as StyledText } from "./text";
 
-export type TextProps = ComponentProps<typeof UniversalText>;
+export type TextProps = ComponentProps<typeof StyledText>;
 
 export type Props = {
   tw?: TW;
@@ -28,11 +28,6 @@ export type Props = {
 >;
 
 /**
- * Text should inherit styles from parent text nodes.
- */
-const ParentContext = createContext<{} | undefined>(undefined);
-
-/**
  * Note: You can wrap <Text> in a <View> with a background color
  * to verify if the text is rendered correctly and if Capsize is working well.
  */
@@ -43,7 +38,7 @@ export const Text = forwardRef<TextType, Props>(
       onTextLayout,
       children,
       selectable,
-      tw,
+      tw = "",
       nativeID,
       htmlFor,
       accessibilityRole,
@@ -52,20 +47,14 @@ export const Text = forwardRef<TextType, Props>(
       pointerEvents,
       onPress,
       style,
+      ...props
     },
     ref
   ) => {
-    const parentTw = useContext(ParentContext);
-
-    const compoundStyle = {
-      ...tailwind.style(parentTw),
-      ...tailwind.style(tw),
-      ...(style as object),
-    };
-
     return (
-      <UniversalText
-        style={compoundStyle}
+      <StyledText
+        style={Platform.OS === "web" ? style : [tailwind.style(tw), style]}
+        tw={Array.isArray(tw) ? tw.join(" ") : tw}
         nativeID={nativeID}
         ref={ref}
         selectable={selectable}
@@ -78,11 +67,10 @@ export const Text = forwardRef<TextType, Props>(
         // @ts-ignore - this prop will only work on web. Refer text.web.tsx
         htmlFor={htmlFor}
         pointerEvents={pointerEvents}
+        {...props}
       >
-        <ParentContext.Provider value={compoundStyle}>
-          {children}
-        </ParentContext.Provider>
-      </UniversalText>
+        {children}
+      </StyledText>
     );
   }
 );

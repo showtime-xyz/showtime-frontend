@@ -219,11 +219,8 @@ const SettingsTabs = () => {
                       return null;
                     }
                     return (
-                      <>
-                        <View
-                          key={index.toString()}
-                          tw="flex-row items-center justify-between p-4"
-                        >
+                      <View key={index.toString()}>
+                        <View tw="flex-row items-center justify-between p-4">
                           <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
                             {key.toUpperCase().replace(/_/g, " ")}
                           </Text>
@@ -246,7 +243,7 @@ const SettingsTabs = () => {
                           Object.entries(pushNotificationsPreferences?.data)
                             ?.length -
                             1 && <SlotSeparator />}
-                      </>
+                      </View>
                     );
                   }
                 )}
@@ -268,7 +265,7 @@ const SettingsTabs = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
         <View
           tw="items-center bg-white dark:bg-black md:mb-4"
           style={{

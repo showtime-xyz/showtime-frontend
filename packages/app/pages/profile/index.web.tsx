@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 
+import { SWRConfig } from "swr";
+
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { ProfileScreen } from "app/screens/profile";
 
-function ProfileRouter() {
+function ProfileRouter({ fallback }: { fallback: any }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -34,7 +36,11 @@ function ProfileRouter() {
     }
   }, [router]);
 
-  return <ProfileScreen />;
+  return (
+    <SWRConfig value={{ fallback }}>
+      <ProfileScreen />
+    </SWRConfig>
+  );
 }
 
 export default ProfileRouter;

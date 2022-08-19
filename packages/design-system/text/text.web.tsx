@@ -1,8 +1,12 @@
 import { ComponentProps, forwardRef, useMemo } from "react";
-import { StyleSheet, Text as ReactNativeText } from "react-native";
+import { Text as ReactNativeText } from "react-native";
 
 // @ts-ignore
 import { unstable_createElement } from "react-native-web";
+
+import { styled } from "@showtime-xyz/universal.tailwind";
+
+const StyledText = styled(ReactNativeText);
 
 // https://github.com/necolas/react-native-web/blob/master/packages/react-native-web/src/exports/View/index.js#L133
 const textStyle = {
@@ -21,11 +25,13 @@ const textStyle = {
 
 const Label = (props: any) => {
   const style = useMemo(() => {
-    return StyleSheet.flatten([textStyle, props.style]);
+    return [textStyle, props.style];
   }, [props.style]);
 
   return unstable_createElement("label", { ...props, style });
 };
+
+const StyledLabel = styled(Label);
 
 type TextProps = ComponentProps<typeof ReactNativeText>;
 
@@ -34,10 +40,10 @@ export const Text = forwardRef<ReactNativeText, TextProps>(
     // @ts-ignore web only role - see label/index.web.tsx
     // onLayout won't work on Label component (removing or else RNW throws warning on console even if onLayout is undefined). Not sure if that's needed though. Will find a way to do that later.
     if (accessibilityRole === "label") {
-      return <Label {...props} ref={ref} />;
+      return <StyledLabel {...props} ref={ref} />;
     } else {
       return (
-        <ReactNativeText
+        <StyledText
           onLayout={onLayout}
           accessibilityRole={accessibilityRole}
           {...props}

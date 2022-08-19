@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 
-// import { TabRecyclerList, TabScrollView } from "design-system/tab-view";
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 
 export const CreatorsList = forwardRef<
@@ -26,7 +25,12 @@ export const CreatorsList = forwardRef<
   // );
 
   // const ItemSeparatorComponent = useCallback(
-  //   () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
+  //   () => (
+  //     <View
+  //       tw={`bg-gray-200 dark:bg-gray-800`}
+  //       style={{ height: separatorHeight }}
+  //     />
+  //   ),
   //   []
   // );
 
@@ -92,6 +96,7 @@ export const CreatorsList = forwardRef<
   // if (isLoading) {
   //   return <TabSpinner index={index} />;
   // }
+
   // if (data.length === 0 && !isLoading) {
   //   return (
   //     <TabScrollView
@@ -104,14 +109,19 @@ export const CreatorsList = forwardRef<
   // }
   // // Todo: replace to TabInfiniteScrollList when re-enabled this page.
   // return (
-  //   <TabRecyclerList
-  //     layoutProvider={_layoutProvider}
-  //     dataProvider={dataProvider}
-  //     rowRenderer={_rowRenderer}
-  //     onEndReached={fetchMore}
-  //     layoutSize={layoutSize}
-  //     style={{ flex: 1 }}
-  //     renderFooter={ListFooterComponent}
+  //   <TabInfiniteScrollList
+  //     numColumns={NUM_COLUMNS}
+  //     data={data}
+  //     ref={listRef}
+  //     keyExtractor={keyExtractor}
+  //     renderItem={renderItem}
+  //     estimatedItemSize={contentWidth / NUM_COLUMNS}
+  //     overscan={{
+  //       main: contentWidth / NUM_COLUMNS,
+  //       reverse: contentWidth / NUM_COLUMNS,
+  //     }}
+  //     renderScrollComponent={TabFlashListScrollView}
+  //     ListFooterComponent={ListFooterComponent}
   //     index={index}
   //   />
   // );

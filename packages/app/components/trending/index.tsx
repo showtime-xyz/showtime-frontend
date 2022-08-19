@@ -107,7 +107,7 @@ export const Trending = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
         <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
           <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
             Trending
