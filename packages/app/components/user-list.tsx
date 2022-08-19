@@ -77,7 +77,10 @@ export const UserList = ({
 
 const SEPARATOR_HEIGHT = 1;
 const Separator = () => (
-  <View tw={`bg-gray-200 dark:bg-gray-800 h-[${SEPARATOR_HEIGHT}px]`} />
+  <View
+    tw={`bg-gray-200 dark:bg-gray-800`}
+    style={{ height: SEPARATOR_HEIGHT }}
+  />
 );
 
 const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
@@ -95,7 +98,8 @@ const FollowingListUser = memo(
     });
     return (
       <View
-        tw={`flex-row items-center justify-between h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
+        tw={`flex-row items-center justify-between overflow-hidden px-4`}
+        style={{ height: ITEM_HEIGHT }}
       >
         <Link
           href={`/@${item.username ?? item.wallet_address}`}

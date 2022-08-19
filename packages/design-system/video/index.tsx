@@ -54,7 +54,8 @@ function Video({
         {videoConfig?.previewOnly ? (
           <Image
             tw={tw}
-            style={StyleSheet.absoluteFill}
+            //@ts-ignore
+            style={[StyleSheet.absoluteFill, style]}
             blurhash={blurhash}
             source={posterSource as Source}
           />
@@ -62,7 +63,8 @@ function Video({
           <>
             <Image
               tw={tw}
-              style={StyleSheet.absoluteFill}
+              // @ts-ignore
+              style={[StyleSheet.absoluteFill, style]}
               blurhash={blurhash}
               source={posterSource as Source}
             />

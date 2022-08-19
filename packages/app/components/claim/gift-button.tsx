@@ -9,7 +9,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 
-import { getClaimStatus, formatClaimNumber } from ".";
+import { formatClaimNumber } from ".";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
@@ -24,7 +24,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   );
 
   if (!edition) return null;
-  const status = getClaimStatus(edition);
+
   return (
     <Button
       variant="text"

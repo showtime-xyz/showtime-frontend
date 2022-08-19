@@ -33,12 +33,14 @@ type Props = {
   variant?: "nft" | "activity" | "market";
   href?: string;
   showClaimButton?: Boolean;
+  sizeStyle?: { width: number; height: number };
 };
 
 function Card({
   nft,
   numColumns,
   tw,
+  sizeStyle,
   onPress,
   href = "",
   showClaimButton = false,
@@ -74,6 +76,7 @@ function Card({
     : numColumns === 2
     ? "w-[46vw]"
     : "w-[100vw]";
+
   if (width < 768) {
     return (
       <RouteComponent href={href} onPress={handleOnPress}>
@@ -89,12 +92,15 @@ function Card({
         // TODO: add accessibility types for RNW
         accessibilityRole="article"
         dataSet={Platform.select({ web: { testId: "nft-card" } })}
-        style={{
-          // @ts-ignore
-          boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-        }}
+        style={[
+          {
+            // @ts-ignore
+            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
+          },
+          sizeStyle,
+        ]}
         tw={[
-          size,
+          !sizeStyle ? size : "",
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",

@@ -72,7 +72,11 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
                 web: { uri: require("./drop-preview.png") },
                 default: require("./drop-preview.png"),
               })}
-              tw={`h-[${previewHeight}px] w-[${previewWidth}px] rounded-xl`}
+              style={{
+                height: previewHeight,
+                width: previewWidth,
+              }}
+              tw="rounded-xl"
               resizeMode="contain"
             />
           </View>

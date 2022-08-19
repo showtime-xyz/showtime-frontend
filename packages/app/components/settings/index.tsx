@@ -265,7 +265,7 @@ const SettingsTabs = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
         <View
           tw="items-center bg-white dark:bg-black md:mb-4"
           style={{

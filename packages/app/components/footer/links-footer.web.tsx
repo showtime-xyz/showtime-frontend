@@ -42,7 +42,7 @@ export const WebFooter = () => {
               >
                 <Text
                   key={item.title}
-                  tw="text-13 mb-4 mt-0 font-semibold text-gray-900 dark:text-white"
+                  tw="text-13 pb-4 font-semibold text-gray-900 dark:text-white"
                 >
                   {item.title}
                 </Text>
