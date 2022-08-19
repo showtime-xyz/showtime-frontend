@@ -5,7 +5,8 @@ import { FlashList } from "@shopify/flash-list";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
-} from "design-system/infinite-scroll-list";
+} from "@showtime-xyz/universal.infinite-scroll-list";
+
 import type { TabScrollViewProps } from "design-system/tab-view-core";
 
 export type TabInfiniteScrollListProps<T> = Omit<

@@ -3,6 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -18,7 +19,6 @@ import {
 } from "app/hooks/use-notifications";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 

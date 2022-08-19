@@ -6,7 +6,7 @@ import React, {
   MutableRefObject,
 } from "react";
 
-import { FlashListProps, ViewToken } from "@shopify/flash-list";
+import type { FlashListProps, ViewToken } from "@shopify/flash-list";
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   GridListProps,

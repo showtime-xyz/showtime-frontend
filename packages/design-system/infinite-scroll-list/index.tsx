@@ -12,7 +12,8 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> &
   Pick<VirtuosoGridProps, "overscan" | "useWindowScroll"> & {
     index?: number;
     /**
-     * grid layout item view props, only valid when numColumns > 1
+     * Grid layout item view props, only valid when numColumns > 1
+     * @default undefined
      */
     gridItemProps?: ViewProps | null;
   };

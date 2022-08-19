@@ -3135,6 +3135,76 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/cli@npm:0.2.10":
+  version: 0.2.10
+  resolution: "@expo/cli@npm:0.2.10"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/code-signing-certificates": ^0.0.2
+    "@expo/config": ~7.0.1
+    "@expo/config-plugins": ~5.0.1
+    "@expo/dev-server": ~0.1.119
+    "@expo/devcert": ^1.0.0
+    "@expo/json-file": ^8.2.35
+    "@expo/metro-config": ~0.3.18
+    "@expo/osascript": ^2.0.31
+    "@expo/package-manager": ~0.0.53
+    "@expo/plist": ^0.0.18
+    "@expo/prebuild-config": ~5.0.3
+    "@expo/rudder-sdk-node": 1.1.1
+    "@expo/spawn-async": 1.5.0
+    "@expo/xcpretty": ^4.2.1
+    "@urql/core": 2.3.6
+    "@urql/exchange-retry": 0.3.0
+    accepts: ^1.3.8
+    arg: 4.1.0
+    better-opn: ~3.0.2
+    bplist-parser: ^0.3.1
+    cacache: ^15.3.0
+    chalk: ^4.0.0
+    ci-info: ^3.3.0
+    debug: ^4.3.4
+    env-editor: ^0.4.1
+    form-data: ^3.0.1
+    freeport-async: 2.0.0
+    fs-extra: ~8.1.0
+    getenv: ^1.0.0
+    graphql: 15.8.0
+    graphql-tag: ^2.10.1
+    internal-ip: 4.3.0
+    is-root: ^2.1.0
+    js-yaml: ^3.13.1
+    json-schema-deref-sync: ^0.13.0
+    md5-file: ^3.2.3
+    md5hex: ^1.0.0
+    minipass: 3.1.6
+    node-fetch: ^2.6.7
+    node-forge: ^1.3.1
+    npm-package-arg: ^7.0.0
+    ora: 3.4.0
+    pretty-bytes: 5.6.0
+    progress: 2.0.3
+    prompts: ^2.3.2
+    qrcode-terminal: 0.11.0
+    requireg: ^0.2.2
+    resolve-from: ^5.0.0
+    semver: ^6.3.0
+    send: ^0.18.0
+    slugify: ^1.3.4
+    structured-headers: ^0.4.1
+    tar: ^6.0.5
+    tempy: ^0.7.1
+    terminal-link: ^2.1.1
+    text-table: ^0.2.0
+    url-join: 4.0.0
+    uuid: ^3.4.0
+    wrap-ansi: ^7.0.0
+  bin:
+    expo-internal: build/bin/cli
+  checksum: 2c2fc87916eaf435f01044433ceb558c82d2b7469a8fa3fb53301d97d14f5e8c43b41fb4ec1551d892132028aa9d0ebb79ebab602707ff166a60eb3d35204518
+  languageName: node
+  linkType: hard
+
 "@expo/cli@npm:0.2.9":
   version: 0.2.9
   resolution: "@expo/cli@npm:0.2.9"
@@ -3458,6 +3528,27 @@ __metadata:
     serialize-error: 6.0.0
     temp-dir: ^2.0.0
   checksum: cb892bc488ca63f7fc28eb9ed2b6b08ae398912cb36ad63cea0cc6052484bcdcf428b5ec9286e29a46b2498dffa86dbf1fd2ba90ea3d9cdda835dab1acd894c2
+  languageName: node
+  linkType: hard
+
+"@expo/dev-server@npm:~0.1.119":
+  version: 0.1.119
+  resolution: "@expo/dev-server@npm:0.1.119"
+  dependencies:
+    "@expo/bunyan": 4.0.0
+    "@expo/metro-config": ~0.3.18
+    "@expo/osascript": 2.0.33
+    body-parser: 1.19.0
+    chalk: ^4.0.0
+    connect: ^3.7.0
+    fs-extra: 9.0.0
+    node-fetch: ^2.6.0
+    open: ^8.3.0
+    resolve-from: ^5.0.0
+    semver: 7.3.2
+    serialize-error: 6.0.0
+    temp-dir: ^2.0.0
+  checksum: 1b80fef6e36ca9aba7eb6c3443873de2a137ea9d4fac8475c940a6aa6e35380594484296d283f099a0d4c6bb0dc36b42c1edc2a47f4a258e1168afb9d9c30679
   languageName: node
   linkType: hard
 
@@ -6942,7 +7033,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:^1.2.1":
+"@shopify/flash-list@npm:1.2.1, @shopify/flash-list@npm:^1.2.1":
   version: 1.2.1
   resolution: "@shopify/flash-list@npm:1.2.1"
   dependencies:
@@ -7251,6 +7342,18 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: 3f963c443d21ec7973b4e81efcb5c32442762afd2b25990a601463336197fab020fcd44ae9d47fe199e8080558650abfb47e62ee18a32ddb0e43dc1d7124660b
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.infinite-scroll-list@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.infinite-scroll-list@npm:0.0.3"
+  dependencies:
+    "@shopify/flash-list": 1.2.1
+    react: 18.2.0
+    react-native: 0.69.4
+    react-virtuoso: 2.16.6
+  checksum: fd5b30c29173efdbca4128dc65cedbba2fe3d0b0bb1e6b5c50e88812b43f7d0348aa4d5e21cb3c9e5f702bfa0f99cac363ea016e2ad6fe2208dcaed44a0fdd38
   languageName: node
   linkType: hard
 
@@ -7786,6 +7889,7 @@ __metadata:
     "@showtime-xyz/universal.hooks": ^0.0.19
     "@showtime-xyz/universal.icon": ^0.0.34
     "@showtime-xyz/universal.image": ^0.0.22
+    "@showtime-xyz/universal.infinite-scroll-list": ^0.0.3
     "@showtime-xyz/universal.input": ^0.0.27
     "@showtime-xyz/universal.label": ^0.0.23
     "@showtime-xyz/universal.light-box": ^0.0.29
@@ -7847,7 +7951,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~46.0.7
+    expo: ~46.0.8
     expo-app-loading: ~2.1.0
     expo-application: ~4.2.2
     expo-av: 12.0.4
@@ -18610,6 +18714,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-modules-core@npm:0.11.4":
+  version: 0.11.4
+  resolution: "expo-modules-core@npm:0.11.4"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: 0ca8969b3d8b5b181ed8cbbc14cb739d80355405ab22cdcb073253dab30745f174bcbdb781774b1fb91bca958a93892d56c4d160a1d8e792ee449afdc6a27903
+  languageName: node
+  linkType: hard
+
 "expo-navigation-bar@npm:~1.3.0":
   version: 1.3.0
   resolution: "expo-navigation-bar@npm:1.3.0"
@@ -18760,7 +18874,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:46.0.7, expo@npm:~46.0.7":
+"expo@npm:46.0.7":
   version: 46.0.7
   resolution: "expo@npm:46.0.7"
   dependencies:
@@ -18791,6 +18905,40 @@ __metadata:
   bin:
     expo: bin/cli.js
   checksum: 2f8bfb59fdef7bd1fbf2caf90520a747646e73ca8c546ea5e6b02278505beea630311b599e87bd4fbae9a8403221100798d93ed49cd765e748de74d28082640b
+  languageName: node
+  linkType: hard
+
+"expo@npm:~46.0.8":
+  version: 46.0.8
+  resolution: "expo@npm:46.0.8"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/cli": 0.2.10
+    "@expo/vector-icons": ^13.0.0
+    babel-preset-expo: ~9.2.0
+    cross-spawn: ^6.0.5
+    expo-application: ~4.2.2
+    expo-asset: ~8.6.1
+    expo-constants: ~13.2.3
+    expo-error-recovery: ~3.2.0
+    expo-file-system: ~14.1.0
+    expo-font: ~10.2.0
+    expo-keep-awake: ~10.2.0
+    expo-modules-autolinking: 0.10.2
+    expo-modules-core: 0.11.4
+    fbemitter: ^3.0.0
+    getenv: ^1.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    node-fetch: ^2.6.7
+    pretty-format: ^26.5.2
+    uuid: ^3.4.0
+  dependenciesMeta:
+    expo-error-recovery:
+      optional: true
+  bin:
+    expo: bin/cli.js
+  checksum: e8cbafed1ec77703f5e92fc48abbcc45b1cde4b40f298ab6d4038c20946129200951bc53d237f0eea1e9ef57796c876ffafcc462e48bf6f49d94fdfa8731f7df
   languageName: node
   linkType: hard
 
@@ -29772,7 +29920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-virtuoso@npm:^2.16.6":
+"react-virtuoso@npm:2.16.6, react-virtuoso@npm:^2.16.6":
   version: 2.16.6
   resolution: "react-virtuoso@npm:2.16.6"
   dependencies:

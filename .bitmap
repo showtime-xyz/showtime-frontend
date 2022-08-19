@@ -111,6 +111,12 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
+    "infinite-scroll-list": {
+        "scope": "showtime.universal",
+        "version": "0.0.3",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/infinite-scroll-list"
+    },
     "input": {
         "scope": "showtime.universal",
         "version": "0.0.27",
