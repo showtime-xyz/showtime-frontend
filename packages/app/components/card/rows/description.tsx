@@ -1,5 +1,7 @@
 import { View } from "@showtime-xyz/universal.view";
 
+import { removeTags } from "app/utilities";
+
 import { MultiClampText } from "design-system/multi-clamp-text";
 
 type Props = {
@@ -18,7 +20,7 @@ function Description({ descriptionText = "", tw, maxLines = 3 }: Props) {
       <MultiClampText
         tw="text-sm text-gray-600 dark:text-gray-400"
         numberOfLines={maxLines}
-        text={descriptionText}
+        text={removeTags(descriptionText)}
       />
     </View>
   );
