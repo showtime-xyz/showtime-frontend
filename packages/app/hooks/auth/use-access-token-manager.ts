@@ -70,7 +70,7 @@ export function useAccessTokenManager() {
           url: `/v1/jwt/refresh`,
           method: "POST",
           data: {
-            refresh: refreshToken,
+            refresh: refreshTokenStorage.getRefreshToken(),
           },
         });
 
@@ -99,7 +99,7 @@ export function useAccessTokenManager() {
         }`;
       }
     },
-    [refreshToken, setAccessToken, setRefreshToken]
+    [setAccessToken, setRefreshToken]
   );
   //#endregion
 

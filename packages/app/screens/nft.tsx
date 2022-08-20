@@ -42,7 +42,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-function NftScreen({ fallback }: { fallback: any }) {
+function NftScreen({ fallback = {} }: { fallback?: object }) {
   useTrackPageViewed({ name: "NFT" });
   const { colorScheme } = useColorScheme();
   const videoConfig = useMemo(

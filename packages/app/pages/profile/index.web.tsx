@@ -6,7 +6,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { ProfileScreen } from "app/screens/profile";
 
-function ProfileRouter({ fallback }: { fallback: any }) {
+function ProfileRouter({ fallback = {} }: { fallback?: object }) {
   const router = useRouter();
 
   useEffect(() => {

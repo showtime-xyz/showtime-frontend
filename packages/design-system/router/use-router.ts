@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import {
   useNavigation,
   NavigationState,
@@ -17,13 +19,15 @@ export function useRouter() {
   const { dispatch, getState } = useNavigation();
   const solitoRouter = useSolitoRouter();
 
-  return {
-    ...solitoRouter,
-    pop: () => {
-      dispatch(StackActions.pop());
-    },
-    pathname: getPath(getState()),
-    query: [],
-    asPath: getPath(getState()),
-  };
+  return useMemo(() => {
+    return {
+      ...solitoRouter,
+      pop: () => {
+        dispatch(StackActions.pop());
+      },
+      pathname: getPath(getState()),
+      query: [],
+      asPath: getPath(getState()),
+    };
+  }, [getState, solitoRouter, dispatch]);
 }
