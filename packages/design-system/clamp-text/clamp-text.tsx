@@ -5,7 +5,7 @@ import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
 
 import { useClampText } from "./use-clamp-text";
 
-type MultiClampTextProps = {
+export type ClampTextProps = {
   text?: string;
   ellipsis?: string;
   expandButtonWidth?: number;
@@ -13,7 +13,7 @@ type MultiClampTextProps = {
   expandText?: string;
 } & TextProps;
 
-export const MultiClampText = ({
+export const ClampText = ({
   text = "",
   tw,
   numberOfLines = 3,
@@ -21,7 +21,7 @@ export const MultiClampText = ({
   expandButtonWidth = 10,
   foldText = " Less",
   expandText = " More",
-}: MultiClampTextProps) => {
+}: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
   useEffect(() => {
     if (Platform.OS === "android") {
