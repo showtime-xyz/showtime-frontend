@@ -8,6 +8,8 @@ import {
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
+import { TabFlashListScrollView } from "./tab-flash-list-scroll-view";
+
 export type TabInfiniteScrollListProps<T> = Omit<
   InfiniteScrollListProps<T>,
   "renderScrollComponent"
@@ -16,7 +18,21 @@ export type TabInfiniteScrollListProps<T> = Omit<
   renderScrollComponent?: React.ForwardRefExoticComponent<TabScrollViewProps>;
 };
 
-export const TabInfiniteScrollList = InfiniteScrollList as <T>(
+function TabInfiniteScrollListComponent<T>(
+  props: TabInfiniteScrollListProps<T>,
+  ref: React.Ref<FlashList<T>>
+) {
+  return (
+    <InfiniteScrollList
+      {...props}
+      renderScrollComponent={TabFlashListScrollView as any}
+      ref={ref}
+    />
+  );
+}
+export const TabInfiniteScrollList = React.forwardRef(
+  TabInfiniteScrollListComponent
+) as <T>(
   props: TabInfiniteScrollListProps<T> & {
     ref?: React.Ref<FlashList<T>>;
   }

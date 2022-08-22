@@ -120,7 +120,6 @@ export const CreatorsList = forwardRef<
   //       main: contentWidth / NUM_COLUMNS,
   //       reverse: contentWidth / NUM_COLUMNS,
   //     }}
-  //     renderScrollComponent={TabFlashListScrollView}
   //     ListFooterComponent={ListFooterComponent}
   //     index={index}
   //   />

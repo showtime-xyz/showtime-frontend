@@ -11,7 +11,6 @@ import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
-  TabFlashListScrollView,
   TabScrollView,
   TabInfiniteScrollList,
   TabSpinner,
@@ -121,6 +120,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         <TabScrollView
           contentContainerStyle={tw.style("mt-12 items-center")}
           index={index}
+          ref={listRef}
         >
           <EmptyPlaceholder
             title={
@@ -142,6 +142,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         <TabScrollView
           contentContainerStyle={tw.style("mt-12 items-center")}
           index={index}
+          ref={listRef}
         >
           <EmptyPlaceholder title="No results found" hideLoginBtn />
         </TabScrollView>
@@ -168,7 +169,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
               main: contentWidth / numColumns,
               reverse: contentWidth / numColumns,
             }}
-            renderScrollComponent={TabFlashListScrollView}
             ListFooterComponent={ListFooterComponent}
             onEndReached={fetchMore}
             index={index}

@@ -7660,9 +7660,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tab-view@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.2"
+"@showtime-xyz/universal.tab-view@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.3"
   dependencies:
     "@shopify/flash-list": 1.2.1
     "@showtime-xyz/universal.collapsible-tab-view": 0.0.22
@@ -7683,7 +7683,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 0cef66dd29799a2b75c2be6c00c61f6c7e7af8546e86c60b5fef0779dbc1c3ac1bf67e0c4f12e7b0b275a1a68a41dc7395e65ffb84a9217cf3184a915acc7b36
+  checksum: 1c794f3303c9cbfafc1cca316bd74470eecbc409269ce293b4c26ac93472c877d43ef9adda87e93103e3a532c7e819a390db3013544117ce365ebb224d7d6f83
   languageName: node
   linkType: hard
 
@@ -7895,7 +7895,7 @@ __metadata:
     "@showtime-xyz/universal.snackbar": ^0.0.56
     "@showtime-xyz/universal.spinner": ^0.0.31
     "@showtime-xyz/universal.switch": ^0.0.33
-    "@showtime-xyz/universal.tab-view": ^0.0.2
+    "@showtime-xyz/universal.tab-view": ^0.0.3
     "@showtime-xyz/universal.tailwind": ^0.0.26
     "@showtime-xyz/universal.text": ^0.0.28
     "@showtime-xyz/universal.text-input": ^0.0.28
