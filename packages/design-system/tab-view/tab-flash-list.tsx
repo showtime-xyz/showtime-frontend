@@ -1,8 +1,8 @@
 import React from "react";
+import { Platform } from "react-native";
 
 import { FlashList } from "@shopify/flash-list";
 
-import type { TabScrollViewProps } from "@showtime-xyz/universal.collapsible-tab-view";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
@@ -15,7 +15,6 @@ export type TabInfiniteScrollListProps<T> = Omit<
   "renderScrollComponent"
 > & {
   index: number;
-  renderScrollComponent?: React.ForwardRefExoticComponent<TabScrollViewProps>;
 };
 
 function TabInfiniteScrollListComponent<T>(
@@ -25,7 +24,10 @@ function TabInfiniteScrollListComponent<T>(
   return (
     <InfiniteScrollList
       {...props}
-      renderScrollComponent={TabFlashListScrollView as any}
+      {...Platform.select({
+        web: {},
+        default: { renderScrollComponent: TabFlashListScrollView as any },
+      })}
       ref={ref}
     />
   );
