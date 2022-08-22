@@ -1,19 +1,31 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef } from "react";
 import { UIManager, Platform } from "react-native";
 
-import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
-
-import { removeTags } from "app/utilities";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useClampText } from "./use-clamp-text";
 
-type Props = {
+export type ClampTextProps = {
   text?: string;
-} & TextProps;
+  ellipsis?: string;
+  expandButtonWidth?: number;
+  foldText?: string;
+  expandText?: string;
+  maxLines?: number;
+  tw?: string;
+};
 
-export const MultiClampText = ({ text = "", tw, numberOfLines = 3 }: Props) => {
+export const ClampText = ({
+  text = "",
+  tw,
+  maxLines = 2,
+  ellipsis = "...",
+  expandButtonWidth = 10,
+  foldText = " Less",
+  expandText = " More",
+}: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
-  const description = useMemo(() => (text ? removeTags(text) : ""), [text]);
+
   useEffect(() => {
     if (Platform.OS === "android") {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -37,8 +49,10 @@ export const MultiClampText = ({ text = "", tw, numberOfLines = 3 }: Props) => {
     onTextLayout,
   } = useClampText({
     element: textRef.current as Element,
-    rows: numberOfLines,
-    text: description,
+    rows: maxLines,
+    text,
+    expandButtonWidth,
+    ellipsis,
   });
 
   if (!text || text === "") {
@@ -53,7 +67,7 @@ export const MultiClampText = ({ text = "", tw, numberOfLines = 3 }: Props) => {
           onPress={showMore ? onShowMore : onShowLess}
           tw="text-sm font-bold text-gray-900 dark:text-white"
         >
-          {showMore ? " More" : " Less"}
+          {showMore ? expandText : foldText}
         </Text>
       )}
     </Text>

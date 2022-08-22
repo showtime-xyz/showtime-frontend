@@ -16,11 +16,6 @@ export function SceneComponent<P extends ScrollViewProps>({
   style,
   ...restProps
 }: SceneProps<P>) {
-  if (onScroll !== undefined) {
-    console.warn(
-      `Don't support the custom onScroll, please use the 'useHeaderTabContext' hooks!`
-    );
-  }
   const { updateSceneInfo } = useHeaderTabContext();
   const scollViewRef =
     useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
@@ -37,12 +32,12 @@ export function SceneComponent<P extends ScrollViewProps>({
   }, [scollViewRef, index, scrollY, updateSceneInfo]);
 
   return (
-    //@ts-ignore
     <ContainerView
       ref={scollViewRef}
       scrollEventThrottle={16}
       directionalLockEnabled
       style={[styles.container, style]}
+      onScroll={onScroll}
       contentContainerStyle={[contentContainerStyle]}
       bounces={false}
       {...restProps}

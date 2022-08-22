@@ -6,18 +6,16 @@ import React, {
   MutableRefObject,
 } from "react";
 
-import { FlashListProps, ViewToken } from "@shopify/flash-list";
+import type { FlashListProps, ViewToken } from "@shopify/flash-list";
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   GridListProps,
-  GridComponents,
   GridItem,
   VirtuosoHandle,
   VirtuosoGridProps,
   VirtuosoGridHandle,
+  GridComponents,
 } from "react-virtuoso";
-
-import { isReactComponent } from "app/utilities";
 
 import type { InfiniteScrollListProps } from ".";
 
@@ -92,7 +90,7 @@ const ViewabilityTracker = ({
   return <div ref={ref}>{children}</div>;
 };
 
-export function VirtuosoList<T>(
+export function VirtuosoListComponent<T>(
   {
     renderItem,
     data,
@@ -128,11 +126,7 @@ export function VirtuosoList<T>(
             onViewableItemsChanged={onViewableItemsChanged}
           >
             {element}
-            {index < data.length - 1 &&
-              ItemSeparatorComponent &&
-              isReactComponent(ItemSeparatorComponent) && (
-                <ItemSeparatorComponent />
-              )}
+            {index < data.length - 1 && renderComponent(ItemSeparatorComponent)}
           </ViewabilityTracker>
         );
       }
@@ -142,7 +136,7 @@ export function VirtuosoList<T>(
     [data, ItemSeparatorComponent, renderItem, onViewableItemsChanged]
   );
 
-  const gridComponents = useMemo<GridComponents<T>>(
+  const gridComponents = useMemo(
     () => ({
       Item: (props: ItemContainerProps) => (
         <ItemContainer
@@ -182,7 +176,7 @@ export function VirtuosoList<T>(
         <VirtuosoGrid
           useWindowScroll={useWindowScroll}
           totalCount={data?.length || 0}
-          components={gridComponents}
+          components={gridComponents as GridComponents<T>}
           endReached={onEndReached}
           itemContent={renderItemContent}
           overscan={overscan}
@@ -194,7 +188,7 @@ export function VirtuosoList<T>(
     </>
   );
 }
-export const InfiniteScrollList = React.forwardRef(VirtuosoList as any);
+export const InfiniteScrollList = React.forwardRef(VirtuosoListComponent);
 
 const ListContainer = React.forwardRef(function ListContainer(
   props: GridListProps,

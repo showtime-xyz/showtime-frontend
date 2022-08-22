@@ -11,8 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useHeaderTabContext } from "./context";
-import { useSharedScrollableRef } from "./hooks/use-shared-scrollable-ref";
-import { useSyncInitialPosition } from "./hooks/use-sync-initial-position";
+import { useSharedScrollableRef, useSyncInitialPosition } from "./hooks";
 import type { SceneProps } from "./types";
 
 export function SceneComponent<P extends object>({
@@ -25,6 +24,13 @@ export function SceneComponent<P extends object>({
   forwardedRef,
   ...restProps
 }: SceneProps<P>) {
+  //#region refs
+  const nativeGestureRef = useRef(Gesture.Native());
+  const scollViewRef =
+    useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
+  //#endregion
+
+  //#region hooks
   const {
     shareAnimatedValue,
     tabbarHeight,
@@ -35,15 +41,17 @@ export function SceneComponent<P extends object>({
     updateSceneInfo,
     scrollStickyHeaderHeight,
   } = useHeaderTabContext();
-  const scollViewRef =
-    useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
+  //#endregion
 
-  const nativeGestureRef = useRef(Gesture.Native());
+  //#region animations/style
   const scrollY = useSharedValue(0);
-
   const { opacityValue, initialPosition } =
     useSyncInitialPosition(scollViewRef);
-
+  const sceneStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(opacityValue.value),
+    };
+  }, [opacityValue]);
   const calcHeight = useMemo(() => {
     return tabbarHeight + headerHeight;
   }, [tabbarHeight, headerHeight]);
@@ -51,7 +59,9 @@ export function SceneComponent<P extends object>({
   const scrollViewPaddingTop = useMemo(() => {
     return calcHeight + scrollStickyHeaderHeight;
   }, [calcHeight, scrollStickyHeaderHeight]);
+  //#endregion
 
+  //#region methods
   const onScrollAnimateEvent = useAnimatedScrollHandler({
     onScroll: (e) => {
       const moveY = Math.max(e.contentOffset.y, 0);
@@ -63,21 +73,6 @@ export function SceneComponent<P extends object>({
       }
     },
   });
-
-  useEffect(() => {
-    refHasChanged?.(nativeGestureRef.current);
-  }, [refHasChanged]);
-
-  useEffect(() => {
-    if (scollViewRef && scollViewRef.current) {
-      updateSceneInfo({
-        scrollRef: scollViewRef,
-        index,
-        scrollY,
-      });
-    }
-  }, [scollViewRef, index, scrollY, updateSceneInfo]);
-
   // adjust the scene size
   const _onContentSizeChange = useCallback(
     (contentWidth: number, contentHeight: number) => {
@@ -88,30 +83,36 @@ export function SceneComponent<P extends object>({
     },
     [onContentSizeChange, initialPosition, expectHeight, shareAnimatedValue]
   );
+  //#endregion
 
-  const sceneStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(opacityValue.value),
-    };
-  }, [opacityValue]);
+  useEffect(() => {
+    refHasChanged?.(nativeGestureRef.current);
+  }, [refHasChanged]);
+  useEffect(() => {
+    if (scollViewRef && scollViewRef.current) {
+      updateSceneInfo({
+        scrollRef: scollViewRef,
+        index,
+        scrollY,
+      });
+    }
+  }, [scollViewRef, index, scrollY, updateSceneInfo]);
 
   return (
     <Animated.View style={[styles.container, sceneStyle]}>
       <GestureDetector gesture={nativeGestureRef.current}>
-        {/* @ts-ignore */}
         <ContainerView
           {...restProps}
           ref={scollViewRef}
           scrollEventThrottle={16}
           directionalLockEnabled
-          // @ts-ignore
-          contentContainerStyle={[
+          contentContainerStyle={StyleSheet.flatten([
+            contentContainerStyle,
             {
               paddingTop: scrollViewPaddingTop,
               minHeight: expectHeight,
             },
-            contentContainerStyle,
-          ]}
+          ])}
           onContentSizeChange={_onContentSizeChange}
           onScroll={onScrollAnimateEvent}
           scrollIndicatorInsets={{

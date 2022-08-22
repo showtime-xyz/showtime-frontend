@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { View, ViewProps, StyleSheet } from "react-native";
 
 import {
-  FlashList as FlashListCore,
+  FlashList,
   FlashListProps,
   ListRenderItemInfo,
 } from "@shopify/flash-list";
@@ -12,12 +12,13 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> &
   Pick<VirtuosoGridProps, "overscan" | "useWindowScroll"> & {
     index?: number;
     /**
-     * grid layout item view props, it only valid if numColumns > 1
+     * Grid layout item view props, only valid when numColumns > 1
+     * @default undefined
      */
     gridItemProps?: ViewProps | null;
   };
 
-export function FlashList<T>(
+function FlashListComponent<T>(
   {
     style,
     renderItem: propRenderItem,
@@ -41,7 +42,7 @@ export function FlashList<T>(
   if (style) {
     return (
       <View style={StyleSheet.flatten([{ height: "100%" }, style])}>
-        <FlashListCore
+        <FlashList
           {...rest}
           numColumns={numColumns}
           ref={ref}
@@ -51,7 +52,7 @@ export function FlashList<T>(
     );
   } else {
     return (
-      <FlashListCore
+      <FlashList
         {...rest}
         numColumns={numColumns}
         renderItem={renderItem}
@@ -61,8 +62,8 @@ export function FlashList<T>(
   }
 }
 
-export const InfiniteScrollList = React.forwardRef(FlashList) as <T>(
+export const InfiniteScrollList = React.forwardRef(FlashListComponent) as <T>(
   props: InfiniteScrollListProps<T> & {
-    ref?: React.Ref<FlashListCore<T>>;
+    ref?: React.Ref<FlashList<T>>;
   }
 ) => React.ReactElement;

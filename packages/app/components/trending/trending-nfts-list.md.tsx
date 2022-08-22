@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -10,7 +11,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { Card } from "app/components/card";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";

@@ -9,6 +9,7 @@ const AnimatePageView = Animated.createAnimatedComponent(RNSectionList);
 export type TabSectionListProps<T, SectionT> = SectionListProps<T, SectionT> & {
   index: number;
 };
+
 function SectionList<T, SectionT>(
   props: TabSectionListProps<T, SectionT>,
   ref: any

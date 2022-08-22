@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 
+import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -7,8 +8,6 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { TRENDING_ROUTE } from "app/components/trending";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { createParam } from "app/navigation/use-param";
-
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 
 import { TrendingCreatorsList } from "./trending-creators-list.md";
 import { TrendingNFTSList } from "./trending-nfts-list.md";

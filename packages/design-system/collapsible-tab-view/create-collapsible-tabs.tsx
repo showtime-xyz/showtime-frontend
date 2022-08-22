@@ -11,7 +11,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view-next/src";
+} from "react-native-tab-view-next";
 
 import { GestureContainer, GestureContainerRef } from "./gesture-container";
 import type {
@@ -30,7 +30,7 @@ export type ForwardTabViewProps<T extends Route> = HeaderTabViewProps<T> & {
   Component: React.PropsWithRef<typeof TabView>;
 };
 
-export function createHeaderTabsComponent<T extends Route>(
+export function createCollapsibleTabsComponent<T extends Route>(
   Component: React.PropsWithRef<typeof TabView>
 ) {
   return React.forwardRef<HeaderTabViewRef, HeaderTabViewProps<T>>(
@@ -64,7 +64,7 @@ function CollapsibleHeaderTabView<T extends Route>({
     }),
     []
   );
-  const _renderTabBar = useCallback(
+  const renderTabBar = useCallback(
     (
       tabbarProps: SceneRendererProps & {
         navigationState: NavigationState<T>;
@@ -89,7 +89,7 @@ function CollapsibleHeaderTabView<T extends Route>({
           tabbarProps: SceneRendererProps & {
             navigationState: NavigationState<T>;
           }
-        ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
+        ) => e.renderTabBarContainer(renderTabBar(tabbarProps))}
         renderScene={(props: any) =>
           e.renderSceneHeader(renderScene(props), props)
         }

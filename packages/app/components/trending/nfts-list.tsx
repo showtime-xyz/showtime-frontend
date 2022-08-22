@@ -3,6 +3,7 @@ import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
@@ -10,9 +11,6 @@ import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
-
-import { TabFlashListScrollView } from "design-system/tab-view";
-import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
 
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 
@@ -66,7 +64,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
           main: contentWidth / NUM_COLUMNS,
           reverse: contentWidth / NUM_COLUMNS,
         }}
-        renderScrollComponent={TabFlashListScrollView}
         ListFooterComponent={ListFooterComponent}
         index={index}
       />

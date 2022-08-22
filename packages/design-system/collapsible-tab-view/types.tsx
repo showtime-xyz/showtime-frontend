@@ -4,8 +4,10 @@ import type { ScrollViewProps } from "react-native";
 
 import type { NativeGesture } from "react-native-gesture-handler";
 import type Animated from "react-native-reanimated";
-import { TabViewProps } from "react-native-tab-view-next";
-import type { Route as TabViewRoute } from "react-native-tab-view-next/src";
+import type {
+  TabViewProps,
+  Route as TabViewRoute,
+} from "react-native-tab-view-next";
 
 export type Route = TabViewRoute & {
   index: number;

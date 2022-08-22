@@ -10,6 +10,7 @@ import {
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -24,7 +25,6 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,

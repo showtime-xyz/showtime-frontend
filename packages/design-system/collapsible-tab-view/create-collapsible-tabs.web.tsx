@@ -13,7 +13,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view-next/src";
+} from "react-native-tab-view-next";
 import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
@@ -38,10 +38,20 @@ export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
   CollapsibleHeaderProps<T>;
 
-export function createHeaderTabsComponent() {
+export function createCollapsibleTabsComponent() {
   return React.forwardRef(CollapsibleHeaderTabView);
 }
+enum StatusCode {
+  /** The default status, located at the original position. */
+  STATUS_ORIGINAL = 0,
 
+  /**
+   * The released status, located at somewhere on document, but not
+   * default one.
+   */
+  STATUS_RELEASED = 1,
+  STATUS_FIXED = 2,
+}
 function CollapsibleHeaderTabView<T extends Route>(
   {
     renderTabBar,
@@ -66,8 +76,8 @@ function CollapsibleHeaderTabView<T extends Route>(
 
   // layout
   const [tabbarHeight, setTabbarHeight] = useState(initTabbarHeight);
-  const [stickyState, setStickyState] = useState<Sticky.StatusCode>(
-    Sticky.STATUS_ORIGINAL
+  const [stickyState, setStickyState] = useState<StatusCode>(
+    StatusCode.STATUS_ORIGINAL
   );
 
   const containeRef = useRef(null);
@@ -118,7 +128,7 @@ function CollapsibleHeaderTabView<T extends Route>(
     );
   };
   const onStickyStateChange = useCallback(
-    ({ status }: Sticky.Status) => setStickyState(status),
+    ({ status }: { status: StatusCode }) => setStickyState(status),
     []
   );
 
@@ -131,7 +141,7 @@ function CollapsibleHeaderTabView<T extends Route>(
           top={minHeaderHeight}
         >
           {React.isValidElement(insertStickyTabBarElement) &&
-            stickyState === Sticky.STATUS_FIXED &&
+            stickyState === StatusCode.STATUS_FIXED &&
             insertStickyTabBarElement}
           <View onLayout={tabbarOnLayout}>{children}</View>
         </Sticky>

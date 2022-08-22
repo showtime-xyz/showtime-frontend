@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { ModalFooter } from "@showtime-xyz/universal.modal";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
@@ -12,7 +13,6 @@ import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { useUser } from "app/hooks/use-user";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
