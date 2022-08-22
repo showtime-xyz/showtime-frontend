@@ -1,4 +1,3 @@
-import { createContext, useContext } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
@@ -10,7 +9,7 @@ export const MuteButton = ({
   muted,
   onPress,
 }: {
-  muted: boolean;
+  muted?: boolean;
   onPress: () => void;
 }) => {
   return (
@@ -43,25 +42,3 @@ const muteButtonStyle = StyleSheet.create({
     padding: 4,
   },
 });
-
-const MuteButtonOffsetContext = createContext({
-  bottomOffset: 10,
-});
-
-export const MuteButtonOffsetProvider = ({
-  bottomOffset,
-  children,
-}: {
-  bottomOffset: number;
-  children: any;
-}) => {
-  return (
-    <MuteButtonOffsetContext.Provider value={{ bottomOffset }}>
-      {children}
-    </MuteButtonOffsetContext.Provider>
-  );
-};
-
-export const useMuteButtonBottomOffset = () => {
-  return useContext(MuteButtonOffsetContext).bottomOffset;
-};

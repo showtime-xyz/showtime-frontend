@@ -27,12 +27,13 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
-import { MuteButtonOffsetProvider } from "app/components/mute-button/mute-button";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
 import { useNavigation } from "app/lib/react-navigation/native";
+import { useMuted } from "app/providers/mute-provider";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -65,6 +66,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const maxContentHeight = windowHeight - bottomHeight;
 
@@ -167,11 +169,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
   }
 
-  const mediaEndY =
-    (itemHeight - bottomPadding - mediaHeight) / 2 + mediaHeight;
-  const detailStartY = itemHeight - bottomMargin - detailHeight;
-  const muteButtonOffsetY = mediaEndY - detailStartY;
-
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View tw="w-full" style={{ height: itemHeight }}>
@@ -215,26 +212,20 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               contentStyle,
             ]}
           >
-            <MuteButtonOffsetProvider
-              bottomOffset={
-                !isNaN(muteButtonOffsetY) ? muteButtonOffsetY + 10 : 0
-              }
-            >
-              <Media
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: windowWidth,
-                }}
-                resizeMode={Platform.select({
-                  web: "contain",
-                  default: "cover",
-                })}
-                onPinchStart={hideHeader}
-                onPinchEnd={showHeader}
-              />
-            </MuteButtonOffsetProvider>
+            <Media
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              resizeMode={Platform.select({
+                web: "contain",
+                default: "cover",
+              })}
+              onPinchStart={hideHeader}
+              onPinchEnd={showHeader}
+            />
           </Animated.View>
         </FeedItemTapGesture>
 
@@ -253,6 +244,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             setDetailHeight(height);
           }}
         >
+          <FeedMutedButton nft={nft} />
+
           <BlurView
             tint={tint}
             intensity={100}
@@ -273,3 +266,22 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   );
 });
 FeedItem.displayName = "FeedItem";
+
+const FeedMutedButton = ({ nft }: { nft: NFT }) => {
+  const [muted, setMuted] = useMuted();
+
+  if (Platform.OS !== "web" && nft?.mime_type?.startsWith("video")) {
+    return (
+      <View tw="z-9 absolute top-[-40px] right-4">
+        <MuteButton
+          onPress={() => {
+            setMuted(!muted);
+          }}
+          muted={muted}
+        />
+      </View>
+    );
+  }
+
+  return null;
+};
