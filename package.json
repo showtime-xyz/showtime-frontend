@@ -129,5 +129,8 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@showtime-xyz/universal.infinite-scroll-list": "^0.0.17"
+  }
 }

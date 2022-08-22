@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { UIManager, Platform } from "react-native";
 
-import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { useClampText } from "./use-clamp-text";
 
@@ -11,18 +11,21 @@ export type ClampTextProps = {
   expandButtonWidth?: number;
   foldText?: string;
   expandText?: string;
-} & TextProps;
+  maxLines?: number;
+  tw?: string;
+};
 
 export const ClampText = ({
   text = "",
   tw,
-  numberOfLines = 3,
+  maxLines = 2,
   ellipsis = "...",
   expandButtonWidth = 10,
   foldText = " Less",
   expandText = " More",
 }: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
+
   useEffect(() => {
     if (Platform.OS === "android") {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -46,7 +49,7 @@ export const ClampText = ({
     onTextLayout,
   } = useClampText({
     element: textRef.current as Element,
-    rows: numberOfLines,
+    rows: maxLines,
     text,
     expandButtonWidth,
     ellipsis,

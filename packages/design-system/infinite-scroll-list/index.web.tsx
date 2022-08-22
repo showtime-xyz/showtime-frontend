@@ -10,11 +10,11 @@ import type { FlashListProps, ViewToken } from "@shopify/flash-list";
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   GridListProps,
-  GridComponents,
   GridItem,
   VirtuosoHandle,
   VirtuosoGridProps,
   VirtuosoGridHandle,
+  GridComponents,
 } from "react-virtuoso";
 
 import type { InfiniteScrollListProps } from ".";
@@ -136,7 +136,7 @@ export function VirtuosoListComponent<T>(
     [data, ItemSeparatorComponent, renderItem, onViewableItemsChanged]
   );
 
-  const gridComponents = useMemo<GridComponents<T>>(
+  const gridComponents = useMemo(
     () => ({
       Item: (props: ItemContainerProps) => (
         <ItemContainer
@@ -176,7 +176,7 @@ export function VirtuosoListComponent<T>(
         <VirtuosoGrid
           useWindowScroll={useWindowScroll}
           totalCount={data?.length || 0}
-          components={gridComponents}
+          components={gridComponents as GridComponents<T>}
           endReached={onEndReached}
           itemContent={renderItemContent}
           overscan={overscan}
