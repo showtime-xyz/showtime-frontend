@@ -59,7 +59,7 @@
     },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.22",
+        "version": "0.0.23",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/collapsible-tab-view"
     },
@@ -251,7 +251,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
