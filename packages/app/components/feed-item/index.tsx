@@ -66,7 +66,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
-  const [muted, setMuted] = useMuted();
 
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const maxContentHeight = windowHeight - bottomHeight;
@@ -245,16 +244,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             setDetailHeight(height);
           }}
         >
-          {Platform.OS !== "web" ? (
-            <View tw="z-9 absolute top-[-40px] right-4">
-              <MuteButton
-                onPress={() => {
-                  setMuted(!muted);
-                }}
-                muted={muted}
-              />
-            </View>
-          ) : null}
+          <FeedMutedButton nft={nft} />
 
           <BlurView
             tint={tint}
@@ -276,3 +266,22 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   );
 });
 FeedItem.displayName = "FeedItem";
+
+const FeedMutedButton = ({ nft }: { nft: NFT }) => {
+  const [muted, setMuted] = useMuted();
+
+  if (Platform.OS !== "web" && nft?.mime_type?.startsWith("video")) {
+    return (
+      <View tw="z-9 absolute top-[-40px] right-4">
+        <MuteButton
+          onPress={() => {
+            setMuted(!muted);
+          }}
+          muted={muted}
+        />
+      </View>
+    );
+  }
+
+  return null;
+};
