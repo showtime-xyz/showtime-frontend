@@ -7,6 +7,7 @@ import { Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -29,7 +30,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
 
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";

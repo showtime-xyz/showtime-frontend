@@ -1,8 +1,8 @@
 import { forwardRef, Suspense, useContext, useMemo } from "react";
 
-import { ErrorBoundary } from "app/components/error-boundary";
+import { TabSpinner } from "@showtime-xyz/universal.tab-view";
 
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
+import { ErrorBoundary } from "app/components/error-boundary";
 
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { TrendingContext } from "./context";

@@ -2,19 +2,20 @@
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
-import { SceneRendererProps } from "react-native-tab-view-next/src";
-
+import { Haptics } from "@showtime-xyz/universal.haptics";
 import { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
+import {
+  SceneRendererProps,
+  HeaderTabView,
+  Route,
+} from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
-import { Haptics } from "app/lib/haptics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-
-import { HeaderTabView, Route } from "design-system/tab-view/index";
 
 import { TrendingContext } from "./context";
 import { TabListContainer, TrendingTabListRef } from "./tab-list";

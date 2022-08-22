@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 
 import { Meta } from "@storybook/react";
 
-// import { Haptics } from "app/lib/haptics";
 import { SegmentedControl } from "./index";
 
 export default {
@@ -15,7 +14,6 @@ export const Primary: React.VFC<{}> = () => {
 
   const handleTabChange = useCallback(
     (index: number) => {
-      // Haptics.impactAsync();
       setSelected(index);
     },
     [setSelected]

@@ -10,6 +10,12 @@ import { Platform } from "react-native";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import {
+  TabFlashListScrollView,
+  TabScrollView,
+  TabInfiniteScrollList,
+  TabSpinner,
+} from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -22,9 +28,6 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 
-import { TabFlashListScrollView, TabScrollView } from "design-system/tab-view";
-import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
