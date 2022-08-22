@@ -108,7 +108,10 @@ export default {
   extra: {
     STAGE: STAGE,
     eas: {
-      projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
+      projectId:
+        STAGE === "development"
+          ? "e77d5b68-bb27-45da-aa5c-96c1fdbf6706"
+          : "45cbf5d5-24fe-4aa6-9580-acf540651abd",
     },
   },
   plugins: [
