@@ -10,7 +10,7 @@ export const MuteButton = ({
   muted,
   onPress,
 }: {
-  muted: boolean;
+  muted?: boolean;
   onPress: () => void;
 }) => {
   return (

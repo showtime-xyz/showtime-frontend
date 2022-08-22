@@ -1,10 +1,5 @@
 import { ComponentProps, useRef, useState } from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  ImageSourcePropType,
-  View,
-} from "react-native";
+import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av/src";
 import { BlurView, BlurTint } from "expo-blur";
@@ -14,6 +9,7 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { MuteButton } from "app/components/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
@@ -80,13 +76,7 @@ export function Video({
             videoStyle={tailwind.style("relative")}
             {...props}
           />
-          <View
-            style={{
-              bottom: 10,
-              right: 10,
-              position: "absolute",
-            }}
-          >
+          <View tw="absolute bottom-12 right-5 md:bottom-2">
             <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
           </View>
         </ImageBackground>
