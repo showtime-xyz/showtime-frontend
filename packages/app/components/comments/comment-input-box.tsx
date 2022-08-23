@@ -4,8 +4,9 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  useEffect,
 } from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
@@ -53,6 +54,13 @@ export const CommentInputBox = forwardRef<
   const context = useBottomSheetInternal(true);
   const { user } = useUser();
   //#endregion
+
+  useEffect(() => {
+    // auto focus on comment modal open on native
+    if (Platform.OS !== "web") {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   //#region callbacks
   const handleOnSubmitComment = useCallback(
