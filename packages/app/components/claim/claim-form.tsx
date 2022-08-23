@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Check } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -14,6 +15,7 @@ import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useComments } from "app/hooks/api/use-comments";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -46,12 +48,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const navigateToLogin = useNavigateToLogin();
   const scrollViewRef = useRef<RNScrollView>(null);
   const { isMagic } = useWeb3();
+  const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
+
+  const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
     address: nft?.data.item.creator_address,
@@ -71,6 +76,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
       follow(nft?.data.item.creator_id);
     }
 
+    if (comment.current.trim().length > 0) {
+      newComment(comment.current);
+    }
     await claimNFT();
 
     mutate();
@@ -250,6 +258,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}
             </Text>
           </View>
+
+          <Fieldset
+            tw="mt-4 flex-1"
+            label="Add a comment (optional)"
+            placeholder="wow, this is so cool!"
+            onChangeText={(v) => (comment.current = v)}
+          />
           <View tw="mt-4">
             <Button
               size="regular"
