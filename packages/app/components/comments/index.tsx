@@ -115,6 +115,7 @@ export function Comments({ nft }: { nft: NFT }) {
       <EmptyPlaceholder
         text="Be the first to add a comment!"
         title="💬 No comments yet..."
+        titleTw="pt-1"
         tw="flex-1 items-center justify-center"
       />
     ),

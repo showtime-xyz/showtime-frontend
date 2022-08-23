@@ -14,6 +14,7 @@ type EmptyPlaceholderProps = {
   title?: string | JSX.Element;
   text?: string | JSX.Element;
   hideLoginBtn?: boolean;
+  titleTw?: string;
   tw?: string;
 };
 
@@ -21,6 +22,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   title = "",
   text = "",
   tw = "",
+  titleTw = "",
   hideLoginBtn,
 }) => {
   const { isAuthenticated } = useUser();
@@ -30,7 +32,9 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
 
   return (
     <View tw={`items-center justify-center pt-4 ${tw}`}>
-      <Text tw="text-lg font-extrabold text-gray-900 dark:text-gray-100">
+      <Text
+        tw={`text-lg font-extrabold text-gray-900 dark:text-gray-100 ${titleTw}`}
+      >
         {title}
       </Text>
       {Boolean(text) && (
