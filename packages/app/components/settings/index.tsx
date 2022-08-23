@@ -256,11 +256,12 @@ const SettingsTabs = () => {
       }
     },
     [
-      accountSettings,
-      emailWallets,
-      router,
       wallets,
+      emailWallets,
+      accountSettings,
       pushNotificationsPreferences,
+      isMdWidth,
+      router,
     ]
   );
 
