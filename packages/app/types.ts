@@ -191,4 +191,5 @@ export type IEdition = {
   name: string;
   owner_address: string;
   symbol: string;
+  is_gated?: boolean;
 };
