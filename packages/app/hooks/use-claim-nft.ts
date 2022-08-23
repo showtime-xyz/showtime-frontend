@@ -213,7 +213,7 @@ export const useClaimNFT = (edition?: IEdition) => {
           if (edition?.is_gated) {
             await gatedClaimFlow();
           } else {
-            await oldSignatureFlow();
+            await oldSignaureClaimFlow();
           }
         }
       } else {
@@ -248,7 +248,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     }
   };
 
-  const oldSignatureFlow = async () => {
+  const oldSignaureClaimFlow = async () => {
     if (edition?.minter_address && userAddress) {
       let forwardRequest: any;
       if (forwarderRequestCached.current) {
