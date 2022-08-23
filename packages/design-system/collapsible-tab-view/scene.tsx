@@ -64,8 +64,8 @@ export function SceneComponent<P extends object>({
   //#region methods
   const onScrollAnimateEvent = useAnimatedScrollHandler({
     onScroll: (e) => {
-      const moveY = Math.max(e.contentOffset.y, 0);
-      scrollY.value = Math.max(moveY, 0);
+      const moveY = e.contentOffset.y;
+      scrollY.value = moveY;
       if (curIndexValue.value !== index) return;
       shareAnimatedValue.value = moveY;
       if (propOnScroll) {
@@ -119,8 +119,7 @@ export function SceneComponent<P extends object>({
             top: headerHeight,
             ...scrollIndicatorInsets,
           }}
-          bounces={false}
-          {...restProps}
+          // bounces={false}
         />
       </GestureDetector>
     </Animated.View>

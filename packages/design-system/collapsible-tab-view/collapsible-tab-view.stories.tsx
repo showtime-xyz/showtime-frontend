@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Platform, StatusBar, Text, View } from "react-native";
+import { Platform, ScrollView, StatusBar, Text, View } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
@@ -93,5 +93,19 @@ export const Basic: React.FC = () => {
         default: undefined,
       })}
     />
+  );
+};
+
+export const TestScrollView = () => {
+  return (
+    <View style={{ flex: 1 }}>
+      <View pointerEvents="none" style={{ height: 200 }} />
+      <ScrollView
+        style={{ backgroundColor: "#999" }}
+        // contentContainerStyle={{ paddingTop: 200 }}
+      >
+        <View style={{ height: 2000, backgroundColor: "red" }}></View>
+      </ScrollView>
+    </View>
   );
 };
