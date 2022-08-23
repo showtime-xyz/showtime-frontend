@@ -1,6 +1,4 @@
-import { useReducer, useEffect, useRef, useCallback } from "react";
-
-import { ethers } from "ethers";
+import { useReducer, useRef, useCallback } from "react";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -15,33 +13,9 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
-import { ledgerWalletHack } from "app/utilities";
 import { delay } from "app/utilities";
 
 const minterABI = ["function mintEdition(address _to)"];
-
-const getForwarderRequest = async ({
-  minterAddress,
-  userAddress,
-}: {
-  minterAddress: string;
-  userAddress: string;
-}) => {
-  const targetInterface = new ethers.utils.Interface(minterABI);
-  const callData = targetInterface.encodeFunctionData("mintEdition", [
-    userAddress,
-  ]);
-  const res = await axios({
-    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-      callData
-    )}&to_address=${encodeURIComponent(
-      minterAddress
-    )}&from_address=${encodeURIComponent(userAddress)}`,
-    method: "GET",
-  });
-
-  return res;
-};
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
@@ -114,37 +88,12 @@ export const useClaimNFT = (edition?: IEdition) => {
   const { connect } = useWallet();
   const { userAddress } = useCurrentUserAddress();
 
-  // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
-    dispatch({ type: "signaturePrompt" });
-
-    const signature = await signTypedData(
-      forwardRequest.domain,
-      forwardRequest.types,
-      forwardRequest.value
-    );
-
-    dispatch({ type: "signatureSuccess" });
-
-    const newSignature = ledgerWalletHack(signature);
-    Logger.log("Signature", { signature, newSignature });
-    Logger.log("Submitting tx...");
-
-    const relayedTx = await axios({
-      url: `/v1/relayer/forward-request`,
-      method: "POST",
-      data: {
-        forward_request: forwardRequest,
-        signature: newSignature,
-        from_address: userAddress,
-      },
-    });
-
+  const pollTransaction = async (transactionId: any) => {
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
       Logger.log(`Checking tx... (${attempts + 1} / 20)`);
       const response = await axios({
-        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
+        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${transactionId}`,
         method: "GET",
       });
       Logger.log(response);
@@ -179,50 +128,26 @@ export const useClaimNFT = (edition?: IEdition) => {
 
   const forwarderRequestCached = useRef<any>();
 
-  useEffect(() => {
-    let timeout: any;
-    async function initialiseForwardRequest() {
-      if (edition?.minter_address && userAddress) {
-        forwarderRequestCached.current = await getForwarderRequest({
-          userAddress,
-          minterAddress: edition?.minter_address,
-        });
-      }
-
-      // clear cached forwarderRequest because nonce might have changed!
-      timeout = setTimeout(() => {
-        forwarderRequestCached.current = null;
-      }, 20000);
-    }
-    initialiseForwardRequest();
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [edition?.minter_address, userAddress]);
-
   const claimNFT = async () => {
     try {
       if (userAddress) {
-        if (edition?.minter_address) {
+        if (edition?.contract_address) {
           dispatch({ type: "loading" });
 
-          let forwardRequest: any;
-          if (forwarderRequestCached.current) {
-            forwardRequest = forwarderRequestCached.current;
-          } else {
-            forwardRequest = await getForwarderRequest({
-              minterAddress: edition?.minter_address,
-              userAddress,
-            });
-          }
+          const relayerResponse = await axios({
+            url:
+              "/v1/creator-airdrops/mint-gated-edition/" +
+              edition.contract_address,
+            method: "POST",
+          });
 
-          Logger.log("Signing... ", forwardRequest);
+          console.log("relayer response ", relayerResponse);
 
-          await signTransaction({ forwardRequest });
+          await pollTransaction(relayerResponse.relayed_transaction_id);
+        } else {
+          // user is probably not connected to wallet
+          connect?.();
         }
-      } else {
-        // user is probably not connected to wallet
-        connect?.();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
