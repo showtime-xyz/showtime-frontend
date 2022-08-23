@@ -58,7 +58,9 @@ export const CommentInputBox = forwardRef<
   useEffect(() => {
     // auto focus on comment modal open on native
     if (Platform.OS !== "web") {
-      inputRef.current?.focus();
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   }, []);
 
