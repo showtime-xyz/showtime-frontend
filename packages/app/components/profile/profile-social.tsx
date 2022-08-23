@@ -52,7 +52,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   );
 
   return (
-    <View tw="items-center justify-center sm:flex-row">
+    <View tw="justify-center sm:flex-row">
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
@@ -78,7 +78,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
       </Hidden>
 
-      <View tw="mt-4 flex-row items-center justify-center sm:mt-0 sm:mt-0">
+      <View tw="mt-4 flex-row items-center justify-end sm:mt-0">
         {twitter?.user_input && (
           <PressableScale
             onPress={() =>
