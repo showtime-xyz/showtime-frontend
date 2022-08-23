@@ -13,11 +13,12 @@ import {
   TabBar,
 } from "react-native-tab-view-next";
 
-import { Route } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+
+import { Route } from "./";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {

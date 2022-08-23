@@ -9,7 +9,6 @@ export type TooltipProps = {
   open?: boolean;
   offset?: number;
   children: React.ReactNode;
-  tw?: string;
   style?: StyleProp<ViewStyle>;
   textTw?: string;
   customContent?: JSX.Element;

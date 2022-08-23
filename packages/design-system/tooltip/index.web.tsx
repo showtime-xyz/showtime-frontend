@@ -17,7 +17,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   delay,
   open,
   placement,
-  tw,
   style,
   ...rest
 }) => {
@@ -50,7 +49,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
         onMouseLeave={onMouseLeave}
         ref={triggerEl}
         style={style}
-        tw={tw}
       >
         {children}
       </View>

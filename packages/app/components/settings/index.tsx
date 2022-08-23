@@ -147,7 +147,9 @@ const SettingsTabs = () => {
                 return <SettingsWalletSlotSkeleton />;
               }}
               ListHeaderComponent={<SettingsWalletSlotHeader />}
-              ItemSeparatorComponent={() => <SlotSeparator />}
+              ItemSeparatorComponent={() =>
+                isMdWidth ? <View tw="mt-2" /> : <SlotSeparator />
+              }
               index={index}
             />
           );
@@ -254,11 +256,12 @@ const SettingsTabs = () => {
       }
     },
     [
-      accountSettings,
-      emailWallets,
-      router,
       wallets,
+      emailWallets,
+      accountSettings,
       pushNotificationsPreferences,
+      isMdWidth,
+      router,
     ]
   );
 
