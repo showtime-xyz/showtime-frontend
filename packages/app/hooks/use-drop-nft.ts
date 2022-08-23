@@ -1,10 +1,4 @@
-import { useReducer, useState, useCallback } from "react";
-
-import type {
-  TypedDataDomain,
-  TypedDataField,
-} from "@ethersproject/abstract-signer";
-import { ethers } from "ethers";
+import { useReducer, useCallback } from "react";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -12,27 +6,14 @@ import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import {
-  delay,
-  getFileMeta,
-  isMobileWeb,
-  ledgerWalletHack,
-} from "app/utilities";
-
-const editionCreatorABI = [
-  "function createEdition(string memory _name, string memory _symbol, string memory _description, string memory _animationUrl, bytes32 _animationHash, string memory _imageUrl, bytes32 _imageHash, uint256 _editionSize, uint256 _royaltyBPS, uint256 claimWindowDurationSeconds) returns(address, address)",
-];
+import { delay, getFileMeta } from "app/utilities";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
-
-const metaSingleEditionMintableCreator =
-  process.env.NEXT_PUBLIC_META_SINGLE_EDITION_MINTABLE_CREATOR;
 
 type IEdition = {
   contract_address: string;
@@ -120,19 +101,12 @@ export type UseDropNFT = {
 };
 
 export const useDropNFT = () => {
-  const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
   const { connect } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const Alert = useAlert();
-  const [signMessageData, setSignMessageData] = useState({
-    status: "idle",
-    data: null as any,
-  });
-  const shouldShowSignMessage =
-    signMessageData.status === "should_sign" && isMobileWeb();
 
   const pollTransaction = async ({
     transactionId,
@@ -148,7 +122,7 @@ export const useDropNFT = () => {
       const response = await axios({
         url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}${
           notSafeForWork ? "&nsfw=true" : ""
-        }`,
+        }&is_gated_edition=true`,
         method: "GET",
       });
       Logger.log(response);
@@ -172,60 +146,9 @@ export const useDropNFT = () => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
-  // @ts-ignore
-  const signTransaction = async ({
-    forwardRequest,
-    notSafeForWork,
-  }: {
-    forwardRequest: {
-      domain: TypedDataDomain;
-      types: Record<string, Array<TypedDataField>>;
-      value: Record<string, string | number>;
-    };
-    notSafeForWork: boolean;
-  }) => {
-    if (isMobileWeb()) {
-      setSignMessageData({
-        status: "sign_requested",
-        data: { forwardRequest, notSafeForWork },
-      });
-    }
-
-    dispatch({ type: "signaturePrompt" });
-    const signature = await signTypedData(
-      forwardRequest.domain,
-      forwardRequest.types,
-      forwardRequest.value
-    );
-
-    dispatch({ type: "signatureSuccess" });
-
-    const newSignature = ledgerWalletHack(signature);
-    Logger.log("Signature", { signature, newSignature });
-    Logger.log("Submitting tx...");
-
-    // Sending signature to backend to initiate the transaction
-    const relayerResponse = await axios({
-      url: `/v1/relayer/forward-request`,
-      method: "POST",
-      data: {
-        forward_request: forwardRequest,
-        signature: newSignature,
-        from_address: userAddress,
-      },
-    });
-
-    await pollTransaction({
-      transactionId: relayerResponse.relayed_transaction_id,
-      notSafeForWork,
-    });
-  };
-
   const dropNFT = async (params: UseDropNFT) => {
     try {
       if (userAddress) {
-        const targetInterface = new ethers.utils.Interface(editionCreatorABI);
-
         const fileMetaData = await getFileMeta(params.file);
 
         if (
@@ -259,43 +182,24 @@ export const useDropNFT = () => {
           escapedDescription,
         });
 
-        const callData = targetInterface.encodeFunctionData("createEdition", [
-          escapedTitle,
-          "SHOWTIME",
-          escapedDescription,
-          "", // animationUrl
-          "0x0000000000000000000000000000000000000000000000000000000000000000", // animationHash
-          "ipfs://" + ipfsHash, // imageUrl
-          "0x0000000000000000000000000000000000000000000000000000000000000000", // imageHash
-          params.editionSize, // editionSize
-          params.royalty * 100, // royaltyBPS
-          params.duration,
-        ]);
-
-        // Sending params to backend to get the signature request
-        const forwardRequest = await axios({
-          url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-            callData
-          )}&to_address=${encodeURIComponent(
-            //@ts-ignore
-            metaSingleEditionMintableCreator
-          )}&from_address=${userAddress}`,
-          method: "GET",
+        const relayerResponse = await axios({
+          url: "/v1/creator-airdrops/create-gated-edition",
+          method: "POST",
+          data: {
+            name: escapedTitle,
+            description: escapedDescription,
+            image_url: "ipfs://" + ipfsHash,
+            edition_size: params.editionSize,
+            royalty_bps: params.royalty * 100,
+            claim_window_duration_seconds: params.duration,
+          },
         });
 
-        Logger.log("Signing... ", forwardRequest);
-
-        if (isMobileWeb()) {
-          setSignMessageData({
-            status: "should_sign",
-            data: { forwardRequest, notSafeForWork: params.notSafeForWork },
-          });
-        } else {
-          await signTransaction({
-            forwardRequest,
-            notSafeForWork: params.notSafeForWork,
-          });
-        }
+        console.log("relayer response ", relayerResponse);
+        await pollTransaction({
+          transactionId: relayerResponse.relayed_transaction_id,
+          notSafeForWork: params.notSafeForWork,
+        });
       } else {
         // user is probably not connected to wallet
         connect?.();
@@ -337,9 +241,6 @@ export const useDropNFT = () => {
     dropNFT,
     state,
     pollTransaction,
-    shouldShowSignMessage,
-    signMessageData,
-    signTransaction,
     onReconnectWallet,
     reset,
   };
