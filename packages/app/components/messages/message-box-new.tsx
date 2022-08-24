@@ -76,7 +76,6 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     );
     return (
       <View
-        pointerEvents={submitting ? "none" : "auto"}
         tw="flex-row items-center bg-white py-4 dark:bg-black"
         style={style}
       >
@@ -85,6 +84,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             //@ts-ignore
             ref={inputRef}
             value={value}
+            editable={!submitting}
             placeholder="Add a comment..."
             placeholderTextColor={
               tw.style("text-gray-500 dark:text-gray-400").color as string
