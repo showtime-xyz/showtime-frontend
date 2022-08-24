@@ -11,7 +11,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import { SpinnerView } from "@showtime-xyz/universal.spinner/spinner-view";
+import { SpinnerView } from "@showtime-xyz/universal.spinner";
 
 import { RefreshControlProps, RefreshTypeEnum } from "./index";
 
