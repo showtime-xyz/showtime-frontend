@@ -76,9 +76,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
       follow(nft?.data.item.creator_id);
     }
 
-    await claimNFT();
+    const success = await claimNFT();
 
-    if (comment.current.trim().length > 0) {
+    if (comment.current.trim().length > 0 && success) {
       newComment(comment.current);
     }
 
