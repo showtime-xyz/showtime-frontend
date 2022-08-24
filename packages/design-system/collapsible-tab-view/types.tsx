@@ -74,7 +74,7 @@ export interface RefreshControlProps {
   refreshControlColor?: string;
 }
 export type SceneProps<P extends object> = P & {
-  ContainerView: React.ComponentType<ScrollViewProps>;
+  ContainerView: any;
   forwardedRef: any;
   index: number;
 } & ScrollViewProps;
