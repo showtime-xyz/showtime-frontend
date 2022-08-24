@@ -204,7 +204,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     };
   }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
-  const claimNFT = async () => {
+  const claimNFT = async (): Promise<boolean | undefined> => {
     try {
       if (userAddress) {
         if (edition?.minter_address) {
@@ -215,6 +215,7 @@ export const useClaimNFT = (edition?: IEdition) => {
           } else {
             await oldSignaureClaimFlow();
           }
+          return true;
         }
       } else {
         // user is probably not connected to wallet

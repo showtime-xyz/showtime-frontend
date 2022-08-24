@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useState } from "react";
 
 import Animated, {
   runOnJS,
@@ -33,14 +34,10 @@ export const useSceneInfo = (curIndexValue: Animated.SharedValue<number>) => {
         });
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [childScrollRef]
+    []
   );
 
-  const aArray = useMemo(
-    () => [childScrollRef, childScrollYTrans],
-    [childScrollRef, childScrollYTrans]
-  );
+  const aArray = [childScrollRef, childScrollYTrans];
 
   const updateIsReady = useCallback(() => {
     const mIndex = curIndexValue.value;
@@ -54,12 +51,12 @@ export const useSceneInfo = (curIndexValue: Animated.SharedValue<number>) => {
         [mIndex]: isReady,
       };
     }
-  }, [aArray, curIndexValue.value, sceneIsReady]);
+  }, [curIndexValue, sceneIsReady, ...aArray]);
 
   // We should call function updateIsReady when the elements in the aArray change
   useEffect(() => {
     updateIsReady();
-  }, [updateIsReady]);
+  }, [updateIsReady, ...aArray]);
 
   /**
    * If all of the elements in the Aarray have changed, the tabIndex is switched.
