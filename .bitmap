@@ -240,7 +240,7 @@
     "spinner": {
         "scope": "showtime.universal",
         "version": "0.0.31",
-        "mainFile": "index.tsx",
+        "mainFile": "index.ts",
         "rootDir": "packages/design-system/spinner"
     },
     "switch": {

@@ -30,6 +30,8 @@
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
     "@react-three/fiber": "^8.2.1",
+    "@shopify/flash-list": "^1.2.1",
+    "@shopify/react-native-skia": "0.1.141",
     "@storybook/addon-actions": "~6.3.12",
     "@storybook/addon-controls": "~6.3.12",
     "@storybook/addon-ondevice-actions": "next",

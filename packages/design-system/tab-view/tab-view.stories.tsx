@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Platform, Text, View } from "react-native";
 
+import { Skia } from "@shopify/react-native-skia";
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
@@ -11,6 +12,9 @@ import { Route } from "./index";
 const LIST_LENGTH = 24;
 const ITEM_HEIGHT = 60;
 const HEADER_HEIGHT = 300;
+const r1 = 12;
+const path = Skia.Path.Make();
+path.addCircle(6 + r1, 6 + r1, r1);
 
 export default {
   component: HeaderTabView,

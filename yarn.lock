@@ -6949,6 +6949,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@shopify/react-native-skia@npm:0.1.141":
+  version: 0.1.141
+  resolution: "@shopify/react-native-skia@npm:0.1.141"
+  dependencies:
+    canvaskit-wasm: ^0.35.0
+    react-reconciler: ^0.26.2
+  peerDependencies:
+    react: ">=16.8.1"
+    react-native: ">=0.63.0-rc.0 <1.0.x"
+    react-native-reanimated: ">=2.0.0"
+  peerDependenciesMeta:
+    react-native-reanimated:
+      optional: true
+  bin:
+    setup-skia-web: scripts/setup-canvaskit.js
+  checksum: af54bb1fc8085f5b7f8872a3b50feaaed579fb151764b3ac73154fca0aae8b965e220ffb3f153decb3825770c80e1a950150d0ea23c3ac1da449b6b591121c9a
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.accordion@npm:^0.0.33":
   version: 0.0.33
   resolution: "@showtime-xyz/universal.accordion@npm:0.0.33"
@@ -7856,6 +7875,7 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^4.2.0
     "@shopify/flash-list": ^1.2.1
+    "@shopify/react-native-skia": 0.1.141
     "@showtime-xyz/universal.accordion": ^0.0.33
     "@showtime-xyz/universal.activity-indicator": ^0.0.27
     "@showtime-xyz/universal.alert": ^0.0.45
@@ -8113,6 +8133,8 @@ __metadata:
     "@react-navigation/native": ^6.0.11
     "@react-navigation/native-stack": ^6.7.0
     "@react-three/fiber": ^8.2.1
+    "@shopify/flash-list": ^1.2.1
+    "@shopify/react-native-skia": 0.1.141
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next
@@ -11706,6 +11728,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@webgpu/types@npm:^0.1.20":
+  version: 0.1.21
+  resolution: "@webgpu/types@npm:0.1.21"
+  checksum: b16ddc4d46a3c507a7f243f14b08b96ebbdb4495f9ea703441ad3525dd5e7e4a5f743f2879e51d74c78846f950e7d60c1349670f75cb7ca03ac3ddf51d46aabe
+  languageName: node
+  linkType: hard
+
 "@xmldom/xmldom@npm:~0.7.0":
   version: 0.7.5
   resolution: "@xmldom/xmldom@npm:0.7.5"
@@ -14241,6 +14270,15 @@ __metadata:
   version: 1.0.30001378
   resolution: "caniuse-lite@npm:1.0.30001378"
   checksum: 19f1774da1f62d393ddde55dc091eb3e4f5c5b0ce43f9a9d20e75307a0f329cf8591c836a35a9f6f9fd7c27db7a75e0682245a194acec2e2ba1bc25ef1c3300c
+  languageName: node
+  linkType: hard
+
+"canvaskit-wasm@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "canvaskit-wasm@npm:0.35.0"
+  dependencies:
+    "@webgpu/types": ^0.1.20
+  checksum: 33080e47730021870b38d7bf04fb77a390c5a5aaa4d2bec9679d22ae862a4c3e5201397f5ab6801ab55e8200dbe5e621a7da8f0e4c39a79db9bb0a49e0427247
   languageName: node
   linkType: hard
 
@@ -29617,6 +29655,19 @@ __metadata:
     react-native:
       optional: true
   checksum: 8641dae996167ec5bd2a020310b1b1540650a2323673722d9ffd882bb28fbd40f09d1ca3e6990f9e27d5878e152c9544a35d4fdb7014fc25a86937e07949aede
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.26.2":
+  version: 0.26.2
+  resolution: "react-reconciler@npm:0.26.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    scheduler: ^0.20.2
+  peerDependencies:
+    react: ^17.0.2
+  checksum: 2ebceace56f547f51eaf142becefef9cca980eae4f42d90ee5a966f54a375f5082d78b71b00c40bbd9bca69e0e0f698c7d4e81cc7373437caa19831fddc1d01b
   languageName: node
   linkType: hard
 

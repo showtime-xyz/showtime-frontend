@@ -70,6 +70,7 @@
     "@rudderstack/rudder-sdk-react-native": "^1.4.1",
     "@sentry/react-native": "^4.2.0",
     "@shopify/flash-list": "^1.2.1",
+    "@shopify/react-native-skia": "0.1.141",
     "@showtime-xyz/universal.accordion": "^0.0.33",
     "@showtime-xyz/universal.activity-indicator": "^0.0.27",
     "@showtime-xyz/universal.alert": "^0.0.45",
