@@ -1,4 +1,4 @@
-import { useMemo, useCallback, ReactNode } from "react";
+import { useMemo, useCallback } from "react";
 import { Platform, Linking } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
@@ -17,17 +17,15 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Link, TextLink } from "app/navigation/link";
+import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
+
 import { useRouter } from "design-system/router";
 
 const mentionRegex = /@([\w\d-]+?)\b/g;
 const hyperlinkRegex = /(https?:\/\/)?([0-9a-z]+\.)?[-_0-9a-z]+\.[0-9a-z]+/g;
 
-const linkify = (
-  content: string,
-  router : any
-) => {
+const linkify = (content: string, router: any) => {
   // first replace all the mentions
   const contentWithMention = reactStringReplace(
     content,
@@ -37,7 +35,7 @@ const linkify = (
         <Text
           onPress={() => {
             router.pop();
-            router.push(`/@${username}`)
+            router.push(`/@${username}`);
           }}
           tw="font-bold text-black dark:text-white"
           key={i}
@@ -46,18 +44,22 @@ const linkify = (
         </Text>
       );
     }
-  )
+  );
 
   // next replace all the hyperlinks
-  const result = contentWithMention.map(token => {
-    if (typeof token === 'string') {
-      return (token as string).split(" ").map((word) => {
+  const result = contentWithMention.map((token) => {
+    if (typeof token === "string") {
+      return (token as string).split(" ").map((word, i) => {
         if (!hyperlinkRegex.test(word)) {
           return word + " ";
         }
         const match = [...word.match(hyperlinkRegex)!];
         return (
-          <Text style={{color: 'blue'}} onPress={() => Linking.openURL(match[0])}>
+          <Text
+            key={i}
+            style={{ color: "blue" }}
+            onPress={() => Linking.openURL(match[0])}
+          >
             {match[0]}
           </Text>
         );
@@ -68,7 +70,7 @@ const linkify = (
   });
 
   return result;
-}
+};
 
 interface MessageRowProps {
   /**
@@ -184,7 +186,7 @@ export function MessageRow({
   onTagPress,
   onUserPress,
 }: MessageRowProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   //#region variables
   const createdAtText = useMemo(() => {
@@ -201,14 +203,9 @@ export function MessageRow({
       addSuffix: true,
     });
   }, [createdAt]);
-  const contentWithTags = useMemo(
-    () => {
-      return onTagPress
-      ? linkify(content, router)
-      : content
-    },
-    [content, onTagPress]
-  );
+  const contentWithTags = useMemo(() => {
+    return onTagPress ? linkify(content, router) : content;
+  }, [content, onTagPress, router]);
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);
