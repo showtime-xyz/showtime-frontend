@@ -12,6 +12,7 @@ import {
   MessageFilled,
   Message,
 } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -19,8 +20,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
-
-import { useRouter } from "@showtime-xyz/universal.router";
 
 const mentionRegex = /@([\w\d-]+?)\b/g;
 const hyperlinkRegex = /(https?:\/\/)?([0-9a-z]+\.)?[-_0-9a-z]+\.[0-9a-z]+/g;
