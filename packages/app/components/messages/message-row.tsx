@@ -57,7 +57,7 @@ const linkify = (content: string, router: any) => {
         return (
           <Text
             key={i}
-            style={{ color: "blue" }}
+            tw="text-blue-500"
             onPress={() => Linking.openURL(match[0])}
           >
             {match[0]}
