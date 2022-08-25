@@ -152,7 +152,10 @@ export function Header({ title, close, onSearchSubmit }: Props) {
 
   return (
     <View
-      tw={`mt-[${safeAreaTop}px] w-full flex-row items-center px-4 py-2 dark:bg-black`}
+      style={{
+        marginTop: safeAreaTop,
+      }}
+      tw="w-full flex-row items-center px-4 py-2 dark:bg-black"
     >
       <View tw="h-12 w-12 items-center justify-center">
         <Button

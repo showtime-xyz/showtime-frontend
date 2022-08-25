@@ -10,6 +10,7 @@ import {
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -24,7 +25,6 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
@@ -134,15 +134,10 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View
-          tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
-          style={Platform.select({
-            web: { maxHeight: "calc(50vh - 64px)" },
-            default: {},
-          })}
-        >
+        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
           {data ? (
             <InfiniteScrollList
+              useWindowScroll={false}
               data={data}
               renderItem={renderItem}
               ItemSeparatorComponent={Separator}
@@ -152,6 +147,10 @@ const SearchInHeader = () => {
                 main: 64,
                 reverse: 64,
               }}
+              style={Platform.select({
+                web: { height: "calc(50vh - 64px)" },
+                default: {},
+              })}
             />
           ) : loading && term ? (
             <SearchItemSkeleton />

@@ -8,7 +8,7 @@ const SearchScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Search" });
 
   return (
-    <View tw="w-full">
+    <View tw="w-full flex-1">
       <Search />
     </View>
   );

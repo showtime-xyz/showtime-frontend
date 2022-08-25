@@ -28,6 +28,7 @@ type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
+  sizeStyle?: object;
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
@@ -37,6 +38,7 @@ function Media({
   item,
   numColumns,
   tw,
+  sizeStyle,
   resizeMode: propResizeMode,
   onPinchStart,
   onPinchEnd,
@@ -58,10 +60,10 @@ function Media({
 
   return (
     <View
-      tw={[
-        numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
-        item?.loading ? "opacity-50" : "opacity-100",
-      ]}
+      style={{
+        margin: numColumns >= 3 ? 1 : numColumns === 2 ? 2 : 0,
+        opacity: item?.loading ? 0.5 : 1,
+      }}
     >
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
@@ -74,7 +76,8 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            tw={size}
+            tw={!sizeStyle ? size : ""}
+            style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
@@ -104,7 +107,8 @@ function Media({
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            tw={size}
+            tw={!sizeStyle ? size : ""}
+            style={sizeStyle}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
             showMuteButton={numColumns === 1}
@@ -113,21 +117,20 @@ function Media({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw={numColumns > 1 ? size : "h-screen w-screen"}>
-          <ErrorBoundary>
-            <Suspense fallback={null}>
-              <Dynamic3dModel
-                url={item?.source_url}
-                // TODO: update this to get a preview from CDN v2
-                fallbackUrl={item?.still_preview_url}
-                numColumns={numColumns}
-                tw={size}
-                blurhash={item?.blurhash}
-                resizeMode={resizeMode}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        </View>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <Dynamic3dModel
+              url={item?.source_url}
+              // TODO: update this to get a preview from CDN v2
+              fallbackUrl={item?.still_preview_url}
+              numColumns={numColumns}
+              tw={!sizeStyle ? size : ""}
+              style={sizeStyle}
+              blurhash={item?.blurhash}
+              resizeMode={resizeMode}
+            />
+          </Suspense>
+        </ErrorBoundary>
       ) : null}
     </View>
   );

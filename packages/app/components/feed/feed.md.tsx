@@ -5,6 +5,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -185,7 +186,8 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <Card
           href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] mb-4`}
+          sizeStyle={{ width: CARD_WIDTH, marginBottom: 16 }}
+          showClaimButton
         />
       </View>
     );

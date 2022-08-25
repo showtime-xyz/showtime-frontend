@@ -24,6 +24,7 @@ type VideoProps = {
 export function Video({
   tw,
   blurhash,
+  style,
   resizeMode,
   posterSource,
   showMuteButton = true,
@@ -41,6 +42,8 @@ export function Video({
       {videoConfig?.previewOnly ? (
         <Image
           tw={tw}
+          //@ts-ignore
+          style={style}
           resizeMode={resizeMode}
           blurhash={blurhash}
           source={posterSource as Source}
@@ -53,6 +56,8 @@ export function Video({
         >
           <Image
             tw={tw}
+            //@ts-ignore
+            style={style}
             resizeMode={resizeMode}
             blurhash={blurhash}
             source={posterSource as Source}

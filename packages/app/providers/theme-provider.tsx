@@ -56,8 +56,10 @@ export function ThemeProvider({
         isDark ? "dark" : "light"
       );
       if (isDark) {
+        document.body.classList.add("dark");
         tw.setColorScheme("dark");
       } else {
+        document.body.classList.remove("dark");
         tw.setColorScheme("light");
       }
     }

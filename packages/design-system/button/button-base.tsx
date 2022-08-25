@@ -23,6 +23,7 @@ export function BaseButton({
   size = "small",
   tw = "",
   labelTW = "",
+  labelStyle: labelStyleProp,
   backgroundColors,
   iconOnly = false,
   iconColor = ["white", "black"],
@@ -71,7 +72,11 @@ export function BaseButton({
     const iconSize = ICON_SIZE_TW[size];
     return Children.map(children, (child: any) => {
       if (typeof child === "string") {
-        return <Text tw={labelStyle}>{child}</Text>;
+        return (
+          <Text tw={labelStyle} style={labelStyleProp}>
+            {child}
+          </Text>
+        );
       }
 
       // @ts-ignore
@@ -90,9 +95,10 @@ export function BaseButton({
               : child?.props?.tw.join(" ")
             : "",
         ],
+        style: labelStyleProp,
       });
     });
-  }, [size, iconColor, labelStyle, children, isDarkMode]);
+  }, [size, iconColor, labelStyle, children, isDarkMode, labelStyleProp]);
 
   const childStyles = useMemo(
     () =>

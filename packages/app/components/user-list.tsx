@@ -2,6 +2,7 @@ import { memo, useCallback } from "react";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -11,7 +12,6 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { UserItemType } from "app/hooks/api/use-follow-list";
 import { useFollow } from "app/hooks/use-follow";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -77,7 +77,10 @@ export const UserList = ({
 
 const SEPARATOR_HEIGHT = 1;
 const Separator = () => (
-  <View tw={`bg-gray-200 dark:bg-gray-800 h-[${SEPARATOR_HEIGHT}px]`} />
+  <View
+    tw={`bg-gray-200 dark:bg-gray-800`}
+    style={{ height: SEPARATOR_HEIGHT }}
+  />
 );
 
 const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
@@ -95,7 +98,8 @@ const FollowingListUser = memo(
     });
     return (
       <View
-        tw={`flex-row items-center justify-between h-[${ITEM_HEIGHT}px] overflow-hidden px-4`}
+        tw={`flex-row items-center justify-between overflow-hidden px-4`}
+        style={{ height: ITEM_HEIGHT }}
       >
         <Link
           href={`/@${item.username ?? item.wallet_address}`}

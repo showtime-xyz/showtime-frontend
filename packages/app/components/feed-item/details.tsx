@@ -7,6 +7,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { GiftButton } from "app/components/claim/gift-button";
@@ -26,47 +27,48 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   return (
-    <View>
-      <View tw="flex-row items-center justify-between px-4">
+    <View tw="px-4">
+      <View tw="flex-row items-center justify-between ">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
-        {isCreatorDrop && edition ? <ClaimButton edition={edition} /> : null}
         {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
+      <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
+        {nft.token_name}
+      </Text>
+      <Description
+        descriptionText={nft?.token_description}
+        tw="pt-2"
+        maxLines={2}
+      />
+      <View tw="h-4" />
 
-      <View tw="px-4">
-        <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
-          {nft.token_name}
-        </Text>
+      <View tw="mb-1 flex-row justify-between">
+        <View tw="flex-row">
+          <Like nft={nft} />
+          <View tw="w-6" />
+          <CommentButton nft={nft} />
+          <View tw="w-6" />
+          <GiftButton nft={nft} />
+        </View>
 
-        <View tw="h-4" />
-
-        <View tw="flex-row justify-between">
-          <View tw="flex-row">
-            <Like nft={nft} />
-            <View tw="w-6" />
-            <CommentButton nft={nft} />
-            <View tw="w-6" />
-            <GiftButton nft={nft} />
-          </View>
-
-          <View tw="flex-row">
-            <Pressable onPress={() => shareNFT(nft)}>
-              <Share
-                height={32}
-                width={22}
-                // @ts-ignore
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-              />
-            </Pressable>
-            <View tw="w-8" />
-
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown nft={nft} />
-            </Suspense>
-          </View>
+        <View tw="flex-row">
+          <Pressable onPress={() => shareNFT(nft)}>
+            <Share
+              height={32}
+              width={22}
+              // @ts-ignore
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+            />
+          </Pressable>
+          <View tw="w-8" />
+          <Suspense fallback={<Skeleton width={24} height={24} />}>
+            <NFTDropdown nft={nft} />
+          </Suspense>
         </View>
       </View>
-
+      {isCreatorDrop && edition ? (
+        <ClaimButton edition={edition} size="regular" />
+      ) : null}
       <View tw="h-4" />
     </View>
   );

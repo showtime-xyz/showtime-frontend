@@ -13,7 +13,7 @@ export type NFT = {
   animation_preview_url?: any;
   blurhash: string;
   token_background_color?: any;
-  token_aspect_ratio: string;
+  token_aspect_ratio: number;
   token_hidden: number;
   creator_id: number;
   creator_name: string;

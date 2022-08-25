@@ -7,6 +7,7 @@ import { Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -29,7 +30,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
 
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
@@ -172,7 +172,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           <Media
             item={nft}
             numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${Math.min(mediaWidth, 800)}px]`}
+            sizeStyle={{
+              height: mediaHeight,
+              width: Math.min(mediaWidth, 800),
+            }}
             resizeMode="contain"
           />
         </View>
@@ -186,14 +189,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             },
           ]}
         >
-          <Social nft={nft} />
+          <View tw="px-4 pt-4">
+            <Social nft={nft} />
+          </View>
           <LikedBy nft={nft} />
           <View tw="my-4 mr-4 flex-row justify-between px-4">
             <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
               {nft.token_name}
             </Text>
           </View>
-          <Description nft={nft} />
+          <Description
+            descriptionText={nft?.token_description}
+            tw="px-4 pb-4"
+          />
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} />
             <Owner nft={nft} price={false} />

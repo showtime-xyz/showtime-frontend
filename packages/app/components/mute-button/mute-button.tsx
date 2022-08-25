@@ -9,7 +9,7 @@ export const MuteButton = ({
   muted,
   onPress,
 }: {
-  muted: boolean;
+  muted?: boolean;
   onPress: () => void;
 }) => {
   return (
@@ -35,9 +35,6 @@ export const MuteButton = ({
 const muteButtonStyle = StyleSheet.create({
   style: {
     zIndex: 5,
-    right: 10,
-    position: "absolute",
-    bottom: 10,
     backgroundColor: colors.gray[700],
     borderRadius: 999,
     alignItems: "center",

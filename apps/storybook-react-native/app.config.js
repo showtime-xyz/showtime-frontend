@@ -28,6 +28,11 @@ export default {
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
   },
+  extra: {
+    eas: {
+      projectId: "e77d5b68-bb27-45da-aa5c-96c1fdbf6706",
+    },
+  },
   android: {
     package: "io.showtime.storybook",
     versionCode: 1,

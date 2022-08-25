@@ -37,7 +37,7 @@ export const PrivacyAndSecuritySettings = () => {
 
   return (
     <ScrollView tw="w-full">
-      {shouldRenderHeaderGap && <View tw={`h-[${headerHeight}px]`} />}
+      {shouldRenderHeaderGap && <View style={{ height: headerHeight }} />}
       <SettingHeaderSection title="Privacy & Security" />
       <SettingBody>{list.map(renderSetting)}</SettingBody>
     </ScrollView>

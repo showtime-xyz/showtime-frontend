@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { NftScreen } from "app/screens/nft";
-import { NFT } from "app/types";
+import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 export async function getServerSideProps(context) {
@@ -11,6 +11,10 @@ export async function getServerSideProps(context) {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/token/${contractAddress}/${tokenId}?chain_identifier=${CHAIN_IDENTIFIERS[chainName]}`
     );
+    const fallback = {
+      [`/api/v2/token/${contractAddress}/${tokenId}?chain_identifier=${CHAIN_IDENTIFIERS[chainName]}`]:
+        res.data,
+    };
 
     const nft = res.data?.data?.item as NFT;
     const imageUrl = getMediaUrl({
@@ -21,6 +25,7 @@ export async function getServerSideProps(context) {
     if (nft) {
       return {
         props: {
+          fallback,
           meta: {
             title: nft.token_name + " | Showtime",
             description: nft.token_description,
@@ -30,7 +35,9 @@ export async function getServerSideProps(context) {
         },
       };
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   return {
     props: {},

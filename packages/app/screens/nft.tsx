@@ -2,6 +2,7 @@ import { Suspense, useMemo } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
+import { SWRConfig } from "swr";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
@@ -41,7 +42,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-function NftScreen() {
+function NftScreen({ fallback = {} }: { fallback?: object }) {
   useTrackPageViewed({ name: "NFT" });
   const { colorScheme } = useColorScheme();
   const videoConfig = useMemo(
@@ -55,35 +56,38 @@ function NftScreen() {
 
   const dummyId = 1;
   const visibileItems = useSharedValue([undefined, dummyId, undefined]);
+
   return (
     <ErrorBoundary>
-      <VideoConfigContext.Provider value={videoConfig}>
-        <ItemKeyContext.Provider value={dummyId}>
-          <ViewabilityItemsContext.Provider value={visibileItems}>
-            <Suspense
-              fallback={
-                <View tw="items-center">
-                  <Skeleton
-                    //@ts-ignore
-                    colorMode={colorScheme}
-                    height={screenHeight - 300}
-                    width={screenWidth}
-                  />
-                  <View tw="h-2" />
-                  <Skeleton
-                    //@ts-ignore
-                    colorMode={colorScheme}
-                    height={300}
-                    width={screenWidth}
-                  />
-                </View>
-              }
-            >
-              <NFTDetail />
-            </Suspense>
-          </ViewabilityItemsContext.Provider>
-        </ItemKeyContext.Provider>
-      </VideoConfigContext.Provider>
+      <SWRConfig value={{ fallback }}>
+        <VideoConfigContext.Provider value={videoConfig}>
+          <ItemKeyContext.Provider value={dummyId}>
+            <ViewabilityItemsContext.Provider value={visibileItems}>
+              <Suspense
+                fallback={
+                  <View tw="items-center">
+                    <Skeleton
+                      //@ts-ignore
+                      colorMode={colorScheme}
+                      height={screenHeight - 300}
+                      width={screenWidth}
+                    />
+                    <View tw="h-2" />
+                    <Skeleton
+                      //@ts-ignore
+                      colorMode={colorScheme}
+                      height={300}
+                      width={screenWidth}
+                    />
+                  </View>
+                }
+              >
+                <NFTDetail />
+              </Suspense>
+            </ViewabilityItemsContext.Provider>
+          </ItemKeyContext.Provider>
+        </VideoConfigContext.Provider>
+      </SWRConfig>
     </ErrorBoundary>
   );
 }

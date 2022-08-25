@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { AnimatePresence, View as MotiView } from "moti";
 import { TapGestureHandler } from "react-native-gesture-handler";
 
 import { HeartFilled } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
@@ -52,7 +51,7 @@ export const FeedItemTapGesture = ({
               scale: 0.8,
             }}
           >
-            <HeartFilled width={90} height={90} color={tw.color("white")} />
+            <HeartFilled width={90} height={90} color="#fff" />
           </MotiView>
         )}
       </AnimatePresence>

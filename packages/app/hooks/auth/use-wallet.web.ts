@@ -20,7 +20,7 @@ const useWallet = (): UseWalletReturnType => {
   const { chain } = useNetwork();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
-  const { web3, isMagic } = useWeb3();
+  const { web3, isMagic, magicWalletAddress } = useWeb3();
 
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const [address, setAddress] = useState<string | undefined>();
@@ -29,6 +29,8 @@ const useWallet = (): UseWalletReturnType => {
     (async function fetchUserAddress() {
       if (wagmiData?.address) {
         setAddress(wagmiData?.address);
+      } else if (magicWalletAddress) {
+        setAddress(magicWalletAddress);
       } else if (web3) {
         const address = await web3.getSigner().getAddress();
         setAddress(address);
@@ -36,7 +38,7 @@ const useWallet = (): UseWalletReturnType => {
         setAddress(undefined);
       }
     })();
-  }, [web3, wagmiData?.address]);
+  }, [web3, wagmiData?.address, magicWalletAddress]);
 
   const connected =
     (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;

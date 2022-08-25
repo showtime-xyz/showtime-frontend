@@ -1,4 +1,5 @@
 import type React from "react";
+import { StyleProp, TextStyle } from "react-native";
 
 import type { Props as PressableScaleProps } from "@showtime-xyz/universal.pressable-scale";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -41,6 +42,13 @@ export type BaseButtonProps = {
    * @default undefined
    */
   labelTW?: TW;
+
+  /**
+   * Defines the inline style to
+   * be applied to the label.
+   * @default undefined
+   */
+  labelStyle?: StyleProp<TextStyle>;
   /**
    * Defines the background state colors.
    */

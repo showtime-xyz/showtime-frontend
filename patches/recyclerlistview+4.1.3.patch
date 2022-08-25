@@ -1,0 +1,26 @@
+diff --git a/node_modules/recyclerlistview/dist/reactnative/core/RecyclerListView.js b/node_modules/recyclerlistview/dist/reactnative/core/RecyclerListView.js
+index cc8f2fb..a98072e 100644
+--- a/node_modules/recyclerlistview/dist/reactnative/core/RecyclerListView.js
++++ b/node_modules/recyclerlistview/dist/reactnative/core/RecyclerListView.js
+@@ -678,7 +678,7 @@ RecyclerListView.propTypes = {
+     //Provide your own ScrollView Component. The contract for the scroll event should match the native scroll event contract, i.e.
+     // scrollEvent = { nativeEvent: { contentOffset: { x: offset, y: offset } } }
+     //Note: Please extend BaseScrollView to achieve expected behaviour
+-    externalScrollView: PropTypes.func,
++    externalScrollView: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+     //Callback given when user scrolls to the end of the list or footer just becomes visible, useful in incremental loading scenarios
+     onEndReached: PropTypes.func,
+     //Specify how many pixels in advance you onEndReached callback
+diff --git a/node_modules/recyclerlistview/src/core/RecyclerListView.tsx b/node_modules/recyclerlistview/src/core/RecyclerListView.tsx
+index e5707de..95dd87b 100644
+--- a/node_modules/recyclerlistview/src/core/RecyclerListView.tsx
++++ b/node_modules/recyclerlistview/src/core/RecyclerListView.tsx
+@@ -821,7 +821,7 @@ RecyclerListView.propTypes = {
+     //Provide your own ScrollView Component. The contract for the scroll event should match the native scroll event contract, i.e.
+     // scrollEvent = { nativeEvent: { contentOffset: { x: offset, y: offset } } }
+     //Note: Please extend BaseScrollView to achieve expected behaviour
+-    externalScrollView: PropTypes.func,
++    externalScrollView: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+ 
+     //Callback given when user scrolls to the end of the list or footer just becomes visible, useful in incremental loading scenarios
+     onEndReached: PropTypes.func,

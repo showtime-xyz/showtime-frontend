@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import { Platform } from "react-native";
 
-import { createParam } from "app/navigation/use-param";
+import { Route } from "@showtime-xyz/universal.tab-view";
 
-import { Route } from "design-system/tab-view/src/types";
+import { createParam } from "app/navigation/use-param";
 
 const { useParam } = createParam();
 

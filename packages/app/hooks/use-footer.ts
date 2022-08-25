@@ -16,15 +16,11 @@ const links = [
     title: "Terms & Conditions",
   },
   {
-    link: "/feedback",
-    title: "Feedback",
-  },
-
-  {
     link: "/assets/Showtime-Assets.zip",
     title: "Brand Assets",
   },
 ];
+
 const social = [
   {
     icon: Twitter,
