@@ -179,6 +179,7 @@ function CollapsibleHeaderTabView<T extends Route>(
         isSlidingHeader,
         isStartRefreshing,
         scrollStickyHeaderHeight: 0,
+        scrollViewPaddingTop: 0,
       }}
     >
       <View ref={containeRef} style={styles.full}>
