@@ -16,7 +16,6 @@ import Animated, {
   cancelAnimation,
   Extrapolate,
   interpolate,
-  runOnJS,
   runOnUI,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -24,6 +23,7 @@ import Animated, {
   useSharedValue,
   withDecay,
   withTiming,
+  runOnJS,
 } from "react-native-reanimated";
 import type { SceneRendererProps } from "react-native-tab-view-next";
 
@@ -40,6 +40,7 @@ export type GestureContainerRef = {
   setCurrentIndex: (index: number) => void;
 } | null;
 
+// Todo: temporarily add `.ios.tsx` file to try the bounces effect, will be merged into `gesture-container.tsx` after stabilization
 export const GestureContainer = React.forwardRef<
   GestureContainerRef,
   GestureContainerProps<Route>
@@ -272,11 +273,11 @@ export const GestureContainer = React.forwardRef<
     .onEnd((event) => {
       if (!sceneIsReady.value[curIndexValue.value]) return;
       if (isSlidingHeader.value === false) return;
-
       headerTransStartY.value = 0;
       headerTrans.value = withDecay(
         {
           velocity: -event.velocityY,
+          deceleration: 0.9995,
           clamp: [
             0,
             panHeaderMaxOffset ??
@@ -308,6 +309,7 @@ export const GestureContainer = React.forwardRef<
         childScrollYTrans[curIndexValue.value]?.value === undefined
       )
         return;
+
       const onReadyToActive = (isPulling: boolean) => {
         dragIndex.value = curIndexValue.value;
         if (isPulling) {
@@ -321,6 +323,7 @@ export const GestureContainer = React.forwardRef<
         }
       };
       if (isRefreshing.value !== isRefreshingWithAnimation.value) return;
+
       if (isRefreshing.value) {
         if (isDragging.value === false) {
           const starty = onReadyToActive(false);
@@ -333,7 +336,7 @@ export const GestureContainer = React.forwardRef<
         );
       } else {
         if (
-          childScrollYTrans[curIndexValue.value].value !== 0 ||
+          childScrollYTrans[curIndexValue.value].value > 0 ||
           event.translationY <= 0
         )
           return;
@@ -345,6 +348,7 @@ export const GestureContainer = React.forwardRef<
         }
         tabsRefreshTrans.value =
           refreshHeight - (event.translationY - basyY.value);
+
         if (!isPullEnough.value && tabsRefreshTrans.value < 0 && onPullEnough) {
           isPullEnough.value = true;
           runOnJS(onPullEnough)();
@@ -426,7 +430,17 @@ export const GestureContainer = React.forwardRef<
     },
     [refreshHeight, tabsRefreshTrans]
   );
-
+  useAnimatedReaction(
+    () => {
+      return shareAnimatedValue.value;
+    },
+    (scrollY) => {
+      if (animationHeaderPosition && scrollY < calcHeight) {
+        animationHeaderPosition.value = -scrollY;
+      }
+    },
+    [calcHeight]
+  );
   // isRefreshing
   useAnimatedReaction(
     () => {
@@ -537,16 +551,18 @@ export const GestureContainer = React.forwardRef<
   );
 
   const headerTransValue = useDerivedValue(() => {
-    const headerTransY = interpolate(
-      shareAnimatedValue.value,
-      [0, calcHeight],
-      [0, -calcHeight],
-      Extrapolate.CLAMP
-    );
-
-    if (animationHeaderPosition && headerTransY < calcHeight) {
-      animationHeaderPosition.value = headerTransY;
+    let headerTransY = 0;
+    if (shareAnimatedValue.value > 0) {
+      headerTransY = interpolate(
+        shareAnimatedValue.value,
+        [0, calcHeight],
+        [0, -calcHeight],
+        Extrapolate.CLAMP
+      );
+    } else {
+      headerTransY = -shareAnimatedValue.value;
     }
+
     return headerTransY;
   });
 

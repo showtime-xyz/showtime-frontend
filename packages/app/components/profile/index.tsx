@@ -104,7 +104,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
-    setIsRefreshing(false);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
   }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
