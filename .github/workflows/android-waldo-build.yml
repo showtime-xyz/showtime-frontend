@@ -41,9 +41,9 @@ jobs:
 
       - name: Build apk
         run: |
-          cd android/ && chmod +x ./gradlew && STAGE=development ./gradlew assembleDebug \
+          cd android/ && chmod +x ./gradlew && STAGE=development ./gradlew assembleRelease \
 
-          echo "APK_PATH=$(pwd)/app/build/outputs/apk/debug/app-debug.apk" >>$GITHUB_ENV
+          echo "APK_PATH=$(pwd)/app/build/outputs/apk/release/app-release.apk" >>$GITHUB_ENV
 
       - name: Upload build to Waldo
         uses: waldoapp/gh-action-upload@v1
