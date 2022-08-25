@@ -5,7 +5,7 @@ import { useSharedValue } from "react-native-reanimated";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
-} from "app/lib/infinite-scroll-list";
+} from "@showtime-xyz/universal.infinite-scroll-list";
 
 import {
   ItemKeyContext,
@@ -65,7 +65,9 @@ export const ViewabilityTrackerInfiniteScrollList = forwardRef(
           {...props}
           ref={ref}
           viewabilityConfig={viewabilityConfig}
-          onViewableItemsChanged={onViewableItemsChanged}
+          onViewableItemsChanged={(v) => {
+            console.log("efefeffe ", v);
+          }}
           renderItem={renderItem}
         />
       </ViewabilityItemsContext.Provider>

@@ -131,7 +131,7 @@
     },
     "infinite-scroll-list": {
         "scope": "showtime.universal",
-        "version": "0.0.23",
+        "version": "0.0.24",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },
@@ -251,7 +251,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.13",
+        "version": "0.0.14",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
