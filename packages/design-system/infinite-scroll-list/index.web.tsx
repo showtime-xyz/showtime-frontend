@@ -141,7 +141,7 @@ export function VirtuosoListComponent<T>(
     [data, ItemSeparatorComponent, renderItem, onViewableItemsChanged]
   );
 
-  const gridComponents = useMemo(
+  const gridComponents = useMemo<GridComponents<T>>(
     () => ({
       Item: (props: ItemContainerProps) => (
         <ItemContainer
