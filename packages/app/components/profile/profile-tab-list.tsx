@@ -31,7 +31,7 @@ import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
-import { ProfileFooter } from "./footer";
+import { ProfileFooter } from "./profile-footer";
 
 type TabListProps = {
   username?: string;
