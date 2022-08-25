@@ -91,7 +91,6 @@ export function SceneComponent<P extends object>({
       });
     }
   }, [scollViewRef, index, scrollY, updateSceneInfo]);
-  console.log(contentContainerStyle, "contentContainerStyle1");
 
   return (
     <Animated.View style={[styles.container, sceneStyle]}>
