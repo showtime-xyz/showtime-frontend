@@ -17,6 +17,7 @@ import { useItemVisible } from "app/hooks/use-viewability-mount";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
+  showMuteButton?: boolean;
 } & ComponentProps<typeof ExpoVideo>;
 
 export function Video({
@@ -24,6 +25,7 @@ export function Video({
   blurhash,
   resizeMode,
   posterSource,
+  showMuteButton = true,
   ...props
 }: VideoProps) {
   const videoConfig = useVideoConfig();
@@ -72,7 +74,11 @@ export function Video({
             videoStyle={tailwind.style("relative")}
             {...props}
           />
-          <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+          {showMuteButton ? (
+            <View tw="absolute bottom-12 right-5 md:bottom-2">
+              <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
+            </View>
+          ) : null}
         </ImageBackground>
       )}
     </>

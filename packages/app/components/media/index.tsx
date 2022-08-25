@@ -107,8 +107,7 @@ function Media({
             tw={size}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
-            //  we always show mute button on web because videos are auto played on web
-            showMuteButton={numColumns === 1 || Platform.OS === "web"}
+            showMuteButton={numColumns === 1}
           />
         </PinchToZoom>
       ) : null}
