@@ -40,6 +40,7 @@ export type GestureContainerRef = {
   setCurrentIndex: (index: number) => void;
 } | null;
 
+// Todo: temporarily add `.ios.tsx` file to try the bounces effect, will be merged into `gesture-container.tsx` after stabilization
 export const GestureContainer = React.forwardRef<
   GestureContainerRef,
   GestureContainerProps<Route>
@@ -692,6 +693,8 @@ export const GestureContainer = React.forwardRef<
         isSlidingHeader,
         isStartRefreshing,
         scrollStickyHeaderHeight,
+        scrollViewPaddingTop:
+          tabbarHeight + headerHeight + scrollStickyHeaderHeight,
       }}
     >
       <GestureDetector gesture={gestureHandler}>
