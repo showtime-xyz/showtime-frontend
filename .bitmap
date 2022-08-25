@@ -251,7 +251,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.9",
+        "version": "0.0.10",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
