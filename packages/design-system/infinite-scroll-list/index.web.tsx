@@ -89,7 +89,7 @@ const ViewabilityTracker = ({
           }
         );
 
-        observer.observe(ref.current);
+        if (ref.current) observer.observe(ref.current);
       }
     }, 10);
 

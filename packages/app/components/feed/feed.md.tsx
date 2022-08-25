@@ -14,14 +14,15 @@ import { View } from "@showtime-xyz/universal.view";
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
-import { ViewabilityTrackerInfiniteScrollList } from "app/components/viewability-tracker-infinite-scroll-list";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hoc/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const CARD_HEIGHT = 825;
@@ -36,6 +37,9 @@ const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 // type Query = {
 //   tab: number;
 // };
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 export const Feed = () => {
   return (
@@ -199,7 +203,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
           overflowY: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <ViewabilityTrackerInfiniteScrollList
+        <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
           overscan={{

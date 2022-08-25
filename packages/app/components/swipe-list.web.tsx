@@ -1,14 +1,17 @@
 import { useMemo, useRef, useCallback } from "react";
-import { FlatList, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { FeedItem } from "app/components/feed-item";
-import { ViewabilityTrackerInfiniteScrollList } from "app/components/viewability-tracker-infinite-scroll-list";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hoc/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
-// import { InfiniteScrollList } from "./test";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 type Props = {
   data: NFT[];
@@ -27,7 +30,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   bottomPadding = 0,
 }: Props) => {
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<any>(null);
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
   const { height: windowHeight } = useWindowDimensions();
@@ -59,7 +62,7 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <ViewabilityTrackerInfiniteScrollList
+      <ViewabilityInfiniteScrollList
         data={data}
         estimatedItemSize={windowHeight}
         onEndReached={fetchMore}

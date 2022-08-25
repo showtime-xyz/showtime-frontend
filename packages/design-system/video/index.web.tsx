@@ -32,7 +32,6 @@ export function Video({
 }: VideoProps) {
   const videoConfig = useVideoConfig();
   const videoRef = useRef<ExpoVideo>(null);
-  // useItemVisible({ videoRef });
   const { colorScheme } = useColorScheme();
   const [muted, setMuted] = useState(true);
   const { id } = useItemVisible({ videoRef });
