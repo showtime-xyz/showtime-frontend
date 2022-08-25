@@ -132,7 +132,7 @@
     "infinite-scroll-list": {
         "scope": "showtime.universal",
         "version": "0.0.23",
-        "mainFile": "index.tsx",
+        "mainFile": "index.ts",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },
     "input": {
@@ -282,7 +282,7 @@
     "tooltip": {
         "scope": "showtime.universal",
         "version": "0.0.45",
-        "mainFile": "index.tsx",
+        "mainFile": "index.ts",
         "rootDir": "packages/design-system/tooltip"
     },
     "typography": {
