@@ -21,7 +21,7 @@ import type { InfiniteScrollListProps } from ".";
 
 const ioConfiguration = {
   // will trigger intersection callback when item is 70% visible
-  threshold: 0.7,
+  threshold: 0.5,
 };
 
 export type InfiniteScrollListWebProps<T> = Omit<
@@ -55,36 +55,41 @@ const ViewabilityTracker = ({
   const ref = useRef<any>(null);
 
   useEffect(() => {
-    if (onViewableItemsChanged) {
-      const observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          if (!viewableItems.current.find((v) => v.index === index))
-            viewableItems.current.push({
-              item,
-              index,
-              isViewable: true,
-              key: index.toString(),
-              timestamp: new Date().valueOf(),
-            });
-        } else {
-          viewableItems.current = viewableItems.current.filter(
-            (v) => v.index !== index
-          );
-        }
+    let observer: IntersectionObserver;
+    // defer with a setTimeout. I think virtuoso might be mounting stuff async so intersection observer doesn't detect item on initial render
+    setTimeout(() => {
+      if (onViewableItemsChanged) {
+        observer = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) {
+            if (!viewableItems.current.find((v) => v.index === index))
+              viewableItems.current.push({
+                item,
+                index,
+                isViewable: true,
+                key: index.toString(),
+                timestamp: new Date().valueOf(),
+              });
+          } else {
+            viewableItems.current = viewableItems.current.filter(
+              (v) => v.index !== index
+            );
+          }
 
-        onViewableItemsChanged?.({
-          viewableItems: viewableItems.current,
+          onViewableItemsChanged?.({
+            viewableItems: viewableItems.current,
 
-          // TODO: implement changed
-          changed: [],
-        });
-      }, ioConfiguration);
+            // TODO: implement changed
+            changed: [],
+          });
+        }, ioConfiguration);
 
-      observer.observe(ref.current);
-      return () => {
-        observer.disconnect();
-      };
-    }
+        observer.observe(ref.current);
+      }
+    }, 10);
+
+    return () => {
+      observer?.disconnect();
+    };
   }, [onViewableItemsChanged, viewableItems, index, item]);
 
   return <div ref={ref}>{children}</div>;
