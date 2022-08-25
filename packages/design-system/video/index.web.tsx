@@ -9,6 +9,7 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { MuteButton } from "app/components/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
