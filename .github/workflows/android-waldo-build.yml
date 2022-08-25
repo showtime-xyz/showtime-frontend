@@ -5,7 +5,7 @@ defaults:
     working-directory: apps/expo
 
 on:
-  pull_request:
+  push:
     branches: ["staging"]
 
   # Allows you to run this workflow manually from the Actions tab
