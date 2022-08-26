@@ -21,7 +21,7 @@ const options = [
 
 const Container = (props: any) => {
   return (
-    <View tw={"items-center p-10"} style={{ flex: 1 }}>
+    <View tw={"items-center bg-gray-800 p-10"} style={{ flex: 1 }}>
       {props.children}
     </View>
   );
