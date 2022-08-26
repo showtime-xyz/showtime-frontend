@@ -8005,6 +8005,7 @@ __metadata:
     "@showtime-xyz/universal.tailwind": 0.0.31
     "@showtime-xyz/universal.view": 0.0.31
     "@storybook/react": 6.5.9
+    react-native-web: 0.18.7
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0

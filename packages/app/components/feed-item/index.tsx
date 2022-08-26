@@ -33,7 +33,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
 import { useNavigation } from "app/lib/react-navigation/native";
-import { useMuted } from "app/providers/mute-provider";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -244,7 +243,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             setDetailHeight(height);
           }}
         >
-          <FeedMutedButton nft={nft} />
+          {nft?.mime_type?.startsWith("video") ? (
+            <View tw="z-9 absolute top-[-40px] right-4">
+              <MuteButton />
+            </View>
+          ) : null}
 
           <BlurView
             tint={tint}
@@ -266,22 +269,3 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   );
 });
 FeedItem.displayName = "FeedItem";
-
-const FeedMutedButton = ({ nft }: { nft: NFT }) => {
-  const [muted, setMuted] = useMuted();
-
-  if (Platform.OS !== "web" && nft?.mime_type?.startsWith("video")) {
-    return (
-      <View tw="z-9 absolute top-[-40px] right-4">
-        <MuteButton
-          onPress={() => {
-            setMuted(!muted);
-          }}
-          muted={muted}
-        />
-      </View>
-    );
-  }
-
-  return null;
-};

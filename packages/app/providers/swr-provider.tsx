@@ -1,7 +1,7 @@
-import { AppState } from "react-native";
+import { useEffect, useRef } from "react";
+import { AppState, AppStateStatus } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
-import { useNavigation } from "@react-navigation/native";
 import { MMKV } from "react-native-mmkv";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
@@ -31,8 +31,20 @@ export const SWRProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const toast = useToast();
-  const navigation = useNavigation();
   const { refreshTokens } = useAccessTokenManager();
+  const isOnline = useRef<boolean>(true);
+
+  useEffect(() => {
+    NetInfo.fetch().then((s) => {
+      isOnline.current = !!s.isConnected && !!s.isInternetReachable;
+    });
+
+    const unsubscribe = NetInfo.addEventListener((s) => {
+      isOnline.current = !!s.isConnected && !!s.isInternetReachable;
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <SWRConfig
@@ -87,23 +99,15 @@ export const SWRProvider = ({
           return AppState.currentState === "active";
         },
         isOnline: () => {
-          return true;
-
-          // return NetInfo.fetch().then((state) => state.isConnected)
+          return isOnline.current;
         },
         // TODO: tab focus too
         initFocus(callback) {
-          let appState = AppState.currentState;
-
-          const onAppStateChange = (nextAppState) => {
+          const onAppStateChange = (nextAppState: AppStateStatus) => {
             /* If it's resuming from background or inactive mode to active one */
-            if (
-              appState.match(/inactive|background/) &&
-              nextAppState === "active"
-            ) {
+            if (nextAppState === "active") {
               callback();
             }
-            appState = nextAppState;
           };
 
           // Subscribe to the app state change events
@@ -112,41 +116,20 @@ export const SWRProvider = ({
             onAppStateChange
           );
 
-          // Subscribe to the navigation events
-          const unsubscribe = navigation.addListener("focus", callback);
-
           return () => {
             if (listener) {
               listener.remove();
             }
-            unsubscribe();
           };
         },
         initReconnect(callback) {
-          let netInfoState = {
-            isConnected: undefined,
-            isInternetReachable: undefined,
-          };
-
-          NetInfo.fetch().then((state) => {
-            netInfoState = state;
-          });
-
-          // Subscribe to the network change events
-          const unsubscribe = NetInfo.addEventListener((nextNetInfoState) => {
-            if (
-              netInfoState.isInternetReachable === false &&
-              nextNetInfoState.isConnected === true &&
-              nextNetInfoState.isInternetReachable === true
-            ) {
+          const unsubscribe = NetInfo.addEventListener((s) => {
+            if (s.isInternetReachable && s.isConnected) {
               callback();
             }
-            netInfoState = nextNetInfoState;
           });
 
-          return () => {
-            unsubscribe();
-          };
+          return unsubscribe;
         },
       }}
     >

@@ -6,6 +6,8 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+import { FlashList } from "@shopify/flash-list";
+
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
 import { FeedItem } from "app/components/feed-item";
@@ -14,14 +16,16 @@ import {
   MOBILE_WEB_TABS_HEIGHT,
 } from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
-import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
-
 const { height: screenHeight } = Dimensions.get("screen");
+
+export const ViewabilityTrackerFlashList =
+  withViewabilityInfiniteScrollList(FlashList);
 
 type Props = {
   data: NFT[];
