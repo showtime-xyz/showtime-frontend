@@ -26,7 +26,6 @@ export const MissingSignatureMessage = ({
   const handleReconnect = async () => {
     if (Platform.OS === "web") {
       disconnect();
-      localStorage.removeItem("walletconnect");
     } else {
       connector.killSession();
     }

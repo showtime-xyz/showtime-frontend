@@ -224,7 +224,7 @@ export const useClaimNFT = (edition?: IEdition) => {
         }
       } else {
         // user is probably not connected to wallet
-        connect?.();
+        connect();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });

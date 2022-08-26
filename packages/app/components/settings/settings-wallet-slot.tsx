@@ -47,35 +47,14 @@ export const SettingsWalletSlotHeader = () => {
         hideAfter: 4000,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status]);
-
-  const triggerAddWallet = async () => {
-    Alert.alert(
-      "Showcase all your NFTs",
-      "If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Select Wallet",
-          style: "default",
-          onPress: async () => {
-            await addWallet();
-          },
-        },
-      ]
-    );
-  };
 
   return (
     <SettingSubTitle>
       <Text tw="text-xl font-bold text-gray-900 dark:text-white">
         Your Wallets
       </Text>
-      <Button variant="primary" size="small" onPress={triggerAddWallet}>
+      <Button variant="primary" size="small" onPress={addWallet}>
         {walletCTA}
       </Button>
     </SettingSubTitle>

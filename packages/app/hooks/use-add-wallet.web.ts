@@ -86,19 +86,17 @@ export const useAddWallet = () => {
     );
   };
 
-  // TODO: use RainbowKit
   const addWallet = async () => {
     try {
       let toastMessage = "";
 
-      // if (connected) {
-      //   console.log(address);
-      //   await disconnect();
-      // }
+      if (connected) {
+        await disconnect();
+      }
 
       dispatch({ type: "status", status: "connecting" });
 
-      // await connect?.();
+      await connect();
 
       if (address) {
         const isNewAddress = checkNewAddress(address);
