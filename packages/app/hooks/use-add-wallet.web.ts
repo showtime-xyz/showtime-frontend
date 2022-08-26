@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 
 import { useSWRConfig } from "swr";
 
@@ -46,56 +46,26 @@ export const useAddWallet = () => {
   const { setWeb3 } = useWeb3();
   const { mutate } = useSWRConfig();
   const { address, connected, connect, disconnect } = useWallet();
-
-  const [state, dispatch] = useReducer(
-    addWalletReducer,
-    initialState,
-    (): AddWallet => {
-      //   const connectionStatus = walletConnector.connected;
-      // A disconnected status can imply a magic user. It's not an automatic error event.
-      return {
-        ...initialState,
-        status: "disconnected",
-      };
-    }
-  );
-
   const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
 
-  const addWalletToBackend = async (address: string) => {
-    await axios({
-      url: "/v1/addwallet",
-      method: "POST",
-      data: { address },
-    });
-  };
+  useEffect(() => {
+    const checkNewAddress = (address: string) => {
+      return !wallets?.find(
+        (addedWallet) =>
+          addedWallet.address.toLowerCase() === address.toLowerCase()
+      );
+    };
 
-  const disconnectMagic = async () => {
-    const isMagicActive = await magic.user.isLoggedIn();
+    const disconnectMagic = async () => {
+      const isMagicActive = await magic.user.isLoggedIn();
 
-    if (isMagicActive) {
-      await magic.user.logout();
-      setWeb3(undefined);
-    }
-  };
-
-  const checkNewAddress = (address: string) => {
-    return !wallets?.find(
-      (addedWallet) =>
-        addedWallet.address.toLowerCase() === address.toLowerCase()
-    );
-  };
-
-  const addWallet = async () => {
-    try {
-      if (connected) {
-        await disconnect();
+      if (isMagicActive) {
+        await magic.user.logout();
+        setWeb3(undefined);
       }
+    };
 
-      dispatch({ type: "status", status: "connecting" });
-
-      await connect();
-
+    const addWallet = async () => {
       if (address) {
         const isNewAddress = checkNewAddress(address);
 
@@ -112,6 +82,41 @@ export const useAddWallet = () => {
           });
         }
       }
+    };
+
+    addWallet();
+  }, [address, magic?.user, mutate, setWeb3, toast, wallets]);
+
+  const [state, dispatch] = useReducer(
+    addWalletReducer,
+    initialState,
+    (): AddWallet => {
+      //   const connectionStatus = walletConnector.connected;
+      // A disconnected status can imply a magic user. It's not an automatic error event.
+      return {
+        ...initialState,
+        status: "disconnected",
+      };
+    }
+  );
+
+  const addWalletToBackend = async (address: string) => {
+    await axios({
+      url: "/v1/addwallet",
+      method: "POST",
+      data: { address },
+    });
+  };
+
+  const addWallet = async () => {
+    try {
+      if (connected) {
+        await disconnect();
+      }
+
+      dispatch({ type: "status", status: "connecting" });
+
+      await connect();
     } catch (error) {
       // todo: handle error
     }
