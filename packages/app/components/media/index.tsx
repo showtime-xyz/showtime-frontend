@@ -92,8 +92,7 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {/* we show play icon only on native because videos are not auto played on native */}
-          {numColumns > 1 && Platform.OS !== "web" && (
+          {numColumns > 1 && (
             <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>

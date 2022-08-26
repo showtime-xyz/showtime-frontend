@@ -21,6 +21,7 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
@@ -178,6 +179,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             }}
             resizeMode="contain"
           />
+          {nft?.mime_type?.includes("video") ? (
+            <View tw="absolute bottom-10 right-10">
+              <MuteButton />
+            </View>
+          ) : null}
         </View>
         <View
           style={[
