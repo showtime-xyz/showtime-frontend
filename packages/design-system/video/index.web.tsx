@@ -1,4 +1,4 @@
-import { ComponentProps, useRef, useState } from "react";
+import { ComponentProps, useRef } from "react";
 import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av/src";
@@ -9,11 +9,10 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
 
-import { MuteButton } from "app/components/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
+import { useMuted } from "app/providers/mute-provider";
 
 type VideoProps = {
   tw?: TW;
@@ -27,14 +26,15 @@ export function Video({
   style,
   resizeMode,
   posterSource,
-  showMuteButton = true,
+  isMuted: isMutedProp,
   ...props
 }: VideoProps) {
   const videoConfig = useVideoConfig();
   const videoRef = useRef<ExpoVideo>(null);
   const { colorScheme } = useColorScheme();
-  const [muted, setMuted] = useState(true);
   const { id } = useItemVisible({ videoRef });
+  const [muted] = useMuted();
+  const isMuted = isMutedProp ?? muted;
 
   return (
     <>
@@ -75,15 +75,10 @@ export function Video({
             ref={videoRef}
             shouldPlay={typeof id === "undefined"}
             isLooping
-            isMuted={muted}
+            isMuted={isMuted}
             videoStyle={tailwind.style("relative")}
             {...props}
           />
-          {showMuteButton ? (
-            <View tw="absolute bottom-12 right-5 md:bottom-2">
-              <MuteButton onPress={() => setMuted(!muted)} muted={muted} />
-            </View>
-          ) : null}
         </ImageBackground>
       )}
     </>

@@ -110,6 +110,7 @@ function Media({
             tw={!sizeStyle ? size : ""}
             style={sizeStyle}
             blurhash={item?.blurhash}
+            isMuted={numColumns > 1 ? true : undefined}
             resizeMode={resizeMode}
             showMuteButton={numColumns === 1}
           />
