@@ -88,8 +88,6 @@ export const useAddWallet = () => {
 
   const addWallet = async () => {
     try {
-      let toastMessage = "";
-
       if (connected) {
         await disconnect();
       }
@@ -105,18 +103,14 @@ export const useAddWallet = () => {
           await addWalletToBackend(address);
           await disconnectMagic();
 
-          toastMessage = "Address added and will soon appear on your profile";
-        } else {
-          toastMessage = "Address already connected to your profile";
+          dispatch({ type: "status", status: "connected" });
+          mutate(MY_INFO_ENDPOINT);
+
+          toast?.show({
+            message: "Your wallet was added successfully!",
+            hideAfter: 4000,
+          });
         }
-
-        dispatch({ type: "status", status: "connected" });
-        mutate(MY_INFO_ENDPOINT);
-
-        toast?.show({
-          message: toastMessage,
-          hideAfter: 4000,
-        });
       }
     } catch (error) {
       // todo: handle error
