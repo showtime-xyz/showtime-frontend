@@ -74,8 +74,6 @@ export function Web3Provider({
         ?.getSigner()
         .getAddress()
         .then((address) => {
-          console.log("dldodofofo ", address);
-
           setMagicWalletAddress(address);
         });
   }, [web3]);
