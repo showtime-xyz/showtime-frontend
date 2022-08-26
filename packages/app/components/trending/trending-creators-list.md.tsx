@@ -3,13 +3,13 @@ import { useState, useCallback } from "react";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators } from "app/hooks/api-hooks";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 

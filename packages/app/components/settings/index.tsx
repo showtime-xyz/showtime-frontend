@@ -6,6 +6,14 @@ import Constants from "expo-constants";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
+import {
+  HeaderTabView,
+  Route,
+  SceneRendererProps,
+  TabScrollView,
+  TabFlatList,
+  TabBarSingle,
+} from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -20,14 +28,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import {
-  HeaderTabView,
-  Route,
-  SceneRendererProps,
-  TabScrollView,
-  TabFlatList,
-} from "design-system/tab-view";
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import {
   breakpoints,
   CARD_DARK_SHADOW,
@@ -147,7 +147,9 @@ const SettingsTabs = () => {
                 return <SettingsWalletSlotSkeleton />;
               }}
               ListHeaderComponent={<SettingsWalletSlotHeader />}
-              ItemSeparatorComponent={() => <SlotSeparator />}
+              ItemSeparatorComponent={() =>
+                isMdWidth ? <View tw="mt-2" /> : <SlotSeparator />
+              }
               index={index}
             />
           );
@@ -254,11 +256,12 @@ const SettingsTabs = () => {
       }
     },
     [
-      accountSettings,
-      emailWallets,
-      router,
       wallets,
+      emailWallets,
+      accountSettings,
       pushNotificationsPreferences,
+      isMdWidth,
+      router,
     ]
   );
 

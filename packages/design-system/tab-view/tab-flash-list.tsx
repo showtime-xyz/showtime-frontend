@@ -1,23 +1,43 @@
 import React from "react";
+import { Platform } from "react-native";
 
 import { FlashList } from "@shopify/flash-list";
 
+import { useHeaderTabContext } from "@showtime-xyz/universal.collapsible-tab-view";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
-} from "app/lib/infinite-scroll-list";
+} from "@showtime-xyz/universal.infinite-scroll-list";
 
-import type { TabScrollViewProps } from "design-system/tab-view/src";
+import { TabFlashListScrollView } from "./tab-flash-list-scroll-view";
 
 export type TabInfiniteScrollListProps<T> = Omit<
   InfiniteScrollListProps<T>,
   "renderScrollComponent"
 > & {
   index: number;
-  renderScrollComponent?: React.ForwardRefExoticComponent<TabScrollViewProps>;
 };
 
-export const TabInfiniteScrollList = InfiniteScrollList as <T>(
+function TabInfiniteScrollListComponent<T>(
+  props: TabInfiniteScrollListProps<T>,
+  ref: React.Ref<FlashList<T>>
+) {
+  const { scrollViewPaddingTop } = useHeaderTabContext();
+  return (
+    <InfiniteScrollList
+      {...props}
+      {...Platform.select({
+        web: {},
+        default: { renderScrollComponent: TabFlashListScrollView as any },
+      })}
+      contentContainerStyle={{ paddingTop: scrollViewPaddingTop }}
+      ref={ref}
+    />
+  );
+}
+export const TabInfiniteScrollList = React.forwardRef(
+  TabInfiniteScrollListComponent
+) as <T>(
   props: TabInfiniteScrollListProps<T> & {
     ref?: React.Ref<FlashList<T>>;
   }

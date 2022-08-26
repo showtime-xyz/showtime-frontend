@@ -3,18 +3,21 @@ import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
-import { TabFlashListScrollView } from "design-system/tab-view";
-import { TabInfiniteScrollList } from "design-system/tab-view/tab-flash-list";
-
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
+
+const ViewabilityInfiniteScrollList = withViewabilityInfiniteScrollList(
+  TabInfiniteScrollList
+);
 
 const NUM_COLUMNS = 3;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
@@ -55,18 +58,18 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
     const contentWidth = useContentWidth();
 
     return (
-      <TabInfiniteScrollList
+      <ViewabilityInfiniteScrollList
         numColumns={NUM_COLUMNS}
         data={data}
         ref={listRef}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
         estimatedItemSize={contentWidth / NUM_COLUMNS}
         overscan={{
           main: contentWidth / NUM_COLUMNS,
           reverse: contentWidth / NUM_COLUMNS,
         }}
-        renderScrollComponent={TabFlashListScrollView}
         ListFooterComponent={ListFooterComponent}
         index={index}
       />

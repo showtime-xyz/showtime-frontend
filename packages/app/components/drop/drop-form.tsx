@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
+import { Accordion } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
@@ -120,7 +121,7 @@ export const DropForm = () => {
   const scrollViewRef = useRef<RNScrollView>(null);
 
   const isSignRequested = signMessageData.status === "sign_requested";
-
+  const [accordionValue, setAccordionValue] = useState("");
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
   };
@@ -404,71 +405,84 @@ export const DropForm = () => {
               </View>
             </View>
           </View>
-          <View tw="justify-between lg:flex-row">
-            <View tw="mt-4 flex-1 flex-row lg:mr-4">
-              <Controller
-                control={control}
-                name="royalty"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  return (
-                    <Fieldset
-                      tw="flex-1"
-                      label="Your royalties (%)"
-                      onBlur={onBlur}
-                      helperText="How much you'll earn each time this NFT is sold"
-                      errorText={errors.royalty?.message}
-                      value={value?.toString()}
-                      onChangeText={onChange}
+          <Accordion.Root
+            value={accordionValue}
+            onValueChange={setAccordionValue}
+          >
+            <Accordion.Item value="open">
+              <Accordion.Trigger tw="px-0">
+                <Accordion.Label>Advanced</Accordion.Label>
+                <Accordion.Chevron />
+              </Accordion.Trigger>
+              <Accordion.Content tw="p-0">
+                <View tw="justify-between lg:flex-row">
+                  <View tw="mt-4 flex-1 flex-row lg:mr-4">
+                    <Controller
+                      control={control}
+                      name="royalty"
+                      render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                          <Fieldset
+                            tw="flex-1"
+                            label="Your royalties (%)"
+                            onBlur={onBlur}
+                            helperText="How much you'll earn each time this NFT is sold"
+                            errorText={errors.royalty?.message}
+                            value={value?.toString()}
+                            onChangeText={onChange}
+                          />
+                        );
+                      }}
                     />
-                  );
-                }}
-              />
-            </View>
-            <View tw="mt-4 flex-1 flex-row">
-              <Controller
-                control={control}
-                name="editionSize"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  return (
-                    <Fieldset
-                      tw="flex-1"
-                      label="Editions"
-                      onBlur={onBlur}
-                      helperText="How many editions will be available to claim"
-                      errorText={errors.editionSize?.message}
-                      value={value?.toString()}
-                      onChangeText={onChange}
+                  </View>
+                  <View tw="mt-4 flex-1 flex-row">
+                    <Controller
+                      control={control}
+                      name="editionSize"
+                      render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                          <Fieldset
+                            tw="flex-1"
+                            label="Editions"
+                            onBlur={onBlur}
+                            helperText="How many editions will be available to claim"
+                            errorText={errors.editionSize?.message}
+                            value={value?.toString()}
+                            onChangeText={onChange}
+                          />
+                        );
+                      }}
                     />
-                  );
-                }}
-              />
-            </View>
-          </View>
-          <View tw="z-10 mt-4 flex-row">
-            <Controller
-              control={control}
-              name="duration"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Duration"
-                    onBlur={onBlur}
-                    helperText="How long the drop will be available to claim"
-                    errorText={errors.duration?.message}
-                    selectOnly
-                    select={{
-                      options: durationOptions,
-                      placeholder: "Duration",
-                      value: value,
-                      onChange,
-                      tw: "flex-1",
+                  </View>
+                </View>
+                <View tw="z-10 mt-4 flex-row">
+                  <Controller
+                    control={control}
+                    name="duration"
+                    render={({ field: { onChange, onBlur, value } }) => {
+                      return (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Duration"
+                          onBlur={onBlur}
+                          helperText="How long the drop will be available to claim"
+                          errorText={errors.duration?.message}
+                          selectOnly
+                          select={{
+                            options: durationOptions,
+                            placeholder: "Duration",
+                            value: value,
+                            onChange,
+                            tw: "flex-1",
+                          }}
+                        />
+                      );
                     }}
                   />
-                );
-              }}
-            />
-          </View>
+                </View>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion.Root>
 
           <View tw="mt-4 flex-row justify-between">
             <View>

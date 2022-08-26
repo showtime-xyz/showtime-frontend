@@ -1,4 +1,4 @@
-import { ComponentProps, useRef, useState } from "react";
+import { ComponentProps, useRef } from "react";
 import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
@@ -8,8 +8,6 @@ import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { MuteButton } from "app/components/mute-button";
-import { useMuteButtonBottomOffset } from "app/components/mute-button/mute-button";
 import { useVideoConfig } from "app/context/video-config-context";
 import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 import { useMuted } from "app/providers/mute-provider";
@@ -17,36 +15,18 @@ import { useMuted } from "app/providers/mute-provider";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
-  showMuteButton?: boolean;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({
-  tw,
-  blurhash,
-  style,
-  posterSource,
-  showMuteButton,
-  ...props
-}: VideoProps) {
+function Video({ tw, blurhash, style, posterSource, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const videoConfig = useVideoConfig();
-  const mutedContext = useMuted();
-  const [muted, setMuted] = useState(true);
-  const isMuted = mutedContext ? mutedContext[0] : muted;
+  const [muted] = useMuted();
 
   const { id } = useViewabilityMount({
     videoRef,
     source: props.source,
-    isMuted,
+    isMuted: muted,
   });
-  const bottomOffset = useMuteButtonBottomOffset();
-  const handleMuteChange = () => {
-    if (mutedContext) {
-      mutedContext[1](!isMuted);
-    } else {
-      setMuted(!isMuted);
-    }
-  };
 
   return (
     <>
@@ -75,19 +55,8 @@ function Video({
               useNativeControls={videoConfig?.useNativeControls}
               resizeMode={ResizeMode.COVER}
               posterSource={posterSource}
-              isMuted={isMuted}
+              isMuted={muted}
             />
-            {showMuteButton ? (
-              <View
-                style={{
-                  bottom: bottomOffset,
-                  right: 10,
-                  position: "absolute",
-                }}
-              >
-                <MuteButton onPress={handleMuteChange} muted={isMuted} />
-              </View>
-            ) : null}
           </>
         )}
 

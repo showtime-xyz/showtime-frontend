@@ -2,9 +2,14 @@ import { useCallback, useReducer, useMemo, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  SceneRendererProps,
+  HeaderTabView,
+  Route,
+  TabSpinner,
+} from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,9 +24,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
@@ -102,7 +104,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
-    setIsRefreshing(false);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
   }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
@@ -143,7 +147,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const headerBgLeft = useMemo(() => {
-    return Math.min(-(width - contentWidth) / 2, 0);
+    return Math.min(-(width - contentWidth + 15) / 2, 0);
   }, [contentWidth, width]);
 
   const headerShadow = useMemo(() => {

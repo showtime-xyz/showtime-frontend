@@ -117,6 +117,12 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment, isAuthenticated, navigateToLogin]);
+  const handleOnReplyOnAReply = useCallback(
+    (replyComment: CommentType) => {
+      reply?.({ ...comment, username: replyComment.username });
+    },
+    [reply, comment]
+  );
   const handleOnUserPress = useCallback((username: string) => {
     if (Platform.OS === "web") {
       router.replace(`/@${username}`);
@@ -165,6 +171,7 @@ function CommentRowComponent({
               likeComment={likeComment}
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}
+              reply={handleOnReplyOnAReply}
             />
           ))
         : null}

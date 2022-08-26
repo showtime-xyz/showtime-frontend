@@ -2,10 +2,9 @@ import { GestureResponderEvent } from "react-native";
 
 import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 
+import { Haptics } from "@showtime-xyz/universal.haptics";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Haptics } from "../lib/haptics";
 
 export const TabBarButton = ({
   onPress,

@@ -7,6 +7,7 @@ import { Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -20,6 +21,7 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
@@ -29,7 +31,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
 
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
 import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
@@ -178,6 +179,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             }}
             resizeMode="contain"
           />
+          {nft?.mime_type?.includes("video") ? (
+            <View tw="absolute bottom-10 right-10">
+              <MuteButton />
+            </View>
+          ) : null}
         </View>
         <View
           style={[

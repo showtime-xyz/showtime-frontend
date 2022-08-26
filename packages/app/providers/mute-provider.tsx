@@ -6,9 +6,8 @@ import {
   SetStateAction,
 } from "react";
 
-export const MuteContext = createContext(
-  null as [boolean, Dispatch<SetStateAction<boolean>>] | null
-);
+export const MuteContext = createContext([true, () => {}] as
+  | [boolean, Dispatch<SetStateAction<boolean>>]);
 
 export const MuteProvider = ({ children }: { children: any }) => {
   const values = useState(true);

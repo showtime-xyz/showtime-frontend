@@ -9,6 +9,7 @@ import {
   Search as SearchIcon,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -18,7 +19,6 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";

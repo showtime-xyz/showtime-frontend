@@ -1,0 +1,91 @@
+diff --git a/node_modules/solito/build/router/use-router.js b/node_modules/solito/build/router/use-router.js
+index c5839b5..f1385ad 100644
+--- a/node_modules/solito/build/router/use-router.js
++++ b/node_modules/solito/build/router/use-router.js
+@@ -1,4 +1,4 @@
+-import { useCallback } from 'react';
++import { useCallback, useMemo } from 'react';
+ import { parseNextPath } from './parse-next-path';
+ import { useLinkTo } from './use-link-to';
+ import { useNavigation } from './use-navigation';
+@@ -7,38 +7,47 @@ export function useRouter() {
+     const linkTo = useLinkTo();
+     const router = useNextRouter();
+     const navigation = useNavigation();
+-    return {
+-        push: useCallback((url, as, options) => {
+-            if (router) {
+-                router.push(url, as, options);
++    const push = useCallback((url, as, options) => {
++        if (router) {
++            router.push(url, as, options);
++        }
++        else {
++            const to = parseNextPath(as || url);
++            if (to) {
++                linkTo(to);
+             }
+-            else {
+-                const to = parseNextPath(as || url);
+-                if (to) {
+-                    linkTo(to);
+-                }
++        }
++    }, [linkTo, router?.push])
++
++    const back = useCallback(() => {
++        if (router) {
++            router.back();
++        }
++        else {
++            navigation?.goBack();
++        }
++    }, [router?.back, navigation])
++
++    const replace = useCallback((url, as, options) => {
++        if (router) {
++            router.replace(url, as, options);
++        }
++        else {
++            const to = parseNextPath(as || url);
++            if (to) {
++                linkTo(to);
+             }
+-        }, [linkTo, router?.push]),
+-        replace: useCallback((url, as, options) => {
+-            if (router) {
+-                router.replace(url, as, options);
+-            }
+-            else {
+-                const to = parseNextPath(as || url);
+-                if (to) {
+-                    linkTo(to);
+-                }
+-            }
+-        }, [linkTo, router?.replace]),
+-        back: useCallback(() => {
+-            if (router) {
+-                router.back();
+-            }
+-            else {
+-                navigation?.goBack();
+-            }
+-        }, [router?.back, navigation]),
+-        parseNextPath,
+-    };
+-}
++        }
++    }, [linkTo, router?.replace])
++
++    return useMemo(() => {
++        return {
++            push,
++            replace ,
++            back,
++            parseNextPath,
++        }
++    } , [replace, back, push, parseNextPath]) 
++       
++};
+ //# sourceMappingURL=use-router.js.map
+\ No newline at end of file

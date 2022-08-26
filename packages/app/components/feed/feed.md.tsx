@@ -5,6 +5,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -15,9 +16,9 @@ import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
@@ -36,6 +37,9 @@ const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 // type Query = {
 //   tab: number;
 // };
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 export const Feed = () => {
   return (
@@ -191,9 +195,6 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
       </View>
     );
   }, []);
-  const keyExtractor = useCallback((item: NFT) => {
-    return item.nft_id?.toFixed();
-  }, []);
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
@@ -202,10 +203,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
           overflowY: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <InfiniteScrollList
+        <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          keyExtractor={keyExtractor}
           overscan={{
             main: CARD_HEIGHT,
             reverse: CARD_HEIGHT,

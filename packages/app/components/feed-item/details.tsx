@@ -68,6 +68,8 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
       </View>
       {isCreatorDrop && edition ? (
         <ClaimButton edition={edition} size="regular" />
+      ) : isCreatorDrop ? (
+        <View tw="h-12" />
       ) : null}
       <View tw="h-4" />
     </View>

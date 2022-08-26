@@ -1,18 +1,15 @@
-import { createContext, useContext } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
 
+import { useMuted } from "app/providers/mute-provider";
+
 import { colors } from "design-system/tailwind";
 
 const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
-export const MuteButton = ({
-  muted,
-  onPress,
-}: {
-  muted: boolean;
-  onPress: () => void;
-}) => {
+export const MuteButton = () => {
+  const [muted, setMuted] = useMuted();
+
   return (
     <Pressable
       style={muteButtonStyle.style}
@@ -21,7 +18,7 @@ export const MuteButton = ({
         if (Platform.OS === "web") {
           e.preventDefault();
         }
-        onPress();
+        setMuted(!muted);
       }}
     >
       {muted ? (
@@ -43,25 +40,3 @@ const muteButtonStyle = StyleSheet.create({
     padding: 4,
   },
 });
-
-const MuteButtonOffsetContext = createContext({
-  bottomOffset: 10,
-});
-
-export const MuteButtonOffsetProvider = ({
-  bottomOffset,
-  children,
-}: {
-  bottomOffset: number;
-  children: any;
-}) => {
-  return (
-    <MuteButtonOffsetContext.Provider value={{ bottomOffset }}>
-      {children}
-    </MuteButtonOffsetContext.Provider>
-  );
-};
-
-export const useMuteButtonBottomOffset = () => {
-  return useContext(MuteButtonOffsetContext).bottomOffset;
-};

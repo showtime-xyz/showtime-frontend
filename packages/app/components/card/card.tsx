@@ -17,6 +17,7 @@ import { ClaimButton } from "app/components/claim/claim-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
@@ -38,7 +39,7 @@ type Props = {
 
 function Card({
   nft,
-  numColumns,
+  numColumns = 1,
   tw,
   sizeStyle,
   onPress,
@@ -126,6 +127,11 @@ function Card({
 
           <RouteComponent href={href!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
+            {numColumns === 1 && nft?.mime_type?.includes("video") ? (
+              <View tw="z-9 absolute bottom-5 right-5">
+                <MuteButton />
+              </View>
+            ) : null}
           </RouteComponent>
           <RouteComponent
             // @ts-ignore
