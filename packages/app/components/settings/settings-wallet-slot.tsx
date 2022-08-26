@@ -45,6 +45,7 @@ export const SettingsWalletSlotHeader = () => {
         hideAfter: 4000,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status]);
 
   return (
