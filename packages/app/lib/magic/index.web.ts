@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useCallback } from "react";
 
 import { isServer } from "app/lib/is-server";
 
@@ -8,21 +8,11 @@ const Relayer = Fragment;
 
 function useMagic() {
   const [magic, setMagic] = useState({});
-  const Magic = isServer
-    ? null
-    : (window as Window & typeof globalThis & { Magic: any })?.Magic;
-  const [, setForceUpdate] = useState(false);
 
-  useEffect(() => {
-    const remove = registerOnMagicLoad(() => {
-      setForceUpdate((p) => !p);
-    });
-    return remove;
-  }, []);
-
-  useEffect(() => {
+  const initializeMagic = useCallback(() => {
     const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
-
+    const Magic = (window as Window & typeof globalThis & { Magic: any })
+      ?.Magic;
     if (!isServer && Magic) {
       // Default to polygon chain
       const customNodeOptions = {
@@ -42,10 +32,27 @@ function useMagic() {
           network: customNodeOptions,
         })
       );
+      return true;
     }
-  }, [Magic]);
+  }, []);
 
-  return { magic, Magic };
+  useEffect(() => {
+    const loaded = initializeMagic();
+    let remove: any;
+    if (!loaded) {
+      remove = registerOnMagicLoad(initializeMagic);
+    }
+    return () => {
+      remove?.();
+    };
+  }, [initializeMagic]);
+
+  return {
+    magic,
+    Magic: isServer
+      ? null
+      : (window as Window & typeof globalThis & { Magic: any })?.Magic,
+  };
 }
 
 export { useMagic, Relayer };
