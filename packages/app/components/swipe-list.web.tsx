@@ -5,7 +5,7 @@ import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list
 
 import { FeedItem } from "app/components/feed-item";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { withViewabilityInfiniteScrollList } from "app/hoc/with-viewability-infinite-scroll-list";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";

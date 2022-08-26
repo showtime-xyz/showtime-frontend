@@ -16,7 +16,7 @@ import {
   MOBILE_WEB_TABS_HEIGHT,
 } from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { withViewabilityInfiniteScrollList } from "app/hoc/with-viewability-infinite-scroll-list";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";

@@ -7,7 +7,7 @@ import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
-import { withViewabilityInfiniteScrollList } from "app/hoc/with-viewability-infinite-scroll-list";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";

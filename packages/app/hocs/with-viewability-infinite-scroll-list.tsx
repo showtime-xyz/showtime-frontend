@@ -30,7 +30,7 @@ export function withViewabilityInfiniteScrollList<T>(Component: T): T {
           }
 
           if (props.data && viewableItem) {
-            const visibleIndex = Number(viewableItem.key);
+            const visibleIndex = Number(viewableItem.index);
 
             const prevIndex = visibleIndex > 0 ? visibleIndex - 1 : undefined;
             const nextIndex =
