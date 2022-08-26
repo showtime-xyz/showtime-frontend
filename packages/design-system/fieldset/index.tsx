@@ -4,12 +4,12 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useId } from "@showtime-xyz/universal.input";
 import { Label } from "@showtime-xyz/universal.label";
+import { Select } from "@showtime-xyz/universal.select";
+import type { SelectProps } from "@showtime-xyz/universal.select";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
-
-import { Select, SelectProps } from "design-system/select";
 
 type FieldsetProps = {
   errorText?: string;
