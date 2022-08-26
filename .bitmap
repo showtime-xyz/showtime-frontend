@@ -291,6 +291,12 @@
         "mainFile": "index.js",
         "rootDir": "packages/design-system/typography"
     },
+    "utils": {
+        "scope": "showtime.universal",
+        "version": "0.0.1",
+        "mainFile": "index.tsx",
+        "rootDir": "packages/design-system/utils"
+    },
     "verification-badge": {
         "scope": "showtime.universal",
         "version": "0.0.25",

@@ -119,11 +119,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View
-            tw="items-center"
-            // @ts-ignore currently overflow-x-hidden doesn't support web, and minHeight we need to subtract Header height.
-            style={{ overflowX: "hidden", minHeight: "calc(100vh - 64px)" }}
-          >
+          <View tw="items-center " style={{ minHeight: "calc(100vh - 64px)" }}>
             <Component {...pageProps} />
           </View>
           <Footer />

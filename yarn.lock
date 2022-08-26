@@ -7578,9 +7578,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.infinite-scroll-list@npm:0.0.25, @showtime-xyz/universal.infinite-scroll-list@npm:^0.0.25":
-  version: 0.0.25
-  resolution: "@showtime-xyz/universal.infinite-scroll-list@npm:0.0.25"
+"@showtime-xyz/universal.infinite-scroll-list@npm:0.0.26, @showtime-xyz/universal.infinite-scroll-list@npm:^0.0.26":
+  version: 0.0.26
+  resolution: "@showtime-xyz/universal.infinite-scroll-list@npm:0.0.26"
   dependencies:
     "@shopify/flash-list": 1.2.1
     react-virtuoso: 2.16.6
@@ -7589,7 +7589,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: c4c6170f80b05cd4e7ff0cfe8bd7b3fef7a8ee0ea8f60ad6d5bd1eca26a6fe56fc31b3b198f96f0ec66e1b781b63f55ed83578f5eeff7e534b6ecd50d2db6500
+  checksum: 465e9beeeb8fb113a229004af93c3d23e08177249e28f0ff3352e8cc4c91787a8f35a8b43d815f068922e1a311a52fb93ee5390ee0c1ef46541f7f130696ebfb
   languageName: node
   linkType: hard
 
@@ -7939,15 +7939,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tab-view@npm:^0.0.15":
-  version: 0.0.15
-  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.15"
+"@showtime-xyz/universal.tab-view@npm:^0.0.16":
+  version: 0.0.16
+  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.16"
   dependencies:
     "@shopify/flash-list": 1.2.1
     "@showtime-xyz/universal.collapsible-tab-view": 0.0.31
     "@showtime-xyz/universal.haptics": 0.0.6
     "@showtime-xyz/universal.hooks": 0.0.31
-    "@showtime-xyz/universal.infinite-scroll-list": 0.0.25
+    "@showtime-xyz/universal.infinite-scroll-list": 0.0.26
     "@showtime-xyz/universal.pressable": 0.0.38
     "@showtime-xyz/universal.safe-area": 0.0.25
     "@showtime-xyz/universal.spinner": 0.0.36
@@ -7963,7 +7963,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 4daf2d11ce6c093787d7e4f314192c7f201de9ff18b5e8f30b6c461e47bbe262c9204706bd6508685f9a0a5d5ffaece290208ed7ffcb7640e03c7017aea40a9c
+  checksum: 64229547cc5ff3ecac8d2bb022370dbecdb8dbfae4360ccaf43fbc86da632dc59ae7c97536a9d9743035f093b7bfa8e6c95bcf9a18c9bbaa9c8a3e08d94228de
   languageName: node
   linkType: hard
 
@@ -8074,6 +8074,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@showtime-xyz/universal.utils@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@showtime-xyz/universal.utils@npm:0.0.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: 9a720f88249a0570d535bbd46fa351755a92b58bee93348d70e0e278ad97e3fa1bc89976e8d53f98667991522b19c14523494d6f2eec6c4f6cb23e9b9a8f4487
+  languageName: node
+  linkType: hard
+
 "@showtime-xyz/universal.verification-badge@npm:^0.0.25":
   version: 0.0.25
   resolution: "@showtime-xyz/universal.verification-badge@npm:0.0.25"
@@ -8155,7 +8167,7 @@ __metadata:
     "@showtime-xyz/universal.hooks": ^0.0.31
     "@showtime-xyz/universal.icon": ^0.0.46
     "@showtime-xyz/universal.image": ^0.0.34
-    "@showtime-xyz/universal.infinite-scroll-list": ^0.0.25
+    "@showtime-xyz/universal.infinite-scroll-list": ^0.0.26
     "@showtime-xyz/universal.input": ^0.0.39
     "@showtime-xyz/universal.label": ^0.0.35
     "@showtime-xyz/universal.light-box": ^0.0.41
@@ -8175,13 +8187,14 @@ __metadata:
     "@showtime-xyz/universal.snackbar": ^0.0.61
     "@showtime-xyz/universal.spinner": ^0.0.36
     "@showtime-xyz/universal.switch": ^0.0.38
-    "@showtime-xyz/universal.tab-view": ^0.0.15
+    "@showtime-xyz/universal.tab-view": ^0.0.16
     "@showtime-xyz/universal.tailwind": ^0.0.31
     "@showtime-xyz/universal.text": ^0.0.33
     "@showtime-xyz/universal.text-input": ^0.0.33
     "@showtime-xyz/universal.toast": ^0.0.50
     "@showtime-xyz/universal.tooltip": ^0.0.46
     "@showtime-xyz/universal.typography": ^0.0.25
+    "@showtime-xyz/universal.utils": ^0.0.1
     "@showtime-xyz/universal.verification-badge": ^0.0.25
     "@showtime-xyz/universal.view": ^0.0.31
     "@storybook/addon-actions": ~6.3.12
