@@ -7228,9 +7228,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.accordion@npm:^0.0.39":
-  version: 0.0.39
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.39"
+"@showtime-xyz/universal.accordion@npm:^0.0.40":
+  version: 0.0.40
+  resolution: "@showtime-xyz/universal.accordion@npm:0.0.40"
   dependencies:
     "@radix-ui/react-accordion": 0.1.6
     "@showtime-xyz/universal.hooks": 0.0.32
@@ -7245,7 +7245,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 86757fec32d6a4ba3cfa3a13629cf4f9b938f550ca2b6e52f3d4371cb8edfcaa0fbb72666b28db5ec2f1f3a027432c48a5ac277442ded6664f52b3b08c7873ba
+  checksum: dec4bb0581eb41bec59906157fb728c67d5240403692856e1d744474e2abe6eba034eacf05b78452ea414392b5bcc98ca65215f06fefcc7dd82f334ba4242e67
   languageName: node
   linkType: hard
 
@@ -7805,10 +7805,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.scroll-view@npm:^0.0.36":
-  version: 0.0.36
-  resolution: "@showtime-xyz/universal.scroll-view@npm:0.0.36"
+"@showtime-xyz/universal.scroll-view@npm:^0.0.37":
+  version: 0.0.37
+  resolution: "@showtime-xyz/universal.scroll-view@npm:0.0.37"
   dependencies:
+    "@showtime-xyz/universal.color-scheme": 0.0.18
     "@showtime-xyz/universal.tailwind": 0.0.31
     react-native-keyboard-aware-scroll-view: 0.9.5
   peerDependencies:
@@ -7816,7 +7817,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 0f41089b76b02ff8e4cbc8db67750df3e547a5611984642c010a394edf0752c773277e60e0cedcc768a3d5472605db9c7ce71ddf2f9901080d8c9ed28010bf59
+  checksum: 22dcba43e22d79798cc45c18927791b85a090e305893ffa94c8d44b640cb778e34d273fdfb558f603b6438478c0b7adbc7245e70a15b06666ca55e43f2596afc
   languageName: node
   linkType: hard
 
@@ -8149,7 +8150,7 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^4.2.0
     "@shopify/flash-list": ^1.2.1
-    "@showtime-xyz/universal.accordion": ^0.0.39
+    "@showtime-xyz/universal.accordion": ^0.0.40
     "@showtime-xyz/universal.activity-indicator": ^0.0.32
     "@showtime-xyz/universal.alert": ^0.0.51
     "@showtime-xyz/universal.avatar": ^0.0.35
@@ -8182,7 +8183,7 @@ __metadata:
     "@showtime-xyz/universal.pressable-scale": ^0.0.36
     "@showtime-xyz/universal.router": ^0.0.30
     "@showtime-xyz/universal.safe-area": ^0.0.25
-    "@showtime-xyz/universal.scroll-view": ^0.0.36
+    "@showtime-xyz/universal.scroll-view": ^0.0.37
     "@showtime-xyz/universal.segmented-control": ^0.0.38
     "@showtime-xyz/universal.select": ^0.0.57
     "@showtime-xyz/universal.skeleton": ^0.0.35

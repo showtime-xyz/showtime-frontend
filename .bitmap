@@ -11,7 +11,7 @@
 {
     "accordion": {
         "scope": "showtime.universal",
-        "version": "0.0.39",
+        "version": "0.0.40",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },
@@ -209,7 +209,7 @@
     },
     "scroll-view": {
         "scope": "showtime.universal",
-        "version": "0.0.36",
+        "version": "0.0.37",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/scroll-view"
     },
