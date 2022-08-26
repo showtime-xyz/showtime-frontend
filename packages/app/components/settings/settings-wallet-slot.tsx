@@ -3,7 +3,6 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -32,7 +31,6 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
-  const Alert = useAlert();
   const toast = useToast();
   const { state, addWallet } = useAddWallet();
 
