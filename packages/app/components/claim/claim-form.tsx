@@ -114,7 +114,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   ) {
     return (
       <CompleteProfileModalContent
-        title={`Show ${getProfileName(userProfile?.data.profile)} who you are!`}
+        title={`Show ${getProfileName(
+          creatorProfile?.data?.profile
+        )} who you are!`}
         description="Complete your profile first to claim this drop. It will take around 1 minute."
         cta="Complete profile to claim"
       />

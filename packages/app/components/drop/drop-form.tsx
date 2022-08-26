@@ -34,7 +34,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
-  getProfileName,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -166,7 +165,7 @@ export const DropForm = () => {
   ) {
     return (
       <CompleteProfileModalContent
-        title={`Show ${getProfileName(userProfile?.data.profile)} who you are!`}
+        title={`Hold on!`}
         description="Complete your profile first to create this drop. It will take around 1 minute."
         cta="Complete profile to drop"
       />
