@@ -64,6 +64,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         ref={listRef}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
         estimatedItemSize={contentWidth / NUM_COLUMNS}
         overscan={{
           main: contentWidth / NUM_COLUMNS,

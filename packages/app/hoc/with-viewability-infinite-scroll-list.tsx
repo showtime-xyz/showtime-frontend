@@ -12,7 +12,7 @@ type ViewabilityItemsContextType = any[];
 
 const viewabilityConfig = {
   minimumViewTime: 50,
-  itemVisiblePercentThreshold: 85,
+  itemVisiblePercentThreshold: 70,
 };
 
 export function withViewabilityInfiniteScrollList<T>(Component: T): T {
