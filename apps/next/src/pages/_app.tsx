@@ -13,6 +13,7 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useLogRocket } from "app/hooks/use-logrocket";
+import { onMagicLoad } from "app/lib/magic/magic-load-listener";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
@@ -115,6 +116,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <Script
         src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
         strategy="lazyOnload"
+        onLoad={onMagicLoad}
       />
       <AppProviders>
         <Container>
