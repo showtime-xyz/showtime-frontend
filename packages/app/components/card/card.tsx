@@ -127,11 +127,11 @@ function Card({
 
           <RouteComponent href={href!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
-            {numColumns === 1 && (
+            {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
                 <MuteButton />
               </View>
-            )}
+            ) : null}
           </RouteComponent>
           <RouteComponent
             // @ts-ignore
