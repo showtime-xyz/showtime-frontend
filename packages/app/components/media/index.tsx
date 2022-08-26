@@ -92,8 +92,7 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {/* we show play icon only on native because videos are not auto played on native */}
-          {numColumns > 1 && Platform.OS !== "web" && (
+          {numColumns > 1 && (
             <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
@@ -110,9 +109,8 @@ function Media({
             tw={!sizeStyle ? size : ""}
             style={sizeStyle}
             blurhash={item?.blurhash}
+            isMuted={numColumns > 1 ? true : undefined}
             resizeMode={resizeMode}
-            //  we always show mute button on web because videos are auto played on web
-            showMuteButton={numColumns === 1 || Platform.OS === "web"}
           />
         </PinchToZoom>
       ) : null}

@@ -7,7 +7,6 @@ import React, {
 } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
-import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 import type {
   GridListProps,
   GridItem,
@@ -16,13 +15,11 @@ import type {
   VirtuosoGridHandle,
   GridComponents,
 } from "react-virtuoso";
+import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 
 import type { InfiniteScrollListProps } from ".";
 
-const ioConfiguration = {
-  // will trigger intersection callback when item is 70% visible
-  threshold: 0.5,
-};
+const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
 
 export type InfiniteScrollListWebProps<T> = Omit<
   InfiniteScrollListProps<T>,
@@ -45,12 +42,14 @@ const ViewabilityTracker = ({
   children,
   onViewableItemsChanged,
   viewableItems,
+  itemVisiblePercentThreshold,
 }: {
   index: number;
   item: any;
   children: any;
   onViewableItemsChanged: FlashListProps<any>["onViewableItemsChanged"];
   viewableItems: MutableRefObject<ViewToken[]>;
+  itemVisiblePercentThreshold: number;
 }) => {
   const ref = useRef<any>(null);
 
@@ -59,38 +58,55 @@ const ViewabilityTracker = ({
     // defer with a setTimeout. I think virtuoso might be mounting stuff async so intersection observer doesn't detect item on initial render
     setTimeout(() => {
       if (onViewableItemsChanged) {
-        observer = new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting) {
-            if (!viewableItems.current.find((v) => v.index === index))
-              viewableItems.current.push({
-                item,
-                index,
-                isViewable: true,
-                key: index.toString(),
-                timestamp: new Date().valueOf(),
-              });
-          } else {
-            viewableItems.current = viewableItems.current.filter(
-              (v) => v.index !== index
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              if (!viewableItems.current.find((v) => v.index === index))
+                viewableItems.current.push({
+                  item,
+                  index,
+                  isViewable: true,
+                  key: index.toString(),
+                  timestamp: new Date().valueOf(),
+                });
+            } else {
+              viewableItems.current = viewableItems.current.filter(
+                (v) => v.index !== index
+              );
+            }
+
+            viewableItems.current = viewableItems.current.sort((a, b) =>
+              a.index && b.index ? a.index - b.index : -1
             );
+
+            onViewableItemsChanged?.({
+              viewableItems: viewableItems.current,
+
+              // TODO: implement changed
+              changed: [],
+            });
+          },
+
+          {
+            // will trigger intersection callback when item is 70% visible
+            threshold: itemVisiblePercentThreshold / 100,
           }
+        );
 
-          onViewableItemsChanged?.({
-            viewableItems: viewableItems.current,
-
-            // TODO: implement changed
-            changed: [],
-          });
-        }, ioConfiguration);
-
-        observer.observe(ref.current);
+        if (ref.current) observer.observe(ref.current);
       }
     }, 10);
 
     return () => {
       observer?.disconnect();
     };
-  }, [onViewableItemsChanged, viewableItems, index, item]);
+  }, [
+    onViewableItemsChanged,
+    viewableItems,
+    index,
+    item,
+    itemVisiblePercentThreshold,
+  ]);
 
   return <div ref={ref}>{children}</div>;
 };
@@ -110,6 +126,7 @@ export function VirtuosoListComponent<T>(
     style,
     onViewableItemsChanged,
     gridItemProps = {},
+    viewabilityConfig,
   }: InfiniteScrollListWebProps<T>,
   ref: React.Ref<VirtuosoHandle> | React.Ref<VirtuosoGridHandle>
 ) {
@@ -126,6 +143,10 @@ export function VirtuosoListComponent<T>(
         return (
           <ViewabilityTracker
             index={index}
+            itemVisiblePercentThreshold={
+              viewabilityConfig?.itemVisiblePercentThreshold ??
+              DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+            }
             item={data[index]}
             viewableItems={viewableItems}
             onViewableItemsChanged={onViewableItemsChanged}
@@ -138,7 +159,13 @@ export function VirtuosoListComponent<T>(
 
       return null;
     },
-    [data, ItemSeparatorComponent, renderItem, onViewableItemsChanged]
+    [
+      data,
+      ItemSeparatorComponent,
+      renderItem,
+      onViewableItemsChanged,
+      viewabilityConfig?.itemVisiblePercentThreshold,
+    ]
   );
 
   const gridComponents = useMemo(
