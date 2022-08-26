@@ -49,7 +49,7 @@ export function AnimateHeight({
     height: hide ? 0 : initialHeight,
   }));
   const [measuredHeight, setHeight] = useState(initialHeight);
-
+  const prevHide = useRef(hide);
   let height = measuredHeight;
 
   if (hide) {
@@ -68,6 +68,8 @@ export function AnimateHeight({
 
   useEffect(
     function updateHeight() {
+      // avoid multiple updates
+      if (prevHide.current === hide) return;
       if (hide) {
         animation.animateTo({
           height: 0,
@@ -77,6 +79,7 @@ export function AnimateHeight({
           height,
         });
       }
+      prevHide.current = hide;
     },
     [animation, height, hide]
   );
