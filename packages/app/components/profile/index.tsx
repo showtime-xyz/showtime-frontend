@@ -147,7 +147,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const headerBgLeft = useMemo(() => {
-    return Math.min(-(width - contentWidth) / 2, 0);
+    return Math.min(-(width - contentWidth + 15) / 2, 0);
   }, [contentWidth, width]);
 
   const headerShadow = useMemo(() => {
