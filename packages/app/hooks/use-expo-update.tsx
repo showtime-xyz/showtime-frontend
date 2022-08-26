@@ -50,9 +50,9 @@ export function useExpoUpdate() {
         captureException(error);
       }
     },
-
-    [bottom]
+    [snackbar, bottom]
   );
+
   useEffect(() => {
     const now = new Date();
     const currentHours = now.getHours();
