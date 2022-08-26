@@ -12,7 +12,7 @@ type ViewabilityItemsContextType = any[];
 
 const viewabilityConfig = {
   minimumViewTime: 50,
-  itemVisiblePercentThreshold: 50,
+  itemVisiblePercentThreshold: 85,
 };
 
 export function withViewabilityInfiniteScrollList<T>(Component: T): T {
@@ -20,13 +20,18 @@ export function withViewabilityInfiniteScrollList<T>(Component: T): T {
     function ViewabilityInfiniteScrollList(props: any, ref: any) {
       const visibleItems = useSharedValue<ViewabilityItemsContextType>([]);
 
-      const { keyExtractor, renderItem: _renderItem } = props;
+      const { renderItem: _renderItem } = props;
 
       const onViewableItemsChanged = useCallback(
         ({ viewableItems }: any) => {
-          const viewableItem = viewableItems[0];
+          let viewableItem = viewableItems[0];
+          if (viewableItems.length > 4) {
+            viewableItem = viewableItems[Math.floor(viewableItems.length) / 2];
+          }
+
           if (props.data && viewableItem) {
             const visibleIndex = Number(viewableItem.key);
+
             const prevIndex = visibleIndex > 0 ? visibleIndex - 1 : undefined;
             const nextIndex =
               visibleIndex < props.data.length ? visibleIndex + 1 : undefined;
@@ -41,19 +46,13 @@ export function withViewabilityInfiniteScrollList<T>(Component: T): T {
       const renderItem = useCallback(
         (params: any) => {
           return (
-            <ItemKeyContext.Provider
-              value={
-                keyExtractor
-                  ? keyExtractor(params.item, params.index)
-                  : params.index
-              }
-            >
+            <ItemKeyContext.Provider value={params.index}>
               {_renderItem?.(params)}
             </ItemKeyContext.Provider>
           );
         },
 
-        [_renderItem, keyExtractor]
+        [_renderItem]
       );
 
       return (

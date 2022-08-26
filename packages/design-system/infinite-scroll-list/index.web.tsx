@@ -75,6 +75,10 @@ const ViewabilityTracker = ({
               );
             }
 
+            viewableItems.current = viewableItems.current.sort((a, b) =>
+              a.index && b.index ? a.index - b.index : -1
+            );
+
             onViewableItemsChanged?.({
               viewableItems: viewableItems.current,
 

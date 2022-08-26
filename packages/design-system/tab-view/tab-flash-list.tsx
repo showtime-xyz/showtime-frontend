@@ -4,11 +4,11 @@ import { Platform } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import { useHeaderTabContext } from "@showtime-xyz/universal.collapsible-tab-view";
+
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
-} from "@showtime-xyz/universal.infinite-scroll-list";
-
+} from "../infinite-scroll-list";
 import { TabFlashListScrollView } from "./tab-flash-list-scroll-view";
 
 export type TabInfiniteScrollListProps<T> = Omit<
