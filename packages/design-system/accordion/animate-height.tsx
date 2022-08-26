@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Platform } from "react-native";
+import React from "react";
+import { StyleSheet, Platform, View } from "react-native";
 
-import { View as MotiView, TransitionConfig, useDynamicAnimation } from "moti";
+import { View as MotiView, useDynamicAnimation } from "moti";
+import { useSharedValue } from "react-native-reanimated";
 
 type Props = {
   children?: React.ReactNode;
@@ -16,7 +17,6 @@ type Props = {
    *
    * Defaults to a `type: 'timing'` animation with a `delay` of 200. You can use this to customize that.
    */
-  containerTransition?: TransitionConfig;
   onHeightDidAnimate?: (height: number) => void;
   /**
    * Defines where the expanded view will be anchored.
@@ -27,96 +27,52 @@ type Props = {
    */
   enterFrom?: "bottom" | "top";
   initialHeight?: number;
-} & React.ComponentProps<typeof MotiView>;
+} & Omit<React.ComponentProps<typeof MotiView>, "state">;
 
 export function AnimateHeight({
   children,
   hide = false,
   style,
-  animate = {},
   delay = Platform.select({ web: 250, default: 0 }),
-  containerTransition = { type: "timing", delay },
-  transition = {
-    type: "timing",
-    delay,
-  },
+  transition = { type: "timing", delay },
   enterFrom = "top",
   onHeightDidAnimate,
   initialHeight = 0,
   ...motiViewProps
 }: Props) {
-  const animation = useDynamicAnimation(() => ({
-    height: hide ? 0 : initialHeight,
-  }));
-  const [measuredHeight, setHeight] = useState(initialHeight);
-  const prevHide = useRef(hide);
-  let height = measuredHeight;
+  const measuredHeight = useSharedValue(initialHeight);
 
-  if (hide) {
-    height = 0;
-  }
-
-  const mounted = useRef(false);
-
-  useEffect(function mount() {
-    mounted.current = true;
-
-    return () => {
-      mounted.current = false;
+  const state = useDynamicAnimation(() => {
+    return {
+      height: initialHeight,
+      opacity: !initialHeight || hide ? 0 : 1,
     };
-  }, []);
-
-  useEffect(
-    function updateHeight() {
-      // avoid multiple updates
-      if (prevHide.current === hide) return;
-      if (hide) {
-        animation.animateTo({
-          height: 0,
-        });
-      } else if (animation.current?.height !== height) {
-        animation.animateTo({
-          height,
-        });
-      }
-      prevHide.current = hide;
-    },
-    [animation, height, hide]
-  );
-
-  const notVisible = !height || hide;
+  });
 
   return (
     <MotiView
-      // animate={{ height }}
-      state={animation}
-      transition={containerTransition}
+      {...motiViewProps}
+      state={state}
+      transition={transition}
       onDidAnimate={
         onHeightDidAnimate &&
-        ((key) => key === "height" && onHeightDidAnimate?.(height))
+        ((key, finished, _, { attemptedValue }) =>
+          key == "height" && onHeightDidAnimate(attemptedValue as number))
       }
-      // TODO shouldn't this always be hidden...?
-      style={[height || hide ? styles.hidden : styles.visible, style]}
+      style={[styles.hidden, style]}
     >
-      <MotiView
-        {...motiViewProps}
-        style={
-          // notVisible &&
-          [
-            StyleSheet.absoluteFillObject,
-            enterFrom === "top" ? styles.autoBottom : styles.autoTop,
-          ]
-        }
-        animate={{ ...animate, opacity: notVisible ? 0 : 1 }}
-        transition={transition}
-        onLayout={(next) => {
-          if (mounted.current) {
-            setHeight(next.nativeEvent.layout.height);
-          }
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          styles.autoBottom,
+          enterFrom === "top" ? styles.autoBottom : styles.autoTop,
+        ]}
+        onLayout={({ nativeEvent }) => {
+          measuredHeight.value = nativeEvent.layout.height;
         }}
       >
         {children}
-      </MotiView>
+      </View>
     </MotiView>
   );
 }

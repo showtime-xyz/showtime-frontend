@@ -357,51 +357,49 @@ export const DropForm = () => {
                 }}
               />
             </View>
-            <View tw="flex-1">
-              <View tw="lg:ml-4">
-                {/* <Text>Import media</Text> */}
-                <View tw="mt-4 flex-row lg:mt-[0px]">
-                  <Controller
-                    control={control}
-                    name="title"
-                    render={({ field: { onChange, onBlur, value } }) => {
-                      return (
-                        <Fieldset
-                          tw="flex-1"
-                          label="Title"
-                          placeholder="How would you like to name your NFT?"
-                          onBlur={onBlur}
-                          errorText={errors.title?.message}
-                          value={value}
-                          onChangeText={onChange}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-                <View tw="mt-4 flex-row">
-                  <Controller
-                    control={control}
-                    name="description"
-                    render={({ field: { onChange, onBlur, value } }) => {
-                      return (
-                        <Fieldset
-                          tw="flex-1"
-                          label="Description"
-                          multiline
-                          textAlignVertical="top"
-                          placeholder="What is this NFT drop about?"
-                          onBlur={onBlur}
-                          helperText="You will not be able to edit this after the drop is created"
-                          errorText={errors.description?.message}
-                          value={value}
-                          numberOfLines={3}
-                          onChangeText={onChange}
-                        />
-                      );
-                    }}
-                  />
-                </View>
+            <View tw="lg:ml-4 lg:flex-1">
+              {/* <Text>Import media</Text> */}
+              <View tw="mt-4 flex-row lg:mt-[0px]">
+                <Controller
+                  control={control}
+                  name="title"
+                  render={({ field: { onChange, onBlur, value } }) => {
+                    return (
+                      <Fieldset
+                        tw="flex-1"
+                        label="Title"
+                        placeholder="How would you like to name your NFT?"
+                        onBlur={onBlur}
+                        errorText={errors.title?.message}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    );
+                  }}
+                />
+              </View>
+              <View tw="mt-4 flex-row">
+                <Controller
+                  control={control}
+                  name="description"
+                  render={({ field: { onChange, onBlur, value } }) => {
+                    return (
+                      <Fieldset
+                        tw="flex-1"
+                        label="Description"
+                        multiline
+                        textAlignVertical="top"
+                        placeholder="What is this NFT drop about?"
+                        onBlur={onBlur}
+                        helperText="You will not be able to edit this after the drop is created"
+                        errorText={errors.description?.message}
+                        value={value}
+                        numberOfLines={3}
+                        onChangeText={onChange}
+                      />
+                    );
+                  }}
+                />
               </View>
             </View>
           </View>
@@ -435,7 +433,7 @@ export const DropForm = () => {
                       }}
                     />
                   </View>
-                  <View tw="mt-4 flex-1 flex-row">
+                  <View tw="flex-1 flex-row">
                     <Controller
                       control={control}
                       name="editionSize"
