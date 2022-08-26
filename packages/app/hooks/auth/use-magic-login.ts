@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 
 import { useWeb3 } from "app/hooks/use-web3";
-import { BYPASS_EMAIL_WITH_INSECURE_KEYS } from "app/lib/constants";
-import { magic } from "app/lib/magic";
-import { overrideMagicInstance } from "app/utilities";
+import {
+  BYPASS_EMAIL,
+  BYPASS_EMAIL_WITH_INSECURE_KEYS,
+} from "app/lib/constants";
+import { useMagic } from "app/lib/magic";
 
 import { useAuth } from "./use-auth";
 
@@ -13,6 +15,7 @@ export function useMagicLogin() {
   //#region hooks
   const { setAuthenticationStatus, login, logout } = useAuth();
   const { setWeb3 } = useWeb3();
+  const { magic, Magic } = useMagic();
   //#endregion
 
   //#region methods
@@ -39,17 +42,40 @@ export function useMagicLogin() {
         throw error;
       }
     },
-    [login, logout, setAuthenticationStatus, setWeb3]
+    [magic, login, logout, setAuthenticationStatus, setWeb3]
   );
+
   const loginWithEmail = useCallback(
     async function loginWithEmail(email: string) {
       setAuthenticationStatus("AUTHENTICATING");
-      const selectedMagicInstance = overrideMagicInstance(email);
-      const overrideEmail = selectedMagicInstance.testMode
+      let magicInstance = magic;
+
+      if (email === BYPASS_EMAIL) {
+        const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+        // Default to polygon chain
+        const customNodeOptions = {
+          rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+          chainId: 137,
+        };
+
+        if (isMumbai) {
+          console.log("Magic network is connecting to Mumbai testnet");
+          customNodeOptions.rpcUrl =
+            "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
+          customNodeOptions.chainId = 80001;
+        }
+
+        magicInstance = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
+          network: customNodeOptions,
+          testMode: true,
+        });
+      }
+
+      const overrideEmail = magicInstance.testMode
         ? BYPASS_EMAIL_WITH_INSECURE_KEYS
         : email;
 
-      const did = await selectedMagicInstance.auth.loginWithMagicLink({
+      const did = await magicInstance.auth.loginWithMagicLink({
         email: overrideEmail,
       });
 
@@ -62,15 +88,16 @@ export function useMagicLogin() {
         const Web3Provider = (await import("@ethersproject/providers"))
           .Web3Provider;
         // @ts-ignore
-        const web3 = new Web3Provider(selectedMagicInstance.rpcProvider);
+        const web3 = new Web3Provider(magicInstance.rpcProvider);
         setWeb3(web3);
       } catch (error) {
         logout();
         throw error;
       }
     },
-    [login, logout, setAuthenticationStatus, setWeb3]
+    [magic, Magic, login, logout, setAuthenticationStatus, setWeb3]
   );
+
   //#endregion
   return {
     loginWithPhoneNumber,

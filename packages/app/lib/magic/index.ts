@@ -19,6 +19,10 @@ const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
   network: customNodeOptions,
 });
 
+function useMagic() {
+  return { magic, Magic };
+}
+
 const Relayer = magic.Relayer;
 
-export { magic, Magic, Relayer };
+export { useMagic, Relayer };

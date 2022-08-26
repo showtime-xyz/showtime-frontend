@@ -35,7 +35,6 @@
     "ethers": "^5.6.9",
     "fortmatic": "^2.2.1",
     "logrocket": "^2.2.1",
-    "magic-sdk": "^8.1.1",
     "next": "12.2.3-canary.2",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.2",

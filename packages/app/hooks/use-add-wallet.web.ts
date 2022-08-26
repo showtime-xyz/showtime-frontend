@@ -4,13 +4,12 @@ import { useSWRConfig } from "swr";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
+import { useWallet } from "app/hooks/auth/use-wallet";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-
-import getWeb3Modal from "../lib/web3modal.web";
 
 export type AddWallet = {
   status: "idle" | "connecting" | "connected" | "disconnected" | "error";
@@ -43,9 +42,10 @@ const addWalletReducer = (
 export const useAddWallet = () => {
   const toast = useToast();
   const { user } = useUser();
-
+  const { magic } = useMagic();
   const { setWeb3 } = useWeb3();
   const { mutate } = useSWRConfig();
+  const { address, connected, connect, disconnect } = useWallet();
 
   const [state, dispatch] = useReducer(
     addWalletReducer,
@@ -86,19 +86,19 @@ export const useAddWallet = () => {
     );
   };
 
+  // TODO: use RainbowKit
   const addWallet = async () => {
     try {
       let toastMessage = "";
-      const web3Modal = await getWeb3Modal();
-      web3Modal.clearCachedProvider();
+
+      // if (connected) {
+      //   console.log(address);
+      //   await disconnect();
+      // }
 
       dispatch({ type: "status", status: "connecting" });
-      const provider = await web3Modal?.connect();
 
-      const address =
-        provider?.accounts?.[0] ||
-        provider?._addresses?.[0] ||
-        provider?.selectedAddress;
+      // await connect?.();
 
       if (address) {
         const isNewAddress = checkNewAddress(address);
