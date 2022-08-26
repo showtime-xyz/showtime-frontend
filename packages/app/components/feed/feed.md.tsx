@@ -5,6 +5,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -22,7 +23,6 @@ import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import { InfiniteScrollList } from "design-system/infinite-scroll-list";
 import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const CARD_HEIGHT = 825;
