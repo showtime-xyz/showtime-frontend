@@ -482,7 +482,7 @@ export const DropForm = () => {
             </Accordion.Item>
           </Accordion.Root>
           <AnimateHeight hide={!!accordionValue}>
-            <Text tw="text-gray-600 duration-500 dark:text-gray-400">
+            <Text tw="text-gray-600 dark:text-gray-400">
               By default, you will drop 100 editions with 10% royalties for a
               week.
             </Text>
