@@ -17,7 +17,6 @@ import { useMuted } from "app/providers/mute-provider";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
-  showMuteButton?: boolean;
 } & ComponentProps<typeof ExpoVideo>;
 
 export function Video({
