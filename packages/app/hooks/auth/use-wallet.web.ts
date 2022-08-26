@@ -45,9 +45,14 @@ const useWallet = (): UseWalletReturnType => {
 
   return {
     address,
-    connect: openConnectModal,
+    connect: async () => {
+      await openConnectModal?.();
+    },
     connected,
-    disconnect,
+    disconnect: async () => {
+      localStorage.removeItem("walletconnect");
+      await disconnect();
+    },
     networkChanged,
     signMessageAsync,
   };

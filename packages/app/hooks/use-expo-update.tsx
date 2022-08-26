@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from "react";
 
 import * as Updates from "expo-updates";
-import { MMKV } from "react-native-mmkv";
 
+// import { MMKV } from "react-native-mmkv";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -11,9 +11,9 @@ import { captureException } from "app/lib/sentry";
 /**
  * store key
  */
-const store = new MMKV();
+// const store = new MMKV();
 // const BACKGROUND_START_TIME_KEY = "backgroundStartTime";
-const LAST_SHOW_UPDATE_KEY = "lastShowUpdateTime";
+// const LAST_SHOW_UPDATE_KEY = "lastShowUpdateTime";
 
 /**
  * update constant
@@ -50,9 +50,9 @@ export function useExpoUpdate() {
         captureException(error);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bottom]
+    [snackbar, bottom]
   );
+
   useEffect(() => {
     const now = new Date();
     const currentHours = now.getHours();

@@ -8367,7 +8367,6 @@ __metadata:
     ethers: ^5.6.9
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
-    magic-sdk: ^8.1.1
     next: 12.2.3-canary.2
     next-compose-plugins: ^2.2.1
     next-fonts: ^1.5.1
@@ -24674,18 +24673,6 @@ __metadata:
   version: 2.2.1
   resolution: "ltgt@npm:2.2.1"
   checksum: 7e3874296f7538bc8087b428ac4208008d7b76916354b34a08818ca7c83958c1df10ec427eeeaad895f6b81e41e24745b18d30f89abcc21d228b94f6961d50a2
-  languageName: node
-  linkType: hard
-
-"magic-sdk@npm:^8.1.1":
-  version: 8.1.1
-  resolution: "magic-sdk@npm:8.1.1"
-  dependencies:
-    "@magic-sdk/commons": ^4.1.1
-    "@magic-sdk/provider": ^8.1.1
-    "@magic-sdk/types": ^7.1.1
-    localforage: ^1.7.4
-  checksum: 45faa9cbf7aa6acd08b162cb5bfdfd32085a1649597d82268b221d7b6b4690a0ff8d2100dd350c0594d6aa33ed114440efaf2cb3de8f25ed687e7a421f9a19ee
   languageName: node
   linkType: hard
 

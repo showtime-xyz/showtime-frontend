@@ -5,6 +5,7 @@ import "setimmediate";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 
 import { View } from "@showtime-xyz/universal.view";
 
@@ -111,6 +112,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
       </Head>
+      <Script
+        src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
+        strategy="lazyOnload"
+      />
       <AppProviders>
         <Container>
           <Header
