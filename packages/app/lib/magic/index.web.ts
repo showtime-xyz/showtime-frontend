@@ -2,6 +2,8 @@ import { Fragment, useEffect, useState } from "react";
 
 import { isServer } from "app/lib/is-server";
 
+import { registerOnMagicLoad } from "./magic-load-listener";
+
 const Relayer = Fragment;
 
 function useMagic() {
@@ -9,6 +11,14 @@ function useMagic() {
   const Magic = isServer
     ? null
     : (window as Window & typeof globalThis & { Magic: any })?.Magic;
+  const [, setForceUpdate] = useState(false);
+
+  useEffect(() => {
+    const remove = registerOnMagicLoad(() => {
+      setForceUpdate((p) => !p);
+    });
+    return remove;
+  }, []);
 
   useEffect(() => {
     const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
