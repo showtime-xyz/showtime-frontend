@@ -115,7 +115,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <Script
         src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={onMagicLoad}
       />
       <AppProviders>

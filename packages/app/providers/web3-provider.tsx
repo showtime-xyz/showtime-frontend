@@ -62,16 +62,23 @@ export function Web3Provider({
       if (magic.rpcProvider && isLoggedIn) {
         //@ts-ignore
         const provider = new EthersWeb3Provider(magic.rpcProvider);
-        provider
-          .getSigner()
-          .getAddress()
-          .then((address) => {
-            setMagicWalletAddress(address);
-          });
         setWeb3(provider);
       }
     });
   }, [magic]);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (web3?.provider.isMagic)
+      web3
+        ?.getSigner()
+        .getAddress()
+        .then((address) => {
+          console.log("dldodofofo ", address);
+
+          setMagicWalletAddress(address);
+        });
+  }, [web3]);
 
   // (Web only) initialises web3 provider from wagmi
   useEffect(() => {
