@@ -17,15 +17,24 @@ type VideoProps = {
   blurhash?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, blurhash, style, posterSource, ...props }: VideoProps) {
+function Video({
+  tw,
+  blurhash,
+  style,
+  isMuted: isMutedProp,
+  posterSource,
+  ...props
+}: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const videoConfig = useVideoConfig();
   const [muted] = useMuted();
 
+  const isMuted = isMutedProp ?? muted;
+
   const { id } = useViewabilityMount({
     videoRef,
     source: props.source,
-    isMuted: muted,
+    isMuted: isMuted,
   });
 
   return (
@@ -55,7 +64,7 @@ function Video({ tw, blurhash, style, posterSource, ...props }: VideoProps) {
               useNativeControls={videoConfig?.useNativeControls}
               resizeMode={ResizeMode.COVER}
               posterSource={posterSource}
-              isMuted={muted}
+              isMuted={isMuted}
             />
           </>
         )}
