@@ -4,13 +4,13 @@ import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Check } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -31,6 +31,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
+  getProfileName,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -112,25 +113,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          Hold on!
-        </Text>
-        <Image
-          source={Platform.select({
-            web: { uri: require("../drop/complete-profile.png") },
-            default: require("../drop/complete-profile.png"),
-          })}
-          tw={`h-25 w-25 rounded-xl`}
-          resizeMode="contain"
-        />
-        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          Please complete your profile before claiming this drop.
-        </Text>
-        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
-          Complete your profile
-        </Button>
-      </View>
+      <CompleteProfileModalContent
+        title={`Show ${getProfileName(userProfile?.data.profile)} who you are!`}
+        description="Complete your profile first to claim this drop. It will take around 1 minute."
+        cta="Complete profile to claim"
+      />
     );
   }
 
