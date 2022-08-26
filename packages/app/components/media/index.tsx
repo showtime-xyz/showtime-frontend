@@ -111,7 +111,6 @@ function Media({
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : undefined}
             resizeMode={resizeMode}
-            showMuteButton={numColumns === 1}
           />
         </PinchToZoom>
       ) : null}
