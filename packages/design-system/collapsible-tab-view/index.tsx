@@ -12,5 +12,5 @@ export type {
   TabFlatListProps,
   TabSectionListProps,
 } from "./scrollable-view";
-
+export { useHeaderTabContext } from "./context";
 export const CollapsibleTabView = createCollapsibleTabsComponent<any>(TabView);

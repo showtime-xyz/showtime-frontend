@@ -56,11 +56,7 @@ export const Trending = () => {
             Trending
           </Text>
           {/* <View
-            tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black"
-            style={{
-              // @ts-ignore
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-            }}
+            tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black dark:shadow-dark shadow-light"
           >
             <SegmentedControl
               values={["NFT", "CREATOR"]}

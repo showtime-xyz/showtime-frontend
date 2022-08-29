@@ -3,7 +3,6 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { Link } from "solito/link";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
@@ -17,13 +16,12 @@ import { ClaimButton } from "app/components/claim/claim-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
-
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 type Props = {
   nft: NFT & { loading?: boolean };
@@ -38,7 +36,7 @@ type Props = {
 
 function Card({
   nft,
-  numColumns,
+  numColumns = 1,
   tw,
   sizeStyle,
   onPress,
@@ -46,7 +44,6 @@ function Card({
   showClaimButton = false,
 }: Props) {
   const { width } = useWindowDimensions();
-  const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const isWeb = Platform.OS === "web";
   const RouteComponent = isWeb ? Link : PressableScale;
@@ -92,19 +89,13 @@ function Card({
         // TODO: add accessibility types for RNW
         accessibilityRole="article"
         dataSet={Platform.select({ web: { testId: "nft-card" } })}
-        style={[
-          {
-            // @ts-ignore
-            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-          },
-          sizeStyle,
-        ]}
+        style={[sizeStyle]}
         tw={[
           !sizeStyle ? size : "",
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
-          "self-center justify-self-center",
+          "dark:shadow-dark shadow-light self-center justify-self-center",
         ]}
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
@@ -126,6 +117,11 @@ function Card({
 
           <RouteComponent href={href!} onPress={handleOnPress}>
             <Media item={nft} numColumns={numColumns} />
+            {numColumns === 1 && nft?.mime_type?.includes("video") ? (
+              <View tw="z-9 absolute bottom-5 right-5">
+                <MuteButton />
+              </View>
+            ) : null}
           </RouteComponent>
           <RouteComponent
             // @ts-ignore

@@ -200,7 +200,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     };
   }, [edition?.minter_address, userAddress]);
 
-  const claimNFT = async () => {
+  const claimNFT = async (): Promise<boolean | undefined> => {
     try {
       if (userAddress) {
         if (edition?.minter_address) {
@@ -219,10 +219,12 @@ export const useClaimNFT = (edition?: IEdition) => {
           Logger.log("Signing... ", forwardRequest);
 
           await signTransaction({ forwardRequest });
+
+          return true;
         }
       } else {
         // user is probably not connected to wallet
-        connect?.();
+        connect();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });

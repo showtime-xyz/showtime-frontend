@@ -251,7 +251,7 @@ export function MessageRow({
 
   return (
     <View tw="flex flex-row bg-white py-4 dark:bg-black">
-      {hasParent && <View tw="ml-8" collapsable={true} />}
+      {hasParent && <View tw="ml-4" collapsable={true} />}
       <View tw="items-center">
         {(hasReplies || hasParent) && (
           <>
@@ -304,7 +304,7 @@ export function MessageRow({
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
           </Button>
-          {replayCount != undefined && (
+          {replayCount != undefined ? (
             <TextButton
               tw="px-2"
               accentColor={
@@ -320,6 +320,20 @@ export function MessageRow({
                 replayCount > 0 ? <MessageFilled /> : <Message />
               }
               {` ${replayCount}`}
+            </TextButton>
+          ) : (
+            <TextButton
+              tw="px-2"
+              accentColor={
+                // TODO: use `repliedByMe` when this is available.
+                [colors.gray[500], colors.gray[500]]
+              }
+              onPress={onReplyPress}
+            >
+              {
+                // TODO: use `repliedByMe` when this is available.
+                <Message />
+              }
             </TextButton>
           )}
           <View

@@ -24,8 +24,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
-
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
@@ -104,7 +102,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
-    setIsRefreshing(false);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
   }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
@@ -145,24 +145,20 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const headerBgLeft = useMemo(() => {
-    return Math.min(-(width - contentWidth) / 2, 0);
+    return Math.min(-(width - contentWidth + 15) / 2, 0);
   }, [contentWidth, width]);
-
-  const headerShadow = useMemo(() => {
-    return isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW;
-  }, [isDark]);
 
   const renderHeader = useCallback(() => {
     return (
       <View tw="items-center bg-white dark:bg-black">
         {Platform.OS === "web" && (
           <View
-            tw="absolute left-0 h-full w-screen bg-white dark:bg-black"
+            tw={
+              "dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white dark:bg-black"
+            }
             style={{
               left: headerBgLeft,
               height: `calc(100% + 44px)`,
-              // @ts-ignore
-              boxShadow: data?.tabs?.length > 0 && headerShadow,
             }}
           />
         )}
@@ -182,8 +178,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     );
   }, [
     headerBgLeft,
-    data?.tabs?.length,
-    headerShadow,
     headerHeight,
     username,
     animationHeaderPosition,
@@ -222,11 +216,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={
             <View
-              tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
+              tw="dark:shadow-dark shadow-light absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
               style={{
                 left: headerBgLeft,
-                // @ts-ignore
-                boxShadow: headerShadow,
               }}
             />
           }

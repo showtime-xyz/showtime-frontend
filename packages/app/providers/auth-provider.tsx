@@ -21,7 +21,7 @@ import { track } from "app/lib/analytics";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
@@ -56,6 +56,7 @@ export function AuthProvider({
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const { setWeb3 } = useWeb3();
+  const { magic } = useMagic();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
@@ -119,7 +120,7 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    [connector, mutate, router, setWeb3, onWagmiDisconnect]
+    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

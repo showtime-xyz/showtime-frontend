@@ -108,12 +108,18 @@ export const useItemVisible = ({ videoRef }: { videoRef: any }) => {
   useAnimatedReaction(
     () => context.value,
     (ctx) => {
-      if (isItemInList && ctx[1] === id) {
-        runOnJS(play)();
-      } else {
-        runOnJS(pause)();
+      if (isItemInList) {
+        if (ctx[1] === id) {
+          runOnJS(play)();
+        } else {
+          runOnJS(pause)();
+        }
       }
     },
     [id, isItemInList]
   );
+
+  return {
+    id,
+  };
 };

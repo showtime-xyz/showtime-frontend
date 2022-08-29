@@ -5,7 +5,6 @@ import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, MotiView } from "moti";
 
 import { useIsMobileWeb } from "@showtime-xyz/universal.hooks";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";
@@ -17,7 +16,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   delay,
   open,
   placement,
-  tw,
   style,
   ...rest
 }) => {
@@ -50,14 +48,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
         onMouseLeave={onMouseLeave}
         ref={triggerEl}
         style={style}
-        tw={tw}
       >
         {children}
       </View>
       {/* @ts-ignore */}
       <AnimatePresence>
         {show && (
-          <Portal.Root style={tailwind.style(`w-full`)}>
+          <Portal.Root style={{ width: "100%" }}>
             <MotiView
               from={{
                 opacity: 0,

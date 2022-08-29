@@ -21,6 +21,7 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
@@ -29,8 +30,6 @@ import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
-
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
 
@@ -178,14 +177,17 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             }}
             resizeMode="contain"
           />
+          {nft?.mime_type?.includes("video") ? (
+            <View tw="absolute bottom-10 right-10">
+              <MuteButton />
+            </View>
+          ) : null}
         </View>
         <View
           style={[
-            tw.style("bg-white dark:bg-black"),
+            tw.style("bg-white dark:bg-black dark:shadow-dark shadow-light"),
             {
               width: NFT_DETAIL_WIDTH,
-              // @ts-ignore Todo: will use tailwind config when switch to NativeWind.
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
           ]}
         >

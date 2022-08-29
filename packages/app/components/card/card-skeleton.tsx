@@ -2,12 +2,11 @@ import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { breakpoints, CARD_DARK_SHADOW } from "design-system/theme";
+import { breakpoints } from "design-system/theme";
 
 type CardSkeletonProps = {
   squareSize: number;
@@ -18,20 +17,17 @@ type CardSkeletonProps = {
 export const CardSkeleton = memo<CardSkeletonProps>(
   ({ squareSize, spacing = 0, tw = "" }) => {
     const { colorScheme } = useColorScheme();
-    const isDark = useIsDarkMode();
     const { width } = useWindowDimensions();
     const isMdWidth = width >= breakpoints["md"];
     if (isMdWidth) {
       return (
         <View
-          tw="mb-4 overflow-hidden rounded-2xl shadow-lg"
+          tw="dark:shadow-dark shadow-light mb-4 overflow-hidden rounded-2xl"
           style={[
             {
               width: squareSize - spacing,
               marginRight: spacing / 2,
               marginLeft: spacing / 2,
-              // @ts-ignore
-              boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
             },
             tailwind.style(tw),
           ]}

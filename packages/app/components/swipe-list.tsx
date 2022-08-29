@@ -1,27 +1,20 @@
 import { useCallback, useMemo, useRef } from "react";
-import {
-  Dimensions,
-  FlatList,
-  Platform,
-  useWindowDimensions,
-} from "react-native";
+import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
 import { FeedItem } from "app/components/feed-item";
-import {
-  MOBILE_WEB_BOTTOM_NAV_HEIGHT,
-  MOBILE_WEB_TABS_HEIGHT,
-} from "app/constants/layout";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { useUser } from "app/hooks/use-user";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
-import { ViewabilityTrackerFlashList } from "./viewability-tracker-flash-list";
-
 const { height: screenHeight } = Dimensions.get("screen");
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 type Props = {
   data: NFT[];
@@ -40,8 +33,7 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   bottomPadding = 0,
 }: Props) => {
-  const { isAuthenticated } = useUser();
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<any>(null);
   const headerHeight = useHeaderHeight();
   const headerHeightRef = useRef(headerHeight);
   useScrollToTop(listRef);
@@ -53,12 +45,7 @@ export const SwipeList = ({
   }, []);
 
   const itemHeight = Platform.select({
-    web:
-      windowHeight -
-      headerHeight -
-      (isAuthenticated
-        ? MOBILE_WEB_BOTTOM_NAV_HEIGHT + MOBILE_WEB_TABS_HEIGHT
-        : 0),
+    web: windowHeight - headerHeight,
     android: safeAreaFrameHeight - headerHeight,
     default: screenHeight,
   });
@@ -93,7 +80,7 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <ViewabilityTrackerFlashList
+      <ViewabilityInfiniteScrollList
         data={data}
         onEndReached={fetchMore}
         initialScrollIndex={initialScrollIndex}
@@ -104,6 +91,10 @@ export const SwipeList = ({
         onMomentumScrollEnd={momentumScrollCallback.current}
         refreshing={isRefreshing}
         pagingEnabled
+        overscan={{
+          main: itemHeight,
+          reverse: itemHeight,
+        }}
         renderItem={renderItem}
         estimatedItemSize={itemHeight}
       />

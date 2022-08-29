@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { Platform, StatusBar, Text, View } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
@@ -77,25 +77,21 @@ export const Basic: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <CollapsibleTabView
-        onStartRefresh={onStartRefresh}
-        isRefreshing={isRefreshing}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        lazy
-        renderScrollHeader={renderHeader}
-        minHeaderHeight={44 + StatusBarHeight}
-        animationHeaderPosition={animationHeaderPosition}
-        animationHeaderHeight={animationHeaderHeight}
-      />
-    </View>
+    <CollapsibleTabView
+      onStartRefresh={onStartRefresh}
+      isRefreshing={isRefreshing}
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      lazy
+      renderScrollHeader={renderHeader}
+      minHeaderHeight={44 + StatusBarHeight}
+      animationHeaderPosition={animationHeaderPosition}
+      animationHeaderHeight={animationHeaderHeight}
+      style={Platform.select({
+        web: { flex: "none" } as any,
+        default: undefined,
+      })}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

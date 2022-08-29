@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -22,6 +22,7 @@ export function SceneComponent<P extends object>({
   contentContainerStyle,
   scrollIndicatorInsets,
   forwardedRef,
+  useExternalScrollView = false,
   ...restProps
 }: SceneProps<P>) {
   //#region refs
@@ -33,13 +34,12 @@ export function SceneComponent<P extends object>({
   //#region hooks
   const {
     shareAnimatedValue,
-    tabbarHeight,
     headerHeight,
     expectHeight,
     curIndexValue,
     refHasChanged,
     updateSceneInfo,
-    scrollStickyHeaderHeight,
+    scrollViewPaddingTop,
   } = useHeaderTabContext();
   //#endregion
 
@@ -52,20 +52,14 @@ export function SceneComponent<P extends object>({
       opacity: withTiming(opacityValue.value),
     };
   }, [opacityValue]);
-  const calcHeight = useMemo(() => {
-    return tabbarHeight + headerHeight;
-  }, [tabbarHeight, headerHeight]);
 
-  const scrollViewPaddingTop = useMemo(() => {
-    return calcHeight + scrollStickyHeaderHeight;
-  }, [calcHeight, scrollStickyHeaderHeight]);
   //#endregion
 
   //#region methods
   const onScrollAnimateEvent = useAnimatedScrollHandler({
     onScroll: (e) => {
-      const moveY = Math.max(e.contentOffset.y, 0);
-      scrollY.value = Math.max(moveY, 0);
+      const moveY = e.contentOffset.y;
+      scrollY.value = moveY;
       if (curIndexValue.value !== index) return;
       shareAnimatedValue.value = moveY;
       if (propOnScroll) {
@@ -109,7 +103,7 @@ export function SceneComponent<P extends object>({
           contentContainerStyle={StyleSheet.flatten([
             contentContainerStyle,
             {
-              paddingTop: scrollViewPaddingTop,
+              paddingTop: useExternalScrollView ? 0 : scrollViewPaddingTop,
               minHeight: expectHeight,
             },
           ])}
@@ -119,8 +113,7 @@ export function SceneComponent<P extends object>({
             top: headerHeight,
             ...scrollIndicatorInsets,
           }}
-          bounces={false}
-          {...restProps}
+          // bounces={false}
         />
       </GestureDetector>
     </Animated.View>

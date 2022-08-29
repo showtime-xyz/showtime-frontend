@@ -3,8 +3,6 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { AnimatePresence, MotiView } from "moti";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
-
 import { Placement, PlatformRect } from "./get-placement";
 import { Position } from "./position";
 import { TooltipContent } from "./tooltop.content";
@@ -13,11 +11,8 @@ import { TooltipProps } from "./types";
 export const Tooltip: React.FC<TooltipProps> = ({
   children,
   text,
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  delay,
   open,
   placement,
-  tw,
   style,
   ...rest
 }) => {
@@ -49,7 +44,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           });
         }}
         ref={triggerEl}
-        style={[tailwind.style(tw), style]}
+        style={style}
       >
         {children}
       </Pressable>

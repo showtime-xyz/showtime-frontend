@@ -3,6 +3,7 @@ import { ScrollView as ReactNativeScrollView } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { styled, tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { ScrollViewProps } from "./types";
@@ -18,7 +19,6 @@ class ScrollViewClass extends Component<ScrollViewProps & { innerRef?: any }> {
     const StyledScrollViewComponent = asKeyboardAwareScrollView
       ? styled(KeyboardAwareScrollView)
       : styled(ReactNativeScrollView);
-
     return (
       <StyledScrollViewComponent
         keyboardShouldPersistTaps="handled"
@@ -32,13 +32,17 @@ class ScrollViewClass extends Component<ScrollViewProps & { innerRef?: any }> {
   }
 }
 
-const ScrollView = forwardRef((props: ScrollViewProps, ref: any) => (
-  <ScrollViewClass
-    //@ts-ignore
-    innerRef={ref}
-    {...props}
-  />
-));
+const ScrollView = forwardRef((props: ScrollViewProps, ref: any) => {
+  const { colorScheme } = useColorScheme();
+  return (
+    <ScrollViewClass
+      //@ts-ignore
+      innerRef={ref}
+      indicatorStyle={colorScheme === "light" ? "black" : "white"}
+      {...props}
+    />
+  );
+});
 
 ScrollView.displayName = "ScrollView";
 

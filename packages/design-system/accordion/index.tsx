@@ -12,7 +12,7 @@ import { ViewProps } from "@showtime-xyz/universal.view";
 import { Accordion as RNAccordion } from "./lib";
 import { ItemProps } from "./lib/types";
 
-const Chevron = ({ children }: { children: any }) => {
+const Chevron = ({ children }: { children?: any }) => {
   const { value: selectedValue } = useContext(RNAccordion.RootContext);
   const { value: itemValue } = useContext(RNAccordion.ItemContext);
   const isExpanded = itemValue === selectedValue;
@@ -92,3 +92,4 @@ export const Accordion = {
   Chevron,
   RNAccordion,
 };
+export { AnimateHeight } from "./animate-height";

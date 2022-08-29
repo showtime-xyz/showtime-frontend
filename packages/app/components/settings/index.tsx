@@ -28,11 +28,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import {
-  breakpoints,
-  CARD_DARK_SHADOW,
-  CARD_LIGHT_SHADOW,
-} from "design-system/theme";
+import { breakpoints } from "design-system/theme";
 
 import packageJson from "../../../../package.json";
 import {
@@ -147,7 +143,9 @@ const SettingsTabs = () => {
                 return <SettingsWalletSlotSkeleton />;
               }}
               ListHeaderComponent={<SettingsWalletSlotHeader />}
-              ItemSeparatorComponent={() => <SlotSeparator />}
+              ItemSeparatorComponent={() =>
+                isMdWidth ? <View tw="mt-2" /> : <SlotSeparator />
+              }
               index={index}
             />
           );
@@ -254,11 +252,12 @@ const SettingsTabs = () => {
       }
     },
     [
-      accountSettings,
-      emailWallets,
-      router,
       wallets,
+      emailWallets,
+      accountSettings,
       pushNotificationsPreferences,
+      isMdWidth,
+      router,
     ]
   );
 
@@ -266,13 +265,7 @@ const SettingsTabs = () => {
     return (
       <>
         {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-        <View
-          tw="items-center bg-white dark:bg-black md:mb-4"
-          style={{
-            // @ts-ignore
-            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-          }}
-        >
+        <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black md:mb-4">
           <View tw="w-full max-w-screen-2xl flex-row justify-between self-center px-4 py-4 md:py-0">
             <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
               Settings
@@ -296,7 +289,7 @@ const SettingsTabs = () => {
         </View>
       </>
     );
-  }, [headerHeight, index, isDark, isWeb, setIndex]);
+  }, [headerHeight, index, isWeb, setIndex]);
 
   return (
     <View style={{ width }} tw="flex-1">

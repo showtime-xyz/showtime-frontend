@@ -11,8 +11,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { CreatorPreview } from "app/components/creator-preview";
 import { useTrendingCreators } from "app/hooks/api-hooks";
 
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
-
 import { TrendingMDListProps } from "./trending.md";
 
 // Todo: strengthen the data types
@@ -31,13 +29,7 @@ export function TrendingCreatorsList({ days }: TrendingMDListProps) {
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<any>) => {
       return (
-        <View
-          tw="mb-8 rounded-lg bg-white dark:bg-black"
-          style={{
-            // @ts-ignore
-            boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-          }}
-        >
+        <View tw="dark:shadow-dark shadow-light mb-8 rounded-lg bg-white dark:bg-black">
           <CreatorPreview
             creator={item}
             onMediaPress={(initialScrollIndex: number) => {
@@ -50,7 +42,7 @@ export function TrendingCreatorsList({ days }: TrendingMDListProps) {
         </View>
       );
     },
-    [containerWidth, days, isDark, router]
+    [containerWidth, days, router]
   );
   return (
     <InfiniteScrollList

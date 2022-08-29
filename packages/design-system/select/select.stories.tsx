@@ -11,6 +11,30 @@ const options = [
   },
   {
     value: 1,
+    label: "Option BBBBBB",
+  },
+  {
+    value: 2,
+    label: "Option C",
+  },
+  {
+    value: 3,
+    label: "Option DDDDD",
+  },
+  {
+    value: 4,
+    label: "Option E",
+  },
+  {
+    value: 5,
+    label: "Option F",
+  },
+  {
+    value: 6,
+    label: "Option G",
+  },
+  {
+    value: 1,
     label: "Option B",
   },
   {

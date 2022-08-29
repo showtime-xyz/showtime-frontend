@@ -12,4 +12,5 @@ export const DropScreen = withModalScreen(DropModal, {
   matchingQueryParam: "dropModal",
   tw: "w-full lg:w-200",
   disableBackdropPress: true,
+  web_height: `max-h-100vh md:max-h-82vh`,
 });
