@@ -11,7 +11,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
 import { AddressMenu } from "./address-menu";
@@ -85,6 +85,7 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
+  const { magic } = useMagic();
   const { isMagic } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
 
@@ -105,7 +106,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         setIsCurrentEmail(true);
       }
     }
-  }, [isMagic, email, userAddress]);
+  }, [magic, isMagic, email, userAddress]);
 
   useEffect(() => {
     getCurrentMagicUser();

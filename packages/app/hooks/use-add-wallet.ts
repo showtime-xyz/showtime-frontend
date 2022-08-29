@@ -7,7 +7,7 @@ import { useToast } from "@showtime-xyz/universal.toast";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
@@ -43,6 +43,7 @@ export const useAddWallet = () => {
   const toast = useToast();
   const walletConnector = useWalletConnect();
   const { user } = useUser();
+  const { magic } = useMagic();
   const { setWeb3 } = useWeb3();
   const { mutate } = useSWRConfig();
 

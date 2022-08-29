@@ -4,7 +4,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { Owner } from "app/components/card";
 import type { NFT } from "app/types";
 
-function Details({ nft }: { nft: NFT }) {
+function Details({ nft }: { nft?: NFT }) {
+  if (!nft) return null;
   return (
     <>
       <View tw="m-4">

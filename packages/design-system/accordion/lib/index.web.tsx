@@ -20,8 +20,8 @@ const Root = (props: RootProps) => {
   const [value, setValue] = useState(propValue);
 
   const handleValueChange = useCallback(
-    (newValue) => {
-      onValueChange?.(newValue);
+    (newValue: RootProps["value"]) => {
+      onValueChange?.(newValue as string);
       setValue(newValue);
     },
     [setValue, onValueChange]

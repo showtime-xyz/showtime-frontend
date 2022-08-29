@@ -7,10 +7,10 @@ import { useWeb3 } from "app/hooks/use-web3";
 
 export type UseWalletReturnType = {
   address?: string;
-  disconnect: () => void;
+  disconnect: () => Promise<void>;
   connected?: boolean;
   networkChanged?: boolean;
-  connect?: () => void;
+  connect: () => Promise<void>;
   signMessageAsync: (args: {
     message: string | ethers.utils.Bytes;
   }) => Promise<string | undefined>;
@@ -39,8 +39,13 @@ const useWallet = (): UseWalletReturnType => {
 
   return {
     address,
-    connect: connector.connect,
-    disconnect: connector.killSession,
+    connect: async () => {
+      await connector.connect();
+    },
+    disconnect: async () => {
+      localStorage.removeItem("walletconnect");
+      await connector.killSession();
+    },
     connected: connected || isMagic,
     networkChanged: undefined,
     signMessageAsync: async (args: {

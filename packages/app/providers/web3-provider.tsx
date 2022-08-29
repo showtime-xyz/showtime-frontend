@@ -5,7 +5,7 @@ import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { Web3Context } from "app/context/web3-context";
-import { magic, Relayer } from "app/lib/magic";
+import { useMagic, Relayer } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 interface Web3ProviderProps {
@@ -22,6 +22,7 @@ export function Web3Provider({
   const [web3, setWeb3] = useState<EthersWeb3Provider | undefined>(undefined);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
+  const { magic } = useMagic();
   const [magicWalletAddress, setMagicWalletAddress] = useState<
     string | undefined
   >(undefined);
@@ -61,16 +62,21 @@ export function Web3Provider({
       if (magic.rpcProvider && isLoggedIn) {
         //@ts-ignore
         const provider = new EthersWeb3Provider(magic.rpcProvider);
-        provider
-          .getSigner()
-          .getAddress()
-          .then((address) => {
-            setMagicWalletAddress(address);
-          });
         setWeb3(provider);
       }
     });
-  }, []);
+  }, [magic]);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (web3?.provider.isMagic)
+      web3
+        ?.getSigner()
+        .getAddress()
+        .then((address) => {
+          setMagicWalletAddress(address);
+        });
+  }, [web3]);
 
   // (Web only) initialises web3 provider from wagmi
   useEffect(() => {
