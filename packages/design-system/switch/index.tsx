@@ -14,7 +14,7 @@ const thumbHeight = 24;
 const thumbWidth = 24;
 const thumbOffset = 2;
 
-type SwitchProps = {
+export type SwitchProps = {
   accessibilityLabel?: string;
   checked?: boolean;
   onChange?: (nextValue: boolean) => void;

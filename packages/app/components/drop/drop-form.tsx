@@ -8,14 +8,12 @@ import { Controller, useForm } from "react-hook-form";
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -41,6 +39,7 @@ import {
   userHasIncompleteExternalLinks,
 } from "app/utilities";
 
+import { ErrorText, Fieldset } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -433,7 +432,7 @@ export const DropForm = () => {
                       }}
                     />
                   </View>
-                  <View tw="flex-1 flex-row">
+                  <View tw="mt-4 flex-1 flex-row md:mt-0">
                     <Controller
                       control={control}
                       name="editionSize"
@@ -478,31 +477,35 @@ export const DropForm = () => {
                     }}
                   />
                 </View>
+                <View tw="mt-4 flex-row justify-between">
+                  <Controller
+                    control={control}
+                    name="notSafeForWork"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        tw="flex-1"
+                        label="Explicit content"
+                        helperText="18+"
+                        errorText={errors.duration?.message}
+                        selectOnly
+                        switchProps={{
+                          checked: value,
+                          onChange,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion.Root>
-          <AnimateHeight hide={!!accordionValue}>
-            <Text tw="text-gray-600 dark:text-gray-400">
-              By default, you will drop 100 editions with 10% royalties for a
-              week.
-            </Text>
+          <AnimateHeight hide={!accordionValue}>
+            <View tw="h-0 md:h-2" />
           </AnimateHeight>
-          <View tw="mt-4 flex-row justify-between">
-            <View>
-              <Text tw="text-sm font-bold text-black dark:text-white">
-                Explicit content
-              </Text>
-              <View tw="h-2" />
-              <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
-            </View>
-            <Controller
-              control={control}
-              name="notSafeForWork"
-              render={({ field: { onChange, value } }) => (
-                <Switch checked={value} onChange={onChange} />
-              )}
-            />
-          </View>
+          <Text tw="text-gray-600 dark:text-gray-400">
+            By default, you will drop 100 editions with 10% royalties for a
+            week.
+          </Text>
 
           <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
@@ -522,7 +525,7 @@ export const DropForm = () => {
                         onPress={() => onChange(!value)}
                         tw="px-4 text-gray-600 dark:text-gray-400"
                       >
-                        I have the rights to publish this artwork, and
+                        I have the rights to publish this content, and
                         understand it will be minted on the Polygon network.
                       </Text>
                     </View>

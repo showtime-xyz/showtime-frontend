@@ -6,6 +6,8 @@ import { useId } from "@showtime-xyz/universal.input";
 import { Label } from "@showtime-xyz/universal.label";
 import { Select } from "@showtime-xyz/universal.select";
 import type { SelectProps } from "@showtime-xyz/universal.select";
+import { Switch } from "@showtime-xyz/universal.switch";
+import type { SwitchProps } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
@@ -18,6 +20,7 @@ type FieldsetProps = {
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
+  switchProps?: SwitchProps;
   selectOnly?: boolean;
   leftElement?: React.ReactNode;
   Component?: ComponentType;
@@ -32,6 +35,7 @@ export function Fieldset(props: FieldsetProps) {
     label,
     disabled,
     select,
+    switchProps,
     tw: twProp = "",
     leftElement,
     selectOnly,
@@ -95,6 +99,7 @@ export function Fieldset(props: FieldsetProps) {
         {select ? (
           <Select disabled={disabled} size="small" {...select} />
         ) : null}
+        {switchProps ? <Switch {...switchProps} /> : null}
       </View>
       {errorText ? (
         <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
