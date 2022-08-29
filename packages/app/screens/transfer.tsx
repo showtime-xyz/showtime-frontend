@@ -1,6 +1,5 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Transfer } from "app/components/transfer";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTrackPageViewed } from "app/lib/analytics";
@@ -29,7 +28,7 @@ const TransferModal = () => {
 
   const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
 
-  return <Transfer nft={nft} />;
+  return null;
 };
 
 export const TransferScreen = withModalScreen(TransferModal, {

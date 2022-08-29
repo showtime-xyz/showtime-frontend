@@ -1,6 +1,6 @@
 import { useAccount, useSigner } from "wagmi";
 
-import { Web3Provider as Web3ProviderBase } from "./web3-provider.tsx";
+import { Web3Provider as Web3ProviderBase } from "./web3-provider";
 
 interface Web3ProviderProps {
   children: React.ReactNode;

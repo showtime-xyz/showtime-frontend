@@ -1,6 +1,5 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Buy } from "app/components/buy";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTrackPageViewed } from "app/lib/analytics";
@@ -27,7 +26,7 @@ const BuyModal = () => {
 
   const { data: nft } = useNFTDetails(data?.data?.item?.nft_id);
 
-  return <Buy nft={nft} />;
+  return null;
 };
 
 export const BuyScreen = withModalScreen(BuyModal, {

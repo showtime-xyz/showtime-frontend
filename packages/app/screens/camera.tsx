@@ -8,7 +8,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Camera } from "app/components/camera";
-import { setInitialMedia } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useFocusEffect } from "app/lib/react-navigation/native";
@@ -39,7 +38,7 @@ function CameraScreen() {
 
   const postPhoto = useCallback(
     (param: FilePickerResolveValue) => {
-      setInitialMedia({ file: param.file, fileType: param.type });
+      // setInitialMedia({ file: param.file, fileType: param.type });
 
       const createPostURL = `/create`;
       if (isAuthenticated) {
@@ -111,7 +110,6 @@ function CameraScreen() {
           const { Camera } = require("react-native-vision-camera");
           const status = await Camera.requestCameraPermission();
           setHasPermission(status === "authorized");
-          // eslint-disable-next-line no-empty
         } catch (error) {}
       }
     })();

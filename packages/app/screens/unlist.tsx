@@ -5,7 +5,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withColorScheme } from "app/components/memo-with-theme";
-import { Unlist } from "app/components/unlist";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
 import { useTrackPageViewed } from "app/lib/analytics";
@@ -58,7 +57,7 @@ const UnlistModal = withColorScheme(() => {
     );
   }
 
-  return <Unlist nft={nft} />;
+  return null;
 });
 
 export const UnlistScreen = withModalScreen(UnlistModal, {

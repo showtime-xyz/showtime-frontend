@@ -1,6 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-import { useAccount, useDisconnect, useSignMessage, useSigner } from "wagmi";
+import { useAccount, useDisconnect, useSignMessage } from "wagmi";
 
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 

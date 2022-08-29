@@ -1,6 +1,5 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Create } from "app/components/create";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 
@@ -10,7 +9,7 @@ const CreateModal = () => {
   useHideHeader();
   //#endregion
 
-  return <Create />;
+  return null;
 };
 
 export const CreateScreen = withModalScreen(CreateModal, {

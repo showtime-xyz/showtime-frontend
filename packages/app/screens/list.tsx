@@ -1,12 +1,9 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { List } from "app/components/list";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetails } from "app/hooks/use-nft-details";
@@ -60,11 +57,7 @@ const ListModal = withColorScheme(() => {
     );
   }
 
-  return (
-    <BottomSheetModalProvider>
-      <List nft={nft} />
-    </BottomSheetModalProvider>
-  );
+  return null;
 });
 
 export const ListScreen = withModalScreen(ListModal, {

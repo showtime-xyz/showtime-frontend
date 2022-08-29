@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
+import type { Bytes } from "@ethersproject/bytes";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { ethers } from "ethers";
 
 import { useWeb3 } from "app/hooks/use-web3";
 
@@ -12,7 +12,7 @@ export type UseWalletReturnType = {
   networkChanged?: boolean;
   connect: () => Promise<void>;
   signMessageAsync: (args: {
-    message: string | ethers.utils.Bytes;
+    message: string | Bytes;
   }) => Promise<string | undefined>;
 };
 
@@ -25,7 +25,8 @@ const useWallet = (): UseWalletReturnType => {
   useEffect(() => {
     (async function fetchUserAddress() {
       if (session?.accounts?.[0]) {
-        setAddress(ethers.utils.getAddress(session.accounts[0]));
+        const getAddress = (await import("@ethersproject/address")).getAddress;
+        setAddress(getAddress(session.accounts[0]));
       } else if (magicWalletAddress) {
         setAddress(magicWalletAddress);
       } else if (web3) {
@@ -48,9 +49,7 @@ const useWallet = (): UseWalletReturnType => {
     },
     connected: connected || isMagic,
     networkChanged: undefined,
-    signMessageAsync: async (args: {
-      message: string | ethers.utils.Bytes;
-    }) => {
+    signMessageAsync: async (args: { message: string | Bytes }) => {
       const signature = await web3?.getSigner().signMessage(args.message);
       return signature;
     },

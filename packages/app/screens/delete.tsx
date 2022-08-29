@@ -1,6 +1,5 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Delete } from "app/components/delete";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
@@ -26,7 +25,7 @@ const DeleteModal = () => {
     contractAddress: contractAddress as string,
   });
 
-  return <Delete nft={data?.data?.item} />;
+  return null;
 };
 
 export const DeleteScreen = withModalScreen(DeleteModal, {
