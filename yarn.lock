@@ -2726,7 +2726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bignumber@npm:5.6.2, @ethersproject/bignumber@npm:^5.6.2":
+"@ethersproject/bignumber@npm:5.6.2":
   version: 5.6.2
   resolution: "@ethersproject/bignumber@npm:5.6.2"
   dependencies:
@@ -2734,17 +2734,6 @@ __metadata:
     "@ethersproject/logger": ^5.6.0
     bn.js: ^5.2.1
   checksum: 9cf31c10274f1b6d45b16aed29f43729e8f5edec38c8ec8bb90d6b44f0eae14fda6519536228d23916a375ce11e71a77279a912d653ea02503959910b6bf9de7
-  languageName: node
-  linkType: hard
-
-"@ethersproject/bignumber@npm:^5.6.0":
-  version: 5.6.1
-  resolution: "@ethersproject/bignumber@npm:5.6.1"
-  dependencies:
-    "@ethersproject/bytes": ^5.6.0
-    "@ethersproject/logger": ^5.6.0
-    bn.js: ^4.11.9
-  checksum: 3ec62d0587682cefd690e1c9fe8233308ac8a384d00163f015d26abde99ff1a5b049ce396ddb58e553c1cde5bf693884d2ab19d8af25b1c58f9e3814c9e87a0d
   languageName: node
   linkType: hard
 
@@ -2981,7 +2970,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/signing-key@npm:5.6.2, @ethersproject/signing-key@npm:^5.6.2":
+"@ethersproject/signing-key@npm:5.6.2":
   version: 5.6.2
   resolution: "@ethersproject/signing-key@npm:5.6.2"
   dependencies:
@@ -2992,20 +2981,6 @@ __metadata:
     elliptic: 6.5.4
     hash.js: 1.1.7
   checksum: 7889d0934c9664f87e7b7e021794e2d2ddb2e81c1392498e154cf2d5909b922d74d3df78cec44187f63dc700eddad8f8ea5ded47d2082a212a591818014ca636
-  languageName: node
-  linkType: hard
-
-"@ethersproject/signing-key@npm:^5.6.0":
-  version: 5.6.1
-  resolution: "@ethersproject/signing-key@npm:5.6.1"
-  dependencies:
-    "@ethersproject/bytes": ^5.6.0
-    "@ethersproject/logger": ^5.6.0
-    "@ethersproject/properties": ^5.6.0
-    bn.js: ^4.11.9
-    elliptic: 6.5.4
-    hash.js: 1.1.7
-  checksum: 9292611a2206b9b160a6e7b8ecaf95090efa66e0fb09c4069f6adcceac678b8be59340c623f61a2ffcc57af814745b0fefc1381b0208eda0a62e84234fa85455
   languageName: node
   linkType: hard
 
@@ -13703,35 +13678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bn.js@npm:4.11.6":
-  version: 4.11.6
-  resolution: "bn.js@npm:4.11.6"
-  checksum: db23047bf06fdf9cf74401c8e76bca9f55313c81df382247d2c753868b368562e69171716b81b7038ada8860af18346fd4bcd1cf9d4963f923fe8e54e61cb58a
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:4.11.8":
-  version: 4.11.8
-  resolution: "bn.js@npm:4.11.8"
-  checksum: 80d4709cd58a21f0be8201e9e5859fea5ef133318e9800c8454cd334625c6e1caea593ca21f9b9a085fb560fbc12fb2fb3514363f8604258db924237fd039139
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:^4.0.0, bn.js@npm:^4.1.0, bn.js@npm:^4.11.0, bn.js@npm:^4.11.6, bn.js@npm:^4.11.8, bn.js@npm:^4.11.9":
-  version: 4.12.0
-  resolution: "bn.js@npm:4.12.0"
-  checksum: 39afb4f15f4ea537b55eaf1446c896af28ac948fdcf47171961475724d1bb65118cca49fa6e3d67706e4790955ec0e74de584e45c8f1ef89f46c812bee5b5a12
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:^5.0.0, bn.js@npm:^5.1.1, bn.js@npm:^5.1.2, bn.js@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "bn.js@npm:5.2.0"
-  checksum: 6117170393200f68b35a061ecbf55d01dd989302e7b3c798a3012354fa638d124f0b2f79e63f77be5556be80322a09c40339eda6413ba7468524c0b6d4b4cb7a
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:^5.2.1":
+"bn.js@npm:5.2.1":
   version: 5.2.1
   resolution: "bn.js@npm:5.2.1"
   checksum: 3dd8c8d38055fedfa95c1d5fc3c99f8dd547b36287b37768db0abab3c239711f88ff58d18d155dd8ad902b0b0cee973747b7ae20ea12a09473272b0201c9edd3
