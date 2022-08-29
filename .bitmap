@@ -101,7 +101,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.61",
+        "version": "0.0.62",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -245,7 +245,7 @@
     },
     "switch": {
         "scope": "showtime.universal",
-        "version": "0.0.39",
+        "version": "0.0.40",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/switch"
     },

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -18,7 +18,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 import { breakpoints } from "design-system/theme";
 
 import { AddressMenu } from "./address-menu";
@@ -146,19 +145,7 @@ export const SettingsWalletSlot = (props: Props) => {
 
   return (
     <View tw="md:px-4">
-      <View
-        tw="w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black "
-        style={
-          isMdWidth &&
-          Platform.select({
-            web: {
-              // @ts-ignore
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-            } as any,
-            default: {},
-          })
-        }
-      >
+      <View tw="md:dark:shadow-dark md:shadow-light w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black">
         <View tw="justify-center">
           <Button iconOnly={true} variant="secondary">
             {isEthereumAddress ? <Ethereum /> : <Tezos />}
