@@ -278,7 +278,7 @@ export const EditProfile = () => {
               <SelectedTabIndicator />
             </Tabs.List>
             <Tabs.Pager
-              tw="web:h-60vh"
+              tw="web:h-58vh"
               style={{
                 overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
               }}
@@ -452,9 +452,9 @@ export const EditProfile = () => {
               >
                 {hasNotSubmittedExternalLink ? (
                   <>
-                    <ErrorText>
+                    <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
                       Please add atleast one link from below
-                    </ErrorText>
+                    </Text>
                     <View tw="h-4" />
                   </>
                 ) : null}
@@ -577,7 +577,7 @@ export const EditProfile = () => {
             </Tabs.Pager>
           </Tabs.Root>
 
-          <View tw={`mt-2.5 px-4`}>
+          <View tw={`my-2.5 mb-4 px-4`}>
             <Button
               disabled={isSubmitting}
               tw={isSubmitting ? "opacity-50" : ""}
