@@ -331,7 +331,7 @@ export const DropForm = () => {
                             ) : null}
 
                             <View tw="mt-2">
-                              <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
+                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
                                 Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
                               </Text>
                             </View>
