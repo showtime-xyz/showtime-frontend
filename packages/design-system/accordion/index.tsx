@@ -92,3 +92,4 @@ export const Accordion = {
   Chevron,
   RNAccordion,
 };
+export { AnimateHeight } from "./animate-height";
