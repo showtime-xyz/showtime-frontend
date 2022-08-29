@@ -278,7 +278,7 @@ export const EditProfile = () => {
               <SelectedTabIndicator />
             </Tabs.List>
             <Tabs.Pager
-              tw="web:h-48vh"
+              tw="web:h-60vh"
               style={{
                 overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
               }}
@@ -367,6 +367,12 @@ export const EditProfile = () => {
                             </View>
                           </View>
                         </Pressable>
+                        <View tw="ml-4 flex-row items-center pt-2">
+                          <Text tw="font-bold text-gray-900 dark:text-white">
+                            Profile picture
+                          </Text>
+                          <Text tw="ml-1 text-red-500">*</Text>
+                        </View>
                         {errors.profilePicture?.message ? (
                           <ErrorText>{errors.profilePicture.message}</ErrorText>
                         ) : null}
@@ -403,6 +409,7 @@ export const EditProfile = () => {
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Fieldset
                           tw="flex-1"
+                          required
                           label="Username"
                           placeholder="Enter your username"
                           value={value}
@@ -426,6 +433,7 @@ export const EditProfile = () => {
                         label="About me"
                         placeholder="About me"
                         tw="mt-4"
+                        required
                         multiline
                         value={value}
                         numberOfLines={3}
