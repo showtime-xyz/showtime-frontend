@@ -10,18 +10,20 @@ import { Switch } from "@showtime-xyz/universal.switch";
 import type { SwitchProps } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
+import { TextInput } from "@showtime-xyz/universal.text-input";
+import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-type FieldsetProps = {
+export type FieldsetProps = {
   errorText?: string;
-  label?: string;
+  label?: string | JSX.Element;
   helperText?: string;
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
   switchProps?: SwitchProps;
   selectOnly?: boolean;
+  switchOnly?: boolean;
   leftElement?: React.ReactNode;
   Component?: ComponentType;
   componentRef?: MutableRefObject<ComponentType | undefined>;
@@ -39,6 +41,7 @@ export function Fieldset(props: FieldsetProps) {
     tw: twProp = "",
     leftElement,
     selectOnly,
+    switchOnly,
     Component = TextInput,
     ...textInputProps
   } = props;
@@ -50,57 +53,62 @@ export function Fieldset(props: FieldsetProps) {
   const inputId = useId();
   const helperTextId = useId();
   const errorTextId = useId();
-
+  const switchTw = switchOnly
+    ? "flex-1 flex-row items-center justify-between"
+    : "";
   return (
-    <View tw={`rounded-4 p-4 ${style} ${twProp}`}>
+    <View tw={`rounded-4 p-4 ${style} ${twProp} ${switchTw}`}>
       <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
         {label}
       </Label>
-      <View tw="mt-4 flex-row items-center">
-        {leftElement}
-        {!selectOnly ? (
-          <Component
-            tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
-            //@ts-ignore - web only
-            style={Platform.select({
-              web: { outline: "none" },
-              default: undefined,
-            })}
-            editable={disabled}
-            nativeID={inputId}
-            accessibilityLabel={accessibilityLabel}
-            multiline={textInputProps.multiline}
-            numberOfLines={textInputProps.numberOfLines ?? 1}
-            blurOnSubmit={textInputProps.blurOnSubmit}
-            textAlignVertical="bottom"
-            placeholderTextColor={
-              isDark ? tw.color("gray-400") : tw.color("gray-600")
-            }
-            selectionColor={
-              isDark ? tw.color("gray-300") : tw.color("gray-700")
-            }
-            //@ts-ignore - web only
-            accessibilityDescribedBy={Platform.select({
-              web: helperText ? helperTextId : undefined,
-              default: undefined,
-            })}
-            accessibilityErrorMessage={Platform.select({
-              web: errorText ? errorTextId : undefined,
-              default: undefined,
-            })}
-            accessibilityInvalid={Platform.select({
-              web: errorText ? true : false,
-              default: undefined,
-            })}
-            {...textInputProps}
-          />
-        ) : null}
+      {switchProps ? <Switch {...switchProps} /> : null}
 
-        {select ? (
-          <Select disabled={disabled} size="small" {...select} />
-        ) : null}
-        {switchProps ? <Switch {...switchProps} /> : null}
-      </View>
+      {!switchProps ? (
+        <View tw="mt-4 flex-row items-center">
+          {leftElement}
+          {!selectOnly ? (
+            <Component
+              tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
+              //@ts-ignore - web only
+              style={Platform.select({
+                web: { outline: "none" },
+                default: undefined,
+              })}
+              editable={disabled}
+              nativeID={inputId}
+              accessibilityLabel={accessibilityLabel}
+              multiline={textInputProps.multiline}
+              numberOfLines={textInputProps.numberOfLines ?? 1}
+              blurOnSubmit={textInputProps.blurOnSubmit}
+              textAlignVertical="bottom"
+              placeholderTextColor={
+                isDark ? tw.color("gray-400") : tw.color("gray-600")
+              }
+              selectionColor={
+                isDark ? tw.color("gray-300") : tw.color("gray-700")
+              }
+              //@ts-ignore - web only
+              accessibilityDescribedBy={Platform.select({
+                web: helperText ? helperTextId : undefined,
+                default: undefined,
+              })}
+              accessibilityErrorMessage={Platform.select({
+                web: errorText ? errorTextId : undefined,
+                default: undefined,
+              })}
+              accessibilityInvalid={Platform.select({
+                web: errorText ? true : false,
+                default: undefined,
+              })}
+              {...textInputProps}
+            />
+          ) : null}
+
+          {select ? (
+            <Select disabled={disabled} size="small" {...select} />
+          ) : null}
+        </View>
+      ) : null}
       {errorText ? (
         <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
       ) : null}

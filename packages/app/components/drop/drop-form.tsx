@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -39,7 +40,6 @@ import {
   userHasIncompleteExternalLinks,
 } from "app/utilities";
 
-import { ErrorText, Fieldset } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -484,10 +484,8 @@ export const DropForm = () => {
                     render={({ field: { onChange, value } }) => (
                       <Fieldset
                         tw="flex-1"
-                        label="Explicit content"
-                        helperText="18+"
-                        errorText={errors.duration?.message}
-                        selectOnly
+                        label="Explicit content (18+)"
+                        switchOnly
                         switchProps={{
                           checked: value,
                           onChange,
