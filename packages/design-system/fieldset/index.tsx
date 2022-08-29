@@ -26,6 +26,7 @@ export type FieldsetProps = {
   switchOnly?: boolean;
   leftElement?: React.ReactNode;
   Component?: ComponentType;
+  required?: boolean;
   componentRef?: MutableRefObject<ComponentType | undefined>;
 } & TextInputProps;
 
@@ -42,6 +43,7 @@ export function Fieldset(props: FieldsetProps) {
     leftElement,
     selectOnly,
     switchOnly,
+    required,
     Component = TextInput,
     ...textInputProps
   } = props;
@@ -58,11 +60,14 @@ export function Fieldset(props: FieldsetProps) {
     : "";
   return (
     <View tw={`rounded-4 p-4 ${style} ${twProp} ${switchTw}`}>
-      <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
-        {label}
-      </Label>
-      {switchProps ? <Switch {...switchProps} /> : null}
+      <View tw="flex-row">
+        <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
+          {label}
+        </Label>
+        {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
+      </View>
 
+      {switchProps ? <Switch {...switchProps} /> : null}
       {!switchProps ? (
         <View tw="mt-4 flex-row items-center">
           {leftElement}
@@ -96,6 +101,7 @@ export function Fieldset(props: FieldsetProps) {
                 web: errorText ? errorTextId : undefined,
                 default: undefined,
               })}
+              accessibilityRequired={required}
               accessibilityInvalid={Platform.select({
                 web: errorText ? true : false,
                 default: undefined,
