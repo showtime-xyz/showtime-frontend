@@ -15,7 +15,6 @@ import {
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
-  File,
   UserMinus,
   Flag,
   EyeOff,
@@ -177,11 +176,6 @@ function NFTDropdown({
             <DropdownMenuItemTitle>Unhide</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
-
-        <DropdownMenuItem onSelect={() => openModal("details")} key="details">
-          <MenuItemIcon Icon={File} />
-          <DropdownMenuItemTitle>Details</DropdownMenuItemTitle>
-        </DropdownMenuItem>
 
         <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
           <MenuItemIcon Icon={Clock} />
