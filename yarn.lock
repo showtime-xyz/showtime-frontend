@@ -7465,9 +7465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.59":
-  version: 0.0.59
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.59"
+"@showtime-xyz/universal.fieldset@npm:^0.0.61":
+  version: 0.0.61
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.61"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.32
     "@showtime-xyz/universal.input": 0.0.40
@@ -7483,7 +7483,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: bdea78d939a3e8ce547353aeb5881f9491bd37102da7c66f0f313717c5c8be770f0c88037cf355776b00913a53542ddea824cc701b3bf967ba0b87de3a81f034
+  checksum: 2b4611a659217cbd72201fd78c77e34e022cf090cb733e7b2e8b4e094d40b6aa884d8b215c20f4b446b92f286a53f56d0c1c2fe6b85526573ea0afac31660a15
   languageName: node
   linkType: hard
 
@@ -7897,9 +7897,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.switch@npm:^0.0.39":
-  version: 0.0.39
-  resolution: "@showtime-xyz/universal.switch@npm:0.0.39"
+"@showtime-xyz/universal.switch@npm:^0.0.40":
+  version: 0.0.40
+  resolution: "@showtime-xyz/universal.switch@npm:0.0.40"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.32
     "@showtime-xyz/universal.view": 0.0.31
@@ -7912,7 +7912,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 3ba5bdd4997f509b25554447ebf308880477f42879a608ee6e46adac2093b06557cffdeba3a8fb3b6e11c661231ace89940d34cd7156d9a01d4cbd827cb13f06
+  checksum: 5c5be1abb63e3141eed4fe8573f25b355bee85b34c65b5bd4337afae8164879639fec2446db2d66b179f76ad5263d34a68a5b5a1ae302b1e52579ce43ef553dd
   languageName: node
   linkType: hard
 
@@ -8140,7 +8140,7 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.34
     "@showtime-xyz/universal.dropdown-menu": ^0.0.34
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.13
-    "@showtime-xyz/universal.fieldset": ^0.0.59
+    "@showtime-xyz/universal.fieldset": ^0.0.61
     "@showtime-xyz/universal.haptics": ^0.0.6
     "@showtime-xyz/universal.hooks": ^0.0.32
     "@showtime-xyz/universal.icon": ^0.0.46
@@ -8164,7 +8164,7 @@ __metadata:
     "@showtime-xyz/universal.skeleton": ^0.0.35
     "@showtime-xyz/universal.snackbar": ^0.0.62
     "@showtime-xyz/universal.spinner": ^0.0.37
-    "@showtime-xyz/universal.switch": ^0.0.39
+    "@showtime-xyz/universal.switch": ^0.0.40
     "@showtime-xyz/universal.tab-view": ^0.0.17
     "@showtime-xyz/universal.tailwind": ^0.0.31
     "@showtime-xyz/universal.text": ^0.0.33

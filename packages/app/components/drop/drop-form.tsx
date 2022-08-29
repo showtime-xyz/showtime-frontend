@@ -10,7 +10,6 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -20,6 +19,7 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
@@ -165,25 +165,11 @@ export const DropForm = () => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          Hold on!
-        </Text>
-        <Image
-          source={Platform.select({
-            web: { uri: require("./complete-profile.png") },
-            default: require("./complete-profile.png"),
-          })}
-          tw={`h-25 w-25 rounded-xl`}
-          resizeMode="contain"
-        />
-        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          Please complete your profile before creating a drop.
-        </Text>
-        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
-          Complete your profile
-        </Button>
-      </View>
+      <CompleteProfileModalContent
+        title="Tell your claimers more about yourself"
+        description="Complete your profile first to create this drop. It will take around 1 minute."
+        cta="Complete profile to drop"
+      />
     );
   }
 
@@ -345,7 +331,7 @@ export const DropForm = () => {
                             ) : null}
 
                             <View tw="mt-2">
-                              <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
+                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
                                 Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
                               </Text>
                             </View>
