@@ -22,7 +22,6 @@ type FieldsetProps = {
   leftElement?: React.ReactNode;
   Component?: ComponentType;
   required?: boolean;
-  maxCharacters?: number;
   componentRef?: MutableRefObject<ComponentType | undefined>;
 } & TextInputProps;
 
