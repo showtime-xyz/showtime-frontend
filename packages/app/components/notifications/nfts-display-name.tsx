@@ -3,6 +3,7 @@ import { Text } from "@showtime-xyz/universal.text";
 
 import { NotificationNFT } from "app/hooks/use-notifications";
 import { findTokenChainName } from "app/lib/utilities";
+import { TextLink } from "app/navigation/link";
 
 type NotificationDescriptionProps = {
   nfts: NotificationNFT[];
@@ -42,7 +43,12 @@ export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
       >
         {nft.display_name}
       </Text>
-      {` and more`}
+      <TextLink
+        href={`/@${
+          nft.creator.username || nft.creator.wallet_address
+        }?type=owned`}
+        tw="text-13 font-bold text-gray-600 dark:text-gray-400"
+      >{` and ${nfts.length - 1} more`}</TextLink>
     </>
   );
 };
