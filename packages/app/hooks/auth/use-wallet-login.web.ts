@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from "react";
 
 import { useSigner } from "wagmi";
 
+import { useWallet } from "app/hooks/use-wallet";
 import { useAccessToken } from "app/lib/access-token";
 import { isMobileWeb } from "app/utilities";
 
@@ -9,7 +10,6 @@ import { useUser } from "../use-user";
 import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
-import { useWallet } from "./use-wallet";
 import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
