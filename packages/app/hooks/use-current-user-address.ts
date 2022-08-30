@@ -1,4 +1,4 @@
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useWallet } from "app/hooks/use-wallet";
 
 function useCurrentUserAddress() {
   const { address } = useWallet();
