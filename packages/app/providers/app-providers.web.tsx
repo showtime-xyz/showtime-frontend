@@ -12,48 +12,50 @@ import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { FeedProvider } from "app/providers/feed-provider";
+import { MagicProvider } from "app/providers/magic-provider.web";
 import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
+import { ThemeProvider } from "app/providers/theme-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
-import { ThemeProvider } from "./theme-provider";
-
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider>
-      <SafeAreaProvider>
-        <ToastProvider>
-          <LightBoxProvider>
-            <WalletProvider>
-              <AlertProvider>
-                <SnackbarProvider>
-                  <SWRProvider>
-                    <Web3Provider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <BiconomyProvider>
-                                    <MuteProvider>{children}</MuteProvider>
-                                  </BiconomyProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </Web3Provider>
-                  </SWRProvider>
-                </SnackbarProvider>
-              </AlertProvider>
-            </WalletProvider>
-          </LightBoxProvider>
-        </ToastProvider>
-      </SafeAreaProvider>
-    </ThemeProvider>
+    <MagicProvider>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          <ToastProvider>
+            <LightBoxProvider>
+              <WalletProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <SWRProvider>
+                      <Web3Provider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <NavigationProvider>
+                                    <BiconomyProvider>
+                                      <MuteProvider>{children}</MuteProvider>
+                                    </BiconomyProvider>
+                                  </NavigationProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </Web3Provider>
+                    </SWRProvider>
+                  </SnackbarProvider>
+                </AlertProvider>
+              </WalletProvider>
+            </LightBoxProvider>
+          </ToastProvider>
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </MagicProvider>
   );
 };
