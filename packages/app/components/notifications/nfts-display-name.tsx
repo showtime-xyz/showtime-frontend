@@ -48,7 +48,7 @@ export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
           nft.creator.username || nft.creator.wallet_address
         }?type=owned`}
         tw="text-13 font-bold text-gray-600 dark:text-gray-400"
-      >{` ${nfts.length - 1} more`}</TextLink>
+      >{` and ${nfts.length - 1} more`}</TextLink>
     </>
   );
 };
