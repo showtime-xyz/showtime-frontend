@@ -1,7 +1,5 @@
 import { useCallback, useEffect } from "react";
 
-import { convertUtf8ToHex } from "@walletconnect/utils";
-
 import { useWallet } from "app/hooks/auth/use-wallet";
 
 import { useStableCallback } from "../use-stable-callback";
@@ -68,9 +66,8 @@ export function useWalletLogin() {
     async function signPersonalMessage() {
       dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
       try {
-        const message = convertUtf8ToHex(
-          process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce
-        );
+        const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
+
         const _signature = await walletConnector.signMessageAsync({ message });
         dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", { signature: _signature });
       } catch (error) {
