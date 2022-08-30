@@ -31,8 +31,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
 
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
-
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
@@ -187,11 +185,9 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         </View>
         <View
           style={[
-            tw.style("bg-white dark:bg-black"),
+            tw.style("bg-white dark:bg-black dark:shadow-dark shadow-light"),
             {
               width: NFT_DETAIL_WIDTH,
-              // @ts-ignore Todo: will use tailwind config when switch to NativeWind.
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
           ]}
         >

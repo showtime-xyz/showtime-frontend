@@ -10,16 +10,15 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
@@ -165,25 +164,11 @@ export const DropForm = () => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          Hold on!
-        </Text>
-        <Image
-          source={Platform.select({
-            web: { uri: require("./complete-profile.png") },
-            default: require("./complete-profile.png"),
-          })}
-          tw={`h-25 w-25 rounded-xl`}
-          resizeMode="contain"
-        />
-        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          Please complete your profile before creating a drop.
-        </Text>
-        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
-          Complete your profile
-        </Button>
-      </View>
+      <CompleteProfileModalContent
+        title="Tell your claimers more about yourself"
+        description="Complete your profile first to create this drop. It will take around 1 minute."
+        cta="Complete profile to drop"
+      />
     );
   }
 
@@ -345,7 +330,7 @@ export const DropForm = () => {
                             ) : null}
 
                             <View tw="mt-2">
-                              <Text tw="max-w-60 text-center text-gray-600 dark:text-gray-200">
+                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
                                 Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
                               </Text>
                             </View>
@@ -391,7 +376,7 @@ export const DropForm = () => {
                         textAlignVertical="top"
                         placeholder="What is this NFT drop about?"
                         onBlur={onBlur}
-                        helperText="You will not be able to edit this after the drop is created"
+                        helperText="You will not be able to edit this"
                         errorText={errors.description?.message}
                         value={value}
                         numberOfLines={3}
@@ -433,7 +418,7 @@ export const DropForm = () => {
                       }}
                     />
                   </View>
-                  <View tw="flex-1 flex-row">
+                  <View tw="mt-4 flex-1 flex-row md:mt-0">
                     <Controller
                       control={control}
                       name="editionSize"
@@ -478,31 +463,33 @@ export const DropForm = () => {
                     }}
                   />
                 </View>
+                <View tw="mt-4 flex-row justify-between">
+                  <Controller
+                    control={control}
+                    name="notSafeForWork"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        tw="flex-1"
+                        label="Explicit content (18+)"
+                        switchOnly
+                        switchProps={{
+                          checked: value,
+                          onChange,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion.Root>
-          <AnimateHeight hide={!!accordionValue}>
-            <Text tw="text-gray-600 dark:text-gray-400">
-              By default, you will drop 100 editions with 10% royalties for a
-              week.
-            </Text>
+          <AnimateHeight hide={!accordionValue}>
+            <View tw="h-0 md:h-2" />
           </AnimateHeight>
-          <View tw="mt-4 flex-row justify-between">
-            <View>
-              <Text tw="text-sm font-bold text-black dark:text-white">
-                Explicit content
-              </Text>
-              <View tw="h-2" />
-              <Text tw="text-gray-600 dark:text-gray-400">18+</Text>
-            </View>
-            <Controller
-              control={control}
-              name="notSafeForWork"
-              render={({ field: { onChange, value } }) => (
-                <Switch checked={value} onChange={onChange} />
-              )}
-            />
-          </View>
+          <Text tw="text-gray-600 dark:text-gray-400">
+            By default, you will drop 100 editions with 10% royalties for a
+            week.
+          </Text>
 
           <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
@@ -522,7 +509,7 @@ export const DropForm = () => {
                         onPress={() => onChange(!value)}
                         tw="px-4 text-gray-600 dark:text-gray-400"
                       >
-                        I have the rights to publish this artwork, and
+                        I have the rights to publish this content, and
                         understand it will be minted on the Polygon network.
                       </Text>
                     </View>

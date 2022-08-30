@@ -1,8 +1,6 @@
 import { useCallback, useEffect } from "react";
 
-import { convertUtf8ToHex } from "@walletconnect/utils";
-
-import { useWalletConnect } from "app/lib/walletconnect";
+import { useWallet } from "app/hooks/use-wallet";
 
 import { useStableCallback } from "../use-stable-callback";
 import { useAuth } from "./use-auth";
@@ -13,7 +11,7 @@ const LOGIN_WALLET_ENDPOINT = "login_wallet";
 
 export function useWalletLogin() {
   //#region hooks
-  const walletConnector = useWalletConnect();
+  const walletConnector = useWallet();
   const { getNonce, rotateNonce } = useNonce();
   const { setAuthenticationStatus, login: _login, logout } = useAuth();
   const { status, name, address, signature, nonce, error, dispatch } =
@@ -68,21 +66,15 @@ export function useWalletLogin() {
     async function signPersonalMessage() {
       dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
       try {
-        const messageParams = [
-          convertUtf8ToHex(
-            process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce
-          ),
-          address!.toLowerCase(),
-        ];
-        const _signature = await walletConnector.signPersonalMessage(
-          messageParams
-        );
+        const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
+
+        const _signature = await walletConnector.signMessageAsync({ message });
         dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", { signature: _signature });
       } catch (error) {
         dispatch("ERROR", { error });
       }
     },
-    [nonce, address, dispatch, walletConnector]
+    [nonce, dispatch, walletConnector]
   );
   const login = useCallback(
     async function login() {
@@ -134,10 +126,8 @@ export function useWalletLogin() {
     // Signing requests post await connector.connect doesn't work everytime and throws session disconnected error
     // so we only consider session is established when connector.connected is true
     if (status === "CONNECTING_TO_WALLET" && walletConnector.connected) {
-      const walletName = walletConnector.peerMeta?.name;
-      const walletAddress = walletConnector.session.accounts.filter((addr) =>
-        addr.startsWith("0x")
-      )[0];
+      const walletName = walletConnector.name;
+      const walletAddress = walletConnector.address;
       dispatch("CONNECT_TO_WALLET_SUCCESS", {
         name: walletName,
         address: walletAddress,

@@ -41,7 +41,7 @@ jobs:
 
       - name: Build apk
         run: |
-          cd android/ && chmod +x ./gradlew && STAGE=development ./gradlew assembleRelease \
+          cd android/ && chmod +x ./gradlew && FLIPPER_DISABLE=1 E2E=true STAGE=development ./gradlew assembleRelease \
 
           echo "APK_PATH=$(pwd)/app/build/outputs/apk/release/app-release.apk" >>$GITHUB_ENV
 

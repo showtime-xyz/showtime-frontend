@@ -32,6 +32,7 @@ type Props = {
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
+  isMuted?: boolean;
 };
 
 function Media({
@@ -42,6 +43,7 @@ function Media({
   resizeMode: propResizeMode,
   onPinchStart,
   onPinchEnd,
+  isMuted,
 }: Props) {
   const resizeMode = propResizeMode ?? ResizeMode.COVER;
 
@@ -109,7 +111,7 @@ function Media({
             tw={!sizeStyle ? size : ""}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            isMuted={numColumns > 1 ? true : undefined}
+            isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
           />
         </PinchToZoom>

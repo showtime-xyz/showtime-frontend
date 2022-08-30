@@ -32,7 +32,7 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, user } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useExpoUpdate();
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
@@ -127,6 +127,7 @@ export function BottomTabNavigator() {
         <BottomTab.Screen
           name="profileTab"
           component={ProfileNavigator}
+          navigationKey={user?.data?.profile?.profile_id?.toString()}
           options={{
             tabBarButton: TabBarButton,
             tabBarIcon: ProfileTabBarIcon,

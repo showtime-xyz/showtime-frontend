@@ -1,10 +1,17 @@
 const path = require("path");
+const fs = require("fs");
+
+const STAGE = process.env.STAGE ?? "production";
+const envPath = path.resolve(__dirname, `.env.${STAGE}`);
+
+// TODO: don't know any better way to do this! We need to add E2E variable in RN env.
+if (process.env.E2E) {
+  fs.appendFileSync(envPath, "\nE2E=true");
+}
 
 module.exports = function (api) {
   api.cache(true);
 
-  const STAGE = process.env.STAGE ?? "production";
-  const envPath = path.resolve(__dirname, `.env.${STAGE}`);
   require("dotenv").config({
     path: envPath,
   });

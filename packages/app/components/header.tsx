@@ -34,11 +34,7 @@ import {
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import {
-  breakpoints,
-  CARD_DARK_SHADOW,
-  CARD_LIGHT_SHADOW,
-} from "design-system/theme";
+import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "./memo-with-theme";
 
@@ -46,7 +42,6 @@ const SearchInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
-  const router = useRouter();
   const inputRef = useRef<TextInput>();
 
   useEffect(() => {
@@ -197,11 +192,10 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
+          tw="dark:shadow-dark shadow-light mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
               height: "calc(50vh - 64px)",
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
             default: {},
           })}
