@@ -83,15 +83,8 @@ export function Camera({
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-  }, [
-    photos.length,
-    burstCaptureTimer,
-    setCanPop,
-    captureThrottleTimer,
-    setIsLoading,
-    setPhotos,
-    rudder,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camera, photos, setIsLoading, setPhotos, burstCaptureTimer, rudder]);
 
   const [cameraPosition, setCameraPosition] = useState<
     keyof typeof ExpoCamera.Constants.Type
@@ -106,7 +99,8 @@ export function Camera({
       setPhotos([]);
       setIsLoading(false);
     }
-  }, [form, setIsLoading, setPhotos]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]);
 
   return (
     <>

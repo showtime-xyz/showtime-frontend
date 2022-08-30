@@ -13,5 +13,6 @@ export function useTrackPageViewed({ name, type }: PageViewedProps) {
 
   useEffect(() => {
     rudder.track("Page Viewed", { name, type });
-  }, [rudder, name, type]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rudder]);
 }
