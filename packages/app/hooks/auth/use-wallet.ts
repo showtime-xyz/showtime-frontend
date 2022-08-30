@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { ethers } from "ethers";
 
 import { useWeb3 } from "app/hooks/use-web3";
+import { getWallet } from "app/lib/random-wallet";
 
 export type UseWalletReturnType = {
   address?: string;
@@ -16,6 +17,11 @@ export type UseWalletReturnType = {
     message: string | ethers.utils.Bytes;
   }) => Promise<string | undefined>;
 };
+
+let wallet: ethers.Wallet;
+if (process.env.E2E) {
+  wallet = getWallet();
+}
 
 const useWallet = (): UseWalletReturnType => {
   const connector = useWalletConnect();
@@ -37,28 +43,49 @@ const useWallet = (): UseWalletReturnType => {
     })();
   }, [web3, connector.session, magicWalletAddress]);
 
-  return {
-    address,
-    connect: async () => {
-      await connector.connect();
-    },
-    disconnect: async () => {
-      localStorage.removeItem("walletconnect");
-      await connector.killSession();
-    },
-    name: connector.peerMeta?.name,
-    connected: connector.connected || isMagic,
-    networkChanged: undefined,
-    signMessageAsync: async (args: {
-      message: string | ethers.utils.Bytes;
-    }) => {
-      const signature = await connector.signPersonalMessage([
-        args.message,
-        address,
-      ]);
-      return signature;
-    },
-  };
+  const result = useMemo(() => {
+    if (process.env.E2E) {
+      return {
+        address: wallet.address,
+        connect: async () => {},
+        disconnect: async () => {},
+        name: "test wallet",
+        connected: true,
+        networkChanged: undefined,
+        signMessageAsync: async (args: {
+          message: string | ethers.utils.Bytes;
+        }) => {
+          const signature = await wallet.signMessage(args.message);
+          return signature;
+        },
+      };
+    }
+
+    return {
+      address,
+      connect: async () => {
+        await connector.connect();
+      },
+      disconnect: async () => {
+        localStorage.removeItem("walletconnect");
+        await connector.killSession();
+      },
+      name: connector.peerMeta?.name,
+      connected: connector.connected || isMagic,
+      networkChanged: undefined,
+      signMessageAsync: async (args: {
+        message: string | ethers.utils.Bytes;
+      }) => {
+        const signature = await connector.signPersonalMessage([
+          args.message,
+          address,
+        ]);
+        return signature;
+      },
+    };
+  }, [address, connector, isMagic]);
+
+  return result;
 };
 
 export { useWallet };

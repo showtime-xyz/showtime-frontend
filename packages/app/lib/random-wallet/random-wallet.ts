@@ -1,4 +1,4 @@
 export const getWallet = () => {
   const ethers = require("ethers");
-  ethers.Wallet.createRandom();
+  return ethers.Wallet.createRandom();
 };
