@@ -69,6 +69,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.tab-view",
   "@showtime-xyz/universal.toast",
   "@showtime-xyz/universal.tooltip",
+  "@showtime-xyz/universal.utils",
   "@showtime-xyz/universal.verification-badge",
   "nativewind",
   "@shopify/flash-list",

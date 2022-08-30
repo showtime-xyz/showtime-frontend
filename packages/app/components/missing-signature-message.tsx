@@ -6,7 +6,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useWallet } from "app/hooks/use-wallet";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 export const MissingSignatureMessage = ({
@@ -26,7 +26,6 @@ export const MissingSignatureMessage = ({
   const handleReconnect = async () => {
     if (Platform.OS === "web") {
       disconnect();
-      localStorage.removeItem("walletconnect");
     } else {
       connector.killSession();
     }

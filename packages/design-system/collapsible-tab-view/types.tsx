@@ -77,6 +77,7 @@ export type SceneProps<P extends object> = P & {
   ContainerView: any;
   forwardedRef: any;
   index: number;
+  useExternalScrollView?: boolean;
 } & ScrollViewProps;
 
 export type UpdateSceneInfoParams = {
@@ -112,4 +113,5 @@ export type TabHeaderContext = {
   refHasChanged: (ref: NativeGesture) => void;
   curIndexValue: Animated.SharedValue<number>;
   updateSceneInfo: (e: UpdateSceneInfoParams) => void;
+  scrollViewPaddingTop: number;
 } | null;

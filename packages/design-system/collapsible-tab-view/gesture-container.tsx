@@ -677,6 +677,8 @@ export const GestureContainer = React.forwardRef<
         isSlidingHeader,
         isStartRefreshing,
         scrollStickyHeaderHeight,
+        scrollViewPaddingTop:
+          tabbarHeight + headerHeight + scrollStickyHeaderHeight,
       }}
     >
       <GestureDetector gesture={gestureHandler}>

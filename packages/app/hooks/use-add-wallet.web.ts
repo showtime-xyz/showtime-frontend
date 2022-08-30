@@ -1,16 +1,15 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 
 import { useSWRConfig } from "swr";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
 import { useUser } from "app/hooks/use-user";
+import { useWallet } from "app/hooks/use-wallet";
 import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-
-import getWeb3Modal from "../lib/web3modal.web";
 
 export type AddWallet = {
   status: "idle" | "connecting" | "connected" | "disconnected" | "error";
@@ -43,9 +42,50 @@ const addWalletReducer = (
 export const useAddWallet = () => {
   const toast = useToast();
   const { user } = useUser();
-
+  const { magic } = useMagic();
   const { setWeb3 } = useWeb3();
   const { mutate } = useSWRConfig();
+  const { address, connected, connect, disconnect } = useWallet();
+  const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
+
+  useEffect(() => {
+    const checkNewAddress = (address: string) => {
+      return !wallets?.find(
+        (addedWallet) =>
+          addedWallet.address.toLowerCase() === address.toLowerCase()
+      );
+    };
+
+    const disconnectMagic = async () => {
+      const isMagicActive = await magic.user.isLoggedIn();
+
+      if (isMagicActive) {
+        await magic.user.logout();
+        setWeb3(undefined);
+      }
+    };
+
+    const addWallet = async () => {
+      if (address) {
+        const isNewAddress = checkNewAddress(address);
+
+        if (isNewAddress) {
+          await addWalletToBackend(address);
+          await disconnectMagic();
+
+          dispatch({ type: "status", status: "connected" });
+          mutate(MY_INFO_ENDPOINT);
+
+          toast?.show({
+            message: "Your wallet was added successfully!",
+            hideAfter: 4000,
+          });
+        }
+      }
+    };
+
+    addWallet();
+  }, [address, magic?.user, mutate, setWeb3, toast, wallets]);
 
   const [state, dispatch] = useReducer(
     addWalletReducer,
@@ -60,8 +100,6 @@ export const useAddWallet = () => {
     }
   );
 
-  const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
-
   const addWalletToBackend = async (address: string) => {
     await axios({
       url: "/v1/addwallet",
@@ -70,56 +108,15 @@ export const useAddWallet = () => {
     });
   };
 
-  const disconnectMagic = async () => {
-    const isMagicActive = await magic.user.isLoggedIn();
-
-    if (isMagicActive) {
-      await magic.user.logout();
-      setWeb3(undefined);
-    }
-  };
-
-  const checkNewAddress = (address: string) => {
-    return !wallets?.find(
-      (addedWallet) =>
-        addedWallet.address.toLowerCase() === address.toLowerCase()
-    );
-  };
-
   const addWallet = async () => {
     try {
-      let toastMessage = "";
-      const web3Modal = await getWeb3Modal();
-      web3Modal.clearCachedProvider();
+      if (connected) {
+        await disconnect();
+      }
 
       dispatch({ type: "status", status: "connecting" });
-      const provider = await web3Modal?.connect();
 
-      const address =
-        provider?.accounts?.[0] ||
-        provider?._addresses?.[0] ||
-        provider?.selectedAddress;
-
-      if (address) {
-        const isNewAddress = checkNewAddress(address);
-
-        if (isNewAddress) {
-          await addWalletToBackend(address);
-          await disconnectMagic();
-
-          toastMessage = "Address added and will soon appear on your profile";
-        } else {
-          toastMessage = "Address already connected to your profile";
-        }
-
-        dispatch({ type: "status", status: "connected" });
-        mutate(MY_INFO_ENDPOINT);
-
-        toast?.show({
-          message: toastMessage,
-          hideAfter: 4000,
-        });
-      }
+      await connect();
     } catch (error) {
       // todo: handle error
     }

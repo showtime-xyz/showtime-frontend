@@ -3,10 +3,10 @@ import { useReducer, useCallback } from "react";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
+import { useWallet } from "app/hooks/use-wallet";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -202,7 +202,7 @@ export const useDropNFT = () => {
         });
       } else {
         // user is probably not connected to wallet
-        connect?.();
+        connect();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });

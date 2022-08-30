@@ -4,6 +4,12 @@ import { LayoutChangeEvent, Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { getScrollParent } from "@showtime-xyz/universal.utils";
+
+export type PlatformRect = Pick<
+  DOMRect,
+  "top" | "left" | "width" | "height"
+> | null;
 
 export const useIsDarkMode = () => {
   const { colorScheme } = useColorScheme();
@@ -176,3 +182,48 @@ export const usePlatformResize = (onResize: (evt: Event) => any) => {
     };
   }, [onResize]);
 };
+
+export function useWebScroll<T>(
+  ele: React.RefObject<T>,
+  onScroll: (evt: Event) => void,
+  deps: any[] = []
+) {
+  useLayoutEffect(() => {
+    if (Platform.OS !== "web") {
+      return;
+    }
+    const handleScroll = (evt: Event) => {
+      onScroll(evt);
+    };
+    if (ele.current) {
+      const parentElement = getScrollParent(ele.current as any);
+
+      parentElement.addEventListener("scroll", handleScroll);
+
+      return () => {
+        parentElement.removeEventListener("scroll", handleScroll);
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deps]);
+}
+export function useWebClientRect<T>(ele: React.RefObject<T>) {
+  const [clientRect, setClientRect] = useState<PlatformRect | null>(null);
+
+  const updateClientRect = useMemo(() => {
+    return () => {
+      setClientRect((ele.current as any)?.getBoundingClientRect());
+    };
+  }, [ele]);
+
+  useLayoutEffect(() => {
+    if (ele.current && Platform.OS === "web") {
+      updateClientRect();
+    }
+  }, [ele, updateClientRect]);
+
+  return [clientRect, updateClientRect] as [
+    typeof clientRect,
+    typeof updateClientRect
+  ];
+}

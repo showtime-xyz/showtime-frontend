@@ -16,6 +16,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
+import { RefreshControl } from "./refresh-control";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
 import { TabSpinner } from "./tab-spinner";
@@ -98,6 +99,7 @@ function HeaderTabView<T extends Route>({
       refreshHeight={60}
       renderScene={_renderScene}
       navigationState={navigationState}
+      renderRefreshControl={RefreshControl}
       {...props}
     />
   );

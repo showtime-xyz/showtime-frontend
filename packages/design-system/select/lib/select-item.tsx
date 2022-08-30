@@ -78,7 +78,7 @@ export function SelectItem<T>({
     >
       <Animated.View style={containerStyle}>
         <Text
-          tw={`font-medium text-gray-900 dark:text-white ${
+          tw={`whitespace-nowrap font-medium text-gray-900 dark:text-white ${
             size === "regular" ? "text-sm" : "text-sm"
           }`}
         >

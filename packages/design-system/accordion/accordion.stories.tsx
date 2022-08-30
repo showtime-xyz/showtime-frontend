@@ -39,6 +39,7 @@ export const Basic: React.VFC<{}> = () => (
       <Accordion.Item value="world">
         <Accordion.Trigger>
           <Accordion.Label>Label</Accordion.Label>
+          <Accordion.Chevron />
         </Accordion.Trigger>
         <Accordion.Content>
           <Text tw="text-gray-900 dark:text-white">

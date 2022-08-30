@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 export const breakpoints = {
   base: 0,
   sm: 640,
@@ -15,12 +13,3 @@ export const sortedBreakpointKeys = Object.keys(breakpoints).sort((a, b) =>
   //@ts-ignore
   breakpoints[a] > breakpoints[b] ? -1 : 1
 ) as Array<IBreakpoints>;
-
-export const CARD_LIGHT_SHADOW =
-  Platform.OS === "web"
-    ? "0px 2px 4px rgba(0, 0, 0, 0.05), 0px 4px 8px rgba(0, 0, 0, 0.05)"
-    : undefined;
-export const CARD_DARK_SHADOW =
-  Platform.OS === "web"
-    ? "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)"
-    : undefined;

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Meta } from "@storybook/react";
 
 import { View } from "@showtime-xyz/universal.view";
@@ -9,12 +11,40 @@ export default {
   title: "Components/Fieldset",
 } as Meta;
 
-export const Primary: React.VFC<{}> = () => (
-  <View tw="flex-1 flex-row items-center justify-center dark:bg-gray-300">
-    <Fieldset
-      errorText="hello world"
-      helperText="hello world"
-      placeholder="placeholder"
-    />
-  </View>
-);
+const options = [
+  {
+    value: 0,
+    label: "Option A",
+  },
+  {
+    value: 1,
+    label: "Option BBBBBB",
+  },
+  {
+    value: 2,
+    label: "Option C",
+  },
+];
+export const Primary: React.VFC<{}> = () => {
+  const [value, setValue] = useState(0);
+  return (
+    <View tw="flex-1 dark:bg-gray-300">
+      <Fieldset
+        errorText="hello world"
+        helperText="hello world"
+        placeholder="placeholder"
+      />
+      <Fieldset
+        label="Default NFT List"
+        tw="mt-4"
+        selectOnly
+        select={{
+          options: options,
+          placeholder: "Select",
+          value: value,
+          onChange: (e) => setValue(+e),
+        }}
+      />
+    </View>
+  );
+};
