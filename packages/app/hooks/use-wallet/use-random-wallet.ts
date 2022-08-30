@@ -1,13 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 
-import { ethers } from "ethers";
+import type { Wallet } from "@ethersproject/wallet";
 
 import { getWallet } from "app/lib/random-wallet";
 import { delay } from "app/utilities";
 
 import type { UseWalletReturnType } from "./types";
 
-let wallet: ethers.Wallet;
+let wallet: Wallet;
 // Only create wallet if E2E. imp. creating wallet can be a costly operation
 if (process.env.E2E) {
   wallet = getWallet();
@@ -61,7 +61,6 @@ export const useRandomWallet = (): UseWalletReturnType => {
         return signature;
       },
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceUpdate]);
 
   return result;
