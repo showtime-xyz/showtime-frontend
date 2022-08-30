@@ -106,7 +106,7 @@ export function Camera({
       setPhotos([]);
       setIsLoading(false);
     }
-  }, [form]);
+  }, [form, setIsLoading, setPhotos]);
 
   return (
     <>
