@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 
-import { useWallet } from "app/hooks/auth/use-wallet";
+import { useWallet } from "app/hooks/use-wallet";
 
 import { useStableCallback } from "../use-stable-callback";
 import { useAuth } from "./use-auth";

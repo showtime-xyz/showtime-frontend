@@ -11,7 +11,7 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 
-import { UseWalletReturnType } from "./use-wallet";
+import { UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
   const wagmiData = useAccount();
@@ -43,19 +43,30 @@ const useWallet = (): UseWalletReturnType => {
   const connected =
     (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
 
-  return {
+  const result = useMemo(() => {
+    return {
+      address,
+      connect: async () => {
+        await openConnectModal?.();
+      },
+      connected,
+      disconnect: async () => {
+        localStorage.removeItem("walletconnect");
+        await disconnect();
+      },
+      networkChanged,
+      signMessageAsync,
+    };
+  }, [
     address,
-    connect: async () => {
-      await openConnectModal?.();
-    },
     connected,
-    disconnect: async () => {
-      localStorage.removeItem("walletconnect");
-      await disconnect();
-    },
+    disconnect,
     networkChanged,
+    openConnectModal,
     signMessageAsync,
-  };
+  ]);
+
+  return result;
 };
 
 export { useWallet };

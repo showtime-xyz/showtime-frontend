@@ -5,8 +5,8 @@ import { captureException } from "@sentry/nextjs";
 
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
-import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
+import { useWalletLogin } from "app/hooks/use-wallet-login";
 import { trackButtonClicked } from "app/lib/analytics";
 
 type LoginSource = "undetermined" | "magic" | "wallet";

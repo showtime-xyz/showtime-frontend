@@ -5,11 +5,11 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { useWallet } from "app/hooks/use-wallet";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";

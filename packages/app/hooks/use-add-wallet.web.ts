@@ -4,8 +4,8 @@ import { useSWRConfig } from "swr";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useUser } from "app/hooks/use-user";
+import { useWallet } from "app/hooks/use-wallet";
 import { useWeb3 } from "app/hooks/use-web3";
 import { axios } from "app/lib/axios";
 import { useMagic } from "app/lib/magic";
