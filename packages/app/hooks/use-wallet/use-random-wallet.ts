@@ -8,9 +8,12 @@ import { delay } from "app/utilities";
 import type { UseWalletReturnType } from "./types";
 
 let wallet: ethers.Wallet;
+async function initialiseRandomWallet() {
+  wallet = await getWallet();
+}
 // Only create wallet if E2E. imp. creating wallet can be a costly operation
 if (process.env.E2E) {
-  wallet = getWallet();
+  initialiseRandomWallet();
 }
 
 let connected = false;
