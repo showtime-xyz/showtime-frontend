@@ -231,6 +231,13 @@ export const useClaimNFT = (edition?: IEdition) => {
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
 
+      if (e?.response?.status === 420) {
+        Alert.alert(
+          "Wow, you love claiming drops!",
+          "Only 5 claims per day is allowed. Come back tomorrow!"
+        );
+      }
+
       if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occured.",

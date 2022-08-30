@@ -306,8 +306,8 @@ export const useDropNFT = () => {
 
       if (e?.response?.status === 420) {
         Alert.alert(
-          "Oops. An error occured.",
-          "Only one drop per day is allowed. Please try again tomorrow!"
+          "Wow, you love drops!",
+          "Only one drop per day is allowed. Come back tomorrow!"
         );
       }
 
