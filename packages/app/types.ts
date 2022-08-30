@@ -60,7 +60,7 @@ export type Creator = {
   img_url?: string;
   love_count: number;
   verified: number;
-  top_items: NFT[];
+  top_items?: NFT[];
 };
 
 export interface WalletAddressesV2 {
