@@ -20,6 +20,7 @@ export type UseWalletReturnType = {
 };
 
 let wallet: ethers.Wallet;
+let randomWalletConnected = false;
 if (process.env.E2E) {
   wallet = getWallet();
 }
@@ -28,7 +29,7 @@ const useWallet = (): UseWalletReturnType => {
   const connector = useWalletConnect();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const [address, setAddress] = useState<string | undefined>();
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useState(randomWalletConnected);
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -52,10 +53,12 @@ const useWallet = (): UseWalletReturnType => {
         connect: async () => {
           await delay(200);
           setConnected(true);
+          randomWalletConnected = true;
         },
         disconnect: async () => {
           await delay(200);
           setConnected(false);
+          randomWalletConnected = false;
         },
         name: "test wallet",
         connected,
