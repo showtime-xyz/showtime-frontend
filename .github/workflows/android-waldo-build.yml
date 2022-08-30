@@ -1,0 +1,53 @@
+name: Android waldo build
+
+defaults:
+  run:
+    working-directory: apps/expo
+
+on:
+  push:
+    branches: ["staging"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Expo prebuild
+        run: yarn waldo:build
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Build apk
+        run: |
+          cd android/ && chmod +x ./gradlew && FLIPPER_DISABLE=1 E2E=true STAGE=development ./gradlew assembleRelease \
+
+          echo "APK_PATH=$(pwd)/app/build/outputs/apk/release/app-release.apk" >>$GITHUB_ENV
+
+      - name: Upload build to Waldo
+        uses: waldoapp/gh-action-upload@v1
+        with:
+          build_path: ${{ env.APK_PATH }}
+          upload_token: ${{ secrets.WALDO_UPLOAD_TOKEN_ANDROID }}
+          is_debug_mode: true

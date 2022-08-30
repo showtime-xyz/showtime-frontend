@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
-import {
-  FlatList,
-  ListRenderItemInfo,
-  Platform,
-  TextInput,
-  useWindowDimensions,
-} from "react-native";
+import { Platform, TextInput, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -15,6 +10,7 @@ import {
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -38,11 +34,7 @@ import {
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import {
-  breakpoints,
-  CARD_DARK_SHADOW,
-  CARD_LIGHT_SHADOW,
-} from "design-system/theme";
+import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "./memo-with-theme";
 
@@ -137,19 +129,23 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View
-          tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white"
-          style={Platform.select({
-            web: { maxHeight: "calc(50vh - 64px)" },
-            default: {},
-          })}
-        >
+        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
           {data ? (
-            <FlatList
+            <InfiniteScrollList
+              useWindowScroll={false}
               data={data}
               renderItem={renderItem}
               ItemSeparatorComponent={Separator}
               keyboardShouldPersistTaps="handled"
+              estimatedItemSize={64}
+              overscan={{
+                main: 64,
+                reverse: 64,
+              }}
+              style={Platform.select({
+                web: { height: "calc(50vh - 64px)" },
+                default: {},
+              })}
             />
           ) : loading && term ? (
             <SearchItemSkeleton />
@@ -196,11 +192,10 @@ const NotificationsInHeader = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <View
-          tw="mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
+          tw="dark:shadow-dark shadow-light mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
               height: "calc(50vh - 64px)",
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
             default: {},
           })}

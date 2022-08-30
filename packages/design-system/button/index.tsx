@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+
 import { BaseButton } from "./button-base";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
@@ -75,15 +77,23 @@ export function DangerButton(props: ButtonProps) {
 }
 
 export function TextButton({ accentColor, ...props }: ButtonProps) {
-  const labelTW = useMemo(
-    () =>
-      accentColor
+  const isDark = useIsDarkMode();
+
+  const labelStyle = useMemo(
+    () => ({
+      color: accentColor
         ? typeof accentColor === "string"
-          ? `text-[${accentColor}]`
-          : `text-[${accentColor[0]}] dark:text-[${accentColor[1]}]`
-        : `text-[${ICON_COLOR_TW_MAPPER.text[0]}] dark:text-[${ICON_COLOR_TW_MAPPER.text[1]}]`,
-    [accentColor]
+          ? accentColor
+          : isDark
+          ? accentColor[1]
+          : accentColor[0]
+        : isDark
+        ? ICON_COLOR_TW_MAPPER.text[1]
+        : ICON_COLOR_TW_MAPPER.text[0],
+    }),
+    [accentColor, isDark]
   );
+
   const iconColor = useMemo(
     () =>
       accentColor
@@ -96,7 +106,7 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
   return (
     <BaseButton
       {...(props as any)}
-      labelTW={labelTW}
+      labelStyle={labelStyle}
       iconColor={iconColor}
       backgroundColors={undefined}
     />

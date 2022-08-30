@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState } from "react";
-import { FlatList, Keyboard, Platform, TextInput } from "react-native";
+import { Keyboard, Platform, TextInput } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
@@ -7,6 +9,7 @@ import {
   Search as SearchIcon,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -31,9 +34,12 @@ export const Search = () => {
   );
   const isiOS = Platform.OS === "ios";
 
-  const renderItem = useCallback(({ item }) => {
-    return <SearchItem item={item} />;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
+      return <SearchItem item={item} />;
+    },
+    []
+  );
 
   // https://github.com/facebook/react-native/issues/23364#issuecomment-642518054
   // PR - https://github.com/facebook/react-native/pull/31943
@@ -44,7 +50,7 @@ export const Search = () => {
 
   return (
     <>
-      {isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null}
+      {isiOS ? <View style={{ height: headerHeight }} /> : null}
       <View tw="px-4 py-2">
         <Input
           placeholder="Search for @name or name.eth"
@@ -86,15 +92,16 @@ export const Search = () => {
         />
       </View>
       {data ? (
-        <FlatList
+        <InfiniteScrollList
           data={data}
-          contentContainerStyle={tw.style(`pb-[${headerHeight}px]`)}
-          ListFooterComponent={
-            isiOS ? <View tw={`h-[${headerHeight}px]`} /> : null
-          }
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
+          estimatedItemSize={64}
+          overscan={{
+            main: 64,
+            reverse: 64,
+          }}
           {...keyboardDismissProp}
         />
       ) : loading && term ? (
@@ -109,7 +116,7 @@ export const SearchItem = ({
   onPress,
 }: {
   item: SearchResponseItem;
-  onPress: () => void;
+  onPress?: () => void;
 }) => {
   return (
     <Link

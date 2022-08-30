@@ -1,8 +1,11 @@
 import React, { useCallback, useMemo } from "react";
-import { ListRenderItemInfo, Platform } from "react-native";
+import { Platform } from "react-native";
+
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -13,14 +16,13 @@ import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { InfiniteScrollList } from "app/lib/infinite-scroll-list";
 import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
-import { CARD_DARK_SHADOW } from "design-system/theme";
 
 const CARD_HEIGHT = 825;
 const CARD_CONTAINER_WIDTH = 620;
@@ -34,6 +36,9 @@ const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 // type Query = {
 //   tab: number;
 // };
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 export const Feed = () => {
   return (
@@ -82,11 +87,7 @@ export const FeedList = () => {
         {/* {isAuthenticated ? (
           <>
             <View
-              tw="mr-2 mb-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black"
-              style={{
-                // @ts-ignore
-                boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-              }}
+              tw="mr-2 mb-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black dark:shadow-dark shadow-light"
             >
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
@@ -183,13 +184,11 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <Card
           href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] mb-4`}
+          sizeStyle={{ width: CARD_WIDTH, marginBottom: 16 }}
+          showClaimButton
         />
       </View>
     );
-  }, []);
-  const keyExtractor = useCallback((item: NFT) => {
-    return item.nft_id?.toFixed();
   }, []);
   return (
     <VideoConfigContext.Provider value={videoConfig}>
@@ -199,14 +198,14 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
           overflowY: Platform.OS === "web" ? "hidden" : undefined,
         }}
       >
-        <InfiniteScrollList
+        <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          keyExtractor={keyExtractor}
           overscan={{
             main: CARD_HEIGHT,
             reverse: CARD_HEIGHT,
           }}
+          estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
           ListEmptyComponent={
             isLoading ? (
@@ -235,13 +234,7 @@ const SuggestedUsers = () => {
           Home
         </Text>
       </View>
-      <View
-        tw="mt-8 rounded-2xl bg-white dark:bg-black"
-        style={{
-          // @ts-ignore
-          boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-        }}
-      >
+      <View tw="dark:shadow-dark shadow-light mt-8 rounded-2xl bg-white dark:bg-black">
         <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">

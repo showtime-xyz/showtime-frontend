@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -19,7 +18,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 import { breakpoints } from "design-system/theme";
 
 import { AddressMenu } from "./address-menu";
@@ -32,7 +30,6 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
-  const Alert = useAlert();
   const toast = useToast();
   const { state, addWallet } = useAddWallet();
 
@@ -50,32 +47,12 @@ export const SettingsWalletSlotHeader = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status]);
 
-  const triggerAddWallet = async () => {
-    Alert.alert(
-      "Showcase all your NFTs",
-      "If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Select Wallet",
-          style: "default",
-          onPress: async () => {
-            await addWallet();
-          },
-        },
-      ]
-    );
-  };
-
   return (
     <SettingSubTitle>
       <Text tw="text-xl font-bold text-gray-900 dark:text-white">
         Your Wallets
       </Text>
-      <Button variant="primary" size="small" onPress={triggerAddWallet}>
+      <Button variant="primary" size="small" onPress={addWallet}>
         {walletCTA}
       </Button>
     </SettingSubTitle>
@@ -164,23 +141,11 @@ export const SettingsWalletSlot = (props: Props) => {
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
-    userAddress.toLowerCase() === address?.toLowerCase();
+    userAddress?.toLowerCase() === address?.toLowerCase();
 
   return (
     <View tw="md:px-4">
-      <View
-        tw="w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black "
-        style={
-          isMdWidth &&
-          Platform.select({
-            web: {
-              // @ts-ignore
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
-            } as any,
-            default: {},
-          })
-        }
-      >
+      <View tw="md:dark:shadow-dark md:shadow-light w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black">
         <View tw="justify-center">
           <Button iconOnly={true} variant="secondary">
             {isEthereumAddress ? <Ethereum /> : <Tezos />}

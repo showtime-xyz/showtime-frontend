@@ -1,7 +1,8 @@
 import { useMemo, useCallback } from "react";
-import { Platform } from "react-native";
+import { Platform, Linking } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
+import reactStringReplace from "react-string-replace";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button, TextButton } from "@showtime-xyz/universal.button";
@@ -11,13 +12,64 @@ import {
   MessageFilled,
   Message,
 } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text, linkify } from "@showtime-xyz/universal.text";
+import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
+
+const mentionRegex = /@([\w\d-]+?)\b/g;
+const hyperlinkRegex = /(https?:\/\/)?([0-9a-z]+\.)?[-_0-9a-z]+\.[0-9a-z]+/g;
+
+const linkify = (content: string, router: any) => {
+  // first replace all the mentions
+  const contentWithMention = reactStringReplace(
+    content,
+    mentionRegex,
+    (username: string, i: number) => {
+      return (
+        <Text
+          onPress={() => {
+            router.pop();
+            router.push(`/@${username}`);
+          }}
+          tw="font-bold text-black dark:text-white"
+          key={i}
+        >
+          @{username}
+        </Text>
+      );
+    }
+  );
+
+  // next replace all the hyperlinks
+  const result = contentWithMention.map((token) => {
+    if (typeof token === "string") {
+      return (token as string).split(" ").map((word, i) => {
+        if (!hyperlinkRegex.test(word)) {
+          return word + " ";
+        }
+        const match = [...word.match(hyperlinkRegex)!];
+        return (
+          <Text
+            key={i}
+            tw="text-blue-500"
+            onPress={() => Linking.openURL(match[0])}
+          >
+            {match[0]}
+          </Text>
+        );
+      });
+    } else {
+      return token;
+    }
+  });
+
+  return result;
+};
 
 interface MessageRowProps {
   /**
@@ -133,6 +185,8 @@ export function MessageRow({
   onTagPress,
   onUserPress,
 }: MessageRowProps) {
+  const router = useRouter();
+
   //#region variables
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
@@ -148,21 +202,9 @@ export function MessageRow({
       addSuffix: true,
     });
   }, [createdAt]);
-  const contentWithTags = useMemo(
-    () =>
-      onTagPress
-        ? linkify(content, (text: string, link: string) => (
-            <Text
-              key={`link-${link}`}
-              tw="font-bold text-black dark:text-white"
-              onPress={() => onTagPress(link)}
-            >
-              {`@${text} `}
-            </Text>
-          ))
-        : content,
-    [content, onTagPress]
-  );
+  const contentWithTags = useMemo(() => {
+    return onTagPress ? linkify(content, router) : content;
+  }, [content, onTagPress, router]);
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);
@@ -209,7 +251,7 @@ export function MessageRow({
 
   return (
     <View tw="flex flex-row bg-white py-4 dark:bg-black">
-      {hasParent && <View tw="ml-8" collapsable={true} />}
+      {hasParent && <View tw="ml-4" collapsable={true} />}
       <View tw="items-center">
         {(hasReplies || hasParent) && (
           <>
@@ -262,7 +304,7 @@ export function MessageRow({
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
           </Button>
-          {replayCount != undefined && (
+          {replayCount != undefined ? (
             <TextButton
               tw="px-2"
               accentColor={
@@ -278,6 +320,20 @@ export function MessageRow({
                 replayCount > 0 ? <MessageFilled /> : <Message />
               }
               {` ${replayCount}`}
+            </TextButton>
+          ) : (
+            <TextButton
+              tw="px-2"
+              accentColor={
+                // TODO: use `repliedByMe` when this is available.
+                [colors.gray[500], colors.gray[500]]
+              }
+              onPress={onReplyPress}
+            >
+              {
+                // TODO: use `repliedByMe` when this is available.
+                <Message />
+              }
             </TextButton>
           )}
           <View

@@ -72,7 +72,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
         </View>
       </View>
       <View tw="mx-[-1px] mt-4 flex-row justify-center">
-        {props.creator.top_items.slice(0, 3).map((item, idx) => {
+        {props.creator.top_items?.slice(0, 3).map((item, idx) => {
           return (
             <Pressable
               key={item.nft_id}
@@ -82,7 +82,10 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
                 key={item.nft_id}
                 item={item}
                 numColumns={3}
-                tw={`w-[${props.mediaSize}px] h-[${props.mediaSize}px]`}
+                sizeStyle={{
+                  height: props.mediaSize,
+                  width: props.mediaSize,
+                }}
               />
             </Pressable>
           );

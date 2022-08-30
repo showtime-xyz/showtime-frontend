@@ -1,6 +1,7 @@
-import { memo, useState, useCallback, useEffect } from "react";
+import { memo, useState, useCallback, useEffect, useMemo } from "react";
 import {
   Platform,
+  StatusBar,
   StyleProp,
   useWindowDimensions,
   ViewStyle,
@@ -8,10 +9,12 @@ import {
 
 import { BlurView } from "expo-blur";
 import Reanimated from "react-native-reanimated";
-import {
+import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  useDerivedValue,
+  Easing,
 } from "react-native-reanimated";
 
 import {
@@ -24,8 +27,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
@@ -39,34 +44,68 @@ export type FeedItemProps = {
   detailStyle?: StyleProp<ViewStyle>;
   bottomPadding?: number;
   bottomMargin?: number;
+  headerHeight?: number;
   itemHeight: number;
   setMomentumScrollCallback?: (callback: any) => void;
 };
+const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,
   bottomMargin = 0,
+  headerHeight = 0,
   itemHeight,
   setMomentumScrollCallback,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
-
+  const bottomHeight = usePlatformBottomHeight();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
+  const maxContentHeight = windowHeight - bottomHeight;
 
-  let mediaHeight =
-    windowWidth /
-    (isNaN(Number(nft.token_aspect_ratio))
-      ? 1
-      : Number(nft.token_aspect_ratio));
+  const mediaHeight = useMemo(() => {
+    const actualHeight =
+      windowWidth /
+      (isNaN(Number(nft.token_aspect_ratio))
+        ? 1
+        : Number(nft.token_aspect_ratio));
 
-  mediaHeight = Math.min(mediaHeight, itemHeight - detailHeight);
+    if (actualHeight < windowHeight - bottomHeight - headerHeight) {
+      return Math.min(actualHeight, maxContentHeight);
+    }
 
+    return windowHeight - bottomHeight;
+  }, [
+    bottomHeight,
+    headerHeight,
+    maxContentHeight,
+    nft.token_aspect_ratio,
+    windowHeight,
+    windowWidth,
+  ]);
+  const platformHeaderHeight = Platform.select({
+    ios: headerHeight,
+    default: 0,
+  });
+  const contentTransY = useDerivedValue(() => {
+    const visibleContentHeight =
+      windowHeight - headerHeight - detailHeight - StatusBarHeight;
+
+    if (mediaHeight < visibleContentHeight) {
+      return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;
+    } else if (mediaHeight < maxContentHeight - headerHeight) {
+      return platformHeaderHeight;
+    } else {
+      return 0;
+    }
+  });
+  const isLayouted = useSharedValue(0);
   const opacity = useSharedValue(1);
 
   const detailStyle = useAnimatedStyle(() => {
@@ -74,14 +113,31 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       opacity: opacity.value,
     };
   }, []);
-
+  const contentStyle = useAnimatedStyle<ViewStyle>(() => {
+    if (Platform.OS === "web") {
+      return {
+        justifyContent: "center",
+      };
+    }
+    return {
+      transform: [
+        {
+          translateY: withTiming(contentTransY.value, {
+            duration: 200,
+            easing: Easing.out(Easing.ease),
+          }),
+        },
+      ],
+      opacity: withTiming(isLayouted.value, { duration: 500 }),
+    };
+  }, []);
   const hideHeader = useCallback(() => {
     if (Platform.OS === "ios") {
       navigation.setOptions({
         headerShown: false,
       });
-      opacity.value = withTiming(0);
     }
+    opacity.value = withTiming(0);
   }, [navigation, opacity]);
 
   const showHeader = useCallback(() => {
@@ -89,8 +145,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       navigation.setOptions({
         headerShown: true,
       });
-      opacity.value = withTiming(1);
     }
+    opacity.value = withTiming(1);
   }, [navigation, opacity]);
 
   const toggleHeader = useCallback(() => {
@@ -114,7 +170,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full" style={{ height: itemHeight }}>
+      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (
@@ -143,24 +199,33 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         )}
 
         <FeedItemTapGesture toggleHeader={toggleHeader} showHeader={showHeader}>
-          <View
-            tw={`absolute justify-center`}
-            style={{
-              height: Platform.select({
-                web: itemHeight - detailHeight,
-                default: itemHeight - bottomPadding - 50,
-              }),
-            }}
+          <Animated.View
+            style={[
+              {
+                height: Platform.select({
+                  web: itemHeight - detailHeight,
+                  default: itemHeight - bottomPadding,
+                }),
+                position: "absolute",
+              },
+              contentStyle,
+            ]}
           >
             <Media
               item={nft}
               numColumns={1}
-              tw={`h-[${mediaHeight}px] w-[${windowWidth}px]`}
-              resizeMode="contain"
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              resizeMode={Platform.select({
+                web: "contain",
+                default: "cover",
+              })}
               onPinchStart={hideHeader}
               onPinchEnd={showHeader}
             />
-          </View>
+          </Animated.View>
         </FeedItemTapGesture>
 
         <Reanimated.View
@@ -174,10 +239,16 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               layout: { height },
             },
           }) => {
-            if (Platform.OS !== "web") return;
+            isLayouted.value = 1;
             setDetailHeight(height);
           }}
         >
+          {nft?.mime_type?.startsWith("video") ? (
+            <View tw="z-9 absolute top-[-40px] right-4">
+              <MuteButton />
+            </View>
+          ) : null}
+
           <BlurView
             tint={tint}
             intensity={100}

@@ -7,6 +7,7 @@ import { Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -20,6 +21,7 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
+import { MuteButton } from "app/components/mute-button/mute-button";
 import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
@@ -28,9 +30,6 @@ import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
-
-import { TabBarSingle } from "design-system/tab-view/tab-bar-single";
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { FeedItemProps } from "./index";
 
@@ -172,28 +171,39 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           <Media
             item={nft}
             numColumns={1}
-            tw={`h-[${mediaHeight}px] w-[${Math.min(mediaWidth, 800)}px]`}
+            sizeStyle={{
+              height: mediaHeight,
+              width: Math.min(mediaWidth, 800),
+            }}
             resizeMode="contain"
           />
+          {nft?.mime_type?.includes("video") ? (
+            <View tw="absolute bottom-10 right-10">
+              <MuteButton />
+            </View>
+          ) : null}
         </View>
         <View
           style={[
-            tw.style("bg-white dark:bg-black"),
+            tw.style("bg-white dark:bg-black dark:shadow-dark shadow-light"),
             {
               width: NFT_DETAIL_WIDTH,
-              // @ts-ignore Todo: will use tailwind config when switch to NativeWind.
-              boxShadow: isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
             },
           ]}
         >
-          <Social nft={nft} />
+          <View tw="px-4 pt-4">
+            <Social nft={nft} />
+          </View>
           <LikedBy nft={nft} />
           <View tw="my-4 mr-4 flex-row justify-between px-4">
             <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
               {nft.token_name}
             </Text>
           </View>
-          <Description nft={nft} />
+          <Description
+            descriptionText={nft?.token_description}
+            tw="px-4 pb-4"
+          />
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} />
             <Owner nft={nft} price={false} />

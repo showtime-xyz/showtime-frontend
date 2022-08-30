@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { Platform } from "react-native";
-
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
@@ -15,6 +12,7 @@ import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { FeedProvider } from "app/providers/feed-provider";
+import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
@@ -35,19 +33,17 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                     <Web3Provider>
                       <AuthProvider>
                         <UserProvider>
-                          <CSROnly>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <NavigationProvider>
-                                    <BiconomyProvider>
-                                      {children}
-                                    </BiconomyProvider>
-                                  </NavigationProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </CSROnly>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <FeedProvider>
+                                <NavigationProvider>
+                                  <BiconomyProvider>
+                                    <MuteProvider>{children}</MuteProvider>
+                                  </BiconomyProvider>
+                                </NavigationProvider>
+                              </FeedProvider>
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
                         </UserProvider>
                       </AuthProvider>
                     </Web3Provider>
@@ -60,22 +56,4 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
       </SafeAreaProvider>
     </ThemeProvider>
   );
-};
-
-// TODO: remove CSR after replacing to css tailwind
-const CSROnly = ({ children }: any) => {
-  const [ready, setReady] = useState(() => {
-    if (Platform.OS !== "web") {
-      return true;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (ready) return children;
-
-  return null;
 };

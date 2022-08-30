@@ -1,6 +1,6 @@
 import { useCallback, useContext } from "react";
 
-import { Select } from "@showtime-xyz/universal.select";
+import { Select } from "design-system/select";
 
 import { FilterContext } from "./fillter-context";
 

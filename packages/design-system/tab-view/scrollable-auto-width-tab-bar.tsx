@@ -1,33 +1,42 @@
-import React, { useState, useCallback, useRef } from "react";
-import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import React, { useState, useCallback, useRef, useMemo } from "react";
+import {
+  Animated,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+  useWindowDimensions,
+} from "react-native";
 
 import {
   NavigationState,
   SceneRendererProps,
   TabBar,
-} from "react-native-tab-view-next/src";
+} from "react-native-tab-view-next";
 
+import { Haptics } from "@showtime-xyz/universal.haptics";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { useContentWidth } from "app/hooks/use-content-width";
-import { Haptics } from "app/lib/haptics";
-
-import { Route } from "./src/types";
+import { Route } from "./";
 
 type State = NavigationState<Route>;
 interface Props extends SceneRendererProps {
   style?: StyleProp<ViewStyle>;
+  maxContentWidth?: number;
 }
 
 export const ScollableAutoWidthTabBar = ({
   style,
+  maxContentWidth = 1140,
   ...rest
 }: Props & { navigationState: State }) => {
   const indicatorFadeAnim = useRef(new Animated.Value(0)).current;
-
-  const contentWidth = useContentWidth();
+  const { width } = useWindowDimensions();
+  const contentWidth = useMemo(
+    () => (width < maxContentWidth ? width : maxContentWidth),
+    [maxContentWidth, width]
+  );
   const [tabsWidth, setTabsWidth] = useState<{
     [index: number]: number;
   }>({});
@@ -173,6 +182,7 @@ export const ScollableAutoWidthTabBar = ({
           />
         );
       }}
+      scrollEnabled
       tabStyle={styles.tabStyle}
       onTabPress={onTabPress}
       renderTabBarItem={({
@@ -192,6 +202,7 @@ export const ScollableAutoWidthTabBar = ({
             onPress={onPress}
             onLongPress={onLongPress}
             key={key}
+            onLayout={onLayout}
           >
             <Animated.View
               style={{
@@ -207,7 +218,6 @@ export const ScollableAutoWidthTabBar = ({
                   navigationState,
                   width: e.nativeEvent.layout.width,
                 });
-                onLayout?.(e);
               }}
             >
               <Text tw="text-sm font-bold text-gray-900 dark:text-white">

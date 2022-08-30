@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -10,11 +11,11 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 
 import { ClaimStatus, getClaimStatus } from ".";
 
-export const ClaimButton = ({
-  edition,
-}: {
+type ClaimButtonProps = {
   edition: CreatorEditionResponse;
-}) => {
+  size?: ButtonProps["size"];
+};
+export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const router = useRouter();
 
   const onClaimPress = () => {
@@ -60,6 +61,7 @@ export const ClaimButton = ({
       onPress={onClaimPress}
       disabled={disabled}
       style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
+      size={size}
       tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
     >
       {status === ClaimStatus.Claimed ? (

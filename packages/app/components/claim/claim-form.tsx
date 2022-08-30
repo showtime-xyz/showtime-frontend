@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
@@ -9,10 +10,12 @@ import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useComments } from "app/hooks/api/use-comments";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -28,6 +31,7 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
+  getProfileName,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -45,12 +49,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const navigateToLogin = useNavigateToLogin();
   const scrollViewRef = useRef<RNScrollView>(null);
   const { isMagic } = useWeb3();
+  const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
     //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
+
+  const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
     address: nft?.data.item.creator_address,
@@ -61,12 +68,20 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     nft?.data.item.creator_airdrop_edition_address
   );
 
+  const { user } = useUser();
   const handleClaimNFT = async () => {
-    if (nft?.data.item.creator_id) {
+    if (
+      nft?.data.item.creator_id &&
+      user?.data?.profile.profile_id !== nft?.data.item.creator_id
+    ) {
       follow(nft?.data.item.creator_id);
     }
 
-    await claimNFT();
+    const success = await claimNFT();
+
+    if (comment.current.trim().length > 0 && success) {
+      newComment(comment.current);
+    }
 
     mutate();
   };
@@ -98,18 +113,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     !userProfile?.data.profile.img_url
   ) {
     return (
-      <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          Hold on!
-        </Text>
-        <Text style={{ fontSize: 100 }}>✏️</Text>
-        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          Please complete your profile before claiming the drop
-        </Text>
-        <Button tw="my-4" onPress={() => router.push("/profile/edit")}>
-          Complete your profile
-        </Button>
-      </View>
+      <CompleteProfileModalContent
+        title={`Show ${getProfileName(
+          creatorProfile?.data?.profile
+        )} who you are!`}
+        description="Complete your profile first to claim this drop. It will take around 1 minute."
+        cta="Complete profile to claim"
+      />
     );
   }
 
@@ -188,7 +198,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row flex-wrap">
-          <Media item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
+          <Media isMuted item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
           <View tw="ml-4 flex-1">
             <Text
               tw="text-xl font-bold text-black dark:text-white"
@@ -238,6 +248,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}
             </Text>
           </View>
+
+          <Fieldset
+            tw="mt-4 flex-1"
+            label="Add a comment (optional)"
+            placeholder="wow, this is so cool!"
+            onChangeText={(v) => (comment.current = v)}
+          />
           <View tw="mt-4">
             <Button
               size="regular"

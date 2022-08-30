@@ -1,5 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Platform } from "react-native";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from "react";
+import { AppState, Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
@@ -9,12 +15,13 @@ import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWeb3 } from "app/hooks/use-web3";
+import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { track } from "app/lib/analytics";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
-import { magic } from "app/lib/magic";
+import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
@@ -26,13 +33,22 @@ interface AuthProviderProps {
   onWagmiDisconnect?: () => void;
 }
 
+// 6 hours
+const REFRESH_TOKEN_MAX_INTERVAL_MILLISECONDS = 8 * 60 * 60 * 1000;
+
 export function AuthProvider({
   children,
   onWagmiDisconnect,
 }: AuthProviderProps) {
+  const initialRefreshTokenRequestSent = useRef(false);
+  const lastRefreshTokenSuccessTimestamp = useRef<number | null>(null);
+  const appState = useRef(AppState.currentState);
+
   //#region state
   const [authenticationStatus, setAuthenticationStatus] =
-    useState<AuthenticationStatus>("IDLE");
+    useState<AuthenticationStatus>(() =>
+      accessTokenStorage.getAccessToken() ? "AUTHENTICATED" : "IDLE"
+    );
 
   //#endregion
 
@@ -40,6 +56,7 @@ export function AuthProvider({
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const { setWeb3 } = useWeb3();
+  const { magic } = useMagic();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
@@ -103,13 +120,14 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    [connector, mutate, router, setWeb3, onWagmiDisconnect]
+    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");
     try {
       await refreshTokens();
       setAuthenticationStatus("AUTHENTICATED");
+      lastRefreshTokenSuccessTimestamp.current = new Date().getTime();
     } catch (error: any) {
       setAuthenticationStatus("UNAUTHENTICATED");
       console.log(
@@ -137,10 +155,33 @@ export function AuthProvider({
 
   //#region effects
   useEffect(() => {
-    if (authenticationStatus === "IDLE") {
+    if (!initialRefreshTokenRequestSent.current) {
       doRefreshToken();
+      initialRefreshTokenRequestSent.current = true;
     }
-  }, [authenticationStatus, doRefreshToken]);
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        // Re-request refresh token after 6 hours
+        if (
+          lastRefreshTokenSuccessTimestamp.current &&
+          new Date().getTime() - lastRefreshTokenSuccessTimestamp.current >
+            REFRESH_TOKEN_MAX_INTERVAL_MILLISECONDS
+        ) {
+          doRefreshToken();
+        }
+      }
+
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [doRefreshToken]);
+
   //#endregion
 
   return (

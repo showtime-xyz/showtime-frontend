@@ -35,30 +35,23 @@ export const Avatar = ({
   );
 
   const containerTW = useMemo(
-    () => [
-      ...(typeof tw === "string" ? [tw] : tw),
-      `w-[${size}px] h-[${size}px]`,
-      CONTAINER_TW,
-    ],
-    [size, tw]
+    () => [...(typeof tw === "string" ? [tw] : tw), CONTAINER_TW],
+    [tw]
   );
   const imageTW = useMemo(
-    () => [
-      IMAGE_TW,
-      `w-[${size}px] h-[${size}px]`,
-      borderWidth > 0 ? `border-${borderWidth}` : "",
-    ],
-    [size, borderWidth]
+    () => [IMAGE_TW, borderWidth > 0 ? `border-${borderWidth}` : ""],
+    [borderWidth]
   );
 
   return (
-    <View tw={containerTW}>
+    <View tw={containerTW} style={{ height: size, width: size }}>
       <Image
         source={imageSource}
         width={size}
         height={size}
         resizeMode="contain"
         tw={imageTW}
+        style={{ height: size, width: size }}
       />
       {children}
     </View>

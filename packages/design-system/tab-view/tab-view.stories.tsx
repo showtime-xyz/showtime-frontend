@@ -1,32 +1,33 @@
 import React, { useCallback, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 
 import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
-import { TabFlatList } from ".";
 import { HeaderTabView } from "./index";
-import { Route } from "./src/types";
+import { TabInfiniteScrollList } from "./index";
+import { Route } from "./index";
+
+const LIST_LENGTH = 24;
+const ITEM_HEIGHT = 60;
+const HEADER_HEIGHT = 300;
 
 export default {
   component: HeaderTabView,
-  title: "Components/TabView",
+  title: "Components/HeaderTabView",
 } as Meta;
 
-const StatusBarHeight = StatusBar.currentHeight ?? 0;
 const TabScene = ({ route }: any) => {
   return (
-    <TabFlatList
+    <TabInfiniteScrollList
       style={{ backgroundColor: "#333" }}
       index={route.index}
-      data={new Array(20).fill(0)}
+      data={new Array(LIST_LENGTH).fill(0)}
       renderItem={({ index }) => {
         return (
           <View
             style={{
-              height: 60,
+              height: ITEM_HEIGHT,
               backgroundColor: "#fff",
               marginBottom: 8,
               justifyContent: "center",
@@ -37,11 +38,17 @@ const TabScene = ({ route }: any) => {
           </View>
         );
       }}
+      estimatedItemSize={ITEM_HEIGHT}
+      overscan={{
+        main: ITEM_HEIGHT,
+        reverse: ITEM_HEIGHT,
+      }}
     />
   );
 };
 export const Basic: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
+
   const [routes] = useState<Route[]>([
     { key: "like", title: "Like", index: 0 },
     { key: "owner", title: "Owner", index: 1 },
@@ -75,30 +82,53 @@ export const Basic: React.FC = () => {
     }, 300);
   };
   const renderHeader = () => (
-    <View style={{ height: 300, backgroundColor: "#000" }}></View>
-  );
-
-  const insets = useSafeAreaInsets();
-  return (
-    <View style={styles.container}>
-      <HeaderTabView
-        onStartRefresh={onStartRefresh}
-        isRefreshing={isRefreshing}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        lazy
-        renderScrollHeader={renderHeader}
-        minHeaderHeight={insets.top + StatusBarHeight}
-        animationHeaderPosition={animationHeaderPosition}
-        animationHeaderHeight={animationHeaderHeight}
-      />
+    <View
+      style={{
+        height: HEADER_HEIGHT,
+        backgroundColor: "#333",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text
+        style={{
+          fontWeight: "600",
+          color: "#fff",
+          fontSize: 24,
+          marginBottom: 10,
+        }}
+      >
+        Features
+      </Text>
+      <Text style={{ color: "#fff", fontSize: 16 }}>
+        Header: support any custom touch or gesture event.
+      </Text>
+      <Text style={{ color: "#fff", fontSize: 16 }}>
+        List: use react-virtuoso on web, use FlashList on native.
+      </Text>
+      <Text style={{ color: "#fff", fontSize: 16 }}>
+        Tabbar: support sticky on web.
+      </Text>
     </View>
   );
-};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+  return (
+    <HeaderTabView
+      onStartRefresh={onStartRefresh}
+      isRefreshing={isRefreshing}
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      renderScrollHeader={renderHeader}
+      minHeaderHeight={44}
+      refreshControlTop={44}
+      autoWidthTabBar
+      animationHeaderPosition={animationHeaderPosition}
+      animationHeaderHeight={animationHeaderHeight}
+      style={Platform.select({
+        web: { flex: "none" } as any,
+        default: undefined,
+      })}
+    />
+  );
+};

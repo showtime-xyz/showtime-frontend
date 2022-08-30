@@ -19,6 +19,7 @@ module.exports = {
           "twrnc",
           "moti",
           "zeego",
+          "nativewind",
           "@showtime-xyz",
         ],
         babelPlugins: ["react-native-reanimated/plugin"],

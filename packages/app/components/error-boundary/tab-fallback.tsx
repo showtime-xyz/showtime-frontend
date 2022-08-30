@@ -1,6 +1,6 @@
-import { FallbackProps } from "app/components/error-boundary";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 
-import { TabScrollView } from "design-system/tab-view";
+import { FallbackProps } from "app/components/error-boundary";
 
 import { Fallback } from "./fallback";
 

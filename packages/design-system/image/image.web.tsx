@@ -112,17 +112,19 @@ function Img({
   return null;
 }
 
-type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;
+type ImageProps = { tw?: TW; style?: any } & ComponentProps<typeof Img>;
 
 function StyledImage({
   tw,
   width: propWidth = 0,
   height: propHeight = 0,
   borderRadius: propBorderRadius = 0,
+  style,
   ...props
 }: ImageProps) {
-  const width = Number(tailwind.style(tw).width) || propWidth;
-  const height = Number(tailwind.style(tw).height) || propHeight;
+  const width = Number(tailwind.style(tw).width) || propWidth || style?.width;
+  const height =
+    Number(tailwind.style(tw).height) || propHeight || style?.height;
   const borderRadius =
     Number(tailwind.style(tw).borderRadius) || propBorderRadius;
 

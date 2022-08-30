@@ -13,7 +13,7 @@ export type NFT = {
   animation_preview_url?: any;
   blurhash: string;
   token_background_color?: any;
-  token_aspect_ratio: string;
+  token_aspect_ratio: number;
   token_hidden: number;
   creator_id: number;
   creator_name: string;
@@ -60,10 +60,11 @@ export type Creator = {
   img_url?: string;
   love_count: number;
   verified: number;
-  top_items: NFT[];
+  top_items?: NFT[];
 };
 
 export interface WalletAddressesV2 {
+  backendAddress: string;
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;

@@ -44,7 +44,7 @@ export interface CommentsPayload {
   data: Data;
 }
 
-export const useComments = (nftId: number) => {
+export const useComments = (nftId?: number) => {
   //#region state
   const [isSubmitting, setIsSubmitting] = useState(false);
   //#endregion

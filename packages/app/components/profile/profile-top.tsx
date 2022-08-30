@@ -58,10 +58,10 @@ const Follow = ({
   onPressFollower,
   followingCount,
   followersCount,
-  tw,
+  tw = "",
 }: FollowProps) => {
   return (
-    <View tw={["flex-row", tw ? tw : ""]}>
+    <View tw={["flex-row", tw]}>
       <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           {`${followingCount ?? 0} `}
@@ -190,21 +190,21 @@ export const ProfileTop = ({
       transform: [
         {
           scale: interpolate(
-            animationHeaderPosition.value,
+            Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
             [1, 1.5]
           ),
         },
         {
           translateY: interpolate(
-            animationHeaderPosition.value,
+            Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
             [0, -44]
           ),
         },
         {
           translateX: interpolate(
-            animationHeaderPosition.value,
+            Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
             [0, 44]
           ),
@@ -252,7 +252,7 @@ export const ProfileTop = ({
             <Animated.View
               style={[
                 tw.style(
-                  "w-32 h-32 rounded-full mt-[-72px]  overflow-hidden border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-900"
+                  "w-32 h-32 rounded-full mt-[-72px] overflow-hidden border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-900"
                 ),
                 avatarStyle,
               ]}

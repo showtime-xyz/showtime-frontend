@@ -13,6 +13,7 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useLogRocket } from "app/hooks/use-logrocket";
+import { onMagicLoad } from "app/lib/magic/magic-load-listener";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
@@ -116,6 +117,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
         src="https://cdn.rudderlabs.com/v1.1/rudder-analytics.min.js"
         strategy="worker"
       />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
+        strategy="afterInteractive"
+        onLoad={onMagicLoad}
+      />
       <AppProviders>
         <Container>
           <Header
@@ -124,11 +130,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View
-            tw="items-center"
-            // @ts-ignore currently overflow-x-hidden doesn't support web, and minHeight we need to subtract Header height.
-            style={{ overflowX: "hidden", minHeight: "calc(100vh - 64px)" }}
-          >
+          <View tw="items-center " style={{ minHeight: "calc(100vh - 64px)" }}>
             <Component {...pageProps} />
           </View>
           <Footer />

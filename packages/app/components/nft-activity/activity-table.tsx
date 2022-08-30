@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
-import { FlatList, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { View } from "@showtime-xyz/universal.view";
 
 import type { Activity, TableProps } from "./nft-activity.types";
@@ -24,11 +25,13 @@ const ActivityTable = ({ data }: TableProps) => {
         showsHorizontalScrollIndicator={false}
       >
         <TableHead />
-        <FlatList
+        <InfiniteScrollList
           data={data}
           renderItem={handleRenderItem}
           ItemSeparatorComponent={handleRenderSeparator}
           keyExtractor={(_, index) => index.toString()}
+          overscan={50}
+          estimatedItemSize={50}
         />
       </ScrollView>
     </>

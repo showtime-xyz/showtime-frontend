@@ -11,7 +11,7 @@ const MarketplaceScreen = withColorScheme(() => {
 
   return (
     <>
-      <View tw={`h-[${headerHeight}px] bg-black`} />
+      <View tw={`bg-black`} style={{ height: headerHeight }} />
 
       <View tw="p-4">
         <Text tw="font-space-bold text-2xl font-extrabold text-black dark:text-white">

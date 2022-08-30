@@ -5,11 +5,11 @@ import { ethers } from "ethers";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useWallet } from "app/hooks/auth/use-wallet";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { useWallet } from "app/hooks/use-wallet";
 import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -200,7 +200,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     };
   }, [edition?.minter_address, userAddress]);
 
-  const claimNFT = async () => {
+  const claimNFT = async (): Promise<boolean | undefined> => {
     try {
       if (userAddress) {
         if (edition?.minter_address) {
@@ -219,15 +219,24 @@ export const useClaimNFT = (edition?: IEdition) => {
           Logger.log("Signing... ", forwardRequest);
 
           await signTransaction({ forwardRequest });
+
+          return true;
         }
       } else {
         // user is probably not connected to wallet
-        connect?.();
+        connect();
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
+
+      if (e?.response?.status === 420) {
+        Alert.alert(
+          "Wow, you love claiming drops!",
+          "Only 5 claims per day is allowed. Come back tomorrow!"
+        );
+      }
 
       if (e?.response?.status === 500) {
         Alert.alert(

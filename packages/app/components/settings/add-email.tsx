@@ -6,7 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
-import { magic, Relayer } from "app/lib/magic";
+import { useMagic, Relayer } from "app/lib/magic";
 
 import { EmailInput } from "./email-input";
 
@@ -15,6 +15,7 @@ export const AddEmailModal = () => {
   const { setMountRelayerOnApp } = useWeb3();
   const { addEmail } = useManageAccount();
   const [mountRelayer, setMountRelayer] = useState(false);
+  const { magic } = useMagic();
 
   useEffect(() => {
     setMountRelayerOnApp(false);
@@ -23,6 +24,7 @@ export const AddEmailModal = () => {
       setMountRelayerOnApp(true);
     };
   }, [setMountRelayerOnApp]);
+
   const submitEmail = useCallback(
     async (email: string) => {
       try {
@@ -35,7 +37,7 @@ export const AddEmailModal = () => {
         console.log("Error:", error);
       }
     },
-    [addEmail, router]
+    [magic, addEmail, router]
   );
 
   return (

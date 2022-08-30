@@ -2,9 +2,14 @@ import { useCallback, useReducer, useMemo, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { SceneRendererProps } from "react-native-tab-view-next/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  SceneRendererProps,
+  HeaderTabView,
+  Route,
+  TabSpinner,
+} from "@showtime-xyz/universal.tab-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,11 +23,6 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-
-import { HeaderTabView } from "design-system/tab-view/index";
-import { Route } from "design-system/tab-view/src/types";
-import { TabSpinner } from "design-system/tab-view/tab-spinner";
-import { CARD_DARK_SHADOW, CARD_LIGHT_SHADOW } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -102,7 +102,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     await mutate();
     // Todo: use async/await.
     currentTab?.refresh();
-    setIsRefreshing(false);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
   }, [currentTab, mutate, setIsRefreshing]);
 
   const renderScene = useCallback(
@@ -143,29 +145,25 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const headerBgLeft = useMemo(() => {
-    return Math.min(-(width - contentWidth) / 2, 0);
+    return Math.min(-(width - contentWidth + 15) / 2, 0);
   }, [contentWidth, width]);
-
-  const headerShadow = useMemo(() => {
-    return isDark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW;
-  }, [isDark]);
 
   const renderHeader = useCallback(() => {
     return (
       <View tw="items-center bg-white dark:bg-black">
         {Platform.OS === "web" && (
           <View
-            tw="absolute left-0 h-full w-screen bg-white dark:bg-black"
+            tw={
+              "dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white dark:bg-black"
+            }
             style={{
               left: headerBgLeft,
               height: `calc(100% + 44px)`,
-              // @ts-ignore
-              boxShadow: data?.tabs?.length > 0 && headerShadow,
             }}
           />
         )}
         <View tw="web:max-w-screen-xl w-full">
-          {Platform.OS === "ios" && <View tw={`h-[${headerHeight}px]`} />}
+          {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
           <ProfileTop
             address={username}
             animationHeaderPosition={animationHeaderPosition}
@@ -180,8 +178,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     );
   }, [
     headerBgLeft,
-    data?.tabs?.length,
-    headerShadow,
     headerHeight,
     username,
     animationHeaderPosition,
@@ -220,22 +216,24 @@ const Profile = ({ username }: ProfileScreenProps) => {
           animationHeaderHeight={animationHeaderHeight}
           insertStickyTabBarElement={
             <View
-              tw="absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
+              tw="dark:shadow-dark shadow-light absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
               style={{
                 left: headerBgLeft,
-                // @ts-ignore
-                boxShadow: headerShadow,
               }}
             />
           }
           insertTabBarElement={
-            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto">
+            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {data?.tabs[index]?.displayed_count} ITEMS
               </Text>
               <ProfileListFilter />
             </View>
           }
+          sceneContainerStyle={Platform.select({
+            web: tw.style("md:mt-0 md:mt-4"),
+            default: null,
+          })}
         />
       </View>
     </FilterContext.Provider>

@@ -7,23 +7,22 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
-import { useVideoConfig } from "app/context/video-config-context";
-
-import { useIsTabFocused } from "design-system/tabs/tablib";
+import { useIsFocused } from "app/lib/react-navigation/native";
 
 export const useViewabilityMount = ({
   videoRef,
   source,
+  isMuted,
 }: {
   videoRef: RefObject<Video>;
   source: any;
+  isMuted: boolean;
 }) => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
   const loaded = useRef(false);
-  const videoConfig = useVideoConfig();
-  let isListFocused = useIsTabFocused();
+  let isScreenFocused = useIsFocused();
 
   const loadPlayOrPause = useCallback(
     async (shouldPlay: boolean) => {
@@ -31,7 +30,7 @@ export const useViewabilityMount = ({
       if (!loaded.current) {
         await videoRef.current?.loadAsync(source, {
           isLooping: true,
-          isMuted: videoConfig?.isMuted,
+          isMuted,
         });
       }
 
@@ -43,7 +42,7 @@ export const useViewabilityMount = ({
 
       loaded.current = true;
     },
-    [source, videoRef, videoConfig?.isMuted]
+    [source, videoRef, isMuted]
   );
 
   const unload = useCallback(() => {
@@ -56,14 +55,21 @@ export const useViewabilityMount = ({
   // we mount or unmount the Video depending on the focus state
   useEffect(() => {
     if (isItemInList) {
-      if (!isListFocused) {
+      if (!isScreenFocused) {
         unload();
       } else if (context.value.includes(id)) {
         const shouldPlay = context.value[1] === id;
         loadPlayOrPause(shouldPlay);
       }
     }
-  }, [isItemInList, unload, isListFocused, id, context.value, loadPlayOrPause]);
+  }, [
+    isItemInList,
+    unload,
+    isScreenFocused,
+    id,
+    context.value,
+    loadPlayOrPause,
+  ]);
 
   useAnimatedReaction(
     () => context.value,
@@ -102,12 +108,18 @@ export const useItemVisible = ({ videoRef }: { videoRef: any }) => {
   useAnimatedReaction(
     () => context.value,
     (ctx) => {
-      if (isItemInList && ctx[1] === id) {
-        runOnJS(play)();
-      } else {
-        runOnJS(pause)();
+      if (isItemInList) {
+        if (ctx[1] === id) {
+          runOnJS(play)();
+        } else {
+          runOnJS(pause)();
+        }
       }
     },
     [id, isItemInList]
   );
+
+  return {
+    id,
+  };
 };

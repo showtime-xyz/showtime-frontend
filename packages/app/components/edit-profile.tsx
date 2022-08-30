@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Platform, Pressable, useWindowDimensions } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  useWindowDimensions,
+} from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,6 +36,8 @@ import { useFilePicker } from "design-system/file-picker";
 import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
 import { MediaCropper } from "./media-cropper";
+
+const windowWidth = Dimensions.get("window").width;
 
 const editProfileValidationSchema = yup.object({
   username: yup
@@ -247,7 +254,7 @@ export const EditProfile = () => {
   return (
     <>
       <BottomSheetModalProvider>
-        <View tw={`w-full flex-1 pb-${insets.bottom}px`}>
+        <View tw={`w-full flex-1`}>
           <Tabs.Root
             onIndexChange={setSelected}
             tabListHeight={TAB_LIST_HEIGHT}
@@ -256,9 +263,12 @@ export const EditProfile = () => {
             lazy
           >
             <Tabs.List
-              style={tw.style(
-                `h-[${TAB_LIST_HEIGHT}px] ios:w-screen android:w-screen`
-              )}
+              style={{
+                height: TAB_LIST_HEIGHT,
+                width: Platform.select({
+                  native: windowWidth,
+                }),
+              }}
             >
               {tabs.map((name, index) => (
                 <Tabs.Trigger key={name}>
@@ -268,7 +278,7 @@ export const EditProfile = () => {
               <SelectedTabIndicator />
             </Tabs.List>
             <Tabs.Pager
-              tw="web:h-48vh"
+              tw="web:h-58vh"
               style={{
                 overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
               }}
@@ -298,9 +308,10 @@ export const EditProfile = () => {
                         setCurrentCropField("coverPicture");
                         onChange(file.file);
                       }}
-                      style={tw.style(
-                        `w-full h-[${coverImageHeight}px] flex-row `
-                      )}
+                      style={[
+                        tw.style(`w-full flex-row `),
+                        { height: coverImageHeight },
+                      ]}
                     >
                       <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
                         <View tw="rounded-full bg-gray-800/70 p-2">
@@ -310,7 +321,8 @@ export const EditProfile = () => {
                       {value && (
                         <Preview
                           file={value}
-                          tw={`h-[${coverImageHeight}px] md:w-120 web:object-cover w-screen`}
+                          style={{ height: coverImageHeight }}
+                          tw={`md:w-120 web:object-cover w-screen`}
                           resizeMode="cover"
                         />
                       )}
@@ -355,6 +367,12 @@ export const EditProfile = () => {
                             </View>
                           </View>
                         </Pressable>
+                        <View tw="ml-4 flex-row items-center pt-2">
+                          <Text tw="font-bold text-gray-900 dark:text-white">
+                            Profile picture
+                          </Text>
+                          <Text tw="ml-1 text-red-500">*</Text>
+                        </View>
                         {errors.profilePicture?.message ? (
                           <ErrorText>{errors.profilePicture.message}</ErrorText>
                         ) : null}
@@ -391,6 +409,7 @@ export const EditProfile = () => {
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Fieldset
                           tw="flex-1"
+                          required
                           label="Username"
                           placeholder="Enter your username"
                           value={value}
@@ -414,6 +433,7 @@ export const EditProfile = () => {
                         label="About me"
                         placeholder="About me"
                         tw="mt-4"
+                        required
                         multiline
                         value={value}
                         numberOfLines={3}
@@ -432,9 +452,9 @@ export const EditProfile = () => {
               >
                 {hasNotSubmittedExternalLink ? (
                   <>
-                    <ErrorText>
+                    <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
                       Please add atleast one link from below
-                    </ErrorText>
+                    </Text>
                     <View tw="h-4" />
                   </>
                 ) : null}
@@ -557,7 +577,7 @@ export const EditProfile = () => {
             </Tabs.Pager>
           </Tabs.Root>
 
-          <View tw={`mt-2.5 px-4`}>
+          <View tw={`my-2.5 mb-4 px-4`}>
             <Button
               disabled={isSubmitting}
               tw={isSubmitting ? "opacity-50" : ""}

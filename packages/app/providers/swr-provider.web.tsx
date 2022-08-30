@@ -33,7 +33,7 @@ export const SWRProvider = ({
       value={{
         provider: isServer ? () => new Map() : localStorageProvider,
         onError: (err) => {
-          if (err?.message && __DEV__) {
+          if (__DEV__ && err?.message && err?.message !== "canceled") {
             console.error(err);
             toast?.show({
               message: err.message,

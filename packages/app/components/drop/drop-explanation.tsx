@@ -13,8 +13,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 
-import { CARD_DARK_SHADOW } from "design-system/theme";
-
 const values = [
   {
     title: "Gift your community a NFT",
@@ -60,19 +58,17 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
     <ScrollView>
       <View tw="px-8" style={modalScreenViewStyle}>
         <View tw="mb-10 items-center">
-          <View
-            tw="rounded-xl shadow-xl"
-            style={{
-              // @ts-ignore
-              boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
-            }}
-          >
+          <View tw="dark:shadow-dark shadow-light rounded-xl shadow-xl">
             <Image
               source={Platform.select({
                 web: { uri: require("./drop-preview.png") },
                 default: require("./drop-preview.png"),
               })}
-              tw={`h-[${previewHeight}px] w-[${previewWidth}px] rounded-xl`}
+              style={{
+                height: previewHeight,
+                width: previewWidth,
+              }}
+              tw="rounded-xl"
               resizeMode="contain"
             />
           </View>

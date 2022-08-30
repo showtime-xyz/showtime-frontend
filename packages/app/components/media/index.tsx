@@ -1,35 +1,49 @@
+import { Suspense } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { Model } from "design-system/model";
+import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
+
+const Dynamic3dModel = dynamic<ModelProps>(
+  () => import("design-system/model").then((mod) => mod.Model),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
+  sizeStyle?: object;
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
+  isMuted?: boolean;
 };
 
 function Media({
   item,
   numColumns,
   tw,
+  sizeStyle,
   resizeMode: propResizeMode,
   onPinchStart,
   onPinchEnd,
+  isMuted,
 }: Props) {
   const resizeMode = propResizeMode ?? ResizeMode.COVER;
 
@@ -48,10 +62,10 @@ function Media({
 
   return (
     <View
-      tw={[
-        numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
-        item?.loading ? "opacity-50" : "opacity-100",
-      ]}
+      style={{
+        margin: numColumns >= 3 ? 1 : numColumns === 2 ? 2 : 0,
+        opacity: item?.loading ? 0.5 : 1,
+      }}
     >
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
@@ -64,7 +78,8 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            tw={size}
+            tw={!sizeStyle ? size : ""}
+            style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
             resizeMode={resizeMode}
@@ -79,8 +94,7 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {/* we show play icon only on native because videos are not auto played on native */}
-          {numColumns > 1 && Platform.OS !== "web" && (
+          {numColumns > 1 && (
             <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
@@ -94,27 +108,30 @@ function Media({
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            tw={size}
+            tw={!sizeStyle ? size : ""}
+            style={sizeStyle}
             blurhash={item?.blurhash}
+            isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
-            //  we always show mute button on web because videos are auto played on web
-            showMuteButton={numColumns === 1 || Platform.OS === "web"}
           />
         </PinchToZoom>
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <View tw={numColumns > 1 ? size : "h-screen w-screen"}>
-          <Model
-            url={item?.source_url}
-            // TODO: update this to get a preview from CDN v2
-            fallbackUrl={item?.still_preview_url}
-            numColumns={numColumns}
-            tw={size}
-            blurhash={item?.blurhash}
-            resizeMode={resizeMode}
-          />
-        </View>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <Dynamic3dModel
+              url={item?.source_url}
+              // TODO: update this to get a preview from CDN v2
+              fallbackUrl={item?.still_preview_url}
+              numColumns={numColumns}
+              tw={!sizeStyle ? size : ""}
+              style={sizeStyle}
+              blurhash={item?.blurhash}
+              resizeMode={resizeMode}
+            />
+          </Suspense>
+        </ErrorBoundary>
       ) : null}
     </View>
   );
