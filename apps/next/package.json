@@ -51,7 +51,6 @@
     "react-virtuoso": "^2.16.6",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
-    "rudder-sdk-js": "^2.9.4",
     "setimmediate": "^1.0.5",
     "swr": "2.0.0-beta.6",
     "wagmi": "^0.6.0",

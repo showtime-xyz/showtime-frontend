@@ -11,9 +11,9 @@ import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { track } from "app/lib/analytics";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { SOL_MAX_INT } from "app/lib/constants";
+import { useRudder } from "app/lib/rudderstack";
 import { NFT } from "app/types";
 import { MATIC_CHAIN_ID, parseBalance } from "app/utilities";
 
@@ -80,6 +80,7 @@ const buyNFTReducer = (
 };
 
 export const useBuyNFT = () => {
+  const { rudder } = useRudder();
   const [state, dispatch] = useReducer(buyNFTReducer, initialState);
   const result = useBiconomy();
   const signTypedDataAsync = useSignTypedData();
@@ -159,7 +160,7 @@ export const useBuyNFT = () => {
         dispatch({ type: "transactionInitiated", payload: { transaction } });
         provider.once(transaction, () => {
           dispatch({ type: "buyingSuccess" });
-          track("NFT Purchased");
+          rudder.track("NFT Purchased");
         });
       }
     }

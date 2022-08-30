@@ -6,7 +6,7 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 
 import transfererAbi from "app/abi/ShowtimeMT.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 import { NFT } from "app/types";
 
 type TransferNFTType = {
@@ -66,6 +66,7 @@ export type UseTransferNFT = {
 };
 
 export const useTransferNFT = () => {
+  const { rudder } = useRudder();
   const Alert = useAlert();
   const [state, dispatch] = useReducer(
     transferNFTReducer,
@@ -154,7 +155,7 @@ export const useTransferNFT = () => {
         tokenId: response.tokenId,
         transaction: response.transaction,
       });
-      track("NFT Transferred");
+      rudder.track("NFT Transferred");
     } catch (e) {
       dispatch({ type: "transferingError" });
       Alert.alert("Sorry! Something went wrong");

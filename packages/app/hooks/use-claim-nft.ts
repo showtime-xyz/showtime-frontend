@@ -10,9 +10,9 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { useWallet } from "app/hooks/use-wallet";
-import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { ledgerWalletHack } from "app/utilities";
@@ -104,6 +104,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export const useClaimNFT = (edition?: IEdition) => {
+  const { rudder } = useRudder();
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -155,7 +156,7 @@ export const useClaimNFT = (edition?: IEdition) => {
       });
 
       if (response.is_complete) {
-        track("NFT Claimed");
+        rudder.track("NFT Claimed");
         dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {

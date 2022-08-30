@@ -13,8 +13,8 @@ import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
-import { track } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
+import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { getFileMeta, getPinataToken } from "app/utilities";
 import { isMobileWeb } from "app/utilities";
@@ -220,9 +220,9 @@ export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
 export const useMintNFT = () => {
+  const { rudder } = useRudder();
   const Alert = useAlert();
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
-
   const snackbar = useSnackbar();
   const insets = useSafeAreaInsets();
   const matchMutate = useMatchMutate();
@@ -369,7 +369,7 @@ export const useMintNFT = () => {
               transaction: transaction,
             },
           });
-          track("NFT Created");
+          rudder.track("NFT Created");
 
           matchMutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         });

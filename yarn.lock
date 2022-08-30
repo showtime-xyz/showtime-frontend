@@ -8361,7 +8361,6 @@ __metadata:
     react-virtuoso: ^2.16.6
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
-    rudder-sdk-js: ^2.9.4
     setimmediate: ^1.0.5
     swr: 2.0.0-beta.6
     tailwindcss: ^3.1.8
@@ -31196,13 +31195,6 @@ __metadata:
   version: 4.8.5
   resolution: "rsvp@npm:4.8.5"
   checksum: 2d8ef30d8febdf05bdf856ccca38001ae3647e41835ca196bc1225333f79b94ae44def733121ca549ccc36209c9b689f6586905e2a043873262609744da8efc1
-  languageName: node
-  linkType: hard
-
-"rudder-sdk-js@npm:^2.9.4":
-  version: 2.9.4
-  resolution: "rudder-sdk-js@npm:2.9.4"
-  checksum: 7830f5451feb7d910e74adcee6357d041baede8d415917711e19c1f18f93706d93c997b72905d03c093edc2d608405d00b9fb627c05354209c985f4dfe69abd3
   languageName: node
   linkType: hard
 

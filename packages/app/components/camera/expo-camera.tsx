@@ -7,8 +7,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
-import { track } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
+import { useRudder } from "app/lib/rudderstack";
 import { createParam } from "app/navigation/use-param";
 
 type Props = {
@@ -38,6 +38,7 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
+  const { rudder } = useRudder();
   const camera = useRef<ExpoCamera>(null);
   const [showPop, setShowPop] = useState(false);
   const { useParam } = createParam<Query>();
@@ -78,12 +79,19 @@ export function Camera({
 
       setIsLoading(true);
 
-      track("Photo Taken");
+      rudder.track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [camera, photos, setIsLoading, setPhotos, burstCaptureTimer]);
+  }, [
+    photos.length,
+    burstCaptureTimer,
+    setCanPop,
+    captureThrottleTimer,
+    setIsLoading,
+    setPhotos,
+    rudder,
+  ]);
 
   const [cameraPosition, setCameraPosition] = useState<
     keyof typeof ExpoCamera.Constants.Type
@@ -98,7 +106,6 @@ export function Camera({
       setPhotos([]);
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
   return (
