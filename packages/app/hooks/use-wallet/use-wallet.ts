@@ -55,6 +55,7 @@ const useWallet = (): UseWalletReturnType => {
   if (process.env.E2E) {
     // env variables won't change between renders, so this looks safe
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useRandomWallet();
   }
 
