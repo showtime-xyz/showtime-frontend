@@ -34,12 +34,10 @@ const onDisconnect = () => {
 export const useRandomWallet = (): UseWalletReturnType => {
   const [forceUpdate, setForceUpdate] = useState(false);
   useEffect(() => {
-    if (process.env.E2E) {
-      const unsubscribe = addOnConnectListener(() => {
-        setForceUpdate((p) => !p);
-      });
-      return unsubscribe;
-    }
+    const unsubscribe = addOnConnectListener(() => {
+      setForceUpdate((p) => !p);
+    });
+    return unsubscribe;
   }, []);
 
   const result = useMemo(() => {
