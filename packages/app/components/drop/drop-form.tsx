@@ -376,7 +376,7 @@ export const DropForm = () => {
                         textAlignVertical="top"
                         placeholder="What is this NFT drop about?"
                         onBlur={onBlur}
-                        helperText="You will not be able to edit this after the drop is created"
+                        helperText="You will not be able to edit this"
                         errorText={errors.description?.message}
                         value={value}
                         numberOfLines={3}
