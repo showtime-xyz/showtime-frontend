@@ -1,3 +1,7 @@
 import rudder from "@rudderstack/rudder-sdk-react-native";
 
-export { rudder };
+function useRudder() {
+  return { rudder };
+}
+
+export { useRudder };

@@ -37,8 +37,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { track } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
+import { useRudder } from "app/lib/rudderstack";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -76,6 +76,7 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
+  const { rudder } = useRudder();
   const tabBarHeight = usePlatformBottomHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -271,11 +272,11 @@ export function Camera({
       setIsLoading(true);
       burstCaptureTimer.start();
 
-      track("Photo Taken");
+      rudder.track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-  }, [camera, takePhotoOptions, photos]);
+  }, [camera, takePhotoOptions, photos, rudder]);
 
   const photoUri = photos?.[0]?.uri;
 

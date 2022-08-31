@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 import { parseBalance } from "app/utilities";
 
 export type ListNFT = {
@@ -54,6 +54,7 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
 };
 
 export const useListNFT = () => {
+  const { rudder } = useRudder();
   const [state, dispatch] = useReducer(listNFTReducer, initialState);
 
   const result = useBiconomy();
@@ -177,7 +178,7 @@ export const useListNFT = () => {
             status: "listingSuccess",
             transactionHash: transaction,
           });
-          track("NFT Listed");
+          rudder.track("NFT Listed");
           resolve(true);
         });
       } catch (error) {

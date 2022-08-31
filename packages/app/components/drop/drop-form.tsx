@@ -28,9 +28,9 @@ import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
-import { track } from "app/lib/analytics";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
@@ -88,6 +88,7 @@ const dropValidationSchema = yup.object({
 // const { useParam } = createParam<{ transactionId: string }>()
 
 export const DropForm = () => {
+  const { rudder } = useRudder();
   const {
     control,
     handleSubmit,
@@ -229,7 +230,7 @@ export const DropForm = () => {
               });
 
               if (result.action === "sharedAction") {
-                track(
+                rudder.track(
                   "Drop Shared",
                   result.activityType
                     ? { type: result.activityType }

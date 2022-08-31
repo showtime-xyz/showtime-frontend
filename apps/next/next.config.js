@@ -87,7 +87,7 @@ const nextConfig = {
     legacyBrowsers: false,
     forceSwcTransforms: true,
     // concurrentFeatures: true,
-    // nextScriptWorkers: true,
+    nextScriptWorkers: true,
     swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
   },
   typescript: {

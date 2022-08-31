@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useBiconomy } from "app/hooks/use-biconomy";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 
 type BurnNFTType = {
   status:
@@ -54,6 +54,7 @@ export type UseBurnNFT = {
 };
 
 export const useBurnNFT = () => {
+  const { rudder } = useRudder();
   const [state, dispatch] = useReducer(burnNFTReducer, initialBurnNFTState);
   const result = useBiconomy();
 
@@ -113,7 +114,7 @@ export const useBurnNFT = () => {
 
       const response = await burnToken({ ...params });
       dispatch({ type: "burningSuccess", transaction: response.transaction });
-      track("NFT Deleted");
+      rudder.track("NFT Deleted");
 
       console.log("** burning success **");
     } catch (e) {
