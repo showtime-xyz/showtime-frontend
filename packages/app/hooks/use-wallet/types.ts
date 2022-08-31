@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import type { Bytes } from "@ethersproject/bytes";
 
 export type UseWalletReturnType = {
   address?: string;
@@ -8,6 +8,6 @@ export type UseWalletReturnType = {
   connect: () => Promise<void>;
   name?: string;
   signMessageAsync: (args: {
-    message: string | ethers.utils.Bytes;
+    message: string | Bytes;
   }) => Promise<string | undefined>;
 };

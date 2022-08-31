@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { parseUnits } from "@ethersproject/units";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { LIST_CURRENCIES, SORT_FIELDS } from "app/lib/constants";
+import { SORT_FIELDS } from "app/lib/constants";
 
 import { NFT, Profile } from "./types";
 
@@ -107,19 +106,6 @@ export const findListingItemByOwner = (
   });
 
   return listedNFT;
-};
-
-// All our supported currencies have 18 decimals, except for USDC which has 6
-export const parseBalance = (
-  balance: string,
-  currencyAddress: typeof LIST_CURRENCIES
-) => {
-  const isUSDC = currencyAddress === LIST_CURRENCIES?.USDC;
-  if (isUSDC) {
-    return parseUnits(balance, 6);
-  }
-
-  return parseUnits(balance, 18);
 };
 
 export const getMediaUrl = ({

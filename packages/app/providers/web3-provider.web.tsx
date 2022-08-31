@@ -1,5 +1,6 @@
 import { useAccount, useSigner } from "wagmi";
 
+// @ts-expect-error
 import { Web3Provider as Web3ProviderBase } from "./web3-provider.tsx";
 
 interface Web3ProviderProps {

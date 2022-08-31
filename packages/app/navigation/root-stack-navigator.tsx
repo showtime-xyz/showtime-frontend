@@ -10,14 +10,11 @@ import { BlockedListScreen } from "app/screens/blocked-list";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimersScreen } from "app/screens/claimers";
 import { CommentsScreen } from "app/screens/comments";
-import { CreateScreen } from "app/screens/create";
-import { DeleteScreen } from "app/screens/delete";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
-import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
@@ -27,8 +24,6 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { SwipeListScreen } from "app/screens/swipe-list";
-import { TransferScreen } from "app/screens/transfer";
-import { UnlistScreen } from "app/screens/unlist";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -91,11 +86,6 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="comments" component={CommentsScreen} />
-        <Stack.Screen name="transfer" component={TransferScreen} />
-        <Stack.Screen name="create" component={CreateScreen} />
-        <Stack.Screen name="delete" component={DeleteScreen} />
-        <Stack.Screen name="list" component={ListScreen} />
-        <Stack.Screen name="unlist" component={UnlistScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="activity" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />

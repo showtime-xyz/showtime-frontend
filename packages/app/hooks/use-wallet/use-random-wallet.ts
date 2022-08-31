@@ -1,13 +1,14 @@
 import { useState, useMemo, useEffect } from "react";
 
-import { ethers } from "ethers";
+import type { Bytes } from "@ethersproject/bytes";
+import type { Wallet } from "@ethersproject/wallet";
 
 import { getWallet } from "app/lib/random-wallet";
 import { delay } from "app/utilities";
 
 import type { UseWalletReturnType } from "./types";
 
-let wallet: ethers.Wallet;
+let wallet: Wallet;
 async function initialiseRandomWallet() {
   wallet = await getWallet();
 }
@@ -57,9 +58,7 @@ export const useRandomWallet = (): UseWalletReturnType => {
       name: "test wallet",
       connected,
       networkChanged: undefined,
-      signMessageAsync: async (args: {
-        message: string | ethers.utils.Bytes;
-      }) => {
+      signMessageAsync: async (args: { message: string | Bytes }) => {
         const signature = await wallet.signMessage(args.message);
         return signature;
       },

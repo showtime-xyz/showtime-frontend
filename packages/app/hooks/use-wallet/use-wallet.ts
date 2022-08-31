@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
+import type { Bytes } from "@ethersproject/bytes";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { ethers } from "ethers";
 
 import { useWeb3 } from "app/hooks/use-web3";
 
@@ -16,7 +16,8 @@ const useWallet = (): UseWalletReturnType => {
   useEffect(() => {
     (async function fetchUserAddress() {
       if (connector.session?.accounts?.[0]) {
-        setAddress(ethers.utils.getAddress(connector.session.accounts[0]));
+        const getAddress = (await import("@ethersproject/address")).getAddress;
+        setAddress(getAddress(connector.session.accounts[0]));
       } else if (magicWalletAddress) {
         setAddress(magicWalletAddress);
       } else if (web3) {
@@ -41,9 +42,7 @@ const useWallet = (): UseWalletReturnType => {
       name: connector.peerMeta?.name,
       connected: connector.connected || isMagic,
       networkChanged: undefined,
-      signMessageAsync: async (args: {
-        message: string | ethers.utils.Bytes;
-      }) => {
+      signMessageAsync: async (args: { message: string | Bytes }) => {
         const signature = await connector.signPersonalMessage([
           args.message,
           address,
@@ -55,6 +54,7 @@ const useWallet = (): UseWalletReturnType => {
 
   if (process.env.E2E) {
     // env variables won't change between renders, so this looks safe
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useRandomWallet();
   }
