@@ -93,6 +93,10 @@ export function AuthProvider({
   const logout = useCallback(
     async function logout() {
       const wasUserLoggedIn = loginStorage.getLogin();
+      if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
+        rudder?.track("User Logged Out");
+        rudder?.reset();
+      }
 
       onWagmiDisconnect?.();
       loginStorage.deleteLogin();
@@ -114,11 +118,6 @@ export function AuthProvider({
 
       if (Platform.OS !== "web") {
         router.push("/");
-      }
-
-      if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        rudder?.track("User Logged Out");
-        await rudder?.reset();
       }
     },
     [magic, connector, mutate, router, setWeb3, onWagmiDisconnect, rudder]
