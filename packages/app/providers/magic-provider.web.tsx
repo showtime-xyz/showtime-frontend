@@ -51,7 +51,7 @@ export const MagicProvider = ({ children }: any) => {
     >
       <Script
         src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onLoad={onMagicLoad}
       />
       {children}
