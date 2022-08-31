@@ -17,13 +17,12 @@ import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
-import { track } from "app/lib/analytics";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
-import { rudder } from "app/lib/rudderstack";
+import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 import type { AuthenticationStatus } from "../types";
@@ -40,6 +39,7 @@ export function AuthProvider({
   children,
   onWagmiDisconnect,
 }: AuthProviderProps) {
+  const { rudder } = useRudder();
   const initialRefreshTokenRequestSent = useRef(false);
   const lastRefreshTokenSuccessTimestamp = useRef<number | null>(null);
   const appState = useRef(AppState.currentState);
@@ -94,9 +94,9 @@ export function AuthProvider({
     async function logout() {
       const wasUserLoggedIn = loginStorage.getLogin();
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        track("User Logged Out");
+        rudder.track("User Logged Out");
+        await rudder?.reset();
       }
-      await rudder?.reset();
 
       onWagmiDisconnect?.();
       loginStorage.deleteLogin();
@@ -120,7 +120,7 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect]
+    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect, rudder]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

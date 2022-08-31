@@ -7,12 +7,13 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
-import { trackButtonClicked } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
 export const useLogin = (onLogin?: () => void) => {
   const loginSource = useRef<LoginSource>("undetermined");
+  const { rudder } = useRudder();
 
   //#region hooks
   const { authenticationStatus, logout } = useAuth();
@@ -50,7 +51,9 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitWallet({ onOpenConnectModal }) {
       try {
         loginSource.current = "wallet";
-        trackButtonClicked({ name: "Login with wallet" });
+        rudder.track("Button Clicked", {
+          name: "Login with wallet",
+        });
 
         if (isWeb) {
           onOpenConnectModal?.();
@@ -61,34 +64,37 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loginWithWallet, handleLoginFailure]
+    [rudder, isWeb, loginWithWallet, handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        trackButtonClicked({ name: "Login with email" });
+        rudder.track("Button Clicked", {
+          name: "Login with email",
+        });
 
         return await loginWithEmail(email);
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure]
+    [loginWithEmail, handleLoginFailure, rudder]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        trackButtonClicked({ name: "Login with phone number" });
+        rudder.track("Button Clicked", {
+          name: "Login with phone number",
+        });
 
         return await loginWithPhoneNumber(phoneNumber);
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithPhoneNumber, handleLoginFailure]
+    [loginWithPhoneNumber, handleLoginFailure, rudder]
   );
 
   /**
@@ -131,7 +137,6 @@ export const useLogin = (onLogin?: () => void) => {
     loading: authenticationStatus === "AUTHENTICATING",
     walletName,
     walletStatus,
-
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,

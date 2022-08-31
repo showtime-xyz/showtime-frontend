@@ -13,7 +13,7 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useLogRocket } from "app/hooks/use-logrocket";
-import { onMagicLoad } from "app/lib/magic/magic-load-listener";
+import { onRudderLoad } from "app/lib/rudderstack/rudder-load-listener";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
@@ -114,9 +114,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
         />
       </Head>
       <Script
-        src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
-        strategy="afterInteractive"
-        onLoad={onMagicLoad}
+        src="https://cdn.rudderlabs.com/v1.1/rudder-analytics.min.js"
+        strategy="lazyOnload"
+        onLoad={onRudderLoad}
       />
       <AppProviders>
         <Container>

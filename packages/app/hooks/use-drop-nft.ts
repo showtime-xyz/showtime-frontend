@@ -13,9 +13,9 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { useWallet } from "app/hooks/use-wallet";
-import { track } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import {
   delay,
@@ -119,6 +119,7 @@ export type UseDropNFT = {
 };
 
 export const useDropNFT = () => {
+  const { rudder } = useRudder();
   const signTypedData = useSignTypedData();
   const uploadMedia = useUploadMediaToPinata();
   const { userAddress } = useCurrentUserAddress();
@@ -159,7 +160,7 @@ export const useDropNFT = () => {
       });
 
       if (response.is_complete) {
-        track("Drop Created");
+        rudder.track("Drop Created");
         dispatch({ type: "success", edition: response.edition });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;
@@ -306,8 +307,8 @@ export const useDropNFT = () => {
 
       if (e?.response?.status === 420) {
         Alert.alert(
-          "Oops. An error occured.",
-          "Only one drop per day is allowed. Please try again tomorrow!"
+          "Wow, you love drops!",
+          "Only one drop per day is allowed. Come back tomorrow!"
         );
       }
 

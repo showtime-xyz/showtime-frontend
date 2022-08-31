@@ -26,7 +26,7 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
@@ -39,6 +39,7 @@ import {
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
+  const { rudder } = useRudder();
   const { state, claimNFT, onReconnectWallet } = useClaimNFT(
     edition?.creator_airdrop_edition
   );
@@ -148,7 +149,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <Button
             onPress={() => {
-              track("Drop Shared", { type: "Twitter" });
+              rudder.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
@@ -173,7 +174,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               });
 
               if (result.action === "sharedAction") {
-                track(
+                rudder.track(
                   "Drop Shared",
                   result.activityType
                     ? { type: result.activityType }
