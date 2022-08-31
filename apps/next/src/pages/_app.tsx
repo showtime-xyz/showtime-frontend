@@ -5,6 +5,7 @@ import "setimmediate";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 
 import { View } from "@showtime-xyz/universal.view";
 
