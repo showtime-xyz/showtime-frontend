@@ -177,9 +177,7 @@ export const DropForm = () => {
     const timeRemaining = 24 - new Date().getUTCHours();
     return (
       <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          {"Oops. An error occured."}
-        </Text>
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">{"Wow, you love drops!"}</Text>
         <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
           {"Only one drop per day is allowed.\n\nCome back in " +
             timeRemaining +
