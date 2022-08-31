@@ -20,42 +20,46 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { RudderStackProvider } from "./rudderstack-provider.web";
+
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <MagicProvider>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <ToastProvider>
-            <LightBoxProvider>
-              <WalletProvider>
-                <AlertProvider>
-                  <SnackbarProvider>
-                    <SWRProvider>
-                      <Web3Provider>
-                        <AuthProvider>
-                          <UserProvider>
-                            <BottomSheetModalProvider>
-                              <GrowthBookProvider growthbook={growthbook}>
-                                <FeedProvider>
-                                  <NavigationProvider>
-                                    <BiconomyProvider>
-                                      <MuteProvider>{children}</MuteProvider>
-                                    </BiconomyProvider>
-                                  </NavigationProvider>
-                                </FeedProvider>
-                              </GrowthBookProvider>
-                            </BottomSheetModalProvider>
-                          </UserProvider>
-                        </AuthProvider>
-                      </Web3Provider>
-                    </SWRProvider>
-                  </SnackbarProvider>
-                </AlertProvider>
-              </WalletProvider>
-            </LightBoxProvider>
-          </ToastProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
-    </MagicProvider>
+    <RudderStackProvider>
+      <MagicProvider>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <ToastProvider>
+              <LightBoxProvider>
+                <WalletProvider>
+                  <AlertProvider>
+                    <SnackbarProvider>
+                      <SWRProvider>
+                        <Web3Provider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <BottomSheetModalProvider>
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <NavigationProvider>
+                                      <BiconomyProvider>
+                                        <MuteProvider>{children}</MuteProvider>
+                                      </BiconomyProvider>
+                                    </NavigationProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </Web3Provider>
+                      </SWRProvider>
+                    </SnackbarProvider>
+                  </AlertProvider>
+                </WalletProvider>
+              </LightBoxProvider>
+            </ToastProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </MagicProvider>
+    </RudderStackProvider>
   );
 };
