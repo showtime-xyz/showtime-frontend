@@ -9,11 +9,11 @@ type WindowAnalytics = {
 };
 
 export const RudderStackContext = createContext({
-  rudder: {},
+  rudder: null as typeof RudderClient | null,
 });
 
 export const RudderStackProvider = ({ children }: any) => {
-  const [rudder, setRudder] = useState({});
+  const [rudder, setRudder] = useState<typeof RudderClient | null>(null);
 
   const onRudderLoad = () => {
     const rudderanalytics = (
