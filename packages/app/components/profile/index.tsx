@@ -3,7 +3,6 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   SceneRendererProps,
   HeaderTabView,
@@ -23,6 +22,7 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { createParam } from "app/navigation/use-param";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -41,6 +41,7 @@ const ProfileScreen = ({ username }: ProfileScreenProps) => {
 };
 
 type Filter = typeof defaultFilters;
+const { useParam } = createParam();
 
 const Profile = ({ username }: ProfileScreenProps) => {
   const {
@@ -49,9 +50,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isLoading,
     mutate,
   } = useUserProfile({ address: username });
-
+  const [type] = useParam("type");
   const { width } = useWindowDimensions();
-  const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -73,7 +73,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     tabRefs,
   } = useTabState<ProfileTabListRef>(routes, {
     defaultIndex: data?.tabs.findIndex(
-      (item) => item.type === data?.default_tab_type
+      (item) => item.type === (type ? type : data?.default_tab_type)
     ),
   });
   const animationHeaderPosition = useSharedValue(0);
