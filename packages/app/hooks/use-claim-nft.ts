@@ -104,7 +104,6 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = (edition?: IEdition) => {
   const { rudder } = useRudder();
-  console.log("rudder112121 ", rudder);
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
