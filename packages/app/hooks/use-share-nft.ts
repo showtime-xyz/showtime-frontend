@@ -19,7 +19,7 @@ export const useShareNFT = () => {
     });
 
     if (result.action === "sharedAction") {
-      rudder.track(
+      rudder?.track(
         "NFT Shared",
         result.activityType ? { type: result.activityType } : undefined
       );
@@ -37,7 +37,7 @@ export const useShareNFT = () => {
         message: ``,
       })
     );
-    rudder.track("NFT Shared", { type: "Twitter" });
+    rudder?.track("NFT Shared", { type: "Twitter" });
   };
 
   return { shareNFT, shareNFTOnTwitter };

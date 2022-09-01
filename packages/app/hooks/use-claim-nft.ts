@@ -155,7 +155,7 @@ export const useClaimNFT = (edition?: IEdition) => {
       });
 
       if (response.is_complete) {
-        rudder.track("NFT Claimed");
+        rudder?.track("NFT Claimed");
         dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {

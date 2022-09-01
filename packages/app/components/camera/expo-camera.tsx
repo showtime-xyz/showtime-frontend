@@ -79,7 +79,7 @@ export function Camera({
 
       setIsLoading(true);
 
-      rudder.track("Photo Taken");
+      rudder?.track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }

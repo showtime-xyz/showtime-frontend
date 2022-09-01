@@ -149,7 +149,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <Button
             onPress={() => {
-              rudder.track("Drop Shared", { type: "Twitter" });
+              rudder?.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
@@ -174,7 +174,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               });
 
               if (result.action === "sharedAction") {
-                rudder.track(
+                rudder?.track(
                   "Drop Shared",
                   result.activityType
                     ? { type: result.activityType }

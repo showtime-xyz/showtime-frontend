@@ -51,7 +51,7 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitWallet({ onOpenConnectModal }) {
       try {
         loginSource.current = "wallet";
-        rudder.track("Button Clicked", {
+        rudder?.track("Button Clicked", {
           name: "Login with wallet",
         });
 
@@ -70,7 +70,7 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        rudder.track("Button Clicked", {
+        rudder?.track("Button Clicked", {
           name: "Login with email",
         });
 
@@ -85,7 +85,7 @@ export const useLogin = (onLogin?: () => void) => {
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        rudder.track("Button Clicked", {
+        rudder?.track("Button Clicked", {
           name: "Login with phone number",
         });
 
