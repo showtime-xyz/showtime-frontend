@@ -1,4 +1,4 @@
-import {
+import type {
   TypedDataDomain,
   TypedDataField,
 } from "@ethersproject/abstract-signer";

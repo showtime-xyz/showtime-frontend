@@ -1,7 +1,5 @@
 import { useReducer, useEffect, useRef, useCallback } from "react";
 
-import { ethers } from "ethers";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
@@ -27,7 +25,8 @@ const getForwarderRequest = async ({
   minterAddress: string;
   userAddress: string;
 }) => {
-  const targetInterface = new ethers.utils.Interface(minterABI);
+  const Interface = (await import("@ethersproject/abi")).Interface;
+  const targetInterface = new Interface(minterABI);
   const callData = targetInterface.encodeFunctionData("mintEdition", [
     userAddress,
   ]);
@@ -156,7 +155,7 @@ export const useClaimNFT = (edition?: IEdition) => {
       });
 
       if (response.is_complete) {
-        rudder.track("NFT Claimed");
+        rudder?.track("NFT Claimed");
         dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {

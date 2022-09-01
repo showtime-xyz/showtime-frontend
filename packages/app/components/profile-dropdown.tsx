@@ -64,7 +64,7 @@ function ProfileDropdown({ user }: Props) {
             });
 
             if (result.action === "sharedAction") {
-              rudder.track(
+              rudder?.track(
                 "User Shared",
                 result.activityType ? { type: result.activityType } : undefined
               );

@@ -272,7 +272,7 @@ export function Camera({
       setIsLoading(true);
       burstCaptureTimer.start();
 
-      rudder.track("Photo Taken");
+      rudder?.track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }

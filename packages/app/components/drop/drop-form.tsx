@@ -173,6 +173,22 @@ export const DropForm = () => {
     );
   }
 
+  if (!userProfile?.data.can_create_drop) {
+    const timeRemaining = 24 - new Date().getUTCHours();
+    return (
+      <View tw="flex-1 items-center justify-center px-10 text-center">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          {"Oops. An error occured."}
+        </Text>
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
+          {"Only one drop per day is allowed.\n\nCome back in " +
+            timeRemaining +
+            " hours!"}
+        </Text>
+      </View>
+    );
+  }
+
   if (state.status === "success") {
     const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
       state.edition?.contract_address
@@ -230,7 +246,7 @@ export const DropForm = () => {
               });
 
               if (result.action === "sharedAction") {
-                rudder.track(
+                rudder?.track(
                   "Drop Shared",
                   result.activityType
                     ? { type: result.activityType }

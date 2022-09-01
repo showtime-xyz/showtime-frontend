@@ -59,10 +59,10 @@ export function UserProvider({ children }: UserProviderProps) {
       if (data) {
         // Identify user
         LogRocket.identify(data.data.profile.profile_id.toString());
-        rudder.identify(data.data.profile.profile_id.toString(), {});
+        rudder?.identify(data.data.profile.profile_id.toString(), {});
 
         LogRocket.getSessionURL((sessionURL: string) => {
-          rudder.track("LogRocket", { sessionURL: sessionURL });
+          rudder?.track("LogRocket", { sessionURL: sessionURL });
           // Sentry.configureScope(scope => {
           //   scope.setExtra("sessionURL", sessionURL);
           // });

@@ -4,7 +4,6 @@ import type {
   TypedDataDomain,
   TypedDataField,
 } from "@ethersproject/abstract-signer";
-import { ethers } from "ethers";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -161,7 +160,7 @@ export const useDropNFT = () => {
       });
 
       if (response.is_complete) {
-        rudder.track("Drop Created");
+        rudder?.track("Drop Created");
         dispatch({ type: "success", edition: response.edition });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;
@@ -225,7 +224,8 @@ export const useDropNFT = () => {
   const dropNFT = async (params: UseDropNFT) => {
     try {
       if (userAddress) {
-        const targetInterface = new ethers.utils.Interface(editionCreatorABI);
+        const Interface = (await import("@ethersproject/abi")).Interface;
+        const targetInterface = new Interface(editionCreatorABI);
 
         const fileMetaData = await getFileMeta(params.file);
 
