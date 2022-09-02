@@ -4,7 +4,6 @@ import { LogBox } from "react-native";
 import LogRocket from "@logrocket/react-native";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
-import * as Network from "expo-network";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { enableScreens } from "react-native-screens";
@@ -51,7 +50,6 @@ function App() {
         process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
         rudderConfig
       );
-      const network = await Network.getNetworkStateAsync();
     };
 
     initAnalytics();

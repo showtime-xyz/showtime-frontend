@@ -130,13 +130,12 @@ export function AuthProvider({
       lastRefreshTokenSuccessTimestamp.current = new Date().getTime();
     } catch (error: any) {
       setAuthenticationStatus("UNAUTHENTICATED");
-      console.log(
+      console.error(
         "AuthProvider",
         typeof error === "string" ? error : error.message || "unknown"
       );
-      await logout();
     }
-  }, [refreshTokens, setAuthenticationStatus, logout]);
+  }, [refreshTokens, setAuthenticationStatus]);
   //#endregion
 
   //#region variables

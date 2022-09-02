@@ -8,6 +8,8 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useExpoUpdate } from "app/hooks/use-expo-update";
+import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { useUser } from "app/hooks/use-user";
 
 import { TabBarButton } from "./tab-bar-button";
@@ -35,7 +37,8 @@ export function BottomTabNavigator() {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
-
+  useExpoUpdate();
+  useNetWorkConnection();
   return (
     <BottomTab.Navigator
       initialRouteName="homeTab"
