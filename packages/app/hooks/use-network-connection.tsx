@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 
-import * as Network from "expo-network";
-
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { useIsForeground } from "./use-is-foreground";
+import { useIsOnline } from "./use-is-online";
 
 export const useNetWorkConnection = () => {
   const { bottom } = useSafeAreaInsets();
   const isForeground = useIsForeground();
   const snackbar = useSnackbar();
+  const { isOnline } = useIsOnline();
 
   useEffect(() => {
     const getNetwork = async () => {
-      const { isConnected } = await Network.getNetworkStateAsync();
-      if (isConnected) return;
+      if (isOnline) return;
       snackbar?.show({
         text: `No internet connection`,
         bottom: bottom + 64,
