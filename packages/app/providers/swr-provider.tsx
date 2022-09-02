@@ -72,7 +72,6 @@ export const SWRProvider = ({
           ) {
             return;
           }
-          console.log(error.status, "status");
 
           if (error.status === 404) {
             return;
