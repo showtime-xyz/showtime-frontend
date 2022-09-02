@@ -186,6 +186,7 @@ export default {
         android: {
           compileSdkVersion: 31,
           targetSdkVersion: 31,
+          minSdkVersion: 23,
           buildToolsVersion: "31.0.0",
           kotlinVersion: "1.6.10",
         },

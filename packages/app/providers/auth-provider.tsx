@@ -25,6 +25,7 @@ import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 
+import { useWalletMobileSDK } from "../hooks/use-wallet-mobile-sdk";
 import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
@@ -55,6 +56,7 @@ export function AuthProvider({
   //#region hooks
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
+  const mobileSDK = useWalletMobileSDK();
   const { setWeb3 } = useWeb3();
   const { magic } = useMagic();
   const { setTokens, refreshTokens } = useAccessTokenManager();
@@ -110,6 +112,10 @@ export function AuthProvider({
         connector.killSession();
       }
 
+      if (mobileSDK && mobileSDK.connected) {
+        mobileSDK.disconnect();
+      }
+
       magic?.user?.logout();
 
       setWeb3(undefined);
@@ -120,7 +126,16 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect, rudder]
+    [
+      onWagmiDisconnect,
+      connector,
+      mobileSDK,
+      magic?.user,
+      setWeb3,
+      mutate,
+      router,
+      rudder,
+    ]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

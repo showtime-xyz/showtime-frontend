@@ -5,12 +5,14 @@ import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 import { useWeb3 } from "app/hooks/use-web3";
 
+import { useWalletMobileSDK } from "../use-wallet-mobile-sdk";
 import { UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 
 const useWallet = (): UseWalletReturnType => {
   const connector = useWalletConnect();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
+  const mobileSDK = useWalletMobileSDK();
   const [address, setAddress] = useState<string | undefined>();
 
   useEffect(() => {
@@ -20,6 +22,8 @@ const useWallet = (): UseWalletReturnType => {
         setAddress(getAddress(connector.session.accounts[0]));
       } else if (magicWalletAddress) {
         setAddress(magicWalletAddress);
+      } else if (mobileSDK.address) {
+        setAddress(mobileSDK.address);
       } else if (web3) {
         const address = await web3.getSigner().getAddress();
         setAddress(address);
@@ -27,30 +31,49 @@ const useWallet = (): UseWalletReturnType => {
         setAddress(undefined);
       }
     })();
-  }, [web3, connector.session, magicWalletAddress]);
+  }, [web3, connector.session, magicWalletAddress, mobileSDK.address]);
 
   const result = useMemo(() => {
+    const wcConnected = connector.connected;
+    const mobileSDKConnected = mobileSDK.connected;
+
+    let walletName: string | undefined;
+    if (wcConnected) {
+      walletName = connector.peerMeta?.name;
+    } else if (mobileSDKConnected) {
+      walletName = mobileSDK.metadata?.name;
+    }
+
     return {
       address,
       connect: async () => {
-        await connector.connect();
+        await Promise.race([connector.connect(), mobileSDK.onConnected()]);
       },
       disconnect: async () => {
-        localStorage.removeItem("walletconnect");
-        await connector.killSession();
+        if (wcConnected) {
+          localStorage.removeItem("walletconnect");
+          await connector.killSession();
+        } else if (mobileSDKConnected) {
+          mobileSDK.disconnect();
+        }
       },
-      name: connector.peerMeta?.name,
-      connected: connector.connected || isMagic,
+      name: walletName,
+      connected: connector.connected || isMagic || mobileSDKConnected,
       networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
-        const signature = await connector.signPersonalMessage([
-          args.message,
-          address,
-        ]);
-        return signature;
+        if (wcConnected) {
+          const signature = await connector.signPersonalMessage([
+            args.message,
+            address,
+          ]);
+          return signature;
+        } else if (mobileSDKConnected && address) {
+          const signature = await mobileSDK.personalSign(args.message, address);
+          return signature;
+        }
       },
     };
-  }, [address, connector, isMagic]);
+  }, [address, connector, isMagic, mobileSDK]);
 
   if (process.env.E2E) {
     // env variables won't change between renders, so this looks safe
