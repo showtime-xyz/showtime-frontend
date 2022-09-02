@@ -8255,7 +8255,6 @@ __metadata:
     expo-linking: ~3.2.2
     expo-modules-core: 0.11.3
     expo-navigation-bar: ~1.3.0
-    expo-network: ~4.3.0
     expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.16.1
     expo-splash-screen: ~0.16.2
@@ -19129,15 +19128,6 @@ __metadata:
   dependencies:
     lodash.get: ^4.4.2
   checksum: 4d979266fb5b90a78dc1317b8004d6f43088393decb311c91e3426e8e408a9fc474e51969469e0d8dc875042829141eeb342e297c405bab8f0d11c55d80a89c2
-  languageName: node
-  linkType: hard
-
-"expo-network@npm:~4.3.0":
-  version: 4.3.0
-  resolution: "expo-network@npm:4.3.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 62297a922d3954004264ba0839fb6c941749921a0d6ea8811502b3038e85185d061356028817c50095810f42c895f50c3057228cd34d1b80b157501b54f97069
   languageName: node
   linkType: hard
 
