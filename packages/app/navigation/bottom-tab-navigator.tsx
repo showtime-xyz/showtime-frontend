@@ -34,10 +34,9 @@ export function BottomTabNavigator() {
   const { isTabBarHidden } = useNavigationElements();
   const { isAuthenticated, user } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  useExpoUpdate();
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
-
+  useExpoUpdate();
   return (
     <BottomTab.Navigator
       initialRouteName="homeTab"

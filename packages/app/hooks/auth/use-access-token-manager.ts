@@ -4,7 +4,6 @@ import { useCallback, useRef } from "react";
 // import { captureException } from "@sentry/nextjs";
 import * as accessTokenStorage from "app/lib/access-token";
 import { axios } from "app/lib/axios";
-import { setLogout } from "app/lib/logout";
 import * as refreshTokenStorage from "app/lib/refresh-token";
 
 export function useAccessTokenManager() {
@@ -84,9 +83,9 @@ export function useAccessTokenManager() {
       } catch (error: any) {
         isRefreshing.current = false;
 
-        accessTokenStorage.deleteAccessToken();
-        refreshTokenStorage.deleteRefreshToken();
-        setLogout(Date.now().toString());
+        // accessTokenStorage.deleteAccessToken();
+        // refreshTokenStorage.deleteRefreshToken();
+        // setLogout(Date.now().toString());
 
         // captureException(error, {
         //   tags: {
