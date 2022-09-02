@@ -11,7 +11,7 @@
 {
     "accordion": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },

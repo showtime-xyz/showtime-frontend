@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Platform, View } from "react-native";
 
 import { View as MotiView, useDynamicAnimation } from "moti";
-import { useSharedValue } from "react-native-reanimated";
+import { useSharedValue, useDerivedValue } from "react-native-reanimated";
 
 type Props = {
   children?: React.ReactNode;
@@ -48,7 +48,20 @@ export function AnimateHeight({
       opacity: !initialHeight || hide ? 0 : 1,
     };
   });
+  if ("state" in motiViewProps) {
+    console.warn("[AnimateHeight] state prop not supported");
+  }
+  useDerivedValue(() => {
+    let height = Math.ceil(measuredHeight.value);
+    if (hide) {
+      height = 0;
+    }
 
+    state.animateTo({
+      height,
+      opacity: !height || hide ? 0 : 1,
+    });
+  }, [hide, measuredHeight]);
   return (
     <MotiView
       {...motiViewProps}
