@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
@@ -10,6 +9,7 @@ import type { PublicConfiguration } from "swr/dist/types";
 import { useToast } from "@showtime-xyz/universal.toast";
 
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
+import { useIsOnline } from "app/hooks/use-is-online";
 import { isUndefined } from "app/lib/swr/helper";
 
 function mmkvProvider() {
@@ -32,19 +32,7 @@ export const SWRProvider = ({
 }): JSX.Element => {
   const toast = useToast();
   const { refreshTokens } = useAccessTokenManager();
-  const isOnline = useRef<boolean>(true);
-
-  useEffect(() => {
-    NetInfo.fetch().then((s) => {
-      isOnline.current = !!s.isConnected && !!s.isInternetReachable;
-    });
-
-    const unsubscribe = NetInfo.addEventListener((s) => {
-      isOnline.current = !!s.isConnected && !!s.isInternetReachable;
-    });
-
-    return unsubscribe;
-  }, []);
+  const { isOnline } = useIsOnline();
 
   return (
     <SWRConfig
@@ -99,7 +87,7 @@ export const SWRProvider = ({
           return AppState.currentState === "active";
         },
         isOnline: () => {
-          return isOnline.current;
+          return isOnline;
         },
         // TODO: tab focus too
         initFocus(callback) {
