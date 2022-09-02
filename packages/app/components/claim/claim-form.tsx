@@ -163,8 +163,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             }}
             tw="bg-[#00ACEE]"
             variant="text"
+            accentColor="#fff"
           >
-            <Text tw="text-white">Share on Twitter</Text>
+            Share on Twitter
           </Button>
           <View tw="h-4" />
           <Button
