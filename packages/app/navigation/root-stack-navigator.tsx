@@ -4,6 +4,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import type { ProfileScreenProps } from "app/components/profile";
+import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
@@ -32,6 +33,8 @@ const Stack = createStackNavigator();
 
 export function RootStackNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
+  useNetWorkConnection();
+
   const isDark = useIsDarkMode();
 
   return (

@@ -36,6 +36,7 @@ LogBox.ignoreLogs([
 
 function App() {
   const [notification, setNotification] = useState(null);
+
   useEffect(() => {
     if (process.env.STAGE !== "development") {
       LogRocket.init("oulg1q/showtime", {
