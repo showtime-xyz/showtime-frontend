@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { LogBox } from "react-native";
 
-import LogRocket from "@logrocket/react-native";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { enableScreens } from "react-native-screens";
 
+import { useLogRocket } from "app/hooks/use-logrocket";
 import { growthbook } from "app/lib/growthbook";
 import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";
@@ -35,15 +35,8 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
+  useLogRocket();
   const [notification, setNotification] = useState(null);
-
-  useEffect(() => {
-    if (process.env.STAGE !== "development") {
-      LogRocket.init("oulg1q/showtime", {
-        redactionTags: ["data-private"],
-      });
-    }
-  }, []);
 
   useEffect(() => {
     const initAnalytics = async () => {
