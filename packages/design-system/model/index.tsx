@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import { StyleSheet, ViewStyle } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
 import { Image } from "@showtime-xyz/universal.image";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";
@@ -18,6 +17,8 @@ export type Props = {
   numColumns: number;
   style?: object;
 };
+
+const StyledCanvas = styled(Canvas);
 
 function Model({ url }: { url: string }) {
   const { scene } = useGLTF(url);
@@ -75,20 +76,12 @@ function ModelViewer({
   }
 
   return (
-    <Canvas
-      style={
-        StyleSheet.flatten([
-          tailwind.style("mx-auto"),
-          tailwind.style(tw),
-          style,
-        ]) as ViewStyle
-      }
-    >
+    <StyledCanvas style={style} tw={`${tw} mx-auto`}>
       <ambientLight />
       <Suspense fallback={null}>
         <Model url={url} />
       </Suspense>
-    </Canvas>
+    </StyledCanvas>
   );
 }
 

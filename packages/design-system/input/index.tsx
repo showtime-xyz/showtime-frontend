@@ -123,8 +123,9 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       >
         {leftElement}
         <TextInput
-          // @ts-ignore remove focus outline on web as we'll control the focus styling
-          style={StyleSheet.flatten([
+          tw="text-gray-900 dark:text-white"
+          style={[
+            // @ts-ignore remove focus outline on web as we'll control the focus styling
             Platform.select({
               web: {
                 outline: "none",
@@ -145,9 +146,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               paddingLeft: leftElement ? 0 : 16,
               paddingRight: rightElement ? 0 : 16,
               fontWeight: "500",
-              ...tw.style("text-gray-900 dark:text-white"),
             },
-          ])}
+          ]}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
           }
