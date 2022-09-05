@@ -1,9 +1,13 @@
-import React, { ComponentProps, useMemo } from "react";
+import { ComponentProps, useMemo } from "react";
 
 import { MotiPressable } from "moti/interactions";
 
 import { useIsDarkMode, useOnHover } from "@showtime-xyz/universal.hooks";
-import { tw as tailwind, colors } from "@showtime-xyz/universal.tailwind";
+import {
+  styled,
+  colors,
+  tw as tailwind,
+} from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type Props = ComponentProps<typeof MotiPressable> & {
@@ -15,6 +19,8 @@ export type Props = ComponentProps<typeof MotiPressable> & {
    */
   disableHoverEffect?: boolean;
 };
+
+const StyledMotiPressable = styled(MotiPressable);
 
 export function Pressable({
   tw,
@@ -43,8 +49,9 @@ export function Pressable({
     <MotiPressable
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
-      style={[hoverStyle, tailwind.style(tw), style]}
+      style={[hoverStyle, style, tailwind.style(tw)]} // TODO: don't use `tailwind.style`
       {...props}
+      // tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />
   );
 }

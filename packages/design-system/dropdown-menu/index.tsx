@@ -47,7 +47,6 @@ const DropdownItemFocusRing = ({
   return (
     <MotiView
       animate={state}
-      style={tailwind.style("")}
       transition={useMemo(
         () => ({
           type: "timing",

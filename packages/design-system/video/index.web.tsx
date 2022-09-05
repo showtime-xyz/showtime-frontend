@@ -66,7 +66,7 @@ export function Video({
             intensity={85}
           />
           <ExpoVideo
-            style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
+            style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}
             resizeMode={resizeMode}
             posterSource={posterSource}
@@ -75,7 +75,7 @@ export function Video({
             shouldPlay={typeof id === "undefined"}
             isLooping
             isMuted={isMuted}
-            videoStyle={tailwind.style("relative")}
+            videoStyle={{ position: "relative" }}
             {...props}
           />
         </ImageBackground>
