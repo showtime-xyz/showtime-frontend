@@ -2,6 +2,7 @@ import { useReducer, useEffect, useRef, useCallback } from "react";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
+import { useMyInfo } from "app/hooks/api-hooks";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -104,6 +105,8 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = (edition?: IEdition) => {
   const { rudder } = useRudder();
+  const { data: userProfile } = useMyInfo();
+
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -234,7 +237,7 @@ export const useClaimNFT = (edition?: IEdition) => {
       if (e?.response?.status === 420) {
         Alert.alert(
           "Wow, you love claiming drops!",
-          "Only 5 claims per day is allowed. Come back tomorrow!"
+          `Only ${userProfile?.data.daily_claim_limit} claims per day is allowed. Come back tomorrow!`
         );
       }
 
