@@ -23,7 +23,7 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.53",
+        "version": "0.0.54",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
@@ -59,7 +59,7 @@
     },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.32",
+        "version": "0.0.33",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/collapsible-tab-view"
     },
@@ -83,7 +83,7 @@
     },
     "divider": {
         "scope": "showtime.universal",
-        "version": "0.0.35",
+        "version": "0.0.36",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/divider"
     },
@@ -101,7 +101,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.63",
+        "version": "0.0.64",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -131,13 +131,13 @@
     },
     "infinite-scroll-list": {
         "scope": "showtime.universal",
-        "version": "0.0.27",
+        "version": "0.0.28",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.41",
+        "version": "0.0.42",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },
@@ -221,7 +221,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.58",
+        "version": "0.0.59",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -251,7 +251,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.19",
+        "version": "0.0.20",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },

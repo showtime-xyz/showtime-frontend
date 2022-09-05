@@ -4,14 +4,17 @@ import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import { setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
+import { useColorScheme as useTailwindColorScheme } from "nativewind";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import {
+  tw, // useColorScheme as useTailwindColorScheme,
+} from "@showtime-xyz/universal.tailwind";
 
 import {
-  getColorScheme as getPersistedColorSchema,
-  setColorScheme as persistColorSchema,
+  getColorScheme as getPersistedColorScheme,
+  setColorScheme as persistColorScheme,
 } from "app/lib/color-scheme-store";
 
 export function ThemeProvider({
@@ -21,9 +24,12 @@ export function ThemeProvider({
 }): JSX.Element {
   useDeviceContext(tw, { withDeviceColorScheme: false });
   const deviceColorScheme = useDeviceColorScheme();
+  const nativewind = useTailwindColorScheme();
+
+  // TODO: remove this once we get rid of `twrnc`
   const [colorScheme, , setColorScheme] = useAppColorScheme(
     tw,
-    getPersistedColorSchema() ?? deviceColorScheme
+    getPersistedColorScheme() ?? deviceColorScheme
   );
 
   useState(() => setColorScheme(colorScheme));
@@ -36,6 +42,7 @@ export function ThemeProvider({
         NavigationBar.setButtonStyleAsync("light");
       }
 
+      nativewind.setColorScheme("dark");
       tw.setColorScheme("dark");
       SystemUI.setBackgroundColorAsync("black");
       setStatusBarStyle("light");
@@ -45,6 +52,7 @@ export function ThemeProvider({
         NavigationBar.setButtonStyleAsync("dark");
       }
 
+      nativewind.setColorScheme("light");
       tw.setColorScheme("light");
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
@@ -57,18 +65,20 @@ export function ThemeProvider({
       );
       if (isDark) {
         document.body.classList.add("dark");
+        nativewind.setColorScheme("dark");
         tw.setColorScheme("dark");
       } else {
         document.body.classList.remove("dark");
+        nativewind.setColorScheme("light");
         tw.setColorScheme("light");
       }
     }
-  }, [isDark]);
+  }, [isDark, nativewind]);
 
   const handleColorSchemeChange = (newColorScheme: typeof colorScheme) => {
     if (newColorScheme) {
       setColorScheme(newColorScheme);
-      persistColorSchema(newColorScheme);
+      persistColorScheme(newColorScheme);
     }
   };
 
