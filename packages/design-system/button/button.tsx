@@ -1,5 +1,4 @@
 import { Children, cloneElement, useMemo } from "react";
-import { ViewStyle } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -25,8 +24,6 @@ export function Button({
   iconOnly = false,
   iconColor = ["white", "black"],
   children,
-  disabled,
-  style: propStyle,
   ...props
 }: BaseButtonProps) {
   const isDarkMode = useIsDarkMode();
@@ -40,15 +37,6 @@ export function Button({
       Array.isArray(tw) ? tw.join(" ") : tw,
     ],
     [tw, size, iconOnly]
-  );
-
-  const containerAnimatedStyle = useMemo<ViewStyle>(
-    () => ({
-      backgroundColor: backgroundColors
-        ? backgroundColors["default"][isDarkMode ? 1 : 0]
-        : "transparent",
-    }),
-    [backgroundColors, isDarkMode]
   );
 
   const renderChildren = useMemo(() => {
@@ -91,9 +79,7 @@ export function Button({
   return (
     <Pressable
       {...props}
-      tw={containerStyle}
-      disabled={disabled}
-      style={[backgroundColors ? containerAnimatedStyle : undefined, propStyle]}
+      tw={[containerStyle, backgroundColors ? backgroundColors["default"] : ""]}
     >
       {renderChildren}
     </Pressable>

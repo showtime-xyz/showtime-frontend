@@ -20,7 +20,6 @@ export type ButtonProps = {
    */
   variant?: ButtonVariant;
   children?: React.ReactNode | string;
-  asChild?: boolean;
 } & PressableProps &
   Partial<
     Pick<
@@ -42,7 +41,6 @@ export type BaseButtonProps = {
    * @default undefined
    */
   labelTW?: TW;
-
   /**
    * Defines the inline style to
    * be applied to the label.
@@ -52,21 +50,21 @@ export type BaseButtonProps = {
   /**
    * Defines the background state colors.
    */
-  backgroundColors: {
-    default: string[];
-    pressed: string[];
+  backgroundColors?: {
+    default: string;
+    pressed: string;
   };
   /**
    * Defines the button icons colour.
    * @default white|black
    */
-  iconColor: string[];
+  iconColor?: string[];
   /**
    * Defines if the button will only contains
    * an icon or not.
    * @default false
    */
-  iconOnly: boolean;
+  iconOnly?: boolean;
   /**
    * Defines the button icon and text colors.
    * @default [black, white]
@@ -76,12 +74,6 @@ export type BaseButtonProps = {
    * Defines the button size.
    * @default small
    */
-  size: ButtonSize;
-
+  size?: ButtonSize;
   children?: React.ReactNode | string;
-
-  /**
-   * Renders the child of button as the Button
-   */
-  asChild?: boolean;
-} & PressableScaleProps;
+} & PressableProps;
