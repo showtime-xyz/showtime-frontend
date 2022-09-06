@@ -9,7 +9,7 @@ import {
 import { ethers } from "ethers";
 import { MMKV } from "react-native-mmkv";
 
-import { WalletMobileSDKContext } from "../context/wallet-mobile-sdk-context";
+import { WalletMobileSDKContext } from "app/context/wallet-mobile-sdk-context";
 
 const CB_WALLET_METADATA = {
   name: "Coinbase Wallet",
@@ -39,23 +39,19 @@ export function WalletMobileSDKProvider({
       };
       const [, account] = await initiateHandshake([action]);
 
-      const callback = onConnectedListenerRef.current;
       if (account && account.address) {
         setConnected(true);
         setAddress(account.address);
         storage.set(CACHED_ADDRESS_KEY, account.address);
-
-        callback && callback(true);
-        onConnectedListenerRef.current = null;
+        onConnectedListenerRef.current?.(true);
       } else {
-        callback && callback(false);
-        onConnectedListenerRef.current = null;
+        onConnectedListenerRef.current?.(false);
       }
     } catch (error) {
       resetSession();
       setAddress(null);
       setConnected(false);
-      onConnectedListenerRef.current = null;
+      onConnectedListenerRef.current?.(false);
     }
   }, []);
 
@@ -74,6 +70,8 @@ export function WalletMobileSDKProvider({
         } else {
           reject();
         }
+
+        onConnectedListenerRef.current = null;
       };
     });
   }, []);

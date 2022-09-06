@@ -4,10 +4,9 @@ import { Platform } from "react-native";
 import type { Web3Provider as EthersWeb3ProviderType } from "@ethersproject/providers";
 
 import { Web3Context } from "app/context/web3-context";
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
-
-import { useWalletMobileSDK } from "../hooks/use-wallet-mobile-sdk";
 
 interface Web3ProviderProps {
   children: React.ReactNode;

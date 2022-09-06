@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { WalletMobileSDKContext } from "../context/wallet-mobile-sdk-context";
+import { WalletMobileSDKContext } from "app/context/wallet-mobile-sdk-context";
 
 export function useWalletMobileSDK() {
   const context = useContext(WalletMobileSDKContext);

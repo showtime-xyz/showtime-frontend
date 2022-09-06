@@ -3,9 +3,9 @@ import { useState, useEffect, useMemo } from "react";
 import type { Bytes } from "@ethersproject/bytes";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 
-import { useWalletMobileSDK } from "../use-wallet-mobile-sdk";
 import { UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 

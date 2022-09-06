@@ -14,6 +14,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
@@ -25,7 +26,6 @@ import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 
-import { useWalletMobileSDK } from "../hooks/use-wallet-mobile-sdk";
 import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Linking, Platform } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useWalletMobileSDK } from "../hooks/use-wallet-mobile-sdk";
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 
 const scheme = `io.showtime${
   process.env.STAGE === "development"
@@ -53,6 +53,11 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
   const insets = useSafeAreaInsets();
   const mobileSDK = useWalletMobileSDK();
 
+  const connectMobileSDK = useCallback(async () => {
+    await mobileSDK.connect();
+    props.onDismiss(); // close modal after connecting
+  }, [mobileSDK, props]);
+
   if (!props.visible) {
     return null;
   }
@@ -76,10 +81,7 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
         <View tw="justify-center bg-white p-4 dark:bg-black">
           <PressableScale
             key={`wallet-cbw`}
-            onPress={async () => {
-              await mobileSDK.connect();
-              props.onDismiss(); // close modal after connecting
-            }}
+            onPress={connectMobileSDK}
             tw="my-2 flex-row items-center"
           >
             <Image
