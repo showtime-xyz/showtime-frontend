@@ -88,6 +88,7 @@ const nextConfig = {
     forceSwcTransforms: true,
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
+    scrollRestoration: true,
     swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
   },
   typescript: {
