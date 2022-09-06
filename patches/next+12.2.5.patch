@@ -1,0 +1,15 @@
+diff --git a/node_modules/next/dist/client/index.js b/node_modules/next/dist/client/index.js
+index 6fd8568..9d98ec5 100644
+--- a/node_modules/next/dist/client/index.js
++++ b/node_modules/next/dist/client/index.js
+@@ -693,7 +693,9 @@ function doRender(input) {
+             });
+         }
+         if (input.scroll) {
+-            window.scrollTo(input.scroll.x, input.scroll.y);
++            setTimeout(() => {
++                window.scrollTo(input.scroll.x, input.scroll.y);
++            }, 50)
+         }
+     }
+     function onRootCommit() {

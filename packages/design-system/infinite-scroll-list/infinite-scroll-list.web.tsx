@@ -3,7 +3,6 @@ import React, {
   useMemo,
   useRef,
   useEffect,
-  useState,
   MutableRefObject,
 } from "react";
 
@@ -128,12 +127,10 @@ export function VirtuosoListComponent<T>(
     onViewableItemsChanged,
     gridItemProps = {},
     viewabilityConfig,
-    estimatedItemSize,
   }: InfiniteScrollListWebProps<T>,
   ref: React.Ref<VirtuosoHandle> | React.Ref<VirtuosoGridHandle>
 ) {
   const viewableItems = useRef<ViewToken[]>([]);
-  const [listItemHeight, setListItemHeight] = useState(0);
 
   const renderItemContent = React.useCallback(
     (index: number) => {
@@ -186,27 +183,6 @@ export function VirtuosoListComponent<T>(
     [ItemSeparatorComponent, gridItemProps, numColumns]
   );
 
-  const styleWithMinHeight = useMemo(() => {
-    let minHeight = 0;
-    if (listItemHeight) {
-      minHeight = listItemHeight;
-    }
-    if (estimatedItemSize && data) {
-      minHeight = estimatedItemSize * data.length;
-    }
-
-    if (typeof style === "object") {
-      return {
-        minHeight: `${minHeight}px`,
-        ...style,
-      };
-    } else {
-      return {
-        minHeight: `${minHeight}px`,
-      };
-    }
-  }, [style, data, estimatedItemSize, listItemHeight]);
-
   if (data?.length === 0) {
     return renderComponent(ListEmptyComponent);
   }
@@ -218,7 +194,6 @@ export function VirtuosoListComponent<T>(
         <Virtuoso
           useWindowScroll={useWindowScroll}
           data={data ?? []}
-          defaultItemHeight={estimatedItemSize}
           endReached={onEndReached}
           itemContent={renderItemContent}
           components={{
@@ -226,8 +201,7 @@ export function VirtuosoListComponent<T>(
             Footer: () => renderComponent(ListFooterComponent),
           }}
           overscan={overscan}
-          style={styleWithMinHeight as CSSProperties}
-          totalListHeightChanged={setListItemHeight}
+          style={style as CSSProperties}
           ref={ref as React.Ref<VirtuosoHandle>}
         />
       ) : (
