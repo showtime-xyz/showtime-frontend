@@ -58,6 +58,7 @@ export const GestureContainer = React.forwardRef<
     initTabbarHeight = 49,
     initHeaderHeight = 0,
     renderScrollHeader,
+    renderAbsoluteBackgroundContent,
     renderTabView,
     renderRefreshControl: renderRefreshControlProp,
     animationHeaderPosition,
@@ -615,7 +616,9 @@ export const GestureContainer = React.forwardRef<
         <GestureDetector gesture={gestureHandlerHeader}>
           <Animated.View style={styles.container}>
             {renderScrollHeader && (
-              <View onLayout={headerOnLayout}>{renderScrollHeader()}</View>
+              <View onLayout={headerOnLayout}>
+                {renderScrollHeader(translateYValue)}
+              </View>
             )}
             {navigationState?.routes.length === 0 && emptyBodyComponent ? (
               <View style={{ marginTop: tabbarHeight }}>
@@ -698,6 +701,11 @@ export const GestureContainer = React.forwardRef<
       }}
     >
       <GestureDetector gesture={gestureHandler}>
+        {!!renderAbsoluteBackgroundContent && (
+          <View style={styles.absoluteBackground}>
+            {renderAbsoluteBackgroundContent(translateYValue)}
+          </View>
+        )}
         <Animated.View style={[styles.container, opacityStyle]}>
           <Animated.View
             style={[styles.container, animateStyle]}
@@ -725,5 +733,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     zIndex: 10,
+  },
+  absoluteBackground: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
 });
