@@ -2,40 +2,33 @@ import { useMemo } from "react";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
-import { BaseButton } from "./button-base";
+import { Button as BaseButton } from "./button";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
-export { ButtonLabel } from "./button-label";
 export type { ButtonVariant } from "./types";
 
-export function Button({
-  tw = "",
-  variant = "primary",
-  ...props
-}: ButtonProps) {
-  const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
-
+export function Button({ variant = "primary", ...props }: ButtonProps) {
   switch (variant) {
     case "primary":
-      return <PrimaryButton tw={_tw} {...props} />;
+      return <PrimaryButton {...props} />;
     case "danger":
-      return <DangerButton tw={_tw} {...props} />;
+      return <DangerButton {...props} />;
     case "tertiary":
-      return <TertiaryButton tw={_tw} {...props} />;
+      return <TertiaryButton {...props} />;
     case "secondary":
-      return <SecondaryButton tw={_tw} {...props} />;
+      return <SecondaryButton {...props} />;
     case "text":
-      return <TextButton tw={_tw} {...props} />;
+      return <TextButton {...props} />;
     default:
-      return <PrimaryButton tw={_tw} {...props} />;
+      return <PrimaryButton {...props} />;
   }
 }
 
 export function PrimaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelTW="text-white dark:text-black"
       iconColor={ICON_COLOR_TW_MAPPER.primary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
@@ -46,7 +39,7 @@ export function PrimaryButton(props: ButtonProps) {
 export function SecondaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelTW="text-gray-900 dark:text-white"
       iconColor={ICON_COLOR_TW_MAPPER.secondary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.secondary}
@@ -57,7 +50,7 @@ export function SecondaryButton(props: ButtonProps) {
 export function TertiaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelTW="text-gray-900 dark:text-white"
       iconColor={ICON_COLOR_TW_MAPPER.tertiary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.tertiary}
@@ -68,7 +61,7 @@ export function TertiaryButton(props: ButtonProps) {
 export function DangerButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelTW="text-white"
       iconColor={ICON_COLOR_TW_MAPPER.danger}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
@@ -103,9 +96,10 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
         : ICON_COLOR_TW_MAPPER.text,
     [accentColor]
   );
+
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelStyle={labelStyle}
       iconColor={iconColor}
       backgroundColors={undefined}

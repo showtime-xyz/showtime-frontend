@@ -1,7 +1,7 @@
 import type React from "react";
 import { StyleProp, TextStyle } from "react-native";
 
-import type { Props as PressableScaleProps } from "@showtime-xyz/universal.pressable-scale";
+import type { Props as PressableProps } from "@showtime-xyz/universal.pressable";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type ButtonVariant =
@@ -21,7 +21,7 @@ export type ButtonProps = {
   variant?: ButtonVariant;
   children?: React.ReactNode | string;
   asChild?: boolean;
-} & PressableScaleProps &
+} & PressableProps &
   Partial<
     Pick<
       BaseButtonProps,

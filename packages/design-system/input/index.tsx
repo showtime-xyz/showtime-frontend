@@ -209,5 +209,5 @@ Input.displayName = "Input";
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {
-  return <PressableScale tw="p-2" {...props} />;
+  return <PressableScale style={{ padding: 8 }} {...props} />;
 };

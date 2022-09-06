@@ -5,18 +5,18 @@ const CONTAINER_TW =
   "disabled:opacity-40 disabled:cursor-not-allowed";
 
 const CONTAINER_PADDING_TW = {
-  small: "px-[16px] py-[8px]",
-  regular: "p-[16px]",
+  small: "px-4 py-2",
+  regular: "p-4",
 };
 
 const CONTAINER_ICON_PADDING_TW = {
-  small: "px-[8px]",
-  regular: "p-[14px]",
+  small: "px-2",
+  regular: "p-4",
 };
 
 const CONTAINER_HEIGHT_TW = {
-  small: "h-[32px]",
-  regular: "h-[48px]",
+  small: "h-8",
+  regular: "h-12",
 };
 
 const CONTAINER_BACKGROUND_MAPPER = {

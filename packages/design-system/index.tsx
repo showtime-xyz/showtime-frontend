@@ -1,6 +1,6 @@
 export { Accordion } from "@showtime-xyz/universal.accordion";
 export { ActivityIndicator } from "@showtime-xyz/universal.activity-indicator";
-export { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+export { Button } from "@showtime-xyz/universal.button";
 export { Checkbox } from "@showtime-xyz/universal.checkbox";
 export { CountryCodePicker } from "@showtime-xyz/universal.country-code-picker";
 export { Fieldset } from "@showtime-xyz/universal.fieldset";

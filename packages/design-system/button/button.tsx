@@ -1,11 +1,8 @@
 import { Children, cloneElement, useMemo } from "react";
 import { ViewStyle } from "react-native";
 
-import Animated from "react-native-reanimated";
-
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 
 import {
@@ -19,35 +16,32 @@ import {
 } from "./constants";
 import type { BaseButtonProps } from "./types";
 
-export function BaseButton({
+export function Button({
   size = "small",
   tw = "",
   labelTW = "",
-  labelStyle: labelStyleProp,
+  labelStyle,
   backgroundColors,
   iconOnly = false,
   iconColor = ["white", "black"],
   children,
-  asChild,
   disabled,
   style: propStyle,
   ...props
 }: BaseButtonProps) {
-  //#region variables
   const isDarkMode = useIsDarkMode();
-  //#endregion
 
-  //#region styles
   const containerStyle = useMemo<any>(
     () => [
       CONTAINER_TW,
       CONTAINER_HEIGHT_TW[size],
       CONTAINER_PADDING_TW[size],
       iconOnly ? CONTAINER_ICON_PADDING_TW[size] : "",
-      typeof tw === "string" ? tw : tw.join(" "),
+      Array.isArray(tw) ? tw.join(" ") : tw,
     ],
     [tw, size, iconOnly]
   );
+
   const containerAnimatedStyle = useMemo<ViewStyle>(
     () => ({
       backgroundColor: backgroundColors
@@ -57,29 +51,25 @@ export function BaseButton({
     [backgroundColors, isDarkMode]
   );
 
-  const labelStyle = useMemo(
-    () => [
-      LABEL_SIZE_TW[size],
-      LABEL_WEIGHT_TW[size],
-      typeof labelTW === "string" ? labelTW : labelTW.join(" "),
-    ],
-    [labelTW, size]
-  );
-  //#endregion
-
-  //#region renderings
   const renderChildren = useMemo(() => {
     const iconSize = ICON_SIZE_TW[size];
+
     return Children.map(children, (child: any) => {
       if (typeof child === "string") {
         return (
-          <Text tw={labelStyle} style={labelStyleProp}>
+          <Text
+            tw={[
+              LABEL_SIZE_TW[size],
+              LABEL_WEIGHT_TW[size],
+              Array.isArray(labelTW) ? labelTW.join(" ") : labelTW,
+            ]}
+            style={labelStyle}
+          >
             {child}
           </Text>
         );
       }
 
-      // @ts-ignore
       return cloneElement(child, {
         color:
           typeof iconColor === "string"
@@ -88,39 +78,24 @@ export function BaseButton({
         ...iconSize,
         ...child?.props,
         tw: [
-          ...labelStyle,
-          child?.props?.tw
-            ? typeof child?.props?.tw === "string"
-              ? child?.props?.tw
-              : child?.props?.tw.join(" ")
-            : "",
+          ...labelTW,
+          Array.isArray(child?.props?.tw)
+            ? child?.props?.tw.join(" ")
+            : child?.props?.tw,
         ],
-        style: labelStyleProp,
+        style: labelStyle,
       });
     });
-  }, [size, iconColor, labelStyle, children, isDarkMode, labelStyleProp]);
-
-  const childStyles = useMemo(
-    () =>
-      backgroundColors
-        ? [containerAnimatedStyle, tailwind.style(containerStyle)]
-        : tailwind.style(containerStyle),
-    [backgroundColors, containerAnimatedStyle, containerStyle]
-  );
-
-  if (asChild) {
-    return <Animated.View style={childStyles}>{renderChildren}</Animated.View>;
-  }
+  }, [size, iconColor, labelTW, children, isDarkMode, labelStyle]);
 
   return (
-    <PressableScale
+    <Pressable
       {...props}
       tw={containerStyle}
       disabled={disabled}
       style={[backgroundColors ? containerAnimatedStyle : undefined, propStyle]}
     >
       {renderChildren}
-    </PressableScale>
+    </Pressable>
   );
-  //#endregion
 }

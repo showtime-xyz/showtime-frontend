@@ -4,7 +4,6 @@ import { Dimensions, Platform } from "react-native";
 import { MotiView } from "moti";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { tw } from "@showtime-xyz/universal.tailwind";
@@ -50,10 +49,8 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
 
   const previewHeight = Dimensions.get("window").height / 3.2;
   const previewWidth = previewHeight * previewAspectRatio;
-
-  const isDark = useIsDarkMode();
-
   const modalScreenViewStyle = useModalScreenViewStyle();
+
   return (
     <ScrollView>
       <View tw="px-8" style={modalScreenViewStyle}>

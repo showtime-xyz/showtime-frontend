@@ -344,19 +344,6 @@ export const EditProfile = () => {
                             onChange(file.file);
                           }}
                           tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
-                          // style={{
-                          //   width: 96,
-                          //   height: 96,
-                          //   borderRadius: 9999,
-                          //   overflow: "hidden",
-                          //   borderWidth: 2,
-                          //   borderColor: isDark
-                          //     ? colors.gray[900]
-                          //     : colors.gray[300],
-                          //   backgroundColor: isDark
-                          //     ? colors.gray[800]
-                          //     : colors.white,
-                          // }}
                         >
                           {value && (
                             <Preview
