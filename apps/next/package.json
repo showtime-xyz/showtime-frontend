@@ -36,7 +36,7 @@
     "ethers": "^5.7.0",
     "fortmatic": "^2.2.1",
     "logrocket": "^2.2.1",
-    "next": "12.2.3-canary.2",
+    "next": "12.2.5",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.2",
     "next-transpile-modules": "^9.0.0",
