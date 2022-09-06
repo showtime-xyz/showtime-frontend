@@ -7,17 +7,17 @@ import * as SystemUI from "expo-system-ui";
 import { useColorScheme as useTailwindColorScheme } from "nativewind";
 import { useAppColorScheme, useDeviceContext } from "twrnc";
 
-import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import {
   tw, // useColorScheme as useTailwindColorScheme,
 } from "@showtime-xyz/universal.tailwind";
 
+import { ColorSchemeContext } from "./context";
 import {
   getColorScheme as getPersistedColorScheme,
   setColorScheme as persistColorScheme,
-} from "app/lib/color-scheme-store";
+} from "./store";
 
-export function ThemeProvider({
+export function ColorSchemeProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -57,22 +57,6 @@ export function ThemeProvider({
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
     }
-
-    if (Platform.OS === "web") {
-      document.documentElement.setAttribute(
-        "data-color-scheme",
-        isDark ? "dark" : "light"
-      );
-      if (isDark) {
-        document.body.classList.add("dark");
-        nativewind.setColorScheme("dark");
-        tw.setColorScheme("dark");
-      } else {
-        document.body.classList.remove("dark");
-        nativewind.setColorScheme("light");
-        tw.setColorScheme("light");
-      }
-    }
   }, [isDark, nativewind]);
 
   const handleColorSchemeChange = (newColorScheme: typeof colorScheme) => {
@@ -83,11 +67,10 @@ export function ThemeProvider({
   };
 
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      setColorScheme={handleColorSchemeChange}
+    <ColorSchemeContext.Provider
+      value={{ colorScheme, setColorScheme: handleColorSchemeChange }}
     >
       {children}
-    </ColorSchemeProvider>
+    </ColorSchemeContext.Provider>
   );
 }

@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Dimensions,
-  Platform,
-  Pressable,
-  useWindowDimensions,
-} from "react-native";
+import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +9,7 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Upload } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors, tw } from "@showtime-xyz/universal.tailwind";
@@ -308,10 +304,10 @@ export const EditProfile = () => {
                         setCurrentCropField("coverPicture");
                         onChange(file.file);
                       }}
-                      style={[
-                        tw.style(`w-full flex-row `),
-                        { height: coverImageHeight },
-                      ]}
+                      style={{
+                        height: coverImageHeight,
+                      }}
+                      tw="w-full flex-row"
                     >
                       <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
                         <View tw="rounded-full bg-gray-800/70 p-2">
@@ -330,7 +326,7 @@ export const EditProfile = () => {
                   )}
                 />
 
-                <View tw={`-mt-12 px-4`}>
+                <View tw="-mt-12 px-4">
                   <Controller
                     control={control}
                     name="profilePicture"
@@ -347,14 +343,25 @@ export const EditProfile = () => {
                             setCurrentCropField("profilePicture");
                             onChange(file.file);
                           }}
-                          style={tw.style(
-                            "w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800"
-                          )}
+                          tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
+                          // style={{
+                          //   width: 96,
+                          //   height: 96,
+                          //   borderRadius: 9999,
+                          //   overflow: "hidden",
+                          //   borderWidth: 2,
+                          //   borderColor: isDark
+                          //     ? colors.gray[900]
+                          //     : colors.gray[300],
+                          //   backgroundColor: isDark
+                          //     ? colors.gray[800]
+                          //     : colors.white,
+                          // }}
                         >
                           {value && (
                             <Preview
                               file={value}
-                              tw={"h-[94px] w-[94px] rounded-full"}
+                              tw="h-[94px] w-[94px] rounded-full"
                             />
                           )}
                           <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">

@@ -83,11 +83,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
   return (
     <Pressable
       onPress={() => handleOnPressItem(props.subRoute)}
-      style={[
-        tw.style(
-          "w-full flex-1 flex-row items-center justify-between px-4 py-2 mb-2 rounded-md"
-        ),
-      ]}
+      tw="mb-2 w-full flex-1 flex-row items-center justify-between rounded-md px-4 py-2"
     >
       <View tw="flex flex-col">
         <Text tw="text-sm text-gray-900 dark:text-white">{props.title}</Text>

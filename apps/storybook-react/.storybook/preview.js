@@ -4,10 +4,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 
 import { linking } from "app/navigation/linking";
-import { ThemeProvider } from "app/providers/theme-provider";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
@@ -44,7 +44,7 @@ export const decorators = [
     <TailwindDeviceContextProvider>
       <BottomSheetModalProvider>
         <SafeAreaProvider>
-          <ThemeProvider>
+          <ColorSchemeProvider>
             <ToastProvider>
               <AlertProvider>
                 <SnackbarProvider>
@@ -56,7 +56,7 @@ export const decorators = [
                 </SnackbarProvider>
               </AlertProvider>
             </ToastProvider>
-          </ThemeProvider>
+          </ColorSchemeProvider>
         </SafeAreaProvider>
       </BottomSheetModalProvider>
     </TailwindDeviceContextProvider>

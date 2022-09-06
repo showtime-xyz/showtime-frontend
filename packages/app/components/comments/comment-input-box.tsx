@@ -20,7 +20,7 @@ import { View } from "@showtime-xyz/universal.view";
 import {
   MessageBox,
   MessageBoxMethods,
-} from "app/components/messages/message-box-new";
+} from "app/components/messages/message-box";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardVisible } from "app/hooks/use-keyboard-visible";
 import { useUser } from "app/hooks/use-user";

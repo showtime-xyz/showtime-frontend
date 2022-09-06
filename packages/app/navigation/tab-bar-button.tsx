@@ -11,7 +11,7 @@ export const TabBarButton = ({
   children,
 }: BottomTabBarButtonProps) => {
   return (
-    <View tw="flex flex-1 items-center justify-center ">
+    <View tw="flex flex-1 items-center justify-center">
       <Pressable
         onPress={(
           e:

@@ -8,7 +8,6 @@ import { Source } from "react-native-fast-image";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";

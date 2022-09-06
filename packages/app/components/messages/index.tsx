@@ -1,1 +1,1 @@
-export { MessageBox, SCROLL_HEIGHT, PADDING_HEIGHT } from "./message-box";
+export { MessageBox } from "./message-box";

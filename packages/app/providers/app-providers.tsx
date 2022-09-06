@@ -3,6 +3,7 @@ import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -19,12 +20,10 @@ import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
 import { MuteProvider } from "./mute-provider";
-import { ThemeProvider } from "./theme-provider";
 
-// @
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider>
+    <ColorSchemeProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
           <WalletProvider>
@@ -59,6 +58,6 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           </WalletProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>
-    </ThemeProvider>
+    </ColorSchemeProvider>
   );
 };
