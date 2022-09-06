@@ -38,7 +38,7 @@ export const useClampText = ({
   ellipsis = "...",
   expandButtonWidth = 6,
 }: ClampTextProps) => {
-  const [innerText, setInnerText] = useState(text);
+  const innerText = text.replace(/[\r\n]/g, "");
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);
   const defaultText = useRef(text);
@@ -48,9 +48,9 @@ export const useClampText = ({
     if (Platform.OS !== "web" || !element) return;
     const initRows = countLines(element);
     if (initRows <= rows) return;
-    const sliceText = (pos: number) => `${text.slice(0, pos)}${ellipsis}`;
-    const fillText = (text: any) => {
-      element.innerHTML = text;
+    const sliceText = (pos: number) => `${innerText.slice(0, pos)}${ellipsis}`;
+    const fillText = (str: any) => {
+      element.innerHTML = str;
     };
     const contentHeight = () => {
       if (!element) return 0;
@@ -72,21 +72,29 @@ export const useClampText = ({
     };
     const singleLineHeight = int(getStyle("lineHeight", element));
 
-    const textRows = (text: string) => {
-      fillText(text);
+    const textRows = (str: string) => {
+      fillText(str);
       return countRows(contentHeight(), singleLineHeight);
     };
 
-    const lastStrPosition = binarySearch(text, (cur) => {
+    const lastStrPosition = binarySearch(innerText, (cur) => {
       const curRows = textRows(sliceText(cur));
+
       if (curRows !== rows) return curRows - rows;
       return textRows(sliceText(cur + 1)) - rows - 1;
     });
+
     if (typeof lastStrPosition !== "number") return;
-    collapseText.current = sliceText(lastStrPosition - expandButtonWidth);
+
+    const lastPosition = Math.max(
+      lastStrPosition - expandButtonWidth,
+      expandButtonWidth
+    );
+
+    collapseText.current = sliceText(lastPosition);
     fillText(collapseText.current);
     setShowMore(true);
-  }, [element, ellipsis, expandButtonWidth, rows, text]);
+  }, [element, ellipsis, expandButtonWidth, rows, text, innerText]);
 
   const onShowLess = useCallback(() => {
     setShowLess(false);
@@ -101,7 +109,7 @@ export const useClampText = ({
     if (!element) return;
     element.childNodes[0].nodeValue = defaultText.current;
   }, [element]);
-  const onTextLayout = () => {};
+  const onTextLayout = () => undefined;
   return {
     showMore,
     showLess,
