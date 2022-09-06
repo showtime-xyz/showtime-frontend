@@ -219,7 +219,7 @@ export const DropForm = () => {
 
           <Button
             onPress={() => {
-              track("Drop Shared", { type: "Twitter" });
+              rudder?.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
