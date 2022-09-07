@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -36,7 +36,7 @@ export const UserItem = (props: UserItemProps) => {
           // TODO(enes): implement unblocking logics
         }}
       >
-        <ButtonLabel>Unblock</ButtonLabel>
+        <Text>Unblock</Text>
       </Button>
     </View>
   );

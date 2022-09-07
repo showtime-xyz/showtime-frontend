@@ -28,7 +28,7 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
 
   return (
     <View tw="px-4">
-      <View tw="flex-row items-center justify-between ">
+      <View tw="flex-row items-center justify-between">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
         {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>

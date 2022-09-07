@@ -102,7 +102,7 @@ const SearchInHeader = () => {
             term.length > 0 ? (
               <Popover.Close>
                 <PressableScale
-                  tw="p-2"
+                  style={{ padding: 8 }}
                   onPress={() => {
                     setTerm("");
                     inputRef.current?.focus();
@@ -316,7 +316,13 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   return (
     <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="h-6 w-6 items-center justify-center rounded-full"
+      style={{
+        height: 24,
+        width: 24,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 9999,
+      }}
       onPress={() => {
         if (canGoBack) {
           router.pop();

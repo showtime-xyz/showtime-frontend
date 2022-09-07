@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { LogBox } from "react-native";
 
+import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
@@ -20,6 +21,16 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
   enableInExpoDevelopment: false,
+});
+
+const scheme = `io.showtime${
+  process.env.NODE_ENV === "development" ? ".development" : ""
+}`;
+
+configureWalletMobileSDK({
+  callbackURL: new URL(`${scheme}://wsegue`), // TODO: Use universal link to prevent warning message in CB Wallet
+  hostURL: new URL("https://go.cb-w.com/wsegue"),
+  hostPackageName: "org.toshi",
 });
 
 LogBox.ignoreLogs([

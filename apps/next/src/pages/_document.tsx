@@ -26,7 +26,6 @@ html, body, #__next {
   flex: 1;
 }
 html {
-  scroll-behavior: smooth;
   /* Prevent text size change on orientation change https://gist.github.com/tfausak/2222823#file-ios-8-web-app-html-L138 */
   -webkit-text-size-adjust: 100%;
   height: 100%;

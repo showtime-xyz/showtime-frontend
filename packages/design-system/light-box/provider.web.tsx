@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
-import { Modal, Pressable } from "react-native";
+import { Modal } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 
 import { Close } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -59,14 +60,12 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
         <View tw="flex-1 items-center justify-center">
           <div
             onClick={onClose}
-            style={tw.style(
-              "dark:bg-black bg-white bg-opacity-80 absolute left-0 right-0 top-0 bottom-0"
-            )}
+            className="absolute left-0 right-0 top-0 bottom-0 bg-white bg-opacity-80 dark:bg-black"
           />
 
           {imageElement}
         </View>
-        <Pressable onPress={onClose} style={tw.style("absolute left-8 top-8 ")}>
+        <Pressable onPress={onClose} tw="absolute left-8 top-8">
           <Close
             color={tw.style("bg-gray-400")?.backgroundColor as string}
             width={24}

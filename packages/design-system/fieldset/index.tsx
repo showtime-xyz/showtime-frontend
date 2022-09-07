@@ -59,7 +59,7 @@ export function Fieldset(props: FieldsetProps) {
     ? "flex-1 flex-row items-center justify-between"
     : "";
   return (
-    <View tw={`rounded-4 p-4 ${style} ${twProp} ${switchTw}`}>
+    <View tw={`rounded-2xl p-4 ${style} ${twProp} ${switchTw}`}>
       <View tw="flex-row">
         <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
           {label}

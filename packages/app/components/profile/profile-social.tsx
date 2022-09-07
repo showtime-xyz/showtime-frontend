@@ -56,7 +56,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
-          tw="flex-row"
+          style={{ flexDirection: "row" }}
           accessibilityLabel="Profile website"
           accessibilityRole="link"
         >
@@ -98,7 +98,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
         {instagram?.user_input && (
           <PressableScale
-            tw="ml-4"
+            style={{ marginLeft: 16 }}
             onPress={() =>
               onPressLink(
                 `https://${instagram?.type__prefix}${instagram?.user_input}`

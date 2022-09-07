@@ -1,13 +1,7 @@
+/** @type {import('tailwindcss').Config} */
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
-const nativewind = require("nativewind/tailwind/css");
-
-const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
-// const { colors } = require("@showtime-xyz/universal.tailwind");
-// const {
-//   MAX_CONTENT_WIDTH,
-//   MAX_HEADER_WIDTH,
-// } = require("@showtime-xyz/universal.tailwind");
+const { textSizes } = require("@showtime-xyz/universal.typography");
 
 const colors = {
   black: "#000",
@@ -296,61 +290,33 @@ const MAX_CONTENT_WIDTH = 1140;
 const MAX_HEADER_WIDTH = 1440;
 
 module.exports = {
-  darkMode: "class",
   content: [
-    "./index.js",
     "./App.tsx",
     "../../packages/**/*.{js,ts,jsx,tsx}",
     "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
   ],
-  important: "html",
   theme: {
     extend: {
       maxWidth: {
-        "screen-3xl": "1680px",
         screen: "100vw",
         "screen-xl": `${MAX_CONTENT_WIDTH}px`,
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
-      },
-      // boxShadow: {
-      //   dropdown:
-      //     "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
-      //   modal:
-      //     "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
-      // },
-      borderRadius: {
-        inherit: "inherit",
+        "screen-3xl": "1680px",
       },
       colors: {
-        inherit: "inherit",
         ...colors,
       },
-      cursor: {
-        copy: "copy",
-      },
       fontFamily: {
-        space: fontFamily("SpaceGrotesk-Regular"),
-        "space-bold": fontFamily("SpaceGrotesk-Bold"),
-        inter: fontFamily("Inter-Regular"),
-        "inter-semibold": fontFamily("Inter-SemiBold"),
-        "inter-bold": fontFamily("Inter-Bold"),
-        sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
-      },
-      whitespace: {
-        "break-spaces": "break-spaces",
-      },
-      fill: {
-        black: "black",
-        white: "white",
-      },
-      zIndex: {
-        1: 1,
-        2: 2,
+        space: "SpaceGrotesk-Regular",
+        "space-bold": "SpaceGrotesk-Bold",
+        inter: "Inter-Regular",
+        "inter-semibold": "Inter-SemiBold",
+        "inter-bold": "Inter-Bold",
+        sans: ["Inter-Regular", ...defaultTheme.fontFamily.sans],
       },
     },
   },
   plugins: [
-    // nativewind(),
     plugin(({ addUtilities }) => {
       addUtilities({
         ".text-xs": textSizes["text-xs"],
@@ -359,12 +325,12 @@ module.exports = {
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: "SpaceGrotesk-Bold",
         },
         ".text-xl": textSizes["text-xl"],
         ".text-2xl": {
           ...textSizes["text-2xl"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: "SpaceGrotesk-Bold",
         },
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],

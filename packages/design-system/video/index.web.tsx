@@ -8,7 +8,6 @@ import { Source } from "react-native-fast-image";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
@@ -66,7 +65,7 @@ export function Video({
             intensity={85}
           />
           <ExpoVideo
-            style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
+            style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}
             resizeMode={resizeMode}
             posterSource={posterSource}
@@ -75,7 +74,7 @@ export function Video({
             shouldPlay={typeof id === "undefined"}
             isLooping
             isMuted={isMuted}
-            videoStyle={tailwind.style("relative")}
+            videoStyle={{ position: "relative" }}
             {...props}
           />
         </ImageBackground>

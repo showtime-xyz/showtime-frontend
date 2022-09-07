@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { View, ViewProps, StyleSheet } from "react-native";
+import { View, ViewProps } from "react-native";
 
 import {
   FlashList,
@@ -41,7 +41,7 @@ function FlashListComponent<T>(
   );
   if (style) {
     return (
-      <View style={StyleSheet.flatten([{ height: "100%" }, style])}>
+      <View style={[{ height: "100%" }, style]}>
         <FlashList
           {...rest}
           numColumns={numColumns}

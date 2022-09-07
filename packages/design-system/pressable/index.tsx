@@ -1,12 +1,10 @@
-import React, { ComponentProps, useMemo } from "react";
+import { ComponentProps, useMemo } from "react";
+import { Pressable as ReactNativePressable } from "react-native";
 
-import { MotiPressable } from "moti/interactions";
-
-import { useIsDarkMode, useOnHover } from "@showtime-xyz/universal.hooks";
-import { tw as tailwind, colors } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
-export type Props = ComponentProps<typeof MotiPressable> & {
+export type Props = ComponentProps<typeof ReactNativePressable> & {
   tw?: TW;
   /**
    * **DESKTOP WEB_ONLY**
@@ -16,35 +14,17 @@ export type Props = ComponentProps<typeof MotiPressable> & {
   disableHoverEffect?: boolean;
 };
 
-export function Pressable({
-  tw,
-  style,
-  disableHoverEffect = false,
-  ...props
-}: Props) {
-  const { onHoverIn, onHoverOut, hovered } = useOnHover();
-  const isDark = useIsDarkMode();
+const StyledPressable = styled(ReactNativePressable);
 
-  const hoverStyle = useMemo(() => {
-    if (disableHoverEffect) {
-      return { backgroundColor: "transparent" };
-    }
-    return {
-      backgroundColor: hovered.value
-        ? isDark
-          ? colors.gray[800]
-          : colors.gray[200]
-        : "transparent",
-      transitionDuration: "150ms",
-    };
-  }, [disableHoverEffect, hovered.value, isDark]);
-
-  return (
-    <MotiPressable
-      onHoverIn={onHoverIn}
-      onHoverOut={onHoverOut}
-      style={[hoverStyle, tailwind.style(tw), style]}
-      {...props}
-    />
+export function Pressable({ tw, disableHoverEffect = false, ...props }: Props) {
+  const twWithHover = useMemo(
+    () =>
+      [
+        disableHoverEffect ? "" : "hover:bg-gray-200 dark:hover:bg-gray-800",
+        Array.isArray(tw) ? tw.join(" ") : tw,
+      ].join(" "),
+    [tw, disableHoverEffect]
   );
+
+  return <StyledPressable {...props} tw={twWithHover} />;
 }

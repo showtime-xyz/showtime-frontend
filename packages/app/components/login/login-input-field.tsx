@@ -5,8 +5,9 @@ import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { yup } from "app/lib/yup";
 
@@ -104,9 +105,7 @@ export function LoginInputField({
         tw="mt-6"
         disabled={!inputValue}
       >
-        <ButtonLabel tw="text-black dark:text-white">
-          {signInButtonLabel}
-        </ButtonLabel>
+        <Text tw="text-black dark:text-white">{signInButtonLabel}</Text>
       </Button>
     </>
   );

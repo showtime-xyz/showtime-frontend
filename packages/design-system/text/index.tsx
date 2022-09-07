@@ -1,7 +1,6 @@
 import { ComponentProps, forwardRef } from "react";
-import { Platform, Text as TextType } from "react-native";
+import { Text as TextType } from "react-native";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { ViewProps } from "@showtime-xyz/universal.view";
 
@@ -46,14 +45,12 @@ export const Text = forwardRef<TextType, Props>(
       ellipsizeMode,
       pointerEvents,
       onPress,
-      style,
       ...props
     },
     ref
   ) => {
     return (
       <StyledText
-        style={Platform.OS === "web" ? style : [tailwind.style(tw), style]}
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
         nativeID={nativeID}
         ref={ref}

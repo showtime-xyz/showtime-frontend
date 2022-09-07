@@ -1,65 +1,65 @@
 import { useMemo } from "react";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { BaseButton } from "./button-base";
-import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
+import { Button as BaseButton } from "./button";
+import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
-export { ButtonLabel } from "./button-label";
 export type { ButtonVariant } from "./types";
 
-export function Button({
-  tw = "",
-  variant = "primary",
-  ...props
-}: ButtonProps) {
-  const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
-
+export function Button({ variant = "primary", ...props }: ButtonProps) {
   switch (variant) {
     case "primary":
-      return <PrimaryButton tw={_tw} {...props} />;
+      return <PrimaryButton {...props} />;
     case "danger":
-      return <DangerButton tw={_tw} {...props} />;
+      return <DangerButton {...props} />;
     case "tertiary":
-      return <TertiaryButton tw={_tw} {...props} />;
+      return <TertiaryButton {...props} />;
     case "secondary":
-      return <SecondaryButton tw={_tw} {...props} />;
+      return <SecondaryButton {...props} />;
     case "text":
-      return <TextButton tw={_tw} {...props} />;
+      return <TextButton {...props} />;
     default:
-      return <PrimaryButton tw={_tw} {...props} />;
+      return <PrimaryButton {...props} />;
   }
 }
 
 export function PrimaryButton(props: ButtonProps) {
+  const isDark = useIsDarkMode();
+
   return (
     <BaseButton
-      {...(props as any)}
-      labelTW="text-white dark:text-black"
-      iconColor={ICON_COLOR_TW_MAPPER.primary}
+      {...props}
+      labelStyle={{ color: isDark ? "#000" : "#FFF" }}
+      iconColor={ICON_COLOR_MAPPER.primary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
     />
   );
 }
 
 export function SecondaryButton(props: ButtonProps) {
+  const isDark = useIsDarkMode();
+
   return (
     <BaseButton
-      {...(props as any)}
-      labelTW="text-gray-900 dark:text-white"
-      iconColor={ICON_COLOR_TW_MAPPER.secondary}
+      {...props}
+      labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
+      iconColor={ICON_COLOR_MAPPER.secondary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.secondary}
     />
   );
 }
 
 export function TertiaryButton(props: ButtonProps) {
+  const isDark = useIsDarkMode();
+
   return (
     <BaseButton
-      {...(props as any)}
-      labelTW="text-gray-900 dark:text-white"
-      iconColor={ICON_COLOR_TW_MAPPER.tertiary}
+      {...props}
+      labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
+      iconColor={ICON_COLOR_MAPPER.tertiary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.tertiary}
     />
   );
@@ -68,9 +68,9 @@ export function TertiaryButton(props: ButtonProps) {
 export function DangerButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...(props as any)}
-      labelTW="text-white"
-      iconColor={ICON_COLOR_TW_MAPPER.danger}
+      {...props}
+      labelStyle={{ color: "#FFF" }}
+      iconColor={ICON_COLOR_MAPPER.danger}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
     />
   );
@@ -88,8 +88,8 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
           ? accentColor[1]
           : accentColor[0]
         : isDark
-        ? ICON_COLOR_TW_MAPPER.text[1]
-        : ICON_COLOR_TW_MAPPER.text[0],
+        ? ICON_COLOR_MAPPER.text[1]
+        : ICON_COLOR_MAPPER.text[0],
     }),
     [accentColor, isDark]
   );
@@ -100,12 +100,13 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
         ? typeof accentColor === "string"
           ? [accentColor, accentColor]
           : accentColor
-        : ICON_COLOR_TW_MAPPER.text,
+        : ICON_COLOR_MAPPER.text,
     [accentColor]
   );
+
   return (
     <BaseButton
-      {...(props as any)}
+      {...props}
       labelStyle={labelStyle}
       iconColor={iconColor}
       backgroundColors={undefined}
