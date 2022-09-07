@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Linking, Platform } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,6 +14,8 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 
 const scheme = `io.showtime${
   process.env.STAGE === "development"
@@ -49,6 +51,12 @@ const WALLETS = [
 
 function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
   const insets = useSafeAreaInsets();
+  const mobileSDK = useWalletMobileSDK();
+
+  const connectMobileSDK = useCallback(async () => {
+    await mobileSDK.connect();
+    props.onDismiss(); // close modal after connecting
+  }, [mobileSDK, props]);
 
   if (!props.visible) {
     return null;
@@ -71,7 +79,19 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
         <View style={{ paddingTop: insets.top }} />
         <ModalHeader title="Connect my wallet" onClose={props.onDismiss} />
         <View tw="justify-center bg-white p-4 dark:bg-black">
-          {/* TODO: Coinbase Wallet */}
+          <PressableScale
+            key={`wallet-cbw`}
+            onPress={connectMobileSDK}
+            tw="my-2 flex-row items-center"
+          >
+            <Image
+              source={require("./coinbase-wallet-icon.png")}
+              tw="h-10 w-10 rounded-md"
+            />
+            <View tw="w-4" />
+            <Text tw="text-lg text-black dark:text-white">Coinbase Wallet</Text>
+          </PressableScale>
+
           {wallets.map((walletService: WalletService, i: number) => {
             return (
               <PressableScale
@@ -83,7 +103,11 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
                     props.connectToWalletService(walletService, props.uri);
                   }
                 }}
-                tw="my-2 flex-row items-center"
+                style={{
+                  marginVertical: 8,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
               >
                 <Image
                   // @ts-ignore

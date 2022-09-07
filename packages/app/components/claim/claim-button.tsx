@@ -65,15 +65,15 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
     >
       {status === ClaimStatus.Claimed ? (
-        <View tw="w-auto flex-row items-center">
+        <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 text-white">Claimed</Text>
-        </View>
+          <Text tw="ml-1 font-semibold text-white">Claimed</Text>
+        </>
       ) : status === ClaimStatus.Soldout ? (
-        <View tw="w-auto flex-row items-center">
+        <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 text-white">Sold out</Text>
-        </View>
+          <Text tw="ml-1 font-semibold text-white">Sold out</Text>
+        </>
       ) : status === ClaimStatus.Expired ? (
         "Drop expired"
       ) : (

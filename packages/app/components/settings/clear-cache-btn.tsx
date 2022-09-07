@@ -3,7 +3,8 @@ import { useCallback } from "react";
 import FastImage from "react-native-fast-image";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
 
@@ -27,9 +28,10 @@ export const ClearCacheBtn = () => {
   }, [Alert]);
 
   if (!__DEV__) return null;
+
   return (
     <Button size="small" onPress={clearAppCache}>
-      <ButtonLabel>Clear Cache</ButtonLabel>
+      <Text>Clear Cache</Text>
     </Button>
   );
 };

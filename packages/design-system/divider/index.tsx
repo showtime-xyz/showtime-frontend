@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, ViewProps, StyleProp, ViewStyle } from "react-native";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -31,14 +30,16 @@ export const Divider: React.FC<DividerProps> = ({
   ...rest
 }) => (
   <View
-    style={StyleSheet.flatten([
-      tailwind.style("bg-gray-200 dark:bg-gray-800"),
+    style={[
       orientation === "horizontal"
         ? { width, height: StyleSheet.hairlineWidth }
         : { width: StyleSheet.hairlineWidth, height },
-      tailwind.style(tw),
       style,
-    ])}
+    ]}
+    tw={[
+      Array.isArray(tw) ? tw.join(" ") : tw ?? "",
+      "bg-gray-200 dark:bg-gray-800",
+    ]}
     {...rest}
   />
 );

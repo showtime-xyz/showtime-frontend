@@ -100,13 +100,13 @@ export function SceneComponent<P extends object>({
           ref={scollViewRef}
           scrollEventThrottle={16}
           directionalLockEnabled
-          contentContainerStyle={StyleSheet.flatten([
+          contentContainerStyle={[
             contentContainerStyle,
             {
               paddingTop: useExternalScrollView ? 0 : scrollViewPaddingTop,
               minHeight: expectHeight,
             },
-          ])}
+          ]}
           onContentSizeChange={_onContentSizeChange}
           onScroll={onScrollAnimateEvent}
           scrollIndicatorInsets={{

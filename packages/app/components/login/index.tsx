@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -128,7 +128,7 @@ export function Login({ onLogin }: LoginProps) {
                       variant="primary"
                       size="regular"
                     >
-                      <ButtonLabel>Sign in with Wallet</ButtonLabel>
+                      <Text>Sign in with Wallet</Text>
                     </Button>
                   </View>
                   <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">

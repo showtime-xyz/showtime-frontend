@@ -1,6 +1,6 @@
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import {
   FilePickerResolveValue,
@@ -14,16 +14,20 @@ export function ImagePickerButton({
   onPick: (param: FilePickerResolveValue) => void;
   type: "camera" | "profilePhoto" | "button";
 }) {
+  const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
 
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
   return (
     <PressableScale
-      tw={
-        type === "profilePhoto"
-          ? "h-20 w-20 items-center justify-center rounded-full bg-white dark:bg-black"
-          : "h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
-      }
+      style={{
+        height: type === "profilePhoto" ? 80 : 48,
+        width: type === "profilePhoto" ? 80 : 48,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 9999,
+        backgroundColor: isDark ? "#000" : "#fff",
+      }}
       onPress={async () => {
         const file = await pickFile({ mediaTypes: "image" });
         onPick(file);
@@ -43,11 +47,7 @@ export function ImagePickerButton({
           />
         </View>
       )}*/}
-      <Image
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-        width={24}
-        height={24}
-      />
+      <Image color={isDark ? "#fff" : "#000"} width={24} height={24} />
     </PressableScale>
   );
 }

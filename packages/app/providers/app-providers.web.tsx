@@ -2,6 +2,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -15,7 +16,6 @@ import { FeedProvider } from "app/providers/feed-provider";
 import { MagicProvider } from "app/providers/magic-provider.web";
 import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
-import { ThemeProvider } from "app/providers/theme-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
@@ -26,7 +26,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <RudderStackProvider>
       <MagicProvider>
-        <ThemeProvider>
+        <ColorSchemeProvider>
           <SafeAreaProvider>
             <ToastProvider>
               <LightBoxProvider>
@@ -58,7 +58,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
               </LightBoxProvider>
             </ToastProvider>
           </SafeAreaProvider>
-        </ThemeProvider>
+        </ColorSchemeProvider>
       </MagicProvider>
     </RudderStackProvider>
   );

@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useRef, useState } from "react";
 
 import * as RadixSelect from "@radix-ui/react-select";
 
@@ -9,7 +8,6 @@ import {
   usePlatformResize,
   useWebScroll,
 } from "@showtime-xyz/universal.hooks";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
@@ -60,20 +58,18 @@ export function Select<T extends string>({
       </RadixSelect.Trigger>
       <RadixSelect.Portal>
         <RadixSelect.Content
-          style={
-            StyleSheet.flatten([
-              tailwind`p-1 bg-white dark:bg-black rounded-2xl max-h-[50vh] absolute`,
-              {
-                boxShadow: isDark
-                  ? DROPDOWN_DRAK_SHADOW
-                  : DROPDOWN_LIGHT_SHADOW,
-                left: triggerRect?.left ?? 0,
-                top:
-                  (triggerRect?.top ?? 0) +
-                  (triggerRect?.height ? triggerRect?.height + 8 : 0),
-              },
-            ]) as React.CSSProperties
-          }
+          style={{
+            position: "absolute",
+            maxHeight: "50vh",
+            backgroundColor: isDark ? "#000" : "#fff",
+            borderRadius: 16,
+            padding: 4,
+            boxShadow: isDark ? DROPDOWN_DRAK_SHADOW : DROPDOWN_LIGHT_SHADOW,
+            left: triggerRect?.left ?? 0,
+            top:
+              (triggerRect?.top ?? 0) +
+              (triggerRect?.height ? triggerRect?.height + 8 : 0),
+          }}
         >
           {options.map((item) => (
             <RadixSelect.Item key={item.label} value={item.value}>

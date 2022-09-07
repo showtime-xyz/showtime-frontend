@@ -10,7 +10,14 @@ export default {
 } as Meta;
 
 export const Primary: React.VFC<{}> = () => (
-  <PressableScale tw="w-auto rounded-full bg-black p-2 dark:bg-white">
+  <PressableScale
+    style={{
+      padding: 8,
+      width: "auto",
+      borderRadius: 9999,
+      backgroundColor: "blue",
+    }}
+  >
     <Text tw="text-center text-white dark:text-black">Press Me</Text>
   </PressableScale>
 );

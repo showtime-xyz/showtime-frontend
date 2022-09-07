@@ -1,3 +1,4 @@
+import { handleResponse } from "@coinbase/wallet-mobile-sdk";
 import * as Linking from "expo-linking";
 
 import type { LinkingOptions } from "app/lib/react-navigation/native";
@@ -69,6 +70,28 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     const finalPath = withRewrites(path);
 
     return getStateFromPath(finalPath, config);
+  },
+  async getInitialURL() {
+    const url = await Linking.getInitialURL();
+    const initialURL = url ? new URL(url) : null;
+    if (initialURL && handleResponse(initialURL)) {
+      // URL handled by Wallet Mobile SDK
+      return null;
+    } else {
+      return url;
+    }
+  },
+  subscribe(listener) {
+    const linkingSubscription = Linking.addEventListener("url", ({ url }) => {
+      const handledByMobileSDK = handleResponse(new URL(url));
+      if (!handledByMobileSDK) {
+        listener(url);
+      }
+    });
+
+    return function cleanup() {
+      linkingSubscription.remove();
+    };
   },
 };
 

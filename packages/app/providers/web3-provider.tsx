@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import type { Web3Provider as EthersWeb3ProviderType } from "@ethersproject/providers";
 
 import { Web3Context } from "app/context/web3-context";
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useWalletConnect } from "app/lib/walletconnect";
 
@@ -23,6 +24,7 @@ export function Web3Provider({
   );
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const connector = useWalletConnect();
+  const mobileSDK = useWalletMobileSDK();
   const { magic } = useMagic();
   const [magicWalletAddress, setMagicWalletAddress] = useState<
     string | undefined
@@ -62,6 +64,28 @@ export function Web3Provider({
       })();
     }
   }, [connector]);
+
+  // (Native only) initializes wallet mobile sdk provider
+  useEffect(() => {
+    (async function setWeb3Provider() {
+      if (Platform.OS !== "web" && mobileSDK.connected && mobileSDK.address) {
+        const MobileSDKProvider = (
+          await import(
+            "@coinbase/wallet-mobile-sdk/build/WalletMobileSDKEVMProvider"
+          )
+        ).WalletMobileSDKEVMProvider;
+        const mobileSDKProvider = new MobileSDKProvider({
+          jsonRpcUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+          address: mobileSDK.address,
+        });
+
+        const EthersWeb3Provider = (await import("@ethersproject/providers"))
+          .Web3Provider;
+        const ethersProvider = new EthersWeb3Provider(mobileSDKProvider as any);
+        setWeb3(ethersProvider);
+      }
+    })();
+  }, [mobileSDK.address, mobileSDK.connected]);
 
   // (Web/Native) initialises magic web3 provider
   useEffect(() => {

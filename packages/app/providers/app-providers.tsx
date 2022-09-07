@@ -3,6 +3,7 @@ import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -19,46 +20,47 @@ import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
 import { MuteProvider } from "./mute-provider";
-import { ThemeProvider } from "./theme-provider";
+import { WalletMobileSDKProvider } from "./wallet-mobile-sdk-provider";
 
-// @
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider>
+    <ColorSchemeProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider style={{ backgroundColor: "black" }}>
-          <WalletProvider>
-            <Web3Provider>
-              <ToastProvider>
-                <AlertProvider>
-                  <LightBoxProvider>
-                    <SnackbarProvider>
-                      <NavigationProvider>
-                        <SWRProvider>
-                          <AuthProvider>
-                            <UserProvider>
-                              <BottomSheetModalProvider>
-                                {/* @ts-ignore */}
-                                <GrowthBookProvider growthbook={growthbook}>
-                                  <FeedProvider>
-                                    <BiconomyProvider>
-                                      <MuteProvider>{children}</MuteProvider>
-                                    </BiconomyProvider>
-                                  </FeedProvider>
-                                </GrowthBookProvider>
-                              </BottomSheetModalProvider>
-                            </UserProvider>
-                          </AuthProvider>
-                        </SWRProvider>
-                      </NavigationProvider>
-                    </SnackbarProvider>
-                  </LightBoxProvider>
-                </AlertProvider>
-              </ToastProvider>
-            </Web3Provider>
-          </WalletProvider>
+          <WalletMobileSDKProvider>
+            <WalletProvider>
+              <Web3Provider>
+                <ToastProvider>
+                  <AlertProvider>
+                    <LightBoxProvider>
+                      <SnackbarProvider>
+                        <NavigationProvider>
+                          <SWRProvider>
+                            <AuthProvider>
+                              <UserProvider>
+                                <BottomSheetModalProvider>
+                                  {/* @ts-ignore */}
+                                  <GrowthBookProvider growthbook={growthbook}>
+                                    <FeedProvider>
+                                      <BiconomyProvider>
+                                        <MuteProvider>{children}</MuteProvider>
+                                      </BiconomyProvider>
+                                    </FeedProvider>
+                                  </GrowthBookProvider>
+                                </BottomSheetModalProvider>
+                              </UserProvider>
+                            </AuthProvider>
+                          </SWRProvider>
+                        </NavigationProvider>
+                      </SnackbarProvider>
+                    </LightBoxProvider>
+                  </AlertProvider>
+                </ToastProvider>
+              </Web3Provider>
+            </WalletProvider>
+          </WalletMobileSDKProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>
-    </ThemeProvider>
+    </ColorSchemeProvider>
   );
 };

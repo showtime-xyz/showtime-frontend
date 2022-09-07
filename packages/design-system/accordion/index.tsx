@@ -57,7 +57,7 @@ const Trigger = ({ tw = "", ...props }: ViewProps) => {
   return (
     <RNAccordion.Trigger>
       <View
-        tw={"w-full flex-row items-center justify-between px-4 py-5 " + tw}
+        tw={"w-full flex-row items-center justify-between px-4 py-4 " + tw}
         {...props}
       >
         {props.children}

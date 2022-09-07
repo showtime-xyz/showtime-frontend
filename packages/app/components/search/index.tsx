@@ -71,7 +71,7 @@ export const Search = () => {
           rightElement={
             term.length > 0 ? (
               <PressableScale
-                tw="p-2"
+                style={{ padding: 8 }}
                 onPress={() => {
                   setTerm("");
                   inputRef.current?.focus();
