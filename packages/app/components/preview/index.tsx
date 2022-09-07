@@ -5,7 +5,7 @@ import { Video, ResizeMode } from "expo-av";
 import type { ResizeMode as ImgResizeMode } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -17,6 +17,8 @@ type PreviewProps = {
   style?: any;
   resizeMode?: ImgResizeMode | ResizeMode;
 };
+
+const StyledVideo = styled(Video);
 
 export const Preview = ({
   tw = "",
@@ -62,10 +64,11 @@ export const Preview = ({
 
     if (fileType === "video") {
       return (
-        <Video
-          source={{ uri: uri as string }}
-          style={[tailwind.style(tw), style]}
+        <StyledVideo
+          tw={tw}
+          style={style}
           resizeMode={resizeMode as ResizeMode}
+          source={{ uri: uri as string }}
           isMuted
           shouldPlay
           onLoad={() => {

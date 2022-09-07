@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Modal, Pressable } from "react-native";
+import { Modal } from "react-native";
 
 import Slider from "@react-native-community/slider";
 import { MotiView } from "moti";
@@ -15,6 +15,7 @@ import {
   RotateCw,
 } from "@showtime-xyz/universal.icon";
 import { ModalHeader } from "@showtime-xyz/universal.modal";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import "@showtime-xyz/universal.pressable";
 import { colors, tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -146,7 +147,7 @@ export const MediaCropper = ({
 
               <Pressable
                 onPress={() => setRotation((rotation) => rotation + 90)}
-                style={tw.style("ml-2")}
+                tw="ml-2"
               >
                 <RotateCw width={20} height={20} color={colors.gray[500]} />
               </Pressable>

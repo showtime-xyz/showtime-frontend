@@ -93,10 +93,16 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
                 setModalVisible(true);
               }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              tw={`mt-[${Platform.select({
-                android: ".45",
-                default: "0",
-              })}rem] h-7 flex-row items-center justify-center`}
+              style={{
+                marginTop: Platform.select({
+                  android: 7,
+                  default: 0,
+                }),
+                height: 28,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Text
                 style={{

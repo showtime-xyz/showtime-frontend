@@ -103,7 +103,11 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
                     props.connectToWalletService(walletService, props.uri);
                   }
                 }}
-                tw="my-2 flex-row items-center"
+                style={{
+                  marginVertical: 8,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
               >
                 <Image
                   // @ts-ignore

@@ -1,7 +1,7 @@
 import { Linking } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -57,7 +57,7 @@ export const SettingAccountSlotFooter = () => {
         <View tw="flex flex-row">
           <Link href="mailto:support@tryshowtime.com">
             <Button variant="danger" size="small" onPress={handleDeleteAccount}>
-              <ButtonLabel>Delete Account</ButtonLabel>
+              <Text>Delete Account</Text>
             </Button>
           </Link>
         </View>
@@ -83,11 +83,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
   return (
     <Pressable
       onPress={() => handleOnPressItem(props.subRoute)}
-      style={[
-        tw.style(
-          "w-full flex-1 flex-row items-center justify-between px-4 py-2 mb-2 rounded-md"
-        ),
-      ]}
+      tw="mb-2 w-full flex-1 flex-row items-center justify-between rounded-md px-4 py-2"
     >
       <View tw="flex flex-col">
         <Text tw="text-sm text-gray-900 dark:text-white">{props.title}</Text>

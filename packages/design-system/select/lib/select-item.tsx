@@ -48,8 +48,7 @@ export function SelectItem<T>({
   );
   const containerStyle = useMemo(
     () => [tw`p-2 m-1 justify-between rounded-lg`, containerAnimatedStyle],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [containerAnimatedStyle]
   );
   //#endregion
 
@@ -78,9 +77,10 @@ export function SelectItem<T>({
     >
       <Animated.View style={containerStyle}>
         <Text
-          tw={`whitespace-nowrap font-medium text-gray-900 dark:text-white ${
-            size === "regular" ? "text-sm" : "text-sm"
-          }`}
+          tw={[
+            "whitespace-nowrap font-medium text-gray-900 dark:text-white",
+            size === "regular" ? "text-sm" : "text-sm",
+          ]}
         >
           {label}
         </Text>

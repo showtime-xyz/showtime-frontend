@@ -1,1 +1,2 @@
-export { ColorSchemeProvider, useColorScheme } from "./color-scheme";
+export { useColorScheme } from "./hook";
+export { ColorSchemeProvider } from "./provider";

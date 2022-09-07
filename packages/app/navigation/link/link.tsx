@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,7 +25,7 @@ function Link({ viewProps, tw, hrefAttrs, onPress, ...props }: LinkProps) {
       {...props}
       Component={Platform.select({
         web: View,
-        default: PressableScale as any,
+        default: Pressable as any,
       })}
       componentProps={{
         ...viewProps,

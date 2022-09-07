@@ -5,36 +5,44 @@ const CONTAINER_TW =
   "disabled:opacity-40 disabled:cursor-not-allowed";
 
 const CONTAINER_PADDING_TW = {
-  small: "px-[16px] py-[8px]",
-  regular: "p-[16px]",
+  small: "px-4 py-2",
+  regular: "p-4",
 };
 
 const CONTAINER_ICON_PADDING_TW = {
-  small: "px-[8px]",
-  regular: "p-[14px]",
+  small: "px-2",
+  regular: "p-4",
 };
 
 const CONTAINER_HEIGHT_TW = {
-  small: "h-[32px]",
-  regular: "h-[48px]",
+  small: "h-8",
+  regular: "h-12",
 };
 
 const CONTAINER_BACKGROUND_MAPPER = {
   primary: {
-    default: [colors.gray[900], colors.white],
-    pressed: [colors.gray[700], colors.gray[200]],
+    // default: [colors.gray[900], colors.white],
+    default: "bg-gray-900 dark:bg-white",
+    // pressed: [colors.gray[700], colors.gray[200]],
+    pressed: "bg-gray-700 dark:bg-gray-200",
   },
   secondary: {
-    default: [colors.white, colors.black],
-    pressed: [colors.gray[200], colors.gray[800]],
+    // default: [colors.white, colors.black],
+    default: "bg-white dark:bg-black",
+    // pressed: [colors.gray[200], colors.gray[800]],
+    pressed: "bg-gray-200 dark:bg-gray-800",
   },
   tertiary: {
-    default: [colors.gray[100], colors.gray[900]],
-    pressed: [colors.gray[300], colors.gray[700]],
+    // default: [colors.gray[100], colors.gray[900]],
+    default: "bg-gray-100 dark:bg-gray-900",
+    // pressed: [colors.gray[300], colors.gray[700]],
+    pressed: "bg-gray-300 dark:bg-gray-700",
   },
   danger: {
-    default: [colors.red[500], colors.red[500]],
-    pressed: [colors.red[700], colors.red[700]],
+    // default: [colors.red[500], colors.red[500]],
+    default: "bg-red-500 dark:bg-red-500",
+    // pressed: [colors.red[700], colors.red[700]],
+    pressed: "bg-red-700 dark:bg-red-700",
   },
 };
 
@@ -59,7 +67,7 @@ const ICON_SIZE_TW = {
   },
 };
 
-const ICON_COLOR_TW_MAPPER = {
+const ICON_COLOR_MAPPER = {
   primary: ["#FFF", colors.gray[900]],
   secondary: [colors.gray[900], "#FFF"],
   tertiary: [colors.gray[900], "#FFF"],
@@ -78,6 +86,6 @@ export {
   LABEL_SIZE_TW,
   LABEL_WEIGHT_TW,
   ICON_SIZE_TW,
-  ICON_COLOR_TW_MAPPER,
+  ICON_COLOR_MAPPER,
   ACCENT_COLOR,
 };

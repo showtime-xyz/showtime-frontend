@@ -3,9 +3,8 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDeviceContext } from "twrnc";
 
+import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-
-import { ThemeProvider } from "app/providers/theme-provider";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
@@ -44,7 +43,7 @@ export const decorators = [
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TailwindDeviceContextProvider>
         <BottomSheetModalProvider>
-          <ThemeProvider>
+          <ColorSchemeProvider>
             <SafeAreaProvider>
               <ToastProvider>
                 <AlertProvider>
@@ -58,7 +57,7 @@ export const decorators = [
                 </AlertProvider>
               </ToastProvider>
             </SafeAreaProvider>
-          </ThemeProvider>
+          </ColorSchemeProvider>
         </BottomSheetModalProvider>
       </TailwindDeviceContextProvider>
     </GestureHandlerRootView>

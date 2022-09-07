@@ -1,8 +1,8 @@
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, Close, Check } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FilePickerResolveValue } from "design-system/file-picker";
@@ -31,6 +31,8 @@ export function CameraButtons({
   setCameraPosition,
   postPhoto,
 }: Props) {
+  const isDark = useIsDarkMode();
+
   return (
     <View tw="flex-row items-center justify-between py-8 px-6">
       {isLoading ? (
@@ -40,19 +42,20 @@ export function CameraButtons({
           style={{ zIndex: 1 }}
         >
           <PressableScale
-            tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
+            style={{
+              height: 48,
+              width: 48,
+              borderRadius: 9999,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: isDark ? "#000" : "#FFF",
+            }}
             onPress={() => {
               setPhotos([]);
               setIsLoading(false);
             }}
           >
-            <Close
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-              width={24}
-              height={24}
-            />
+            <Close color={isDark ? "#FFF" : "#000"} width={24} height={24} />
           </PressableScale>
         </Animated.View>
       ) : (
@@ -71,7 +74,12 @@ export function CameraButtons({
 
         <View tw="rounded-full border-4 border-white bg-white dark:border-black dark:bg-black">
           <PressableScale
-            tw="h-[64px] w-[64px] rounded-full bg-black dark:bg-white"
+            style={{
+              height: 64,
+              width: 64,
+              borderRadius: 9999,
+              backgroundColor: isDark ? "#000" : "#FFF",
+            }}
             onPress={takePhoto}
             disabled={!canPop && photos.length < 9}
           />
@@ -96,35 +104,38 @@ export function CameraButtons({
             </View> */}
 
             <PressableScale
-              tw="z-10 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
+              style={{
+                zIndex: 10,
+                height: 48,
+                width: 48,
+                borderRadius: 9999,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: isDark ? "#000" : "#FFF",
+              }}
               onPress={() => {
                 postPhoto({ file: photos[0].uri, type: "image" });
               }}
             >
-              <Check
-                color={
-                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
-                }
-                width={24}
-                height={24}
-              />
+              <Check color={isDark ? "#FFF" : "#000"} width={24} height={24} />
             </PressableScale>
           </View>
         </Animated.View>
       ) : (
         <PressableScale
-          tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
+          style={{
+            height: 48,
+            width: 48,
+            borderRadius: 9999,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: isDark ? "#000" : "#FFF",
+          }}
           onPress={() =>
             setCameraPosition(cameraPosition === "front" ? "back" : "front")
           }
         >
-          <Flip
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-            width={24}
-            height={24}
-          />
+          <Flip color={isDark ? "#FFF" : "#000"} width={24} height={24} />
         </PressableScale>
       )}
     </View>

@@ -305,7 +305,7 @@ export const DropForm = () => {
                           const file = await pickFile({ mediaTypes: "all" });
                           onChange(file.file);
                         }}
-                        tw="h-63 w-63 items-center justify-center rounded-lg"
+                        tw="h-64 w-64 items-center justify-center rounded-lg"
                       >
                         {value ? (
                           <View>
@@ -405,110 +405,115 @@ export const DropForm = () => {
               </View>
             </View>
           </View>
-          <Accordion.Root
-            value={accordionValue}
-            onValueChange={setAccordionValue}
-          >
-            <Accordion.Item tw="-mx-4" value="open">
-              <Accordion.Trigger>
-                <Accordion.Label>Advanced</Accordion.Label>
-                <Accordion.Chevron />
-              </Accordion.Trigger>
-              <Accordion.Content tw="pt-0">
-                <View tw="justify-between lg:flex-row">
-                  <View tw="flex-1 flex-row lg:mr-4">
-                    <Controller
-                      control={control}
-                      name="royalty"
-                      render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                          <Fieldset
-                            tw="flex-1"
-                            label="Your royalties (%)"
-                            onBlur={onBlur}
-                            helperText="How much you'll earn each time this NFT is sold"
-                            errorText={errors.royalty?.message}
-                            value={value?.toString()}
-                            onChangeText={onChange}
-                          />
-                        );
-                      }}
-                    />
-                  </View>
-                  <View tw="mt-4 flex-1 flex-row md:mt-0">
-                    <Controller
-                      control={control}
-                      name="editionSize"
-                      render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                          <Fieldset
-                            tw="flex-1"
-                            label="Editions"
-                            onBlur={onBlur}
-                            helperText="How many editions will be available to claim"
-                            errorText={errors.editionSize?.message}
-                            value={value?.toString()}
-                            onChangeText={onChange}
-                          />
-                        );
-                      }}
-                    />
-                  </View>
-                </View>
-                <View tw="z-10 mt-4 flex-row">
-                  <Controller
-                    control={control}
-                    name="duration"
-                    render={({ field: { onChange, onBlur, value } }) => {
-                      return (
-                        <Fieldset
-                          tw="flex-1"
-                          label="Duration"
-                          onBlur={onBlur}
-                          helperText="How long the drop will be available to claim"
-                          errorText={errors.duration?.message}
-                          selectOnly
-                          select={{
-                            options: durationOptions,
-                            placeholder: "Duration",
-                            value: value,
-                            onChange,
-                            tw: "flex-1",
-                          }}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-                <View tw="mt-4 flex-row justify-between">
-                  <Controller
-                    control={control}
-                    name="notSafeForWork"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        tw="flex-1"
-                        label="Explicit content (18+)"
-                        switchOnly
-                        switchProps={{
-                          checked: value,
-                          onChange,
+          <View tw="mb-2">
+            <Accordion.Root
+              value={accordionValue}
+              onValueChange={setAccordionValue}
+            >
+              <Accordion.Item tw="-mx-4" value="open">
+                <Accordion.Trigger>
+                  <Accordion.Label>Advanced</Accordion.Label>
+                  <Accordion.Chevron />
+                </Accordion.Trigger>
+                <Accordion.Content tw="pt-0">
+                  <View tw="justify-between lg:flex-row">
+                    <View tw="flex-1 flex-row lg:mr-4">
+                      <Controller
+                        control={control}
+                        name="royalty"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Your royalties (%)"
+                              onBlur={onBlur}
+                              helperText="How much you'll earn each time this NFT is sold"
+                              errorText={errors.royalty?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                            />
+                          );
                         }}
                       />
-                    )}
-                  />
-                </View>
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion.Root>
-          <AnimateHeight hide={!accordionValue}>
-            <View tw="h-0 md:h-2" />
-          </AnimateHeight>
-          <Text tw="text-gray-600 dark:text-gray-400">
-            By default, you will drop 100 editions with 10% royalties for a
-            week.
-          </Text>
+                    </View>
+                    <View tw="mt-4 flex-1 flex-row md:mt-0">
+                      <Controller
+                        control={control}
+                        name="editionSize"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Editions"
+                              onBlur={onBlur}
+                              helperText="How many editions will be available to claim"
+                              errorText={errors.editionSize?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  </View>
+                  <View tw="z-10 mt-4 flex-row">
+                    <Controller
+                      control={control}
+                      name="duration"
+                      render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                          <Fieldset
+                            tw="flex-1"
+                            label="Duration"
+                            onBlur={onBlur}
+                            helperText="How long the drop will be available to claim"
+                            errorText={errors.duration?.message}
+                            selectOnly
+                            select={{
+                              options: durationOptions,
+                              placeholder: "Duration",
+                              value: value,
+                              onChange,
+                              tw: "flex-1",
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  </View>
+                  <View tw="mt-4 flex-row justify-between">
+                    <Controller
+                      control={control}
+                      name="notSafeForWork"
+                      render={({ field: { onChange, value } }) => (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Explicit content (18+)"
+                          switchOnly
+                          switchProps={{
+                            checked: value,
+                            onChange,
+                          }}
+                        />
+                      )}
+                    />
+                  </View>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+            <AnimateHeight hide={!accordionValue}>
+              <View tw="h-0 md:h-2" />
+            </AnimateHeight>
+            <Text
+              onPress={() => setAccordionValue("open")}
+              tw="text-gray-600 dark:text-gray-400"
+            >
+              By default, you will drop 100 editions with 10% royalties for a
+              week.
+            </Text>
+          </View>
 
-          <View tw="mt-4 flex-1">
+          <View tw="flex-1">
             <View tw="flex-1 flex-row">
               <Controller
                 control={control}
