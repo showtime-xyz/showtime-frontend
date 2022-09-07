@@ -78,7 +78,7 @@
     "@showtime-xyz/universal.bottom-sheet": "^0.0.53",
     "@showtime-xyz/universal.button": "^0.0.51",
     "@showtime-xyz/universal.checkbox": "^0.0.45",
-    "@showtime-xyz/universal.clamp-text": "^0.0.13",
+    "@showtime-xyz/universal.clamp-text": "^0.0.14",
     "@showtime-xyz/universal.collapsible-tab-view": "^0.0.34",
     "@showtime-xyz/universal.color-scheme": "^0.0.23",
     "@showtime-xyz/universal.country-code-picker": "^0.0.52",

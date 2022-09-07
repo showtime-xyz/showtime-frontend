@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, ReactNode } from "react";
 import {
   NativeSyntheticEvent,
   TextLayoutEventData,
@@ -12,7 +12,7 @@ const animation = LayoutAnimation.create(
 );
 export type ClampTextProps = {
   element?: Element;
-  text: string;
+  text: string | Iterable<ReactNode>;
   rows?: number;
   ellipsis?: string;
   expandButtonWidth?: number;
@@ -23,7 +23,9 @@ export const useClampText = ({
   ellipsis = "...",
   expandButtonWidth = 10,
 }: ClampTextProps) => {
-  const [innerText, setInnerText] = useState(text.replace(/[\r\n]/g, " "));
+  const [innerText, setInnerText] = useState(
+    typeof text === "string" ? text.replace(/[\r\n]/g, " ") : text
+  );
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);
   const collapseText = useRef("");
