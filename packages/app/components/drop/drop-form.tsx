@@ -405,7 +405,7 @@ export const DropForm = () => {
               </View>
             </View>
           </View>
-          <View tw="my-4">
+          <View tw="mb-2">
             <Accordion.Root
               value={accordionValue}
               onValueChange={setAccordionValue}
@@ -415,7 +415,7 @@ export const DropForm = () => {
                   <Accordion.Label>Advanced</Accordion.Label>
                   <Accordion.Chevron />
                 </Accordion.Trigger>
-                <Accordion.Content>
+                <Accordion.Content tw="pt-0">
                   <View tw="justify-between lg:flex-row">
                     <View tw="flex-1 flex-row lg:mr-4">
                       <Controller
@@ -506,7 +506,7 @@ export const DropForm = () => {
             </AnimateHeight>
             <Text
               onPress={() => setAccordionValue("open")}
-              tw="py-2 text-gray-600 dark:text-gray-400"
+              tw="text-gray-600 dark:text-gray-400"
             >
               By default, you will drop 100 editions with 10% royalties for a
               week.
