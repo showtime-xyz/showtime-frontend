@@ -7272,9 +7272,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.accordion@npm:^0.0.44":
-  version: 0.0.44
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.44"
+"@showtime-xyz/universal.accordion@npm:^0.0.45":
+  version: 0.0.45
+  resolution: "@showtime-xyz/universal.accordion@npm:0.0.45"
   dependencies:
     "@radix-ui/react-accordion": 0.1.6
     "@showtime-xyz/universal.hooks": 0.0.35
@@ -7289,7 +7289,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 8acd0a9b625b1823239840cde23d8ec16f5b7998fdad174fa39574805d2a8373d15789ce378d9cd5b187c373d71f87db84badb8f5c5d3327d1673bd570c64553
+  checksum: f2db5f98fa3075047aecf4896fc4d50db4b40e857886508f76b8d7f286b3fe0fc047004e0639a3515f63e0f1f47922b1ce12d5f9219d8e0902e01793405ff2a3
   languageName: node
   linkType: hard
 
@@ -8201,7 +8201,7 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^4.2.0
     "@shopify/flash-list": ^1.2.1
-    "@showtime-xyz/universal.accordion": ^0.0.44
+    "@showtime-xyz/universal.accordion": ^0.0.45
     "@showtime-xyz/universal.activity-indicator": ^0.0.34
     "@showtime-xyz/universal.alert": ^0.0.59
     "@showtime-xyz/universal.avatar": ^0.0.38
