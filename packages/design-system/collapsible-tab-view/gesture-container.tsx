@@ -58,6 +58,7 @@ export const GestureContainer = React.forwardRef<
     initHeaderHeight = 0,
     renderScrollHeader,
     renderAbsoluteBackgroundContent,
+    renderAbsoluteForegroundContent,
     renderTabView,
     renderRefreshControl: renderRefreshControlProp,
     animationHeaderPosition,
@@ -685,12 +686,12 @@ export const GestureContainer = React.forwardRef<
       }}
     >
       <GestureDetector gesture={gestureHandler}>
-        {!!renderAbsoluteBackgroundContent && (
-          <View style={styles.absoluteBackground}>
-            {renderAbsoluteBackgroundContent(translateYValue)}
-          </View>
-        )}
         <Animated.View style={[styles.container, opacityStyle]}>
+          {!!renderAbsoluteBackgroundContent && (
+            <View style={styles.absoluteBackground}>
+              {renderAbsoluteBackgroundContent(translateYValue)}
+            </View>
+          )}
           <Animated.View
             style={[styles.container, animateStyle]}
             onLayout={containerOnLayout}
@@ -701,6 +702,11 @@ export const GestureContainer = React.forwardRef<
             })}
           </Animated.View>
           {renderRefreshControl()}
+          {!!renderAbsoluteForegroundContent && (
+            <View style={styles.absoluteBackground}>
+              {renderAbsoluteForegroundContent()}
+            </View>
+          )}
         </Animated.View>
       </GestureDetector>
     </HeaderTabContext.Provider>

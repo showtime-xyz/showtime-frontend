@@ -31,6 +31,7 @@ export type CollapsibleHeaderProps<T extends Route> = {
   renderAbsoluteBackgroundContent?: (
     translateYValue: Animated.SharedValue<number>
   ) => React.ReactElement | null;
+  renderAbsoluteForegroundContent?: () => React.ReactElement | null;
   initTabbarHeight?: number;
   minHeaderHeight?: number;
   overflowHeight?: number;
