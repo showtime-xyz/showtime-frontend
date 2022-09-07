@@ -106,6 +106,8 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
     [snackbar]
   );
 
+  if (!show) return null;
+
   return (
     // @ts-ignore
     <AnimatePresence>
