@@ -199,7 +199,11 @@ export function VirtuosoListComponent<T>(
   }
 
   return (
-    <div style={{ minHeight: `${minHeight}px` }}>
+    <div
+      style={
+        useWindowScroll ? { minHeight: `${minHeight}px` } : { height: "100%" }
+      }
+    >
       {numColumns > 1 && renderComponent(ListHeaderComponent)}
       {numColumns === 1 ? (
         <Virtuoso
