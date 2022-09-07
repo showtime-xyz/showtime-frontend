@@ -7,8 +7,6 @@ import { useDeviceContext } from "twrnc";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 
-import { linking } from "app/navigation/linking";
-
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
 import { tw } from "design-system/tailwind";
@@ -48,7 +46,7 @@ export const decorators = [
             <ToastProvider>
               <AlertProvider>
                 <SnackbarProvider>
-                  <NavigationContainer linking={linking}>
+                  <NavigationContainer>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="Storybook" component={Story} />
                     </Stack.Navigator>
