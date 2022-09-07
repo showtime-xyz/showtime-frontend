@@ -67,7 +67,7 @@ const ICON_SIZE_TW = {
   },
 };
 
-const ICON_COLOR_TW_MAPPER = {
+const ICON_COLOR_MAPPER = {
   primary: ["#FFF", colors.gray[900]],
   secondary: [colors.gray[900], "#FFF"],
   tertiary: [colors.gray[900], "#FFF"],
@@ -86,6 +86,6 @@ export {
   LABEL_SIZE_TW,
   LABEL_WEIGHT_TW,
   ICON_SIZE_TW,
-  ICON_COLOR_TW_MAPPER,
+  ICON_COLOR_MAPPER,
   ACCENT_COLOR,
 };

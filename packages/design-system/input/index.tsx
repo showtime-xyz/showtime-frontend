@@ -1,12 +1,5 @@
 import { forwardRef, useMemo } from "react";
-import {
-  Platform,
-  StyleProp,
-  StyleSheet,
-  TextInputProps,
-  TextStyle,
-  TextInput,
-} from "react-native";
+import { Platform, StyleProp, TextInputProps, TextStyle } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
@@ -18,6 +11,7 @@ import {
 } from "@showtime-xyz/universal.pressable-scale";
 import { tw, colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 type InputProps = {

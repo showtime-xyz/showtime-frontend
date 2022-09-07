@@ -28,20 +28,19 @@ export function Button({
 }: BaseButtonProps) {
   const isDarkMode = useIsDarkMode();
 
-  const containerStyle = useMemo<any>(
-    () => [
-      CONTAINER_TW,
-      CONTAINER_HEIGHT_TW[size],
-      CONTAINER_PADDING_TW[size],
-      iconOnly ? CONTAINER_ICON_PADDING_TW[size] : "",
-      Array.isArray(tw) ? tw.join(" ") : tw,
-    ],
+  const containerTW = useMemo(
+    () =>
+      [
+        CONTAINER_TW,
+        CONTAINER_HEIGHT_TW[size],
+        CONTAINER_PADDING_TW[size],
+        iconOnly ? CONTAINER_ICON_PADDING_TW[size] : "",
+        Array.isArray(tw) ? tw.join(" ") : tw,
+      ].join(" "),
     [tw, size, iconOnly]
   );
 
   const renderChildren = useMemo(() => {
-    const iconSize = ICON_SIZE_TW[size];
-
     return Children.map(children, (child: any) => {
       if (typeof child === "string") {
         return (
@@ -59,12 +58,6 @@ export function Button({
       }
 
       return cloneElement(child, {
-        color:
-          typeof iconColor === "string"
-            ? iconColor
-            : iconColor[isDarkMode ? 1 : 0],
-        ...iconSize,
-        ...child?.props,
         tw: [
           ...labelTW,
           Array.isArray(child?.props?.tw)
@@ -72,6 +65,12 @@ export function Button({
             : child?.props?.tw,
         ],
         style: labelStyle,
+        color:
+          typeof iconColor === "string"
+            ? iconColor
+            : iconColor[isDarkMode ? 1 : 0],
+        ...ICON_SIZE_TW[size],
+        ...child?.props,
       });
     });
   }, [size, iconColor, labelTW, children, isDarkMode, labelStyle]);
@@ -79,7 +78,7 @@ export function Button({
   return (
     <Pressable
       {...props}
-      tw={[containerStyle, backgroundColors ? backgroundColors["default"] : ""]}
+      tw={[containerTW, backgroundColors ? backgroundColors["default"] : ""]}
     >
       {renderChildren}
     </Pressable>
