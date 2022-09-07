@@ -1,4 +1,4 @@
-import { useMemo, useRef, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import Animated, {
@@ -8,6 +8,7 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
@@ -102,7 +103,6 @@ export const ProfileTop = ({
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
-  const hasLinksInBio = useRef<boolean>(false);
   const { colorScheme } = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing } = useMyInfo();
@@ -122,7 +122,6 @@ export const ProfileTop = ({
         bio,
         /@([\w\d-]+?)\b/g,
         (username: string, i: number) => {
-          hasLinksInBio.current = true;
           return (
             <TextLink
               href={`/@${username}`}
@@ -395,13 +394,12 @@ export const ProfileTop = ({
           )}
 
           {bio ? (
-            <View
-              tw="mt-3 flex-row items-center"
-              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
-            >
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">
-                {bioWithMentions}
-              </Text>
+            <View tw="mt-3 items-baseline md:w-max">
+              <ClampText
+                text={bioWithMentions}
+                maxLines={3}
+                tw="text-sm text-gray-600 dark:text-gray-400"
+              />
             </View>
           ) : null}
           <Hidden from="md">
