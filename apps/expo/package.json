@@ -49,6 +49,7 @@
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
+    "@coinbase/wallet-mobile-sdk": "^0.3.1",
     "@ethersproject/shims": "^5.7.0",
     "@gorhom/bottom-sheet": "4.4.2",
     "@hookform/resolvers": "^2.8.5",
