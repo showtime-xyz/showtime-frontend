@@ -29,7 +29,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.36",
+        "version": "0.0.37",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -101,7 +101,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.68",
+        "version": "0.0.69",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -125,7 +125,7 @@
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.35",
+        "version": "0.0.36",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
@@ -149,7 +149,7 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.43",
+        "version": "0.0.44",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
@@ -161,7 +161,7 @@
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.76",
+        "version": "0.0.77",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
@@ -197,7 +197,7 @@
     },
     "router": {
         "scope": "showtime.universal",
-        "version": "0.0.31",
+        "version": "0.0.32",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/router"
     },
