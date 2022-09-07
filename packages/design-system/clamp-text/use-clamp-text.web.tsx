@@ -116,7 +116,6 @@ export const useClampText = ({
     if (typeof text === "string") {
       element.childNodes[0].nodeValue = text;
     } else {
-      element.innerHTML = text as any;
       (element as any).style.height = "auto";
     }
   }, [element, text]);
