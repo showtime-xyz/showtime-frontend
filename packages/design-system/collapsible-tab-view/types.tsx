@@ -26,7 +26,7 @@ export enum RefreshTypeEnum {
 export type CollapsibleHeaderProps<T extends Route> = {
   initHeaderHeight?: number;
   renderScrollHeader: (
-    translateYValue: Animated.SharedValue<number>
+    translateYValue?: Animated.SharedValue<number>
   ) => React.ReactElement | null;
   renderAbsoluteBackgroundContent?: (
     translateYValue: Animated.SharedValue<number>

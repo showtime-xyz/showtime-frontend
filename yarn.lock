@@ -7419,9 +7419,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.collapsible-tab-view@npm:0.0.34, @showtime-xyz/universal.collapsible-tab-view@npm:^0.0.34":
-  version: 0.0.34
-  resolution: "@showtime-xyz/universal.collapsible-tab-view@npm:0.0.34"
+"@showtime-xyz/universal.collapsible-tab-view@npm:0.0.35, @showtime-xyz/universal.collapsible-tab-view@npm:^0.0.35":
+  version: 0.0.35
+  resolution: "@showtime-xyz/universal.collapsible-tab-view@npm:0.0.35"
   dependencies:
     "@storybook/react": 6.5.9
     react-native-tab-view-next: 3.1.3
@@ -7433,7 +7433,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 6332a0e761d9f16444b75305671a39a19fdf48b7a9c5c37d5626439a62ddce9aa7ec1df13b2a7e1f4399d2bf5376cc5ad2ea1a993aa40398927e69f3af9efeb4
+  checksum: c513234393b3b0636e8d49f96b3395fe1b5bd815d787ea92b95fe1ba0fd730ebef2397f453261534b36936769857b5323958997579b3e038a59edb806b7db5a9
   languageName: node
   linkType: hard
 
@@ -7992,12 +7992,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tab-view@npm:^0.0.26":
-  version: 0.0.26
-  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.26"
+"@showtime-xyz/universal.tab-view@npm:^0.0.27":
+  version: 0.0.27
+  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.27"
   dependencies:
     "@shopify/flash-list": 1.2.1
-    "@showtime-xyz/universal.collapsible-tab-view": 0.0.34
+    "@showtime-xyz/universal.collapsible-tab-view": 0.0.35
     "@showtime-xyz/universal.haptics": 0.0.8
     "@showtime-xyz/universal.hooks": 0.0.37
     "@showtime-xyz/universal.infinite-scroll-list": 0.0.31
@@ -8016,7 +8016,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: c3ebd16e07762cb2455f842399af99138817101549a92a1b291fde8bad98f7d4b9db1743d000e586fe5987fce6bb44e28ee8e1e475b60e3571d2b82a066eff55
+  checksum: e3c47a0e84ce888a95cd39fecf09e61b838742442f361f3c5f4945259f49a53d092eba16e41b9f18f1f8231588ffd0d99d72425d98e51ef6e4aedff931866caf
   languageName: node
   linkType: hard
 
@@ -8209,7 +8209,7 @@ __metadata:
     "@showtime-xyz/universal.button": ^0.0.51
     "@showtime-xyz/universal.checkbox": ^0.0.45
     "@showtime-xyz/universal.clamp-text": ^0.0.14
-    "@showtime-xyz/universal.collapsible-tab-view": ^0.0.34
+    "@showtime-xyz/universal.collapsible-tab-view": ^0.0.35
     "@showtime-xyz/universal.color-scheme": ^0.0.23
     "@showtime-xyz/universal.country-code-picker": ^0.0.52
     "@showtime-xyz/universal.data-pill": ^0.0.39
@@ -8241,7 +8241,7 @@ __metadata:
     "@showtime-xyz/universal.snackbar": ^0.0.71
     "@showtime-xyz/universal.spinner": ^0.0.43
     "@showtime-xyz/universal.switch": ^0.0.45
-    "@showtime-xyz/universal.tab-view": ^0.0.26
+    "@showtime-xyz/universal.tab-view": ^0.0.27
     "@showtime-xyz/universal.tailwind": ^0.0.35
     "@showtime-xyz/universal.text": ^0.0.37
     "@showtime-xyz/universal.text-input": ^0.0.37
