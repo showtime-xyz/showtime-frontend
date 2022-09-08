@@ -51,7 +51,6 @@ const useWallet = (): UseWalletReturnType => {
       },
       disconnect: async () => {
         if (wcConnected) {
-          localStorage.removeItem("walletconnect");
           await connector.killSession();
         } else if (mobileSDKConnected) {
           mobileSDK.disconnect();
@@ -62,13 +61,16 @@ const useWallet = (): UseWalletReturnType => {
       networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
         if (wcConnected) {
+          console.log("idhar nahi jaana");
           const signature = await connector.signPersonalMessage([
             args.message,
             address,
           ]);
           return signature;
         } else if (mobileSDKConnected && address) {
+          console.log("before 1132", args.message, address);
           const signature = await mobileSDK.personalSign(args.message, address);
+          console.log("signaturee ", signature);
           return signature;
         }
       },

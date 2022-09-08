@@ -87,7 +87,7 @@ export function WalletMobileSDKProvider({
       };
       const [res] = await makeRequest([action]);
       if (res.result) {
-        return JSON.parse(res.result);
+        return res.result;
       } else {
         throw new Error(res.errorMessage ?? "Personal sign failed");
       }
