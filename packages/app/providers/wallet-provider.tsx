@@ -82,7 +82,11 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
           <PressableScale
             key={`wallet-cbw`}
             onPress={connectMobileSDK}
-            tw="my-2 flex-row items-center"
+            style={{
+              marginVertical: 8,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
             <Image
               source={require("./coinbase-wallet-icon.png")}
