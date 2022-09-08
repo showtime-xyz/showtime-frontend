@@ -63,11 +63,35 @@ type BottomTabNavigatorParams = {
   profileTab: NavigatorScreenParams<ProfileStackParams>;
 };
 
-declare global {
-  // namespace ReactNavigation {
-  //   interface RootParamList extends BottomTabNavigatorParams {}
-  // }
-}
+type RootStackNavigatorParams = {
+  bottomTabs: BottomTabNavigatorParams;
+  profile: ProfileStackParams["profile"];
+  settings: undefined;
+  privacySecuritySettings: undefined;
+  notificationSettings: undefined;
+  blockedList: undefined;
+  search: undefined;
+  swipeList: {
+    profileId?: string;
+    initialScrollIndex?: number;
+    collectionId?: number;
+    sortType?: string;
+    tabType?: string;
+    type: string;
+  };
+  nft: undefined;
+  login: undefined;
+  comments: undefined;
+  details: undefined;
+  activity: undefined;
+  editProfile: undefined;
+  followers: undefined;
+  following: undefined;
+  addEmail: undefined;
+  drop: undefined;
+  claim: undefined;
+  claimers: undefined;
+};
 
 export type {
   NextNavigationProps,
@@ -78,4 +102,5 @@ export type {
   NotificationsStackParams,
   ProfileStackParams,
   BottomTabNavigatorParams,
+  RootStackNavigatorParams,
 };

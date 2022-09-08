@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
-import type { ProfileScreenProps } from "app/components/profile";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { ActivitiesScreen } from "app/screens/activities";
@@ -28,8 +27,9 @@ import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
+import { RootStackNavigatorParams } from "./types";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackNavigatorParams>();
 
 export function RootStackNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
@@ -51,7 +51,7 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
-          getId={({ params }) => (params as ProfileScreenProps)?.username}
+          getId={({ params }) => params?.username}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
@@ -73,7 +73,9 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="swipeList"
           component={SwipeListScreen}
-          getId={({ params }) => params?.type}
+          getId={({ params }) => {
+            return params?.profileId ?? params.type;
+          }}
         />
         <Stack.Screen name="nft" component={NftScreen} />
       </Stack.Group>

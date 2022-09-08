@@ -7,11 +7,8 @@ const CreateStack = createStackNavigator<CreateStackParams>();
 
 function CreateNavigator() {
   return (
-    <CreateStack.Navigator
-      // @ts-ignore
-      screenOptions={screenOptions}
-    >
-      <CreateStack.Screen name="Drop" component={Drop} />
+    <CreateStack.Navigator screenOptions={screenOptions as {}}>
+      <CreateStack.Screen name="drop" component={Drop} />
     </CreateStack.Navigator>
   );
 }
