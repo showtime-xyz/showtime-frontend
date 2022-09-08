@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useExpoUpdate } from "app/hooks/use-expo-update";
@@ -34,9 +34,11 @@ export function BottomTabNavigator() {
   const { isTabBarHidden } = useNavigationElements();
   const { isAuthenticated, user } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
-  const tint = color === "#000" ? "light" : "dark";
+  const isDark = useIsDarkMode();
+  const color = isDark ? "#FFF" : "#000";
+
   useExpoUpdate();
+
   return (
     <BottomTab.Navigator
       initialRouteName="homeTab"
@@ -76,7 +78,7 @@ export function BottomTabNavigator() {
                 />
               ) : (
                 <BlurView
-                  tint={tint}
+                  tint={isDark ? "dark" : "light"}
                   intensity={95}
                   style={StyleSheet.absoluteFill}
                 />

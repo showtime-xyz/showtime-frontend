@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 const ModalListScreenQueryParamList = [
   "followersModal",
@@ -26,7 +25,7 @@ export const useModalListProps = () => {
   return {
     // Todo: react-virtuoso‘s list height does not adapt when in Modal, so set min-height to fix it first. and dig reason later.
     style: Platform.select({
-      web: isHasModalParam ? tw.style("min-h-50vh") : null,
+      web: isHasModalParam ? { minHeight: "50vh" } : null,
       default: null,
     }),
     useWindowScroll: false,

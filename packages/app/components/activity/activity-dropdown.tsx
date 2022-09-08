@@ -10,8 +10,8 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -23,6 +23,7 @@ type Props = {
 };
 
 function ActivityDropdown({ activity }: Props) {
+  const isDark = useIsDarkMode();
   const { mutate } = useSWRConfig();
   const { report } = useReport();
   const { unfollow } = useMyInfo();
@@ -36,9 +37,7 @@ function ActivityDropdown({ activity }: Props) {
             <MoreHorizontal
               width={24}
               height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
+              color={isDark ? "#FFF" : "#000"}
             />
           </Button>
         </View>

@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -15,7 +15,6 @@ import {
   TabInfiniteScrollList,
   TabSpinner,
 } from "@showtime-xyz/universal.tab-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Card } from "app/components/card";
@@ -52,6 +51,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   ) {
     const router = useRouter();
     const { filter } = useContext(FilterContext);
+    const { width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
 
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
@@ -118,7 +119,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     if (isBlocked) {
       return (
         <TabScrollView
-          contentContainerStyle={tw.style("mt-12 items-center")}
+          contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
           index={index}
           ref={listRef}
         >
@@ -140,7 +141,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     if (data.length === 0 && !isLoading) {
       return (
         <TabScrollView
-          contentContainerStyle={tw.style("mt-12 items-center")}
+          contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
           index={index}
           ref={listRef}
         >
@@ -174,7 +175,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             index={index}
             gridItemProps={Platform.select({
               default: null,
-              web: { style: tw.style("px-0 md:px-4") },
+              web: { style: { marginVertical: isMdWidth ? 16 : 0 } },
             })}
           />
         </ProfileTabsNFTProvider>

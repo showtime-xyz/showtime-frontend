@@ -6,7 +6,6 @@ import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image from "next/image";
 
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -55,20 +54,15 @@ function Img({
   onLoad,
   ...props
 }: Props) {
-  const actualHeight =
-    !isNaN(height) && typeof height === "number" ? height : undefined;
-  const actualWidth =
-    !isNaN(width) && typeof width === "number" ? width : undefined;
-
-  const hasHeightOrWidth = actualHeight || actualWidth;
+  const hasHeightOrWidth = false;
 
   if (source?.uri && typeof source?.uri === "string") {
     return (
       <Image
         src={source.uri}
         loading={loading}
-        width={actualWidth}
-        height={actualHeight}
+        width={width}
+        height={height}
         onLoadingComplete={(e) => {
           onLoad?.({
             nativeEvent: {
@@ -101,8 +95,8 @@ function Img({
       <Image
         src={source as string}
         loading={loading}
-        width={actualWidth}
-        height={actualHeight}
+        width={width}
+        height={height}
         layout={!hasHeightOrWidth ? "fill" : undefined}
         {...props}
       />
@@ -114,28 +108,10 @@ function Img({
 
 type ImageProps = { tw?: TW; style?: any } & ComponentProps<typeof Img>;
 
-function StyledImage({
-  tw,
-  width: propWidth = 0,
-  height: propHeight = 0,
-  borderRadius: propBorderRadius = 0,
-  style,
-  ...props
-}: ImageProps) {
-  const width = Number(tailwind.style(tw).width) || propWidth || style?.width;
-  const height =
-    Number(tailwind.style(tw).height) || propHeight || style?.height;
-  const borderRadius =
-    Number(tailwind.style(tw).borderRadius) || propBorderRadius;
-
+function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
   return (
     <View style={{ borderRadius, overflow: "hidden" }}>
-      <Img
-        {...props}
-        className={Array.isArray(tw) ? tw.join(" ") : tw ?? ""}
-        width={width}
-        height={height}
-      />
+      <Img {...props} className={Array.isArray(tw) ? tw.join(" ") : tw} />
     </View>
   );
 }

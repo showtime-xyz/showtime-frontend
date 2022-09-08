@@ -8,7 +8,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -131,7 +130,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         tw="h-full w-full max-w-screen-2xl flex-row overflow-hidden"
         style={{ height: itemHeight }}
       >
-        <View style={tw.style("flex-1 bg-gray-100 dark:bg-black")}>
+        <View tw="flex-1 bg-gray-100 dark:bg-black">
           <View
             ref={container}
             tw="w-full flex-row items-center justify-between p-4"
@@ -141,7 +140,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               size="regular"
               onPress={onClose}
               iconOnly
-              style={tw.style("dark:bg-gray-900 bg-white px-3")}
+              tw="bg-white px-3 dark:bg-gray-900"
             >
               <Close width={24} height={24} />
             </Button>
@@ -151,14 +150,14 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 size="regular"
                 onPress={onFullScreen}
                 iconOnly
-                style={tw.style("dark:bg-gray-900 bg-white mr-4 px-3")}
+                tw="dark:bg-gray-900 bg-white mr-4 px-3"
               >
                 <Maximize width={24} height={24} />
               </Button> */}
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   btnProps={{
-                    style: tw.style("dark:bg-gray-900 bg-white mr-4 px-3"),
+                    tw: "dark:bg-gray-900 bg-white mr-4 px-3",
                     variant: "tertiary",
                     size: "regular",
                   }}
@@ -184,12 +183,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           ) : null}
         </View>
         <View
-          style={[
-            tw.style("bg-white dark:bg-black dark:shadow-dark shadow-light"),
-            {
-              width: NFT_DETAIL_WIDTH,
-            },
-          ]}
+          tw="dark:shadow-dark shadow-light bg-white dark:bg-black"
+          style={{
+            width: NFT_DETAIL_WIDTH,
+          }}
         >
           <View tw="px-4 pt-4">
             <Social nft={nft} />

@@ -3,7 +3,7 @@ import { ViewStyle } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowTop } from "@showtime-xyz/universal.icon";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -12,9 +12,9 @@ import { TooltipProps } from "./types";
 
 const DARK_SHADOW =
   "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.05)) drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.05))";
-
 const LIGHT_SHADOW =
   "drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.5)) drop-shadow(0px 8px 16px rgba(255, 255, 255, 0.1))";
+
 const ARROW_SIZE = {
   width: 16,
   height: 8,
@@ -79,11 +79,14 @@ export const TooltipContent: React.FC<
         return {};
     }
   }, [placement]);
+
   if (customContent) return customContent;
+
   return (
     <View
+      tw="relative items-center justify-center rounded-2xl px-4 py-2"
       style={[
-        tw.style("relative items-center justify-center rounded-2xl px-4 py-2"),
+        // @ts-ignore
         {
           filter: isDark ? DARK_SHADOW : LIGHT_SHADOW,
           backgroundColor: color,
@@ -92,10 +95,10 @@ export const TooltipContent: React.FC<
         contentStyle,
       ]}
     >
-      <Text tw={`text-center text-base font-bold text-white ${textTw}`}>
+      <Text tw={["text-center text-base font-bold text-white", textTw ?? ""]}>
         {text}
       </Text>
-      <View style={[tw.style("z-1 absolute self-center"), getArrowStyle]}>
+      <View tw="z-1 absolute self-center" style={getArrowStyle}>
         <ArrowTop color={color} {...ARROW_SIZE} />
       </View>
     </View>

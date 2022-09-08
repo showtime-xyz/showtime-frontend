@@ -10,12 +10,13 @@ import reactStringReplace from "react-string-replace";
 import { Button } from "@showtime-xyz/universal.button";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -98,6 +99,7 @@ export const ProfileTop = ({
   isError: boolean;
   isLoading: boolean;
 }) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const userId = useCurrentUserId();
   const name = getProfileName(profileData?.profile);
@@ -250,9 +252,16 @@ export const ProfileTop = ({
           <View tw="flex-row items-end">
             <Animated.View
               style={[
-                tw.style(
-                  "w-32 h-32 rounded-full mt-[-72px] overflow-hidden border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-900"
-                ),
+                {
+                  width: 128,
+                  height: 128,
+                  borderRadius: 9999,
+                  marginTop: -72,
+                  overflow: "hidden",
+                  borderWidth: 4,
+                  borderColor: isDark ? "#000" : "#FFF",
+                  backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
+                },
                 avatarStyle,
               ]}
             >

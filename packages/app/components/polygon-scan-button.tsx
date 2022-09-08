@@ -1,8 +1,8 @@
 import { Linking } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PolygonScan } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 export const PolygonScanButton = ({
@@ -10,23 +10,27 @@ export const PolygonScanButton = ({
 }: {
   transactionHash?: string;
 }) => {
-  function handleOpenPolygonScan() {
-    Linking.openURL(
-      `https://${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
-      }polygonscan.com/tx/${transactionHash}`
-    );
-  }
+  const isDark = useIsDarkMode();
 
   if (!transactionHash) {
     return null;
   }
 
   return (
-    <Button onPress={handleOpenPolygonScan} variant="tertiary" size="regular">
+    <Button
+      onPress={() =>
+        Linking.openURL(
+          `https://${
+            process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+          }polygonscan.com/tx/${transactionHash}`
+        )
+      }
+      variant="tertiary"
+      size="regular"
+    >
       <PolygonScan
-        style={tw.style("rounded-lg overflow-hidden ")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={{ borderRadius: 8, overflow: "hidden" }}
+        color={isDark ? "#FFF" : "#000"}
       />
       <Text tw="pl-2 text-sm text-black dark:text-white">
         View on Polygon Scan

@@ -13,6 +13,7 @@ import {
   DropdownMenuItemIcon,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   UserMinus,
@@ -25,7 +26,7 @@ import {
   Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -42,12 +43,7 @@ import type { NFT } from "app/types";
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
     <DropdownMenuItemIcon>
-      <Icon
-        width="1em"
-        height="1em"
-        color={tw.style("bg-gray-500")?.backgroundColor as string}
-        {...rest}
-      />
+      <Icon width="1em" height="1em" color={colors.gray[500]} {...rest} />
     </DropdownMenuItemIcon>
   );
 };
@@ -64,6 +60,7 @@ function NFTDropdown({
   btnProps,
 }: Props) {
   //#region hooks
+  const isDark = useIsDarkMode();
   const tabType = useProfileTabType();
   const { isAuthenticated } = useUser();
   const { report } = useReport();
@@ -143,9 +140,7 @@ function NFTDropdown({
           {...btnProps}
         >
           <MoreHorizontal
-            color={
-              tw.style("dark:bg-white bg-gray-900")?.backgroundColor as string
-            }
+            color={isDark ? "#FFF" : colors.gray[900]}
             width={24}
             height={24}
           />

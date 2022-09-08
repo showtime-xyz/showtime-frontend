@@ -6,7 +6,6 @@ import { MotiView } from "moti";
 import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -93,7 +92,11 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
           from={{ opacity: 0 }}
           transition={{ duration: 600, type: "timing" }}
           animate={{ opacity: 1 }}
-          style={tw.style("mt-10 mb-4 h-30")}
+          style={{
+            marginTop: 40,
+            marginBottom: 16,
+            height: 128,
+          }}
         >
           <Text tw="text-center text-2xl text-gray-900 dark:text-white">
             {values[page].title}

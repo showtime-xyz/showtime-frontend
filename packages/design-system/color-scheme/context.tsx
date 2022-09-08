@@ -1,12 +1,11 @@
 import { createContext } from "react";
+import type { ColorSchemeName } from "react-native";
 
-type ColorScheme = "light" | "dark" | null | undefined;
-
-type SetColorScheme = (colorScheme: ColorScheme) => void;
+type SetColorScheme = (colorScheme: ColorSchemeName) => void;
 
 export const ColorSchemeContext = createContext(
   null as unknown as {
-    colorScheme: ColorScheme;
+    colorScheme: ColorSchemeName;
     setColorScheme: SetColorScheme;
   }
 );

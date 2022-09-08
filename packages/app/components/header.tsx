@@ -15,7 +15,7 @@ import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -39,6 +39,7 @@ import { breakpoints } from "design-system/theme";
 import { withColorScheme } from "./memo-with-theme";
 
 const SearchInHeader = () => {
+  const isDark = useIsDarkMode();
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
@@ -88,11 +89,13 @@ const SearchInHeader = () => {
           leftElement={
             <View tw="h-12 w-12 items-center justify-center rounded-full">
               <Search
-                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-                color={
-                  tw.style("bg-gray-500 dark:bg-gray-400")
-                    ?.backgroundColor as string
-                }
+                style={{
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  width: 24,
+                  height: 24,
+                }}
+                color={isDark ? colors.gray[400] : colors.gray[500]}
                 width={24}
                 height={24}
               />
@@ -110,10 +113,7 @@ const SearchInHeader = () => {
                   hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
                 >
                   <Close
-                    //@ts-ignore
-                    color={
-                      tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
-                    }
+                    color={isDark ? colors.gray[400] : colors.gray[600]}
                     width={24}
                     height={24}
                   />
@@ -121,7 +121,7 @@ const SearchInHeader = () => {
               </Popover.Close>
             ) : undefined
           }
-          inputStyle={tw.style("w-[269px]")}
+          inputStyle={{ width: 269 }}
         />
       </Popover.Anchor>
 
@@ -310,6 +310,7 @@ const HeaderRight = () => {
 };
 
 const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
 
@@ -332,8 +333,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
       }}
     >
       <Icon
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={{ borderRadius: 8, overflow: "hidden", width: 24, height: 24 }}
+        color={isDark ? "#FFF" : "#000"}
         width={24}
         height={24}
       />
@@ -352,16 +353,10 @@ const HeaderCenter = ({
     <View tw="flex flex-row">
       {isMdWidth ? (
         <Link href="/">
-          <ShowtimeTabBarIcon
-            color={isDark ? "black" : "white"}
-            customTw="mr-4"
-          />
+          <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
         </Link>
       ) : (
-        <ShowtimeTabBarIcon
-          color={isDark ? "black" : "white"}
-          customTw="mr-4"
-        />
+        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
       )}
 
       {isMdWidth ? <SearchInHeader /> : null}

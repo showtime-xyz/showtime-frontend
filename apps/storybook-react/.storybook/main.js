@@ -16,7 +16,6 @@ module.exports = {
         modulesToTranspile: [
           "@gorhom/bottom-sheet",
           "@gorhom/portal",
-          "twrnc",
           "moti",
           "zeego",
           "nativewind",

@@ -9,7 +9,7 @@ import {
   PressableScale,
   Props as PressableProps,
 } from "@showtime-xyz/universal.pressable-scale";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
@@ -104,12 +104,10 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           {
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 999,
-            ...tw.style(
-              `bg-gray-100 dark:bg-gray-900 ${
-                isInvalid ? "border-red-500 border" : ""
-              }`
-            ),
+            borderRadius: 9999,
+            backgroundColor: isDark ? colors.gray[900] : colors.gray[100],
+            borderColor: isInvalid ? colors.red[500] : undefined,
+            borderWidth: isInvalid ? 1 : undefined,
           },
           // @ts-ignore
           animatableStyle,

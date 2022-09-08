@@ -280,7 +280,7 @@ export const EditProfile = () => {
               }}
             >
               <Tabs.ScrollView
-                style={tw.style("flex-1")}
+                style={{ flex: 1 }}
                 asKeyboardAwareScrollView
                 extraScrollHeight={extraScrollHeight}
               >
@@ -440,7 +440,7 @@ export const EditProfile = () => {
                 </View>
               </Tabs.ScrollView>
               <Tabs.ScrollView
-                style={tw.style("px-4 mt-4")}
+                style={{ paddingVertical: 16, marginTop: 16 }}
                 asKeyboardAwareScrollView
                 extraScrollHeight={extraScrollHeight}
               >
@@ -512,7 +512,7 @@ export const EditProfile = () => {
                     );
                   })}
               </Tabs.ScrollView>
-              <Tabs.ScrollView style={tw.style("px-4 mt-4")}>
+              <Tabs.ScrollView style={{ paddingVertical: 16, marginTop: 16 }}>
                 <View tw="z-2">
                   <Controller
                     control={control}

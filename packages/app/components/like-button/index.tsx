@@ -1,6 +1,6 @@
 import { Button } from "@showtime-xyz/universal.button";
 import { Heart, HeartFilled } from "@showtime-xyz/universal.icon";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useSocialColor } from "app/hooks/use-social-color";
 import { formatNumber } from "app/utilities";
@@ -25,7 +25,7 @@ export function LikeButton({
       accentColor={textColors}
     >
       {isLiked ? (
-        <HeartFilled height={24} width={24} color={tw.color("red-500")} />
+        <HeartFilled height={24} width={24} color={colors.red[500]} />
       ) : (
         <Heart height={24} width={24} color={iconColor} />
       )}

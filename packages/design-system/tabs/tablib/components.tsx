@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -57,7 +57,13 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
   return (
     <Animated.View
       style={[
-        tw.style("flex-row justify-center items-center h-full px-4"),
+        {
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          paddingVertical: 16,
+        },
         Platform.OS !== "web" && animatedStyle,
       ]}
     >
@@ -132,13 +138,11 @@ export const SelectedTabIndicator = () => {
       ]}
     >
       <View
-        style={[
-          {
-            // negative bottom to accomodate border bottom of 1px
-            bottom: -1,
-          },
-          tw.style(`bg-gray-900 dark:bg-gray-100 h-0.5 absolute z-50 w-full`),
-        ]}
+        style={{
+          // negative bottom to accomodate border bottom of 1px
+          bottom: -1,
+        }}
+        tw="absolute z-50 h-0.5 w-full bg-gray-900 dark:bg-gray-100"
       />
       {/* {disableBackground ? null : (
         <View

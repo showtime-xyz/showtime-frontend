@@ -5,7 +5,7 @@ import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 
 import { Close } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import type { LightBoxProps } from "./light-box";
@@ -66,11 +66,7 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
           {imageElement}
         </View>
         <Pressable onPress={onClose} tw="absolute left-8 top-8">
-          <Close
-            color={tw.style("bg-gray-400")?.backgroundColor as string}
-            width={24}
-            height={24}
-          />
+          <Close color={colors.gray[400]} width={24} height={24} />
         </Pressable>
       </Modal>
     </LightBoxContext.Provider>

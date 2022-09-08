@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Platform, Pressable } from "react-native";
 
 import { MotiView } from "moti";
@@ -10,7 +10,7 @@ import {
   useOnHover,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 type CheckboxProps = {
   onChange: (checked: boolean) => void;
@@ -32,7 +32,6 @@ export const Checkbox = ({
   const handleChange = useCallback(() => {
     onChange(!checked);
   }, [onChange, checked]);
-
   const isDark = useIsDarkMode();
 
   const { onHoverIn, onHoverOut, hovered } = useOnHover();
@@ -80,11 +79,11 @@ export const Checkbox = ({
               borderWidth: 1,
               alignItems: "center",
               justifyContent: "center",
+              backgroundColor: isDark ? "#000" : "#FFF",
             },
             animatedStyle,
-            tw`bg-white dark:bg-black`,
           ],
-          [animatedStyle]
+          [animatedStyle, isDark]
         )}
       >
         <MotiView

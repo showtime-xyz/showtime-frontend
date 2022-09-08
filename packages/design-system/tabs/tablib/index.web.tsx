@@ -9,7 +9,7 @@ import {
 
 import * as RadixTabs from "@radix-ui/react-tabs";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { RecyclerListView } from "app/lib/recyclerlistview";
@@ -36,6 +36,7 @@ const Root = ({
   accessibilityLabel,
   index,
 }: TabRootProps) => {
+  const isDark = useIsDarkMode();
   const [selected, setSelected] = React.useState(
     initialIndex.toString() ?? "0"
   );
@@ -54,7 +55,6 @@ const Root = ({
       setSelected(index.toString());
       position.setValue(index);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
   const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
@@ -98,23 +98,25 @@ const Root = ({
         value={selected}
         onValueChange={onIndexChange}
         activationMode="manual"
-        style={tw.style("w-full")}
+        style={{ width: "100%" }}
       >
         {headerChild}
         <View tw="flex flex-1 flex-row justify-center bg-white dark:bg-black">
           <View tw="w-full max-w-screen-xl">
-            <RadixTabs.List
-              aria-label={accessibilityLabel}
-              style={tw.style("")}
-              asChild
-            >
+            <RadixTabs.List aria-label={accessibilityLabel} asChild>
               <ScrollView
                 {...(listChild as any).props}
                 horizontal
                 contentContainerStyle={[
-                  tw.style(
-                    `bg-white dark:bg-black flex h-full px-2.5 items-center flex-row flex-nowrap`
-                  ),
+                  {
+                    backgroundColor: isDark ? "#000" : "#FFF",
+                    display: "flex",
+                    flexDirection: "row",
+                    height: "100%",
+                    paddingVertical: 10,
+                    alignItems: "center",
+                    flexWrap: "nowrap",
+                  },
                   (listChild as any).props?.contentContainerStyle,
                 ]}
               >
@@ -130,14 +132,12 @@ const Root = ({
                     >
                       <TabIndexContext.Provider value={{ index }}>
                         <View
-                          style={tw.style(
-                            "item items-center border-b-2 h-full justify-center"
-                          )}
-                          tw={
+                          tw={[
+                            "item h-full items-center justify-center border-b-2",
                             selected === value
                               ? "border-b-gray-900 dark:border-b-gray-100"
-                              : "border-b-transparent"
-                          }
+                              : "border-b-transparent",
+                          ]}
                         >
                           {t}
                         </View>
@@ -151,10 +151,8 @@ const Root = ({
         </View>
         <View tw="w-full items-center">
           <View
-            style={[
-              tw.style(`w-full max-w-screen-xl ${tabPage?.props.tw}`),
-              tabPage?.props.style,
-            ]}
+            tw={["w-full max-w-screen-xl", tabPage?.props.tw]}
+            style={tabPage?.props.style}
           >
             {tabContents.map((c, index) => {
               const value = index.toString();

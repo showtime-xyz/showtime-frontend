@@ -9,12 +9,8 @@
     "source.organizeImports": false
   },
   "tailwindCSS.experimental.classRegex": [
-    "tw`([^`]*)", // tw`...`
     "tw=\"([^\"]*)", // <View tw="..." />
     "tw={\"([^\"}]*)", // <View tw={"..."} />
-    "tw\\.\\w+`([^`]*)", // tw.xxx`...`
-    "tw\\(.*?\\)`([^`]*)", // tw(Component)`...`
-    "tw\\.style\\(([^)]*)\\)", // tw.style("...")
     "tw={`([^`}]*)" // <View tw={`...`} />
   ]
 }

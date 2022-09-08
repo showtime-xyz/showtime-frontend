@@ -15,22 +15,15 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import { ModalContainerProps, ModalMethods } from "./types";
 // @ts-ignore
 import { useKeyboard } from "./useKeyboard";
-
-const BACKGROUND_TW = [
-  "bg-white dark:bg-black",
-  "rounded-t-[32px]",
-  "pointer-events-auto",
-];
-
-const BACKDROP_TW = "bg-gray-100 dark:bg-gray-900";
 
 const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
@@ -45,11 +38,19 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
     },
     ref
   ) {
+    const isDark = useIsDarkMode();
     const bottomSheetRef = useRef<BottomSheet>(null);
-
     const { top } = useSafeAreaInsets();
 
-    const backgroundStyle = useMemo(() => tailwind.style(...BACKGROUND_TW), []);
+    const backgroundStyle = useMemo(
+      () => ({
+        backgroundColor: isDark ? "#000" : "#FFF",
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
+        pointerEvents: "auto",
+      }),
+      [isDark]
+    );
     const ModalSheet = useMemo(
       () => (isScreen ? BottomSheet : BottomSheetModal),
       [isScreen]
@@ -73,12 +74,15 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         <BottomSheetBackdrop
           appearsOnIndex={0}
           disappearsOnIndex={-1}
-          style={tailwind.style(BACKDROP_TW)}
+          style={{
+            backgroundColor: isDark ? colors.gray[900] : colors.gray[100],
+          }}
           {...props}
         />
       ),
-      []
+      [isDark]
     );
+
     const renderHandleComponent = useCallback(
       (props: BottomSheetHandleProps) => (
         <>
@@ -88,6 +92,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       ),
       [title, close]
     );
+
     return (
       <ModalSheet
         ref={bottomSheetRef as any}

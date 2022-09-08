@@ -8,7 +8,8 @@ import {
 } from "react-native-tab-view-next";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Route } from "./index";
@@ -22,25 +23,34 @@ export const ScollableTabBar = ({
   style,
   ...rest
 }: Props & { navigationState: State }) => {
+  const isDark = useIsDarkMode();
   const onTabPress = useCallback(() => {
     Haptics.impactAsync();
   }, []);
+
   return (
     <View tw="web:border-b-0 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-black">
       <TabBar
         {...rest}
-        contentContainerStyle={tw.style("items-center")}
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
         style={[
           styles.tabbar,
-          tw.style("bg-white dark:bg-black shadow-none relative"),
+          {
+            backgroundColor: isDark ? "#000" : "#fff",
+            position: "relative",
+          },
           style,
         ]}
-        indicatorContainerStyle={tw.style("z-1")}
-        labelStyle={tw.style(
-          "text-sm font-bold text-gray-900 dark:text-white normal-case"
-        )}
-        indicatorStyle={tw.style("bg-gray-900 dark:bg-white")}
-        tabStyle={tw.style("px-2")}
+        indicatorContainerStyle={{ zIndex: 1 }}
+        labelStyle={{
+          color: isDark ? colors.white : colors.gray[900],
+          fontWeight: "bold",
+          fontSize: 14,
+        }}
+        indicatorStyle={{ backgroundColor: isDark ? "#FFF" : colors.gray[900] }}
+        tabStyle={{ paddingVertical: 8 }}
         onTabPress={onTabPress}
       />
     </View>

@@ -8,7 +8,7 @@ import {
   useOnHover,
   useOnPress,
 } from "@showtime-xyz/universal.hooks";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { SelectProps } from "../types";
@@ -53,14 +53,24 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
 
     const containerStyle = useMemo(
       () => [
-        tw`${
-          size === "regular" ? "py-[11px]" : "py-[7px]"
-        } flex-row items-center justify-between rounded-full pl-4 pr-2 border border-gray-200 dark:border-gray-800`,
+        {
+          paddingVertical: size === "regular" ? 11 : 7,
+          paddingLeft: 16,
+          paddingRight: 8,
+          borderRadius: 9999,
+          borderWidth: 1,
+          borderColor: isDarkMode ? colors.gray[800] : colors.gray[200],
+          // Not sure why TS is not happy with the type of the styles below
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        },
         containerAnimatedStyle,
       ],
-      [containerAnimatedStyle, size]
+      [containerAnimatedStyle, size, isDarkMode]
     );
     //#endregion
+
     return (
       <Pressable
         //@ts-ignore
@@ -74,11 +84,15 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
         disabled={disabled}
         {...rest}
       >
-        <Animated.View style={containerStyle}>
+        <Animated.View
+          // @ts-ignore
+          style={containerStyle}
+        >
           <Text
-            tw={`font-bold text-gray-900 dark:text-white ${
-              size === "regular" ? "text-sm" : "text-xs"
-            } mr-2`}
+            tw={[
+              "mr-2 font-bold text-gray-900 dark:text-white",
+              size === "regular" ? "text-sm" : "text-xs",
+            ]}
           >
             {label}
           </Text>

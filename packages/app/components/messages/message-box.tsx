@@ -10,9 +10,10 @@ import { Platform, ViewStyle } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Send } from "@showtime-xyz/universal.icon";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -40,6 +41,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     ref
   ) {
     //#region variables
+    const isDark = useIsDarkMode();
     const inputRef = useRef<typeof TextInput | HTMLElement>();
     useAutoSizeInput(inputRef);
     const [value, setValue] = useState("");
@@ -86,9 +88,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             value={value}
             editable={!submitting}
             placeholder="Add a comment..."
-            placeholderTextColor={
-              tw.style("text-gray-500 dark:text-gray-400").color as string
-            }
+            placeholderTextColor={isDark ? colors.gray[400] : colors.gray[500]}
             multiline={true}
             keyboardType="twitter"
             tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"

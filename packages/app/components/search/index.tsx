@@ -4,6 +4,7 @@ import { Keyboard, Platform, TextInput } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Close as CloseIcon,
   Search as SearchIcon,
@@ -13,7 +14,7 @@ import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -24,6 +25,7 @@ import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 export const Search = () => {
+  const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
@@ -61,8 +63,7 @@ export const Search = () => {
           leftElement={
             <View tw="p-2">
               <SearchIcon
-                //@ts-ignore
-                color={tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor}
+                color={isDark ? colors.gray[400] : colors.gray[600]}
                 width={24}
                 height={24}
               />
@@ -79,10 +80,7 @@ export const Search = () => {
                 hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
               >
                 <CloseIcon
-                  //@ts-ignore
-                  color={
-                    tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
-                  }
+                  color={isDark ? colors.gray[400] : colors.gray[600]}
                   width={24}
                   height={24}
                 />
