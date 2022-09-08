@@ -24,7 +24,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AlertOption } from "./alert-option";
 
-type AlertContext = {
+type AlertContextType = {
   alert: (...params: Parameters<AlertStatic["alert"]>) => void;
   /**
    * check out AlertProvider is installed
@@ -32,7 +32,7 @@ type AlertContext = {
   isMounted?: boolean;
 };
 
-export const AlertContext = createContext<AlertContext>({
+export const AlertContext = createContext<AlertContextType>({
   /**
    * use Alert.alert instead of Alert?.alert
    */

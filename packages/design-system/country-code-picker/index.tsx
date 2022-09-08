@@ -36,7 +36,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
 
   useEffect(() => {
     sharedValue.value = value;
-  }, [value]);
+  }, [sharedValue, value]);
 
   const contextValue = useMemo(() => {
     return {
@@ -46,7 +46,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         onChange(item.code);
       },
     };
-  }, [onChange]);
+  }, [onChange, sharedValue]);
 
   return (
     <PickerContext.Provider value={contextValue}>
