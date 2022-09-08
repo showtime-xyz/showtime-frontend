@@ -55,7 +55,7 @@ const Root = ({
       setSelected(index.toString());
       position.setValue(index);
     }
-  }, [index]);
+  }, [index, position]);
 
   const { tabTriggers, tabContents, tabPage, headerChild, listChild } =
     React.useMemo(() => {
