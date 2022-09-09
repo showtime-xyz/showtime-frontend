@@ -13,6 +13,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
@@ -129,12 +130,15 @@ export const SettingsWalletSlot = (props: Props) => {
   const address = props.address;
   const ensDomain = props.ensDomain;
   const { userAddress } = useCurrentUserAddress();
+  const user = useUser();
 
   const display = ensDomain ? ensDomain : formatAddressShort(address);
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
     userAddress?.toLowerCase() === address?.toLowerCase();
+
+  const isPrimary = user.user?.data.profile.primary_wallet?.address === address;
 
   return (
     <>
@@ -154,13 +158,9 @@ export const SettingsWalletSlot = (props: Props) => {
                 {isConnectedAddress ? (
                   <DataPill label="Current" tw="md:ml-2" type="secondary" />
                 ) : null}
-                {/* {mintingEnabled ? (
-                  <DataPill
-                    label="🔨 Minting Enabled"
-                    tw="md:ml-2"
-                    type="primary"
-                  />
-                ) : null} */}
+                {isPrimary ? (
+                  <DataPill label="Primary" tw="md:ml-2" type="primary" />
+                ) : null}
               </View>
             </View>
             <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
@@ -170,6 +170,7 @@ export const SettingsWalletSlot = (props: Props) => {
               address={address}
               isCurrent={isConnectedAddress}
               onEditNickname={props.onEditNickname}
+              isPrimary={isPrimary}
             />
           </View>
         </View>

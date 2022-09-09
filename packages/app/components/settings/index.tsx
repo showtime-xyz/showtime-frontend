@@ -324,7 +324,7 @@ const SettingsTabs = () => {
       <View style={{ height: bottomHeight }} />
       <EditNicknameModal
         editingWallet={editingWallet}
-        onClose={() => setEditingWallet(null)}
+        onClose={() => setEditingWallet(undefined)}
       />
     </View>
   );
@@ -334,8 +334,7 @@ const EditNicknameModal = ({
   editingWallet,
   onClose,
 }: {
-  editingWallet: WalletAddressesV2;
-  visible: boolean;
+  editingWallet?: WalletAddressesV2;
   onClose: any;
 }) => {
   const [nickname, setNickname] = useState(editingWallet?.nickname ?? "");
@@ -359,8 +358,10 @@ const EditNicknameModal = ({
         <Button
           tw="mt-4"
           onPress={() => {
-            editWalletNickName(editingWallet.address, nickname);
-            onClose();
+            if (editingWallet) {
+              editWalletNickName(editingWallet?.address, nickname);
+              onClose();
+            }
           }}
         >
           Submit

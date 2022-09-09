@@ -19,6 +19,7 @@ type AddressMenuProps = {
   address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
   isCurrent: boolean;
   onEditNickname: (address: string) => void;
+  isPrimary?: boolean;
 };
 
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
@@ -44,15 +45,18 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          // @ts-ignore
-          onSelect={() => setPrimaryWallet(address)}
-          key="primary"
-          destructive
-        >
-          <MenuItemIcon Icon={Check} />
-          <DropdownMenuItemTitle>Make Primary</DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {!props.isPrimary ? (
+          <DropdownMenuItem
+            // @ts-ignore
+            onSelect={() => setPrimaryWallet(address)}
+            key="primary"
+            destructive
+          >
+            <MenuItemIcon Icon={Check} />
+            <DropdownMenuItemTitle>Make Primary</DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
+
         <DropdownMenuItem
           // @ts-ignore
           onSelect={() => removeAccount(address)}
