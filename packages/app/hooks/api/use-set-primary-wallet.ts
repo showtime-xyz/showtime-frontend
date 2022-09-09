@@ -14,5 +14,5 @@ export const useSetPrimaryWallet = () => {
     });
   };
 
-  return setPrimaryWallet;
+  return { setPrimaryWallet };
 };

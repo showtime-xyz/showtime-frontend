@@ -2,6 +2,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Check, Edit, MoreHorizontal } from "@showtime-xyz/universal.icon";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
@@ -23,6 +24,7 @@ type AddressMenuProps = {
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
   const { removeAccount } = useManageAccount();
   const address = props.address;
+  const { setPrimaryWallet } = useSetPrimaryWallet();
 
   return (
     <DropdownMenuRoot>
@@ -44,7 +46,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
 
         <DropdownMenuItem
           // @ts-ignore
-          onSelect={() => {}}
+          onSelect={() => setPrimaryWallet(address)}
           key="primary"
           destructive
         >
