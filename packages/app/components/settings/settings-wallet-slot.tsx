@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Platform } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -69,7 +70,11 @@ export const SettingsWalletSlotSkeleton = () => {
           colorMode={colorScheme as any}
           radius="round"
         >
-          <Animated.View entering={FadeIn}></Animated.View>
+          {Platform.OS !== "web" ? (
+            <Animated.View entering={FadeIn} />
+          ) : (
+            <View />
+          )}
         </Skeleton>
       </View>
       <View tw="px-4">
@@ -80,7 +85,11 @@ export const SettingsWalletSlotSkeleton = () => {
             show={true}
             colorMode={colorScheme as any}
           >
-            <Animated.View entering={FadeIn}></Animated.View>
+            {Platform.OS !== "web" ? (
+              <Animated.View entering={FadeIn} />
+            ) : (
+              <View />
+            )}
           </Skeleton>
         </View>
         <View tw="pb-3">
@@ -90,7 +99,11 @@ export const SettingsWalletSlotSkeleton = () => {
             show={true}
             colorMode={colorScheme as any}
           >
-            <Animated.View entering={FadeIn}></Animated.View>
+            {Platform.OS !== "web" ? (
+              <Animated.View entering={FadeIn} />
+            ) : (
+              <View />
+            )}
           </Skeleton>
         </View>
         <View tw="pb-3">
@@ -100,7 +113,11 @@ export const SettingsWalletSlotSkeleton = () => {
             show={true}
             colorMode={colorScheme as any}
           >
-            <Animated.View entering={FadeIn}></Animated.View>
+            {Platform.OS !== "web" ? (
+              <Animated.View entering={FadeIn} />
+            ) : (
+              <View />
+            )}
           </Skeleton>
         </View>
         <View>
@@ -110,7 +127,11 @@ export const SettingsWalletSlotSkeleton = () => {
             show={true}
             colorMode={colorScheme as any}
           >
-            <Animated.View entering={FadeIn}></Animated.View>
+            {Platform.OS !== "web" ? (
+              <Animated.View entering={FadeIn} />
+            ) : (
+              <View />
+            )}
           </Skeleton>
         </View>
       </View>
@@ -156,10 +177,14 @@ export const SettingsWalletSlot = (props: Props) => {
               </Text>
               <View tw="my-2 flex flex-row md:my-0">
                 {isConnectedAddress ? (
-                  <DataPill label="Current" tw="md:ml-2" type="secondary" />
+                  <DataPill
+                    label="Current"
+                    tw="bg-gray-500 md:ml-2"
+                    type="primary"
+                  />
                 ) : null}
                 {isPrimary ? (
-                  <DataPill label="Primary" tw="md:ml-2" type="primary" />
+                  <DataPill label="Primary" tw="md:ml-2" type="secondary" />
                 ) : null}
               </View>
             </View>
