@@ -18,14 +18,14 @@ export const WebFooter = () => {
     <View tw="w-full items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-2xl flex-col-reverse justify-between p-4 md:flex-row md:p-12 ">
         <View tw="mt-4 md:mt-0">
-          <Link href="/" key="ShowtimeWordmark">
+          <Link href="/" tw="mb-4" key="ShowtimeWordmark">
             <ShowtimeWordmark
               color={tw.style("text-gray-900 dark:text-white").color as string}
               height={24}
               width={140}
             />
           </Link>
-          <Text tw={"text-13 mt-4 font-semibold text-gray-500"}>
+          <Text tw="text-13 font-semibold text-gray-500">
             &copy; {new Date().getFullYear()} Showtime Technologies, Inc.
           </Text>
         </View>
