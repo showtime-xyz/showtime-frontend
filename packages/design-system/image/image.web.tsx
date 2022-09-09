@@ -54,7 +54,12 @@ function Img({
   onLoad,
   ...props
 }: Props) {
-  const hasHeightOrWidth = false;
+  const actualHeight =
+    !isNaN(height) && typeof height === "number" ? height : undefined;
+  const actualWidth =
+    !isNaN(width) && typeof width === "number" ? width : undefined;
+
+  const hasHeightOrWidth = actualHeight || actualWidth;
 
   if (source?.uri && typeof source?.uri === "string") {
     return (
