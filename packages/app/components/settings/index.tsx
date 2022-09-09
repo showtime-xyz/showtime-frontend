@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import Constants from "expo-constants";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
 import {
@@ -19,6 +21,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useAddWalletNickname } from "app/hooks/api/use-add-wallet-nickname";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { useTabState } from "app/hooks/use-tab-state";
@@ -81,10 +84,15 @@ const SettingsTabs = () => {
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
-  const isDark = useIsDarkMode();
   const isWeb = Platform.OS === "web";
   const pushNotificationsPreferences = usePushNotificationsPreferences();
   const bottomHeight = usePlatformBottomHeight();
+  const [editingWallet, setEditingWallet] = useState<
+    WalletAddressesV2 | undefined
+  >(undefined);
+  const handleEditNickname = useCallback((wallet?: WalletAddressesV2) => {
+    setEditingWallet(wallet);
+  }, []);
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
@@ -133,6 +141,7 @@ const SettingsTabs = () => {
                   address={item.address}
                   ensDomain={item.ens_domain}
                   mintingEnabled={item.minting_enabled}
+                  onEditNickname={() => handleEditNickname(item)}
                 />
               )}
               ListEmptyComponent={() => {
@@ -258,6 +267,7 @@ const SettingsTabs = () => {
       pushNotificationsPreferences,
       isMdWidth,
       router,
+      handleEditNickname,
     ]
   );
 
@@ -312,7 +322,51 @@ const SettingsTabs = () => {
         style={tw.style("z-1")}
       />
       <View style={{ height: bottomHeight }} />
+      <EditNicknameModal
+        editingWallet={editingWallet}
+        onClose={() => setEditingWallet(null)}
+      />
     </View>
+  );
+};
+
+const EditNicknameModal = ({
+  editingWallet,
+  onClose,
+}: {
+  editingWallet: WalletAddressesV2;
+  visible: boolean;
+  onClose: any;
+}) => {
+  const [nickname, setNickname] = useState(editingWallet?.nickname ?? "");
+  const { editWalletNickName } = useAddWalletNickname();
+
+  return (
+    <ModalSheet
+      title="Edit Nickname"
+      visible={!!editingWallet}
+      close={onClose}
+      onClose={onClose}
+    >
+      <View tw="p-4">
+        <Fieldset
+          placeholder="rainbow wallet"
+          label="Nickname"
+          autoFocus
+          value={nickname}
+          onChangeText={setNickname}
+        />
+        <Button
+          tw="mt-4"
+          onPress={() => {
+            editWalletNickName(editingWallet.address, nickname);
+            onClose();
+          }}
+        >
+          Submit
+        </Button>
+      </View>
+    </ModalSheet>
   );
 };
 

@@ -18,5 +18,5 @@ export const useAddWalletNickname = () => {
     });
   };
 
-  return editWalletNickName;
+  return { editWalletNickName };
 };

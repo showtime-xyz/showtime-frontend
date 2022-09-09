@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import { useWindowDimensions } from "react-native";
 
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -18,15 +16,14 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
-import { breakpoints } from "design-system/theme";
-
-import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
+import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 
 type Props = {
   address: WalletAddressesExcludingEmailV2["address"];
   ensDomain?: WalletAddressesExcludingEmailV2["ens_domain"];
   mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
+  onEditNickname: (wallet: string) => void;
 };
 
 export const SettingsWalletSlotHeader = () => {
@@ -131,12 +128,8 @@ export const SettingsWalletSlotPlaceholder = () => {
 export const SettingsWalletSlot = (props: Props) => {
   const address = props.address;
   const ensDomain = props.ensDomain;
-  const isDark = useIsDarkMode();
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
   const { userAddress } = useCurrentUserAddress();
 
-  const mintingEnabled = props.mintingEnabled;
   const display = ensDomain ? ensDomain : formatAddressShort(address);
   const isEthereumAddress = address.startsWith("0x");
 
@@ -144,41 +137,43 @@ export const SettingsWalletSlot = (props: Props) => {
     userAddress?.toLowerCase() === address?.toLowerCase();
 
   return (
-    <View tw="md:px-4">
-      <View tw="md:dark:shadow-dark md:shadow-light w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black">
-        <View tw="justify-center">
-          <Button iconOnly={true} variant="secondary">
-            {isEthereumAddress ? <Ethereum /> : <Tezos />}
-          </Button>
-        </View>
-        <View tw="flex-1 px-4">
-          <View tw="md:mb-3 md:flex-row">
-            <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
-              {display}
-            </Text>
-            <View tw="my-2 flex flex-row md:my-0">
-              {isConnectedAddress ? (
-                <DataPill label="Current" tw="md:ml-2" type="secondary" />
-              ) : null}
-              {mintingEnabled ? (
-                <DataPill
-                  label="🔨 Minting Enabled"
-                  tw="md:ml-2"
-                  type="primary"
-                />
-              ) : null}
-            </View>
+    <>
+      <View tw="md:px-4">
+        <View tw="md:dark:shadow-dark md:shadow-light w-full flex-row justify-between p-4 md:rounded-2xl md:bg-white md:dark:bg-black">
+          <View tw="justify-center">
+            <Button iconOnly={true} variant="secondary">
+              {isEthereumAddress ? <Ethereum /> : <Tezos />}
+            </Button>
           </View>
-          <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
-        </View>
-        <View tw="flex justify-center">
-          <AddressMenu
-            address={address}
-            ctaCopy="Delete Wallet"
-            isCurrent={isConnectedAddress}
-          />
+          <View tw="flex-1 px-4">
+            <View tw="md:mb-3 md:flex-row">
+              <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
+                {display}
+              </Text>
+              <View tw="my-2 flex flex-row md:my-0">
+                {isConnectedAddress ? (
+                  <DataPill label="Current" tw="md:ml-2" type="secondary" />
+                ) : null}
+                {/* {mintingEnabled ? (
+                  <DataPill
+                    label="🔨 Minting Enabled"
+                    tw="md:ml-2"
+                    type="primary"
+                  />
+                ) : null} */}
+              </View>
+            </View>
+            <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
+          </View>
+          <View tw="flex justify-center">
+            <WalletDropdownMenu
+              address={address}
+              isCurrent={isConnectedAddress}
+              onEditNickname={props.onEditNickname}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
