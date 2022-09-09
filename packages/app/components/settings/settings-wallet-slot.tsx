@@ -1,7 +1,4 @@
 import { useEffect } from "react";
-import { Platform } from "react-native";
-
-import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -69,56 +66,32 @@ export const SettingsWalletSlotSkeleton = () => {
           show={true}
           colorMode={colorScheme as any}
           radius="round"
-        >
-          {Platform.OS !== "web" ? (
-            <Animated.View entering={FadeIn} />
-          ) : (
-            <View />
-          )}
-        </Skeleton>
+        />
       </View>
-      <View tw="px-4">
-        <View tw="pb-3">
+      <View tw="w-full px-4">
+        <View tw="w-full pb-3">
           <Skeleton
             height={16}
-            width={128}
+            width={"100%"}
             show={true}
             colorMode={colorScheme as any}
-          >
-            {Platform.OS !== "web" ? (
-              <Animated.View entering={FadeIn} />
-            ) : (
-              <View />
-            )}
-          </Skeleton>
+          />
         </View>
         <View tw="pb-3">
           <Skeleton
             height={16}
-            width={256}
+            width={"100%"}
             show={true}
             colorMode={colorScheme as any}
-          >
-            {Platform.OS !== "web" ? (
-              <Animated.View entering={FadeIn} />
-            ) : (
-              <View />
-            )}
-          </Skeleton>
+          />
         </View>
-        <View tw="pb-3">
+        <View tw="w-full pb-3">
           <Skeleton
             height={32}
-            width={300}
+            width={"100%"}
             show={true}
             colorMode={colorScheme as any}
-          >
-            {Platform.OS !== "web" ? (
-              <Animated.View entering={FadeIn} />
-            ) : (
-              <View />
-            )}
-          </Skeleton>
+          />
         </View>
         <View>
           <Skeleton
@@ -126,13 +99,7 @@ export const SettingsWalletSlotSkeleton = () => {
             width={300}
             show={true}
             colorMode={colorScheme as any}
-          >
-            {Platform.OS !== "web" ? (
-              <Animated.View entering={FadeIn} />
-            ) : (
-              <View />
-            )}
-          </Skeleton>
+          />
         </View>
       </View>
     </View>
