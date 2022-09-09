@@ -18,9 +18,9 @@ const CONTAINER_TW = [
 
 const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
-  "w-full	sm:w-480px",
+  "w-full	sm:w-[480px]",
   "bg-white dark:bg-black",
-  "shadow-xl shadow-black dark:shadow-white",
+  "dark:shadow-lg-dark shadow-lg-light",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
   "max-h-90vh md:max-h-82vh",
 ];
@@ -39,6 +39,8 @@ function ModalContainerComponent({
   disableBackdropPress,
   tw: propTw = "",
 }: ModalContainerProps) {
+  console.log(propTw);
+
   const modalContainerTW = useMemo(
     () => [...MODAL_CONTAINER_TW, web_height, propTw],
     [web_height, propTw]

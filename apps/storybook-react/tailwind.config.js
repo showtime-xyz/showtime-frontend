@@ -311,10 +311,13 @@ module.exports = {
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
       },
       boxShadow: {
-        dropdown:
-          "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
-        modal:
-          "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
+        dark: "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 8px 16px rgba(255, 255, 255, 0.1)",
+        light:
+          "0px 2px 4px rgba(0, 0, 0, 0.05), 0px 4px 8px rgba(0, 0, 0, 0.05)",
+        "lg-dark":
+          "0px 0px 2px rgba(255, 255, 255, 0.5), 0px 16px 48px rgba(255, 255, 255, 0.2)",
+        "lg-light":
+          "0px 12px 16px rgba(0, 0, 0, 0.1), 0px 16px 48px rgba(0, 0, 0, 0.1)",
       },
       borderRadius: {
         inherit: "inherit",
