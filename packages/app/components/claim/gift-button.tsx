@@ -29,7 +29,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
     <Button
       variant="text"
       size="regular"
-      tw="h-6 p-0"
+      tw="h-6 p-0 md:p-4"
       onPress={() => {
         const as = `/claimers/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
         router.push(

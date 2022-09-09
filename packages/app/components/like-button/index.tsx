@@ -20,7 +20,7 @@ export function LikeButton({
     <Button
       variant="text"
       size="regular"
-      tw="h-6 p-0"
+      tw="h-6 p-0 md:p-4"
       onPress={onPress}
       accentColor={textColors}
     >

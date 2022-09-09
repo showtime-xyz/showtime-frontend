@@ -11,7 +11,7 @@ const CONTAINER_PADDING_TW = {
 
 const CONTAINER_ICON_PADDING_TW = {
   small: "px-2",
-  regular: "p-4",
+  regular: "p-3.5",
 };
 
 const CONTAINER_HEIGHT_TW = {

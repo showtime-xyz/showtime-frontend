@@ -19,7 +19,6 @@ function ProfileNavigator() {
 
   return (
     <ProfileStack.Navigator
-      // @ts-ignore
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
