@@ -130,7 +130,7 @@ function Card({
           >
             <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
-          <View tw="flex-row justify-between px-4 pt-4">
+          <View tw="flex-row justify-between p-4">
             <Social nft={nft} />
             {showClaimButton &&
             !!nft.creator_airdrop_edition_address &&
@@ -138,8 +138,6 @@ function Card({
               <ClaimButton edition={edition} />
             ) : null}
           </View>
-
-          <Owner nft={nft} price={false} />
         </View>
       </View>
     </LikeContextProvider>
