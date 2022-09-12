@@ -16,6 +16,8 @@ export type Props = {
   resizeMode?: ResizeMode;
   numColumns: number;
   style?: object;
+  width: number;
+  height: number;
 };
 
 const StyledCanvas = styled(Canvas);
@@ -60,6 +62,8 @@ function ModelViewer({
   resizeMode,
   style,
   numColumns,
+  width,
+  height,
 }: Props) {
   if (fallbackUrl && numColumns > 1) {
     return (
@@ -71,6 +75,8 @@ function ModelViewer({
         style={style}
         blurhash={blurhash}
         resizeMode={resizeMode}
+        width={width}
+        height={height}
       />
     );
   }

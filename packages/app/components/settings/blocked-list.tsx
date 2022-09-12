@@ -23,6 +23,8 @@ export const UserItem = (props: UserItemProps) => {
       <View tw="mr-2 h-6 w-6 rounded-xl bg-gray-200">
         <Image
           tw={"h-full w-full rounded-full"}
+          width={24}
+          height={24}
           source={{ uri: props.image_url }}
         />
       </View>

@@ -90,7 +90,9 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
           >
             <Image
               source={require("./coinbase-wallet-icon.png")}
-              tw="h-10 w-10 rounded-md"
+              tw="rounded-md"
+              width={40}
+              height={40}
             />
             <View tw="w-4" />
             <Text tw="text-lg text-black dark:text-white">Coinbase Wallet</Text>
@@ -116,7 +118,9 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
                 <Image
                   // @ts-ignore
                   source={{ uri: walletService.image_url.lg }}
-                  tw="h-10 w-10 rounded-md"
+                  tw="rounded-md"
+                  width={40}
+                  height={40}
                 />
                 <View tw="w-4" />
                 <Text tw="text-lg text-black dark:text-white">
