@@ -101,13 +101,7 @@ export const EditProfile = () => {
   const pickFile = useFilePicker();
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
-  const [index, setIndex] = useState(0);
-
-  const [currentCropField, setCurrentCropField] = useState<
-    null | "coverPicture" | "profilePicture"
-  >(null);
-
-  const [selected, setSelected] = useState(() =>
+  const [index, setIndex] = useState(() =>
     !user?.data?.profile.username ||
     !user?.data?.profile.bio ||
     !user?.data?.profile.img_url
@@ -117,8 +111,12 @@ export const EditProfile = () => {
       : 0
   );
 
+  const [currentCropField, setCurrentCropField] = useState<
+    null | "coverPicture" | "profilePicture"
+  >(null);
+
   const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
-    useState(selected === 1);
+    useState(index === 1);
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -192,7 +190,7 @@ export const EditProfile = () => {
     //@ts-ignore
     if (userHasIncompleteExternalLinks(newValues)) {
       setHasNotSubmittedExternalLink(true);
-      setSelected(1);
+      setIndex(1);
     } else {
       setHasNotSubmittedExternalLink(false);
 
