@@ -25,7 +25,7 @@ export const AddWalletOrSetPrimary = () => {
     return user?.data.profile.wallet_addresses_excluding_email_v2.map(
       (wallet) => {
         return {
-          label: formatAddressShort(wallet.address),
+          label: formatAddressShort(wallet.address) ?? wallet.address,
           value: wallet.address,
         };
       }
