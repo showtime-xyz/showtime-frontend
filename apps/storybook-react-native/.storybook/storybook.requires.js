@@ -32,7 +32,6 @@ const getStories = () => {
     require("../../../packages/design-system/skeleton/skeleton.stories.tsx"),
     require("../../../packages/design-system/spinner/spinner.stories.tsx"),
     require("../../../packages/design-system/switch/switch.stories.tsx"),
-    // require("../../../packages/design-system/tabs/tabs.stories.tsx"),
     require("../../../packages/design-system/text/text.stories.tsx"),
     require("../../../packages/design-system/alert/alert.stories.tsx"),
     require("../../../packages/design-system/toast/toast.stories.tsx"),

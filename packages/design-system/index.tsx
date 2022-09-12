@@ -13,7 +13,6 @@ export { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 export { Select } from "@showtime-xyz/universal.select";
 export { Skeleton } from "@showtime-xyz/universal.skeleton";
 export { Spinner } from "@showtime-xyz/universal.spinner";
-export { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 export { Text } from "@showtime-xyz/universal.text";
 export { TextInput } from "@showtime-xyz/universal.text-input";
 export { VerificationBadge } from "@showtime-xyz/universal.verification-badge";

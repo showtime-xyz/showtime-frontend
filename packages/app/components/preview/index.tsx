@@ -16,6 +16,8 @@ type PreviewProps = {
   tw?: string;
   style?: any;
   resizeMode?: ImgResizeMode | ResizeMode;
+  width: number;
+  height: number;
 };
 
 const StyledVideo = styled(Video);
@@ -26,6 +28,8 @@ export const Preview = ({
   type,
   file,
   resizeMode = "cover",
+  width,
+  height,
 }: PreviewProps) => {
   const uri = getLocalFileURI(file);
 
@@ -55,6 +59,8 @@ export const Preview = ({
           source={{
             uri: uri as string,
           }}
+          width={width}
+          height={height}
           onLoad={() => {
             revokeObjectURL(uri);
           }}
@@ -66,7 +72,7 @@ export const Preview = ({
       return (
         <StyledVideo
           tw={tw}
-          style={style}
+          style={[{ width, height }, style]}
           resizeMode={resizeMode as ResizeMode}
           source={{ uri: uri as string }}
           isMuted

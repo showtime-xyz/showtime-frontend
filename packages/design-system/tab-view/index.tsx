@@ -27,6 +27,8 @@ export * from "react-native-tab-view-next";
 export * from "./tab-flash-list-scroll-view";
 export * from "./tab-bar-single";
 export * from "./tab-spinner";
+export * from "./scrollable-auto-width-tab-bar";
+export * from "./scrollable-tab-bar";
 type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
   autoWidthTabBar?: boolean;
   insertTabBarElement?: JSX.Element;
