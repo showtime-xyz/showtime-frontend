@@ -5,7 +5,6 @@ import { Link } from "solito/link";
 
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
@@ -106,7 +105,7 @@ function Card({
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   btnProps={{
-                    style: tailwind.style("dark:bg-gray-900 bg-gray-100 px-1"),
+                    tw: "dark:bg-gray-900 bg-gray-100 px-1",
                     size: "small",
                   }}
                   nft={nft}

@@ -17,13 +17,14 @@ import { MotiView } from "moti";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { Divider } from "@showtime-xyz/universal.divider";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AlertOption } from "./alert-option";
 
-type AlertContext = {
+type AlertContextType = {
   alert: (...params: Parameters<AlertStatic["alert"]>) => void;
   /**
    * check out AlertProvider is installed
@@ -31,8 +32,7 @@ type AlertContext = {
   isMounted?: boolean;
 };
 
-// eslint-disable-next-line no-redeclare
-export const AlertContext = createContext<AlertContext>({
+export const AlertContext = createContext<AlertContextType>({
   /**
    * use Alert.alert instead of Alert?.alert
    */
@@ -43,6 +43,7 @@ export const AlertContext = createContext<AlertContext>({
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
+  const isDark = useIsDarkMode();
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -107,7 +108,12 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
         {/* prevent scrolling/shaking when modal is open */}
         {Platform.OS === "web" && <RemoveScrollBar />}
         <MotiView
-          style={tw.style("h-full w-full bg-black bg-opacity-60 absolute")}
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            position: "absolute",
+          }}
           from={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -115,9 +121,13 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
         />
         <View tw="h-full w-full items-center justify-center">
           <MotiView
-            style={tw.style(
-              "max-w-xs w-4/5 px-4 py-4 bg-white dark:bg-gray-900 shadow-2xl rounded-2xl"
-            )}
+            style={{
+              padding: 16,
+              backgroundColor: isDark ? colors.gray[900] : "#FFF",
+              borderRadius: 16,
+              maxWidth: 320,
+              width: "80%",
+            }}
             from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
             animate={{ transform: [{ scale: 1 }], opacity: 1 }}
             exit={{ opacity: 0 }}

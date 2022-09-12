@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ViewStyle,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import {
@@ -14,8 +15,9 @@ import {
 } from "react-native-tab-view-next";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Route } from "./";
@@ -31,6 +33,7 @@ export const ScollableAutoWidthTabBar = ({
   maxContentWidth = 1140,
   ...rest
 }: Props & { navigationState: State }) => {
+  const isDark = useIsDarkMode();
   const indicatorFadeAnim = useRef(new Animated.Value(0)).current;
   const { width } = useWindowDimensions();
   const contentWidth = useMemo(
@@ -151,18 +154,21 @@ export const ScollableAutoWidthTabBar = ({
       contentContainerStyle={styles.contentContainerStyle}
       style={[
         styles.tabbar,
-        tw.style(
-          "bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 web:border-b-0"
-        ),
+        {
+          backgroundColor: isDark ? "#000" : "#FFF",
+          borderColor: isDark ? colors.gray[800] : colors.gray[200],
+          borderBottomWidth: Platform.OS === "web" ? 0 : 1,
+        },
         style,
       ]}
-      indicatorContainerStyle={tw.style("z-1")}
+      indicatorContainerStyle={{ zIndex: 1 }}
       renderIndicator={({ position, navigationState }) => {
         return (
           <Animated.View
             style={[
-              tw.style("bg-gray-900 dark:bg-white z-10"),
               {
+                backgroundColor: isDark ? "#FFF" : colors.gray[900],
+                zIndex: 10,
                 width: contentWidth,
                 opacity: indicatorFadeAnim,
                 transform: [

@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -224,7 +223,6 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
   const { colorScheme } = useColorScheme();
-  const isDark = useIsDarkMode();
   const router = useRouter();
 
   return (
@@ -248,7 +246,7 @@ const SuggestedUsers = () => {
             <CreatorPreview
               creator={user}
               onMediaPress={(index: number) => {
-                const item = user?.top_items[index];
+                const item = user?.top_items![index];
                 router.push(
                   `/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`
                 );

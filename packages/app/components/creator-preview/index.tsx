@@ -39,10 +39,11 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           href={`/@${props.creator.username ?? props.creator.address}`}
           tw="flex-row items-center"
         >
-          <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
+          <View tw="mr-2 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
             <Image
               source={{ uri: props.creator?.img_url ?? DEFAULT_PROFILE_PIC }}
-              tw="h-8 w-8 rounded-full"
+              width={64}
+              height={64}
             />
           </View>
           <View>

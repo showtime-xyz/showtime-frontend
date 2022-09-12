@@ -8,6 +8,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   Copy,
@@ -15,7 +16,6 @@ import {
   Slash,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
@@ -36,6 +36,7 @@ function ProfileDropdown({ user }: Props) {
   const share = useShare();
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
+  const isDark = useIsDarkMode();
 
   return (
     <DropdownMenuRoot>
@@ -45,11 +46,7 @@ function ProfileDropdown({ user }: Props) {
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
         >
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          <MoreHorizontal color={isDark ? "#FFF" : "#000"} />
         </Button>
       </DropdownMenuTrigger>
 

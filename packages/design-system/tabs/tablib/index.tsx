@@ -40,11 +40,11 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ScrollViewProps,
   ScrollView,
 } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 import { useIsFocused, useScrollToTop } from "app/lib/react-navigation/native";
@@ -98,7 +98,6 @@ const Root = ({
     if (typeof indexProp === "number") {
       pagerRef.current.setPage(indexProp);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indexProp]);
 
   // We need to put both header and TabBar in absolute view so filter here, bad for composition, maybe improve later
@@ -204,6 +203,7 @@ const ListImpl = ({
   onPressCallback,
   ...props
 }: TabListProps) => {
+  const isDark = useIsDarkMode();
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
@@ -251,8 +251,8 @@ const ListImpl = ({
   );
 
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-black`), style];
-  }, [style]);
+    return [{ backgroundColor: isDark ? "#000" : "#FFF" }, style];
+  }, [isDark, style]);
 
   return (
     <AnimatedScrollView
@@ -393,7 +393,7 @@ const Trigger = React.forwardRef(
     }: PressableProps & {
       onPressCallback?: () => void;
     },
-    // eslint-disable-next-line unused-imports/no-unused-vars
+
     ref: ForwardedRef<typeof Pressable>
   ) => {
     const { pagerRef, tabItemLayouts } = useContext(TabsContext);

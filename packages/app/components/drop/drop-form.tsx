@@ -9,12 +9,12 @@ import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -88,6 +88,7 @@ const dropValidationSchema = yup.object({
 // const { useParam } = createParam<{ transactionId: string }>()
 
 export const DropForm = () => {
+  const isDark = useIsDarkMode();
   const { rudder } = useRudder();
   const {
     control,
@@ -326,10 +327,7 @@ export const DropForm = () => {
                         ) : (
                           <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
                             <ImageIcon
-                              color={
-                                tw.style("bg-black dark:bg-white")
-                                  ?.backgroundColor as string
-                              }
+                              color={isDark ? "#FFF" : "#000"}
                               width={40}
                               height={40}
                             />

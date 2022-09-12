@@ -9,7 +9,6 @@ import {
   Route,
   TabSpinner,
 } from "@showtime-xyz/universal.tab-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -23,6 +22,8 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+
+import { breakpoints } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -52,6 +53,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
   const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -209,7 +211,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
           initialLayout={{
             width: contentWidth,
           }}
-          style={tw.style("z-1")}
+          style={{ zIndex: 1 }}
           autoWidthTabBar
           emptyBodyComponent={isError ? <Profile404 /> : null}
           animationHeaderPosition={animationHeaderPosition}
@@ -231,7 +233,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             </View>
           }
           sceneContainerStyle={Platform.select({
-            web: tw.style("md:mt-0 md:mt-4"),
+            web: { marginTop: isMdWidth ? 16 : 0 },
             default: null,
           })}
         />

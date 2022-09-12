@@ -1,6 +1,4 @@
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -36,30 +34,29 @@ function OwnershipContainer({
 }
 
 export function Ownership({ nft }: Props) {
-  const isDarkMode = useIsDarkMode();
-  const { data, loading } = useNFTDetails(nft?.nft_id);
+  const { data } = useNFTDetails(nft?.nft_id);
 
   if (!nft) return null;
 
-  if (loading) {
-    return (
-      <OwnershipContainer count={nft.owner_count}>
-        {Array(nft.owner_count)
-          .fill(0)
-          .slice(0, 4)
-          .map((_, index) => (
-            <Skeleton
-              key={`nft-${nft.nft_id}-owner-${index}-skeleton`}
-              width={14}
-              height={14}
-              colorMode={isDarkMode ? "dark" : "light"}
-              radius="round"
-              show={true}
-            />
-          ))}
-      </OwnershipContainer>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <OwnershipContainer count={nft.owner_count}>
+  //       {Array(nft.owner_count)
+  //         .fill(0)
+  //         .slice(0, 4)
+  //         .map((_, index) => (
+  //           <Skeleton
+  //             key={`nft-${nft.nft_id}-owner-${index}-skeleton`}
+  //             width={14}
+  //             height={14}
+  //             colorMode={isDarkMode ? "dark" : "light"}
+  //             radius="round"
+  //             show={true}
+  //           />
+  //         ))}
+  //     </OwnershipContainer>
+  //   );
+  // }
 
   if (
     data?.owner_count &&

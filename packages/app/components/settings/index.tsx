@@ -14,11 +14,11 @@ import {
   TabFlatList,
   TabBarSingle,
 } from "@showtime-xyz/universal.tab-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { MAX_CONTENT_WIDTH } from "app/constants/layout";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { useTabState } from "app/hooks/use-tab-state";
@@ -302,14 +302,17 @@ const SettingsTabs = () => {
           default: headerHeight,
           android: 0,
         })}
-        sceneContainerStyle={tw.style("max-w-screen-xl web:self-center")}
+        sceneContainerStyle={{
+          maxWidth: MAX_CONTENT_WIDTH,
+          alignSelf: Platform.OS === "web" ? "center" : undefined,
+        }}
         autoWidthTabBar
         hideTabBar={isMdWidth}
         swipeEnabled={!isMdWidth}
         initialLayout={{
           width: width,
         }}
-        style={tw.style("z-1")}
+        style={{ zIndex: 1 }}
       />
       <View style={{ height: bottomHeight }} />
     </View>

@@ -78,7 +78,12 @@ export const MediaCropper = ({
       statusBarTranslucent
     >
       <MotiView
-        style={tw.style("h-full w-full bg-black bg-opacity-30 absolute")}
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+        }}
         from={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -126,7 +131,10 @@ export const MediaCropper = ({
                 <ZoomOut width={20} height={20} color={colors.gray[500]} />
               </Pressable>
               <Slider
-                style={tw.style("w-full mx-2")}
+                style={{
+                  width: "100%",
+                  marginVertical: 8,
+                }}
                 minimumValue={1}
                 maximumValue={3}
                 value={zoom}

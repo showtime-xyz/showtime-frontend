@@ -3,7 +3,6 @@ import { useWindowDimensions } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { breakpoints } from "design-system/theme";
@@ -22,15 +21,15 @@ export const CardSkeleton = memo<CardSkeletonProps>(
     if (isMdWidth) {
       return (
         <View
-          tw="dark:shadow-dark shadow-light mb-4 overflow-hidden rounded-2xl"
-          style={[
-            {
-              width: squareSize - spacing,
-              marginRight: spacing / 2,
-              marginLeft: spacing / 2,
-            },
-            tailwind.style(tw),
+          tw={[
+            "dark:shadow-dark shadow-light mb-4 overflow-hidden rounded-2xl",
+            tw,
           ]}
+          style={{
+            width: squareSize - spacing,
+            marginRight: spacing / 2,
+            marginLeft: spacing / 2,
+          }}
         >
           <View tw="py-2 px-4">
             <View tw="flex-row">

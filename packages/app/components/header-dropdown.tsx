@@ -1,7 +1,6 @@
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   DropdownMenuContent,
@@ -20,7 +19,6 @@ import {
   LogOut,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -34,13 +32,13 @@ import { breakpoints } from "design-system/theme";
 function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const { logout } = useAuth();
   const router = useRouter();
-  const context = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
-  const isLightTheme = context.colorScheme === "light";
+  const isDark = colorScheme === "dark";
 
   return (
     <DropdownMenuRoot>
@@ -56,13 +54,7 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
           </View>
         ) : (
           <View tw="h-8 w-8 items-center justify-center rounded-full">
-            <Settings
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Settings width={24} height={24} color={isDark ? "#FFF" : "#000"} />
           </View>
         )}
       </DropdownMenuTrigger>
@@ -115,19 +107,19 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
 
         <DropdownMenuRoot>
           <DropdownMenuTriggerItem key="nested-group-trigger">
-            <MenuItemIcon Icon={isLightTheme ? Sun : Moon} />
+            <MenuItemIcon Icon={isDark ? Moon : Sun} />
             <DropdownMenuItemTitle>Theme</DropdownMenuItemTitle>
           </DropdownMenuTriggerItem>
           <DropdownMenuContent tw="w-30">
             <DropdownMenuItem
-              onSelect={() => context.setColorScheme("light")}
+              onSelect={() => setColorScheme("light")}
               key="nested-group-1"
             >
               <MenuItemIcon Icon={Sun} />
               <DropdownMenuItemTitle>Light</DropdownMenuItemTitle>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onSelect={() => context.setColorScheme("dark")}
+              onSelect={() => setColorScheme("dark")}
               key="nested-group-2"
             >
               <MenuItemIcon Icon={Moon} />

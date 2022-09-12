@@ -12,6 +12,4 @@ export default {
 
 export const Basic: React.VFC<{}> = () => <Avatar url={URL} />;
 
-export const withBorder: React.VFC<{}> = () => (
-  <Avatar url={URL} borderWidth={4} />
-);
+export const withBorder: React.VFC<{}> = () => <Avatar url={URL} />;
