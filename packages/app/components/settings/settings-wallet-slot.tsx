@@ -60,20 +60,11 @@ export const SettingsWalletSlotSkeleton = () => {
   const { colorScheme } = useColorScheme();
   return (
     <View tw="max-h-[150px] w-full flex-1 flex-row justify-between p-4">
-      <View tw="flex justify-center">
-        <Skeleton
-          height={25}
-          width={25}
-          show={true}
-          colorMode={colorScheme as any}
-          radius="round"
-        />
-      </View>
       <View tw="w-full px-4">
         <View tw="w-full pb-3">
           <Skeleton
             height={16}
-            width={"100%"}
+            width={200}
             show={true}
             colorMode={colorScheme as any}
           />
@@ -81,15 +72,7 @@ export const SettingsWalletSlotSkeleton = () => {
         <View tw="pb-3">
           <Skeleton
             height={16}
-            width={"100%"}
-            show={true}
-            colorMode={colorScheme as any}
-          />
-        </View>
-        <View tw="w-full pb-3">
-          <Skeleton
-            height={32}
-            width={"100%"}
+            width={"70%"}
             show={true}
             colorMode={colorScheme as any}
           />
