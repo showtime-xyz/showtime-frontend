@@ -110,7 +110,9 @@ const FollowingListUser = memo(
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
-                  tw="h-8 w-8 rounded-full"
+                  tw="rounded-full"
+                  width={32}
+                  height={32}
                 />
               )}
             </View>

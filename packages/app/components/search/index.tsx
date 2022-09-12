@@ -126,7 +126,12 @@ export const SearchItem = ({
         <View tw="flex-row">
           <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
             {item.img_url && (
-              <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
+              <Image
+                source={{ uri: item.img_url }}
+                tw="rounded-full"
+                width={32}
+                height={32}
+              />
             )}
           </View>
           <View tw="mr-1 justify-center">
