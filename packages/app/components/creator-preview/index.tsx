@@ -22,76 +22,74 @@ type Props = {
   mediaSize: number;
 };
 
-export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
-  const { isFollowing } = useMyInfo();
-  const creatorId = props.creator.profile_id;
-  const isFollowingCreator = useMemo(
-    () => isFollowing(creatorId),
-    [creatorId, isFollowing]
-  );
+export const CreatorPreview = withMemoAndColorScheme(
+  ({ mediaSize, creator, onMediaPress }: Props) => {
+    const { isFollowing } = useMyInfo();
+    const creatorId = creator.profile_id;
+    const isFollowingCreator = useMemo(
+      () => isFollowing(creatorId),
+      [creatorId, isFollowing]
+    );
 
-  const { onToggleFollow } = useFollow({ username: props.creator.username });
+    const { onToggleFollow } = useFollow({ username: creator.username });
 
-  return (
-    <View tw="p-4">
-      <View tw="flex-row items-center justify-between">
-        <Link
-          href={`/@${props.creator.username ?? props.creator.address}`}
-          tw="flex-row items-center"
-        >
-          <View tw="mr-2 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-            <Image
-              source={{ uri: props.creator?.img_url ?? DEFAULT_PROFILE_PIC }}
-              width={64}
-              height={64}
+    return (
+      <View tw="p-4">
+        <View tw="flex-row items-center justify-between">
+          <Link
+            href={`/@${creator.username ?? creator.address}`}
+            tw="flex-row items-center"
+          >
+            <View tw="mr-2 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
+              <Image
+                source={{ uri: creator?.img_url ?? DEFAULT_PROFILE_PIC }}
+                width={64}
+                height={64}
+              />
+            </View>
+            <View>
+              <View tw="flex-row items-center">
+                <Text tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  {creator.username ? (
+                    <>@{creator.username}</>
+                  ) : (
+                    <>{formatAddressShort(creator.address)}</>
+                  )}
+                </Text>
+                {Boolean(creator.verified) && (
+                  <View>
+                    <VerificationBadge size={14} />
+                  </View>
+                )}
+              </View>
+            </View>
+          </Link>
+          <View tw="flex-row items-center justify-center">
+            <FollowButton
+              isFollowing={isFollowingCreator}
+              name={creator.name}
+              profileId={creatorId}
+              onToggleFollow={onToggleFollow}
             />
           </View>
-          <View>
-            <View tw="flex-row items-center">
-              <Text tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white">
-                {props.creator.username ? (
-                  <>@{props.creator.username}</>
-                ) : (
-                  <>{formatAddressShort(props.creator.address)}</>
-                )}
-              </Text>
-              {Boolean(props.creator.verified) && (
-                <View>
-                  <VerificationBadge size={14} />
-                </View>
-              )}
-            </View>
-          </View>
-        </Link>
-        <View tw="flex-row items-center justify-center">
-          <FollowButton
-            isFollowing={isFollowingCreator}
-            name={props.creator.name}
-            profileId={creatorId}
-            onToggleFollow={onToggleFollow}
-          />
+        </View>
+        <View tw="mx-[-1px] mt-4 flex-row justify-center">
+          {creator.top_items?.slice(0, 3).map((item, idx) => {
+            return (
+              <Pressable key={item.nft_id} onPress={() => onMediaPress(idx)}>
+                <Media
+                  key={item.nft_id}
+                  item={item}
+                  sizeStyle={{
+                    height: mediaSize,
+                    width: mediaSize,
+                  }}
+                />
+              </Pressable>
+            );
+          })}
         </View>
       </View>
-      <View tw="mx-[-1px] mt-4 flex-row justify-center">
-        {props.creator.top_items?.slice(0, 3).map((item, idx) => {
-          return (
-            <Pressable
-              key={item.nft_id}
-              onPress={() => props.onMediaPress(idx)}
-            >
-              <Media
-                key={item.nft_id}
-                item={item}
-                numColumns={3}
-                sizeStyle={{
-                  height: props.mediaSize,
-                  width: props.mediaSize,
-                }}
-              />
-            </Pressable>
-          );
-        })}
-      </View>
-    </View>
-  );
-});
+    );
+  }
+);

@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import dynamic from "next/dynamic";
+import { ImageStyle } from "react-native-fast-image";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -29,7 +30,7 @@ type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
-  sizeStyle?: object;
+  sizeStyle?: ImageStyle;
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
@@ -39,7 +40,7 @@ type Props = {
 function Media({
   item,
   numColumns,
-  sizeStyle,
+  sizeStyle = {},
   resizeMode: propResizeMode,
   onPinchStart,
   onPinchEnd,
@@ -53,7 +54,10 @@ function Media({
   const mediaStillPreviewUri = getMediaUrl({ nft: item, stillPreview: true });
   const contentWidth = useContentWidth();
 
-  const size = contentWidth / (numColumns ?? 1);
+  const size = useMemo(() => {
+    if (sizeStyle?.width) return +sizeStyle?.width;
+    return contentWidth / (numColumns ?? 1);
+  }, [contentWidth, numColumns, sizeStyle?.width]);
 
   return (
     <View
