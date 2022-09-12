@@ -37,7 +37,6 @@ import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
 
-import { useTabState } from "../hooks/use-tab-state";
 import { MediaCropper } from "./media-cropper";
 
 const EDIT_PROFILE_ROUTES = [
@@ -94,6 +93,7 @@ export const EditProfile = () => {
   const router = useRouter();
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
+  const [index, setIndex] = useState(0);
 
   const [currentCropField, setCurrentCropField] = useState<
     null | "coverPicture" | "profilePicture"
@@ -268,11 +268,10 @@ export const EditProfile = () => {
     () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
     [insets.bottom]
   );
-  const { index, setIndex, routes } = useTabState(EDIT_PROFILE_ROUTES);
 
   const renderScene = useCallback(
     ({
-      route: { index, key },
+      route: { key },
     }: SceneRendererProps & {
       route: Route;
     }) => {
@@ -596,7 +595,7 @@ export const EditProfile = () => {
       <BottomSheetModalProvider>
         <View tw={`w-full flex-1`}>
           <TabView
-            navigationState={{ index, routes }}
+            navigationState={{ index, routes: EDIT_PROFILE_ROUTES }}
             renderScene={renderScene}
             onIndexChange={setIndex}
             renderTabBar={(props) => <ScollableAutoWidthTabBar {...props} />}

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -11,7 +11,6 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useTabState } from "app/hooks/use-tab-state";
 import { yup } from "app/lib/yup";
 
 import { LoginContainer } from "./login-container";
@@ -43,8 +42,7 @@ const CONTENT_HEIGHT = Platform.select({
 
 export function Login({ onLogin }: LoginProps) {
   //#region state
-  const { index, setIndex, routes } = useTabState(LOGIN_ROUTES);
-
+  const [index, setIndex] = useState(0);
   //#endregion
 
   //#region hooks
@@ -174,7 +172,7 @@ export function Login({ onLogin }: LoginProps) {
         >
           <LoginHeader />
           <TabView
-            navigationState={{ index, routes }}
+            navigationState={{ index, routes: LOGIN_ROUTES }}
             renderScene={renderScene}
             onIndexChange={setIndex}
             renderTabBar={(props) => <ScollableTabBar {...props} />}
