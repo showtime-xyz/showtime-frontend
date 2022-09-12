@@ -3,6 +3,7 @@ import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
@@ -58,6 +59,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
 
+  const isDark = useIsDarkMode();
   const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
