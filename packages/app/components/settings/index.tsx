@@ -90,9 +90,7 @@ const SettingsTabs = () => {
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);
-  const handleEditNickname = useCallback((wallet?: WalletAddressesV2) => {
-    setEditingWallet(wallet);
-  }, []);
+
   // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
@@ -142,7 +140,7 @@ const SettingsTabs = () => {
                   ensDomain={item.ens_domain}
                   nickname={item.nickname}
                   mintingEnabled={item.minting_enabled}
-                  onEditNickname={() => handleEditNickname(item)}
+                  onEditNickname={() => setEditingWallet(item)}
                 />
               )}
               ListEmptyComponent={() => {
@@ -268,7 +266,6 @@ const SettingsTabs = () => {
       pushNotificationsPreferences,
       isMdWidth,
       router,
-      handleEditNickname,
     ]
   );
 
