@@ -18,6 +18,7 @@ import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -281,6 +282,15 @@ export const DropForm = () => {
         </View>
       </View>
     );
+  }
+
+  const hasWallet =
+    user.user?.data.profile.wallet_addresses_excluding_email_v2 &&
+    user.user?.data.profile.wallet_addresses_excluding_email_v2.length > 0;
+  const primaryWallet = user.user?.data.profile.primary_wallet;
+
+  if (!primaryWallet || !hasWallet) {
+    return <AddWalletOrSetPrimary />;
   }
 
   return (
