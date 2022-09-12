@@ -1,8 +1,3 @@
-import { styled } from "nativewind";
-import { create } from "twrnc";
-
-const tw = create(require("./tailwind.config.js"));
-
-export { tw, styled };
+export { styled, useColorScheme } from "nativewind";
 export { TW } from "./types";
 export { colors } from "./colors";

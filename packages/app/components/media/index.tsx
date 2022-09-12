@@ -11,6 +11,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { useContentWidth } from "app/hooks/use-content-width";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -38,7 +39,6 @@ type Props = {
 function Media({
   item,
   numColumns,
-  tw,
   sizeStyle,
   resizeMode: propResizeMode,
   onPinchStart,
@@ -51,14 +51,9 @@ function Media({
     ? item?.source_url
     : getMediaUrl({ nft: item, stillPreview: false });
   const mediaStillPreviewUri = getMediaUrl({ nft: item, stillPreview: true });
+  const contentWidth = useContentWidth();
 
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[33vw] h-[33vw]"
-    : numColumns === 2
-    ? "w-[50vw] h-[50vw]"
-    : "w-[100vw] h-[100vw]";
+  const size = contentWidth / (numColumns ?? 1);
 
   return (
     <View
@@ -78,10 +73,11 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            tw={!sizeStyle ? size : ""}
             style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
+            width={size}
+            height={size}
             resizeMode={resizeMode}
           />
         </PinchToZoom>
@@ -103,16 +99,17 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            //@ts-ignore
-            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            tw={!sizeStyle ? size : ""}
+            width={size}
+            height={size}
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
+            //@ts-ignore
+            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
           />
         </PinchToZoom>
       ) : null}
@@ -125,7 +122,6 @@ function Media({
               // TODO: update this to get a preview from CDN v2
               fallbackUrl={item?.still_preview_url}
               numColumns={numColumns}
-              tw={!sizeStyle ? size : ""}
               style={sizeStyle}
               blurhash={item?.blurhash}
               resizeMode={resizeMode}

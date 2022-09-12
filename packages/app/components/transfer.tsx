@@ -9,10 +9,11 @@ import { Controller, useForm } from "react-hook-form";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowRight, PolygonScan } from "@showtime-xyz/universal.icon";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -33,6 +34,7 @@ type FormData = {
 };
 
 function Transfer({ nft }: { nft?: NFT }) {
+  const isDark = useIsDarkMode();
   const { startTransfer, state } = useTransferNFT();
 
   const copiesHelperText = `1 by default`;
@@ -168,8 +170,8 @@ function Transfer({ nft }: { nft?: NFT }) {
               </Text>
               <View tw="flex-row items-center">
                 <PolygonScan
-                  style={tw.style("overflow-hidden")}
-                  color={tw.style("bg-gray-500")?.backgroundColor as string}
+                  style={{ overflow: "hidden" }}
+                  color={colors.gray[500]}
                   height={14}
                   width={14}
                 />
@@ -284,10 +286,13 @@ function Transfer({ nft }: { nft?: NFT }) {
                 : "Success!"}
             </Text>
             <ArrowRight
-              style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-              color={
-                tw.style("bg-white dark:bg-black")?.backgroundColor as string
-              }
+              style={{
+                borderRadius: 8,
+                overflow: "hidden",
+                width: 24,
+                height: 24,
+              }}
+              color={isDark ? "#000" : "#FFF"}
             />
           </Button>
         </View>

@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { AnimatePresence, View as MotiView } from "moti";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,13 +25,16 @@ export const TabBarSingle = ({
   index: propIndex,
   onPress,
 }: IndependentTabBarProps) => {
+  const isDark = useIsDarkMode();
   const [tabsWidth, setTabsWidth] = useState<{
     [index: number]: number;
   }>({});
+
   const outputRange = routes.reduce<number[]>((acc, _, i) => {
     if (i === 0) return [PADDING_X];
     return [...acc, acc[i - 1] + tabsWidth[i - 1] + PADDING_X * 2];
   }, []);
+
   return (
     <View tw="flex-row">
       {routes.map((item, index) => (
@@ -56,10 +60,7 @@ export const TabBarSingle = ({
             }}
             tw="py-4"
           >
-            <Text
-              tw="text-sm font-bold"
-              style={tw.style(getTextColor(propIndex === index))}
-            >
+            <Text tw={["text-sm font-bold", getTextColor(propIndex === index)]}>
               {item.title}
               {Boolean(item.subtitle) && (
                 <Text tw="text-xs font-semibold text-gray-400">
@@ -72,9 +73,12 @@ export const TabBarSingle = ({
       ))}
       <AnimatePresence>
         <MotiView
-          style={[
-            tw.style("absolute bottom-0 h-0.5 bg-gray-900 dark:bg-white"),
-          ]}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            height: 2,
+            backgroundColor: isDark ? "#FFF" : colors.gray[900],
+          }}
           from={{ opacity: 0 }}
           animate={{
             width: tabsWidth[propIndex],

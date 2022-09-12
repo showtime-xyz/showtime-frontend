@@ -25,13 +25,9 @@ export enum RefreshTypeEnum {
 
 export type CollapsibleHeaderProps<T extends Route> = {
   initHeaderHeight?: number;
-  renderScrollHeader: (
-    translateYValue?: Animated.SharedValue<number>
-  ) => React.ReactElement | null;
-  renderAbsoluteBackgroundContent?: (
-    translateYValue: Animated.SharedValue<number>
-  ) => React.ReactElement | null;
-  renderAbsoluteForegroundContent?: () => React.ReactElement | null;
+  renderScrollHeader: () => React.ReactElement | null;
+  overridenShareAnimatedValue?: Animated.SharedValue<number>;
+  overridenTranslateYValue?: Animated.SharedValue<number>;
   initTabbarHeight?: number;
   minHeaderHeight?: number;
   overflowHeight?: number;

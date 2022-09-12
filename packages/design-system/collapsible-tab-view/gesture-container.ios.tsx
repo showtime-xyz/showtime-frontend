@@ -58,8 +58,8 @@ export const GestureContainer = React.forwardRef<
     initTabbarHeight = 49,
     initHeaderHeight = 0,
     renderScrollHeader,
-    renderAbsoluteBackgroundContent,
-    renderAbsoluteForegroundContent,
+    overridenShareAnimatedValue,
+    overridenTranslateYValue,
     renderTabView,
     renderRefreshControl: renderRefreshControlProp,
     animationHeaderPosition,
@@ -75,7 +75,11 @@ export const GestureContainer = React.forwardRef<
   forwardedRef
 ) {
   //#region animation value
-  const shareAnimatedValue = useSharedValue(0);
+  const defaultShareAnimatedValue = useSharedValue(0);
+  const shareAnimatedValue =
+    overridenShareAnimatedValue || defaultShareAnimatedValue;
+  const defaultTranslateYValue = useSharedValue(0);
+  const translateYValue = overridenTranslateYValue || defaultTranslateYValue;
   const curIndexValue = useSharedValue(initialPage);
   const isSlidingHeader = useSharedValue(false);
   const slideIndex = useSharedValue(curIndexValue.value);
@@ -578,7 +582,7 @@ export const GestureContainer = React.forwardRef<
     };
   });
 
-  const translateYValue = useRefreshDerivedValue({
+  useRefreshDerivedValue(translateYValue, {
     animatedValue: tabsTrans,
     refreshHeight,
     overflowPull,
@@ -617,9 +621,7 @@ export const GestureContainer = React.forwardRef<
         <GestureDetector gesture={gestureHandlerHeader}>
           <Animated.View style={styles.container}>
             {renderScrollHeader && (
-              <View onLayout={headerOnLayout}>
-                {renderScrollHeader(translateYValue)}
-              </View>
+              <View onLayout={headerOnLayout}>{renderScrollHeader()}</View>
             )}
             {navigationState?.routes.length === 0 && emptyBodyComponent ? (
               <View style={{ marginTop: tabbarHeight }}>
@@ -703,11 +705,6 @@ export const GestureContainer = React.forwardRef<
     >
       <GestureDetector gesture={gestureHandler}>
         <Animated.View style={[styles.container, opacityStyle]}>
-          {!!renderAbsoluteBackgroundContent && (
-            <View style={styles.absoluteBackground}>
-              {renderAbsoluteBackgroundContent(translateYValue)}
-            </View>
-          )}
           <Animated.View
             style={[styles.container, animateStyle]}
             onLayout={containerOnLayout}
@@ -718,11 +715,6 @@ export const GestureContainer = React.forwardRef<
             })}
           </Animated.View>
           {renderRefreshControl()}
-          {!!renderAbsoluteForegroundContent && (
-            <View style={styles.absoluteBackground}>
-              {renderAbsoluteForegroundContent()}
-            </View>
-          )}
         </Animated.View>
       </GestureDetector>
     </HeaderTabContext.Provider>
@@ -739,10 +731,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     zIndex: 10,
-  },
-  absoluteBackground: {
-    position: "absolute",
-    top: 0,
-    width: "100%",
   },
 });

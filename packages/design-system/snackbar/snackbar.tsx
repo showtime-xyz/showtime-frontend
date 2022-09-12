@@ -9,7 +9,6 @@ import { Check } from "@showtime-xyz/universal.icon";
 import { PanToClose } from "@showtime-xyz/universal.pan-to-close";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -119,15 +118,18 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
         >
           <MotiView
             transition={transition}
-            style={[tw.style(`w-full h-10`), snackbarStyle]}
+            style={[{ width: "100%", height: 40 }, snackbarStyle]}
             {...PRESET_TRANSITION_MAP.get(snackbar.transition ?? "fade")}
           >
             <BlurView
               intensity={snackbar.preset === "explore" ? 0 : 100}
-              style={[
-                tw.style(`w-full items-center h-full flex-row`),
-                { paddingHorizontal: isWeb && !isMobileWeb ? 32 : 10 },
-              ]}
+              style={{
+                width: "100%",
+                alignItems: "center",
+                height: "100%",
+                flexDirection: "row",
+                paddingHorizontal: isWeb && !isMobileWeb ? 32 : 10,
+              }}
               tint={isDark ? "light" : "dark"}
             >
               <MotiView

@@ -2,10 +2,11 @@ import { Linking } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -75,6 +76,7 @@ export type AccountSettingItemProps = {
 };
 
 export const AccountSettingItem = (props: AccountSettingItemProps) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const handleOnPressItem = (route: string) => {
     router.push(`/settings/${route}`);
@@ -92,9 +94,7 @@ export const AccountSettingItem = (props: AccountSettingItemProps) => {
         <ChevronRight
           width={24}
           height={24}
-          color={
-            tw.style("dark:bg-gray-200 bg-gray-700").backgroundColor as string
-          }
+          color={isDark ? colors.gray[200] : colors.gray[700]}
         />
       </View>
     </Pressable>

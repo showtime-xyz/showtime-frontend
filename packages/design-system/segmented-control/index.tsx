@@ -7,7 +7,7 @@ import {
 import RNSegmentedControl from "@react-native-segmented-control/segmented-control";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 type SegmentedControlProps = {
   values: Array<string>;
@@ -16,6 +16,7 @@ type SegmentedControlProps = {
 };
 
 export const SegmentedControl = (props: SegmentedControlProps) => {
+  const isDark = useIsDarkMode();
   const { values, selectedIndex, onChange } = props;
   const handleChange = useCallback(
     (e: NativeSyntheticEvent<NativeSegmentedControlIOSChangeEvent>) => {
@@ -24,18 +25,24 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
     [onChange]
   );
 
-  const isDark = useIsDarkMode();
-
   return (
     <RNSegmentedControl
       values={values}
       selectedIndex={selectedIndex}
       onChange={handleChange}
-      style={tw.style("rounded-lg")}
+      style={{
+        borderRadius: 8,
+      }}
       backgroundColor={isDark ? colors.gray[900] : colors.gray[100]}
       tintColor={isDark ? colors.white : colors.gray[900]}
-      fontStyle={tw.style("font-bold dark:text-gray-400 text-gray-600")}
-      activeFontStyle={tw.style("font-bold dark:text-gray-900 text-white")}
+      fontStyle={{
+        color: isDark ? colors.gray[400] : colors.gray[600],
+        fontWeight: "bold",
+      }}
+      activeFontStyle={{
+        color: isDark ? colors.gray[900] : colors.white,
+        fontWeight: "bold",
+      }}
     />
   );
 };

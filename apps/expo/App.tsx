@@ -23,12 +23,8 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
-const scheme = `io.showtime${
-  process.env.NODE_ENV === "development" ? ".development" : ""
-}`;
-
 configureWalletMobileSDK({
-  callbackURL: new URL(`${scheme}://wsegue`), // TODO: Use universal link to prevent warning message in CB Wallet
+  callbackURL: new URL(`https://showtime.xyz/wsegue`),
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });

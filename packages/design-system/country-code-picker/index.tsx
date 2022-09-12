@@ -13,9 +13,9 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -32,11 +32,11 @@ const PickerContext = createContext<any>(null);
 export const CountryCodePicker = (props: CountryCodePickerProps) => {
   const { onChange, value } = props;
   const sharedValue = useSharedValue(value);
+  const isDark = useIsDarkMode();
 
   useEffect(() => {
     sharedValue.value = value;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [sharedValue, value]);
 
   const contextValue = useMemo(() => {
     return {
@@ -46,8 +46,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         onChange(item.code);
       },
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onChange]);
+  }, [onChange, sharedValue]);
 
   return (
     <PickerContext.Provider value={contextValue}>
@@ -62,7 +61,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         renderItem={useCallback(({ item }) => {
           return <PickerItem item={item} />;
         }, [])}
-        style={tw.style("dark:bg-black")}
+        style={{ backgroundColor: isDark ? "#000" : "#fff" }}
         keyExtractor={useCallback((item) => item.code, [])}
         data={props.data ?? data}
       />
@@ -71,6 +70,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
 };
 
 const PickerItem = memo(({ item }: { item: CountryDataType }) => {
+  const isDark = useIsDarkMode();
   const { onChange, sharedValue } = useContext(PickerContext);
 
   const handleChange = useCallback(() => {
@@ -90,13 +90,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
           {item.emoji} {item.name} ({item.dial_code})
         </Text>
         <Animated.View style={[style, { marginLeft: "auto" }]}>
-          <Check
-            height={24}
-            width={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          <Check height={24} width={24} color={isDark ? "#FFF" : "#000"} />
         </Animated.View>
       </View>
     </PressableScale>

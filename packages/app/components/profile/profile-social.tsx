@@ -10,7 +10,7 @@ import {
   Instagram,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,7 +26,7 @@ type ProfileSocialProps = {
 export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   profile,
 }) {
-  useIsDarkMode();
+  const isDark = useIsDarkMode();
 
   const Alert = useAlert();
   const twitter = useMemo(
@@ -61,10 +61,10 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
           accessibilityRole="link"
         >
           <LinkIcon
-            color={tw.style("text-gray-900 dark:text-white").color as string}
+            color={isDark ? "#FFF" : colors.gray[900]}
             width={16}
             height={16}
-            style={tw.style("mr-1 -mt-0.5")}
+            style={{ marginRight: 4, marginTop: -2 }}
           />
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             {websiteLink}
@@ -92,7 +92,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             <Twitter
               width={16}
               height={16}
-              color={tw.style("text-gray-900 dark:text-white").color as string}
+              color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
         )}
@@ -110,7 +110,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             <Instagram
               width={16}
               height={16}
-              color={tw.style("text-gray-900 dark:text-white").color as string}
+              color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
         )}

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -6,7 +6,7 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -244,7 +244,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               height={20}
               width={20}
               //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-gray-100").backgroundColor}
+              color={isDark ? colors.gray[100] : colors.gray[900]}
             />
             <Text tw="ml-1 text-gray-900 dark:text-gray-100">
               You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}

@@ -8,7 +8,7 @@ import { Select } from "@showtime-xyz/universal.select";
 import type { SelectProps } from "@showtime-xyz/universal.select";
 import { Switch } from "@showtime-xyz/universal.switch";
 import type { SwitchProps } from "@showtime-xyz/universal.switch";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
@@ -87,11 +87,9 @@ export function Fieldset(props: FieldsetProps) {
               blurOnSubmit={textInputProps.blurOnSubmit}
               textAlignVertical="bottom"
               placeholderTextColor={
-                isDark ? tw.color("gray-400") : tw.color("gray-600")
+                isDark ? colors.gray[400] : colors.gray[600]
               }
-              selectionColor={
-                isDark ? tw.color("gray-300") : tw.color("gray-700")
-              }
+              selectionColor={isDark ? colors.gray[300] : colors.gray[700]}
               //@ts-ignore - web only
               accessibilityDescribedBy={Platform.select({
                 web: helperText ? helperTextId : undefined,

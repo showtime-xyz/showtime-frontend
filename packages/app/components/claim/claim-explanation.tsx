@@ -4,7 +4,6 @@ import { MotiView } from "moti";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -84,7 +83,10 @@ export const ClaimExplanation = ({
           from={{ opacity: 0 }}
           transition={{ duration: 600, type: "timing" }}
           animate={{ opacity: 1 }}
-          style={tw.style("mt-10 h-16")}
+          style={{
+            marginTop: 40,
+            height: 64,
+          }}
         >
           <Text tw="text-center text-lg text-gray-600 dark:text-gray-400">
             {values[page].description}

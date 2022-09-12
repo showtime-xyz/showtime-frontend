@@ -4,7 +4,7 @@ import { Pressable, GestureResponderEvent } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useIsDarkMode, useOnHover } from "@showtime-xyz/universal.hooks";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { SelectProps } from "../types";
@@ -47,7 +47,16 @@ export function SelectItem<T>({
     [isDarkMode, hovered, disabled]
   );
   const containerStyle = useMemo(
-    () => [tw`p-2 m-1 justify-between rounded-lg`, containerAnimatedStyle],
+    () => [
+      {
+        padding: 8,
+        margin: 4,
+        borderRadius: 8,
+        // Not sure why TS is not happy with the type of the styles below
+        justifyContent: "space-between",
+      },
+      containerAnimatedStyle,
+    ],
     [containerAnimatedStyle]
   );
   //#endregion
@@ -75,7 +84,10 @@ export function SelectItem<T>({
       onPress={handlePress}
       {...rest}
     >
-      <Animated.View style={containerStyle}>
+      <Animated.View
+        // @ts-ignore
+        style={containerStyle}
+      >
         <Text
           tw={[
             "whitespace-nowrap font-medium text-gray-900 dark:text-white",
