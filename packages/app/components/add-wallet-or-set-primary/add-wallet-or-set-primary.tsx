@@ -14,7 +14,9 @@ export const AddWalletOrSetPrimary = () => {
   const { user } = useUser();
   const { setPrimaryWallet } = useSetPrimaryWallet();
   const { addWallet } = useAddWallet();
-  const [selectedWallet, setSelectedWallet] = useState<any>(null);
+  const [selectedWallet, setSelectedWallet] = useState<any>(
+    user?.data.profile.wallet_addresses_excluding_email_v2?.[0]?.address ?? null
+  );
 
   const hasWallet =
     user?.data.profile.wallet_addresses_excluding_email_v2 &&
