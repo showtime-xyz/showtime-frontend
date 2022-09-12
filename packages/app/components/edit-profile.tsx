@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { Dimensions, Platform, useWindowDimensions } from "react-native";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { Platform, useWindowDimensions, ScrollView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -12,7 +13,13 @@ import { Upload } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors, tw } from "@showtime-xyz/universal.tailwind";
+import {
+  SceneRendererProps,
+  TabView,
+  Route,
+  ScollableAutoWidthTabBar,
+} from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -23,17 +30,33 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
-import { SORT_FIELDS, TAB_LIST_HEIGHT } from "app/lib/constants";
+import { SORT_FIELDS } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
-import { SelectedTabIndicator, TabItem, Tabs } from "design-system/tabs";
 
+import { useTabState } from "../hooks/use-tab-state";
 import { MediaCropper } from "./media-cropper";
 
-const windowWidth = Dimensions.get("window").width;
+const EDIT_PROFILE_ROUTES = [
+  {
+    title: "Profile",
+    key: "Profile",
+    index: 0,
+  },
+  {
+    title: "Links",
+    key: "Links",
+    index: 1,
+  },
+  {
+    title: "Page Settings",
+    key: "Settings",
+    index: 2,
+  },
+];
 
 const editProfileValidationSchema = yup.object({
   username: yup
@@ -52,8 +75,6 @@ const editProfileValidationSchema = yup.object({
   name: yup.string().max(40).nullable(),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
-
-const tabs = ["Profile", "Links", "Page Settings"];
 
 const nftList = [
   { label: "Created", value: 1 },
@@ -247,315 +268,277 @@ export const EditProfile = () => {
     () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
     [insets.bottom]
   );
-  return (
-    <>
-      <BottomSheetModalProvider>
-        <View tw={`w-full flex-1`}>
-          <Tabs.Root
-            onIndexChange={setSelected}
-            tabListHeight={TAB_LIST_HEIGHT}
-            index={selected}
-            initialIndex={selected}
-            lazy
-          >
-            <Tabs.List
-              style={{
-                height: TAB_LIST_HEIGHT,
-                width: Platform.select({
-                  native: windowWidth,
-                }),
-              }}
-            >
-              {tabs.map((name, index) => (
-                <Tabs.Trigger key={name}>
-                  <TabItem name={name} selected={selected === index} />
-                </Tabs.Trigger>
-              ))}
-              <SelectedTabIndicator />
-            </Tabs.List>
-            <Tabs.Pager
-              tw="web:h-58vh"
-              style={{
-                overflow: (Platform.OS === "web" ? "auto" : "visible") as any,
-              }}
-            >
-              <Tabs.ScrollView
-                style={{ flex: 1 }}
-                asKeyboardAwareScrollView
-                extraScrollHeight={extraScrollHeight}
-              >
+  const { index, setIndex, routes } = useTabState(EDIT_PROFILE_ROUTES);
+
+  const renderScene = useCallback(
+    ({
+      route: { index, key },
+    }: SceneRendererProps & {
+      route: Route;
+    }) => {
+      switch (key) {
+        case "Profile":
+          return (
+            <KeyboardAwareScrollView>
+              <Controller
+                control={control}
+                name="coverPicture"
+                render={({ field: { onChange, value } }) => (
+                  <Pressable
+                    onPress={async () => {
+                      const file = await pickFile({
+                        mediaTypes: "image",
+                        option: Platform.select({
+                          // aspect option only support android.
+                          android: { allowsEditing: true, aspect: [3, 1] },
+                          default: {},
+                        }),
+                      });
+                      const uri = getLocalFileURI(file.file);
+
+                      setSelectedImg(uri);
+                      setCurrentCropField("coverPicture");
+                      onChange(file.file);
+                    }}
+                    style={{
+                      height: coverImageHeight,
+                    }}
+                    tw="w-full flex-row"
+                  >
+                    <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                      <View tw="rounded-full bg-gray-800/70 p-2">
+                        <Upload height={20} width={20} color={colors.white} />
+                      </View>
+                    </View>
+                    {value && (
+                      <Preview
+                        file={value}
+                        style={{ height: coverImageHeight }}
+                        tw={`md:w-120 web:object-cover w-screen`}
+                        resizeMode="cover"
+                      />
+                    )}
+                  </Pressable>
+                )}
+              />
+
+              <View tw="-mt-12 px-4">
                 <Controller
                   control={control}
-                  name="coverPicture"
+                  name="profilePicture"
                   render={({ field: { onChange, value } }) => (
-                    <Pressable
-                      onPress={async () => {
-                        const file = await pickFile({
-                          mediaTypes: "image",
-                          option: Platform.select({
-                            // aspect option only support android.
-                            android: { allowsEditing: true, aspect: [3, 1] },
-                            default: {},
-                          }),
-                        });
-                        const uri = getLocalFileURI(file.file);
+                    <>
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({
+                            mediaTypes: "image",
+                            option: { allowsEditing: true, aspect: [1, 1] },
+                          });
 
-                        setSelectedImg(uri);
-                        setCurrentCropField("coverPicture");
-                        onChange(file.file);
-                      }}
-                      style={{
-                        height: coverImageHeight,
-                      }}
-                      tw="w-full flex-row"
-                    >
-                      <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
-                        <View tw="rounded-full bg-gray-800/70 p-2">
-                          <Upload height={20} width={20} color={colors.white} />
+                          setSelectedImg(getLocalFileURI(file.file));
+                          setCurrentCropField("profilePicture");
+                          onChange(file.file);
+                        }}
+                        tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
+                      >
+                        {value && (
+                          <Preview
+                            file={value}
+                            tw="h-[94px] w-[94px] rounded-full"
+                          />
+                        )}
+                        <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                          <View tw="rounded-full bg-gray-800/70 p-2">
+                            <Upload
+                              height={20}
+                              width={20}
+                              color={colors.white}
+                            />
+                          </View>
                         </View>
+                      </Pressable>
+                      <View tw="ml-4 flex-row items-center pt-2">
+                        <Text tw="font-bold text-gray-900 dark:text-white">
+                          Profile picture
+                        </Text>
+                        <Text tw="ml-1 text-red-500">*</Text>
                       </View>
-                      {value && (
-                        <Preview
-                          file={value}
-                          style={{ height: coverImageHeight }}
-                          tw={`md:w-120 web:object-cover w-screen`}
-                          resizeMode="cover"
-                        />
-                      )}
-                    </Pressable>
+                      {errors.profilePicture?.message ? (
+                        <ErrorText>{errors.profilePicture.message}</ErrorText>
+                      ) : null}
+                    </>
                   )}
                 />
 
-                <View tw="-mt-12 px-4">
+                <View tw="mt-4 flex-row">
                   <Controller
                     control={control}
-                    name="profilePicture"
-                    render={({ field: { onChange, value } }) => (
-                      <>
-                        <Pressable
-                          onPress={async () => {
-                            const file = await pickFile({
-                              mediaTypes: "image",
-                              option: { allowsEditing: true, aspect: [1, 1] },
-                            });
-
-                            setSelectedImg(getLocalFileURI(file.file));
-                            setCurrentCropField("profilePicture");
-                            onChange(file.file);
-                          }}
-                          tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
-                        >
-                          {value && (
-                            <Preview
-                              file={value}
-                              tw="h-[94px] w-[94px] rounded-full"
-                            />
-                          )}
-                          <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                            <View tw="rounded-full bg-gray-800/70 p-2">
-                              <Upload
-                                height={20}
-                                width={20}
-                                color={colors.white}
-                              />
-                            </View>
-                          </View>
-                        </Pressable>
-                        <View tw="ml-4 flex-row items-center pt-2">
-                          <Text tw="font-bold text-gray-900 dark:text-white">
-                            Profile picture
-                          </Text>
-                          <Text tw="ml-1 text-red-500">*</Text>
-                        </View>
-                        {errors.profilePicture?.message ? (
-                          <ErrorText>{errors.profilePicture.message}</ErrorText>
-                        ) : null}
-                      </>
-                    )}
-                  />
-
-                  <View tw="mt-4 flex-row">
-                    <Controller
-                      control={control}
-                      name="name"
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          tw="mr-4 flex-1"
-                          label="Name"
-                          placeholder="Your display name"
-                          value={value}
-                          textContentType="name"
-                          errorText={errors.name?.message}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                        />
-                      )}
-                    />
-
-                    <Controller
-                      control={control}
-                      rules={{
-                        onChange: (v) => {
-                          validate(v.target.value);
-                        },
-                      }}
-                      name="username"
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          tw="flex-1"
-                          required
-                          label="Username"
-                          placeholder="Enter your username"
-                          value={value}
-                          textContentType="username"
-                          errorText={errors.username?.message}
-                          onBlur={onBlur}
-                          helperText={
-                            !isValid ? "username not available" : undefined
-                          }
-                          onChangeText={onChange}
-                        />
-                      )}
-                    />
-                  </View>
-
-                  <Controller
-                    control={control}
-                    name="bio"
+                    name="name"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Fieldset
-                        label="About me"
-                        placeholder="About me"
-                        tw="mt-4"
-                        required
-                        multiline
+                        tw="mr-4 flex-1"
+                        label="Name"
+                        placeholder="Your display name"
                         value={value}
-                        numberOfLines={3}
-                        errorText={errors.bio?.message}
+                        textContentType="name"
+                        errorText={errors.name?.message}
                         onBlur={onBlur}
                         onChangeText={onChange}
                       />
                     )}
                   />
+
+                  <Controller
+                    control={control}
+                    rules={{
+                      onChange: (v) => {
+                        validate(v.target.value);
+                      },
+                    }}
+                    name="username"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Fieldset
+                        tw="flex-1"
+                        required
+                        label="Username"
+                        placeholder="Enter your username"
+                        value={value}
+                        textContentType="username"
+                        errorText={errors.username?.message}
+                        onBlur={onBlur}
+                        helperText={
+                          !isValid ? "username not available" : undefined
+                        }
+                        onChangeText={onChange}
+                      />
+                    )}
+                  />
                 </View>
-              </Tabs.ScrollView>
-              <Tabs.ScrollView
-                style={{ paddingVertical: 16, marginTop: 16 }}
-                asKeyboardAwareScrollView
-                extraScrollHeight={extraScrollHeight}
-              >
-                {hasNotSubmittedExternalLink ? (
-                  <>
-                    <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
-                      Please add atleast one link from below
-                    </Text>
-                    <View tw="h-4" />
-                  </>
-                ) : null}
+
                 <Controller
                   control={control}
-                  name="website_url"
+                  name="bio"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Fieldset
-                      label="Website"
-                      keyboardType="url"
-                      textContentType="URL"
-                      placeholder="Your url"
+                      label="About me"
+                      placeholder="About me"
+                      tw="mt-4"
+                      required
+                      multiline
                       value={value}
+                      numberOfLines={3}
+                      errorText={errors.bio?.message}
                       onBlur={onBlur}
                       onChangeText={onChange}
                     />
                   )}
                 />
+              </View>
+            </KeyboardAwareScrollView>
+          );
+        case "Links":
+          return (
+            <KeyboardAwareScrollView
+              extraScrollHeight={extraScrollHeight}
+              style={{ padding: 16, marginTop: 16 }}
+            >
+              {hasNotSubmittedExternalLink ? (
+                <>
+                  <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+                    Please add atleast one link from below
+                  </Text>
+                  <View tw="h-4" />
+                </>
+              ) : null}
+              <Controller
+                control={control}
+                name="website_url"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Fieldset
+                    label="Website"
+                    keyboardType="url"
+                    textContentType="URL"
+                    placeholder="Your url"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
 
-                {socialLinks.data?.data
-                  .filter(
-                    (link) =>
-                      link.prefix.includes("twitter") ||
-                      link.prefix.includes("instagram")
-                  )
-                  .map((v) => {
-                    return (
-                      <Controller
-                        control={control}
-                        key={v.id}
-                        name={`links[${v.id}]`}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <Fieldset
-                            tw="mt-4"
-                            label={v.name}
-                            value={value}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            autoCapitalize="none"
-                            leftElement={
-                              <Text
-                                tw="text-base text-gray-600 dark:text-gray-400"
-                                style={{
-                                  marginTop: Platform.select({
-                                    ios: 1,
-                                    android: 4,
-                                    default: 0,
-                                  }),
-                                  marginBottom: Platform.select({
-                                    default: 4,
-                                    web: 0,
-                                  }),
-                                }}
-                              >
-                                {v.prefix}
-                              </Text>
-                            }
-                          />
-                        )}
-                      />
-                    );
-                  })}
-              </Tabs.ScrollView>
-              <Tabs.ScrollView style={{ paddingVertical: 16, marginTop: 16 }}>
-                <View tw="z-2">
-                  <Controller
-                    control={control}
-                    name="default_list_id"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        label="Default NFT List"
-                        selectOnly
-                        select={{
-                          options: nftList,
-                          placeholder: "Select",
-                          value: value,
-                          onChange: onChange,
-                        }}
-                      />
-                    )}
-                  />
-                </View>
-                <View tw="z-1">
-                  <Controller
-                    control={control}
-                    name="default_created_sort_id"
-                    render={({ field: { onChange, value } }) => (
-                      <Fieldset
-                        label="Sort Created By"
-                        selectOnly
-                        tw="mt-4"
-                        select={{
-                          options: sortingOptionsList,
-                          placeholder: "Select",
-                          value: value,
-                          onChange: onChange,
-                        }}
-                      />
-                    )}
-                  />
-                </View>
+              {socialLinks.data?.data
+                .filter(
+                  (link) =>
+                    link.prefix.includes("twitter") ||
+                    link.prefix.includes("instagram")
+                )
+                .map((v) => {
+                  return (
+                    <Controller
+                      control={control}
+                      key={v.id}
+                      name={`links[${v.id}]`}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Fieldset
+                          tw="mt-4"
+                          label={v.name}
+                          value={value}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          autoCapitalize="none"
+                          leftElement={
+                            <Text
+                              tw="text-base text-gray-600 dark:text-gray-400"
+                              style={{
+                                marginTop: Platform.select({
+                                  ios: 1,
+                                  android: 4,
+                                  default: 0,
+                                }),
+                                marginBottom: Platform.select({
+                                  default: 4,
+                                  web: 0,
+                                }),
+                              }}
+                            >
+                              {v.prefix}
+                            </Text>
+                          }
+                        />
+                      )}
+                    />
+                  );
+                })}
+            </KeyboardAwareScrollView>
+          );
+        case "Settings":
+          return (
+            <ScrollView style={{ padding: 16, marginTop: 16 }}>
+              <View tw="z-2">
                 <Controller
                   control={control}
-                  name="default_owned_sort_id"
+                  name="default_list_id"
                   render={({ field: { onChange, value } }) => (
                     <Fieldset
-                      label="Sort Owned By"
+                      label="Default NFT List"
+                      selectOnly
+                      select={{
+                        options: nftList,
+                        placeholder: "Select",
+                        value: value,
+                        onChange: onChange,
+                      }}
+                    />
+                  )}
+                />
+              </View>
+              <View tw="z-1">
+                <Controller
+                  control={control}
+                  name="default_created_sort_id"
+                  render={({ field: { onChange, value } }) => (
+                    <Fieldset
+                      label="Sort Created By"
                       selectOnly
                       tw="mt-4"
                       select={{
@@ -567,11 +550,62 @@ export const EditProfile = () => {
                     />
                   )}
                 />
-              </Tabs.ScrollView>
-            </Tabs.Pager>
-          </Tabs.Root>
+              </View>
+              <Controller
+                control={control}
+                name="default_owned_sort_id"
+                render={({ field: { onChange, value } }) => (
+                  <Fieldset
+                    label="Sort Owned By"
+                    selectOnly
+                    tw="mt-4"
+                    select={{
+                      options: sortingOptionsList,
+                      placeholder: "Select",
+                      value: value,
+                      onChange: onChange,
+                    }}
+                  />
+                )}
+              />
+            </ScrollView>
+          );
 
-          <View tw={`my-2.5 mb-4 px-4`}>
+        default:
+          return null;
+      }
+    },
+    [
+      control,
+      coverImageHeight,
+      errors.bio?.message,
+      errors.name?.message,
+      errors.profilePicture?.message,
+      errors.username?.message,
+      extraScrollHeight,
+      hasNotSubmittedExternalLink,
+      isValid,
+      pickFile,
+      socialLinks.data?.data,
+      validate,
+    ]
+  );
+
+  return (
+    <>
+      <BottomSheetModalProvider>
+        <View tw={`w-full flex-1`}>
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            renderTabBar={(props) => <ScollableAutoWidthTabBar {...props} />}
+            initialLayout={{
+              width: width,
+            }}
+          />
+
+          <View tw="my-2.5 mb-4 px-4">
             <Button
               disabled={isSubmitting}
               tw={isSubmitting ? "opacity-50" : ""}

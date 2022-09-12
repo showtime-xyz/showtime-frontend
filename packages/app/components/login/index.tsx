@@ -1,14 +1,18 @@
-import { useMemo, useState } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { useMemo, useCallback } from "react";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  SceneRendererProps,
+  TabView,
+  Route,
+  ScollableTabBar,
+} from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useTabState } from "app/hooks/use-tab-state";
 import { yup } from "app/lib/yup";
-
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
@@ -20,15 +24,27 @@ import { useLogin } from "./use-login";
 interface LoginProps {
   onLogin?: () => void;
 }
-
+const LOGIN_ROUTES = [
+  {
+    title: "Wallet or email",
+    key: "email",
+    index: 0,
+  },
+  {
+    title: "Phone number",
+    key: "phone",
+    index: 1,
+  },
+];
 const CONTENT_HEIGHT = Platform.select({
   android: [389, 397],
-  default: [389, 389],
+  default: [420, 420],
 });
 
 export function Login({ onLogin }: LoginProps) {
   //#region state
-  const [selected, setSelected] = useState(0);
+  const { index, setIndex, routes } = useTabState(LOGIN_ROUTES);
+
   //#endregion
 
   //#region hooks
@@ -40,6 +56,8 @@ export function Login({ onLogin }: LoginProps) {
     handleSubmitPhoneNumber,
     handleSubmitWallet,
   } = useLogin(onLogin);
+  const { width } = useWindowDimensions();
+
   //#endregion
 
   //#region variables
@@ -79,9 +97,63 @@ export function Login({ onLogin }: LoginProps) {
         .required(),
     []
   );
-  const tabsData = useMemo(
-    () => [{ name: "Wallet or email" }, { name: "Phone number" }],
-    []
+
+  const renderScene = useCallback(
+    ({
+      route: { key },
+    }: SceneRendererProps & {
+      route: Route;
+    }) => {
+      switch (key) {
+        case "email":
+          return (
+            <View style={styles.tabListItemContainer}>
+              <View tw="mb-[16px]">
+                <Button
+                  onPress={() => handleSubmitWallet()}
+                  variant="primary"
+                  size="regular"
+                >
+                  <Text>Sign in with Wallet</Text>
+                </Button>
+              </View>
+              <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
+                <View tw="h-2" />
+                <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
+                  — or —
+                </Text>
+                <View tw="h-2" />
+              </View>
+              <LoginInputField
+                key="login-email-field"
+                validationSchema={emailValidationSchema}
+                label="Email address"
+                placeholder="Enter your email address"
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                signInButtonLabel="Send"
+                onSubmit={handleSubmitEmail}
+              />
+            </View>
+          );
+        case "phone":
+          return (
+            <View style={styles.tabListItemContainer}>
+              <PhoneNumberPicker
+                handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+              />
+            </View>
+          );
+        default:
+          return null;
+      }
+    },
+    [
+      emailValidationSchema,
+      handleSubmitEmail,
+      handleSubmitPhoneNumber,
+      handleSubmitWallet,
+    ]
   );
   //#endregion
   return (
@@ -95,69 +167,22 @@ export function Login({ onLogin }: LoginProps) {
           </Text>
         </View>
       ) : (
-        <>
+        <View
+          style={{
+            height: CONTENT_HEIGHT[index],
+          }}
+        >
           <LoginHeader />
-
-          <View
-            style={{
-              height: CONTENT_HEIGHT[selected],
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            renderTabBar={(props) => <ScollableTabBar {...props} />}
+            initialLayout={{
+              width,
             }}
-          >
-            <Tabs.Root
-              initialIndex={selected}
-              onIndexChange={setSelected}
-              tabListHeight={TAB_LIST_HEIGHT}
-            >
-              <View tw="items-center justify-center border-b border-gray-200 dark:border-gray-800">
-                <View tw="h-[56px] flex-row">
-                  {tabsData.map((d, i) => (
-                    // @ts-ignore
-                    <Tabs.Trigger key={d.name} index={i}>
-                      <TabItem name={d.name} selected={selected === i} />
-                    </Tabs.Trigger>
-                  ))}
-
-                  <SelectedTabIndicator />
-                </View>
-              </View>
-              <Tabs.Pager>
-                <Tabs.View style={styles.tabListItemContainer}>
-                  <View tw="mb-[16px]">
-                    <Button
-                      onPress={handleSubmitWallet}
-                      variant="primary"
-                      size="regular"
-                    >
-                      <Text>Sign in with Wallet</Text>
-                    </Button>
-                  </View>
-                  <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
-                    <View tw="h-2" />
-                    <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-                      — or —
-                    </Text>
-                    <View tw="h-2" />
-                  </View>
-                  <LoginInputField
-                    key="login-email-field"
-                    validationSchema={emailValidationSchema}
-                    label="Email address"
-                    placeholder="Enter your email address"
-                    keyboardType="email-address"
-                    textContentType="emailAddress"
-                    signInButtonLabel="Send"
-                    onSubmit={handleSubmitEmail}
-                  />
-                </Tabs.View>
-                <Tabs.View style={styles.tabListItemContainer}>
-                  <PhoneNumberPicker
-                    handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-                  />
-                </Tabs.View>
-              </Tabs.Pager>
-            </Tabs.Root>
-          </View>
-        </>
+          />
+        </View>
       )}
       <LoginOverlays loading={loading && !isConnectingToWallet} />
     </LoginContainer>
@@ -170,8 +195,9 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   tabListItemContainer: {
-    marginTop: -(TAB_LIST_HEIGHT - 16),
     paddingHorizontal: 16,
     paddingBottom: 16,
+    flex: 1,
+    paddingTop: 16,
   },
 });

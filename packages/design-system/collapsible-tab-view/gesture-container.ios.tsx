@@ -110,6 +110,7 @@ export const GestureContainer = React.forwardRef<
   const [headerHeight, setHeaderHeight] = useState(
     initHeaderHeight - overflowHeight
   );
+  const [isLoadedHeader, setIsLoadedHeader] = useState(!renderSceneHeader);
   const [scrollStickyHeaderHeight, setStickyHeaderHeight] = useState(0);
   const [childGestures, setChildRefs] = useState<NativeGesture[]>([]);
   //#endregion
@@ -222,6 +223,7 @@ export const GestureContainer = React.forwardRef<
       if (animationHeaderHeight) {
         animationHeaderHeight.value = Math.abs(calcHeight - minHeaderHeight);
       }
+      setIsLoadedHeader(true);
     },
     [
       animationHeaderHeight,
@@ -385,11 +387,11 @@ export const GestureContainer = React.forwardRef<
   //#endregion
 
   useEffect(() => {
-    if (headerHeight !== 0) {
+    if (isLoadedHeader) {
       opacityValue.value = withTiming(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerHeight]);
+  }, [isLoadedHeader]);
 
   useEffect(() => {
     animateTabsToRefresh(isRefreshingProp);

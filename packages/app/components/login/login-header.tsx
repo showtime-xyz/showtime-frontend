@@ -6,7 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 export function LoginHeader() {
   return (
-    <>
+    <View>
       <Text tw="text-center font-semibold text-gray-900 dark:text-white">
         If this is your first time, it will create a new account on Showtime.
       </Text>
@@ -28,6 +28,6 @@ export function LoginHeader() {
         </PressableScale>
         <Text tw="text-center text-xs text-gray-600 dark:text-gray-400">.</Text>
       </View>
-    </>
+    </View>
   );
 }
