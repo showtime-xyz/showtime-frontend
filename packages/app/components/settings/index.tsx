@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, useState } from "react";
+import { useEffect, useMemo, useCallback, useState, useRef } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import Constants from "expo-constants";
@@ -140,6 +140,7 @@ const SettingsTabs = () => {
                 <SettingsWalletSlot
                   address={item.address}
                   ensDomain={item.ens_domain}
+                  nickname={item.nickname}
                   mintingEnabled={item.minting_enabled}
                   onEditNickname={() => handleEditNickname(item)}
                 />
@@ -337,8 +338,16 @@ const EditNicknameModal = ({
   editingWallet?: WalletAddressesV2;
   onClose: any;
 }) => {
-  const [nickname, setNickname] = useState(editingWallet?.nickname ?? "");
+  const [nickname, setNickname] = useState("");
   const { editWalletNickName } = useAddWalletNickname();
+  const initialValueSet = useRef(false);
+
+  useEffect(() => {
+    if (editingWallet?.nickname && !initialValueSet.current) {
+      setNickname(editingWallet?.nickname);
+      initialValueSet.current = true;
+    }
+  }, [editingWallet?.nickname]);
 
   return (
     <ModalSheet

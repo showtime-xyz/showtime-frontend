@@ -22,6 +22,7 @@ type Props = {
   address: WalletAddressesExcludingEmailV2["address"];
   ensDomain?: WalletAddressesExcludingEmailV2["ens_domain"];
   mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
+  nickname?: string;
   onEditNickname: (wallet: string) => void;
 };
 
@@ -121,6 +122,7 @@ export const SettingsWalletSlot = (props: Props) => {
   const user = useUser();
 
   const display = ensDomain ? ensDomain : formatAddressShort(address);
+  const nickname = props.nickname;
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
@@ -138,21 +140,22 @@ export const SettingsWalletSlot = (props: Props) => {
             </Button>
           </View>
           <View tw="flex-1 px-4">
-            <View tw="md:mb-3 md:flex-row">
-              <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
-                {display}
+            <View>
+              <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
+                {nickname}
               </Text>
-              <View tw="my-2 flex flex-row md:my-0">
-                {isConnectedAddress ? (
-                  <DataPill
-                    label="Current"
-                    tw="bg-gray-500 md:ml-2"
-                    type="primary"
-                  />
-                ) : null}
-                {isPrimary ? (
-                  <DataPill label="Primary" tw="md:ml-2" type="secondary" />
-                ) : null}
+              <View tw="md:mb-3 md:flex-row">
+                <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
+                  {display}
+                </Text>
+                <View tw="my-2 flex flex-row md:my-0">
+                  {isConnectedAddress ? (
+                    <DataPill label="Current" tw="md:ml-2" type="primary" />
+                  ) : null}
+                  {isPrimary ? (
+                    <DataPill label="Primary" tw="md:ml-2" type="secondary" />
+                  ) : null}
+                </View>
               </View>
             </View>
             <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>

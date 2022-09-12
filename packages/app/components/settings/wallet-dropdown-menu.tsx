@@ -36,10 +36,8 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent loop>
         <DropdownMenuItem
-          // @ts-ignore
-          onSelect={() => props.onEditNickname(address)}
+          onSelect={() => address && props.onEditNickname(address)}
           key="nickname"
-          destructive
         >
           <MenuItemIcon Icon={Edit} />
           <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
@@ -47,10 +45,8 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
 
         {!props.isPrimary ? (
           <DropdownMenuItem
-            // @ts-ignore
-            onSelect={() => setPrimaryWallet(address)}
+            onSelect={() => address && setPrimaryWallet(address)}
             key="primary"
-            destructive
           >
             <MenuItemIcon Icon={Check} />
             <DropdownMenuItemTitle>Make Primary</DropdownMenuItemTitle>
