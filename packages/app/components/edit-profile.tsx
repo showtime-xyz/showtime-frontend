@@ -36,6 +36,7 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
+import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
 
@@ -87,10 +88,17 @@ const sortingOptionsList = [
 ];
 
 export const EditProfile = () => {
+  // hooks
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+  const { isValid, validate } = useValidateUsername();
+  const insets = useSafeAreaInsets();
+  const socialLinks = useLinkOptions();
+  const pickFile = useFilePicker();
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [index, setIndex] = useState(0);
@@ -108,12 +116,7 @@ export const EditProfile = () => {
       ? 1
       : 0
   );
-  const { isValid, validate } = useValidateUsername();
-  const insets = useSafeAreaInsets();
 
-  const { width } = useWindowDimensions();
-  const socialLinks = useLinkOptions();
-  const pickFile = useFilePicker();
   const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
     useState(selected === 1);
 
@@ -313,8 +316,10 @@ export const EditProfile = () => {
                       <Preview
                         file={value}
                         style={{ height: coverImageHeight }}
-                        tw={`md:w-120 web:object-cover w-screen`}
+                        tw="web:object-cover"
                         resizeMode="cover"
+                        width={isMdWidth ? 480 : width}
+                        height={isMdWidth ? 480 : width}
                       />
                     )}
                   </Pressable>
@@ -343,7 +348,9 @@ export const EditProfile = () => {
                         {value && (
                           <Preview
                             file={value}
-                            tw="h-[94px] w-[94px] rounded-full"
+                            tw="rounded-full"
+                            width={94}
+                            height={94}
                           />
                         )}
                         <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
@@ -583,10 +590,12 @@ export const EditProfile = () => {
       errors.username?.message,
       extraScrollHeight,
       hasNotSubmittedExternalLink,
+      isMdWidth,
       isValid,
       pickFile,
       socialLinks.data?.data,
       validate,
+      width,
     ]
   );
 

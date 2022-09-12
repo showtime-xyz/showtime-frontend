@@ -310,7 +310,12 @@ export const DropForm = () => {
                       >
                         {value ? (
                           <View>
-                            <Preview file={value} tw="h-63 w-63 rounded-2xl" />
+                            <Preview
+                              file={value}
+                              width={252}
+                              height={252}
+                              tw="rounded-2xl"
+                            />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row shadow-lg">
                                 <FlipIcon
