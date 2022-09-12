@@ -37,7 +37,7 @@ const LOGIN_ROUTES = [
   },
 ];
 const CONTENT_HEIGHT = Platform.select({
-  android: [389, 397],
+  android: [450, 397],
   default: [420, 420],
 });
 
