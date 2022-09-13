@@ -9,7 +9,7 @@ export const addWalletToBackend = async ({
   signature: string;
   nickname?: string;
 }) => {
-  await axios({
+  return axios({
     url: `/v2/wallet/${address}/add`,
     method: "POST",
     data: { address, signature, nickname },
@@ -17,7 +17,7 @@ export const addWalletToBackend = async ({
 };
 
 export const removeWalletFromBackend = async (address: string) => {
-  await axios({
+  return axios({
     url: `/v2/wallet/${address}/remove`,
     method: "DELETE",
   });
