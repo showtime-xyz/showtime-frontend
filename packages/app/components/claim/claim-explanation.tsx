@@ -54,7 +54,11 @@ export const ClaimExplanation = ({
             <Media
               resizeMode="contain"
               item={token?.data.item}
-              tw="h-60 w-60 overflow-hidden"
+              sizeStyle={{
+                width: 240,
+                height: 240,
+              }}
+              tw="overflow-hidden"
             />
           </View>
         </View>
