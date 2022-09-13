@@ -1,61 +1,29 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Select } from "@showtime-xyz/universal.select";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
-import { useAddWallet } from "app/hooks/use-add-wallet";
-import { useUser } from "app/hooks/use-user";
-import { formatAddressShort } from "app/utilities";
+import { TextLink } from "app/navigation/link";
 
 export const AddWalletOrSetPrimary = () => {
-  const { user } = useUser();
-  const { setPrimaryWallet } = useSetPrimaryWallet();
-  const { addWallet } = useAddWallet();
-  const [selectedWallet, setSelectedWallet] = useState<any>(
-    user?.data.profile.wallet_addresses_excluding_email_v2?.[0]?.address ?? null
+  return (
+    <View tw="items-center">
+      <View tw="h-8" />
+      <Text tw="text-center text-xl text-black dark:text-white">
+        Choose a primary wallet to receive your drop
+      </Text>
+      <View tw="mt-8 mb-10">
+        <Text tw="text-center text-base text-black dark:text-white">
+          Please choose which wallet will receive your drop. You only have to do
+          this once!
+        </Text>
+      </View>
+      <TextLink
+        href="/settings"
+        tw="rounded-3xl bg-gray-900 p-4 text-white dark:bg-gray-200 dark:text-black"
+      >
+        Select Primary wallet
+      </TextLink>
+    </View>
   );
-
-  const hasWallet =
-    user?.data.profile.wallet_addresses_excluding_email_v2 &&
-    user.data.profile.wallet_addresses_excluding_email_v2.length > 0;
-  const primary = user?.data.profile.primary_wallet;
-
-  const wallets = useMemo(() => {
-    return user?.data.profile.wallet_addresses_excluding_email_v2.map(
-      (wallet) => {
-        return {
-          label: formatAddressShort(wallet.address) ?? wallet.address,
-          value: wallet.address,
-        };
-      }
-    );
-  }, [user]);
-
-  if (!hasWallet) {
-    return (
-      <View>
-        <Button onPress={addWallet}>Add a wallet</Button>
-      </View>
-    );
-  }
-
-  if (!primary) {
-    return (
-      <View>
-        <Select
-          options={wallets}
-          onChange={setSelectedWallet}
-          value={selectedWallet}
-        />
-        <Button onPress={() => setPrimaryWallet(selectedWallet)}>
-          Set primary wallet
-        </Button>
-      </View>
-    );
-  }
-
-  return <></>;
 };
