@@ -39,8 +39,6 @@ function ModalContainerComponent({
   disableBackdropPress,
   tw: propTw = "",
 }: ModalContainerProps) {
-  console.log(propTw);
-
   const modalContainerTW = useMemo(
     () => [...MODAL_CONTAINER_TW, web_height, propTw],
     [web_height, propTw]
