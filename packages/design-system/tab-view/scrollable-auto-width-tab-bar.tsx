@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ViewStyle,
   useWindowDimensions,
-  Platform,
 } from "react-native";
 
 import {
@@ -157,7 +156,7 @@ export const ScollableAutoWidthTabBar = ({
         {
           backgroundColor: isDark ? "#000" : "#FFF",
           borderColor: isDark ? colors.gray[800] : colors.gray[200],
-          borderBottomWidth: Platform.OS === "web" ? 0 : 1,
+          borderBottomWidth: StyleSheet.hairlineWidth,
         },
         style,
       ]}
