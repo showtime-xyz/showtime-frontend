@@ -185,9 +185,12 @@ export const NotificationsTabBarIcon = ({
 const UnreadNotificationIndicator = () => {
   const { hasUnreadNotification } = useNotifications();
 
-  return hasUnreadNotification ? (
-    <View tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500" />
-  ) : null;
+  return (
+    <View
+      tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500"
+      style={{ opacity: hasUnreadNotification ? 1 : 0 }}
+    />
+  );
 };
 
 export const ProfileTabBarIcon = () => {
