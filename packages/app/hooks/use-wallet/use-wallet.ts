@@ -18,7 +18,6 @@ const useWallet = (): UseWalletReturnType => {
   const [address, setAddress] = useState<string | undefined>();
 
   // we use this hook to prevent stale values in closures
-  const addressRef = useLatestValueRef(address);
   const walletConnectInstanceRef = useLatestValueRef(connector);
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
@@ -42,19 +41,28 @@ const useWallet = (): UseWalletReturnType => {
     })();
   }, [web3, connector.session, magicWalletAddress, mobileSDK.address]);
 
+  // WalletConnect connected
   useEffect(() => {
-    if (
-      walletConnectedPromiseResolveCallback.current &&
-      walletConnected &&
-      address
-    ) {
+    if (walletConnectedPromiseResolveCallback.current && connector.connected) {
+      const getAddress = require("@ethersproject/address").getAddress;
       walletConnectedPromiseResolveCallback.current({
-        address: address,
+        address: getAddress(connector.session?.accounts?.[0]),
         walletName: connector.peerMeta?.name,
       });
       walletConnectedPromiseResolveCallback.current = null;
     }
-  }, [walletConnected, address, connector.peerMeta?.name]);
+  }, [connector, address, connector.peerMeta?.name]);
+
+  // Coinbase connected
+  useEffect(() => {
+    if (walletConnectedPromiseResolveCallback.current && mobileSDK.connected) {
+      walletConnectedPromiseResolveCallback.current({
+        address: mobileSDK.address,
+        walletName: mobileSDK.metadata?.name,
+      });
+      walletConnectedPromiseResolveCallback.current = null;
+    }
+  }, [walletConnected, address, mobileSDK]);
 
   const result = useMemo(() => {
     const wcConnected = connector.connected;
@@ -87,20 +95,23 @@ const useWallet = (): UseWalletReturnType => {
       networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
         if (walletConnectInstanceRef.current.connected) {
+          const getAddress = (await import("@ethersproject/address"))
+            .getAddress;
+
           const signature =
             await walletConnectInstanceRef.current.signPersonalMessage([
               args.message,
-              addressRef.current,
+              getAddress(walletConnectInstanceRef.current.session.accounts[0]),
             ]);
           return signature;
         } else if (
           coinbaseMobileSDKInstanceRef.current.connected &&
-          addressRef.current
+          coinbaseMobileSDKInstanceRef.current.address
         ) {
           const signature =
             await coinbaseMobileSDKInstanceRef.current.personalSign(
               args.message,
-              addressRef.current
+              coinbaseMobileSDKInstanceRef.current.address
             );
           return signature;
         }
@@ -116,7 +127,6 @@ const useWallet = (): UseWalletReturnType => {
     isMagic,
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
-    addressRef,
   ]);
 
   if (process.env.E2E) {
