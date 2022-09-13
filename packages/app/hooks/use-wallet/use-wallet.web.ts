@@ -11,6 +11,7 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 
+import { useLatestValueRef } from "../use-latest-value-ref";
 import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
@@ -29,7 +30,6 @@ const useWallet = (): UseWalletReturnType => {
   const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
-  const openConnectModalRef = useRef<any>(null);
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
@@ -37,9 +37,8 @@ const useWallet = (): UseWalletReturnType => {
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const [address, setAddress] = useState<string | undefined>();
 
-  useEffect(() => {
-    openConnectModalRef.current = openConnectModal;
-  });
+  // we use this hook to prevent stale values in closures
+  const openConnectModalRef = useLatestValueRef(openConnectModal);
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -86,10 +85,11 @@ const useWallet = (): UseWalletReturnType => {
   }, [
     address,
     connected,
-    disconnect,
     networkChanged,
-    wagmiData.isConnected,
     signMessageAsync,
+    openConnectModalRef,
+    disconnect,
+    wagmiData.isConnected,
   ]);
 
   return result;

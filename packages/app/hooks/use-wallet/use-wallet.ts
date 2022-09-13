@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import type { Bytes } from "@ethersproject/bytes";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
+import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 
@@ -12,22 +13,16 @@ import { useRandomWallet } from "./use-random-wallet";
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const connector = useWalletConnect();
-  const walletConnectInstanceRef = useRef(connector);
-  const isWalletConnectConnected = useRef<boolean>();
-  const isCoinbaseConnectedRef = useRef<boolean>();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
   const [address, setAddress] = useState<string | undefined>();
-  const addressRef = useRef<string | undefined>();
+
+  // we use this hook to prevent stale values in closures
+  const addressRef = useLatestValueRef(address);
+  const walletConnectInstanceRef = useLatestValueRef(connector);
+  const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
   const walletConnected = connector.connected || mobileSDK.connected;
-
-  useEffect(() => {
-    isWalletConnectConnected.current = connector.connected;
-    isCoinbaseConnectedRef.current = mobileSDK.connected;
-    addressRef.current = address;
-    walletConnectInstanceRef.current = connector;
-  });
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -75,7 +70,7 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        connector.connect();
+        walletConnectInstanceRef.current.connect();
         return new Promise<ConnectResult>((resolve) => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });
@@ -83,32 +78,47 @@ const useWallet = (): UseWalletReturnType => {
       disconnect: async () => {
         if (wcConnected) {
           localStorage.removeItem("walletconnect");
-          await connector.killSession();
+          await walletConnectInstanceRef.current.killSession();
         } else if (mobileSDKConnected) {
-          mobileSDK.disconnect();
+          coinbaseMobileSDKInstanceRef.current.disconnect();
         }
       },
       name: walletName,
       connected: walletConnected || isMagic,
       networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
-        if (isWalletConnectConnected.current) {
+        if (walletConnectInstanceRef.current.connected) {
           const signature =
             await walletConnectInstanceRef.current.signPersonalMessage([
               args.message,
               addressRef.current,
             ]);
           return signature;
-        } else if (isCoinbaseConnectedRef.current && addressRef.current) {
-          const signature = await mobileSDK.personalSign(
-            args.message,
-            addressRef.current
-          );
+        } else if (
+          coinbaseMobileSDKInstanceRef.current.connected &&
+          addressRef.current
+        ) {
+          const signature =
+            await coinbaseMobileSDKInstanceRef.current.personalSign(
+              args.message,
+              addressRef.current
+            );
           return signature;
         }
       },
     };
-  }, [address, connector, isMagic, mobileSDK, walletConnected]);
+  }, [
+    connector.connected,
+    connector.peerMeta?.name,
+    mobileSDK.connected,
+    mobileSDK.metadata?.name,
+    address,
+    walletConnected,
+    isMagic,
+    walletConnectInstanceRef,
+    coinbaseMobileSDKInstanceRef,
+    addressRef,
+  ]);
 
   if (process.env.E2E) {
     // env variables won't change between renders, so this looks safe
