@@ -127,9 +127,9 @@ export const SettingsWalletSlot = (props: Props) => {
                 Make Primary
               </Button>
             ) : (
-              <Button disabled tw="mr-4 w-32" variant="tertiary">
-                Primary ✓
-              </Button>
+              <View tw="mr-4 w-32 items-center rounded-3xl bg-green-600 py-2">
+                <Text tw="text-white">Primary ✓</Text>
+              </View>
             )}
             <WalletDropdownMenu
               address={address}
