@@ -2,13 +2,13 @@ import { useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
@@ -112,6 +112,7 @@ export const SettingsWalletSlot = (props: Props) => {
     userAddress?.toLowerCase() === address?.toLowerCase();
 
   const isPrimary = user.user?.data.profile.primary_wallet?.address === address;
+  const { setPrimaryWallet } = useSetPrimaryWallet();
 
   return (
     <>
@@ -131,24 +132,24 @@ export const SettingsWalletSlot = (props: Props) => {
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
                 </Text>
-                <View tw="my-2 flex flex-row md:my-0">
-                  {isConnectedAddress ? (
-                    <DataPill label="Current" tw="md:ml-2" type="primary" />
-                  ) : null}
-                  {isPrimary ? (
-                    <DataPill label="Primary" tw="md:ml-2" type="secondary" />
-                  ) : null}
-                </View>
               </View>
             </View>
             <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
           </View>
-          <View tw="flex justify-center">
+          <View tw="flex flex-row items-center justify-center">
+            {!isPrimary ? (
+              <Button tw="mr-4 w-32" onPress={() => setPrimaryWallet(address)}>
+                Make Primary
+              </Button>
+            ) : (
+              <Button disabled tw="mr-4 w-32" variant="tertiary">
+                Primary ✓
+              </Button>
+            )}
             <WalletDropdownMenu
               address={address}
               isCurrent={isConnectedAddress}
               onEditNickname={props.onEditNickname}
-              isPrimary={isPrimary}
             />
           </View>
         </View>
