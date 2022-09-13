@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, useMemo } from "react";
 import { Pressable as ReactNativePressable } from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
@@ -11,7 +11,14 @@ export type Props = ComponentProps<typeof ReactNativePressable> & {
 const StyledPressable = styled(ReactNativePressable);
 
 export function Pressable({ tw, ...props }: Props) {
-  return (
-    <StyledPressable {...props} tw={Array.isArray(tw) ? tw.join(" ") : tw} />
+  const twWithHover = useMemo(
+    () =>
+      [
+        "hover:bg-gray-200 dark:hover:bg-gray-800",
+        Array.isArray(tw) ? tw.join(" ") : tw,
+      ].join(" "),
+    [tw]
   );
+
+  return <StyledPressable {...props} tw={twWithHover} />;
 }

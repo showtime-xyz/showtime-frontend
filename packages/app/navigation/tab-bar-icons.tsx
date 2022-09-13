@@ -50,7 +50,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
   if (isWeb) {
     if (onPress) {
       return (
-        <Pressable onPress={onPress} disableHoverEffect={true}>
+        <Pressable onPress={onPress}>
           <View
             tw={["h-12 w-12 items-center justify-center rounded-full", tw]}
             style={
