@@ -7,6 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -107,7 +108,8 @@ export const ProfileTop = ({
   const bio = profileData?.profile.bio;
   const { colorScheme } = useColorScheme();
   const { width } = useWindowDimensions();
-  const { isFollowing } = useMyInfo();
+  const { isFollowing, data: userProfile } = useMyInfo();
+  const Alert = useAlert();
   const profileId = profileData?.profile.profile_id;
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
@@ -332,6 +334,15 @@ export const ProfileTop = ({
                     <Button
                       size="small"
                       onPress={() => {
+                        if (userProfile?.data.can_create_drop === false) {
+                          const timeRemaining = 24 - new Date().getUTCHours();
+                          Alert.alert(
+                            "Wow, you love drops!",
+                            `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
+                          );
+                          return;
+                        }
+
                         router.push(
                           Platform.select({
                             native: "/drop",
