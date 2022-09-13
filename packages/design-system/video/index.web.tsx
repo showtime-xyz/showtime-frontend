@@ -40,7 +40,7 @@ export function Video({
 
   return (
     <>
-      {!videoConfig?.previewOnly ? (
+      {videoConfig?.previewOnly ? (
         <Image
           tw={tw}
           style={style as ImageStyle}
