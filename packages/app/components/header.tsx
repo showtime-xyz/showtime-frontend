@@ -12,6 +12,7 @@ import {
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -25,7 +26,6 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
@@ -241,7 +241,7 @@ const HeaderRight = () => {
                 <NotificationsInHeader />
               </View>
               <View tw="mx-2">
-                <PressableScale
+                <PressableHover
                   onPress={() => {
                     router.push(
                       Platform.select({
@@ -272,7 +272,7 @@ const HeaderRight = () => {
                       color={isDark ? "black" : "white"}
                     />
                   </View>
-                </PressableScale>
+                </PressableHover>
               </View>
             </>
           )}
@@ -351,13 +351,7 @@ const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      {isMdWidth ? (
-        <Link href="/">
-          <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-        </Link>
-      ) : (
-        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-      )}
+      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
 
       {isMdWidth ? <SearchInHeader /> : null}
     </View>
@@ -382,7 +376,7 @@ const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
-            <HeaderCenter {...{ isDark, isMdWidth }} />
+            <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
           </View>
           <View tw="items-end">
             <HeaderRight />

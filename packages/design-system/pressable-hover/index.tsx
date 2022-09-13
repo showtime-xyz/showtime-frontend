@@ -14,7 +14,7 @@ export function PressableHover({ tw, ...props }: Props) {
   const twWithHover = useMemo(
     () =>
       [
-        "hover:bg-gray-200 dark:hover:bg-gray-800",
+        "hover:opacity-80 dark:hover:opacity-90",
         Array.isArray(tw) ? tw.join(" ") : tw,
       ].join(" "),
     [tw]

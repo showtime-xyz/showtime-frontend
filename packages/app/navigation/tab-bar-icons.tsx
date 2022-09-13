@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -15,7 +15,7 @@ import {
   Plus,
   Showtime,
 } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,8 +24,6 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
-
-import { breakpoints } from "design-system/theme";
 
 type TabBarIconProps = {
   color?: string;
@@ -42,34 +40,31 @@ type TabBarButtonProps = {
 };
 
 function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
-  const isWeb = Platform.OS === "web";
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
-  const isDark = useIsDarkMode();
-
-  if (isWeb) {
+  if (Platform.OS === "web") {
     if (onPress) {
       return (
-        <Pressable onPress={onPress}>
-          <View
-            tw={["h-12 w-12 items-center justify-center rounded-full", tw]}
-            style={
-              isWeb && isMdWidth
-                ? { backgroundColor: isDark ? "#18181b" : "#f4f4f5" }
-                : {}
-            }
-          >
-            {children}
-          </View>
-        </Pressable>
+        <PressableHover
+          onPress={onPress}
+          tw={[
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            tw ?? "",
+          ]}
+        >
+          {children}
+        </PressableHover>
       );
     }
 
     return (
       <Link href={tab}>
-        <View tw="h-12 w-12 items-center justify-center rounded-full">
+        <PressableHover
+          tw={[
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            tw ?? "",
+          ]}
+        >
           {children}
-        </View>
+        </PressableHover>
       </Link>
     );
   }
