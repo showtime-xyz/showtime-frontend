@@ -80,8 +80,8 @@ function Media({
             style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
-            width={size}
-            height={size}
+            width={sizeStyle?.width ?? size}
+            height={sizeStyle?.height ?? size}
             resizeMode={resizeMode}
           />
         </PinchToZoom>
@@ -106,8 +106,8 @@ function Media({
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            width={size}
-            height={size}
+            width={sizeStyle?.width ?? size}
+            height={sizeStyle?.height ?? size}
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
