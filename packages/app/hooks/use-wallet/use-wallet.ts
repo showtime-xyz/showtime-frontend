@@ -12,6 +12,7 @@ import { useRandomWallet } from "./use-random-wallet";
 
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
+  const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const connector = useWalletConnect();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
@@ -51,7 +52,7 @@ const useWallet = (): UseWalletReturnType => {
       });
       walletConnectedPromiseResolveCallback.current = null;
     }
-  }, [connector, address, connector.peerMeta?.name]);
+  }, [connector]);
 
   // Coinbase connected
   useEffect(() => {
@@ -62,7 +63,29 @@ const useWallet = (): UseWalletReturnType => {
       });
       walletConnectedPromiseResolveCallback.current = null;
     }
-  }, [walletConnected, address, mobileSDK]);
+  }, [mobileSDK]);
+
+  // WalletConnect disconnected
+  useEffect(() => {
+    if (
+      walletDisconnectedPromiseResolveCallback.current &&
+      !connector.connected
+    ) {
+      walletDisconnectedPromiseResolveCallback.current();
+      walletDisconnectedPromiseResolveCallback.current = null;
+    }
+  }, [connector]);
+
+  // Coinbase disconnected
+  useEffect(() => {
+    if (
+      walletDisconnectedPromiseResolveCallback.current &&
+      !mobileSDK.connected
+    ) {
+      walletDisconnectedPromiseResolveCallback.current();
+      walletDisconnectedPromiseResolveCallback.current = null;
+    }
+  }, [mobileSDK]);
 
   const result = useMemo(() => {
     const wcConnected = connector.connected;
@@ -85,10 +108,14 @@ const useWallet = (): UseWalletReturnType => {
       },
       disconnect: async () => {
         if (walletConnectInstanceRef.current.connected) {
-          await walletConnectInstanceRef.current.killSession();
+          walletConnectInstanceRef.current.killSession();
         } else if (coinbaseMobileSDKInstanceRef.current.connected) {
-          await coinbaseMobileSDKInstanceRef.current.disconnect();
+          coinbaseMobileSDKInstanceRef.current.disconnect();
         }
+
+        return new Promise<ConnectResult>((resolve) => {
+          walletDisconnectedPromiseResolveCallback.current = resolve;
+        });
       },
       name: walletName,
       connected: walletConnected || isMagic,
