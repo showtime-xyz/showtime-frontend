@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
@@ -14,7 +14,13 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
-  const wagmiData = useAccount();
+  const walletConnectedPromiseResolveCallback = useRef<any>(null);
+  const wagmiData = useAccount({
+    onConnect: (c) => {
+      walletConnectedPromiseResolveCallback.current?.(c);
+      walletConnectedPromiseResolveCallback.current = null;
+    },
+  });
   const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
@@ -47,7 +53,10 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        await openConnectModal?.();
+        openConnectModal?.();
+        return new Promise((resolve) => {
+          walletConnectedPromiseResolveCallback.current = resolve;
+        });
       },
       connected,
       disconnect: async () => {

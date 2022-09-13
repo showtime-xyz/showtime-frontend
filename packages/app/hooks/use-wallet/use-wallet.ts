@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 import type { Bytes } from "@ethersproject/bytes";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
@@ -6,14 +6,28 @@ import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 
-import { UseWalletReturnType } from "./types";
+import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 
 const useWallet = (): UseWalletReturnType => {
+  const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const connector = useWalletConnect();
+  const walletConnectInstanceRef = useRef(connector);
+  const isWalletConnectConnected = useRef<boolean>();
+  const isCoinbaseConnectedRef = useRef<boolean>();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
   const [address, setAddress] = useState<string | undefined>();
+  const addressRef = useRef<string | undefined>();
+
+  const walletConnected = connector.connected || mobileSDK.connected;
+
+  useEffect(() => {
+    isWalletConnectConnected.current = connector.connected;
+    isCoinbaseConnectedRef.current = mobileSDK.connected;
+    addressRef.current = address;
+    walletConnectInstanceRef.current = connector;
+  });
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -33,6 +47,20 @@ const useWallet = (): UseWalletReturnType => {
     })();
   }, [web3, connector.session, magicWalletAddress, mobileSDK.address]);
 
+  useEffect(() => {
+    if (
+      walletConnectedPromiseResolveCallback.current &&
+      walletConnected &&
+      address
+    ) {
+      walletConnectedPromiseResolveCallback.current({
+        address: address,
+        walletName: connector.peerMeta?.name,
+      });
+      walletConnectedPromiseResolveCallback.current = null;
+    }
+  }, [walletConnected, address, connector.peerMeta?.name]);
+
   const result = useMemo(() => {
     const wcConnected = connector.connected;
     const mobileSDKConnected = mobileSDK.connected;
@@ -47,7 +75,10 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        await Promise.race([connector.connect(), mobileSDK.onConnected()]);
+        connector.connect();
+        return new Promise<ConnectResult>((resolve) => {
+          walletConnectedPromiseResolveCallback.current = resolve;
+        });
       },
       disconnect: async () => {
         if (wcConnected) {
@@ -58,22 +89,26 @@ const useWallet = (): UseWalletReturnType => {
         }
       },
       name: walletName,
-      connected: connector.connected || isMagic || mobileSDKConnected,
+      connected: walletConnected || isMagic,
       networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
-        if (wcConnected) {
-          const signature = await connector.signPersonalMessage([
-            args.message,
-            address,
-          ]);
+        if (isWalletConnectConnected.current) {
+          const signature =
+            await walletConnectInstanceRef.current.signPersonalMessage([
+              args.message,
+              addressRef.current,
+            ]);
           return signature;
-        } else if (mobileSDKConnected && address) {
-          const signature = await mobileSDK.personalSign(args.message, address);
+        } else if (isCoinbaseConnectedRef.current && addressRef.current) {
+          const signature = await mobileSDK.personalSign(
+            args.message,
+            addressRef.current
+          );
           return signature;
         }
       },
     };
-  }, [address, connector, isMagic, mobileSDK]);
+  }, [address, connector, isMagic, mobileSDK, walletConnected]);
 
   if (process.env.E2E) {
     // env variables won't change between renders, so this looks safe
