@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
@@ -24,22 +21,10 @@ type Props = {
 };
 
 export const SettingsWalletSlotHeader = () => {
-  const toast = useToast();
   const { state, addWallet } = useAddWallet();
 
   const walletCTA =
     state.status === "error" ? "Connect Lost, Retry" : "Add Wallet";
-
-  useEffect(() => {
-    if (state.status === "error") {
-      // TODO: Possible force logout
-      toast?.show({
-        message: "Wallet connection lost please try again",
-        hideAfter: 4000,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status]);
 
   return (
     <SettingSubTitle>

@@ -76,11 +76,10 @@ const useWallet = (): UseWalletReturnType => {
         });
       },
       disconnect: async () => {
-        if (wcConnected) {
-          localStorage.removeItem("walletconnect");
+        if (walletConnectInstanceRef.current.connected) {
           await walletConnectInstanceRef.current.killSession();
-        } else if (mobileSDKConnected) {
-          coinbaseMobileSDKInstanceRef.current.disconnect();
+        } else if (coinbaseMobileSDKInstanceRef.current.connected) {
+          await coinbaseMobileSDKInstanceRef.current.disconnect();
         }
       },
       name: walletName,
