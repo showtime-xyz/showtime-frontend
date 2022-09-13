@@ -54,7 +54,9 @@ const Avatar = ({ url, icon = "none" }: Props) => {
   return (
     <View tw="relative h-12 w-12 rounded-full">
       <Image
-        tw="h-12 w-12 rounded-full"
+        tw="rounded-full"
+        width={48}
+        height={48}
         source={{
           uri: url,
         }}

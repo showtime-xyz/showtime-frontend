@@ -29,7 +29,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {
       return (
-        <View tw="my-4 flex-1 px-2">
+        <View tw="flex-1 px-2">
           <Card
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
             key={`nft-list-card-${index}`}

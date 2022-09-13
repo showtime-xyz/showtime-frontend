@@ -25,9 +25,9 @@ export const CompleteProfileModalContent = ({
           web: { uri: require("./complete-profile.png") },
           default: require("./complete-profile.png"),
         })}
-        height={100}
-        width={100}
         tw="rounded-xl"
+        width={100}
+        height={100}
         resizeMode="contain"
       />
       <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
