@@ -1,7 +1,7 @@
 import { Children, cloneElement, useMemo } from "react";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 
 import {
@@ -76,11 +76,11 @@ export function Button({
   }, [size, iconColor, labelTW, children, isDarkMode, labelStyle]);
 
   return (
-    <Pressable
+    <PressableHover
       {...props}
       tw={[containerTW, backgroundColors ? backgroundColors["default"] : ""]}
     >
       {renderChildren}
-    </Pressable>
+    </PressableHover>
   );
 }
