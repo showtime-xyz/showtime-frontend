@@ -11,25 +11,35 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 
-import { UseWalletReturnType } from "./types";
+import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
+  const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const wagmiData = useAccount({
     onConnect: (c) => {
       walletConnectedPromiseResolveCallback.current?.(c);
       walletConnectedPromiseResolveCallback.current = null;
     },
+    onDisconnect: () => {
+      walletDisconnectedPromiseResolveCallback.current?.();
+      walletDisconnectedPromiseResolveCallback.current = null;
+    },
   });
   const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
+  const openConnectModalRef = useRef<any>(null);
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
 
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const [address, setAddress] = useState<string | undefined>();
+
+  useEffect(() => {
+    openConnectModalRef.current = openConnectModal;
+  });
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -53,15 +63,22 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        openConnectModal?.();
-        return new Promise((resolve) => {
+        openConnectModalRef.current?.();
+        return new Promise<ConnectResult>((resolve) => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });
       },
       connected,
       disconnect: async () => {
         localStorage.removeItem("walletconnect");
-        await disconnect();
+        disconnect();
+        return new Promise<any>((resolve) => {
+          if (wagmiData.isConnected) {
+            walletDisconnectedPromiseResolveCallback.current = resolve;
+          } else {
+            resolve(true);
+          }
+        });
       },
       networkChanged,
       signMessageAsync,
@@ -71,7 +88,7 @@ const useWallet = (): UseWalletReturnType => {
     connected,
     disconnect,
     networkChanged,
-    openConnectModal,
+    wagmiData.isConnected,
     signMessageAsync,
   ]);
 
