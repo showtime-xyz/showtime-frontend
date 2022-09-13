@@ -101,7 +101,7 @@
     "@showtime-xyz/universal.pan-to-close": "^0.0.20",
     "@showtime-xyz/universal.pinch-to-zoom": "^0.0.31",
     "@showtime-xyz/universal.pressable": "^0.0.47",
-    "@showtime-xyz/universal.pressable-hover": "^0.0.1",
+    "@showtime-xyz/universal.pressable-hover": "^0.0.3",
     "@showtime-xyz/universal.pressable-scale": "^0.0.44",
     "@showtime-xyz/universal.router": "^0.0.36",
     "@showtime-xyz/universal.safe-area": "^0.0.30",

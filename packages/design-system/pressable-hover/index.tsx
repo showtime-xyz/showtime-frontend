@@ -10,7 +10,7 @@ export type Props = ComponentProps<typeof ReactNativePressable> & {
 
 const StyledPressable = styled(ReactNativePressable);
 
-export function Pressable({ tw, ...props }: Props) {
+export function PressableHover({ tw, ...props }: Props) {
   const twWithHover = useMemo(
     () =>
       [

@@ -191,7 +191,7 @@
     },
     "pressable-hover": {
         "scope": "showtime.universal",
-        "version": "0.0.1",
+        "version": "0.0.3",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable-hover"
     },

@@ -7795,9 +7795,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.pressable-hover@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@showtime-xyz/universal.pressable-hover@npm:0.0.1"
+"@showtime-xyz/universal.pressable-hover@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@showtime-xyz/universal.pressable-hover@npm:0.0.3"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.38
     "@showtime-xyz/universal.text": 0.0.40
@@ -7807,7 +7807,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 1937dd2c61cdb2c33dd9356cbd10841d51fac43317a9cf3694e8d649ce00e5f8311697a38ad3c0e076696e230d6a6b3e520614a9fdb5a47210d847a0597053a5
+  checksum: 492d7a2de3aad221ce076169aeab1578f85778ae113387a710048ba6565a0fd623b7ed7531e32842e7d0d7994648cb16339e63b6daf4ec48604cdae5299b1c70
   languageName: node
   linkType: hard
 
@@ -8246,7 +8246,7 @@ __metadata:
     "@showtime-xyz/universal.pan-to-close": ^0.0.20
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.31
     "@showtime-xyz/universal.pressable": ^0.0.47
-    "@showtime-xyz/universal.pressable-hover": ^0.0.1
+    "@showtime-xyz/universal.pressable-hover": ^0.0.3
     "@showtime-xyz/universal.pressable-scale": ^0.0.44
     "@showtime-xyz/universal.router": ^0.0.36
     "@showtime-xyz/universal.safe-area": ^0.0.30
