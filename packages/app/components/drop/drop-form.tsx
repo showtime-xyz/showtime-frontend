@@ -35,6 +35,7 @@ import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
+  formatAddressShort,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -528,6 +529,13 @@ export const DropForm = () => {
             </Text>
           </View>
 
+          <View tw="my-4 flex-row">
+            <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+              This drop will be owned by your{" "}
+              <Text tw="font-bold">{primaryWallet.nickname}</Text>{" "}
+              {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
+            </Text>
+          </View>
           <View tw="flex-1">
             <View tw="flex-1 flex-row">
               <Controller
