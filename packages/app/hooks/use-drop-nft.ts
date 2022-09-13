@@ -247,6 +247,14 @@ export const useDropNFT = () => {
           notSafeForWork: params.notSafeForWork,
         });
 
+        if (!ipfsHash) {
+          dispatch({
+            type: "error",
+            error: "Failed to upload the media on IPFS. Please try again!",
+          });
+          return;
+        }
+
         const escapedTitle = JSON.stringify(params.title).slice(1, -1);
         const escapedDescription = JSON.stringify(params.description).slice(
           1,
