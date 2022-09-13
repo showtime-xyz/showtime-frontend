@@ -284,13 +284,15 @@ export const DropForm = () => {
     );
   }
 
-  const hasWallet =
-    user.user?.data.profile.wallet_addresses_excluding_email_v2 &&
-    user.user?.data.profile.wallet_addresses_excluding_email_v2.length > 0;
   const primaryWallet = user.user?.data.profile.primary_wallet;
 
-  if (!primaryWallet || !hasWallet) {
-    return <AddWalletOrSetPrimary />;
+  if (!primaryWallet) {
+    return (
+      <AddWalletOrSetPrimary
+        title="Choose a primary wallet to create your drop"
+        description="Please choose which wallet will receive your drop. You only have to do this once!"
+      />
+    );
   }
 
   return (
