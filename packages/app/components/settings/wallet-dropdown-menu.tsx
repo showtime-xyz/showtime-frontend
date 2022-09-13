@@ -17,7 +17,7 @@ import { Trash } from "design-system/icon";
 type AddressMenuProps = {
   address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
   isCurrent: boolean;
-  onEditNickname: (address: string) => void;
+  onEditNickname: (item: WalletAddressesExcludingEmailV2) => void;
 };
 
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
@@ -32,10 +32,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent loop>
-        <DropdownMenuItem
-          onSelect={() => address && props.onEditNickname(address)}
-          key="nickname"
-        >
+        <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
           <MenuItemIcon Icon={Edit} />
           <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
         </DropdownMenuItem>

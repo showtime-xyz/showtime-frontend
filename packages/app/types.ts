@@ -77,6 +77,7 @@ export interface WalletAddressesExcludingEmailV2 {
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;
+  nickname?: string;
 }
 
 export interface Link {

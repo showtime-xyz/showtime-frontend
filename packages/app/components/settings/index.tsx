@@ -136,11 +136,8 @@ const SettingsTabs = () => {
               keyExtractor={keyExtractor}
               renderItem={({ item }) => (
                 <SettingsWalletSlot
-                  address={item.address}
-                  ensDomain={item.ens_domain}
-                  nickname={item.nickname}
-                  mintingEnabled={item.minting_enabled}
                   onEditNickname={() => setEditingWallet(item)}
+                  wallet={item}
                 />
               )}
               ListEmptyComponent={() => {

@@ -19,11 +19,8 @@ import { SettingSubTitle } from "./settings-subtitle";
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 
 type Props = {
-  address: WalletAddressesExcludingEmailV2["address"];
-  ensDomain?: WalletAddressesExcludingEmailV2["ens_domain"];
-  mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
-  nickname?: string;
-  onEditNickname: (wallet: string) => void;
+  wallet: WalletAddressesExcludingEmailV2;
+  onEditNickname: (item: WalletAddressesExcludingEmailV2) => void;
 };
 
 export const SettingsWalletSlotHeader = () => {
@@ -99,13 +96,13 @@ export const SettingsWalletSlotPlaceholder = () => {
 };
 
 export const SettingsWalletSlot = (props: Props) => {
-  const address = props.address;
-  const ensDomain = props.ensDomain;
+  const address = props.wallet.address;
+  const ensDomain = props.wallet.ens_domain;
+  const nickname = props.wallet.nickname;
   const { userAddress } = useCurrentUserAddress();
   const user = useUser();
 
   const display = ensDomain ? ensDomain : formatAddressShort(address);
-  const nickname = props.nickname;
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
@@ -128,17 +125,20 @@ export const SettingsWalletSlot = (props: Props) => {
               <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
                 {nickname}
               </Text>
-              <View tw="md:mb-3 md:flex-row">
+              <View tw="mb-3 md:flex-row">
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
                 </Text>
               </View>
             </View>
-            <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
+            <Text tw="text-xs text-gray-900 dark:text-white">{address}</Text>
           </View>
           <View tw="flex flex-row items-center justify-center">
             {!isPrimary ? (
-              <Button tw="mr-4 w-32" onPress={() => setPrimaryWallet(address)}>
+              <Button
+                tw="mr-4 w-32"
+                onPress={() => setPrimaryWallet(props.wallet)}
+              >
                 Make Primary
               </Button>
             ) : (
