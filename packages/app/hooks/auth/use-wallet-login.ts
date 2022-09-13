@@ -32,7 +32,6 @@ export function useWalletLogin() {
             nonce,
           });
           if (nonce) {
-            // const signature = await signPersonalMessage(nonce);
             dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
             const message =
               process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
