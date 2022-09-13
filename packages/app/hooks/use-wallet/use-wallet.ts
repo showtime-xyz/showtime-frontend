@@ -56,7 +56,11 @@ const useWallet = (): UseWalletReturnType => {
 
   // Coinbase connected
   useEffect(() => {
-    if (walletConnectedPromiseResolveCallback.current && mobileSDK.connected) {
+    if (
+      walletConnectedPromiseResolveCallback.current &&
+      mobileSDK.connected &&
+      mobileSDK.address
+    ) {
       walletConnectedPromiseResolveCallback.current({
         address: mobileSDK.address,
         walletName: mobileSDK.metadata?.name,
