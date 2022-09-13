@@ -17,7 +17,7 @@ import {
 import { ModalHeader } from "@showtime-xyz/universal.modal";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import "@showtime-xyz/universal.pressable";
-import { colors, tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { getCroppedImg } from "app/lib/canvas-utils";
@@ -108,7 +108,7 @@ export const MediaCropper = ({
               <Button onPress={showCroppedImage}>Apply</Button>
             )}
           />
-          <View tw={`max-h-82vh min-h-[560px]`}>
+          <View tw={`max-h-[82vh] min-h-[560px]`}>
             <View tw="h-[480px] w-full md:w-[480px]">
               {src && (
                 <Cropper

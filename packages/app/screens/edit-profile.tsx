@@ -14,5 +14,5 @@ export const EditProfileScreen = withModalScreen(EditProfilePage, {
   enableContentPanningGesture: false,
   snapPoints: ["90%"],
   disableBackdropPress: true,
-  web_height: `max-h-90vh md:max-h-82vh`,
+  web_height: `max-h-[90vh] md:max-h-[82vh]`,
 });

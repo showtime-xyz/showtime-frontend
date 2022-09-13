@@ -31,7 +31,7 @@ export interface ModalProps {
   /**
    * **WEB ONLY**: Defines the modal container height.
    * It could be static value or responsive.
-   * @default "max-h-280px"
+   * @default "max-h-[280px]"
    */
   web_height?: string;
 
