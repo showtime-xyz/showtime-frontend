@@ -10,18 +10,13 @@ import {
   AlertButton,
   AlertStatic,
   Platform,
-  Modal,
+  StyleSheet,
 } from "react-native";
 
-import { MotiView } from "moti";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
-
-import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AlertContainer } from "./alert-container";
 import { AlertOption } from "./alert-option";
 
 type AlertContextType = {
@@ -48,6 +43,13 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [buttons, setButtons] = useState<AlertButton[]>([]);
+
+  const onModalDismiss = useCallback(() => {
+    setTitle("");
+    setMessage("");
+    setButtons([]);
+  }, []);
+
   const closeAlert = useCallback(() => {
     setShow(false);
   }, []);
@@ -64,11 +66,6 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
     }),
     []
   );
-  const onModalDismiss = useCallback(() => {
-    setTitle("");
-    setMessage("");
-    setButtons([]);
-  }, []);
 
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
@@ -98,57 +95,13 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   return (
     <AlertContext.Provider value={value}>
       {children}
-      <Modal
-        animationType="none"
-        transparent
-        visible={show}
-        onDismiss={onModalDismiss}
-        statusBarTranslucent
-      >
-        {/* prevent scrolling/shaking when modal is open */}
-        {Platform.OS === "web" && <RemoveScrollBar />}
-        <MotiView
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
-            position: "absolute",
-          }}
-          from={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ type: "timing", duration: 120 }}
-        />
-        <View tw="h-full w-full items-center justify-center">
-          <MotiView
-            style={{
-              padding: 16,
-              backgroundColor: isDark ? colors.gray[900] : "#FFF",
-              borderRadius: 16,
-              maxWidth: 320,
-              width: "80%",
-            }}
-            from={{ transform: [{ scale: 1.1 }], opacity: 0 }}
-            animate={{ transform: [{ scale: 1 }], opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: "timing", duration: 250 }}
-          >
-            <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
-              {title}
-            </Text>
-            {Boolean(message) && (
-              <>
-                <View tw="h-4" />
-                <Text tw="text-center text-base text-gray-900 dark:text-white">
-                  {message}
-                </Text>
-              </>
-            )}
-            <Divider tw="my-4" />
-            {renderBtns}
-          </MotiView>
-        </View>
-      </Modal>
+      <AlertContainer
+        title={title}
+        message={message}
+        renderBtns={renderBtns}
+        show={show}
+        onModalDismiss={onModalDismiss}
+      />
     </AlertContext.Provider>
   );
 };
@@ -174,3 +127,18 @@ export const useCustomAlert = () => {
   }
   return Alert;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    borderRadius: 16,
+    maxWidth: 320,
+    width: "80%",
+  },
+  backdrop: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    position: "absolute",
+  },
+});
