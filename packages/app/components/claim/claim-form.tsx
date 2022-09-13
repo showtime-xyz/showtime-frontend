@@ -202,7 +202,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row flex-wrap">
-          <Media isMuted item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
+          <Media
+            isMuted
+            item={nft?.data.item}
+            sizeStyle={{
+              width: 80,
+              height: 80,
+            }}
+            tw="rounded-lg"
+          />
           <View tw="ml-4 flex-1">
             <Text
               tw="text-xl font-bold text-black dark:text-white"
