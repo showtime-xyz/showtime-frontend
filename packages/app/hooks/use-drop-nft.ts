@@ -3,10 +3,8 @@ import { useReducer, useCallback } from "react";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
-import { useWallet } from "app/hooks/use-wallet";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
@@ -103,8 +101,6 @@ export type UseDropNFT = {
 export const useDropNFT = () => {
   const { rudder } = useRudder();
   const uploadMedia = useUploadMediaToPinata();
-  const { userAddress } = useCurrentUserAddress();
-  const { connect } = useWallet();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const Alert = useAlert();
@@ -149,70 +145,65 @@ export const useDropNFT = () => {
 
   const dropNFT = async (params: UseDropNFT) => {
     try {
-      if (userAddress) {
-        const fileMetaData = await getFileMeta(params.file);
+      const fileMetaData = await getFileMeta(params.file);
 
-        if (
-          fileMetaData &&
-          typeof fileMetaData.size === "number" &&
-          fileMetaData.size > MAX_FILE_SIZE
-        ) {
-          Alert.alert(
-            `This file is too big. Please use a file smaller than 50 MB.`
-          );
-          return;
-        }
-
-        dispatch({ type: "loading" });
-
-        const ipfsHash = await uploadMedia({
-          file: params.file,
-          notSafeForWork: params.notSafeForWork,
-        });
-
-        if (!ipfsHash) {
-          dispatch({
-            type: "error",
-            error: "Failed to upload the media on IPFS. Please try again!",
-          });
-          return;
-        }
-
-        const escapedTitle = JSON.stringify(params.title).slice(1, -1);
-        const escapedDescription = JSON.stringify(params.description).slice(
-          1,
-          -1
+      if (
+        fileMetaData &&
+        typeof fileMetaData.size === "number" &&
+        fileMetaData.size > MAX_FILE_SIZE
+      ) {
+        Alert.alert(
+          `This file is too big. Please use a file smaller than 50 MB.`
         );
-
-        Logger.log("ipfs hash ", {
-          ipfsHash,
-          params,
-          escapedTitle,
-          escapedDescription,
-        });
-
-        const relayerResponse = await axios({
-          url: "/v1/creator-airdrops/create-gated-edition",
-          method: "POST",
-          data: {
-            name: escapedTitle,
-            description: escapedDescription,
-            image_url: "ipfs://" + ipfsHash,
-            edition_size: params.editionSize,
-            royalty_bps: params.royalty * 100,
-            claim_window_duration_seconds: params.duration,
-          },
-        });
-
-        console.log("relayer response ", relayerResponse);
-        await pollTransaction({
-          transactionId: relayerResponse.relayed_transaction_id,
-          notSafeForWork: params.notSafeForWork,
-        });
-      } else {
-        // user is probably not connected to wallet
-        connect();
+        return;
       }
+
+      dispatch({ type: "loading" });
+
+      const ipfsHash = await uploadMedia({
+        file: params.file,
+        notSafeForWork: params.notSafeForWork,
+      });
+
+      if (!ipfsHash) {
+        dispatch({
+          type: "error",
+          error: "Failed to upload the media on IPFS. Please try again!",
+        });
+        return;
+      }
+
+      const escapedTitle = JSON.stringify(params.title).slice(1, -1);
+      const escapedDescription = JSON.stringify(params.description).slice(
+        1,
+        -1
+      );
+
+      Logger.log("ipfs hash ", {
+        ipfsHash,
+        params,
+        escapedTitle,
+        escapedDescription,
+      });
+
+      const relayerResponse = await axios({
+        url: "/v1/creator-airdrops/create-gated-edition",
+        method: "POST",
+        data: {
+          name: escapedTitle,
+          description: escapedDescription,
+          image_url: "ipfs://" + ipfsHash,
+          edition_size: params.editionSize,
+          royalty_bps: params.royalty * 100,
+          claim_window_duration_seconds: params.duration,
+        },
+      });
+
+      console.log("relayer response ", relayerResponse);
+      await pollTransaction({
+        transactionId: relayerResponse.relayed_transaction_id,
+        notSafeForWork: params.notSafeForWork,
+      });
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);

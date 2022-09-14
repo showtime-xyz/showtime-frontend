@@ -8,7 +8,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { useWallet } from "app/hooks/use-wallet";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
@@ -114,7 +113,6 @@ export const useClaimNFT = (edition?: IEdition) => {
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
-  const { connect } = useWallet();
   const { userAddress } = useCurrentUserAddress();
 
   const pollTransaction = async (transactionId: any) => {
@@ -209,20 +207,15 @@ export const useClaimNFT = (edition?: IEdition) => {
 
   const claimNFT = async (): Promise<boolean | undefined> => {
     try {
-      if (userAddress) {
-        if (edition?.minter_address) {
-          dispatch({ type: "loading" });
+      if (edition?.minter_address) {
+        dispatch({ type: "loading" });
 
-          if (edition?.is_gated) {
-            await gatedClaimFlow();
-          } else {
-            await oldSignaureClaimFlow();
-          }
-          return true;
+        if (edition?.is_gated) {
+          await gatedClaimFlow();
+        } else {
+          await oldSignaureClaimFlow();
         }
-      } else {
-        // user is probably not connected to wallet
-        connect();
+        return true;
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
