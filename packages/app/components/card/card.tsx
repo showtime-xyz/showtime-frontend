@@ -8,7 +8,6 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
-import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
