@@ -485,7 +485,7 @@ export function isIOS(): boolean {
 }
 
 export function isMobileWeb(): boolean {
-  return isAndroid() || isIOS();
+  return Platform.OS === "web" && (isAndroid() || isIOS());
 }
 
 // TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
