@@ -85,7 +85,7 @@ export const SettingsWalletSlotPlaceholder = () => {
   const { addWallet } = useAddWallet();
 
   return (
-    <View tw="items-center">
+    <View tw="mt-8 items-center">
       <Button tw="h-10 w-80" onPress={addWallet}>
         Connect Wallet
       </Button>
