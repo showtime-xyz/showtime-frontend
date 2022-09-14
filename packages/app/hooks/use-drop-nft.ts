@@ -199,7 +199,7 @@ export const useDropNFT = () => {
         },
       });
 
-      console.log("relayer response ", relayerResponse);
+      console.log("relayer response :: ", relayerResponse);
       await pollTransaction({
         transactionId: relayerResponse.relayed_transaction_id,
         notSafeForWork: params.notSafeForWork,
