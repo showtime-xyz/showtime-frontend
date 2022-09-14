@@ -70,6 +70,7 @@ export interface WalletAddressesV2 {
   minting_enabled: boolean;
   email: string;
   is_email: number;
+  is_phone: number;
   nickname?: string;
 }
 
@@ -77,6 +78,7 @@ export interface WalletAddressesExcludingEmailV2 {
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;
+  nickname?: string;
 }
 
 export interface Link {

@@ -18,6 +18,7 @@ import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -34,6 +35,7 @@ import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
+  formatAddressShort,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -165,22 +167,6 @@ export const DropForm = () => {
     );
   }
 
-  if (!userProfile?.data.can_create_drop) {
-    const timeRemaining = 24 - new Date().getUTCHours();
-    return (
-      <View tw="flex-1 items-center justify-center px-10 text-center">
-        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
-          {"Wow, you love drops!"}
-        </Text>
-        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
-          {"Only one drop per day is allowed.\n\nCome back in " +
-            timeRemaining +
-            " hours!"}
-        </Text>
-      </View>
-    );
-  }
-
   if (state.status === "success") {
     const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
       state.edition?.contract_address
@@ -271,6 +257,33 @@ export const DropForm = () => {
           </Button>
         </View>
       </View>
+    );
+  }
+
+  if (!userProfile?.data.can_create_drop) {
+    const timeRemaining = 24 - new Date().getUTCHours();
+    return (
+      <View tw="flex-1 items-center justify-center px-10 text-center">
+        <Text tw="pb-4 text-2xl text-gray-900 dark:text-gray-100">
+          {"Wow, you love drops!"}
+        </Text>
+        <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
+          {"Only one drop per day is allowed.\n\nCome back in " +
+            timeRemaining +
+            " hours!"}
+        </Text>
+      </View>
+    );
+  }
+
+  const primaryWallet = user.user?.data.profile.primary_wallet;
+
+  if (!primaryWallet) {
+    return (
+      <AddWalletOrSetPrimary
+        title="Choose a primary wallet to create your drop"
+        description="Please choose which wallet will receive your drop. You only have to do this once!"
+      />
     );
   }
 
@@ -507,6 +520,13 @@ export const DropForm = () => {
             </Text>
           </View>
 
+          <View tw="my-4 flex-row">
+            <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+              This drop will be owned by your{" "}
+              <Text tw="font-bold">{primaryWallet.nickname}</Text>{" "}
+              {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
+            </Text>
+          </View>
           <View tw="flex-1">
             <View tw="flex-1 flex-row">
               <Controller
