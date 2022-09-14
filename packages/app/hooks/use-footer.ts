@@ -7,12 +7,12 @@ import {
 
 const links = [
   {
-    link: "https://showtimeinc.notion.site/Work-at-Showtime-Public-fa6282938e284134b302184062d7e329",
+    link: "https://showtime-xyz.notion.site/Work-at-Showtime-Public-fa6282938e284134b302184062d7e329",
     title: "Careers",
   },
 
   {
-    link: "https://showtimeinc.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68",
+    link: "https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68",
     title: "Terms & Conditions",
   },
   {
