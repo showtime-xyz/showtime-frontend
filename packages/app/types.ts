@@ -70,6 +70,7 @@ export interface WalletAddressesV2 {
   minting_enabled: boolean;
   email: string;
   is_email: number;
+  is_phone: number;
   nickname?: string;
 }
 

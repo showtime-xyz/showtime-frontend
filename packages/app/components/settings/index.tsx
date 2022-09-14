@@ -99,6 +99,14 @@ const SettingsTabs = () => {
       ),
     [user?.data.profile.wallet_addresses_v2]
   );
+
+  const wallets = useMemo(
+    () =>
+      user?.data.profile.wallet_addresses_v2.filter(
+        (wallet) => !wallet.is_email && !wallet.is_phone
+      ),
+    [user?.data.profile.wallet_addresses_v2]
+  );
   const accountSettings = useMemo(
     () => [
       {
@@ -110,7 +118,6 @@ const SettingsTabs = () => {
     ],
     []
   );
-  const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
 
   useEffect(() => {

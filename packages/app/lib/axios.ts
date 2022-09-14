@@ -60,6 +60,9 @@ const axiosAPI = async ({
   try {
     return await axios(request).then((res) => res.data);
   } catch (error: any) {
+    if (request.url.includes("creator-airdrops")) {
+      return null;
+    }
     Logger.log("Failed request:", request);
     Logger.error(error);
 

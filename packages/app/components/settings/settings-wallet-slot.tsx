@@ -33,7 +33,7 @@ export const SettingsWalletSlotHeader = (props: { hasNoWallet: boolean }) => {
           Your Wallets
         </Text>
         <Text tw="pt-4 text-sm text-gray-900 dark:text-white">
-          Your Primary wallet will be the Polygon address that automatically
+          Your Primary Wallet will be the Polygon address that automatically
           receives your drops on Showtime.
         </Text>
       </View>
