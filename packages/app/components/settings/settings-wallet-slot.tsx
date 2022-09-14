@@ -20,7 +20,7 @@ type Props = {
   onEditNickname: (item: WalletAddressesExcludingEmailV2) => void;
 };
 
-export const SettingsWalletSlotHeader = () => {
+export const SettingsWalletSlotHeader = (props: { hasNoWallet: boolean }) => {
   const { state, addWallet } = useAddWallet();
 
   const walletCTA =
@@ -28,12 +28,21 @@ export const SettingsWalletSlotHeader = () => {
 
   return (
     <SettingSubTitle>
-      <Text tw="text-xl font-bold text-gray-900 dark:text-white">
-        Your Wallets
-      </Text>
-      <Button variant="primary" size="small" onPress={addWallet}>
-        {walletCTA}
-      </Button>
+      <View tw="flex-1">
+        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
+          Your Wallets
+        </Text>
+        <Text tw="pt-4 text-sm text-gray-900 dark:text-white">
+          Your Primary wallet will be the address that automatically receives
+          your drops on Showtime.
+        </Text>
+      </View>
+      {/* We show a connect wallet button in SettingsWalletSlotPlaceholder component when user don't have a wallet */}
+      {props.hasNoWallet ? null : (
+        <Button variant="primary" size="small" onPress={addWallet}>
+          {walletCTA}
+        </Button>
+      )}
     </SettingSubTitle>
   );
 };
@@ -73,10 +82,14 @@ export const SettingsWalletSlotSkeleton = () => {
 };
 
 export const SettingsWalletSlotPlaceholder = () => {
+  const { addWallet } = useAddWallet();
+
   return (
-    <Text tw="p-4 text-base font-bold text-gray-900 dark:text-white">
-      No wallet connected to your profile.
-    </Text>
+    <View tw="items-center">
+      <Button tw="h-10 w-80" onPress={addWallet}>
+        Connect Wallet
+      </Button>
+    </View>
   );
 };
 
@@ -128,7 +141,7 @@ export const SettingsWalletSlot = (props: Props) => {
               </Button>
             ) : (
               <View tw="mr-4 w-32 items-center rounded-3xl bg-green-600 py-2">
-                <Text tw="text-white">Primary ✓</Text>
+                <Text tw="font-semibold text-white">Primary ✓</Text>
               </View>
             )}
             <WalletDropdownMenu

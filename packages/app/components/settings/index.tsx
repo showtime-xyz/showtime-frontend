@@ -147,7 +147,9 @@ const SettingsTabs = () => {
                 }
                 return <SettingsWalletSlotSkeleton />;
               }}
-              ListHeaderComponent={<SettingsWalletSlotHeader />}
+              ListHeaderComponent={
+                <SettingsWalletSlotHeader hasNoWallet={wallets?.length === 0} />
+              }
               ItemSeparatorComponent={() =>
                 isMdWidth ? <View tw="mt-2" /> : <SlotSeparator />
               }
