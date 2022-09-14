@@ -27,11 +27,11 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
-import { BlurView } from "app/lib/blurview";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { BlurView } from "../../lib/blurview";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 
@@ -180,9 +180,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 source={{
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
-              >
-                <BlurView />
-              </Image>
+              ></Image>
             )}
           </View>
         )}
@@ -216,44 +214,45 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             />
           </Animated.View>
         </FeedItemTapGesture>
-
-        <Reanimated.View
-          style={[
-            detailStyle,
-            {
-              position: "absolute",
-              bottom: bottomMargin,
-              right: 0,
-              left: 0,
-              zIndex: 1,
-            },
-          ]}
-          onLayout={({
-            nativeEvent: {
-              layout: { height },
-            },
-          }) => {
-            isLayouted.value = 1;
-            setDetailHeight(height);
+        <BlurView
+          blurRadius={20}
+          overlayColor="transparent"
+          style={{
+            bottom: bottomMargin,
+            position: "absolute",
+            right: 0,
+            left: 0,
+            zIndex: 1,
           }}
         >
-          {nft?.mime_type?.startsWith("video") ? (
-            <View tw="z-9 absolute top-[-40px] right-4">
-              <MuteButton />
-            </View>
-          ) : null}
-
-          <View
-            style={{
-              ...blurredBackgroundStyles,
-              paddingBottom: bottomPadding,
+          <Reanimated.View
+            style={[detailStyle]}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              isLayouted.value = 1;
+              setDetailHeight(height);
             }}
-            tw="overflow-hidden"
           >
-            <BlurView />
-            <NFTDetails edition={edition} nft={nft} />
-          </View>
-        </Reanimated.View>
+            {nft?.mime_type?.startsWith("video") ? (
+              <View tw="z-9 absolute top-[-40px] right-4">
+                <MuteButton />
+              </View>
+            ) : null}
+
+            <View
+              style={{
+                ...blurredBackgroundStyles,
+                paddingBottom: bottomPadding,
+              }}
+              tw="overflow-hidden"
+            >
+              <NFTDetails edition={edition} nft={nft} />
+            </View>
+          </Reanimated.View>
+        </BlurView>
       </View>
     </LikeContextProvider>
   );

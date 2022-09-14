@@ -35,94 +35,107 @@ export const BottomTabbar = ({
 
   return (
     <View
-      tw="absolute w-full flex-row pt-2"
-      style={[
-        {
-          height: 64 + safeAreaBottom,
-        },
-        {
-          bottom: !isAuthenticated || isTabBarHidden ? -100 : 0,
-        },
-      ]}
+      style={{
+        position: "absolute",
+        bottom: !isAuthenticated || isTabBarHidden ? -100 : 0,
+        width: "100%",
+        height: 64 + safeAreaBottom,
+        overflow: "hidden",
+        backgroundColor: "transparent",
+      }}
     >
-      <BlurView />
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const focused = state.index === index;
+      <BlurView
+        blurRadius={20}
+        overlayColor="rgba(255,255,255,.8)"
+        blurAmount={100}
+      >
+        <View tw="flex-row bg-transparent pt-2">
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const focused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: "tabPress",
-            target: route.key,
-            canPreventDefault: true,
-          });
-          Haptics.impactAsync();
+            const onPress = () => {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+                canPreventDefault: true,
+              });
+              Haptics.impactAsync();
 
-          if (route.name === "createTab") {
-            if (userProfile?.data.can_create_drop === false) {
-              const timeRemaining = 24 - new Date().getUTCHours();
-              Alert.alert(
-                "Wow, you love drops!",
-                `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
-              );
-              return;
-            }
+              if (route.name === "createTab") {
+                if (userProfile?.data.can_create_drop === false) {
+                  const timeRemaining = 24 - new Date().getUTCHours();
+                  Alert.alert(
+                    "Wow, you love drops!",
+                    `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
+                  );
+                  return;
+                }
 
-            router.push(
-              Platform.select({
-                native: "/drop",
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    dropModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: "/drop",
-                web: router.asPath,
-              })
+                router.push(
+                  Platform.select({
+                    native: "/drop",
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        dropModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: "/drop",
+                    web: router.asPath,
+                  })
+                );
+                return;
+              }
+
+              if (!focused && !event.defaultPrevented) {
+                navigation.navigate({
+                  name: route.name,
+                  merge: true,
+                  params: route.params,
+                });
+              }
+            };
+            const onLongPress = () => {
+              navigation.emit({
+                type: "tabLongPress",
+                target: route.key,
+              });
+            };
+            return (
+              <View
+                key={route.key}
+                tw="flex flex-1 items-center justify-center"
+              >
+                <Pressable
+                  tw="flex-1"
+                  onLongPress={onLongPress}
+                  onPress={onPress}
+                >
+                  {options.tabBarIcon?.({ focused, color, size: 24 })}
+                </Pressable>
+              </View>
             );
-            return;
-          }
+          })}
 
-          if (!focused && !event.defaultPrevented) {
-            navigation.navigate({
-              name: route.name,
-              merge: true,
-              params: route.params,
-            });
-          }
-        };
-        const onLongPress = () => {
-          navigation.emit({
-            type: "tabLongPress",
-            target: route.key,
-          });
-        };
-        return (
-          <View key={route.key} tw="flex flex-1 items-center justify-center">
-            <Pressable tw="flex-1" onLongPress={onLongPress} onPress={onPress}>
-              {options.tabBarIcon?.({ focused, color, size: 24 })}
-            </Pressable>
-          </View>
-        );
-      })}
-
-      <MotiView
-        style={{
-          position: "absolute",
-          top: 0,
-          height: 2,
-          backgroundColor: color,
-          width: width / state.routes.length,
-        }}
-        animate={{
-          translateX: (width / state.routes.length) * state.index,
-        }}
-        transition={{ type: "timing", duration: 250 }}
-      />
+          <MotiView
+            style={{
+              position: "absolute",
+              top: 0,
+              height: 2,
+              backgroundColor: color,
+              width: width / state.routes.length,
+            }}
+            animate={{
+              translateX: (width / state.routes.length) * state.index,
+            }}
+            transition={{ type: "timing", duration: 250 }}
+          />
+        </View>
+      </BlurView>
     </View>
   );
 };
