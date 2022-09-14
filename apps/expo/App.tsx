@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { LogBox } from "react-native";
 
-import LogRocket from "@logrocket/react-native";
+import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { enableScreens } from "react-native-screens";
 
+import { useLogRocket } from "app/hooks/use-logrocket";
 import { growthbook } from "app/lib/growthbook";
 import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";
@@ -22,6 +23,12 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
+configureWalletMobileSDK({
+  callbackURL: new URL(`https://showtime.xyz/wsegue`),
+  hostURL: new URL("https://go.cb-w.com/wsegue"),
+  hostPackageName: "org.toshi",
+});
+
 LogBox.ignoreLogs([
   "Constants.deviceYearClass",
   "No native splash screen",
@@ -31,17 +38,12 @@ LogBox.ignoreLogs([
   "ExponentGLView",
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components",
   "Sending `onAnimatedValueUpdate` with no listeners registered.", // `react-native-tab-view` waring issue.
+  "Did not receive response to shouldStartLoad in time", // warning from @magic-sdk/react-native's react-native-webview dependency. https://github.com/react-native-webview/react-native-webview/issues/124
 ]);
 
 function App() {
+  useLogRocket();
   const [notification, setNotification] = useState(null);
-  useEffect(() => {
-    if (process.env.STAGE !== "development") {
-      LogRocket.init("oulg1q/showtime", {
-        redactionTags: ["data-private"],
-      });
-    }
-  }, []);
 
   useEffect(() => {
     const initAnalytics = async () => {

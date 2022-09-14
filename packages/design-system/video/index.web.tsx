@@ -3,12 +3,11 @@ import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av/src";
 import { BlurView, BlurTint } from "expo-blur";
-import { Source } from "react-native-fast-image";
+import { ImageStyle, Source } from "react-native-fast-image";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
@@ -17,6 +16,8 @@ import { useMuted } from "app/providers/mute-provider";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
+  width: number;
+  height: number;
 } & ComponentProps<typeof ExpoVideo>;
 
 export function Video({
@@ -26,6 +27,8 @@ export function Video({
   resizeMode,
   posterSource,
   isMuted: isMutedProp,
+  width,
+  height,
   ...props
 }: VideoProps) {
   const videoConfig = useVideoConfig();
@@ -40,11 +43,12 @@ export function Video({
       {videoConfig?.previewOnly ? (
         <Image
           tw={tw}
-          //@ts-ignore
-          style={style}
+          style={style as ImageStyle}
           resizeMode={resizeMode}
           blurhash={blurhash}
           source={posterSource as Source}
+          width={width}
+          height={height}
         />
       ) : (
         <ImageBackground
@@ -54,11 +58,12 @@ export function Video({
         >
           <Image
             tw={tw}
-            //@ts-ignore
-            style={style}
+            style={style as ImageStyle}
             resizeMode={resizeMode}
             blurhash={blurhash}
             source={posterSource as Source}
+            width={width}
+            height={height}
           />
           <BlurView
             style={StyleSheet.absoluteFill}
@@ -66,7 +71,7 @@ export function Video({
             intensity={85}
           />
           <ExpoVideo
-            style={[StyleSheet.absoluteFill, tailwind.style("justify-center")]}
+            style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}
             resizeMode={resizeMode}
             posterSource={posterSource}
@@ -75,7 +80,7 @@ export function Video({
             shouldPlay={typeof id === "undefined"}
             isLooping
             isMuted={isMuted}
-            videoStyle={tailwind.style("relative")}
+            videoStyle={{ position: "relative" }}
             {...props}
           />
         </ImageBackground>

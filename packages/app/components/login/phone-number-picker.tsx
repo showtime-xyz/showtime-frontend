@@ -8,12 +8,12 @@ import {
   CountryCodePicker,
   data,
 } from "@showtime-xyz/universal.country-code-picker";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronLeft, Close, Search } from "@showtime-xyz/universal.icon";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,6 +26,7 @@ type PhoneNumberPickerProp = {
 };
 
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
+  const isDark = useIsDarkMode();
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
   const [country, setCountry] = useState("US");
@@ -62,7 +63,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
       >
-        <SafeAreaView style={tw.style("dark:bg-black")}>
+        <SafeAreaView style={{ backgroundColor: isDark ? "#000" : undefined }}>
           <Header
             title="Select country"
             close={() => setModalVisible(false)}
@@ -93,10 +94,16 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
                 setModalVisible(true);
               }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              tw={`mt-[${Platform.select({
-                android: ".45",
-                default: "0",
-              })}rem] h-7 flex-row items-center justify-center`}
+              style={{
+                marginTop: Platform.select({
+                  android: 7,
+                  default: 0,
+                }),
+                height: 28,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Text
                 style={{
@@ -131,6 +138,7 @@ type Props = {
 };
 
 export function Header({ title, close, onSearchSubmit }: Props) {
+  const isDark = useIsDarkMode();
   const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
   const { top: safeAreaTop } = useSafeAreaInsets();
@@ -167,14 +175,12 @@ export function Header({ title, close, onSearchSubmit }: Props) {
           <ChevronLeft
             width={24}
             height={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
+            color={isDark ? "#FFF" : "#000"}
           />
         </Button>
       </View>
 
-      <Animated.View layout={FadeIn} style={tw.style("flex-1 mx-2")}>
+      <Animated.View layout={FadeIn} style={{ flex: 1, marginVertical: 8 }}>
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
@@ -191,21 +197,9 @@ export function Header({ title, close, onSearchSubmit }: Props) {
           iconOnly={true}
         >
           {showSearch ? (
-            <Close
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Close width={24} height={24} color={isDark ? "#FFF" : "#000"} />
           ) : (
-            <Search
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
+            <Search width={24} height={24} color={isDark ? "#FFF" : "#000"} />
           )}
         </Button>
       </View>

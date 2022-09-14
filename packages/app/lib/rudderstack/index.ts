@@ -1,3 +1,1 @@
-import rudder from "@rudderstack/rudder-sdk-react-native";
-
-export { rudder };
+export { useRudder } from "./rudderstack";

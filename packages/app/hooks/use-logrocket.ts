@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 
-import LogRocket from "app/lib/logrocket";
-
 export const useLogRocket = () => {
   useEffect(() => {
-    if (process.env.STAGE !== "development") {
+    const init = async () => {
+      const LogRocket = (await import("app/lib/logrocket")).default;
+
       LogRocket.init("oulg1q/showtime", {
         redactionTags: ["data-private"],
       });
+    };
+
+    if (process.env.STAGE !== "development") {
+      init();
     }
   }, []);
 

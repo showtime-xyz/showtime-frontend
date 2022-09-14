@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import { Pressable } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -23,12 +24,13 @@ type NFTDetailsProps = {
   edition?: CreatorEditionResponse;
 };
 export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
+  const isDark = useIsDarkMode();
   const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   return (
     <View tw="px-4">
-      <View tw="flex-row items-center justify-between ">
+      <View tw="flex-row items-center justify-between">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
         {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
@@ -56,8 +58,7 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
             <Share
               height={32}
               width={22}
-              // @ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+              color={isDark ? "#FFF" : colors.gray[900]}
             />
           </Pressable>
           <View tw="w-8" />

@@ -14,7 +14,6 @@ const withTM = require("next-transpile-modules")([
   "app",
   "@gorhom/bottom-sheet",
   "@gorhom/portal",
-  "twrnc",
   "moti",
   "expo-next-react-navigation",
   "zeego",
@@ -55,6 +54,7 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.pan-to-close",
   "@showtime-xyz/universal.pinch-to-zoom",
   "@showtime-xyz/universal.pressable",
+  "@showtime-xyz/universal.pressable-hover",
   "@showtime-xyz/universal.pressable-scale",
   "@showtime-xyz/universal.router",
   "@showtime-xyz/universal.safe-area",
@@ -88,6 +88,7 @@ const nextConfig = {
     forceSwcTransforms: true,
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
+    scrollRestoration: true,
     swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
   },
   typescript: {

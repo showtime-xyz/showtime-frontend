@@ -30,7 +30,7 @@ export const AddressMenu = (props: AddressMenuProps) => {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button iconOnly={true} variant="tertiary" asChild>
+        <Button iconOnly={true} variant="tertiary">
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>

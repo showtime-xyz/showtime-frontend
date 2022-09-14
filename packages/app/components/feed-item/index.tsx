@@ -22,7 +22,6 @@ import {
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
@@ -179,11 +178,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 decodeWidth={16}
                 decodeHeight={16}
                 decodeAsync={true}
-                style={tw.style("w-full h-full")}
+                style={{ width: "100%", height: "100%" }}
               />
             ) : (
               <Image
-                tw="h-full w-full "
+                tw="h-full w-full"
                 source={{
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
@@ -191,7 +190,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 <BlurView
                   tint={tint}
                   intensity={100}
-                  style={tw.style("h-full w-full")}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </Image>
             )}
@@ -230,9 +229,14 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
         <Reanimated.View
           style={[
-            tw.style("z-1 absolute right-0 left-0"),
             detailStyle,
-            { bottom: bottomMargin },
+            {
+              position: "absolute",
+              bottom: bottomMargin,
+              right: 0,
+              left: 0,
+              zIndex: 1,
+            },
           ]}
           onLayout={({
             nativeEvent: {
@@ -253,11 +257,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             tint={tint}
             intensity={100}
             style={{
-              // @ts-ignore
               ...blurredBackgroundStyles,
-              ...tw.style(
-                "bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20"
-              ),
+              backgroundColor: isDark
+                ? "rgba(0, 0, 0, 0.2)"
+                : "rgba(255, 255, 255, 0.2)",
               paddingBottom: bottomPadding,
             }}
           >

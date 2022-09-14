@@ -9,7 +9,7 @@ import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
 export type AvatarProps = {
   url?: string;
   size?: number;
-  borderWidth?: number;
+  borderRadius?: number;
   tw?: TW;
   children?: ReactNode;
 };
@@ -24,7 +24,7 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
 // TODO: alt
 export const Avatar = ({
   url,
-  borderWidth = 0,
+  borderRadius = 0,
   size = 32,
   tw = "",
   children,
@@ -34,24 +34,19 @@ export const Avatar = ({
     [url, size]
   );
 
-  const containerTW = useMemo(
-    () => [...(typeof tw === "string" ? [tw] : tw), CONTAINER_TW],
-    [tw]
-  );
-  const imageTW = useMemo(
-    () => [IMAGE_TW, borderWidth > 0 ? `border-${borderWidth}` : ""],
-    [borderWidth]
-  );
-
   return (
-    <View tw={containerTW} style={{ height: size, width: size }}>
+    <View
+      tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
+      style={{ height: size, width: size }}
+    >
       <Image
         source={imageSource}
         width={size}
         height={size}
+        borderRadius={borderRadius}
         resizeMode="contain"
-        tw={imageTW}
-        style={{ height: size, width: size }}
+        tw={IMAGE_TW}
+        style={{ height: size, width: size, borderRadius: borderRadius }}
       />
       {children}
     </View>

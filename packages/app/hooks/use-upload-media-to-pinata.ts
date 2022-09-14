@@ -12,41 +12,45 @@ export const useUploadMediaToPinata = () => {
     file: File | string;
     notSafeForWork: boolean;
   }) => {
-    const formData = new FormData();
-    const fileFormData = await getFileFormData(file);
+    try {
+      const formData = new FormData();
+      const fileFormData = await getFileFormData(file);
 
-    if (!fileFormData) {
-      Logger.error("error in generating file form data");
-      return;
-    }
-
-    formData.append("file", fileFormData);
-    formData.append(
-      "pinataMetadata",
-      JSON.stringify({
-        name: uuid(),
-      })
-    );
-    if (notSafeForWork) {
-      formData.append(
-        "pinataContent",
-        JSON.stringify({ attributes: [{ value: "NSFW" }] })
-      );
-    }
-
-    const pinataToken = await getPinataToken();
-    const res = await axios.post(
-      "https://api.pinata.cloud/pinning/pinFileToIPFS",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${pinataToken}`,
-          "Content-Type": `multipart/form-data`,
-        },
+      if (!fileFormData) {
+        throw "Failed to generate the file form data";
       }
-    );
 
-    return res.data.IpfsHash;
+      formData.append("file", fileFormData);
+      formData.append(
+        "pinataMetadata",
+        JSON.stringify({
+          name: uuid(),
+        })
+      );
+      if (notSafeForWork) {
+        formData.append(
+          "pinataContent",
+          JSON.stringify({ attributes: [{ value: "NSFW" }] })
+        );
+      }
+
+      const pinataToken = await getPinataToken();
+      const res = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${pinataToken}`,
+            "Content-Type": `multipart/form-data`,
+          },
+        }
+      );
+
+      return res.data.IpfsHash;
+    } catch (error) {
+      Logger.error(error);
+      return null;
+    }
   };
 
   return uploadMedia;

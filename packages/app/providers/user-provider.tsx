@@ -6,9 +6,8 @@ import useSWR from "swr";
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { axios } from "app/lib/axios";
-import LogRocket from "app/lib/logrocket";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
-import { rudder } from "app/lib/rudderstack";
+import { useRudder } from "app/lib/rudderstack";
 import { UserType } from "app/types";
 
 interface UserProviderProps {
@@ -19,6 +18,7 @@ export const MY_INFO_ENDPOINT = "/v2/myinfo";
 
 export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
+  const { rudder } = useRudder();
   const { authenticationStatus, accessToken } = useAuth();
   const { data, error, mutate } = useSWR<UserType>(
     accessToken ? MY_INFO_ENDPOINT : null,
@@ -56,15 +56,21 @@ export function UserProvider({ children }: UserProviderProps) {
   useEffect(() => {
     const identifyAndRegisterPushNotification = async () => {
       if (data) {
+        const LogRocket = (await import("app/lib/logrocket")).default;
+
         // Identify user
         LogRocket.identify(data.data.profile.profile_id.toString());
-        rudder.identify(data.data.profile.profile_id.toString(), {});
+        rudder?.identify(data.data.profile.profile_id.toString(), {});
 
         LogRocket.getSessionURL((sessionURL: string) => {
-          rudder.track("LogRocket", { sessionURL: sessionURL });
-          // Sentry.configureScope(scope => {
-          //   scope.setExtra("sessionURL", sessionURL);
-          // });
+          if (
+            sessionURL !== "Session quota exceeded. Please upgrade your plan."
+          ) {
+            rudder?.track("LogRocket", { sessionURL: sessionURL });
+            // Sentry.configureScope(scope => {
+            //   scope.setExtra("sessionURL", sessionURL);
+            // });
+          }
         });
 
         // Handle registration for push notification
@@ -75,7 +81,7 @@ export function UserProvider({ children }: UserProviderProps) {
     };
 
     identifyAndRegisterPushNotification();
-  }, [data]);
+  }, [data, rudder]);
   //#endregion
 
   return (

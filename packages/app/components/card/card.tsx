@@ -5,11 +5,9 @@ import { Link } from "solito/link";
 
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
-import { Owner } from "app/components/card/rows/owner";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
@@ -106,7 +104,7 @@ function Card({
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   btnProps={{
-                    style: tailwind.style("dark:bg-gray-900 bg-gray-100 px-1"),
+                    tw: "dark:bg-gray-900 bg-gray-100 px-1",
                     size: "small",
                   }}
                   nft={nft}
@@ -131,7 +129,7 @@ function Card({
           >
             <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
-          <View tw="flex-row justify-between px-4 pt-4">
+          <View tw="flex-row justify-between p-4">
             <Social nft={nft} />
             {showClaimButton &&
             !!nft.creator_airdrop_edition_address &&
@@ -139,8 +137,6 @@ function Card({
               <ClaimButton edition={edition} />
             ) : null}
           </View>
-
-          <Owner nft={nft} price={false} />
         </View>
       </View>
     </LikeContextProvider>

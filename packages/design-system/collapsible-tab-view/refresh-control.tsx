@@ -41,8 +41,9 @@ const RefreshControlContainer: React.FC<RefreshControlContainerProps> = ({
     if (isRefreshingWithAnimation.value) return 1;
     return Math.min(refreshValue.value / refreshHeight, 1);
   });
+  const tranYValue = useSharedValue(0);
 
-  const tranYValue = useRefreshDerivedValue({
+  useRefreshDerivedValue(tranYValue, {
     animatedValue: refreshValue,
     refreshHeight,
     overflowPull,

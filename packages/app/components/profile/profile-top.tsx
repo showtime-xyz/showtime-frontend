@@ -1,4 +1,4 @@
-import { useMemo, useRef, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import Animated, {
@@ -8,13 +8,15 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -97,12 +99,12 @@ export const ProfileTop = ({
   isError: boolean;
   isLoading: boolean;
 }) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const userId = useCurrentUserId();
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
-  const hasLinksInBio = useRef<boolean>(false);
   const { colorScheme } = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing } = useMyInfo();
@@ -122,7 +124,6 @@ export const ProfileTop = ({
         bio,
         /@([\w\d-]+?)\b/g,
         (username: string, i: number) => {
-          hasLinksInBio.current = true;
           return (
             <TextLink
               href={`/@${username}`}
@@ -251,9 +252,16 @@ export const ProfileTop = ({
           <View tw="flex-row items-end">
             <Animated.View
               style={[
-                tw.style(
-                  "w-32 h-32 rounded-full mt-[-72px] overflow-hidden border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-900"
-                ),
+                {
+                  width: 128,
+                  height: 128,
+                  borderRadius: 9999,
+                  marginTop: -72,
+                  overflow: "hidden",
+                  borderWidth: 4,
+                  borderColor: isDark ? "#000" : "#FFF",
+                  backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
+                },
                 avatarStyle,
               ]}
             >
@@ -395,13 +403,12 @@ export const ProfileTop = ({
           )}
 
           {bio ? (
-            <View
-              tw="mt-3 flex-row items-center"
-              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
-            >
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">
-                {bioWithMentions}
-              </Text>
+            <View tw="mt-3 items-baseline md:w-max">
+              <ClampText
+                text={bioWithMentions}
+                maxLines={3}
+                tw="text-sm text-gray-600 dark:text-gray-400"
+              />
             </View>
           ) : null}
           <Hidden from="md">

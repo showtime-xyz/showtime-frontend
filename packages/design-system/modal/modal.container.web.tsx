@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { WEB_HEIGHT } from "./constants";
@@ -19,9 +18,9 @@ const CONTAINER_TW = [
 
 const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
-  "w-full	sm:w-480px",
+  "w-full	sm:w-[480px]",
   "bg-white dark:bg-black",
-  "shadow-xl shadow-black dark:shadow-white",
+  "dark:shadow-lg-dark shadow-lg-light",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
   "max-h-90vh md:max-h-82vh",
 ];
@@ -40,6 +39,8 @@ function ModalContainerComponent({
   disableBackdropPress,
   tw: propTw = "",
 }: ModalContainerProps) {
+  console.log(propTw);
+
   const modalContainerTW = useMemo(
     () => [...MODAL_CONTAINER_TW, web_height, propTw],
     [web_height, propTw]
@@ -56,12 +57,9 @@ function ModalContainerComponent({
         {/* prevent scrolling/shaking when modal is open */}
         <RemoveScrollBar />
         <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
-        <View style={[tw.style(modalContainerTW), style]}>
+        <View tw={modalContainerTW} style={style}>
           <ModalHeader title={title} onClose={onClose} />
-          <View
-            style={[tw.style(MODAL_BODY_TW), bodyStyle]}
-            accessibilityViewIsModal
-          >
+          <View tw={MODAL_BODY_TW} style={bodyStyle} accessibilityViewIsModal>
             {children}
           </View>
         </View>

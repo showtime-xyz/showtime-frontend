@@ -12,10 +12,11 @@ import {
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -25,7 +26,6 @@ import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
@@ -39,6 +39,7 @@ import { breakpoints } from "design-system/theme";
 import { withColorScheme } from "./memo-with-theme";
 
 const SearchInHeader = () => {
+  const isDark = useIsDarkMode();
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
@@ -88,11 +89,13 @@ const SearchInHeader = () => {
           leftElement={
             <View tw="h-12 w-12 items-center justify-center rounded-full">
               <Search
-                style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-                color={
-                  tw.style("bg-gray-500 dark:bg-gray-400")
-                    ?.backgroundColor as string
-                }
+                style={{
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  width: 24,
+                  height: 24,
+                }}
+                color={isDark ? colors.gray[400] : colors.gray[500]}
                 width={24}
                 height={24}
               />
@@ -102,7 +105,7 @@ const SearchInHeader = () => {
             term.length > 0 ? (
               <Popover.Close>
                 <PressableScale
-                  tw="p-2"
+                  style={{ padding: 8 }}
                   onPress={() => {
                     setTerm("");
                     inputRef.current?.focus();
@@ -110,10 +113,7 @@ const SearchInHeader = () => {
                   hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
                 >
                   <Close
-                    //@ts-ignore
-                    color={
-                      tw.style("dark:bg-gray-400 bg-gray-600").backgroundColor
-                    }
+                    color={isDark ? colors.gray[400] : colors.gray[600]}
                     width={24}
                     height={24}
                   />
@@ -121,7 +121,7 @@ const SearchInHeader = () => {
               </Popover.Close>
             ) : undefined
           }
-          inputStyle={tw.style("w-[269px]")}
+          inputStyle={{ width: 269 }}
         />
       </Popover.Anchor>
 
@@ -241,7 +241,7 @@ const HeaderRight = () => {
                 <NotificationsInHeader />
               </View>
               <View tw="mx-2">
-                <PressableScale
+                <PressableHover
                   onPress={() => {
                     router.push(
                       Platform.select({
@@ -272,7 +272,7 @@ const HeaderRight = () => {
                       color={isDark ? "black" : "white"}
                     />
                   </View>
-                </PressableScale>
+                </PressableHover>
               </View>
             </>
           )}
@@ -310,13 +310,20 @@ const HeaderRight = () => {
 };
 
 const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
 
   return (
     <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      tw="h-6 w-6 items-center justify-center rounded-full"
+      style={{
+        height: 24,
+        width: 24,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 9999,
+      }}
       onPress={() => {
         if (canGoBack) {
           router.pop();
@@ -326,8 +333,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
       }}
     >
       <Icon
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={{ borderRadius: 8, overflow: "hidden", width: 24, height: 24 }}
+        color={isDark ? "#FFF" : "#000"}
         width={24}
         height={24}
       />
@@ -344,19 +351,7 @@ const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      {isMdWidth ? (
-        <Link href="/">
-          <ShowtimeTabBarIcon
-            color={isDark ? "black" : "white"}
-            customTw="mr-4"
-          />
-        </Link>
-      ) : (
-        <ShowtimeTabBarIcon
-          color={isDark ? "black" : "white"}
-          customTw="mr-4"
-        />
-      )}
+      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
 
       {isMdWidth ? <SearchInHeader /> : null}
     </View>
@@ -381,7 +376,7 @@ const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
       >
         <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
-            <HeaderCenter {...{ isDark, isMdWidth }} />
+            <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
           </View>
           <View tw="items-end">
             <HeaderRight />

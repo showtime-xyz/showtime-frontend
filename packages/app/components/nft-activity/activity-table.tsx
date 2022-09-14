@@ -27,6 +27,7 @@ const ActivityTable = ({ data }: TableProps) => {
         <TableHead />
         <InfiniteScrollList
           data={data}
+          useWindowScroll={false}
           renderItem={handleRenderItem}
           ItemSeparatorComponent={handleRenderSeparator}
           keyExtractor={(_, index) => index.toString()}

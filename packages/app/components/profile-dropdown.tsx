@@ -8,6 +8,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   Copy,
@@ -15,13 +16,12 @@ import {
   Slash,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 import type { Profile } from "app/types";
 
 type Props = {
@@ -29,12 +29,14 @@ type Props = {
 };
 
 function ProfileDropdown({ user }: Props) {
+  const { rudder } = useRudder();
   const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const share = useShare();
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
+  const isDark = useIsDarkMode();
 
   return (
     <DropdownMenuRoot>
@@ -44,11 +46,7 @@ function ProfileDropdown({ user }: Props) {
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
         >
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          <MoreHorizontal color={isDark ? "#FFF" : "#000"} />
         </Button>
       </DropdownMenuTrigger>
 
@@ -63,7 +61,7 @@ function ProfileDropdown({ user }: Props) {
             });
 
             if (result.action === "sharedAction") {
-              track(
+              rudder?.track(
                 "User Shared",
                 result.activityType ? { type: result.activityType } : undefined
               );

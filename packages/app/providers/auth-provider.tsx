@@ -14,16 +14,16 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
+import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
-import { track } from "app/lib/analytics";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
-import { rudder } from "app/lib/rudderstack";
+import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 
 import type { AuthenticationStatus } from "../types";
@@ -40,6 +40,7 @@ export function AuthProvider({
   children,
   onWagmiDisconnect,
 }: AuthProviderProps) {
+  const { rudder } = useRudder();
   const initialRefreshTokenRequestSent = useRef(false);
   const lastRefreshTokenSuccessTimestamp = useRef<number | null>(null);
   const appState = useRef(AppState.currentState);
@@ -55,6 +56,7 @@ export function AuthProvider({
   //#region hooks
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
+  const mobileSDK = useWalletMobileSDK();
   const { setWeb3 } = useWeb3();
   const { magic } = useMagic();
   const { setTokens, refreshTokens } = useAccessTokenManager();
@@ -94,9 +96,9 @@ export function AuthProvider({
     async function logout() {
       const wasUserLoggedIn = loginStorage.getLogin();
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        track("User Logged Out");
+        rudder?.track("User Logged Out");
+        rudder?.reset();
       }
-      await rudder?.reset();
 
       onWagmiDisconnect?.();
       loginStorage.deleteLogin();
@@ -110,6 +112,10 @@ export function AuthProvider({
         connector.killSession();
       }
 
+      if (mobileSDK && mobileSDK.connected) {
+        mobileSDK.disconnect();
+      }
+
       magic?.user?.logout();
 
       setWeb3(undefined);
@@ -120,7 +126,16 @@ export function AuthProvider({
         router.push("/");
       }
     },
-    [magic, connector, mutate, router, setWeb3, onWagmiDisconnect]
+    [
+      onWagmiDisconnect,
+      connector,
+      mobileSDK,
+      magic?.user,
+      setWeb3,
+      mutate,
+      router,
+      rudder,
+    ]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");
@@ -130,13 +145,12 @@ export function AuthProvider({
       lastRefreshTokenSuccessTimestamp.current = new Date().getTime();
     } catch (error: any) {
       setAuthenticationStatus("UNAUTHENTICATED");
-      console.log(
+      console.error(
         "AuthProvider",
         typeof error === "string" ? error : error.message || "unknown"
       );
-      await logout();
     }
-  }, [refreshTokens, setAuthenticationStatus, logout]);
+  }, [refreshTokens, setAuthenticationStatus]);
   //#endregion
 
   //#region variables

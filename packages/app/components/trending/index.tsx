@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
@@ -9,7 +8,6 @@ import {
   HeaderTabView,
   Route,
 } from "@showtime-xyz/universal.tab-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -139,7 +137,7 @@ export const Trending = () => {
           initialLayout={{
             width: contentWidth,
           }}
-          style={tw.style("z-1")}
+          style={{ zIndex: 1 }}
           // renderSceneHeader={renderSceneHeader}
         />
       </View>

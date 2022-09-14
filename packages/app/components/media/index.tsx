@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import dynamic from "next/dynamic";
+import { ImageStyle } from "react-native-fast-image";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -11,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { useContentWidth } from "app/hooks/use-content-width";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
@@ -28,7 +30,7 @@ type Props = {
   item: NFT & { loading?: boolean };
   numColumns: number;
   tw?: string;
-  sizeStyle?: object;
+  sizeStyle?: ImageStyle;
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
@@ -38,8 +40,7 @@ type Props = {
 function Media({
   item,
   numColumns,
-  tw,
-  sizeStyle,
+  sizeStyle = {},
   resizeMode: propResizeMode,
   onPinchStart,
   onPinchEnd,
@@ -51,14 +52,12 @@ function Media({
     ? item?.source_url
     : getMediaUrl({ nft: item, stillPreview: false });
   const mediaStillPreviewUri = getMediaUrl({ nft: item, stillPreview: true });
+  const contentWidth = useContentWidth();
 
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[33vw] h-[33vw]"
-    : numColumns === 2
-    ? "w-[50vw] h-[50vw]"
-    : "w-[100vw] h-[100vw]";
+  const size = useMemo(() => {
+    if (sizeStyle?.width) return +sizeStyle?.width;
+    return contentWidth / (numColumns ?? 1);
+  }, [contentWidth, numColumns, sizeStyle?.width]);
 
   return (
     <View
@@ -78,10 +77,11 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            tw={!sizeStyle ? size : ""}
             style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
+            width={sizeStyle?.width ?? size}
+            height={sizeStyle?.height ?? size}
             resizeMode={resizeMode}
           />
         </PinchToZoom>
@@ -103,16 +103,17 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            //@ts-ignore
-            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            tw={!sizeStyle ? size : ""}
+            width={sizeStyle?.width ?? size}
+            height={sizeStyle?.height ?? size}
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
+            //@ts-ignore
+            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
           />
         </PinchToZoom>
       ) : null}
@@ -125,7 +126,6 @@ function Media({
               // TODO: update this to get a preview from CDN v2
               fallbackUrl={item?.still_preview_url}
               numColumns={numColumns}
-              tw={!sizeStyle ? size : ""}
               style={sizeStyle}
               blurhash={item?.blurhash}
               resizeMode={resizeMode}

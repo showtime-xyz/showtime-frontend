@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as DropdownMenu from "zeego/dropdown-menu";
 
-import { tw as tailwind, styled } from "@showtime-xyz/universal.tailwind";
+import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -47,7 +47,6 @@ const DropdownItemFocusRing = ({
   return (
     <MotiView
       animate={state}
-      style={tailwind.style("")}
       transition={useMemo(
         () => ({
           type: "timing",

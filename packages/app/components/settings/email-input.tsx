@@ -5,8 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
 import { BottomSheetTextInput } from "@showtime-xyz/universal.bottom-sheet";
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { yup } from "app/lib/yup";
 
@@ -96,9 +97,7 @@ export const EmailInput = (props: EmailInputProps) => {
         size="regular"
         tw="mt-6"
       >
-        <ButtonLabel tw="text-black dark:text-white">
-          {submitButtonLabel}
-        </ButtonLabel>
+        <Text tw="text-black dark:text-white">{submitButtonLabel}</Text>
       </Button>
     </>
   );

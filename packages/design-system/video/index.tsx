@@ -15,12 +15,16 @@ import { useMuted } from "app/providers/mute-provider";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
+  width: number;
+  height: number;
 } & ComponentProps<typeof ExpoVideo>;
 
 function Video({
   tw,
   blurhash,
   style,
+  width,
+  height,
   isMuted: isMutedProp,
   posterSource,
   ...props
@@ -44,7 +48,8 @@ function Video({
           <Image
             tw={tw}
             //@ts-ignore
-            style={[StyleSheet.absoluteFill, style]}
+            width={width}
+            height={height}
             blurhash={blurhash}
             source={posterSource as Source}
           />
@@ -52,6 +57,8 @@ function Video({
           <>
             <Image
               tw={tw}
+              width={width}
+              height={height}
               // @ts-ignore
               style={[StyleSheet.absoluteFill, style]}
               blurhash={blurhash}

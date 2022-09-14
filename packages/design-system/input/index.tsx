@@ -1,12 +1,5 @@
 import { forwardRef, useMemo } from "react";
-import {
-  Platform,
-  StyleProp,
-  StyleSheet,
-  TextInputProps,
-  TextStyle,
-  TextInput,
-} from "react-native";
+import { Platform, StyleProp, TextInputProps, TextStyle } from "react-native";
 
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
@@ -16,8 +9,9 @@ import {
   PressableScale,
   Props as PressableProps,
 } from "@showtime-xyz/universal.pressable-scale";
-import { tw, colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 type InputProps = {
@@ -110,12 +104,10 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           {
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 999,
-            ...tw.style(
-              `bg-gray-100 dark:bg-gray-900 ${
-                isInvalid ? "border-red-500 border" : ""
-              }`
-            ),
+            borderRadius: 9999,
+            backgroundColor: isDark ? colors.gray[900] : colors.gray[100],
+            borderColor: isInvalid ? colors.red[500] : undefined,
+            borderWidth: isInvalid ? 1 : undefined,
           },
           // @ts-ignore
           animatableStyle,
@@ -123,8 +115,9 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       >
         {leftElement}
         <TextInput
-          // @ts-ignore remove focus outline on web as we'll control the focus styling
-          style={StyleSheet.flatten([
+          tw="text-gray-900 dark:text-white"
+          style={[
+            // @ts-ignore remove focus outline on web as we'll control the focus styling
             Platform.select({
               web: {
                 outline: "none",
@@ -145,9 +138,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               paddingLeft: leftElement ? 0 : 16,
               paddingRight: rightElement ? 0 : 16,
               fontWeight: "500",
-              ...tw.style("text-gray-900 dark:text-white"),
             },
-          ])}
+          ]}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
           }
@@ -209,5 +201,5 @@ Input.displayName = "Input";
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {
-  return <PressableScale tw="p-2" {...props} />;
+  return <PressableScale style={{ padding: 8 }} {...props} />;
 };

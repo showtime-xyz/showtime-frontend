@@ -5,7 +5,6 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -23,13 +22,14 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
   });
 
   const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const contentWidth = useContentWidth();
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {
       return (
-        <View tw="my-4 flex-1 px-2">
+        <View tw="flex-1 px-2">
           <Card
             href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
             key={`nft-list-card-${index}`}
@@ -66,7 +66,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
       }
       gridItemProps={Platform.select({
         default: null,
-        web: { style: tw.style("px-0 md:px-4") },
+        web: { style: { marginVertical: isMdWidth ? 16 : 0 } },
       })}
     />
   );

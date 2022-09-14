@@ -10,7 +10,7 @@ export const DropScreen = withModalScreen(DropModal, {
   title: "Drop",
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",
-  tw: "w-full lg:w-200",
+  tw: "w-full lg:w-[800px]",
   disableBackdropPress: true,
   web_height: `max-h-100vh md:max-h-82vh`,
 });

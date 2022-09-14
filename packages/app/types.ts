@@ -60,7 +60,7 @@ export type Creator = {
   img_url?: string;
   love_count: number;
   verified: number;
-  top_items: NFT[];
+  top_items?: NFT[];
 };
 
 export interface WalletAddressesV2 {
@@ -70,6 +70,7 @@ export interface WalletAddressesV2 {
   minting_enabled: boolean;
   email: string;
   is_email: number;
+  nickname?: string;
 }
 
 export interface WalletAddressesExcludingEmailV2 {
@@ -106,6 +107,7 @@ export interface Profile {
   notifications_last_opened: Date;
   has_onboarded: boolean;
   links: Link[];
+  primary_wallet: WalletAddressesV2;
 }
 
 type FollowType = {

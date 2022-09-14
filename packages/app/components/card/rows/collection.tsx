@@ -28,7 +28,9 @@ function Collection({ nft }: Props) {
           >
             <Image
               source={{ uri: nft.collection_img_url }}
-              tw="h-5 w-5 rounded-full"
+              tw="rounded-full"
+              width={20}
+              height={20}
             />
           </View>
         )}

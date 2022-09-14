@@ -27,18 +27,18 @@ import {
 } from "react-native-vision-camera";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flash, FlashOff } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { track } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
+import { useRudder } from "app/lib/rudderstack";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -76,6 +76,8 @@ export function Camera({
   setIsLoading,
   postPhoto,
 }: Props) {
+  const isDark = useIsDarkMode();
+  const { rudder } = useRudder();
   const tabBarHeight = usePlatformBottomHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -271,11 +273,11 @@ export function Camera({
       setIsLoading(true);
       burstCaptureTimer.start();
 
-      track("Photo Taken");
+      rudder?.track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-  }, [camera, takePhotoOptions, photos]);
+  }, [camera, takePhotoOptions, photos, rudder]);
 
   const photoUri = photos?.[0]?.uri;
 
@@ -378,24 +380,27 @@ export function Camera({
       <View tw="absolute top-0 right-0 left-0 bg-gray-100 opacity-95 dark:bg-gray-900">
         <View tw="flex-row justify-end py-8 px-4">
           <PressableScale
-            tw="mt-4 h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black"
+            style={{
+              marginTop: 8,
+              height: 48,
+              width: 48,
+              borderRadius: 9999,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: isDark ? "#000" : "#FFF",
+            }}
             onPress={onFlashPressed}
           >
             {flash === "off" ? (
               <FlashOff
-                color={
-                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
-                }
+                color={isDark ? "#FFF" : "#000"}
                 width={24}
                 height={24}
               />
             ) : (
               <Flash
                 color={
-                  flash === "on"
-                    ? tw.color("amber-500")
-                    : (tw.style("bg-black dark:bg-white")
-                        ?.backgroundColor as string)
+                  flash === "on" ? colors.amber[500] : isDark ? "#FFF" : "#000"
                 }
                 width={21}
                 height={21}

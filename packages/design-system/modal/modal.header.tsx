@@ -1,8 +1,7 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
-import { tw as tailwind } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -15,23 +14,13 @@ function ModalHeaderComponent({
   title,
   endContentComponent: EndContentComponent,
   startContentComponent: StartContentComponent,
-  tw,
+  tw = "",
   onClose,
 }: ModalHeaderProps) {
-  const containerStyle = useMemo(
-    () =>
-      tailwind.style(
-        MODAL_HEADER_CONTAINER_TW,
-        ...(typeof tw === "undefined"
-          ? [""]
-          : typeof tw === "string"
-          ? [tw]
-          : tw)
-      ),
-    [tw]
-  );
   return (
-    <View style={containerStyle}>
+    <View
+      tw={[MODAL_HEADER_CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
+    >
       {StartContentComponent ? (
         <StartContentComponent />
       ) : (

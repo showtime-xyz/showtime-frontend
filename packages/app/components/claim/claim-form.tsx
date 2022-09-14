@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,7 +27,7 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
-import { track } from "app/lib/analytics";
+import { useRudder } from "app/lib/rudderstack";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
@@ -39,6 +40,7 @@ import {
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
+  const { rudder } = useRudder();
   const { state, claimNFT, onReconnectWallet } = useClaimNFT(
     edition?.creator_airdrop_edition
   );
@@ -57,6 +59,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
 
+  const isDark = useIsDarkMode();
   const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
@@ -148,7 +151,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
           <Button
             onPress={() => {
-              track("Drop Shared", { type: "Twitter" });
+              rudder?.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
@@ -162,8 +165,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             }}
             tw="bg-[#00ACEE]"
             variant="text"
+            accentColor="#fff"
           >
-            <Text tw="text-white">Share on Twitter</Text>
+            Share on Twitter
           </Button>
           <View tw="h-4" />
           <Button
@@ -173,7 +177,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               });
 
               if (result.action === "sharedAction") {
-                track(
+                rudder?.track(
                   "Drop Shared",
                   result.activityType
                     ? { type: result.activityType }
@@ -198,7 +202,15 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row flex-wrap">
-          <Media isMuted item={nft?.data.item} tw="h-20 w-20 rounded-lg" />
+          <Media
+            isMuted
+            item={nft?.data.item}
+            sizeStyle={{
+              width: 80,
+              height: 80,
+            }}
+            tw="rounded-lg"
+          />
           <View tw="ml-4 flex-1">
             <Text
               tw="text-xl font-bold text-black dark:text-white"
@@ -242,7 +254,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               height={20}
               width={20}
               //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-gray-100").backgroundColor}
+              color={isDark ? colors.gray[100] : colors.gray[900]}
             />
             <Text tw="ml-1 text-gray-900 dark:text-gray-100">
               You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}

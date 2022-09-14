@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { parseUnits } from "@ethersproject/units";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
-import { LIST_CURRENCIES, SORT_FIELDS } from "app/lib/constants";
+import { SORT_FIELDS } from "app/lib/constants";
 
 import { NFT, Profile } from "./types";
 
@@ -107,19 +106,6 @@ export const findListingItemByOwner = (
   });
 
   return listedNFT;
-};
-
-// All our supported currencies have 18 decimals, except for USDC which has 6
-export const parseBalance = (
-  balance: string,
-  currencyAddress: typeof LIST_CURRENCIES
-) => {
-  const isUSDC = currencyAddress === LIST_CURRENCIES?.USDC;
-  if (isUSDC) {
-    return parseUnits(balance, 6);
-  }
-
-  return parseUnits(balance, 18);
 };
 
 export const getMediaUrl = ({
@@ -499,7 +485,7 @@ export function isIOS(): boolean {
 }
 
 export function isMobileWeb(): boolean {
-  return isAndroid() || isIOS();
+  return Platform.OS === "web" && (isAndroid() || isIOS());
 }
 
 // TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
@@ -549,16 +535,8 @@ export const userHasIncompleteExternalLinks = (profile?: {
 
 export const convertUTCDateToLocalDate = (dateStr: string) => {
   if (typeof dateStr !== "string") return new Date();
-  const date = new Date(dateStr);
   // will be old UTC +0 time if include Z, so return time directly
-  if (dateStr.includes("Z")) return date;
-  const newDate = new Date(
-    date.getTime() + date.getTimezoneOffset() * 60 * 1000
-  );
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
+  if (dateStr.includes("Z")) return new Date(dateStr);
 
-  newDate.setHours(hours - offset);
-
-  return newDate;
+  return new Date(dateStr + "Z");
 };

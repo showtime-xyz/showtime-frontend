@@ -1,7 +1,8 @@
 import { Suspense } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Bell,
   BellFilled,
@@ -14,8 +15,7 @@ import {
   Plus,
   Showtime,
 } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { tw } from "@showtime-xyz/universal.tailwind";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,57 +25,46 @@ import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
-import { breakpoints } from "design-system/theme";
-
 type TabBarIconProps = {
   color?: string;
   focused?: boolean;
-  customTw?: TW;
+  tw?: TW;
   onPress?: () => void;
 };
 
 type TabBarButtonProps = {
   tab: string;
   children: React.ReactNode;
-  customTw?: TW;
+  tw?: TW;
   onPress?: () => void;
 };
 
-function TabBarIcon({ tab, children, customTw, onPress }: TabBarButtonProps) {
-  const isWeb = Platform.OS === "web";
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
-
-  if (isWeb) {
+function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
+  if (Platform.OS === "web") {
     if (onPress) {
       return (
-        <Pressable onPress={onPress} disableHoverEffect={true}>
-          <View
-            tw="h-12 w-12 items-center justify-center rounded-full"
-            style={tw.style(
-              `${
-                isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
-              } ${customTw}`
-            )}
-          >
-            {children}
-          </View>
-        </Pressable>
+        <PressableHover
+          onPress={onPress}
+          tw={[
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            tw ?? "",
+          ]}
+        >
+          {children}
+        </PressableHover>
       );
     }
 
     return (
       <Link href={tab}>
-        <View
-          tw="h-12 w-12 items-center justify-center rounded-full"
-          style={tw.style(
-            `${
-              isWeb && isMdWidth ? "bg-gray-100 dark:bg-gray-900" : ""
-            } ${customTw}`
-          )}
+        <PressableHover
+          tw={[
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            tw ?? "",
+          ]}
         >
           {children}
-        </View>
+        </PressableHover>
       </Link>
     );
   }
@@ -88,13 +77,13 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
     <TabBarIcon tab="/">
       {focused ? (
         <HomeFilled
-          style={tw.style("z-1")}
+          style={{ zIndex: 1 }}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Home style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Home style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
@@ -105,24 +94,26 @@ export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
     <TabBarIcon tab="/marketplace">
       {focused ? (
         <CompassFilled
-          style={tw.style("z-1")}
+          style={{ zIndex: 1 }}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Compass style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Compass style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
 };
 
-export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
+export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
+  const isDark = useIsDarkMode();
+
   return (
-    <TabBarIcon tab="/" customTw={customTw}>
+    <TabBarIcon tab="/" tw={tw}>
       <Showtime
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        style={{ borderRadius: 8, overflow: "hidden", width: 24, height: 24 }}
+        color={isDark ? "#FFF" : "#000"}
         width={24}
         height={24}
       />
@@ -131,6 +122,8 @@ export const ShowtimeTabBarIcon = ({ customTw }: TabBarIconProps) => {
 };
 
 export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
+  const isDark = useIsDarkMode();
+
   return (
     <TabBarIcon tab="/drop">
       <View
@@ -143,9 +136,7 @@ export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
           width={24}
           height={24}
           color={
-            tw.style(
-              focused ? "bg-black dark:bg-white" : "bg-white dark:bg-black"
-            )?.backgroundColor as string
+            focused ? (isDark ? "#FFF" : "#000") : isDark ? "#000" : "#FFF"
           }
         />
       </View>
@@ -157,14 +148,9 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
     <TabBarIcon tab="/trending">
       {focused ? (
-        <HotFilled
-          style={tw.style("z-1")}
-          width={24}
-          height={24}
-          color={color}
-        />
+        <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
       ) : (
-        <Hot style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Hot style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
@@ -179,13 +165,13 @@ export const NotificationsTabBarIcon = ({
     <TabBarIcon tab="/notifications" onPress={onPress}>
       {focused ? (
         <BellFilled
-          style={tw.style("z-1")}
+          style={{ zIndex: 1 }}
           width={24}
           height={24}
           color={color}
         />
       ) : (
-        <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
+        <Bell style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
       <ErrorBoundary renderFallback={() => <></>}>
         <Suspense fallback={null}>
@@ -199,9 +185,12 @@ export const NotificationsTabBarIcon = ({
 const UnreadNotificationIndicator = () => {
   const { hasUnreadNotification } = useNotifications();
 
-  return hasUnreadNotification ? (
-    <View tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500" />
-  ) : null;
+  return (
+    <View
+      tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500"
+      style={{ opacity: hasUnreadNotification ? 1 : 0 }}
+    />
+  );
 };
 
 export const ProfileTabBarIcon = () => {

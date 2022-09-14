@@ -58,6 +58,8 @@ export const GestureContainer = React.forwardRef<
     initTabbarHeight = 49,
     initHeaderHeight = 0,
     renderScrollHeader,
+    overridenShareAnimatedValue,
+    overridenTranslateYValue,
     renderTabView,
     renderRefreshControl: renderRefreshControlProp,
     animationHeaderPosition,
@@ -73,7 +75,11 @@ export const GestureContainer = React.forwardRef<
   forwardedRef
 ) {
   //#region animation value
-  const shareAnimatedValue = useSharedValue(0);
+  const defaultShareAnimatedValue = useSharedValue(0);
+  const shareAnimatedValue =
+    overridenShareAnimatedValue || defaultShareAnimatedValue;
+  const defaultTranslateYValue = useSharedValue(0);
+  const translateYValue = overridenTranslateYValue || defaultTranslateYValue;
   const curIndexValue = useSharedValue(initialPage);
   const isSlidingHeader = useSharedValue(false);
   const slideIndex = useSharedValue(curIndexValue.value);
@@ -104,6 +110,7 @@ export const GestureContainer = React.forwardRef<
   const [headerHeight, setHeaderHeight] = useState(
     initHeaderHeight - overflowHeight
   );
+  const [isLoadedHeader, setIsLoadedHeader] = useState(!renderSceneHeader);
   const [scrollStickyHeaderHeight, setStickyHeaderHeight] = useState(0);
   const [childGestures, setChildRefs] = useState<NativeGesture[]>([]);
   //#endregion
@@ -216,6 +223,7 @@ export const GestureContainer = React.forwardRef<
       if (animationHeaderHeight) {
         animationHeaderHeight.value = Math.abs(calcHeight - minHeaderHeight);
       }
+      setIsLoadedHeader(true);
     },
     [
       animationHeaderHeight,
@@ -379,11 +387,11 @@ export const GestureContainer = React.forwardRef<
   //#endregion
 
   useEffect(() => {
-    if (headerHeight !== 0) {
+    if (isLoadedHeader) {
       opacityValue.value = withTiming(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerHeight]);
+  }, [isLoadedHeader]);
 
   useEffect(() => {
     animateTabsToRefresh(isRefreshingProp);
@@ -576,7 +584,7 @@ export const GestureContainer = React.forwardRef<
     };
   });
 
-  const translateYValue = useRefreshDerivedValue({
+  useRefreshDerivedValue(translateYValue, {
     animatedValue: tabsTrans,
     refreshHeight,
     overflowPull,

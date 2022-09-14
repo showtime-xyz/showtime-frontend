@@ -3,9 +3,9 @@ import { Platform, LayoutChangeEvent, StyleSheet } from "react-native";
 
 import { MotiView } from "moti";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PanToClose } from "@showtime-xyz/universal.pan-to-close";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { tw } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 type ToastProps = {
@@ -17,6 +17,7 @@ type ToastProps = {
 const SAFE_AREA_TOP = 20;
 
 export const Toast = ({ render, message, hide }: ToastProps) => {
+  const isDark = useIsDarkMode();
   const safeAreaInsets = useSafeAreaInsets();
   const [layout, setLayout] = useState<
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
@@ -31,8 +32,10 @@ export const Toast = ({ render, message, hide }: ToastProps) => {
       <MotiView
         style={[
           styles.toastContainer,
-          { opacity: layout ? 1 : 0 },
-          tw.style("bg-white dark:bg-black shadow-black dark:shadow-white"),
+          {
+            opacity: layout ? 1 : 0,
+            backgroundColor: isDark ? "#000" : "#FFF",
+          },
         ]}
         accessibilityLiveRegion="polite"
         pointerEvents="box-none"

@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-import { Button, ButtonLabel } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -23,6 +23,8 @@ export const UserItem = (props: UserItemProps) => {
       <View tw="mr-2 h-6 w-6 rounded-xl bg-gray-200">
         <Image
           tw={"h-full w-full rounded-full"}
+          width={24}
+          height={24}
           source={{ uri: props.image_url }}
         />
       </View>
@@ -36,7 +38,7 @@ export const UserItem = (props: UserItemProps) => {
           // TODO(enes): implement unblocking logics
         }}
       >
-        <ButtonLabel>Unblock</ButtonLabel>
+        <Text>Unblock</Text>
       </Button>
     </View>
   );
