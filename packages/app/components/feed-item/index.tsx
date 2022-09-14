@@ -7,7 +7,6 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { BlurView } from "expo-blur";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -31,6 +30,7 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
+import { BlurView } from "app/lib/blurview";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
@@ -187,11 +187,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                   uri: getMediaUrl({ nft, stillPreview: true }),
                 }}
               >
-                <BlurView
-                  tint={tint}
-                  intensity={100}
-                  style={{ width: "100%", height: "100%" }}
-                />
+                <BlurView />
               </Image>
             )}
           </View>
@@ -253,19 +249,16 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </View>
           ) : null}
 
-          <BlurView
-            tint={tint}
-            intensity={100}
+          <View
             style={{
               ...blurredBackgroundStyles,
-              backgroundColor: isDark
-                ? "rgba(0, 0, 0, 0.2)"
-                : "rgba(255, 255, 255, 0.2)",
               paddingBottom: bottomPadding,
+              overflow: "hidden",
             }}
           >
+            <BlurView />
             <NFTDetails edition={edition} nft={nft} />
-          </BlurView>
+          </View>
         </Reanimated.View>
       </View>
     </LikeContextProvider>
