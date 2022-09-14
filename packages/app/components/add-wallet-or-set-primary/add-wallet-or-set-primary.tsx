@@ -23,7 +23,7 @@ export const AddWalletOrSetPrimary = ({
       </View>
       <TextLink
         href="/settings"
-        tw="rounded-3xl bg-gray-900 p-2 text-sm font-bold text-white dark:bg-gray-200 dark:text-black"
+        tw="rounded-3xl bg-gray-900 py-3 px-4 text-sm font-bold text-white dark:bg-gray-200 dark:text-black"
       >
         Select Primary wallet
       </TextLink>

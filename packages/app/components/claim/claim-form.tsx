@@ -244,9 +244,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
-              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-                {primaryWallet.nickname ??
-                  formatAddressShort(primaryWallet.address)}
+              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
+                {primaryWallet.nickname +
+                  " (" +
+                  formatAddressShort(primaryWallet.address) +
+                  ")"}
               </Text>
             </View>
             <View>
