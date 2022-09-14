@@ -75,7 +75,6 @@ function Card({
   if (width < 768) {
     return (
       <RouteComponent href={href} onPress={handleOnPress}>
-        {/* <View style={{ width: 100, height: 100, backgroundColor: "red" }} /> */}
         <Media item={nft} numColumns={numColumns} />
       </RouteComponent>
     );
