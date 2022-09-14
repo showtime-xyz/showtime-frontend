@@ -16,10 +16,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import {
-  useBlurredBackgroundStyles,
-  useIsDarkMode,
-} from "@showtime-xyz/universal.hooks";
+import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -160,9 +157,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
 
-  const isDark = useIsDarkMode();
-  const tint = isDark ? "dark" : "light";
-
   if (windowWidth >= 768) {
     return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
   }
@@ -253,8 +247,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             style={{
               ...blurredBackgroundStyles,
               paddingBottom: bottomPadding,
-              overflow: "hidden",
             }}
+            tw="overflow-hidden"
           >
             <BlurView />
             <NFTDetails edition={edition} nft={nft} />

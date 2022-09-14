@@ -1,5 +1,5 @@
-import { useEffect, useRef, ReactNode, useState } from "react";
-import { UIManager, Platform } from "react-native";
+import { useRef, ReactNode, useState } from "react";
+import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -28,19 +28,6 @@ export const ClampText = ({
   const [containerWidth, setContainerWidth] = useState(0);
 
   const isPureText = typeof text === "string";
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      if (UIManager.setLayoutAnimationEnabledExperimental) {
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-      }
-
-      return () => {
-        if (UIManager.setLayoutAnimationEnabledExperimental) {
-          UIManager.setLayoutAnimationEnabledExperimental(false);
-        }
-      };
-    }
-  }, []);
 
   const {
     showMore,

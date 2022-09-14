@@ -1,15 +1,6 @@
 import { useState, useRef, useCallback, ReactNode } from "react";
-import {
-  NativeSyntheticEvent,
-  TextLayoutEventData,
-  LayoutAnimation,
-} from "react-native";
+import { NativeSyntheticEvent, TextLayoutEventData } from "react-native";
 
-const animation = LayoutAnimation.create(
-  200,
-  LayoutAnimation.Types.easeOut,
-  LayoutAnimation.Properties.opacity
-);
 export type ClampTextProps = {
   element?: Element;
   text: string | Iterable<ReactNode>;
@@ -50,14 +41,12 @@ export const useClampText = ({
     isLayouted.current = true;
   };
   const onShowMore = useCallback(() => {
-    LayoutAnimation.configureNext(animation);
     setShowMore(false);
     setShowLess(true);
     setInnerText(text);
   }, [text]);
 
   const onShowLess = useCallback(() => {
-    LayoutAnimation.configureNext(animation);
     setShowLess(false);
     setShowMore(true);
     setInnerText(collapseText.current);
