@@ -11,85 +11,85 @@
 {
     "accordion": {
         "scope": "showtime.universal",
-        "version": "0.0.53",
+        "version": "0.0.54",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },
     "activity-indicator": {
         "scope": "showtime.universal",
-        "version": "0.0.39",
+        "version": "0.0.40",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/activity-indicator"
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.67",
+        "version": "0.0.68",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.43",
+        "version": "0.0.44",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
     "bottom-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.59",
+        "version": "0.0.60",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/bottom-sheet"
     },
     "button": {
         "scope": "showtime.universal",
-        "version": "0.0.57",
+        "version": "0.0.58",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/button"
     },
     "checkbox": {
         "scope": "showtime.universal",
-        "version": "0.0.49",
+        "version": "0.0.50",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/checkbox"
     },
     "clamp-text": {
         "scope": "showtime.universal",
-        "version": "0.0.17",
+        "version": "0.0.18",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/clamp-text"
     },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/collapsible-tab-view"
     },
     "color-scheme": {
         "scope": "showtime.universal",
-        "version": "0.0.27",
+        "version": "0.0.28",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/color-scheme"
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.56",
+        "version": "0.0.57",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
     "data-pill": {
         "scope": "showtime.universal",
-        "version": "0.0.42",
+        "version": "0.0.43",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/data-pill"
     },
     "divider": {
         "scope": "showtime.universal",
-        "version": "0.0.42",
+        "version": "0.0.43",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/divider"
     },
     "dropdown-menu": {
         "scope": "showtime.universal",
-        "version": "0.0.41",
+        "version": "0.0.42",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/dropdown-menu"
     },
@@ -101,217 +101,217 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.80",
+        "version": "0.0.81",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
     "haptics": {
         "scope": "showtime.universal",
-        "version": "0.0.11",
+        "version": "0.0.12",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/haptics"
     },
     "hooks": {
         "scope": "showtime.universal",
-        "version": "0.0.41",
+        "version": "0.0.42",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/hooks"
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.53",
+        "version": "0.0.54",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.42",
+        "version": "0.0.43",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
     "infinite-scroll-list": {
         "scope": "showtime.universal",
-        "version": "0.0.34",
+        "version": "0.0.35",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.51",
+        "version": "0.0.52",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },
     "label": {
         "scope": "showtime.universal",
-        "version": "0.0.42",
+        "version": "0.0.43",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/label"
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.50",
+        "version": "0.0.51",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.75",
+        "version": "0.0.76",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.86",
+        "version": "0.0.87",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.77",
+        "version": "0.0.78",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
     "pan-to-close": {
         "scope": "showtime.universal",
-        "version": "0.0.20",
+        "version": "0.0.21",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pan-to-close"
     },
     "pinch-to-zoom": {
         "scope": "showtime.universal",
-        "version": "0.0.31",
+        "version": "0.0.32",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pinch-to-zoom"
     },
     "pressable": {
         "scope": "showtime.universal",
-        "version": "0.0.47",
+        "version": "0.0.48",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable"
     },
     "pressable-hover": {
         "scope": "showtime.universal",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable-hover"
     },
     "pressable-scale": {
         "scope": "showtime.universal",
-        "version": "0.0.44",
+        "version": "0.0.45",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/pressable-scale"
     },
     "router": {
         "scope": "showtime.universal",
-        "version": "0.0.36",
+        "version": "0.0.37",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/router"
     },
     "safe-area": {
         "scope": "showtime.universal",
-        "version": "0.0.30",
+        "version": "0.0.31",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/safe-area"
     },
     "scroll-view": {
         "scope": "showtime.universal",
-        "version": "0.0.46",
+        "version": "0.0.47",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/scroll-view"
     },
     "segmented-control": {
         "scope": "showtime.universal",
-        "version": "0.0.47",
+        "version": "0.0.48",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/segmented-control"
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.74",
+        "version": "0.0.75",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
     "skeleton": {
         "scope": "showtime.universal",
-        "version": "0.0.42",
+        "version": "0.0.43",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/skeleton"
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.77",
+        "version": "0.0.78",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
     "spinner": {
         "scope": "showtime.universal",
-        "version": "0.0.47",
+        "version": "0.0.48",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/spinner"
     },
     "switch": {
         "scope": "showtime.universal",
-        "version": "0.0.49",
+        "version": "0.0.50",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/switch"
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.33",
+        "version": "0.0.34",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
     "tailwind": {
         "scope": "showtime.universal",
-        "version": "0.0.38",
+        "version": "0.0.39",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/tailwind"
     },
     "text": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/text"
     },
     "text-input": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/text-input"
     },
     "toast": {
         "scope": "showtime.universal",
-        "version": "0.0.66",
+        "version": "0.0.67",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/toast"
     },
     "tooltip": {
         "scope": "showtime.universal",
-        "version": "0.0.56",
+        "version": "0.0.57",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/tooltip"
     },
     "typography": {
         "scope": "showtime.universal",
-        "version": "0.0.30",
+        "version": "0.0.31",
         "mainFile": "index.js",
         "rootDir": "packages/design-system/typography"
     },
     "utils": {
         "scope": "showtime.universal",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/utils"
     },
     "verification-badge": {
         "scope": "showtime.universal",
-        "version": "0.0.35",
+        "version": "0.0.36",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/verification-badge"
     },
     "view": {
         "scope": "showtime.universal",
-        "version": "0.0.38",
+        "version": "0.0.39",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/view"
     },
