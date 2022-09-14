@@ -60,5 +60,6 @@ export const ScollableTabBar = ({
 const styles = StyleSheet.create({
   tabbar: {
     elevation: 0,
+    shadowOpacity: 0,
   },
 });
