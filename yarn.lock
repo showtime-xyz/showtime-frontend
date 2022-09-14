@@ -6413,6 +6413,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/blur@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@react-native-community/blur@npm:4.2.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: adfc7e423555bcf6581f68c2d836f73f2c5e562359ab189ceb723ef3019d72460432b67e86c258d596658b827efb3277f321ef46b29841dc380d1e4fc839abc6
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:^8.0.4":
   version: 8.0.4
   resolution: "@react-native-community/cli-clean@npm:8.0.4"
@@ -8204,6 +8214,7 @@ __metadata:
     "@radix-ui/react-accordion": ^0.1.5
     "@radix-ui/react-tabs": ^0.1.1
     "@react-native-async-storage/async-storage": ~1.17.0
+    "@react-native-community/blur": ^4.2.0
     "@react-native-community/netinfo": 9.3.0
     "@react-native-community/slider": ^4.2.4
     "@react-native-menu/menu": ^0.5.2

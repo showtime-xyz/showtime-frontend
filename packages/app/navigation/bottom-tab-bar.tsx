@@ -1,7 +1,6 @@
-import { Platform, useWindowDimensions, StyleSheet } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { BlurView } from "expo-blur";
 import { MotiView } from "moti";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -15,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
+import { BlurView } from "app/lib/blurview";
 
 import { useNavigationElements } from "./use-navigation-elements";
 
@@ -45,20 +45,7 @@ export const BottomTabbar = ({
         },
       ]}
     >
-      <>
-        {Platform.OS === "android" ? (
-          <View
-            tw="bg-white opacity-95 dark:bg-black"
-            style={StyleSheet.absoluteFill}
-          />
-        ) : (
-          <BlurView
-            tint={isDark ? "dark" : "light"}
-            intensity={95}
-            style={StyleSheet.absoluteFill}
-          />
-        )}
-      </>
+      <BlurView />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const focused = state.index === index;
