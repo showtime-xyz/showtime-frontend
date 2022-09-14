@@ -1,17 +1,15 @@
-import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { View } from "@showtime-xyz/universal.view";
 
 import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { useUser } from "app/hooks/use-user";
 
-import { TabBarButton } from "./tab-bar-button";
+import { BottomTabbar } from "./bottom-tab-bar";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -49,49 +47,17 @@ export function BottomTabNavigator() {
         tabBarInactiveTintColor: color,
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [
-          {
-            height: 64 + safeAreaBottom,
-            backgroundColor: "transparent",
-            borderTopColor: "transparent",
-            position: "absolute",
-          },
-          width >= 768 && {
-            backgroundColor: "transparent",
-            borderTopColor: "transparent",
-            top: 0,
-            left: width / 2 - 100,
-            maxWidth: 200,
-          },
-          (!isAuthenticated || isTabBarHidden) && {
-            bottom: -100,
-          },
-        ],
-        tabBarBackground: () =>
-          width >= 768 ? null : (
-            // <BlurredBackground isDark={isDark} width={width} height={50} />
-            <>
-              {Platform.OS === "android" ? (
-                <View
-                  tw="bg-white opacity-95 dark:bg-black"
-                  style={StyleSheet.absoluteFill}
-                />
-              ) : (
-                <BlurView
-                  tint={isDark ? "dark" : "light"}
-                  intensity={95}
-                  style={StyleSheet.absoluteFill}
-                />
-              )}
-            </>
-          ),
+        tabBarStyle: {
+          height: 64 + safeAreaBottom,
+          position: "absolute",
+        },
       }}
+      tabBar={(props) => <BottomTabbar {...props} />}
     >
       <BottomTab.Screen
         name="homeTab"
         component={HomeNavigator}
         options={{
-          tabBarButton: TabBarButton,
           tabBarIcon: HomeTabBarIcon,
         }}
       />
@@ -99,7 +65,6 @@ export function BottomTabNavigator() {
         name="trendingTab"
         component={TrendingNavigator}
         options={{
-          tabBarButton: TabBarButton,
           tabBarIcon: TrendingTabBarIcon,
         }}
       />
@@ -108,9 +73,7 @@ export function BottomTabNavigator() {
           name="createTab"
           component={CreateNavigator}
           options={{
-            tabBarButton: TabBarButton,
             tabBarIcon: CreateTabBarIcon,
-            // headerShown: false,
           }}
         />
       )}
@@ -119,7 +82,6 @@ export function BottomTabNavigator() {
           name="notificationsTab"
           component={NotificationsNavigator}
           options={{
-            tabBarButton: TabBarButton,
             tabBarIcon: NotificationsTabBarIcon,
           }}
         />
@@ -130,7 +92,6 @@ export function BottomTabNavigator() {
           component={ProfileNavigator}
           navigationKey={user?.data?.profile?.profile_id?.toString()}
           options={{
-            tabBarButton: TabBarButton,
             tabBarIcon: ProfileTabBarIcon,
           }}
         />

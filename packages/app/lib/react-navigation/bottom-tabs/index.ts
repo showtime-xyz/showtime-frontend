@@ -10,6 +10,7 @@ const useBottomTabBarHeight = () => {
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useRNBottomTabBarHeight()
     : 0;
+
   return nativeBottomTabBarHeight;
 };
 
