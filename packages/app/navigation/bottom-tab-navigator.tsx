@@ -17,7 +17,6 @@ import {
   ProfileTabBarIcon,
   TrendingTabBarIcon,
 } from "./tab-bar-icons";
-import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
@@ -29,8 +28,7 @@ const BottomTab = createBottomTabNavigator();
 
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
-  const { isTabBarHidden } = useNavigationElements();
-  const { isAuthenticated, user } = useUser();
+  const { user } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const color = isDark ? "#FFF" : "#000";
