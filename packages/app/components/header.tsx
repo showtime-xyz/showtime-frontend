@@ -28,6 +28,7 @@ import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
@@ -363,8 +364,9 @@ const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-
+      <Link href="/">
+        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
+      </Link>
       {isMdWidth ? <SearchInHeader /> : null}
     </View>
   );

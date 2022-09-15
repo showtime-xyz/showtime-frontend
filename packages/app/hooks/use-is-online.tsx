@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
 
 export const useIsOnline = () => {
-  const [isOnline, setIsOnlie] = useState(true);
+  const [isOnline, setIsOnline] = useState(true);
   useEffect(() => {
     NetInfo.fetch().then((s) => {
-      setIsOnlie(!!s.isConnected && !!s.isInternetReachable);
+      if (typeof s.isInternetReachable === "boolean") {
+        setIsOnline(s.isInternetReachable);
+      }
     });
 
     const unsubscribe = NetInfo.addEventListener((s) => {
-      setIsOnlie(!!s.isConnected && !!s.isInternetReachable);
+      if (typeof s.isInternetReachable === "boolean") {
+        setIsOnline(s.isInternetReachable);
+      }
     });
 
     return unsubscribe;
