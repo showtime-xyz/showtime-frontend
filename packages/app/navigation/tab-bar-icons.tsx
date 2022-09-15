@@ -58,14 +58,14 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
 
     return (
       <Link href={tab}>
-        <PressableHover
+        <View
           tw={[
             "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
           {children}
-        </PressableHover>
+        </View>
       </Link>
     );
   }
