@@ -414,7 +414,7 @@ export const ProfileTop = ({
           )}
 
           {bio ? (
-            <View tw="mt-3 items-baseline md:w-max">
+            <View tw="mt-3 items-baseline">
               <ClampText
                 text={bioWithMentions}
                 maxLines={3}
