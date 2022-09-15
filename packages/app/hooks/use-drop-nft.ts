@@ -201,7 +201,7 @@ export const useDropNFT = () => {
     dispatch({ type: "signatureSuccess" });
 
     const newSignature = ledgerWalletHack(signature);
-    Logger.log("Signature", { signature, newSignature });
+    Logger.log("Signature ", { signature, newSignature });
     Logger.log("Submitting tx...");
 
     // Sending signature to backend to initiate the transaction
