@@ -99,8 +99,8 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
     (phoneNumber: string) =>
       props.handleSubmitPhoneNumber(
         Platform.OS === "web"
-          ? phoneNumber
-          : selectedCountry?.dial_code + phoneNumber
+          ? `+${phoneNumber}`
+          : `${selectedCountry?.dial_code}${phoneNumber}`
       ),
     [props, selectedCountry]
   );
@@ -134,7 +134,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         validationSchema={phoneNumberValidationSchema}
         label="Phone number"
         placeholder="Enter your phone number"
-        keyboardType="numeric"
+        keyboardType="phone-pad"
         signInButtonLabel="Send"
         leftElement={leftElement}
         onSubmit={onSubmit}
