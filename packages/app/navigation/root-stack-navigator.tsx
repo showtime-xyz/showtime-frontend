@@ -23,6 +23,7 @@ import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
+import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
@@ -97,6 +98,10 @@ export function RootStackNavigator() {
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
+        <Stack.Screen
+          name="verifyPhoneNumber"
+          component={VerifyPhoneNumberScreen}
+        />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="claimers" component={ClaimersScreen} />

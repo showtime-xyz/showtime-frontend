@@ -88,6 +88,7 @@ type RootStackNavigatorParams = {
   followers: undefined;
   following: undefined;
   addEmail: undefined;
+  verifyPhoneNumber: undefined;
   drop: undefined;
   claim: undefined;
   claimers: undefined;
