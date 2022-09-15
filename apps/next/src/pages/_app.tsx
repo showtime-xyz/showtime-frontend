@@ -26,6 +26,7 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
 import { AddEmailScreen } from "app/screens/settings-add-email";
+import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 
 import "../styles/styles.css";
 
@@ -124,13 +125,17 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <CommentsScreen />
         <DetailsScreen />
         <ActivitiesScreen />
-        <EditProfileScreen />
         <FollowersScreen />
         <FollowingScreen />
-        <AddEmailScreen />
         <DropScreen />
         <ClaimScreen />
         <ClaimersScreen />
+
+        {/* Settings that renders on top of other modals */}
+        <EditProfileScreen />
+        <AddEmailScreen />
+        <VerifyPhoneNumberScreen />
+
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
       </AppProviders>

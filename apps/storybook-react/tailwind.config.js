@@ -349,6 +349,21 @@ module.exports = {
         1: 1,
         2: 2,
       },
+      keyframes: {
+        "bounce-in": {
+          "0%": { transform: "scale(1)", opacity: 0 },
+          "50%": { transform: "scale(1.1)", opacity: 1 },
+          "100%": { transform: "scale(1)", opacity: 1 },
+        },
+        "fade-in": {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
+      },
+      animation: {
+        "bounce-in": "bounce-in 250ms",
+        "fade-in": "fade-in 150ms",
+      },
     },
   },
   plugins: [

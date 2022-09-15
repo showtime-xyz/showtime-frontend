@@ -27,13 +27,42 @@ export function useManageAccount() {
         mutate(MY_INFO_ENDPOINT);
 
         toast?.show({
-          message: "Email added and will soon appear on your profile",
+          message: "Email added and will soon appear on your profile!",
           hideAfter: 4000,
         });
       } catch (error) {
         toast?.show({
           message:
-            "Unable to add the email to your profile at this time, please try again",
+            "Unable to add the email to your profile at this time, please try again!",
+          hideAfter: 4000,
+        });
+      }
+    },
+    [toast, mutate]
+  );
+
+  const verifyPhoneNumber = useCallback(
+    async (phoneNumber: string, did: string) => {
+      try {
+        await axios({
+          url: `/v1/magic/wallet`,
+          method: "POST",
+          data: { phone_number: phoneNumber, did },
+          overrides: {
+            forceAccessTokenAuthorization: true,
+          },
+        });
+
+        mutate(MY_INFO_ENDPOINT);
+
+        toast?.show({
+          message: "Phone number successfully verified!",
+          hideAfter: 4000,
+        });
+      } catch (error) {
+        toast?.show({
+          message:
+            "Unable to verify your phone number at this time, please try again!",
           hideAfter: 4000,
         });
       }
@@ -63,5 +92,5 @@ export function useManageAccount() {
     [toast, mutate]
   );
 
-  return { addEmail, removeAccount };
+  return { addEmail, verifyPhoneNumber, removeAccount };
 }

@@ -4,6 +4,7 @@ import { Platform, TextInput, useWindowDimensions } from "react-native";
 import * as Popover from "@radix-ui/react-popover";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import {
   useBlurredBackgroundStyles,
@@ -24,8 +25,10 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
@@ -227,6 +230,8 @@ const HeaderRight = () => {
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
   const navigateToLogin = useNavigateToLogin();
+  const { data: userProfile } = useMyInfo();
+  const Alert = useAlert();
 
   return (
     <View>
@@ -246,6 +251,14 @@ const HeaderRight = () => {
               <View tw="mx-2">
                 <PressableHover
                   onPress={() => {
+                    if (userProfile?.data.can_create_drop === false) {
+                      const timeRemaining = 24 - new Date().getUTCHours();
+                      Alert.alert(
+                        "Wow, you love drops!",
+                        `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
+                      );
+                      return;
+                    }
                     router.push(
                       Platform.select({
                         native: "/drop",
@@ -354,8 +367,9 @@ const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-
+      <Link href="/">
+        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
+      </Link>
       {isMdWidth ? <SearchInHeader /> : null}
     </View>
   );

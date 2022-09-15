@@ -46,6 +46,12 @@ import {
   SettingsEmailSlotPlaceholder,
 } from "./settings-email-slot";
 import {
+  SettingPhoneNumberSlotHeader,
+  SettingsPhoneNumberSkeletonSlot,
+  SettingsPhoneNumberSlot,
+  SettingsPhoneNumberSlotPlaceholder,
+} from "./settings-phone-number-slot";
+import {
   SettingsWalletSlot,
   SettingsWalletSlotHeader,
   SettingsWalletSlotPlaceholder,
@@ -65,14 +71,19 @@ const SETTINGS_ROUTES = [
     index: 1,
   },
   {
+    title: "Phone Number",
+    key: "Phone",
+    index: 2,
+  },
+  {
     title: "Account",
     key: "Account",
-    index: 2,
+    index: 3,
   },
   {
     title: "Push Notifications",
     key: "Push Notifications",
-    index: 3,
+    index: 4,
   },
 ];
 
@@ -91,7 +102,6 @@ const SettingsTabs = () => {
     WalletAddressesV2 | undefined
   >(undefined);
 
-  // TODO: Include wallets with `phone number flag` after backend implementation
   const emailWallets = useMemo(
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
@@ -104,6 +114,14 @@ const SettingsTabs = () => {
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
         (wallet) => !wallet.is_email && !wallet.is_phone
+      ),
+    [user?.data.profile.wallet_addresses_v2]
+  );
+
+  const phoneNumberWallets = useMemo(
+    () =>
+      user?.data.profile.wallet_addresses_v2.filter(
+        (wallet) => wallet.is_phone
       ),
     [user?.data.profile.wallet_addresses_v2]
   );
@@ -209,6 +227,52 @@ const SettingsTabs = () => {
               index={index}
             />
           );
+        case "Phone":
+          return (
+            <TabFlatList
+              data={phoneNumberWallets}
+              keyExtractor={keyExtractor}
+              renderItem={({ item }) => (
+                <SettingsPhoneNumberSlot
+                  phoneNumber={item.phone_number}
+                  address={item.backendAddress}
+                />
+              )}
+              ListEmptyComponent={() => {
+                const hasNoPhoneNumbers = Boolean(phoneNumberWallets);
+                if (hasNoPhoneNumbers) {
+                  return <SettingsPhoneNumberSlotPlaceholder />;
+                }
+                return <SettingsPhoneNumberSkeletonSlot />;
+              }}
+              ListHeaderComponent={
+                <SettingPhoneNumberSlotHeader
+                  hasPhoneNumber={Boolean(phoneNumberWallets?.length)}
+                  onVerifyPhoneNumber={() =>
+                    router.push(
+                      Platform.select({
+                        native: `/settings/verify-phone-number`,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            verifyPhoneNumberModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({
+                        native: `/settings/verify-phone-number`,
+                        web: router.asPath,
+                      }),
+                      { scroll: false }
+                    )
+                  }
+                />
+              }
+              ItemSeparatorComponent={() => <SlotSeparator />}
+              index={index}
+            />
+          );
         case "Account":
           return (
             <TabScrollView index={index}>
@@ -268,6 +332,7 @@ const SettingsTabs = () => {
     [
       wallets,
       emailWallets,
+      phoneNumberWallets,
       accountSettings,
       pushNotificationsPreferences,
       isMdWidth,

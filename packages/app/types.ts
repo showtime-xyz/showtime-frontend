@@ -70,6 +70,7 @@ export interface WalletAddressesV2 {
   minting_enabled: boolean;
   email: string;
   is_email: number;
+  phone_number: string;
   is_phone: number;
   nickname?: string;
 }
@@ -110,6 +111,7 @@ export interface Profile {
   has_onboarded: boolean;
   links: Link[];
   primary_wallet: WalletAddressesV2;
+  has_verified_phone_number: boolean;
 }
 
 type FollowType = {

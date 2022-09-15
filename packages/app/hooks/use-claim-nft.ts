@@ -1,6 +1,8 @@
 import { useReducer, useEffect, useRef, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
@@ -104,6 +106,7 @@ const reducer = (state: State, action: Action): State => {
 
 export const useClaimNFT = (edition?: IEdition) => {
   const { rudder } = useRudder();
+  const router = useRouter();
   const { data: userProfile } = useMyInfo();
 
   const signTypedData = useSignTypedData();
@@ -223,10 +226,49 @@ export const useClaimNFT = (edition?: IEdition) => {
       Logger.error("nft drop claim failed", e);
 
       if (e?.response?.status === 420) {
-        Alert.alert(
-          "Wow, you love claiming drops!",
-          `Only ${userProfile?.data.daily_claim_limit} claims per day is allowed. Come back tomorrow!`
-        );
+        if (!userProfile?.data.profile.has_verified_phone_number) {
+          Alert.alert(
+            "Wow, you love claiming drops!",
+            "Prove you're a real person and we'll let you claim more. Please verify your phone number.",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Verify my phone number",
+                onPress: () => {
+                  rudder?.track("Button Clicked", {
+                    name: "Verify my phone number",
+                  });
+
+                  router.push(
+                    Platform.select({
+                      native: `/settings/verify-phone-number`,
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          verifyPhoneNumberModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({
+                      native: `/settings/verify-phone-number`,
+                      web: router.asPath,
+                    }),
+                    { scroll: false }
+                  );
+                },
+              },
+            ]
+          );
+        } else {
+          Alert.alert(
+            "Wow, you love claiming drops!",
+            `Only ${userProfile?.data.daily_claim_limit} claims per day is allowed. Come back tomorrow!`
+          );
+        }
       }
 
       if (e?.response?.status === 500) {

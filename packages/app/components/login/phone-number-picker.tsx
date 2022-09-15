@@ -56,6 +56,55 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
       : data;
   }, [search]);
 
+  const leftElement = useMemo(() => {
+    if (Platform.OS === "web") return null;
+
+    return (
+      <PressableScale
+        onPress={() => {
+          setSearch("");
+          setModalVisible(true);
+        }}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        style={{
+          marginTop: Platform.select({
+            android: 7,
+            default: 0,
+          }),
+          height: 28,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text
+          style={{
+            marginTop: Platform.select({
+              android: -4,
+              default: 0,
+            }),
+            marginRight: 1,
+          }}
+        >
+          {selectedCountry?.emoji}
+        </Text>
+        <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
+          {selectedCountry?.dial_code}{" "}
+        </Text>
+      </PressableScale>
+    );
+  }, [selectedCountry]);
+
+  const onSubmit = useCallback(
+    (phoneNumber: string) =>
+      props.handleSubmitPhoneNumber(
+        Platform.OS === "web"
+          ? `+${phoneNumber}`
+          : `${selectedCountry?.dial_code}${phoneNumber}`
+      ),
+    [props, selectedCountry]
+  );
+
   return (
     <>
       <Modal
@@ -79,53 +128,16 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
           }, [])}
         />
       </Modal>
+
       <LoginInputField
         key="login-phone-number-field"
         validationSchema={phoneNumberValidationSchema}
         label="Phone number"
         placeholder="Enter your phone number"
-        keyboardType="numeric"
+        keyboardType="phone-pad"
         signInButtonLabel="Send"
-        leftElement={useMemo(() => {
-          return (
-            <PressableScale
-              onPress={() => {
-                setSearch("");
-                setModalVisible(true);
-              }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              style={{
-                marginTop: Platform.select({
-                  android: 7,
-                  default: 0,
-                }),
-                height: 28,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{
-                  marginTop: Platform.select({
-                    android: -4,
-                    default: 0,
-                  }),
-                  marginRight: 1,
-                }}
-              >
-                {selectedCountry?.emoji}
-              </Text>
-              <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
-                {selectedCountry?.dial_code}{" "}
-              </Text>
-            </PressableScale>
-          );
-        }, [selectedCountry])}
-        onSubmit={useCallback(
-          (v) => props.handleSubmitPhoneNumber(selectedCountry?.dial_code + v),
-          [props, selectedCountry]
-        )}
+        leftElement={leftElement}
+        onSubmit={onSubmit}
       />
     </>
   );

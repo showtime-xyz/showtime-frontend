@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Pressable } from "react-native";
 
+import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -32,16 +33,17 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
     <View tw="px-4">
       <View tw="flex-row items-center justify-between">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
-        {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
       </View>
       <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
         {nft.token_name}
       </Text>
-      <Description
-        descriptionText={nft?.token_description}
-        tw="pt-2"
-        maxLines={2}
-      />
+      <AnimateHeight transition={{ type: "timing", duration: 200 }}>
+        <Description
+          descriptionText={nft?.token_description}
+          tw="pt-2"
+          maxLines={2}
+        />
+      </AnimateHeight>
       <View tw="h-4" />
 
       <View tw="mb-1 flex-row justify-between">

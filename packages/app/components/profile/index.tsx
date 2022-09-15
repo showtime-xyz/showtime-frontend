@@ -155,9 +155,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       <View tw="items-center bg-white dark:bg-black">
         {Platform.OS === "web" && (
           <View
-            tw={
-              "dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white dark:bg-black"
-            }
+            tw="dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white opacity-0 dark:bg-black md:opacity-100"
             style={{
               left: headerBgLeft,
               height: `calc(100% + 44px)`,

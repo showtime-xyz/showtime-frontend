@@ -25,13 +25,13 @@ interface LoginProps {
 }
 const LOGIN_ROUTES = [
   {
-    title: "Wallet or email",
-    key: "email",
+    title: "Wallet or phone",
+    key: "phone",
     index: 0,
   },
   {
-    title: "Phone number",
-    key: "phone",
+    title: "Email",
+    key: "email",
     index: 1,
   },
 ];
@@ -103,7 +103,7 @@ export function Login({ onLogin }: LoginProps) {
       route: Route;
     }) => {
       switch (key) {
-        case "email":
+        case "phone":
           return (
             <View style={styles.tabListItemContainer}>
               <View tw="mb-[16px]">
@@ -122,6 +122,14 @@ export function Login({ onLogin }: LoginProps) {
                 </Text>
                 <View tw="h-2" />
               </View>
+              <PhoneNumberPicker
+                handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+              />
+            </View>
+          );
+        case "email":
+          return (
+            <View style={styles.tabListItemContainer}>
               <LoginInputField
                 key="login-email-field"
                 validationSchema={emailValidationSchema}
@@ -131,14 +139,6 @@ export function Login({ onLogin }: LoginProps) {
                 textContentType="emailAddress"
                 signInButtonLabel="Send"
                 onSubmit={handleSubmitEmail}
-              />
-            </View>
-          );
-        case "phone":
-          return (
-            <View style={styles.tabListItemContainer}>
-              <PhoneNumberPicker
-                handleSubmitPhoneNumber={handleSubmitPhoneNumber}
               />
             </View>
           );

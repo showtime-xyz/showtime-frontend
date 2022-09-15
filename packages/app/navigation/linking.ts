@@ -51,6 +51,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       following: "profile/following",
       settings: "settings",
       addEmail: "settings/add-email",
+      verifyPhoneNumber: "settings/verify-phone-number",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",
@@ -78,6 +79,12 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       // URL handled by Wallet Mobile SDK
       return null;
     } else {
+      if (url) {
+        let urlObj = new URL(url);
+        urlObj.pathname = withRewrites(urlObj.pathname);
+        return urlObj.href;
+      }
+
       return url;
     }
   },
@@ -85,7 +92,13 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     const linkingSubscription = Linking.addEventListener("url", ({ url }) => {
       const handledByMobileSDK = handleResponse(new URL(url));
       if (!handledByMobileSDK) {
-        listener(url);
+        if (url) {
+          let urlObj = new URL(url);
+          urlObj.pathname = withRewrites(urlObj.pathname);
+          listener(urlObj.href);
+        } else {
+          listener(url);
+        }
       }
     });
 

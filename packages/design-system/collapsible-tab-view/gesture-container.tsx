@@ -216,19 +216,18 @@ export const GestureContainer = React.forwardRef<
 
   const headerOnLayout = useCallback(
     ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-      if (headerHeight === layout.height) return;
       const height = layout.height - overflowHeight;
       setHeaderHeight(height);
       if (animationHeaderHeight) {
         animationHeaderHeight.value = Math.abs(calcHeight - minHeaderHeight);
       }
-      setIsLoadedHeader(true);
+      opacityValue.value = withTiming(1);
     },
     [
       animationHeaderHeight,
       calcHeight,
-      headerHeight,
       minHeaderHeight,
+      opacityValue,
       overflowHeight,
     ]
   );
@@ -381,13 +380,6 @@ export const GestureContainer = React.forwardRef<
       }
     });
   //#endregion
-
-  useEffect(() => {
-    if (isLoadedHeader) {
-      opacityValue.value = withTiming(1);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoadedHeader]);
 
   useEffect(() => {
     animateTabsToRefresh(isRefreshingProp);
