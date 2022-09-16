@@ -2,5 +2,9 @@ import { createContext } from "react";
 
 const useBottomTabBarHeight = () => {};
 const BottomTabBarHeightContext = createContext({});
-
-export { useBottomTabBarHeight, BottomTabBarHeightContext };
+const useBottomTabBarHeightCallback = () => {};
+export {
+  useBottomTabBarHeight,
+  BottomTabBarHeightContext,
+  useBottomTabBarHeightCallback,
+};
