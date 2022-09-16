@@ -13,6 +13,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
+import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
 import { useNavigationElements } from "./use-navigation-elements";
 
@@ -28,6 +29,7 @@ export const BottomTabbar = ({
   const isDark = useIsDarkMode();
   const color = isDark ? colors.gray[100] : colors.gray[900];
   const redirectToCreateDrop = useRedirectToCreateDrop();
+  const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
 
   return (
     <View
@@ -39,6 +41,11 @@ export const BottomTabbar = ({
         overflow: "hidden",
         backgroundColor: "transparent",
       }}
+      onLayout={({
+        nativeEvent: {
+          layout: { height },
+        },
+      }) => nativeBottomTabBarHeightCallback(height)}
     >
       <BlurView
         blurRadius={20}

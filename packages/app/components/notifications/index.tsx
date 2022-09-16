@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -93,11 +93,25 @@ export const Notifications = ({ useWindowScroll = true }) => {
       <InfiniteScrollList
         useWindowScroll={useWindowScroll}
         data={data}
-        style={{ height: flatListHeight }}
+        // for blur header effect on iOS
+        style={{
+          height: Platform.select({
+            default: flatListHeight,
+            ios: windowHeight,
+          }),
+        }}
         overscan={{
           main: 100,
           reverse: 100,
         }}
+        // for blur header effect on iOS
+        contentContainerStyle={Platform.select({
+          ios: {
+            paddingTop: headerHeight,
+            paddingBottom: bottomBarHeight,
+          },
+          default: {},
+        })}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}
