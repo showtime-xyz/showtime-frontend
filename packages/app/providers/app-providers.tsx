@@ -4,7 +4,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
-import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
@@ -18,6 +17,8 @@ import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+
+import { LightBoxProvider } from "design-system/light-box";
 
 import { MuteProvider } from "./mute-provider";
 import { WalletMobileSDKProvider } from "./wallet-mobile-sdk-provider";
