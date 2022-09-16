@@ -210,7 +210,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   return (
     <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
-        <View tw="flex-row flex-wrap">
+        <View tw="flex-row">
           <Media
             isMuted
             item={nft?.data.item}

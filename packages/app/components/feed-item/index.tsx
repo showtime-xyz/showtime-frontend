@@ -224,7 +224,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               right: 0,
               left: 0,
               zIndex: 1,
-              overflow: "hidden",
             },
           ]}
           onLayout={({

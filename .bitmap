@@ -29,7 +29,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.44",
+        "version": "0.0.45",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -125,7 +125,7 @@
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.43",
+        "version": "0.0.44",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
@@ -149,7 +149,7 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.51",
+        "version": "0.0.52",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
@@ -257,7 +257,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.34",
+        "version": "0.0.35",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },

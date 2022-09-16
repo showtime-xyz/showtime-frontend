@@ -33,6 +33,7 @@ export type LightBoxProps = {
   onLongPress?: () => void;
   tapToClose?: boolean;
   onTap?: () => void;
+  borderRadius?: number;
   /**
    * This value must be set when you use the Native Header.
    * e.g.
@@ -52,6 +53,7 @@ export const LightBox: React.FC<LightBoxProps> = ({
   tapToClose = true,
   onTap,
   nativeHeaderHeight = 0,
+  borderRadius,
 }) => {
   // Todo: add lightboxImage component.
   const [targetLayout] = useState<AnimationParams["layout"] | null>(null);
@@ -86,6 +88,7 @@ export const LightBox: React.FC<LightBoxProps> = ({
       imageElement: children,
       tapToClose,
       onTap,
+      borderRadius,
     });
   };
 

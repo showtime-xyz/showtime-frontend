@@ -15,6 +15,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
+import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
 import { useNavigationElements } from "./use-navigation-elements";
 
@@ -25,13 +26,14 @@ export const BottomTabbar = ({
 }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { isAuthenticated, user } = useUser();
+  const { isAuthenticated } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { data: userProfile } = useMyInfo();
   const Alert = useAlert();
   const isDark = useIsDarkMode();
   const router = useRouter();
   const color = isDark ? colors.gray[100] : colors.gray[900];
+  const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
 
   return (
     <View
@@ -43,6 +45,11 @@ export const BottomTabbar = ({
         overflow: "hidden",
         backgroundColor: "transparent",
       }}
+      onLayout={({
+        nativeEvent: {
+          layout: { height },
+        },
+      }) => nativeBottomTabBarHeightCallback(height)}
     >
       <BlurView
         blurRadius={20}

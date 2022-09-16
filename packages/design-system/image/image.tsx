@@ -16,16 +16,23 @@ export type ImgProps = FastImageProps & {
 
 const StyledFastImage = styled(FastImage);
 
-function Img({ source, height, width, borderRadius, ...props }: ImgProps) {
+function Img({
+  source,
+  height,
+  width,
+  borderRadius,
+  style,
+  ...rest
+}: ImgProps) {
   return (
     <StyledFastImage
-      {...props}
       source={
         Object.prototype.hasOwnProperty.call(source, "uri")
           ? { ...(source as Source), cache: FastImage.cacheControl.immutable }
           : source
       }
-      style={[props.style, { height, width, borderRadius }]}
+      style={[{ height, width, borderRadius }, style]}
+      {...rest}
     />
   );
 }
@@ -37,9 +44,9 @@ type ImageProps = {
 } & ComponentProps<typeof Img>;
 
 function StyledImage({
-  width = 0,
-  height = 0,
-  borderRadius = 0,
+  width,
+  height,
+  borderRadius,
   blurhash,
   ...props
 }: ImageProps) {
@@ -56,17 +63,17 @@ function StyledImage({
           />
         </View>
         <Img
-          {...props}
           width={width}
           height={height}
           borderRadius={borderRadius}
+          {...props}
         />
       </>
     );
   }
 
   return (
-    <Img {...props} width={width} height={height} borderRadius={borderRadius} />
+    <Img width={width} height={height} borderRadius={borderRadius} {...props} />
   );
 }
 

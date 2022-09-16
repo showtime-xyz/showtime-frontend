@@ -3,9 +3,6 @@ import { Platform, useWindowDimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import dynamic from "next/dynamic";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { useUser } from "app/hooks/use-user";
 
@@ -29,9 +26,6 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { user } = useUser();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const isDark = useIsDarkMode();
-  const color = isDark ? "#FFF" : "#000";
 
   useExpoUpdate();
 
@@ -41,14 +35,6 @@ export function BottomTabNavigator() {
       screenOptions={{
         lazy: Platform.OS === "android" ? false : true,
         headerShown: false,
-        tabBarActiveTintColor: color,
-        tabBarInactiveTintColor: color,
-        tabBarShowLabel: false,
-        tabBarHideOnKeyboard: true,
-        tabBarStyle: {
-          height: 64 + safeAreaBottom,
-          position: "absolute",
-        },
       }}
       tabBar={(props) => <BottomTabbar {...props} />}
     >
