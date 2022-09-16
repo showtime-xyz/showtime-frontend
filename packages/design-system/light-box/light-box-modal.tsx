@@ -31,8 +31,15 @@ export const LightImageModal = ({
   activeImage,
   onClose,
 }: LightImageModalProps) => {
-  const { layout, position, imageElement, onLongPress, tapToClose, onTap } =
-    activeImage;
+  const {
+    layout,
+    position,
+    imageElement,
+    onLongPress,
+    tapToClose,
+    onTap,
+    borderRadius,
+  } = activeImage;
   const { x, y, width, height, imageOpacity } = position;
   const { width: targetWidth, height: dimensionHeight } = useWindowDimensions();
 
@@ -107,21 +114,28 @@ export const LightImageModal = ({
   const imageStyles = useAnimatedStyle(() => {
     const interpolateProgress = (range: [number, number]) =>
       interpolate(animationProgress.value, [0, 1], range, Extrapolate.CLAMP);
+
     const top =
       translateY.value + interpolateProgress([y.value, targetY.value]);
     const left =
       translateX.value + interpolateProgress([x.value, targetX.value]);
+
     return {
       position: "absolute",
-      top,
-      left,
       width: interpolateProgress([width.value, targetWidth]),
       height: interpolateProgress([height.value, targetHeight]),
       transform: [
         {
           scale: scale.value,
         },
+        {
+          translateX: left,
+        },
+        {
+          translateY: top,
+        },
       ],
+      borderRadius: borderRadius ? interpolateProgress([borderRadius, 0]) : 0,
     };
   });
 
@@ -193,7 +207,6 @@ export const LightImageModal = ({
       }
     });
   return (
-    //@ts-ignore
     <GestureDetector
       gesture={Gesture.Race(
         Gesture.Simultaneous(
@@ -205,7 +218,9 @@ export const LightImageModal = ({
     >
       <Animated.View style={StyleSheet.absoluteFillObject}>
         <Animated.View style={[styles.backdrop, backdropStyles]} />
-        <Animated.View style={imageStyles}>{imageElement}</Animated.View>
+        <Animated.View style={[styles.imageStyle, imageStyles]}>
+          {imageElement}
+        </Animated.View>
       </Animated.View>
     </GestureDetector>
   );
@@ -214,5 +229,8 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "black",
+  },
+  imageStyle: {
+    overflow: "hidden",
   },
 });

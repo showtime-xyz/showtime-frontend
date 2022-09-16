@@ -23,9 +23,9 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
-import { MAX_COVER_WIDTH } from "app/constants/layout";
 import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { TextLink } from "app/navigation/link";
@@ -107,7 +107,8 @@ export const ProfileTop = ({
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const { colorScheme } = useColorScheme();
-  const { width } = useWindowDimensions();
+  const { width, height: screenHeight } = useWindowDimensions();
+  const contentWidth = useContentWidth();
   const { isFollowing, data: userProfile } = useMyInfo();
   const Alert = useAlert();
   const profileId = profileData?.profile.profile_id;
@@ -140,7 +141,7 @@ export const ProfileTop = ({
     [bio]
   );
   // banner ratio: w:h=3:1
-  const coverHeight = useMemo(() => (width < 768 ? width / 3 : 180), [width]);
+  const coverHeight = contentWidth < 768 ? contentWidth / 3 : 180;
 
   const onPressFollower = useCallback(
     () =>
@@ -215,7 +216,6 @@ export const ProfileTop = ({
       ],
     };
   }, []);
-
   return (
     <>
       <View
@@ -223,16 +223,16 @@ export const ProfileTop = ({
       >
         <Skeleton
           height={coverHeight}
-          width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
+          width={contentWidth}
           show={isLoading}
           colorMode={colorScheme as any}
           radius={0}
         >
           {profileData?.profile.cover_url && (
             <LightBox
-              width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
+              width={contentWidth}
               height={coverHeight}
-              imgLayout={{ width, height: coverHeight }}
+              imgLayout={{ width: contentWidth, height: coverHeight }}
               tapToClose
             >
               <Image
@@ -241,7 +241,7 @@ export const ProfileTop = ({
                 }}
                 alt="Cover image"
                 resizeMode="cover"
-                width={width < MAX_COVER_WIDTH ? width : MAX_COVER_WIDTH}
+                width={contentWidth}
                 height={coverHeight}
                 style={StyleSheet.absoluteFillObject}
               />
@@ -278,16 +278,22 @@ export const ProfileTop = ({
                   <LightBox
                     width={120}
                     height={120}
-                    imgLayout={{ width, height: width }}
+                    imgLayout={{ width: contentWidth, height: width }}
+                    borderRadius={999}
                     tapToClose
                   >
                     <Image
                       source={{
                         uri: getProfileImage(profileData?.profile),
                       }}
-                      width={120}
-                      height={120}
-                      borderRadius={999}
+                      width={Platform.select({
+                        web: screenHeight * 0.82,
+                        default: undefined,
+                      })}
+                      height={Platform.select({
+                        web: screenHeight * 0.82,
+                        default: undefined,
+                      })}
                       style={StyleSheet.absoluteFillObject}
                     />
                   </LightBox>
