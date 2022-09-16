@@ -16,6 +16,7 @@ export type AnimationParams = Pick<
   position: ImageBoundingClientRect;
   style?: ImageStyle;
   imageElement: JSX.Element;
+  borderRadius?: number;
 };
 
 type LightBoxContextType = {
