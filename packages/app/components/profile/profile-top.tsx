@@ -13,6 +13,7 @@ import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
+import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -30,7 +31,6 @@ import { useFollow } from "app/hooks/use-follow";
 import { TextLink } from "app/navigation/link";
 
 import { Hidden } from "design-system/hidden";
-import { LightBox } from "design-system/light-box";
 
 import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
