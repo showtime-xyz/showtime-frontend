@@ -28,7 +28,6 @@ import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRudder } from "app/lib/rudderstack";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
@@ -47,8 +46,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const share = useShare();
   const router = useRouter();
   const { userAddress } = useCurrentUserAddress();
-  const { isAuthenticated } = useUser();
-  const navigateToLogin = useNavigateToLogin();
   const scrollViewRef = useRef<RNScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
@@ -100,14 +97,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   //       });
   //     });
   // }, [web3]);
-
-  if (!isAuthenticated) {
-    return (
-      <View tw="p-4">
-        <Button onPress={navigateToLogin}>Please login to continue</Button>
-      </View>
-    );
-  }
 
   if (
     !userProfile?.data.profile.username ||

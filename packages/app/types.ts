@@ -197,3 +197,17 @@ export type IEdition = {
   owner_address: string;
   symbol: string;
 };
+
+export type MyInfo = {
+  data: {
+    follows: Array<{ profile_id: number }>;
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: any[];
+    comments: number[];
+    blocked_profile_ids: number[];
+    notifications_last_opened: string | null;
+    can_create_drop: boolean;
+    daily_claim_limit: number;
+  };
+};
