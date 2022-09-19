@@ -15,7 +15,6 @@ import { useLogRocket } from "app/hooks/use-logrocket";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
-import { ActivitiesScreen } from "app/screens/activities";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimersScreen } from "app/screens/claimers";
 import { CommentsScreen } from "app/screens/comments";
@@ -124,7 +123,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
         {/* Modals */}
         <CommentsScreen />
         <DetailsScreen />
-        <ActivitiesScreen />
         <FollowersScreen />
         <FollowingScreen />
         <DropScreen />

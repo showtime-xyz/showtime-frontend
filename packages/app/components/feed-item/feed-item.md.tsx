@@ -1,8 +1,8 @@
 import { memo, useMemo, Suspense, useRef, useState } from "react";
+import React from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -21,22 +21,33 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { Activities } from "app/components/nft-activity";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { UserList } from "app/components/user-list";
 import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
+import { NFT } from "app/types";
 
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
 
+const Claimers = ({ nft }: { nft: NFT }) => {
+  return (
+    <UserList
+      loading={false}
+      users={nft?.multiple_owners_list || []}
+      onClose={() => false}
+    />
+  );
+};
+
 const TAB_SCENES_MAP = new Map([
   [0, Comments],
-  [1, Activities],
+  [1, Claimers],
 ]);
 type Query = {
   tokenId: string;
@@ -50,7 +61,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   itemHeight,
 }) {
   const router = useRouter();
-  const isDark = useIsDarkMode();
   // const [showFullScreen, setShowFullScreen] = useState(false);
   const { commentsCount } = useComments(nft.nft_id);
   const routes = useMemo(
@@ -62,8 +72,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         subtitle: commentsCount,
       },
       {
-        title: "Activity",
-        key: "Activity",
+        title: "Claimers",
+        key: "Claimers",
         index: 1,
       },
     ],

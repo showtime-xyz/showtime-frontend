@@ -104,3 +104,4 @@ export { default as ZoomIn } from "./ZoomIn";
 export { default as ZoomOut } from "./ZoomOut";
 export { default as RotateCcw } from "./RotateCcw";
 export { default as RotateCw } from "./RotateCw";
+export { default as OpenSea } from "./OpenSea";
