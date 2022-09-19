@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
-import { ActivitiesScreen } from "app/screens/activities";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimersScreen } from "app/screens/claimers";
@@ -93,7 +92,6 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
-        <Stack.Screen name="activity" component={ActivitiesScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
