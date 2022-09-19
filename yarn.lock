@@ -7553,14 +7553,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.82":
-  version: 0.0.82
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.82"
+"@showtime-xyz/universal.fieldset@npm:^0.0.83":
+  version: 0.0.83
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.83"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.42
     "@showtime-xyz/universal.input": 0.0.52
     "@showtime-xyz/universal.label": 0.0.43
-    "@showtime-xyz/universal.select": 0.0.76
+    "@showtime-xyz/universal.select": 0.0.77
     "@showtime-xyz/universal.switch": 0.0.50
     "@showtime-xyz/universal.tailwind": 0.0.39
     "@showtime-xyz/universal.text": 0.0.41
@@ -7572,7 +7572,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 0951d521ca281ac1ec17bbb29aec7cc124681dbb1110be151e4c4382cd169c00261ecb80f4bba82713a67c540d78c08a1234f878780a91d94136043022a049ab
+  checksum: 3ee32e2d1a49ad720eeb1d8cde4bc05ab0e2ca8db9bf97b08d27a7001fa1b471b1c6745516dd08c30a412d94ac195a2ffa5c5ccce97d79d649caa90d0f9124e5
   languageName: node
   linkType: hard
 
@@ -7919,9 +7919,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.select@npm:0.0.76, @showtime-xyz/universal.select@npm:^0.0.76":
-  version: 0.0.76
-  resolution: "@showtime-xyz/universal.select@npm:0.0.76"
+"@showtime-xyz/universal.select@npm:0.0.77, @showtime-xyz/universal.select@npm:^0.0.77":
+  version: 0.0.77
+  resolution: "@showtime-xyz/universal.select@npm:0.0.77"
   dependencies:
     "@gorhom/bottom-sheet": 4.4.2
     "@radix-ui/react-select": 1.0.0
@@ -7939,7 +7939,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 59b6340eddbab739f75e712bf2968c8d3e84a41d039f8503b5daf14cfe179c52f59c7adf4b98fd83fb9730136fd91fe9ba8d47ea1959838ec30a2f90f1fe9b96
+  checksum: ac7fd57b66f627808a3c8421949c1e874d98e62a36b652a9d9df38eee36f5750e891db5a9967356f379f09dd124a87eb593de10479c49c7f9b1256d920199d1b
   languageName: node
   linkType: hard
 
@@ -8244,7 +8244,7 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.43
     "@showtime-xyz/universal.dropdown-menu": ^0.0.42
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.13
-    "@showtime-xyz/universal.fieldset": ^0.0.82
+    "@showtime-xyz/universal.fieldset": ^0.0.83
     "@showtime-xyz/universal.haptics": ^0.0.12
     "@showtime-xyz/universal.hooks": ^0.0.42
     "@showtime-xyz/universal.icon": ^0.0.55
@@ -8265,7 +8265,7 @@ __metadata:
     "@showtime-xyz/universal.safe-area": ^0.0.31
     "@showtime-xyz/universal.scroll-view": ^0.0.47
     "@showtime-xyz/universal.segmented-control": ^0.0.48
-    "@showtime-xyz/universal.select": ^0.0.76
+    "@showtime-xyz/universal.select": ^0.0.77
     "@showtime-xyz/universal.skeleton": ^0.0.43
     "@showtime-xyz/universal.snackbar": ^0.0.79
     "@showtime-xyz/universal.spinner": ^0.0.48
