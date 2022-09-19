@@ -22,7 +22,6 @@ import {
   Copy,
   Slash,
   Refresh,
-  Clock,
   Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -172,10 +171,6 @@ function NFTDropdown({
           </DropdownMenuItem>
         ) : null}
 
-        <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
-          <MenuItemIcon Icon={Clock} />
-          <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
-        </DropdownMenuItem>
         {shouldEnableSharing && (
           <>
             {!isShareAPIAvailable && (

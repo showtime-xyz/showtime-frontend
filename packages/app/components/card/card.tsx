@@ -97,7 +97,6 @@ function Card({
         ]}
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>
-          {/* {variant === "activity" && <Activity activity={act} />} */}
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>

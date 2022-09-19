@@ -55,24 +55,30 @@ export const UserList = ({
     },
     [isFollowing, unfollow, follow, onClose]
   );
-  if (users && users?.length > 0) {
-    return (
-      <InfiniteScrollList
-        data={users}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        estimatedItemSize={64}
-        overscan={64}
-        ItemSeparatorComponent={Separator}
-        {...modalListProps}
+  const listEmptyComponent = useCallback(
+    () => (
+      <EmptyPlaceholder
+        title="No results found"
+        tw="h-10 flex-1 items-center justify-center"
       />
-    );
-  } else if (loading) {
+    ),
+    []
+  );
+  if (loading) {
     return <FollowingUserItemLoadingIndicator />;
-  } else if (users?.length === 0) {
-    return <EmptyPlaceholder title="No results found" />;
   }
-  return null;
+  return (
+    <InfiniteScrollList
+      data={users}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      estimatedItemSize={64}
+      overscan={64}
+      ItemSeparatorComponent={Separator}
+      ListEmptyComponent={listEmptyComponent}
+      {...modalListProps}
+    />
+  );
 };
 
 const SEPARATOR_HEIGHT = 1;
