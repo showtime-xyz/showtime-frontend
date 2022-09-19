@@ -23,16 +23,18 @@ type FollowingListProp = {
   unFollow: (profileId: number) => void;
   hideSheet: () => void;
 };
-
+type UserListProps = {
+  users?: UserItemType[];
+  onClose: () => void;
+  loading: boolean;
+  emptyTitle?: string;
+};
 export const UserList = ({
   users,
   loading,
   onClose,
-}: {
-  users?: UserItemType[];
-  onClose: () => void;
-  loading: boolean;
-}) => {
+  emptyTitle = "No results found",
+}: UserListProps) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
   const modalListProps = useModalListProps();
 
@@ -58,11 +60,12 @@ export const UserList = ({
   const listEmptyComponent = useCallback(
     () => (
       <EmptyPlaceholder
-        title="No results found"
+        title={emptyTitle}
         tw="h-10 flex-1 items-center justify-center"
+        hideLoginBtn
       />
     ),
-    []
+    [emptyTitle]
   );
   if (loading) {
     return <FollowingUserItemLoadingIndicator />;

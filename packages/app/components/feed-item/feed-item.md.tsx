@@ -1,4 +1,5 @@
 import { memo, useMemo, Suspense, useRef, useState } from "react";
+import React from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
