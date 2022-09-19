@@ -159,7 +159,6 @@ const FollowingListUser = memo(
           </View>
         </Link>
         <FollowButton
-          isFollowing={isFollowingUser}
           profileId={item.profile_id}
           name={item.name}
           onToggleFollow={onToggleFollow}
