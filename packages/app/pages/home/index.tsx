@@ -36,7 +36,6 @@ function HomeNavigator() {
   const { isLoading, isAuthenticated } = useUser();
   return (
     <HomeStack.Navigator
-      // @ts-ignore
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
