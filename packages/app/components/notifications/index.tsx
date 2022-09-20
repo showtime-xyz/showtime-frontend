@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,11 +28,10 @@ export const Notifications = ({ useWindowScroll = true }) => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
+  const isDark = useIsDarkMode();
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
-
-  const flatListHeight = windowHeight - bottomBarHeight - headerHeight;
 
   const [users, setUsers] = useState<Pick<Actor, "profile_id" | "username">[]>(
     []
@@ -96,22 +97,35 @@ export const Notifications = ({ useWindowScroll = true }) => {
         // for blur header effect on iOS
         style={{
           height: Platform.select({
-            default: flatListHeight,
-            ios: windowHeight,
+            web: windowHeight - bottomBarHeight - headerHeight,
+            default: windowHeight,
           }),
         }}
         overscan={{
           main: 100,
           reverse: 100,
         }}
-        // for blur header effect on iOS
+        // for blur header effect on Native
         contentContainerStyle={Platform.select({
-          ios: {
+          default: {
             paddingTop: headerHeight,
             paddingBottom: bottomBarHeight,
           },
-          default: {},
+          web: {},
         })}
+        // Todo: unity refresh control same as tab view
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={refresh}
+            progressViewOffset={headerHeight}
+            tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+            colors={[colors.violet[500]]}
+            progressBackgroundColor={
+              isDark ? colors.gray[200] : colors.gray[100]
+            }
+          />
+        }
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={Separator}

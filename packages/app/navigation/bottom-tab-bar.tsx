@@ -49,7 +49,7 @@ export const BottomTabbar = ({
     >
       <BlurView
         blurRadius={20}
-        overlayColor="rgba(255,255,255,.8)"
+        overlayColor={isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)"}
         blurAmount={100}
       >
         <View tw="flex-row bg-transparent pt-2">
