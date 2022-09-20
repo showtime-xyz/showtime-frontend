@@ -507,7 +507,9 @@ export const DropForm = () => {
           <View tw="my-4 flex-row">
             <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
               This drop will be owned by your{" "}
-              <Text tw="font-bold">{primaryWallet.nickname}</Text>{" "}
+              {primaryWallet.nickname ? (
+                <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
+              ) : null}
               {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
             </Text>
           </View>
