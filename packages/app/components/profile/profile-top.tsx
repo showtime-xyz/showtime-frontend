@@ -7,7 +7,6 @@ import Animated, {
 } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -28,6 +27,7 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { TextLink } from "app/navigation/link";
 
 import { Hidden } from "design-system/hidden";
@@ -109,9 +109,9 @@ export const ProfileTop = ({
   const { colorScheme } = useColorScheme();
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const { isFollowing, data: userProfile } = useMyInfo();
-  const Alert = useAlert();
+  const { isFollowing } = useMyInfo();
   const profileId = profileData?.profile.profile_id;
+  const redirectToCreateDrop = useRedirectToCreateDrop();
   const isFollowingUser = useMemo(
     () => profileId && isFollowing(profileId),
     [profileId, isFollowing]
@@ -337,36 +337,7 @@ export const ProfileTop = ({
                       />
                     </>
                   ) : userId === profileId ? (
-                    <Button
-                      size="small"
-                      onPress={() => {
-                        if (userProfile?.data.can_create_drop === false) {
-                          const timeRemaining = 24 - new Date().getUTCHours();
-                          Alert.alert(
-                            "Wow, you love drops!",
-                            `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
-                          );
-                          return;
-                        }
-
-                        router.push(
-                          Platform.select({
-                            native: "/drop",
-                            web: {
-                              pathname: router.pathname,
-                              query: {
-                                ...router.query,
-                                dropModal: true,
-                              },
-                            } as any,
-                          }),
-                          Platform.select({
-                            native: "/drop",
-                            web: router.asPath,
-                          })
-                        );
-                      }}
-                    >
+                    <Button size="small" onPress={redirectToCreateDrop}>
                       Drop Free NFT
                     </Button>
                   ) : null}

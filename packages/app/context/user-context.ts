@@ -2,14 +2,14 @@ import { createContext } from "react";
 
 import type { KeyedMutator } from "swr";
 
-import type { UserType } from "../types";
+import type { MyInfo } from "../types";
 
 type UserContextType = {
-  user?: UserType;
+  user?: MyInfo;
   error?: Error;
   isLoading: boolean;
   isAuthenticated: boolean;
-  mutate: KeyedMutator<UserType>;
+  mutate: KeyedMutator<MyInfo>;
 };
 
 export const UserContext = createContext<UserContextType | null>(null);

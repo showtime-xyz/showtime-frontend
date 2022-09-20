@@ -13,7 +13,6 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AlertContainer } from "./alert-container";
@@ -38,7 +37,6 @@ export const AlertContext = createContext<AlertContextType>({
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
-  const isDark = useIsDarkMode();
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -52,7 +50,8 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
 
   const closeAlert = useCallback(() => {
     setShow(false);
-  }, []);
+    onModalDismiss();
+  }, [onModalDismiss]);
 
   const value = useMemo(
     () => ({

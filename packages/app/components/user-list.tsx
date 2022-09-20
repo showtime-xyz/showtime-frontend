@@ -23,16 +23,18 @@ type FollowingListProp = {
   unFollow: (profileId: number) => void;
   hideSheet: () => void;
 };
-
+type UserListProps = {
+  users?: UserItemType[];
+  onClose: () => void;
+  loading: boolean;
+  emptyTitle?: string;
+};
 export const UserList = ({
   users,
   loading,
   onClose,
-}: {
-  users?: UserItemType[];
-  onClose: () => void;
-  loading: boolean;
-}) => {
+  emptyTitle = "No results found",
+}: UserListProps) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
   const modalListProps = useModalListProps();
 
@@ -55,24 +57,31 @@ export const UserList = ({
     },
     [isFollowing, unfollow, follow, onClose]
   );
-  if (users && users?.length > 0) {
-    return (
-      <InfiniteScrollList
-        data={users}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        estimatedItemSize={64}
-        overscan={64}
-        ItemSeparatorComponent={Separator}
-        {...modalListProps}
+  const listEmptyComponent = useCallback(
+    () => (
+      <EmptyPlaceholder
+        title={emptyTitle}
+        tw="h-10 flex-1 items-center justify-center"
+        hideLoginBtn
       />
-    );
-  } else if (loading) {
+    ),
+    [emptyTitle]
+  );
+  if (loading) {
     return <FollowingUserItemLoadingIndicator />;
-  } else if (users?.length === 0) {
-    return <EmptyPlaceholder title="No results found" />;
   }
-  return null;
+  return (
+    <InfiniteScrollList
+      data={users}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      estimatedItemSize={64}
+      overscan={64}
+      ItemSeparatorComponent={Separator}
+      ListEmptyComponent={listEmptyComponent}
+      {...modalListProps}
+    />
+  );
 };
 
 const SEPARATOR_HEIGHT = 1;
@@ -150,7 +159,6 @@ const FollowingListUser = memo(
           </View>
         </Link>
         <FollowButton
-          isFollowing={isFollowingUser}
           profileId={item.profile_id}
           name={item.name}
           onToggleFollow={onToggleFollow}

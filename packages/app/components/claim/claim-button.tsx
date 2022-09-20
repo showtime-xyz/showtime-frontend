@@ -1,13 +1,10 @@
-import { Platform } from "react-native";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { Check } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
 import { ClaimStatus, getClaimStatus } from ".";
 
@@ -16,29 +13,10 @@ type ClaimButtonProps = {
   size?: ButtonProps["size"];
 };
 export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
-  const router = useRouter();
+  const redirectToClaimDrop = useRedirectToClaimDrop();
 
   const onClaimPress = () => {
-    const as = `/claim/${edition.creator_airdrop_edition.contract_address}`;
-
-    router.push(
-      Platform.select({
-        native: as,
-        web: {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            contractAddress: edition?.creator_airdrop_edition.contract_address,
-            claimModal: true,
-          },
-        } as any,
-      }),
-      Platform.select({
-        native: as,
-        web: router.asPath,
-      }),
-      { shallow: true }
-    );
+    redirectToClaimDrop(edition);
   };
 
   let isExpired = false;

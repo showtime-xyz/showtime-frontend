@@ -23,7 +23,7 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.68",
+        "version": "0.0.69",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
@@ -71,7 +71,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.57",
+        "version": "0.0.58",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -101,7 +101,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.81",
+        "version": "0.0.83",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -119,7 +119,7 @@
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.54",
+        "version": "0.0.55",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
@@ -149,25 +149,25 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.52",
+        "version": "0.0.53",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.76",
+        "version": "0.0.77",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.87",
+        "version": "0.0.88",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.78",
+        "version": "0.0.79",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -227,7 +227,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.75",
+        "version": "0.0.77",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -239,7 +239,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.78",
+        "version": "0.0.79",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -287,7 +287,7 @@
     },
     "tooltip": {
         "scope": "showtime.universal",
-        "version": "0.0.57",
+        "version": "0.0.58",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/tooltip"
     },

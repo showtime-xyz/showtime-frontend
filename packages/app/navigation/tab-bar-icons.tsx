@@ -23,6 +23,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
@@ -124,9 +125,10 @@ export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
 
 export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
   const isDark = useIsDarkMode();
+  const redirectToCreateDrop = useRedirectToCreateDrop();
 
   return (
-    <TabBarIcon tab="/drop">
+    <TabBarIcon onPress={redirectToCreateDrop}>
       <View
         tw={[
           "h-12 w-12 items-center justify-center rounded-full",

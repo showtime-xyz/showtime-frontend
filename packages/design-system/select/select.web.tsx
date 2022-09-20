@@ -41,7 +41,10 @@ export function Select<T extends string>({
     <RadixSelect.Root
       value={value}
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open: boolean) => {
+        updateTriggerRect();
+        setOpen(open);
+      }}
       onValueChange={onChange}
     >
       <RadixSelect.Trigger ref={triggerRef} disabled={disabled}>

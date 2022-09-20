@@ -1,5 +1,5 @@
 import { useMemo, ComponentType } from "react";
-import { Platform } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { SvgProps } from "react-native-svg";
 
@@ -22,7 +22,6 @@ import {
   Copy,
   Slash,
   Refresh,
-  Clock,
   Twitter,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -39,6 +38,8 @@ import { useShareNFT } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
+
+import { OpenSea } from "design-system/icon";
 
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return (
@@ -96,38 +97,17 @@ function NFTDropdown({
   );
   //#endregion
 
-  const openModal = (modal: string) => {
-    const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/${modal}`;
-
-    router.push(
-      Platform.select({
-        native: as,
-        web: {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            chainName: nft?.chain_name,
-            contractAddress: nft?.contract_address,
-            tokenId: nft?.token_id,
-            [`${modal}Modal`]: true,
-          },
-        } as any,
-      }),
-      Platform.select({
-        native: as,
-        web: router.asPath.startsWith("/nft/") ? as : router.asPath,
-      }),
-      Platform.select({
-        native: {},
-        web: { scroll: false },
-      })
-    );
-  };
-
   const isShareAPIAvailable = Platform.select({
     default: true,
     web: typeof window !== "undefined" && !!navigator.share,
   });
+
+  const viewOnOpenSea = () => {
+    // Todo: maybe need to use token_id from backend.
+    const token_id = "1";
+    const link = `https://opensea.io/assets/matic/${nft?.contract_address}/${token_id}`;
+    Linking.openURL(link);
+  };
 
   return (
     <DropdownMenuRoot>
@@ -172,10 +152,14 @@ function NFTDropdown({
           </DropdownMenuItem>
         ) : null}
 
-        <DropdownMenuItem onSelect={() => openModal("activity")} key="activity">
-          <MenuItemIcon Icon={Clock} />
-          <DropdownMenuItemTitle>Activity</DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {nft?.multiple_owners_list &&
+          nft?.multiple_owners_list.length > 0 &&
+          nft?.contract_address && (
+            <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
+              <MenuItemIcon Icon={OpenSea} />
+              <DropdownMenuItemTitle>View on OpenSea</DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
         {shouldEnableSharing && (
           <>
             {!isShareAPIAvailable && (

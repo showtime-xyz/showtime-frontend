@@ -8,7 +8,7 @@ export interface UserItemType {
   profile_id: number;
   timestamp?: string;
   username?: string;
-  verified?: 0 | 1;
+  verified?: boolean;
   wallet_address?: string;
 }
 

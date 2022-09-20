@@ -226,7 +226,12 @@ export const useClaimNFT = (edition?: IEdition) => {
       Logger.error("nft drop claim failed", e);
 
       if (e?.response?.status === 420) {
-        if (!userProfile?.data.profile.has_verified_phone_number) {
+        // Verified users have claim limit to 10 and users that have phone verified also have claim limit to 10.
+        // So increasing claim limit alert makes sense only when you're not verified and you've not verified your phone
+        if (
+          !userProfile?.data.profile.has_verified_phone_number &&
+          !userProfile?.data.profile.verified
+        ) {
           Alert.alert(
             "Wow, you love claiming drops!",
             "Prove you're a real person and we'll let you claim more. Please verify your phone number.",

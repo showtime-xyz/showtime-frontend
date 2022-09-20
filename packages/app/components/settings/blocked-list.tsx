@@ -46,12 +46,10 @@ export const UserItem = (props: UserItemProps) => {
 
 export const BlockedList = () => {
   const headerHeight = useHeaderHeight();
-  const shouldRenderHeaderGap =
-    Platform.OS !== "web" && Platform.OS !== "android";
 
   return (
     <ScrollView tw="w-full">
-      {shouldRenderHeaderGap && <View style={{ height: headerHeight }} />}
+      {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
       <SettingHeaderSection title="Blocked List" />
       <SettingBody>
         <View tw="flex-1 px-4 pt-4">

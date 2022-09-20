@@ -122,7 +122,7 @@ const NFTDetail = () => {
         headerHeight -
         (isAuthenticated && !isMdWidth ? MOBILE_WEB_BOTTOM_NAV_HEIGHT : 0)
       : Platform.OS === "android"
-      ? safeAreaFrameHeight - headerHeight
+      ? safeAreaFrameHeight
       : screenHeight;
   const nft = data?.data?.item;
 

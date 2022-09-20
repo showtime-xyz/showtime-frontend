@@ -106,7 +106,7 @@ export const Trending = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+        {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
         <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
           <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
             Trending
@@ -126,14 +126,8 @@ export const Trending = () => {
           renderScene={renderScene}
           onIndexChange={setIndex}
           renderScrollHeader={renderHeader}
-          minHeaderHeight={Platform.select({
-            default: headerHeight,
-            android: 0,
-          })}
-          refreshControlTop={Platform.select({
-            ios: headerHeight,
-            default: 0,
-          })}
+          minHeaderHeight={headerHeight}
+          refreshControlTop={headerHeight}
           initialLayout={{
             width: contentWidth,
           }}

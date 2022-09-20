@@ -87,12 +87,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     windowWidth,
   ]);
   const platformHeaderHeight = Platform.select({
-    ios: headerHeight,
-    default: 0,
+    web: 0,
+    default: headerHeight,
   });
+
   const contentTransY = useDerivedValue(() => {
     const visibleContentHeight =
-      windowHeight - headerHeight - detailHeight - StatusBarHeight;
+      windowHeight - detailHeight - StatusBarHeight - headerHeight;
 
     if (mediaHeight < visibleContentHeight) {
       return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;

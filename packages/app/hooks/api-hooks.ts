@@ -4,7 +4,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { NFT, Profile } from "app/types";
+import { MyInfo, NFT, Profile } from "app/types";
 
 import { useAuth } from "./auth/use-auth";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
@@ -283,20 +283,6 @@ export const useComments = ({ nftId }: { nftId: number }) => {
   });
 
   return queryState;
-};
-
-type MyInfo = {
-  data: {
-    follows: Array<{ profile_id: number }>;
-    profile: Profile;
-    likes_nft: number[];
-    likes_comment: any[];
-    comments: number[];
-    blocked_profile_ids: number[];
-    notifications_last_opened: string | null;
-    can_create_drop: boolean;
-    daily_claim_limit: number;
-  };
 };
 
 export const useMyInfo = () => {

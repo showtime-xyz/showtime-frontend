@@ -8,7 +8,7 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { axios } from "app/lib/axios";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { useRudder } from "app/lib/rudderstack";
-import { UserType } from "app/types";
+import { MyInfo } from "app/types";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -20,7 +20,7 @@ export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
   const { rudder } = useRudder();
   const { authenticationStatus, accessToken } = useAuth();
-  const { data, error, mutate } = useSWR<UserType>(
+  const { data, error, mutate } = useSWR<MyInfo>(
     accessToken ? MY_INFO_ENDPOINT : null,
     (url) => axios({ url, method: "GET" })
   );

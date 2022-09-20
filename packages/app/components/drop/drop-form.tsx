@@ -144,14 +144,6 @@ export const DropForm = () => {
   //   </View>
   // }
 
-  if (!isAuthenticated) {
-    return (
-      <View tw="p-4">
-        <Button onPress={navigateToLogin}>Please login to continue</Button>
-      </View>
-    );
-  }
-
   if (
     !userProfile?.data.profile.username ||
     userHasIncompleteExternalLinks(userProfile?.data.profile) ||
@@ -273,7 +265,7 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
-      {Platform.OS === "ios" ? <View style={{ height: headerHeight }} /> : null}
+      {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
       <ScrollView
         tw="p-4"
         ref={scrollViewRef}

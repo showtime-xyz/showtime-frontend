@@ -46,7 +46,7 @@ export const SwipeList = ({
 
   const itemHeight = Platform.select({
     web: windowHeight - headerHeight,
-    android: safeAreaFrameHeight - headerHeight,
+    android: safeAreaFrameHeight,
     default: screenHeight,
   });
 
