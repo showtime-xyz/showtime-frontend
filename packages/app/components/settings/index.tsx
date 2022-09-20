@@ -5,7 +5,7 @@ import Constants from "expo-constants";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { Modal } from "@showtime-xyz/universal.modal";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
 import {
@@ -387,10 +387,12 @@ const SettingsTabs = () => {
         style={{ zIndex: 1 }}
       />
       <View style={{ height: bottomHeight }} />
-      <EditNicknameModal
-        editingWallet={editingWallet}
-        onClose={() => setEditingWallet(undefined)}
-      />
+      {editingWallet ? (
+        <EditNicknameModal
+          editingWallet={editingWallet}
+          onClose={() => setEditingWallet(undefined)}
+        />
+      ) : null}
     </View>
   );
 };
@@ -414,12 +416,7 @@ const EditNicknameModal = ({
   }, [editingWallet?.nickname]);
 
   return (
-    <ModalSheet
-      title="Edit Nickname"
-      visible={!!editingWallet}
-      close={onClose}
-      onClose={onClose}
-    >
+    <Modal tw="bottom-16 md:bottom-0" onClose={onClose} title="Edit Nickname">
       <View tw="p-4">
         <Fieldset
           placeholder="rainbow wallet"
@@ -440,7 +437,7 @@ const EditNicknameModal = ({
           Submit
         </Button>
       </View>
-    </ModalSheet>
+    </Modal>
   );
 };
 
