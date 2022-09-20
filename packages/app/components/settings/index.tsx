@@ -127,7 +127,7 @@ const SettingsTabs = () => {
     ],
     []
   );
-  const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
+  const wallets = user?.data.profile.wallet_addresses_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
 
   useEffect(() => {
@@ -154,6 +154,7 @@ const SettingsTabs = () => {
               renderItem={({ item }) => (
                 <SettingsWalletSlot
                   address={item.address}
+                  wallet={item}
                   ensDomain={item.ens_domain}
                   nickname={item.nickname}
                   mintingEnabled={item.minting_enabled}

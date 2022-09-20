@@ -13,7 +13,7 @@ import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/lib/utilities";
-import { WalletAddressesExcludingEmailV2 } from "app/types";
+import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 
 import { SettingSubTitle } from "./settings-subtitle";
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
@@ -24,6 +24,7 @@ type Props = {
   mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
   nickname?: string;
   onEditNickname: (wallet: string) => void;
+  wallet?: WalletAddressesV2;
 };
 
 export const SettingsWalletSlotHeader = () => {
@@ -101,6 +102,7 @@ export const SettingsWalletSlotPlaceholder = () => {
 export const SettingsWalletSlot = (props: Props) => {
   const address = props.address;
   const ensDomain = props.ensDomain;
+  const wallet = props.wallet;
   const { userAddress } = useCurrentUserAddress();
   const user = useUser();
 
@@ -124,9 +126,18 @@ export const SettingsWalletSlot = (props: Props) => {
           </View>
           <View tw="flex-1 px-4">
             <View>
-              <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
-                {nickname}
-              </Text>
+              {nickname ? (
+                <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
+                  {nickname}
+                </Text>
+              ) : null}
+
+              {wallet?.email || wallet?.phone_number ? (
+                <Text tw="pb-4 text-base text-gray-900 dark:text-white">
+                  {wallet.email ?? wallet?.phone_number}
+                </Text>
+              ) : null}
+
               <View tw="md:mb-3 md:flex-row">
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
