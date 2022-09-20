@@ -93,10 +93,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   const contentTransY = useDerivedValue(() => {
     const visibleContentHeight =
-      windowHeight -
-      detailHeight -
-      StatusBarHeight -
-      (Platform.OS === "android" ? 0 : headerHeight);
+      windowHeight - detailHeight - StatusBarHeight - headerHeight;
 
     if (mediaHeight < visibleContentHeight) {
       return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;
