@@ -100,7 +100,7 @@ export function LoginInputField({
 
       <Button
         onPress={handleSubmit(handleSubmitData)}
-        variant="tertiary"
+        variant="primary"
         size="regular"
         tw="mt-6"
         disabled={!inputValue}
