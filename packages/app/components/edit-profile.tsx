@@ -4,7 +4,7 @@ import { Platform, useWindowDimensions } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
+import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
