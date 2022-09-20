@@ -7317,9 +7317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.alert@npm:^0.0.68":
-  version: 0.0.68
-  resolution: "@showtime-xyz/universal.alert@npm:0.0.68"
+"@showtime-xyz/universal.alert@npm:^0.0.69":
+  version: 0.0.69
+  resolution: "@showtime-xyz/universal.alert@npm:0.0.69"
   dependencies:
     "@radix-ui/react-portal": 0.1.4
     "@showtime-xyz/universal.button": 0.0.58
@@ -7337,7 +7337,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 2f837ff36e4ca85f9daa5eb6e78ec5aa140f6dc1236d52d51ea1962c68d492da80c06db892d75189038d3fc9dadb43da819bb77de48ca3908e15941eefaab15a
+  checksum: 98f983c33c22ce08300e6b005c2d64461169596be5cb5460e99c4e2e924921a2959fbc36b74ef503425684b31eb03081fb10c0651b2fa743e59ec958a20bce08
   languageName: node
   linkType: hard
 
@@ -8231,7 +8231,7 @@ __metadata:
     "@shopify/flash-list": ^1.2.1
     "@showtime-xyz/universal.accordion": ^0.0.54
     "@showtime-xyz/universal.activity-indicator": ^0.0.40
-    "@showtime-xyz/universal.alert": ^0.0.68
+    "@showtime-xyz/universal.alert": ^0.0.69
     "@showtime-xyz/universal.avatar": ^0.0.45
     "@showtime-xyz/universal.bottom-sheet": ^0.0.60
     "@showtime-xyz/universal.button": ^0.0.58
