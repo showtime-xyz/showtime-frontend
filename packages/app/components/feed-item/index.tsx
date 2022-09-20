@@ -29,6 +29,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
 import { BlurView } from "app/lib/blurview";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
@@ -41,7 +42,6 @@ export type FeedItemProps = {
   detailStyle?: StyleProp<ViewStyle>;
   bottomPadding?: number;
   bottomMargin?: number;
-  headerHeight?: number;
   itemHeight: number;
   setMomentumScrollCallback?: (callback: any) => void;
 };
@@ -51,11 +51,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,
   bottomMargin = 0,
-  headerHeight = 0,
   itemHeight,
   setMomentumScrollCallback,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
+  const headerHeight = useHeaderHeight();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
   const bottomHeight = usePlatformBottomHeight();
@@ -165,7 +165,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+      <View
+        tw="w-full"
+        style={{
+          height: itemHeight,
+          overflow: "hidden",
+        }}
+      >
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (
