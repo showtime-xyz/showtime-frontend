@@ -10,11 +10,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
-import { AddressMenu } from "./address-menu";
+import { DropdownMenu } from "./dropdown-menu";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export type EmailSlotProps = {
@@ -85,6 +86,7 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
+  const { removeAccount } = useManageAccount();
   const { magic } = useMagic();
   const { isMagic } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
@@ -123,8 +125,8 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         ) : null}
       </View>
       <View tw="flex justify-center">
-        <AddressMenu
-          address={backendAddress}
+        <DropdownMenu
+          onRemove={() => removeAccount(backendAddress)}
           ctaCopy="Delete Email Address"
           isCurrent={isCurrentEmail}
         />

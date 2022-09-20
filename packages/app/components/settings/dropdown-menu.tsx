@@ -2,8 +2,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
-import { useManageAccount } from "app/hooks/use-manage-account";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
 import {
   DropdownMenuContent,
@@ -15,15 +14,13 @@ import {
 import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {
-  address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
   email?: WalletAddressesV2["email"];
   ctaCopy: string;
   isCurrent: boolean;
+  onRemove?: () => void;
 };
 
-export const AddressMenu = (props: AddressMenuProps) => {
-  const { removeAccount } = useManageAccount();
-  const address = props.address;
+export const DropdownMenu = (props: AddressMenuProps) => {
   const ctaCopy = props.ctaCopy;
   const disable = props.isCurrent || props.isCurrent === undefined;
 
@@ -37,7 +34,7 @@ export const AddressMenu = (props: AddressMenuProps) => {
       <DropdownMenuContent loop>
         <DropdownMenuItem
           // @ts-ignore
-          onSelect={() => removeAccount(address)}
+          onSelect={props.onRemove}
           className="danger"
           disabled={disable}
           key="your-profile"

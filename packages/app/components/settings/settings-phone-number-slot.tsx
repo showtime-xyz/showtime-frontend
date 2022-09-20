@@ -10,11 +10,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
-import { AddressMenu } from "./address-menu";
+import { DropdownMenu } from "./dropdown-menu";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export type PhoneNumberSlotProps = {
@@ -49,6 +50,7 @@ export const SettingPhoneNumberSlotHeader = ({
 
 export const SettingsPhoneNumberSkeletonSlot = () => {
   const { colorScheme } = useColorScheme();
+
   return (
     <View tw="p-4">
       <View tw="pb-3">
@@ -88,9 +90,9 @@ export const SettingsPhoneNumberSlot = (props: PhoneNumberSlotProps) => {
   const { magic } = useMagic();
   const { isMagic } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
+  const { removePhoneNumber } = useManageAccount();
 
   const phoneNumber = props.phoneNumber;
-  const backendAddress = props.address;
 
   const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
@@ -124,10 +126,10 @@ export const SettingsPhoneNumberSlot = (props: PhoneNumberSlotProps) => {
         ) : null}
       </View>
       <View tw="flex justify-center">
-        <AddressMenu
-          address={backendAddress}
+        <DropdownMenu
           ctaCopy="Delete Phone Number"
           isCurrent={isCurrentPhoneNumber}
+          onRemove={() => removePhoneNumber(phoneNumber)}
         />
       </View>
     </View>
