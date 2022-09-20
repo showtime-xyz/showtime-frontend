@@ -110,8 +110,6 @@ const SettingsTabs = () => {
     [user?.data.profile.wallet_addresses_v2]
   );
 
-  const wallets = user?.data.profile.wallet_addresses_v2;
-
   const phoneNumberWallets = useMemo(
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
@@ -130,6 +128,7 @@ const SettingsTabs = () => {
     ],
     []
   );
+  const wallets = user?.data.profile.wallet_addresses_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
 
   useEffect(() => {

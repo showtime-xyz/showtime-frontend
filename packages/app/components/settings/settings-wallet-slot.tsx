@@ -10,14 +10,14 @@ import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/lib/utilities";
-import { WalletAddressesExcludingEmailV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
 import { SettingSubTitle } from "./settings-subtitle";
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 
 type Props = {
-  wallet: WalletAddressesExcludingEmailV2;
-  onEditNickname: (item: WalletAddressesExcludingEmailV2) => void;
+  wallet: WalletAddressesV2;
+  onEditNickname: (item: WalletAddressesV2) => void;
 };
 
 export const SettingsWalletSlotHeader = (props: { hasNoWallet: boolean }) => {
@@ -97,6 +97,7 @@ export const SettingsWalletSlot = (props: Props) => {
   const address = props.wallet.address;
   const ensDomain = props.wallet.ens_domain;
   const nickname = props.wallet.nickname;
+  const wallet = props.wallet;
   const { userAddress } = useCurrentUserAddress();
   const user = useUser();
 
@@ -120,10 +121,19 @@ export const SettingsWalletSlot = (props: Props) => {
           </View>
           <View tw="flex-1 px-4">
             <View>
-              <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
-                {nickname}
-              </Text>
-              <View tw="mb-3 md:flex-row">
+              {nickname ? (
+                <Text tw="pb-4 text-base font-bold text-gray-900 dark:text-white">
+                  {nickname}
+                </Text>
+              ) : null}
+
+              {wallet?.email || wallet?.phone_number ? (
+                <Text tw="pb-4 text-base text-gray-900 dark:text-white">
+                  {wallet?.email ?? wallet?.phone_number}
+                </Text>
+              ) : null}
+
+              <View tw="md:mb-3 md:flex-row">
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
                 </Text>
