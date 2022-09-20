@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Platform, useWindowDimensions, ScrollView } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -13,6 +13,7 @@ import { Upload } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import {
   SceneRendererProps,
   TabView,
@@ -57,7 +58,19 @@ const EDIT_PROFILE_ROUTES = [
     index: 2,
   },
 ];
+type SceneViewProps = KeyboardAwareScrollViewProps & {
+  focused?: boolean;
+};
 
+const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
+  return (
+    <ScrollView
+      style={[style, { display: focused ? "flex" : "none" }]}
+      asKeyboardAwareScrollView
+      {...props}
+    />
+  );
+};
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
@@ -272,14 +285,15 @@ export const EditProfile = () => {
 
   const renderScene = useCallback(
     ({
-      route: { key },
+      route: { key, index: routeIndex },
     }: SceneRendererProps & {
       route: Route;
     }) => {
+      const focused = index === routeIndex || Platform.OS !== "web";
       switch (key) {
         case "Profile":
           return (
-            <KeyboardAwareScrollView>
+            <SceneView focused={focused}>
               <Controller
                 control={control}
                 name="coverPicture"
@@ -438,12 +452,13 @@ export const EditProfile = () => {
                   )}
                 />
               </View>
-            </KeyboardAwareScrollView>
+            </SceneView>
           );
         case "Links":
           return (
-            <KeyboardAwareScrollView
+            <SceneView
               extraScrollHeight={extraScrollHeight}
+              focused={focused}
               style={{ padding: 16, marginTop: 16 }}
             >
               {hasNotSubmittedExternalLink ? (
@@ -496,11 +511,12 @@ export const EditProfile = () => {
                               style={{
                                 marginTop: Platform.select({
                                   ios: 1,
-                                  android: 4,
+                                  android: 8,
                                   default: 0,
                                 }),
                                 marginBottom: Platform.select({
                                   default: 4,
+                                  android: 0,
                                   web: 0,
                                 }),
                               }}
@@ -513,11 +529,11 @@ export const EditProfile = () => {
                     />
                   );
                 })}
-            </KeyboardAwareScrollView>
+            </SceneView>
           );
         case "Settings":
           return (
-            <ScrollView style={{ padding: 16, marginTop: 16 }}>
+            <SceneView style={{ padding: 16, marginTop: 16 }} focused={focused}>
               <View tw="z-2">
                 <Controller
                   control={control}
@@ -572,7 +588,7 @@ export const EditProfile = () => {
                   />
                 )}
               />
-            </ScrollView>
+            </SceneView>
           );
 
         default:
@@ -588,6 +604,7 @@ export const EditProfile = () => {
       errors.username?.message,
       extraScrollHeight,
       hasNotSubmittedExternalLink,
+      index,
       isMdWidth,
       isValid,
       pickFile,

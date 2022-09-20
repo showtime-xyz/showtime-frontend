@@ -35,7 +35,6 @@ export const SwipeList = ({
 }: Props) => {
   const listRef = useRef<any>(null);
   const headerHeight = useHeaderHeight();
-  const headerHeightRef = useRef(headerHeight);
   useScrollToTop(listRef);
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
@@ -58,7 +57,6 @@ export const SwipeList = ({
           itemHeight,
           bottomPadding,
           setMomentumScrollCallback,
-          headerHeight: headerHeightRef.current,
         }}
       />
     ),

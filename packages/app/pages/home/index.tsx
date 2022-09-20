@@ -1,5 +1,3 @@
-import { View } from "react-native";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -13,11 +11,8 @@ import { HomeScreen } from "app/screens/home";
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 
-const HeaderRight = () => {
+const NativeHeaderRight = () => {
   const router = useRouter();
-  const { isLoading, isAuthenticated } = useUser();
-
-  if (isAuthenticated || isLoading) return <View />;
 
   return (
     <Button
@@ -38,14 +33,13 @@ const HeaderRight = () => {
 function HomeNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
-
+  const { isLoading, isAuthenticated } = useUser();
   return (
     <HomeStack.Navigator
-      // @ts-ignore
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
-        headerRight: HeaderRight,
+        headerRight: isAuthenticated || isLoading ? null : NativeHeaderRight,
       })}
     >
       <HomeStack.Screen name="home" component={HomeScreen} />

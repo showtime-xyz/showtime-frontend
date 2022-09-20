@@ -29,6 +29,7 @@ export const screenOptions = ({
     // @ts-ignore
     headerStyle: {
       height: 64 + safeAreaTop,
+      position: "absolute",
       // Similar to `headerShadowVisible` but for web
       // @ts-ignore
       borderBottomWidth: 0,
