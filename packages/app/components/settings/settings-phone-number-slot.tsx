@@ -93,6 +93,7 @@ export const SettingsPhoneNumberSlot = (props: PhoneNumberSlotProps) => {
   const { removePhoneNumber } = useManageAccount();
 
   const phoneNumber = props.phoneNumber;
+  const address = props.address;
 
   const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
@@ -129,7 +130,7 @@ export const SettingsPhoneNumberSlot = (props: PhoneNumberSlotProps) => {
         <DropdownMenu
           ctaCopy="Delete Phone Number"
           isCurrent={isCurrentPhoneNumber}
-          onRemove={() => removePhoneNumber(phoneNumber)}
+          onRemove={() => removePhoneNumber(address)}
         />
       </View>
     </View>

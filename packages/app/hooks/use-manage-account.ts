@@ -96,12 +96,11 @@ export function useManageAccount() {
   );
 
   const removePhoneNumber = useCallback(
-    async (phoneNumber: string) => {
+    async (address: string) => {
       try {
         await axios({
-          url: "/v1/removewallet",
-          method: "POST",
-          data: { phoneNumber },
+          url: `v2/wallet/${address}/remove`,
+          method: "DELETE",
         });
 
         mutate(MY_INFO_ENDPOINT);
