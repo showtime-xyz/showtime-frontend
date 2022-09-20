@@ -50,7 +50,9 @@ export function useExpoUpdate() {
         captureException(error);
       }
     },
-    [snackbar, bottom]
+    // just use snackbar to prompt once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bottom]
   );
 
   useEffect(() => {
