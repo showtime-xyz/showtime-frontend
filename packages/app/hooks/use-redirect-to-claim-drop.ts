@@ -2,18 +2,17 @@ import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useUser } from "app/hooks/use-user";
 
 export const useRedirectToClaimDrop = () => {
   const { isAuthenticated } = useUser();
   const router = useRouter();
 
-  const redirectToClaimDrop = (edition: CreatorEditionResponse) => {
+  const redirectToClaimDrop = (editionContractAddress: string) => {
     if (!isAuthenticated) {
       router.push("/login");
     } else {
-      const as = `/claim/${edition.creator_airdrop_edition.contract_address}`;
+      const as = `/claim/${editionContractAddress}`;
 
       router.push(
         Platform.select({
@@ -22,8 +21,7 @@ export const useRedirectToClaimDrop = () => {
             pathname: router.pathname,
             query: {
               ...router.query,
-              contractAddress:
-                edition?.creator_airdrop_edition.contract_address,
+              contractAddress: editionContractAddress,
               claimModal: true,
             },
           } as any,

@@ -98,10 +98,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   // }, [web3]);
 
   if (
-    !userProfile?.data.profile.username ||
-    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
-    !userProfile?.data.profile.bio ||
-    !userProfile?.data.profile.img_url
+    userProfile &&
+    (!userProfile.data.profile.username ||
+      userHasIncompleteExternalLinks(userProfile.data.profile) ||
+      !userProfile.data.profile.bio ||
+      !userProfile.data.profile.img_url)
   ) {
     return (
       <CompleteProfileModalContent
@@ -191,6 +192,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   if (!primaryWallet) {
     return (
       <AddWalletOrSetPrimary
+        contractAddress={edition?.creator_airdrop_edition.contract_address}
         title="Choose a primary wallet to receive your drop"
         description="Please choose which wallet will receive your drop. You only have to do this once!"
       />

@@ -13,6 +13,9 @@ const HomeStack = createStackNavigator<HomeStackParams>();
 
 const NativeHeaderRight = () => {
   const router = useRouter();
+  const { isLoading, isAuthenticated } = useUser();
+
+  if (isLoading || isAuthenticated) return null;
 
   return (
     <Button
@@ -33,13 +36,12 @@ const NativeHeaderRight = () => {
 function HomeNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
-  const { isLoading, isAuthenticated } = useUser();
   return (
     <HomeStack.Navigator
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
-        headerRight: isAuthenticated || isLoading ? null : NativeHeaderRight,
+        headerRight: NativeHeaderRight,
       })}
     >
       <HomeStack.Screen name="home" component={HomeScreen} />

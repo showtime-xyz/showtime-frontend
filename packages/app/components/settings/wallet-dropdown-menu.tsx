@@ -1,9 +1,11 @@
+import { Linking } from "react-native";
+
 import { Button } from "@showtime-xyz/universal.button";
-import { Edit, MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { Edit, MoreHorizontal, Wallet } from "@showtime-xyz/universal.icon";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useManageAccount } from "app/hooks/use-manage-account";
-import { WalletAddressesExcludingEmailV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
 import {
   DropdownMenuContent,
@@ -15,9 +17,10 @@ import {
 import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {
-  address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
+  address?: WalletAddressesV2["address"] | undefined | null;
   isCurrent: boolean;
-  onEditNickname: (item: WalletAddressesExcludingEmailV2) => void;
+  onEditNickname: (item: WalletAddressesV2) => void;
+  isMagicWallet: boolean;
 };
 
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
@@ -36,6 +39,18 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           <MenuItemIcon Icon={Edit} />
           <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
         </DropdownMenuItem>
+        {props.isMagicWallet ? (
+          <DropdownMenuItem
+            onSelect={() =>
+              Linking.openURL("https://reveal.magic.link/showtime")
+            }
+            key="export_key"
+          >
+            <MenuItemIcon Icon={Wallet} />
+
+            <DropdownMenuItemTitle>Export Private Key</DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
 
         <DropdownMenuItem
           // @ts-ignore
