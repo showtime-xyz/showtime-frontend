@@ -92,5 +92,28 @@ export function useManageAccount() {
     [toast, mutate]
   );
 
-  return { addEmail, verifyPhoneNumber, removeAccount };
+  const removePhoneNumber = useCallback(
+    async (address: string) => {
+      try {
+        await axios({
+          url: `v2/wallet/${address}/remove`,
+          method: "DELETE",
+        });
+
+        mutate(MY_INFO_ENDPOINT);
+        toast?.show({
+          message: "Phone number has removed",
+          hideAfter: 4000,
+        });
+      } catch (error) {
+        toast?.show({
+          message:
+            "Unable to remove the phone number at this time, please try again",
+          hideAfter: 4000,
+        });
+      }
+    },
+    [toast, mutate]
+  );
+  return { addEmail, verifyPhoneNumber, removeAccount, removePhoneNumber };
 }

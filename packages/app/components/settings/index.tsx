@@ -228,7 +228,7 @@ const SettingsTabs = () => {
               renderItem={({ item }) => (
                 <SettingsPhoneNumberSlot
                   phoneNumber={item.phone_number}
-                  address={item.backendAddress}
+                  address={item.address}
                 />
               )}
               ListEmptyComponent={() => {
