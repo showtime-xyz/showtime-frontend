@@ -16,7 +16,7 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const redirectToClaimDrop = useRedirectToClaimDrop();
 
   const onClaimPress = () => {
-    redirectToClaimDrop(edition);
+    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
   };
 
   let isExpired = false;

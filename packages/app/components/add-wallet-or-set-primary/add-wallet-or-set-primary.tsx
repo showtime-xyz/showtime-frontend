@@ -8,9 +8,11 @@ import { View } from "@showtime-xyz/universal.view";
 export const AddWalletOrSetPrimary = ({
   title,
   description,
+  contractAddress,
 }: {
   title: string;
   description: string;
+  contractAddress: string;
 }) => {
   const router = useRouter();
   return (
@@ -24,12 +26,12 @@ export const AddWalletOrSetPrimary = ({
       </View>
       <Button
         onPress={() => {
-          // Close the native modal
+          // Close modal on native
           if (Platform.OS !== "web") {
             router.pop();
           }
 
-          router.push("/settings?redirectTo=" + router.pathname);
+          router.push("/settings?editionContractAddress=" + contractAddress);
         }}
         size="regular"
       >
