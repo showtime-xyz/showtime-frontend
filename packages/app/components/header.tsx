@@ -162,18 +162,21 @@ const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const isDark = useIsDarkMode();
-  const prevPath = useRef<any>(null);
+  const prevPath = useRef(router.pathname);
+  const prevQuery = useRef(router.query);
 
   useEffect(() => {
     if (
       Platform.OS === "web" &&
       isOpen &&
-      prevPath.current !== router.pathname
+      (prevPath.current !== router.pathname ||
+        prevQuery.current !== router.query)
     ) {
       setIsOpen(false);
     }
     prevPath.current = router.pathname;
-  }, [router.pathname, isOpen]);
+    prevQuery.current = router.query;
+  }, [router.pathname, isOpen, router.query]);
 
   return (
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>

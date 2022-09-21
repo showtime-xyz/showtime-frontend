@@ -4,6 +4,7 @@ import { useSWRConfig } from "swr";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
+import { removeWalletFromBackend } from "app/lib/add-wallet";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
@@ -72,11 +73,7 @@ export function useManageAccount() {
   const removeAccount = useCallback(
     async (address: string) => {
       try {
-        await axios({
-          url: "/v1/removewallet",
-          method: "POST",
-          data: { address },
-        });
+        await removeWalletFromBackend(address);
 
         mutate(MY_INFO_ENDPOINT);
 

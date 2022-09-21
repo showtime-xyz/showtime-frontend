@@ -79,6 +79,7 @@ export interface WalletAddressesExcludingEmailV2 {
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;
+  nickname?: string;
 }
 
 export interface Link {
@@ -196,6 +197,7 @@ export type IEdition = {
   name: string;
   owner_address: string;
   symbol: string;
+  is_gated?: boolean;
 };
 
 export type MyInfo = {

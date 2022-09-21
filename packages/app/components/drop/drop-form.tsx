@@ -18,6 +18,7 @@ import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -34,6 +35,7 @@ import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
+  formatAddressShort,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -104,15 +106,7 @@ export const DropForm = () => {
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const {
-    state,
-    dropNFT,
-    shouldShowSignMessage,
-    signMessageData,
-    signTransaction,
-    onReconnectWallet,
-    reset,
-  } = useDropNFT();
+  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
   const { isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
@@ -121,7 +115,6 @@ export const DropForm = () => {
   const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
 
-  const isSignRequested = signMessageData.status === "sign_requested";
   const [accordionValue, setAccordionValue] = useState("");
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values);
@@ -256,6 +249,17 @@ export const DropForm = () => {
           </Button>
         </View>
       </View>
+    );
+  }
+
+  const primaryWallet = user.user?.data.profile.primary_wallet;
+
+  if (!primaryWallet) {
+    return (
+      <AddWalletOrSetPrimary
+        title="Choose a primary wallet to create your drop"
+        description="Please choose which wallet will receive your drop. You only have to do this once!"
+      />
     );
   }
 
@@ -492,6 +496,15 @@ export const DropForm = () => {
             </Text>
           </View>
 
+          <View tw="my-4 flex-row">
+            <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+              This drop will be owned by your{" "}
+              {primaryWallet.nickname ? (
+                <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
+              ) : null}
+              {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
+            </Text>
+          </View>
           <View tw="flex-1">
             <View tw="flex-1 flex-row">
               <Controller
@@ -524,42 +537,19 @@ export const DropForm = () => {
           </View>
 
           <View tw="mt-8">
-            {shouldShowSignMessage ? (
-              <View tw="px-2">
-                {!isSignRequested ? (
-                  <Text tw="text-center text-lg dark:text-gray-400">
-                    We need a signature in order to complete the drop. This
-                    won't cost any gas.
-                  </Text>
-                ) : null}
-                <Button
-                  tw={`mt-4 ${isSignRequested ? "opacity-60" : ""}`}
-                  size="regular"
-                  variant="primary"
-                  disabled={isSignRequested}
-                  onPress={() => {
-                    // @ts-ignore
-                    signTransaction(signMessageData.data);
-                  }}
-                >
-                  {isSignRequested ? "Signing..." : "Sign Message"}
-                </Button>
-              </View>
-            ) : (
-              <Button
-                variant="primary"
-                size="regular"
-                tw={state.status === "loading" ? "opacity-45" : ""}
-                disabled={state.status === "loading"}
-                onPress={handleSubmit(onSubmit)}
-              >
-                {state.status === "loading"
-                  ? "Submitting..."
-                  : state.status === "error"
-                  ? "Failed. Retry!"
-                  : "Drop Free NFT"}
-              </Button>
-            )}
+            <Button
+              variant="primary"
+              size="regular"
+              tw={state.status === "loading" ? "opacity-45" : ""}
+              disabled={state.status === "loading"}
+              onPress={handleSubmit(onSubmit)}
+            >
+              {state.status === "loading"
+                ? "Submitting..."
+                : state.status === "error"
+                ? "Failed. Retry!"
+                : "Drop Free NFT"}
+            </Button>
 
             {state.transactionHash ? (
               <View tw="mt-4">

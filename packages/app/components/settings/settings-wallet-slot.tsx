@@ -1,58 +1,48 @@
-import { useEffect } from "react";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { Ethereum, Tezos } from "@showtime-xyz/universal.icon";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/lib/utilities";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
 import { SettingSubTitle } from "./settings-subtitle";
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 
 type Props = {
-  address: WalletAddressesExcludingEmailV2["address"];
-  ensDomain?: WalletAddressesExcludingEmailV2["ens_domain"];
-  mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
-  nickname?: string;
-  onEditNickname: (wallet: string) => void;
-  wallet?: WalletAddressesV2;
+  wallet: WalletAddressesV2;
+  onEditNickname: (item: WalletAddressesV2) => void;
 };
 
-export const SettingsWalletSlotHeader = () => {
-  const toast = useToast();
+export const SettingsWalletSlotHeader = (props: { hasNoWallet: boolean }) => {
   const { state, addWallet } = useAddWallet();
 
   const walletCTA =
     state.status === "error" ? "Connect Lost, Retry" : "Add Wallet";
 
-  useEffect(() => {
-    if (state.status === "error") {
-      // TODO: Possible force logout
-      toast?.show({
-        message: "Wallet connection lost please try again",
-        hideAfter: 4000,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status]);
-
   return (
     <SettingSubTitle>
-      <Text tw="text-xl font-bold text-gray-900 dark:text-white">
-        Your Wallets
-      </Text>
-      <Button variant="primary" size="small" onPress={addWallet}>
-        {walletCTA}
-      </Button>
+      <View tw="flex-1">
+        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
+          Your Wallets
+        </Text>
+        <Text tw="pt-4 text-sm text-gray-900 dark:text-white">
+          Your Primary Wallet will be the Polygon address that automatically
+          receives your drops on Showtime.
+        </Text>
+      </View>
+      {/* We show a connect wallet button in SettingsWalletSlotPlaceholder component when user don't have a wallet */}
+      {props.hasNoWallet ? null : (
+        <Button variant="primary" size="small" onPress={addWallet}>
+          {walletCTA}
+        </Button>
+      )}
     </SettingSubTitle>
   );
 };
@@ -92,28 +82,33 @@ export const SettingsWalletSlotSkeleton = () => {
 };
 
 export const SettingsWalletSlotPlaceholder = () => {
+  const { addWallet } = useAddWallet();
+
   return (
-    <Text tw="p-4 text-base font-bold text-gray-900 dark:text-white">
-      No wallet connected to your profile.
-    </Text>
+    <View tw="mt-8 items-center">
+      <Button tw="h-10 w-80" onPress={addWallet}>
+        Connect Wallet
+      </Button>
+    </View>
   );
 };
 
 export const SettingsWalletSlot = (props: Props) => {
-  const address = props.address;
-  const ensDomain = props.ensDomain;
+  const address = props.wallet.address;
+  const ensDomain = props.wallet.ens_domain;
+  const nickname = props.wallet.nickname;
   const wallet = props.wallet;
   const { userAddress } = useCurrentUserAddress();
   const user = useUser();
 
   const display = ensDomain ? ensDomain : formatAddressShort(address);
-  const nickname = props.nickname;
   const isEthereumAddress = address.startsWith("0x");
 
   const isConnectedAddress =
     userAddress?.toLowerCase() === address?.toLowerCase();
 
   const isPrimary = user.user?.data.profile.primary_wallet?.address === address;
+  const { setPrimaryWallet } = useSetPrimaryWallet();
 
   return (
     <>
@@ -134,7 +129,7 @@ export const SettingsWalletSlot = (props: Props) => {
 
               {wallet?.email || wallet?.phone_number ? (
                 <Text tw="pb-4 text-base text-gray-900 dark:text-white">
-                  {wallet.email ?? wallet?.phone_number}
+                  {wallet?.email ?? wallet?.phone_number}
                 </Text>
               ) : null}
 
@@ -142,24 +137,27 @@ export const SettingsWalletSlot = (props: Props) => {
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
                 </Text>
-                <View tw="my-2 flex flex-row md:my-0">
-                  {isConnectedAddress ? (
-                    <DataPill label="Current" tw="md:ml-2" type="primary" />
-                  ) : null}
-                  {isPrimary ? (
-                    <DataPill label="Primary" tw="md:ml-2" type="secondary" />
-                  ) : null}
-                </View>
               </View>
             </View>
-            <Text tw=" text-xs text-gray-900 dark:text-white">{address}</Text>
+            <Text tw="text-xs text-gray-900 dark:text-white">{address}</Text>
           </View>
-          <View tw="flex justify-center">
+          <View tw="flex flex-row items-center justify-center">
+            {!isPrimary ? (
+              <Button
+                tw="mr-4 w-32"
+                onPress={() => setPrimaryWallet(props.wallet)}
+              >
+                Make Primary
+              </Button>
+            ) : (
+              <View tw="mr-4 w-32 items-center rounded-3xl bg-green-600 py-2">
+                <Text tw="font-semibold text-white">Primary ✓</Text>
+              </View>
+            )}
             <WalletDropdownMenu
               address={address}
               isCurrent={isConnectedAddress}
               onEditNickname={props.onEditNickname}
-              isPrimary={isPrimary}
             />
           </View>
         </View>

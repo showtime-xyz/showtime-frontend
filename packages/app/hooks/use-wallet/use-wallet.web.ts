@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
@@ -11,10 +11,22 @@ import {
 
 import { useWeb3 } from "app/hooks/use-web3";
 
-import { UseWalletReturnType } from "./types";
+import { useLatestValueRef } from "../use-latest-value-ref";
+import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
-  const wagmiData = useAccount();
+  const walletConnectedPromiseResolveCallback = useRef<any>(null);
+  const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
+  const wagmiData = useAccount({
+    onConnect: (c) => {
+      walletConnectedPromiseResolveCallback.current?.(c);
+      walletConnectedPromiseResolveCallback.current = null;
+    },
+    onDisconnect: () => {
+      walletDisconnectedPromiseResolveCallback.current?.();
+      walletDisconnectedPromiseResolveCallback.current = null;
+    },
+  });
   const { signMessageAsync } = useSignMessage();
   const { data: wagmiSigner } = useSigner();
   const { chain } = useNetwork();
@@ -24,6 +36,9 @@ const useWallet = (): UseWalletReturnType => {
 
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const [address, setAddress] = useState<string | undefined>();
+
+  // we use this hook to prevent stale values in closures
+  const openConnectModalRef = useLatestValueRef(openConnectModal);
 
   useEffect(() => {
     (async function fetchUserAddress() {
@@ -47,12 +62,22 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        await openConnectModal?.();
+        openConnectModalRef.current?.();
+        return new Promise<ConnectResult>((resolve) => {
+          walletConnectedPromiseResolveCallback.current = resolve;
+        });
       },
       connected,
       disconnect: async () => {
         localStorage.removeItem("walletconnect");
-        await disconnect();
+        disconnect();
+        return new Promise<any>((resolve) => {
+          if (wagmiData.isConnected) {
+            walletDisconnectedPromiseResolveCallback.current = resolve;
+          } else {
+            resolve(true);
+          }
+        });
       },
       networkChanged,
       signMessageAsync,
@@ -60,10 +85,11 @@ const useWallet = (): UseWalletReturnType => {
   }, [
     address,
     connected,
-    disconnect,
     networkChanged,
-    openConnectModal,
     signMessageAsync,
+    openConnectModalRef,
+    disconnect,
+    wagmiData.isConnected,
   ]);
 
   return result;
