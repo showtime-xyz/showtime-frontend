@@ -102,16 +102,16 @@ try {
   const currentCommitHeadIdResponse = await $`git log -1 --pretty=format:%h`;
   const currentCommitHeadId = currentCommitHeadIdResponse.stdout;
 
-  const sameCommit = lastReleaseCommitId === currentCommitHeadId;
+  // const sameCommit = lastReleaseCommitId === currentCommitHeadId;
 
   console.log(`Current Commit ID: ${chalk.blue(currentCommitHeadId)}\n`);
   console.log(`Last Release Commit ID: ${chalk.blue(lastReleaseCommitId)}\n`);
 
-  if (sameCommit) {
-    console.log("No new commits since the last release, no action needed");
-    // Exit code 1 to fail the GitHub Action and prevent an unnecessary deployment
-    await $`exit 1`;
-  }
+  // if (sameCommit) {
+  //   console.log("No new commits since the last release, no action needed");
+  //   // Exit code 1 to fail the GitHub Action and prevent an unnecessary deployment
+  //   await $`exit 1`;
+  // }
 
   // Force a major version bump
   if (versionType === "major") {
