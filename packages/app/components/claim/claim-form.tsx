@@ -24,6 +24,7 @@ import {
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -55,6 +56,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
+  const redirectToClaimDrop = useRedirectToClaimDrop();
 
   const isDark = useIsDarkMode();
   const { newComment } = useComments(nft?.data?.item?.nft_id);
@@ -192,7 +194,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   if (!primaryWallet) {
     return (
       <AddWalletOrSetPrimary
-        contractAddress={edition?.creator_airdrop_edition.contract_address}
+        onPrimaryWalletSetCallback={() =>
+          redirectToClaimDrop(edition.creator_airdrop_edition.contract_address)
+        }
         title="Choose a primary wallet to receive your drop"
         description="Please choose which wallet will receive your drop. You only have to do this once!"
       />

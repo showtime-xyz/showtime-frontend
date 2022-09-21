@@ -5,14 +5,16 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { setPrimaryWalletSuccessCallback } from "app/hooks/api/use-set-primary-wallet";
+
 export const AddWalletOrSetPrimary = ({
   title,
   description,
-  contractAddress,
+  onPrimaryWalletSetCallback,
 }: {
   title: string;
   description: string;
-  contractAddress: string;
+  onPrimaryWalletSetCallback?: Function;
 }) => {
   const router = useRouter();
   return (
@@ -30,8 +32,8 @@ export const AddWalletOrSetPrimary = ({
           if (Platform.OS !== "web") {
             router.pop();
           }
-
-          router.push("/settings?editionContractAddress=" + contractAddress);
+          setPrimaryWalletSuccessCallback(onPrimaryWalletSetCallback);
+          router.push("/settings");
         }}
         size="regular"
       >

@@ -26,6 +26,7 @@ import { Preview } from "app/components/preview";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -33,7 +34,6 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import {
   formatAddressShort,
   getTwitterIntent,
@@ -108,10 +108,9 @@ export const DropForm = () => {
 
   const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
-  const { isAuthenticated } = useUser();
-  const navigateToLogin = useNavigateToLogin();
   const { data: userProfile } = useMyInfo();
   const headerHeight = useHeaderHeight();
+  const redirectToCreateDrop = useRedirectToCreateDrop();
   const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
 
@@ -257,6 +256,7 @@ export const DropForm = () => {
   if (!primaryWallet) {
     return (
       <AddWalletOrSetPrimary
+        onPrimaryWalletSetCallback={redirectToCreateDrop}
         title="Choose a primary wallet to create your drop"
         description="Please choose which wallet will receive your drop. You only have to do this once!"
       />
