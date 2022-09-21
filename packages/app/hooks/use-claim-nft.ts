@@ -18,6 +18,8 @@ import { IEdition } from "app/types";
 import { ledgerWalletHack } from "app/utilities";
 import { delay } from "app/utilities";
 
+import { useWallet } from "./use-wallet";
+
 const minterABI = ["function mintEdition(address _to)"];
 
 const getForwarderRequest = async ({
@@ -116,6 +118,8 @@ export const useClaimNFT = (edition?: IEdition) => {
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
+  const { connect } = useWallet();
+
   const { userAddress } = useCurrentUserAddress();
 
   const pollTransaction = async (transactionId: any) => {
@@ -300,20 +304,25 @@ export const useClaimNFT = (edition?: IEdition) => {
   };
 
   const oldSignaureClaimFlow = async () => {
-    if (edition?.minter_address && userAddress) {
-      let forwardRequest: any;
-      if (forwarderRequestCached.current) {
-        forwardRequest = forwarderRequestCached.current;
-      } else {
-        forwardRequest = await getForwarderRequest({
-          minterAddress: edition?.minter_address,
-          userAddress,
-        });
+    if (userAddress) {
+      if (edition?.minter_address) {
+        let forwardRequest: any;
+        if (forwarderRequestCached.current) {
+          forwardRequest = forwarderRequestCached.current;
+        } else {
+          forwardRequest = await getForwarderRequest({
+            minterAddress: edition?.minter_address,
+            userAddress,
+          });
+        }
+
+        Logger.log("Signing... ", forwardRequest);
+
+        await signTransaction({ forwardRequest });
       }
-
-      Logger.log("Signing... ", forwardRequest);
-
-      await signTransaction({ forwardRequest });
+    } else {
+      // user is probably not connected to wallet
+      connect?.();
     }
   };
 
