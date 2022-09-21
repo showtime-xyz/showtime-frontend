@@ -8,17 +8,14 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 type Query = {
-  popOnSuccess: boolean;
+  redirectTo: string;
 };
 
 const { useParam } = createParam<Query>();
 export const useSetPrimaryWallet = () => {
   const { mutate } = useSWRConfig();
   const router = useRouter();
-  const [popOnSuccess] = useParam("popOnSuccess", {
-    parse: (v) => v === "true",
-    initial: false,
-  });
+  const [redirectTo] = useParam("redirectTo");
 
   const setPrimaryWallet = async (wallet: WalletAddressesExcludingEmailV2) => {
     mutate(MY_INFO_ENDPOINT, async () => {
@@ -26,8 +23,8 @@ export const useSetPrimaryWallet = () => {
         url: `/v2/wallet/${wallet.address}/primary`,
         method: "PATCH",
       });
-      if (popOnSuccess) {
-        router.pop();
+      if (redirectTo) {
+        router.replace(redirectTo);
       }
     });
   };
