@@ -1,21 +1,16 @@
 import { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
-import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
-import { useRedirectToClaimDrop } from "../use-redirect-to-claim-drop";
+let onPrimaryWalletSetCallback: any = null;
 
-type Query = {
-  editionContractAddress: string;
+export const setPrimaryWalletSuccessCallback = (cb?: Function) => {
+  onPrimaryWalletSetCallback = cb;
 };
-
-const { useParam } = createParam<Query>();
 export const useSetPrimaryWallet = () => {
   const { mutate } = useSWRConfig();
-  const redirectToClaimDrop = useRedirectToClaimDrop();
-  const [editionContractAddress] = useParam("editionContractAddress");
 
   const setPrimaryWallet = async (wallet: WalletAddressesExcludingEmailV2) => {
     mutate(MY_INFO_ENDPOINT, async () => {
@@ -23,9 +18,8 @@ export const useSetPrimaryWallet = () => {
         url: `/v2/wallet/${wallet.address}/primary`,
         method: "PATCH",
       });
-      if (editionContractAddress) {
-        redirectToClaimDrop(editionContractAddress);
-      }
+      onPrimaryWalletSetCallback?.();
+      onPrimaryWalletSetCallback = null;
     });
   };
 
