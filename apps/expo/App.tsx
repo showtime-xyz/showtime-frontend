@@ -23,8 +23,13 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
+const scheme =
+  process.env.NODE_ENV === "development"
+    ? "io.showtime.development://wsegue"
+    : "https://showtime.xyz/wsegue";
+
 configureWalletMobileSDK({
-  callbackURL: new URL(`https://showtime.xyz/wsegue`),
+  callbackURL: new URL(scheme),
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });

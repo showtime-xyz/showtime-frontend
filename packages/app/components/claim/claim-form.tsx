@@ -11,6 +11,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
@@ -22,7 +23,6 @@ import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
@@ -45,7 +45,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   );
   const share = useShare();
   const router = useRouter();
-  const { userAddress } = useCurrentUserAddress();
+  const { user } = useUser();
   const scrollViewRef = useRef<RNScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
@@ -68,7 +68,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     nft?.data.item.creator_airdrop_edition_address
   );
 
-  const { user } = useUser();
   const handleClaimNFT = async () => {
     if (
       nft?.data.item.creator_id &&
@@ -99,10 +98,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   // }, [web3]);
 
   if (
-    !userProfile?.data.profile.username ||
-    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
-    !userProfile?.data.profile.bio ||
-    !userProfile?.data.profile.img_url
+    userProfile &&
+    (!userProfile.data.profile.username ||
+      userHasIncompleteExternalLinks(userProfile.data.profile) ||
+      !userProfile.data.profile.bio ||
+      !userProfile.data.profile.img_url)
   ) {
     return (
       <CompleteProfileModalContent
@@ -187,6 +187,18 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
+  const primaryWallet = user?.data.profile.primary_wallet;
+
+  if (!primaryWallet) {
+    return (
+      <AddWalletOrSetPrimary
+        contractAddress={edition?.creator_airdrop_edition.contract_address}
+        title="Choose a primary wallet to receive your drop"
+        description="Please choose which wallet will receive your drop. You only have to do this once!"
+      />
+    );
+  }
+
   return (
     <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
@@ -224,8 +236,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
-              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-                {formatAddressShort(userAddress)}
+              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
+                {primaryWallet.nickname
+                  ? primaryWallet.nickname +
+                    " (" +
+                    formatAddressShort(primaryWallet.address) +
+                    ")"
+                  : formatAddressShort(primaryWallet.address)}
               </Text>
             </View>
             <View>

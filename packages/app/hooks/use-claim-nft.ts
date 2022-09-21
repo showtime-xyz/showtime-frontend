@@ -10,7 +10,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { useWallet } from "app/hooks/use-wallet";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
@@ -117,40 +116,14 @@ export const useClaimNFT = (edition?: IEdition) => {
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
-  const { connect } = useWallet();
   const { userAddress } = useCurrentUserAddress();
 
-  // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
-    dispatch({ type: "signaturePrompt" });
-
-    const signature = await signTypedData(
-      forwardRequest.domain,
-      forwardRequest.types,
-      forwardRequest.value
-    );
-
-    dispatch({ type: "signatureSuccess" });
-
-    const newSignature = ledgerWalletHack(signature);
-    Logger.log("Signature", { signature, newSignature });
-    Logger.log("Submitting tx...");
-
-    const relayedTx = await axios({
-      url: `/v1/relayer/forward-request`,
-      method: "POST",
-      data: {
-        forward_request: forwardRequest,
-        signature: newSignature,
-        from_address: userAddress,
-      },
-    });
-
+  const pollTransaction = async (transactionId: any) => {
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
       Logger.log(`Checking tx... (${attempts + 1} / 20)`);
       const response = await axios({
-        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${relayedTx.relayed_transaction_id}`,
+        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${transactionId}`,
         method: "GET",
       });
       Logger.log(response);
@@ -183,12 +156,41 @@ export const useClaimNFT = (edition?: IEdition) => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
+  // @ts-ignore
+  const signTransaction = async ({ forwardRequest }) => {
+    dispatch({ type: "signaturePrompt" });
+
+    const signature = await signTypedData(
+      forwardRequest.domain,
+      forwardRequest.types,
+      forwardRequest.value
+    );
+
+    dispatch({ type: "signatureSuccess" });
+
+    const newSignature = ledgerWalletHack(signature);
+    Logger.log("Signature", { signature, newSignature });
+    Logger.log("Submitting tx...");
+
+    const relayedTx = await axios({
+      url: `/v1/relayer/forward-request`,
+      method: "POST",
+      data: {
+        forward_request: forwardRequest,
+        signature: newSignature,
+        from_address: userAddress,
+      },
+    });
+
+    await pollTransaction(relayedTx.relayed_transaction_id);
+  };
+
   const forwarderRequestCached = useRef<any>();
 
   useEffect(() => {
     let timeout: any;
     async function initialiseForwardRequest() {
-      if (edition?.minter_address && userAddress) {
+      if (edition?.minter_address && userAddress && !edition.is_gated) {
         forwarderRequestCached.current = await getForwarderRequest({
           userAddress,
           minterAddress: edition?.minter_address,
@@ -204,33 +206,19 @@ export const useClaimNFT = (edition?: IEdition) => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [edition?.minter_address, userAddress]);
+  }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
   const claimNFT = async (): Promise<boolean | undefined> => {
     try {
-      if (userAddress) {
-        if (edition?.minter_address) {
-          dispatch({ type: "loading" });
+      if (edition?.minter_address) {
+        dispatch({ type: "loading" });
 
-          let forwardRequest: any;
-          if (forwarderRequestCached.current) {
-            forwardRequest = forwarderRequestCached.current;
-          } else {
-            forwardRequest = await getForwarderRequest({
-              minterAddress: edition?.minter_address,
-              userAddress,
-            });
-          }
-
-          Logger.log("Signing... ", forwardRequest);
-
-          await signTransaction({ forwardRequest });
-
-          return true;
+        if (edition?.is_gated) {
+          await gatedClaimFlow();
+        } else {
+          await oldSignaureClaimFlow();
         }
-      } else {
-        // user is probably not connected to wallet
-        connect();
+        return true;
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
@@ -296,6 +284,36 @@ export const useClaimNFT = (edition?: IEdition) => {
       }
 
       captureException(e);
+    }
+  };
+
+  const gatedClaimFlow = async () => {
+    if (edition?.minter_address) {
+      const relayerResponse = await axios({
+        url:
+          "/v1/creator-airdrops/mint-gated-edition/" + edition.contract_address,
+        method: "POST",
+      });
+
+      await pollTransaction(relayerResponse.relayed_transaction_id);
+    }
+  };
+
+  const oldSignaureClaimFlow = async () => {
+    if (edition?.minter_address && userAddress) {
+      let forwardRequest: any;
+      if (forwarderRequestCached.current) {
+        forwardRequest = forwarderRequestCached.current;
+      } else {
+        forwardRequest = await getForwarderRequest({
+          minterAddress: edition?.minter_address,
+          userAddress,
+        });
+      }
+
+      Logger.log("Signing... ", forwardRequest);
+
+      await signTransaction({ forwardRequest });
     }
   };
 

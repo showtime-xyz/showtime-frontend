@@ -1,10 +1,11 @@
+import { Linking } from "react-native";
+
 import { Button } from "@showtime-xyz/universal.button";
-import { Check, Edit, MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { Edit, MoreHorizontal, Wallet } from "@showtime-xyz/universal.icon";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
-import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useManageAccount } from "app/hooks/use-manage-account";
-import { WalletAddressesExcludingEmailV2 } from "app/types";
+import { WalletAddressesV2 } from "app/types";
 
 import {
   DropdownMenuContent,
@@ -16,16 +17,15 @@ import {
 import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {
-  address?: WalletAddressesExcludingEmailV2["address"] | undefined | null;
+  address?: WalletAddressesV2["address"] | undefined | null;
   isCurrent: boolean;
-  onEditNickname: (address: string) => void;
-  isPrimary?: boolean;
+  onEditNickname: (item: WalletAddressesV2) => void;
+  isMagicWallet: boolean;
 };
 
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
   const { removeAccount } = useManageAccount();
   const address = props.address;
-  const { setPrimaryWallet } = useSetPrimaryWallet();
 
   return (
     <DropdownMenuRoot>
@@ -35,21 +35,20 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent loop>
-        <DropdownMenuItem
-          onSelect={() => address && props.onEditNickname(address)}
-          key="nickname"
-        >
+        <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
           <MenuItemIcon Icon={Edit} />
           <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        {!props.isPrimary ? (
+        {props.isMagicWallet ? (
           <DropdownMenuItem
-            onSelect={() => address && setPrimaryWallet(address)}
-            key="primary"
+            onSelect={() =>
+              Linking.openURL("https://reveal.magic.link/showtime")
+            }
+            key="export_key"
           >
-            <MenuItemIcon Icon={Check} />
-            <DropdownMenuItemTitle>Make Primary</DropdownMenuItemTitle>
+            <MenuItemIcon Icon={Wallet} />
+
+            <DropdownMenuItemTitle>Export Private Key</DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
