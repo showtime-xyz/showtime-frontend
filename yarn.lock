@@ -8363,7 +8363,7 @@ __metadata:
     react-native-cronet: ^0.5.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: 2.5.0
+    react-native-gesture-handler: ^2.6.1
     react-native-ios-context-menu: 1.3.0
     react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-level-fs: ^3.0.0
@@ -8521,7 +8521,7 @@ __metadata:
     react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: 2.5.0
+    react-native-gesture-handler: ^2.6.1
     react-native-ios-context-menu: 1.3.0
     react-native-mmkv: ^2.4.3
     react-native-pager-view: ^5.4.25
@@ -29795,9 +29795,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:2.5.0":
-  version: 2.5.0
-  resolution: "react-native-gesture-handler@npm:2.5.0"
+"react-native-gesture-handler@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "react-native-gesture-handler@npm:2.6.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -29807,7 +29807,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: d086f14da7f45c24c675402a4e9dec0a5c32e7279110f1af0c178cae0b6ca40dea99f878120d7034ce9c84f01465f68d0f21dcc9c3869fd527ebd18255b73432
+  checksum: 79ff09cba80075375841af9ecabbb2f40583dc980e329f6386b6bffb2714d1998edef78e6508ed2ad61ae5d6932819c28710745c99547ca1964f2aa2fa2ae311
   languageName: node
   linkType: hard
 
