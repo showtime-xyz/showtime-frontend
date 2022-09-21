@@ -50,6 +50,10 @@ export const useRandomWallet = (): UseWalletReturnType => {
       connect: async () => {
         await delay(200);
         onConnect();
+        return {
+          address: wallet.address,
+          walletName: "Random Wallet",
+        };
       },
       disconnect: async () => {
         await delay(200);

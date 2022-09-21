@@ -120,7 +120,7 @@ export const useClaimNFT = (edition?: IEdition) => {
   );
   const { connect } = useWallet();
 
-  const { userAddress } = useCurrentUserAddress();
+  let { userAddress } = useCurrentUserAddress();
 
   const pollTransaction = async (transactionId: any) => {
     let intervalMs = 2000;
@@ -304,25 +304,26 @@ export const useClaimNFT = (edition?: IEdition) => {
   };
 
   const oldSignaureClaimFlow = async () => {
-    if (userAddress) {
-      if (edition?.minter_address) {
-        let forwardRequest: any;
-        if (forwarderRequestCached.current) {
-          forwardRequest = forwarderRequestCached.current;
-        } else {
-          forwardRequest = await getForwarderRequest({
-            minterAddress: edition?.minter_address,
-            userAddress,
-          });
-        }
-
-        Logger.log("Signing... ", forwardRequest);
-
-        await signTransaction({ forwardRequest });
-      }
-    } else {
+    if (!userAddress) {
       // user is probably not connected to wallet
-      connect?.();
+      const session = await connect?.();
+      userAddress = session?.address;
+    }
+
+    if (edition?.minter_address && userAddress) {
+      let forwardRequest: any;
+      if (forwarderRequestCached.current) {
+        forwardRequest = forwarderRequestCached.current;
+      } else {
+        forwardRequest = await getForwarderRequest({
+          minterAddress: edition?.minter_address,
+          userAddress,
+        });
+      }
+
+      Logger.log("Signing... ", forwardRequest);
+
+      await signTransaction({ forwardRequest });
     }
   };
 
