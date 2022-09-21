@@ -323,6 +323,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     } else {
       // user is probably not connected to wallet
       connect?.();
+      throw new Error("User is not connected to wallet");
     }
   };
 
