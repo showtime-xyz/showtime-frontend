@@ -12,7 +12,7 @@ export const AddWalletOrSetPrimary = ({
 }: {
   title: string;
   description: string;
-  contractAddress: string;
+  contractAddress?: string;
 }) => {
   const router = useRouter();
   return (
@@ -30,8 +30,11 @@ export const AddWalletOrSetPrimary = ({
           if (Platform.OS !== "web") {
             router.pop();
           }
-
-          router.push("/settings?editionContractAddress=" + contractAddress);
+          if (contractAddress) {
+            router.push("/settings?editionContractAddress=" + contractAddress);
+          } else {
+            router.push("/settings");
+          }
         }}
         size="regular"
       >
