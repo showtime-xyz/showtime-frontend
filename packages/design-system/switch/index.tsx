@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
-import { Extrapolate } from "react-native-reanimated";
+import { Extrapolation } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -58,7 +58,7 @@ export const Switch = (props: SwitchProps) => {
           translateX: checked ? width - thumbWidth - thumbOffset : thumbOffset,
         }}
         // @ts-ignore
-        transition={{ overshootClamping: Extrapolate.CLAMP }}
+        transition={{ overshootClamping: Extrapolation.CLAMP }}
       />
     </Pressable>
   );

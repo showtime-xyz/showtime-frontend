@@ -594,13 +594,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^7.18.9":
-  version: 7.18.9
-  resolution: "@babel/helper-plugin-utils@npm:7.18.9"
-  checksum: ebae876cd60f1fe238c7210986093845fa5c4cad5feeda843ea4d780bf068256717650376d3af2a5e760f2ed6a35c065ae144f99c47da3e54aa6cba99d8804e0
-  languageName: node
-  linkType: hard
-
 "@babel/helper-remap-async-to-generator@npm:^7.16.8":
   version: 7.16.8
   resolution: "@babel/helper-remap-async-to-generator@npm:7.16.8"
@@ -959,18 +952,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 5016079a5305c1c130fea587b42cdce501574739cfefa5b63469dbc1f32d436df0ff42fabf04089fe8b6a00f4ea7563869e944744b457e186c677995983cb166
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-proposal-export-namespace-from@npm:^7.17.12":
-  version: 7.18.9
-  resolution: "@babel/plugin-proposal-export-namespace-from@npm:7.18.9"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.18.9
-    "@babel/plugin-syntax-export-namespace-from": ^7.8.3
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 84ff22bacc5d30918a849bfb7e0e90ae4c5b8d8b65f2ac881803d1cf9068dffbe53bd657b0e4bc4c20b4db301b1c85f1e74183cf29a0dd31e964bd4e97c363ef
   languageName: node
   linkType: hard
 
@@ -8363,7 +8344,7 @@ __metadata:
     react-native-cronet: ^0.5.0
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: 2.5.0
+    react-native-gesture-handler: 2.6.1
     react-native-ios-context-menu: 1.3.0
     react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-level-fs: ^3.0.0
@@ -8376,7 +8357,7 @@ __metadata:
     react-native-quick-crypto: ^0.4.5
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: 2.9.1
+    react-native-reanimated: 2.10.0
     react-native-safe-area-context: 4.3.1
     react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
@@ -8521,14 +8502,14 @@ __metadata:
     react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
-    react-native-gesture-handler: 2.5.0
+    react-native-gesture-handler: 2.6.1
     react-native-ios-context-menu: 1.3.0
     react-native-mmkv: ^2.4.3
     react-native-pager-view: ^5.4.25
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: 2.9.1
+    react-native-reanimated: 2.10.0
     react-native-safe-area-context: 4.3.1
     react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
@@ -29795,9 +29776,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:2.5.0":
-  version: 2.5.0
-  resolution: "react-native-gesture-handler@npm:2.5.0"
+"react-native-gesture-handler@npm:2.6.1":
+  version: 2.6.1
+  resolution: "react-native-gesture-handler@npm:2.6.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -29807,7 +29788,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: d086f14da7f45c24c675402a4e9dec0a5c32e7279110f1af0c178cae0b6ca40dea99f878120d7034ce9c84f01465f68d0f21dcc9c3869fd527ebd18255b73432
+  checksum: 79ff09cba80075375841af9ecabbb2f40583dc980e329f6386b6bffb2714d1998edef78e6508ed2ad61ae5d6932819c28710745c99547ca1964f2aa2fa2ae311
   languageName: node
   linkType: hard
 
@@ -30009,11 +29990,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:2.9.1":
-  version: 2.9.1
-  resolution: "react-native-reanimated@npm:2.9.1"
+"react-native-reanimated@npm:2.10.0":
+  version: 2.10.0
+  resolution: "react-native-reanimated@npm:2.10.0"
   dependencies:
-    "@babel/plugin-proposal-export-namespace-from": ^7.17.12
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
     "@types/invariant": ^2.2.35
@@ -30025,7 +30005,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 4ec8e62c86e9ac8645e9a4a6ac9c4501d48fc15eb8884bdbde0615dfa51de0cae38e2cb63d8b7521429367e34b78e1604d38280b049b5b20b44b45b82dadc99d
+  checksum: 7f01ee15e0f2d48af543370b10b8d257e22d09c3fcdbeff1d74d68bfc72f0e9cf74d0634edb10beef4671a20068d7be128678bb52d976aefdf78f5c80a0baa90
   languageName: node
   linkType: hard
 

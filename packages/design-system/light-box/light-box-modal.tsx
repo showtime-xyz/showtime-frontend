@@ -4,7 +4,7 @@ import { BackHandler, StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Easing,
-  Extrapolate,
+  Extrapolation,
   interpolate,
   runOnJS,
   useAnimatedStyle,
@@ -75,14 +75,14 @@ export const LightImageModal = ({
         translateY.value,
         [-200, 0, 200],
         [0.65, 1, 0.65],
-        Extrapolate.CLAMP
+        Extrapolation.CLAMP
       );
 
       backdropOpacity.value = interpolate(
         translateY.value,
         [-100, 0, 100],
         [0.2, 1, 0.2],
-        Extrapolate.CLAMP
+        Extrapolation.CLAMP
       );
     })
     .onEnd(() => {
@@ -113,7 +113,7 @@ export const LightImageModal = ({
 
   const imageStyles = useAnimatedStyle(() => {
     const interpolateProgress = (range: [number, number]) =>
-      interpolate(animationProgress.value, [0, 1], range, Extrapolate.CLAMP);
+      interpolate(animationProgress.value, [0, 1], range, Extrapolation.CLAMP);
 
     const top =
       translateY.value + interpolateProgress([y.value, targetY.value]);
