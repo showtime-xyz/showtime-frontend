@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "53.0.0",
+  "version": "55.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -84,7 +84,8 @@
     "@ethersproject/bignumber": "5.6.2",
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
-    "next": "12.2.5"
+    "next": "12.2.5",
+    "react-native-gesture-handler": "2.6.1"
   },
   "react-native": {
     "zlib": "browserify-zlib",
