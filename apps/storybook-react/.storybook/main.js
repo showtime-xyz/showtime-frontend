@@ -21,7 +21,10 @@ module.exports = {
           "nativewind",
           "@showtime-xyz",
         ],
-        babelPlugins: ["react-native-reanimated/plugin"],
+        babelPlugins: [
+          "@babel/plugin-proposal-export-namespace-from",
+          "react-native-reanimated/plugin",
+        ],
       },
     },
   ],
