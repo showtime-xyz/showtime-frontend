@@ -37,6 +37,8 @@ export const VerifyPhoneNumberModal = () => {
         });
         if (did) {
           await verifyPhoneNumber(phoneNumber, did);
+          // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to wear bugs.
+          magic?.user?.logout();
           router.pop();
         }
       } catch (error) {

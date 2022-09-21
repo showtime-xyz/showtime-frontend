@@ -2349,7 +2349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/wallet-mobile-sdk@npm:^0.3.1":
+"@coinbase/wallet-mobile-sdk@npm:0.3.1":
   version: 0.3.1
   resolution: "@coinbase/wallet-mobile-sdk@npm:0.3.1"
   dependencies:
@@ -8204,7 +8204,7 @@ __metadata:
     "@babel/runtime": ^7.18.9
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
-    "@coinbase/wallet-mobile-sdk": ^0.3.1
+    "@coinbase/wallet-mobile-sdk": 0.3.1
     "@config-plugins/detox": ^1.1.0
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2

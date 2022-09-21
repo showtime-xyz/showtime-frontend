@@ -133,7 +133,7 @@ export const SettingsWalletSlot = (props: Props) => {
                 </Text>
               ) : null}
 
-              <View tw="md:mb-3 md:flex-row">
+              <View tw="mb-3 md:flex-row">
                 <Text tw="text-base font-bold text-gray-900 dark:text-white md:self-center">
                   {display}
                 </Text>
@@ -157,6 +157,7 @@ export const SettingsWalletSlot = (props: Props) => {
             <WalletDropdownMenu
               address={address}
               isCurrent={isConnectedAddress}
+              isMagicWallet={!!props.wallet.is_email || !!props.wallet.is_phone}
               onEditNickname={props.onEditNickname}
             />
           </View>
