@@ -14,7 +14,7 @@ import {
 } from "react-native-gesture-handler";
 import Animated, {
   cancelAnimation,
-  Extrapolate,
+  Extrapolation,
   interpolate,
   runOnUI,
   useAnimatedReaction,
@@ -556,7 +556,7 @@ export const GestureContainer = React.forwardRef<
         shareAnimatedValue.value,
         [0, calcHeight],
         [0, -calcHeight],
-        Extrapolate.CLAMP
+        Extrapolation.CLAMP
       );
     } else {
       headerTransY = -shareAnimatedValue.value;

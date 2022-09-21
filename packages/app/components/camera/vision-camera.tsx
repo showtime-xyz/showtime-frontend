@@ -9,7 +9,7 @@ import {
   TapGestureHandler,
 } from "react-native-gesture-handler";
 import Animated, {
-  Extrapolate,
+  Extrapolation,
   interpolate,
   useAnimatedGestureHandler,
   useAnimatedProps,
@@ -236,13 +236,13 @@ export function Camera({
         event.scale,
         [1 - 1 / SCALE_FULL_ZOOM, 1, SCALE_FULL_ZOOM],
         [-1, 0, 1],
-        Extrapolate.CLAMP
+        Extrapolation.CLAMP
       );
       zoom.value = interpolate(
         scale,
         [-1, 0, 1],
         [0, startZoom, 1],
-        Extrapolate.CLAMP
+        Extrapolation.CLAMP
       );
     },
   });
