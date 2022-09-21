@@ -35,7 +35,7 @@ export const VerifyPhoneNumberModal = () => {
         const did = await magic.auth.loginWithSMS({
           phoneNumber,
         });
-        // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to wear bugs.
+        // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to weird bugs.
         magic?.user?.logout();
 
         if (did) {

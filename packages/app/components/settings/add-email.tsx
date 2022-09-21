@@ -34,7 +34,7 @@ export const AddEmailModal = () => {
 
       try {
         const did = await magic.auth.loginWithMagicLink({ email });
-        // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to wear bugs.
+        // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to weird bugs.
         magic?.user?.logout();
 
         if (did) {
