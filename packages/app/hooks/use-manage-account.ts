@@ -8,6 +8,7 @@ import { useToast } from "@showtime-xyz/universal.toast";
 import { removeWalletFromBackend } from "app/lib/add-wallet";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { obfuscatePhoneNumber } from "app/utilities";
 
 export function useManageAccount() {
   const toast = useToast();
@@ -66,7 +67,9 @@ export function useManageAccount() {
         if (error?.response?.data?.error?.code === 420) {
           Alert.alert(
             "Phone number already linked to another account",
-            `Would you like to link ${phoneNumber} to this account? \n\n By doing so, you will lose your access to the previous account`,
+            `Would you like to link ${obfuscatePhoneNumber(
+              phoneNumber
+            )} to this account? \n\n By doing so, you will lose your access to the previous account`,
             [
               { text: "Cancel" },
               {
