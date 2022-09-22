@@ -50,7 +50,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { isMagic } = useWeb3();
   const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
-    //@ts-ignore
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
