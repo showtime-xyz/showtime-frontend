@@ -236,7 +236,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
           <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <View>
+            <View tw="flex-1">
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
