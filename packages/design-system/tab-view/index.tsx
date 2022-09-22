@@ -53,7 +53,12 @@ function HeaderTabView<T extends Route>({
         navigationState: NavigationState<Route>;
       }
     ) => {
-      if (hideTabBar) return null;
+      if (
+        hideTabBar ||
+        !props.navigationState.routes ||
+        props.navigationState.routes.length === 0
+      )
+        return null;
       return (
         <>
           {autoWidthTabBar ? (
