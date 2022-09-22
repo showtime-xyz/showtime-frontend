@@ -59,7 +59,7 @@
     },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.41",
+        "version": "0.0.42",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/collapsible-tab-view"
     },
@@ -101,7 +101,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.83",
+        "version": "0.0.84",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -149,7 +149,7 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.53",
+        "version": "0.0.54",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
@@ -251,13 +251,13 @@
     },
     "switch": {
         "scope": "showtime.universal",
-        "version": "0.0.50",
+        "version": "0.0.51",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/switch"
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.35",
+        "version": "0.0.36",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
