@@ -35,7 +35,7 @@ export const PrivacyAndSecuritySettings = () => {
 
   return (
     <ScrollView tw="w-full">
-      {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
+      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <SettingHeaderSection title="Privacy & Security" />
       <SettingBody>{list.map(renderSetting)}</SettingBody>
     </ScrollView>

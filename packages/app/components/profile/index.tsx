@@ -163,7 +163,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
           />
         )}
         <View tw="web:max-w-screen-xl w-full">
-          {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
+          {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
           <ProfileTop
             address={username}
             animationHeaderPosition={animationHeaderPosition}
@@ -198,8 +198,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
           renderScene={renderScene}
           onIndexChange={setIndex}
           renderScrollHeader={renderHeader}
-          minHeaderHeight={headerHeight}
-          refreshControlTop={headerHeight}
+          minHeaderHeight={Platform.select({
+            default: headerHeight,
+            android: 0,
+          })}
+          refreshControlTop={Platform.select({
+            ios: headerHeight,
+            default: 0,
+          })}
           initialLayout={{
             width: contentWidth,
           }}

@@ -35,9 +35,9 @@ export const BottomTabbar = ({
     <View
       style={{
         position: "absolute",
-        bottom: !isAuthenticated || isTabBarHidden ? -100 : 0,
+        bottom: 0,
         width: "100%",
-        height: 64 + safeAreaBottom,
+        height: !isAuthenticated || isTabBarHidden ? 0 : 64 + safeAreaBottom,
         overflow: "hidden",
         backgroundColor: "transparent",
       }}
@@ -45,7 +45,9 @@ export const BottomTabbar = ({
         nativeEvent: {
           layout: { height },
         },
-      }) => nativeBottomTabBarHeightCallback(height)}
+      }) => {
+        nativeBottomTabBarHeightCallback(height);
+      }}
     >
       <BlurView
         blurRadius={20}
