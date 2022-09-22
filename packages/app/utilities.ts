@@ -540,3 +540,13 @@ export const convertUTCDateToLocalDate = (dateStr: string) => {
 
   return new Date(dateStr + "Z");
 };
+
+export const obfuscatePhoneNumber = (phoneNumber: string) => {
+  if (!phoneNumber) return "";
+  const obfuscated =
+    phoneNumber.slice(0, 3) +
+    "*".repeat(phoneNumber.length - 5) +
+    phoneNumber.slice(-2);
+
+  return obfuscated;
+};

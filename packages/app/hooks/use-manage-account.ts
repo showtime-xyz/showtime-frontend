@@ -2,15 +2,19 @@ import { useCallback } from "react";
 
 import { useSWRConfig } from "swr";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { useToast } from "@showtime-xyz/universal.toast";
 
 import { removeWalletFromBackend } from "app/lib/add-wallet";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { obfuscatePhoneNumber } from "app/utilities";
 
 export function useManageAccount() {
   const toast = useToast();
   const { mutate } = useSWRConfig();
+
+  const Alert = useAlert();
 
   const addEmail = useCallback(
     async (email: string, did: string) => {
@@ -54,20 +58,62 @@ export function useManageAccount() {
         });
 
         mutate(MY_INFO_ENDPOINT);
-
         toast?.show({
           message: "Phone number successfully verified!",
           hideAfter: 4000,
         });
-      } catch (error) {
-        toast?.show({
-          message:
-            "Unable to verify your phone number at this time, please try again!",
-          hideAfter: 4000,
-        });
+      } catch (error: any) {
+        // User has already linked this phone to another account so we ask whether we should reassign to this account.
+        if (error?.response?.data?.error?.code === 420) {
+          Alert.alert(
+            "Phone number already linked to another account",
+            `Would you like to link ${obfuscatePhoneNumber(
+              phoneNumber
+            )} to this account? \n\n By doing so, you will lose your access to the previous account`,
+            [
+              { text: "Cancel" },
+              {
+                text: "Confirm",
+                onPress: async () => {
+                  try {
+                    await axios({
+                      url: `/v1/magic/wallet`,
+                      method: "POST",
+                      data: {
+                        phone_number: phoneNumber,
+                        did,
+                        reassign_phone_number: true,
+                      },
+                      overrides: {
+                        forceAccessTokenAuthorization: true,
+                      },
+                    });
+                    mutate(MY_INFO_ENDPOINT);
+                    toast?.show({
+                      message: "Phone number successfully verified!",
+                      hideAfter: 4000,
+                    });
+                  } catch (e) {
+                    toast?.show({
+                      message:
+                        "Unable to verify your phone number at this time, please try again!",
+                      hideAfter: 4000,
+                    });
+                  }
+                },
+              },
+            ]
+          );
+        } else {
+          toast?.show({
+            message:
+              "Unable to verify your phone number at this time, please try again!",
+            hideAfter: 4000,
+          });
+        }
       }
     },
-    [toast, mutate]
+    [toast, mutate, Alert]
   );
 
   const removeAccount = useCallback(
