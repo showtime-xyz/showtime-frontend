@@ -293,7 +293,7 @@ module.exports = {
   content: [
     "./App.tsx",
     "../../packages/**/*.{js,ts,jsx,tsx}",
-    "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
+    // "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
