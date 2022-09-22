@@ -26,9 +26,11 @@ Then you can install the new version of the packages in `apps/expo/package.json`
 
 You can run `bit status` at all times to check the status of the components.
 
-## Use in your own app
+## Use Universal UI in your own app
 
 You can get started pretty easily if you follow the same monorepo structure as the Showtime monorepo or [Solito example monorepo](https://github.com/nandorojo/solito/tree/master/example-monorepos/with-tailwind).
+
+`cd apps/expo`
 
 `yarn add @showtime-xyz/universal.view @showtime-xyz/universal.text`
 
@@ -68,6 +70,23 @@ content: [
 ],
 important: "html",
 // ...
+```
+
+You can now use Universal in your app:
+
+```tsx:app/hello-world.tsx
+import { View } from "@showtime-xyz/universal.view"
+import { Text } from "@showtime-xyz/universal.text"
+
+export function HelloWorld() {
+  return (
+    <View tw="flex-1 justify-center items-center bg-white dark:bg-black">
+      <Text tw="text-lg text-black dark:text-white md:dark:text-purple">
+        Hello, World!
+      </Text>
+    </View>
+  )
+}
 ```
 
 Enjoy!
