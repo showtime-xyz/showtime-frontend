@@ -11,4 +11,5 @@ export const ClaimScreen = withModalScreen(ClaimModal, {
   matchingPathname: "/claim/[contractAddress]",
   matchingQueryParam: "claimModal",
   disableBackdropPress: true,
+  snapPoints: ["100%"],
 });

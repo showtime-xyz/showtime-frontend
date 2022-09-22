@@ -54,8 +54,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   itemHeight,
   setMomentumScrollCallback,
 }) {
-  const [detailHeight, setDetailHeight] = useState(0);
   const headerHeight = useHeaderHeight();
+  const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
   const bottomHeight = usePlatformBottomHeight();
@@ -87,13 +87,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     windowWidth,
   ]);
   const platformHeaderHeight = Platform.select({
-    web: 0,
-    default: headerHeight,
+    ios: headerHeight,
+    default: 0,
   });
-
   const contentTransY = useDerivedValue(() => {
     const visibleContentHeight =
-      windowHeight - detailHeight - StatusBarHeight - headerHeight;
+      windowHeight - headerHeight - detailHeight - StatusBarHeight;
 
     if (mediaHeight < visibleContentHeight) {
       return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;
@@ -165,13 +164,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View
-        tw="w-full"
-        style={{
-          height: itemHeight,
-          overflow: "hidden",
-        }}
-      >
+      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
         {Platform.OS !== "web" && (
           <View>
             {nft.blurhash ? (

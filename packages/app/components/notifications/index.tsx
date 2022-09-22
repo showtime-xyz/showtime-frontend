@@ -97,21 +97,25 @@ export const Notifications = ({ useWindowScroll = true }) => {
         // for blur header effect on iOS
         style={{
           height: Platform.select({
-            web: windowHeight - bottomBarHeight - headerHeight,
-            default: windowHeight,
+            default: windowHeight - bottomBarHeight - headerHeight,
+            android: windowHeight - bottomBarHeight,
+            ios: windowHeight,
           }),
         }}
         overscan={{
           main: 100,
           reverse: 100,
         }}
-        // for blur header effect on Native
+        // for blur effect on Native
         contentContainerStyle={Platform.select({
-          default: {
+          ios: {
             paddingTop: headerHeight,
             paddingBottom: bottomBarHeight,
           },
-          web: {},
+          android: {
+            paddingBottom: bottomBarHeight,
+          },
+          default: {},
         })}
         // Todo: unity refresh control same as tab view
         refreshControl={
