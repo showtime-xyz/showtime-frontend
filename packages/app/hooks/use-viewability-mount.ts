@@ -56,7 +56,7 @@ export const useViewabilityMount = ({
   useEffect(() => {
     if (isItemInList) {
       if (!isScreenFocused) {
-        unload();
+        loadPlayOrPause(false);
       } else if (context.value.includes(id)) {
         const shouldPlay = context.value[1] === id;
         loadPlayOrPause(shouldPlay);
