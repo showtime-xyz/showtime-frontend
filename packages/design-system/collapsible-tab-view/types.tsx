@@ -48,10 +48,6 @@ export type CollapsibleHeaderProps<T extends Route> = {
   refreshControlColor?: string;
   refreshControlTop?: number;
   emptyBodyComponent?: JSX.Element | null;
-  /**
-   * WEB_ONLY: Insert element into tabbar on Sticky.
-   */
-  insertStickyTabBarElement?: JSX.Element | null;
   renderSceneHeader?: (props: T) => JSX.Element | null;
 };
 

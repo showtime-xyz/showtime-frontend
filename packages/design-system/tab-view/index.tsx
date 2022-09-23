@@ -1,4 +1,4 @@
-import { useCallback, isValidElement } from "react";
+import { useCallback } from "react";
 import { Platform, StatusBar, View } from "react-native";
 
 import {
@@ -31,7 +31,6 @@ export * from "./scrollable-auto-width-tab-bar";
 export * from "./scrollable-tab-bar";
 type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
   autoWidthTabBar?: boolean;
-  insertTabBarElement?: JSX.Element;
   hideTabBar?: boolean;
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
@@ -40,8 +39,8 @@ function HeaderTabView<T extends Route>({
   autoWidthTabBar,
   renderScene,
   navigationState,
-  insertTabBarElement,
   hideTabBar = false,
+  renderTabBar: renderTabBarProps,
   ...props
 }: TabBarProps<T>) {
   const insets = useSafeAreaInsets();
@@ -50,15 +49,19 @@ function HeaderTabView<T extends Route>({
   const renderTabBar = useCallback(
     (
       props: SceneRendererProps & {
-        navigationState: NavigationState<Route>;
+        navigationState: NavigationState<T>;
       }
     ) => {
       if (
         hideTabBar ||
-        !props.navigationState.routes ||
-        props.navigationState.routes.length === 0
-      )
+        !props.navigationState?.routes ||
+        props.navigationState?.routes?.length === 0
+      ) {
         return null;
+      }
+      if (renderTabBarProps) {
+        return renderTabBarProps(props);
+      }
       return (
         <>
           {autoWidthTabBar ? (
@@ -66,11 +69,10 @@ function HeaderTabView<T extends Route>({
           ) : (
             <ScollableTabBar {...props} />
           )}
-          {isValidElement(insertTabBarElement) && insertTabBarElement}
         </>
       );
     },
-    [autoWidthTabBar, hideTabBar, insertTabBarElement]
+    [autoWidthTabBar, hideTabBar, renderTabBarProps]
   );
   const onPullEnough = useCallback(() => {
     Haptics.impactAsync();

@@ -8,6 +8,8 @@ import {
   HeaderTabView,
   Route,
   TabSpinner,
+  ScollableAutoWidthTabBar,
+  NavigationState,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,6 +21,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
@@ -51,6 +54,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isLoading,
     mutate,
   } = useUserProfile({ address: username });
+  const { width: scrollbarWidth } = useScrollbarSize();
+
   const [type] = useParam("type");
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -153,7 +158,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const renderHeader = useCallback(() => {
     return (
       <View tw="items-center bg-white dark:bg-black">
-        {Platform.OS === "web" && (
+        {/* {Platform.OS === "web" && (
           <View
             tw="dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white opacity-0 dark:bg-black md:opacity-100"
             style={{
@@ -161,8 +166,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
               height: `calc(100% + 44px)`,
             }}
           />
-        )}
-        <View tw="web:max-w-screen-xl w-full">
+        )} */}
+        <View tw="w-full max-w-screen-xl">
           {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
           <ProfileTop
             address={username}
@@ -177,7 +182,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
       </View>
     );
   }, [
-    headerBgLeft,
     headerHeight,
     username,
     animationHeaderPosition,
@@ -187,10 +191,29 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isLoading,
     isError,
   ]);
-
+  const renderTabBar = useCallback(
+    (
+      props: SceneRendererProps & {
+        navigationState: NavigationState<Route>;
+      }
+    ) => (
+      <View tw="dark:shadow-dark shadow-light">
+        <View tw="mx-auto w-full max-w-screen-xl">
+          <ScollableAutoWidthTabBar {...props} />
+          <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
+            <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
+              {data?.tabs[index]?.displayed_count} ITEMS
+            </Text>
+            <ProfileListFilter />
+          </View>
+        </View>
+      </View>
+    ),
+    [data?.tabs, index]
+  );
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
-      <View style={{ width: contentWidth }} tw="flex-1">
+      <View style={{ width: width - scrollbarWidth }} tw="flex-1">
         <HeaderTabView
           onStartRefresh={onStartRefresh}
           isRefreshing={isRefreshing}
@@ -210,28 +233,16 @@ const Profile = ({ username }: ProfileScreenProps) => {
             width: contentWidth,
           }}
           style={{ zIndex: 1 }}
-          autoWidthTabBar
           emptyBodyComponent={isError ? <Profile404 /> : null}
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
-          insertStickyTabBarElement={
-            <View
-              tw="dark:shadow-dark shadow-light absolute left-0 top-0 h-full w-screen bg-white dark:bg-black"
-              style={{
-                left: headerBgLeft,
-              }}
-            />
-          }
-          insertTabBarElement={
-            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
-              <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
-                {data?.tabs[index]?.displayed_count} ITEMS
-              </Text>
-              <ProfileListFilter />
-            </View>
-          }
+          renderTabBar={renderTabBar}
           sceneContainerStyle={Platform.select({
-            web: { marginTop: isMdWidth ? 16 : 0 },
+            web: {
+              marginTop: isMdWidth ? 16 : 0,
+              maxWidth: contentWidth,
+              alignSelf: "center",
+            },
             default: null,
           })}
         />
