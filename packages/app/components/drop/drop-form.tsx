@@ -540,7 +540,7 @@ export const DropForm = () => {
             <Button
               variant="primary"
               size="regular"
-              tw={state.status === "loading" ? "opacity-45" : ""}
+              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
               disabled={state.status === "loading"}
               onPress={handleSubmit(onSubmit)}
             >
