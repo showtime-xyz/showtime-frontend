@@ -188,8 +188,9 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         <Button
           onPress={close}
           variant="tertiary"
-          tw="h-12 w-12 rounded-full"
-          iconOnly={true}
+          size="regular"
+          iconOnly
+          tw="bg-white px-3 dark:bg-gray-900"
         >
           <ChevronLeft
             width={24}
@@ -215,8 +216,9 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         <Button
           onPress={() => setShowSearch(!showSearch)}
           variant="tertiary"
-          tw="h-12 w-12 rounded-full"
-          iconOnly={true}
+          size="regular"
+          iconOnly
+          tw="bg-white px-3 dark:bg-gray-900"
         >
           {showSearch ? (
             <Close width={24} height={24} color={isDark ? "#FFF" : "#000"} />
