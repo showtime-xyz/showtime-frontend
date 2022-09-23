@@ -54,13 +54,15 @@ export const ClampText = ({
         tw={tw}
         ref={textRef as any}
         style={Platform.select({
-          web: {
-            "-webkit-mask-image": showMore
-              ? `linear-gradient(to top, transparent 0%, transparent 2rem, rgb(0, 0, 0) 2rem, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(0, 0, 0) 0%, rgb(0, 0, 0) ${
-                  containerWidth / 2
-                }px, transparent ${containerWidth}px, transparent 100%)`
-              : null,
-          } as any,
+          web: isPureText
+            ? undefined
+            : ({
+                "-webkit-mask-image": showMore
+                  ? `linear-gradient(to top, transparent 0%, transparent 2rem, rgb(0, 0, 0) 2rem, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(0, 0, 0) 0%, rgb(0, 0, 0) ${
+                      containerWidth / 2
+                    }px, transparent ${containerWidth}px, transparent 100%)`
+                  : null,
+              } as any),
           default: undefined,
         })}
         onTextLayout={onTextLayout}

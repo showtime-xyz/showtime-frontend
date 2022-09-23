@@ -24,6 +24,7 @@ import { MAX_CONTENT_WIDTH } from "app/constants/layout";
 import { useAddWalletNickname } from "app/hooks/api/use-add-wallet-nickname";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
@@ -91,7 +92,7 @@ const SettingsTabs = () => {
   const { width } = useWindowDimensions();
 
   const isMdWidth = width >= breakpoints["md"];
-
+  const { width: scrollbarWidth } = useScrollbarSize();
   const { user, isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
@@ -364,7 +365,7 @@ const SettingsTabs = () => {
   }, [headerHeight, index, isWeb, setIndex]);
 
   return (
-    <View style={{ width }} tw="flex-1">
+    <View style={{ width: width - scrollbarWidth }} tw="flex-1">
       <HeaderTabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -382,7 +383,7 @@ const SettingsTabs = () => {
         hideTabBar={isMdWidth}
         swipeEnabled={!isMdWidth}
         initialLayout={{
-          width: width,
+          width: width - scrollbarWidth,
         }}
         style={{ zIndex: 1 }}
       />

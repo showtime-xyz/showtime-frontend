@@ -60,7 +60,6 @@ function CollapsibleHeaderTabView<T extends Route>(
     initTabbarHeight = 44,
     minHeaderHeight = 0,
     navigationState,
-    insertStickyTabBarElement,
     emptyBodyComponent,
     renderScene,
     renderSceneHeader,
@@ -140,9 +139,6 @@ function CollapsibleHeaderTabView<T extends Route>(
           onStateChange={onStickyStateChange}
           top={minHeaderHeight}
         >
-          {React.isValidElement(insertStickyTabBarElement) &&
-            stickyState === StatusCode.STATUS_FIXED &&
-            insertStickyTabBarElement}
           <View onLayout={tabbarOnLayout}>{children}</View>
         </Sticky>
       </View>
