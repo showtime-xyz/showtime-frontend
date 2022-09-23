@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal, Platform } from "react-native";
 
-import Animated, { FadeIn } from "react-native-reanimated";
-
 import { Button } from "@showtime-xyz/universal.button";
 import {
   CountryCodePicker,
@@ -26,7 +24,6 @@ type PhoneNumberPickerProp = {
 };
 
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
-  const isDark = useIsDarkMode();
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
   const [country, setCountry] = useState("US");
@@ -57,8 +54,6 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
   }, [search]);
 
   const leftElement = useMemo(() => {
-    if (Platform.OS === "web") return null;
-
     return (
       <PressableScale
         onPress={() => {
@@ -111,22 +106,30 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
+        transparent={Platform.OS === "web"}
+        statusBarTranslucent={Platform.OS === "web"}
       >
-        <SafeAreaView style={{ backgroundColor: isDark ? "#000" : undefined }}>
-          <Header
-            title="Select country"
-            close={() => setModalVisible(false)}
-            onSearchSubmit={(value) => setSearch(value)}
+        <View tw="min-h-screen bg-white dark:bg-black">
+          <SafeAreaView>
+            <View tw="mx-auto w-full max-w-screen-md">
+              <Header
+                title="Select country"
+                close={() => setModalVisible(false)}
+                onSearchSubmit={(value) => setSearch(value)}
+                twCenter="max-w-screen-sm"
+              />
+            </View>
+          </SafeAreaView>
+          <CountryCodePicker
+            data={filteredData}
+            value={country}
+            onChange={useCallback((value) => {
+              setCountry(value);
+              setModalVisible(false);
+            }, [])}
+            tw="mx-auto w-full max-w-screen-sm"
           />
-        </SafeAreaView>
-        <CountryCodePicker
-          data={filteredData}
-          value={country}
-          onChange={useCallback((value) => {
-            setCountry(value);
-            setModalVisible(false);
-          }, [])}
-        />
+        </View>
       </Modal>
 
       <LoginInputField
@@ -147,12 +150,14 @@ type Props = {
   title?: string;
   close?: () => void;
   onSearchSubmit: (search: string) => void;
+  twCenter?: string;
 };
 
-export function Header({ title, close, onSearchSubmit }: Props) {
+export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
   const isDark = useIsDarkMode();
   const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
+
   const { top: safeAreaTop } = useSafeAreaInsets();
 
   const handleSearch = (text: string) => {
@@ -163,7 +168,9 @@ export function Header({ title, close, onSearchSubmit }: Props) {
       onSearchSubmit(text);
     }, 40);
   };
-
+  const onPressTitle = () => {
+    setShowSearch(true);
+  };
   useEffect(() => {
     if (!showSearch) {
       onSearchSubmit("");
@@ -175,7 +182,7 @@ export function Header({ title, close, onSearchSubmit }: Props) {
       style={{
         marginTop: safeAreaTop,
       }}
-      tw="w-full flex-row items-center px-4 py-2 dark:bg-black"
+      tw="w-full flex-row items-center justify-between bg-white px-4 py-2 dark:bg-black"
     >
       <View tw="h-12 w-12 items-center justify-center">
         <Button
@@ -192,15 +199,18 @@ export function Header({ title, close, onSearchSubmit }: Props) {
         </Button>
       </View>
 
-      <Animated.View layout={FadeIn} style={{ flex: 1, marginVertical: 8 }}>
+      <View tw={["my-2 mx-2 flex-1", twCenter]}>
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text tw="font-space-bold px-4 text-lg font-bold dark:text-white">
+          <Text
+            onPress={onPressTitle}
+            tw="font-space-bold px-4 py-3.5 text-lg font-bold dark:text-white"
+          >
             {title}
           </Text>
         )}
-      </Animated.View>
+      </View>
       <View tw="h-12 w-12 items-center justify-center">
         <Button
           onPress={() => setShowSearch(!showSearch)}

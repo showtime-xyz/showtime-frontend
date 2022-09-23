@@ -60,7 +60,7 @@ export function LoginInputField({
     [onSubmit]
   );
   const handleOnBlur = useCallback(
-    (onBlur) => {
+    (onBlur: () => void) => {
       if (bottomSheetContext) {
         bottomSheetContext.shouldHandleKeyboardEvents.value = false;
       }

@@ -6,8 +6,9 @@ import {
   useEffect,
   useMemo,
 } from "react";
-import { FlatList } from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 
+import { ListRenderItemInfo } from "@shopify/flash-list";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -15,6 +16,7 @@ import Animated, {
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,6 +27,8 @@ type CountryCodePickerProps = {
   value: string;
   onChange: (value: string) => void;
   data?: CountryDataType[];
+  style?: StyleProp<ViewStyle>;
+  tw?: string;
 };
 
 const PickerContext = createContext<any>(null);
@@ -32,7 +36,6 @@ const PickerContext = createContext<any>(null);
 export const CountryCodePicker = (props: CountryCodePickerProps) => {
   const { onChange, value } = props;
   const sharedValue = useSharedValue(value);
-  const isDark = useIsDarkMode();
 
   useEffect(() => {
     sharedValue.value = value;
@@ -47,24 +50,37 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
       },
     };
   }, [onChange, sharedValue]);
-
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<CountryDataType>) => {
+      return <PickerItem item={item} />;
+    },
+    []
+  );
+  const ItemSeparatorComponent = useCallback(
+    () => <View tw="h-[1px] w-full bg-gray-200 dark:bg-gray-800" />,
+    []
+  );
+  const keyExtractor = useCallback((item: CountryDataType) => item.code, []);
   return (
     <PickerContext.Provider value={contextValue}>
-      <FlatList
-        keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={useCallback(
-          () => (
-            <View tw="h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
-          ),
-          []
-        )}
-        renderItem={useCallback(({ item }) => {
-          return <PickerItem item={item} />;
-        }, [])}
-        style={{ backgroundColor: isDark ? "#000" : "#fff" }}
-        keyExtractor={useCallback((item) => item.code, [])}
-        data={props.data ?? data}
-      />
+      <View
+        tw={["flex-1 bg-white dark:bg-black", props?.tw ?? ""]}
+        style={props.style}
+      >
+        <InfiniteScrollList
+          useWindowScroll={false}
+          data={props.data ?? data}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ItemSeparatorComponent={ItemSeparatorComponent}
+          keyboardShouldPersistTaps="handled"
+          estimatedItemSize={64}
+          overscan={{
+            main: 64,
+            reverse: 64,
+          }}
+        />
+      </View>
     </PickerContext.Provider>
   );
 };
