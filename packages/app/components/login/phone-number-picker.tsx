@@ -93,9 +93,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
   const onSubmit = useCallback(
     (phoneNumber: string) =>
       props.handleSubmitPhoneNumber(
-        Platform.OS === "web"
-          ? `+${phoneNumber}`
-          : `${selectedCountry?.dial_code}${phoneNumber}`
+        `${selectedCountry?.dial_code}${phoneNumber}`
       ),
     [props, selectedCountry]
   );
