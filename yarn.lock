@@ -7400,9 +7400,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.clamp-text@npm:^0.0.18":
-  version: 0.0.18
-  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.18"
+"@showtime-xyz/universal.clamp-text@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.19"
   dependencies:
     "@showtime-xyz/universal.text": 0.0.41
     "@storybook/react": 6.5.9
@@ -7411,13 +7411,13 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 39abe755837182ab9f57f41ea1e11bc64a1842a0c5de87471966489de9cfa625855e66d4ecdcb7b43dce7938cd52132a8d2f7a0f0edba608e187c56dc674ffd7
+  checksum: 0d9323eb612796d733ea5d9106bde1b38bc42ece6e7ef22f55938dd257acc781d22f13dd4aa50814daa95faef1d72832f449daed8c60b1e74664bd59b8e0e7e0
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.collapsible-tab-view@npm:0.0.42, @showtime-xyz/universal.collapsible-tab-view@npm:^0.0.42":
-  version: 0.0.42
-  resolution: "@showtime-xyz/universal.collapsible-tab-view@npm:0.0.42"
+"@showtime-xyz/universal.collapsible-tab-view@npm:0.0.43, @showtime-xyz/universal.collapsible-tab-view@npm:^0.0.43":
+  version: 0.0.43
+  resolution: "@showtime-xyz/universal.collapsible-tab-view@npm:0.0.43"
   dependencies:
     "@storybook/react": 6.5.9
     react-native-tab-view-next: 3.1.3
@@ -7429,7 +7429,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 50c1a37ec7082b03138ff36c306febefc0b3ee8d8dc717860be2f8b73a1535f9a47ffc1af69904672a9f6161fa5b77294a8141686781c84b8669d1449da48cbd
+  checksum: 094055b847690d845414c077c7bd061ddad3149a8490c24a20571c0711a379e734f7a8aa574ecbd6b00a43eb992eb79864198909bc12479580674d1a4c685be2
   languageName: node
   linkType: hard
 
@@ -8004,12 +8004,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tab-view@npm:^0.0.36":
-  version: 0.0.36
-  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.36"
+"@showtime-xyz/universal.tab-view@npm:^0.0.37":
+  version: 0.0.37
+  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.37"
   dependencies:
     "@shopify/flash-list": 1.2.1
-    "@showtime-xyz/universal.collapsible-tab-view": 0.0.42
+    "@showtime-xyz/universal.collapsible-tab-view": 0.0.43
     "@showtime-xyz/universal.haptics": 0.0.12
     "@showtime-xyz/universal.hooks": 0.0.42
     "@showtime-xyz/universal.infinite-scroll-list": 0.0.35
@@ -8028,7 +8028,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 08bad949ab244fc2db5b5b326a6dd2f028917faf3155743f176a0d204a10a2088c7a2161d1351e53a98f8d2b269704bea1d1561cc040f57024408f6b3cf595a0
+  checksum: 6631bb44653d0960c6ef4e4026c9f503c6e3db0313e4af510367779f99ac04a4830197c7f45f914912e44257b18f1d98c2da53de46e52b51118176792b7732cd
   languageName: node
   linkType: hard
 
@@ -8218,8 +8218,8 @@ __metadata:
     "@showtime-xyz/universal.bottom-sheet": ^0.0.60
     "@showtime-xyz/universal.button": ^0.0.58
     "@showtime-xyz/universal.checkbox": ^0.0.50
-    "@showtime-xyz/universal.clamp-text": ^0.0.18
-    "@showtime-xyz/universal.collapsible-tab-view": ^0.0.42
+    "@showtime-xyz/universal.clamp-text": ^0.0.19
+    "@showtime-xyz/universal.collapsible-tab-view": ^0.0.43
     "@showtime-xyz/universal.color-scheme": ^0.0.28
     "@showtime-xyz/universal.country-code-picker": ^0.0.58
     "@showtime-xyz/universal.data-pill": ^0.0.43
@@ -8252,7 +8252,7 @@ __metadata:
     "@showtime-xyz/universal.snackbar": ^0.0.79
     "@showtime-xyz/universal.spinner": ^0.0.48
     "@showtime-xyz/universal.switch": ^0.0.51
-    "@showtime-xyz/universal.tab-view": ^0.0.36
+    "@showtime-xyz/universal.tab-view": ^0.0.37
     "@showtime-xyz/universal.tailwind": ^0.0.39
     "@showtime-xyz/universal.text": ^0.0.41
     "@showtime-xyz/universal.text-input": ^0.0.41
