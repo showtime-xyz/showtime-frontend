@@ -13,4 +13,5 @@ export const DropScreen = withModalScreen(DropModal, {
   tw: "w-full lg:w-[800px]",
   disableBackdropPress: true,
   web_height: `max-h-[100vh] md:max-h-[82vh]`,
+  snapPoints: ["100%"],
 });

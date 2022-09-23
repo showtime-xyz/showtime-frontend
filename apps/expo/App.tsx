@@ -6,6 +6,7 @@ import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
+import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableScreens } from "react-native-screens";
 
 import { useLogRocket } from "app/hooks/use-logrocket";
@@ -16,7 +17,7 @@ import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
-
+enableLayoutAnimations(false);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,

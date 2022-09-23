@@ -1,5 +1,7 @@
 # Universal
 
+Introduction: [How to build a great universal design system](https://axeldelafosse.com/blog/universal-design-system) by Axel Delafosse
+
 ## Bit
 
 You need to install [Bit](https://bit.dev) to compile the design system.
@@ -24,9 +26,76 @@ Then you can install the new version of the packages in `apps/expo/package.json`
 
 You can run `bit status` at all times to check the status of the components.
 
-## Docs
+## Use Universal UI in your own app
 
-We don't have docs yet, but you can check out [Storybook](https://universal.showtime.xyz).
+You can get started pretty easily if you follow the same monorepo structure as the Showtime monorepo or [Solito example monorepo](https://github.com/nandorojo/solito/tree/master/example-monorepos/with-tailwind).
+
+`cd apps/expo`
+
+`yarn add @showtime-xyz/universal.view @showtime-xyz/universal.text`
+
+In `next.config.js`, please use `next-transpile-modules` to transpile the design system:
+
+```js
+const withTM = require("next-transpile-modules")([
+  "@showtime-xyz/universal.tailwind",
+  "@showtime-xyz/universal.view",
+  "@showtime-xyz/universal.text",
+]);
+```
+
+> Don't forget to add the Universal packages to this list. Keep this in mind when you install new packages.
+
+Then create or update the `tailwind.config.js` file in both `apps/expo` and `apps/next`.
+
+In `apps/expo`, make sure to use the following:
+
+```js
+// ...
+content: [
+  "./App.tsx",
+  "../../packages/**/*.{js,ts,jsx,tsx}",
+  "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
+],
+// ...
+```
+
+And in `apps/next`, make sure to use the following:
+
+```js
+// ...
+content: [
+  "./src/**/*.{js,ts,jsx,tsx}",
+  "../../packages/**/*.{js,ts,jsx,tsx}",
+],
+important: "html",
+// ...
+```
+
+You can now use Universal in your app:
+
+```tsx:app/hello-world.tsx
+import { View } from "@showtime-xyz/universal.view"
+import { Text } from "@showtime-xyz/universal.text"
+
+export function HelloWorld() {
+  return (
+    <View tw="flex-1 justify-center items-center bg-white dark:bg-black">
+      <Text tw="text-lg text-black dark:text-white md:dark:text-purple">
+        Hello, World!
+      </Text>
+    </View>
+  )
+}
+```
+
+Enjoy!
+
+## Storybook
+
+You can check out [Storybook](https://universal.showtime.xyz).
+
+You can also run the Storybook web app and the Storybook native app locally.
 
 ## How to contribute?
 

@@ -265,7 +265,7 @@ export const DropForm = () => {
 
   return (
     <BottomSheetModalProvider>
-      {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
+      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <ScrollView
         tw="p-4"
         ref={scrollViewRef}
