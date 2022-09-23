@@ -209,7 +209,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           </View>
           <Description
             descriptionText={nft?.token_description}
-            style={{ paddingHorizontal: 16, paddingBottom: 16 }}
+            tw="max-h-[30vh] overflow-auto p-4"
           />
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} />
