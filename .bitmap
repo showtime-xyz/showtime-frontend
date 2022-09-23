@@ -71,7 +71,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.58",
+        "version": "0.0.59",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
