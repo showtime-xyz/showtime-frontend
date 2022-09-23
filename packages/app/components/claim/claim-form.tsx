@@ -270,22 +270,25 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
 
-          <Fieldset
-            tw="mt-4 flex-1"
-            label="Add a comment (optional)"
-            placeholder="wow, this is so cool!"
-            onChangeText={(v) => (comment.current = v)}
-          />
+          {state.status === "idle" ? (
+            <Fieldset
+              tw="mt-4 flex-1"
+              label="Add a comment (optional)"
+              placeholder="wow, this is so cool!"
+              onChangeText={(v) => (comment.current = v)}
+            />
+          ) : null}
+
           <View tw="mt-4">
             <Button
               size="regular"
               variant="primary"
               disabled={state.status === "loading"}
-              tw={state.status === "loading" ? "opacity-45" : ""}
+              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
               {state.status === "loading"
-                ? "Claiming..."
+                ? "Claiming... wait up to 10 seconds"
                 : state.status === "error"
                 ? "Failed. Retry!"
                 : "Claim for free"}
