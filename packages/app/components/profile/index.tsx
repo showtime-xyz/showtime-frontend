@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useMemo, Suspense } from "react";
+import { useCallback, useReducer, Suspense } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -151,22 +151,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
       tabRefs,
     ]
   );
-  const headerBgLeft = useMemo(() => {
-    return Math.min(-(width - contentWidth + 15) / 2, 0);
-  }, [contentWidth, width]);
 
   const renderHeader = useCallback(() => {
     return (
       <View tw="items-center bg-white dark:bg-black">
-        {/* {Platform.OS === "web" && (
-          <View
-            tw="dark:shadow-dark shadow-light absolute left-0 h-full w-screen bg-white opacity-0 dark:bg-black md:opacity-100"
-            style={{
-              left: headerBgLeft,
-              height: `calc(100% + 44px)`,
-            }}
-          />
-        )} */}
         <View tw="w-full max-w-screen-xl">
           {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
           <ProfileTop
