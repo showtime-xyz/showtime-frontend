@@ -18,17 +18,12 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
-import { Sticky } from "app/lib/stickynode";
 import type { NFT } from "app/types";
-
-import { Hidden } from "design-system/hidden";
 
 const CARD_HEIGHT = 825;
 const CARD_CONTAINER_WIDTH = 620;
 const HORIZONTAL_GAPS = 24;
 const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
-const LEFT_SLIDE_WIDTH = 320;
-const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
 // type Tab = "following" | "curated" | "" | undefined;
 
@@ -69,19 +64,6 @@ export const FeedList = () => {
 
   return (
     <View tw="flex-row">
-      <Hidden until="xl">
-        <View
-          style={{
-            width: LEFT_SLIDE_WIDTH,
-            marginRight: LEFT_SLIDE_MARGIN,
-          }}
-        >
-          <Sticky enabled>
-            <SuggestedUsers />
-          </Sticky>
-        </View>
-      </Hidden>
-
       <View tw="flex-1" style={{ width: CARD_CONTAINER_WIDTH }}>
         {/* {isAuthenticated ? (
           <>

@@ -288,7 +288,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               onPress={handleClaimNFT}
             >
               {state.status === "loading"
-                ? "Claiming... wait up to 10 seconds"
+                ? "Claiming... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Retry!"
                 : "Claim for free"}
