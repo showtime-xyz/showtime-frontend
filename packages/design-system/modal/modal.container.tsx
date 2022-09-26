@@ -22,8 +22,8 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
 import { ModalContainerProps, ModalMethods } from "./types";
+
 // @ts-ignore
-import { useKeyboard } from "./useKeyboard";
 
 const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
@@ -99,15 +99,10 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         index={0}
         topInset={top}
         snapPoints={mobile_snapPoints!}
-        keyboardBehavior="extend"
-        android_keyboardInputMode="adjustPan"
-        keyboardBlurBehavior="restore"
         backgroundStyle={backgroundStyle}
         enablePanDownToClose={true}
         handleComponent={renderHandleComponent}
         backdropComponent={renderBackdropComponent}
-        // @ts-ignore
-        keyboardHandlerHook={useKeyboard}
         onClose={onClose}
         onDismiss={onClose}
         enableContentPanningGesture={enableContentPanningGesture}

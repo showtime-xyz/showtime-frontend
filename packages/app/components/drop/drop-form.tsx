@@ -14,7 +14,6 @@ import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -43,6 +42,10 @@ import {
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "design-system/keyboard-aware";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -263,15 +266,15 @@ export const DropForm = () => {
     );
   }
 
+  const ContainerScrollView = Platform.select({
+    android: KeyboardAwareBottomSheetScrollView,
+    default: KeyboardAwareScrollView,
+  });
+
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ScrollView
-        tw="p-4"
-        ref={scrollViewRef}
-        asKeyboardAwareScrollView
-        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
-      >
+      <ContainerScrollView ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -575,7 +578,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ScrollView>
+      </ContainerScrollView>
     </BottomSheetModalProvider>
   );
 };

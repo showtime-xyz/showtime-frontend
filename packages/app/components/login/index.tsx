@@ -4,8 +4,8 @@ import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import {
   SceneRendererProps,
-  TabView,
   Route,
+  TabView,
   ScollableTabBar,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -13,7 +13,12 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { yup } from "app/lib/yup";
 
-import { LoginContainer } from "./login-container";
+import "design-system/keyboard-aware";
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "design-system/keyboard-aware";
+
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
@@ -37,7 +42,7 @@ const LOGIN_ROUTES = [
 ];
 const CONTENT_HEIGHT = Platform.select({
   android: [450, 397],
-  default: [420, 420],
+  default: [460, 460],
 });
 
 export function Login({ onLogin }: LoginProps) {
@@ -153,37 +158,40 @@ export function Login({ onLogin }: LoginProps) {
       handleSubmitWallet,
     ]
   );
+
+  const ContainerScrollView = Platform.select({
+    android: KeyboardAwareBottomSheetScrollView,
+    default: KeyboardAwareScrollView,
+  });
   //#endregion
   return (
-    <LoginContainer style={styles.container}>
-      {isConnectingToWallet ? (
-        <View tw="py-40">
-          <Text tw="text-center dark:text-gray-400">
-            {walletName
-              ? `Pushed a request to ${walletName}... Please check your wallet.`
-              : `Pushed a request to your wallet...`}
-          </Text>
-        </View>
-      ) : (
-        <View
-          style={{
-            height: CONTENT_HEIGHT[index],
-          }}
-        >
-          <LoginHeader />
-          <TabView
-            navigationState={{ index, routes: LOGIN_ROUTES }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={(props) => <ScollableTabBar {...props} />}
-            initialLayout={{
-              width,
-            }}
-          />
-        </View>
-      )}
-      <LoginOverlays loading={loading && !isConnectingToWallet} />
-    </LoginContainer>
+    <View style={{ flex: 1 }}>
+      <ContainerScrollView>
+        {isConnectingToWallet ? (
+          <View tw="py-40">
+            <Text tw="text-center dark:text-gray-400">
+              {walletName
+                ? `Pushed a request to ${walletName}... Please check your wallet.`
+                : `Pushed a request to your wallet...`}
+            </Text>
+          </View>
+        ) : (
+          <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
+            <LoginHeader />
+            <TabView
+              navigationState={{ index, routes: LOGIN_ROUTES }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              renderTabBar={(props) => <ScollableTabBar {...props} />}
+              initialLayout={{
+                width,
+              }}
+            />
+          </View>
+        )}
+        <LoginOverlays loading={loading && !isConnectingToWallet} />
+      </ContainerScrollView>
+    </View>
   );
 }
 
