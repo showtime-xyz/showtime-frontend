@@ -5,6 +5,7 @@ import "setimmediate";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
 import { View } from "@showtime-xyz/universal.view";
 
@@ -39,6 +40,8 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
+
+enableExperimentalWebImplementation(true);
 
 export default function App({ Component, pageProps, router }: AppProps) {
   useLogRocket();
