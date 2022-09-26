@@ -185,7 +185,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         navigationState: NavigationState<Route>;
       }
     ) => (
-      <View tw="dark:shadow-dark shadow-light">
+      <View tw="dark:shadow-dark shadow-light bg-white dark:bg-black">
         <View tw="mx-auto w-full max-w-screen-xl">
           <ScollableAutoWidthTabBar {...props} />
           <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
@@ -220,7 +220,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
           initialLayout={{
             width: contentWidth,
           }}
-          style={{ zIndex: 1 }}
           emptyBodyComponent={isError ? <Profile404 /> : null}
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
