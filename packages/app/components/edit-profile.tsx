@@ -74,6 +74,7 @@ const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
+    .typeError("Please enter a valid username")
     .min(2)
     .max(30)
     .matches(
