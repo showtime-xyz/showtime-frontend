@@ -10,13 +10,13 @@ export interface NFTDetailsPayload {
 
 export function useFollowSuggestions() {
   const { data, error } = useSWR<NFTDetailsPayload>(
-    "/v1/get_follow_suggestions?recache=1",
+    "/v2/follow-suggestions",
     fetcher,
     { revalidateOnFocus: false, refreshInterval: 5 * 60 * 1000 }
   );
 
   return {
-    data: data?.data,
+    data: data,
     loading: !data,
     error,
   };
