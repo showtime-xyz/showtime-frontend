@@ -310,9 +310,9 @@ export const EditProfile = () => {
                       });
                       const uri = getLocalFileURI(file.file);
 
+                      onChange(file.file);
                       setSelectedImg(uri);
                       setCurrentCropField("coverPicture");
-                      onChange(file.file);
                     }}
                     style={{
                       height: coverImageHeight,
@@ -351,9 +351,9 @@ export const EditProfile = () => {
                             option: { allowsEditing: true, aspect: [1, 1] },
                           });
 
+                          onChange(file.file);
                           setSelectedImg(getLocalFileURI(file.file));
                           setCurrentCropField("profilePicture");
-                          onChange(file.file);
                         }}
                         tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
                       >
