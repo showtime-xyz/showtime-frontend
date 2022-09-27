@@ -208,9 +208,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
   const ContainerScrollView = Platform.select({
     android: KeyboardAwareBottomSheetScrollView,
-    default: KeyboardAwareScrollView,
+    ios: KeyboardAwareScrollView,
+    web: RNScrollView,
   });
-
   return (
     <ContainerScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">

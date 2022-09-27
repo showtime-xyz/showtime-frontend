@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import {
+  Platform,
+  useWindowDimensions,
+  ScrollView as RNScrollView,
+} from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +17,6 @@ import { Upload } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import {
   SceneRendererProps,
   TabView,
@@ -37,6 +40,10 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "design-system/keyboard-aware";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
@@ -63,10 +70,15 @@ type SceneViewProps = KeyboardAwareScrollViewProps & {
 };
 
 const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
+  const ContainerScrollView = Platform.select({
+    android: KeyboardAwareBottomSheetScrollView,
+    ios: KeyboardAwareScrollView,
+    web: RNScrollView,
+  });
+
   return (
-    <ScrollView
+    <ContainerScrollView
       style={[style, { display: focused ? "flex" : "none" }]}
-      asKeyboardAwareScrollView
       {...props}
     />
   );
@@ -445,6 +457,7 @@ export const EditProfile = () => {
                       required
                       multiline
                       value={value}
+                      textAlignVertical="top"
                       numberOfLines={3}
                       errorText={errors.bio?.message}
                       onBlur={onBlur}

@@ -268,7 +268,8 @@ export const DropForm = () => {
 
   const ContainerScrollView = Platform.select({
     android: KeyboardAwareBottomSheetScrollView,
-    default: KeyboardAwareScrollView,
+    ios: KeyboardAwareScrollView,
+    web: RNScrollView,
   });
 
   return (
