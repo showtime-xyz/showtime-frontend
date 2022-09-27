@@ -39,7 +39,7 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
       <Description
         descriptionText={nft?.token_description}
         maxLines={2}
-        tw="max-h-[30vh] overflow-auto pt-2"
+        tw="max-h-[30vh] pt-2"
       />
       <View tw="h-4" />
 
