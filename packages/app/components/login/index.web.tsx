@@ -1,12 +1,11 @@
 import { useCallback } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ConnectButton } from "../connect-button";
-import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
@@ -45,7 +44,7 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer style={styles.container}>
+    <ScrollView style={styles.container}>
       {walletStatus === "FETCHING_SIGNATURE" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -90,7 +89,7 @@ export function Login({ onLogin }: LoginProps) {
       )}
 
       <LoginOverlays loading={loading} />
-    </LoginContainer>
+    </ScrollView>
   );
 }
 
