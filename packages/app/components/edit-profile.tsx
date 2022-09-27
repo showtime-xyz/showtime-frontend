@@ -8,7 +8,6 @@ import {
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -65,7 +64,7 @@ const EDIT_PROFILE_ROUTES = [
     index: 2,
   },
 ];
-type SceneViewProps = KeyboardAwareScrollViewProps & {
+type SceneViewProps = RNScrollView & {
   focused?: boolean;
 };
 

@@ -285,6 +285,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               label="Add a comment (optional)"
               placeholder="wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
+              returnKeyLabel="Claim"
+              returnKeyType="done"
+              onSubmitEditing={handleClaimNFT}
             />
           ) : null}
 

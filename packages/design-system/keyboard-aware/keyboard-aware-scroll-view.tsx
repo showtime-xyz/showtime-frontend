@@ -42,12 +42,12 @@ function withReanimatedKeyboardAwareScrollView(Component: any) {
             return;
           }
 
-          const DISTANCE_BETWEEN_TEXT_INPUT_AND_KEYBOARD = 80;
+          const PADDING_BETWEEN_TEXT_INPUT_AND_KEYBOARD = 40;
 
           scrollViewRef?.current?.scrollTo({
             y:
               Math.max(scrollY.value, 0) +
-              DISTANCE_BETWEEN_TEXT_INPUT_AND_KEYBOARD +
+              PADDING_BETWEEN_TEXT_INPUT_AND_KEYBOARD +
               textinputBottomY -
               keyboardTopY,
           });

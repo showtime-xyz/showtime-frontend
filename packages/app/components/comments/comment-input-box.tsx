@@ -8,8 +8,6 @@ import {
 } from "react";
 import { Platform, ViewStyle } from "react-native";
 
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
@@ -51,7 +49,6 @@ export const CommentInputBox = forwardRef<
     null
   );
   const { bottom } = useSafeAreaInsets();
-  const context = useBottomSheetInternal(true);
   const { user } = useUser();
   //#endregion
 
