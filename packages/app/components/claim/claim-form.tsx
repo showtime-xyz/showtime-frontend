@@ -6,7 +6,6 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -38,6 +37,11 @@ import {
   isMobileWeb,
   userHasIncompleteExternalLinks,
 } from "app/utilities";
+
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "design-system/keyboard-aware";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
@@ -202,8 +206,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
+  const ContainerScrollView = Platform.select({
+    android: KeyboardAwareBottomSheetScrollView,
+    default: KeyboardAwareScrollView,
+  });
+
   return (
-    <ScrollView ref={scrollViewRef}>
+    <ContainerScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
@@ -315,6 +324,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           ) : null}
         </View>
       </View>
-    </ScrollView>
+    </ContainerScrollView>
   );
 };

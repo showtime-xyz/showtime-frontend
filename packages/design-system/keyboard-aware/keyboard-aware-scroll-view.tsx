@@ -42,8 +42,14 @@ function withReanimatedKeyboardAwareScrollView(Component: any) {
             return;
           }
 
+          const DISTANCE_BETWEEN_TEXT_INPUT_AND_KEYBOARD = 80;
+
           scrollViewRef?.current?.scrollTo({
-            y: Math.max(scrollY.value, 0) + textinputBottomY - keyboardTopY,
+            y:
+              Math.max(scrollY.value, 0) +
+              DISTANCE_BETWEEN_TEXT_INPUT_AND_KEYBOARD +
+              textinputBottomY -
+              keyboardTopY,
           });
         }
       );
@@ -53,8 +59,11 @@ function withReanimatedKeyboardAwareScrollView(Component: any) {
       () => {
         return keyboard.state.value;
       },
-      (keyboardState) => {
-        if (keyboardState === KeyboardState.OPEN) {
+      (keyboardState, prevState) => {
+        if (
+          prevState !== KeyboardState.OPEN &&
+          keyboardState === KeyboardState.OPEN
+        ) {
           runOnJS(performScroll)();
         }
       }
@@ -63,7 +72,6 @@ function withReanimatedKeyboardAwareScrollView(Component: any) {
     const containerPaddingStyle = useAnimatedProps(() => {
       return {
         paddingBottom: keyboard.height.value,
-        backgroundColor: "pink",
       };
     });
 
