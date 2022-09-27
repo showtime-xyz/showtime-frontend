@@ -11,13 +11,11 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { yup } from "app/lib/yup";
-
-import "design-system/keyboard-aware";
 import {
   KeyboardAwareBottomSheetScrollView,
   KeyboardAwareScrollView,
-} from "design-system/keyboard-aware";
+} from "app/components/keyboard-aware";
+import { yup } from "app/lib/yup";
 
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";

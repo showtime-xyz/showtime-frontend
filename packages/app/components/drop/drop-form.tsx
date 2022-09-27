@@ -19,6 +19,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "app/components/keyboard-aware";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
@@ -42,10 +46,6 @@ import {
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "design-system/keyboard-aware";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;

@@ -12,6 +12,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "app/components/keyboard-aware";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -37,11 +41,6 @@ import {
   isMobileWeb,
   userHasIncompleteExternalLinks,
 } from "app/utilities";
-
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "design-system/keyboard-aware";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();

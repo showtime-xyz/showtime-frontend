@@ -26,6 +26,10 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import {
+  KeyboardAwareBottomSheetScrollView,
+  KeyboardAwareScrollView,
+} from "app/components/keyboard-aware";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -39,10 +43,6 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "design-system/keyboard-aware";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
