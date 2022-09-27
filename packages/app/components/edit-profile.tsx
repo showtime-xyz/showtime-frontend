@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
@@ -65,8 +66,11 @@ type SceneViewProps = ScrollViewProps & {
 };
 
 const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
+  const ScrollComponent =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
+
   return (
-    <ScrollView
+    <ScrollComponent
       style={[style, { display: focused ? "flex" : "none" }]}
       {...props}
     />

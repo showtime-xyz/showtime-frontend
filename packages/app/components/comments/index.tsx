@@ -1,11 +1,10 @@
-import { useCallback, useMemo, useRef } from "react";
-import { StyleSheet } from "react-native";
+import { useCallback, useMemo, useRef, useEffect } from "react";
+import { Platform, StyleSheet, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { ModalFooter } from "@showtime-xyz/universal.modal";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,7 +25,19 @@ export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
+  const commentInputRef = useRef<TextInput>(null);
   //#endregion
+
+  //#region effects
+
+  useEffect(() => {
+    // auto focus on comment modal open on native
+    if (Platform.OS !== "web") {
+      setTimeout(() => {
+        commentInputRef.current?.focus?.();
+      }, 100);
+    }
+  }, []);
 
   //#region hooks
   const { isAuthenticated } = useUser();
@@ -142,13 +153,12 @@ export function Comments({ nft }: { nft: NFT }) {
             {...modalListProps}
           />
           {isAuthenticated && (
-            <ModalFooter>
-              <CommentInputBox
-                ref={inputRef}
-                submitting={isSubmitting}
-                submit={newComment}
-              />
-            </ModalFooter>
+            <CommentInputBox
+              ref={inputRef}
+              commentInputRef={commentInputRef}
+              submitting={isSubmitting}
+              submit={newComment}
+            />
           )}
         </>
       )}
