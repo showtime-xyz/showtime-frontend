@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { TextInputProps } from "react-native";
 
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
@@ -49,7 +48,6 @@ export function LoginInputField({
     reValidateMode: "onChange",
   });
   const inputValue = watch(INPUT_NAME);
-  const bottomSheetContext = useBottomSheetInternal(true);
   //#endregion
 
   //#region callbacks
@@ -59,31 +57,16 @@ export function LoginInputField({
     },
     [onSubmit]
   );
-  const handleOnBlur = useCallback(
-    (onBlur: () => void) => {
-      if (bottomSheetContext) {
-        bottomSheetContext.shouldHandleKeyboardEvents.value = false;
-      }
-      onBlur();
-    },
-    [bottomSheetContext]
-  );
-  const handleOnFocus = useCallback(() => {
-    if (bottomSheetContext) {
-      bottomSheetContext.shouldHandleKeyboardEvents.value = true;
-    }
-  }, [bottomSheetContext]);
+
   //#endregion
   return (
     <>
       <Controller
         control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({ field: { onChange, value } }) => (
           <Fieldset
             label={label}
             onChangeText={onChange}
-            onBlur={() => handleOnBlur(onBlur)}
-            onFocus={handleOnFocus}
             placeholder={placeholder}
             value={value}
             errorText={errors.data?.message}
