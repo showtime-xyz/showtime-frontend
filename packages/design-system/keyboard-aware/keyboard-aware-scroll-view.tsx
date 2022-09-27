@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef } from "react";
-import { TextInput, ScrollView } from "react-native";
+import { TextInput, ScrollView, Keyboard, Platform } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import Animated, {
@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
-function withReanimatedKeyboardAwareScrollView(Component) {
+function withReanimatedKeyboardAwareScrollView(Component: any) {
   const AnimatedScrollView = Animated.createAnimatedComponent(Component);
 
   return forwardRef(function KeyboardAwareReanimatedScrollView(
@@ -23,6 +23,13 @@ function withReanimatedKeyboardAwareScrollView(Component) {
     const scrollY = useSharedValue(0);
     const keyboard = useAnimatedKeyboard();
     const scrollViewRef = useRef<Animated.ScrollView>();
+
+    // https://github.com/facebook/react-native/issues/23364#issuecomment-642518054
+    // PR - https://github.com/facebook/react-native/pull/31943
+    const keyboardDismissProp = Platform.select({
+      ios: { keyboardDismissMode: "on-drag" } as const,
+      android: { onScrollEndDrag: Keyboard.dismiss } as const,
+    });
 
     const screenDimensions = useSafeAreaFrame();
     const performScroll = () => {
@@ -72,6 +79,8 @@ function withReanimatedKeyboardAwareScrollView(Component) {
     return (
       <>
         <AnimatedScrollView
+          {...keyboardDismissProp}
+          keyboardShouldPersistTaps="handled"
           {...props}
           //@ts-ignore
           ref={mergeRefs([ref, scrollViewRef])}

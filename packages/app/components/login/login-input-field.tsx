@@ -21,6 +21,7 @@ interface LoginInputFieldProps
   signInButtonLabel?: string;
   validationSchema?: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
+  textInputRef: any;
   onSubmit: (value: string) => void;
 }
 
@@ -34,6 +35,7 @@ export function LoginInputField({
   textContentType = "none",
   validationSchema,
   leftElement,
+  textInputRef,
   onSubmit,
 }: LoginInputFieldProps) {
   //#region hooks
@@ -68,6 +70,8 @@ export function LoginInputField({
             label={label}
             onChangeText={onChange}
             placeholder={placeholder}
+            //@ts-ignore
+            ref={textInputRef}
             value={value}
             errorText={errors.data?.message}
             autoCapitalize="none"
@@ -76,6 +80,7 @@ export function LoginInputField({
             textContentType={textContentType}
             leftElement={leftElement}
             returnKeyType="go"
+            onSubmitEditing={handleSubmit(handleSubmitData)}
           />
         )}
         name={INPUT_NAME}
@@ -85,7 +90,7 @@ export function LoginInputField({
         onPress={handleSubmit(handleSubmitData)}
         variant="primary"
         size="regular"
-        tw="mt-6"
+        tw={`mt-6 ${!inputValue ? "opacity-50" : null}`}
         disabled={!inputValue}
       >
         <Text tw="text-black dark:text-white">{signInButtonLabel}</Text>
