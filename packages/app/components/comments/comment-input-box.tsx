@@ -92,17 +92,6 @@ export const CommentInputBox = forwardRef<
     },
     [Alert, submit, selectedComment]
   );
-  const handleOnBlur = useCallback(() => {
-    if (context) {
-      context.shouldHandleKeyboardEvents.value = false;
-    }
-  }, [context]);
-
-  const handleOnFocus = useCallback(() => {
-    if (context) {
-      context.shouldHandleKeyboardEvents.value = true;
-    }
-  }, [context]);
 
   const handleOnClearPress = useCallback(() => {
     setSelectedComment(null);
@@ -145,8 +134,6 @@ export const CommentInputBox = forwardRef<
           paddingBottom: 0,
         }}
         onSubmit={handleOnSubmitComment}
-        onBlur={context ? handleOnBlur : undefined}
-        onFocus={context ? handleOnFocus : undefined}
         userAvatar={user?.data.profile.img_url}
       />
     </>
