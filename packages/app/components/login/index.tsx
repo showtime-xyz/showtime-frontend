@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { yup } from "app/lib/yup";
 
+import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
@@ -156,7 +157,7 @@ export function Login({ onLogin }: LoginProps) {
 
   //#endregion
   return (
-    <View style={{ flex: 1 }}>
+    <LoginContainer style={styles.container}>
       <ScrollView>
         {isConnectingToWallet ? (
           <View tw="py-40">
@@ -182,7 +183,7 @@ export function Login({ onLogin }: LoginProps) {
         )}
         <LoginOverlays loading={loading && !isConnectingToWallet} />
       </ScrollView>
-    </View>
+    </LoginContainer>
   );
 }
 

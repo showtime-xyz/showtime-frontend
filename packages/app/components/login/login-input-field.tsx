@@ -64,9 +64,10 @@ export function LoginInputField({
     <>
       <Controller
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <Fieldset
             label={label}
+            onBlur={onBlur}
             onChangeText={onChange}
             placeholder={placeholder}
             //@ts-ignore
