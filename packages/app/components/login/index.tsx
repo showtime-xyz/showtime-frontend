@@ -2,7 +2,6 @@ import { useMemo, useCallback, useState } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import {
   SceneRendererProps,
   Route,
@@ -158,31 +157,29 @@ export function Login({ onLogin }: LoginProps) {
   //#endregion
   return (
     <LoginContainer style={styles.container}>
-      <ScrollView>
-        {isConnectingToWallet ? (
-          <View tw="py-40">
-            <Text tw="text-center dark:text-gray-400">
-              {walletName
-                ? `Pushed a request to ${walletName}... Please check your wallet.`
-                : `Pushed a request to your wallet...`}
-            </Text>
-          </View>
-        ) : (
-          <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
-            <LoginHeader />
-            <TabView
-              navigationState={{ index, routes: LOGIN_ROUTES }}
-              renderScene={renderScene}
-              onIndexChange={setIndex}
-              renderTabBar={(props) => <ScollableTabBar {...props} />}
-              initialLayout={{
-                width,
-              }}
-            />
-          </View>
-        )}
-        <LoginOverlays loading={loading && !isConnectingToWallet} />
-      </ScrollView>
+      {isConnectingToWallet ? (
+        <View tw="py-40">
+          <Text tw="text-center dark:text-gray-400">
+            {walletName
+              ? `Pushed a request to ${walletName}... Please check your wallet.`
+              : `Pushed a request to your wallet...`}
+          </Text>
+        </View>
+      ) : (
+        <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
+          <LoginHeader />
+          <TabView
+            navigationState={{ index, routes: LOGIN_ROUTES }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            renderTabBar={(props) => <ScollableTabBar {...props} />}
+            initialLayout={{
+              width,
+            }}
+          />
+        </View>
+      )}
+      <LoginOverlays loading={loading && !isConnectingToWallet} />
     </LoginContainer>
   );
 }
