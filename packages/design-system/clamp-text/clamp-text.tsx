@@ -21,8 +21,8 @@ export const ClampText = ({
   maxLines = 2,
   ellipsis = "...",
   expandButtonWidth = 10,
-  foldText = " Less",
-  expandText = " More",
+  foldText = "Less",
+  expandText = "More",
 }: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
 
@@ -50,18 +50,16 @@ export const ClampText = ({
   }
 
   return (
-    <>
-      <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
-        {innerText}
-        {(showMore || showLess) && (isPureText || Platform.OS !== "web") && (
-          <Text
-            onPress={showMore ? onShowMore : onShowLess}
-            tw="text-sm font-bold text-gray-900 dark:text-white"
-          >
-            {showMore ? expandText : foldText}
-          </Text>
-        )}
-      </Text>
-    </>
+    <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
+      {innerText}
+      {(showMore || showLess) && (isPureText || Platform.OS !== "web") && (
+        <Text
+          onPress={showMore ? onShowMore : onShowLess}
+          tw="text-sm font-bold text-gray-900 dark:text-white"
+        >
+          {` ${showMore ? expandText : foldText}`}
+        </Text>
+      )}
+    </Text>
   );
 };

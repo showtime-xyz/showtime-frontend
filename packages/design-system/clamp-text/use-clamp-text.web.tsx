@@ -4,14 +4,15 @@ import { Platform } from "react-native";
 import { MultiClamp } from "./clamp.web";
 import type { ClampTextParams } from "./use-clamp-text";
 
-const tw = "text-sm font-bold text-gray-900 dark:text-white";
+const tw =
+  "text-sm font-bold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-600 rounded-sm px-0.5";
 export const useClampText = ({
   element,
   text = "",
   rows = 3,
   ellipsis = "...",
-  expandText = " More",
-  foldText = " Less",
+  expandText = "More",
+  foldText = "Less",
 }: ClampTextParams) => {
   useLayoutEffect(() => {
     if (Platform.OS !== "web" || !element) return;

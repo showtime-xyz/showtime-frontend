@@ -44,14 +44,14 @@ export class MultiClamp {
   expendTagClassName?: string = "";
   foldTagClassName?: string = "";
   originText?: string = "";
-  originNode?: Node;
+  originNode: Node;
   constructor(element: HTMLElement, config: MultiClampParams) {
     Object.assign(this, config);
     this.originNode = element.cloneNode(true);
     this.ele = element;
     this.text = element.innerText;
 
-    this.singleLineHeight = this.eleLineHeight();
+    this.singleLineHeight = this.getEleLineHeight();
 
     // determine if text needs to be omitted
     const initRows = countRows(this.getContentHeight(), this.singleLineHeight);
@@ -75,7 +75,8 @@ export class MultiClamp {
         if (this.foldableDom) this.ele.appendChild(this.foldableDom);
       } else {
         this.foldableDom && this.originNode?.appendChild(this.foldableDom);
-        this.originNode && this.ele.replaceWith(this.originNode);
+        this.ele.innerHTML = "";
+        this.ele.appendChild(this.originNode);
       }
     };
     return expendDom;
@@ -121,7 +122,7 @@ export class MultiClamp {
     );
   }
 
-  eleLineHeight() {
+  getEleLineHeight() {
     let lineHeight = int(this.getStyle("lineHeight"));
     if (isNaN(lineHeight)) {
       this.fillText("test");
