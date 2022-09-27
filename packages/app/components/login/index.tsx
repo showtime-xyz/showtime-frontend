@@ -117,7 +117,7 @@ export function Login({ onLogin }: LoginProps) {
                   variant="primary"
                   size="regular"
                 >
-                  <Text>Sign in with Wallet</Text>
+                  Sign in with Wallet
                 </Button>
               </View>
               <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">

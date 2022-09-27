@@ -6,7 +6,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Text } from "@showtime-xyz/universal.text";
 
 import { yup } from "app/lib/yup";
 
@@ -93,7 +92,7 @@ export function LoginInputField({
         tw={`mt-6 ${!inputValue ? "opacity-50" : null}`}
         disabled={!inputValue}
       >
-        <Text tw="text-black dark:text-white">{signInButtonLabel}</Text>
+        {signInButtonLabel}
       </Button>
     </>
   );
