@@ -124,7 +124,7 @@ export class ReactNativeWebMain {
        */
       reactNative.useEslint({
         transformers: [
-          (config) => {
+          (config: any) => {
             config.setRule("no-console", ["error"]);
             return config;
           },
@@ -139,7 +139,7 @@ export class ReactNativeWebMain {
        */
       reactNative.usePrettier({
         transformers: [
-          (config) => {
+          (config: any) => {
             config.setKey("tabWidth", 2);
             return config;
           },

@@ -1,19 +1,26 @@
 import { useState, useRef, useCallback, ReactNode } from "react";
 import { NativeSyntheticEvent, TextLayoutEventData } from "react-native";
 
-export type ClampTextProps = {
-  element?: Element;
+import { ClampTextProps } from "./clamp-text";
+
+export type ClampTextParams = Pick<
+  ClampTextProps,
+  "expandText" | "foldText"
+> & {
+  element?: HTMLElement;
   text: string | Iterable<ReactNode>;
   rows?: number;
   ellipsis?: string;
   expandButtonWidth?: number;
+  expandable?: boolean;
+  foldable?: boolean;
 };
 export const useClampText = ({
   text = "",
   rows = 3,
   ellipsis = "...",
   expandButtonWidth = 10,
-}: ClampTextProps) => {
+}: ClampTextParams) => {
   const [innerText, setInnerText] = useState(
     typeof text === "string" ? text.replace(/[\r\n]/g, " ") : text
   );
