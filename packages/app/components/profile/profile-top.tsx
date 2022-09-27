@@ -8,7 +8,6 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
@@ -30,6 +29,7 @@ import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { TextLink } from "app/navigation/link";
 
+import { ClampText } from "design-system/clamp-text";
 import { Hidden } from "design-system/hidden";
 
 import { getProfileImage, getProfileName } from "../../utilities";

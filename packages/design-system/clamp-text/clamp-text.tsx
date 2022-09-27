@@ -1,4 +1,4 @@
-import { useRef, ReactNode, useState } from "react";
+import { useRef, ReactNode } from "react";
 import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
@@ -9,8 +9,8 @@ export type ClampTextProps = {
   text?: string | Iterable<ReactNode>;
   ellipsis?: string;
   expandButtonWidth?: number;
-  foldText?: string;
-  expandText?: string;
+  foldText?: string | undefined;
+  expandText?: string | undefined;
   maxLines?: number;
   tw?: string;
 };
@@ -25,7 +25,6 @@ export const ClampText = ({
   expandText = " More",
 }: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
 
   const isPureText = typeof text === "string";
 
@@ -37,11 +36,13 @@ export const ClampText = ({
     innerText,
     onTextLayout,
   } = useClampText({
-    element: textRef.current as Element,
+    element: textRef.current as HTMLElement,
     rows: maxLines,
     text,
     expandButtonWidth,
     ellipsis,
+    expandText,
+    foldText,
   });
 
   if (!text || text === "") {
@@ -50,26 +51,7 @@ export const ClampText = ({
 
   return (
     <>
-      <Text
-        tw={tw}
-        ref={textRef as any}
-        style={Platform.select({
-          web: isPureText
-            ? undefined
-            : ({
-                "-webkit-mask-image": showMore
-                  ? `linear-gradient(to top, transparent 0%, transparent 2rem, rgb(0, 0, 0) 2rem, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(0, 0, 0) 0%, rgb(0, 0, 0) ${
-                      containerWidth / 2
-                    }px, transparent ${containerWidth}px, transparent 100%)`
-                  : null,
-              } as any),
-          default: undefined,
-        })}
-        onTextLayout={onTextLayout}
-        onLayout={(e) => {
-          setContainerWidth(e.nativeEvent.layout.width);
-        }}
-      >
+      <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
         {innerText}
         {(showMore || showLess) && (isPureText || Platform.OS !== "web") && (
           <Text
@@ -80,19 +62,6 @@ export const ClampText = ({
           </Text>
         )}
       </Text>
-      {!isPureText && Platform.OS === "web" && (showMore || showLess) && (
-        <Text
-          onPress={showMore ? onShowMore : onShowLess}
-          tw="bottom-0 ml-0 text-sm font-bold text-gray-900 dark:text-white"
-          style={{
-            right: 0,
-            position: showMore ? "absolute" : "relative",
-            marginTop: showMore ? 0 : 8,
-          }}
-        >
-          {showMore ? expandText : foldText}
-        </Text>
-      )}
     </>
   );
 };
