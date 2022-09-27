@@ -2,6 +2,7 @@ import { useMemo, useCallback, useState } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import {
   SceneRendererProps,
   Route,
@@ -11,10 +12,6 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "app/components/keyboard-aware";
 import { yup } from "app/lib/yup";
 
 import { LoginHeader } from "./login-header";
@@ -157,14 +154,10 @@ export function Login({ onLogin }: LoginProps) {
     ]
   );
 
-  const ContainerScrollView = Platform.select({
-    android: KeyboardAwareBottomSheetScrollView,
-    default: KeyboardAwareScrollView,
-  });
   //#endregion
   return (
     <View style={{ flex: 1 }}>
-      <ContainerScrollView>
+      <ScrollView>
         {isConnectingToWallet ? (
           <View tw="py-40">
             <Text tw="text-center dark:text-gray-400">
@@ -188,7 +181,7 @@ export function Login({ onLogin }: LoginProps) {
           </View>
         )}
         <LoginOverlays loading={loading && !isConnectingToWallet} />
-      </ContainerScrollView>
+      </ScrollView>
     </View>
   );
 }

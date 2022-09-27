@@ -1,21 +1,18 @@
 import { useRef } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "app/components/keyboard-aware";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -205,13 +202,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
-  const ContainerScrollView = Platform.select({
-    android: KeyboardAwareBottomSheetScrollView,
-    ios: KeyboardAwareScrollView,
-    web: RNScrollView,
-  });
   return (
-    <ContainerScrollView ref={scrollViewRef}>
+    <ScrollView ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
@@ -326,6 +318,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           ) : null}
         </View>
       </View>
-    </ContainerScrollView>
+    </ScrollView>
   );
 };

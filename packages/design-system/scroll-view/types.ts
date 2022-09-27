@@ -5,5 +5,4 @@ import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export type ScrollViewProps = {
   tw?: TW;
-  asKeyboardAwareScrollView?: boolean;
 } & ComponentProps<typeof ReactNativeScrollView>;

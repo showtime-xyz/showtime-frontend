@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,15 +14,12 @@ import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "app/components/keyboard-aware";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
@@ -266,16 +263,10 @@ export const DropForm = () => {
     );
   }
 
-  const ContainerScrollView = Platform.select({
-    android: KeyboardAwareBottomSheetScrollView,
-    ios: KeyboardAwareScrollView,
-    web: RNScrollView,
-  });
-
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ContainerScrollView ref={scrollViewRef} style={{ padding: 16 }}>
+      <ScrollView ref={scrollViewRef} tw="p-4">
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -579,7 +570,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ContainerScrollView>
+      </ScrollView>
     </BottomSheetModalProvider>
   );
 };

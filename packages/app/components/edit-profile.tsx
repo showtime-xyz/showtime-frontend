@@ -1,9 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import {
-  Platform,
-  useWindowDimensions,
-  ScrollView as RNScrollView,
-} from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,6 +13,10 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
+  ScrollView,
+  ScrollViewProps,
+} from "@showtime-xyz/universal.scroll-view";
+import {
   SceneRendererProps,
   TabView,
   Route,
@@ -26,10 +26,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import {
-  KeyboardAwareBottomSheetScrollView,
-  KeyboardAwareScrollView,
-} from "app/components/keyboard-aware";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -64,19 +60,13 @@ const EDIT_PROFILE_ROUTES = [
     index: 2,
   },
 ];
-type SceneViewProps = RNScrollView & {
+type SceneViewProps = ScrollViewProps & {
   focused?: boolean;
 };
 
 const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
-  const ContainerScrollView = Platform.select({
-    android: KeyboardAwareBottomSheetScrollView,
-    ios: KeyboardAwareScrollView,
-    web: RNScrollView,
-  });
-
   return (
-    <ContainerScrollView
+    <ScrollView
       style={[style, { display: focused ? "flex" : "none" }]}
       {...props}
     />
