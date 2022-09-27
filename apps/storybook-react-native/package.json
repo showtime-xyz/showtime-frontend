@@ -76,7 +76,7 @@
     "react-native-screens": "^3.17.0",
     "react-native-svg": "12.3.0",
     "react-native-vision-camera": "2.14.0",
-    "react-native-web": "0.18.7",
+    "react-native-web": "0.18.9",
     "three": "^0.142.0"
   },
   "devDependencies": {
