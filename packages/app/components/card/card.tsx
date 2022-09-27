@@ -35,7 +35,7 @@ type Props = {
 function Card({
   nft,
   numColumns = 1,
-  tw,
+  tw = "",
   sizeStyle,
   onPress,
   href = "",
@@ -93,7 +93,7 @@ function Card({
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
-          "dark:shadow-dark shadow-light self-center justify-self-center",
+          "dark:shadow-dark shadow-light mx-auto self-center justify-self-center",
         ]}
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>

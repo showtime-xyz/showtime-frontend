@@ -107,19 +107,15 @@ export const useDropNFT = () => {
 
   const pollTransaction = async ({
     transactionId,
-    notSafeForWork,
   }: {
     transactionId: string;
-    notSafeForWork: boolean;
   }) => {
     // Polling to check transaction status
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
       Logger.log(`Checking tx... (${attempts + 1} / 100)`);
       const response = await axios({
-        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}${
-          notSafeForWork ? "&nsfw=true" : ""
-        }&is_gated_edition=true`,
+        url: `/v1/creator-airdrops/poll-edition?relayed_transaction_id=${transactionId}&is_gated_edition=true`,
         method: "GET",
       });
       Logger.log(response);
@@ -196,13 +192,13 @@ export const useDropNFT = () => {
           edition_size: params.editionSize,
           royalty_bps: params.royalty * 100,
           claim_window_duration_seconds: params.duration,
+          nsfw: params.notSafeForWork,
         },
       });
 
       console.log("relayer response :: ", relayerResponse);
       await pollTransaction({
         transactionId: relayerResponse.relayed_transaction_id,
-        notSafeForWork: params.notSafeForWork,
       });
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
