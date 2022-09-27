@@ -26,7 +26,8 @@ class Document extends NextDocument {
             rel="stylesheet"
           />
         </Head>
-        <body className="!max-w-screen">
+        {/* Prevent the web app to move on browsers like Safari on iOS */}
+        <body className="!max-w-screen fixed top-0 bottom-0 left-0 right-0 md:relative">
           <Main />
           <NextScript />
         </body>

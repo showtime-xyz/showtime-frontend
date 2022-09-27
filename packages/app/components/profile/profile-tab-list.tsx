@@ -177,6 +177,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
               default: null,
               web: { style: { marginVertical: isMdWidth ? 16 : 0 } },
             })}
+            useWindowScroll={isMdWidth ? true : false}
           />
         </ProfileTabsNFTProvider>
       </MutateProvider>

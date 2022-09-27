@@ -1,4 +1,5 @@
 import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
+import { useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -13,6 +14,8 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
+import { breakpoints } from "design-system/theme";
+
 import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
 
 const ViewabilityInfiniteScrollList = withViewabilityInfiniteScrollList(
@@ -23,6 +26,8 @@ const NUM_COLUMNS = 3;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ days, index }, ref) {
     const router = useRouter();
+    const { width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
 
     const { data, mutate } = useTrendingNFTS({
       days,
@@ -72,6 +77,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         }}
         ListFooterComponent={ListFooterComponent}
         index={index}
+        useWindowScroll={isMdWidth ? true : false}
       />
     );
   }

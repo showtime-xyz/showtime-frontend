@@ -1,5 +1,10 @@
 import { useCallback, useRef, useState } from "react";
-import { Keyboard, Platform, TextInput } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  TextInput,
+  useWindowDimensions,
+} from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -24,6 +29,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
+import { breakpoints } from "design-system/theme";
+
 export const Search = () => {
   const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
@@ -34,6 +41,8 @@ export const Search = () => {
     () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
   );
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
@@ -99,6 +108,7 @@ export const Search = () => {
             main: 64,
             reverse: 64,
           }}
+          useWindowScroll={isMdWidth ? true : false}
           {...keyboardDismissProp}
         />
       ) : loading && term ? (

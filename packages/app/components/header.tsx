@@ -213,7 +213,7 @@ const NotificationsInHeader = () => {
                 </View>
               }
             >
-              <Notifications useWindowScroll={false} />
+              <Notifications />
             </Suspense>
           </ErrorBoundary>
         </View>

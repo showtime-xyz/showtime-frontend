@@ -18,7 +18,7 @@ import type {
 } from "react-virtuoso";
 import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 
-import type { InfiniteScrollListProps } from ".";
+import type { InfiniteScrollListProps } from "./index";
 
 const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
 

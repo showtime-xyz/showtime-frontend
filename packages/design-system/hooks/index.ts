@@ -248,6 +248,7 @@ export function useLockBodyScroll(isLocked = true) {
       window.document.body.style.top = "0px";
       window.document.body.style.left = "0px";
       window.document.body.style.right = "0px";
+      window.document.body.style.touchAction = "none";
     }
 
     return () => {
@@ -263,6 +264,7 @@ export function useLockBodyScroll(isLocked = true) {
         window.document.body.style.top = "";
         window.document.body.style.left = "";
         window.document.body.style.right = "";
+        window.document.body.style.touchAction = "auto";
         // window.scrollTo(0, y);
       }
     };
