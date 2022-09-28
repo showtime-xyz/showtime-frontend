@@ -6688,7 +6688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/bottom-tabs@npm:^6.4.0":
+"@react-navigation/bottom-tabs@npm:^6.3.2":
   version: 6.4.0
   resolution: "@react-navigation/bottom-tabs@npm:6.4.0"
   dependencies:
@@ -6705,7 +6705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/core@npm:^6.4.0":
+"@react-navigation/core@npm:^6.2.2":
   version: 6.4.0
   resolution: "@react-navigation/core@npm:6.4.0"
   dependencies:
@@ -6733,7 +6733,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native-stack@npm:^6.9.0":
+"@react-navigation/native-stack@npm:^6.7.0":
   version: 6.9.0
   resolution: "@react-navigation/native-stack@npm:6.9.0"
   dependencies:
@@ -6749,18 +6749,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native@npm:6.0.13":
-  version: 6.0.13
-  resolution: "@react-navigation/native@npm:6.0.13"
+"@react-navigation/native@npm:6.0.11":
+  version: 6.0.11
+  resolution: "@react-navigation/native@npm:6.0.11"
   dependencies:
-    "@react-navigation/core": ^6.4.0
+    "@react-navigation/core": ^6.2.2
     escape-string-regexp: ^4.0.0
     fast-deep-equal: ^3.1.3
     nanoid: ^3.1.23
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: a2ed9bb8e9df8b52f190e4ad5d93eefa78aa40bc3dd2d3563dfe8fe988cee721e089cce4232d34dd0401db53d551e264eebbe9a52ebb0d486f967f5f0f8b56ea
+  checksum: 0dab07c8144d0b50cfbbd52f2a2da7dd9284d67ed1fd638691eed04fd035881f40233e88998d6337804af573c93bd484c641344b7fd19c4395d698463fb8972b
   languageName: node
   linkType: hard
 
@@ -6773,7 +6773,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/stack@npm:^6.3.1":
+"@react-navigation/stack@npm:^6.2.2":
   version: 6.3.1
   resolution: "@react-navigation/stack@npm:6.3.1"
   dependencies:
@@ -8205,10 +8205,10 @@ __metadata:
     "@react-native-community/slider": ^4.2.4
     "@react-native-menu/menu": ^0.5.2
     "@react-native-segmented-control/segmented-control": 2.4.0
-    "@react-navigation/bottom-tabs": ^6.4.0
-    "@react-navigation/native": ^6.0.13
-    "@react-navigation/native-stack": ^6.9.0
-    "@react-navigation/stack": ^6.3.1
+    "@react-navigation/bottom-tabs": ^6.3.2
+    "@react-navigation/native": ^6.0.11
+    "@react-navigation/native-stack": ^6.7.0
+    "@react-navigation/stack": ^6.2.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
@@ -8363,7 +8363,7 @@ __metadata:
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.10.0
     react-native-safe-area-context: 4.3.1
-    react-native-screens: ^3.17.0
+    react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
     react-native-tab-view-next: ^3.1.3
     react-native-vision-camera: 2.14.0
@@ -8468,8 +8468,8 @@ __metadata:
     "@react-native-community/slider": ^4.2.4
     "@react-native-menu/menu": ^0.5.2
     "@react-native-segmented-control/segmented-control": ^2.4.0
-    "@react-navigation/bottom-tabs": ^6.4.0
-    "@react-navigation/native-stack": ^6.9.0
+    "@react-navigation/bottom-tabs": ^6.3.2
+    "@react-navigation/native-stack": ^6.7.0
     "@react-three/fiber": ^8.2.1
     "@shopify/flash-list": ^1.2.1
     "@storybook/addon-actions": ~6.3.12
@@ -8515,7 +8515,7 @@ __metadata:
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.10.0
     react-native-safe-area-context: 4.3.1
-    react-native-screens: ^3.17.0
+    react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
     react-native-vision-camera: 2.14.0
     react-native-web: 0.18.9
@@ -30017,16 +30017,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.17.0":
-  version: 3.17.0
-  resolution: "react-native-screens@npm:3.17.0"
+"react-native-screens@npm:~3.15.0":
+  version: 3.15.0
+  resolution: "react-native-screens@npm:3.15.0"
   dependencies:
     react-freeze: ^1.0.0
     warn-once: ^0.1.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: c3523d56113c182ac13e487d09c04f2991f8151578cbbea34cf0abc9c5fbe9ee19664cfcb84b9620607791ae38fc61efcd72870534513a4afbd5b5da9a248b48
+  checksum: ebc3cded19d594aafa748d5ab6e237533f68dc33e28a584c99b8a6cac993585919f01413b94e9801f01af4a138810575f55ee25f90d7a77cb13c49d3252edb2a
   languageName: node
   linkType: hard
 
