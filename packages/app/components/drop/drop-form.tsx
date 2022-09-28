@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
@@ -263,15 +264,12 @@ export const DropForm = () => {
     );
   }
 
+  const ScrollComponent =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ScrollView
-        tw="p-4"
-        ref={scrollViewRef}
-        asKeyboardAwareScrollView
-        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
-      >
+      <ScrollComponent ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -575,7 +573,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ScrollView>
+      </ScrollComponent>
     </BottomSheetModalProvider>
   );
 };

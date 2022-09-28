@@ -74,7 +74,7 @@ export default {
       backgroundImage: config.backgroundImage,
     },
     jsEngine: "hermes",
-    softwareKeyboardLayoutMode: "pan",
+    softwareKeyboardLayoutMode: "resize",
     intentFilters: [
       {
         action: "VIEW",

@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -13,7 +13,10 @@ import { Upload } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import {
+  ScrollView,
+  ScrollViewProps,
+} from "@showtime-xyz/universal.scroll-view";
 import {
   SceneRendererProps,
   TabView,
@@ -58,15 +61,17 @@ const EDIT_PROFILE_ROUTES = [
     index: 2,
   },
 ];
-type SceneViewProps = KeyboardAwareScrollViewProps & {
+type SceneViewProps = ScrollViewProps & {
   focused?: boolean;
 };
 
 const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
+  const ScrollComponent =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
+
   return (
-    <ScrollView
+    <ScrollComponent
       style={[style, { display: focused ? "flex" : "none" }]}
-      asKeyboardAwareScrollView
       {...props}
     />
   );
@@ -445,6 +450,7 @@ export const EditProfile = () => {
                       required
                       multiline
                       value={value}
+                      textAlignVertical="top"
                       numberOfLines={3}
                       errorText={errors.bio?.message}
                       onBlur={onBlur}

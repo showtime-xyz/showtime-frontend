@@ -1,5 +1,7 @@
 import { useRef } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import { Linking, Platform } from "react-native";
+
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
@@ -202,8 +204,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
+  const ScrollComponent =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
+
   return (
-    <ScrollView ref={scrollViewRef}>
+    <ScrollComponent ref={scrollViewRef}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
@@ -276,6 +281,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               label="Add a comment (optional)"
               placeholder="wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
+              returnKeyLabel="Claim"
+              returnKeyType="done"
+              onSubmitEditing={handleClaimNFT}
             />
           ) : null}
 
@@ -315,6 +323,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           ) : null}
         </View>
       </View>
-    </ScrollView>
+    </ScrollComponent>
   );
 };

@@ -1,14 +1,5 @@
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
-import { Platform, ViewStyle } from "react-native";
-
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
+import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
+import { ViewStyle } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
@@ -17,10 +8,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import {
-  MessageBox,
-  MessageBoxMethods,
-} from "app/components/messages/message-box";
+import { MessageBox } from "app/components/messages/message-box";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardVisible } from "app/hooks/use-keyboard-visible";
 import { useUser } from "app/hooks/use-user";
@@ -29,6 +17,7 @@ import { formatAddressShort } from "app/utilities";
 interface CommentInputBoxProps {
   submitting?: boolean;
   style?: ViewStyle;
+  commentInputRef?: any;
   submit: (message: string, parentId?: number | null) => Promise<void>;
 }
 
@@ -42,27 +31,17 @@ const getUsername = (comment?: CommentType) =>
 export const CommentInputBox = forwardRef<
   CommentInputBoxMethods,
   CommentInputBoxProps
->(function CommentInputBox({ submitting, submit }, ref) {
+>(function CommentInputBox({ submitting, submit, commentInputRef }, ref) {
   //#region variables
   const Alert = useAlert();
   const { visible } = useKeyboardVisible();
-  const inputRef = useRef<MessageBoxMethods>(null);
+
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null
   );
   const { bottom } = useSafeAreaInsets();
-  const context = useBottomSheetInternal(true);
   const { user } = useUser();
   //#endregion
-
-  useEffect(() => {
-    // auto focus on comment modal open on native
-    if (Platform.OS !== "web") {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    }
-  }, []);
 
   //#region callbacks
   const handleOnSubmitComment = useCallback(
@@ -70,7 +49,7 @@ export const CommentInputBox = forwardRef<
       const _newComment = async () => {
         try {
           await submit(text, selectedComment?.comment_id);
-          inputRef.current?.reset();
+          commentInputRef?.current?.reset();
         } catch (error) {
           Alert.alert("Error", "Cannot add comment.", [
             {
@@ -90,29 +69,18 @@ export const CommentInputBox = forwardRef<
 
       setSelectedComment(null);
     },
-    [Alert, submit, selectedComment]
+    [Alert, submit, selectedComment, commentInputRef]
   );
-  const handleOnBlur = useCallback(() => {
-    if (context) {
-      context.shouldHandleKeyboardEvents.value = false;
-    }
-  }, [context]);
-
-  const handleOnFocus = useCallback(() => {
-    if (context) {
-      context.shouldHandleKeyboardEvents.value = true;
-    }
-  }, [context]);
 
   const handleOnClearPress = useCallback(() => {
     setSelectedComment(null);
-    inputRef.current?.setValue("");
-  }, []);
+    commentInputRef.current?.setValue("");
+  }, [commentInputRef]);
 
   const handleReply = (comment: CommentType) => {
     setSelectedComment(comment);
-    inputRef.current?.setValue(`@${getUsername(comment)} `);
-    inputRef.current?.focus();
+    commentInputRef.current?.setValue(`@${getUsername(comment)} `);
+    commentInputRef.current?.focus();
   };
   //#endregion
 
@@ -137,7 +105,7 @@ export const CommentInputBox = forwardRef<
         </View>
       )}
       <MessageBox
-        ref={inputRef}
+        ref={commentInputRef}
         submitting={submitting}
         style={{
           paddingHorizontal: 16,
@@ -145,8 +113,6 @@ export const CommentInputBox = forwardRef<
           paddingBottom: 0,
         }}
         onSubmit={handleOnSubmitComment}
-        onBlur={context ? handleOnBlur : undefined}
-        onFocus={context ? handleOnFocus : undefined}
         userAvatar={user?.data.profile.img_url}
       />
     </>

@@ -84,7 +84,8 @@
     "@ethersproject/bignumber": "5.6.2",
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
-    "next": "12.2.5"
+    "next": "12.2.5",
+    "@gorhom/bottom-sheet": "4.4.5"
   },
   "react-native": {
     "zlib": "browserify-zlib",

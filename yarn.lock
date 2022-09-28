@@ -3239,6 +3239,76 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/cli@npm:0.3.1":
+  version: 0.3.1
+  resolution: "@expo/cli@npm:0.3.1"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/code-signing-certificates": ^0.0.2
+    "@expo/config": ~7.0.1
+    "@expo/config-plugins": ~5.0.1
+    "@expo/dev-server": ~0.1.120
+    "@expo/devcert": ^1.0.0
+    "@expo/json-file": ^8.2.35
+    "@expo/metro-config": ~0.4.0
+    "@expo/osascript": ^2.0.31
+    "@expo/package-manager": ~0.0.53
+    "@expo/plist": ^0.0.18
+    "@expo/prebuild-config": ~5.0.3
+    "@expo/rudder-sdk-node": 1.1.1
+    "@expo/spawn-async": 1.5.0
+    "@expo/xcpretty": ^4.2.1
+    "@urql/core": 2.3.6
+    "@urql/exchange-retry": 0.3.0
+    accepts: ^1.3.8
+    arg: 4.1.0
+    better-opn: ~3.0.2
+    bplist-parser: ^0.3.1
+    cacache: ^15.3.0
+    chalk: ^4.0.0
+    ci-info: ^3.3.0
+    debug: ^4.3.4
+    env-editor: ^0.4.1
+    form-data: ^3.0.1
+    freeport-async: 2.0.0
+    fs-extra: ~8.1.0
+    getenv: ^1.0.0
+    graphql: 15.8.0
+    graphql-tag: ^2.10.1
+    internal-ip: 4.3.0
+    is-root: ^2.1.0
+    js-yaml: ^3.13.1
+    json-schema-deref-sync: ^0.13.0
+    md5-file: ^3.2.3
+    md5hex: ^1.0.0
+    minipass: 3.1.6
+    node-fetch: ^2.6.7
+    node-forge: ^1.3.1
+    npm-package-arg: ^7.0.0
+    ora: 3.4.0
+    pretty-bytes: 5.6.0
+    progress: 2.0.3
+    prompts: ^2.3.2
+    qrcode-terminal: 0.11.0
+    requireg: ^0.2.2
+    resolve-from: ^5.0.0
+    semver: ^6.3.0
+    send: ^0.18.0
+    slugify: ^1.3.4
+    structured-headers: ^0.4.1
+    tar: ^6.0.5
+    tempy: ^0.7.1
+    terminal-link: ^2.1.1
+    text-table: ^0.2.0
+    url-join: 4.0.0
+    uuid: ^3.4.0
+    wrap-ansi: ^7.0.0
+  bin:
+    expo-internal: build/bin/cli
+  checksum: c2b75359bd0437992e4a0693ac1deff48e731acfdfc7ac9c70dbfe648f78baed763a9e7bf694a1027e302f4d969a43c82ef2bdd10e86262da17e686a465489a2
+  languageName: node
+  linkType: hard
+
 "@expo/code-signing-certificates@npm:0.0.2, @expo/code-signing-certificates@npm:^0.0.2":
   version: 0.0.2
   resolution: "@expo/code-signing-certificates@npm:0.0.2"
@@ -3495,6 +3565,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/dev-server@npm:~0.1.120":
+  version: 0.1.120
+  resolution: "@expo/dev-server@npm:0.1.120"
+  dependencies:
+    "@expo/bunyan": 4.0.0
+    "@expo/metro-config": ~0.4.0
+    "@expo/osascript": 2.0.33
+    body-parser: 1.19.0
+    chalk: ^4.0.0
+    connect: ^3.7.0
+    fs-extra: 9.0.0
+    node-fetch: ^2.6.0
+    open: ^8.3.0
+    resolve-from: ^5.0.0
+    semver: 7.3.2
+    serialize-error: 6.0.0
+    temp-dir: ^2.0.0
+  checksum: cc4e42203a4dfaf1d0d0b165ec147bd98840eaad697d8f97a41fed28c38459f8d3800475fbf7f0ef83af23ce050881c13817daba7ccea4f9d201f425607d6b5d
+  languageName: node
+  linkType: hard
+
 "@expo/devcert@npm:^1.0.0":
   version: 1.0.0
   resolution: "@expo/devcert@npm:1.0.0"
@@ -3625,6 +3716,22 @@ __metadata:
     resolve-from: ^5.0.0
     sucrase: ^3.20.0
   checksum: f0084def2a88fde7aba6044e1680af5e4dfd0f5d201cc2f6402f1febfc2e2f5c489f43fa98792993622e045c2a503a694115c7d469b91bc985126253962ca6ba
+  languageName: node
+  linkType: hard
+
+"@expo/metro-config@npm:~0.4.0":
+  version: 0.4.0
+  resolution: "@expo/metro-config@npm:0.4.0"
+  dependencies:
+    "@expo/config": 7.0.1
+    "@expo/json-file": 8.2.36
+    chalk: ^4.1.0
+    debug: ^4.3.2
+    find-yarn-workspace-root: ~2.0.0
+    getenv: ^1.0.0
+    resolve-from: ^5.0.0
+    sucrase: ^3.20.0
+  checksum: 8f571dd36c9eafed15ff709183eaa18bd5b92c1f9a5f367e245913c862d1fd6084812351d34260ed293c967a83bc230774d6e148f1947c495a0fd5b815e75aba
   languageName: node
   linkType: hard
 
@@ -3876,20 +3983,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:4.4.2":
-  version: 4.4.2
-  resolution: "@gorhom/bottom-sheet@npm:4.4.2"
+"@gorhom/bottom-sheet@npm:4.4.5":
+  version: 4.4.5
+  resolution: "@gorhom/bottom-sheet@npm:4.4.5"
   dependencies:
-    "@gorhom/portal": 1.0.13
+    "@gorhom/portal": 1.0.14
     invariant: ^2.2.4
-    nanoid: ^3.3.3
-    react-native-redash: ^16.1.1
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-gesture-handler: ">=1.10.1"
     react-native-reanimated: ">=2.2.0"
-  checksum: 32034ec389df39b9b3ebd886eda02bb14b7bedf4c654dfb54c1b5bc1fe78f790011b279d02956d8805e9dfe3dd1fcdb416dc82cf3dcc7e13265475021adf7522
+  checksum: 19b3efeaacdd0eddb3f6c6e6c225dd20fcf21fae9d20f760c94e81b7ecba47a56737cb0e681225c368c93779beebe7a61102e064656a376eeb7761366b9874d6
   languageName: node
   linkType: hard
 
@@ -3902,6 +4007,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 4dd471feedc0dbcc06e9ba725695727448b79550fdc95e5888ea3c2aa9dd51ffffaa0ec2c3e762526c8eef4a36cebd625f73271a3bc31b80786af5a90ba2ea5b
+  languageName: node
+  linkType: hard
+
+"@gorhom/portal@npm:1.0.14":
+  version: 1.0.14
+  resolution: "@gorhom/portal@npm:1.0.14"
+  dependencies:
+    nanoid: ^3.3.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 227bb96a2db854ab29bb9da8d4f3823c7f7448358de459709dd1b78522110da564c9a8734c6bc7d7153ed7c99320e0fb5d60b420c2ebb75ecaf2f0d757f410f9
   languageName: node
   linkType: hard
 
@@ -8193,7 +8310,7 @@ __metadata:
     "@config-plugins/detox": ^1.1.0
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2
-    "@gorhom/bottom-sheet": 4.4.2
+    "@gorhom/bottom-sheet": 4.4.5
     "@hookform/resolvers": ^2.8.5
     "@logrocket/react-native": ^1.2.1
     "@magic-sdk/react-native": ^8.2.1
@@ -8299,7 +8416,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~46.0.9
+    expo: ~46.0.13
     expo-app-loading: ~2.1.0
     expo-application: ~4.2.2
     expo-av: 12.0.4
@@ -8341,7 +8458,8 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
-    react-native: 0.69.5
+    react-native: 0.69.6
+    react-native-avoid-softinput: ^3.0.0
     react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
@@ -8350,7 +8468,6 @@ __metadata:
     react-native-flipper: ^0.131.1
     react-native-gesture-handler: 2.6.1
     react-native-ios-context-menu: 1.3.0
-    react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-level-fs: ^3.0.0
     react-native-localhost: ^1.0.0
     react-native-mmkv: ^2.4.3
@@ -8502,7 +8619,7 @@ __metadata:
     expo-web-browser: ~10.2.1
     react: 18.2.0
     react-dom: 18.2.0
-    react-native: 0.69.5
+    react-native: 0.69.6
     react-native-blob-jsi-helper: ^0.2.2
     react-native-fast-image: ^8.5.11
     react-native-flipper: ^0.131.1
@@ -12293,13 +12410,6 @@ __metadata:
   dependencies:
     event-target-shim: ^5.0.0
   checksum: 170bdba9b47b7e65906a28c8ce4f38a7a369d78e2271706f020849c1bfe0ee2067d4261df8bbb66eb84f79208fd5b710df759d64191db58cfba7ce8ef9c54b75
-  languageName: node
-  linkType: hard
-
-"abs-svg-path@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "abs-svg-path@npm:0.1.1"
-  checksum: af1a167c09e8bdb76c80adca7333f3d828e5b50e37b9702aa03675e271919e7b1eeaa35cce939970ecba14769953b7465ea34c2129ab683ddff9d973a07f164f
   languageName: node
   linkType: hard
 
@@ -19142,6 +19252,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-font@npm:~10.2.1":
+  version: 10.2.1
+  resolution: "expo-font@npm:10.2.1"
+  dependencies:
+    fontfaceobserver: ^2.1.0
+  peerDependencies:
+    expo: "*"
+  checksum: fa82616614b393ecb8e7dce91de8043c0e7b5ebc2145ec816b37179bef5ac2b81fdf3ea750b93d47e3702978f08f6b40373c91844098cc62ed43b42d7d73ed63
+  languageName: node
+  linkType: hard
+
 "expo-gl-cpp@npm:~11.4.0":
   version: 11.4.0
   resolution: "expo-gl-cpp@npm:11.4.0"
@@ -19273,6 +19394,16 @@ __metadata:
     compare-versions: ^3.4.0
     invariant: ^2.2.4
   checksum: 0ca8969b3d8b5b181ed8cbbc14cb739d80355405ab22cdcb073253dab30745f174bcbdb781774b1fb91bca958a93892d56c4d160a1d8e792ee449afdc6a27903
+  languageName: node
+  linkType: hard
+
+"expo-modules-core@npm:0.11.5":
+  version: 0.11.5
+  resolution: "expo-modules-core@npm:0.11.5"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: 304e60c5f8b6b9c8f13f13fffa111bb9819b15bc06c6ff173d70857da6d25dc3039325c1b27c013c9646a7158c61298972a97a6db3fe0c6399bef70b7410337a
   languageName: node
   linkType: hard
 
@@ -19435,6 +19566,40 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 6097bb5ed3ef45947f782262240774fc29e683548fc934fae11194e596ac560242c225dcc8fd601aae808248dddf07e6647625553203f5cc10d5918c1208b19b
+  languageName: node
+  linkType: hard
+
+"expo@npm:~46.0.13":
+  version: 46.0.13
+  resolution: "expo@npm:46.0.13"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/cli": 0.3.1
+    "@expo/vector-icons": ^13.0.0
+    babel-preset-expo: ~9.2.0
+    cross-spawn: ^6.0.5
+    expo-application: ~4.2.2
+    expo-asset: ~8.6.1
+    expo-constants: ~13.2.4
+    expo-error-recovery: ~3.2.0
+    expo-file-system: ~14.1.0
+    expo-font: ~10.2.1
+    expo-keep-awake: ~10.2.0
+    expo-modules-autolinking: 0.10.3
+    expo-modules-core: 0.11.5
+    fbemitter: ^3.0.0
+    getenv: ^1.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    node-fetch: ^2.6.7
+    pretty-format: ^26.5.2
+    uuid: ^3.4.0
+  dependenciesMeta:
+    expo-error-recovery:
+      optional: true
+  bin:
+    expo: bin/cli.js
+  checksum: bd3e355cacddb467fcc23d66a467a63bc34e27655abfcde44c18fcf9faec58cb18cff18711dc80812b1e2a0a7559ced9c96b980f70f062ed784269b83d2d60b3
   languageName: node
   linkType: hard
 
@@ -26688,15 +26853,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"normalize-svg-path@npm:^1.0.1":
-  version: 1.1.0
-  resolution: "normalize-svg-path@npm:1.1.0"
-  dependencies:
-    svg-arc-to-cubic-bezier: ^3.0.0
-  checksum: 106e108b2f99e9e222a1c6edfc859523c6c3c2b0a6ba64743ed08af120b23b9bc2c16682bc2ae043a24c011c34c8252376c68525cf11735c6f110b571740eb2e
-  languageName: node
-  linkType: hard
-
 "normalize-url@npm:^2.0.1":
   version: 2.0.1
   resolution: "normalize-url@npm:2.0.1"
@@ -27586,13 +27742,6 @@ __metadata:
   version: 1.0.2
   resolution: "parse-srcset@npm:1.0.2"
   checksum: 3a0380380c6082021fcce982f0b89fb8a493ce9dfd7d308e5e6d855201e80db8b90438649b31fdd82a3d6089a8ca17dccddaa2b730a718389af4c037b8539ebf
-  languageName: node
-  linkType: hard
-
-"parse-svg-path@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "parse-svg-path@npm:0.1.2"
-  checksum: bba7d4b4207fcc9eaf553b0d34db96ea8a1173635bc94528b5b66e1581902d4792d8d6229103764f01af4d839274234e97a4fa1c6f0fe7dcce195383848cec56
   languageName: node
   linkType: hard
 
@@ -28954,12 +29103,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:^8.0.3":
-  version: 8.1.0
-  resolution: "promise@npm:8.1.0"
+"promise@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "promise@npm:8.2.0"
   dependencies:
     asap: ~2.0.6
-  checksum: 89b71a56154ed7d66a73236d8e8351a9c59adddba3929ecc845f75421ff37fc08ea0c67ad76cd5c0b0d81812c7d07a32bed27e7df5fcc960c6d68b0c1cd771f7
+  checksum: 45d65ffe4fbd9172ef848f790ac1366822e63f063a5ef42a14e75b577ffa3c37870a9d8472729d9d429d7c8a770428f9d13650b52aafaa361dcc69cf84873b20
   languageName: node
   linkType: hard
 
@@ -29664,6 +29813,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-avoid-softinput@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "react-native-avoid-softinput@npm:3.0.0"
+  peerDependencies:
+    react: ">=17.0.0"
+    react-native: ">=0.65.0"
+  checksum: 94a5fb8387a14bddfb1c32c7b91e8b2d064d08f13ef8c6d9d56ff08960c633b4e73a609a9122521d5b195e9509112414bcce2e404a9acb3414592058b8134c48
+  languageName: node
+  linkType: hard
+
 "react-native-bignumber@npm:^0.1.9":
   version: 0.1.9
   resolution: "react-native-bignumber@npm:0.1.9"
@@ -29800,7 +29959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyboard-aware-scroll-view@npm:0.9.5, react-native-keyboard-aware-scroll-view@npm:^0.9.5":
+"react-native-keyboard-aware-scroll-view@npm:0.9.5":
   version: 0.9.5
   resolution: "react-native-keyboard-aware-scroll-view@npm:0.9.5"
   dependencies:
@@ -29991,22 +30150,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-redash@npm:^16.1.1":
-  version: 16.2.4
-  resolution: "react-native-redash@npm:16.2.4"
-  dependencies:
-    abs-svg-path: ^0.1.1
-    normalize-svg-path: ^1.0.1
-    parse-svg-path: ^0.1.2
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: "*"
-    react-native-reanimated: ">=2.0.0"
-  checksum: 34507c7e708531fd78b3a10c96afc131a23c53249e1dd81b35fe0795921af10425f6b7a115d604f84d12c37ec9577a47ce1731ae6172108c6dd519f2353f38a0
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:4.3.1":
   version: 4.3.1
   resolution: "react-native-safe-area-context@npm:4.3.1"
@@ -30131,9 +30274,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.69.5":
-  version: 0.69.5
-  resolution: "react-native@npm:0.69.5"
+"react-native@npm:0.69.6":
+  version: 0.69.6
+  resolution: "react-native@npm:0.69.6"
   dependencies:
     "@jest/create-cache-key-function": ^27.0.1
     "@react-native-community/cli": ^8.0.4
@@ -30156,7 +30299,7 @@ __metadata:
     mkdirp: ^0.5.1
     nullthrows: ^1.1.1
     pretty-format: ^26.5.2
-    promise: ^8.0.3
+    promise: ^8.2.0
     react-devtools-core: 4.24.0
     react-native-codegen: ^0.69.2
     react-native-gradle-plugin: ^0.0.7
@@ -30172,7 +30315,7 @@ __metadata:
     react: 18.0.0
   bin:
     react-native: cli.js
-  checksum: 4f7cfcd0d614cc6fe897a49197bd036210625c5eb547342ac7ebea45ab5febae73d6a9a7438f08f454d1e02c2e041b3f910461c4a6e5c6e0e44f5cfe70405990
+  checksum: d050b9f0389362368cd1286c02dd46cd84def9fcbf4774dcedd5cbc3aa9ad594de48f22c5458ec257c07646d79722256bc837b25205c3a52752d5c5b6a7873f4
   languageName: node
   linkType: hard
 
@@ -33269,13 +33412,6 @@ __metadata:
   peerDependencies:
     react: ">=17.0"
   checksum: 173a56c8df8f401098697b640567f80d756849bbee02928a5283f25b94e9aef74fa58c48c974a073e3a57f6f5c0d51dcf19f410bfe0a81cc70c232d759f25c93
-  languageName: node
-  linkType: hard
-
-"svg-arc-to-cubic-bezier@npm:^3.0.0":
-  version: 3.2.0
-  resolution: "svg-arc-to-cubic-bezier@npm:3.2.0"
-  checksum: 55bf17756d558b9c0daddf636a6c9f2fe01fd5ac412229dfa2d4b29740226a82c980bcd3b5eb09ce311cbea282106c7549d97f8c8dba3a5a7b75f786bcb5e155
   languageName: node
   linkType: hard
 
