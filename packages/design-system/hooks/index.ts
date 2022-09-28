@@ -257,7 +257,7 @@ export function useLockBodyScroll(isLocked = true) {
         isMounted &&
         isLocked
       ) {
-        window.document.body.style.overflow = "auto scroll";
+        window.document.body.style.overflow = "";
         window.document.body.style.marginRight = "";
         window.document.body.style.position = "";
         window.document.body.style.top = "";

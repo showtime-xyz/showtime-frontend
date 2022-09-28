@@ -5,10 +5,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  useBlurredBackgroundStyles,
-  useIsDarkMode,
-} from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
@@ -351,19 +348,12 @@ const HeaderCenter = ({
 const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
   const { width } = useWindowDimensions();
   const { isHeaderHidden } = useNavigationElements();
-  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
 
   if (isMdWidth) {
     return (
-      <View
-        // @ts-expect-error
-        style={{
-          position: "sticky",
-        }}
-        tw="top-0 right-0 left-0 z-50 w-full items-center bg-white shadow-sm dark:bg-black"
-      >
+      <View tw="fixed top-0 right-0 left-0 z-50 w-full items-center bg-white stroke-inherit shadow-sm dark:bg-black">
         <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
             <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
@@ -381,14 +371,7 @@ const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
   }
 
   return (
-    <View
-      // @ts-expect-error
-      style={{
-        position: "sticky",
-        ...blurredBackgroundStyles,
-      }}
-      tw="top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm"
-    >
+    <View tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm backdrop-blur-md">
       <View tw="w-20 items-start">
         <HeaderLeft canGoBack={canGoBack} />
       </View>

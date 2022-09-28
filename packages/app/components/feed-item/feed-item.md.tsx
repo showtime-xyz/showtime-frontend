@@ -28,6 +28,7 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
@@ -63,6 +64,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const router = useRouter();
   // const [showFullScreen, setShowFullScreen] = useState(false);
   const { commentsCount } = useComments(nft.nft_id);
+  const headerHeight = useHeaderHeight();
   const routes = useMemo(
     () => [
       {
@@ -138,7 +140,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
         tw="h-full w-full max-w-screen-2xl flex-row overflow-hidden"
-        style={{ height: itemHeight }}
+        style={{ height: itemHeight, paddingTop: headerHeight }}
       >
         <View tw="flex-1 bg-gray-100 dark:bg-black">
           <View
