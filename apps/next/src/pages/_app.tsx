@@ -94,7 +94,17 @@ export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <>
       <Head>
+        {process.env.NODE_ENV !== "development" ? (
+          <>
+            <link rel="preconnect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="dns-prefect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="preconnect" href="//lh3.googleusercontent.com" />
+            <link rel="dns-prefect" href="//lh3.googleusercontent.com" />
+          </>
+        ) : null}
+
         {metaTags}
+
         <link rel="manifest" href="/manifest.json" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
