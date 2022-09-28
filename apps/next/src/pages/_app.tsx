@@ -94,13 +94,38 @@ export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <>
       <Head>
+        {process.env.NODE_ENV !== "development" ? (
+          <>
+            <link rel="preconnect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="dns-prefect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="preconnect" href="//lh3.googleusercontent.com" />
+            <link rel="dns-prefect" href="//lh3.googleusercontent.com" />
+          </>
+        ) : null}
+
         {metaTags}
+
         <link rel="manifest" href="/manifest.json" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="192x192"
+          href="/icons/icon-512x512.png"
+        />
+
+        <meta name="application-name" content="Showtime" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Showtime" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#000000" />
         <meta
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
         />
+
         <script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
