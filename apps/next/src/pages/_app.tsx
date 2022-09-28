@@ -108,6 +108,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="192x192"
+          href="/icons/icon-512x512.png"
+        />
 
         <meta name="application-name" content="Showtime" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
