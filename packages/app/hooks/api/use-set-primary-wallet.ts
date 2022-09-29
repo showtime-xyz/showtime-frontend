@@ -17,6 +17,7 @@ export const useSetPrimaryWallet = () => {
       await axios({
         url: `/v2/wallet/${wallet.address}/primary`,
         method: "PATCH",
+        data: {},
       });
       onPrimaryWalletSetCallback?.();
       onPrimaryWalletSetCallback = null;
