@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 
+import * as Application from "expo-application";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
@@ -32,7 +33,7 @@ async function registerForPushNotificationsAsync() {
   }
 
   const experienceId = "@showtime-xyz/showtime";
-  const applicationId = "io.showtime";
+  const applicationId = Application.applicationId;
 
   let granted = await getNotificationPermissionStatus();
 

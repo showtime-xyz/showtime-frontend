@@ -297,6 +297,7 @@ export const useClaimNFT = (edition?: IEdition) => {
         url:
           "/v1/creator-airdrops/mint-gated-edition/" + edition.contract_address,
         method: "POST",
+        data: {},
       });
 
       await pollTransaction(relayerResponse.relayed_transaction_id);

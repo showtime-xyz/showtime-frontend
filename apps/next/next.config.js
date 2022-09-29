@@ -2,6 +2,8 @@
  * @type {import('next').NextConfig}
  */
 
+const isDev = process.env.NODE_ENV === "development";
+
 const { withExpo } = require("@expo/next-adapter");
 const withFonts = require("next-fonts");
 const withImages = require("next-images");
@@ -9,6 +11,12 @@ const withPlugins = require("next-compose-plugins");
 const { withSentryConfig } = require("@sentry/nextjs");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
+});
+const cache = require("./workbox-cache");
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: isDev,
+  runtimeCaching: cache,
 });
 const withTM = require("next-transpile-modules")([
   "app",
@@ -76,8 +84,6 @@ const withTM = require("next-transpile-modules")([
   "recyclerlistview",
 ]);
 
-const isDev = process.env.NODE_ENV === "development";
-
 const nextConfig = {
   swcMinify: false,
   reactStrictMode: true,
@@ -137,6 +143,18 @@ const nextConfig = {
         destination: "/api/.well-known/:file",
         permanent: false,
       },
+      {
+        source: "/app-store",
+        destination:
+          "https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688",
+        permanent: true,
+      },
+      {
+        source: "/google-play",
+        destination:
+          "https://play.google.com/store/apps/details?id=io.showtime",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -160,6 +178,7 @@ module.exports = withPlugins(
     withImages,
     withBundleAnalyzer,
     !isDev ? withSentryConfig : null,
+    withPWA,
     [withExpo, { projectRoot: __dirname + "/../.." }],
   ].filter(Boolean),
   nextConfig

@@ -4,8 +4,8 @@ import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import {
   SceneRendererProps,
-  TabView,
   Route,
+  TabView,
   ScollableTabBar,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -37,7 +37,7 @@ const LOGIN_ROUTES = [
 ];
 const CONTENT_HEIGHT = Platform.select({
   android: [450, 397],
-  default: [420, 420],
+  default: [460, 460],
 });
 
 export function Login({ onLogin }: LoginProps) {
@@ -112,7 +112,7 @@ export function Login({ onLogin }: LoginProps) {
                   variant="primary"
                   size="regular"
                 >
-                  <Text>Sign in with Wallet</Text>
+                  Sign in with Wallet
                 </Button>
               </View>
               <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
@@ -153,6 +153,7 @@ export function Login({ onLogin }: LoginProps) {
       handleSubmitWallet,
     ]
   );
+
   //#endregion
   return (
     <LoginContainer style={styles.container}>
@@ -165,11 +166,7 @@ export function Login({ onLogin }: LoginProps) {
           </Text>
         </View>
       ) : (
-        <View
-          style={{
-            height: CONTENT_HEIGHT[index],
-          }}
-        >
+        <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
           <LoginHeader />
           <TabView
             navigationState={{ index, routes: LOGIN_ROUTES }}

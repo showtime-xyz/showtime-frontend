@@ -1,4 +1,4 @@
-import { MutableRefObject, ComponentType } from "react";
+import { MutableRefObject, ComponentType, forwardRef } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -30,7 +30,7 @@ export type FieldsetProps = {
   componentRef?: MutableRefObject<ComponentType | undefined>;
 } & TextInputProps;
 
-export function Fieldset(props: FieldsetProps) {
+function FieldsetImpl(props: FieldsetProps, ref: any) {
   const {
     errorText,
     accessibilityLabel,
@@ -44,6 +44,7 @@ export function Fieldset(props: FieldsetProps) {
     selectOnly,
     switchOnly,
     required,
+    componentRef,
     Component = TextInput,
     ...textInputProps
   } = props;
@@ -79,6 +80,7 @@ export function Fieldset(props: FieldsetProps) {
                 web: { outline: "none" },
                 default: undefined,
               })}
+              ref={ref}
               editable={disabled}
               nativeID={inputId}
               accessibilityLabel={accessibilityLabel}
@@ -148,3 +150,5 @@ export const ErrorText = ({
     </>
   );
 };
+
+export const Fieldset = forwardRef(FieldsetImpl);

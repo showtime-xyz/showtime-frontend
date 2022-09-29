@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
@@ -182,7 +183,7 @@ export const DropForm = () => {
           </Text>
           <View tw="mt-8 mb-10">
             <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share your free NFT drop to the world!
+              Now share your free drop to the world!
             </Text>
           </View>
 
@@ -192,11 +193,11 @@ export const DropForm = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just dropped a free NFT "${
+                  message: `I just created a free drop "${
                     state.edition?.name
                   }" by ${getTwitterIntentUsername(
                     user?.user?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
+                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
                 })
               );
             }}
@@ -225,7 +226,7 @@ export const DropForm = () => {
             }}
           >
             {isShareAPIAvailable
-              ? "Share NFT with your friends"
+              ? "Share the drop with your friends"
               : "Copy drop link 🔗"}
           </Button>
           <Button
@@ -263,15 +264,12 @@ export const DropForm = () => {
     );
   }
 
+  const ScrollComponent =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ScrollView
-        tw="p-4"
-        ref={scrollViewRef}
-        asKeyboardAwareScrollView
-        extraScrollHeight={insets.bottom + (Platform.OS === "ios" ? 120 : 200)}
-      >
+      <ScrollComponent ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
           <View tw="md:flex-column lg:flex-row">
             <View>
@@ -353,7 +351,7 @@ export const DropForm = () => {
                       <Fieldset
                         tw="flex-1"
                         label="Title"
-                        placeholder="How would you like to name your NFT?"
+                        placeholder="How would you like to name your drop?"
                         onBlur={onBlur}
                         errorText={errors.title?.message}
                         value={value}
@@ -374,7 +372,7 @@ export const DropForm = () => {
                         label="Description"
                         multiline
                         textAlignVertical="top"
-                        placeholder="What is this NFT drop about?"
+                        placeholder="What is this drop about?"
                         onBlur={onBlur}
                         helperText="You will not be able to edit this"
                         errorText={errors.description?.message}
@@ -410,7 +408,7 @@ export const DropForm = () => {
                               tw="flex-1"
                               label="Your royalties (%)"
                               onBlur={onBlur}
-                              helperText="How much you'll earn each time this NFT is sold"
+                              helperText="How much you'll earn each time an edition of this drop is sold"
                               errorText={errors.royalty?.message}
                               value={value?.toString()}
                               onChangeText={onChange}
@@ -545,10 +543,10 @@ export const DropForm = () => {
               onPress={handleSubmit(onSubmit)}
             >
               {state.status === "loading"
-                ? "Submitting..."
+                ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
-                ? "Failed. Retry!"
-                : "Drop Free NFT"}
+                ? "Failed. Please retry!"
+                : "Create free drop"}
             </Button>
 
             {state.transactionHash ? (
@@ -575,7 +573,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ScrollView>
+      </ScrollComponent>
     </BottomSheetModalProvider>
   );
 };

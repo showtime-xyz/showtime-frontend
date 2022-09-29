@@ -35,7 +35,7 @@ export const ClaimExplanation = ({
   return (
     <Explanation
       values={values}
-      title={`Claim this free NFT from ${getCreatorUsernameFromNFT(
+      title={`Claim this free drop from ${getCreatorUsernameFromNFT(
         token?.data.item
       )}`}
       coverElement={

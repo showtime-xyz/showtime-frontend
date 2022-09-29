@@ -13,7 +13,7 @@ import { TrendingCreatorsList } from "./trending-creators-list.md";
 import { TrendingNFTSList } from "./trending-nfts-list.md";
 
 type Query = {
-  tab: "creator" | "nft";
+  tab: "creator" | "drop";
   days: number;
 };
 
@@ -27,7 +27,7 @@ export const Trending = () => {
 
   // const handleTabChange = (index: number) => {
   //   Haptics.impactAsync();
-  //   setTab(index !== 0 ? "creator" : "nft");
+  //   setTab(index !== 0 ? "creator" : "drop");
   // };
   const [days, setDays] = useParam("days", {
     initial: 1,
@@ -59,7 +59,7 @@ export const Trending = () => {
             tw="w-[400px] rounded-lg bg-white p-4 shadow-lg dark:bg-black dark:shadow-dark shadow-light"
           >
             <SegmentedControl
-              values={["NFT", "CREATOR"]}
+              values={["DROP", "CREATOR"]}
               onChange={handleTabChange}
               selectedIndex={selected}
             />
@@ -87,10 +87,10 @@ export type TrendingMDListProps = {
 
 const LIST_MAP = new Map<Query["tab"], React.FC<TrendingMDListProps>>([
   ["creator", TrendingCreatorsList],
-  ["nft", TrendingNFTSList],
+  ["drop", TrendingNFTSList],
 ]);
 
-const List = ({ selectedTab = "nft", ...rest }: TrendingMDListProps) => {
+const List = ({ selectedTab = "drop", ...rest }: TrendingMDListProps) => {
   const List = useMemo(() => LIST_MAP.get(selectedTab), [selectedTab]);
 
   if (!List) return null;
