@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,7 +26,10 @@ function LoginOverlaysComponent({ loading }: LoginOverlaysProps) {
   return (
     <>
       {loading && (
-        <View tw="dark:opacity-85 absolute top--2 right-0 bottom--2 left-0 items-center justify-center bg-white opacity-95 dark:bg-black">
+        <View
+          tw="items-center justify-center bg-white opacity-[0.95] dark:bg-black dark:opacity-[0.85]"
+          style={StyleSheet.absoluteFill}
+        >
           <Spinner />
         </View>
       )}

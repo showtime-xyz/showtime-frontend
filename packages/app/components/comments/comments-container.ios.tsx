@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { KeyboardAvoidingView, Platform, ViewProps } from "react-native";
+
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
@@ -14,6 +17,15 @@ const modalPresentationHeight = Platform.isPad
 
 export function CommentsContainer({ children, style }: ViewProps) {
   const { top, bottom } = useSafeAreaInsets();
+  // we're handling keyboard here with a keyboardavoidingview.
+  // TODO: Refactor, replace keyboard avoid view
+  useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
+    return () => {
+      AvoidSoftInput.setEnabled(true);
+    };
+  }, []);
   return (
     <KeyboardAvoidingView
       behavior="padding"

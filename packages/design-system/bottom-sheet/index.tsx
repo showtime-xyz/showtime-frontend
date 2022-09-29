@@ -18,6 +18,7 @@ import {
 } from "@gorhom/bottom-sheet";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { styled, colors } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -41,6 +42,8 @@ export const BottomSheet = (props: BottomSheetProps) => {
     snapPoints,
     bodyStyle,
   } = props;
+
+  useLockBodyScroll(visible);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();

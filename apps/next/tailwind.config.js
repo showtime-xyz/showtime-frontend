@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
-// const nativewind = require("nativewind/tailwind/css");
 
 const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
 // const { colors } = require("@showtime-xyz/universal.tailwind");
@@ -370,7 +369,7 @@ module.exports = {
     },
   },
   plugins: [
-    // nativewind(),
+    require("nativewind/tailwind/css"),
     plugin(({ addUtilities }) => {
       addUtilities({
         ".text-xs": textSizes["text-xs"],

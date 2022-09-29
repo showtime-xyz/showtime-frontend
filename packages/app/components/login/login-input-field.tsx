@@ -1,13 +1,11 @@
 import React, { useCallback } from "react";
 import { TextInputProps } from "react-native";
 
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Text } from "@showtime-xyz/universal.text";
 
 import { yup } from "app/lib/yup";
 
@@ -22,6 +20,7 @@ interface LoginInputFieldProps
   signInButtonLabel?: string;
   validationSchema?: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
+  textInputRef: any;
   onSubmit: (value: string) => void;
 }
 
@@ -35,6 +34,7 @@ export function LoginInputField({
   textContentType = "none",
   validationSchema,
   leftElement,
+  textInputRef,
   onSubmit,
 }: LoginInputFieldProps) {
   //#region hooks
@@ -49,7 +49,6 @@ export function LoginInputField({
     reValidateMode: "onChange",
   });
   const inputValue = watch(INPUT_NAME);
-  const bottomSheetContext = useBottomSheetInternal(true);
   //#endregion
 
   //#region callbacks
@@ -59,20 +58,7 @@ export function LoginInputField({
     },
     [onSubmit]
   );
-  const handleOnBlur = useCallback(
-    (onBlur: () => void) => {
-      if (bottomSheetContext) {
-        bottomSheetContext.shouldHandleKeyboardEvents.value = false;
-      }
-      onBlur();
-    },
-    [bottomSheetContext]
-  );
-  const handleOnFocus = useCallback(() => {
-    if (bottomSheetContext) {
-      bottomSheetContext.shouldHandleKeyboardEvents.value = true;
-    }
-  }, [bottomSheetContext]);
+
   //#endregion
   return (
     <>
@@ -81,10 +67,11 @@ export function LoginInputField({
         render={({ field: { onChange, onBlur, value } }) => (
           <Fieldset
             label={label}
+            onBlur={onBlur}
             onChangeText={onChange}
-            onBlur={() => handleOnBlur(onBlur)}
-            onFocus={handleOnFocus}
             placeholder={placeholder}
+            //@ts-ignore
+            ref={textInputRef}
             value={value}
             errorText={errors.data?.message}
             autoCapitalize="none"
@@ -93,6 +80,7 @@ export function LoginInputField({
             textContentType={textContentType}
             leftElement={leftElement}
             returnKeyType="go"
+            onSubmitEditing={handleSubmit(handleSubmitData)}
           />
         )}
         name={INPUT_NAME}
@@ -102,10 +90,10 @@ export function LoginInputField({
         onPress={handleSubmit(handleSubmitData)}
         variant="primary"
         size="regular"
-        tw="mt-6"
+        tw={`mt-6 ${!inputValue ? "opacity-50" : null}`}
         disabled={!inputValue}
       >
-        <Text tw="text-black dark:text-white">{signInButtonLabel}</Text>
+        {signInButtonLabel}
       </Button>
     </>
   );

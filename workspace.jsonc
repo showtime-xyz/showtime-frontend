@@ -43,7 +43,8 @@
         "react-native-reanimated": ">=2.0.0",
         "react-native-gesture-handler": ">=2.0.0",
         "moti": "*",
-        "next": "*"
+        "next": "*",
+        "@gorhom/bottom-sheet": "*"
       }
     }
   },

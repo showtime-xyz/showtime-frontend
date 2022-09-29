@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
+import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { WEB_HEIGHT } from "./constants";
@@ -46,13 +47,17 @@ function ModalContainerComponent({
 
   useEscapeKeydown((event) => {
     event.preventDefault();
+
     return disableBackdropPress ? noop() : onClose?.();
   });
+
+  // Prevent scrolling the body when the modal is open
+  useLockBodyScroll();
 
   return (
     <FocusTrap aria-modal>
       <View tw={CONTAINER_TW} style={styles.container}>
-        {/* prevent scrolling/shaking when modal is open */}
+        {/* Prevent shaking when the modal is open */}
         <RemoveScrollBar />
         <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
         <View tw={modalContainerTW} style={style}>
