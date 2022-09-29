@@ -353,7 +353,7 @@ const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
 
   if (isMdWidth) {
     return (
-      <View tw="fixed top-0 right-0 left-0 z-50 w-full items-center bg-white stroke-inherit shadow-sm dark:bg-black">
+      <View tw="fixed top-0 right-0 left-0 z-50 w-full items-center bg-white/60 stroke-inherit shadow-sm backdrop-blur-md dark:bg-black/60">
         <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
           <View tw="items-start">
             <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />

@@ -106,7 +106,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         <View
           tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
           style={{
-            paddingBottom: bottomPadding,
+            paddingBottom: bottomHeight,
           }}
           onLayout={({
             nativeEvent: {

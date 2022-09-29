@@ -41,7 +41,7 @@ const ViewabilityInfiniteScrollList =
 
 export const Feed = () => {
   return (
-    <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
+    <View tw="max-w-7xl flex-1 pb-8 pt-24" testID="homeFeed">
       <ErrorBoundary>
         <FeedList />
       </ErrorBoundary>

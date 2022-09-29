@@ -1,27 +1,25 @@
-import { useCallback, useMemo, useRef } from "react";
-import { Dimensions, useWindowDimensions } from "react-native";
+import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import { useWindowDimensions } from "react-native";
 
-import { Virtual, Mousewheel } from "swiper";
+import { useSharedValue } from "react-native-reanimated";
+import { Virtual } from "swiper";
+import type { Swiper as SwiperClass } from "swiper";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItem } from "app/components/feed-item";
+import {
+  ItemKeyContext,
+  ViewabilityItemsContext,
+} from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
-
-const { height: screenHeight } = Dimensions.get("screen");
-
-const ViewabilityInfiniteScrollList =
-  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 type Props = {
   data: NFT[];
@@ -31,25 +29,23 @@ type Props = {
   initialScrollIndex?: number;
   bottomPadding?: number;
 };
+const { useParam } = createParam();
 
+export const SwiperActiveIndexContext = createContext<number>(0);
 export const SwipeList = ({
   data,
   fetchMore,
-  isRefreshing = false,
-  refresh,
   initialScrollIndex = 0,
-  bottomPadding = 0,
 }: Props) => {
-  const listRef = useRef<any>(null);
-  const headerHeight = useHeaderHeight();
-  useScrollToTop(listRef);
-  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-  const momentumScrollCallback = useRef(undefined);
-  const setMomentumScrollCallback = useCallback((cb: any) => {
-    momentumScrollCallback.current = cb;
-  }, []);
+  const [, setInitialScrollIndex] = useParam("initialScrollIndex");
 
+  const [activeIndex, setActiveIndex] = useState(0);
+  const listRef = useRef<any>(null);
+
+  useScrollToTop(listRef);
+  const visibleItems = useSharedValue<number[]>([]);
+
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -58,36 +54,43 @@ export const SwipeList = ({
     }),
     []
   );
-
-  const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
+  const onRealIndexChange = useCallback(
+    (e: SwiperClass) => {
+      visibleItems.value = [e.previousIndex, e.activeIndex];
+      setInitialScrollIndex(e.activeIndex.toString());
+      setActiveIndex(e.activeIndex);
+    },
+    [setInitialScrollIndex, visibleItems]
+  );
 
   if (data.length === 0) return null;
 
   return (
     <View testID="swipeList" nativeID="slidelist" tw="h-screen overflow-hidden">
       <VideoConfigContext.Provider value={videoConfig}>
-        <Swiper
-          modules={[Virtual, Mousewheel]}
-          height={windowHeight}
-          width={windowWidth}
-          slidesPerView={1}
-          virtual
-          direction="vertical"
-          mousewheel
-        >
-          {data.map((item, index) => (
-            <SwiperSlide key={item.nft_id} virtualIndex={index}>
-              <FeedItem
-                nft={item}
-                {...{
-                  itemHeight: windowHeight,
-                  bottomPadding,
-                  setMomentumScrollCallback,
-                }}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <SwiperActiveIndexContext.Provider value={activeIndex}>
+          <ViewabilityItemsContext.Provider value={visibleItems}>
+            <Swiper
+              modules={[Virtual]}
+              height={windowHeight}
+              width={windowWidth}
+              initialSlide={initialScrollIndex}
+              virtual
+              direction="vertical"
+              onRealIndexChange={onRealIndexChange}
+              onReachEnd={fetchMore}
+              threshold={25}
+            >
+              {data.map((item, index) => (
+                <SwiperSlide key={item.nft_id} virtualIndex={index}>
+                  <ItemKeyContext.Provider value={index}>
+                    <FeedItem nft={item} itemHeight={windowHeight} />
+                  </ItemKeyContext.Provider>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </ViewabilityItemsContext.Provider>
+        </SwiperActiveIndexContext.Provider>
       </VideoConfigContext.Provider>
     </View>
   );

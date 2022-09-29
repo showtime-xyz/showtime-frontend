@@ -51,6 +51,7 @@
     "react-virtuoso": "^2.16.6",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
+    "screenfull": "^6.0.2",
     "setimmediate": "^1.0.5",
     "swiper": "^8.4.2",
     "swr": "2.0.0-beta.6",

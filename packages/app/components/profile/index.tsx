@@ -156,7 +156,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return (
       <View tw="items-center bg-white dark:bg-black">
         <View tw="w-full max-w-screen-xl">
-          {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+          {Platform.OS !== "android" && (
+            <View style={{ height: headerHeight }} />
+          )}
           <ProfileTop
             address={username}
             animationHeaderPosition={animationHeaderPosition}

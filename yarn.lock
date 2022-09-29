@@ -8449,6 +8449,7 @@ __metadata:
     react-virtuoso: ^2.16.6
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
+    screenfull: ^6.0.2
     setimmediate: ^1.0.5
     swiper: ^8.4.2
     swr: 2.0.0-beta.6
@@ -31678,6 +31679,13 @@ __metadata:
     ajv: ^6.12.5
     ajv-keywords: ^3.5.2
   checksum: fb73f3d759d43ba033c877628fe9751620a26879f6301d3dbeeb48cf2a65baec5cdf99da65d1bf3b4ff5444b2e59cbe4f81c2456b5e0d2ba7d7fd4aed5da29ce
+  languageName: node
+  linkType: hard
+
+"screenfull@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "screenfull@npm:6.0.2"
+  checksum: 56a541da09241ae7c97115cc31245623c09230bcbebb93636871e955b545f26c7dcdb2299795234a0a21bff5d5401b7329b22609becf4c381a9e22347acf87ba
   languageName: node
   linkType: hard
 

@@ -114,7 +114,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center " style={{ minHeight: "calc(100vh - 64px)" }}>
+          <View tw="items-center" style={{ minHeight: "calc(100vh - 64px)" }}>
             <Component {...pageProps} />
           </View>
           <Footer />
