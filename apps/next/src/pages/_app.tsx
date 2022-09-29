@@ -100,6 +100,8 @@ export default function App({ Component, pageProps, router }: AppProps) {
             <link rel="dns-prefect" href="//showtimenft.wl.r.appspot.com" />
             <link rel="preconnect" href="//lh3.googleusercontent.com" />
             <link rel="dns-prefect" href="//lh3.googleusercontent.com" />
+            <link rel="preconnect" href="//res.cloudinary.com" />
+            <link rel="dns-prefect" href="//res.cloudinary.com" />
           </>
         ) : null}
 
