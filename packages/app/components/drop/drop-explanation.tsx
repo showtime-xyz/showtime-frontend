@@ -7,7 +7,7 @@ import { Explanation } from "../explanation";
 
 const values = [
   {
-    title: "Gift your community a NFT",
+    title: "A gift for your community",
     description:
       "A reward they can showcase. Bonus: engage them with unlockable features!",
   },
@@ -38,7 +38,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   return (
     <Explanation
       values={values}
-      title="Drop Free NFTs to your followers"
+      title="Create a drop"
       coverElement={
         <View tw="mb-10 items-center">
           <View tw="dark:shadow-dark shadow-light rounded-xl shadow-xl">

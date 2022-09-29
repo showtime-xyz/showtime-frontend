@@ -147,11 +147,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just claimed a free NFT "${
+                  message: `I just claimed a free drop "${
                     nft?.data.item.token_name
                   }" by ${getTwitterIntentUsername(
                     creatorProfile?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim yours for free here:`,
+                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
                 })
               );
             }}

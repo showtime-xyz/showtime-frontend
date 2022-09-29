@@ -118,7 +118,7 @@ export default {
       "react-native-vision-camera",
       {
         cameraPermissionText:
-          "$(PRODUCT_NAME) uses your camera to let you take photos or videos and to turn them into NFTs.",
+          "$(PRODUCT_NAME) uses your camera to let you take photos or videos and post them on Showtime.",
         // Disable for now to be safe, we don't support videos yet
         enableMicrophonePermission: false,
         microphonePermissionText:
