@@ -338,7 +338,7 @@ export const ProfileTop = ({
                     </>
                   ) : userId === profileId ? (
                     <Button size="small" onPress={redirectToCreateDrop}>
-                      Drop Free NFT
+                      Create free drop
                     </Button>
                   ) : null}
                 </>

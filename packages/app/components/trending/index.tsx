@@ -88,7 +88,7 @@ export const Trending = () => {
       return (
         <View tw="bg-white p-4 dark:bg-black">
           <SegmentedControl
-            values={["NFT", "CREATOR"]}
+            values={["DROP", "CREATOR"]}
             onChange={(newIndex) => {
               Haptics.impactAsync();
               setSelecteds({
