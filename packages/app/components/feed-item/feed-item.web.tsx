@@ -33,7 +33,6 @@ const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
-  bottomPadding = 0,
   itemHeight,
 }) {
   const headerHeight = useHeaderHeight();

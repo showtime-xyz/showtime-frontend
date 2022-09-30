@@ -65,7 +65,6 @@ function Media({
   return (
     <View
       style={{
-        margin: numColumns >= 3 ? 1 : numColumns === 2 ? 2 : 0,
         opacity: item?.loading ? 0.5 : 1,
       }}
     >

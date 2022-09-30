@@ -94,11 +94,14 @@ export const Notifications = ({ useWindowScroll = true }) => {
       <InfiniteScrollList
         useWindowScroll={useWindowScroll}
         data={data}
+        ListHeaderComponent={Platform.select({
+          web: () => <View style={{ height: headerHeight }} />,
+          default: undefined,
+        })}
         // for blur header effect on iOS
         style={{
           height: Platform.select({
-            default: windowHeight - bottomBarHeight - headerHeight,
-            android: windowHeight - bottomBarHeight,
+            default: windowHeight - bottomBarHeight,
             ios: windowHeight,
           }),
         }}

@@ -1,4 +1,12 @@
-import { memo, useState, useCallback, useEffect, useMemo } from "react";
+import {
+  memo,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  createContext,
+  useRef,
+} from "react";
 import {
   Platform,
   StatusBar,
@@ -35,7 +43,6 @@ import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { NFTDetails } from "./details";
-import { FeedItemMD } from "./feed-item.md";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -46,6 +53,7 @@ export type FeedItemProps = {
   setMomentumScrollCallback?: (callback: any) => void;
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
+export const SwiperActiveIndexContext = createContext<number>(0);
 
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
@@ -55,6 +63,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   setMomentumScrollCallback,
 }) {
   const headerHeight = useHeaderHeight();
+  const headerHeightRef = useRef(headerHeight);
+
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
@@ -73,30 +83,29 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         ? 1
         : Number(nft.token_aspect_ratio));
 
-    if (actualHeight < windowHeight - bottomHeight - headerHeight) {
+    if (actualHeight < windowHeight - bottomHeight - headerHeightRef.current) {
       return Math.min(actualHeight, maxContentHeight);
     }
 
     return windowHeight - bottomHeight;
   }, [
     bottomHeight,
-    headerHeight,
     maxContentHeight,
     nft.token_aspect_ratio,
     windowHeight,
     windowWidth,
   ]);
   const platformHeaderHeight = Platform.select({
-    ios: headerHeight,
+    ios: headerHeightRef.current,
     default: 0,
   });
   const contentTransY = useDerivedValue(() => {
     const visibleContentHeight =
-      windowHeight - headerHeight - detailHeight - StatusBarHeight;
+      windowHeight - detailHeight - StatusBarHeight - headerHeightRef.current;
 
     if (mediaHeight < visibleContentHeight) {
       return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;
-    } else if (mediaHeight < maxContentHeight - headerHeight) {
+    } else if (mediaHeight < maxContentHeight - headerHeightRef.current) {
       return platformHeaderHeight;
     } else {
       return 0;
@@ -127,6 +136,9 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     if (Platform.OS !== "ios") return;
     navigation.setOptions({
       headerShown: false,
+      headerStyle: {
+        opacity: 0,
+      },
     });
     opacity.value = withTiming(0);
   }, [navigation, opacity]);
@@ -151,10 +163,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
-
-  if (windowWidth >= 768) {
-    return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
-  }
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>

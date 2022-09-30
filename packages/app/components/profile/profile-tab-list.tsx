@@ -116,7 +116,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [
         filter.collectionId,
         filter.sortType,
-        index,
         list.type,
         numColumns,
         onItemPress,

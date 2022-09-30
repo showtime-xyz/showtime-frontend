@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, ComponentType } from "react";
 import { View, ViewProps } from "react-native";
 
 import {
@@ -16,6 +16,13 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> &
      * @default undefined
      */
     gridItemProps?: ViewProps | null;
+    // override this type, avoid some style code that cause the web to be re-rendered.
+    ListHeaderComponent?: ComponentType<{
+      context?: unknown;
+    }>;
+    ListFooterComponent?: ComponentType<{
+      context?: unknown;
+    }>;
   };
 
 function FlashListComponent<T>(

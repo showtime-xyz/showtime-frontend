@@ -167,11 +167,17 @@ export function useIsMobileWeb() {
   };
 }
 
-export const usePlatformResize = (onResize: (evt: Event) => any) => {
+export const usePlatformResize = (
+  onResize: (evt?: Event) => any,
+  isInit = false
+) => {
   useLayoutEffect(() => {
     const handleResize = (evt: Event) => {
       onResize(evt);
     };
+    if (isInit) {
+      onResize();
+    }
     Platform.OS === "web" && window.addEventListener("resize", handleResize);
     return function cleanup() {
       Platform.OS === "web" &&

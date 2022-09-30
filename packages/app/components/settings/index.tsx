@@ -89,7 +89,7 @@ const SETTINGS_ROUTES = [
 ];
 
 const SettingsTabs = () => {
-  const { width } = useWindowDimensions();
+  const { width, height: screenHeight } = useWindowDimensions();
 
   const isMdWidth = width >= breakpoints["md"];
   const { width: scrollbarWidth } = useScrollbarSize();
@@ -154,10 +154,72 @@ const SettingsTabs = () => {
               data={wallets as []}
               keyExtractor={keyExtractor}
               renderItem={({ item }) => (
-                <SettingsWalletSlot
-                  onEditNickname={() => setEditingWallet(item)}
-                  wallet={item}
-                />
+                <>
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                  <SettingsWalletSlot
+                    onEditNickname={() => setEditingWallet(item)}
+                    wallet={item}
+                  />
+                </>
               )}
               ListEmptyComponent={() => {
                 const hasNoWallet = Boolean(wallets);
@@ -365,7 +427,17 @@ const SettingsTabs = () => {
   }, [headerHeight, index, isWeb, setIndex]);
 
   return (
-    <View style={{ width: width - scrollbarWidth }} tw="flex-1">
+    <View
+      style={Platform.select({
+        default: {
+          flex: 1,
+        },
+        web: {
+          width: width - scrollbarWidth,
+          height: screenHeight,
+        },
+      })}
+    >
       <HeaderTabView
         navigationState={{ index, routes }}
         renderScene={renderScene}

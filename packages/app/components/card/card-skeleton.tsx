@@ -11,10 +11,18 @@ type CardSkeletonProps = {
   squareSize: number;
   spacing: number;
   tw?: string;
+  height?: number;
+  width?: number;
 };
 
 export const CardSkeleton = memo<CardSkeletonProps>(
-  ({ squareSize, spacing = 0, tw = "" }) => {
+  ({
+    squareSize,
+    height: propHeight,
+    width: propWidth,
+    spacing = 0,
+    tw = "",
+  }) => {
     const { colorScheme } = useColorScheme();
     const { width } = useWindowDimensions();
     const isMdWidth = width >= breakpoints["md"];
@@ -22,14 +30,9 @@ export const CardSkeleton = memo<CardSkeletonProps>(
       return (
         <View
           tw={[
-            "dark:shadow-dark shadow-light mb-4 overflow-hidden rounded-2xl",
+            "dark:shadow-dark shadow-light flexe-1 mb-4 overflow-hidden rounded-2xl",
             tw,
           ]}
-          style={{
-            width: squareSize - spacing,
-            marginRight: spacing / 2,
-            marginLeft: spacing / 2,
-          }}
         >
           <View tw="py-2 px-4">
             <View tw="flex-row">

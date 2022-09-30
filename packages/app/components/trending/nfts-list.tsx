@@ -48,7 +48,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
                 `/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`
               )
             }
-            href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
+            href={`/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`}
           />
         );
       },
@@ -59,6 +59,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
 
     return (
       <ViewabilityInfiniteScrollList
+        useWindowScroll={false}
         numColumns={NUM_COLUMNS}
         data={data}
         ref={listRef}
