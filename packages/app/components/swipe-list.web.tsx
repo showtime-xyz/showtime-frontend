@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import { clamp } from "@showtime-xyz/universal.utils";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItem } from "app/components/feed-item";
@@ -74,7 +75,7 @@ export const SwipeList = ({
               modules={[Virtual]}
               height={windowHeight}
               width={windowWidth}
-              initialSlide={initialScrollIndex}
+              initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
               virtual
               direction="vertical"
               onRealIndexChange={onRealIndexChange}
