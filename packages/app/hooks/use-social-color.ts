@@ -1,8 +1,8 @@
 import { useWindowDimensions } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { useIsDarkMode } from "design-system/hooks";
 import { breakpoints } from "design-system/theme";
 
 export const useSocialColor = () => {

@@ -12,6 +12,8 @@ import type { ListRenderItemInfo } from "@shopify/flash-list";
 import chuck from "lodash/chunk";
 import { useSharedValue } from "react-native-reanimated";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -33,8 +35,6 @@ import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 
-import { InfiniteScrollList } from "design-system/infinite-scroll-list";
-import { Route, TabBarSingle } from "design-system/tab-view";
 import { breakpoints } from "design-system/theme";
 
 import { CardSkeleton } from "../card/card-skeleton";
