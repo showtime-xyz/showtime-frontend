@@ -75,7 +75,7 @@ export const SwipeList = ({
               modules={[Virtual]}
               height={windowHeight}
               width={windowWidth}
-              initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
+              initialSlide={clamp(initialScrollIndex, 0, data.length - 1 - 0)}
               virtual
               direction="vertical"
               onRealIndexChange={onRealIndexChange}
