@@ -12,8 +12,10 @@ import type { ListRenderItemInfo } from "@shopify/flash-list";
 import chuck from "lodash/chunk";
 import { useSharedValue } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -138,6 +140,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     initial: 1,
   });
   const { width: scrollbarWidth } = useScrollbarSize();
+  const isDark = useIsDarkMode();
   const [type] = useParam("type");
   const { width, height: screenHeight } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -248,7 +251,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
           tw="mx-auto h-20 flex-row items-center justify-center"
           style={{ maxWidth: contentWidth }}
         >
-          <Spinner />
+          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
           {/* {new Array(numColumns).fill(0).map((_, i) => (
             <CardSkeleton
               squareSize={contentWidth / 3}
@@ -261,7 +264,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       );
     }
     return null;
-  }, [contentWidth, isLoadingMore]);
+  }, [contentWidth, isDark, isLoadingMore]);
 
   return (
     <ProfileHeaderContext.Provider
