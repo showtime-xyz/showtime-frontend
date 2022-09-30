@@ -29,15 +29,14 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
-import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 
+import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
-import { CardSkeleton } from "../card/card-skeleton";
 import { FilterContext } from "./fillter-context";
 import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTop } from "./profile-top";
@@ -139,7 +138,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     initial: 1,
   });
   const { width: scrollbarWidth } = useScrollbarSize();
-  const { user } = useUser();
   const [type] = useParam("type");
   const { width, height: screenHeight } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -243,25 +241,27 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
+    // Todo: wait to confirm whether to use card or spinner, because CardSkeleton I think not good.
     if (isLoadingMore) {
       return (
         <View
-          tw="mx-auto mb-px h-20 flex-row items-center justify-center space-x-1 px-0 md:space-x-6 md:px-6 lg:space-x-8 lg:px-4 xl:px-0"
+          tw="mx-auto h-20 flex-row items-center justify-center"
           style={{ maxWidth: contentWidth }}
         >
-          {new Array(numColumns).fill(0).map((_, i) => (
+          <Spinner />
+          {/* {new Array(numColumns).fill(0).map((_, i) => (
             <CardSkeleton
               squareSize={contentWidth / 3}
               tw="flex-1"
               key={`Card-Skeleton-${i}`}
               spacing={0}
             />
-          ))}
+          ))} */}
         </View>
       );
     }
     return null;
-  }, [contentWidth, isLoadingMore, numColumns]);
+  }, [contentWidth, isLoadingMore]);
 
   return (
     <ProfileHeaderContext.Provider
