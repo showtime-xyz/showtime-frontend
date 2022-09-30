@@ -154,72 +154,10 @@ const SettingsTabs = () => {
               data={wallets as []}
               keyExtractor={keyExtractor}
               renderItem={({ item }) => (
-                <>
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                  <SettingsWalletSlot
-                    onEditNickname={() => setEditingWallet(item)}
-                    wallet={item}
-                  />
-                </>
+                <SettingsWalletSlot
+                  onEditNickname={() => setEditingWallet(item)}
+                  wallet={item}
+                />
               )}
               ListEmptyComponent={() => {
                 const hasNoWallet = Boolean(wallets);
