@@ -13,20 +13,20 @@ export type SearchResponseItem = {
 };
 
 type SearchResponse = {
-  data: Array<SearchResponseItem>;
+  results: Array<SearchResponseItem>;
 };
 
 export const useSearch = (term: string) => {
   const debouncedSearch = useDebounce(term, 200);
   const { data, error } = useSWR<SearchResponse>(
     term.length >= 2 && debouncedSearch
-      ? "/v1/search?q=" + debouncedSearch
+      ? "/v2/search?q=" + debouncedSearch
       : null,
     fetcher
   );
 
   return {
-    data: data?.data,
+    data: data?.results,
     loading: !data,
     error,
   };
