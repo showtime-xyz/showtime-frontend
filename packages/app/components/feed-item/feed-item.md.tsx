@@ -76,7 +76,9 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
   const disablePrevButton = activeIndex === 0;
-  const disableNextButton = activeIndex === swiper.snapGrid.length - 1;
+  const disableNextButton = swiper
+    ? activeIndex === swiper.snapGrid.length - 1
+    : false;
   const routes = useMemo(
     () => [
       {
@@ -195,45 +197,47 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             />
           </View>
           {/* Control Swiper */}
-          <View
-            tw={[
-              "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
-              showFullScreen ? "hidden" : "flex",
-            ]}
-          >
-            <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
-              <Button
-                variant="text"
-                size="regular"
-                iconOnly
-                tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
-                disabled={disablePrevButton}
-                style={{ opacity: disablePrevButton ? 0.4 : 1 }}
-                onPress={() => {
-                  swiper.slideTo(Math.max(activeIndex - 1, 0));
-                }}
-              >
-                <ChevronUp width={24} height={24} />
-              </Button>
+          {swiper && (
+            <View
+              tw={[
+                "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
+                showFullScreen ? "hidden" : "flex",
+              ]}
+            >
+              <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
+                <Button
+                  variant="text"
+                  size="regular"
+                  iconOnly
+                  tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
+                  disabled={disablePrevButton}
+                  style={{ opacity: disablePrevButton ? 0.4 : 1 }}
+                  onPress={() => {
+                    swiper.slideTo(Math.max(activeIndex - 1, 0));
+                  }}
+                >
+                  <ChevronUp width={24} height={24} />
+                </Button>
+              </View>
+              <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
+                <Button
+                  variant="text"
+                  size="regular"
+                  iconOnly
+                  tw="bg-white px-3 dark:bg-gray-900"
+                  disabled={disableNextButton}
+                  style={{ opacity: disableNextButton ? 0.4 : 1 }}
+                  onPress={() => {
+                    swiper.slideTo(
+                      Math.min(activeIndex + 1, swiper.snapGrid.length)
+                    );
+                  }}
+                >
+                  <ChevronDown width={24} height={24} />
+                </Button>
+              </View>
             </View>
-            <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
-              <Button
-                variant="text"
-                size="regular"
-                iconOnly
-                tw="bg-white px-3 dark:bg-gray-900"
-                disabled={disableNextButton}
-                style={{ opacity: disableNextButton ? 0.4 : 1 }}
-                onPress={() => {
-                  swiper.slideTo(
-                    Math.min(activeIndex + 1, swiper.snapGrid.length)
-                  );
-                }}
-              >
-                <ChevronDown width={24} height={24} />
-              </Button>
-            </View>
-          </View>
+          )}
         </View>
 
         {nft?.mime_type?.includes("video") ? (
