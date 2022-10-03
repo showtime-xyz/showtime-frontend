@@ -62,6 +62,7 @@ const ProfileHeaderContext = createContext<{
   routes: Route[];
   displayedCount: number | undefined;
   defaultIndex: number;
+  isBlocked: boolean;
 }>({
   profileData: undefined,
   username: "",
@@ -70,6 +71,7 @@ const ProfileHeaderContext = createContext<{
   routes: [],
   displayedCount: 0,
   defaultIndex: 0,
+  isBlocked: false,
 });
 
 const Header = memo(function Header() {
@@ -85,16 +87,17 @@ const Header = memo(function Header() {
     routes,
     displayedCount,
     defaultIndex,
+    isBlocked,
   } = context;
+
   const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v ?? defaultIndex),
+    parse: (v) => {
+      // handling when params index is an illegal character, e.g.tab = 11,1a,abc
+      const value = Number(v ?? defaultIndex) ? Number(v ?? defaultIndex) : 0;
+      return value > routes.length || value < 0 ? 0 : value;
+    },
     initial: defaultIndex,
   });
-
-  const { getIsBlocked } = useBlock();
-  const profileId = profileData?.profile.profile_id;
-
-  const isBlocked = getIsBlocked(profileId);
 
   return (
     <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
@@ -140,12 +143,16 @@ const Profile = ({ username }: ProfileScreenProps) => {
     initial: 1,
   });
   const { width: scrollbarWidth } = useScrollbarSize();
+
   const isDark = useIsDarkMode();
   const [type] = useParam("type");
   const { width, height: screenHeight } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const contentWidth = useContentWidth();
+  const { getIsBlocked } = useBlock();
+
   const profileId = profileData?.data?.profile.profile_id;
+  const isBlocked = getIsBlocked(profileId);
 
   const { data } = useProfileNftTabs({
     profileId: profileId,
@@ -249,26 +256,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
-    // Todo: wait to confirm whether to use card or spinner, because CardSkeleton I think not good.
-    if (isLoadingMore) {
-      return (
-        <View
-          tw="mx-auto h-20 flex-row items-center justify-center"
-          style={{ maxWidth: contentWidth }}
-        >
-          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
-          {/* {new Array(numColumns).fill(0).map((_, i) => (
-            <CardSkeleton
-              squareSize={contentWidth / 3}
-              tw="flex-1"
-              key={`Card-Skeleton-${i}`}
-              spacing={0}
-            />
-          ))} */}
-        </View>
-      );
-    }
-    return null;
+    if (!isLoadingMore) return null;
+    return (
+      <View
+        tw="mx-auto h-20 flex-row items-center justify-center"
+        style={{ maxWidth: contentWidth }}
+      >
+        <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+      </View>
+    );
   }, [contentWidth, isDark, isLoadingMore]);
 
   return (
@@ -281,6 +277,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         routes,
         displayedCount: data?.tabs[index]?.displayed_count,
         defaultIndex,
+        isBlocked,
       }}
     >
       <FilterContext.Provider value={{ filter, dispatch }}>
@@ -290,7 +287,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               useWindowScroll={isMdWidth}
               ListHeaderComponent={Header}
               numColumns={1}
-              data={chuckList}
+              data={isBlocked ? [] : chuckList}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
               estimatedItemSize={contentWidth / numColumns}
@@ -305,7 +302,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 if (isLoading) return null;
                 return (
                   <EmptyPlaceholder
-                    title="No results found"
+                    title={
+                      isBlocked ? (
+                        <Text tw="text-gray-900 dark:text-white">
+                          <Text tw="font-bold">@{username}</Text> is blocked
+                        </Text>
+                      ) : (
+                        "No results found"
+                      )
+                    }
                     tw="h-[50vh]"
                     hideLoginBtn
                   />
