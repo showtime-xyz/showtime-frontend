@@ -64,17 +64,14 @@ function Card({
     if (isWeb) return null;
     onPress?.();
   }, [isWeb, onPress]);
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[350px] max-w-[30vw]"
-    : numColumns === 2
-    ? "w-[46vw]"
-    : "w-[100vw]";
 
   if (width < 768) {
     return (
-      <RouteComponent href={href} onPress={handleOnPress}>
+      <RouteComponent
+        href={href}
+        viewProps={{ style: { flex: 1 } }}
+        onPress={handleOnPress}
+      >
         <Media item={nft} numColumns={numColumns} />
       </RouteComponent>
     );
@@ -89,11 +86,12 @@ function Card({
         dataSet={Platform.select({ web: { testId: "nft-card" } })}
         style={[sizeStyle]}
         tw={[
-          !sizeStyle ? size : "",
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
-          "dark:shadow-dark shadow-light mx-auto self-center justify-self-center",
+          "dark:shadow-dark shadow-light",
+          "flex-1",
+          tw,
         ]}
       >
         <View tw="bg-white dark:bg-black" shouldRasterizeIOS={true}>

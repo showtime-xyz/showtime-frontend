@@ -109,7 +109,6 @@ export const GestureContainer = React.forwardRef<
   const [headerHeight, setHeaderHeight] = useState(
     initHeaderHeight - overflowHeight
   );
-  const [isLoadedHeader, setIsLoadedHeader] = useState(!renderSceneHeader);
   const [scrollStickyHeaderHeight, setStickyHeaderHeight] = useState(0);
   const [childGestures, setChildRefs] = useState<NativeGesture[]>([]);
   //#endregion

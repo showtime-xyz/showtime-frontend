@@ -15,6 +15,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
+import { usePlatformBottomHeight } from "../../hooks/use-platform-bottom-height";
 import { TrendingContext } from "./context";
 import { TabListContainer, TrendingTabListRef } from "./tab-list";
 
@@ -41,27 +42,15 @@ export const TRENDING_ROUTE = [
     days: 30,
   },
 ];
+// Todo: add index.web.tsx to improve web.
 export const Trending = () => {
   const headerHeight = useHeaderHeight();
   const contentWidth = useContentWidth();
-  const {
-    index,
-    setIndex,
-    setIsRefreshing,
-    isRefreshing,
-    routes,
-    tabRefs,
-    currentTab,
-  } = useTabState<TrendingTabListRef, TrendingTabRoute>(TRENDING_ROUTE);
-
-  const onStartRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    // Todo: use async/await.
-    currentTab?.refresh();
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 1000);
-  }, [currentTab, setIsRefreshing]);
+  const bottomHeight = usePlatformBottomHeight();
+  const { index, setIndex, routes, tabRefs } = useTabState<
+    TrendingTabListRef,
+    TrendingTabRoute
+  >(TRENDING_ROUTE);
 
   const renderScene = useCallback(
     ({
@@ -106,7 +95,7 @@ export const Trending = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+        {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
         <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
           <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
             Trending
@@ -120,8 +109,6 @@ export const Trending = () => {
     <TrendingContext.Provider value={selecteds}>
       <View style={{ width: contentWidth }} tw="flex-1">
         <HeaderTabView<TrendingTabRoute>
-          onStartRefresh={onStartRefresh}
-          isRefreshing={isRefreshing}
           navigationState={{ index, routes }}
           renderScene={renderScene}
           onIndexChange={setIndex}
@@ -138,6 +125,12 @@ export const Trending = () => {
             width: contentWidth,
           }}
           style={{ zIndex: 1 }}
+          sceneContainerStyle={Platform.select({
+            web: {
+              paddingBottom: bottomHeight + 20,
+            },
+            default: undefined,
+          })}
           // renderSceneHeader={renderSceneHeader}
         />
       </View>

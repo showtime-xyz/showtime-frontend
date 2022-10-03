@@ -50,7 +50,7 @@ export const Trending = () => {
   const index = days === 1 ? 0 : days === 7 ? 1 : 2;
   return (
     <View style={{ width: contentWidth }} tw="w-full bg-gray-100 dark:bg-black">
-      <View tw="py-8">
+      <View tw="pb-8 pt-24">
         <View tw="flex-row items-center justify-between pb-8">
           <Text tw="font-space-bold px-4 text-2xl text-black dark:text-white">
             Trending

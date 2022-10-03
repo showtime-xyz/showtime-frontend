@@ -2,10 +2,13 @@ import "raf/polyfill";
 
 import "setimmediate";
 
+import { useCallback } from "react";
+
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
+import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Footer } from "app/components/footer";
@@ -26,6 +29,7 @@ import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { isMobileWeb } from "app/utilities";
 
 import "../styles/styles.css";
 
@@ -132,7 +136,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
       </Head>
-
       <AppProviders>
         <Container>
           <Header
@@ -141,7 +144,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center " style={{ minHeight: "calc(100vh - 64px)" }}>
+          <View tw="items-center" style={{ minHeight: "calc(100vh - 64px)" }}>
             <Component {...pageProps} />
           </View>
           <Footer />
@@ -170,6 +173,14 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
+    const onResize = useCallback(() => {
+      if (isMobileWeb()) {
+        document.body.classList.add("overflow-hidden");
+      } else {
+        document.body.classList.remove("overflow-hidden");
+      }
+    }, []);
+    usePlatformResize(onResize, true);
     return <View tw="bg-gray-100 dark:bg-black">{children}</View>;
   }
 );
