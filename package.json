@@ -19,6 +19,7 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-unused-imports": "1.1.5",
     "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "0.1.10",
@@ -110,6 +111,10 @@
     "tty": "tty-browserify",
     "vm": "vm-browserify",
     "tls": false
+  },
+  "lint-staged": {
+    "packages/**/*.{js,jsx,ts,tsx,json,css}": "eslint",
+    "apps/**/*.{js,jsx,ts,tsx,json,css}": "eslint"
   },
   "browser": {
     "_stream_duplex": "readable-stream/duplex",
