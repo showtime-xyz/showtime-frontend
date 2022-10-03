@@ -294,9 +294,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 reverse: contentWidth / numColumns,
               }}
               style={{
-                marginTop: isMdWidth ? 16 : 0,
-                marginLeft: "auto",
-                marginRight: "auto",
                 height: screenHeight - 64,
               }}
               ListEmptyComponent={() => {
