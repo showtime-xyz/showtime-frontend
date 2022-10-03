@@ -21,6 +21,7 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
+import { isMobileWeb } from "app/utilities";
 
 type Props = {
   data: NFT[];
@@ -80,7 +81,7 @@ export const SwipeList = ({
               direction="vertical"
               onRealIndexChange={onRealIndexChange}
               onReachEnd={fetchMore}
-              threshold={25}
+              threshold={isMobileWeb() ? 0 : 25}
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>
