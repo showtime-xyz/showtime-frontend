@@ -113,8 +113,8 @@
     "tls": false
   },
   "lint-staged": {
-    "packages/**/*.{js,jsx,ts,tsx,json,css}": "yarn lint",
-    "app/**/*.{js,jsx,ts,tsx,json,css}": "yarn lint"
+    "packages/**/*.{js,jsx,ts,tsx,json,css}": "eslint",
+    "apps/**/*.{js,jsx,ts,tsx,json,css}": "eslint"
   },
   "browser": {
     "_stream_duplex": "readable-stream/duplex",
