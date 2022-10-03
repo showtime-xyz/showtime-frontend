@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const BUNDLE_ID = "io.showtime";
+const isDevelopment = process.env.STAGE === "development";
+
+const BUNDLE_ID = isDevelopment ? "io.showtime.development" : "io.showtime";
 const TEAM_ID = "88TKHB268W";
 
 const association = {

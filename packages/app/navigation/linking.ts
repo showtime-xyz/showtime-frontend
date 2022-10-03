@@ -4,7 +4,7 @@ import * as Linking from "expo-linking";
 import type { LinkingOptions } from "app/lib/react-navigation/native";
 import { getStateFromPath } from "app/lib/react-navigation/native";
 
-const url = "showtime.xyz";
+const url = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
 const withRewrites = (unparsedPath: string): string => {
   if (unparsedPath.startsWith("/@")) {

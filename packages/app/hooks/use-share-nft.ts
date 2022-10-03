@@ -13,9 +13,11 @@ export const useShareNFT = () => {
   const shareNFT = async (nft?: NFT) => {
     if (!nft) return;
     const result = await share({
-      url: `https://showtime.xyz/t/${findTokenChainName(
-        nft?.chain_identifier
-      )}/${nft?.contract_address}/${nft?.token_id}`,
+      url: `https://${
+        process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
+      }/t/${findTokenChainName(nft?.chain_identifier)}/${
+        nft?.contract_address
+      }/${nft?.token_id}`,
     });
 
     if (result.action === "sharedAction") {
@@ -27,9 +29,11 @@ export const useShareNFT = () => {
   };
   const shareNFTOnTwitter = async (nft?: NFT) => {
     if (!nft) return;
-    const url = `https://showtime.xyz/t/${findTokenChainName(
-      nft?.chain_identifier
-    )}/${nft?.contract_address}/${nft?.token_id}`;
+    const url = `https://${
+      process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
+    }/t/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
+      nft?.token_id
+    }`;
     // Todo: add share Claim/Drop copytext
     Linking.openURL(
       getTwitterIntent({
