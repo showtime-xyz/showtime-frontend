@@ -39,14 +39,14 @@ export const SwipeList = ({
   initialScrollIndex = 0,
 }: Props) => {
   // Todo: use nft_id instead of initialScrollIndex navigate to specific NFT
-  // const [, setInitialScrollIndex] = useParam("initialScrollIndex");
+  // const [id, setId] = useParam("id");
+  const [, setInitialScrollIndex] = useParam("initialScrollIndex");
 
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
-
   useScrollToTop(listRef);
-  const visibleItems = useSharedValue<number[]>([]);
 
+  const visibleItems = useSharedValue<number[]>([]);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
     () => ({
@@ -56,13 +56,23 @@ export const SwipeList = ({
     }),
     []
   );
+
+  // const initialSlideIndex = useMemo(() => {
+  //   const defaultIndex = clamp(initialScrollIndex, 0, data.length - 1);
+  //   if (!id) return defaultIndex;
+  //   const index = data.findIndex((item) => item.nft_id.toString() === id);
+  //   return index > -1 ? index : defaultIndex;
+  // }, [id, initialScrollIndex, data]);
+
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
       visibleItems.value = [e.previousIndex, e.activeIndex];
-      // setInitialScrollIndex(e.activeIndex.toString());
+      setInitialScrollIndex(e.activeIndex.toString());
+      // const id = data[e.activeIndex].nft_id.toString();
+      // id && setId(id);
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems]
+    [visibleItems, setInitialScrollIndex]
   );
 
   if (data.length === 0) return null;
