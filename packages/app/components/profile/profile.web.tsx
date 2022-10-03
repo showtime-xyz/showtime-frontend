@@ -215,13 +215,18 @@ const Profile = ({ username }: ProfileScreenProps) => {
           tw="mx-auto mb-px flex-row space-x-1 px-0 md:space-x-6 md:px-6 lg:space-x-8 lg:px-4 xl:px-0"
           style={{ maxWidth: contentWidth }}
         >
-          {chuckItem.map((item) => (
+          {chuckItem.map((item, chuckItemIndex) => (
             <Card
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
-              onPress={() => onItemPress(item.nft_id)}
-              href={`/list?initialScrollIndex=${itemIndex}&tabType=${data?.tabs[index].type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`}
+              href={`/list?initialScrollIndex=${
+                itemIndex * numColumns + chuckItemIndex
+              }&tabType=${
+                data?.tabs[index].type
+              }&profileId=${profileId}&collectionId=${
+                filter.collectionId
+              }&sortType=${filter.sortType}&type=profile`}
             />
           ))}
           {chuckItem.length < numColumns &&
@@ -320,6 +325,3 @@ const Profile = ({ username }: ProfileScreenProps) => {
 };
 
 export { ProfileScreen as Profile };
-function onItemPress(nft_id: any) {
-  throw new Error("Function not implemented.");
-}
