@@ -10,7 +10,6 @@ import {
   AlertButton,
   AlertStatic,
   Platform,
-  StyleSheet,
 } from "react-native";
 
 import { View } from "@showtime-xyz/universal.view";
@@ -126,18 +125,3 @@ export const useCustomAlert = () => {
   }
   return Alert;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    borderRadius: 16,
-    maxWidth: 320,
-    width: "80%",
-  },
-  backdrop: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-    position: "absolute",
-  },
-});

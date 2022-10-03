@@ -75,9 +75,6 @@ function CollapsibleHeaderTabView<T extends Route>(
 
   // layout
   const [tabbarHeight, setTabbarHeight] = useState(initTabbarHeight);
-  const [stickyState, setStickyState] = useState<StatusCode>(
-    StatusCode.STATUS_ORIGINAL
-  );
 
   const containeRef = useRef(null);
   useImperativeHandle(ref, () => ({}), []);
@@ -126,19 +123,11 @@ function CollapsibleHeaderTabView<T extends Route>(
       />
     );
   };
-  const onStickyStateChange = useCallback(
-    ({ status }: { status: StatusCode }) => setStickyState(status),
-    []
-  );
 
   const _renderTabBarContainer = (children: React.ReactElement) => {
     return (
       <View style={styles.tabbarStyle}>
-        <Sticky
-          enabled={true}
-          onStateChange={onStickyStateChange}
-          top={minHeaderHeight}
-        >
+        <Sticky enabled={true} top={minHeaderHeight}>
           <View onLayout={tabbarOnLayout}>{children}</View>
         </Sticky>
       </View>

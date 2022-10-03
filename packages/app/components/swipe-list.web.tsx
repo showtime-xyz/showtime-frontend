@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  createContext,
-  useState,
-  useEffect,
-} from "react";
+import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -45,17 +38,14 @@ export const SwipeList = ({
   fetchMore,
   initialScrollIndex = 0,
 }: Props) => {
-  const [, setInitialScrollIndex] = useParam("initialScrollIndex");
+  // Todo: use nft_id instead of initialScrollIndex navigate to specific NFT
+  // const [, setInitialScrollIndex] = useParam("initialScrollIndex");
 
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
 
   useScrollToTop(listRef);
   const visibleItems = useSharedValue<number[]>([]);
-  const dom = useRef(null);
-  useEffect(() => {
-    dom.current = document.querySelector("#controlSwiper");
-  }, []);
 
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
@@ -69,10 +59,10 @@ export const SwipeList = ({
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
       visibleItems.value = [e.previousIndex, e.activeIndex];
-      setInitialScrollIndex(e.activeIndex.toString());
+      // setInitialScrollIndex(e.activeIndex.toString());
       setActiveIndex(e.activeIndex);
     },
-    [setInitialScrollIndex, visibleItems]
+    [visibleItems]
   );
 
   if (data.length === 0) return null;
