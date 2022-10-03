@@ -50,9 +50,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
 
     //#region callbacks
     const handleReset = useCallback(() => {
-      setValue("");
       // @ts-ignore
-      inputRef.current.blur();
+      inputRef?.current?.blur();
+      setValue("");
     }, [inputRef, setValue]);
     const handleFocus = useCallback(() => {
       // @ts-ignore

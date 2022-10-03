@@ -2,11 +2,14 @@ import "raf/polyfill";
 
 import "setimmediate";
 
+import { useCallback } from "react";
+
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
+import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Footer } from "app/components/footer";
@@ -27,6 +30,7 @@ import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { isMobileWeb } from "app/utilities";
 
 import "../styles/styles.css";
 
@@ -97,18 +101,44 @@ export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <>
       <Head>
+        {process.env.NODE_ENV !== "development" ? (
+          <>
+            <link rel="preconnect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="dns-prefect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="preconnect" href="//lh3.googleusercontent.com" />
+            <link rel="dns-prefect" href="//lh3.googleusercontent.com" />
+            <link rel="preconnect" href="//res.cloudinary.com" />
+            <link rel="dns-prefect" href="//res.cloudinary.com" />
+          </>
+        ) : null}
+
         {metaTags}
+
         <link rel="manifest" href="/manifest.json" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="192x192"
+          href="/icons/icon-512x512.png"
+        />
+
+        <meta name="application-name" content="Showtime" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Showtime" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#000000" />
         <meta
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
         />
+
         <script
           dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
       </Head>
-
       <AppProviders>
         <Container>
           <Header
@@ -117,7 +147,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center " style={{ minHeight: "calc(100vh - 64px)" }}>
+          <View tw="items-center" style={{ minHeight: "calc(100vh - 64px)" }}>
             <Component {...pageProps} />
           </View>
           <Footer />
@@ -146,6 +176,14 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
+    const onResize = useCallback(() => {
+      if (isMobileWeb()) {
+        document.body.classList.add("overflow-hidden");
+      } else {
+        document.body.classList.remove("overflow-hidden");
+      }
+    }, []);
+    usePlatformResize(onResize, true);
     return <View tw="bg-gray-100 dark:bg-black">{children}</View>;
   }
 );

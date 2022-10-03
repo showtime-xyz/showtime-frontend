@@ -98,7 +98,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           : 2,
     });
     const renderItem = useCallback(
-      ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+      ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         // currently minting nft
         if (item.loading) {
           return <Card nft={item} numColumns={numColumns} />;
@@ -109,11 +109,18 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             nft={item}
             numColumns={numColumns}
             onPress={() => onItemPress(item.nft_id)}
-            href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}?tabType=${list.type}`}
+            href={`/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`}
           />
         );
       },
-      [list.type, numColumns, onItemPress]
+      [
+        filter.collectionId,
+        filter.sortType,
+        list.type,
+        numColumns,
+        onItemPress,
+        profileId,
+      ]
     );
 
     if (isBlocked) {

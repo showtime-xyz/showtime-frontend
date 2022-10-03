@@ -194,10 +194,6 @@ export function VirtuosoListComponent<T>(
       estimatedItemSize * (numColumns ? data.length / numColumns : data.length);
   }
 
-  if (data?.length === 0) {
-    return renderComponent(ListEmptyComponent);
-  }
-
   return (
     <div
       style={
@@ -213,8 +209,9 @@ export function VirtuosoListComponent<T>(
           endReached={onEndReached}
           itemContent={renderItemContent}
           components={{
-            Header: () => renderComponent(ListHeaderComponent),
+            Header: ListHeaderComponent,
             Footer: () => renderComponent(ListFooterComponent),
+            EmptyPlaceholder: () => renderComponent(ListEmptyComponent),
           }}
           overscan={overscan}
           style={style as CSSProperties}

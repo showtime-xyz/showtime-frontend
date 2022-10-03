@@ -31,7 +31,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
       return (
         <View tw="flex-1 px-2">
           <Card
-            href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
+            href={`/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`}
             key={`nft-list-card-${index}`}
             nft={item}
             numColumns={numColumns}
@@ -39,7 +39,7 @@ export function TrendingNFTSList({ days }: TrendingMDListProps) {
         </View>
       );
     },
-    [numColumns]
+    [days, numColumns]
   );
   const keyExtractor = useCallback((item: NFT) => {
     return item.nft_id?.toFixed();

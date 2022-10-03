@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Modal, Platform } from "react-native";
+import { Modal, Platform, TextInput } from "react-native";
+
+import * as Localization from "expo-localization";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -26,7 +28,9 @@ type PhoneNumberPickerProp = {
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
-  const [country, setCountry] = useState("US");
+  const [country, setCountry] = useState(
+    () => data.find((item) => item.code === Localization.region)?.code || "US"
+  );
 
   const selectedCountry = useMemo(() => {
     return data.find((item) => item.code === country);
@@ -98,11 +102,28 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
     [props, selectedCountry]
   );
 
+  const textInputRef = useRef<TextInput>(null);
+
+  const handleModalHide = useCallback(() => {
+    setModalVisible(false);
+
+    // reset focus to phone input on country picker close
+    textInputRef.current?.focus();
+  }, []);
+
+  const handleCountrySelect = useCallback(
+    (value: any) => {
+      setCountry(value);
+      handleModalHide();
+    },
+    [handleModalHide]
+  );
+
   return (
     <>
       <Modal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={handleModalHide}
         animationType="slide"
         transparent={Platform.OS === "web"}
         statusBarTranslucent={Platform.OS === "web"}
@@ -112,7 +133,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
             <View tw="mx-auto w-full max-w-screen-md">
               <Header
                 title="Select country"
-                close={() => setModalVisible(false)}
+                close={handleModalHide}
                 onSearchSubmit={(value) => setSearch(value)}
                 twCenter="max-w-screen-sm"
               />
@@ -121,10 +142,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
           <CountryCodePicker
             data={filteredData}
             value={country}
-            onChange={useCallback((value) => {
-              setCountry(value);
-              setModalVisible(false);
-            }, [])}
+            onChange={handleCountrySelect}
             tw="mx-auto w-full max-w-screen-sm"
           />
         </View>
@@ -136,6 +154,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         label="Phone number"
         placeholder="Enter your phone number"
         keyboardType="phone-pad"
+        textInputRef={textInputRef}
         signInButtonLabel="Send"
         leftElement={leftElement}
         onSubmit={onSubmit}

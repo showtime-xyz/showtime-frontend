@@ -1,4 +1,4 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import dynamic from "next/dynamic";
@@ -33,7 +33,6 @@ export function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        lazy: Platform.OS === "android" ? false : true,
         headerShown: false,
       }}
       tabBar={(props) => <BottomTabbar {...props} />}

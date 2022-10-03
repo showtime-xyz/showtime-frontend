@@ -89,7 +89,7 @@ const SETTINGS_ROUTES = [
 ];
 
 const SettingsTabs = () => {
-  const { width } = useWindowDimensions();
+  const { width, height: screenHeight } = useWindowDimensions();
 
   const isMdWidth = width >= breakpoints["md"];
   const { width: scrollbarWidth } = useScrollbarSize();
@@ -337,7 +337,7 @@ const SettingsTabs = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+        {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
         <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black md:mb-4">
           <View tw="w-full max-w-screen-2xl flex-row justify-between self-center px-4 py-4 md:py-0">
             <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
@@ -365,7 +365,17 @@ const SettingsTabs = () => {
   }, [headerHeight, index, isWeb, setIndex]);
 
   return (
-    <View style={{ width: width - scrollbarWidth }} tw="flex-1">
+    <View
+      style={Platform.select({
+        default: {
+          flex: 1,
+        },
+        web: {
+          width: width - scrollbarWidth,
+          height: screenHeight,
+        },
+      })}
+    >
       <HeaderTabView
         navigationState={{ index, routes }}
         renderScene={renderScene}

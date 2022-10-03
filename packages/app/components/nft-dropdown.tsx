@@ -119,11 +119,7 @@ function NFTDropdown({
           iconOnly
           {...btnProps}
         >
-          <MoreHorizontal
-            color={isDark ? "#FFF" : colors.gray[900]}
-            width={24}
-            height={24}
-          />
+          <MoreHorizontal width={24} height={24} />
         </Button>
       </DropdownMenuTrigger>
 

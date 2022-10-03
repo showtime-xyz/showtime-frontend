@@ -41,7 +41,7 @@ const ViewabilityInfiniteScrollList =
 
 export const Feed = () => {
   return (
-    <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
+    <View tw="max-w-7xl flex-1 pb-8 pt-24" testID="homeFeed">
       <ErrorBoundary>
         <FeedList />
       </ErrorBoundary>
@@ -176,11 +176,11 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
     []
   );
 
-  const renderItem = useCallback(({ item }: ListRenderItemInfo<NFT>) => {
+  const renderItem = useCallback(({ item, index }: ListRenderItemInfo<NFT>) => {
     return (
       <View tw="p-2">
         <Card
-          href={`/nft/${item.chain_name}/${item.contract_address}/${item.token_id}`}
+          href={`/list?initialScrollIndex=${index}&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, marginBottom: 16 }}
           showClaimButton

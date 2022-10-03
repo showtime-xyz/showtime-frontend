@@ -53,16 +53,6 @@ export default {
     // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
     process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
-      "react-native-vision-camera",
-      {
-        cameraPermissionText: "$(PRODUCT_NAME) needs access to your camera.",
-        enableMicrophonePermission: true,
-        microphonePermissionText:
-          "$(PRODUCT_NAME) needs access to your microphone.",
-        disableFrameProcessors: true,
-      },
-    ],
-    [
       "expo-image-picker",
       {
         photosPermission: "$(PRODUCT_NAME) needs access to your photos.",

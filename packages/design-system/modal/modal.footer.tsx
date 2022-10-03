@@ -9,15 +9,10 @@ import {
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import type { ModalFooterProps } from "./types";
-import { useKeyboardOffset } from "./useKeyboardOffset";
 
 function ModalFooterComponent({ children }: ModalFooterProps) {
   const bottomSheetContext = useBottomSheetInternal(true);
-  const { bottom, top } = useSafeAreaInsets();
-  const animatedContainerStyle = useKeyboardOffset(
-    top,
-    bottomSheetContext?.animatedKeyboardState
-  );
+  const { bottom } = useSafeAreaInsets();
 
   if (bottomSheetContext == null) {
     return children;
@@ -26,11 +21,7 @@ function ModalFooterComponent({ children }: ModalFooterProps) {
   return (
     <BottomSheetFooterContainer
       footerComponent={(props) => (
-        <BottomSheetFooter
-          bottomInset={bottom}
-          style={animatedContainerStyle}
-          {...props}
-        >
+        <BottomSheetFooter bottomInset={bottom} {...props}>
           {children}
         </BottomSheetFooter>
       )}

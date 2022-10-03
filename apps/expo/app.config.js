@@ -74,7 +74,7 @@ export default {
       backgroundImage: config.backgroundImage,
     },
     jsEngine: "hermes",
-    softwareKeyboardLayoutMode: "pan",
+    softwareKeyboardLayoutMode: "resize",
     intentFilters: [
       {
         action: "VIEW",
@@ -114,18 +114,6 @@ export default {
   plugins: [
     // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
     process.env.DETOX ? "@config-plugins/detox" : (x) => x,
-    [
-      "react-native-vision-camera",
-      {
-        cameraPermissionText:
-          "$(PRODUCT_NAME) uses your camera to let you take photos or videos and to turn them into NFTs.",
-        // Disable for now to be safe, we don't support videos yet
-        enableMicrophonePermission: false,
-        microphonePermissionText:
-          "$(PRODUCT_NAME) needs access to your microphone.",
-        disableFrameProcessors: true,
-      },
-    ],
     [
       "expo-image-picker",
       {

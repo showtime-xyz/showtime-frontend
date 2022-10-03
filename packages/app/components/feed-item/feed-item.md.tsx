@@ -1,9 +1,18 @@
-import { memo, useMemo, Suspense, useRef, useState } from "react";
+import { memo, useMemo, Suspense, useRef, useState, useContext } from "react";
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
+import { useSwiper } from "swiper/react";
+
 import { Button } from "@showtime-xyz/universal.button";
-import { Close } from "@showtime-xyz/universal.icon";
+import {
+  Close,
+  Muted,
+  Unmuted,
+  Maximize,
+  ChevronDown,
+  ChevronUp,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -20,17 +29,21 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
-import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
-import { MAX_HEADER_WIDTH } from "app/constants/layout";
 import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
+import {
+  ContentLayoutOffset,
+  useContentWidth,
+} from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { createParam } from "app/navigation/use-param";
+import { useFullscreen } from "app/hooks/use-full-screen";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
 
+import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
@@ -49,20 +62,21 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Claimers],
 ]);
-type Query = {
-  tokenId: string;
-  contractAddress: string;
-  chainName: string;
-};
-const { useParam } = createParam<Query>();
 
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
   itemHeight,
 }) {
   const router = useRouter();
-  // const [showFullScreen, setShowFullScreen] = useState(false);
+  const [showFullScreen, setShowFullScreen] = useState(false);
+
+  const [muted, setMuted] = useMuted();
+  const swiper = useSwiper();
+  const activeIndex = useContext(SwiperActiveIndexContext);
   const { commentsCount } = useComments(nft.nft_id);
+  const headerHeight = useHeaderHeight();
+  const disablePrevButton = activeIndex === 0;
+  const disableNextButton = activeIndex === swiper.snapGrid.length - 1;
   const routes = useMemo(
     () => [
       {
@@ -83,20 +97,16 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const [index, setIndex] = useState(0);
 
   const { width: windowWidth } = useWindowDimensions();
+  const contentWidth = useContentWidth(ContentLayoutOffset.HEADER);
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
-  const [tokenId] = useParam("tokenId");
-  const [contractAddress] = useParam("contractAddress");
-  const [chainName] = useParam("chainName");
-  const { data: nftDetails } = useNFTDetailByTokenId({
-    chainName: chainName as string,
-    tokenId: tokenId as string,
-    contractAddress: contractAddress as string,
-  });
 
   const container = useRef<HTMLElement | null>(null);
-  // useFullScreen(container?.current as HTMLElement, showFullScreen);
+  useFullscreen(container, showFullScreen, {
+    onClose: () => setShowFullScreen(false),
+  });
 
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
@@ -105,48 +115,42 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     width: windowWidth,
   };
 
-  const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160;
+  const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160 - 80;
 
   const mediaWidth = useMemo(() => {
-    if (windowWidth >= MAX_HEADER_WIDTH) {
-      return MAX_HEADER_WIDTH - NFT_DETAIL_WIDTH;
-    }
+    return contentWidth - NFT_DETAIL_WIDTH - 160;
+  }, [contentWidth]);
 
-    return windowWidth - NFT_DETAIL_WIDTH;
-  }, [windowWidth]);
-
-  // Todo: add full screen feature, but not sure why it is black screen on fullscreen.
-  // const onFullScreen = () => {
-  //   setShowFullScreen(true);
-  // };
+  const onFullScreen = () => {
+    setShowFullScreen(!showFullScreen);
+  };
   const onClose = () => {
-    if (history?.length > 1) {
-      router.pop();
+    if (showFullScreen) {
+      setShowFullScreen(false);
     } else {
-      router.push("/");
+      if (history?.length > 1) {
+        router.pop();
+      } else {
+        router.push("/");
+      }
     }
-
-    // if (showFullScreen) {
-    //   setShowFullScreen(false);
-    // } else {
-    //   router.pop();
-    // }
   };
   const TabScene = useMemo(() => TAB_SCENES_MAP.get(index), [index]);
 
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
-        tw="h-full w-full max-w-screen-2xl flex-row overflow-hidden"
-        style={{ height: itemHeight }}
+        tw="h-full w-full flex-row overflow-hidden"
+        style={{
+          height: itemHeight,
+          paddingTop: headerHeight,
+          width: contentWidth,
+        }}
       >
-        <View tw="flex-1 bg-gray-100 dark:bg-black">
-          <View
-            ref={container}
-            tw="w-full flex-row items-center justify-between p-4"
-          >
+        <View tw="bg-gray-100 dark:bg-black" ref={container}>
+          <View tw="w-full flex-row items-center justify-between p-4">
             <Button
-              variant="tertiary"
+              variant="text"
               size="regular"
               onPress={onClose}
               iconOnly
@@ -155,20 +159,23 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
-              {/* <Button
-                variant="tertiary"
+              <Button
+                variant="text"
                 size="regular"
                 onPress={onFullScreen}
                 iconOnly
-                tw="dark:bg-gray-900 bg-white mr-4 px-3"
+                tw="mr-4 bg-white px-3 dark:bg-gray-900"
               >
                 <Maximize width={24} height={24} />
-              </Button> */}
+              </Button>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   btnProps={{
-                    tw: "dark:bg-gray-900 bg-white mr-4 px-3",
-                    variant: "tertiary",
+                    tw: [
+                      "dark:bg-gray-900 bg-white px-3",
+                      showFullScreen ? "hidden" : "flex",
+                    ],
+                    variant: "text",
                     size: "regular",
                   }}
                   nft={nft}
@@ -176,22 +183,79 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-
-          <Media
-            item={nft}
-            numColumns={1}
-            sizeStyle={{
-              height: mediaHeight,
-              width: Math.min(mediaWidth, 800),
-            }}
-            resizeMode="contain"
-          />
-          {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-10 right-10">
-              <MuteButton />
+          <View tw="flex-1 items-center justify-center px-20 pb-20">
+            <Media
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: mediaWidth,
+              }}
+              resizeMode="contain"
+            />
+          </View>
+          {/* Control Swiper */}
+          <View
+            tw={[
+              "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
+              showFullScreen ? "hidden" : "flex",
+            ]}
+          >
+            <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
+                disabled={disablePrevButton}
+                style={{ opacity: disablePrevButton ? 0.4 : 1 }}
+                onPress={() => {
+                  swiper.slideTo(Math.max(activeIndex - 1, 0));
+                }}
+              >
+                <ChevronUp width={24} height={24} />
+              </Button>
             </View>
-          ) : null}
+            <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="bg-white px-3 dark:bg-gray-900"
+                disabled={disableNextButton}
+                style={{ opacity: disableNextButton ? 0.4 : 1 }}
+                onPress={() => {
+                  swiper.slideTo(
+                    Math.min(activeIndex + 1, swiper.snapGrid.length)
+                  );
+                }}
+              >
+                <ChevronDown width={24} height={24} />
+              </Button>
+            </View>
+          </View>
         </View>
+
+        {nft?.mime_type?.includes("video") ? (
+          <View tw="absolute bottom-4 right-4">
+            <Button
+              variant="text"
+              size="regular"
+              onPress={(e) => {
+                e.preventDefault();
+                setMuted(!muted);
+              }}
+              iconOnly
+              tw="bg-white px-3 dark:bg-gray-900"
+            >
+              {muted ? (
+                <Muted width={24} height={24} />
+              ) : (
+                <Unmuted width={24} height={24} />
+              )}
+            </Button>
+          </View>
+        ) : null}
         <View
           tw="dark:shadow-dark shadow-light bg-white dark:bg-black"
           style={{
@@ -236,9 +300,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 </View>
               }
             >
-              {TabScene && nftDetails?.data.item && (
-                <TabScene nft={nftDetails?.data.item} />
-              )}
+              {TabScene && nft && <TabScene nft={nft} />}
             </Suspense>
           </ErrorBoundary>
           <View tw="h-2" />

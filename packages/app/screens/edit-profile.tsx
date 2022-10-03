@@ -12,7 +12,7 @@ export const EditProfileScreen = withModalScreen(EditProfilePage, {
   matchingPathname: "/profile/edit",
   matchingQueryParam: "editProfileModal",
   enableContentPanningGesture: false,
-  snapPoints: ["90%"],
+  snapPoints: ["100%"],
   disableBackdropPress: true,
-  web_height: `max-h-[90vh] md:max-h-[82vh]`,
+  web_height: `h-[90vh]`,
 });
