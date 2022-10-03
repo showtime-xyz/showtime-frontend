@@ -24,7 +24,16 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
-export const Notifications = ({ useWindowScroll = true }) => {
+const Header = () => {
+  const headerHeight = useHeaderHeight();
+
+  return <View style={{ height: headerHeight }} />;
+};
+
+export const Notifications = ({
+  useWindowScroll = true,
+  hideHeader = false,
+}) => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
@@ -32,11 +41,11 @@ export const Notifications = ({ useWindowScroll = true }) => {
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight } = useWindowDimensions();
-
   const [users, setUsers] = useState<Pick<Actor, "profile_id" | "username">[]>(
     []
   );
-
+  const listRef = useRef<any>();
+  useScrollToTop(listRef);
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<NotificationType>) => {
       return <NotificationItem notification={item} setUsers={setUsers} />;
@@ -85,23 +94,20 @@ export const Notifications = ({ useWindowScroll = true }) => {
     })();
   }, [refetchMyInfo]);
 
-  const listRef = useRef<any>();
-
-  useScrollToTop(listRef);
-
   return (
     <>
       <InfiniteScrollList
         useWindowScroll={useWindowScroll}
         data={data}
         ListHeaderComponent={Platform.select({
-          web: () => <View style={{ height: headerHeight }} />,
+          web: hideHeader ? undefined : Header,
           default: undefined,
         })}
         // for blur header effect on iOS
         style={{
           height: Platform.select({
             default: windowHeight - bottomBarHeight,
+            web: windowHeight - bottomBarHeight,
             ios: windowHeight,
           }),
         }}
