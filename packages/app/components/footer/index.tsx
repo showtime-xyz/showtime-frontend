@@ -1,4 +1,4 @@
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import {
   useBlurredBackgroundStyles,
@@ -42,8 +42,10 @@ const Footer = () => {
       style={{
         position: "fixed",
         ...blurredBackgroundStyles,
+        paddingBottom:
+          Platform.OS === "web" ? "env(safe-area-inset-bottom)" : 0,
       }}
-      tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4 py-2"
+      tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4"
     >
       <HomeTabBarIcon
         color={color}
