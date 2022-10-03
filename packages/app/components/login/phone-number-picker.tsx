@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal, Platform, TextInput } from "react-native";
 
+import * as Localization from "expo-localization";
+
 import { Button } from "@showtime-xyz/universal.button";
 import {
   CountryCodePicker,
@@ -26,7 +28,9 @@ type PhoneNumberPickerProp = {
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
-  const [country, setCountry] = useState("US");
+  const [country, setCountry] = useState(
+    () => data.find((item) => item.code === Localization.region)?.code || "US"
+  );
 
   const selectedCountry = useMemo(() => {
     return data.find((item) => item.code === country);

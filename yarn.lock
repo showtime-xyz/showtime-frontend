@@ -9470,6 +9470,7 @@ __metadata:
     expo-image-picker: ~13.3.1
     expo-linear-gradient: ~11.4.0
     expo-linking: ~3.2.2
+    expo-localization: ~13.1.0
     expo-modules-core: 0.11.3
     expo-navigation-bar: ~1.3.0
     expo-next-react-navigation: ^2.0.2
@@ -9520,7 +9521,6 @@ __metadata:
     react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
     react-native-tab-view-next: ^3.1.3
-    react-native-vision-camera: 2.14.0
     react-native-web: ^0.18.9
     react-native-webview: 11.23.0
     react-string-replace: ^0.4.4
@@ -9676,7 +9676,6 @@ __metadata:
     react-native-safe-area-context: 4.3.1
     react-native-screens: ~3.15.0
     react-native-svg: 12.3.0
-    react-native-vision-camera: 2.14.0
     react-native-web: 0.18.9
     three: ^0.142.0
     typescript: 4.7.4
@@ -20552,6 +20551,17 @@ __metadata:
     qs: ^6.9.1
     url-parse: ^1.5.9
   checksum: 406b427e68ab6cbd7fe0d47350ca67a68ebd7ad776b5c7eb160b58948b9d91294bd3d507657071a7119bd3f3c79ed05f4e41480e1732a51028c8aee27cb050dd
+  languageName: node
+  linkType: hard
+
+"expo-localization@npm:~13.1.0":
+  version: 13.1.0
+  resolution: "expo-localization@npm:13.1.0"
+  dependencies:
+    rtl-detect: ^1.0.2
+  peerDependencies:
+    expo: "*"
+  checksum: f97bac33daf0ce187f1d505b916b8d73180b09869fcd0ec03f8cd9092c69b3af84788a24d0928775ee6378d5171b49595546734539d6a3c8f575246ee61cb76c
   languageName: node
   linkType: hard
 
@@ -31486,16 +31496,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:2.14.0":
-  version: 2.14.0
-  resolution: "react-native-vision-camera@npm:2.14.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: b1efa53cee564658a6d27ef17c689124be4f745f1e0a5448d752ee0a387e9402ddc12203e778a1ef9fdac487eee08763a8478c1baa8b1f4ece28ee81a8073ef8
-  languageName: node
-  linkType: hard
-
 "react-native-web@npm:0.18.7":
   version: 0.18.7
   resolution: "react-native-web@npm:0.18.7"
@@ -32896,6 +32896,13 @@ __metadata:
   version: 4.8.5
   resolution: "rsvp@npm:4.8.5"
   checksum: 2d8ef30d8febdf05bdf856ccca38001ae3647e41835ca196bc1225333f79b94ae44def733121ca549ccc36209c9b689f6586905e2a043873262609744da8efc1
+  languageName: node
+  linkType: hard
+
+"rtl-detect@npm:^1.0.2":
+  version: 1.0.4
+  resolution: "rtl-detect@npm:1.0.4"
+  checksum: d562535baa0db62f57f0a1d4676297bff72fd6b94e88f0f0900d5c3e810ab512c5c4cadffd3e05fbe8d9c74310c919afa3ea8c1001c244e5555e8eef12d02d6f
   languageName: node
   linkType: hard
 
