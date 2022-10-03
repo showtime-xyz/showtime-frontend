@@ -33,7 +33,10 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
 import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
-import { useContentWidth } from "app/hooks/use-content-width";
+import {
+  ContentLayoutOffset,
+  useContentWidth,
+} from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFullscreen } from "app/hooks/use-full-screen";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -74,7 +77,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const headerHeight = useHeaderHeight();
   const disablePrevButton = activeIndex === 0;
   const disableNextButton = activeIndex === swiper.snapGrid.length - 1;
-
   const routes = useMemo(
     () => [
       {
@@ -95,7 +97,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const [index, setIndex] = useState(0);
 
   const { width: windowWidth } = useWindowDimensions();
-  const contentWidth = useContentWidth(-240);
+  const contentWidth = useContentWidth(ContentLayoutOffset.HEADER);
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -115,7 +118,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160 - 80;
 
   const mediaWidth = useMemo(() => {
-    return contentWidth - NFT_DETAIL_WIDTH;
+    return contentWidth - NFT_DETAIL_WIDTH - 160;
   }, [contentWidth]);
 
   const onFullScreen = () => {
@@ -137,7 +140,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
-        tw="h-full w-full max-w-screen-2xl flex-row overflow-hidden"
+        tw="h-full w-full flex-row overflow-hidden"
         style={{
           height: itemHeight,
           paddingTop: headerHeight,
@@ -180,18 +183,18 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-          <View tw="flex-1 items-center justify-center px-20">
+          <View tw="flex-1 items-center justify-center px-20 pb-20">
             <Media
               item={nft}
               numColumns={1}
               sizeStyle={{
                 height: mediaHeight,
-                width: Math.min(mediaWidth, 800),
+                width: mediaWidth,
               }}
               resizeMode="contain"
             />
           </View>
-          {/* Controll Swiper */}
+          {/* Control Swiper */}
           <View
             tw={[
               "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",

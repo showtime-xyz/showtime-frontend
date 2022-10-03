@@ -30,7 +30,7 @@ export const CardSkeleton = memo<CardSkeletonProps>(
       return (
         <View
           tw={[
-            "dark:shadow-dark shadow-light flexe-1 mb-4 overflow-hidden rounded-2xl",
+            "dark:shadow-dark shadow-light mb-4 flex-1 overflow-hidden rounded-2xl",
             tw,
           ]}
         >

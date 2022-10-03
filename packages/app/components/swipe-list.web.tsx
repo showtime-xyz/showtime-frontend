@@ -1,10 +1,16 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { Virtual, Keyboard } from "swiper";
+import { Virtual, Keyboard, Mousewheel } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -46,6 +52,10 @@ export const SwipeList = ({
 
   useScrollToTop(listRef);
   const visibleItems = useSharedValue<number[]>([]);
+  const dom = useRef(null);
+  useEffect(() => {
+    dom.current = document.querySelector("#controlSwiper");
+  }, []);
 
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
@@ -73,10 +83,11 @@ export const SwipeList = ({
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>
             <Swiper
-              modules={[Virtual, Keyboard]}
+              modules={[Virtual, Keyboard, Mousewheel]}
               height={windowHeight}
               width={windowWidth}
               keyboard
+              mousewheel
               initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
               virtual
               direction="vertical"
