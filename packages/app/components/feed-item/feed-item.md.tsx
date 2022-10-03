@@ -144,54 +144,60 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           width: contentWidth,
         }}
       >
-        <View tw="flex-1" ref={container}>
-          <View tw="bg-gray-100 dark:bg-black" ref={container}>
-            <View tw="w-full flex-row items-center justify-between p-4">
+        <View tw="bg-gray-100 dark:bg-black" ref={container}>
+          <View tw="w-full flex-row items-center justify-between p-4">
+            <Button
+              variant="text"
+              size="regular"
+              onPress={onClose}
+              iconOnly
+              tw="bg-white px-3 dark:bg-gray-900"
+            >
+              <Close width={24} height={24} />
+            </Button>
+            <View tw="flex-row items-center">
               <Button
                 variant="text"
                 size="regular"
-                onPress={onClose}
+                onPress={onFullScreen}
                 iconOnly
-                tw="bg-white px-3 dark:bg-gray-900"
+                tw="mr-4 bg-white px-3 dark:bg-gray-900"
               >
-                <Close width={24} height={24} />
+                <Maximize width={24} height={24} />
               </Button>
-              <View tw="flex-row items-center">
-                <Button
-                  variant="text"
-                  size="regular"
-                  onPress={onFullScreen}
-                  iconOnly
-                  tw="mr-4 bg-white px-3 dark:bg-gray-900"
-                >
-                  <Maximize width={24} height={24} />
-                </Button>
-                <Suspense fallback={<Skeleton width={24} height={24} />}>
-                  <NFTDropdown
-                    btnProps={{
-                      tw: "dark:bg-gray-900 bg-white px-3",
-                      variant: "text",
-                      size: "regular",
-                    }}
-                    nft={nft}
-                  />
-                </Suspense>
-              </View>
-            </View>
-            <View tw="flex-1 items-center justify-center px-20 pb-20">
-              <Media
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: Math.min(mediaWidth, 800),
-                }}
-                resizeMode="contain"
-              />
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown
+                  btnProps={{
+                    tw: [
+                      "dark:bg-gray-900 bg-white px-3",
+                      showFullScreen ? "hidden" : "flex",
+                    ],
+                    variant: "text",
+                    size: "regular",
+                  }}
+                  nft={nft}
+                />
+              </Suspense>
             </View>
           </View>
-          {/* Control */}
-          <View tw="absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform">
+          <View tw="flex-1 items-center justify-center px-20">
+            <Media
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: Math.min(mediaWidth, 800),
+              }}
+              resizeMode="contain"
+            />
+          </View>
+          {/* Controll Swiper */}
+          <View
+            tw={[
+              "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
+              showFullScreen ? "hidden" : "flex",
+            ]}
+          >
             <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
               <Button
                 variant="text"
@@ -225,27 +231,28 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Button>
             </View>
           </View>
-          {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-4 right-4">
-              <Button
-                variant="text"
-                size="regular"
-                onPress={(e) => {
-                  e.preventDefault();
-                  setMuted(!muted);
-                }}
-                iconOnly
-                tw="bg-white px-3 dark:bg-gray-900"
-              >
-                {muted ? (
-                  <Muted width={24} height={24} />
-                ) : (
-                  <Unmuted width={24} height={24} />
-                )}
-              </Button>
-            </View>
-          ) : null}
         </View>
+
+        {nft?.mime_type?.includes("video") ? (
+          <View tw="absolute bottom-4 right-4">
+            <Button
+              variant="text"
+              size="regular"
+              onPress={(e) => {
+                e.preventDefault();
+                setMuted(!muted);
+              }}
+              iconOnly
+              tw="bg-white px-3 dark:bg-gray-900"
+            >
+              {muted ? (
+                <Muted width={24} height={24} />
+              ) : (
+                <Unmuted width={24} height={24} />
+              )}
+            </Button>
+          </View>
+        ) : null}
         <View
           tw="dark:shadow-dark shadow-light bg-white dark:bg-black"
           style={{
