@@ -10,7 +10,8 @@ export enum ContentLayoutOffset {
 export function useContentWidth(offset: ContentLayoutOffset = 0) {
   const { width } = useWindowDimensions();
   const contentWidth = useMemo(
-    () => (width < MAX_CONTENT_WIDTH ? width : MAX_CONTENT_WIDTH - offset),
+    () =>
+      width < MAX_CONTENT_WIDTH - offset ? width : MAX_CONTENT_WIDTH - offset,
     [offset, width]
   );
   return contentWidth;
