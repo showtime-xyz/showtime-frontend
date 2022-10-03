@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { Virtual } from "swiper";
+import { Virtual, Keyboard } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
 // Import Swiper styles
 import "swiper/css";
@@ -73,9 +73,10 @@ export const SwipeList = ({
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>
             <Swiper
-              modules={[Virtual]}
+              modules={[Virtual, Keyboard]}
               height={windowHeight}
               width={windowWidth}
+              keyboard
               initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
               virtual
               direction="vertical"
