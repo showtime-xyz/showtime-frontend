@@ -18,7 +18,6 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-unused-imports": "1.1.5",
-    "husky": "^8.0.1",
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "0.1.10",
@@ -58,7 +57,7 @@
     "clean:turbo": "rm -rf ./node_modules/.cache/turbo",
     "clean:build": "rm -rf apps/.next",
     "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
-    "postinstall": "patch-package && husky install",
+    "postinstall": "patch-package",
     "clean:native": "yarn clean && rm -rf apps/storybook-react-native/android && rm -rf apps/storybook-react-native/ios && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
     "test:expo": "cd apps/expo && yarn test",
     "upgrade:design-system": "yarn up '@showtime-xyz/universal.*'"
