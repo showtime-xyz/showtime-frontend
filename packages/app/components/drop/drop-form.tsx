@@ -14,7 +14,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -97,6 +96,8 @@ export const DropForm = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
     reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
@@ -104,6 +105,9 @@ export const DropForm = () => {
     reValidateMode: "onChange",
     defaultValues,
   });
+
+  const gatingType = watch("gating_type");
+  console.log("effe ", gatingType);
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
@@ -135,7 +139,6 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
@@ -485,6 +488,7 @@ export const DropForm = () => {
             <AnimateHeight hide={!accordionValue}>
               <View tw="h-0 md:h-2" />
             </AnimateHeight>
+
             <Text
               onPress={() => setAccordionValue("open")}
               tw="text-gray-600 dark:text-gray-400"
@@ -503,7 +507,54 @@ export const DropForm = () => {
               {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
             </Text>
           </View>
-          <View tw="flex-1">
+
+          <View tw="flex-row justify-between">
+            <Controller
+              control={control}
+              name="gating_type"
+              render={({ field: { onChange, value } }) => (
+                <Fieldset
+                  tw="flex-1"
+                  label="Is Spotify gated?"
+                  switchOnly
+                  switchProps={{
+                    checked: value === "spotify_save",
+                    onChange: (v) => {
+                      onChange(v ? "spotify_save" : undefined);
+                      if (!v) {
+                        setValue("spotify_track_id", undefined);
+                      }
+                    },
+                  }}
+                />
+              )}
+            />
+          </View>
+
+          {gatingType === "spotify_save" ? (
+            <View tw="z-10 mt-4 flex-row">
+              <Controller
+                control={control}
+                name="spotify_track_id"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <Fieldset
+                      autoFocus
+                      tw="flex-1"
+                      label="Spotify Track Id"
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      value={value}
+                      helperText="How long the drop will be available to claim"
+                      errorText={errors.spotify_track_id?.message}
+                    />
+                  );
+                }}
+              />
+            </View>
+          ) : null}
+
+          <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
               <Controller
                 control={control}
