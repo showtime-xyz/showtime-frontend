@@ -28,7 +28,7 @@ const Dynamic3dModel = dynamic<ModelProps>(
 
 type Props = {
   item: NFT & { loading?: boolean };
-  numColumns: number;
+  numColumns?: number;
   tw?: string;
   sizeStyle?: ImageStyle;
   resizeMode?: ResizeMode;
@@ -39,7 +39,7 @@ type Props = {
 
 function Media({
   item,
-  numColumns,
+  numColumns = 1,
   sizeStyle = {},
   resizeMode: propResizeMode,
   onPinchStart,
@@ -112,7 +112,7 @@ function Media({
             height={height}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            // isMuted={numColumns > 1 ? true : isMuted}
+            isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
             //@ts-ignore
             dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
@@ -141,6 +141,6 @@ function Media({
   );
 }
 
-const MemoizedMedia = withMemoAndColorScheme(Media);
+const MemoizedMedia = withMemoAndColorScheme<typeof Media, Props>(Media);
 
 export { MemoizedMedia as Media };
