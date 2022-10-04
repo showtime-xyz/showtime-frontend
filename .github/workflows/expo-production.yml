@@ -53,12 +53,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Decrypt service_account_key.json
+      - name: Decrypt service_account_key.json and google-services.json
         env:
           SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE }}
+          GOOGLE_SERVICES_SECRET_PASSPHRASE: ${{ secrets.GOOGLE_SERVICES_SECRET_PASSPHRASE }}
         run: |
           cd ../../scripts
-          sh ./decrypt_secret.sh
+          sh ./decrypt_secrets.sh
           cd ../apps/expo
 
       - name: Bump the version
