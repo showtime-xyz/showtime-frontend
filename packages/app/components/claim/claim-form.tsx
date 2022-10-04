@@ -299,7 +299,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              onPress={() => claimSpotifyGatedDrop(nft?.data.item.nft_id)}
+              onPress={() => claimSpotifyGatedDrop(nft?.data.item)}
             >
               {state.status === "loading"
                 ? "Claiming... it should take about 10 seconds"

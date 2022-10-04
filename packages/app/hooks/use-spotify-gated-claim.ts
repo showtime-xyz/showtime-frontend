@@ -1,6 +1,6 @@
-import { Linking } from "react-native";
+import { Linking, Platform } from "react-native";
 
-import { IEdition } from "../types";
+import { IEdition, NFT } from "../types";
 import { useClaimNFT } from "./use-claim-nft";
 import { useUser } from "./use-user";
 
@@ -10,18 +10,14 @@ const scope =
 
 export const SPOTIFY_REDIRECT_URI = `http://localhost:3000/spotify-auth/redirect`;
 
-const generateState = (nftId: number, userId?: number) => {
-  const state = `nftId=${nftId}&userId=${userId}`;
-
-  return state;
-};
-
 export const useSpotifyGatedClaim = (edition?: IEdition) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
 
-  const claimSpotifyGatedDrop = (nftId?: number) => {
-    if (nftId) {
+  const claimSpotifyGatedDrop = (nft?: NFT) => {
+    if (nft) {
+      // if (false) {
+      // TODO: remove this after testing
       if (user?.user?.data.profile.has_spotify_token) {
         try {
           const res = claimNFT();
@@ -31,7 +27,7 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
           // TODO: handle error. Could be unauthorized, so we need to redirect to spotify auth flow
         }
       } else {
-        const state = generateState(nftId, user.user?.data.profile.profile_id);
+        const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user.user?.data.profile.profile_id}`;
 
         const params = {
           client_id: clientId,
@@ -47,9 +43,13 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
 
         console.log(" queryString", queryString, state);
 
-        Linking.openURL(
-          `https://accounts.spotify.com/authorize?${queryString}`
-        );
+        if (Platform.OS === "web") {
+          window.location.href = `https://accounts.spotify.com/authorize?${queryString}`;
+        } else {
+          Linking.openURL(
+            `https://accounts.spotify.com/authorize?${queryString}`
+          );
+        }
       }
     }
   };
