@@ -6,7 +6,7 @@ import { FallbackProps } from "app/components/error-boundary";
 
 export function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
-    <View tw="min-h-40vh w-full max-w-screen-xl items-center justify-center">
+    <View tw="min-h-[50vh] w-full max-w-screen-xl items-center justify-center">
       <EmptyPlaceholder
         title="Something went wrong!"
         text={error.message}

@@ -5,15 +5,20 @@ import {
   createContext,
   useContext,
   memo,
+  useEffect,
+  useState,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 import chuck from "lodash/chunk";
+import { stringify } from "querystring";
+import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -30,7 +35,6 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -61,7 +65,9 @@ const ProfileHeaderContext = createContext<{
   isLoading: boolean;
   routes: Route[];
   displayedCount: number | undefined;
-  defaultIndex: number;
+  isBlocked: boolean;
+  index: number;
+  setIndex: (index: number) => void;
 }>({
   profileData: undefined,
   username: "",
@@ -69,7 +75,9 @@ const ProfileHeaderContext = createContext<{
   isLoading: false,
   routes: [],
   displayedCount: 0,
-  defaultIndex: 0,
+  isBlocked: false,
+  index: 0,
+  setIndex: () => {},
 });
 
 const Header = memo(function Header() {
@@ -77,6 +85,8 @@ const Header = memo(function Header() {
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
   const headerHeight = useHeaderHeight();
+  const router = useRouter();
+
   const {
     profileData,
     isError,
@@ -84,18 +94,34 @@ const Header = memo(function Header() {
     username,
     routes,
     displayedCount,
-    defaultIndex,
+    isBlocked,
+    index,
+    setIndex,
   } = context;
-  const [selected, setSelected] = useParam("tab", {
-    parse: (v) => Number(v ?? defaultIndex),
-    initial: defaultIndex,
-  });
 
-  const { getIsBlocked } = useBlock();
-  const profileId = profileData?.profile.profile_id;
-
-  const isBlocked = getIsBlocked(profileId);
-
+  const onPress = useCallback(
+    (itemIndex: number) => {
+      const newQuery = {
+        ...router.query,
+        tab: itemIndex.toString(),
+      } as ParsedUrlQuery;
+      const { username = null, ...restQuery } = newQuery;
+      const queryPath = stringify(restQuery) ? `?${stringify(restQuery)}` : "";
+      /**
+       * because this packages/app/pages/profile/index.web.tsx file, we did rename route,
+       * so need to avoid triggering route changes when switching tabs.
+       */
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: newQuery,
+        },
+        username ? `/@${username}${queryPath}` : ""
+      );
+      setIndex(itemIndex);
+    },
+    [router, setIndex]
+  );
   return (
     <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-xl">
@@ -111,11 +137,7 @@ const Header = memo(function Header() {
         />
         <View tw="bg-white dark:bg-black">
           <View tw="mx-auto w-full max-w-screen-xl">
-            <TabBarSingle
-              onPress={setSelected}
-              routes={routes}
-              index={selected}
-            />
+            <TabBarSingle onPress={onPress} routes={routes} index={index} />
             <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
                 {displayedCount} ITEMS
@@ -135,25 +157,35 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isError,
     isLoading: profileIsLoading,
   } = useUserProfile({ address: username });
-  const [index] = useParam("tab", {
-    parse: (v) => Number(v ?? 1),
-    initial: 1,
-  });
-  const { width: scrollbarWidth } = useScrollbarSize();
   const isDark = useIsDarkMode();
-  const [type] = useParam("type");
   const { width, height: screenHeight } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const contentWidth = useContentWidth();
-  const profileId = profileData?.data?.profile.profile_id;
+  const { getIsBlocked } = useBlock();
 
-  const { data } = useProfileNftTabs({
+  const profileId = profileData?.data?.profile.profile_id;
+  const isBlocked = getIsBlocked(profileId);
+
+  const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
-  const defaultIndex =
-    data?.tabs.findIndex(
-      (item) => item.type === (type ? type : data?.default_tab_type)
-    ) ?? 0;
+  const routes = useMemo(
+    () =>
+      data?.tabs.map((item, index) => ({
+        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
+        key: item?.name,
+        index,
+      })) ?? [],
+    [data?.tabs]
+  );
+
+  const [index, setIndex] = useState(0);
+  const [queryTab] = useParam("tab");
+  useEffect(() => {
+    const defaultIndex =
+      data?.tabs.findIndex((item) => item.type === data?.default_tab_type) ?? 0;
+    setIndex(queryTab ? +queryTab : defaultIndex);
+  }, [data?.default_tab_type, data?.tabs, queryTab]);
 
   const [filter, dispatch] = useReducer(
     (state: Filter, action: any): Filter => {
@@ -168,16 +200,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     { ...defaultFilters }
   );
-  const routes = useMemo(
-    () =>
-      data?.tabs.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
-        key: item?.name,
-        index,
-      })) ?? [],
-    [data?.tabs]
-  );
-
+  // Todo: execute fetch list when have defaultIndex, avoid duplication fetch.
   const {
     isLoading,
     data: list,
@@ -202,7 +225,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [list, numColumns]);
 
   const keyExtractor = useCallback(
-    (item: NFT[], index: number) => `${index}`,
+    (_item: NFT[], index: number) => `${index}`,
     []
   );
   const renderItem = useCallback(
@@ -249,26 +272,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
-    // Todo: wait to confirm whether to use card or spinner, because CardSkeleton I think not good.
-    if (isLoadingMore) {
-      return (
-        <View
-          tw="mx-auto h-20 flex-row items-center justify-center"
-          style={{ maxWidth: contentWidth }}
-        >
-          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
-          {/* {new Array(numColumns).fill(0).map((_, i) => (
-            <CardSkeleton
-              squareSize={contentWidth / 3}
-              tw="flex-1"
-              key={`Card-Skeleton-${i}`}
-              spacing={0}
-            />
-          ))} */}
-        </View>
-      );
-    }
-    return null;
+    if (!isLoadingMore) return null;
+    return (
+      <View
+        tw="mx-auto h-20 flex-row items-center justify-center"
+        style={{ maxWidth: contentWidth }}
+      >
+        <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+      </View>
+    );
   }, [contentWidth, isDark, isLoadingMore]);
 
   return (
@@ -277,20 +289,22 @@ const Profile = ({ username }: ProfileScreenProps) => {
         profileData: profileData?.data,
         username,
         isError,
-        isLoading: profileIsLoading,
+        isLoading: profileIsLoading && profileTabIsLoading,
         routes,
         displayedCount: data?.tabs[index]?.displayed_count,
-        defaultIndex,
+        index,
+        setIndex,
+        isBlocked,
       }}
     >
       <FilterContext.Provider value={{ filter, dispatch }}>
-        <View style={{ width: width - scrollbarWidth }} tw="flex-1">
+        <View tw="w-full">
           <MutateProvider mutate={updateItem}>
             <InfiniteScrollList
               useWindowScroll={isMdWidth}
               ListHeaderComponent={Header}
               numColumns={1}
-              data={chuckList}
+              data={isBlocked ? [] : chuckList}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
               estimatedItemSize={contentWidth / numColumns}
@@ -305,7 +319,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 if (isLoading) return null;
                 return (
                   <EmptyPlaceholder
-                    title="No results found"
+                    title={
+                      isBlocked ? (
+                        <Text tw="text-gray-900 dark:text-white">
+                          <Text tw="font-bold">@{username}</Text> is blocked
+                        </Text>
+                      ) : (
+                        "No results found"
+                      )
+                    }
                     tw="h-[50vh]"
                     hideLoginBtn
                   />
