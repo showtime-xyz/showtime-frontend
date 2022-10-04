@@ -22,7 +22,7 @@ type Props = {
   mediaSize: number;
 };
 
-export const CreatorPreview = withMemoAndColorScheme(
+export const CreatorPreview = withMemoAndColorScheme<any, Props>(
   ({ mediaSize, creator, onMediaPress }: Props) => {
     const { isFollowing } = useMyInfo();
     const creatorId = creator.profile_id;
@@ -66,7 +66,6 @@ export const CreatorPreview = withMemoAndColorScheme(
           </Link>
           <View tw="flex-row items-center justify-center">
             <FollowButton
-              isFollowing={isFollowingCreator}
               name={creator.name}
               profileId={creatorId}
               onToggleFollow={onToggleFollow}

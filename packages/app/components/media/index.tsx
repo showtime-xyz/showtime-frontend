@@ -28,7 +28,7 @@ const Dynamic3dModel = dynamic<ModelProps>(
 
 type Props = {
   item: NFT & { loading?: boolean };
-  numColumns: number;
+  numColumns?: number;
   tw?: string;
   sizeStyle?: ImageStyle;
   resizeMode?: ResizeMode;
@@ -39,7 +39,7 @@ type Props = {
 
 function Media({
   item,
-  numColumns,
+  numColumns = 1,
   sizeStyle = {},
   resizeMode: propResizeMode,
   onPinchStart,
