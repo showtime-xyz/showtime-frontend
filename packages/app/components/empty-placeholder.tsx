@@ -31,7 +31,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   const navigateToLogin = useNavigateToLogin();
 
   return (
-    <View tw={`items-center justify-center pt-4 ${tw}`}>
+    <View tw={["items-center justify-center pt-4", tw]}>
       <Text
         tw={`text-lg font-extrabold text-gray-900 dark:text-gray-100 ${titleTw}`}
       >

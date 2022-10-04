@@ -21,6 +21,7 @@ export const useViewabilityMount = ({
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
+
   const loaded = useRef(false);
   let isScreenFocused = useIsFocused();
 

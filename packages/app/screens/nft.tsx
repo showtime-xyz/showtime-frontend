@@ -18,7 +18,6 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
-import { MOBILE_WEB_BOTTOM_NAV_HEIGHT } from "app/constants/layout";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -116,14 +115,12 @@ const NFTDetail = () => {
     };
   }, [data, listing]);
 
-  const itemHeight =
-    Platform.OS === "web"
-      ? windowHeight -
-        headerHeight -
-        (isAuthenticated && !isMdWidth ? MOBILE_WEB_BOTTOM_NAV_HEIGHT : 0)
-      : Platform.OS === "android"
-      ? safeAreaFrameHeight - headerHeight
-      : screenHeight;
+  const itemHeight = Platform.select({
+    web: windowHeight,
+    android: safeAreaFrameHeight - headerHeight,
+    default: screenHeight,
+  });
+
   const nft = data?.data?.item;
 
   if (nft) {

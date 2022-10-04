@@ -51,7 +51,7 @@ export const Search = () => {
 
   return (
     <>
-      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
       <View tw="px-4 py-2">
         <Input
           placeholder="Search for @name or name.eth"

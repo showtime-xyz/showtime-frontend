@@ -25,10 +25,7 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
-const scheme =
-  process.env.NODE_ENV === "development"
-    ? "io.showtime.development://wsegue"
-    : "https://showtime.xyz/wsegue";
+const scheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
 
 configureWalletMobileSDK({
   callbackURL: new URL(scheme),

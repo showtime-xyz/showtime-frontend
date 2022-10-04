@@ -27,7 +27,7 @@ const scheme = `io.showtime${
 
 const WALLET_CONNECT_CLIENT_META = {
   description: "Connect with Showtime",
-  url: "https://showtime.xyz",
+  url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`,
   icons: ["https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg"],
   name: "Showtime",
   scheme,

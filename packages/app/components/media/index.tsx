@@ -59,10 +59,12 @@ function Media({
     return contentWidth / (numColumns ?? 1);
   }, [contentWidth, numColumns, sizeStyle?.width]);
 
+  const width = sizeStyle?.width ? +sizeStyle?.width : size;
+  const height = sizeStyle?.height ? +sizeStyle?.height : size;
+
   return (
     <View
       style={{
-        margin: numColumns >= 3 ? 1 : numColumns === 2 ? 2 : 0,
         opacity: item?.loading ? 0.5 : 1,
       }}
     >
@@ -80,8 +82,8 @@ function Media({
             style={sizeStyle}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
-            width={sizeStyle?.width ?? size}
-            height={sizeStyle?.height ?? size}
+            width={width}
+            height={height}
             resizeMode={resizeMode}
           />
         </PinchToZoom>
@@ -106,11 +108,11 @@ function Media({
             posterSource={{
               uri: mediaStillPreviewUri,
             }}
-            width={sizeStyle?.width ?? size}
-            height={sizeStyle?.height ?? size}
+            width={width}
+            height={height}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            isMuted={numColumns > 1 ? true : isMuted}
+            // isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
             //@ts-ignore
             dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
@@ -129,6 +131,8 @@ function Media({
               style={sizeStyle}
               blurhash={item?.blurhash}
               resizeMode={resizeMode}
+              width={width}
+              height={height}
             />
           </Suspense>
         </ErrorBoundary>

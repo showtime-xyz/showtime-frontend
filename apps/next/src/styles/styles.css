@@ -115,7 +115,9 @@ div.reactEasyCrop_CropAreaGrid::after {
  * Building on the RNWeb reset:
  * https://github.com/necolas/react-native-web/blob/master/packages/react-native-web/src/exports/StyleSheet/initialRules.js
  */
- html, body, #__next {
+html,
+body,
+#__next {
   width: 100%;
   /* To smooth any scrolling behavior */
   -webkit-overflow-scrolling: touch;
@@ -152,4 +154,15 @@ body {
   /* */
   width: unset !important;
   padding-right: 0 !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
