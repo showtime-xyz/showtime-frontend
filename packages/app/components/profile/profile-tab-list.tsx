@@ -4,10 +4,12 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
+  useMemo,
 } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
+import chuck from "lodash/chunk";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -16,6 +18,7 @@ import {
   TabSpinner,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
@@ -71,15 +74,17 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     useImperativeHandle(ref, () => ({
       refresh,
     }));
+    const chuckList = useMemo(() => {
+      return chuck(data, 3);
+    }, [data]);
 
     const onItemPress = useCallback(
-      (nftId: number) => {
-        const index = data.findIndex((v) => v.nft_id === nftId);
+      (currentIndex: number) => {
         router.push(
-          `/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
+          `/list?initialScrollIndex=${currentIndex}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
         );
       },
-      [list.type, profileId, filter.collectionId, filter.sortType, router, data]
+      [list.type, profileId, filter.collectionId, filter.sortType, router]
     );
 
     const ListFooterComponent = useCallback(
@@ -87,7 +92,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
+    const keyExtractor = useCallback(
+      (_item: NFT[], index: number) => `${index}`,
+      []
+    );
     const numColumns = Platform.select({
       default: 3,
       web:
@@ -98,29 +106,30 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           : 2,
     });
     const renderItem = useCallback(
-      ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-        // currently minting nft
-        if (item.loading) {
-          return <Card nft={item} numColumns={numColumns} />;
-        }
-
+      ({
+        item: chuckItem,
+        index: itemIndex,
+      }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
         return (
-          <Card
-            nft={item}
-            numColumns={numColumns}
-            onPress={() => onItemPress(item.nft_id)}
-            href={`/list?initialScrollIndex=${index}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`}
-          />
+          <View tw="flex-row" style={{ maxWidth: contentWidth }}>
+            {chuckItem.map((item, chuckItemIndex) => (
+              <Card
+                key={item.nft_id}
+                nft={item}
+                onPress={() =>
+                  onItemPress(itemIndex * numColumns + chuckItemIndex)
+                }
+                numColumns={numColumns}
+                style={{
+                  marginRight: StyleSheet.hairlineWidth,
+                  marginBottom: StyleSheet.hairlineWidth,
+                }}
+              />
+            ))}
+          </View>
         );
       },
-      [
-        filter.collectionId,
-        filter.sortType,
-        list.type,
-        numColumns,
-        onItemPress,
-        profileId,
-      ]
+      [contentWidth, numColumns, onItemPress]
     );
 
     if (isBlocked) {
@@ -167,8 +176,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           }
         >
           <TabInfiniteScrollList
-            numColumns={numColumns}
-            data={data}
+            numColumns={1}
+            data={chuckList}
             ref={listRef}
             keyExtractor={keyExtractor}
             renderItem={renderItem}

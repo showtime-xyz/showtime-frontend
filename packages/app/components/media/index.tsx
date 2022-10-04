@@ -112,7 +112,7 @@ function Media({
             height={height}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            // isMuted={numColumns > 1 ? true : isMuted}
+            isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode}
             //@ts-ignore
             dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
@@ -141,6 +141,6 @@ function Media({
   );
 }
 
-const MemoizedMedia = withMemoAndColorScheme(Media);
+const MemoizedMedia = withMemoAndColorScheme<typeof Media, Props>(Media);
 
 export { MemoizedMedia as Media };

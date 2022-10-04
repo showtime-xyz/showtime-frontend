@@ -235,7 +235,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
       return (
         <View
-          tw="mx-auto mb-px flex-row space-x-1 px-0 md:space-x-6 md:px-6 lg:space-x-8 lg:px-4 xl:px-0"
+          tw="mx-auto mb-px flex-row space-x-px px-0 md:space-x-6 md:px-6 lg:space-x-8 lg:px-4 xl:px-0"
           style={{ maxWidth: contentWidth }}
         >
           {chuckItem.map((item, chuckItemIndex) => (
