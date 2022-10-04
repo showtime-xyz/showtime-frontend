@@ -106,7 +106,7 @@ export const DropForm = () => {
     defaultValues,
   });
 
-  const gatingType = watch("gating_type");
+  const gatingType = watch("gatingType");
   console.log("effe ", gatingType);
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
@@ -511,7 +511,7 @@ export const DropForm = () => {
           <View tw="flex-row justify-between">
             <Controller
               control={control}
-              name="gating_type"
+              name="gatingType"
               render={({ field: { onChange, value } }) => (
                 <Fieldset
                   tw="flex-1"
@@ -522,7 +522,7 @@ export const DropForm = () => {
                     onChange: (v) => {
                       onChange(v ? "spotify_save" : undefined);
                       if (!v) {
-                        setValue("spotify_track_id", undefined);
+                        setValue("spotifyTrackId", undefined);
                       }
                     },
                   }}
@@ -535,7 +535,7 @@ export const DropForm = () => {
             <View tw="z-10 mt-4 flex-row">
               <Controller
                 control={control}
-                name="spotify_track_id"
+                name="spotifyTrackId"
                 render={({ field: { onChange, onBlur, value } }) => {
                   return (
                     <Fieldset
@@ -546,7 +546,7 @@ export const DropForm = () => {
                       onChange={onChange}
                       value={value}
                       helperText="How long the drop will be available to claim"
-                      errorText={errors.spotify_track_id?.message}
+                      errorText={errors.spotifyTrackId?.message}
                     />
                   );
                 }}
