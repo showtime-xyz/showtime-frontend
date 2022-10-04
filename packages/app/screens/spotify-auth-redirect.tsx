@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Linking } from "react-native";
 
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
+import { SPOTIFY_REDIRECT_URI } from "app/hooks/use-spotify-gated-claim";
 import { createParam } from "app/navigation/use-param";
 
 import { Button, Text, View } from "design-system";
@@ -19,15 +20,12 @@ export const SpotifyAuthRedirect = () => {
   const [state] = useParam("state");
   const [code] = useParam("code");
   const { saveSpotifyToken } = useSaveSpotifyToken();
-  console.log("jfjfjjfj ", error, state);
   useEffect(() => {
     const urlParams = new URLSearchParams(state);
-    console.log("eoeef ", urlParams);
     const nftId = urlParams.get("nftId");
     const userId = urlParams.get("userId");
     if (nftId && userId && code) {
-      console.log("redirecting ");
-      saveSpotifyToken({ code });
+      saveSpotifyToken({ code, redirectUri: SPOTIFY_REDIRECT_URI });
     }
   }, [state, saveSpotifyToken, code]);
   if (error) {
@@ -37,7 +35,7 @@ export const SpotifyAuthRedirect = () => {
         <Button
           onPress={() =>
             //@ts-ignore
-            Linking.openURL(process.env.NEXT_PUBLIC_WEBSITE_DOMAIN)
+            Linking.openURL("https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN)
           }
         >
           Go back to the app
@@ -52,7 +50,7 @@ export const SpotifyAuthRedirect = () => {
       <Button
         onPress={() =>
           //@ts-ignore
-          Linking.openURL(process.env.NEXT_PUBLIC_WEBSITE_DOMAIN)
+          Linking.openURL("https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN)
         }
       >
         Go back to the app

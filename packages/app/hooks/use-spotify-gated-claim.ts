@@ -8,6 +8,8 @@ const clientId = "e12f7eea542947ff843cfc68d762235a";
 const scope =
   "user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
 
+export const SPOTIFY_REDIRECT_URI = `http://localhost:3000/spotify-auth/redirect`;
+
 const generateState = (nftId: number, userId?: number) => {
   const state = `nftId=${nftId}&userId=${userId}`;
 
@@ -34,7 +36,7 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
         const params = {
           client_id: clientId,
           scope,
-          redirect_uri: `http://localhost:3000/spotify-auth/redirect`,
+          redirect_uri: SPOTIFY_REDIRECT_URI,
           state,
           response_type: "code",
         };
