@@ -9,7 +9,7 @@ import React, {
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import chuck from "lodash/chunk";
+import chunk from "lodash/chunk";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -75,7 +75,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       refresh,
     }));
     const chuckList = useMemo(() => {
-      return chuck(data, 3);
+      return chunk(data, 3);
     }, [data]);
 
     const onItemPress = useCallback(

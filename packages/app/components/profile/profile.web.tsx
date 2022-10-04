@@ -11,7 +11,7 @@ import {
 import { useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import chuck from "lodash/chunk";
+import chunk from "lodash/chunk";
 import { stringify } from "querystring";
 import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
@@ -226,7 +226,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
 
   const chuckList = useMemo(() => {
-    return chuck(list, numColumns);
+    return chunk(list, numColumns);
   }, [list, numColumns]);
 
   const keyExtractor = useCallback(
