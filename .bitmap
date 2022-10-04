@@ -23,7 +23,7 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.72",
+        "version": "0.0.73",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
@@ -59,7 +59,7 @@
     },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.44",
+        "version": "0.0.45",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/collapsible-tab-view"
     },
@@ -161,7 +161,7 @@
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.92",
+        "version": "0.0.93",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
@@ -203,7 +203,7 @@
     },
     "router": {
         "scope": "showtime.universal",
-        "version": "0.0.38",
+        "version": "0.0.39",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/router"
     },
@@ -257,7 +257,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
