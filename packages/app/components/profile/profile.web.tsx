@@ -5,8 +5,8 @@ import {
   createContext,
   useContext,
   memo,
-  useEffect,
   useState,
+  useEffect,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
@@ -63,21 +63,19 @@ const ProfileHeaderContext = createContext<{
   username: string;
   isError: boolean;
   isLoading: boolean;
-  routes: Route[];
-  displayedCount: number | undefined;
+  routes: (Route & { displayedCount: number })[];
   isBlocked: boolean;
-  index: number;
-  setIndex: (index: number) => void;
+  type: string | undefined;
+  setType: (type: string) => void;
 }>({
   profileData: undefined,
   username: "",
   isError: false,
   isLoading: false,
   routes: [],
-  displayedCount: 0,
   isBlocked: false,
-  index: 0,
-  setIndex: () => {},
+  type: undefined,
+  setType: () => {},
 });
 
 const Header = memo(function Header() {
@@ -93,17 +91,17 @@ const Header = memo(function Header() {
     isLoading,
     username,
     routes,
-    displayedCount,
     isBlocked,
-    index,
-    setIndex,
+    type,
+    setType,
   } = context;
 
   const onPress = useCallback(
-    (itemIndex: number) => {
+    (index: number) => {
+      const currentType = routes[index].key;
       const newQuery = {
         ...router.query,
-        tab: itemIndex.toString(),
+        type: currentType,
       } as ParsedUrlQuery;
       const { username = null, ...restQuery } = newQuery;
       const queryPath = stringify(restQuery) ? `?${stringify(restQuery)}` : "";
@@ -118,10 +116,13 @@ const Header = memo(function Header() {
         },
         username ? `/@${username}${queryPath}` : ""
       );
-      setIndex(itemIndex);
+      setType(currentType);
     },
-    [router, setIndex]
+    [router, routes, setType]
   );
+  const displayedCount = routes.find(
+    (item) => item.key === type
+  )?.displayedCount;
   return (
     <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-xl">
@@ -137,10 +138,14 @@ const Header = memo(function Header() {
         />
         <View tw="bg-white dark:bg-black">
           <View tw="mx-auto w-full max-w-screen-xl">
-            <TabBarSingle onPress={onPress} routes={routes} index={index} />
+            <TabBarSingle
+              onPress={onPress}
+              routes={routes}
+              index={routes.findIndex((item) => item.key === type)}
+            />
             <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
               <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
-                {displayedCount} ITEMS
+                {displayedCount ?? 0} ITEMS
               </Text>
               <ProfileListFilter />
             </View>
@@ -157,35 +162,41 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isError,
     isLoading: profileIsLoading,
   } = useUserProfile({ address: username });
-  const isDark = useIsDarkMode();
-  const { width, height: screenHeight } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
-  const contentWidth = useContentWidth();
-  const { getIsBlocked } = useBlock();
-
   const profileId = profileData?.data?.profile.profile_id;
+  const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileId);
-
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
+  const isDark = useIsDarkMode();
+  const { height: screenHeight } = useWindowDimensions();
+  const contentWidth = useContentWidth();
+  const isMdWidth = contentWidth >= breakpoints["md"];
+  const numColumns =
+    contentWidth <= breakpoints["md"]
+      ? 3
+      : contentWidth >= breakpoints["lg"]
+      ? 3
+      : 2;
+
   const routes = useMemo(
     () =>
       data?.tabs.map((item, index) => ({
         title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
         key: item?.name,
         index,
+        displayedCount: item.displayed_count,
       })) ?? [],
     [data?.tabs]
   );
-
-  const [index, setIndex] = useState(0);
-  const [queryTab] = useParam("tab");
+  const [queryTab] = useParam("type", {
+    initial: data?.default_tab_type,
+  });
+  const [type, setType] = useState(queryTab);
   useEffect(() => {
-    const defaultIndex =
-      data?.tabs.findIndex((item) => item.type === data?.default_tab_type) ?? 0;
-    setIndex(queryTab ? +queryTab : defaultIndex);
-  }, [data?.default_tab_type, data?.tabs, queryTab]);
+    if (!data?.default_tab_type) return;
+    setType(data?.default_tab_type);
+  }, [data?.default_tab_type]);
 
   const [filter, dispatch] = useReducer(
     (state: Filter, action: any): Filter => {
@@ -200,7 +211,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     { ...defaultFilters }
   );
-  // Todo: execute fetch list when have defaultIndex, avoid duplication fetch.
+
   const {
     isLoading,
     data: list,
@@ -208,17 +219,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
     updateItem,
     isLoadingMore,
   } = useProfileNFTs({
-    tabType: data?.tabs[index].type,
+    tabType: type,
     profileId: profileId,
     collectionId: filter.collectionId,
     sortType: filter.sortType,
   });
-  const numColumns =
-    contentWidth <= breakpoints["md"]
-      ? 3
-      : contentWidth >= breakpoints["lg"]
-      ? 3
-      : 2;
 
   const chuckList = useMemo(() => {
     return chuck(list, numColumns);
@@ -245,9 +250,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               numColumns={numColumns}
               href={`/list?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
-              }&tabType=${
-                data?.tabs[index].type
-              }&profileId=${profileId}&collectionId=${
+              }&tabType=${type}&profileId=${profileId}&collectionId=${
                 filter.collectionId
               }&sortType=${filter.sortType}&type=profile`}
             />
@@ -263,12 +266,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     [
       contentWidth,
-      data?.tabs,
       filter.collectionId,
       filter.sortType,
-      index,
       numColumns,
       profileId,
+      type,
     ]
   );
   const ListFooterComponent = useCallback(() => {
@@ -282,6 +284,24 @@ const Profile = ({ username }: ProfileScreenProps) => {
       </View>
     );
   }, [contentWidth, isDark, isLoadingMore]);
+  const ListEmptyComponent = useCallback(() => {
+    if (isLoading) return null;
+    return (
+      <EmptyPlaceholder
+        title={
+          isBlocked ? (
+            <Text tw="text-gray-900 dark:text-white">
+              <Text tw="font-bold">@{username}</Text> is blocked
+            </Text>
+          ) : (
+            "No results found"
+          )
+        }
+        tw="h-[50vh]"
+        hideLoginBtn
+      />
+    );
+  }, [isBlocked, isLoading, username]);
 
   return (
     <ProfileHeaderContext.Provider
@@ -291,9 +311,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
         isError,
         isLoading: profileIsLoading && profileTabIsLoading,
         routes,
-        displayedCount: data?.tabs[index]?.displayed_count,
-        index,
-        setIndex,
+        type,
+        setType: setType,
         isBlocked,
       }}
     >
@@ -315,29 +334,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
               style={{
                 height: screenHeight - 64,
               }}
-              ListEmptyComponent={() => {
-                if (isLoading) return null;
-                return (
-                  <EmptyPlaceholder
-                    title={
-                      isBlocked ? (
-                        <Text tw="text-gray-900 dark:text-white">
-                          <Text tw="font-bold">@{username}</Text> is blocked
-                        </Text>
-                      ) : (
-                        "No results found"
-                      )
-                    }
-                    tw="h-[50vh]"
-                    hideLoginBtn
-                  />
-                );
-              }}
+              ListEmptyComponent={ListEmptyComponent}
               ListFooterComponent={ListFooterComponent}
               onEndReached={fetchMore}
-              gridItemProps={{
-                style: { marginVertical: isMdWidth ? 16 : 0 },
-              }}
             />
           </MutateProvider>
         </View>

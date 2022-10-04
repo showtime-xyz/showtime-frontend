@@ -32,7 +32,7 @@ const RouteComponent = isWeb ? Link : PressableScale;
 type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
-  onPress: () => void;
+  onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   href?: string;
