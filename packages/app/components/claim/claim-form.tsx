@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Linking, Platform } from "react-native";
+import { ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
@@ -28,6 +29,7 @@ import {
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useShare } from "app/hooks/use-share";
+import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRudder } from "app/lib/rudderstack";
@@ -46,6 +48,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { state, claimNFT, onReconnectWallet } = useClaimNFT(
     edition?.creator_airdrop_edition
   );
+  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
+    edition?.creator_airdrop_edition
+  );
+
   const share = useShare();
   const router = useRouter();
   const { user } = useUser();
@@ -293,7 +299,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              onPress={handleClaimNFT}
+              onPress={() => claimSpotifyGatedDrop(nft?.data.item.nft_id)}
             >
               {state.status === "loading"
                 ? "Claiming... it should take about 10 seconds"

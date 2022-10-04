@@ -5,6 +5,7 @@ import { useSWRConfig } from "swr";
 import { useToast } from "@showtime-xyz/universal.toast";
 
 import { axios } from "app/lib/axios";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 type SaveSpotifyTokenParams = {
   code: string;
@@ -25,7 +26,7 @@ function useSaveSpotifyToken() {
           redirect_uri: redirectUri,
         },
       });
-      mutate(null);
+      mutate(MY_INFO_ENDPOINT);
       toast?.show({ message: "Spotify token saved!", hideAfter: 4000 });
     },
     [toast, mutate]

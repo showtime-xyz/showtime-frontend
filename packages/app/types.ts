@@ -198,12 +198,15 @@ export type IEdition = {
   owner_address: string;
   symbol: string;
   is_gated?: boolean;
+  is_spotify_gated?: boolean;
 };
 
 export type MyInfo = {
   data: {
     follows: Array<{ profile_id: number }>;
-    profile: Profile;
+    profile: Profile & {
+      has_spotify_token: boolean;
+    };
     likes_nft: number[];
     likes_comment: any[];
     comments: number[];
