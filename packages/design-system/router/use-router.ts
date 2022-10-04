@@ -5,6 +5,7 @@ import {
   NavigationState,
   StackActions,
 } from "@react-navigation/native";
+import type { ParsedUrlQuery } from "querystring";
 import { useRouter as useSolitoRouter } from "solito/router";
 
 const getPath = (navigationState: NavigationState) => {
@@ -26,7 +27,7 @@ export function useRouter() {
         dispatch(StackActions.pop());
       },
       pathname: getPath(getState()),
-      query: [],
+      query: {} as ParsedUrlQuery,
       asPath: getPath(getState()),
     };
   }, [getState, solitoRouter, dispatch]);
