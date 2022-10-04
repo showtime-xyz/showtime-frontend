@@ -84,7 +84,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
       {meta.deeplinkUrl && (
         <meta
           name="twitter:app:url:googleplay"
-          content={"https://showtime.xyz/" + meta.deeplinkUrl}
+          content={
+            `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/` +
+            meta.deeplinkUrl
+          }
         />
       )}
     </>

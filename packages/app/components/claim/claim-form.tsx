@@ -119,7 +119,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   }
 
   if (state.status === "success") {
-    const claimUrl = `https://showtime.xyz/t/${[
+    const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
       process.env.NEXT_PUBLIC_CHAIN_ID,
     ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
 

@@ -163,7 +163,7 @@ export const DropForm = () => {
     const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
       state.edition?.contract_address
     }/0`;
-    const claimUrl = `https://showtime.xyz${claimPath}`;
+    const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
 
     const isShareAPIAvailable = Platform.select({
       default: true,
