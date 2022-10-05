@@ -1,10 +1,15 @@
-import { ComponentProps, forwardRef } from "react";
-import { View as ReactNativeView } from "react-native";
+import { forwardRef } from "react";
+import {
+  View as ReactNativeView,
+  ViewProps as RNViewProps,
+} from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
-export type ViewProps = { tw?: TW } & ComponentProps<typeof ReactNativeView>;
+export type ViewProps = Omit<RNViewProps, "tw"> & {
+  tw?: string | Array<string> | TW[];
+};
 
 const StyledView = styled(ReactNativeView);
 
