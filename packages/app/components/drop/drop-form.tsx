@@ -541,11 +541,11 @@ export const DropForm = () => {
                     <Fieldset
                       autoFocus
                       tw="flex-1"
-                      label="Spotify Track Id"
+                      label="Spotify URL"
                       onBlur={onBlur}
                       onChange={onChange}
                       value={value}
-                      helperText="How long the drop will be available to claim"
+                      helperText="Enter the spotify url of the track"
                       errorText={errors.spotifyUrl?.message}
                     />
                   );
