@@ -9,7 +9,11 @@ const clientId = "e12f7eea542947ff843cfc68d762235a";
 const scope =
   "user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
 
-export const SPOTIFY_REDIRECT_URI = `http://localhost:3000/spotify-auth/redirect`;
+export const SPOTIFY_REDIRECT_URI = `${
+  __DEV__
+    ? "http://localhost:3000"
+    : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
+}/spotify-auth/redirect`;
 
 export const useSpotifyGatedClaim = (edition?: IEdition) => {
   const user = useUser();
