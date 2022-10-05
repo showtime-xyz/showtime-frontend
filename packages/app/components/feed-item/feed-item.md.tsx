@@ -238,28 +238,28 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </View>
             </View>
           )}
+          {nft?.mime_type?.includes("video") ? (
+            <View tw="absolute bottom-4 right-4">
+              <Button
+                variant="text"
+                size="regular"
+                onPress={(e) => {
+                  e.preventDefault();
+                  setMuted(!muted);
+                }}
+                iconOnly
+                tw="bg-white px-3 dark:bg-gray-900"
+              >
+                {muted ? (
+                  <Muted width={24} height={24} />
+                ) : (
+                  <Unmuted width={24} height={24} />
+                )}
+              </Button>
+            </View>
+          ) : null}
         </View>
 
-        {nft?.mime_type?.includes("video") ? (
-          <View tw="absolute bottom-4 right-4">
-            <Button
-              variant="text"
-              size="regular"
-              onPress={(e) => {
-                e.preventDefault();
-                setMuted(!muted);
-              }}
-              iconOnly
-              tw="bg-white px-3 dark:bg-gray-900"
-            >
-              {muted ? (
-                <Muted width={24} height={24} />
-              ) : (
-                <Unmuted width={24} height={24} />
-              )}
-            </Button>
-          </View>
-        ) : null}
         <View
           tw="dark:shadow-dark shadow-light bg-white dark:bg-black"
           style={{

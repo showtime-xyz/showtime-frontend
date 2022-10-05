@@ -1,5 +1,10 @@
 import { Suspense, useMemo, useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import {
+  Platform,
+  StyleProp,
+  useWindowDimensions,
+  ViewStyle,
+} from "react-native";
 
 import { Link } from "solito/link";
 
@@ -21,15 +26,19 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 
+const isWeb = Platform.OS === "web";
+const RouteComponent = isWeb ? Link : PressableScale;
+
 type Props = {
   nft: NFT & { loading?: boolean };
   numColumns: number;
-  onPress: () => void;
+  onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   href?: string;
   showClaimButton?: Boolean;
   sizeStyle?: { width: number; height: number };
+  style?: StyleProp<ViewStyle>;
 };
 
 function Card({
@@ -40,11 +49,11 @@ function Card({
   onPress,
   href = "",
   showClaimButton = false,
+  style,
 }: Props) {
   const { width } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const isWeb = Platform.OS === "web";
-  const RouteComponent = isWeb ? Link : PressableScale;
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -63,16 +72,17 @@ function Card({
   const handleOnPress = useCallback(() => {
     if (isWeb) return null;
     onPress?.();
-  }, [isWeb, onPress]);
+  }, [onPress]);
 
   if (width < 768) {
     return (
       <RouteComponent
         href={href}
-        viewProps={{ style: { flex: 1 } }}
+        viewProps={{ style: [{ flex: 1 }, style] }}
+        style={style as any}
         onPress={handleOnPress}
       >
-        <Media item={nft} numColumns={numColumns} />
+        <Media item={nft} tw={tw} numColumns={numColumns} />
       </RouteComponent>
     );
   }
@@ -140,6 +150,6 @@ function Card({
   );
 }
 
-const MemoizedCard = withMemoAndColorScheme(Card);
+const MemoizedCard = withMemoAndColorScheme<typeof Card, Props>(Card);
 
 export { MemoizedCard as Card };
