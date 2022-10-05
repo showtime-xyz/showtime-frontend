@@ -68,16 +68,6 @@ export function Login({ onLogin }: LoginProps) {
         <>
           <LoginHeader />
           <View tw="p-4">
-            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
-          </View>
-          <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
-            <View tw="h-2" />
-            <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-              — or —
-            </Text>
-            <View tw="h-2" />
-          </View>
-          <View tw="p-4">
             <LoginInputField
               key="login-contact-details-field"
               label="Contact details"
@@ -85,6 +75,16 @@ export function Login({ onLogin }: LoginProps) {
               signInButtonLabel="Sign in"
               onSubmit={handleSubmitContactDetails}
             />
+          </View>
+          <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
+            <View tw="h-2" />
+            <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
+              or
+            </Text>
+            <View tw="h-2" />
+          </View>
+          <View tw="p-4">
+            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           </View>
         </>
       )}
