@@ -46,7 +46,11 @@ export const SwipeList = ({
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
 
-  const visibleItems = useSharedValue<number[]>([]);
+  const visibleItems = useSharedValue<any[]>([
+    undefined,
+    0,
+    data.length > 1 ? 1 : undefined,
+  ]);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
     () => ({
@@ -66,13 +70,17 @@ export const SwipeList = ({
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
-      visibleItems.value = [e.previousIndex, e.activeIndex];
+      visibleItems.value = [
+        e.previousIndex,
+        e.activeIndex,
+        e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
+      ];
       setInitialScrollIndex(e.activeIndex.toString());
       // const id = data[e.activeIndex].nft_id.toString();
       // id && setId(id);
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, setInitialScrollIndex]
+    [visibleItems, setInitialScrollIndex, data.length]
   );
 
   if (data.length === 0) return null;
