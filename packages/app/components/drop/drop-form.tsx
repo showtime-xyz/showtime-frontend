@@ -522,7 +522,7 @@ export const DropForm = () => {
                     onChange: (v) => {
                       onChange(v ? "spotify_save" : undefined);
                       if (!v) {
-                        setValue("spotifyTrackId", undefined);
+                        setValue("spotifyUrl", undefined);
                       }
                     },
                   }}
@@ -535,7 +535,7 @@ export const DropForm = () => {
             <View tw="z-10 mt-4 flex-row">
               <Controller
                 control={control}
-                name="spotifyTrackId"
+                name="spotifyUrl"
                 render={({ field: { onChange, onBlur, value } }) => {
                   return (
                     <Fieldset
@@ -546,7 +546,7 @@ export const DropForm = () => {
                       onChange={onChange}
                       value={value}
                       helperText="How long the drop will be available to claim"
-                      errorText={errors.spotifyTrackId?.message}
+                      errorText={errors.spotifyUrl?.message}
                     />
                   );
                 }}

@@ -96,7 +96,7 @@ export type UseDropNFT = {
   animationUrl?: string;
   animationHash?: string;
   imageHash?: string;
-  spotifyTrackId?: string;
+  spotifyUrl?: string;
   gatingType?: string;
 };
 
@@ -195,7 +195,7 @@ export const useDropNFT = () => {
           royalty_bps: params.royalty * 100,
           claim_window_duration_seconds: params.duration,
           nsfw: params.notSafeForWork,
-          spotify_track_id: params.spotifyTrackId,
+          spotify_url: params.spotifyUrl,
           gating_type: params.gatingType,
         },
       });
