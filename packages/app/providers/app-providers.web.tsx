@@ -20,6 +20,7 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { ClaimProvider } from "./claim-provider";
 import { RudderStackProvider } from "./rudderstack-provider.web";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
@@ -42,7 +43,11 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                   <FeedProvider>
                                     <NavigationProvider>
                                       <BiconomyProvider>
-                                        <MuteProvider>{children}</MuteProvider>
+                                        <ClaimProvider>
+                                          <MuteProvider>
+                                            {children}
+                                          </MuteProvider>
+                                        </ClaimProvider>
                                       </BiconomyProvider>
                                     </NavigationProvider>
                                   </FeedProvider>

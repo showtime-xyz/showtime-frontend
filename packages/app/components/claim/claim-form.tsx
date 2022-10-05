@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Linking, Platform } from "react-native";
 import { ScrollView as RNScrollView } from "react-native";
 
@@ -21,7 +21,6 @@ import { MissingSignatureMessage } from "app/components/missing-signature-messag
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
-import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
@@ -33,6 +32,7 @@ import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRudder } from "app/lib/rudderstack";
+import { useClaimNFT } from "app/providers/claim-provider";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
@@ -45,7 +45,7 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
+  const { state, claimNFT, onReconnectWallet, resetState } = useClaimNFT(
     edition?.creator_airdrop_edition
   );
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
@@ -94,6 +94,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     mutate();
   };
 
+  useEffect(() => {
+    // reset global claim provider state on unmount
+    return resetState;
+  }, [resetState]);
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -299,7 +303,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              onPress={() => claimSpotifyGatedDrop(nft?.data.item)}
+              onPress={() =>
+                edition.gating_type === "spotify_save"
+                  ? claimSpotifyGatedDrop(nft?.data.item)
+                  : claimNFT()
+              }
             >
               {state.status === "loading"
                 ? "Claiming... it should take about 10 seconds"

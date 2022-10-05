@@ -1,7 +1,8 @@
 import { Linking, Platform } from "react-native";
 
+import { useClaimNFT } from "app/providers/claim-provider";
+
 import { IEdition, NFT } from "../types";
-import { useClaimNFT } from "./use-claim-nft";
 import { useUser } from "./use-user";
 
 const clientId = "e12f7eea542947ff843cfc68d762235a";

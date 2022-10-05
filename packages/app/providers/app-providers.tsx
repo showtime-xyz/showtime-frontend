@@ -13,6 +13,7 @@ import { growthbook } from "app/lib/growthbook";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
+import { ClaimProvider } from "app/providers/claim-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
@@ -43,7 +44,11 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                   <GrowthBookProvider growthbook={growthbook}>
                                     <FeedProvider>
                                       <BiconomyProvider>
-                                        <MuteProvider>{children}</MuteProvider>
+                                        <ClaimProvider>
+                                          <MuteProvider>
+                                            {children}
+                                          </MuteProvider>
+                                        </ClaimProvider>
                                       </BiconomyProvider>
                                     </FeedProvider>
                                   </GrowthBookProvider>

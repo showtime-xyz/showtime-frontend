@@ -1,4 +1,5 @@
-import { useReducer, useEffect, useRef, useCallback } from "react";
+import * as React from "react";
+import { useReducer, useEffect, useRef } from "react";
 import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -10,6 +11,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { useWallet } from "app/hooks/use-wallet";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
@@ -17,34 +19,6 @@ import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { ledgerWalletHack } from "app/utilities";
 import { delay } from "app/utilities";
-
-import { useWallet } from "./use-wallet";
-
-const minterABI = ["function mintEdition(address _to)"];
-
-const getForwarderRequest = async ({
-  minterAddress,
-  userAddress,
-}: {
-  minterAddress: string;
-  userAddress: string;
-}) => {
-  const Interface = (await import("@ethersproject/abi")).Interface;
-  const targetInterface = new Interface(minterABI);
-  const callData = targetInterface.encodeFunctionData("mintEdition", [
-    userAddress,
-  ]);
-  const res = await axios({
-    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-      callData
-    )}&to_address=${encodeURIComponent(
-      minterAddress
-    )}&from_address=${encodeURIComponent(userAddress)}`,
-    method: "GET",
-  });
-
-  return res;
-};
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
@@ -61,10 +35,15 @@ type Action = {
   mint?: any;
 };
 
-const initialState: State = {
-  status: "idle",
-  signaturePrompt: false,
+type ContextType = {
+  state: State;
+  setEdition: (edition: IEdition) => void;
+  claimNFT: () => Promise<boolean | undefined>;
+  onReconnectWallet: any;
+  resetState: () => void;
 };
+
+const ClaimContext = React.createContext(null as unknown as ContextType);
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -81,13 +60,15 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         transactionHash: action.transactionHash,
       };
+    case "reset": {
+      return initialState;
+    }
     case "signaturePrompt": {
       return {
         ...state,
         signaturePrompt: true,
       };
     }
-
     case "signatureSuccess": {
       return {
         ...state,
@@ -106,10 +87,16 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useClaimNFT = (edition?: IEdition) => {
+const initialState: State = {
+  status: "idle",
+  signaturePrompt: false,
+};
+
+export const ClaimProvider = (props: any) => {
   const { rudder } = useRudder();
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
+  const [edition, setEdition] = React.useState<IEdition | null>(null);
 
   const signTypedData = useSignTypedData();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -160,8 +147,7 @@ export const useClaimNFT = (edition?: IEdition) => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
-  // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
+  const signTransaction = async ({ forwardRequest }: any) => {
     dispatch({ type: "signaturePrompt" });
 
     const signature = await signTypedData(
@@ -328,16 +314,69 @@ export const useClaimNFT = (edition?: IEdition) => {
     }
   };
 
-  const onReconnectWallet = useCallback(() => {
+  const onReconnectWallet = React.useCallback(() => {
     dispatch({
       type: "error",
       error: "Please retry claiming the drop",
     });
   }, []);
 
+  const resetState = React.useCallback(() => {
+    dispatch({
+      type: "reset",
+    });
+  }, []);
+
+  return (
+    <ClaimContext.Provider
+      value={{ setEdition, claimNFT, state, resetState, onReconnectWallet }}
+    >
+      {props.children}
+    </ClaimContext.Provider>
+  );
+};
+
+const minterABI = ["function mintEdition(address _to)"];
+
+const getForwarderRequest = async ({
+  minterAddress,
+  userAddress,
+}: {
+  minterAddress: string;
+  userAddress: string;
+}) => {
+  const Interface = (await import("@ethersproject/abi")).Interface;
+  const targetInterface = new Interface(minterABI);
+  const callData = targetInterface.encodeFunctionData("mintEdition", [
+    userAddress,
+  ]);
+  const res = await axios({
+    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
+      callData
+    )}&to_address=${encodeURIComponent(
+      minterAddress
+    )}&from_address=${encodeURIComponent(userAddress)}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const useClaimNFT = (edition?: IEdition) => {
+  const { state, claimNFT, onReconnectWallet, setEdition, resetState } =
+    React.useContext(ClaimContext);
+  useEffect(() => {
+    if (edition) {
+      setEdition(edition);
+    }
+  }, [edition, setEdition]);
+
+  // Logger.log("useClaimNFT", state);
+
   return {
     state,
     claimNFT,
     onReconnectWallet,
+    resetState,
   };
 };
