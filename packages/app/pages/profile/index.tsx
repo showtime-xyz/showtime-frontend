@@ -1,6 +1,3 @@
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
@@ -10,8 +7,6 @@ import { ProfileScreen } from "app/screens/profile";
 const ProfileStack = createStackNavigator<ProfileStackParams>();
 
 function ProfileNavigator() {
-  const { top: safeAreaTop } = useSafeAreaInsets();
-  const isDark = useIsDarkMode();
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
 

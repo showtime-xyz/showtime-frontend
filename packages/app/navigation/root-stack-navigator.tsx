@@ -25,6 +25,7 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
+import { ClaimeTankExplanationScreen } from "../screens/claim-tank-explanation";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -45,14 +46,17 @@ export function RootStackNavigator() {
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
-
-      {/* Screens accessible in most of the navigators */}
-      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
+      {/* Screens without default header */}
+      <Stack.Group screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
+      </Stack.Group>
+
+      {/* Screens accessible in most of the navigators */}
+      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
           name="privacySecuritySettings"
@@ -102,7 +106,20 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
+
         <Stack.Screen name="claimers" component={ClaimersScreen} />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+          animation: "none",
+          presentation: "transparentModal",
+        }}
+      >
+        <Stack.Screen
+          name="claimTankExplanation"
+          component={ClaimeTankExplanationScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

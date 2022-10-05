@@ -81,6 +81,11 @@ export interface ModalProps {
    * @default false
    */
   disableBackdropPress?: boolean;
+  /**
+   * **iOS ONLY**: use native modal
+   * @default true
+   */
+  useNativeModal?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -120,10 +125,6 @@ export interface ModalContainerProps
   enableContentPanningGesture?: boolean;
   disableBackdropPress?: boolean;
   tw?: string;
-}
-
-export interface ModalScreenProps extends ModalProps {
-  close: () => void;
 }
 
 export interface ModalFooterProps {

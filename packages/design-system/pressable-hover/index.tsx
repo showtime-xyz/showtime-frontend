@@ -1,10 +1,13 @@
-import { ComponentProps, useMemo } from "react";
-import { Pressable as ReactNativePressable } from "react-native";
+import { useMemo } from "react";
+import {
+  Pressable as ReactNativePressable,
+  PressableProps,
+} from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
-export type Props = ComponentProps<typeof ReactNativePressable> & {
+export type Props = Omit<PressableProps, "tw"> & {
   tw?: TW;
 };
 

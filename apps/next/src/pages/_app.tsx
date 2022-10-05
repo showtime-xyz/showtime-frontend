@@ -19,6 +19,7 @@ import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { ClaimScreen } from "app/screens/claim";
+import { ClaimeTankExplanationScreen } from "app/screens/claim-tank-explanation";
 import { ClaimersScreen } from "app/screens/claimers";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
@@ -161,6 +162,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <DropScreen />
         <ClaimScreen />
         <ClaimersScreen />
+        <ClaimeTankExplanationScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />

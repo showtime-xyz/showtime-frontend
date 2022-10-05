@@ -17,7 +17,11 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Header, HeaderCenter } from "app/components/header";
+import {
+  DEFAULT_HADER_HEIGHT,
+  Header,
+  HeaderLeft,
+} from "app/components/header";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import {
   defaultFilters,
@@ -29,6 +33,8 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+
+import { useRouter } from "design-system/router/use-router";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -62,6 +68,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+  const router = useRouter();
 
   const routes =
     data?.tabs.map((item, index) => ({
@@ -208,45 +215,59 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ),
     [data?.tabs, index]
   );
+  const headerCenter = useCallback(() => {
+    return (
+      <View tw="h-full justify-center">
+        <Text numberOfLines={1} tw="text-lg font-bold text-white">
+          {profileData?.data?.profile.name ??
+            profileData?.data?.profile.username ??
+            profileData?.data?.profile.primary_wallet.nickname ??
+            profileData?.data?.profile.primary_wallet.address}
+        </Text>
+      </View>
+    );
+  }, [profileData?.data?.profile]);
   return (
-    <FilterContext.Provider value={{ filter, dispatch }}>
-      <>
-        <Header
-          headerRight={
-            <HeaderDropdown
-              type="settings"
-              translateYValue={animationHeaderPosition}
-            />
-          }
-          headerCenter={HeaderCenter}
-          translateYValue={animationHeaderPosition}
-        />
-        <HeaderTabView
-          onStartRefresh={onStartRefresh}
-          isRefreshing={isRefreshing}
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          renderScrollHeader={renderHeader}
-          minHeaderHeight={Platform.select({
-            default: headerHeight ? headerHeight : 44 + 40,
-            android: 0,
-          })}
-          refreshControlTop={Platform.select({
-            ios: headerHeight ? headerHeight : 20,
-            default: 0,
-          })}
-          refreshHeight={top + 44}
-          initialLayout={{
-            width: contentWidth,
-          }}
-          emptyBodyComponent={isError ? <Profile404 /> : null}
-          animationHeaderPosition={animationHeaderPosition}
-          animationHeaderHeight={animationHeaderHeight}
-          renderTabBar={renderTabBar}
-        />
-      </>
-    </FilterContext.Provider>
+    <>
+      <FilterContext.Provider value={{ filter, dispatch }}>
+        <>
+          <Header
+            headerLeft={
+              router.asPath === "/" ? null : (
+                <HeaderLeft canGoBack={true} withBackground />
+              )
+            }
+            headerRight={<HeaderDropdown type="settings" withBackground />}
+            headerCenter={headerCenter}
+            translateYValue={animationHeaderPosition}
+          />
+          <HeaderTabView
+            onStartRefresh={onStartRefresh}
+            isRefreshing={isRefreshing}
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            renderScrollHeader={renderHeader}
+            minHeaderHeight={Platform.select({
+              default: headerHeight ? headerHeight : 44 + 47,
+              android: 0,
+            })}
+            refreshControlTop={Platform.select({
+              ios: headerHeight ? headerHeight : 20,
+              default: 0,
+            })}
+            refreshHeight={top + DEFAULT_HADER_HEIGHT}
+            initialLayout={{
+              width: contentWidth,
+            }}
+            emptyBodyComponent={isError ? <Profile404 /> : null}
+            animationHeaderPosition={animationHeaderPosition}
+            animationHeaderHeight={animationHeaderHeight}
+            renderTabBar={renderTabBar}
+          />
+        </>
+      </FilterContext.Provider>
+    </>
   );
 };
 

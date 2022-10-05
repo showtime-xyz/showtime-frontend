@@ -39,19 +39,21 @@ export const ClaimExplanation = ({
         token?.data.item
       )}`}
       coverElement={
-        <View tw="items-center">
-          <View tw="rounded-xl shadow-xl">
-            <Media
-              resizeMode="contain"
-              item={token?.data.item}
-              sizeStyle={{
-                width: 240,
-                height: 240,
-              }}
-              tw="overflow-hidden"
-            />
+        token?.data.item ? (
+          <View tw="items-center">
+            <View tw="rounded-xl shadow-xl">
+              <Media
+                resizeMode="contain"
+                item={token?.data.item}
+                sizeStyle={{
+                  width: 240,
+                  height: 240,
+                }}
+                tw="overflow-hidden"
+              />
+            </View>
           </View>
-        </View>
+        ) : null
       }
       onDone={onDone}
       ctaCopy={"Continue"}

@@ -211,5 +211,10 @@ export type MyInfo = {
     notifications_last_opened: string | null;
     can_create_drop: boolean;
     daily_claim_limit: number;
+    claim_tank: {
+      available_claims: number;
+      next_refill_at: string;
+      tank_limit: number;
+    };
   };
 };

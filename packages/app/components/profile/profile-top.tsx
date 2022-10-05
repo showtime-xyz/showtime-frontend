@@ -11,8 +11,13 @@ import { Button } from "@showtime-xyz/universal.button";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Gift as GiftIcon,
+  InformationCircle as InformationCircleIcon,
+} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -22,12 +27,13 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
-import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
+import { UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useUser } from "app/hooks/use-user";
 import { TextLink } from "app/navigation/link";
 
 import { Hidden } from "design-system/hidden";
@@ -107,15 +113,12 @@ export const ProfileTop = ({
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const { colorScheme } = useColorScheme();
+  const { user } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const { isFollowing } = useMyInfo();
   const profileId = profileData?.profile.profile_id;
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const isFollowingUser = useMemo(
-    () => profileId && isFollowing(profileId),
-    [profileId, isFollowing]
-  );
+
   const { unblock } = useBlock();
   const { onToggleFollow } = useFollow({
     username: profileData?.profile.username,
@@ -203,19 +206,20 @@ export const ProfileTop = ({
           translateY: interpolate(
             Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
-            [0, -44]
+            [0, -40]
           ),
         },
         {
           translateX: interpolate(
             Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
-            [0, 44]
+            [0, 16]
           ),
         },
       ],
     };
   }, []);
+
   return (
     <>
       <View
@@ -228,25 +232,31 @@ export const ProfileTop = ({
           colorMode={colorScheme as any}
           radius={0}
         >
-          {profileData?.profile.cover_url && (
-            <LightBox
-              width={contentWidth}
-              height={coverHeight}
-              imgLayout={{ width: contentWidth, height: coverHeight }}
-              tapToClose
-            >
-              <Image
-                source={{
-                  uri: getFullSizeCover(profileData?.profile.cover_url),
-                }}
-                alt="Cover image"
-                resizeMode="cover"
+          <>
+            {profileData?.profile.cover_url && (
+              <LightBox
                 width={contentWidth}
                 height={coverHeight}
-                style={StyleSheet.absoluteFillObject}
-              />
-            </LightBox>
-          )}
+                imgLayout={{ width: contentWidth, height: coverHeight }}
+                tapToClose
+              >
+                <Image
+                  source={{
+                    uri: getFullSizeCover(profileData?.profile.cover_url),
+                  }}
+                  alt="Cover image"
+                  resizeMode="cover"
+                  width={contentWidth}
+                  height={coverHeight}
+                  style={StyleSheet.absoluteFillObject}
+                />
+              </LightBox>
+            )}
+            <View
+              tw="absolute inset-0 bg-black/10 dark:bg-black/30"
+              pointerEvents="none"
+            />
+          </>
         </Skeleton>
       </View>
       <View tw="mx-2">
@@ -255,10 +265,10 @@ export const ProfileTop = ({
             <Animated.View
               style={[
                 {
-                  width: 128,
-                  height: 128,
+                  width: 86,
+                  height: 86,
                   borderRadius: 9999,
-                  marginTop: -72,
+                  marginTop: -36,
                   overflow: "hidden",
                   borderWidth: 4,
                   borderColor: isDark ? "#000" : "#FFF",
@@ -268,16 +278,16 @@ export const ProfileTop = ({
               ]}
             >
               <Skeleton
-                height={120}
-                width={120}
+                height={86}
+                width={86}
                 show={isLoading}
                 colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
                   <LightBox
-                    width={120}
-                    height={120}
+                    width={86}
+                    height={86}
                     imgLayout={{ width: contentWidth, height: width }}
                     borderRadius={999}
                     tapToClose
@@ -330,17 +340,18 @@ export const ProfileTop = ({
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}
-                        isFollowing={isFollowingUser}
                         name={profileData?.profile.name}
                         profileId={profileId}
                         onToggleFollow={onToggleFollow}
                       />
                     </>
-                  ) : userId === profileId ? (
-                    <Button size="small" onPress={redirectToCreateDrop}>
-                      Create free drop
-                    </Button>
-                  ) : null}
+                  ) : (
+                    userId === profileId && (
+                      <Button size="small" onPress={redirectToCreateDrop}>
+                        Create free drop
+                      </Button>
+                    )
+                  )}
                 </>
               )}
             </View>
@@ -399,13 +410,48 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
+          {userId === profileId && (
+            <Pressable
+              onPress={() => {
+                router.push(
+                  Platform.select({
+                    native: `/claim/claim-tank-explanation`,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        claimTankExplanation: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: `/claim/claim-tank-explanation`,
+                    web: router.asPath,
+                  })
+                );
+              }}
+              tw="mt-3 flex-row items-center"
+            >
+              <GiftIcon height={18} width={18} color={colors.gray[500]} />
+              <Text tw="ml-0.5 mr-0.5 text-sm text-gray-500">
+                {user?.data.claim_tank.available_claims
+                  ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
+                  : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
+              </Text>
+              <InformationCircleIcon
+                height={18}
+                width={18}
+                color={colors.gray[500]}
+              />
+            </Pressable>
+          )}
           <Hidden from="md">
             <Follow
               onPressFollower={onPressFollower}
               onPressFollowing={onPressFollowing}
               followersCount={profileData?.followers_count}
               followingCount={profileData?.following_count}
-              tw="mt-4"
+              tw="mt-3"
             />
           </Hidden>
         </View>

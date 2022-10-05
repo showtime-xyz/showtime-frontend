@@ -24,7 +24,14 @@ import { breakpoints } from "design-system/theme";
 import { NotificationsInHeader, SearchInHeader } from "./header";
 
 export * from "./header";
-export const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+type HeaderLeftProps = {
+  canGoBack: boolean;
+  withBackground?: boolean;
+};
+export const HeaderLeft = ({
+  canGoBack,
+  withBackground = false,
+}: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
@@ -32,13 +39,16 @@ export const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   return (
     <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      style={{
-        height: 24,
-        width: 24,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 9999,
-      }}
+      style={[
+        {
+          height: 32,
+          width: 32,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 999,
+        },
+        withBackground && { backgroundColor: "rgba(0,0,0,.3)" },
+      ]}
       onPress={() => {
         if (canGoBack) {
           router.pop();
@@ -48,8 +58,7 @@ export const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
       }}
     >
       <Icon
-        style={{ borderRadius: 8, overflow: "hidden", width: 24, height: 24 }}
-        color={isDark ? "#FFF" : "#000"}
+        color={withBackground ? "#FFF" : isDark ? "#FFF" : "#000"}
         width={24}
         height={24}
       />

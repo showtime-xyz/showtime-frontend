@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import { BlurView, BlurTint } from "expo-blur";
+import { BlurView } from "expo-blur";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -11,15 +11,16 @@ import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
+export const DEFAULT_HADER_HEIGHT = 44;
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (React.isValidElement(Component)) return Component;
   return <Component />;
 };
 export type HeaderProps = {
-  headerLeft?: React.ComponentType<any> | React.ReactElement | undefined;
-  headerCenter?: React.ComponentType<any> | React.ReactElement | undefined;
-  headerRight?: React.ComponentType<any> | React.ReactElement | undefined;
+  headerLeft?: React.ComponentType<any> | React.ReactElement | null;
+  headerCenter?: React.ComponentType<any> | React.ReactElement | null;
+  headerRight?: React.ComponentType<any> | React.ReactElement | null;
   translateYValue?: Animated.SharedValue<number>;
   disableCenterAnimation?: boolean;
 };
@@ -33,7 +34,7 @@ export const Header = memo<HeaderProps>(function Header({
 }) {
   const { colorScheme } = useColorScheme();
   const { top } = useSafeAreaInsets();
-  const headerHeight = top + 44;
+  const headerHeight = top + DEFAULT_HADER_HEIGHT;
   const animationBackgroundStyles = useAnimatedStyle(() => {
     if (!translateYValue) return {};
     return {
@@ -49,7 +50,7 @@ export const Header = memo<HeaderProps>(function Header({
   });
   return (
     <View
-      tw="absolute top-0 z-10 w-full items-center overflow-hidden"
+      tw="absolute top-0 z-10 w-full items-center"
       style={[
         {
           paddingTop: top,
@@ -64,8 +65,8 @@ export const Header = memo<HeaderProps>(function Header({
           ios: (
             <BlurView
               style={StyleSheet.absoluteFill}
-              tint={colorScheme as BlurTint}
-              intensity={85}
+              tint={"dark"}
+              intensity={50}
             />
           ),
           default: (
@@ -73,8 +74,8 @@ export const Header = memo<HeaderProps>(function Header({
           ),
         })}
       </Animated.View>
-      <View tw="w-full flex-row flex-nowrap items-center px-3">
-        <View style={{ flex: 1, alignItems: "flex-start", maxWidth: 60 }}>
+      <View tw="h-full w-full flex-row flex-nowrap justify-center px-4">
+        <View tw="max-w-[80px] flex-1 items-start justify-center">
           {renderComponent(headerLeft)}
         </View>
 
@@ -90,7 +91,7 @@ export const Header = memo<HeaderProps>(function Header({
           {renderComponent(headerCenter)}
         </Animated.View>
 
-        <View style={{ flex: 1, maxWidth: 60, alignItems: "flex-end" }}>
+        <View tw="max-w-[80px] flex-1 items-end justify-center">
           {renderComponent(headerRight)}
         </View>
       </View>
