@@ -1,8 +1,11 @@
 import { useCallback, useReducer, Suspense } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, StatusBar } from "react-native";
 
+import { useFocusEffect } from "@react-navigation/native";
 import { useSharedValue } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
   SceneRendererProps,
   HeaderTabView,
@@ -14,6 +17,8 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Header, HeaderCenter } from "app/components/header";
+import { HeaderDropdown } from "app/components/header-dropdown";
 import {
   defaultFilters,
   useProfileNftTabs,
@@ -21,12 +26,9 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
-
-import { breakpoints } from "design-system/theme";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -54,11 +56,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isLoading,
     mutate,
   } = useUserProfile({ address: username });
-  const { width: scrollbarWidth } = useScrollbarSize();
-
   const [type] = useParam("type");
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
+  const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -85,10 +84,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
-
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
-
+  const { top } = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
 
   const [filter, dispatch] = useReducer(
@@ -104,6 +102,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     { ...defaultFilters }
   );
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBarStyle("light-content");
+      return () => {
+        !isDark && StatusBar.setBarStyle("dark-content");
+      };
+    }, [isDark])
+  );
+
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await mutate();
@@ -203,7 +210,17 @@ const Profile = ({ username }: ProfileScreenProps) => {
   );
   return (
     <FilterContext.Provider value={{ filter, dispatch }}>
-      <View style={{ width: width - scrollbarWidth }} tw="flex-1">
+      <>
+        <Header
+          headerRight={
+            <HeaderDropdown
+              type="settings"
+              translateYValue={animationHeaderPosition}
+            />
+          }
+          headerCenter={HeaderCenter}
+          translateYValue={animationHeaderPosition}
+        />
         <HeaderTabView
           onStartRefresh={onStartRefresh}
           isRefreshing={isRefreshing}
@@ -212,13 +229,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
           onIndexChange={setIndex}
           renderScrollHeader={renderHeader}
           minHeaderHeight={Platform.select({
-            default: headerHeight,
+            default: headerHeight ? headerHeight : 44 + 40,
             android: 0,
           })}
           refreshControlTop={Platform.select({
-            ios: headerHeight,
+            ios: headerHeight ? headerHeight : 20,
             default: 0,
           })}
+          refreshHeight={top + 44}
           initialLayout={{
             width: contentWidth,
           }}
@@ -226,16 +244,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
           animationHeaderPosition={animationHeaderPosition}
           animationHeaderHeight={animationHeaderHeight}
           renderTabBar={renderTabBar}
-          sceneContainerStyle={Platform.select({
-            web: {
-              marginTop: isMdWidth ? 16 : 0,
-              maxWidth: contentWidth,
-              alignSelf: "center",
-            },
-            default: null,
-          })}
         />
-      </View>
+      </>
     </FilterContext.Provider>
   );
 };

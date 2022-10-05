@@ -1,4 +1,9 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+
+import Animated, {
+  useAnimatedStyle,
+  interpolate,
+} from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -19,6 +24,7 @@ import {
   LogOut,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -29,7 +35,11 @@ import { useUser } from "app/hooks/use-user";
 
 import { breakpoints } from "design-system/theme";
 
-function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
+type HeaderDropdownProps = {
+  type: "profile" | "settings";
+  translateYValue?: Animated.SharedValue<number>;
+};
+function HeaderDropdown({ type, translateYValue }: HeaderDropdownProps) {
   const { logout } = useAuth();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useColorScheme();
@@ -39,7 +49,15 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
   const isDark = colorScheme === "dark";
+  const { top } = useSafeAreaInsets();
 
+  const animationStyle = useAnimatedStyle(() => {
+    if (!translateYValue || isDark) return { opacity: 0 };
+
+    return {
+      opacity: interpolate(-translateYValue.value, [0, top + 44], [1, 0]),
+    };
+  }, [isDark, translateYValue]);
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -53,9 +71,24 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             ) : null}
           </View>
         ) : (
-          <View tw="h-8 w-8 items-center justify-center rounded-full">
-            <Settings width={24} height={24} color={isDark ? "#FFF" : "#000"} />
-          </View>
+          <>
+            <Animated.View style={styles.icon}>
+              <Settings
+                width={24}
+                height={24}
+                color={isDark ? "#FFF" : "#000"}
+              />
+            </Animated.View>
+            <Animated.View
+              style={[
+                styles.icon,
+                StyleSheet.absoluteFillObject,
+                animationStyle,
+              ]}
+            >
+              <Settings width={24} height={24} color={"#FFF"} />
+            </Animated.View>
+          </>
         )}
       </DropdownMenuTrigger>
 
@@ -138,3 +171,13 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
 }
 
 export { HeaderDropdown };
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+  },
+});
