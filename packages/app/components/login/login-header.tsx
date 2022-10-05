@@ -8,7 +8,8 @@ export function LoginHeader() {
   return (
     <View>
       <Text tw="text-center font-semibold text-gray-900 dark:text-white">
-        If this is your first time, it will create a new account on Showtime.
+        Sign in to create and claim free drops from your favorite creators. If
+        this is your first time, you will create a new profile.
       </Text>
       <View tw="h-[10px]" />
       <View tw="mb-[16px] flex-row justify-center">

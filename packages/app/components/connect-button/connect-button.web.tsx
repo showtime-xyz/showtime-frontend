@@ -67,7 +67,7 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
                       });
                     }}
                   >
-                    Connect Wallet
+                    I already have a wallet
                   </Button>
                 );
               }

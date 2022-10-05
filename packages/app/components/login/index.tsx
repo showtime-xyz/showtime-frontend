@@ -107,24 +107,24 @@ export function Login({ onLogin }: LoginProps) {
           return (
             <View style={styles.tabListItemContainer}>
               <View tw="mb-[16px]">
-                <Button
-                  onPress={() => handleSubmitWallet()}
-                  variant="primary"
-                  size="regular"
-                >
-                  Sign in with Wallet
-                </Button>
+                <PhoneNumberPicker
+                  handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+                />
               </View>
               <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
                 <View tw="h-2" />
                 <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-                  — or —
+                  or
                 </Text>
                 <View tw="h-2" />
               </View>
-              <PhoneNumberPicker
-                handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-              />
+              <Button
+                onPress={() => handleSubmitWallet()}
+                variant="primary"
+                size="regular"
+              >
+                I already have a wallet
+              </Button>
             </View>
           );
         case "email":
