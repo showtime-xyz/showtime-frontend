@@ -48,8 +48,8 @@ export const SwipeList = ({
 
   const visibleItems = useSharedValue<any[]>([
     undefined,
-    0,
-    data.length > 1 ? 1 : undefined,
+    initialScrollIndex,
+    initialScrollIndex + 1 < data.length ? initialScrollIndex + 1 : undefined,
   ]);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
