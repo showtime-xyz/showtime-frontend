@@ -7,7 +7,7 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check } from "@showtime-xyz/universal.icon";
+import { Check, Close } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -285,6 +285,36 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
 
+          {edition.gating_type === "spotify_save" ? (
+            <View tw="mt-4 flex-row items-center">
+              {user.data.profile.has_spotify_token ? (
+                <>
+                  <Check
+                    height={20}
+                    width={20}
+                    //@ts-ignore
+                    color={isDark ? colors.gray[100] : colors.gray[900]}
+                  />
+                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                    We'll save this song on your spotify playlist
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Close
+                    height={18}
+                    width={18}
+                    //@ts-ignore
+                    color={isDark ? colors.gray[100] : colors.gray[900]}
+                  />
+                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                    You connected your profile to Spotify
+                  </Text>
+                </>
+              )}
+            </View>
+          ) : null}
+
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
@@ -313,6 +343,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Claiming... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Retry!"
+                : edition.gating_type === "spotify_save" &&
+                  !user.data.profile.has_spotify_token
+                ? "Connect Spotify"
                 : "Claim for free"}
             </Button>
 
