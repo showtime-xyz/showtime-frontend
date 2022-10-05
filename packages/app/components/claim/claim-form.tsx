@@ -345,7 +345,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Failed. Retry!"
                 : edition.gating_type === "spotify_save" &&
                   !user.data.profile.has_spotify_token
-                ? "Connect Spotify"
+                ? "Connect Spotify to claim"
                 : "Claim for free"}
             </Button>
 
