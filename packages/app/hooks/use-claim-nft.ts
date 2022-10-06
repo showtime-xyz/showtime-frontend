@@ -188,7 +188,7 @@ export const useClaimNFT = (edition: IEdition) => {
             text: "Claiming...",
             iconStatus: "waiting",
             bottom,
-            hideAfter: 10000,
+            hideAfter: 200000, // After this, the transaction failed
           });
         } else {
           await oldSignatureClaimFlow();
@@ -259,7 +259,7 @@ export const useClaimNFT = (edition: IEdition) => {
           text: "Claiming failed. Please try again!",
           bottom,
           iconStatus: "default",
-          hideAfter: 4000,
+          hideAfter: 10000,
         });
       }
 

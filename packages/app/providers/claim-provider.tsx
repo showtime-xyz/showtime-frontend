@@ -35,7 +35,7 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
       text: "Claiming...",
       iconStatus: "waiting",
       bottom,
-      hideAfter: 15000,
+      hideAfter: 200000, // After this, the transaction failed
     });
 
     let intervalMs = 2000;
