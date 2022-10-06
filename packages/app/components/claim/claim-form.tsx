@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { Linking, Platform } from "react-native";
 import { ScrollView as RNScrollView } from "react-native";
 
@@ -94,10 +94,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     mutate();
   };
 
-  useEffect(() => {
-    // reset global claim provider state on unmount
-    return resetState;
-  }, [resetState]);
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
