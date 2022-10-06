@@ -1,4 +1,6 @@
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
+
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useClaimNFT } from "app/providers/claim-provider";
 
@@ -18,6 +20,7 @@ export const SPOTIFY_REDIRECT_URI = `${
 export const useSpotifyGatedClaim = (edition?: IEdition) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
+  const router = useRouter();
 
   const claimSpotifyGatedDrop = (nft?: NFT) => {
     if (nft) {
@@ -51,9 +54,8 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
         if (Platform.OS === "web") {
           window.location.href = `https://accounts.spotify.com/authorize?${queryString}`;
         } else {
-          Linking.openURL(
-            `https://accounts.spotify.com/authorize?${queryString}`
-          );
+          // on native we handle spotify stuff in a webview
+          router.push("/spotifyAuth?uri=" + queryString);
         }
       }
     }

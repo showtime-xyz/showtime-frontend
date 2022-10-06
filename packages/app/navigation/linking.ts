@@ -50,7 +50,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       followers: "profile/followers",
       following: "profile/following",
       settings: "settings",
-      spotifyAuthRedirect: "spotify-auth/redirect",
+      spotifyAuth: "spotifyAuth",
       addEmail: "settings/add-email",
       verifyPhoneNumber: "settings/verify-phone-number",
       privacySecuritySettings: "settings/privacy-and-security",

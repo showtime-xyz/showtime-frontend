@@ -23,7 +23,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { SpotifyAuthRedirect } from "app/screens/spotify-auth-redirect";
+import { SpotifyAuth } from "app/screens/spotify-auth";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
@@ -79,10 +79,6 @@ export function RootStackNavigator() {
           }}
         />
         <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen
-          name="spotifyAuthRedirect"
-          component={SpotifyAuthRedirect}
-        />
       </Stack.Group>
 
       {/* Modals */}
@@ -108,6 +104,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="claimers" component={ClaimersScreen} />
+        <Stack.Screen name="spotifyAuth" component={SpotifyAuth} />
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -79,7 +79,6 @@ type RootStackNavigatorParams = {
     tabType?: string;
     type: string;
   };
-  spotifyAuthRedirect: undefined;
   nft: undefined;
   login: undefined;
   comments: undefined;
@@ -93,6 +92,7 @@ type RootStackNavigatorParams = {
   drop: undefined;
   claim: undefined;
   claimers: undefined;
+  spotifyAuth: undefined;
 };
 
 export type {

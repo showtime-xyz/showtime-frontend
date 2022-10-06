@@ -45,7 +45,7 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, claimNFT, onReconnectWallet, resetState } = useClaimNFT(
+  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
     edition?.creator_airdrop_edition
   );
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
