@@ -10,7 +10,7 @@ export interface UserItemType {
   username?: string;
   verified?: boolean;
   wallet_address?: string;
-  follows_you: boolean;
+  follows_you?: boolean;
 }
 
 interface FollowData {

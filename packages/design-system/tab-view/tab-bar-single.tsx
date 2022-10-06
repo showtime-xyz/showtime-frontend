@@ -10,6 +10,7 @@ type IndependentTabBarProps = {
   routes: Route[];
   index: number;
   onPress?: (index: number) => void;
+  tw?: string;
 };
 const PADDING_X = 16;
 
@@ -17,7 +18,12 @@ const getTextColor = (isFocus: boolean) =>
   isFocus ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-400";
 
 export const TabBarSingle = memo<IndependentTabBarProps>(
-  function IndependentTabBarProps({ routes, index: propIndex, onPress }) {
+  function IndependentTabBarProps({
+    routes,
+    index: propIndex,
+    onPress,
+    tw = "",
+  }) {
     const [tabsWidth, setTabsWidth] = useState<{
       [index: number]: number;
     }>({});
@@ -32,7 +38,9 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
     );
 
     return (
-      <View tw="no-scrollbar flex-row overflow-x-auto overflow-y-hidden">
+      <View
+        tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
+      >
         {routes.map((item, index) => (
           <Pressable
             onPress={() => onPress?.(index)}

@@ -139,7 +139,7 @@ const Header = memo(function Header() {
           isError={isError}
         />
         <View tw="bg-white dark:bg-black">
-          <View tw="mx-auto w-full max-w-screen-xl">
+          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl">
             <TabBarSingle
               onPress={onPress}
               routes={routes}
@@ -278,18 +278,22 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
-    if (!isLoadingMore) return null;
-    return (
-      <View
-        tw="mx-auto h-20 flex-row items-center justify-center"
-        style={{ maxWidth: contentWidth }}
-      >
-        <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
-      </View>
-    );
-  }, [contentWidth, isDark, isLoadingMore]);
+    if (isLoadingMore || profileIsLoading) {
+      return (
+        <View
+          tw="mx-auto h-20 flex-row items-center justify-center"
+          style={{ maxWidth: contentWidth }}
+        >
+          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+        </View>
+      );
+    }
+    return null;
+  }, [contentWidth, isDark, isLoadingMore, profileIsLoading]);
   const ListEmptyComponent = useCallback(() => {
-    if (isLoading) return null;
+    if (isLoading || profileIsLoading || !type) {
+      return null;
+    }
     return (
       <EmptyPlaceholder
         title={
@@ -305,7 +309,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         hideLoginBtn
       />
     );
-  }, [isBlocked, isLoading, username]);
+  }, [isBlocked, isLoading, profileIsLoading, type, username]);
 
   return (
     <ProfileHeaderContext.Provider
