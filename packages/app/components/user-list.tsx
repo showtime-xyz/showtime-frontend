@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 
+import { Chip } from "@showtime-xyz/universal.chip";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -14,8 +15,6 @@ import { useFollow } from "app/hooks/use-follow";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
-
-import { Chip } from "design-system/chip";
 
 import { EmptyPlaceholder } from "./empty-placeholder";
 import { FollowButton } from "./follow-button";

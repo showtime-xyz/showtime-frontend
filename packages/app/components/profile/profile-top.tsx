@@ -8,6 +8,7 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -41,7 +42,6 @@ import {
   getProfileName,
 } from "app/utilities";
 
-import { Chip } from "design-system/chip";
 import { Hidden } from "design-system/hidden";
 
 import { FollowButton } from "../follow-button";
