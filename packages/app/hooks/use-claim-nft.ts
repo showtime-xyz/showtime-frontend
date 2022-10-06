@@ -1,14 +1,14 @@
-import { useReducer, useEffect, useRef, useCallback } from "react";
+import { useContext, useEffect, useRef, useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
+import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -16,7 +16,6 @@ import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { ledgerWalletHack } from "app/utilities";
-import { delay } from "app/utilities";
 
 import { useWallet } from "./use-wallet";
 
@@ -46,27 +45,27 @@ const getForwarderRequest = async ({
   return res;
 };
 
-type State = {
-  status: "idle" | "loading" | "success" | "error";
+export type State = {
+  status: "idle" | "loading" | "success" | "share" | "error";
   error?: string;
   transactionHash?: string;
   mint?: any;
   signaturePrompt?: boolean;
 };
 
-type Action = {
+export type Action = {
   error?: string;
   type: string;
   transactionHash?: string;
   mint?: any;
 };
 
-const initialState: State = {
+export const initialState: State = {
   status: "idle",
   signaturePrompt: false,
 };
 
-const reducer = (state: State, action: Action): State => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "loading":
       return { ...initialState, status: "loading" };
@@ -87,13 +86,17 @@ const reducer = (state: State, action: Action): State => {
         signaturePrompt: true,
       };
     }
-
     case "signatureSuccess": {
       return {
         ...state,
         signaturePrompt: false,
       };
     }
+    case "share":
+      return {
+        ...state,
+        status: "share",
+      };
     case "error":
       return {
         ...state,
@@ -106,59 +109,17 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useClaimNFT = (edition?: IEdition) => {
+export const useClaimNFT = (edition: IEdition) => {
   const { rudder } = useRudder();
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
-
+  const bottom = usePlatformBottomHeight();
   const signTypedData = useSignTypedData();
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const mutate = useMatchMutate();
+  const { state, dispatch, pollTransaction } = useContext(ClaimContext);
   const Alert = useAlert();
-  const { mutate: mutateEdition } = useCreatorCollectionDetail(
-    edition?.contract_address
-  );
   const { connect } = useWallet();
-
   let { userAddress } = useCurrentUserAddress();
-
-  const pollTransaction = async (transactionId: any) => {
-    let intervalMs = 2000;
-    for (let attempts = 0; attempts < 100; attempts++) {
-      Logger.log(`Checking tx... (${attempts + 1} / 20)`);
-      const response = await axios({
-        url: `/v1/creator-airdrops/poll-mint?relayed_transaction_id=${transactionId}`,
-        method: "GET",
-      });
-      Logger.log(response);
-
-      dispatch({
-        type: "transactionHash",
-        transactionHash: response.transaction_hash,
-      });
-
-      if (response.is_complete) {
-        rudder?.track("NFT Claimed");
-        dispatch({ type: "success", mint: response.mint });
-        mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
-        mutateEdition((d) => {
-          if (d) {
-            return {
-              ...d,
-              is_already_claimed: true,
-              total_claimed_count: d?.total_claimed_count + 1,
-            };
-          }
-        });
-
-        return;
-      }
-
-      await delay(intervalMs);
-    }
-
-    dispatch({ type: "error", error: "polling timed out" });
-  };
+  const snackbar = useSnackbar();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
@@ -186,7 +147,10 @@ export const useClaimNFT = (edition?: IEdition) => {
       },
     });
 
-    await pollTransaction(relayedTx.relayed_transaction_id);
+    await pollTransaction(
+      relayedTx.relayed_transaction_id,
+      edition.contract_address
+    );
   };
 
   const forwarderRequestCached = useRef<any>();
@@ -219,8 +183,15 @@ export const useClaimNFT = (edition?: IEdition) => {
 
         if (edition?.is_gated) {
           await gatedClaimFlow();
+
+          snackbar?.show({
+            text: "Claiming...",
+            iconStatus: "waiting",
+            bottom,
+            hideAfter: 10000,
+          });
         } else {
-          await oldSignaureClaimFlow();
+          await oldSignatureClaimFlow();
         }
         return true;
       }
@@ -278,13 +249,18 @@ export const useClaimNFT = (edition?: IEdition) => {
             `Only ${userProfile?.data.daily_claim_limit} claims per day is allowed. Come back tomorrow!`
           );
         }
-      }
-
-      if (e?.response?.status === 500) {
+      } else if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occured.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
+      } else {
+        snackbar?.show({
+          text: "Claiming failed. Please try again!",
+          bottom,
+          iconStatus: "default",
+          hideAfter: 4000,
+        });
       }
 
       captureException(e);
@@ -300,11 +276,14 @@ export const useClaimNFT = (edition?: IEdition) => {
         data: {},
       });
 
-      await pollTransaction(relayerResponse.relayed_transaction_id);
+      await pollTransaction(
+        relayerResponse.relayed_transaction_id,
+        edition.contract_address
+      );
     }
   };
 
-  const oldSignaureClaimFlow = async () => {
+  const oldSignatureClaimFlow = async () => {
     if (!userAddress) {
       // user is probably not connected to wallet
       const session = await connect?.();
@@ -331,9 +310,9 @@ export const useClaimNFT = (edition?: IEdition) => {
   const onReconnectWallet = useCallback(() => {
     dispatch({
       type: "error",
-      error: "Please retry claiming the drop",
+      error: "Claiming failed. Please try again!",
     });
-  }, []);
+  }, [dispatch]);
 
   return {
     state,

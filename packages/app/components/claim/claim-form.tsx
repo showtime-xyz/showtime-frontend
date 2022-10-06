@@ -1,5 +1,9 @@
-import { useRef } from "react";
-import { Linking, Platform } from "react-native";
+import { useRef, useContext } from "react";
+import {
+  Linking,
+  Platform,
+  ScrollView as ReactNativeScrollView,
+} from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
@@ -18,6 +22,7 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
@@ -43,13 +48,14 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
-    edition?.creator_airdrop_edition
+  const { state } = useContext(ClaimContext);
+  const { claimNFT, onReconnectWallet } = useClaimNFT(
+    edition.creator_airdrop_edition
   );
   const share = useShare();
   const router = useRouter();
   const { user } = useUser();
-  const scrollViewRef = useRef<RNScrollView>(null);
+  const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
@@ -118,7 +124,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
-  if (state.status === "success") {
+  if (state.status === "loading" && state.signaturePrompt === false) {
+    router.pop();
+
+    return null;
+  }
+
+  if (state.status === "share") {
     const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
       process.env.NEXT_PUBLIC_CHAIN_ID,
     ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
@@ -179,7 +191,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             }}
           >
             {isShareAPIAvailable
-              ? "Share NFT with your friends"
+              ? "Share with your friends"
               : "Copy drop link 🔗"}
           </Button>
           <Button variant="tertiary" tw="mt-4" onPress={router.pop}>

@@ -12,15 +12,15 @@ import { growthbook } from "app/lib/growthbook";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
+import { ClaimProvider } from "app/providers/claim-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MagicProvider } from "app/providers/magic-provider.web";
 import { MuteProvider } from "app/providers/mute-provider";
+import { RudderStackProvider } from "app/providers/rudderstack-provider.web";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
-
-import { RudderStackProvider } from "./rudderstack-provider.web";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -42,7 +42,11 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                   <FeedProvider>
                                     <NavigationProvider>
                                       <BiconomyProvider>
-                                        <MuteProvider>{children}</MuteProvider>
+                                        <MuteProvider>
+                                          <ClaimProvider>
+                                            {children}
+                                          </ClaimProvider>
+                                        </MuteProvider>
                                       </BiconomyProvider>
                                     </NavigationProvider>
                                   </FeedProvider>

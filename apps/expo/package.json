@@ -5,7 +5,7 @@
     "waldo:build": "E2E=true FLIPPER_DISABLE=1 STAGE=development expo prebuild --skip-dependency-update react",
     "dev": "yarn start:dev-client",
     "start": "STAGE=development expo start --dev-client",
-    "start:dev-client": "yarn expo:prebuild && yarn expo start --dev-client",
+    "start:dev-client": "STAGE=development yarn expo:prebuild && yarn expo start --dev-client",
     "start:dev-client:clear": "yarn start:dev-client -c",
     "eject": "expo eject",
     "expo:prebuild": "yarn expo prebuild --skip-dependency-update react",
