@@ -424,17 +424,17 @@ export const ProfileTop = ({
               onPress={() => {
                 router.push(
                   Platform.select({
-                    native: `/claim/claim-tank-explanation`,
+                    native: `/claim/claim-limit-explanation`,
                     web: {
                       pathname: router.pathname,
                       query: {
                         ...router.query,
-                        claimTankExplanation: true,
+                        claimLimitExplanation: true,
                       },
                     } as any,
                   }),
                   Platform.select({
-                    native: `/claim/claim-tank-explanation`,
+                    native: `/claim/claim-limit-explanation`,
                     web: router.asPath,
                   })
                 );
