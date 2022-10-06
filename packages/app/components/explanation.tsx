@@ -11,7 +11,7 @@ import { View } from "@showtime-xyz/universal.view";
 type ExplanationProps = {
   values: { description?: string; title?: string }[];
   title: string;
-  coverElement?: JSX.Element;
+  coverElement?: JSX.Element | null;
   onDone: () => void;
   ctaCopy?: string;
 };

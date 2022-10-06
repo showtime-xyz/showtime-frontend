@@ -4,12 +4,10 @@ import { Platform, TextInput, useWindowDimensions } from "react-native";
 import * as Popover from "@radix-ui/react-popover";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Close, Plus, Search } from "@showtime-xyz/universal.icon";
+import { Close, Search } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -18,26 +16,18 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 // import { NetworkButton } from "app/components/connect-button";
-import { HeaderDropdown } from "app/components/header-dropdown";
 import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
-import {
-  ShowtimeTabBarIcon,
-  TrendingTabBarIcon,
-  NotificationsTabBarIcon,
-} from "app/navigation/tab-bar-icons";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { breakpoints } from "design-system/theme";
 
-import { withColorScheme } from "./memo-with-theme";
+import { HeaderRight, HeaderCenter, HeaderLeft } from ".";
+import { withColorScheme } from "../memo-with-theme";
 
-const SearchInHeader = () => {
+export const SearchInHeader = () => {
   const isDark = useIsDarkMode();
   const [isOpen, setIsOpen] = useState(false);
   const [term, setTerm] = useState("");
@@ -155,7 +145,7 @@ const SearchInHeader = () => {
   );
 };
 
-const NotificationsInHeader = () => {
+export const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -219,170 +209,44 @@ const NotificationsInHeader = () => {
   );
 };
 
-const HeaderRight = () => {
-  const router = useRouter();
-  const { isLoading, isAuthenticated } = useUser();
-  const { width } = useWindowDimensions();
-  const isDark = useIsDarkMode();
-  const isMdWidth = width >= breakpoints["md"];
-  const navigateToLogin = useNavigateToLogin();
-  const redirectToDrop = useRedirectToCreateDrop();
+export const Header = withColorScheme(
+  ({ canGoBack }: { canGoBack: boolean }) => {
+    const { width } = useWindowDimensions();
+    const { isHeaderHidden } = useNavigationElements();
+    const isDark = useIsDarkMode();
+    const isMdWidth = width >= breakpoints["md"];
 
-  return (
-    <View>
-      {!isLoading && (
-        <View tw="flex-row items-center">
-          {isAuthenticated && isMdWidth && (
-            <>
-              <View tw="mx-2">
-                <TrendingTabBarIcon
-                  color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/trending"}
-                />
-              </View>
-              <View tw="mx-2">
-                <NotificationsInHeader />
-              </View>
-              <View tw="mx-2">
-                <PressableHover onPress={redirectToDrop}>
-                  <View
-                    testID="mint-nft"
-                    tw={[
-                      "h-12 w-12 items-center justify-center rounded-full",
-                      "bg-black dark:bg-white",
-                    ]}
-                  >
-                    <Plus
-                      width={24}
-                      height={24}
-                      color={isDark ? "black" : "white"}
-                    />
-                  </View>
-                </PressableHover>
-              </View>
-            </>
-          )}
-          <View tw="flex-row items-center md:mx-2">
-            {isAuthenticated ? (
-              <HeaderDropdown type={isMdWidth ? "profile" : "settings"} />
-            ) : (
-              <>
-                {isMdWidth && (
-                  <View tw="mx-3">
-                    <TrendingTabBarIcon
-                      color={isDark ? "white" : "black"}
-                      focused={router.pathname === "/trending"}
-                    />
-                  </View>
-                )}
-                <Button
-                  onPress={() => {
-                    navigateToLogin();
-                  }}
-                  variant="primary"
-                  size={isMdWidth ? "regular" : "small"}
-                  labelTW="font-semibold"
-                >
-                  Sign&nbsp;In
-                </Button>
-              </>
-            )}
-            {/* {Platform.OS === "web" ? <NetworkButton /> : null} */}
+    if (isMdWidth) {
+      return (
+        <View tw="fixed top-0 right-0 left-0 z-50 w-screen items-center bg-white/60 stroke-inherit shadow-sm backdrop-blur-md dark:bg-black/60">
+          <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
+            <View tw="items-start">
+              <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
+            </View>
+            <View tw="items-end">
+              <HeaderRight />
+            </View>
           </View>
         </View>
-      )}
-    </View>
-  );
-};
+      );
+    }
 
-const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
-  const isDark = useIsDarkMode();
-  const router = useRouter();
-  const Icon = canGoBack ? ArrowLeft : Search;
+    if (isHeaderHidden) {
+      return null;
+    }
 
-  return (
-    <PressableScale
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      style={{
-        height: 24,
-        width: 24,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 9999,
-      }}
-      onPress={() => {
-        if (canGoBack) {
-          router.pop();
-        } else {
-          router.push("/search");
-        }
-      }}
-    >
-      <Icon
-        style={{ borderRadius: 8, overflow: "hidden", width: 24, height: 24 }}
-        color={isDark ? "#FFF" : "#000"}
-        width={24}
-        height={24}
-      />
-    </PressableScale>
-  );
-};
-
-const HeaderCenter = ({
-  isDark,
-  isMdWidth,
-}: {
-  isDark?: boolean;
-  isMdWidth?: boolean;
-}) => {
-  return (
-    <View tw="flex flex-row">
-      <Link href="/">
-        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-      </Link>
-      {isMdWidth ? <SearchInHeader /> : null}
-    </View>
-  );
-};
-
-const Header = withColorScheme(({ canGoBack }: { canGoBack: boolean }) => {
-  const { width } = useWindowDimensions();
-  const { isHeaderHidden } = useNavigationElements();
-  const isDark = useIsDarkMode();
-  const isMdWidth = width >= breakpoints["md"];
-
-  if (isMdWidth) {
     return (
-      <View tw="fixed top-0 right-0 left-0 z-50 w-screen items-center bg-white/60 stroke-inherit shadow-sm backdrop-blur-md dark:bg-black/60">
-        <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
-          <View tw="items-start">
-            <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
-          </View>
-          <View tw="items-end">
-            <HeaderRight />
-          </View>
+      <View tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm backdrop-blur-md">
+        <View tw="w-20 items-start">
+          <HeaderLeft canGoBack={canGoBack} />
+        </View>
+        <View tw="w-20 items-center">
+          <HeaderCenter />
+        </View>
+        <View tw="w-20 items-end">
+          <HeaderRight />
         </View>
       </View>
     );
   }
-
-  if (isHeaderHidden) {
-    return null;
-  }
-
-  return (
-    <View tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm backdrop-blur-md">
-      <View tw="w-20 items-start">
-        <HeaderLeft canGoBack={canGoBack} />
-      </View>
-      <View tw="w-20 items-center">
-        <HeaderCenter />
-      </View>
-      <View tw="w-20 items-end">
-        <HeaderRight />
-      </View>
-    </View>
-  );
-});
-
-export { Header, HeaderLeft, HeaderCenter, HeaderRight };
+);

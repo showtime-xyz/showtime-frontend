@@ -7,7 +7,7 @@ import { ToastProvider } from "@showtime-xyz/universal.toast";
 import type { ModalScreenOptions } from "./types";
 import { useBackPressHandler } from "./use-back-press-handler";
 
-function withModalScreen<P>(
+function withModalScreen<P extends {}>(
   Screen: FC<P>,
   { title, snapPoints = ["90%", "100%"], ...rest }: ModalScreenOptions
 ) {

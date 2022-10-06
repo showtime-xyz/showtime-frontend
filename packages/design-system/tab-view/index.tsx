@@ -33,7 +33,7 @@ type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
   autoWidthTabBar?: boolean;
   hideTabBar?: boolean;
 };
-const StatusBarHeight = StatusBar.currentHeight ?? 0;
+export const StatusBarHeight = StatusBar.currentHeight ?? 0;
 
 function HeaderTabView<T extends Route>({
   autoWidthTabBar,

@@ -96,7 +96,18 @@ export function formatNumber(number: number) {
     return number;
   }
 }
-
+export function formatToUSNumber(number: number) {
+  if (number >= 1000000) {
+    return `${(number / 1000000).toFixed(1)}m`;
+  } else if (number >= 10000) {
+    return `${(number / 1000).toFixed(1)}k`;
+  } else {
+    const str = number.toString();
+    const reg =
+      str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+    return str.replace(reg, "$1,");
+  }
+}
 export const findListingItemByOwner = (
   nft: NFT | undefined,
   profileID: Profile["profile_id"] | undefined

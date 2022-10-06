@@ -122,6 +122,7 @@ export const Default = () => {
       <IconItem icon={Icon.RotateCcw} title="RotateCcw" />
       <IconItem icon={Icon.RotateCw} title="RotateCw" />
       <IconItem icon={Icon.OpenSea} title="OpenSea" />
+      <IconItem icon={Icon.InformationCircle} title="InformationCircle" />
     </View>
   );
 };

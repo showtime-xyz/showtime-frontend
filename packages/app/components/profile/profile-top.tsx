@@ -8,11 +8,17 @@ import Animated, {
 import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Gift as GiftIcon,
+  InformationCircle as InformationCircleIcon,
+} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -22,19 +28,27 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
-import { useMyInfo, UserProfile } from "app/hooks/api-hooks";
+import { UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useUser } from "app/hooks/use-user";
 import { TextLink } from "app/navigation/link";
+import {
+  formatToUSNumber,
+  getProfileImage,
+  getProfileName,
+} from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
-import { getProfileImage, getProfileName } from "../../utilities";
 import { FollowButton } from "../follow-button";
 import { ProfileSocial } from "./profile-social";
+
+const AVATAR_SIZE = 86;
+const AVATAR_BORDER_SIZE = 4;
 
 function getFullSizeCover(url: string) {
   if (
@@ -67,14 +81,14 @@ const Follow = ({
     <View tw={["flex-row", tw]}>
       <PressableScale onPress={onPressFollowing}>
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-          {`${followingCount ?? 0} `}
+          {`${formatToUSNumber(followingCount ?? 0)} `}
           <Text tw="font-medium">following</Text>
         </Text>
       </PressableScale>
       <View tw="ml-8 md:ml-4">
         <PressableScale onPress={onPressFollower}>
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-            {`${followersCount ?? 0} `}
+            {`${formatToUSNumber(followersCount ?? 0)} `}
             <Text tw="font-medium">followers</Text>
           </Text>
         </PressableScale>
@@ -107,15 +121,12 @@ export const ProfileTop = ({
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const { colorScheme } = useColorScheme();
+  const { user } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const { isFollowing } = useMyInfo();
   const profileId = profileData?.profile.profile_id;
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const isFollowingUser = useMemo(
-    () => profileId && isFollowing(profileId),
-    [profileId, isFollowing]
-  );
+  const isSelf = userId === profileId;
   const { unblock } = useBlock();
   const { onToggleFollow } = useFollow({
     username: profileData?.profile.username,
@@ -203,24 +214,23 @@ export const ProfileTop = ({
           translateY: interpolate(
             Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
-            [0, -44]
+            [0, -40]
           ),
         },
         {
           translateX: interpolate(
             Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
-            [0, 44]
+            [0, 16]
           ),
         },
       ],
     };
   }, []);
+
   return (
     <>
-      <View
-        tw={`overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]`}
-      >
+      <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
         <Skeleton
           height={coverHeight}
           width={contentWidth}
@@ -228,25 +238,31 @@ export const ProfileTop = ({
           colorMode={colorScheme as any}
           radius={0}
         >
-          {profileData?.profile.cover_url && (
-            <LightBox
-              width={contentWidth}
-              height={coverHeight}
-              imgLayout={{ width: contentWidth, height: coverHeight }}
-              tapToClose
-            >
-              <Image
-                source={{
-                  uri: getFullSizeCover(profileData?.profile.cover_url),
-                }}
-                alt="Cover image"
-                resizeMode="cover"
+          <>
+            {profileData?.profile.cover_url && (
+              <LightBox
                 width={contentWidth}
                 height={coverHeight}
-                style={StyleSheet.absoluteFillObject}
-              />
-            </LightBox>
-          )}
+                imgLayout={{ width: contentWidth, height: coverHeight }}
+                tapToClose
+              >
+                <Image
+                  source={{
+                    uri: getFullSizeCover(profileData?.profile.cover_url),
+                  }}
+                  alt="Cover image"
+                  resizeMode="cover"
+                  width={contentWidth}
+                  height={coverHeight}
+                  style={StyleSheet.absoluteFillObject}
+                />
+              </LightBox>
+            )}
+            <View
+              tw="absolute inset-0 bg-black/10 dark:bg-black/30"
+              pointerEvents="none"
+            />
+          </>
         </Skeleton>
       </View>
       <View tw="mx-2">
@@ -255,12 +271,12 @@ export const ProfileTop = ({
             <Animated.View
               style={[
                 {
-                  width: 128,
-                  height: 128,
+                  width: AVATAR_SIZE,
+                  height: AVATAR_SIZE,
                   borderRadius: 9999,
-                  marginTop: -72,
+                  marginTop: -36,
                   overflow: "hidden",
-                  borderWidth: 4,
+                  borderWidth: AVATAR_BORDER_SIZE,
                   borderColor: isDark ? "#000" : "#FFF",
                   backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
                 },
@@ -268,16 +284,16 @@ export const ProfileTop = ({
               ]}
             >
               <Skeleton
-                height={120}
-                width={120}
+                height={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
+                width={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
                 show={isLoading}
                 colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
                   <LightBox
-                    width={120}
-                    height={120}
+                    width={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
+                    height={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
                     imgLayout={{ width: contentWidth, height: width }}
                     borderRadius={999}
                     tapToClose
@@ -324,23 +340,24 @@ export const ProfileTop = ({
                       tw="mr-8"
                     />
                   </Hidden>
-                  {profileId && userId !== profileId ? (
+                  {profileId && !isSelf ? (
                     <>
                       <ProfileDropdown user={profileData?.profile} />
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}
-                        isFollowing={isFollowingUser}
                         name={profileData?.profile.name}
                         profileId={profileId}
                         onToggleFollow={onToggleFollow}
                       />
                     </>
-                  ) : userId === profileId ? (
-                    <Button size="small" onPress={redirectToCreateDrop}>
-                      Create free drop
-                    </Button>
-                  ) : null}
+                  ) : (
+                    isSelf && (
+                      <Button size="small" onPress={redirectToCreateDrop}>
+                        Create free drop
+                      </Button>
+                    )
+                  )}
                 </>
               )}
             </View>
@@ -366,7 +383,7 @@ export const ProfileTop = ({
             </>
           ) : (
             <View tw="flex-row items-start justify-between">
-              <View>
+              <View tw="flex-1">
                 <Text
                   tw="font-space-bold max-w-45 text-2xl font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={2}
@@ -374,8 +391,8 @@ export const ProfileTop = ({
                   {name}
                 </Text>
                 <View tw="h-2 md:h-3" />
-                <View tw="flex-row items-center">
-                  <Text tw="text-base font-semibold  text-gray-900 dark:text-white md:text-lg">
+                <View tw="h-6 flex-row items-center">
+                  <Text tw="text-base text-gray-600 dark:text-gray-400 md:text-lg">
                     {username ? `@${username}` : null}
                   </Text>
 
@@ -384,6 +401,9 @@ export const ProfileTop = ({
                       <VerificationBadge size={16} />
                     </View>
                   ) : null}
+                  {profileData?.follows_you && !isSelf ? (
+                    <Chip label="Follows You" tw="ml-2" />
+                  ) : null}
                 </View>
               </View>
               <ProfileSocial profile={profileData?.profile} />
@@ -391,14 +411,53 @@ export const ProfileTop = ({
           )}
 
           {bio ? (
-            <View tw="mt-3 items-baseline">
+            <View tw="mt-4 items-baseline">
               <ClampText
                 text={bioWithMentions}
                 maxLines={3}
-                tw="text-sm text-gray-600 dark:text-gray-400"
+                tw="text-sm text-gray-900 dark:text-white"
               />
             </View>
           ) : null}
+          {isSelf && (
+            <Pressable
+              onPress={() => {
+                router.push(
+                  Platform.select({
+                    native: `/claim/claim-tank-explanation`,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        claimTankExplanation: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: `/claim/claim-tank-explanation`,
+                    web: router.asPath,
+                  })
+                );
+              }}
+              tw="mt-3 flex-row items-center"
+            >
+              <GiftIcon
+                height={18}
+                width={18}
+                color={isDark ? colors.gray[400] : colors.gray[600]}
+              />
+              <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
+                {user?.data.claim_tank.available_claims
+                  ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
+                  : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
+              </Text>
+              <InformationCircleIcon
+                height={18}
+                width={18}
+                color={isDark ? colors.gray[400] : colors.gray[600]}
+              />
+            </Pressable>
+          )}
           <Hidden from="md">
             <Follow
               onPressFollower={onPressFollower}

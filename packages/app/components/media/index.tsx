@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { ResizeMode } from "expo-av";
 import dynamic from "next/dynamic";
 import { ImageStyle } from "react-native-fast-image";
+import type { ResizeMode as ResizeModeType } from "react-native-fast-image";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -31,7 +32,7 @@ type Props = {
   numColumns?: number;
   tw?: string;
   sizeStyle?: ImageStyle;
-  resizeMode?: ResizeMode;
+  resizeMode?: ResizeModeType;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;
@@ -113,7 +114,7 @@ function Media({
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
-            resizeMode={resizeMode}
+            resizeMode={resizeMode as ResizeMode}
             //@ts-ignore
             dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
           />
@@ -130,7 +131,7 @@ function Media({
               numColumns={numColumns}
               style={sizeStyle}
               blurhash={item?.blurhash}
-              resizeMode={resizeMode}
+              resizeMode={resizeMode as ResizeMode}
               width={width}
               height={height}
             />
