@@ -249,8 +249,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
             onIndexChange={setIndex}
             renderScrollHeader={renderHeader}
             minHeaderHeight={Platform.select({
-              default: headerHeight ? headerHeight : 44 + 47,
-              android: 0,
+              default: headerHeight ? headerHeight : DEFAULT_HADER_HEIGHT + top,
+              android: headerHeight ? 0 : DEFAULT_HADER_HEIGHT + top,
             })}
             refreshControlTop={Platform.select({
               ios: headerHeight ? headerHeight : 20,

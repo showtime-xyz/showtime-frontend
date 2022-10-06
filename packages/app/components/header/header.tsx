@@ -1,13 +1,12 @@
 import React, { memo } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import { BlurView } from "expo-blur";
+import { BlurView } from "@react-native-community/blur";
 import Animated, {
   useAnimatedStyle,
   interpolate,
 } from "react-native-reanimated";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -32,7 +31,6 @@ export const Header = memo<HeaderProps>(function Header({
   translateYValue,
   disableCenterAnimation = false,
 }) {
-  const { colorScheme } = useColorScheme();
   const { top } = useSafeAreaInsets();
   const headerHeight = top + DEFAULT_HADER_HEIGHT;
   const animationBackgroundStyles = useAnimatedStyle(() => {
@@ -43,14 +41,14 @@ export const Header = memo<HeaderProps>(function Header({
   });
   const animationCenterStyles = useAnimatedStyle(() => {
     if (!translateYValue || disableCenterAnimation) return {};
+
     return {
-      // Todo: add fadeInUp effect
       opacity: interpolate(-translateYValue.value, [top, headerHeight], [0, 1]),
     };
   });
   return (
     <View
-      tw="absolute top-0 z-10 w-full items-center"
+      tw="absolute top-0 z-10 w-full items-center overflow-hidden"
       style={[
         {
           paddingTop: top,
@@ -61,18 +59,19 @@ export const Header = memo<HeaderProps>(function Header({
       <Animated.View
         style={[StyleSheet.absoluteFillObject, animationBackgroundStyles]}
       >
-        {Platform.select({
-          ios: (
-            <BlurView
-              style={StyleSheet.absoluteFill}
-              tint={"dark"}
-              intensity={50}
-            />
-          ),
-          default: (
-            <View tw="bg-white dark:bg-black" style={StyleSheet.absoluteFill} />
-          ),
-        })}
+        <BlurView
+          style={StyleSheet.absoluteFill}
+          blurAmount={30}
+          {...Platform.select({
+            ios: {
+              blurType: "ultraThinMaterialDark",
+            },
+            default: {
+              blurType: "dark",
+              overlayColor: "rgba(0,0,0,.2)",
+            },
+          })}
+        />
       </Animated.View>
       <View tw="h-full w-full flex-row flex-nowrap justify-center px-4">
         <View tw="max-w-[80px] flex-1 items-start justify-center">
