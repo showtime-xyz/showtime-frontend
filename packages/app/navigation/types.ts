@@ -92,7 +92,7 @@ type RootStackNavigatorParams = {
   drop: undefined;
   claim: undefined;
   claimers: undefined;
-  claimTankExplanation: undefined;
+  claimLimitExplanation: undefined;
 };
 
 export type {
