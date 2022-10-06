@@ -25,7 +25,7 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
-import { ClaimeLimitExplanationScreen } from "../screens/claim-limit-explanation";
+import { ClaimLimitExplanationScreen } from "../screens/claim-limit-explanation";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -118,7 +118,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen
           name="claimTankExplanation"
-          component={ClaimeLimitExplanationScreen}
+          component={ClaimLimitExplanationScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

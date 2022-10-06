@@ -22,6 +22,7 @@ export type HeaderProps = {
   headerRight?: React.ComponentType<any> | React.ReactElement | null;
   translateYValue?: Animated.SharedValue<number>;
   disableCenterAnimation?: boolean;
+  canGoBack?: boolean;
 };
 
 export const Header = memo<HeaderProps>(function Header({

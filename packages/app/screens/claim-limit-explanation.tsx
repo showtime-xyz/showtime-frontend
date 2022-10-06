@@ -2,7 +2,7 @@ import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { ClaimLimitExplanationModal } from "app/components/claim/claim-limit-explanation";
 
-export const ClaimeLimitExplanationScreen = withModalScreen(
+export const ClaimLimitExplanationScreen = withModalScreen(
   ClaimLimitExplanationModal,
   {
     title: "Claim Limit",
