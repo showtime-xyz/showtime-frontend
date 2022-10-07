@@ -2,11 +2,12 @@ import { useEffect, useCallback } from "react";
 
 import * as Updates from "expo-updates";
 
-// import { MMKV } from "react-native-mmkv";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { captureException } from "app/lib/sentry";
+
+// import { MMKV } from "react-native-mmkv";
 
 /**
  * store key
@@ -37,7 +38,7 @@ export function useExpoUpdate() {
           } else {
             snackbar?.show({
               text: "New update available 🎉",
-              bottom: bottom + 64,
+              bottom,
               action: {
                 text: "Reload",
                 onPress: async () => await Updates.reloadAsync(),

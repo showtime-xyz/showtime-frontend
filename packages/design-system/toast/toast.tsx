@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Platform, LayoutChangeEvent, StyleSheet } from "react-native";
+import { Platform, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { MotiView } from "moti";
 
@@ -14,7 +14,7 @@ type ToastProps = {
   hide: () => void;
 };
 
-const SAFE_AREA_TOP = 20;
+export const SAFE_AREA_TOP = 20;
 
 export const Toast = ({ render, message, hide }: ToastProps) => {
   const isDark = useIsDarkMode();
@@ -22,42 +22,51 @@ export const Toast = ({ render, message, hide }: ToastProps) => {
   const [layout, setLayout] = useState<
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
+
   const { top: safeAreaTop } =
     Platform.OS === "web" ? { top: SAFE_AREA_TOP } : safeAreaInsets;
-
   const toastHeight = layout?.height ?? 0;
 
   return (
-    <PanToClose panCloseDirection={"up"} onClose={hide}>
-      <MotiView
-        style={[
-          styles.toastContainer,
-          {
-            opacity: layout ? 1 : 0,
-            backgroundColor: isDark ? "#000" : "#FFF",
-          },
-        ]}
-        accessibilityLiveRegion="polite"
-        pointerEvents="box-none"
-        from={{ translateY: -toastHeight }}
-        animate={{
-          translateY: safeAreaTop === 0 ? SAFE_AREA_TOP : safeAreaTop,
-        }}
-        exit={{ translateY: -toastHeight }}
-        transition={{ type: "timing", duration: 350 }}
-        onLayout={(e) => {
-          setLayout(e.nativeEvent.layout);
-        }}
-      >
-        {render ? (
-          render
-        ) : (
-          <Text tw="p-4 text-center text-gray-900 dark:text-white">
-            {message}
-          </Text>
-        )}
-      </MotiView>
-    </PanToClose>
+    <MotiView
+      accessibilityLiveRegion="polite"
+      pointerEvents="box-none"
+      from={{ translateY: -toastHeight }}
+      animate={{
+        translateY: safeAreaTop === 0 ? SAFE_AREA_TOP : safeAreaTop,
+      }}
+      exit={{ translateY: -toastHeight }}
+      transition={{ type: "timing", duration: 350 }}
+      onLayout={(e) => {
+        setLayout(e.nativeEvent.layout);
+      }}
+    >
+      <PanToClose panCloseDirection="up" closeDuration={500} onClose={hide}>
+        <View
+          style={[
+            styles.toastContainer,
+            {
+              opacity: layout ? 1 : 0,
+              backgroundColor: isDark ? "#000" : "#FFF",
+            },
+          ]}
+          pointerEvents="box-none"
+        >
+          {render ? (
+            render
+          ) : (
+            <Text
+              onPress={() => {
+                console.log(123);
+              }}
+              tw="p-4 text-center text-gray-900 dark:text-white"
+            >
+              {message}
+            </Text>
+          )}
+        </View>
+      </PanToClose>
+    </MotiView>
   );
 };
 

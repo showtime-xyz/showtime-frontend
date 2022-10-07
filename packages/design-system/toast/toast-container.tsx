@@ -1,8 +1,9 @@
-import { StyleSheet, View } from "react-native";
-
 import { AnimatePresence } from "moti";
+import { FullWindowOverlay } from "react-native-screens";
 
-import { Toast } from "./toast";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+
+import { SAFE_AREA_TOP, Toast } from "./toast";
 
 type ToastProps = {
   show: boolean;
@@ -12,13 +13,19 @@ type ToastProps = {
 };
 
 export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
+  const { top } = useSafeAreaInsets();
   return (
-    // @ts-ignore
     <AnimatePresence>
       {show && (
-        <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
+        <FullWindowOverlay
+          style={{
+            position: "absolute",
+            width: "100%",
+            top: top === 0 ? SAFE_AREA_TOP : top,
+          }}
+        >
           <Toast render={render} message={message} hide={hide} />
-        </View>
+        </FullWindowOverlay>
       )}
     </AnimatePresence>
   );

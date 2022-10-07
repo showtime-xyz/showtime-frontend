@@ -1,8 +1,8 @@
-import React, { createContext, useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Platform } from "react-native";
 
 import { BlurView } from "expo-blur";
-import { AnimatePresence, MotiView } from "moti";
+import { MotiView } from "moti";
 
 import { useIsDarkMode, useIsMobileWeb } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
@@ -12,31 +12,13 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { SnackbarShowParams } from ".";
 import { PRESET_TRANSITION_MAP } from "./constants";
+import { SnackbarShowParams } from "./index";
 
 export type SnackbarStateType = "default" | "waiting" | "done";
-
-type SnackbarContextType = {
-  show: (params: SnackbarShowParams) => void;
-  update: (params: SnackbarShowParams) => void;
-  hide: () => void;
-  isVisible: boolean;
-  iconStatus?: SnackbarStateType;
-};
+export const SNACKBAR_HEIGHT = 40;
 
 const isWeb = Platform.OS === "web";
-
-export const SnackbarContext = createContext<SnackbarContextType | undefined>(
-  undefined
-);
-
-export const initSnakbarParams: SnackbarShowParams = {
-  text: "",
-  iconStatus: "default",
-  bottom: 0,
-  preset: "default",
-};
 
 export type SnackbarProps = {
   snackbar: SnackbarShowParams;
@@ -86,16 +68,6 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
     }
   }, [snackbar, isDark, isExplore, textColor]);
 
-  const snackbarStyle = useMemo(
-    () => ({
-      position: isWeb ? ("fixed" as any) : "absolute",
-      bottom: snackbar.bottom ?? 0,
-      backgroundColor:
-        snackbar.preset === "explore" ? colors.violet[600] : "transparent",
-    }),
-    [snackbar]
-  );
-
   const transition = useMemo<SnackbarShowParams["transitionConfig"]>(
     () =>
       snackbar?.transitionConfig ?? {
@@ -108,78 +80,82 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
   if (!show) return null;
 
   return (
-    // @ts-ignore
-    <AnimatePresence>
-      {show && (
-        <PanToClose
-          panCloseDirection="down"
-          onClose={hide}
-          disable={snackbar.disableGestureToClose}
+    <PanToClose
+      panCloseDirection="down"
+      onClose={hide}
+      disable={snackbar.disableGestureToClose}
+    >
+      <MotiView
+        transition={transition}
+        style={[
+          {
+            width: "100%",
+            height: SNACKBAR_HEIGHT,
+            backgroundColor:
+              snackbar.preset === "explore"
+                ? colors.violet[600]
+                : "transparent",
+          },
+        ]}
+        {...PRESET_TRANSITION_MAP.get(snackbar.transition ?? "fade")}
+      >
+        <BlurView
+          intensity={snackbar.preset === "explore" ? 0 : 100}
+          style={{
+            width: "100%",
+            alignItems: "center",
+            height: "100%",
+            flexDirection: "row",
+            paddingHorizontal: isWeb && !isMobileWeb ? 32 : 10,
+          }}
+          tint={isDark ? "light" : "dark"}
         >
           <MotiView
-            transition={transition}
-            style={[{ width: "100%", height: 40 }, snackbarStyle]}
-            {...PRESET_TRANSITION_MAP.get(snackbar.transition ?? "fade")}
+            animate={{
+              width: snackbar.iconStatus !== "default" ? 32 : 0,
+              opacity: snackbar.iconStatus !== "default" ? 1 : 0,
+            }}
+            transition={{ type: "timing", duration: 250 }}
           >
-            <BlurView
-              intensity={snackbar.preset === "explore" ? 0 : 100}
-              style={{
-                width: "100%",
-                alignItems: "center",
-                height: "100%",
-                flexDirection: "row",
-                paddingHorizontal: isWeb && !isMobileWeb ? 32 : 10,
-              }}
-              tint={isDark ? "light" : "dark"}
-            >
-              <MotiView
-                animate={{
-                  width: snackbar.iconStatus !== "default" ? 32 : 0,
-                  opacity: snackbar.iconStatus !== "default" ? 1 : 0,
-                }}
-                transition={{ type: "timing", duration: 250 }}
-              >
-                {renderIcon}
-              </MotiView>
-              <Text
-                tw="text-xs font-medium"
-                numberOfLines={1}
-                style={{ color: textColor }}
-                accessibilityRole="text"
-              >
-                {snackbar.text}
-              </Text>
-              {Boolean(snackbar?.action) && (
-                <MotiView
-                  from={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ type: "timing", duration: 250 }}
-                  style={{ marginLeft: "auto" }}
-                >
-                  <PressableScale
-                    accessibilityLabel="View"
-                    accessibilityRole="button"
-                    onPress={snackbar.action?.onPress}
-                  >
-                    {snackbar.action?.element ? (
-                      snackbar.action?.element
-                    ) : (
-                      <Text
-                        tw="text-xs font-bold"
-                        numberOfLines={1}
-                        style={{ color: textColor }}
-                      >
-                        {snackbar.action?.text}
-                      </Text>
-                    )}
-                  </PressableScale>
-                </MotiView>
-              )}
-            </BlurView>
+            {renderIcon}
           </MotiView>
-        </PanToClose>
-      )}
-    </AnimatePresence>
+          <Text
+            tw="text-xs font-medium"
+            numberOfLines={1}
+            style={{ color: textColor }}
+            accessibilityRole="text"
+          >
+            {snackbar.text}
+          </Text>
+          {Boolean(snackbar?.action) && (
+            <MotiView
+              from={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type: "timing", duration: 250 }}
+              style={{ marginLeft: "auto" }}
+            >
+              <PressableScale
+                accessibilityLabel="View"
+                accessibilityRole="button"
+                onPress={snackbar.action?.onPress}
+              >
+                {snackbar.action?.element ? (
+                  snackbar.action?.element
+                ) : (
+                  <Text
+                    tw="text-xs font-bold"
+                    numberOfLines={1}
+                    style={{ color: textColor }}
+                  >
+                    {snackbar.action?.text}
+                  </Text>
+                )}
+              </PressableScale>
+            </MotiView>
+          )}
+        </BlurView>
+      </MotiView>
+    </PanToClose>
   );
 };
