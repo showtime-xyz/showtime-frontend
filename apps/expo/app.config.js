@@ -89,7 +89,6 @@ export default {
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
-    googleServicesFile: "./google-services.json",
   },
   androidNavigationBar: {
     barStyle: "dark-content",
