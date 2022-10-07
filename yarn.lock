@@ -9519,6 +9519,7 @@ __metadata:
     react-native-reanimated: 2.10.0
     react-native-safe-area-context: 4.3.1
     react-native-screens: ~3.15.0
+    react-native-spotify-remote: "file:../../react-native-spotify-remote"
     react-native-svg: 12.3.0
     react-native-tab-view-next: ^3.1.3
     react-native-web: ^0.18.9
@@ -31396,6 +31397,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-events@npm:^1.0.15":
+  version: 1.0.21
+  resolution: "react-native-events@npm:1.0.21"
+  dependencies:
+    events: ^3.0.0
+  peerDependencies:
+    react-native: ~0.63.4
+  checksum: 7f4596676dc1c70c75b127685f43e581f9e1320a8cedc7c85f1d2a284307592259ef65fbbdd4102679be6c0db7f07b5c56fdc741f4e9927950ba1e802199bf9c
+  languageName: node
+  linkType: hard
+
 "react-native-fast-image@npm:^8.5.11":
   version: 8.5.11
   resolution: "react-native-fast-image@npm:8.5.11"
@@ -31648,6 +31660,17 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: ebc3cded19d594aafa748d5ab6e237533f68dc33e28a584c99b8a6cac993585919f01413b94e9801f01af4a138810575f55ee25f90d7a77cb13c49d3252edb2a
+  languageName: node
+  linkType: hard
+
+"react-native-spotify-remote@file:../../react-native-spotify-remote::locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo":
+  version: 0.3.10
+  resolution: "react-native-spotify-remote@file:../../react-native-spotify-remote#../../react-native-spotify-remote::hash=22ddce&locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo"
+  dependencies:
+    react-native-events: ^1.0.15
+  peerDependencies:
+    react-native: ">=0.60"
+  checksum: d97c2a8f3e7d08259ff58bcb77cf377e1cb80906db6b11e8e42eb9bf580e611c5b59794256cede6d6f579eece598f684e602dbe2c65f4987a87855e30883a2ef
   languageName: node
   linkType: hard
 
