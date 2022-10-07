@@ -1,4 +1,4 @@
-import { NFT } from "../../types";
+import { MyInfo, NFT } from "../../types";
 
 const scope =
   "user-top-read user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
@@ -11,8 +11,8 @@ export const redirectUri = `${
 
 const clientID = "e12f7eea542947ff843cfc68d762235a";
 
-export const getSpotifyAuthCode = (nft: NFT) => {
-  const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user.user?.data.profile.profile_id}`;
+export const getSpotifyAuthCode = (nft: NFT, user?: MyInfo) => {
+  const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user?.data.profile.profile_id}`;
 
   const params = {
     client_id: clientID,

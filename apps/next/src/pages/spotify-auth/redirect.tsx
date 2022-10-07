@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Linking } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
 import { Logger } from "app/lib/logger";
 import { redirectUri } from "app/lib/spotify/spotify";
@@ -26,10 +26,12 @@ const SpotifyAuthRedirect = () => {
   const [code] = useParam("code");
   const { saveSpotifyToken } = useSaveSpotifyToken();
   const urlParams = new URLSearchParams(state);
+  const chainName = urlParams.get("chainName");
+  const tokenId = urlParams.get("tokenId");
   const contractAddress = urlParams.get("contractAddress");
-  const redirectToClaimDrop = useRedirectToClaimDrop();
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (code) {
@@ -38,19 +40,18 @@ const SpotifyAuthRedirect = () => {
           setFetching(true);
           setError(false);
           //@ts-ignore
-          if (typeof window.ReactNativeWebView !== "undefined") {
-            //@ts-ignore
-            window.ReactNativeWebView.postMessage(JSON.stringify({ code }));
-          } else {
-            await saveSpotifyToken({ code, redirectUri: redirectUri });
-            redirectToClaimDrop(contractAddress);
-          }
+          // await saveSpotifyToken({ code, redirectUri: redirectUri });
+          setTimeout(() => {
+            router.replace(`/nft/${chainName}/${contractAddress}/${tokenId}`);
+          }, 1000);
+          // redirectToClaimDrop(contractAddress);
         } catch (e) {
           setError(e);
           Logger.error("Save spotify token error", e);
         }
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saveSpotifyToken, code, redirectUri]);
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const SpotifyAuthRedirect = () => {
 
   return (
     <View tw="h-screen items-center justify-center">
-      <Text tw="light:text-black text-lg dark:text-white">
+      <Text tw="light:text-black dark:text-white">
         Please wait...You'll be redirected back to the app
       </Text>
     </View>

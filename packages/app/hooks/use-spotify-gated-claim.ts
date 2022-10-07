@@ -26,9 +26,9 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
         }
       } else {
         if (Platform.OS === "web") {
-          return getSpotifyAuthCode(nft);
+          return getSpotifyAuthCode(nft, user?.user);
         } else {
-          const session = await getSpotifyAuthCode(nft);
+          const session = await getSpotifyAuthCode(nft, user?.user);
           console.log("session", session);
           await saveSpotifyToken({
             code: session.accessToken,
