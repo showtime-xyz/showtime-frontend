@@ -9,8 +9,8 @@ function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
   return (
-    <View tw="flex-row justify-between bg-white  dark:bg-black">
-      <View tw="flex-row items-center">
+    <View tw="flex-row justify-between bg-white dark:bg-black">
+      <View tw="-ml-4 flex-row items-center">
         <Like nft={nft} />
         <CommentButton nft={nft} />
         <GiftButton nft={nft} />
