@@ -11,6 +11,7 @@ const spotifyConfig: ApiConfig = {
   clientID: "e12f7eea542947ff843cfc68d762235a",
   redirectURL: "io.showtime.development://spotify-success",
   scopes: [ApiScope.UserTopReadScope],
+  authType: "CODE",
 };
 
 const App = () => {
