@@ -200,6 +200,30 @@ export const ProfileTop = ({
       ),
     [profileId, router]
   );
+
+  const onPressClaimLimit = useCallback(
+    () =>
+      router.push(
+        Platform.select({
+          native: `/claim-limit-explanation`,
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              claimLimitExplanationModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: `/claim-limit-explanation`,
+          web: router.asPath,
+        }),
+        {
+          scroll: false,
+        }
+      ),
+    [router]
+  );
   const avatarStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -419,26 +443,9 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
-          {isSelf && (
+          {isSelf && user?.data?.claim_tank?.available_claims && (
             <Pressable
-              onPress={() => {
-                router.push(
-                  Platform.select({
-                    native: `/claim/claim-limit-explanation`,
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        claimLimitExplanation: true,
-                      },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: `/claim/claim-limit-explanation`,
-                    web: router.asPath,
-                  })
-                );
-              }}
+              onPress={onPressClaimLimit}
               tw="mt-3 flex-row items-center"
             >
               <GiftIcon
