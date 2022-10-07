@@ -10,6 +10,5 @@
 #define RNSpotifyRemoteLib_h
 
 #import "RNSpotifyRemoteAuth.h"
-#import "RNSpotifyRemoteAppRemote.h"
 
 #endif /* RNSpotifyRemoteLib_h */

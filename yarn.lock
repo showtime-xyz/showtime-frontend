@@ -31397,17 +31397,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-events@npm:^1.0.15":
-  version: 1.0.21
-  resolution: "react-native-events@npm:1.0.21"
-  dependencies:
-    events: ^3.0.0
-  peerDependencies:
-    react-native: ~0.63.4
-  checksum: 7f4596676dc1c70c75b127685f43e581f9e1320a8cedc7c85f1d2a284307592259ef65fbbdd4102679be6c0db7f07b5c56fdc741f4e9927950ba1e802199bf9c
-  languageName: node
-  linkType: hard
-
 "react-native-fast-image@npm:^8.5.11":
   version: 8.5.11
   resolution: "react-native-fast-image@npm:8.5.11"
@@ -31665,12 +31654,10 @@ __metadata:
 
 "react-native-spotify-remote@file:../../react-native-spotify-remote::locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo":
   version: 0.3.10
-  resolution: "react-native-spotify-remote@file:../../react-native-spotify-remote#../../react-native-spotify-remote::hash=3eb565&locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo"
-  dependencies:
-    react-native-events: ^1.0.15
+  resolution: "react-native-spotify-remote@file:../../react-native-spotify-remote#../../react-native-spotify-remote::hash=b38529&locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo"
   peerDependencies:
     react-native: ">=0.60"
-  checksum: 7980766af9be5f5d603e713832e0d32fa30c6f8f81c5b4abf445ddbfce5a29e9b46a606e774d77ace90a8c171dde3b22bed5491c5d6c9cc83ebbca9e81cd377f
+  checksum: 9c5175326fea2e2479000bfbb5c9ba49a23d995feff409ef809e628dfdcdaa8b08a695a58e5624d8c80ad2cae9d6014db6f75623db1d6cbb16851bd4933f2c2d
   languageName: node
   linkType: hard
 

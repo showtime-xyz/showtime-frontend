@@ -13,7 +13,6 @@
 		D67AF673216E725000859404 /* RNSpotifyRemoteSubscriptionCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = D67AF672216E725000859404 /* RNSpotifyRemoteSubscriptionCallback.m */; };
 		D67AF675216EC14700859404 /* RNSpotifyItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D67AF674216EC14700859404 /* RNSpotifyItem.m */; };
 		D67AF679216F9D8C00859404 /* NSArrayExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D67AF678216F9D8C00859404 /* NSArrayExtensions.m */; };
-		D6F24B8421653FAC00D58B82 /* RNSpotifyRemoteAppRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = D6F24B832165372500D58B82 /* RNSpotifyRemoteAppRemote.m */; };
 		D6F24BC421665F4A00D58B82 /* RNSpotifyRemoteError.m in Sources */ = {isa = PBXBuildFile; fileRef = D6F24BC221665F4A00D58B82 /* RNSpotifyRemoteError.m */; };
 		D6F24BD5216685B000D58B82 /* RNSpotifyRemotePromise.m in Sources */ = {isa = PBXBuildFile; fileRef = A0C233712036800A0063A745 /* RNSpotifyRemotePromise.m */; };
 /* End PBXBuildFile section */
@@ -46,8 +45,6 @@
 		D67AF676216EC15000859404 /* RNSpotifyItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSpotifyItem.h; sourceTree = "<group>"; };
 		D67AF677216F9D7D00859404 /* NSArrayExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSArrayExtensions.h; sourceTree = "<group>"; };
 		D67AF678216F9D8C00859404 /* NSArrayExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtensions.m; sourceTree = "<group>"; };
-		D6F24B822165372200D58B82 /* RNSpotifyRemoteAppRemote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSpotifyRemoteAppRemote.h; sourceTree = "<group>"; };
-		D6F24B832165372500D58B82 /* RNSpotifyRemoteAppRemote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSpotifyRemoteAppRemote.m; sourceTree = "<group>"; };
 		D6F24BC221665F4A00D58B82 /* RNSpotifyRemoteError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSpotifyRemoteError.m; sourceTree = "<group>"; };
 		D6F24BC321665F4A00D58B82 /* RNSpotifyRemoteError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSpotifyRemoteError.h; sourceTree = "<group>"; };
 		D6F24BD621689F1F00D58B82 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
@@ -86,8 +83,6 @@
 				D67AF671216E722E00859404 /* RNSpotifyRemoteSubscriptionCallback.h */,
 				D67AF672216E725000859404 /* RNSpotifyRemoteSubscriptionCallback.m */,
 				D6F24BD621689F1F00D58B82 /* Macros.h */,
-				D6F24B822165372200D58B82 /* RNSpotifyRemoteAppRemote.h */,
-				D6F24B832165372500D58B82 /* RNSpotifyRemoteAppRemote.m */,
 				D6F24BC321665F4A00D58B82 /* RNSpotifyRemoteError.h */,
 				D6F24BC221665F4A00D58B82 /* RNSpotifyRemoteError.m */,
 				A0C233702036800A0063A745 /* RNSpotifyRemotePromise.h */,
@@ -146,6 +141,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -166,7 +162,6 @@
 				D67AF66E216D18E900859404 /* RNSpotifyRemoteConvert.m in Sources */,
 				D6F24BD5216685B000D58B82 /* RNSpotifyRemotePromise.m in Sources */,
 				D64EA9822183767C001B053B /* RNSpotifyRemoteAuth.m in Sources */,
-				D6F24B8421653FAC00D58B82 /* RNSpotifyRemoteAppRemote.m in Sources */,
 				D6F24BC421665F4A00D58B82 /* RNSpotifyRemoteError.m in Sources */,
 				D67AF673216E725000859404 /* RNSpotifyRemoteSubscriptionCallback.m in Sources */,
 				D67AF679216F9D8C00859404 /* NSArrayExtensions.m in Sources */,
