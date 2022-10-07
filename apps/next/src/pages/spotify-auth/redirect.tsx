@@ -42,7 +42,9 @@ const SpotifyAuthRedirect = () => {
           //@ts-ignore
           // await saveSpotifyToken({ code, redirectUri: redirectUri });
           setTimeout(() => {
-            router.replace(`/nft/${chainName}/${contractAddress}/${tokenId}`);
+            router.replace(
+              `/nft/${chainName}/${contractAddress}/${tokenId}?showClaim=true`
+            );
           }, 1000);
           // redirectToClaimDrop(contractAddress);
         } catch (e) {
