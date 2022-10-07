@@ -205,7 +205,7 @@ export const ProfileTop = ({
     () =>
       router.push(
         Platform.select({
-          native: `/claim-limit-explanation`,
+          native: `/claim/claim-limit-explanation`,
           web: {
             pathname: router.pathname,
             query: {
@@ -215,7 +215,7 @@ export const ProfileTop = ({
           } as any,
         }),
         Platform.select({
-          native: `/claim-limit-explanation`,
+          native: `/claim/claim-limit-explanation`,
           web: router.asPath,
         }),
         {
