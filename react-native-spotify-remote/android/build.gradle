@@ -124,9 +124,7 @@ repositories {
 }
 
 dependencies {
-    def externalLibs = fileTree(dir: "$projectDir/external", include: '**/*.aar').collect()
-    println("Adding external libraries ${externalLibs}")
-    implementation files(externalLibs)   
+    implementation "com.spotify.android:auth:2.0.2" 
      //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"
 // From node_modules
