@@ -1,75 +1,133 @@
-def DEFAULT_COMPILE_SDK_VERSION = 29
-def DEFAULT_MIN_SDK_VERSION = 16
-def DEFAULT_TARGET_SDK_VERSION = 29
-
-def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
-}
-
-apply plugin: 'com.android.library'
-
 buildscript {
-    // The Android Gradle plugin is only required when opening the android folder stand-alone.
-    // This avoids unnecessary downloads and potential conflicts when the library is included as a
-    // module dependency in an application project.
-    // ref: https://docs.gradle.org/current/userguide/tutorial_using_tasks.html#sec:build_script_external_dependencies
-    if (project == rootProject) {
-        repositories {
-            google()
-            mavenCentral()
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:3.4.1'
-        }
-    }
+  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
+
+  repositories {
+      google()
+      mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.5.3'
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") &&  rootProject.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: 'com.android.library'
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: 'com.facebook.react'
+}
+
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['RnSpotifyAuth_' + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['RnSpotifyAuth_' + name]).toInteger()
+}
 
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
-    defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
-        targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
-        versionCode 1
-        versionName "1.0"
-    }
+  compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
 
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault('minSdkVersion')
+    targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
     }
-    lintOptions {
-        disable 'GradleCompatible'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['external']
-        }
-    }
+  }
+
+  lintOptions {
+    disable 'GradleCompatible'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 repositories {
-    mavenLocal()
+  mavenCentral()
+  google()
+
+  def found = false
+  def defaultDir = null
+  def androidSourcesName = 'React Native sources'
+
+  if (rootProject.ext.has('reactNativeAndroidRoot')) {
+    defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
+  } else {
+    defaultDir = new File(
+      projectDir,
+      '/../../../node_modules/react-native/android'
+    )
+  }
+
+  if (defaultDir.exists()) {
     maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        url "$rootDir/../node_modules/react-native/android"
+      url defaultDir.toString()
+      name androidSourcesName
     }
-    google()
-    mavenCentral()
-    jcenter()
+
+    logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
+    found = true
+  } else {
+    def parentDir = rootProject.projectDir
+
+    1.upto(5, {
+      if (found) return true
+      parentDir = parentDir.parentFile
+
+      def androidSourcesDir = new File(
+        parentDir,
+        'node_modules/react-native'
+      )
+
+      def androidPrebuiltBinaryDir = new File(
+        parentDir,
+        'node_modules/react-native/android'
+      )
+
+      if (androidPrebuiltBinaryDir.exists()) {
+        maven {
+          url androidPrebuiltBinaryDir.toString()
+          name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${androidPrebuiltBinaryDir.canonicalPath}")
+        found = true
+      } else if (androidSourcesDir.exists()) {
+        maven {
+          url androidSourcesDir.toString()
+          name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${androidSourcesDir.canonicalPath}")
+        found = true
+      }
+    })
+  }
+
+  if (!found) {
+    throw new GradleException(
+      "${project.name}: unable to locate React Native android sources. " +
+      "Ensure you have you installed React Native as a dependency in your project and try again."
+    )
+  }
 }
 
 dependencies {
-    implementation (files("external/SpotifySDK/auth-lib/spotify-auth-release-1.2.3.aar"))
-    implementation (files("external/SpotifySDK/app-remote-lib/spotify-app-remote-release-0.7.2.aar"))
-    implementation "com.google.code.gson:gson:2.8.5"  // needed by spotify-app-remote
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    def externalLibs = fileTree(dir: "$projectDir/external", include: '**/*.aar').collect()
+    println("Adding external libraries ${externalLibs}")
+    implementation files(externalLibs)   
+     //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"
+// From node_modules
 }

@@ -31665,12 +31665,12 @@ __metadata:
 
 "react-native-spotify-remote@file:../../react-native-spotify-remote::locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo":
   version: 0.3.10
-  resolution: "react-native-spotify-remote@file:../../react-native-spotify-remote#../../react-native-spotify-remote::hash=d8cad3&locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo"
+  resolution: "react-native-spotify-remote@file:../../react-native-spotify-remote#../../react-native-spotify-remote::hash=e85c9d&locator=%40showtime%2Fexpo%40workspace%3Aapps%2Fexpo"
   dependencies:
     react-native-events: ^1.0.15
   peerDependencies:
     react-native: ">=0.60"
-  checksum: e15f1fd0d770f4314ad2ff915c5c36444bf7705d17a833d2469aedf54021226632d1eb134582c7544eb6ff8271a481714830c4e94bc8ad9212381d305c9e9412
+  checksum: f9bb671e50c662982c9c87a7ba2cc371b17d012276d550cb8e8e5e85af04c2fd7000a0fe98b0a9bd71554fbd91176ff14400382d577c356caf292ea6b7a6ffd2
   languageName: node
   linkType: hard
 

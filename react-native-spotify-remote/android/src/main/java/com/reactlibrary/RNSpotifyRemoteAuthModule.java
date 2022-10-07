@@ -1,8 +1,7 @@
 
 package com.reactlibrary;
 
-import android.app.Activity;
-import android.content.Intent;
+import java.util.ArrayList;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
@@ -12,12 +11,12 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import java.util.ArrayList;
+import android.app.Activity;
+import android.content.Intent;
 
 
 @ReactModule(name = "RNSpotifyRemoteAuth")
@@ -28,12 +27,7 @@ public class RNSpotifyRemoteAuthModule extends ReactContextBaseJavaModule implem
     private Promise authPromise;
     private AuthorizationResponse mAuthResponse;
     private ReadableMap mConfig;
-    private ConnectionParams.Builder mConnectionParamsBuilder;
 
-
-    public ConnectionParams.Builder getConnectionParamsBuilder() {
-        return mConnectionParamsBuilder;
-    }
 
     public RNSpotifyRemoteAuthModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -51,10 +45,6 @@ public class RNSpotifyRemoteAuthModule extends ReactContextBaseJavaModule implem
         AuthorizationResponse.Type responseType = mConfig.hasKey("authType") ?
                 AuthorizationResponse.Type.valueOf(mConfig.getString("authType"))
                 : AuthorizationResponse.Type.TOKEN;
-
-        mConnectionParamsBuilder = new ConnectionParams.Builder(clientId)
-                .setRedirectUri(redirectUri)
-                .showAuthView(showDialog);
 
         authPromise = promise;
 
@@ -93,7 +83,6 @@ public class RNSpotifyRemoteAuthModule extends ReactContextBaseJavaModule implem
                         String code = response.getCode();
                         String error = response.getError();
                         authPromise.reject(code, error);
-                        mConnectionParamsBuilder = null;
                     }
                     break;
 
@@ -103,7 +92,6 @@ public class RNSpotifyRemoteAuthModule extends ReactContextBaseJavaModule implem
                         String code = "500";
                         String error = "Cancelled";
                         authPromise.reject(code, error);
-                        mConnectionParamsBuilder = null;
                     }
             }
         }
@@ -117,15 +105,8 @@ public class RNSpotifyRemoteAuthModule extends ReactContextBaseJavaModule implem
     @ReactMethod
     public void endSession(Promise promise) {
         mAuthResponse = null;
-        mConnectionParamsBuilder = null;
         mConfig = null;
-
-        RNSpotifyRemoteAppModule remoteModule = reactContext.getNativeModule(RNSpotifyRemoteAppModule.class);
-        if (remoteModule != null) {
-            remoteModule.disconnect(promise);
-        } else {
-            promise.resolve(null);
-        }
+        promise.resolve(null);
     }
 
     public String[] convertScopes(ReadableMap config) {
