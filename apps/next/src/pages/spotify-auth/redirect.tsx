@@ -9,6 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
 import { Logger } from "app/lib/logger";
+import { redirectUri } from "app/lib/spotify/spotify";
 import { createParam } from "app/navigation/use-param";
 
 type Query = {
@@ -41,7 +42,7 @@ const SpotifyAuthRedirect = () => {
             //@ts-ignore
             window.ReactNativeWebView.postMessage(JSON.stringify({ code }));
           } else {
-            await saveSpotifyToken({ code });
+            await saveSpotifyToken({ code, redirectUri: redirectUri });
             redirectToClaimDrop(contractAddress);
           }
         } catch (e) {
@@ -50,7 +51,7 @@ const SpotifyAuthRedirect = () => {
         }
       })();
     }
-  }, [saveSpotifyToken, code, contractAddress, redirectToClaimDrop]);
+  }, [saveSpotifyToken, code, redirectUri]);
 
   useEffect(() => {
     if (spotifyError) {

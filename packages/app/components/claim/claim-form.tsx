@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 import { ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -14,8 +14,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -33,15 +31,7 @@ import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRudder } from "app/lib/rudderstack";
 import { useClaimNFT } from "app/providers/claim-provider";
-import {
-  formatAddressShort,
-  getCreatorUsernameFromNFT,
-  getProfileName,
-  getTwitterIntent,
-  getTwitterIntentUsername,
-  isMobileWeb,
-  userHasIncompleteExternalLinks,
-} from "app/utilities";
+import { getCreatorUsernameFromNFT } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
@@ -106,109 +96,109 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   //     });
   // }, [web3]);
 
-  if (
-    userProfile &&
-    (!userProfile.data.profile.username ||
-      userHasIncompleteExternalLinks(userProfile.data.profile) ||
-      !userProfile.data.profile.bio ||
-      !userProfile.data.profile.img_url)
-  ) {
-    return (
-      <CompleteProfileModalContent
-        title={`Show ${getProfileName(
-          creatorProfile?.data?.profile
-        )} who you are!`}
-        description="Complete your profile first to claim this drop. It will take around 1 minute."
-        cta="Complete profile to claim"
-      />
-    );
-  }
+  // if (
+  //   userProfile &&
+  //   (!userProfile.data.profile.username ||
+  //     userHasIncompleteExternalLinks(userProfile.data.profile) ||
+  //     !userProfile.data.profile.bio ||
+  //     !userProfile.data.profile.img_url)
+  // ) {
+  //   return (
+  //     <CompleteProfileModalContent
+  //       title={`Show ${getProfileName(
+  //         creatorProfile?.data?.profile
+  //       )} who you are!`}
+  //       description="Complete your profile first to claim this drop. It will take around 1 minute."
+  //       cta="Complete profile to claim"
+  //     />
+  //   );
+  // }
 
-  if (state.status === "success") {
-    const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
-      process.env.NEXT_PUBLIC_CHAIN_ID,
-    ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
+  // if (state.status === "success") {
+  //   const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
+  //     process.env.NEXT_PUBLIC_CHAIN_ID,
+  //   ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
 
-    const isShareAPIAvailable = Platform.select({
-      default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
-    });
+  //   const isShareAPIAvailable = Platform.select({
+  //     default: true,
+  //     web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
+  //   });
 
-    return (
-      <View tw="items-center justify-center p-4">
-        <Text tw="text-8xl">🎉</Text>
-        <View>
-          <View tw="h-8" />
-          <Text tw="text-center text-4xl text-black dark:text-white">
-            Congrats!
-          </Text>
-          <View tw="mt-8 mb-10">
-            <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share it with the world!
-            </Text>
-          </View>
-          <Button
-            onPress={() => {
-              rudder?.track("Drop Shared", { type: "Twitter" });
-              Linking.openURL(
-                getTwitterIntent({
-                  url: claimUrl,
-                  message: `I just claimed a free drop "${
-                    nft?.data.item.token_name
-                  }" by ${getTwitterIntentUsername(
-                    creatorProfile?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
-                })
-              );
-            }}
-            tw="bg-[#00ACEE]"
-            variant="text"
-            accentColor="#fff"
-          >
-            Share on Twitter
-          </Button>
-          <View tw="h-4" />
-          <Button
-            onPress={async () => {
-              const result = await share({
-                url: claimUrl,
-              });
+  //   return (
+  //     <View tw="items-center justify-center p-4">
+  //       <Text tw="text-8xl">🎉</Text>
+  //       <View>
+  //         <View tw="h-8" />
+  //         <Text tw="text-center text-4xl text-black dark:text-white">
+  //           Congrats!
+  //         </Text>
+  //         <View tw="mt-8 mb-10">
+  //           <Text tw="text-center text-2xl text-black dark:text-white">
+  //             Now share it with the world!
+  //           </Text>
+  //         </View>
+  //         <Button
+  //           onPress={() => {
+  //             rudder?.track("Drop Shared", { type: "Twitter" });
+  //             Linking.openURL(
+  //               getTwitterIntent({
+  //                 url: claimUrl,
+  //                 message: `I just claimed a free drop "${
+  //                   nft?.data.item.token_name
+  //                 }" by ${getTwitterIntentUsername(
+  //                   creatorProfile?.data?.profile
+  //                 )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
+  //               })
+  //             );
+  //           }}
+  //           tw="bg-[#00ACEE]"
+  //           variant="text"
+  //           accentColor="#fff"
+  //         >
+  //           Share on Twitter
+  //         </Button>
+  //         <View tw="h-4" />
+  //         <Button
+  //           onPress={async () => {
+  //             const result = await share({
+  //               url: claimUrl,
+  //             });
 
-              if (result.action === "sharedAction") {
-                rudder?.track(
-                  "Drop Shared",
-                  result.activityType
-                    ? { type: result.activityType }
-                    : undefined
-                );
-              }
-            }}
-          >
-            {isShareAPIAvailable
-              ? "Share NFT with your friends"
-              : "Copy drop link 🔗"}
-          </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
-            Skip for now
-          </Button>
-        </View>
-      </View>
-    );
-  }
+  //             if (result.action === "sharedAction") {
+  //               rudder?.track(
+  //                 "Drop Shared",
+  //                 result.activityType
+  //                   ? { type: result.activityType }
+  //                   : undefined
+  //               );
+  //             }
+  //           }}
+  //         >
+  //           {isShareAPIAvailable
+  //             ? "Share NFT with your friends"
+  //             : "Copy drop link 🔗"}
+  //         </Button>
+  //         <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+  //           Skip for now
+  //         </Button>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
-  const primaryWallet = user?.data.profile.primary_wallet;
+  // const primaryWallet = user?.data.profile.primary_wallet;
 
-  if (!primaryWallet) {
-    return (
-      <AddWalletOrSetPrimary
-        onPrimaryWalletSetCallback={() =>
-          redirectToClaimDrop(edition.creator_airdrop_edition.contract_address)
-        }
-        title="Choose a primary wallet to receive your drop"
-        description="Please choose which wallet will receive your drop. You only have to do this once!"
-      />
-    );
-  }
+  // if (!primaryWallet) {
+  //   return (
+  //     <AddWalletOrSetPrimary
+  //       onPrimaryWalletSetCallback={() =>
+  //         redirectToClaimDrop(edition.creator_airdrop_edition.contract_address)
+  //       }
+  //       title="Choose a primary wallet to receive your drop"
+  //       description="Please choose which wallet will receive your drop. You only have to do this once!"
+  //     />
+  //   );
+  // }
 
   const ScrollComponent =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
@@ -250,14 +240,14 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
-              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
+              {/* <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
                 {primaryWallet.nickname
                   ? primaryWallet.nickname +
                     " (" +
                     formatAddressShort(primaryWallet.address) +
                     ")"
                   : formatAddressShort(primaryWallet.address)}
-              </Text>
+              </Text> */}
             </View>
             <View>
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">

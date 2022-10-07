@@ -1,28 +1,18 @@
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
+import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
+import { getSpotifyAuthCode } from "app/lib/spotify/spotify";
 import { useClaimNFT } from "app/providers/claim-provider";
 
 import { IEdition, NFT } from "../types";
 import { useUser } from "./use-user";
 
-const clientId = "e12f7eea542947ff843cfc68d762235a";
-const scope =
-  "user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
-
-export const SPOTIFY_REDIRECT_URI = `${
-  __DEV__
-    ? "http://localhost:3000"
-    : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
-}/spotify-auth/redirect`;
-
 export const useSpotifyGatedClaim = (edition?: IEdition) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
-  const router = useRouter();
+  const { saveSpotifyToken } = useSaveSpotifyToken();
 
-  const claimSpotifyGatedDrop = (nft?: NFT) => {
+  const claimSpotifyGatedDrop = async (nft?: NFT) => {
     if (nft) {
       // if (false) {
       // TODO: remove this after testing
@@ -35,27 +25,15 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
           // TODO: handle error. Could be unauthorized, so we need to redirect to spotify auth flow
         }
       } else {
-        const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user.user?.data.profile.profile_id}`;
-
-        const params = {
-          client_id: clientId,
-          scope,
-          redirect_uri: SPOTIFY_REDIRECT_URI,
-          state,
-          response_type: "code",
-        };
-
-        const queryString = Object.entries(params)
-          .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-          .join("&");
-
-        console.log(" queryString", queryString, state);
-
         if (Platform.OS === "web") {
-          window.location.href = `https://accounts.spotify.com/authorize?${queryString}`;
+          return getSpotifyAuthCode(nft);
         } else {
-          // on native we handle spotify stuff in a webview
-          router.push("/spotifyAuth?uri=" + queryString);
+          const session = await getSpotifyAuthCode(nft);
+          console.log("session", session);
+          await saveSpotifyToken({
+            code: session.accessToken,
+            redirectUri: "io.showtime.development://spotify-success",
+          });
         }
       }
     }
