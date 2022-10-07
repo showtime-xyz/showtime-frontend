@@ -29,11 +29,10 @@
     "mobile",
     "player"
   ],
-  "main": "dist/index",
-  "module": "dist/index",
-  "types": "dist/index.d.ts",
-  "source": "dist/index",
-  "react-native": "dist/index",
+  "main": "src/index",
+  "module": "src/index",
+  "source": "src/index",
+  "react-native": "src/index",
   "scripts": {
     "rebuild": "yarn build && yarn docs",
     "clean": "rm -rf ./dist",
