@@ -1,7 +1,13 @@
 import { Platform } from "react-native";
 
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
-import { getSpotifyAuthCode } from "app/lib/spotify/spotify";
+import {
+  getQueryString,
+  getSpotifyAuthCode,
+  redirectUri,
+} from "app/lib/spotify";
 import { useClaimNFT } from "app/providers/claim-provider";
 
 import { IEdition, NFT } from "../types";
@@ -9,6 +15,7 @@ import { useUser } from "./use-user";
 
 export const useSpotifyGatedClaim = (edition?: IEdition) => {
   const user = useUser();
+  const router = useRouter();
   const { claimNFT } = useClaimNFT(edition);
   const { saveSpotifyToken } = useSaveSpotifyToken();
 
@@ -27,12 +34,14 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
       } else {
         if (Platform.OS === "web") {
           return getSpotifyAuthCode(nft, user?.user);
-        } else {
+        } else if (Platform.OS === "ios") {
+          const queryString = getQueryString(nft, user?.user);
+          router.push(`/spotifyAuth?uri=${encodeURIComponent(queryString)}`);
+        } else if (Platform.OS === "android") {
           const session = await getSpotifyAuthCode(nft, user?.user);
-          console.log("session", session);
           await saveSpotifyToken({
             code: session.accessToken,
-            redirectUri: "io.showtime.development://spotify-success",
+            redirectUri: redirectUri,
           });
         }
       }
