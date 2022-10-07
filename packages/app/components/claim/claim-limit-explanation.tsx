@@ -10,6 +10,7 @@ export const ClaimLimitExplanationModal = () => {
 
   const hasVerifiedPhoneNumber =
     userProfile?.data?.profile.has_verified_phone_number;
+  const verified = userProfile?.data?.profile.verified;
   const dailyClaimLimit = userProfile?.data?.daily_claim_limit ?? 5;
   return (
     <BottomSheetModalProvider>
@@ -19,13 +20,13 @@ export const ClaimLimitExplanationModal = () => {
         </Text>
         <View tw="h-4" />
         <Text tw="text-sm text-black dark:text-white">
-          {hasVerifiedPhoneNumber ? (
+          {hasVerifiedPhoneNumber || verified ? (
             <>
               {`- Congrats, your phone is verified! Enjoy 1 more claim every hour, up to ${dailyClaimLimit} claims.`}
             </>
           ) : (
             <>
-              {`- You are currently earning 1 claim every 3 hours, up to ${dailyClaimLimit} claims. Verify your phone number to claim more drops.`}
+              {`- You are currently earning 1 claim every 1 hours, up to ${dailyClaimLimit} claims. Verify your phone number to claim more drops.`}
             </>
           )}
         </Text>
