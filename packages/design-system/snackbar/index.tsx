@@ -11,7 +11,7 @@ import { AccessibilityInfo, ViewStyle } from "react-native";
 import { MotiTransitionProp, StyleValueWithReplacedTransforms } from "moti";
 
 import { SnackbarTransitionType } from "./constants";
-import { initSnakbarParams, Snackbar } from "./snackbar";
+import { SnackbarContainer } from "./snackbar-container";
 
 export type SnackbarStateType = "default" | "waiting" | "done";
 
@@ -43,8 +43,13 @@ export type SnackbarShowParams = {
   /** disable pan gesture to close */
   disableGestureToClose?: boolean;
 };
-
-type SnackbarContextType = {
+export const initSnakbarParams: SnackbarShowParams = {
+  text: "",
+  iconStatus: "default",
+  bottom: 0,
+  preset: "default",
+};
+export type SnackbarContextType = {
   show: (params: SnackbarShowParams) => void;
   update: (params: SnackbarShowParams) => void;
   hide: () => void;
@@ -68,7 +73,7 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   const hide = () => {
     setState({
       show: false,
-      snackbar: initSnakbarParams,
+      snackbar: { ...initSnakbarParams },
     });
   };
   const setHideAfter = useCallback((duration: number | undefined) => {
@@ -116,7 +121,7 @@ export const SnackbarProvider: React.FC<{ children: JSX.Element }> = ({
   return (
     <SnackbarContext.Provider value={value}>
       {children}
-      <Snackbar {...state} hide={hide} />
+      <SnackbarContainer {...state} hide={hide} />
     </SnackbarContext.Provider>
   );
 };

@@ -14,13 +14,16 @@ export const usePlatformBottomHeight = () => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const nativeBottomTabBarHeight = useBottomTabBarHeight();
+
   if (!isAuthenticated) return 0;
 
-  const isMdWidth = width >= breakpoints["md"];
-  const webBottomTabBarHeight = isMdWidth
-    ? insets.bottom
-    : insets.bottom + MOBILE_WEB_BOTTOM_NAV_HEIGHT;
-  return Platform.OS === "web"
-    ? webBottomTabBarHeight
-    : nativeBottomTabBarHeight;
+  if (Platform.OS === "web") {
+    const isMdWidth = width >= breakpoints["md"];
+    const webBottomTabBarHeight = isMdWidth
+      ? insets.bottom
+      : insets.bottom + MOBILE_WEB_BOTTOM_NAV_HEIGHT;
+    return webBottomTabBarHeight;
+  }
+
+  return nativeBottomTabBarHeight;
 };

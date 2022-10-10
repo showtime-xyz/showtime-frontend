@@ -17,6 +17,7 @@ import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-t
 
 import { useNavigationElements } from "./use-navigation-elements";
 
+export const BOTTOM_TABBAR_BASE_HEIGHT = 64;
 export const BottomTabbar = ({
   navigation,
   state,
@@ -31,13 +32,16 @@ export const BottomTabbar = ({
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
 
+  const isHiddenBottomTabbar = !isAuthenticated || isTabBarHidden;
   return (
     <View
       style={{
         position: "absolute",
         bottom: 0,
         width: "100%",
-        height: !isAuthenticated || isTabBarHidden ? 0 : 64 + safeAreaBottom,
+        height: isHiddenBottomTabbar
+          ? 0
+          : BOTTOM_TABBAR_BASE_HEIGHT + safeAreaBottom,
         overflow: "hidden",
         backgroundColor: "transparent",
       }}

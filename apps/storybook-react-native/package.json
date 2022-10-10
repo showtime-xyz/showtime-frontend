@@ -21,6 +21,7 @@
     "storybook-watcher": "sb-rn-watcher"
   },
   "dependencies": {
+    "@coinbase/wallet-mobile-sdk": "^1.0.3",
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-community/datetimepicker": "^6.1.0",
@@ -39,7 +40,7 @@
     "@storybook/addon-ondevice-notes": "next",
     "@storybook/react-native": "next",
     "design-system": "*",
-    "expo": "~46.0.9",
+    "expo": "~46.0.13",
     "expo-asset": "~8.5.0",
     "expo-av": "12.0.4",
     "expo-blur": "~11.2.0",

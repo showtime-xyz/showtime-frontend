@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { useIsForeground } from "./use-is-foreground";
 import { useIsOnline } from "./use-is-online";
+import { usePlatformBottomHeight } from "./use-platform-bottom-height";
 
 export const useNetWorkConnection = () => {
-  const { bottom } = useSafeAreaInsets();
+  const bottom = usePlatformBottomHeight();
   const isForeground = useIsForeground();
   const snackbar = useSnackbar();
   const { isOnline } = useIsOnline();
@@ -17,7 +17,7 @@ export const useNetWorkConnection = () => {
       if (isOnline) return;
       snackbar?.show({
         text: `No internet connection`,
-        bottom: bottom + 64,
+        bottom: bottom,
         hideAfter: 3000,
       });
     };

@@ -33,7 +33,6 @@ export const Basic: React.VFC<{}> = () => {
           toggleSnackbar(() =>
             snackbar?.show({
               text: "Minting “A day in the woods...”",
-              disableGestureToClose: true,
             })
           )
         }
