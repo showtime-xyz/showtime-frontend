@@ -52,10 +52,7 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
         transactionHash: response.transaction_hash,
       });
 
-      console.log("damn dude ", response.is_complete);
       if (response.is_complete) {
-        console.log("damn dude ", snackbar, snackbar?.show);
-
         rudder?.track("NFT Claimed");
         snackbar?.show({
           text: "Claimed!",
