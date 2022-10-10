@@ -46,7 +46,7 @@ const getForwarderRequest = async ({
 };
 
 export type State = {
-  status: "idle" | "loading" | "success" | "share" | "error";
+  status: "idle" | "loading" | "success" | "share" | "error" | "initial";
   error?: string;
   transactionHash?: string;
   mint?: any;
@@ -103,6 +103,10 @@ export const reducer = (state: State, action: Action): State => {
         status: "error",
         signaturePrompt: false,
         error: action.error,
+      };
+    case "initial":
+      return {
+        ...initialState,
       };
     default:
       return state;
@@ -314,9 +318,13 @@ export const useClaimNFT = (edition: IEdition) => {
     });
   }, [dispatch]);
 
+  const hideSnackbar = () => {
+    snackbar?.hide();
+  };
   return {
     state,
     claimNFT,
     onReconnectWallet,
+    hideSnackbar,
   };
 };
