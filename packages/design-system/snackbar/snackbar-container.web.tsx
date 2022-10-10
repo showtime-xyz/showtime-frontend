@@ -23,7 +23,7 @@ export const SnackbarContainer = ({
                 bottom: snackbar.bottom,
               },
             ]}
-            pointerEvents="none"
+            pointerEvents="box-none"
           >
             <Snackbar show={show} snackbar={snackbar} {...rest} />
           </View>

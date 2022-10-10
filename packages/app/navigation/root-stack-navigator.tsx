@@ -117,7 +117,7 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen
-          name="claimTankExplanation"
+          name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
         />
       </Stack.Group>

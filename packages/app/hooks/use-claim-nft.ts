@@ -180,16 +180,15 @@ export const useClaimNFT = (edition: IEdition) => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
+        snackbar?.show({
+          text: "Claiming...",
+          iconStatus: "waiting",
+          bottom,
+          hideAfter: 200000, // After this, the transaction failed
+        });
 
         if (edition?.is_gated) {
           await gatedClaimFlow();
-
-          snackbar?.show({
-            text: "Claiming...",
-            iconStatus: "waiting",
-            bottom,
-            hideAfter: 200000, // After this, the transaction failed
-          });
         } else {
           await oldSignatureClaimFlow();
         }
@@ -255,14 +254,14 @@ export const useClaimNFT = (edition: IEdition) => {
           "Oops. An error occured.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
-      } else {
-        snackbar?.show({
-          text: "Claiming failed. Please try again!",
-          bottom,
-          iconStatus: "default",
-          hideAfter: 10000,
-        });
       }
+
+      snackbar?.update({
+        text: "Claiming failed. Please try again!",
+        bottom,
+        iconStatus: "default",
+        hideAfter: 10000,
+      });
 
       captureException(e);
     }

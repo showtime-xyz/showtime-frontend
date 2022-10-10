@@ -7,7 +7,7 @@ export const ClaimLimitExplanationScreen = withModalScreen(
   {
     title: "Claim Limit",
     matchingPathname: "/claim/claim-limit-explanation",
-    matchingQueryParam: "claimLimitExplanation",
+    matchingQueryParam: "claimLimitExplanationModal",
     snapPoints: [240],
     useNativeModal: false,
   }
