@@ -1,6 +1,5 @@
 import { View, Platform } from "react-native";
 
-import { AnimatePresence } from "moti";
 import { FullWindowOverlay } from "react-native-screens";
 
 import { Snackbar, SnackbarProps, SNACKBAR_HEIGHT } from "./snackbar";
@@ -13,7 +12,7 @@ export const SnackbarContainer = ({
   ...rest
 }: SnackbarProps) => {
   return (
-    <AnimatePresence>
+    <>
       {show && (
         <OverLayView
           style={{
@@ -21,11 +20,12 @@ export const SnackbarContainer = ({
             height: SNACKBAR_HEIGHT,
             width: "100%",
             bottom: snackbar.bottom,
+            backgroundColor: "red",
           }}
         >
           <Snackbar show={show} snackbar={snackbar} {...rest} />
         </OverLayView>
       )}
-    </AnimatePresence>
+    </>
   );
 };

@@ -48,8 +48,9 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state } = useContext(ClaimContext);
-  const { claimNFT, onReconnectWallet } = useClaimNFT(
+  const { state, dispatch } = useContext(ClaimContext);
+
+  const { claimNFT, onReconnectWallet, hideSnackbar } = useClaimNFT(
     edition.creator_airdrop_edition
   );
   const share = useShare();
@@ -93,7 +94,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     mutate();
   };
-
+  const onSkipToShare = () => {
+    dispatch({ type: "initial" });
+    hideSnackbar();
+    router.pop();
+  };
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -122,12 +127,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         cta="Complete profile to claim"
       />
     );
-  }
-
-  if (state.status === "loading" && state.signaturePrompt === false) {
-    router.pop();
-
-    return null;
   }
 
   if (state.status === "share") {
@@ -194,7 +193,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               ? "Share with your friends"
               : "Copy drop link 🔗"}
           </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
+          <Button variant="tertiary" tw="mt-4" onPress={onSkipToShare}>
             Skip for now
           </Button>
         </View>
@@ -220,7 +219,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
   return (
-    <ScrollComponent ref={scrollViewRef}>
+    <ScrollComponent ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
