@@ -66,8 +66,8 @@ const SpotifyAuthRedirect = () => {
 
   if (spotifyError || error) {
     return (
-      <View>
-        <Text>Something went wrong</Text>
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="pb-4 text-black dark:text-white">Something went wrong</Text>
         <Button
           onPress={() =>
             //@ts-ignore
