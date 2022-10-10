@@ -2,18 +2,18 @@ import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
 import {
   getQueryString,
   getSpotifyAuthCode,
   redirectUri,
 } from "app/lib/spotify";
-import { useClaimNFT } from "app/providers/claim-provider";
 
 import { IEdition, NFT } from "../types";
 import { useUser } from "./use-user";
 
-export const useSpotifyGatedClaim = (edition?: IEdition) => {
+export const useSpotifyGatedClaim = (edition: IEdition) => {
   const user = useUser();
   const router = useRouter();
   const { claimNFT } = useClaimNFT(edition);
@@ -33,7 +33,7 @@ export const useSpotifyGatedClaim = (edition?: IEdition) => {
         }
       } else {
         if (Platform.OS === "web") {
-          return getSpotifyAuthCode(nft, user?.user);
+          getSpotifyAuthCode(nft, user?.user);
         } else if (Platform.OS === "ios") {
           const queryString = getQueryString(nft, user?.user);
           router.push(`/spotifyAuth?uri=${encodeURIComponent(queryString)}`);
