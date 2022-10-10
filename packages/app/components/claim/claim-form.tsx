@@ -10,7 +10,7 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Close, Check } from "@showtime-xyz/universal.icon";
+import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -240,8 +240,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             sizeStyle={{
               width: 80,
               height: 80,
+              borderRadius: 16,
             }}
-            tw="rounded-lg"
           />
           <View tw="ml-4 flex-1">
             <Text
@@ -262,7 +262,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               {edition.creator_airdrop_edition.description}
             </Text>
           </View>
-          <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+          {/* <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
             <View tw="flex-1">
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
@@ -284,54 +284,41 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 1/{edition.creator_airdrop_edition.edition_size}
               </Text>
             </View>
-          </View>
-
-          <View tw="mt-4 flex-row items-center">
-            <Check
-              height={20}
-              width={20}
-              //@ts-ignore
-              color={isDark ? colors.gray[100] : colors.gray[900]}
-            />
-            <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-              You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}
-            </Text>
-          </View>
+          </View> */}
 
           {edition.gating_type === "spotify_save" ? (
-            <View tw="mt-4 flex-row items-center">
-              {user.data.profile.has_spotify_token ? (
-                <>
-                  <Check
-                    height={20}
-                    width={20}
-                    //@ts-ignore
-                    color={isDark ? colors.gray[100] : colors.gray[900]}
-                  />
-                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                    We'll save this song on your spotify playlist
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Close
-                    height={18}
-                    width={18}
-                    //@ts-ignore
-                    color={isDark ? colors.gray[100] : colors.gray[900]}
-                  />
-                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                    You connected your profile to Spotify
-                  </Text>
-                </>
-              )}
-            </View>
+            <>
+              <View tw="mt-4 flex-row items-center">
+                {user.data.profile.has_spotify_token ? (
+                  <CheckIcon />
+                ) : (
+                  <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                )}
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  Connect your Spotify account
+                </Text>
+              </View>
+
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  You will save this song to your Spotify library
+                </Text>
+              </View>
+            </>
           ) : null}
+
+          <View tw="mt-4 flex-row items-center">
+            <CheckIcon />
+            <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+              You will follow {getCreatorUsernameFromNFT(nft?.data.item)}
+            </Text>
+          </View>
 
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
-              label="Add a comment (optional)"
+              label="Comment (optional)"
               placeholder="wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
               returnKeyLabel="Claim"
@@ -354,10 +341,20 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Failed. Retry!"
                 : edition.gating_type === "spotify_save" &&
                   !user.data.profile.has_spotify_token
-                ? "Connect Spotify to claim"
+                ? "Save on Spotify to claim"
                 : "Claim for free"}
             </Button>
-
+            <View tw="mt-4">
+              <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                to{" "}
+                {primaryWallet.nickname
+                  ? primaryWallet.nickname +
+                    " (" +
+                    formatAddressShort(primaryWallet.address) +
+                    ")"
+                  : formatAddressShort(primaryWallet.address)}
+              </Text>
+            </View>
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>
@@ -382,3 +379,37 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     </ScrollComponent>
   );
 };
+
+const CheckIcon = () => {
+  const isDark = useIsDarkMode();
+  return (
+    <View tw="items-center justify-center">
+      <View tw="rounded-full bg-gray-800 p-3 dark:bg-gray-100"></View>
+      <View tw="z-9 absolute">
+        <Check
+          height={20}
+          width={20}
+          //@ts-ignore
+          color={isDark ? colors.gray[900] : colors.gray[100]}
+        />
+      </View>
+    </View>
+  );
+};
+
+// const CloseIcon = () => {
+//   const isDark = useIsDarkMode();
+//   return (
+//     <View tw="items-center justify-center">
+//       <View tw="rounded-full bg-gray-800 p-3"></View>
+//       <View tw="z-9 absolute">
+//         <Close
+//           height={20}
+//           width={20}
+//           //@ts-ignore
+//           color={isDark ? colors.gray[900] : colors.gray[100]}
+//         />
+//       </View>
+//     </View>
+//   );
+// };
