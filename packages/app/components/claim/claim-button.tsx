@@ -1,6 +1,5 @@
 import { useContext } from "react";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { Check } from "@showtime-xyz/universal.icon";
@@ -19,16 +18,10 @@ type ClaimButtonProps = {
 export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const { state: claimStates } = useContext(ClaimContext);
-  const Alert = useAlert();
   const isProgress =
     claimStates.status === "loading" && claimStates.signaturePrompt === false;
 
   const onClaimPress = () => {
-    if (isProgress) {
-      return Alert.alert(
-        "You currently have a transaction in progress, please wait to complete it and try again!"
-      );
-    }
     redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
   };
 
