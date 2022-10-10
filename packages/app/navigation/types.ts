@@ -93,6 +93,7 @@ type RootStackNavigatorParams = {
   claim: undefined;
   claimers: undefined;
   spotifyAuth: undefined;
+  claimLimitExplanation: undefined;
 };
 
 export type {

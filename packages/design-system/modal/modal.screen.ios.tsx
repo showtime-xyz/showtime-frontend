@@ -1,18 +1,28 @@
-import { memo, forwardRef, useImperativeHandle } from "react";
+import { memo, forwardRef } from "react";
 
+import { Modal } from "./modal";
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
-import type { ModalScreenProps } from "./types";
+import type { ModalProps } from "./types";
 
-const ModalScreenComponent = forwardRef<any, ModalScreenProps>(
-  function ModalScreenComponent({ title, children, onClose }, ref) {
-    useImperativeHandle(ref, () => {});
+const ModalScreenComponent = forwardRef<any, ModalProps>(
+  function ModalScreenComponent(
+    { title, children, onClose, useNativeModal = true, ...rest },
+    ref
+  ) {
+    if (useNativeModal) {
+      return (
+        <>
+          <ModalHeaderBar />
+          <ModalHeader title={title} onClose={onClose} />
+          {children}
+        </>
+      );
+    }
     return (
-      <>
-        <ModalHeaderBar />
-        <ModalHeader title={title} onClose={onClose} />
+      <Modal ref={ref} title={title} onClose={onClose} {...rest}>
         {children}
-      </>
+      </Modal>
     );
   }
 );

@@ -15,13 +15,12 @@ import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
 import { FeedProvider } from "app/providers/feed-provider";
+import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
+import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
-
-import { MuteProvider } from "./mute-provider";
-import { WalletMobileSDKProvider } from "./wallet-mobile-sdk-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -44,11 +43,11 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                   <GrowthBookProvider growthbook={growthbook}>
                                     <FeedProvider>
                                       <BiconomyProvider>
-                                        <ClaimProvider>
-                                          <MuteProvider>
+                                        <MuteProvider>
+                                          <ClaimProvider>
                                             {children}
-                                          </MuteProvider>
-                                        </ClaimProvider>
+                                          </ClaimProvider>
+                                        </MuteProvider>
                                       </BiconomyProvider>
                                     </FeedProvider>
                                   </GrowthBookProvider>

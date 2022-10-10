@@ -14,7 +14,6 @@ type ToastProps = {
 
 export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
   return (
-    // @ts-ignore
     <AnimatePresence>
       {show && (
         <Portal.Root>

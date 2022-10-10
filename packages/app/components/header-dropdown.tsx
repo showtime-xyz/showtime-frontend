@@ -29,7 +29,11 @@ import { useUser } from "app/hooks/use-user";
 
 import { breakpoints } from "design-system/theme";
 
-function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
+type HeaderDropdownProps = {
+  type: "profile" | "settings";
+  withBackground?: boolean;
+};
+function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
   const { logout } = useAuth();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useColorScheme();
@@ -53,8 +57,17 @@ function HeaderDropdown({ type }: { type: "profile" | "settings" }) {
             ) : null}
           </View>
         ) : (
-          <View tw="h-8 w-8 items-center justify-center rounded-full">
-            <Settings width={24} height={24} color={isDark ? "#FFF" : "#000"} />
+          <View
+            tw={[
+              "h-8 w-8 items-center justify-center rounded-full",
+              withBackground ? "bg-black/30" : "",
+            ]}
+          >
+            <Settings
+              width={24}
+              height={24}
+              color={withBackground ? "#FFF" : isDark ? "#FFF" : "#000"}
+            />
           </View>
         )}
       </DropdownMenuTrigger>

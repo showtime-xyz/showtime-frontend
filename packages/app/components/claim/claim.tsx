@@ -37,7 +37,7 @@ export const Claim = () => {
   if (error) {
     return (
       <Button onPress={() => mutate()}>
-        Something went wrong. Please Try again
+        Something went wrong. Please try again!
       </Button>
     );
   }

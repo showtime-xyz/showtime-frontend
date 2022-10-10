@@ -1,30 +1,17 @@
-import { useCallback } from "react";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useUser } from "app/hooks/use-user";
-import { useClaimNFT } from "app/providers/claim-provider";
 
 export const useRedirectToClaimDrop = () => {
   const { isAuthenticated } = useUser();
   const router = useRouter();
-  const { state, resetState } = useClaimNFT();
 
-  const redirectToClaimDrop = useCallback(
-    (editionContractAddress: string) => {
-      if (state.status === "loading") {
-        Alert.alert("A transaction is already in progress");
-        return;
-      }
-
-      if (!isAuthenticated) {
-        router.push("/login");
-        return;
-      }
-
-      resetState();
-
+  const redirectToClaimDrop = (editionContractAddress: string) => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    } else {
       const as = `/claim/${editionContractAddress}`;
 
       router.push(
@@ -45,9 +32,8 @@ export const useRedirectToClaimDrop = () => {
         }),
         { shallow: true }
       );
-    },
-    [isAuthenticated, resetState, router, state.status]
-  );
+    }
+  };
 
   return redirectToClaimDrop;
 };

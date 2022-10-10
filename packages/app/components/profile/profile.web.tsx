@@ -26,6 +26,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
+import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
   defaultFilters,
   useProfileNFTs,
@@ -35,6 +36,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -137,7 +139,7 @@ const Header = memo(function Header() {
           isError={isError}
         />
         <View tw="bg-white dark:bg-black">
-          <View tw="mx-auto w-full max-w-screen-xl">
+          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl">
             <TabBarSingle
               onPress={onPress}
               routes={routes}
@@ -165,6 +167,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const profileId = profileData?.data?.profile.profile_id;
   const { getIsBlocked } = useBlock();
   const isBlocked = getIsBlocked(profileId);
+  const { user } = useUser();
+
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
@@ -274,18 +278,22 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
-    if (!isLoadingMore) return null;
-    return (
-      <View
-        tw="mx-auto h-20 flex-row items-center justify-center"
-        style={{ maxWidth: contentWidth }}
-      >
-        <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
-      </View>
-    );
-  }, [contentWidth, isDark, isLoadingMore]);
+    if (isLoadingMore || profileIsLoading) {
+      return (
+        <View
+          tw="mx-auto h-20 flex-row items-center justify-center"
+          style={{ maxWidth: contentWidth }}
+        >
+          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+        </View>
+      );
+    }
+    return null;
+  }, [contentWidth, isDark, isLoadingMore, profileIsLoading]);
   const ListEmptyComponent = useCallback(() => {
-    if (isLoading) return null;
+    if (isLoading || profileIsLoading || !type) {
+      return null;
+    }
     return (
       <EmptyPlaceholder
         title={
@@ -301,7 +309,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         hideLoginBtn
       />
     );
-  }, [isBlocked, isLoading, username]);
+  }, [isBlocked, isLoading, profileIsLoading, type, username]);
 
   return (
     <ProfileHeaderContext.Provider
@@ -319,25 +327,31 @@ const Profile = ({ username }: ProfileScreenProps) => {
       <FilterContext.Provider value={{ filter, dispatch }}>
         <View tw="w-full">
           <MutateProvider mutate={updateItem}>
-            <InfiniteScrollList
-              useWindowScroll={isMdWidth}
-              ListHeaderComponent={Header}
-              numColumns={1}
-              data={isBlocked ? [] : chuckList}
-              keyExtractor={keyExtractor}
-              renderItem={renderItem}
-              estimatedItemSize={contentWidth / numColumns}
-              overscan={{
-                main: contentWidth / numColumns,
-                reverse: contentWidth / numColumns,
-              }}
-              style={{
-                height: screenHeight - 64,
-              }}
-              ListEmptyComponent={ListEmptyComponent}
-              ListFooterComponent={ListFooterComponent}
-              onEndReached={fetchMore}
-            />
+            <ProfileTabsNFTProvider
+              tabType={
+                user?.data?.profile?.profile_id === profileId ? type : undefined
+              }
+            >
+              <InfiniteScrollList
+                useWindowScroll={isMdWidth}
+                ListHeaderComponent={Header}
+                numColumns={1}
+                data={isBlocked ? [] : chuckList}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                estimatedItemSize={contentWidth / numColumns}
+                overscan={{
+                  main: contentWidth / numColumns,
+                  reverse: contentWidth / numColumns,
+                }}
+                style={{
+                  height: screenHeight - 64,
+                }}
+                ListEmptyComponent={ListEmptyComponent}
+                ListFooterComponent={ListFooterComponent}
+                onEndReached={fetchMore}
+              />
+            </ProfileTabsNFTProvider>
           </MutateProvider>
         </View>
       </FilterContext.Provider>

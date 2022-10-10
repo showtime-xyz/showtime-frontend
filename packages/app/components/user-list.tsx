@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 
+import { Chip } from "@showtime-xyz/universal.chip";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -113,6 +114,8 @@ const FollowingListUser = memo(
         <Link
           href={`/@${item.username ?? item.wallet_address}`}
           onPress={hideSheet}
+          tw="flex-1"
+          viewProps={{ style: { flex: 1 } }}
         >
           <View tw="flex-row">
             <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
@@ -125,11 +128,11 @@ const FollowingListUser = memo(
                 />
               )}
             </View>
-            <View tw="mr-1 justify-center">
+            <View tw="mr-1 flex-1 justify-center">
               {item.name ? (
                 <>
                   <Text
-                    tw="max-w-[150px] text-sm font-semibold text-gray-600 dark:text-gray-300"
+                    tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
                     numberOfLines={1}
                   >
                     {item.name}
@@ -140,11 +143,14 @@ const FollowingListUser = memo(
 
               <View tw="flex-row items-center">
                 <Text
-                  tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
+                  tw="max-w-[120px] text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username ? (
-                    <>@{item.username}</>
+                    <>
+                      @{item.username}
+                      {item.username}
+                    </>
                   ) : (
                     <>{formatAddressShort(item.wallet_address)}</>
                   )}
@@ -154,15 +160,20 @@ const FollowingListUser = memo(
                     <VerificationBadge size={14} />
                   </View>
                 )}
+                {item?.follows_you ? (
+                  <Chip label="Follows You" tw="ml-1 py-1" />
+                ) : null}
               </View>
             </View>
           </View>
         </Link>
-        <FollowButton
-          profileId={item.profile_id}
-          name={item.name}
-          onToggleFollow={onToggleFollow}
-        />
+        <View tw="max-w-[120px]">
+          <FollowButton
+            profileId={item.profile_id}
+            name={item.name}
+            onToggleFollow={onToggleFollow}
+          />
+        </View>
       </View>
     );
   }

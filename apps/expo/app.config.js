@@ -89,6 +89,7 @@ export default {
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
+    googleServicesFile: STAGE === "production" ? "./google-services.json" : "",
   },
   androidNavigationBar: {
     barStyle: "dark-content",

@@ -1,13 +1,16 @@
-import { useRef } from "react";
-import { Linking, Platform } from "react-native";
-import { ScrollView as RNScrollView } from "react-native";
+import { useRef, useContext } from "react";
+import {
+  Linking,
+  Platform,
+  ScrollView as ReactNativeScrollView,
+} from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Close } from "@showtime-xyz/universal.icon";
+import { Check } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -19,8 +22,10 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
+import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
@@ -28,12 +33,11 @@ import {
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useShare } from "app/hooks/use-share";
-import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useRudder } from "app/lib/rudderstack";
-import { useClaimNFT } from "app/providers/claim-provider";
 import {
+  formatAddressShort,
   getCreatorUsernameFromNFT,
   getProfileName,
   getTwitterIntent,
@@ -44,17 +48,14 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, claimNFT, onReconnectWallet } = useClaimNFT(
-    edition?.creator_airdrop_edition
+  const { state } = useContext(ClaimContext);
+  const { claimNFT, onReconnectWallet } = useClaimNFT(
+    edition.creator_airdrop_edition
   );
-  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
-    edition?.creator_airdrop_edition
-  );
-
   const share = useShare();
   const router = useRouter();
   const { user } = useUser();
-  const scrollViewRef = useRef<RNScrollView>(null);
+  const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
@@ -123,7 +124,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
-  if (state.status === "success") {
+  if (state.status === "loading" && state.signaturePrompt === false) {
+    router.pop();
+
+    return null;
+  }
+
+  if (state.status === "share") {
     const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
       process.env.NEXT_PUBLIC_CHAIN_ID,
     ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
@@ -184,7 +191,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             }}
           >
             {isShareAPIAvailable
-              ? "Share NFT with your friends"
+              ? "Share with your friends"
               : "Copy drop link 🔗"}
           </Button>
           <Button variant="tertiary" tw="mt-4" onPress={router.pop}>
@@ -249,14 +256,14 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
                 Wallet
               </Text>
-              {/* <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
+              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
                 {primaryWallet.nickname
                   ? primaryWallet.nickname +
                     " (" +
                     formatAddressShort(primaryWallet.address) +
                     ")"
                   : formatAddressShort(primaryWallet.address)}
-              </Text> */}
+              </Text>
             </View>
             <View>
               <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
@@ -280,36 +287,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
 
-          {edition.gating_type === "spotify_save" ? (
-            <View tw="mt-4 flex-row items-center">
-              {user.data.profile.has_spotify_token ? (
-                <>
-                  <Check
-                    height={20}
-                    width={20}
-                    //@ts-ignore
-                    color={isDark ? colors.gray[100] : colors.gray[900]}
-                  />
-                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                    We'll save this song on your spotify playlist
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Close
-                    height={18}
-                    width={18}
-                    //@ts-ignore
-                    color={isDark ? colors.gray[100] : colors.gray[900]}
-                  />
-                  <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                    You connected your profile to Spotify
-                  </Text>
-                </>
-              )}
-            </View>
-          ) : null}
-
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
@@ -328,19 +305,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               variant="primary"
               disabled={state.status === "loading"}
               tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              onPress={() =>
-                edition.gating_type === "spotify_save"
-                  ? claimSpotifyGatedDrop(nft?.data.item)
-                  : claimNFT()
-              }
+              onPress={handleClaimNFT}
             >
               {state.status === "loading"
                 ? "Claiming... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Retry!"
-                : edition.gating_type === "spotify_save" &&
-                  !user.data.profile.has_spotify_token
-                ? "Connect Spotify to claim"
                 : "Claim for free"}
             </Button>
 

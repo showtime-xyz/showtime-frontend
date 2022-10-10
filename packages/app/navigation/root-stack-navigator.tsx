@@ -26,6 +26,7 @@ import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-numbe
 import { SpotifyAuth } from "app/screens/spotify-auth";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
+import { ClaimLimitExplanationScreen } from "../screens/claim-limit-explanation";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -46,14 +47,17 @@ export function RootStackNavigator() {
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
-
-      {/* Screens accessible in most of the navigators */}
-      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
+      {/* Screens without default header */}
+      <Stack.Group screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
+      </Stack.Group>
+
+      {/* Screens accessible in most of the navigators */}
+      <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
           name="privacySecuritySettings"
@@ -103,8 +107,21 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
+
         <Stack.Screen name="claimers" component={ClaimersScreen} />
         <Stack.Screen name="spotifyAuth" component={SpotifyAuth} />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+          animation: "none",
+          presentation: "transparentModal",
+        }}
+      >
+        <Stack.Screen
+          name="claimLimitExplanation"
+          component={ClaimLimitExplanationScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -22,10 +22,7 @@ export type ButtonProps = {
   children?: React.ReactNode | string;
 } & PressableProps &
   Partial<
-    Pick<
-      BaseButtonProps,
-      "tw" | "labelTW" | "iconOnly" | "size" | "accentColor"
-    >
+    Pick<BaseButtonProps, "labelTW" | "iconOnly" | "size" | "accentColor">
   >;
 
 export type BaseButtonProps = {
