@@ -1,7 +1,11 @@
+import { View, Platform } from "react-native";
+
 import { AnimatePresence } from "moti";
 import { FullWindowOverlay } from "react-native-screens";
 
 import { Snackbar, SnackbarProps, SNACKBAR_HEIGHT } from "./snackbar";
+
+const OverLayView = Platform.OS === "ios" ? FullWindowOverlay : View;
 
 export const SnackbarContainer = ({
   show,
@@ -11,7 +15,7 @@ export const SnackbarContainer = ({
   return (
     <AnimatePresence>
       {show && (
-        <FullWindowOverlay
+        <OverLayView
           style={{
             position: "absolute",
             height: SNACKBAR_HEIGHT,
@@ -20,7 +24,7 @@ export const SnackbarContainer = ({
           }}
         >
           <Snackbar show={show} snackbar={snackbar} {...rest} />
-        </FullWindowOverlay>
+        </OverLayView>
       )}
     </AnimatePresence>
   );

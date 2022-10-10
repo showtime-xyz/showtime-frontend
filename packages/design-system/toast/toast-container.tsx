@@ -1,9 +1,13 @@
+import { View, Platform } from "react-native";
+
 import { AnimatePresence } from "moti";
 import { FullWindowOverlay } from "react-native-screens";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { SAFE_AREA_TOP, Toast } from "./toast";
+
+const OverLayView = Platform.OS === "ios" ? FullWindowOverlay : View;
 
 type ToastProps = {
   show: boolean;
@@ -17,7 +21,7 @@ export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
   return (
     <AnimatePresence>
       {show && (
-        <FullWindowOverlay
+        <OverLayView
           style={{
             position: "absolute",
             width: "100%",
@@ -25,7 +29,7 @@ export const ToastContainer = ({ show, render, message, hide }: ToastProps) => {
           }}
         >
           <Toast render={render} message={message} hide={hide} />
-        </FullWindowOverlay>
+        </OverLayView>
       )}
     </AnimatePresence>
   );
