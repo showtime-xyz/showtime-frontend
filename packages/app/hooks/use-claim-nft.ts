@@ -254,7 +254,7 @@ export const useClaimNFT = (edition: IEdition) => {
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
       } else {
-        snackbar?.show({
+        snackbar?.update({
           text: "Claiming failed. Please try again!",
           bottom,
           iconStatus: "default",
