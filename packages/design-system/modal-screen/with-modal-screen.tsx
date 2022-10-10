@@ -2,6 +2,7 @@ import { FC, useCallback, useRef } from "react";
 
 import { ModalMethods, ModalScreen } from "@showtime-xyz/universal.modal";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import type { ModalScreenOptions } from "./types";
@@ -25,16 +26,18 @@ function withModalScreen<P extends {}>(
       // Toast provider so we toast shows up on top of modal overlay
       // TODO: use FullWindowOverlay or Portal instead of Portal
       <ToastProvider>
-        <ModalScreen
-          ref={modalRef}
-          title={title}
-          mobile_snapPoints={snapPoints}
-          isScreen={true}
-          onClose={onClose}
-          {...rest}
-        >
-          <Screen {...props} />
-        </ModalScreen>
+        <SnackbarProvider>
+          <ModalScreen
+            ref={modalRef}
+            title={title}
+            mobile_snapPoints={snapPoints}
+            isScreen={true}
+            onClose={onClose}
+            {...rest}
+          >
+            <Screen {...props} />
+          </ModalScreen>
+        </SnackbarProvider>
       </ToastProvider>
     );
   };
