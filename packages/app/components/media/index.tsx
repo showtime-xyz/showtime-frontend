@@ -28,7 +28,7 @@ const Dynamic3dModel = dynamic<ModelProps>(
 );
 
 type Props = {
-  item: NFT & { loading?: boolean };
+  item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
   sizeStyle?: ImageStyle;

@@ -123,7 +123,7 @@ export const getMediaUrl = ({
   nft,
   stillPreview,
 }: {
-  nft: NFT;
+  nft?: NFT;
   stillPreview: boolean;
 }) => {
   if (!nft || (!nft.chain_name && !nft.contract_address && !nft.token_id)) {

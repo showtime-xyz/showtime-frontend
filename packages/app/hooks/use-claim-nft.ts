@@ -197,6 +197,7 @@ export const useClaimNFT = (edition: IEdition) => {
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
+      snackbar?.hide();
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
 

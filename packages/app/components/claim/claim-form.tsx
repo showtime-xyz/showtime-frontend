@@ -49,6 +49,7 @@ import {
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
   const { state } = useContext(ClaimContext);
+
   const { claimNFT, onReconnectWallet } = useClaimNFT(
     edition.creator_airdrop_edition
   );
@@ -124,11 +125,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     );
   }
 
-  if (state.status === "loading" && state.signaturePrompt === false) {
-    router.pop();
+  // if (state.status === "loading" && state.signaturePrompt === false) {
+  //   router.pop();
 
-    return null;
-  }
+  //   return null;
+  // }
 
   if (state.status === "share") {
     const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
@@ -220,7 +221,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
   return (
-    <ScrollComponent ref={scrollViewRef}>
+    <ScrollComponent ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
