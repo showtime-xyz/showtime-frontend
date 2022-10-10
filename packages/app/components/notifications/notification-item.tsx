@@ -21,6 +21,7 @@ export type NotificationItemProp = {
   notification: NotificationType;
   setUsers: (actors: Actor[]) => void;
 };
+
 const NOTIFICATION_TYPE_COPY = new Map([
   ["FOLLOW", "followed you"],
   ["LIKE_ON_CREATED_NFT", "liked "],
@@ -50,6 +51,14 @@ export const NotificationItem = ({
           myProfile?.user?.data.profile.username ||
           myProfile?.user?.data.profile.wallet_addresses[0]
         }`);
+
+  if (
+    NOTIFICATION_TYPE_COPY.get(notification.type_name) === undefined ||
+    icon === undefined
+  ) {
+    return null;
+  }
+
   return (
     <View tw="flex-row items-center p-4">
       {icon}
@@ -81,7 +90,7 @@ const NotificationDescription = ({
         ellipsizeMode="tail"
       >
         <Actors actors={notification.actors} setUsers={setUsers} />
-        {NOTIFICATION_TYPE_COPY.get(notification.type_name) ?? ""}
+        {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
         <NFTSDisolayName nfts={notification.nfts} />
       </Text>
       <View tw="h-1" />
