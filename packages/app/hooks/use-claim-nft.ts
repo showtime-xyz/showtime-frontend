@@ -180,16 +180,15 @@ export const useClaimNFT = (edition: IEdition) => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
+        snackbar?.show({
+          text: "Claiming...",
+          iconStatus: "waiting",
+          bottom,
+          hideAfter: 200000, // After this, the transaction failed
+        });
 
         if (edition?.is_gated) {
           await gatedClaimFlow();
-
-          snackbar?.show({
-            text: "Claiming...",
-            iconStatus: "waiting",
-            bottom,
-            hideAfter: 200000, // After this, the transaction failed
-          });
         } else {
           await oldSignatureClaimFlow();
         }
