@@ -253,14 +253,14 @@ export const useClaimNFT = (edition: IEdition) => {
           "Oops. An error occured.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
-      } else {
-        snackbar?.show({
-          text: "Claiming failed. Please try again!",
-          bottom,
-          iconStatus: "default",
-          hideAfter: 10000,
-        });
       }
+
+      snackbar?.update({
+        text: "Claiming failed. Please try again!",
+        bottom,
+        iconStatus: "default",
+        hideAfter: 10000,
+      });
 
       captureException(e);
     }
