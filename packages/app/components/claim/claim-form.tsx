@@ -85,13 +85,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     ) {
       follow(nft?.data.item.creator_id);
     }
-
+    router.pop();
     const success = await claimNFT();
 
     if (comment.current.trim().length > 0 && success) {
       newComment(comment.current);
     }
-
     mutate();
   };
   const onSkipToShare = () => {
