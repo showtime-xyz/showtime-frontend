@@ -163,6 +163,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
           </View>
           <Button
+            size="regular"
             onPress={() => {
               rudder?.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
@@ -184,6 +185,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </Button>
           <View tw="h-4" />
           <Button
+            size="regular"
             onPress={async () => {
               const result = await share({
                 url: claimUrl,
@@ -203,7 +205,12 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               ? "Share with your friends"
               : "Copy drop link 🔗"}
           </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={onSkipToShare}>
+          <Button
+            variant="tertiary"
+            size="regular"
+            tw="mt-4"
+            onPress={onSkipToShare}
+          >
             Skip for now
           </Button>
         </View>
