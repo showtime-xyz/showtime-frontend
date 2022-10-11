@@ -1,8 +1,0 @@
-{
-    "out": "docs",
-    "entryPoints": [
-        "./src/index.ts"
-    ],
-    "theme": "minimal",
-    "gitRevision": "master"
-}
