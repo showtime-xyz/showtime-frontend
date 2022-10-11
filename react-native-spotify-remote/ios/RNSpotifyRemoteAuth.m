@@ -20,7 +20,8 @@ static RNSpotifyRemoteAuth *sharedInstance = nil;
     BOOL _initialized;
     BOOL _isInitializing;
     NSDictionary* _options;
-    
+    RCTPromiseResolveBlock _resolve;
+
     NSMutableArray<RNSpotifyRemotePromise*>* _sessionManagerCallbacks;
     
     SPTConfiguration* _apiConfiguration;
@@ -110,6 +111,16 @@ static RNSpotifyRemoteAuth *sharedInstance = nil;
     DLog(@"Session Initiated");
 }
 
+- (BOOL)sessionManager:(SPTSessionManager *)manager shouldRequestAccessTokenWithAuthorizationCode:(SPTAuthorizationCode)code {
+    
+    if (_resolve != nil) {
+        
+        _resolve(code);
+        _resolve = nil;
+    }
+    return NO;
+}
+
 - (void)sessionManager:(SPTSessionManager *)manager didFailWithError:(NSError *)error
 {
     [RNSpotifyRemotePromise rejectCompletions:_sessionManagerCallbacks error:[RNSpotifyRemoteError errorWithNSError:error]];
@@ -165,6 +176,8 @@ RCT_EXPORT_METHOD(getSession:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseR
 
 RCT_EXPORT_METHOD(authorize:(NSDictionary*)options resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
+    
+    _resolve = resolve;
     // Wrap our promise callbacks in a completion
     RNSpotifyRemotePromise<NSString*>* completion = [RNSpotifyRemotePromise<NSString*> onResolve:^(NSString *result) {
         resolve(result);
