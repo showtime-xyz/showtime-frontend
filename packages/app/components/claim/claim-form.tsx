@@ -89,6 +89,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     ) {
       follow(nft?.data.item.creator_id);
     }
+    router.pop();
 
     let success: boolean | undefined = false;
 
@@ -101,7 +102,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     if (comment.current.trim().length > 0 && success) {
       newComment(comment.current);
     }
-
     mutate();
   };
   const onSkipToShare = () => {

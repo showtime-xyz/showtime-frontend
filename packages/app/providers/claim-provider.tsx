@@ -1,4 +1,4 @@
-import { ReactNode, useReducer, useState, useEffect } from "react";
+import { ReactNode, useReducer, useState, useEffect, useCallback } from "react";
 
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
@@ -90,6 +90,12 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
     dispatch({ type: "error", error: "polling timed out" });
   };
+  const snackbarAction = useCallback(() => {
+    redirectToClaimDrop(contractAddress);
+    dispatch({
+      type: "share",
+    });
+  }, [contractAddress, redirectToClaimDrop]);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -97,19 +103,15 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
         text: "Claimed!",
         iconStatus: "done",
         bottom,
-        hideAfter: 25000,
+        hideAfter: 5000,
         action: {
           text: "Share",
-          onPress: () => {
-            redirectToClaimDrop(contractAddress);
-            dispatch({
-              type: "share",
-            });
-          },
+          onPress: snackbarAction,
         },
       });
     }
-  }, [state, bottom, snackbar, redirectToClaimDrop, contractAddress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, bottom, contractAddress]);
 
   return (
     <ClaimContext.Provider value={{ state, dispatch, pollTransaction }}>

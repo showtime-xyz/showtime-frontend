@@ -73,6 +73,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         status: "success",
+        transactionHash: undefined,
         mint: action.mint,
       };
     case "transactionHash":
@@ -90,18 +91,21 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         signaturePrompt: false,
+        transactionHash: undefined,
       };
     }
     case "share":
       return {
         ...state,
         status: "share",
+        transactionHash: undefined,
       };
     case "error":
       return {
         ...state,
         status: "error",
         signaturePrompt: false,
+        transactionHash: undefined,
         error: action.error,
       };
     case "initial":
