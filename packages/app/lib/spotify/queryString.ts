@@ -2,7 +2,7 @@ import { MyInfo, NFT } from "../../types";
 
 export const redirectUri = `${
   __DEV__
-    ? "http://localhost:3000"
+    ? "https://3acd-103-85-10-249.in.ngrok.io"
     : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
 }/spotify-auth/redirect`;
 

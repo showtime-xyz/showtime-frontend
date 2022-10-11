@@ -110,7 +110,7 @@ export interface Profile {
   notifications_last_opened: Date;
   has_onboarded: boolean;
   links: Link[];
-  primary_wallet: WalletAddressesV2;
+  primary_wallet?: WalletAddressesV2;
   has_verified_phone_number: boolean;
 }
 

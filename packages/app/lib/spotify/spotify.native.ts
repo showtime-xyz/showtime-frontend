@@ -6,12 +6,16 @@ import {
 
 // Api Config object, replace with your own applications client id and urls
 
-export const redirectUri = "io.showtime.development://spotify-success";
+export const redirectUri =
+  process.env.STAGE === "development"
+    ? "io.showtime.development://spotify-success"
+    : "io.showtime://spotify-success";
 // TODO: patch this PR - https://github.com/spotify/android-auth/pull/89/files
 const spotifyConfig: ApiConfig = {
   clientID: "e12f7eea542947ff843cfc68d762235a",
   redirectURL: redirectUri,
   scopes: [
+    ApiScope.UserTopReadScope,
     ApiScope.UserReadRecentlyPlayedScope,
     ApiScope.UserReadPrivateScope,
     ApiScope.UserReadEmailScope,
@@ -19,8 +23,6 @@ const spotifyConfig: ApiConfig = {
     ApiScope.UserFollowReadScope,
     ApiScope.UserLibraryModifyScope,
     ApiScope.UserLibraryReadScope,
-    ApiScope.UserTopReadScope,
-    ApiScope.UserReadPrivateScope,
   ],
   authType: "CODE",
 };

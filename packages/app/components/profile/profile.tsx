@@ -221,8 +221,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <Text numberOfLines={1} tw="text-lg font-bold text-white">
           {profileData?.data?.profile.name ??
             profileData?.data?.profile.username ??
-            profileData?.data?.profile.primary_wallet.nickname ??
-            profileData?.data?.profile.primary_wallet.address}
+            profileData?.data?.profile.primary_wallet?.nickname ??
+            profileData?.data?.profile.primary_wallet?.address}
         </Text>
       </View>
     );
