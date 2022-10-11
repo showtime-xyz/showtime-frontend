@@ -9007,9 +9007,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.snackbar@npm:^0.0.86":
-  version: 0.0.86
-  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.86"
+"@showtime-xyz/universal.snackbar@npm:^0.0.87":
+  version: 0.0.87
+  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.87"
   dependencies:
     "@radix-ui/react-portal": 0.1.4
     "@showtime-xyz/universal.button": 0.0.63
@@ -9031,7 +9031,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: f908581bd47a7dec04aba40768cc95965ba8ee85e62e0a74d1561384faa5ef6dc3565ee9bd927d80af8380d5bb8b0de4d691077ef0c5fe92b19986be44e15c9a
+  checksum: fe14a41623ad0bd1b157417c99f55d7d90b114efa01f26997b40f72449e794012ffdd9567a4bb6e9fdc7a94c7e0d2ec4616120bcc4e042c17b7dc85d369a484e
   languageName: node
   linkType: hard
 
@@ -9318,7 +9318,7 @@ __metadata:
     "@showtime-xyz/universal.segmented-control": ^0.0.51
     "@showtime-xyz/universal.select": ^0.0.83
     "@showtime-xyz/universal.skeleton": ^0.0.44
-    "@showtime-xyz/universal.snackbar": ^0.0.86
+    "@showtime-xyz/universal.snackbar": ^0.0.87
     "@showtime-xyz/universal.spinner": ^0.0.52
     "@showtime-xyz/universal.switch": ^0.0.55
     "@showtime-xyz/universal.tab-view": ^0.0.43

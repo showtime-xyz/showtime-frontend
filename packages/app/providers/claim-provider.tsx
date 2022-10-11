@@ -54,7 +54,7 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
       if (response.is_complete) {
         rudder?.track("NFT Claimed");
-        snackbar?.show({
+        snackbar?.update({
           text: "Claimed!",
           iconStatus: "done",
           bottom,
