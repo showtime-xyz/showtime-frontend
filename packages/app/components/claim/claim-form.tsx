@@ -70,7 +70,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   });
   const redirectToClaimDrop = useRedirectToClaimDrop();
 
-  const isDark = useIsDarkMode();
   const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
