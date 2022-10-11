@@ -17,11 +17,12 @@ type ClaimButtonProps = {
 };
 export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { state: claimStates } = useContext(ClaimContext);
+  const { state: claimStates, dispatch } = useContext(ClaimContext);
   const isProgress =
     claimStates.status === "loading" && claimStates.signaturePrompt === false;
 
   const onClaimPress = () => {
+    dispatch({ type: "initial" });
     redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
   };
 
