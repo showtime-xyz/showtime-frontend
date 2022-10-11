@@ -1,4 +1,4 @@
-import { MyInfo, NFT } from "../../types";
+import { MyInfo, NFT } from "app/types";
 
 export const redirectUri = `${
   __DEV__
@@ -9,7 +9,7 @@ export const redirectUri = `${
 const scope =
   "user-top-read user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
 
-const clientID = "e12f7eea542947ff843cfc68d762235a";
+export const clientID = "e12f7eea542947ff843cfc68d762235a";
 
 export const getQueryString = (nft: NFT, user?: MyInfo) => {
   const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user?.data.profile.profile_id}`;

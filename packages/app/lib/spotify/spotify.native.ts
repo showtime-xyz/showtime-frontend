@@ -2,7 +2,9 @@ import {
   auth as SpotifyAuth,
   ApiScope,
   ApiConfig,
-} from "app/lib/react-native-spotify-remote";
+} from "react-native-spotify-remote";
+
+import { clientID } from "./queryString";
 
 // Api Config object, replace with your own applications client id and urls
 
@@ -12,7 +14,7 @@ export const redirectUri =
     : "io.showtime://spotify-success";
 // TODO: patch this PR - https://github.com/spotify/android-auth/pull/89/files
 const spotifyConfig: ApiConfig = {
-  clientID: "e12f7eea542947ff843cfc68d762235a",
+  clientID,
   redirectURL: redirectUri,
   scopes: [
     ApiScope.UserTopReadScope,
