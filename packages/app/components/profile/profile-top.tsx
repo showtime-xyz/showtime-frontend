@@ -443,7 +443,7 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
-          {isSelf && user?.data?.claim_tank?.available_claims && (
+          {isSelf && user?.data?.claim_tank?.available_claims ? (
             <Pressable
               onPress={onPressClaimLimit}
               tw="mt-3 flex-row items-center"
@@ -464,7 +464,7 @@ export const ProfileTop = ({
                 color={isDark ? colors.gray[400] : colors.gray[600]}
               />
             </Pressable>
-          )}
+          ) : null}
           <Hidden from="md">
             <Follow
               onPressFollower={onPressFollower}
