@@ -2,7 +2,7 @@ import {
   auth as SpotifyAuth,
   ApiScope,
   ApiConfig,
-} from "react-native-spotify-remote";
+} from "app/lib/react-native-spotify-remote";
 
 // Api Config object, replace with your own applications client id and urls
 
