@@ -150,20 +150,30 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     });
 
     return (
-      <View tw="items-center justify-center p-4">
-        <Text tw="text-8xl">🎉</Text>
+      <View tw="items-center justify-center">
+        {/* <Text tw="text-8xl">🎉</Text> */}
+        <Media
+          item={nft?.data.item}
+          sizeStyle={{ height: 200, width: 200, borderRadius: 16 }}
+        />
         <View>
           <View tw="h-8" />
           <Text tw="text-center text-4xl text-black dark:text-white">
             Congrats!
           </Text>
-          <View tw="mt-8 mb-10">
+          <View tw="mt-4">
             <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share it with the world!
+              Share it with the world!
+            </Text>
+          </View>
+          <View tw="mt-4 mb-8">
+            <Text tw="text-center text-sm text-gray-900 dark:text-gray-100">
+              {user?.data.claim_tank.available_claims
+                ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
+                : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
             </Text>
           </View>
           <Button
-            size="regular"
             onPress={() => {
               rudder?.track("Drop Shared", { type: "Twitter" });
               Linking.openURL(
@@ -185,7 +195,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
           </Button>
           <View tw="h-4" />
           <Button
-            size="regular"
             onPress={async () => {
               const result = await share({
                 url: claimUrl,
@@ -205,12 +214,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               ? "Share with your friends"
               : "Copy drop link 🔗"}
           </Button>
-          <Button
-            variant="tertiary"
-            size="regular"
-            tw="mt-4"
-            onPress={onSkipToShare}
-          >
+          <Button variant="tertiary" tw="mt-4" onPress={onSkipToShare}>
             Skip for now
           </Button>
         </View>
