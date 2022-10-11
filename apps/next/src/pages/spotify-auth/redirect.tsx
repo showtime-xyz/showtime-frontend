@@ -80,20 +80,12 @@ const SpotifyAuthRedirect = () => {
     );
   }
 
-  if (fetching) {
-    return (
-      <View tw="h-screen flex-row items-center justify-center">
-        <Text tw="light:text-black mr-2 dark:text-white">Loading...</Text>
-        <Spinner size="small" />
-      </View>
-    );
-  }
-
   return (
-    <View tw="h-screen items-center justify-center">
-      <Text tw="light:text-black dark:text-white">
-        Please wait...You'll be redirected back to the app
+    <View tw="h-screen flex-row items-center justify-center">
+      <Text tw="light:text-black mr-2 text-lg dark:text-white">
+        Taking you back to Showtime...
       </Text>
+      <Spinner size="small" />
     </View>
   );
 };
