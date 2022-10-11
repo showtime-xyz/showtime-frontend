@@ -38,7 +38,8 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
   const disabled =
     status === ClaimStatus.Claimed ||
     status === ClaimStatus.Soldout ||
-    isExpired;
+    isExpired ||
+    isProgress;
 
   return (
     <Button
@@ -46,7 +47,7 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       disabled={disabled}
       style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
       size={size}
-      tw={isExpired && !bgIsGreen ? "opacity-50" : ""}
+      tw={(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : ""}
     >
       {status === ClaimStatus.Claimed ? (
         <>
@@ -61,7 +62,7 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       ) : status === ClaimStatus.Expired ? (
         "Drop expired"
       ) : isProgress ? (
-        "Claim in progress"
+        "Claiming in progress…"
       ) : (
         "Claim for free"
       )}
