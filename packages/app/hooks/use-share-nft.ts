@@ -6,18 +6,23 @@ import { findTokenChainName } from "app/lib/utilities";
 import { NFT } from "app/types";
 import { getTwitterIntent } from "app/utilities";
 
+export const getNFTSlug = (nft: NFT) =>
+  `/t/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
+    nft?.token_id
+  }`;
+
+export const getNFTURL = (nft: NFT) =>
+  `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + getNFTSlug(nft)}`;
+
 export const useShareNFT = () => {
   const { rudder } = useRudder();
   const share = useShare();
 
   const shareNFT = async (nft?: NFT) => {
     if (!nft) return;
+    const url = getNFTURL(nft);
     const result = await share({
-      url: `https://${
-        process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
-      }/t/${findTokenChainName(nft?.chain_identifier)}/${
-        nft?.contract_address
-      }/${nft?.token_id}`,
+      url,
     });
 
     if (result.action === "sharedAction") {
