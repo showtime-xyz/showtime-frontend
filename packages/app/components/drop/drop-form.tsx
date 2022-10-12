@@ -543,7 +543,7 @@ export const DropForm = () => {
                       tw="flex-1"
                       label="Spotify URL"
                       onBlur={onBlur}
-                      onChange={onChange}
+                      onChangeText={onChange}
                       value={value}
                       helperText="Enter the spotify url of the track"
                       errorText={errors.spotifyUrl?.message}
