@@ -13,7 +13,6 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimedBy } from "app/components//feed-item/claimed-by";
-import { LikedBy } from "app/components//liked-by";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
@@ -152,13 +151,11 @@ function Card({
               <ClaimButton edition={edition} />
             ) : null}
           </View>
-          <View tw="flex-row items-center justify-between px-4">
-            {numColumns < 3 && <LikedBy nft={nft} />}
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
-            />
-          </View>
+          <ClaimedBy
+            claimersList={detailData?.data.item?.multiple_owners_list}
+            nft={nft}
+            tw="px-4"
+          />
         </View>
       </View>
     </LikeContextProvider>
