@@ -144,7 +144,7 @@ function Card({
           >
             <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
-          <View tw="flex-row justify-between px-4">
+          <View tw="flex-row justify-between px-4 py-2">
             <Social nft={nft} />
             {showClaimButton &&
             !!nft.creator_airdrop_edition_address &&
