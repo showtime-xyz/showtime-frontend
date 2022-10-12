@@ -22,6 +22,7 @@ import {
   Slash,
   Refresh,
   Twitter,
+  Showtime,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -33,9 +34,11 @@ import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
+import { isMobileWeb, isAndroid } from "app/utilities";
 
 import { OpenSea } from "design-system/icon";
 
@@ -133,6 +136,27 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           </DropdownMenuItem>
         ) : null}
 
+        {nft && isMobileWeb() ? (
+          <DropdownMenuItem
+            onSelect={() => {
+              window.location.replace(`io.showtime://${getNFTSlug(nft)}`);
+
+              setTimeout(function () {
+                window.open(
+                  isAndroid()
+                    ? "https://play.google.com/store/apps/details?id=io.showtime"
+                    : "https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688",
+                  "_blank"
+                );
+              }, 2000);
+            }}
+            key="open-in-app"
+          >
+            <MenuItemIcon Icon={Showtime} />
+            <DropdownMenuItemTitle>Open in app</DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
+
         {nft?.multiple_owners_list &&
           nft?.multiple_owners_list.length > 0 &&
           nft?.contract_address && (
@@ -141,6 +165,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
               <DropdownMenuItemTitle>View on OpenSea</DropdownMenuItemTitle>
             </DropdownMenuItem>
           )}
+
         {shouldEnableSharing && (
           <>
             {!isShareAPIAvailable && (
