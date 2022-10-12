@@ -23,6 +23,7 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
+  onVisibleIndexChange?: (index: number) => void;
 };
 
 export const SwipeList = ({
