@@ -12,9 +12,10 @@ import { TextLink } from "app/navigation/link";
 interface Props {
   nft?: any;
   max?: number;
+  tw?: string;
 }
 
-export function LikedBy({ nft, max = 2 }: Props) {
+export function LikedBy({ nft, max = 2, tw = "" }: Props) {
   //#region hooks
   const { data } = useLikes(nft?.nft_id);
   const router = useRouter();
@@ -25,7 +26,12 @@ export function LikedBy({ nft, max = 2 }: Props) {
   }
 
   return (
-    <View tw="flex flex-row items-center justify-start bg-white	dark:bg-black">
+    <View
+      tw={[
+        "flex flex-row items-center justify-start bg-white	dark:bg-black",
+        tw,
+      ]}
+    >
       <Text tw="text-sm text-gray-900 dark:text-white">Liked by&nbsp;</Text>
       <Text tw="text-sm text-gray-900 dark:text-white">
         {data?.likers.slice(0, max).map((like, index) => (
