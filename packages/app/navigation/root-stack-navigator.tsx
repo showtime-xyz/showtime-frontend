@@ -14,6 +14,7 @@ import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
+import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
@@ -106,8 +107,8 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
-
         <Stack.Screen name="claimers" component={ClaimersScreen} />
+        <Stack.Screen name="likers" component={LikersScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{

@@ -3,18 +3,10 @@ import useUnmountSignal from "use-unmount-signal";
 
 import { axios } from "app/lib/axios";
 
-export interface Liker {
-  profile_id: number;
-  verified: number;
-  wallet_address: string;
-  name: string;
-  img_url: string;
-  timestamp: Date;
-  username: string;
-}
+import { UserItemType } from "./use-follow-list";
 
 export interface Data {
-  likers: Liker[];
+  likers: UserItemType[];
 }
 
 interface LikesPayload {

@@ -93,6 +93,7 @@ type RootStackNavigatorParams = {
   claim: undefined;
   claimers: undefined;
   claimLimitExplanation: undefined;
+  likers: undefined;
 };
 
 export type {
