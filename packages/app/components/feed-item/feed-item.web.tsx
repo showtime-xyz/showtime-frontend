@@ -16,6 +16,7 @@ import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
@@ -39,6 +40,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   itemHeight,
 }) {
+  const { isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
@@ -91,7 +93,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
-        {activeIndex === 0 && isMobileWeb() ? (
+        {activeIndex === 0 && isMobileWeb() && isAuthenticated ? (
           <View
             tw="dark:shadow-dark shadow-light absolute top-0 right-0 left-0 z-10 bg-white dark:bg-black"
             style={{ paddingTop: headerHeight + StatusBarHeight }}
