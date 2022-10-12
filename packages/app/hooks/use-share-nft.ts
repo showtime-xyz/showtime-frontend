@@ -21,7 +21,6 @@ export const useShareNFT = () => {
   const shareNFT = async (nft?: NFT) => {
     if (!nft) return;
     const url = getNFTURL(nft);
-    console.log("efoef ", url);
     const result = await share({
       url,
     });
