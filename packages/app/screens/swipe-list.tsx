@@ -1,5 +1,4 @@
-import { useMemo, useEffect, useRef, useCallback } from "react";
-import { Platform } from "react-native";
+import { useMemo } from "react";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
@@ -9,7 +8,6 @@ import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
@@ -54,12 +52,10 @@ const FeedSwipeList = () => {
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const { onVisibleIndexChange } = useSyncNFTURL(data);
 
   return (
     <SwipeList
       data={data}
-      onVisibleIndexChange={onVisibleIndexChange}
       initialScrollIndex={Number(initialScrollIndex)}
       bottomPadding={safeAreaBottom}
     />
@@ -84,7 +80,6 @@ const ProfileSwipeList = () => {
     }
   );
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const { onVisibleIndexChange } = useSyncNFTURL(data);
 
   return (
     <MutateProvider mutate={updateItem}>
@@ -97,7 +92,6 @@ const ProfileSwipeList = () => {
       >
         <SwipeList
           data={data}
-          onVisibleIndexChange={onVisibleIndexChange}
           fetchMore={fetchMore}
           isRefreshing={isRefreshing}
           refresh={refresh}
@@ -118,7 +112,6 @@ const TrendingNFTsSwipeList = () => {
     days: Number(days),
   });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const { onVisibleIndexChange } = useSyncNFTURL(data);
 
   return (
     <SwipeList
@@ -126,7 +119,6 @@ const TrendingNFTsSwipeList = () => {
       // fetchMore={fetchMore}
       // isRefreshing={isRefreshing}
       // refresh={refresh}
-      onVisibleIndexChange={onVisibleIndexChange}
       initialScrollIndex={Number(initialScrollIndex)}
       bottomPadding={safeAreaBottom}
     />
@@ -138,7 +130,6 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const [creatorId] = useParam("creatorId");
-  const { onVisibleIndexChange } = useSyncNFTURL(data);
 
   const { data, mutate } = useTrendingCreators({
     days: Number(days),
@@ -169,32 +160,7 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
         fetchMore={() => {}}
         isRefreshing={false}
         refresh={() => {}}
-        onVisibleIndexChange={onVisibleIndexChange}
       />
     </MutateProvider>
   );
 });
-
-const useSyncNFTURL = (data: NFT[]) => {
-  const initialURLSet = useRef(false);
-
-  useEffect(() => {
-    if (Platform.OS !== "web") return;
-
-    if (!initialURLSet.current) {
-      window.history.replaceState(null, "", getNFTSlug(data[0]));
-      initialURLSet.current = true;
-    }
-  }, [data]);
-
-  const onVisibleIndexChange = useCallback(
-    (index: number) => {
-      if (Platform.OS !== "web") return;
-
-      window.history.replaceState(null, "", getNFTSlug(data[index]));
-    },
-    [data]
-  );
-
-  return { onVisibleIndexChange };
-};

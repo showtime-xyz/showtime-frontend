@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+  createContext,
+  useState,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -17,7 +24,9 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 import { isMobileWeb } from "app/utilities";
 
@@ -28,15 +37,14 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  onVisibleIndexChange?: (index: number) => void;
 };
+const { useParam } = createParam();
 
 export const SwiperActiveIndexContext = createContext<number>(0);
 export const SwipeList = ({
   data,
   fetchMore,
   initialScrollIndex = 0,
-  onVisibleIndexChange,
 }: Props) => {
   // Todo: use nft_id instead of initialScrollIndex navigate to specific NFT
   // const [id, setId] = useParam("id");
@@ -44,6 +52,9 @@ export const SwipeList = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
+  const initialURLSet = useRef(false);
+  const [initialParamProp] = useParam("initialScrollIndex");
+  const isSwipeListScreen = typeof initialParamProp !== "undefined";
 
   const visibleItems = useSharedValue<any[]>([
     undefined,
@@ -60,6 +71,12 @@ export const SwipeList = ({
     []
   );
 
+  useEffect(() => {
+    if (!initialURLSet.current && isSwipeListScreen) {
+      window.history.replaceState(null, "", getNFTSlug(data[0]));
+      initialURLSet.current = true;
+    }
+  }, [data, isSwipeListScreen]);
   // const initialSlideIndex = useMemo(() => {
   //   const defaultIndex = clamp(initialScrollIndex, 0, data.length - 1);
   //   if (!id) return defaultIndex;
@@ -74,10 +91,12 @@ export const SwipeList = ({
         e.activeIndex,
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
-      onVisibleIndexChange?.(e.activeIndex);
+      if (isSwipeListScreen) {
+        window.history.replaceState(null, "", getNFTSlug(data[e.activeIndex]));
+      }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, onVisibleIndexChange]
+    [visibleItems, data, isSwipeListScreen]
   );
 
   if (data.length === 0) return null;
