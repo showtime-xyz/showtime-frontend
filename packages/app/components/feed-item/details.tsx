@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -12,6 +13,7 @@ import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { GiftButton } from "app/components/claim/gift-button";
+import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -22,9 +24,11 @@ import type { NFT } from "app/types";
 type NFTDetailsProps = {
   nft: NFT;
   edition?: CreatorEditionResponse;
+  detail?: NFT | undefined;
 };
-export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
+export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   const isDark = useIsDarkMode();
+  const router = useRouter();
   const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
@@ -62,10 +66,15 @@ export const NFTDetails = ({ nft, edition }: NFTDetailsProps) => {
           </Pressable>
           <View tw="w-8" />
           <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={nft} />
+            <NFTDropdown nft={detail} />
           </Suspense>
         </View>
       </View>
+      <ClaimedBy
+        claimersList={detail?.multiple_owners_list}
+        nft={nft}
+        tw="mb-4"
+      />
       {isCreatorDrop && edition ? (
         <ClaimButton edition={edition} size="regular" />
       ) : isCreatorDrop ? (

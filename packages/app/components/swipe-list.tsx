@@ -44,8 +44,8 @@ export const SwipeList = ({
   }, []);
 
   const itemHeight = Platform.select({
-    web: windowHeight - headerHeight,
-    android: safeAreaFrameHeight - headerHeight,
+    web: windowHeight,
+    android: safeAreaFrameHeight,
     default: screenHeight,
   });
 
@@ -78,6 +78,7 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
+      {/* <Header disableBlur canGoBack={false} color="#FFF" /> */}
       <ViewabilityInfiniteScrollList
         data={data}
         onEndReached={fetchMore}

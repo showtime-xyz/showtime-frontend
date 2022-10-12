@@ -43,11 +43,14 @@ import {
 } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
+import { breakpoints } from "design-system/theme";
 
 import { FollowButton } from "../follow-button";
 import { ProfileSocial } from "./profile-social";
 
-const AVATAR_SIZE = 86;
+const AVATAR_SIZE_SMALL = 86;
+const AVATAR_SIZE_LARGE = 128;
+
 const AVATAR_BORDER_SIZE = 4;
 
 function getFullSizeCover(url: string) {
@@ -124,6 +127,7 @@ export const ProfileTop = ({
   const { user } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
+  const isMdWidth = width >= breakpoints["md"];
   const profileId = profileData?.profile.profile_id;
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const isSelf = userId === profileId;
@@ -295,8 +299,8 @@ export const ProfileTop = ({
             <Animated.View
               style={[
                 {
-                  width: AVATAR_SIZE,
-                  height: AVATAR_SIZE,
+                  width: isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL,
+                  height: isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL,
                   borderRadius: 9999,
                   marginTop: -36,
                   overflow: "hidden",
@@ -308,16 +312,28 @@ export const ProfileTop = ({
               ]}
             >
               <Skeleton
-                height={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
-                width={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
+                height={
+                  (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
+                  AVATAR_BORDER_SIZE * 2
+                }
+                width={
+                  (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
+                  AVATAR_BORDER_SIZE * 2
+                }
                 show={isLoading}
                 colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
                   <LightBox
-                    width={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
-                    height={AVATAR_SIZE - AVATAR_BORDER_SIZE * 2}
+                    width={
+                      (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
+                      AVATAR_BORDER_SIZE * 2
+                    }
+                    height={
+                      (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
+                      AVATAR_BORDER_SIZE * 2
+                    }
                     imgLayout={{ width: contentWidth, height: width }}
                     borderRadius={999}
                     tapToClose

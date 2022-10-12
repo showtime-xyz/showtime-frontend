@@ -27,6 +27,7 @@ import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -39,6 +40,7 @@ import {
 } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFullscreen } from "app/hooks/use-full-screen";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
@@ -68,13 +70,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   itemHeight,
 }) {
   const router = useRouter();
-  const [showFullScreen, setShowFullScreen] = useState(false);
+  const { data: detailData } = useNFTDetailByTokenId({
+    contractAddress: nft?.contract_address,
+    tokenId: nft?.token_id,
+    chainName: nft?.chain_name,
+  });
 
   const [muted, setMuted] = useMuted();
   const swiper = useSwiper();
   const activeIndex = useContext(SwiperActiveIndexContext);
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
+  const [showFullScreen, setShowFullScreen] = useState(false);
+
   const disablePrevButton = activeIndex === 0;
   const disableNextButton = swiper
     ? activeIndex === swiper.snapGrid.length - 1
@@ -180,7 +188,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     variant: "text",
                     size: "regular",
                   }}
-                  nft={nft}
+                  nft={detailData?.data.item}
                 />
               </Suspense>
             </View>
@@ -266,28 +274,37 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             width: NFT_DETAIL_WIDTH,
           }}
         >
-          <View tw="px-4 pt-4">
-            <Social nft={nft} />
-          </View>
-          <LikedBy nft={nft} />
-          <View tw="my-4 mr-4 flex-row justify-between px-4">
-            <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
-              {nft.token_name}
-            </Text>
-          </View>
-          <Description
-            descriptionText={nft?.token_description}
-            tw="max-h-[30vh] overflow-auto p-4"
-          />
-          <View tw="flex-row items-center justify-between px-4">
-            <Creator nft={nft} />
-            <Owner nft={nft} price={false} />
-          </View>
-          <View tw="px-4 py-4">
-            {isCreatorDrop && edition ? (
-              <ClaimButton edition={edition} />
-            ) : null}
-            {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
+          <View tw="px-4">
+            <View tw="pt-4">
+              <Social nft={nft} />
+            </View>
+            <LikedBy nft={nft} />
+            <View tw="my-4 mr-4 flex-row justify-between">
+              <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
+                {nft.token_name}
+              </Text>
+            </View>
+            <Description
+              descriptionText={nft?.token_description}
+              tw="max-h-[30vh] overflow-auto py-4"
+            />
+
+            <View tw="flex-row items-center justify-between">
+              <Creator nft={nft} />
+              <Owner nft={nft} price={false} />
+            </View>
+
+            <View tw="pb-4">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+                tw="mt-2 mb-4"
+              />
+              {isCreatorDrop && edition ? (
+                <ClaimButton edition={edition} />
+              ) : null}
+              {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
+            </View>
           </View>
           <TabBarSingle
             onPress={(i) => {

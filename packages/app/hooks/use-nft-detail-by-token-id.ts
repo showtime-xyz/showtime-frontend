@@ -14,7 +14,7 @@ type Data = {
   item: NFT;
 };
 
-type NFTDetailPayload = {
+export type NFTDetailPayload = {
   data: Data;
 };
 

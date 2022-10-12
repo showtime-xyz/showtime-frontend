@@ -13,7 +13,6 @@ import {
   DropdownMenuItemIcon,
   DropdownMenuTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   UserMinus,
@@ -31,7 +30,6 @@ import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useHideNFT } from "app/hooks/use-hide-nft";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
@@ -55,13 +53,8 @@ type Props = {
   btnProps?: ButtonProps;
 };
 
-function NFTDropdown({
-  nft: propNFT,
-  shouldEnableSharing = true,
-  btnProps,
-}: Props) {
+function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
   //#region hooks
-  const isDark = useIsDarkMode();
   const tabType = useProfileTabType();
   const { isAuthenticated } = useUser();
   const { report } = useReport();
@@ -69,14 +62,6 @@ function NFTDropdown({
   const { hideNFT, unhideNFT } = useHideNFT();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
-  // const { refresh } = useFeed("");
-  const { data } = useNFTDetailByTokenId({
-    contractAddress: propNFT?.contract_address,
-    tokenId: propNFT?.token_id,
-    chainName: propNFT?.chain_name,
-  });
-
-  const nft = data?.data.item;
 
   const isCreatorDrop = nft?.creator_airdrop_edition_address;
   const { shareNFT, shareNFTOnTwitter } = useShareNFT();
