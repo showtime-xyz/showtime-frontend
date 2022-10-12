@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useState, useMemo, useContext } from "react";
 import {
   StatusBar,
   StyleProp,
@@ -7,6 +7,8 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
@@ -14,10 +16,13 @@ import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
+import { isMobileWeb, isAndroid } from "app/utilities";
 
+import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 
@@ -35,6 +40,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   itemHeight,
 }) {
+  const { isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
@@ -42,6 +48,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+  const activeIndex = useContext(SwiperActiveIndexContext);
 
   const maxContentHeight = windowHeight - bottomHeight;
 
@@ -86,6 +93,30 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+        {activeIndex === 0 && isMobileWeb() && isAuthenticated ? (
+          <View
+            tw="dark:shadow-dark shadow-light absolute top-0 right-0 left-0 z-10 bg-white dark:bg-black"
+            style={{ paddingTop: headerHeight + StatusBarHeight }}
+          >
+            <View tw="flex flex-row items-center justify-between px-4 pb-4">
+              <Text tw="font-space-bold text-lg dark:text-white">
+                Get the app
+              </Text>
+              <Button
+                onPress={() => {
+                  window.open(
+                    isAndroid()
+                      ? "https://play.google.com/store/apps/details?id=io.showtime"
+                      : "https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688",
+                    "_blank"
+                  );
+                }}
+              >
+                Download now
+              </Button>
+            </View>
+          </View>
+        ) : null}
         <View
           tw="duration-200"
           style={{
