@@ -29,7 +29,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.47",
+        "version": "0.0.48",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -245,7 +245,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.87",
+        "version": "0.0.88",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },

@@ -27,10 +27,12 @@ export * from "./header";
 type HeaderLeftProps = {
   canGoBack: boolean;
   withBackground?: boolean;
+  color?: string;
 };
 export const HeaderLeft = ({
   canGoBack,
   withBackground = false,
+  color,
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -58,7 +60,9 @@ export const HeaderLeft = ({
       }}
     >
       <Icon
-        color={withBackground ? "#FFF" : isDark ? "#FFF" : "#000"}
+        color={
+          color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+        }
         width={24}
         height={24}
       />

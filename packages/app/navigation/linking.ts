@@ -42,6 +42,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       claim: "claim/:contractAddress",
       claimers: "claimers/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",
+      likers: "likers/:nftId",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
       activity: "nft/:chainName/:contractAddress/:tokenId/activity",
       details: "nft/:chainName/:contractAddress/:tokenId/details",

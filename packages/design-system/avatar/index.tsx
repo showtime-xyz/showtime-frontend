@@ -44,7 +44,7 @@ export const Avatar = ({
         width={size}
         height={size}
         borderRadius={borderRadius}
-        resizeMode="contain"
+        resizeMode="cover"
         tw={IMAGE_TW}
         style={{ height: size, width: size, borderRadius: borderRadius }}
       />

@@ -5,6 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
   SceneRendererProps,
@@ -33,8 +34,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
-
-import { useRouter } from "design-system/router/use-router";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -233,7 +232,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <>
           <Header
             headerLeft={
-              router.asPath === "/" ? null : (
+              router.asPath === "/" ? (
+                <></>
+              ) : (
                 <HeaderLeft canGoBack={true} withBackground />
               )
             }

@@ -34,6 +34,7 @@ import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Blurhash } from "app/lib/blurhash";
 import { BlurView } from "app/lib/blurview";
@@ -64,7 +65,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 }) {
   const headerHeight = useHeaderHeight();
   const headerHeightRef = useRef(headerHeight);
-
+  const { data: detailData } = useNFTDetailByTokenId({
+    contractAddress: nft?.contract_address,
+    tokenId: nft?.token_id,
+    chainName: nft?.chain_name,
+  });
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
@@ -247,7 +252,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             }}
             tw="overflow-hidden"
           >
-            <NFTDetails edition={edition} nft={nft} />
+            <NFTDetails
+              edition={edition}
+              nft={nft}
+              detail={detailData?.data?.item}
+            />
           </View>
         </Reanimated.View>
       </View>

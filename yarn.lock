@@ -8373,9 +8373,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.47":
-  version: 0.0.47
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.47"
+"@showtime-xyz/universal.avatar@npm:^0.0.48":
+  version: 0.0.48
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.48"
   dependencies:
     "@showtime-xyz/universal.image": 0.0.46
     "@showtime-xyz/universal.tailwind": 0.0.40
@@ -8386,7 +8386,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 50900a3c8f501e1ea0ffe4157c216b5af6c0e42c76746a6cb5a23513bd9bc7700da71cc5d5c4e3c62b7ef23b685ee6cdf181524c7f399768161a0ed0a5ca3e5d
+  checksum: 990b3d0f0aef52dabaa724035bfe4ad9facc0529231a3e447162fb26ec4220b26ef53efbecb4fb63817f1b3984b760145edc3938bb9de074a3adad6ff43740f3
   languageName: node
   linkType: hard
 
@@ -9007,9 +9007,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.snackbar@npm:^0.0.87":
-  version: 0.0.87
-  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.87"
+"@showtime-xyz/universal.snackbar@npm:^0.0.88":
+  version: 0.0.88
+  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.88"
   dependencies:
     "@radix-ui/react-portal": 0.1.4
     "@showtime-xyz/universal.button": 0.0.63
@@ -9031,7 +9031,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: fe14a41623ad0bd1b157417c99f55d7d90b114efa01f26997b40f72449e794012ffdd9567a4bb6e9fdc7a94c7e0d2ec4616120bcc4e042c17b7dc85d369a484e
+  checksum: 8efd8458d671cb9f40e2b2481e75eb7a04d6f162cf5358aef484ab2d0ebbc60ee58998a317590b50c62b38a27d4151827b0a62763c1c99ac709c9cffa50d5d11
   languageName: node
   linkType: hard
 
@@ -9282,7 +9282,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.58
     "@showtime-xyz/universal.activity-indicator": ^0.0.41
     "@showtime-xyz/universal.alert": ^0.0.77
-    "@showtime-xyz/universal.avatar": ^0.0.47
+    "@showtime-xyz/universal.avatar": ^0.0.48
     "@showtime-xyz/universal.bottom-sheet": ^0.0.66
     "@showtime-xyz/universal.button": ^0.0.63
     "@showtime-xyz/universal.checkbox": ^0.0.54
@@ -9318,7 +9318,7 @@ __metadata:
     "@showtime-xyz/universal.segmented-control": ^0.0.51
     "@showtime-xyz/universal.select": ^0.0.83
     "@showtime-xyz/universal.skeleton": ^0.0.44
-    "@showtime-xyz/universal.snackbar": ^0.0.87
+    "@showtime-xyz/universal.snackbar": ^0.0.88
     "@showtime-xyz/universal.spinner": ^0.0.52
     "@showtime-xyz/universal.switch": ^0.0.55
     "@showtime-xyz/universal.tab-view": ^0.0.43

@@ -147,10 +147,7 @@ const FollowingListUser = memo(
                   numberOfLines={1}
                 >
                   {item.username ? (
-                    <>
-                      @{item.username}
-                      {item.username}
-                    </>
+                    <>@{item.username}</>
                   ) : (
                     <>{formatAddressShort(item.wallet_address)}</>
                   )}
