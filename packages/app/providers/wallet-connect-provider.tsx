@@ -7,13 +7,7 @@ import WCProvider, {
 } from "@walletconnect/react-native-dapp";
 import { FullWindowOverlay } from "react-native-screens";
 
-const scheme = `io.showtime${
-  process.env.STAGE === "development"
-    ? ".development"
-    : process.env.STAGE === "staging"
-    ? ".staging"
-    : ""
-}`;
+import { scheme } from "app/lib/scheme";
 
 const WALLET_CONNECT_CLIENT_META = {
   description: "Connect with Showtime",
