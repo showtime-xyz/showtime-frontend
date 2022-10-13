@@ -51,7 +51,7 @@ const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
 };
 
 type Props = {
-  nft?: NFT;
+  nft: NFT;
   shouldEnableSharing?: boolean;
   btnProps?: ButtonProps;
 };
@@ -66,22 +66,22 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
 
-  const isCreatorDrop = nft?.creator_airdrop_edition_address;
+  const isCreatorDrop = nft.creator_airdrop_edition_address;
   const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
 
   //#region variables
-  const hasOwnership = nft?.is_user_owner;
+  const hasOwnership = nft.is_user_owner;
 
   const isFollowingUser = useMemo(
-    () => nft?.owner_id && isFollowing(nft?.creator_id),
-    [nft?.creator_id, nft?.owner_id, isFollowing]
+    () => nft.owner_id && isFollowing(nft.creator_id),
+    [nft.creator_id, nft.owner_id, isFollowing]
   );
   const isBlocked = useMemo(
-    () => getIsBlocked(nft?.creator_id),
-    [nft?.creator_id, getIsBlocked]
+    () => getIsBlocked(nft.creator_id),
+    [nft.creator_id, getIsBlocked]
   );
   //#endregion
 
@@ -93,7 +93,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
   const viewOnOpenSea = () => {
     // Todo: maybe need to use token_id from backend.
     const token_id = "1";
-    const link = `https://opensea.io/assets/matic/${nft?.contract_address}/${token_id}`;
+    const link = `https://opensea.io/assets/matic/${nft.contract_address}/${token_id}`;
     Linking.openURL(link);
   };
 
@@ -115,7 +115,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
         {tabType && tabType !== "hidden" ? (
           <DropdownMenuItem
             onSelect={() => {
-              hideNFT(nft?.nft_id);
+              hideNFT(nft.nft_id);
             }}
             key="hide"
           >
@@ -127,7 +127,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
         {tabType && tabType === "hidden" ? (
           <DropdownMenuItem
             onSelect={() => {
-              unhideNFT(nft?.nft_id);
+              unhideNFT(nft.nft_id);
             }}
             key="unhide"
           >
@@ -136,7 +136,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        {nft && isMobileWeb() ? (
+        {isMobileWeb() ? (
           <DropdownMenuItem
             onSelect={() => {
               window.location.replace(`io.showtime://${getNFTSlug(nft)}`);
@@ -157,9 +157,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           </DropdownMenuItem>
         ) : null}
 
-        {nft?.multiple_owners_list &&
-          nft?.multiple_owners_list.length > 0 &&
-          nft?.contract_address && (
+        {nft.multiple_owners_list &&
+          nft.multiple_owners_list.length > 0 &&
+          nft.contract_address && (
             <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
               <MenuItemIcon Icon={OpenSea} />
               <DropdownMenuItemTitle>View on OpenSea</DropdownMenuItemTitle>
@@ -203,7 +203,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
-                await unfollow(nft?.creator_id);
+                await unfollow(nft.creator_id);
                 // refresh();
               } else {
                 navigateToLogin();
@@ -223,8 +223,8 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             onSelect={() =>
               toggleBlock({
                 isBlocked,
-                creatorId: nft?.creator_id,
-                name: nft?.creator_name,
+                creatorId: nft.creator_id,
+                name: nft.creator_name,
               })
             }
           >
@@ -238,7 +238,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
         {!hasOwnership && (
           <DropdownMenuItem
             onSelect={async () => {
-              await report({ nftId: nft?.nft_id });
+              await report({ nftId: nft.nft_id });
               router.pop();
             }}
             key="report"

@@ -26,9 +26,9 @@ type NFTDetailsProps = {
   edition?: CreatorEditionResponse;
   detail?: NFT | undefined;
 };
+
 export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   const isDark = useIsDarkMode();
-  const router = useRouter();
   const { shareNFT } = useShareNFT();
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
@@ -66,7 +66,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
           </Pressable>
           <View tw="w-8" />
           <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={detail} />
+            <NFTDropdown nft={detail ?? nft} />
           </Suspense>
         </View>
       </View>

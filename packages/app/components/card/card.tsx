@@ -122,7 +122,7 @@ function Card({
                     tw: "dark:bg-gray-900 bg-gray-100 px-1",
                     size: "small",
                   }}
-                  nft={detailData?.data.item}
+                  nft={detailData?.data.item ?? nft}
                 />
               </Suspense>
             </ErrorBoundary>
