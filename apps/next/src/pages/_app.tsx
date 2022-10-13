@@ -182,9 +182,9 @@ const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
     const onResize = useCallback(() => {
       if (isMobileWeb()) {
-        document.body.classList.add("overflow-hidden");
+        document.body.classList.add("overflow-hidden", "overscroll-y-contain");
       } else {
-        document.body.classList.remove("overflow-hidden");
+        document.body.classList.remove("overflow-hidden", "overscroll-y-none");
       }
     }, []);
     usePlatformResize(onResize, true);
