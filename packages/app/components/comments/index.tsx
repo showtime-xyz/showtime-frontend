@@ -127,10 +127,14 @@ export function Comments({ nft }: { nft: NFT }) {
         text="Be the first to add a comment!"
         title="💬 No comments yet..."
         titleTw="pt-1"
-        tw="flex-1 items-center justify-center"
+        tw="-mt-5 h-full flex-1 items-center justify-center"
       />
     ),
     []
+  );
+  const listFooterComponent = useCallback(
+    () => <View style={{ height: Math.max(bottom, 20) }} />,
+    [bottom]
   );
   return (
     <CommentsContainer style={styles.container}>
@@ -147,9 +151,7 @@ export function Comments({ nft }: { nft: NFT }) {
             overscan={98}
             keyboardDismissMode="on-drag"
             ListEmptyComponent={listEmptyComponent}
-            ListFooterComponent={
-              <View style={{ height: Math.max(bottom, 20) }} />
-            }
+            ListFooterComponent={listFooterComponent}
             {...modalListProps}
           />
           {isAuthenticated && (

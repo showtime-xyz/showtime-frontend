@@ -30,7 +30,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
               <Link href={`/@${item.username ?? item.wallet_address}`}>
                 <Avatar
                   url={item.img_url}
-                  tw="border border-gray-300"
+                  tw="border border-gray-300 dark:border-gray-700"
                   size={20}
                 />
               </Link>
