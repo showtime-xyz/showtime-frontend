@@ -16,14 +16,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
-
-const scheme = `io.showtime${
-  process.env.STAGE === "development"
-    ? ".development"
-    : process.env.STAGE === "staging"
-    ? ".staging"
-    : ""
-}`;
+import { scheme } from "app/lib/scheme";
 
 const WALLET_CONNECT_CLIENT_META = {
   description: "Connect with Showtime",

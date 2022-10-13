@@ -188,7 +188,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     variant: "text",
                     size: "regular",
                   }}
-                  nft={detailData?.data.item}
+                  nft={detailData?.data.item ?? nft}
                 />
               </Suspense>
             </View>

@@ -7,7 +7,7 @@ import { NFT } from "app/types";
 import { getTwitterIntent } from "app/utilities";
 
 export const getNFTSlug = (nft: NFT) =>
-  `/t/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
+  `/nft/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
     nft?.token_id
   }`;
 
