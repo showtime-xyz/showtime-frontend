@@ -36,6 +36,7 @@ import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
+import { scheme } from "app/lib/scheme";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
 import { isMobileWeb, isAndroid } from "app/utilities";
@@ -139,7 +140,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
         {isMobileWeb() ? (
           <DropdownMenuItem
             onSelect={() => {
-              window.location.replace(`io.showtime://${getNFTSlug(nft)}`);
+              window.location.replace(`${scheme}://${getNFTSlug(nft)}`);
 
               setTimeout(function () {
                 window.open(
