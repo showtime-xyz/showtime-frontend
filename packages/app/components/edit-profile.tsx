@@ -34,7 +34,7 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
-import { SORT_FIELDS } from "app/lib/constants";
+import { DropFileZone } from "app/lib/drop-file-zone";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
@@ -88,17 +88,6 @@ const editProfileValidationSchema = yup.object({
   name: yup.string().max(40).nullable(),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
-
-const nftList = [
-  { label: "Created", value: 1 },
-  { label: "Owned", value: 2 },
-  { label: "Liked", value: 3 },
-];
-
-const sortingOptionsList = [
-  //@ts-ignore
-  ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
-];
 
 export const EditProfile = () => {
   // hooks
@@ -298,43 +287,45 @@ export const EditProfile = () => {
                 control={control}
                 name="coverPicture"
                 render={({ field: { onChange, value } }) => (
-                  <Pressable
-                    onPress={async () => {
-                      const file = await pickFile({
-                        mediaTypes: "image",
-                        option: Platform.select({
-                          // aspect option only support android.
-                          android: { allowsEditing: true, aspect: [3, 1] },
-                          default: {},
-                        }),
-                      });
-                      const uri = getLocalFileURI(file.file);
+                  <DropFileZone onChange={onChange}>
+                    <Pressable
+                      onPress={async () => {
+                        const file = await pickFile({
+                          mediaTypes: "image",
+                          option: Platform.select({
+                            // aspect option only support android.
+                            android: { allowsEditing: true, aspect: [3, 1] },
+                            default: {},
+                          }),
+                        });
+                        const uri = getLocalFileURI(file.file);
 
-                      onChange(file.file);
-                      setSelectedImg(uri);
-                      setCurrentCropField("coverPicture");
-                    }}
-                    style={{
-                      height: coverImageHeight,
-                    }}
-                    tw="w-full flex-row"
-                  >
-                    <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
-                      <View tw="rounded-full bg-gray-800/70 p-2">
-                        <Upload height={20} width={20} color={colors.white} />
+                        onChange(file.file);
+                        setSelectedImg(uri);
+                        setCurrentCropField("coverPicture");
+                      }}
+                      style={{
+                        height: coverImageHeight,
+                      }}
+                      tw="w-full flex-row"
+                    >
+                      <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                        <View tw="rounded-full bg-gray-800/70 p-2">
+                          <Upload height={20} width={20} color={colors.white} />
+                        </View>
                       </View>
-                    </View>
-                    {value && (
-                      <Preview
-                        file={value}
-                        style={{ height: coverImageHeight }}
-                        tw="web:object-cover"
-                        resizeMode="cover"
-                        width={isMdWidth ? 480 : width}
-                        height={isMdWidth ? 480 : width}
-                      />
-                    )}
-                  </Pressable>
+                      {value && (
+                        <Preview
+                          file={value}
+                          style={{ height: coverImageHeight }}
+                          tw="web:object-cover"
+                          resizeMode="cover"
+                          width={isMdWidth ? 480 : width}
+                          height={isMdWidth ? 480 : width}
+                        />
+                      )}
+                    </Pressable>
+                  </DropFileZone>
                 )}
               />
 
@@ -343,48 +334,50 @@ export const EditProfile = () => {
                   control={control}
                   name="profilePicture"
                   render={({ field: { onChange, value } }) => (
-                    <>
-                      <Pressable
-                        onPress={async () => {
-                          const file = await pickFile({
-                            mediaTypes: "image",
-                            option: { allowsEditing: true, aspect: [1, 1] },
-                          });
+                    <DropFileZone onChange={onChange}>
+                      <>
+                        <Pressable
+                          onPress={async () => {
+                            const file = await pickFile({
+                              mediaTypes: "image",
+                              option: { allowsEditing: true, aspect: [1, 1] },
+                            });
 
-                          onChange(file.file);
-                          setSelectedImg(getLocalFileURI(file.file));
-                          setCurrentCropField("profilePicture");
-                        }}
-                        tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
-                      >
-                        {value && (
-                          <Preview
-                            file={value}
-                            tw="rounded-full"
-                            width={94}
-                            height={94}
-                          />
-                        )}
-                        <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                          <View tw="rounded-full bg-gray-800/70 p-2">
-                            <Upload
-                              height={20}
-                              width={20}
-                              color={colors.white}
+                            onChange(file.file);
+                            setSelectedImg(getLocalFileURI(file.file));
+                            setCurrentCropField("profilePicture");
+                          }}
+                          tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
+                        >
+                          {value && (
+                            <Preview
+                              file={value}
+                              tw="rounded-full"
+                              width={94}
+                              height={94}
                             />
+                          )}
+                          <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                            <View tw="rounded-full bg-gray-800/70 p-2">
+                              <Upload
+                                height={20}
+                                width={20}
+                                color={colors.white}
+                              />
+                            </View>
                           </View>
+                        </Pressable>
+                        <View tw="ml-4 flex-row items-center pt-2">
+                          <Text tw="font-bold text-gray-900 dark:text-white">
+                            Profile picture
+                          </Text>
+                          <Text tw="ml-1 text-red-500">*</Text>
                         </View>
-                      </Pressable>
-                      <View tw="ml-4 flex-row items-center pt-2">
-                        <Text tw="font-bold text-gray-900 dark:text-white">
-                          Profile picture
-                        </Text>
-                        <Text tw="ml-1 text-red-500">*</Text>
-                      </View>
-                      {errors.profilePicture?.message ? (
-                        <ErrorText>{errors.profilePicture.message}</ErrorText>
-                      ) : null}
-                    </>
+                        {errors.profilePicture?.message ? (
+                          <ErrorText>{errors.profilePicture.message}</ErrorText>
+                        ) : null}
+                      </>
+                    </DropFileZone>
                   )}
                 />
 
