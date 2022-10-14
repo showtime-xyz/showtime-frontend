@@ -39,7 +39,6 @@ import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
 import { Profile404 } from "./profile-404";
-import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
@@ -71,9 +70,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
 
   const routes =
     data?.tabs.map((item, index) => ({
-      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
+      // use js instead of css reason: design requires `This week` instead of `This Week`.
+      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
       key: item?.name,
       index,
+      subtitle: item.displayed_count,
     })) ?? [];
 
   const {
@@ -203,16 +204,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
       <View tw="dark:shadow-dark shadow-light bg-white dark:bg-black">
         <View tw="mx-auto w-full max-w-screen-xl">
           <ScollableAutoWidthTabBar {...props} />
-          <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
-            <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
-              {data?.tabs[index]?.displayed_count} ITEMS
-            </Text>
+          {/* <View tw="z-1 relative w-full flex-row items-center justify-end bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
             <ProfileListFilter />
-          </View>
+          </View> */}
         </View>
       </View>
     ),
-    [data?.tabs, index]
+    []
   );
   const headerCenter = useCallback(() => {
     return (
