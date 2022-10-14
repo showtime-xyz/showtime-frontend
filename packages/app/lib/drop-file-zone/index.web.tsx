@@ -1,5 +1,4 @@
 import Dropzone from "react-dropzone";
-import "react-hook-form";
 
 import { DropFileZoneProps } from ".";
 
