@@ -1,4 +1,4 @@
-import { useCallback, useReducer, Suspense } from "react";
+import { useCallback, useReducer, Suspense, useMemo } from "react";
 import { Platform, StatusBar } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
@@ -34,12 +34,12 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+import { formatProfileRoutes } from "app/utilities";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
 import { Profile404 } from "./profile-404";
-import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
@@ -69,12 +69,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const router = useRouter();
 
-  const routes =
-    data?.tabs.map((item, index) => ({
-      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
-      key: item?.name,
-      index,
-    })) ?? [];
+  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
   const {
     index,
@@ -203,16 +198,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
       <View tw="dark:shadow-dark shadow-light bg-white dark:bg-black">
         <View tw="mx-auto w-full max-w-screen-xl">
           <ScollableAutoWidthTabBar {...props} />
-          <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
-            <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
-              {data?.tabs[index]?.displayed_count} ITEMS
-            </Text>
+          {/* <View tw="z-1 relative w-full flex-row items-center justify-end bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
             <ProfileListFilter />
-          </View>
+          </View> */}
         </View>
       </View>
     ),
-    [data?.tabs, index]
+    []
   );
   const headerCenter = useCallback(() => {
     return (

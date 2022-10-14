@@ -62,7 +62,7 @@ export const UserList = ({
     () => (
       <EmptyPlaceholder
         title={emptyTitle}
-        tw="h-10 flex-1 items-center justify-center"
+        tw="h-full min-h-[40px] flex-1 items-center justify-center"
         hideLoginBtn
       />
     ),

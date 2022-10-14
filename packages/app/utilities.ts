@@ -7,6 +7,7 @@ import removeMd from "remove-markdown";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { SORT_FIELDS } from "app/lib/constants";
 
+import { ProfileTabsAPI } from "./hooks/api-hooks";
 import { NFT, Profile } from "./types";
 
 export const formatAddressShort = (address?: string | null) => {
@@ -561,3 +562,27 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 
   return obfuscated;
 };
+
+//#region format profile routers
+const ProfileTabNameMap = new Map([
+  ["owned", "claimed"],
+  ["created", "drops"],
+]);
+
+const getProfileTitle = (name: string) => {
+  const title = ProfileTabNameMap.get(name) ?? name;
+  return title.replace(/^\S/, (s) => s.toUpperCase());
+};
+
+export const formatProfileRoutes = (
+  tabs: ProfileTabsAPI["tabs"] | undefined
+) => {
+  if (!tabs) return [];
+  return tabs.map((item, index) => ({
+    title: getProfileTitle(item.name),
+    key: item?.name,
+    index,
+    subtitle: item.displayed_count,
+  }));
+};
+//#endregion

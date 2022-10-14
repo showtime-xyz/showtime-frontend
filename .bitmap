@@ -263,7 +263,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.43",
+        "version": "0.0.44",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },

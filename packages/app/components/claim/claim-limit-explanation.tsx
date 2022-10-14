@@ -26,7 +26,7 @@ export const ClaimLimitExplanationModal = () => {
             </>
           ) : (
             <>
-              {`- You are currently earning 1 claim every 1 hours, up to ${dailyClaimLimit} claims. Verify your phone number to claim more drops.`}
+              {`- You are currently earning 1 claim every 3 hours, up to ${dailyClaimLimit} claims. Verify your phone number to claim more drops.`}
             </>
           )}
         </Text>

@@ -103,7 +103,7 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
         text: "Claimed!",
         iconStatus: "done",
         bottom,
-        hideAfter: 5000,
+        hideAfter: 10000,
         action: {
           text: "Share",
           onPress: snackbarAction,

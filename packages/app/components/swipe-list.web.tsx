@@ -102,7 +102,11 @@ export const SwipeList = ({
   if (data.length === 0) return null;
 
   return (
-    <View testID="swipeList" nativeID="slidelist" tw="h-screen overflow-hidden">
+    <View
+      testID="swipeList"
+      nativeID="slidelist"
+      tw="fixed inset-0 h-screen overflow-hidden"
+    >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>

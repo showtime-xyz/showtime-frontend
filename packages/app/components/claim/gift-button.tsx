@@ -9,6 +9,8 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 
+import { formatClaimNumber } from ".";
+
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { iconColor, textColors } = useSocialColor();
@@ -54,7 +56,9 @@ export function GiftButton({ nft }: { nft: NFT }) {
       accentColor={textColors}
     >
       <GiftIcon height={24} width={24} color={iconColor} />
-      {` ${edition.creator_airdrop_edition.edition_size}`}
+      {` ${formatClaimNumber(edition.total_claimed_count)}/${
+        edition.creator_airdrop_edition.edition_size
+      }`}
     </Button>
   );
 }
