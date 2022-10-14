@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Linking, Platform } from "react-native";
+import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -31,6 +31,7 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
+import { DropFileZone } from "app/lib/drop-file-zone";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
@@ -89,7 +90,8 @@ const dropValidationSchema = yup.object({
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
-
+const ScrollComponent =
+  Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
 export const DropForm = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
@@ -264,8 +266,6 @@ export const DropForm = () => {
     );
   }
 
-  const ScrollComponent =
-    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
@@ -278,64 +278,69 @@ export const DropForm = () => {
                 name="file"
                 render={({ field: { onChange, value } }) => {
                   return (
-                    <View tw="z-1 items-center">
-                      <Pressable
-                        onPress={async () => {
-                          const file = await pickFile({ mediaTypes: "all" });
-                          onChange(file.file);
-                        }}
-                        tw="h-64 w-64 items-center justify-center rounded-lg"
-                      >
-                        {value ? (
-                          <View>
-                            <Preview
-                              file={value}
-                              width={252}
-                              height={252}
-                              tw="rounded-2xl"
-                            />
-                            <View tw="absolute h-full w-full items-center justify-center">
-                              <View tw="flex-row shadow-lg">
-                                <FlipIcon
-                                  width={20}
-                                  height={20}
-                                  color="white"
-                                />
-                                <Text tw=" ml-2 text-sm text-white">
-                                  Replace media
-                                </Text>
+                    <DropFileZone onChange={onChange}>
+                      <View tw="z-1 items-center">
+                        <Pressable
+                          onPress={async () => {
+                            const file = await pickFile({
+                              mediaTypes: "all",
+                            });
+                            onChange(file.file);
+                          }}
+                          tw="h-64 w-64 items-center justify-center rounded-lg"
+                        >
+                          {value ? (
+                            <View>
+                              <Preview
+                                file={value}
+                                width={252}
+                                height={252}
+                                tw="rounded-2xl"
+                              />
+                              <View tw="absolute h-full w-full items-center justify-center">
+                                <View tw="flex-row shadow-lg">
+                                  <FlipIcon
+                                    width={20}
+                                    height={20}
+                                    color="white"
+                                  />
+                                  <Text tw=" ml-2 text-sm text-white">
+                                    Replace media
+                                  </Text>
+                                </View>
                               </View>
                             </View>
-                          </View>
-                        ) : (
-                          <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
-                            <ImageIcon
-                              color={isDark ? "#FFF" : "#000"}
-                              width={40}
-                              height={40}
-                            />
-                            <View tw="mt-4">
-                              <Text tw="font-bold text-gray-600 dark:text-gray-200">
-                                Upload a media file
-                              </Text>
-                            </View>
-                            {errors.file?.message ? (
-                              <View tw="mt-2">
-                                <Text tw="text-sm text-red-500">
-                                  {errors?.file?.message}
+                          ) : (
+                            <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
+                              <ImageIcon
+                                color={isDark ? "#FFF" : "#000"}
+                                width={40}
+                                height={40}
+                              />
+                              <View tw="mt-4">
+                                <Text tw="font-bold text-gray-600 dark:text-gray-200">
+                                  Upload a media file
                                 </Text>
                               </View>
-                            ) : null}
+                              {errors.file?.message ? (
+                                <View tw="mt-2">
+                                  <Text tw="text-sm text-red-500">
+                                    {errors?.file?.message}
+                                  </Text>
+                                </View>
+                              ) : null}
 
-                            <View tw="mt-2">
-                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
-                              </Text>
+                              <View tw="mt-2">
+                                <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
+                                  Tap to upload a JPG, PNG, GIF, MOV or MP4
+                                  file.
+                                </Text>
+                              </View>
                             </View>
-                          </View>
-                        )}
-                      </Pressable>
-                    </View>
+                          )}
+                        </Pressable>
+                      </View>
+                    </DropFileZone>
                   );
                 }}
               />

@@ -9578,6 +9578,7 @@ __metadata:
     postcss: ^8.4.16
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
+    react-dropzone: ^14.2.3
     react-easy-crop: ^4.4.2
     react-native-fast-image: ^8.5.11
     react-native-web: ^0.18.9
@@ -12168,6 +12169,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dropzone@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@types/react-dropzone@npm:5.1.0"
+  dependencies:
+    react-dropzone: "*"
+  checksum: 2b68fcf0153fb00e17088907490b823b6d81a29a02e615f820e347df2546f9318c5f025eeb33d575c648d01a14e55a19e528c32907608b5a7f727ff0e96b3923
+  languageName: node
+  linkType: hard
+
 "@types/react-native@npm:0.69.3":
   version: 0.69.3
   resolution: "@types/react-native@npm:0.69.3"
@@ -14374,6 +14384,13 @@ __metadata:
   bin:
     atob: bin/atob.js
   checksum: dfeeeb70090c5ebea7be4b9f787f866686c645d9f39a0d184c817252d0cf08455ed25267d79c03254d3be1f03ac399992a792edcd5ffb9c91e097ab5ef42833a
+  languageName: node
+  linkType: hard
+
+"attr-accept@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "attr-accept@npm:2.2.2"
+  checksum: 496f7249354ab53e522510c1dc8f67a1887382187adde4dc205507d2f014836a247073b05e9d9ea51e2e9c7f71b0d2aa21730af80efa9af2d68303e5f0565c4d
   languageName: node
   linkType: hard
 
@@ -21261,6 +21278,15 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: 5e242b236598154770447fe82bd6f2241a05f07f6035730ac8ebb5729ff92faaca3882c8ada84dfa0f7127cf076adcdbad5dd1ffa9a34a22ba6a7e4d253000c5
+  languageName: node
+  linkType: hard
+
+"file-selector@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "file-selector@npm:0.6.0"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: 7d051b6e5d793f3c6e2ab287ba5e7c2c6a0971bccc9d56e044c8047ba483e18f60fc0b5771c951dc707c0d15f4f36ccb4f1f1aaf385d21ec8f7700dadf8325ba
   languageName: node
   linkType: hard
 
@@ -31165,6 +31191,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dropzone@npm:*, react-dropzone@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "react-dropzone@npm:14.2.3"
+  dependencies:
+    attr-accept: ^2.2.2
+    file-selector: ^0.6.0
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ">= 16.8 || 18.0.0"
+  checksum: 174b744d5ca898cf3d84ec1aeb6cef5211c446697e45dc8ece8287a03d291f8d07253206d5a1247ef156fd385d65e7de666d4d5c2986020b8543b8f2434e8b40
+  languageName: node
+  linkType: hard
+
 "react-easy-crop@npm:^4.4.2":
   version: 4.4.2
   resolution: "react-easy-crop@npm:4.4.2"
@@ -33700,6 +33739,7 @@ __metadata:
   dependencies:
     "@react-native-menu/menu": ^0.5.2
     "@trivago/prettier-plugin-sort-imports": ^3.3.0
+    "@types/react-dropzone": ^5.1.0
     "@types/react-native": 0.69.3
     "@typescript-eslint/eslint-plugin": 5.23.0
     "@typescript-eslint/parser": 5.23.0

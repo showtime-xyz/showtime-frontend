@@ -93,7 +93,7 @@ export const getLocalFileURI = (file?: string | File) => {
 
   if (typeof file === "string") return file;
 
-  if (Platform.OS === "web") return (URL || webkitURL).createObjectURL(file);
+  if (Platform.OS === "web") return (URL || webkitURL)?.createObjectURL(file);
 
   return file;
 };
