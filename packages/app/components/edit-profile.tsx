@@ -55,20 +55,14 @@ const EDIT_PROFILE_ROUTES = [
     key: "Links",
     index: 1,
   },
-  {
-    title: "Page Settings",
-    key: "Settings",
-    index: 2,
-  },
 ];
 type SceneViewProps = ScrollViewProps & {
   focused?: boolean;
+  extraScrollHeight?: number;
 };
-
+const ScrollComponent =
+  Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
 const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
-  const ScrollComponent =
-    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
-
   return (
     <ScrollComponent
       style={[style, { display: focused ? "flex" : "none" }]}
@@ -538,65 +532,6 @@ export const EditProfile = () => {
                 })}
             </SceneView>
           );
-        case "Settings":
-          return (
-            <SceneView style={{ padding: 16, marginTop: 16 }} focused={focused}>
-              <View tw="z-2">
-                <Controller
-                  control={control}
-                  name="default_list_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Default NFT List"
-                      selectOnly
-                      select={{
-                        options: nftList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
-                    />
-                  )}
-                />
-              </View>
-              <View tw="z-1">
-                <Controller
-                  control={control}
-                  name="default_created_sort_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Sort Created By"
-                      selectOnly
-                      tw="mt-4"
-                      select={{
-                        options: sortingOptionsList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
-                    />
-                  )}
-                />
-              </View>
-              <Controller
-                control={control}
-                name="default_owned_sort_id"
-                render={({ field: { onChange, value } }) => (
-                  <Fieldset
-                    label="Sort Owned By"
-                    selectOnly
-                    tw="mt-4"
-                    select={{
-                      options: sortingOptionsList,
-                      placeholder: "Select",
-                      value: value,
-                      onChange: onChange,
-                    }}
-                  />
-                )}
-              />
-            </SceneView>
-          );
 
         default:
           return null;
@@ -633,6 +568,7 @@ export const EditProfile = () => {
             initialLayout={{
               width: width,
             }}
+            swipeEnabled={Platform.OS !== "web"}
           />
 
           <View tw="my-2.5 mb-4 px-4">

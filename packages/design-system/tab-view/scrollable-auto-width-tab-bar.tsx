@@ -51,7 +51,7 @@ export const ScollableAutoWidthTabBar = ({
   ) => {
     if (routes.length > 1) {
       const inputRange = routes.map((_, i) => i);
-      const outputRange = inputRange.map((i) => (i === tabIndex ? 1 : 0.6));
+      const outputRange = inputRange.map((i) => (i === tabIndex ? 1 : 0.7));
       return position.interpolate({
         inputRange,
         outputRange,
@@ -229,6 +229,11 @@ export const ScollableAutoWidthTabBar = ({
             >
               <Text tw="text-sm font-bold text-gray-900 dark:text-white">
                 {route.title}
+                {Boolean(route.subtitle) && (
+                  <Text tw="text-xs font-semibold text-gray-500">
+                    {` ${route.subtitle}`}
+                  </Text>
+                )}
               </Text>
             </Animated.View>
           </Pressable>
