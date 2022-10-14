@@ -69,7 +69,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
               >
                 {item.title}
                 {Boolean(item.subtitle) && (
-                  <Text tw="text-xs font-semibold text-gray-400">
+                  <Text tw="text-xs font-semibold text-gray-500">
                     {` ${item.subtitle}`}
                   </Text>
                 )}

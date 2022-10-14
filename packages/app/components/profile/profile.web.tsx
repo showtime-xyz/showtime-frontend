@@ -41,12 +41,12 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+import { formatProfileRoutes } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
 import { FilterContext } from "./fillter-context";
-import { ProfileListFilter } from "./profile-tab-filter";
 import { ProfileTop } from "./profile-top";
 
 export type ProfileScreenProps = {
@@ -65,7 +65,7 @@ const ProfileHeaderContext = createContext<{
   username: string;
   isError: boolean;
   isLoading: boolean;
-  routes: (Route & { displayedCount: number })[];
+  routes: Route[];
   isBlocked: boolean;
   type: string | undefined;
   setType: (type: string) => void;
@@ -122,9 +122,7 @@ const Header = memo(function Header() {
     },
     [router, routes, setType]
   );
-  const displayedCount = routes.find(
-    (item) => item.key === type
-  )?.displayedCount;
+
   return (
     <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-xl">
@@ -145,12 +143,6 @@ const Header = memo(function Header() {
               routes={routes}
               index={routes.findIndex((item) => item.key === type)}
             />
-            <View tw="z-1 relative w-full flex-row items-center justify-between bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
-              <Text tw="text-xs font-bold text-gray-900 dark:text-white md:mr-6">
-                {displayedCount ?? 0} ITEMS
-              </Text>
-              <ProfileListFilter />
-            </View>
           </View>
         </View>
       </View>
@@ -183,16 +175,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
       ? 3
       : 2;
 
-  const routes = useMemo(
-    () =>
-      data?.tabs.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
-        key: item?.name,
-        index,
-        displayedCount: item.displayed_count,
-      })) ?? [],
-    [data?.tabs]
-  );
+  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
+
   const [queryTab] = useParam("type", {
     initial: data?.default_tab_type,
   });

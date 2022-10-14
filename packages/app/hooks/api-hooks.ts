@@ -259,7 +259,7 @@ export type List = {
   user_has_hidden_items: boolean;
 };
 
-type ProfileTabsAPI = {
+export type ProfileTabsAPI = {
   default_tab_type: string;
   tabs: Array<List>;
 };
