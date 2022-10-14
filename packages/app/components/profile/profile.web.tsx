@@ -41,6 +41,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+import { formatProfileRoutes } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
@@ -142,9 +143,6 @@ const Header = memo(function Header() {
               routes={routes}
               index={routes.findIndex((item) => item.key === type)}
             />
-            {/* <View tw="z-1 relative w-full flex-row items-center justify-end bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-4 md:my-0 md:w-auto md:py-0 md:px-0">
-              <ProfileListFilter />
-            </View> */}
           </View>
         </View>
       </View>
@@ -177,16 +175,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
       ? 3
       : 2;
 
-  const routes = useMemo(
-    () =>
-      data?.tabs.map((item, index) => ({
-        title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()), // use js instead of css reason: design requires `This week` instead of `This Week`.
-        key: item?.name,
-        index,
-        subtitle: item.displayed_count,
-      })) ?? [],
-    [data?.tabs]
-  );
+  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
+
   const [queryTab] = useParam("type", {
     initial: data?.default_tab_type,
   });

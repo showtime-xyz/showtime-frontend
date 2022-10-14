@@ -1,4 +1,4 @@
-import { useCallback, useReducer, Suspense } from "react";
+import { useCallback, useReducer, Suspense, useMemo } from "react";
 import { Platform, StatusBar } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
@@ -34,6 +34,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
+import { formatProfileRoutes } from "app/utilities";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -68,14 +69,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const router = useRouter();
 
-  const routes =
-    data?.tabs.map((item, index) => ({
-      // use js instead of css reason: design requires `This week` instead of `This Week`.
-      title: item?.name?.replace(/^\S/, (s) => s.toUpperCase()),
-      key: item?.name,
-      index,
-      subtitle: item.displayed_count,
-    })) ?? [];
+  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
   const {
     index,
