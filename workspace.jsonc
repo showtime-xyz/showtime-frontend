@@ -44,7 +44,8 @@
         "react-native-gesture-handler": ">=2.0.0",
         "moti": "*",
         "next": "*",
-        "@gorhom/bottom-sheet": "*"
+        "@gorhom/bottom-sheet": "*",
+        "react-native-web": "*"
       }
     }
   },
