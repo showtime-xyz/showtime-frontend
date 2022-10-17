@@ -12,7 +12,8 @@ const useFeed = () => {
   const { accessToken } = useAuth();
   const { data, isLoading, mutate, error } = useSWR<FeedAPIResponse>(
     accessToken ? "/v4/feed/nfts" : "/v2/trending/nfts?timeframe=day",
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   return { data: data ?? [], isLoading, mutate, error };
