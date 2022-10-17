@@ -459,7 +459,7 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
-          {isSelf && user?.data?.claim_tank?.available_claims ? (
+          {isSelf && user?.data?.claim_tank?.available_claims !== undefined ? (
             <Pressable
               onPress={onPressClaimLimit}
               tw="mt-3 flex-row items-center"

@@ -45,7 +45,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
           >
             {firstClaimer.name}
           </TextLink>
-          {claimersList?.length && claimersList?.length > 2 && (
+          {claimersList?.length && claimersList?.length >= 2 && (
             <>
               {` & `}
               <Text
@@ -74,7 +74,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
                 }}
                 tw="font-bold"
               >
-                {`${claimersList?.length - 2} others`}
+                {`${claimersList?.length - 1} others`}
               </Text>
             </>
           )}
