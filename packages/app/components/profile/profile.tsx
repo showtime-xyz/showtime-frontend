@@ -34,7 +34,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
-import { formatProfileRoutes } from "app/utilities";
+import { formatProfileRoutes, getProfileName } from "app/utilities";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
@@ -198,9 +198,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
       <View tw="dark:shadow-dark shadow-light bg-white dark:bg-black">
         <View tw="mx-auto w-full max-w-screen-xl">
           <ScollableAutoWidthTabBar {...props} />
-          {/* <View tw="z-1 relative w-full flex-row items-center justify-end bg-white py-2 px-4 dark:bg-black md:absolute md:bottom-1.5 md:right-10 md:my-0 md:w-auto md:py-0 md:px-0">
-            <ProfileListFilter />
-          </View> */}
         </View>
       </View>
     ),
@@ -210,10 +207,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return (
       <View tw="h-full justify-center">
         <Text numberOfLines={1} tw="text-lg font-bold text-white">
-          {profileData?.data?.profile.name ??
-            profileData?.data?.profile.username ??
-            profileData?.data?.profile.primary_wallet.nickname ??
-            profileData?.data?.profile.primary_wallet.address}
+          {getProfileName(profileData?.data?.profile)}
         </Text>
       </View>
     );
