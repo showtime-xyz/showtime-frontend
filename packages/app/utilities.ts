@@ -439,7 +439,7 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
   )?.user_input;
 
   if (twitterUsername) {
-    return `@${twitterUsername}`;
+    return `@${twitterUsername.replace(/@/g, "")}`;
   }
 
   return profile.username
