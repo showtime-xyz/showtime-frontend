@@ -431,10 +431,14 @@ export const ProfileTop = ({
                   {name}
                 </Text>
                 <View tw="h-2 md:h-3" />
-                <View tw="h-6 flex-row items-center">
-                  <Text tw="text-base text-gray-600 dark:text-gray-400 md:text-lg">
-                    {username ? `@${username}` : null}
-                  </Text>
+                <View tw="flex-row items-center">
+                  {Boolean(username) && (
+                    <>
+                      <Text tw="text-base text-gray-600 dark:text-gray-400 md:text-lg">
+                        {`@${username}`}
+                      </Text>
+                    </>
+                  )}
 
                   {profileData?.profile.verified ? (
                     <View tw="ml-1">
