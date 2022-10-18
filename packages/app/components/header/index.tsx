@@ -12,7 +12,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
 import {
   ShowtimeTabBarIcon,
   TrendingTabBarIcon,
@@ -78,9 +77,7 @@ export const HeaderCenter = ({
 }) => {
   return (
     <View tw="flex flex-row">
-      <Link href="/">
-        <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-      </Link>
+      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
       {isMdWidth ? <SearchInHeader /> : null}
     </View>
   );

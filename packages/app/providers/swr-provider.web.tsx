@@ -1,6 +1,6 @@
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
-import type { PublicConfiguration } from "swr/dist/types";
+import type { SWRConfiguration } from "swr";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
@@ -9,12 +9,13 @@ import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
 
 const localStorageProvider = () => {
-  // @ts-ignore
-  const map = new Map(JSON.parse(localStorage.getItem("app-cache")) || []);
+  const map = new Map<any, any>(
+    JSON.parse(localStorage.getItem("app-cache") as string) || []
+  );
 
   window.addEventListener("beforeunload", () => {
     const appCache = JSON.stringify(Array.from(map.entries()));
-    localStorage.setItem("app-cache", appCache);
+    localStorage?.setItem("app-cache", appCache);
   });
 
   return map;
@@ -27,7 +28,6 @@ export const SWRProvider = ({
 }): JSX.Element => {
   const toast = useToast();
   const { refreshTokens } = useAccessTokenManager();
-
   return (
     <SWRConfig
       value={{
@@ -46,7 +46,7 @@ export const SWRProvider = ({
             status: number;
           },
           key: string,
-          config: Readonly<PublicConfiguration>,
+          config: Readonly<SWRConfiguration>,
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
@@ -58,7 +58,7 @@ export const SWRProvider = ({
             ~~(
               (Math.random() + 0.5) *
               (1 << (currentRetryCount < 8 ? currentRetryCount : 8))
-            ) * config.errorRetryInterval;
+            ) * (config.errorRetryInterval ?? 1);
 
           if (
             !isUndefined(maxRetryCount) &&

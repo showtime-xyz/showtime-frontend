@@ -35,7 +35,7 @@ type TabBarIconProps = {
 };
 
 type TabBarButtonProps = {
-  tab: string;
+  tab?: string;
   children: React.ReactNode;
   tw?: TW;
   onPress?: () => void;
@@ -56,7 +56,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
         </PressableHover>
       );
     }
-
+    if (!tab) return null;
     return (
       <Link href={tab}>
         <View

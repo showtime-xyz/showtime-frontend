@@ -19,7 +19,7 @@ import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-inf
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { Sticky } from "app/lib/stickynode";
-import { Link } from "app/navigation/link";
+import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 
 import { Hidden } from "design-system/hidden";
@@ -264,18 +264,18 @@ const SuggestedUsers = () => {
           Get the app
         </Text>
         <View tw="flex flex-row items-center justify-between p-4">
-          <Link
-            tw="font-space-bold dark:text-white"
+          <TextLink
+            tw="font-space-bold text-base dark:text-white"
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
           >
             🍎 App Store
-          </Link>
-          <Link
-            tw="font-space-bold dark:text-white"
+          </TextLink>
+          <TextLink
+            tw="font-space-bold text-base dark:text-white"
             href="https://play.google.com/store/apps/details?id=io.showtime"
           >
             🤖 Google Play
-          </Link>
+          </TextLink>
         </View>
       </View>
     </>

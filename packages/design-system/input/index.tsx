@@ -1,8 +1,6 @@
 import { forwardRef, useMemo } from "react";
 import { Platform, StyleProp, TextInputProps, TextStyle } from "react-native";
 
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
-
 import { useOnFocus, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Label } from "@showtime-xyz/universal.label";
 import {
@@ -74,18 +72,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
   const helperTextId = useId();
   const errorTextId = useId();
 
-  const animatableStyle = useAnimatedStyle(() => {
-    return {
-      boxShadow:
-        Platform.OS === "web" && focused.value
-          ? isDark
-            ? BOX_SHADOW_DARK
-            : BOX_SHADOW_LIGNT
-          : undefined,
-      opacity: disabled ? 0.75 : 1,
-    };
-  }, [focused, disabled]);
-
   return (
     <View>
       {label ? (
@@ -99,7 +85,12 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           <View tw="h-2" />
         </>
       ) : null}
-      <Animated.View
+
+      <View
+        tw={[
+          "transition-all duration-300",
+          focused.value ? "dark:shadow-dark shadow-light" : "",
+        ]}
         style={[
           {
             flexDirection: "row",
@@ -108,9 +99,8 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
             backgroundColor: isDark ? colors.gray[900] : colors.gray[100],
             borderColor: isInvalid ? colors.red[500] : undefined,
             borderWidth: isInvalid ? 1 : undefined,
+            opacity: disabled ? 0.75 : 1,
           },
-          // @ts-ignore
-          animatableStyle,
         ]}
       >
         {leftElement}
@@ -173,7 +163,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
         {rightElement && (
           <View style={{ marginLeft: "auto" }}>{rightElement}</View>
         )}
-      </Animated.View>
+      </View>
       {helperText ? (
         <Text
           nativeID={helperTextId}

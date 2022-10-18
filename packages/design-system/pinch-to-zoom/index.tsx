@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import type { ViewProps } from "react-native";
+import type { LayoutChangeEvent, ViewProps } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -150,7 +150,7 @@ export function PinchToZoom(props: Props) {
       <Animated.View
         {...props}
         onLayout={useCallback(
-          (e) => {
+          (e: LayoutChangeEvent) => {
             viewHeight.value = e.nativeEvent.layout.height;
             viewWidth.value = e.nativeEvent.layout.width;
             onLayout?.(e);

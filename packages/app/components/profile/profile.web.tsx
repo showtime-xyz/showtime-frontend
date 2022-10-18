@@ -19,7 +19,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -44,6 +43,7 @@ import { NFT } from "app/types";
 import { formatProfileRoutes } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
+import { Route, TabBarSingle } from "design-system/tab-view";
 import { breakpoints } from "design-system/theme";
 
 import { FilterContext } from "./fillter-context";

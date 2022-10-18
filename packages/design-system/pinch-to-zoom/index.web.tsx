@@ -1,7 +1,6 @@
 import React from "react";
-import type { ViewProps } from "react-native";
 
-import Animated from "react-native-reanimated";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 type Props = {
   children: React.ReactNode;
@@ -13,5 +12,5 @@ type Props = {
 } & ViewProps;
 
 export function PinchToZoom(props: Props) {
-  return <Animated.View {...props} />;
+  return <View {...props} />;
 }
