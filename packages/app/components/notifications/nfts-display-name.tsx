@@ -14,7 +14,7 @@ const getNFTLink = (nft: NotificationNFT) =>
     nft?.token_identifier
   }`;
 
-export const NFTSDisolayName = ({ nfts }: NotificationDescriptionProps) => {
+export const NFTSDisplayName = ({ nfts }: NotificationDescriptionProps) => {
   const router = useRouter();
   if (!nfts || nfts?.length === 0) return null;
   if (nfts.length === 1) {

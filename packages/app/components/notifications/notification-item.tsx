@@ -6,6 +6,7 @@ import {
   MarketFilled,
   MessageFilled,
   PlusFilled,
+  GiftSolid,
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -15,7 +16,7 @@ import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 
-import { NFTSDisolayName } from "./nfts-display-name";
+import { NFTSDisplayName } from "./nfts-display-name";
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -33,6 +34,8 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["NFT_SALE", "bought "],
   ["NEW_CREATOR_AIRDROP_FROM_FOLLOWING", "created a new drop "],
   ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "claimed "],
+  ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
+  ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
 ]);
 
 export const NotificationItem = ({
@@ -79,6 +82,7 @@ type NotificationDescriptionProps = {
   notification: NotificationType;
   setUsers: NotificationItemProp["setUsers"];
 };
+
 const NotificationDescription = ({
   notification,
   setUsers,
@@ -91,14 +95,8 @@ const NotificationDescription = ({
       >
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-        <NFTSDisolayName nfts={notification.nfts} />
+        <NFTSDisplayName nfts={notification.nfts} />
       </Text>
-      <View tw="h-1" />
-      {/* <Text tw="text-xs text-gray-500">
-        {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
-          addSuffix: true,
-        })}
-      </Text> */}
     </View>
   );
 };
@@ -128,9 +126,13 @@ export const useNotificationIcon = (type_name: string) => {
     case "NFT_SALE":
       return <MarketFilled width={20} height={20} color={colors.amber[500]} />;
     case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
+      return <PlusFilled width={20} height={20} color={colors.indigo[500]} />;
     case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
+      return <GiftSolid width={20} height={20} color={colors.indigo[500]} />;
+    case "CREATED_EDITION_SOLD_OUT":
+      return <GiftSolid width={20} height={20} color={colors.rose[500]} />;
+    case "CREATED_EDITION_EXPIRED":
+      return <GiftSolid width={20} height={20} color={colors.gray[500]} />;
     default:
       return undefined;
   }
