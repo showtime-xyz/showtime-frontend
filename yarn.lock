@@ -9512,7 +9512,7 @@ __metadata:
     remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
-    solito: ^0.0.24
+    solito: 0.0.24
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     three: ^0.142.0
@@ -31676,10 +31676,10 @@ __metadata:
 
 "react-native-spotify-remote@file:./react-native-spotify-remote::locator=showtime%40workspace%3A.":
   version: 0.3.10
-  resolution: "react-native-spotify-remote@file:./react-native-spotify-remote#./react-native-spotify-remote::hash=ef5ebe&locator=showtime%40workspace%3A."
+  resolution: "react-native-spotify-remote@file:./react-native-spotify-remote#./react-native-spotify-remote::hash=a3c094&locator=showtime%40workspace%3A."
   peerDependencies:
     react-native: ">=0.60"
-  checksum: 11bfd89075cd7d8d6bf591a39a1c6a72c7243421fb546b51bfb6179c99ecf777f9536d6449a963c44fa5294ec1cc8a92354aa495e3166350ad59d4402733e671
+  checksum: b8d7f19fb7f8afb4d684148e0202db54e4fe6817159433595901a61f76299f628f21b933ddfcd052b2581c20e0e1188f4e6cc49b850af420b73ae35abdc1f000
   languageName: node
   linkType: hard
 
@@ -34035,7 +34035,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solito@npm:0.0.24, solito@npm:^0.0.24":
+"solito@npm:0.0.24":
   version: 0.0.24
   resolution: "solito@npm:0.0.24"
   checksum: 484cc67222cf557bf05cb191a1028cb457ff7573a9201282d7f05cf2213565796761aeaf7f9bc236afd1d6a97ec1e235c2e38829b9839c1a222c664ee1c2c06d
