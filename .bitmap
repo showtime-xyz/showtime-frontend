@@ -107,7 +107,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.90",
+        "version": "0.0.91",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -143,7 +143,7 @@
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.56",
+        "version": "0.0.57",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },
@@ -185,8 +185,8 @@
     },
     "pinch-to-zoom": {
         "scope": "showtime.universal",
-        "version": "0.0.33",
-        "mainFile": "index.tsx",
+        "version": "0.0.35",
+        "mainFile": "index.ts",
         "rootDir": "packages/design-system/pinch-to-zoom"
     },
     "pressable": {

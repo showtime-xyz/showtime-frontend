@@ -8674,12 +8674,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.90":
-  version: 0.0.90
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.90"
+"@showtime-xyz/universal.fieldset@npm:^0.0.91":
+  version: 0.0.91
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.91"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.45
-    "@showtime-xyz/universal.input": 0.0.56
+    "@showtime-xyz/universal.input": 0.0.57
     "@showtime-xyz/universal.label": 0.0.45
     "@showtime-xyz/universal.select": 0.0.83
     "@showtime-xyz/universal.switch": 0.0.55
@@ -8693,7 +8693,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 6c29396e4b8111ff4ed1315e07be7929317f7f86b2f5e5712aa81e79cce0c05cd8957122f2d9bfa97ea01e1c023a31f11608856ce50295fc8cbe7d8b95c918be
+  checksum: 237db82d3224f3d99ce499f4469797ed3fc9f322c2538083b9daf6001a95991ce7abf8dc8e49ae01deea8d1ea0da10d578f2385840d321500dce85ce50545061
   languageName: node
   linkType: hard
 
@@ -8779,9 +8779,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.input@npm:0.0.56, @showtime-xyz/universal.input@npm:^0.0.56":
-  version: 0.0.56
-  resolution: "@showtime-xyz/universal.input@npm:0.0.56"
+"@showtime-xyz/universal.input@npm:0.0.57, @showtime-xyz/universal.input@npm:^0.0.57":
+  version: 0.0.57
+  resolution: "@showtime-xyz/universal.input@npm:0.0.57"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.45
     "@showtime-xyz/universal.label": 0.0.45
@@ -8796,9 +8796,8 @@ __metadata:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
-    react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 96ed030cdc76cbdcf0e367ad343be41db7c546614e8af8d1a4ac6796a770d058c0517c548552682ac4eba5068cbceb55a30134fb2161c4ab7cf9bbb985ec9e2e
+  checksum: d3ba8b61707d86a0a647f560b730e99eceea44b600c05943c8f5824c39c202b59c142c6b51903ff2004629d6d878cd1e2c35318deb0ab2d76089221dd8e100a8
   languageName: node
   linkType: hard
 
@@ -8913,9 +8912,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.33":
-  version: 0.0.33
-  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.33"
+"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.35":
+  version: 0.0.35
+  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.35"
+  dependencies:
+    "@showtime-xyz/universal.view": 0.0.41
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
@@ -8923,7 +8924,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: a582363997445e60ad4a0cc4d60af915499184c726e020fb951029233eb655bd2a3173301f5da3f5e4b2f8d09e7480de4840c013f2f6b667721d06508d6b099f
+  checksum: f5e27ef500f09ba7b7a7c9a4d299c76e14eae9a2621fca1b231e18396f39a80687179ff58caac8e8fba134a7d5d6d3586e6415854cbe29b6d8745e094a425cff
   languageName: node
   linkType: hard
 
@@ -9365,20 +9366,20 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.45
     "@showtime-xyz/universal.dropdown-menu": ^0.0.44
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.14
-    "@showtime-xyz/universal.fieldset": ^0.0.90
+    "@showtime-xyz/universal.fieldset": ^0.0.91
     "@showtime-xyz/universal.haptics": ^0.0.13
     "@showtime-xyz/universal.hooks": ^0.0.45
     "@showtime-xyz/universal.icon": ^0.0.57
     "@showtime-xyz/universal.image": ^0.0.46
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.37
-    "@showtime-xyz/universal.input": ^0.0.56
+    "@showtime-xyz/universal.input": ^0.0.57
     "@showtime-xyz/universal.label": ^0.0.45
     "@showtime-xyz/universal.light-box": ^0.0.57
     "@showtime-xyz/universal.modal": ^0.0.83
     "@showtime-xyz/universal.modal-screen": ^0.0.96
     "@showtime-xyz/universal.modal-sheet": ^0.0.85
     "@showtime-xyz/universal.pan-to-close": ^0.0.23
-    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.33
+    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.35
     "@showtime-xyz/universal.pressable": ^0.0.51
     "@showtime-xyz/universal.pressable-hover": ^0.0.7
     "@showtime-xyz/universal.pressable-scale": ^0.0.47
