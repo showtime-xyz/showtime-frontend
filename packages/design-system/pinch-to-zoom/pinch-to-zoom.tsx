@@ -10,7 +10,7 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-type Props = {
+export type PinchToZoomProps = {
   children: React.ReactNode;
   minimumZoomScale?: number;
   maximumZoomScale?: number;
@@ -19,7 +19,7 @@ type Props = {
   disabled?: boolean;
 } & ViewProps;
 
-export function PinchToZoom(props: Props) {
+export function PinchToZoom(props: PinchToZoomProps) {
   const {
     minimumZoomScale = 1,
     maximumZoomScale = 8,

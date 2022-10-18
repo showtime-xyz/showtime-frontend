@@ -101,7 +101,7 @@
     "@showtime-xyz/universal.modal-screen": "^0.0.96",
     "@showtime-xyz/universal.modal-sheet": "^0.0.85",
     "@showtime-xyz/universal.pan-to-close": "^0.0.23",
-    "@showtime-xyz/universal.pinch-to-zoom": "^0.0.34",
+    "@showtime-xyz/universal.pinch-to-zoom": "^0.0.35",
     "@showtime-xyz/universal.pressable": "^0.0.51",
     "@showtime-xyz/universal.pressable-hover": "^0.0.7",
     "@showtime-xyz/universal.pressable-scale": "^0.0.47",

@@ -185,8 +185,8 @@
     },
     "pinch-to-zoom": {
         "scope": "showtime.universal",
-        "version": "0.0.34",
-        "mainFile": "index.tsx",
+        "version": "0.0.35",
+        "mainFile": "index.ts",
         "rootDir": "packages/design-system/pinch-to-zoom"
     },
     "pressable": {

@@ -8912,9 +8912,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.34":
-  version: 0.0.34
-  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.34"
+"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.35":
+  version: 0.0.35
+  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.35"
   dependencies:
     "@showtime-xyz/universal.view": 0.0.41
   peerDependencies:
@@ -8924,7 +8924,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 88ea7c7252013272722da133bcf1f4c231c4a82b573618941b2b5bcc2e26595f5f02432a8bdb17b0f63c4494bd428f819b64248271008c17e42f139446c32924
+  checksum: f5e27ef500f09ba7b7a7c9a4d299c76e14eae9a2621fca1b231e18396f39a80687179ff58caac8e8fba134a7d5d6d3586e6415854cbe29b6d8745e094a425cff
   languageName: node
   linkType: hard
 
@@ -9379,7 +9379,7 @@ __metadata:
     "@showtime-xyz/universal.modal-screen": ^0.0.96
     "@showtime-xyz/universal.modal-sheet": ^0.0.85
     "@showtime-xyz/universal.pan-to-close": ^0.0.23
-    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.34
+    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.35
     "@showtime-xyz/universal.pressable": ^0.0.51
     "@showtime-xyz/universal.pressable-hover": ^0.0.7
     "@showtime-xyz/universal.pressable-scale": ^0.0.47
