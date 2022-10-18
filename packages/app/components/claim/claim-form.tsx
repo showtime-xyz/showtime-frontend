@@ -66,7 +66,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   });
   const redirectToClaimDrop = useRedirectToClaimDrop();
 
-  const isDark = useIsDarkMode();
   const { newComment } = useComments(nft?.data?.item?.nft_id);
 
   const { data: creatorProfile } = useUserProfile({
@@ -139,16 +138,26 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     });
 
     return (
-      <View tw="items-center justify-center p-4">
-        <Text tw="text-8xl">🎉</Text>
+      <View tw="items-center justify-center">
+        <Media
+          item={nft?.data.item}
+          sizeStyle={{ height: 200, width: 200, borderRadius: 16 }}
+        />
         <View>
           <View tw="h-8" />
           <Text tw="text-center text-4xl text-black dark:text-white">
             Congrats!
           </Text>
-          <View tw="mt-8 mb-10">
+          <View tw="mt-4">
             <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share it with the world!
+              Share it with the world!
+            </Text>
+          </View>
+          <View tw="mt-4 mb-8">
+            <Text tw="text-center text-sm text-gray-900 dark:text-gray-100">
+              {user?.data.claim_tank.available_claims
+                ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
+                : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
             </Text>
           </View>
           <Button
@@ -227,8 +236,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             sizeStyle={{
               width: 80,
               height: 80,
+              borderRadius: 16,
             }}
-            tw="rounded-lg"
           />
           <View tw="ml-4 flex-1">
             <Text
@@ -249,46 +258,18 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               {edition.creator_airdrop_edition.description}
             </Text>
           </View>
-          <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <View tw="flex-1">
-              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
-                Wallet
-              </Text>
-              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
-                {primaryWallet.nickname
-                  ? primaryWallet.nickname +
-                    " (" +
-                    formatAddressShort(primaryWallet.address) +
-                    ")"
-                  : formatAddressShort(primaryWallet.address)}
-              </Text>
-            </View>
-            <View>
-              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
-                Claim amount
-              </Text>
-              <Text tw="text-right text-sm font-bold text-gray-900 dark:text-gray-100">
-                1/{edition.creator_airdrop_edition.edition_size}
-              </Text>
-            </View>
-          </View>
 
           <View tw="mt-4 flex-row items-center">
-            <Check
-              height={20}
-              width={20}
-              //@ts-ignore
-              color={isDark ? colors.gray[100] : colors.gray[900]}
-            />
+            <CheckIcon />
             <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-              You'll follow {getCreatorUsernameFromNFT(nft?.data.item)}
+              You will follow {getCreatorUsernameFromNFT(nft?.data.item)}
             </Text>
           </View>
 
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
-              label="Add a comment (optional)"
+              label="Comment (optional)"
               placeholder="wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
               returnKeyLabel="Claim"
@@ -311,7 +292,17 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Failed. Retry!"
                 : "Claim for free"}
             </Button>
-
+            <View tw="mt-4">
+              <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                to{" "}
+                {primaryWallet.nickname
+                  ? primaryWallet.nickname +
+                    " (" +
+                    formatAddressShort(primaryWallet.address) +
+                    ")"
+                  : formatAddressShort(primaryWallet.address)}
+              </Text>
+            </View>
             <View tw="mt-4">
               <PolygonScanButton transactionHash={state.transactionHash} />
             </View>
@@ -334,5 +325,22 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         </View>
       </View>
     </ScrollComponent>
+  );
+};
+
+const CheckIcon = () => {
+  const isDark = useIsDarkMode();
+  return (
+    <View tw="items-center justify-center">
+      <View tw="rounded-full bg-gray-800 p-3 dark:bg-gray-100"></View>
+      <View tw="z-9 absolute">
+        <Check
+          height={20}
+          width={20}
+          //@ts-ignore
+          color={isDark ? colors.gray[900] : colors.gray[100]}
+        />
+      </View>
+    </View>
   );
 };

@@ -1,14 +1,20 @@
 import React, { useRef, useState } from "react";
-import { Linking, Platform, ScrollView as RNScrollView } from "react-native";
+import {
+  Linking,
+  Platform,
+  ScrollView as RNScrollView,
+  useWindowDimensions,
+} from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
+import { Accordion } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
@@ -98,6 +104,7 @@ export const DropForm = () => {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
     reset: resetForm,
   } = useForm<any>({
@@ -116,6 +123,7 @@ export const DropForm = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
+  const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
   const onSubmit = (values: UseDropNFT) => {
@@ -145,6 +153,13 @@ export const DropForm = () => {
   //     <Text>Loading</Text>
   //   </View>
   // }
+
+  const selectedDuration = watch("duration");
+
+  const selectedDurationLabel = React.useMemo(
+    () => durationOptions.find((d) => d.value === selectedDuration)?.label,
+    [selectedDuration]
+  );
 
   if (
     !userProfile?.data.profile.username ||
@@ -271,102 +286,97 @@ export const DropForm = () => {
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <ScrollComponent ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
-          <View tw="md:flex-column lg:flex-row">
-            <View>
+          <View tw="flex-row">
+            <Controller
+              control={control}
+              name="file"
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <DropFileZone onChange={onChange}>
+                    <View tw="z-1">
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({
+                            mediaTypes: "all",
+                          });
+                          onChange(file.file);
+                        }}
+                        tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64"
+                      >
+                        {value ? (
+                          <View>
+                            <Preview
+                              file={value}
+                              width={windowWidth >= 768 ? 256 : 120}
+                              height={windowWidth >= 768 ? 256 : 120}
+                              tw="rounded-2xl"
+                            />
+                            <View tw="absolute h-full w-full items-center justify-center">
+                              <View tw="flex-row shadow-lg">
+                                <FlipIcon
+                                  width={20}
+                                  height={20}
+                                  color="white"
+                                />
+                                <Text tw=" ml-2 text-sm text-white">
+                                  Replace
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        ) : (
+                          <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
+                            <ImageIcon
+                              color={isDark ? "#FFF" : "#000"}
+                              width={40}
+                              height={40}
+                            />
+                            <View tw="mt-2">
+                              <Text tw="font-bold text-gray-600 dark:text-gray-200">
+                                Upload
+                              </Text>
+                            </View>
+                            {errors.file?.message ? (
+                              <View tw="mt-2">
+                                <Text tw="text-sm text-red-500">
+                                  {errors?.file?.message}
+                                </Text>
+                              </View>
+                            ) : null}
+
+                            <View tw="mt-2 hidden md:flex">
+                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
+                                Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
+                              </Text>
+                            </View>
+                          </View>
+                        )}
+                      </Pressable>
+                    </View>
+                  </DropFileZone>
+                );
+              }}
+            />
+            <View tw="ml-4 flex-1">
+              {/* <Text>Import media</Text> */}
               <Controller
                 control={control}
-                name="file"
-                render={({ field: { onChange, value } }) => {
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => {
                   return (
-                    <DropFileZone onChange={onChange}>
-                      <View tw="z-1 items-center">
-                        <Pressable
-                          onPress={async () => {
-                            const file = await pickFile({
-                              mediaTypes: "all",
-                            });
-                            onChange(file.file);
-                          }}
-                          tw="h-64 w-64 items-center justify-center rounded-lg"
-                        >
-                          {value ? (
-                            <View>
-                              <Preview
-                                file={value}
-                                width={252}
-                                height={252}
-                                tw="rounded-2xl"
-                              />
-                              <View tw="absolute h-full w-full items-center justify-center">
-                                <View tw="flex-row shadow-lg">
-                                  <FlipIcon
-                                    width={20}
-                                    height={20}
-                                    color="white"
-                                  />
-                                  <Text tw=" ml-2 text-sm text-white">
-                                    Replace media
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          ) : (
-                            <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
-                              <ImageIcon
-                                color={isDark ? "#FFF" : "#000"}
-                                width={40}
-                                height={40}
-                              />
-                              <View tw="mt-4">
-                                <Text tw="font-bold text-gray-600 dark:text-gray-200">
-                                  Upload a media file
-                                </Text>
-                              </View>
-                              {errors.file?.message ? (
-                                <View tw="mt-2">
-                                  <Text tw="text-sm text-red-500">
-                                    {errors?.file?.message}
-                                  </Text>
-                                </View>
-                              ) : null}
-
-                              <View tw="mt-2">
-                                <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                  Tap to upload a JPG, PNG, GIF, MOV or MP4
-                                  file.
-                                </Text>
-                              </View>
-                            </View>
-                          )}
-                        </Pressable>
-                      </View>
-                    </DropFileZone>
+                    <Fieldset
+                      tw={windowWidth <= 768 ? "flex-1" : ""}
+                      label="Title"
+                      placeholder="Sweet"
+                      onBlur={onBlur}
+                      errorText={errors.title?.message}
+                      value={value}
+                      onChangeText={onChange}
+                    />
                   );
                 }}
               />
-            </View>
-            <View tw="lg:ml-4 lg:flex-1">
-              {/* <Text>Import media</Text> */}
-              <View tw="mt-4 flex-row lg:mt-[0px]">
-                <Controller
-                  control={control}
-                  name="title"
-                  render={({ field: { onChange, onBlur, value } }) => {
-                    return (
-                      <Fieldset
-                        tw="flex-1"
-                        label="Title"
-                        placeholder="How would you like to name your drop?"
-                        onBlur={onBlur}
-                        errorText={errors.title?.message}
-                        value={value}
-                        onChangeText={onChange}
-                      />
-                    );
-                  }}
-                />
-              </View>
-              <View tw="mt-4 flex-row">
+              <View tw="mt-4 hidden flex-1 flex-row md:flex">
                 <Controller
                   control={control}
                   name="description"
@@ -379,7 +389,7 @@ export const DropForm = () => {
                         textAlignVertical="top"
                         placeholder="What is this drop about?"
                         onBlur={onBlur}
-                        helperText="You will not be able to edit this"
+                        helperText="You cannot edit this after the drop is created"
                         errorText={errors.description?.message}
                         value={value}
                         numberOfLines={3}
@@ -391,15 +401,59 @@ export const DropForm = () => {
               </View>
             </View>
           </View>
-          <View tw="mb-2">
+          <View tw="mt-4 md:hidden">
+            <Controller
+              control={control}
+              name="description"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Description"
+                    multiline
+                    textAlignVertical="top"
+                    placeholder="What is this drop about?"
+                    onBlur={onBlur}
+                    helperText="You cannot edit this after the drop is created"
+                    errorText={errors.description?.message}
+                    value={value}
+                    numberOfLines={3}
+                    onChangeText={onChange}
+                  />
+                );
+              }}
+            />
+          </View>
+          <View>
             <Accordion.Root
               value={accordionValue}
               onValueChange={setAccordionValue}
             >
               <Accordion.Item tw="-mx-4" value="open">
                 <Accordion.Trigger>
-                  <Accordion.Label>Advanced</Accordion.Label>
-                  <Accordion.Chevron />
+                  <View tw="flex-1">
+                    <View tw="mb-4 flex-1 flex-row justify-between">
+                      <Accordion.Label>Drop Details</Accordion.Label>
+                      <Accordion.Chevron />
+                    </View>
+                    <View tw="flex-row justify-between">
+                      <DataPill
+                        tw="md:flex-1"
+                        label={`Royalties ${watch("royalty")}%`}
+                        type="primary"
+                      />
+                      <DataPill
+                        tw="md:mx-4 md:flex-1"
+                        label={`Editions ${watch("editionSize")}`}
+                        type="primary"
+                      />
+                      <DataPill
+                        tw="md:flex-1"
+                        label={`Duration ${selectedDurationLabel}`}
+                        type="primary"
+                      />
+                    </View>
+                  </View>
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
                   <View tw="justify-between lg:flex-row">
@@ -487,25 +541,25 @@ export const DropForm = () => {
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion.Root>
-            <AnimateHeight hide={!accordionValue}>
+            {/* <AnimateHeight hide={!accordionValue}>
               <View tw="h-0 md:h-2" />
-            </AnimateHeight>
-            <Text
+            </AnimateHeight> */}
+            {/* <Text
               onPress={() => setAccordionValue("open")}
               tw="text-gray-600 dark:text-gray-400"
             >
               By default, you will drop 100 editions with 10% royalties for a
               week.
-            </Text>
+            </Text> */}
           </View>
 
-          <View tw="my-4 flex-row">
+          <View tw="mb-4 flex-row">
             <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
-              This drop will be owned by your{" "}
+              This drop will be owned by you{" "}
               {primaryWallet.nickname ? (
                 <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
               ) : null}
-              {"(" + formatAddressShort(primaryWallet.address) + ")"} wallet
+              {"(" + formatAddressShort(primaryWallet.address) + ")"}
             </Text>
           </View>
           <View tw="flex-1">
@@ -515,21 +569,21 @@ export const DropForm = () => {
                 name="hasAcceptedTerms"
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <View tw="flex-1 flex-row items-center">
+                    <Pressable
+                      onPress={() => onChange(!value)}
+                      tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                    >
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}
                         accesibilityLabel="I agree to the terms and conditions"
                       />
 
-                      <Text
-                        onPress={() => onChange(!value)}
-                        tw="px-4 text-gray-600 dark:text-gray-400"
-                      >
+                      <Text tw="px-4 text-gray-600 dark:text-gray-400">
                         I have the rights to publish this content, and
                         understand it will be minted on the Polygon network.
                       </Text>
-                    </View>
+                    </Pressable>
                   </>
                 )}
               />
@@ -551,7 +605,7 @@ export const DropForm = () => {
                 ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Please retry!"
-                : "Create free drop"}
+                : "Drop now"}
             </Button>
 
             {state.transactionHash ? (
