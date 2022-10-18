@@ -565,7 +565,7 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 
 //#region format profile routers
 const ProfileTabNameMap = new Map([
-  ["owned", "claimed"],
+  ["owned", "collected"],
   ["created", "drops"],
 ]);
 
