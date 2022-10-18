@@ -436,19 +436,19 @@ export const DropForm = () => {
                       <Accordion.Label>Drop Details</Accordion.Label>
                       <Accordion.Chevron />
                     </View>
-                    <View tw="md:justify-space-around flex-row justify-between">
+                    <View tw="flex-row justify-between">
                       <DataPill
-                        tw="flex-1"
+                        tw="md:flex-1"
                         label={`Royalties ${watch("royalty")}%`}
                         type="primary"
                       />
                       <DataPill
-                        tw="mx-2 flex-1"
+                        tw="md:mx-4 md:flex-1"
                         label={`Editions ${watch("editionSize")}`}
                         type="primary"
                       />
                       <DataPill
-                        tw="flex-1"
+                        tw="md:flex-1"
                         label={`Duration ${selectedDurationLabel}`}
                         type="primary"
                       />
