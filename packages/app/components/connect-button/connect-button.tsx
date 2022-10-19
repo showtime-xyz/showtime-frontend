@@ -12,5 +12,5 @@ export type ConnectButtonProps = {
 
 export const ConnectButton = () => {
   const { connect } = useWalletConnect();
-  return <Button onPress={connect}>I already have a wallet</Button>;
+  return <Button onPress={() => connect()}>I already have a wallet</Button>;
 };

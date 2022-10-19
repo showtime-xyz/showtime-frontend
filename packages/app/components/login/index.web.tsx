@@ -84,7 +84,7 @@ export function Login({ onLogin }: LoginProps) {
             <View tw="h-2" />
           </View>
           <View tw="p-4">
-            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
+            <ConnectButton />
           </View>
         </>
       )}

@@ -18,8 +18,13 @@ const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const wagmiData = useAccount({
-    onConnect: (c) => {
-      walletConnectedPromiseResolveCallback.current?.(c);
+    onConnect: ({ connector, ...rest }) => {
+      const walletName = connector?.name;
+      walletConnectedPromiseResolveCallback.current?.({
+        ...rest,
+        connector: connector,
+        walletName,
+      });
       walletConnectedPromiseResolveCallback.current = null;
     },
     onDisconnect: () => {

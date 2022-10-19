@@ -20,7 +20,7 @@ interface LoginInputFieldProps
   signInButtonLabel?: string;
   validationSchema?: yup.AnyObjectSchema;
   leftElement?: React.ReactNode;
-  textInputRef: any;
+  textInputRef?: any;
   onSubmit: (value: string) => void;
 }
 
