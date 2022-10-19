@@ -79,7 +79,10 @@ export const SettingsPhoneNumberSkeletonSlot = () => {
 
 export const SettingsPhoneNumberSlotPlaceholder = () => {
   return (
-    <Text tw="m-0 p-4 text-base font-bold text-gray-900 dark:text-white">
+    <Text
+      tw="p-4 text-base font-bold text-gray-900 dark:text-white"
+      style={{ margin: 0 }}
+    >
       No phone number connected to your profile.
     </Text>
   );
