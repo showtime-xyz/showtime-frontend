@@ -15,7 +15,8 @@ export const HeaderLeft = ({
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
-  const Icon = canGoBack ? ArrowLeft : Search;
+  const canGoHome = router.pathname.split("/").length - 1 >= 2;
+  const Icon = canGoBack || canGoHome ? ArrowLeft : Search;
 
   return (
     <PressableScale
@@ -33,6 +34,8 @@ export const HeaderLeft = ({
       onPress={() => {
         if (canGoBack) {
           router.pop();
+        } else if (canGoHome) {
+          router.push("/home");
         } else {
           router.push("/search");
         }
