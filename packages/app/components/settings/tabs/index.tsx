@@ -1,10 +1,4 @@
-import { FlatList, Platform, ScrollView } from "react-native";
-
-import {
-  Route,
-  TabFlatList,
-  TabScrollView,
-} from "@showtime-xyz/universal.tab-view";
+import { Route } from "@showtime-xyz/universal.tab-view";
 
 import { WalletAddressesV2 } from "app/types";
 
@@ -14,15 +8,38 @@ import { PhoneTab } from "./phone";
 import { PushNotificationTab } from "./push-notifications";
 import { WalletsTab } from "./wallets";
 
-export const SettingListComponent =
-  Platform.OS === "web" ? FlatList : TabFlatList;
-export const SettingScrollComponent =
-  Platform.OS === "web" ? ScrollView : TabScrollView;
-
 export type SettingTabsSceneProps = {
   route: Route;
   setEditingWallet: (v: WalletAddressesV2) => void;
 };
+
+export const SETTINGS_ROUTES = [
+  {
+    title: "Wallets",
+    key: "Wallets",
+    index: 0,
+  },
+  {
+    title: "Email",
+    key: "Email",
+    index: 1,
+  },
+  {
+    title: "Phone Number",
+    key: "Phone",
+    index: 2,
+  },
+  {
+    title: "Account",
+    key: "Account",
+    index: 3,
+  },
+  {
+    title: "Push Notifications",
+    key: "Push Notifications",
+    index: 4,
+  },
+];
 export const SettingTabsScene = ({
   route: { index, key },
   setEditingWallet,

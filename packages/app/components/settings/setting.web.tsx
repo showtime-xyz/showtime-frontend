@@ -9,10 +9,9 @@ import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
 import { WalletAddressesV2 } from "app/types";
 
-import { SETTINGS_ROUTES } from ".";
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingsHeader } from "./setting-header";
-import { SettingTabsScene } from "./tabs";
+import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
 
 const SettingsTabs = () => {
   const { isAuthenticated } = useUser();

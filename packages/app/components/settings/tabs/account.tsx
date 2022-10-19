@@ -1,11 +1,16 @@
 import { useMemo } from "react";
+import { Platform, ScrollView } from "react-native";
+
+import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 
 import {
   AccountSettingItem,
   SettingAccountSlotFooter,
   SettingAccountSlotHeader,
 } from "../settings-account-slot";
-import { SettingScrollComponent } from "./index";
+
+const SettingScrollComponent =
+  Platform.OS === "web" ? ScrollView : TabScrollView;
 
 export type AccountTabProps = {
   index?: number;

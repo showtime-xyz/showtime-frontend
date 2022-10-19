@@ -1,10 +1,11 @@
-import { useEffect, useMemo } from "react";
-import { Platform } from "react-native";
+import { useMemo, useCallback } from "react";
+import { Platform, ScrollView } from "react-native";
 
+import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
-import { WalletAddressesV2 } from "app/types";
 
 import {
   SettingEmailSlotHeader,
@@ -13,13 +14,14 @@ import {
   SettingsEmailSlotPlaceholder,
 } from "../settings-email-slot";
 import { SlotSeparator } from "../slot-separator";
-import { SettingListComponent } from "./index";
 
+const SettingScrollComponent =
+  Platform.OS === "web" ? ScrollView : TabScrollView;
 export type EmailTabProps = {
   index?: number;
 };
 export const EmailTab = ({ index = 0 }: EmailTabProps) => {
-  const { user, isAuthenticated } = useUser();
+  const { user } = useUser();
   const router = useRouter();
 
   const emailWallets = useMemo(
@@ -30,55 +32,49 @@ export const EmailTab = ({ index = 0 }: EmailTabProps) => {
     [user?.data.profile.wallet_addresses_v2]
   );
 
-  const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
-
-  useEffect(() => {
-    const isUnauthenticated = !isAuthenticated;
-    if (isUnauthenticated) {
-      router.pop();
+  const ListEmptyComponent = useCallback(() => {
+    const hasNoEmails = Boolean(emailWallets);
+    if (hasNoEmails) {
+      return <SettingsEmailSlotPlaceholder />;
     }
-  }, [isAuthenticated, router]);
+    return <SettingsEmailSkeletonSlot />;
+  }, [emailWallets]);
 
   return (
-    <SettingListComponent
-      data={emailWallets}
-      keyExtractor={keyExtractor}
-      renderItem={({ item }) => (
-        <SettingsEmailSlot email={item.email} address={item.backendAddress} />
-      )}
-      ListEmptyComponent={() => {
-        const hasNoEmails = Boolean(emailWallets);
-        if (hasNoEmails) {
-          return <SettingsEmailSlotPlaceholder />;
+    <SettingScrollComponent index={index}>
+      <SettingEmailSlotHeader
+        hasEmail={Boolean(emailWallets?.length)}
+        onAddEmail={() =>
+          router.push(
+            Platform.select({
+              native: `/settings/add-email`,
+              web: {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  addEmailModal: true,
+                },
+              } as any,
+            }),
+            Platform.select({
+              native: `/settings/add-email`,
+              web: router.asPath,
+            }),
+            { scroll: false }
+          )
         }
-        return <SettingsEmailSkeletonSlot />;
-      }}
-      ListHeaderComponent={
-        <SettingEmailSlotHeader
-          hasEmail={Boolean(emailWallets?.length)}
-          onAddEmail={() =>
-            router.push(
-              Platform.select({
-                native: `/settings/add-email`,
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    addEmailModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: `/settings/add-email`,
-                web: router.asPath,
-              }),
-              { scroll: false }
-            )
-          }
-        />
-      }
-      ItemSeparatorComponent={() => <SlotSeparator />}
-      index={index}
-    />
+      />
+      {emailWallets?.length === 0
+        ? ListEmptyComponent()
+        : emailWallets?.map((item) => (
+            <View key={item.address}>
+              <SettingsEmailSlot
+                email={item.email}
+                address={item.backendAddress}
+              />
+              <SlotSeparator />
+            </View>
+          ))}
+    </SettingScrollComponent>
   );
 };

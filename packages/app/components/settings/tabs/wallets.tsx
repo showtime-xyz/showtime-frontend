@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from "react";
-import { useWindowDimensions } from "react-native";
+import { Platform, ScrollView, useWindowDimensions } from "react-native";
 
+import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,12 +17,14 @@ import {
   SettingsWalletSlotSkeleton,
 } from "../settings-wallet-slot";
 import { SlotSeparator } from "../slot-separator";
-import { SettingScrollComponent } from "./index";
 
 export type WalletsTabProps = {
   index?: number;
   setEditingWallet: (v: WalletAddressesV2) => void;
 };
+const SettingScrollComponent =
+  Platform.OS === "web" ? ScrollView : TabScrollView;
+
 export const WalletsTab = ({
   index = 0,
   setEditingWallet,

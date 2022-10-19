@@ -2,30 +2,28 @@ import { useEffect, useCallback, useState } from "react";
 import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
   HeaderTabView,
   Route,
   SceneRendererProps,
 } from "@showtime-xyz/universal.tab-view";
-import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
-import { SETTINGS_ROUTES } from ".";
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingsHeader } from "./setting-header";
-import { SettingTabsScene } from "./tabs";
+import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
 
 const SettingsTabs = () => {
   const { isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
+  const { bottom } = useSafeAreaInsets();
   const router = useRouter();
-  const bottomHeight = usePlatformBottomHeight();
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);
@@ -73,9 +71,11 @@ const SettingsTabs = () => {
           default: headerHeight,
           android: 0,
         })}
+        sceneContainerStyle={{
+          paddingBottom: Math.max(bottom, 20),
+        }}
         autoWidthTabBar
       />
-      <View style={{ height: bottomHeight }} />
       {editingWallet ? (
         <EditNicknameModal
           editingWallet={editingWallet}

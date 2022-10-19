@@ -1,20 +1,21 @@
 import { useMemo, useCallback } from "react";
-import { Platform } from "react-native";
+import { Platform, ScrollView } from "react-native";
 
+import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
-
-import { useUser } from "app/hooks/use-user";
-import { WalletAddressesV2 } from "app/types";
 
 import {
   SettingPhoneNumberSlotHeader,
   SettingsPhoneNumberSkeletonSlot,
   SettingsPhoneNumberSlot,
   SettingsPhoneNumberSlotPlaceholder,
-} from "../settings-phone-number-slot";
-import { SlotSeparator } from "../slot-separator";
-import { SettingScrollComponent } from "./index";
+} from "app/components/settings/settings-phone-number-slot";
+import { SlotSeparator } from "app/components/settings/slot-separator";
+import { useUser } from "app/hooks/use-user";
+
+const SettingScrollComponent =
+  Platform.OS === "web" ? ScrollView : TabScrollView;
 
 export type PhoneTabProps = {
   index?: number;
@@ -30,8 +31,6 @@ export const PhoneTab = ({ index = 0 }: PhoneTabProps) => {
       ),
     [user?.data.profile.wallet_addresses_v2]
   );
-
-  const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
 
   const ListEmptyComponent = useCallback(() => {
     const hasNoPhoneNumbers = Boolean(phoneNumberWallets);
