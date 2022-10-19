@@ -10,7 +10,7 @@ export type ConnectButtonProps = {
   }) => void;
 };
 
-export const ConnectButton = () => {
+export const ConnectButton: React.FC<ConnectButtonProps> = () => {
   const { connect } = useWalletConnect();
   return <Button onPress={() => connect()}>I already have a wallet</Button>;
 };
