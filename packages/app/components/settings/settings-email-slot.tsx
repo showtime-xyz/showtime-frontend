@@ -78,9 +78,12 @@ export const SettingsEmailSkeletonSlot = () => {
 
 export const SettingsEmailSlotPlaceholder = () => {
   return (
-    <Text tw="m-0 p-4 text-base font-bold text-gray-900 dark:text-white">
-      No email connected to your profile.
-    </Text>
+    <>
+      <Text tw="p-4 text-base font-bold text-gray-900 dark:text-white">
+        No email connected to your profile.
+      </Text>
+      <View tw="h-2" />
+    </>
   );
 };
 

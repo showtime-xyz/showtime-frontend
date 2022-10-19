@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { HeaderLeft } from ".";
+import { HeaderLeft } from "./header-left";
 
 export const DEFAULT_HADER_HEIGHT = 44;
 const renderComponent = (Component: any) => {

@@ -13,11 +13,11 @@ import { View } from "@showtime-xyz/universal.view";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
+import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
 import { useNavigationElements } from "./use-navigation-elements";
 
-export const BOTTOM_TABBAR_BASE_HEIGHT = 64;
 export const BottomTabbar = ({
   navigation,
   state,

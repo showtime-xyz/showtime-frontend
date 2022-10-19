@@ -15,7 +15,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-// import { NetworkButton } from "app/components/connect-button";
 import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
@@ -24,8 +23,10 @@ import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { breakpoints } from "design-system/theme";
 
-import { HeaderRight, HeaderCenter, HeaderLeft } from ".";
 import { withColorScheme } from "../memo-with-theme";
+import { HeaderCenter } from "./header-center";
+import { HeaderLeft } from "./header-left";
+import { HeaderRight } from "./header-right";
 
 export const SearchInHeader = () => {
   const isDark = useIsDarkMode();
