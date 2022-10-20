@@ -9,7 +9,10 @@ type Props = {
 };
 
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
-export const linkifyDescription = (text: string, rest?: Props) => {
+export const linkifyDescription = (text?: string, rest?: Props) => {
+  if (!text) {
+    return null;
+  }
   // Match @-mentions
   let replacedText = reactStringReplace(text, /@(\w+)/g, (match, i) => {
     console.log(",atch man ", match);
