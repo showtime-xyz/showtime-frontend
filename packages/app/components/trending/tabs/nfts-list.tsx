@@ -13,7 +13,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
-import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
+import { TrendingTabListProps, TrendingTabListRef } from "./";
 
 const ViewabilityInfiniteScrollList = withViewabilityInfiniteScrollList(
   TabInfiniteScrollList
@@ -23,10 +23,10 @@ const NUM_COLUMNS = 3;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ days, index }, ref) {
     const router = useRouter();
-
     const { data, mutate } = useTrendingNFTS({
       days,
     });
+
     const listRef = useRef(null);
     useScrollToTop(listRef);
     useImperativeHandle(ref, () => ({

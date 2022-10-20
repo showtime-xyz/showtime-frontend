@@ -3,9 +3,9 @@ import { forwardRef, Suspense, useContext, useMemo } from "react";
 import { TabSpinner } from "@showtime-xyz/universal.tab-view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { TabFallback } from "app/components/error-boundary/tab-fallback";
+import { TrendingContext } from "app/components/trending/context";
 
-import { TabFallback } from "../error-boundary/tab-fallback";
-import { TrendingContext } from "./context";
 import { CreatorsList } from "./creators-list";
 import { NFTSList } from "./nfts-list";
 
@@ -16,6 +16,23 @@ export type TrendingTabListProps = {
   days: number;
   index: number;
 };
+export const TRENDING_ROUTE = [
+  {
+    title: "Today",
+    key: "1",
+    index: 0,
+  },
+  {
+    title: "This week",
+    key: "7",
+    index: 1,
+  },
+  {
+    title: "This month",
+    key: "30",
+    index: 2,
+  },
+];
 
 const LIST_MAP = new Map([
   [0, NFTSList],
