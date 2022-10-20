@@ -20,7 +20,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -148,7 +147,6 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
@@ -284,14 +282,17 @@ export const DropForm = () => {
     );
   }
 
-  const handleFileChange = (file: any) => {
+  const handleFileChange = (file: string | File) => {
     let extension;
     // On Native file is a string uri
     if (typeof file === "string") {
       extension = file.split(".").pop();
     }
 
-    if (file.type === "video/quicktime" || extension === "mov") {
+    if (
+      extension === "mov" ||
+      (typeof file === "object" && file.type === "video/quicktime")
+    ) {
       setError("file", { type: "custom", message: "File type not supported" });
       setValue("file", undefined);
     } else {
