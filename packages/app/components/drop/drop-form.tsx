@@ -20,7 +20,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -105,6 +104,9 @@ export const DropForm = () => {
     control,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
+    setValue,
     formState: { errors },
     reset: resetForm,
   } = useForm<any>({
@@ -145,7 +147,6 @@ export const DropForm = () => {
   const pickFile = useFilePicker();
   const share = useShare();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
@@ -281,6 +282,25 @@ export const DropForm = () => {
     );
   }
 
+  const handleFileChange = (file: string | File) => {
+    let extension;
+    // On Native file is a string uri
+    if (typeof file === "string") {
+      extension = file.split(".").pop();
+    }
+
+    if (
+      extension === "mov" ||
+      (typeof file === "object" && file.type === "video/quicktime")
+    ) {
+      setError("file", { type: "custom", message: "File type not supported" });
+      setValue("file", undefined);
+    } else {
+      clearErrors("file");
+      setValue("file", file);
+    }
+  };
+
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
@@ -290,16 +310,16 @@ export const DropForm = () => {
             <Controller
               control={control}
               name="file"
-              render={({ field: { onChange, value } }) => {
+              render={({ field: { value } }) => {
                 return (
-                  <DropFileZone onChange={onChange}>
+                  <DropFileZone onChange={handleFileChange}>
                     <View tw="z-1">
                       <Pressable
                         onPress={async () => {
                           const file = await pickFile({
                             mediaTypes: "all",
                           });
-                          onChange(file.file);
+                          handleFileChange(file.file);
                         }}
                         tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64"
                       >
@@ -309,16 +329,16 @@ export const DropForm = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              tw="rounded-2xl"
+                              style={{ borderRadius: 16 }}
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
-                              <View tw="flex-row shadow-lg">
+                              <View tw="flex-row items-center shadow-lg">
                                 <FlipIcon
                                   width={20}
                                   height={20}
                                   color="white"
                                 />
-                                <Text tw=" ml-2 text-sm text-white">
+                                <Text tw="ml-2 text-sm text-white">
                                   Replace
                                 </Text>
                               </View>
@@ -338,7 +358,7 @@ export const DropForm = () => {
                             </View>
                             {errors.file?.message ? (
                               <View tw="mt-2">
-                                <Text tw="text-sm text-red-500">
+                                <Text tw="text-center text-sm text-red-500">
                                   {errors?.file?.message}
                                 </Text>
                               </View>
@@ -346,7 +366,7 @@ export const DropForm = () => {
 
                             <View tw="mt-2 hidden md:flex">
                               <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                Tap to upload a JPG, PNG, GIF, MOV or MP4 file.
+                                Tap to upload a JPG, PNG, GIF, WebM or MP4 file.
                               </Text>
                             </View>
                           </View>
@@ -357,6 +377,7 @@ export const DropForm = () => {
                 );
               }}
             />
+
             <View tw="ml-4 flex-1">
               {/* <Text>Import media</Text> */}
               <Controller
@@ -401,6 +422,11 @@ export const DropForm = () => {
               </View>
             </View>
           </View>
+
+          <Text tw="mt-4 text-gray-600 dark:text-gray-200 md:hidden">
+            JPG, PNG, GIF, WebM or MP4 file
+          </Text>
+
           <View tw="mt-4 md:hidden">
             <Controller
               control={control}
