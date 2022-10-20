@@ -1,0 +1,45 @@
+diff --git a/node_modules/@react-navigation/native/src/useLinking.native.tsx b/node_modules/@react-navigation/native/src/useLinking.native.tsx
+index 759c8ec..932b80a 100644
+--- a/node_modules/@react-navigation/native/src/useLinking.native.tsx
++++ b/node_modules/@react-navigation/native/src/useLinking.native.tsx
+@@ -119,16 +119,20 @@ export default function useLinking(
+   });
+ 
+   const getStateFromURL = React.useCallback(
+-    (url: string | null | undefined) => {
++    (url: string | null | undefined, isInitial?: boolean) => {
+       if (!url || (filterRef.current && !filterRef.current(url))) {
+         return undefined;
+       }
+ 
+       const path = extractPathFromURL(prefixesRef.current, url);
+ 
+-      return path !== undefined
+-        ? getStateFromPathRef.current(path, configRef.current)
+-        : undefined;
++      if (path === "" || path === "/") {
++        if (isInitial) {
++          return getStateFromPathRef.current(path, configRef.current);
++        }
++      } else if (path !== undefined) {
++        return getStateFromPathRef.current(path, configRef.current);
++      }
+     },
+     []
+   );
+@@ -141,13 +145,13 @@ export default function useLinking(
+ 
+       if (url != null && typeof url !== 'string') {
+         return url.then((url) => {
+-          const state = getStateFromURL(url);
++          const state = getStateFromURL(url, true);
+ 
+           return state;
+         });
+       }
+ 
+-      state = getStateFromURL(url);
++      state = getStateFromURL(url, true);
+     }
+ 
+     const thenable = {
