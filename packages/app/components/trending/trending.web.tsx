@@ -27,8 +27,8 @@ type Query = {
 };
 
 const TrendingHeaderContext = createContext<{
-  days: string | number | undefined;
-  setDays: (type: number) => void;
+  days: string | undefined;
+  setDays: (type: string) => void;
 }>({
   days: undefined,
   setDays: () => {},
@@ -49,7 +49,7 @@ const Header = () => {
       </View>
       <TabBarSingle
         onPress={(index: number) => {
-          setDays(+TRENDING_ROUTE[index].key);
+          setDays(TRENDING_ROUTE[index].key);
         }}
         routes={TRENDING_ROUTE}
         index={TRENDING_ROUTE.findIndex((item) => item.key == days)}
@@ -68,13 +68,10 @@ export const Trending = () => {
       : contentWidth >= breakpoints["lg"]
       ? 3
       : 2;
-  const [days, setDays] = useParam("days", {
-    initial: 1,
-    parse: (value) => Number(value ?? 1),
-  });
+  const [days, setDays] = useParam("days", { initial: "1" });
 
   const { data: list, isLoading } = useTrendingNFTS({
-    days,
+    days: Number(days),
   });
   const chuckList = useMemo(() => {
     return chunk(list, numColumns);
@@ -127,7 +124,7 @@ export const Trending = () => {
     <TrendingHeaderContext.Provider
       value={{
         days: days,
-        setDays,
+        setDays: setDays,
       }}
     >
       <View tw="w-full pb-8 pt-16 md:pt-20">
