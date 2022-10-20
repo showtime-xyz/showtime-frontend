@@ -34,27 +34,6 @@ export const Trending = () => {
   const [selecteds] = useState({
     ...TRENDING_ROUTE.map(() => 0),
   });
-
-  // const renderSceneHeader = useCallback(
-  //   (props: Route) => {
-  //     return (
-  //       <View tw="bg-white p-4 dark:bg-black">
-  //         <SegmentedControl
-  //           values={["DROP", "CREATOR"]}
-  //           onChange={(newIndex) => {
-  //             Haptics.impactAsync();
-  //             setSelecteds({
-  //               ...selecteds,
-  //               [props.index]: newIndex,
-  //             });
-  //           }}
-  //           selectedIndex={selecteds[props.index]}
-  //         />
-  //       </View>
-  //     );
-  //   },
-  //   [selecteds]
-  // );
   const renderHeader = useCallback(() => {
     return (
       <>

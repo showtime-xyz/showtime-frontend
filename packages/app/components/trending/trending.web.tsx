@@ -47,7 +47,6 @@ const Header = () => {
           Trending
         </Text>
       </View>
-
       <TabBarSingle
         onPress={(index: number) => {
           setDays(+TRENDING_ROUTE[index].key);
@@ -63,23 +62,17 @@ export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const isMdWidth = contentWidth >= breakpoints["md"];
-
-  // const isDark = useIsDarkMode();
-
-  // const handleTabChange = (index: number) => {
-  //   setTab(index !== 0 ? "creator" : "drop");
-  // };
-  const [days, setDays] = useParam("days", {
-    initial: 1,
-    parse: (value) => Number(value ?? 1),
-  });
-
   const numColumns =
     contentWidth <= breakpoints["md"]
       ? 3
       : contentWidth >= breakpoints["lg"]
       ? 3
       : 2;
+  const [days, setDays] = useParam("days", {
+    initial: 1,
+    parse: (value) => Number(value ?? 1),
+  });
+
   const { data: list, isLoading } = useTrendingNFTS({
     days,
   });

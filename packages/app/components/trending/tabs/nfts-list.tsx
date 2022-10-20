@@ -37,6 +37,11 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
     });
     const listRef = useRef(null);
     useScrollToTop(listRef);
+    const contentWidth = useContentWidth();
+    const chuckList = useMemo(() => {
+      return chunk(data, 3);
+    }, [data]);
+
     useImperativeHandle(ref, () => ({
       refresh: mutate,
     }));
@@ -80,11 +85,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       (_item: NFT[], index: number) => `${index}`,
       []
     );
-    const contentWidth = useContentWidth();
-
-    const chuckList = useMemo(() => {
-      return chunk(data, 3);
-    }, [data]);
 
     return (
       <ViewabilityInfiniteScrollList
