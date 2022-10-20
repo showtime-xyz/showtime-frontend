@@ -1,10 +1,21 @@
 diff --git a/node_modules/solito/build/link/core.js b/node_modules/solito/build/link/core.js
-index 18ef1d9..ffc7aa9 100644
+index 18ef1d9..71c138e 100644
 --- a/node_modules/solito/build/link/core.js
 +++ b/node_modules/solito/build/link/core.js
-@@ -13,7 +13,13 @@ function LinkCore({ children, href, as, componentProps, Component, ...props }) {
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { Platform } from 'react-native';
++import { Platform, Linking } from 'react-native';
+ import { parseNextPath } from '../router';
+ import { useLinkTo } from '../router/use-link-to';
+ import { NextLink } from './next-link';
+@@ -11,9 +11,16 @@ function LinkCore({ children, href, as, componentProps, Component, ...props }) {
+     // eslint-disable-next-line react-hooks/rules-of-hooks
+     const linkTo = useLinkTo();
      return (React.createElement(Component, { accessibilityRole: "link", ...componentProps, onPress: (e) => {
-             componentProps?.onPress?.(e);
+-            componentProps?.onPress?.(e);
++        console.log("efkoefkofok 23344")
++        componentProps?.onPress?.(e);
              if (!e?.defaultPrevented) {
 -                linkTo(parseNextPath(as || href));
 +                const link = as || href

@@ -15,8 +15,6 @@ export const linkifyDescription = (text?: string, rest?: Props) => {
   }
   // Match @-mentions
   let replacedText = reactStringReplace(text, /@(\w+)/g, (match, i) => {
-    console.log(",atch man ", match);
-
     return (
       <Link
         key={match + i}
