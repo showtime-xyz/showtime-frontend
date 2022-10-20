@@ -19,26 +19,17 @@ import { TRENDING_ROUTE, TabListContainer, TrendingTabListRef } from "./tabs";
 export const Trending = () => {
   const headerHeight = useHeaderHeight();
   const contentWidth = useContentWidth();
-  const { index, setIndex, routes, tabRefs } =
+  const { index, setIndex, routes } =
     useTabState<TrendingTabListRef>(TRENDING_ROUTE);
-
   const renderScene = useCallback(
     ({
-      route: { index: sceneIndex },
+      route: { index: sceneIndex, key },
     }: SceneRendererProps & {
       route: Route;
     }) => {
-      console.log(TRENDING_ROUTE[index].key);
-
-      return (
-        <TabListContainer
-          days={+TRENDING_ROUTE[index].key}
-          index={sceneIndex}
-          ref={(ref) => (tabRefs.current[sceneIndex] = ref)}
-        />
-      );
+      return <TabListContainer days={Number(key)} index={sceneIndex} />;
     },
-    [index, tabRefs]
+    []
   );
   const [selecteds] = useState({
     ...TRENDING_ROUTE.map(() => 0),
@@ -79,27 +70,24 @@ export const Trending = () => {
 
   return (
     <TrendingContext.Provider value={selecteds}>
-      <View style={{ width: contentWidth }} tw="flex-1">
-        <HeaderTabView
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          renderScrollHeader={renderHeader}
-          minHeaderHeight={Platform.select({
-            default: headerHeight,
-            android: 0,
-          })}
-          refreshControlTop={Platform.select({
-            ios: headerHeight,
-            default: 0,
-          })}
-          initialLayout={{
-            width: contentWidth,
-          }}
-          style={{ zIndex: 1 }}
-          // renderSceneHeader={renderSceneHeader}
-        />
-      </View>
+      <HeaderTabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        renderScrollHeader={renderHeader}
+        minHeaderHeight={Platform.select({
+          default: headerHeight,
+          android: 0,
+        })}
+        refreshControlTop={Platform.select({
+          ios: headerHeight,
+          default: 0,
+        })}
+        initialLayout={{
+          width: contentWidth,
+        }}
+        // renderSceneHeader={renderSceneHeader}
+      />
     </TrendingContext.Provider>
   );
 };
