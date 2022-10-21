@@ -1,6 +1,6 @@
 import { useState, memo, useMemo } from "react";
 
-import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -11,6 +11,7 @@ type IndependentTabBarProps = {
   index: number;
   onPress?: (index: number) => void;
   tw?: string;
+  disableScrollableBar?: boolean;
 };
 const PADDING_X = 16;
 
@@ -23,6 +24,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
     index: propIndex,
     onPress,
     tw = "",
+    disableScrollableBar = false,
   }) {
     const [tabsWidth, setTabsWidth] = useState<{
       [index: number]: number;
@@ -42,12 +44,13 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
         tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
       >
         {routes.map((item, index) => (
-          <Pressable
+          <PressableHover
             onPress={() => onPress?.(index)}
             style={{
               paddingHorizontal: PADDING_X,
             }}
             key={item.key}
+            tw={disableScrollableBar ? "flex-1" : ""}
           >
             <View
               onLayout={({
@@ -62,7 +65,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
                   setTabsWidth({ ...tabs });
                 }
               }}
-              tw="py-4"
+              tw={["py-4", disableScrollableBar ? "items-center" : ""]}
             >
               <Text
                 tw={["text-sm font-bold", getTextColor(propIndex === index)]}
@@ -75,7 +78,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
                 )}
               </Text>
             </View>
-          </Pressable>
+          </PressableHover>
         ))}
         <View
           tw="animate-fade-in absolute bottom-0 h-[2px] bg-gray-900 transition-all dark:bg-white"

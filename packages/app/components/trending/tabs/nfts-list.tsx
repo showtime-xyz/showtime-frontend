@@ -1,9 +1,18 @@
-import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
+import {
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useMemo,
+} from "react";
+import { StyleSheet } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
+import chunk from "lodash/chunk";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
@@ -13,7 +22,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
-import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
+import { TrendingTabListProps, TrendingTabListRef } from "./";
 
 const ViewabilityInfiniteScrollList = withViewabilityInfiniteScrollList(
   TabInfiniteScrollList
@@ -23,12 +32,16 @@ const NUM_COLUMNS = 3;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ days, index }, ref) {
     const router = useRouter();
-
     const { data, mutate } = useTrendingNFTS({
       days,
     });
     const listRef = useRef(null);
     useScrollToTop(listRef);
+    const contentWidth = useContentWidth();
+    const chuckList = useMemo(() => {
+      return chunk(data, 3);
+    }, [data]);
+
     useImperativeHandle(ref, () => ({
       refresh: mutate,
     }));
@@ -36,32 +49,46 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       () => <ListFooter isLoading={false} />,
       []
     );
-
-    const renderItem = useCallback(
-      ({ item, index: itemIndex }: ListRenderItemInfo<NFT>) => {
-        return (
-          <Card
-            nft={item}
-            numColumns={NUM_COLUMNS}
-            onPress={() =>
-              router.push(
-                `/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`
-              )
-            }
-            href={`/list?initialScrollIndex=${itemIndex}&days=${days}&type=trendingNFTs`}
-          />
+    const onItemPress = useCallback(
+      (currentIndex: number) => {
+        router.push(
+          `/list?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
         );
       },
       [router, days]
     );
-    const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
-    const contentWidth = useContentWidth();
+
+    const renderItem = useCallback(
+      ({ item: chuckItem, index: itemIndex }: ListRenderItemInfo<NFT[]>) => {
+        return (
+          <View tw="flex-row">
+            {chuckItem.map((item, chuckItemIndex) => (
+              <Card
+                key={item.nft_id}
+                nft={item}
+                onPress={() =>
+                  onItemPress(itemIndex * NUM_COLUMNS + chuckItemIndex)
+                }
+                numColumns={NUM_COLUMNS}
+                style={{
+                  marginRight: StyleSheet.hairlineWidth,
+                  marginBottom: StyleSheet.hairlineWidth,
+                }}
+              />
+            ))}
+          </View>
+        );
+      },
+      [onItemPress]
+    );
+    const keyExtractor = useCallback(
+      (_item: NFT[], index: number) => `${index}`,
+      []
+    );
 
     return (
       <ViewabilityInfiniteScrollList
-        useWindowScroll={false}
-        numColumns={NUM_COLUMNS}
-        data={data}
+        data={chuckList}
         ref={listRef}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
