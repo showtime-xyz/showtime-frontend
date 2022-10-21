@@ -15,7 +15,7 @@ import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
-import { ledgerWalletHack } from "app/utilities";
+import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
 
 import { useWallet } from "./use-wallet";
 
@@ -254,7 +254,11 @@ export const useClaimNFT = (edition: IEdition) => {
         } else {
           Alert.alert(
             "Wow, you love claiming drops!",
-            `Only ${userProfile?.data.daily_claim_limit} claims per day is allowed. Come back tomorrow!`
+            `Only ${
+              userProfile?.data.daily_claim_limit
+            } claims per day is allowed. Come back ${getNextRefillClaim(
+              userProfile?.data.claim_tank.next_refill_at
+            )}!`
           );
         }
       } else if (e?.response?.status === 500) {
