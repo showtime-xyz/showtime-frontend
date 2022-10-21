@@ -5,10 +5,11 @@ type DataPillProps = {
   type?: "primary" | "secondary";
   label?: string;
   tw?: string;
+  textTw?: string;
 };
 
 export const DataPill = (props: DataPillProps) => {
-  const { type = "primary", label, tw = "" } = props;
+  const { type = "primary", label, tw = "", textTw = "" } = props;
 
   return (
     <View
@@ -21,11 +22,14 @@ export const DataPill = (props: DataPillProps) => {
       ]}
     >
       <Text
-        tw={`text-xs font-medium ${
-          type === "primary"
-            ? "text-gray-500 "
-            : " text-white dark:text-gray-900"
-        }`}
+        tw={[
+          `text-xs font-medium ${
+            type === "primary"
+              ? "text-gray-500 "
+              : " text-white dark:text-gray-900"
+          }`,
+          textTw,
+        ]}
       >
         {label}
       </Text>

@@ -8609,9 +8609,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.data-pill@npm:^0.0.45":
-  version: 0.0.45
-  resolution: "@showtime-xyz/universal.data-pill@npm:0.0.45"
+"@showtime-xyz/universal.data-pill@npm:^0.0.46":
+  version: 0.0.46
+  resolution: "@showtime-xyz/universal.data-pill@npm:0.0.46"
   dependencies:
     "@showtime-xyz/universal.text": 0.0.43
     "@showtime-xyz/universal.view": 0.0.41
@@ -8621,7 +8621,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 630dedfc8b20932ad7b964dc3a31b8b2917fdc3f215cf2cb38d0b7c252ae9ccde8fcdf7f491ef74acd82694b85078dd714cc60618e1b1d070f9588627e4287db
+  checksum: 8a09904dfa80f25048a574818cfec560493a2d3705215ab570aa0f9eca1cbbaa908308d297e7d41f6d837488f820d13a0d0862c3760fde2cc95576dcff102d08
   languageName: node
   linkType: hard
 
@@ -9363,7 +9363,7 @@ __metadata:
     "@showtime-xyz/universal.collapsible-tab-view": ^0.0.45
     "@showtime-xyz/universal.color-scheme": ^0.0.29
     "@showtime-xyz/universal.country-code-picker": ^0.0.63
-    "@showtime-xyz/universal.data-pill": ^0.0.45
+    "@showtime-xyz/universal.data-pill": ^0.0.46
     "@showtime-xyz/universal.divider": ^0.0.45
     "@showtime-xyz/universal.dropdown-menu": ^0.0.44
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.14

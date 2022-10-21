@@ -1,4 +1,4 @@
-import { useRef, useContext } from "react";
+import { useRef, useContext, useMemo } from "react";
 import {
   Linking,
   Platform,
@@ -35,6 +35,7 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
+import { linkifyDescription } from "app/lib/linkify";
 import { useRudder } from "app/lib/rudderstack";
 import {
   formatAddressShort,
@@ -97,6 +98,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     hideSnackbar();
     router.pop();
   };
+  const linkifiedDescription = useMemo(
+    () => linkifyDescription(edition.creator_airdrop_edition.description),
+    [edition.creator_airdrop_edition.description]
+  );
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -255,7 +260,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         <View tw="mt-4 w-full">
           <View tw="mb-4">
             <Text tw="text-gray-900 dark:text-gray-100">
-              {edition.creator_airdrop_edition.description}
+              {linkifiedDescription}
             </Text>
           </View>
 
