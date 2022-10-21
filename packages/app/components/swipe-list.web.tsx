@@ -72,11 +72,19 @@ export const SwipeList = ({
   );
 
   useEffect(() => {
-    if (!initialURLSet.current && isSwipeListScreen) {
-      window.history.replaceState(null, "", getNFTSlug(data[0]));
+    if (
+      !initialURLSet.current &&
+      isSwipeListScreen &&
+      typeof initialParamProp !== "undefined"
+    ) {
+      const nft = data[Number(initialParamProp)];
+      if (nft) {
+        window.history.replaceState(null, "", getNFTSlug(nft));
+      }
+
       initialURLSet.current = true;
     }
-  }, [data, isSwipeListScreen]);
+  }, [data, isSwipeListScreen, initialParamProp]);
   // const initialSlideIndex = useMemo(() => {
   //   const defaultIndex = clamp(initialScrollIndex, 0, data.length - 1);
   //   if (!id) return defaultIndex;
