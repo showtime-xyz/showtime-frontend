@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -38,6 +37,7 @@ import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import {
   formatToUSNumber,
+  getNextRefillClaim,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
@@ -237,14 +237,7 @@ export const ProfileTop = ({
       ],
     };
   }, []);
-  const nextRefillClaim = user?.data.claim_tank.next_refill_at
-    ? formatDistanceToNowStrict(
-        new Date(user?.data.claim_tank.next_refill_at),
-        {
-          addSuffix: true,
-        }
-      )
-    : "";
+
   return (
     <>
       <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
@@ -465,7 +458,9 @@ export const ProfileTop = ({
               <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
                 {user?.data.claim_tank.available_claims
                   ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                  : `Your next claim will be available ${nextRefillClaim}`}
+                  : `Your next claim will be available ${getNextRefillClaim(
+                      user?.data.claim_tank.next_refill_at
+                    )}`}
               </Text>
               <InformationCircleIcon
                 height={18}
