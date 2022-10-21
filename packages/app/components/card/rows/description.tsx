@@ -1,8 +1,10 @@
+import { useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
+import { linkifyDescription } from "app/lib/linkify";
 import { removeTags } from "app/utilities";
 
 type Props = ViewProps & {
@@ -12,6 +14,12 @@ type Props = ViewProps & {
 };
 
 function Description({ descriptionText = "", maxLines = 3, ...rest }: Props) {
+  const description = useMemo(
+    () =>
+      descriptionText ? linkifyDescription(removeTags(descriptionText)) : "",
+    [descriptionText]
+  );
+
   if (!descriptionText || descriptionText === "") {
     return null;
   }
@@ -21,7 +29,7 @@ function Description({ descriptionText = "", maxLines = 3, ...rest }: Props) {
       <ClampText
         tw="text-sm text-gray-600 dark:text-gray-400"
         maxLines={maxLines}
-        text={removeTags(descriptionText)}
+        text={description}
       />
     </View>
   );

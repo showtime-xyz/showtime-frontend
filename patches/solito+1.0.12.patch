@@ -1,0 +1,98 @@
+diff --git a/node_modules/solito/build/link/core.js b/node_modules/solito/build/link/core.js
+index 18ef1d9..1cdac87 100644
+--- a/node_modules/solito/build/link/core.js
++++ b/node_modules/solito/build/link/core.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { Platform } from 'react-native';
++import { Platform, Linking } from 'react-native';
+ import { parseNextPath } from '../router';
+ import { useLinkTo } from '../router/use-link-to';
+ import { NextLink } from './next-link';
+@@ -11,9 +11,15 @@ function LinkCore({ children, href, as, componentProps, Component, ...props }) {
+     // eslint-disable-next-line react-hooks/rules-of-hooks
+     const linkTo = useLinkTo();
+     return (React.createElement(Component, { accessibilityRole: "link", ...componentProps, onPress: (e) => {
+-            componentProps?.onPress?.(e);
++        componentProps?.onPress?.(e);
+             if (!e?.defaultPrevented) {
+-                linkTo(parseNextPath(as || href));
++                const link = as || href
++                // Handles external URLs
++                if (typeof link === 'string' && !link.startsWith('/')) {
++                  Linking.openURL(link)
++                } else {
++                  linkTo(parseNextPath(link))
++                }
+             }
+         } }, children));
+ }
+diff --git a/node_modules/solito/src/link/core.tsx b/node_modules/solito/src/link/core.tsx
+index cd22c98..6fa6cff 100644
+--- a/node_modules/solito/src/link/core.tsx
++++ b/node_modules/solito/src/link/core.tsx
+@@ -1,14 +1,14 @@
+-import React from 'react'
+-import type { ComponentProps, ComponentType } from 'react'
+-import { Platform } from 'react-native'
++import React from "react";
++import type { ComponentProps, ComponentType } from "react";
++import { Platform } from "react-native";
+ 
+-import { parseNextPath } from '../router'
+-import { useLinkTo } from '../router/use-link-to'
+-import { NextLink } from './next-link'
++import { parseNextPath } from "../router";
++import { useLinkTo } from "../router/use-link-to";
++import { NextLink } from "./next-link";
+ 
+ export type LinkCoreProps = {
+-  children: React.ReactNode
+-} & Omit<ComponentProps<typeof NextLink>, 'passHref'>
++  children: React.ReactNode;
++} & Omit<ComponentProps<typeof NextLink>, "passHref">;
+ 
+ function LinkCore({
+   children,
+@@ -18,32 +18,32 @@ function LinkCore({
+   Component,
+   ...props
+ }: LinkCoreProps & {
+-  Component: ComponentType<any>
+-  componentProps?: any
++  Component: ComponentType<any>;
++  componentProps?: any;
+ }) {
+-  if (Platform.OS === 'web') {
++  if (Platform.OS === "web") {
+     return (
+       <NextLink {...props} href={href} as={as} passHref>
+         <Component {...componentProps}>{children}</Component>
+       </NextLink>
+-    )
++    );
+   }
+   // eslint-disable-next-line react-hooks/rules-of-hooks
+-  const linkTo = useLinkTo()
++  const linkTo = useLinkTo();
+   return (
+     <Component
+       accessibilityRole="link"
+       {...componentProps}
+       onPress={(e?: any) => {
+-        componentProps?.onPress?.(e)
++        componentProps?.onPress?.(e);
+         if (!e?.defaultPrevented) {
+-          linkTo(parseNextPath(as || href))
++          linkTo(parseNextPath(as || href));
+         }
+       }}
+     >
+       {children}
+     </Component>
+-  )
++  );
+ }
+ 
+-export { LinkCore }
++export { LinkCore };
