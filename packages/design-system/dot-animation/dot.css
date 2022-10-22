@@ -1,0 +1,30 @@
+.dot-animation {
+  display: inline-block;
+  position: relative;
+  opacity: 0;
+  animation: showHideDot 2.5s ease-in-out infinite;
+}
+.dot-animation-1 {
+  animation-delay: 0.2s;
+}
+.dot-animation-2 {
+  animation-delay: 0.4s;
+}
+.dot-animation-3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes showHideDot {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

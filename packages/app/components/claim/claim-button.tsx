@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
@@ -8,6 +8,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+
+import { DotAnimation } from "design-system/dot-animation";
 
 import { ClaimStatus, getClaimStatus } from ".";
 
@@ -42,6 +44,36 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
     isExpired ||
     isProgress;
 
+  const renderContext = useCallback(() => {
+    if (isProgress) {
+      return (
+        <Text tw="ml-1 font-semibold text-white">
+          Claiming in progress
+          <DotAnimation />
+        </Text>
+      );
+    }
+    switch (status) {
+      case ClaimStatus.Claimed:
+        return (
+          <>
+            <Check color="white" width={18} height={18} />
+            <Text tw="ml-1 font-semibold text-white">Claimed</Text>
+          </>
+        );
+      case ClaimStatus.Soldout:
+        return (
+          <>
+            <Check color="white" width={18} height={18} />
+            <Text tw="ml-1 font-semibold text-white">Sold out</Text>
+          </>
+        );
+      case ClaimStatus.Expired:
+        return "Drop expired";
+      default:
+        return "Claim for free";
+    }
+  }, [isProgress, status]);
   return (
     <Button
       onPress={onClaimPress}
@@ -50,7 +82,7 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       size={size}
       tw={(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : ""}
     >
-      {status === ClaimStatus.Claimed ? (
+      {/* {status === ClaimStatus.Claimed ? (
         <>
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 font-semibold text-white">Claimed</Text>
@@ -63,10 +95,11 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       ) : status === ClaimStatus.Expired ? (
         "Drop expired"
       ) : isProgress ? (
-        "Claiming in progress…"
+        <></>
       ) : (
         "Claim for free"
-      )}
+      )} */}
+      {renderContext()}
     </Button>
   );
 };
