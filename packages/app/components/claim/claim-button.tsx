@@ -95,7 +95,7 @@ export const ClaimButton = ({
       return "Drop expired";
     } else if (isProgress) {
       return (
-        <Text tw="ml-1 font-semibold">
+        <Text tw="text-xs font-bold">
           Claiming in progress
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
@@ -114,23 +114,6 @@ export const ClaimButton = ({
       tw={[(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : "", tw]}
     >
       {content}
-      {/* {status === ClaimStatus.Claimed ? (
-        <>
-          <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Claimed</Text>
-        </>
-      ) : status === ClaimStatus.Soldout ? (
-        <>
-          <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Sold out</Text>
-        </>
-      ) : status === ClaimStatus.Expired ? (
-        "Drop expired"
-      ) : isProgress ? (
-        "Claiming in progress…"
-      ) : (
-        "Claim for free"
-      )} */}
     </Button>
   );
 };
