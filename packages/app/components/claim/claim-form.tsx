@@ -49,7 +49,7 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, dispatch } = useContext(ClaimContext);
+  const { state } = useContext(ClaimContext);
 
   const { claimNFT, onReconnectWallet } = useClaimNFT(
     edition.creator_airdrop_edition
@@ -93,6 +93,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     }
     mutate();
   };
+
   const linkifiedDescription = useMemo(
     () => linkifyDescription(edition.creator_airdrop_edition.description),
     [edition.creator_airdrop_edition.description]
