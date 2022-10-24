@@ -1,4 +1,4 @@
-import { useRef, useContext } from "react";
+import { useRef, useContext, useMemo } from "react";
 import {
   Linking,
   Platform,
@@ -36,6 +36,7 @@ import { useShare } from "app/hooks/use-share";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
+import { linkifyDescription } from "app/lib/linkify";
 import { useRudder } from "app/lib/rudderstack";
 import {
   formatAddressShort,
@@ -109,6 +110,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     hideSnackbar();
     router.pop();
   };
+  const linkifiedDescription = useMemo(
+    () => linkifyDescription(edition.creator_airdrop_edition.description),
+    [edition.creator_airdrop_edition.description]
+  );
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -151,7 +156,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     return (
       <View tw="items-center justify-center">
-        {/* <Text tw="text-8xl">🎉</Text> */}
         <Media
           item={nft?.data.item}
           sizeStyle={{ height: 200, width: 200, borderRadius: 16 }}
@@ -268,7 +272,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         <View tw="mt-4 w-full">
           <View tw="mb-4">
             <Text tw="text-gray-900 dark:text-gray-100">
-              {edition.creator_airdrop_edition.description}
+              {linkifiedDescription}
             </Text>
           </View>
           {/* <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
@@ -405,20 +409,3 @@ const CheckIcon = () => {
     </View>
   );
 };
-
-// const CloseIcon = () => {
-//   const isDark = useIsDarkMode();
-//   return (
-//     <View tw="items-center justify-center">
-//       <View tw="rounded-full bg-gray-800 p-3"></View>
-//       <View tw="z-9 absolute">
-//         <Close
-//           height={20}
-//           width={20}
-//           //@ts-ignore
-//           color={isDark ? colors.gray[900] : colors.gray[100]}
-//         />
-//       </View>
-//     </View>
-//   );
-// };

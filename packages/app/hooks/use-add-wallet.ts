@@ -18,11 +18,11 @@ const useAddWallet = () => {
   const Alert = useAlert();
   const { mutate } = useSWRConfig();
   const { setPrimaryWallet } = useSetPrimaryWallet();
-
   const user = useUser();
   const wallet = useWallet();
 
   const hasNoPrimaryWallet = user?.user?.data.profile.primary_wallet === null;
+  const userWallets = user?.user?.data.profile.wallet_addresses_v2;
 
   const addWallet = async () => {
     try {
@@ -32,6 +32,17 @@ const useAddWallet = () => {
       }
 
       const res = await wallet.connect();
+
+      const getWalletDefalutNickname = () => {
+        const walletName = res?.walletName;
+        const index = userWallets?.findIndex(
+          (item) => item.nickname === walletName
+        );
+        if (!index || index === -1) {
+          return res?.walletName;
+        }
+        return `${res?.walletName} ${(userWallets?.length ?? 0) + 1}`;
+      };
 
       if (res) {
         const nonce = await fetchNonce(res.address);
@@ -71,6 +82,7 @@ const useAddWallet = () => {
             const addedWallet = await addWalletToBackend({
               address: res.address,
               signature,
+              nickname: getWalletDefalutNickname(),
             });
 
             mutate(MY_INFO_ENDPOINT);
@@ -84,7 +96,7 @@ const useAddWallet = () => {
       }
 
       setStatus("idle");
-    } catch (e) {
+    } catch (e: any) {
       setStatus("error");
       Alert.alert("Something went wrong", e.message);
       Logger.error("failed adding wallet", e);

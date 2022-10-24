@@ -5,7 +5,6 @@ import Animated, {
   useAnimatedStyle,
   interpolate,
 } from "react-native-reanimated";
-import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
@@ -35,9 +34,10 @@ import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import { TextLink } from "app/navigation/link";
+import { linkifyDescription } from "app/lib/linkify";
 import {
   formatToUSNumber,
+  getNextRefillClaim,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
@@ -136,25 +136,7 @@ export const ProfileTop = ({
     username: profileData?.profile.username,
   });
 
-  const bioWithMentions = useMemo(
-    () =>
-      reactStringReplace(
-        bio,
-        /@([\w\d-]+?)\b/g,
-        (username: string, i: number) => {
-          return (
-            <TextLink
-              href={`/@${username}`}
-              tw="font-bold text-black dark:text-white"
-              key={i}
-            >
-              @{username}
-            </TextLink>
-          );
-        }
-      ),
-    [bio]
-  );
+  const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // banner ratio: w:h=3:1
   const coverHeight = contentWidth < 768 ? contentWidth / 3 : 180;
 
@@ -476,7 +458,9 @@ export const ProfileTop = ({
               <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
                 {user?.data.claim_tank.available_claims
                   ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                  : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
+                  : `Your next claim will be available ${getNextRefillClaim(
+                      user?.data.claim_tank.next_refill_at
+                    )}`}
               </Text>
               <InformationCircleIcon
                 height={18}

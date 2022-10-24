@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
+import { formatDistanceToNowStrict } from "date-fns";
 import * as FileSystem from "expo-file-system";
 import removeMd from "remove-markdown";
 
@@ -565,7 +566,7 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 
 //#region format profile routers
 const ProfileTabNameMap = new Map([
-  ["owned", "claimed"],
+  ["owned", "collected"],
   ["created", "drops"],
 ]);
 
@@ -586,3 +587,8 @@ export const formatProfileRoutes = (
   }));
 };
 //#endregion
+
+export const getNextRefillClaim = (time?: string) => {
+  if (!time) return "";
+  return formatDistanceToNowStrict(new Date(time), { addSuffix: true });
+};

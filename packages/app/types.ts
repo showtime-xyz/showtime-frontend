@@ -149,7 +149,8 @@ export type WalletConnectionStatus =
   | "EXPIRING_NONCE"
   | "EXPIRED_NONCE"
   | "CONNECTED"
-  | "ERRORED";
+  | "ERRORED"
+  | "FETCHING_SIGNATURE";
 
 export interface OwnersListOwner {
   profile_id: number;

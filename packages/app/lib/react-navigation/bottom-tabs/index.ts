@@ -8,7 +8,7 @@ import {
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { useUser } from "app/hooks/use-user";
-import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/navigation/bottom-tab-bar";
+import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 const useBottomTabBarHeight = () => {

@@ -6,7 +6,7 @@ import React, {
   useRef,
   useMemo,
 } from "react";
-import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 import chunk from "lodash/chunk";
@@ -29,8 +29,6 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 
-import { breakpoints } from "design-system/theme";
-
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./profile-footer";
@@ -42,7 +40,7 @@ type TabListProps = {
   list: List;
   index: number;
 };
-
+const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
@@ -54,8 +52,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   ) {
     const router = useRouter();
     const { filter } = useContext(FilterContext);
-    const { width } = useWindowDimensions();
-    const isMdWidth = width >= breakpoints["md"];
 
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
@@ -63,8 +59,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         profileId,
         collectionId: filter.collectionId,
         sortType: filter.sortType,
-        // TODO: remove refresh interval once we have the new indexer.
-        // refreshInterval: 5000,
       });
     const contentWidth = useContentWidth();
 
@@ -96,30 +90,22 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       (_item: NFT[], index: number) => `${index}`,
       []
     );
-    const numColumns = Platform.select({
-      default: 3,
-      web:
-        contentWidth <= breakpoints["md"]
-          ? 3
-          : contentWidth >= breakpoints["lg"]
-          ? 3
-          : 2,
-    });
+
     const renderItem = useCallback(
       ({
         item: chuckItem,
         index: itemIndex,
       }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
         return (
-          <View tw="flex-row" style={{ maxWidth: contentWidth }}>
+          <View tw="flex-row">
             {chuckItem.map((item, chuckItemIndex) => (
               <Card
                 key={item.nft_id}
                 nft={item}
                 onPress={() =>
-                  onItemPress(itemIndex * numColumns + chuckItemIndex)
+                  onItemPress(itemIndex * NUM_COLUMNS + chuckItemIndex)
                 }
-                numColumns={numColumns}
+                numColumns={NUM_COLUMNS}
                 style={{
                   marginRight: StyleSheet.hairlineWidth,
                   marginBottom: StyleSheet.hairlineWidth,
@@ -129,7 +115,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           </View>
         );
       },
-      [contentWidth, numColumns, onItemPress]
+      [onItemPress]
     );
 
     if (isBlocked) {
@@ -181,18 +167,14 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             ref={listRef}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            estimatedItemSize={contentWidth / numColumns}
+            estimatedItemSize={contentWidth / NUM_COLUMNS}
             overscan={{
-              main: contentWidth / numColumns,
-              reverse: contentWidth / numColumns,
+              main: contentWidth / NUM_COLUMNS,
+              reverse: contentWidth / NUM_COLUMNS,
             }}
             ListFooterComponent={ListFooterComponent}
             onEndReached={fetchMore}
             index={index}
-            gridItemProps={Platform.select({
-              default: null,
-              web: { style: { marginVertical: isMdWidth ? 16 : 0 } },
-            })}
           />
         </ProfileTabsNFTProvider>
       </MutateProvider>
