@@ -24,9 +24,9 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
   return (
     <View tw={["ml-2 flex-row items-center", tw]}>
       <>
-        {slicedClaimersList?.map((item) => {
+        {slicedClaimersList?.map((item, index) => {
           return (
-            <View tw="-ml-2" key={item.profile_id}>
+            <View tw="-ml-2" key={`${item.profile_id}-${index}`}>
               <Link href={`/@${item.username ?? item.wallet_address}`}>
                 <Avatar
                   url={item.img_url}

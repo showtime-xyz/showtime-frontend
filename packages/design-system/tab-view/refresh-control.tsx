@@ -11,9 +11,11 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
+import {
+  RefreshControlProps,
+  RefreshTypeEnum,
+} from "@showtime-xyz/universal.collapsible-tab-view";
 import { SpinnerView } from "@showtime-xyz/universal.spinner";
-
-import { RefreshControlProps, RefreshTypeEnum } from "./index";
 
 export const RefreshControl = ({
   progress,

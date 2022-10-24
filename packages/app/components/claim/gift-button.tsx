@@ -8,8 +8,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
-
-import { formatClaimNumber } from ".";
+import { formatClaimNumber } from "app/utilities";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
