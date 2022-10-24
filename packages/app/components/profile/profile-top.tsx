@@ -5,7 +5,6 @@ import Animated, {
   useAnimatedStyle,
   interpolate,
 } from "react-native-reanimated";
-import reactStringReplace from "react-string-replace";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
@@ -35,7 +34,7 @@ import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import { TextLink } from "app/navigation/link";
+import { linkifyDescription } from "app/lib/linkify";
 import {
   formatToUSNumber,
   getNextRefillClaim,
@@ -137,25 +136,7 @@ export const ProfileTop = ({
     username: profileData?.profile.username,
   });
 
-  const bioWithMentions = useMemo(
-    () =>
-      reactStringReplace(
-        bio,
-        /@([\w\d-]+?)\b/g,
-        (username: string, i: number) => {
-          return (
-            <TextLink
-              href={`/@${username}`}
-              tw="font-bold text-black dark:text-white"
-              key={i}
-            >
-              @{username}
-            </TextLink>
-          );
-        }
-      ),
-    [bio]
-  );
+  const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // banner ratio: w:h=3:1
   const coverHeight = contentWidth < 768 ? contentWidth / 3 : 180;
 

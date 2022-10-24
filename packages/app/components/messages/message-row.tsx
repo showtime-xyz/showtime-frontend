@@ -1,8 +1,7 @@
 import { useMemo, useCallback } from "react";
-import { Platform, Linking } from "react-native";
+import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
-import reactStringReplace from "react-string-replace";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button, TextButton } from "@showtime-xyz/universal.button";
@@ -18,58 +17,9 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
-
-const mentionRegex = /@([\w\d-]+?)\b/g;
-const hyperlinkRegex = /(https?:\/\/)?([0-9a-z]+\.)?[-_0-9a-z]+\.[0-9a-z]+/g;
-
-const linkify = (content: string, router: any) => {
-  // first replace all the mentions
-  const contentWithMention = reactStringReplace(
-    content,
-    mentionRegex,
-    (username: string, i: number) => {
-      return (
-        <Text
-          onPress={() => {
-            router.pop();
-            router.push(`/@${username}`);
-          }}
-          tw="font-bold text-black dark:text-white"
-          key={i}
-        >
-          @{username}
-        </Text>
-      );
-    }
-  );
-
-  // next replace all the hyperlinks
-  const result = contentWithMention.map((token) => {
-    if (typeof token === "string") {
-      return (token as string).split(" ").map((word, i) => {
-        if (!hyperlinkRegex.test(word)) {
-          return word + " ";
-        }
-        const match = [...word.match(hyperlinkRegex)!];
-        return (
-          <Text
-            key={i}
-            tw="text-blue-500"
-            onPress={() => Linking.openURL(match[0])}
-          >
-            {match[0]}
-          </Text>
-        );
-      });
-    } else {
-      return token;
-    }
-  });
-
-  return result;
-};
 
 interface MessageRowProps {
   /**
@@ -203,8 +153,12 @@ export function MessageRow({
     });
   }, [createdAt]);
   const contentWithTags = useMemo(() => {
-    return onTagPress ? linkify(content, router) : content;
-  }, [content, onTagPress, router]);
+    return onTagPress
+      ? linkifyDescription(content, {
+          onUserMentionPress: router.pop,
+        })
+      : content;
+  }, [content, onTagPress, router.pop]);
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);

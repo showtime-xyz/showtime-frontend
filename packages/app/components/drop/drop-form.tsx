@@ -465,16 +465,19 @@ export const DropForm = () => {
                     <View tw="flex-row justify-between">
                       <DataPill
                         tw="md:flex-1"
+                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Royalties ${watch("royalty")}%`}
                         type="primary"
                       />
                       <DataPill
                         tw="md:mx-4 md:flex-1"
+                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Editions ${watch("editionSize")}`}
                         type="primary"
                       />
                       <DataPill
                         tw="md:flex-1"
+                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Duration ${selectedDurationLabel}`}
                         type="primary"
                       />

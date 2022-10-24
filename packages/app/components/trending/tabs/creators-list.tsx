@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 
-import { TrendingTabListProps, TrendingTabListRef } from "./tab-list";
+import { TrendingTabListProps, TrendingTabListRef } from "./";
 
 export const CreatorsList = forwardRef<
   TrendingTabListRef,
   TrendingTabListProps
->(function CreatorsList({ days, index }, ref) {
+>(function CreatorsList() {
   return null;
   // const { data, isLoadingMore, isLoading, refresh, fetchMore } =
   //   useTrendingCreators({
