@@ -1,6 +1,6 @@
 import { DotAnimationProps } from "./type";
 
-export const DotAnimation = ({
+export const ThreeDotsAnimation = ({
   color = "#000",
   size = 2,
   spacing = 2,

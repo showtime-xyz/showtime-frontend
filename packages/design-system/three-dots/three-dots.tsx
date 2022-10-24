@@ -13,7 +13,7 @@ import Animated, {
 
 import { DotAnimationProps } from "./type";
 
-export const DotAnimation = ({ style, ...rest }: DotAnimationProps) => {
+export const ThreeDotsAnimation = ({ style, ...rest }: DotAnimationProps) => {
   return (
     <View
       style={[
@@ -38,8 +38,6 @@ const Dot = ({
 }: Pick<DotAnimationProps, "color" | "dotStyle"> & {
   index: number;
 }) => {
-  console.log(color);
-
   const opacity = useSharedValue(0);
   const delayMS = 200 * (index + 1);
   useEffect(() => {
