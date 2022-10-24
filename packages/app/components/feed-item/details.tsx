@@ -3,7 +3,6 @@ import { Pressable } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -20,6 +19,8 @@ import { NFTDropdown } from "app/components/nft-dropdown";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import type { NFT } from "app/types";
+
+import { ClaimedShareButton } from "../claim/claimed-share-button";
 
 type NFTDetailsProps = {
   nft: NFT;
@@ -76,7 +77,14 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         tw="mb-4"
       />
       {isCreatorDrop && edition ? (
-        <ClaimButton edition={edition} size="regular" />
+        <View tw="flex-row">
+          <ClaimButton tw="flex-1" edition={edition} size="regular" />
+          <ClaimedShareButton
+            tw="ml-3 w-1/3"
+            edition={edition}
+            size="regular"
+          />
+        </View>
       ) : isCreatorDrop ? (
         <View tw="h-12" />
       ) : null}

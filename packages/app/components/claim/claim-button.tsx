@@ -1,8 +1,11 @@
-import { useContext, useCallback } from "react";
+import { useContext, useMemo } from "react";
+import { StyleProp, ViewStyle } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { ClaimContext } from "app/context/claim-context";
@@ -11,13 +14,42 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
 import { DotAnimation } from "design-system/dot-animation";
 
-import { ClaimStatus, getClaimStatus } from ".";
-
 type ClaimButtonProps = {
   edition: CreatorEditionResponse;
   size?: ButtonProps["size"];
+  tw?: string;
+  style?: StyleProp<ViewStyle>;
 };
-export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
+
+export enum ClaimStatus {
+  Soldout,
+  Claimed,
+  Expired,
+  Normal,
+}
+export const getClaimStatus = (edition: CreatorEditionResponse) => {
+  if (!edition) return undefined;
+  if (
+    edition.total_claimed_count ===
+    edition.creator_airdrop_edition?.edition_size
+  )
+    return ClaimStatus.Soldout;
+
+  if (edition.is_already_claimed) return ClaimStatus.Claimed;
+
+  return typeof edition?.time_limit === "string" &&
+    new Date() > new Date(edition.time_limit)
+    ? ClaimStatus.Expired
+    : ClaimStatus.Normal;
+};
+
+export const ClaimButton = ({
+  edition,
+  size = "small",
+  tw = "",
+  style,
+}: ClaimButtonProps) => {
+  const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
   const isProgress =
@@ -44,15 +76,7 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
     isExpired ||
     isProgress;
 
-  const renderContext = useCallback(() => {
-    if (isProgress) {
-      return (
-        <Text tw="ml-1 font-semibold text-white">
-          Claiming in progress
-          <DotAnimation />
-        </Text>
-      );
-    }
+  const content = useMemo(() => {
     switch (status) {
       case ClaimStatus.Claimed:
         return (
@@ -73,33 +97,24 @@ export const ClaimButton = ({ edition, size = "small" }: ClaimButtonProps) => {
       default:
         return "Claim for free";
     }
-  }, [isProgress, status]);
+  }, [status]);
+
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
-      style={bgIsGreen ? { backgroundColor: "#0CB504" } : undefined}
+      style={[bgIsGreen ? { backgroundColor: "#0CB504" } : undefined, style]}
       size={size}
-      tw={(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : ""}
+      tw={[(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : "", tw]}
     >
-      {/* {status === ClaimStatus.Claimed ? (
-        <>
-          <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Claimed</Text>
-        </>
-      ) : status === ClaimStatus.Soldout ? (
-        <>
-          <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Sold out</Text>
-        </>
-      ) : status === ClaimStatus.Expired ? (
-        "Drop expired"
-      ) : isProgress ? (
-        <></>
+      {isProgress ? (
+        <Text tw="ml-1 font-semibold">
+          Claiming in progress
+          <DotAnimation color={isDark ? colors.black : colors.white} />
+        </Text>
       ) : (
-        "Claim for free"
-      )} */}
-      {renderContext()}
+        content
+      )}
     </Button>
   );
 };

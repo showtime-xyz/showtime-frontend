@@ -38,6 +38,8 @@ const Dot = ({
 }: Pick<DotAnimationProps, "color" | "dotStyle"> & {
   index: number;
 }) => {
+  console.log(color);
+
   const opacity = useSharedValue(0);
   const delayMS = 200 * (index + 1);
   useEffect(() => {
@@ -45,9 +47,9 @@ const Dot = ({
       delayMS,
       withRepeat(
         withSequence(
-          withTiming(0, { duration: 700, easing: Easing.in(Easing.ease) }),
-          withTiming(1, { duration: 1200, easing: Easing.in(Easing.ease) }),
-          withTiming(0, { duration: 600, easing: Easing.out(Easing.ease) })
+          withTiming(0, { duration: 400, easing: Easing.in(Easing.ease) }),
+          withTiming(1, { duration: 800, easing: Easing.in(Easing.ease) }),
+          withTiming(0, { duration: 500, easing: Easing.out(Easing.ease) })
         ),
         -1,
         true

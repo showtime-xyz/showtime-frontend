@@ -25,6 +25,7 @@ import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
+import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
@@ -301,7 +302,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 tw="mt-2 mb-4"
               />
               {isCreatorDrop && edition ? (
-                <ClaimButton edition={edition} />
+                <View tw="flex-row">
+                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimedShareButton tw="ml-3 w-1/3" edition={edition} />
+                </View>
               ) : null}
               {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
             </View>

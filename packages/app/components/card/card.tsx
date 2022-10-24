@@ -17,6 +17,7 @@ import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
+import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
@@ -148,7 +149,10 @@ function Card({
             {showClaimButton &&
             !!nft.creator_airdrop_edition_address &&
             edition ? (
-              <ClaimButton edition={edition} />
+              <View tw="flex-row">
+                <ClaimButton edition={edition} />
+                <ClaimedShareButton tw="ml-3" edition={edition} />
+              </View>
             ) : null}
           </View>
           <ClaimedBy

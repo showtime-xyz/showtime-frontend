@@ -1,4 +1,3 @@
-import "./dot.css";
 import { DotAnimationProps } from "./type";
 
 export const DotAnimation = ({
@@ -10,7 +9,7 @@ export const DotAnimation = ({
     <>
       {new Array(3).fill(0).map((_, index) => (
         <span
-          className={`dot-animation dot-animation-${index + 1}`}
+          className="relative inline-block animate-pulse opacity-0"
           key={index}
           style={{
             width: size,
@@ -18,6 +17,7 @@ export const DotAnimation = ({
             borderRadius: size,
             marginLeft: spacing,
             backgroundColor: color,
+            animationDelay: `${(index + 1) * 200}ms`,
           }}
         />
       ))}
