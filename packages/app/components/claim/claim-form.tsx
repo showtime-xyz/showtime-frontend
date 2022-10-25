@@ -274,30 +274,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               {linkifiedDescription}
             </Text>
           </View>
-          {/* <View tw="flex-row justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <View tw="flex-1">
-              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
-                Wallet
-              </Text>
-              <Text tw="max-w-[300px] text-sm font-bold text-gray-900 dark:text-gray-100">
-                {primaryWallet.nickname
-                  ? primaryWallet.nickname +
-                    " (" +
-                    formatAddressShort(primaryWallet.address) +
-                    ")"
-                  : formatAddressShort(primaryWallet.address)}
-              </Text>
-            </View>
-            <View>
-              <Text tw="pb-2 text-sm font-semibold text-gray-600 dark:text-gray-200">
-                Claim amount
-              </Text>
-              <Text tw="text-right text-sm font-bold text-gray-900 dark:text-gray-100">
-                1/{edition.creator_airdrop_edition.edition_size}
-              </Text>
-            </View>
-          </View> */}
-
           {edition.gating_type === "spotify_save" ? (
             <>
               <View tw="mt-4 flex-row items-center">
