@@ -86,7 +86,7 @@
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
     "@gorhom/bottom-sheet": "4.4.5",
-    "react-native-spotify-remote": "file:./react-native-spotify-remote"
+    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz"
   },
   "react-native": {
     "zlib": "browserify-zlib",
