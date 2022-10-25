@@ -55,5 +55,8 @@ jobs:
       # - name: EAS Update
       #   run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true STAGE=staging eas update --branch staging --message "Deploy to staging"
 
-      - name: Build on EAS
-        run: STAGE=staging eas build --profile preview --platform all --non-interactive --no-wait --resource-class=large
+      - name: Build Android on EAS
+        run: STAGE=staging eas build --profile preview --platform android --non-interactive --no-wait --resource-class=large
+
+      - name: Build iOS on EAS
+        run: STAGE=staging eas build --profile preview --platform ios --non-interactive --no-wait --resource-class=m1-experimental

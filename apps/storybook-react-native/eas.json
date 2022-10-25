@@ -11,8 +11,7 @@
       },
       "env": {
         "STAGE": "development"
-      },
-      "node": "14.18.1"
+      }
     }
   },
   "cli": {
