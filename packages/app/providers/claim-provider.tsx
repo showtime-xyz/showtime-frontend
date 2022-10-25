@@ -1,10 +1,12 @@
 import { ReactNode, useReducer, useState } from "react";
+import { InteractionManager } from "react-native";
 
 import { ClaimContext } from "app/context/claim-context";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { reducer, initialState } from "app/hooks/use-claim-nft";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
@@ -15,6 +17,7 @@ type ClaimProviderProps = {
 };
 
 export function ClaimProvider({ children }: ClaimProviderProps) {
+  const redirectToClaimDrop = useRedirectToClaimDrop();
   const { rudder } = useRudder();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -40,8 +43,15 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
       if (response.is_complete) {
         rudder?.track("NFT Claimed");
-
         dispatch({ type: "success", mint: response.mint });
+        // make sure to execute it when all interactions/animations have been completed, and avoid dropped frames
+        InteractionManager.runAfterInteractions(() => {
+          redirectToClaimDrop(contractAddress);
+          dispatch({
+            type: "share",
+          });
+        });
+
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {
           if (d) {
