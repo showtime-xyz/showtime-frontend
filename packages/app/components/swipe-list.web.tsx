@@ -129,6 +129,8 @@ export const SwipeList = ({
               onRealIndexChange={onRealIndexChange}
               onReachEnd={fetchMore}
               threshold={isMobileWeb() ? 0 : 25}
+              noSwiping
+              noSwipingClass="swiper-no-swiping"
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>
