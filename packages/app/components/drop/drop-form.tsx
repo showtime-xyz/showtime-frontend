@@ -3,6 +3,7 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
+  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -21,6 +22,7 @@ import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -117,9 +119,9 @@ export const DropForm = () => {
   });
 
   const gatingType = watch("gatingType");
-  console.log("effe ", gatingType);
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
+  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
@@ -453,6 +455,62 @@ export const DropForm = () => {
               }}
             />
           </View>
+          <View
+            tw={[
+              `z-10 mt-4 flex-row`,
+              gatingType !== "spotify_save" ? "h-12" : "",
+            ]}
+          >
+            <Controller
+              control={control}
+              name="spotifyUrl"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Make it a Music Drop?"
+                    onBlur={onBlur}
+                    ref={spotifyTextInputRef}
+                    onChangeText={onChange}
+                    style={{
+                      display:
+                        gatingType === "spotify_save" ? undefined : "none",
+                    }}
+                    value={value}
+                    placeholder="Enter the Spotify song link"
+                    errorText={errors.spotifyUrl?.message}
+                  />
+                );
+              }}
+            />
+            <View style={{ position: "absolute", right: 12, top: 8 }}>
+              {user.user?.data.profile.spotify_artist_id ? (
+                <Switch
+                  checked={gatingType === "spotify_save"}
+                  onChange={(v) => {
+                    setValue("gatingType", v ? "spotify_save" : undefined);
+                    if (!v) {
+                      setValue("spotifyUrl", undefined);
+                    } else {
+                      setTimeout(() => {
+                        spotifyTextInputRef.current?.focus();
+                      }, 100);
+                    }
+                  }}
+                />
+              ) : (
+                <Button
+                  onPress={() => {
+                    // TODO: add typeform verify form URL
+                    Linking.openURL("https://showtime.xyz");
+                  }}
+                >
+                  Verify
+                </Button>
+              )}
+            </View>
+          </View>
+
           <View>
             <Accordion.Root
               value={accordionValue}
@@ -594,52 +652,6 @@ export const DropForm = () => {
               {"(" + formatAddressShort(primaryWallet.address) + ")"}
             </Text>
           </View>
-
-          <View tw="flex-row justify-between">
-            <Controller
-              control={control}
-              name="gatingType"
-              render={({ field: { onChange, value } }) => (
-                <Fieldset
-                  tw="flex-1"
-                  label="Is Spotify gated?"
-                  switchOnly
-                  switchProps={{
-                    checked: value === "spotify_save",
-                    onChange: (v) => {
-                      onChange(v ? "spotify_save" : undefined);
-                      if (!v) {
-                        setValue("spotifyUrl", undefined);
-                      }
-                    },
-                  }}
-                />
-              )}
-            />
-          </View>
-
-          {gatingType === "spotify_save" ? (
-            <View tw="z-10 mt-4 flex-row">
-              <Controller
-                control={control}
-                name="spotifyUrl"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  return (
-                    <Fieldset
-                      autoFocus
-                      tw="flex-1"
-                      label="Spotify URL"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      helperText="Enter the spotify url of the track"
-                      errorText={errors.spotifyUrl?.message}
-                    />
-                  );
-                }}
-              />
-            </View>
-          ) : null}
 
           <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">

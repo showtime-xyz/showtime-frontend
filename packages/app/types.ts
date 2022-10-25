@@ -207,6 +207,7 @@ export type MyInfo = {
     follows: Array<{ profile_id: number }>;
     profile: Profile & {
       has_spotify_token: boolean;
+      spotify_artist_id: null | number;
     };
     likes_nft: number[];
     likes_comment: any[];
