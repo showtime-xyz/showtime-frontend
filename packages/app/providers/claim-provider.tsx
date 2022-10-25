@@ -9,7 +9,6 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { delay } from "app/utilities";
 
 type ClaimProviderProps = {
@@ -18,7 +17,6 @@ type ClaimProviderProps = {
 
 export function ClaimProvider({ children }: ClaimProviderProps) {
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { rudder } = useRudder();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
   const [contractAddress, setContractAddress] = useState("");
@@ -42,7 +40,6 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
       });
 
       if (response.is_complete) {
-        rudder?.track("NFT Claimed");
         dispatch({ type: "success", mint: response.mint });
         // make sure to execute it when all interactions/animations have been completed, and avoid dropped frames
         InteractionManager.runAfterInteractions(() => {
