@@ -6,8 +6,7 @@ export const redirectUri = `${
     : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
 }/spotify-auth/redirect`;
 
-const scope =
-  "user-top-read user-read-recently-played user-read-private user-read-email user-follow-modify user-follow-read user-library-modify user-library-read";
+export const scope = "user-library-modify";
 
 export const clientID = "e12f7eea542947ff843cfc68d762235a";
 

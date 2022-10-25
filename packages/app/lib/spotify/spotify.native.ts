@@ -16,16 +16,7 @@ export const redirectUri =
 const spotifyConfig: ApiConfig = {
   clientID,
   redirectURL: redirectUri,
-  scopes: [
-    ApiScope.UserTopReadScope,
-    ApiScope.UserReadRecentlyPlayedScope,
-    ApiScope.UserReadPrivateScope,
-    ApiScope.UserReadEmailScope,
-    ApiScope.UserFollowModifyScope,
-    ApiScope.UserFollowReadScope,
-    ApiScope.UserLibraryModifyScope,
-    ApiScope.UserLibraryReadScope,
-  ],
+  scopes: [ApiScope.UserLibraryModifyScope],
   authType: "CODE",
 };
 
