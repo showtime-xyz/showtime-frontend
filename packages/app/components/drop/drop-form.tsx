@@ -3,6 +3,7 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
+  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -21,6 +22,7 @@ import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -103,11 +105,11 @@ export const DropForm = () => {
   const {
     control,
     handleSubmit,
-    watch,
     setError,
     clearErrors,
-    setValue,
     formState: { errors },
+    watch,
+    setValue,
     reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
@@ -115,8 +117,11 @@ export const DropForm = () => {
     reValidateMode: "onChange",
     defaultValues,
   });
+
+  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
+  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
@@ -450,6 +455,64 @@ export const DropForm = () => {
               }}
             />
           </View>
+          <View
+            tw={[
+              `z-10 mt-4 flex-row`,
+              gatingType !== "spotify_save" ? "h-12" : "",
+            ]}
+          >
+            <Controller
+              control={control}
+              name="spotifyUrl"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Make it a Music Drop?"
+                    onBlur={onBlur}
+                    ref={spotifyTextInputRef}
+                    onChangeText={onChange}
+                    style={{
+                      display:
+                        gatingType === "spotify_save" ? undefined : "none",
+                    }}
+                    value={value}
+                    placeholder="Enter the Spotify song link"
+                    errorText={errors.spotifyUrl?.message}
+                  />
+                );
+              }}
+            />
+            <View style={{ position: "absolute", right: 12, top: 8 }}>
+              {user.user?.data.profile.spotify_artist_id ? (
+                <Switch
+                  checked={gatingType === "spotify_save"}
+                  onChange={(v) => {
+                    setValue("gatingType", v ? "spotify_save" : undefined);
+                    if (!v) {
+                      setValue("spotifyUrl", undefined);
+                      spotifyTextInputRef.current?.clear();
+                    } else {
+                      setTimeout(() => {
+                        spotifyTextInputRef.current?.focus();
+                      }, 100);
+                    }
+                  }}
+                />
+              ) : (
+                <Button
+                  onPress={() => {
+                    Linking.openURL(
+                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
+                    );
+                  }}
+                >
+                  Verify
+                </Button>
+              )}
+            </View>
+          </View>
+
           <View>
             <Accordion.Root
               value={accordionValue}
@@ -591,7 +654,8 @@ export const DropForm = () => {
               {"(" + formatAddressShort(primaryWallet.address) + ")"}
             </Text>
           </View>
-          <View tw="flex-1">
+
+          <View tw="mt-4 flex-1">
             <View tw="flex-1 flex-row">
               <Controller
                 control={control}

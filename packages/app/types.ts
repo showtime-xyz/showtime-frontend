@@ -110,7 +110,7 @@ export interface Profile {
   notifications_last_opened: Date;
   has_onboarded: boolean;
   links: Link[];
-  primary_wallet: WalletAddressesV2;
+  primary_wallet?: WalletAddressesV2;
   has_verified_phone_number: boolean;
 }
 
@@ -199,12 +199,16 @@ export type IEdition = {
   owner_address: string;
   symbol: string;
   is_gated?: boolean;
+  is_spotify_gated?: boolean;
 };
 
 export type MyInfo = {
   data: {
     follows: Array<{ profile_id: number }>;
-    profile: Profile;
+    profile: Profile & {
+      has_spotify_token: boolean;
+      spotify_artist_id: null | number;
+    };
     likes_nft: number[];
     likes_comment: any[];
     comments: number[];

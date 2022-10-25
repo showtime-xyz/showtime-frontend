@@ -51,8 +51,10 @@ web-build/
 __generated__/
 
 # Native
-ios/
-android/
+apps/expo/ios/
+apps/expo/android/
+apps/storybook-react-native/ios/
+apps/storybook-react-native/android/
 
 # OSX
 .DS_Store

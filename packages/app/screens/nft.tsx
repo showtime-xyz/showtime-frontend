@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useEffect, useRef } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -19,15 +19,16 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
+import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../components/empty-placeholder";
-import { VideoConfigContext } from "../context/video-config-context";
 import { TextLink } from "../navigation/link";
 
 type Query = {
@@ -35,6 +36,7 @@ type Query = {
   contractAddress: string;
   chainName: string;
   tabType?: string;
+  showClaim?: boolean;
 };
 
 const { useParam } = createParam<Query>();
@@ -43,6 +45,12 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 function NftScreen({ fallback = {} }: { fallback?: object }) {
   useTrackPageViewed({ name: "NFT" });
   const { colorScheme } = useColorScheme();
+  const [showClaim] = useParam("showClaim", {
+    initial: false,
+    parse: (v) => Boolean(v),
+  });
+  const [contractAddress] = useParam("contractAddress");
+  const initialRef = useRef(false);
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -52,8 +60,17 @@ function NftScreen({ fallback = {} }: { fallback?: object }) {
     []
   );
 
+  const redirectToClaimDrop = useRedirectToClaimDrop();
+
   const dummyId = 1;
   const visibileItems = useSharedValue([undefined, dummyId, undefined]);
+
+  useEffect(() => {
+    if (showClaim && contractAddress && !initialRef.current) {
+      initialRef.current = true;
+      redirectToClaimDrop(contractAddress);
+    }
+  }, [showClaim, redirectToClaimDrop, contractAddress]);
 
   return (
     <ErrorBoundary>
