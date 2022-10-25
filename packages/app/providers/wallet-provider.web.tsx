@@ -24,16 +24,7 @@ const wagmiClient = createClient({
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        initialChain={
-          process.env.NEXT_PUBLIC_CHAIN_ID === "polygon"
-            ? chain.polygon.id
-            : chain.polygonMumbai.id
-        }
-        chains={chains}
-      >
-        {children}
-      </RainbowKitProvider>
+      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
     </WagmiConfig>
   );
 };

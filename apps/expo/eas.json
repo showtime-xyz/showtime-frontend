@@ -14,7 +14,6 @@
         "STAGE": "production",
         "FLIPPER_DISABLE": "1"
       },
-      "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-4"
@@ -34,7 +33,6 @@
         "STAGE": "staging",
         "FLIPPER_DISABLE": "1"
       },
-      "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-3"
@@ -52,7 +50,6 @@
       "env": {
         "STAGE": "development"
       },
-      "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-3"
@@ -69,7 +66,6 @@
       "env": {
         "STAGE": "staging"
       },
-      "node": "14.18.1",
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
         "key": "showtime-3"

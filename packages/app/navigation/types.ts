@@ -92,6 +92,7 @@ type RootStackNavigatorParams = {
   drop: undefined;
   claim: undefined;
   claimers: undefined;
+  spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   likers: undefined;
 };

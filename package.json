@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "66.0.4",
+  "version": "67.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -87,7 +87,8 @@
     "eth-block-tracker": "4.4.3",
     "next": "12.2.5",
     "@gorhom/bottom-sheet": "4.4.5",
-    "zeego": "canary"
+    "zeego": "canary",
+    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz"
   },
   "react-native": {
     "zlib": "browserify-zlib",

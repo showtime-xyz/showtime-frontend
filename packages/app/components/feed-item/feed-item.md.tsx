@@ -270,7 +270,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         </View>
 
         <View
-          tw="dark:shadow-dark shadow-light bg-white dark:bg-black"
+          tw="dark:shadow-dark shadow-light swiper-no-swiping bg-white dark:bg-black"
           style={{
             width: NFT_DETAIL_WIDTH,
           }}
