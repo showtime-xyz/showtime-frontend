@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { TW } from "@showtime-xyz/universal.tailwind";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 

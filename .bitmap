@@ -83,7 +83,7 @@
     },
     "data-pill": {
         "scope": "showtime.universal",
-        "version": "0.0.48",
+        "version": "0.0.49",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/data-pill"
     },
