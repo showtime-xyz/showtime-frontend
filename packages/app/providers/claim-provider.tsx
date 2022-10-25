@@ -1,17 +1,14 @@
-import { ReactNode, useReducer, useState, useEffect, useCallback } from "react";
-
-import { useSnackbar } from "@showtime-xyz/universal.snackbar";
+import { ReactNode, useReducer, useState } from "react";
+import { InteractionManager } from "react-native";
 
 import { ClaimContext } from "app/context/claim-context";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { reducer, initialState } from "app/hooks/use-claim-nft";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { delay } from "app/utilities";
 
 type ClaimProviderProps = {
@@ -19,24 +16,14 @@ type ClaimProviderProps = {
 };
 
 export function ClaimProvider({ children }: ClaimProviderProps) {
-  const { rudder } = useRudder();
+  const redirectToClaimDrop = useRedirectToClaimDrop();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const snackbar = useSnackbar();
   const mutate = useMatchMutate();
   const [contractAddress, setContractAddress] = useState("");
   const { mutate: mutateEdition } = useCreatorCollectionDetail(contractAddress);
-  const redirectToClaimDrop = useRedirectToClaimDrop();
-  const bottom = usePlatformBottomHeight();
 
   const pollTransaction = async (transactionId: any, contractAddress: any) => {
     setContractAddress(contractAddress);
-
-    snackbar?.show({
-      text: "Claiming...",
-      iconStatus: "waiting",
-      bottom,
-      hideAfter: 200000, // After this, the transaction failed
-    });
 
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
@@ -53,24 +40,15 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
       });
 
       if (response.is_complete) {
-        rudder?.track("NFT Claimed");
-        snackbar?.update({
-          text: "Claimed!",
-          iconStatus: "done",
-          bottom,
-          hideAfter: 25000,
-          action: {
-            text: "Share",
-            onPress: () => {
-              redirectToClaimDrop(contractAddress);
-              dispatch({
-                type: "share",
-              });
-            },
-          },
+        dispatch({ type: "success", mint: response.mint });
+        // make sure to execute it when all interactions/animations have been completed, and avoid dropped frames
+        InteractionManager.runAfterInteractions(() => {
+          redirectToClaimDrop(contractAddress);
+          dispatch({
+            type: "share",
+          });
         });
 
-        dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {
           if (d) {
@@ -90,28 +68,6 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
     dispatch({ type: "error", error: "polling timed out" });
   };
-  const snackbarAction = useCallback(() => {
-    redirectToClaimDrop(contractAddress);
-    dispatch({
-      type: "share",
-    });
-  }, [contractAddress, redirectToClaimDrop]);
-
-  useEffect(() => {
-    if (state.status === "success") {
-      snackbar?.show({
-        text: "Claimed!",
-        iconStatus: "done",
-        bottom,
-        hideAfter: 10000,
-        action: {
-          text: "Share",
-          onPress: snackbarAction,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, bottom, contractAddress]);
 
   return (
     <ClaimContext.Provider value={{ state, dispatch, pollTransaction }}>

@@ -592,3 +592,16 @@ export const getNextRefillClaim = (time?: string) => {
   if (!time) return "";
   return formatDistanceToNowStrict(new Date(time), { addSuffix: true });
 };
+
+// Format claim big numbers
+export function formatClaimNumber(number: number) {
+  if (!number) return 0;
+  // for the edge case of 100k, our max supply, put “100k”, no decimals
+  if (number >= 100000) {
+    return `100k`;
+  } else if (number > 1000) {
+    return `${(number / 1000).toFixed(1)}k`;
+  } else {
+    return number;
+  }
+}

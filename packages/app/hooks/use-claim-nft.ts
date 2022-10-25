@@ -3,12 +3,10 @@ import { Platform } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -121,13 +119,11 @@ export const useClaimNFT = (edition: IEdition) => {
   const { rudder } = useRudder();
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
-  const bottom = usePlatformBottomHeight();
   const signTypedData = useSignTypedData();
   const { state, dispatch, pollTransaction } = useContext(ClaimContext);
   const Alert = useAlert();
   const { connect } = useWallet();
   let { userAddress } = useCurrentUserAddress();
-  const snackbar = useSnackbar();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
@@ -188,12 +184,6 @@ export const useClaimNFT = (edition: IEdition) => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
-        snackbar?.show({
-          text: "Claiming...",
-          iconStatus: "waiting",
-          bottom,
-          hideAfter: 200000, // After this, the transaction failed
-        });
 
         if (edition?.is_gated) {
           await gatedClaimFlow();
@@ -204,7 +194,6 @@ export const useClaimNFT = (edition: IEdition) => {
       }
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
-      snackbar?.hide();
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
 
@@ -268,13 +257,6 @@ export const useClaimNFT = (edition: IEdition) => {
         );
       }
 
-      snackbar?.update({
-        text: "Claiming failed. Please try again!",
-        bottom,
-        iconStatus: "default",
-        hideAfter: 10000,
-      });
-
       captureException(e);
     }
   };
@@ -326,13 +308,9 @@ export const useClaimNFT = (edition: IEdition) => {
     });
   }, [dispatch]);
 
-  const hideSnackbar = () => {
-    snackbar?.hide();
-  };
   return {
     state,
     claimNFT,
     onReconnectWallet,
-    hideSnackbar,
   };
 };

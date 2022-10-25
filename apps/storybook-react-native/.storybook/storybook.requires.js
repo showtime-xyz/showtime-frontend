@@ -43,6 +43,7 @@ const getStories = () => {
     require("../../../packages/design-system/light-box/light-box.stories.tsx"),
     require("../../../packages/design-system/collapsible-tab-view/collapsible-tab-view.stories.tsx"),
     require("../../../packages/design-system/tab-view/tab-view.stories.tsx"),
+    require("../../../packages/design-system/three-dots/three-dots.stories.tsx"),
   ];
 };
 

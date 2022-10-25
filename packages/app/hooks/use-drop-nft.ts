@@ -129,7 +129,6 @@ export const useDropNFT = () => {
       });
 
       if (response.is_complete) {
-        rudder?.track("Drop Created");
         dispatch({ type: "success", edition: response.edition });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;

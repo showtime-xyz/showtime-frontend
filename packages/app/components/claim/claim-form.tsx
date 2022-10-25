@@ -50,9 +50,9 @@ import {
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
-  const { state, dispatch } = useContext(ClaimContext);
+  const { state } = useContext(ClaimContext);
 
-  const { claimNFT, onReconnectWallet, hideSnackbar } = useClaimNFT(
+  const { claimNFT, onReconnectWallet } = useClaimNFT(
     edition.creator_airdrop_edition
   );
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
@@ -105,11 +105,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     }
     mutate();
   };
-  const onSkipToShare = () => {
-    dispatch({ type: "initial" });
-    hideSnackbar();
-    router.pop();
-  };
+
   const linkifiedDescription = useMemo(
     () => linkifyDescription(edition.creator_airdrop_edition.description),
     [edition.creator_airdrop_edition.description]
@@ -217,9 +213,6 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             {isShareAPIAvailable
               ? "Share with your friends"
               : "Copy drop link 🔗"}
-          </Button>
-          <Button variant="tertiary" tw="mt-4" onPress={onSkipToShare}>
-            Skip for now
           </Button>
         </View>
       </View>
