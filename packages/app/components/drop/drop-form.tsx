@@ -455,65 +455,63 @@ export const DropForm = () => {
               }}
             />
           </View>
-
-          {/* TODO: hide the option until typeform is ready */}
-          {user.user?.data.profile.spotify_artist_id ? (
-            <View
-              tw={[
-                `z-10 mt-4 flex-row`,
-                gatingType !== "spotify_save" ? "h-12" : "",
-              ]}
-            >
-              <Controller
-                control={control}
-                name="spotifyUrl"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  return (
-                    <Fieldset
-                      tw="flex-1"
-                      label="Make it a Music Drop?"
-                      onBlur={onBlur}
-                      ref={spotifyTextInputRef}
-                      onChangeText={onChange}
-                      style={{
-                        display:
-                          gatingType === "spotify_save" ? undefined : "none",
-                      }}
-                      value={value}
-                      placeholder="Enter the Spotify song link"
-                      errorText={errors.spotifyUrl?.message}
-                    />
-                  );
-                }}
-              />
-              <View style={{ position: "absolute", right: 12, top: 8 }}>
-                {user.user?.data.profile.spotify_artist_id ? (
-                  <Switch
-                    checked={gatingType === "spotify_save"}
-                    onChange={(v) => {
-                      setValue("gatingType", v ? "spotify_save" : undefined);
-                      if (!v) {
-                        setValue("spotifyUrl", undefined);
-                      } else {
-                        setTimeout(() => {
-                          spotifyTextInputRef.current?.focus();
-                        }, 100);
-                      }
+          <View
+            tw={[
+              `z-10 mt-4 flex-row`,
+              gatingType !== "spotify_save" ? "h-12" : "",
+            ]}
+          >
+            <Controller
+              control={control}
+              name="spotifyUrl"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Make it a Music Drop?"
+                    onBlur={onBlur}
+                    ref={spotifyTextInputRef}
+                    onChangeText={onChange}
+                    style={{
+                      display:
+                        gatingType === "spotify_save" ? undefined : "none",
                     }}
+                    value={value}
+                    placeholder="Enter the Spotify song link"
+                    errorText={errors.spotifyUrl?.message}
                   />
-                ) : (
-                  <Button
-                    onPress={() => {
-                      // TODO: add typeform verify form URL
-                      Linking.openURL("https://showtime.xyz");
-                    }}
-                  >
-                    Verify
-                  </Button>
-                )}
-              </View>
+                );
+              }}
+            />
+            <View style={{ position: "absolute", right: 12, top: 8 }}>
+              {user.user?.data.profile.spotify_artist_id ? (
+                <Switch
+                  checked={gatingType === "spotify_save"}
+                  onChange={(v) => {
+                    setValue("gatingType", v ? "spotify_save" : undefined);
+                    if (!v) {
+                      setValue("spotifyUrl", undefined);
+                      spotifyTextInputRef.current?.clear();
+                    } else {
+                      setTimeout(() => {
+                        spotifyTextInputRef.current?.focus();
+                      }, 100);
+                    }
+                  }}
+                />
+              ) : (
+                <Button
+                  onPress={() => {
+                    Linking.openURL(
+                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
+                    );
+                  }}
+                >
+                  Verify
+                </Button>
+              )}
             </View>
-          ) : null}
+          </View>
 
           <View>
             <Accordion.Root
