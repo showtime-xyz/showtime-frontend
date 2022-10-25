@@ -70,7 +70,9 @@ function ProfileDropdown({ user }: Props) {
           key="share"
         >
           <MenuItemIcon Icon={Copy} />
-          <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Share
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -85,7 +87,7 @@ function ProfileDropdown({ user }: Props) {
           }}
         >
           <MenuItemIcon Icon={Slash} />
-          <DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -98,7 +100,9 @@ function ProfileDropdown({ user }: Props) {
           key="report"
         >
           <MenuItemIcon Icon={Flag} />
-          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Report
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

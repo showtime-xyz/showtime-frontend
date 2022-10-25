@@ -121,7 +121,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             key="hide"
           >
             <MenuItemIcon Icon={EyeOff} />
-            <DropdownMenuItemTitle>Hide</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Hide
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
@@ -133,7 +135,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             key="unhide"
           >
             <MenuItemIcon Icon={EyeOff} />
-            <DropdownMenuItemTitle>Unhide</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Unhide
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
@@ -154,7 +158,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             key="open-in-app"
           >
             <MenuItemIcon Icon={Showtime} />
-            <DropdownMenuItemTitle>Open in app</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Open in app
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
@@ -163,7 +169,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           nft.contract_address && (
             <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
               <MenuItemIcon Icon={OpenSea} />
-              <DropdownMenuItemTitle>View on OpenSea</DropdownMenuItemTitle>
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                View on OpenSea
+              </DropdownMenuItemTitle>
             </DropdownMenuItem>
           )}
 
@@ -176,13 +184,15 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
               >
                 <MenuItemIcon Icon={Twitter} />
 
-                <DropdownMenuItemTitle>Share on Twitter</DropdownMenuItemTitle>
+                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  Share on Twitter
+                </DropdownMenuItemTitle>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
               <MenuItemIcon Icon={Copy} />
 
-              <DropdownMenuItemTitle>
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 {isShareAPIAvailable ? "Share" : "Copy Link"}
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -196,7 +206,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
           >
             <MenuItemIcon Icon={Refresh} />
 
-            <DropdownMenuItemTitle>Refresh Metadata</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Refresh Metadata
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
@@ -213,7 +225,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             key="unfollow"
           >
             <MenuItemIcon Icon={UserMinus} />
-            <DropdownMenuItemTitle>Unfollow User</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Unfollow User
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
@@ -230,7 +244,7 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             }
           >
             <MenuItemIcon Icon={Slash} />
-            <DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               {isBlocked ? "Unblock User" : "Block User"}
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -245,7 +259,9 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
             key="report"
           >
             <MenuItemIcon Icon={Flag} />
-            <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Report
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
