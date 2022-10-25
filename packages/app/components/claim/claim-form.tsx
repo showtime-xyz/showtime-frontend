@@ -90,7 +90,13 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     ) {
       follow(nft?.data.item.creator_id);
     }
-    router.pop();
+
+    if (
+      edition.gating_type !== "spotify_save" ||
+      user?.data.profile.has_spotify_token
+    ) {
+      router.pop();
+    }
 
     let success: boolean | undefined = false;
 
