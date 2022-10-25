@@ -39,8 +39,6 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
       });
 
       if (response.is_complete) {
-        rudder?.track("NFT Claimed");
-
         dispatch({ type: "success", mint: response.mint });
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {
