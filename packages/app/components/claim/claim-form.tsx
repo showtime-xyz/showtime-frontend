@@ -33,6 +33,7 @@ import {
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useShare } from "app/hooks/use-share";
+import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { linkifyDescription } from "app/lib/linkify";
@@ -54,6 +55,10 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { claimNFT, onReconnectWallet } = useClaimNFT(
     edition.creator_airdrop_edition
   );
+  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
+    edition.creator_airdrop_edition
+  );
+
   const share = useShare();
   const router = useRouter();
   const { user } = useUser();
@@ -85,8 +90,21 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     ) {
       follow(nft?.data.item.creator_id);
     }
-    router.pop();
-    const success = await claimNFT();
+
+    if (
+      edition.gating_type !== "spotify_save" ||
+      user?.data.profile.has_spotify_token
+    ) {
+      router.pop();
+    }
+
+    let success: boolean | undefined = false;
+
+    if (edition.gating_type === "spotify_save") {
+      success = await claimSpotifyGatedDrop(nft?.data.item);
+    } else {
+      success = await claimNFT();
+    }
 
     if (comment.current.trim().length > 0 && success) {
       newComment(comment.current);
@@ -256,6 +274,28 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               {linkifiedDescription}
             </Text>
           </View>
+          {edition.gating_type === "spotify_save" ? (
+            <>
+              <View tw="mt-4 flex-row items-center">
+                {user.data.profile.has_spotify_token ? (
+                  <CheckIcon />
+                ) : (
+                  <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                )}
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  Connect your Spotify account
+                </Text>
+              </View>
+
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  You will save {edition.spotify_track_name} to your Spotify
+                  library
+                </Text>
+              </View>
+            </>
+          ) : null}
 
           <View tw="mt-4 flex-row items-center">
             <CheckIcon />
@@ -288,6 +328,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 ? "Claiming... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Retry!"
+                : edition.gating_type === "spotify_save" &&
+                  !user.data.profile.has_spotify_token
+                ? "Save on Spotify to claim"
                 : "Claim for free"}
             </Button>
             <View tw="mt-4">
