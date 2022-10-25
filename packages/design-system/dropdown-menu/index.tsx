@@ -17,6 +17,8 @@ const DropdownMenuGroup = DropdownMenu.Group;
 
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
+const DropdownMenuSub = DropdownMenu.Sub;
+
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
 const DropdownMenuContent = DropdownMenu.menuify(
@@ -117,38 +119,38 @@ const DropdownMenuItem = DropdownMenu.menuify(
   "Item"
 );
 
-const StyledDropdownMenuCheckboxItem = styled(DropdownMenu.CheckboxItem);
+// const StyledDropdownMenuCheckboxItem = styled(DropdownMenu.CheckboxItem);
 
-const DropdownMenuCheckboxItem = DropdownMenu.menuify(
-  ({
-    tw,
-    children,
-    onBlur,
-    onFocus,
-    ...props
-  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
-    const { isFocused, handleBlur, handleFocus } = useFocusedItem({
-      onFocus,
-      onBlur,
-    });
+// const DropdownMenuCheckboxItem = DropdownMenu.menuify(
+//   ({
+//     tw,
+//     children,
+//     onBlur,
+//     onFocus,
+//     ...props
+//   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
+//     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
+//       onFocus,
+//       onBlur,
+//     });
 
-    return (
-      <StyledDropdownMenuCheckboxItem
-        {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        tw={Array.isArray(tw) ? tw.join(" ") : tw}
-      >
-        <DropdownItemFocusRing isFocused={isFocused} />
-        <DropdownMenu.ItemIndicator>
-          {/* <Icon name="checkmark" color="textContrast" /> */}
-        </DropdownMenu.ItemIndicator>
-        {children}
-      </StyledDropdownMenuCheckboxItem>
-    );
-  },
-  "CheckboxItem"
-);
+//     return (
+//       <StyledDropdownMenuCheckboxItem
+//         {...props}
+//         onFocus={handleFocus}
+//         onBlur={handleBlur}
+//         tw={Array.isArray(tw) ? tw.join(" ") : tw}
+//       >
+//         <DropdownItemFocusRing isFocused={isFocused} />
+//         <DropdownMenu.ItemIndicator>
+//           {/* <Icon name="checkmark" color="textContrast" /> */}
+//         </DropdownMenu.ItemIndicator>
+//         {children}
+//       </StyledDropdownMenuCheckboxItem>
+//     );
+//   },
+//   "CheckboxItem"
+// );
 
 const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle);
 
@@ -218,23 +220,23 @@ const DropdownMenuSeparator = DropdownMenu.menuify(
   "Separator"
 );
 
-const StyledDropdownMenuTriggerItem = styled(DropdownMenu.TriggerItem);
+const StyledDropdownMenuSubTrigger = styled(DropdownMenu.SubTrigger);
 
-const DropdownMenuTriggerItem = DropdownMenu.menuify(
+const DropdownMenuSubTrigger = DropdownMenu.menuify(
   ({
     tw,
     children,
     onBlur,
     onFocus,
     ...props
-  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.TriggerItem>) => {
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.SubTrigger>) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
     });
 
     return (
-      <StyledDropdownMenuTriggerItem
+      <StyledDropdownMenuSubTrigger
         {...props}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -242,10 +244,10 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
       >
         <DropdownItemFocusRing isFocused={isFocused} />
         {children}
-      </StyledDropdownMenuTriggerItem>
+      </StyledDropdownMenuSubTrigger>
     );
   },
-  "TriggerItem"
+  "SubTrigger"
 );
 
 const StyledDropdownMenuItemIcon = styled(DropdownMenu.ItemIcon);
@@ -299,12 +301,13 @@ export {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
+  // DropdownMenuCheckboxItem,
   DropdownMenuItemTitle,
   DropdownMenuItemSubtitle,
   DropdownMenuItemIndicator,
   DropdownMenuSeparator,
-  DropdownMenuTriggerItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
   DropdownMenuItemIcon,
   DropdownMenuItemImage,
   DropdownMenuLabel,

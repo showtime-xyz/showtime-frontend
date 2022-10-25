@@ -8,7 +8,8 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  DropdownMenuTriggerItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
@@ -81,7 +82,9 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
             key="your-profile"
           >
             <MenuItemIcon Icon={User} />
-            <DropdownMenuItemTitle>Profile</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Profile
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
@@ -90,7 +93,9 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           key="your-settings"
         >
           <MenuItemIcon Icon={Settings} />
-          <DropdownMenuItemTitle>Settings</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Settings
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -115,35 +120,45 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           key="edit-profile"
         >
           <MenuItemIcon Icon={Edit} />
-          <DropdownMenuItemTitle>Edit Profile</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Edit Profile
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
-        <DropdownMenuRoot>
-          <DropdownMenuTriggerItem key="nested-group-trigger">
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger key="nested-group-trigger">
             <MenuItemIcon Icon={isDark ? Moon : Sun} />
-            <DropdownMenuItemTitle>Theme</DropdownMenuItemTitle>
-          </DropdownMenuTriggerItem>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Theme
+            </DropdownMenuItemTitle>
+          </DropdownMenuSubTrigger>
           <DropdownMenuContent tw="w-30">
             <DropdownMenuItem
               onSelect={() => setColorScheme("light")}
               key="nested-group-1"
             >
               <MenuItemIcon Icon={Sun} />
-              <DropdownMenuItemTitle>Light</DropdownMenuItemTitle>
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Light
+              </DropdownMenuItemTitle>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => setColorScheme("dark")}
               key="nested-group-2"
             >
               <MenuItemIcon Icon={Moon} />
-              <DropdownMenuItemTitle>Dark</DropdownMenuItemTitle>
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Dark
+              </DropdownMenuItemTitle>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>
+        </DropdownMenuSub>
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
           <MenuItemIcon Icon={LogOut} />
-          <DropdownMenuItemTitle>Sign Out</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Sign Out
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

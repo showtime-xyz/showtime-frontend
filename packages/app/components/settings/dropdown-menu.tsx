@@ -41,7 +41,9 @@ export const DropdownMenu = (props: AddressMenuProps) => {
           destructive
         >
           <MenuItemIcon Icon={Trash} />
-          <DropdownMenuItemTitle>{ctaCopy}</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            {ctaCopy}
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>
