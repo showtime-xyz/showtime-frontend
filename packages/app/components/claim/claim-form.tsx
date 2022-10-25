@@ -290,7 +290,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <View tw="mt-4 flex-row items-center">
                 <CheckIcon />
                 <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                  You will save this song to your Spotify library
+                  You will save {edition.spotify_track_name} to your Spotify
+                  library
                 </Text>
               </View>
             </>

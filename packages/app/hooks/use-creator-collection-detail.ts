@@ -10,6 +10,7 @@ export type CreatorEditionResponse = {
   time_limit: string;
   total_claimed_count: number;
   gating_type: "spotify_save";
+  spotify_track_name: string | null;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {
