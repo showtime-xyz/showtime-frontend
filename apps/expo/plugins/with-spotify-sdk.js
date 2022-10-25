@@ -1,7 +1,7 @@
 const { withAppBuildGradle } = require("@expo/config-plugins");
 
 function withCustomAppBuildGradle(config) {
-  const insertString = `  manifestPlaceholders.redirectHostName = "io.showtime"\n        manifestPlaceholders.redirectSchemeName = "spotify-success"`;
+  const insertString = `  manifestPlaceholders = [redirectSchemeName: "io.showtime", redirectHostName: "spotify-success" ]`;
 
   return withAppBuildGradle(config, (config) => {
     if (config.modResults.contents.includes(insertString)) {
