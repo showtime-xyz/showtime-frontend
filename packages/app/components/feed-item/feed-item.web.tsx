@@ -13,6 +13,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
+import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -154,6 +155,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           {nft?.mime_type?.startsWith("video") ? (
             <View tw="z-9 absolute top-[-40px] right-4">
               <MuteButton />
+            </View>
+          ) : null}
+
+          {edition?.spotify_track_url ? (
+            <View tw="z-9 absolute top-[-40px] left-4">
+              <PlayOnSpotify url={edition?.spotify_track_url} />
             </View>
           ) : null}
 

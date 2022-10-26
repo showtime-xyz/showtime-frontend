@@ -11,6 +11,7 @@ export type CreatorEditionResponse = {
   total_claimed_count: number;
   gating_type: "spotify_save";
   spotify_track_name: string | null;
+  spotify_track_url: string | null;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {

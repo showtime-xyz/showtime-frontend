@@ -34,6 +34,7 @@ import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { UserList } from "app/components/user-list";
 import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
@@ -265,6 +266,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   <Unmuted width={24} height={24} />
                 )}
               </Button>
+            </View>
+          ) : null}
+          {edition?.spotify_track_url ? (
+            <View tw="absolute bottom-10 left-4">
+              <PlayOnSpotify url={edition?.spotify_track_url} />
             </View>
           ) : null}
         </View>
