@@ -225,7 +225,7 @@
     "uuid": "^8.3.2",
     "vm-browserify": "1.1.2",
     "yup": "^0.32.11",
-    "zeego": "^0.4.0"
+    "zeego": "canary"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
