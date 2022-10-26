@@ -118,10 +118,7 @@ function Card({
             <ErrorBoundary renderFallback={() => null}>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
-                  btnProps={{
-                    tw: "dark:bg-gray-900 bg-gray-100 px-1",
-                    size: "small",
-                  }}
+                  tw="rounded-full bg-gray-100 p-1 dark:bg-gray-900"
                   nft={detailData?.data.item ?? nft}
                 />
               </Suspense>

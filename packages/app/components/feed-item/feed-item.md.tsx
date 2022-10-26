@@ -5,6 +5,7 @@ import { useWindowDimensions } from "react-native";
 import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Close,
   Muted,
@@ -17,6 +18,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -71,6 +73,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   itemHeight,
 }) {
   const router = useRouter();
+  const isDark = useIsDarkMode();
   const { data: detailData } = useNFTDetailByTokenId({
     contractAddress: nft?.contract_address,
     tokenId: nft?.token_id,
@@ -181,14 +184,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Button>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
-                  btnProps={{
-                    tw: [
-                      "dark:bg-gray-900 bg-white px-3",
-                      showFullScreen ? "hidden" : "flex",
-                    ],
-                    variant: "text",
-                    size: "regular",
-                  }}
+                  tw={[
+                    "rounded-full bg-gray-100 bg-white p-3 dark:bg-gray-900",
+                    showFullScreen ? "hidden" : "flex",
+                  ]}
+                  iconColor={isDark ? colors.white : colors.gray[900]}
                   nft={detailData?.data.item ?? nft}
                 />
               </Suspense>

@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { Pressable } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
@@ -16,6 +15,7 @@ import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { SocialButton } from "app/components/social-button";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import type { NFT } from "app/types";
@@ -46,9 +46,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         maxLines={2}
         tw="max-h-[30vh] pt-2"
       />
-      <View tw="h-4" />
-
-      <View tw="mb-1 flex-row justify-between">
+      <View tw="flex-row justify-between py-2">
         <View tw="flex-row">
           <Like nft={nft} />
           <View tw="w-6" />
@@ -58,16 +56,16 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         </View>
 
         <View tw="flex-row">
-          <Pressable onPress={() => shareNFT(nft)}>
+          <SocialButton onPress={() => shareNFT(nft)}>
             <Share
               height={32}
               width={22}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
-          </Pressable>
+          </SocialButton>
           <View tw="w-8" />
           <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={detail ?? nft} />
+            <NFTDropdown nft={detail ?? nft} tw="" />
           </Suspense>
         </View>
       </View>
