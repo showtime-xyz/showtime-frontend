@@ -3,8 +3,6 @@ import { Linking, Platform } from "react-native";
 
 import { SvgProps } from "react-native-svg";
 
-import { Button } from "@showtime-xyz/universal.button";
-import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -24,8 +22,9 @@ import {
   Twitter,
   Showtime,
 } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { colors, TW } from "@showtime-xyz/universal.tailwind";
 
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -35,6 +34,7 @@ import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { getNFTSlug } from "app/hooks/use-share-nft";
+import { useSocialColor } from "app/hooks/use-social-color";
 import { useUser } from "app/hooks/use-user";
 import { scheme } from "app/lib/scheme";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
@@ -54,11 +54,19 @@ const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
 type Props = {
   nft: NFT;
   shouldEnableSharing?: boolean;
-  btnProps?: ButtonProps;
+  tw?: TW;
+  iconColor?: string;
 };
 
-function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
+function NFTDropdown({
+  nft,
+  shouldEnableSharing = true,
+  tw = "",
+  iconColor: iconColorProp,
+}: Props) {
   //#region hooks
+  const { iconColor } = useSocialColor();
+
   const tabType = useProfileTabType();
   const { isAuthenticated } = useUser();
   const { report } = useReport();
@@ -101,15 +109,13 @@ function NFTDropdown({ nft, shouldEnableSharing = true, btnProps }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button
-          variant="text"
-          tw="p-0"
-          accessibilityLabel="nft card item menu"
-          iconOnly
-          {...btnProps}
-        >
-          <MoreHorizontal width={24} height={24} />
-        </Button>
+        <Pressable tw={tw} accessibilityLabel="nft card item menu">
+          <MoreHorizontal
+            width={24}
+            height={24}
+            color={iconColorProp ?? iconColor}
+          />
+        </Pressable>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop>

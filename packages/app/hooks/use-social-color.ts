@@ -10,7 +10,6 @@ export const useSocialColor = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   return {
-    textColors: [colors.gray[900], isMdWidth ? colors.gray[400] : colors.white],
     iconColor: isDark
       ? isMdWidth
         ? colors.gray[400]

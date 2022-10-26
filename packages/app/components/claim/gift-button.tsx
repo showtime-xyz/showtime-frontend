@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { GiftSolid, Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { SocialButton } from "app/components/social-button";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
@@ -12,7 +12,7 @@ import { formatClaimNumber } from "app/utilities";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();
-  const { iconColor, textColors } = useSocialColor();
+  const { iconColor } = useSocialColor();
   const { data: edition } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
@@ -25,10 +25,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   if (!edition) return null;
 
   return (
-    <Button
-      variant="text"
-      size="regular"
-      tw="h-6 p-0 md:p-4"
+    <SocialButton
       onPress={() => {
         const as = `/claimers/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
         router.push(
@@ -52,12 +49,11 @@ export function GiftButton({ nft }: { nft: NFT }) {
           { shallow: true }
         );
       }}
-      accentColor={textColors}
-    >
-      <GiftIcon height={24} width={24} color={iconColor} />
-      {` ${formatClaimNumber(edition.total_claimed_count)}/${
+      text={` ${formatClaimNumber(edition.total_claimed_count)}/${
         edition.creator_airdrop_edition.edition_size
       }`}
-    </Button>
+    >
+      <GiftIcon height={24} width={24} color={iconColor} />
+    </SocialButton>
   );
 }
