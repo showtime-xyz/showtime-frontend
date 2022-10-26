@@ -87,7 +87,6 @@
     "eth-block-tracker": "4.4.3",
     "next": "12.2.5",
     "@gorhom/bottom-sheet": "4.4.5",
-    "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz"
   },
   "react-native": {
