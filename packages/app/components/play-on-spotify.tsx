@@ -9,7 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 export const PlayOnSpotify = ({ url }: { url: string }) => {
   return (
     <Pressable
-      tw="opacity-45 flex-row rounded-xl bg-gray-700 px-2 py-1"
+      tw="flex-row rounded-xl bg-gray-800/80 px-2 py-1"
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();
@@ -21,7 +21,7 @@ export const PlayOnSpotify = ({ url }: { url: string }) => {
       <View tw="mr-2">
         <Spotify color="white" />
       </View>
-      <Text tw="text-[12px] text-white">Play on Spotify</Text>
+      <Text tw="text-[12px] font-semibold text-white">Play on Spotify</Text>
     </Pressable>
   );
 };
