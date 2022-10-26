@@ -106,3 +106,4 @@ export { default as RotateCcw } from "./RotateCcw";
 export { default as RotateCw } from "./RotateCw";
 export { default as OpenSea } from "./OpenSea";
 export { default as InformationCircle } from "./InformationCircle";
+export { default as Spotify } from "./Spotify";

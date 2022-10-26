@@ -23,6 +23,7 @@ import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -130,6 +131,11 @@ function Card({
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
                 <MuteButton />
+              </View>
+            ) : null}
+            {numColumns === 1 && edition?.spotify_track_url ? (
+              <View tw="z-9 absolute bottom-4 left-4">
+                <PlayOnSpotify url={edition?.spotify_track_url} />
               </View>
             ) : null}
           </RouteComponent>
