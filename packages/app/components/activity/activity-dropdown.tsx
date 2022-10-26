@@ -52,7 +52,9 @@ function ActivityDropdown({ activity }: Props) {
             }}
             key="unfollow"
           >
-            <DropdownMenuItemTitle>Unfollow</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Unfollow
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
 
@@ -62,7 +64,9 @@ function ActivityDropdown({ activity }: Props) {
           }}
           key="report"
         >
-          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Report
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

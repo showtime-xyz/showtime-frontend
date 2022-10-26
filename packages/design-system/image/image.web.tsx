@@ -76,6 +76,7 @@ function Img({
             },
           });
         }}
+        // @ts-ignore
         objectFit={resizeModeToObjectFit(
           resizeMode ??
             // When using intrinsic size use contain to avoid
@@ -97,6 +98,7 @@ function Img({
 
   if (source) {
     return (
+      // @ts-ignore
       <Image
         src={source as string}
         loading={loading}
