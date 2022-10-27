@@ -96,7 +96,7 @@ const nextConfig = {
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
     scrollRestoration: true,
-    // TODO: swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
+    swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
   },
   typescript: {
     ignoreDevErrors: true,
