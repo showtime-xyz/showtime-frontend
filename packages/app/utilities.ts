@@ -496,6 +496,13 @@ export function isLargeIOS(): boolean {
 export function isIOS(): boolean {
   return isSmallIOS() || isLargeIOS();
 }
+export function isSafari(): boolean {
+  return (
+    typeof navigator !== "undefined" &&
+    /Safari/.test(navigator.userAgent) &&
+    !/Chrome/.test(navigator.userAgent)
+  );
+}
 
 export function isMobileWeb(): boolean {
   return Platform.OS === "web" && (isAndroid() || isIOS());
