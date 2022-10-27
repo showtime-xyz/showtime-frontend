@@ -25,9 +25,15 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
 const Header = () => {
-  const headerHeight = useHeaderHeight();
-
-  return <View style={{ height: headerHeight }} />;
+  return (
+    <View tw="mx-auto w-full max-w-screen-xl">
+      <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
+        <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
+          Notifications
+        </Text>
+      </View>
+    </View>
+  );
 };
 
 export const Notifications = ({
