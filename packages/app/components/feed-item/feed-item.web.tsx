@@ -7,8 +7,6 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
@@ -21,7 +19,6 @@ import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
-import { isMobileWeb, isAndroid } from "app/utilities";
 
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { NFTDetails } from "./details";
@@ -60,14 +57,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         ? 1
         : Number(nft.token_aspect_ratio));
 
-    if (actualHeight < windowHeight - bottomHeight - headerHeight) {
+    if (actualHeight < windowHeight - bottomHeight) {
       return Math.min(actualHeight, maxContentHeight);
     }
 
     return windowHeight - bottomHeight;
   }, [
     bottomHeight,
-    headerHeight,
     maxContentHeight,
     nft.token_aspect_ratio,
     windowHeight,
@@ -75,17 +71,16 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   ]);
 
   const paddingTop = useMemo(() => {
-    const visibleContentHeight =
-      windowHeight - headerHeight - detailHeight - StatusBarHeight;
+    const visibleContentHeight = windowHeight - detailHeight;
 
     if (mediaHeight < visibleContentHeight) {
-      return (visibleContentHeight - mediaHeight) / 2 + headerHeight;
-    } else if (mediaHeight < maxContentHeight - headerHeight) {
-      return headerHeight;
+      return (visibleContentHeight - mediaHeight) / 2;
+    } else if (mediaHeight < maxContentHeight) {
+      return 0;
     } else {
       return 0;
     }
-  }, [detailHeight, headerHeight, maxContentHeight, mediaHeight, windowHeight]);
+  }, [detailHeight, maxContentHeight, mediaHeight, windowHeight]);
 
   if (windowWidth >= 768) {
     return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
@@ -94,7 +89,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
-        {activeIndex === 0 && isMobileWeb() && isAuthenticated ? (
+        {/* {activeIndex === 0 && isMobileWeb() && isAuthenticated ? (
           <View
             tw="dark:shadow-dark shadow-light absolute top-0 right-0 left-0 z-10 bg-white dark:bg-black"
             style={{ paddingTop: headerHeight + StatusBarHeight }}
@@ -117,7 +112,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               </Button>
             </View>
           </View>
-        ) : null}
+        ) : null} */}
         <View
           tw="duration-200"
           style={{

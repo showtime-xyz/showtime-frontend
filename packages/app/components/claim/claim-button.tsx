@@ -75,7 +75,7 @@ export const ClaimButton = ({
     status === ClaimStatus.Soldout ||
     isExpired ||
     isProgress;
-
+  const isMusicDrop = edition?.gating_type === "spotify_save";
   const content = useMemo(() => {
     if (status === ClaimStatus.Claimed) {
       return (
@@ -101,9 +101,9 @@ export const ClaimButton = ({
         </Text>
       );
     } else {
-      return "Claim for free";
+      return isMusicDrop ? "Save to Collect" : "Claim for free";
     }
-  }, [status, isProgress, isDark]);
+  }, [status, isProgress, isDark, isMusicDrop]);
 
   return (
     <Button

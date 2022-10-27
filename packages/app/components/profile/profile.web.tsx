@@ -126,7 +126,6 @@ const Header = memo(function Header() {
   return (
     <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
       <View tw="w-full max-w-screen-xl">
-        <View style={{ height: headerHeight }} />
         <ProfileTop
           address={username}
           animationHeaderPosition={animationHeaderPosition}
