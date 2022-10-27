@@ -9,7 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useSaveSpotifyToken } from "app/hooks/use-save-spotify-token";
 import { Logger } from "app/lib/logger";
-import { redirectUri } from "app/lib/spotify/spotify";
+import { redirectUri } from "app/lib/spotify/queryString";
 import { createParam } from "app/navigation/use-param";
 
 type Query = {
