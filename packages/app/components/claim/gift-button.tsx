@@ -27,7 +27,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
   return (
     <SocialButton
       onPress={() => {
-        const as = `/claimers/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
+        const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
         router.push(
           Platform.select({
             native: as,
@@ -38,7 +38,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
                 contractAddress: nft?.contract_address,
                 tokenId: nft?.token_id,
                 chainName: nft?.chain_name,
-                claimersModal: true,
+                collectorsModal: true,
               },
             } as any,
           }),
