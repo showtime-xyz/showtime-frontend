@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useLogRocket } from "app/hooks/use-logrocket";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
@@ -153,7 +154,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center" style={{ minHeight: "calc(100vh - 64px)" }}>
+          <View
+            tw="items-center"
+            style={{ minHeight: `calc(100vh - ${MOBILE_WEB_TABS_HEIGHT}px)` }}
+          >
             <Component {...pageProps} />
           </View>
           <Footer />
