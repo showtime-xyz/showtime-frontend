@@ -12,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { Card } from "app/components/card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { createParam } from "app/navigation/use-param";
@@ -120,6 +121,9 @@ export const Trending = () => {
       <EmptyPlaceholder title={"No results found"} tw="h-[50vh]" hideLoginBtn />
     );
   }, [isLoading]);
+  const ListFooterComponent = useCallback(() => {
+    return <View style={{ height: MOBILE_WEB_TABS_HEIGHT }} />;
+  }, []);
   return (
     <TrendingHeaderContext.Provider
       value={{
@@ -132,7 +136,6 @@ export const Trending = () => {
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
             ListHeaderComponent={Header}
-            numColumns={1}
             data={chuckList}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
@@ -144,6 +147,7 @@ export const Trending = () => {
             style={{
               height: screenHeight - 64,
             }}
+            ListFooterComponent={ListFooterComponent}
             ListEmptyComponent={ListEmptyComponent}
           />
         </ErrorBoundary>

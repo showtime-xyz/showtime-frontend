@@ -15,6 +15,7 @@ import "swiper/css";
 import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -28,7 +29,7 @@ import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
-import { isMobileWeb } from "app/utilities";
+import { isMobileWeb, isSafari } from "app/utilities";
 
 type Props = {
   data: NFT[];
@@ -46,15 +47,14 @@ export const SwipeList = ({
   fetchMore,
   initialScrollIndex = 0,
 }: Props) => {
-  // Todo: use nft_id instead of initialScrollIndex navigate to specific NFT
-  // const [id, setId] = useParam("id");
-
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
   const initialURLSet = useRef(false);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
+  const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
     undefined,
@@ -85,15 +85,19 @@ export const SwipeList = ({
       initialURLSet.current = true;
     }
   }, [data, isSwipeListScreen, initialParamProp]);
-  // const initialSlideIndex = useMemo(() => {
-  //   const defaultIndex = clamp(initialScrollIndex, 0, data.length - 1);
-  //   if (!id) return defaultIndex;
-  //   const index = data.findIndex((item) => item.nft_id.toString() === id);
-  //   return index > -1 ? index : defaultIndex;
-  // }, [id, initialScrollIndex, data]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
+      if (
+        e.activeIndex !== 0 &&
+        !isSwiped.current &&
+        router.pathname === "/" &&
+        isSafari()
+      ) {
+        // change URL is for hide smart app banner on Safari when swipe once
+        window.history.replaceState(null, "", "foryou");
+        isSwiped.current = true;
+      }
       visibleItems.value = [
         e.previousIndex,
         e.activeIndex,
@@ -104,7 +108,7 @@ export const SwipeList = ({
       }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, isSwipeListScreen]
+    [visibleItems, data, router, isSwipeListScreen]
   );
 
   if (data.length === 0) return null;
