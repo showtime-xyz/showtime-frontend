@@ -25,14 +25,16 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
 const Header = () => {
-  return (
-    <View tw="mx-auto w-full max-w-screen-xl">
-      <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
-        <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
-          Notifications
-        </Text>
-      </View>
+  const headerHeight = useHeaderHeight();
+
+  return Platform.OS === "web" ? (
+    <View tw="w-full flex-row justify-center px-4 py-4">
+      <Text tw="font-space-bold text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+        Notifications
+      </Text>
     </View>
+  ) : (
+    <View style={{ height: headerHeight }} />
   );
 };
 
