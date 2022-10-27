@@ -42,7 +42,6 @@ export const SpotifyAuth = () => {
           }
           onMessage={async (s) => {
             if (s.nativeEvent.data) {
-              console.log("Efokfe ", s.nativeEvent.data);
               const { code } = JSON.parse(s.nativeEvent.data);
               await saveSpotifyToken({ code, redirectUri });
               router.pop();
