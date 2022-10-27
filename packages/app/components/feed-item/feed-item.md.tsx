@@ -54,7 +54,7 @@ import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
 
-const Claimers = ({ nft }: { nft: NFT }) => {
+const Collectors = ({ nft }: { nft: NFT }) => {
   return (
     <UserList
       loading={false}
@@ -66,7 +66,7 @@ const Claimers = ({ nft }: { nft: NFT }) => {
 
 const TAB_SCENES_MAP = new Map([
   [0, Comments],
-  [1, Claimers],
+  [1, Collectors],
 ]);
 
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
@@ -101,8 +101,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         subtitle: commentsCount,
       },
       {
-        title: "Claimers",
-        key: "Claimers",
+        title: "Collectors",
+        key: "Collectors",
         index: 1,
       },
     ],

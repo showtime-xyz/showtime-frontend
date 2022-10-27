@@ -12,13 +12,13 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimedBy } from "app/components//feed-item/claimed-by";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";

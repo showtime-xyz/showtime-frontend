@@ -7,7 +7,7 @@ import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { ClaimScreen } from "app/screens/claim";
-import { ClaimersScreen } from "app/screens/claimers";
+import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
@@ -108,7 +108,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
-        <Stack.Screen name="claimers" component={ClaimersScreen} />
+        <Stack.Screen name="collectors" component={CollectorsScreen} />
         <Stack.Screen name="spotifyAuth" component={SpotifyAuth} />
         <Stack.Screen name="likers" component={LikersScreen} />
       </Stack.Group>

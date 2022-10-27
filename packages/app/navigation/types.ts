@@ -91,7 +91,7 @@ type RootStackNavigatorParams = {
   verifyPhoneNumber: undefined;
   drop: undefined;
   claim: undefined;
-  claimers: undefined;
+  collectors: undefined;
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   likers: undefined;

@@ -142,8 +142,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         title={`Show ${getProfileName(
           creatorProfile?.data?.profile
         )} who you are!`}
-        description="Complete your profile first to claim this drop. It will take around 1 minute."
-        cta="Complete profile to claim"
+        description="Complete your profile first to collect this drop. It will take around 1 minute."
+        cta="Complete profile to collect"
       />
     );
   }
@@ -187,11 +187,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just claimed a free drop "${
+                  message: `I just collected a free drop "${
                     nft?.data.item.token_name
                   }" by ${getTwitterIntentUsername(
                     creatorProfile?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
+                  )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
                 })
               );
             }}
@@ -310,9 +310,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             <Fieldset
               tw="mt-4 flex-1"
               label="Comment (optional)"
-              placeholder="wow, this is so cool!"
+              placeholder="Wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
-              returnKeyLabel="Claim"
+              returnKeyLabel="Collect"
               returnKeyType="done"
               onSubmitEditing={handleClaimNFT}
             />
@@ -327,7 +327,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               onPress={handleClaimNFT}
             >
               {state.status === "loading" ? (
-                "Claiming... it should take about 10 seconds"
+                "Collecting... it should take about 10 seconds"
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" &&
@@ -335,11 +335,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                 <View tw="w-full flex-row items-center justify-center">
                   <Spotify color={isDark ? "#000" : "#fff"} />
                   <Text tw="ml-2 font-semibold text-white dark:text-black">
-                    Save on Spotify to claim
+                    Save to Collect
                   </Text>
                 </View>
               ) : (
-                "Claim for free"
+                "Collect"
               )}
             </Button>
             <View tw="mt-4">

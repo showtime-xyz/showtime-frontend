@@ -81,7 +81,7 @@ export const ClaimButton = ({
       return (
         <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Claimed</Text>
+          <Text tw="ml-1 font-semibold text-white">Collected</Text>
         </>
       );
     } else if (status === ClaimStatus.Soldout) {
@@ -92,16 +92,16 @@ export const ClaimButton = ({
         </>
       );
     } else if (status === ClaimStatus.Expired) {
-      return "Drop expired";
+      return "Expired";
     } else if (isProgress) {
       return (
         <Text tw="text-xs font-bold">
-          Claiming in progress
+          Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
       );
     } else {
-      return isMusicDrop ? "Save to Collect" : "Claim for free";
+      return isMusicDrop ? "Save to Collect" : "Collect";
     }
   }, [status, isProgress, isDark, isMusicDrop]);
 

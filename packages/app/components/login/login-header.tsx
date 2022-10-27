@@ -8,7 +8,7 @@ export function LoginHeader() {
   return (
     <View>
       <Text tw="text-center font-semibold text-gray-900 dark:text-white">
-        Sign in to create and claim free drops from your favorite creators. If
+        Sign in to create and collect free drops from your favorite creators. If
         this is your first time, you will create a new profile.
       </Text>
       <View tw="h-[10px]" />
