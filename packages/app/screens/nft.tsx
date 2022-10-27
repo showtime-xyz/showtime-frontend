@@ -112,7 +112,7 @@ const NFTDetail = () => {
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
   const [tabType] = useParam("tabType");
-  const { data } = useNFTDetailByTokenId({
+  const { data, isLoading } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
@@ -136,7 +136,7 @@ const NFTDetail = () => {
   });
 
   const nft = data?.data?.item;
-  if (!nft) {
+  if (!nft && !isLoading) {
     return (
       <EmptyPlaceholder
         title="No results found"
