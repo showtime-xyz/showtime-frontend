@@ -6,6 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
+import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -29,7 +30,11 @@ const Footer = () => {
     return <WebFooter />;
   }
 
-  if (!isAuthenticated || isTabBarHidden) {
+  if (
+    !isAuthenticated ||
+    isTabBarHidden ||
+    HIDE_LINK_FOOTER_ROUTER_LIST.includes(router.pathname)
+  ) {
     return null;
   }
 
