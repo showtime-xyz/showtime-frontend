@@ -42,14 +42,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
     [profile?.website_url]
   );
 
-  const onPressLink = useCallback(
-    async (link: string) => {
-      const canOpenUrl = await Linking.canOpenURL(link);
-      if (!canOpenUrl) return Alert.alert("Unable to open the link.");
-      return Linking.openURL(link);
-    },
-    [Alert]
-  );
+  const onPressLink = useCallback(async (link: string) => {
+    return Linking.openURL(link);
+  }, []);
 
   return (
     <View tw="justify-center sm:flex-row">
