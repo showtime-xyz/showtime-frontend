@@ -37,7 +37,6 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useUser } from "app/hooks/use-user";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
@@ -84,7 +83,6 @@ const Header = memo(function Header() {
   const context = useContext(ProfileHeaderContext);
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
-  const headerHeight = useHeaderHeight();
   const router = useRouter();
 
   const {
@@ -181,9 +179,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const [type, setType] = useState(queryTab);
   useEffect(() => {
-    if (!data?.default_tab_type) return;
+    if (!data?.default_tab_type || type) return;
     setType(data?.default_tab_type);
-  }, [data?.default_tab_type]);
+  }, [data?.default_tab_type, type]);
 
   const [filter, dispatch] = useReducer(
     (state: Filter, action: any): Filter => {
