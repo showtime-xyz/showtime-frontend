@@ -26,9 +26,10 @@ import type { Profile } from "app/types";
 
 type Props = {
   user: Profile;
+  tw?: string;
 };
 
-function ProfileDropdown({ user }: Props) {
+function ProfileDropdown({ user, tw = "" }: Props) {
   const { rudder } = useRudder();
   const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
@@ -45,6 +46,7 @@ function ProfileDropdown({ user }: Props) {
           variant="tertiary"
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
+          tw={tw}
         >
           <MoreHorizontal color={isDark ? "#FFF" : "#000"} />
         </Button>

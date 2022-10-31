@@ -95,7 +95,7 @@ export const ClaimButton = ({
       return "Expired";
     } else if (isProgress) {
       return (
-        <Text tw="text-xs font-bold">
+        <Text tw="font-semibold">
           Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>

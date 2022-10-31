@@ -61,7 +61,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           <View
             tw={[
               "h-8 w-8 items-center justify-center rounded-full",
-              withBackground ? "bg-black/30" : "",
+              withBackground ? "bg-black/60" : "",
             ]}
           >
             <Settings

@@ -1,7 +1,6 @@
 import { memo, useMemo, useCallback } from "react";
 import { Linking } from "react-native";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -28,7 +27,6 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
 }) {
   const isDark = useIsDarkMode();
 
-  const Alert = useAlert();
   const twitter = useMemo(
     () => profile?.links?.find((item) => item.type__name === "Twitter"),
     [profile?.links]
@@ -61,7 +59,10 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             height={16}
             style={{ marginRight: 4, marginTop: -2 }}
           />
-          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+          <Text
+            numberOfLines={1}
+            tw="max-w-[150px] text-sm font-bold text-gray-900 dark:text-white"
+          >
             {websiteLink}
           </Text>
         </PressableScale>

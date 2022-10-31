@@ -8,7 +8,7 @@ export type ClampTextParams = Pick<
   "expandText" | "foldText"
 > & {
   element?: HTMLElement;
-  text: string | Iterable<ReactNode>;
+  text: string | Iterable<ReactNode> | null;
   rows?: number;
   ellipsis?: string;
   expandButtonWidth?: number;
