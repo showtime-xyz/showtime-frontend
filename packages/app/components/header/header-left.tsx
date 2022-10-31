@@ -29,7 +29,7 @@ export const HeaderLeft = ({
           alignItems: "center",
           borderRadius: 999,
         },
-        withBackground && { backgroundColor: "rgba(0,0,0,.3)" },
+        withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
         if (canGoBack) {

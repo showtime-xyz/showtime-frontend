@@ -6,7 +6,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { useClampText } from "./use-clamp-text";
 
 export type ClampTextProps = {
-  text?: string | Iterable<ReactNode>;
+  text?: string | Iterable<ReactNode> | null;
   ellipsis?: string;
   expandButtonWidth?: number;
   foldText?: string | undefined;
