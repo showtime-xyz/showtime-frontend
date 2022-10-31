@@ -17,6 +17,7 @@ import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
+import { LoginWithApple } from "./login-with-apple";
 import { PhoneNumberPicker } from "./phone-number-picker";
 import { useLogin } from "./use-login";
 
@@ -125,6 +126,7 @@ export function Login({ onLogin }: LoginProps) {
               >
                 I already have a wallet
               </Button>
+              <LoginWithApple />
             </View>
           );
         case "email":
