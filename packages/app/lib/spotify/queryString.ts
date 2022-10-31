@@ -1,10 +1,15 @@
+import { Platform } from "react-native";
+
 import { MyInfo, NFT } from "app/types";
 
-export const redirectUri = `${
-  __DEV__
-    ? "http://localhost:3000"
-    : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
-}/spotify-auth/redirect`;
+export const redirectUri = Platform.select({
+  web: `${
+    __DEV__
+      ? "http://localhost:3000"
+      : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
+  }/spotify-auth/redirect`,
+  default: `io.showtime${__DEV__ ? ".development" : ""}://spotify-success`,
+});
 
 export const scope = "user-library-modify";
 
