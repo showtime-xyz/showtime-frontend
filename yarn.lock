@@ -6048,6 +6048,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@magic-ext/oauth@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@magic-ext/oauth@npm:4.0.0"
+  dependencies:
+    "@magic-sdk/types": ^9.0.0
+  checksum: c660c628c5fa26c121e27f13d0ce9f6191e8c668bca8817a13efc3857fd793f272481cca3ca5578c3ffdab89fe2ba9b98c49aa28ffa7c59cf8c43e7a3608d7c8
+  languageName: node
+  linkType: hard
+
+"@magic-ext/react-native-oauth@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@magic-ext/react-native-oauth@npm:4.0.0"
+  dependencies:
+    "@magic-sdk/types": ^9.0.0
+    crypto-js: ^3.3.0
+    expo-web-browser: ^11.0.0
+  checksum: ba5ae2731438b897926fbda1ad212d2ed782bca5fb24c0fd4d56f9ba499729cc399c59c5c10f2200d7adde010bc8cef4c06b9d81a02b7f96277de69bfb20d5a3
+  languageName: node
+  linkType: hard
+
 "@magic-sdk/commons@npm:^4.1.1":
   version: 4.1.1
   resolution: "@magic-sdk/commons@npm:4.1.1"
@@ -6055,6 +6075,29 @@ __metadata:
     "@magic-sdk/provider": ">=4.3.0"
     "@magic-sdk/types": ">=3.1.1"
   checksum: 82d9078014341d9672cdbbc240cd880786fdb021649246e49374790ca1104d11f2f48fdef3db5af6a45b82cdd1666d628a1bc4c107647fe970b22ec72d891e40
+  languageName: node
+  linkType: hard
+
+"@magic-sdk/commons@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@magic-sdk/commons@npm:6.0.0"
+  peerDependencies:
+    "@magic-sdk/provider": ">=4.3.0"
+    "@magic-sdk/types": ">=3.1.1"
+  checksum: 1b7d404abd4688cf938a9f81619c238356bba9f5ad6afb6d4cf4e2618620e879087d44567f80405ea3bf29629e48c63a44de6d17fb5f43f5a5736cb46a2d60b9
+  languageName: node
+  linkType: hard
+
+"@magic-sdk/provider@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@magic-sdk/provider@npm:10.0.0"
+  dependencies:
+    "@magic-sdk/types": ^9.0.0
+    eventemitter3: ^4.0.4
+    web3-core: 1.5.2
+  peerDependencies:
+    localforage: ^1.7.4
+  checksum: 40c6e79d7ea9daa8d887b041290f35002cfd66272d8cb77bcaa95c38e2d7170c68730743e5c54b41ded1fd59679ed738587831e1616ed77f751b3a15b62ef767
   languageName: node
   linkType: hard
 
@@ -6100,6 +6143,13 @@ __metadata:
   version: 7.1.1
   resolution: "@magic-sdk/types@npm:7.1.1"
   checksum: ea380b32fa35a0def1ccfcc19b441900640d6e49362311a24403c77c1fe2b55683b5412e7831e88597d270e86783cd141e3ec423f1ece489c498a3669e5a8632
+  languageName: node
+  linkType: hard
+
+"@magic-sdk/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@magic-sdk/types@npm:9.0.0"
+  checksum: 43cdc18aad76f2e370c510f1cd885f271a4ee38eab833449f61b80d01dc3d9f0179ed6d7ed3e96614a6672d81154b2a6e7d33d71e2510e5f7126ae6942455918
   languageName: node
   linkType: hard
 
@@ -9490,6 +9540,7 @@ __metadata:
     "@gorhom/bottom-sheet": 4.4.5
     "@hookform/resolvers": ^2.8.5
     "@logrocket/react-native": ^1.2.1
+    "@magic-ext/react-native-oauth": ^4.0.0
     "@magic-sdk/react-native": ^8.2.1
     "@radix-ui/react-accordion": ^0.1.5
     "@radix-ui/react-tabs": ^0.1.1
@@ -9701,6 +9752,7 @@ __metadata:
     "@expo/next-adapter": 4.0.8
     "@growthbook/growthbook-react": ^0.9.1
     "@headlessui/react": ^1.6.6
+    "@magic-ext/oauth": ^4.0.0
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
     "@radix-ui/react-select": ^1.0.0
@@ -9728,6 +9780,7 @@ __metadata:
     ethers: ^5.7.0
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
+    magic-sdk: ^10.0.0
     next: 12.2.5
     next-compose-plugins: ^2.2.1
     next-fonts: ^1.5.1
@@ -17454,6 +17507,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crypto-js@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "crypto-js@npm:3.3.0"
+  checksum: 193923143a4784b2f974366068d96fe8280168fd3fef2bfea9551a5c3e32096f5a8fa49ff4eeb5bd0b9716d325618d38cfbe6125e359a4ef488fbca93e600824
+  languageName: node
+  linkType: hard
+
 "crypto-random-string@npm:^1.0.0":
   version: 1.0.0
   resolution: "crypto-random-string@npm:1.0.0"
@@ -20989,6 +21049,17 @@ __metadata:
   bin:
     expo-updates: bin/cli.js
   checksum: 40c564e19a2afe5b69b64e11420661f6131b80b3eff20f7df2da1ebe76e4cc7e3c1d513267f537251bb926165ffbaa9c2fdbfcf0a76c9f7b2dad32d4ce9347b0
+  languageName: node
+  linkType: hard
+
+"expo-web-browser@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "expo-web-browser@npm:11.0.0"
+  dependencies:
+    compare-urls: ^2.0.0
+  peerDependencies:
+    expo: "*"
+  checksum: 93740703b138d4470786387772aafbe3f37e484f052ffeb7fed97d16077ce1fdbf3f1370c603ced6e134343bf5cc4e314eaedf22a6460a608e38a6a1af8deae4
   languageName: node
   linkType: hard
 
@@ -26692,6 +26763,18 @@ __metadata:
   version: 2.2.1
   resolution: "ltgt@npm:2.2.1"
   checksum: 7e3874296f7538bc8087b428ac4208008d7b76916354b34a08818ca7c83958c1df10ec427eeeaad895f6b81e41e24745b18d30f89abcc21d228b94f6961d50a2
+  languageName: node
+  linkType: hard
+
+"magic-sdk@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "magic-sdk@npm:10.0.0"
+  dependencies:
+    "@magic-sdk/commons": ^6.0.0
+    "@magic-sdk/provider": ^10.0.0
+    "@magic-sdk/types": ^9.0.0
+    localforage: ^1.7.4
+  checksum: ee78a9730c0699431631462d6667ed9b1830c5fd7460d36e355ebbfe303178c7b43cb6f1a4489688f48b6838197081962af3ddf375d58203a9605258a1c55167
   languageName: node
   linkType: hard
 

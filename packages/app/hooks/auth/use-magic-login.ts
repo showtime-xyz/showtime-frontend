@@ -9,7 +9,7 @@ import { useMagic } from "app/lib/magic";
 
 import { useAuth } from "./use-auth";
 
-const LOGIN_MAGIC_ENDPOINT = "login_magic";
+export const LOGIN_MAGIC_ENDPOINT = "login_magic";
 
 export function useMagicLogin() {
   //#region hooks

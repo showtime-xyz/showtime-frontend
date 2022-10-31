@@ -1,3 +1,4 @@
+import { OAuthExtension } from "@magic-ext/react-native-oauth";
 import { Magic } from "@magic-sdk/react-native";
 
 const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
@@ -18,6 +19,7 @@ if (isMumbai) {
 // @ts-ignore
 const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
   network: customNodeOptions,
+  extensions: [new OAuthExtension()],
 });
 
 function useMagic() {
