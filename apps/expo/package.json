@@ -190,7 +190,7 @@
     "react-native-fast-image": "^8.5.11",
     "react-native-flipper": "^0.131.1",
     "react-native-gesture-handler": "^2.7.1",
-    "react-native-ios-context-menu": "1.3.0",
+    "react-native-ios-context-menu": "^1.15.1",
     "react-native-level-fs": "^3.0.0",
     "react-native-localhost": "^1.0.0",
     "react-native-mmkv": "^2.4.3",
