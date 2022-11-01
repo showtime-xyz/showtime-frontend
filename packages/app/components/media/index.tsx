@@ -86,6 +86,7 @@ function Media({
             width={width}
             height={height}
             resizeMode={resizeMode}
+            alt={item?.token_name}
           />
         </PinchToZoom>
       ) : null}

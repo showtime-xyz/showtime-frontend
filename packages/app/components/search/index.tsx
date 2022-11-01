@@ -130,6 +130,7 @@ export const SearchItem = ({
                 tw="rounded-full"
                 width={32}
                 height={32}
+                alt={item.username ?? item.address0}
               />
             )}
           </View>

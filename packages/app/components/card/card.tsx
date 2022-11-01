@@ -127,7 +127,15 @@ function Card({
           </View>
 
           <RouteComponent href={href!} onPress={handleOnPress}>
-            <Media item={nft} numColumns={numColumns} />
+            <Media
+              item={nft}
+              numColumns={numColumns}
+              sizeStyle={{
+                width: sizeStyle?.width ?? cardMaxWidth,
+                height: sizeStyle?.height ?? cardMaxWidth,
+              }}
+              resizeMode="cover"
+            />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
                 <MuteButton />

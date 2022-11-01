@@ -45,6 +45,7 @@ export const CreatorPreview = withMemoAndColorScheme<any, Props>(
                 source={{ uri: creator?.img_url ?? DEFAULT_PROFILE_PIC }}
                 width={64}
                 height={64}
+                alt={creator.username ?? creator.address ?? "User"}
               />
             </View>
             <View>

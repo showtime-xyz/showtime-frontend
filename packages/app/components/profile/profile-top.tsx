@@ -333,6 +333,7 @@ export const ProfileTop = ({
                         default: undefined,
                       })}
                       style={StyleSheet.absoluteFillObject}
+                      alt={profileData?.profile.name}
                     />
                   </LightBox>
                 )}
