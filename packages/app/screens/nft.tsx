@@ -20,7 +20,6 @@ import {
 } from "app/components/viewability-tracker-flatlist";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useTrackPageViewed } from "app/lib/analytics";
@@ -117,17 +116,10 @@ const NFTDetail = () => {
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
-  const { data: listing } = useNFTListings(data?.data.item.nft_id);
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
-  const nftWithListing = useMemo(() => {
-    return {
-      ...data?.data.item,
-      listing: listing?.card_summary?.[0]?.listing,
-    };
-  }, [data, listing]);
 
   const itemHeight = Platform.select({
     web: windowHeight,
@@ -136,6 +128,7 @@ const NFTDetail = () => {
   });
 
   const nft = data?.data?.item;
+
   if (!nft && !isLoading) {
     return (
       <EmptyPlaceholder
@@ -150,12 +143,13 @@ const NFTDetail = () => {
       />
     );
   }
+
   return (
     <ProfileTabsNFTProvider tabType={tabType}>
       <FeedItem
         itemHeight={itemHeight}
         bottomPadding={safeAreaBottom}
-        nft={nftWithListing as NFT}
+        nft={nft as NFT}
       />
     </ProfileTabsNFTProvider>
   );
