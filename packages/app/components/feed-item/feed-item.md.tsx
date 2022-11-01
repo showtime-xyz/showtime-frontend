@@ -196,15 +196,22 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
           </View>
           <View tw="flex-1 items-center justify-center px-20 pb-20">
-            <Media
-              item={nft}
-              numColumns={1}
-              sizeStyle={{
+            <View
+              style={{
                 height: mediaHeight,
                 width: mediaWidth,
               }}
-              resizeMode="contain"
-            />
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: mediaWidth,
+                }}
+                resizeMode="contain"
+              />
+            </View>
           </View>
           {/* Control Swiper */}
           {swiper && (
