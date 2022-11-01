@@ -507,7 +507,7 @@ export const DropForm = () => {
                     );
                   }}
                 >
-                  Verify
+                  Request
                 </Button>
               )}
             </View>
