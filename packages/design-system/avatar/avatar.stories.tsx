@@ -10,6 +10,8 @@ export default {
   title: "Components/Avatar",
 } as Meta;
 
-export const Basic: React.VFC<{}> = () => <Avatar url={URL} />;
+export const Basic: React.VFC<{}> = () => <Avatar url={URL} alt="Avatar" />;
 
-export const withBorder: React.VFC<{}> = () => <Avatar url={URL} />;
+export const withBorder: React.VFC<{}> = () => (
+  <Avatar url={URL} alt="Avatar" />
+);
