@@ -21082,17 +21082,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-web-browser@npm:~11.0.0":
-  version: 11.0.0
-  resolution: "expo-web-browser@npm:11.0.0"
-  dependencies:
-    compare-urls: ^2.0.0
-  peerDependencies:
-    expo: "*"
-  checksum: 93740703b138d4470786387772aafbe3f37e484f052ffeb7fed97d16077ce1fdbf3f1370c603ced6e134343bf5cc4e314eaedf22a6460a608e38a6a1af8deae4
-  languageName: node
-  linkType: hard
-
 "expo@npm:~46.0.16":
   version: 46.0.16
   resolution: "expo@npm:46.0.16"

@@ -9,7 +9,7 @@ import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { OAUTH_REDIRECT_URI } from "app/utilities";
 
-export const LoginWithApple = () => {
+export const LoginWithGoogle = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
   const { magic } = useMagic();
   const router = useRouter();
@@ -21,7 +21,7 @@ export const LoginWithApple = () => {
         if (Platform.OS === "web") {
           //@ts-ignore
           await magic.oauth.loginWithRedirect({
-            provider: "apple",
+            provider: "google",
             redirectURI: OAUTH_REDIRECT_URI,
             scope: ["email"],
           });
@@ -30,7 +30,7 @@ export const LoginWithApple = () => {
             setAuthenticationStatus("AUTHENTICATING");
             //@ts-ignore
             const result = await magic.oauth.loginWithPopup({
-              provider: "apple",
+              provider: "google",
               redirectURI: OAUTH_REDIRECT_URI,
             });
 
@@ -48,7 +48,7 @@ export const LoginWithApple = () => {
         }
       }}
     >
-      Login with Apple
+      Login with Google
     </Button>
   );
 };
