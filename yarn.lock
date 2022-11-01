@@ -8699,9 +8699,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.clamp-text@npm:^0.0.24":
-  version: 0.0.24
-  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.24"
+"@showtime-xyz/universal.clamp-text@npm:^0.0.26":
+  version: 0.0.26
+  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.26"
   dependencies:
     "@showtime-xyz/universal.text": 0.0.45
     "@storybook/react": 6.5.9
@@ -8710,7 +8710,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: d2f568748067e1aacf6fdf8d2bf6116d658affb9cd5398126693ecd770ad690e1e57bd46d4eaa7f72aa7ef51b65194f23fe91db12f1a527154eae0881399e429
+  checksum: 62526cdbdd979c0039b58cc43a9c62b58163e754ba5376dcd6fa4563dde822168083410d3089be50ee1f13c9716ae522a0afa5ea9a40098272ef1f0347701fa2
   languageName: node
   linkType: hard
 
@@ -8806,9 +8806,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.dropdown-menu@npm:^0.0.47":
-  version: 0.0.47
-  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.47"
+"@showtime-xyz/universal.dropdown-menu@npm:^0.0.48":
+  version: 0.0.48
+  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.48"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.42
     "@showtime-xyz/universal.text": 0.0.45
@@ -8820,7 +8820,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: e777401c630df9eae7dd920d36e91fbd79c69284503392a3d4268355059caf2b064e7073ec4a063ac6f8923dfd455ace4cb297057fd37d4e90fb5ecf5c8b6aee
+  checksum: 942fb516622435d633de7d1cdef9cc475215877633a02fa5e69a187e65f378204c022fd3495385514043608635d6197a09c998801eeadd14923a04039bd82a3e
   languageName: node
   linkType: hard
 
@@ -9523,13 +9523,13 @@ __metadata:
     "@showtime-xyz/universal.button": ^0.0.65
     "@showtime-xyz/universal.checkbox": ^0.0.56
     "@showtime-xyz/universal.chip": ^0.0.3
-    "@showtime-xyz/universal.clamp-text": ^0.0.24
+    "@showtime-xyz/universal.clamp-text": ^0.0.26
     "@showtime-xyz/universal.collapsible-tab-view": ^0.0.48
     "@showtime-xyz/universal.color-scheme": ^0.0.31
     "@showtime-xyz/universal.country-code-picker": ^0.0.66
     "@showtime-xyz/universal.data-pill": ^0.0.50
     "@showtime-xyz/universal.divider": ^0.0.47
-    "@showtime-xyz/universal.dropdown-menu": ^0.0.47
+    "@showtime-xyz/universal.dropdown-menu": ^0.0.48
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.14
     "@showtime-xyz/universal.fieldset": ^0.0.94
     "@showtime-xyz/universal.haptics": ^0.0.15

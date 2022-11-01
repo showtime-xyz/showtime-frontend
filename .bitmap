@@ -59,7 +59,7 @@
     },
     "clamp-text": {
         "scope": "showtime.universal",
-        "version": "0.0.24",
+        "version": "0.0.26",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/clamp-text"
     },
@@ -95,7 +95,7 @@
     },
     "dropdown-menu": {
         "scope": "showtime.universal",
-        "version": "0.0.47",
+        "version": "0.0.48",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/dropdown-menu"
     },
