@@ -88,6 +88,13 @@ export default {
         ],
         category: ["BROWSABLE", "DEFAULT"],
       },
+      {
+        action: "VIEW",
+        category: ["BROWSABLE", "DEFAULT"],
+        data: {
+          scheme: config.scheme,
+        },
+      },
     ],
     googleServicesFile: STAGE === "production" ? "./google-services.json" : "",
   },
