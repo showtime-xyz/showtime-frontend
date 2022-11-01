@@ -21,7 +21,7 @@ import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
-import { ClaimersScreen } from "app/screens/claimers";
+import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
@@ -170,7 +170,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <FollowingScreen />
         <DropScreen />
         <ClaimScreen />
-        <ClaimersScreen />
+        <CollectorsScreen />
         <ClaimLimitExplanationScreen />
         <LikersScreen />
 

@@ -205,8 +205,8 @@ export const useClaimNFT = (edition: IEdition) => {
           !userProfile?.data.profile.verified
         ) {
           Alert.alert(
-            "Wow, you love claiming drops!",
-            "Prove you're a real person and we'll let you claim more. Please verify your phone number.",
+            "Wow, you love collecting drops!",
+            "Prove you're a real person and we'll let you collect more. Please verify your phone number.",
             [
               {
                 text: "Cancel",
@@ -242,7 +242,7 @@ export const useClaimNFT = (edition: IEdition) => {
           );
         } else {
           Alert.alert(
-            "Wow, you love claiming drops!",
+            "Wow, you love collecting drops!",
             `Only ${
               userProfile?.data.daily_claim_limit
             } claims per day is allowed. Come back ${getNextRefillClaim(
@@ -304,7 +304,7 @@ export const useClaimNFT = (edition: IEdition) => {
   const onReconnectWallet = useCallback(() => {
     dispatch({
       type: "error",
-      error: "Claiming failed. Please try again!",
+      error: "Collecting failed. Please try again!",
     });
   }, [dispatch]);
 

@@ -35,12 +35,14 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     `http://*.${url}/`,
   ],
   config: {
+    //@ts-ignore
+    initialRouteName: "bottomTabs",
     screens: {
       login: "login",
       nft: "nft/:chainName/:contractAddress/:tokenId",
       drop: "drop",
       claim: "claim/:contractAddress",
-      claimers: "claimers/:chainName/:contractAddress/:tokenId",
+      collectors: "collectors/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
@@ -60,6 +62,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       blockedList: "settings/blocked-list",
       swipeList: "list",
       bottomTabs: {
+        initialRouteName: "homeTab",
         screens: {
           // Bottom Tab Navigator
           homeTab: "",

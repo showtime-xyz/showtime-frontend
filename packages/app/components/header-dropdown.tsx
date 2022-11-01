@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSub,
   DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
@@ -61,7 +62,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           <View
             tw={[
               "h-8 w-8 items-center justify-center rounded-full",
-              withBackground ? "bg-black/30" : "",
+              withBackground ? "bg-black/60" : "",
             ]}
           >
             <Settings
@@ -132,7 +133,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuSubTrigger>
-          <DropdownMenuContent tw="w-30">
+          <DropdownMenuSubContent tw="w-30">
             <DropdownMenuItem
               onSelect={() => setColorScheme("light")}
               key="nested-group-1"
@@ -151,7 +152,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
                 Dark
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
-          </DropdownMenuContent>
+          </DropdownMenuSubContent>
         </DropdownMenuSub>
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">

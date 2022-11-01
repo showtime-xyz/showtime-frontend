@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "68.0.4",
+  "version": "72.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -71,7 +71,6 @@
     "react-native-svg": "12.3.0",
     "@jest/create-cache-key-function": "28.0.2",
     "expo-linear-gradient": "11.4.0",
-    "react-native-ios-context-menu": "1.3.0",
     "jest-runtime": "28.0.3",
     "react-native-reanimated": "2.11.0",
     "@types/react": "18.0.1",

@@ -364,7 +364,11 @@ export const ProfileTop = ({
                   </Hidden>
                   {profileId && !isSelf ? (
                     <>
-                      <ProfileDropdown user={profileData?.profile} />
+                      <ProfileDropdown
+                        user={profileData?.profile}
+                        // Todo: Zeego issue on iOS.
+                        tw="ios:mt-2"
+                      />
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}

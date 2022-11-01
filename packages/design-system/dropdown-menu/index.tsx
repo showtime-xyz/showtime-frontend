@@ -18,6 +18,7 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuSub = DropdownMenu.Sub;
+const DropdownMenuSubContent = DropdownMenu.SubContent;
 
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
@@ -308,6 +309,7 @@ export {
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
   DropdownMenuItemIcon,
   DropdownMenuItemImage,
   DropdownMenuLabel,

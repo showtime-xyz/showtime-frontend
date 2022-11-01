@@ -42,7 +42,7 @@ const hasPlatform = (fileDiffList, reactNativeConfig, configuration) => {
           )} was found in the android react native config`
         );
         return Boolean(
-          nativeDependencies[packageKey].platforms.android.sourceDir
+          nativeDependencies[packageKey].platforms.android?.sourceDir
         );
       }
     });
@@ -203,6 +203,6 @@ try {
     }
   }
 } catch (error) {
-  console.error(`Error: ${error.stderr}`);
+  console.error(`Error: ${error}`);
   await $`exit ${error.exitCode}`;
 }

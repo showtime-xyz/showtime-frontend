@@ -4,7 +4,7 @@ import { LikersModal } from "app/components/likers-modal";
 
 export const LikersScreen = withModalScreen(LikersModal, {
   title: "Likers",
-  matchingPathname: "/claimers/[nftId]",
+  matchingPathname: "/collectors/[nftId]",
   matchingQueryParam: "likersModal",
   enableContentPanningGesture: false,
   snapPoints: ["90%"],

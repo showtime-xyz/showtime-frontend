@@ -13,7 +13,7 @@ const values = [
   },
   {
     title: "Grow your web3 presence",
-    description: "Claimers will follow you on Showtime.",
+    description: "Collectors will follow you on Showtime.",
   },
   {
     title: "Instantly tradable on OpenSea",
@@ -25,7 +25,7 @@ const values = [
   },
   {
     title: "Share your drop link!",
-    description: "Your following & friends can claim it for free.",
+    description: "Your following & friends can collect it for free.",
   },
 ];
 
