@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, CSSProperties } from "react";
 import { ImageURISource, ImageResizeMode } from "react-native";
 
 // @ts-ignore
@@ -43,6 +43,7 @@ type Props = Pick<ImgProps, "source" | "resizeMode" | "onLoad"> & {
   layout?: "fixed" | "intrinsic" | "responsive" | "fill";
   alt: string; // Required from Next.js 13
   blurhash?: string;
+  style?: CSSProperties;
 };
 
 function Img({
@@ -52,6 +53,7 @@ function Img({
   height,
   resizeMode,
   onLoad,
+  style,
   ...props
 }: Props) {
   const actualHeight =
@@ -72,6 +74,7 @@ function Img({
               // rounding errors causing some pixel lost.
               (width != null ? "contain" : "cover")
           ),
+          ...style,
         }}
         loading={loading}
         width={width}
@@ -99,7 +102,6 @@ function Img({
 
   if (source) {
     return (
-      // @ts-ignore
       <Image
         src={source as string}
         loading={loading}

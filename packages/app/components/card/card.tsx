@@ -74,7 +74,7 @@ function Card({
       case 2:
         return contentWidth / 2;
       default:
-        return 500;
+        return 596;
     }
   }, [numColumns, contentWidth]);
 
