@@ -51,11 +51,13 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         accountSettings.map((item) => (
           <AccountSettingItem {...item} key={item.id} />
         ))}
-      <View tw="mb-4 flex-row items-center px-4">
-        <Spotify height={32} width={32} color={isDark ? "#fff" : "#000"} />
-        <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
-          Spotify Connected
-        </Text>
+      <View tw="space-between mb-4 flex-row items-center justify-between px-4">
+        <View tw="flex-row items-center">
+          <Spotify height={32} width={32} color={isDark ? "#fff" : "#000"} />
+          <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
+            Spotify Connected
+          </Text>
+        </View>
         <Switch
           checked={user.user?.data.profile.has_spotify_token}
           onChange={() => {
