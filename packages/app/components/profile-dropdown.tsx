@@ -26,9 +26,10 @@ import type { Profile } from "app/types";
 
 type Props = {
   user: Profile;
+  tw?: string;
 };
 
-function ProfileDropdown({ user }: Props) {
+function ProfileDropdown({ user, tw = "" }: Props) {
   const { rudder } = useRudder();
   const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
@@ -45,6 +46,7 @@ function ProfileDropdown({ user }: Props) {
           variant="tertiary"
           iconOnly={true}
           size={width < 768 ? "small" : "regular"}
+          tw={tw}
         >
           <MoreHorizontal color={isDark ? "#FFF" : "#000"} />
         </Button>
@@ -70,7 +72,9 @@ function ProfileDropdown({ user }: Props) {
           key="share"
         >
           <MenuItemIcon Icon={Copy} />
-          <DropdownMenuItemTitle>Share</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Share
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -85,7 +89,7 @@ function ProfileDropdown({ user }: Props) {
           }}
         >
           <MenuItemIcon Icon={Slash} />
-          <DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -98,7 +102,9 @@ function ProfileDropdown({ user }: Props) {
           key="report"
         >
           <MenuItemIcon Icon={Flag} />
-          <DropdownMenuItemTitle>Report</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Report
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

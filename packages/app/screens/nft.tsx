@@ -23,13 +23,13 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTListings } from "app/hooks/api/use-nft-listings";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
-import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 
-import { breakpoints } from "design-system/theme";
+import { EmptyPlaceholder } from "../components/empty-placeholder";
+import { TextLink } from "../navigation/link";
 
 type Query = {
   tokenId: string;
@@ -112,7 +112,7 @@ const NFTDetail = () => {
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
   const [tabType] = useParam("tabType");
-  const { data } = useNFTDetailByTokenId({
+  const { data, isLoading } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
@@ -121,9 +121,7 @@ const NFTDetail = () => {
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-  const { isAuthenticated } = useUser();
-  const isMdWidth = windowWidth >= breakpoints["md"];
+  const { height: windowHeight } = useWindowDimensions();
   const nftWithListing = useMemo(() => {
     return {
       ...data?.data.item,
@@ -138,20 +136,29 @@ const NFTDetail = () => {
   });
 
   const nft = data?.data?.item;
-
-  if (nft) {
+  if (!nft && !isLoading) {
     return (
-      <ProfileTabsNFTProvider tabType={tabType}>
-        <FeedItem
-          itemHeight={itemHeight}
-          bottomPadding={safeAreaBottom}
-          nft={nftWithListing as NFT}
-        />
-      </ProfileTabsNFTProvider>
+      <EmptyPlaceholder
+        title="No results found"
+        text={
+          <TextLink href={`/`} tw="text-indigo-500">
+            Go Home
+          </TextLink>
+        }
+        tw="min-h-screen"
+        hideLoginBtn
+      />
     );
   }
-
-  return null;
+  return (
+    <ProfileTabsNFTProvider tabType={tabType}>
+      <FeedItem
+        itemHeight={itemHeight}
+        bottomPadding={safeAreaBottom}
+        nft={nftWithListing as NFT}
+      />
+    </ProfileTabsNFTProvider>
+  );
 };
 
 export { NftScreen };

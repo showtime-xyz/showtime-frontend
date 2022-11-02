@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { Message } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { SocialButton } from "app/components/social-button";
 import { useComments } from "app/hooks/api/use-comments";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
@@ -16,7 +16,7 @@ interface CommentButtonProps {
 
 export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
-  const { iconColor, textColors } = useSocialColor();
+  const { iconColor } = useSocialColor();
   const { commentsCount } = useComments(nft?.nft_id ?? -Infinity);
 
   const handleOnPress = useCallback(() => {
@@ -49,15 +49,11 @@ export function CommentButton({ nft }: CommentButtonProps) {
   }
 
   return (
-    <Button
-      variant="text"
-      size="regular"
-      tw="h-6 p-0 md:p-4"
+    <SocialButton
       onPress={handleOnPress}
-      accentColor={textColors}
+      text={commentsCount > 0 ? ` ${formatNumber(commentsCount)}` : ""}
     >
       <Message height={24} width={24} color={iconColor} />
-      {commentsCount > 0 ? ` ${formatNumber(commentsCount)}` : ""}
-    </Button>
+    </SocialButton>
   );
 }

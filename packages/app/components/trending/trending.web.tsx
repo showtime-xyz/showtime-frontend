@@ -14,6 +14,7 @@ import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
@@ -42,8 +43,8 @@ const Header = () => {
 
   return (
     <View tw="mx-auto w-full max-w-screen-xl">
-      <View tw="w-full flex-row justify-between self-center px-4 py-4 md:pb-8">
-        <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
+      <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
+        <Text tw="font-space-bold self-center text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
           Trending
         </Text>
       </View>
@@ -61,6 +62,7 @@ const Header = () => {
 export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
+  const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = contentWidth >= breakpoints["md"];
   const numColumns =
     contentWidth <= breakpoints["md"]
@@ -120,6 +122,7 @@ export const Trending = () => {
       <EmptyPlaceholder title={"No results found"} tw="h-[50vh]" hideLoginBtn />
     );
   }, [isLoading]);
+
   return (
     <TrendingHeaderContext.Provider
       value={{
@@ -127,12 +130,11 @@ export const Trending = () => {
         setDays: setDays,
       }}
     >
-      <View tw="w-full pb-8 pt-16 md:pt-20">
+      <View tw="w-full pb-8 md:pt-20">
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
             ListHeaderComponent={Header}
-            numColumns={1}
             data={chuckList}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
@@ -142,7 +144,7 @@ export const Trending = () => {
               reverse: contentWidth / numColumns,
             }}
             style={{
-              height: screenHeight - 64,
+              height: screenHeight - bottomBarHeight,
             }}
             ListEmptyComponent={ListEmptyComponent}
           />

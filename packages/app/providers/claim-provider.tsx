@@ -1,5 +1,4 @@
 import { ReactNode, useReducer, useState } from "react";
-import { InteractionManager } from "react-native";
 
 import { ClaimContext } from "app/context/claim-context";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
@@ -41,13 +40,6 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
       if (response.is_complete) {
         dispatch({ type: "success", mint: response.mint });
-        // make sure to execute it when all interactions/animations have been completed, and avoid dropped frames
-        InteractionManager.runAfterInteractions(() => {
-          redirectToClaimDrop(contractAddress);
-          dispatch({
-            type: "share",
-          });
-        });
 
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {

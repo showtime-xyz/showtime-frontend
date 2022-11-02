@@ -88,6 +88,13 @@ export default {
         ],
         category: ["BROWSABLE", "DEFAULT"],
       },
+      {
+        action: "VIEW",
+        category: ["BROWSABLE", "DEFAULT"],
+        data: {
+          scheme: config.scheme,
+        },
+      },
     ],
     googleServicesFile: STAGE === "production" ? "./google-services.json" : "",
   },
@@ -144,6 +151,7 @@ export default {
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
     "@logrocket/react-native",
+    "./plugins/with-spotify-sdk.js",
     [
       withInfoPlist,
       (config) => {

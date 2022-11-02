@@ -175,7 +175,7 @@ export const DropForm = () => {
   ) {
     return (
       <CompleteProfileModalContent
-        title="Tell your claimers more about yourself"
+        title="Tell your collectors more about yourself"
         description="Complete your profile first to create this drop. It will take around 1 minute."
         cta="Complete profile to drop"
       />
@@ -220,7 +220,7 @@ export const DropForm = () => {
                     state.edition?.name
                   }" by ${getTwitterIntentUsername(
                     user?.user?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
+                  )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
                 })
               );
             }}
@@ -507,7 +507,7 @@ export const DropForm = () => {
                     );
                   }}
                 >
-                  Verify
+                  Request
                 </Button>
               )}
             </View>
@@ -528,21 +528,18 @@ export const DropForm = () => {
                     <View tw="flex-row justify-between">
                       <DataPill
                         tw="md:flex-1"
-                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Royalties ${watch("royalty")}%`}
-                        type="primary"
+                        type="text"
                       />
                       <DataPill
                         tw="md:mx-4 md:flex-1"
-                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Editions ${watch("editionSize")}`}
-                        type="primary"
+                        type="text"
                       />
                       <DataPill
                         tw="md:flex-1"
-                        textTw="dark:text-gray-100 text-gray-900"
                         label={`Duration ${selectedDurationLabel}`}
-                        type="primary"
+                        type="text"
                       />
                     </View>
                   </View>
@@ -578,7 +575,7 @@ export const DropForm = () => {
                               tw="flex-1"
                               label="Editions"
                               onBlur={onBlur}
-                              helperText="How many editions will be available to claim"
+                              helperText="How many editions will be available to collect"
                               errorText={errors.editionSize?.message}
                               value={value?.toString()}
                               onChangeText={onChange}

@@ -3,8 +3,10 @@ import { useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Plus } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
@@ -17,7 +19,10 @@ import { breakpoints } from "design-system/theme";
 
 import { NotificationsInHeader } from "./header";
 
-export const HeaderRight = () => {
+type HeaderRightProps = {
+  withBackground?: boolean;
+};
+export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
   const { width } = useWindowDimensions();
@@ -62,7 +67,10 @@ export const HeaderRight = () => {
           )}
           <View tw="flex-row items-center md:mx-2">
             {isAuthenticated ? (
-              <HeaderDropdown type={isMdWidth ? "profile" : "settings"} />
+              <HeaderDropdown
+                type={isMdWidth ? "profile" : "settings"}
+                withBackground={withBackground}
+              />
             ) : (
               <>
                 {isMdWidth && (
@@ -73,16 +81,29 @@ export const HeaderRight = () => {
                     />
                   </View>
                 )}
-                <Button
-                  onPress={() => {
-                    navigateToLogin();
-                  }}
-                  variant="primary"
-                  size={isMdWidth ? "regular" : "small"}
-                  labelTW="font-semibold"
-                >
-                  Sign&nbsp;In
-                </Button>
+                {withBackground ? (
+                  <Pressable
+                    onPress={() => {
+                      navigateToLogin();
+                    }}
+                    tw="h-8 items-center justify-center rounded-full bg-black/30 px-4"
+                  >
+                    <Text tw="text-sm font-semibold text-white">
+                      Sign&nbsp;In
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Button
+                    onPress={() => {
+                      navigateToLogin();
+                    }}
+                    variant="primary"
+                    size="regular"
+                    labelTW="font-semibold"
+                  >
+                    Sign&nbsp;In
+                  </Button>
+                )}
               </>
             )}
             {/* {Platform.OS === "web" ? <NetworkButton /> : null} */}

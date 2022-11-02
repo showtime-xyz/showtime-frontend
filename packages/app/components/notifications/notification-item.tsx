@@ -33,7 +33,7 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["LIKE_ON_COMMENT", "liked your comment on "],
   ["NFT_SALE", "bought "],
   ["NEW_CREATOR_AIRDROP_FROM_FOLLOWING", "created a new drop "],
-  ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "claimed "],
+  ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
   ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
 ]);

@@ -11,6 +11,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
+import { Spotify } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -52,6 +53,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const { rudder } = useRudder();
   const { state } = useContext(ClaimContext);
 
+  const isDark = useIsDarkMode();
   const { claimNFT, onReconnectWallet } = useClaimNFT(
     edition.creator_airdrop_edition
   );
@@ -140,8 +142,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
         title={`Show ${getProfileName(
           creatorProfile?.data?.profile
         )} who you are!`}
-        description="Complete your profile first to claim this drop. It will take around 1 minute."
-        cta="Complete profile to claim"
+        description="Complete your profile first to collect this drop. It will take around 1 minute."
+        cta="Complete profile to collect"
       />
     );
   }
@@ -185,11 +187,11 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just claimed a free drop "${
+                  message: `I just collected a free drop "${
                     nft?.data.item.token_name
                   }" by ${getTwitterIntentUsername(
                     creatorProfile?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nClaim it for free here:`,
+                  )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
                 })
               );
             }}
@@ -290,7 +292,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               <View tw="mt-4 flex-row items-center">
                 <CheckIcon />
                 <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                  You will save {edition.spotify_track_name} to your Spotify
+                  You will save "{edition.spotify_track_name}" to your Spotify
                   library
                 </Text>
               </View>
@@ -308,9 +310,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
             <Fieldset
               tw="mt-4 flex-1"
               label="Comment (optional)"
-              placeholder="wow, this is so cool!"
+              placeholder="Wow, this is so cool!"
               onChangeText={(v) => (comment.current = v)}
-              returnKeyLabel="Claim"
+              returnKeyLabel="Collect"
               returnKeyType="done"
               onSubmitEditing={handleClaimNFT}
             />
@@ -324,14 +326,21 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
               tw={state.status === "loading" ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
-              {state.status === "loading"
-                ? "Claiming... it should take about 10 seconds"
-                : state.status === "error"
-                ? "Failed. Retry!"
-                : edition.gating_type === "spotify_save" &&
-                  !user.data.profile.has_spotify_token
-                ? "Save on Spotify to claim"
-                : "Claim for free"}
+              {state.status === "loading" ? (
+                "Collecting... it should take about 10 seconds"
+              ) : state.status === "error" ? (
+                "Failed. Retry!"
+              ) : edition.gating_type === "spotify_save" &&
+                !user.data.profile.has_spotify_token ? (
+                <View tw="w-full flex-row items-center justify-center">
+                  <Spotify color={isDark ? "#000" : "#fff"} />
+                  <Text tw="ml-2 font-semibold text-white dark:text-black">
+                    Save to Collect
+                  </Text>
+                </View>
+              ) : (
+                "Collect"
+              )}
             </Button>
             <View tw="mt-4">
               <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">

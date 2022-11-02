@@ -75,13 +75,13 @@ export const ClaimButton = ({
     status === ClaimStatus.Soldout ||
     isExpired ||
     isProgress;
-
+  const isMusicDrop = edition?.gating_type === "spotify_save";
   const content = useMemo(() => {
     if (status === ClaimStatus.Claimed) {
       return (
         <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Claimed</Text>
+          <Text tw="ml-1 font-semibold text-white">Collected</Text>
         </>
       );
     } else if (status === ClaimStatus.Soldout) {
@@ -92,18 +92,18 @@ export const ClaimButton = ({
         </>
       );
     } else if (status === ClaimStatus.Expired) {
-      return "Drop expired";
+      return "Expired";
     } else if (isProgress) {
       return (
-        <Text tw="text-xs font-bold">
-          Claiming in progress
+        <Text tw="font-semibold">
+          Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
       );
     } else {
-      return "Claim for free";
+      return isMusicDrop ? "Save to Collect" : "Collect";
     }
-  }, [status, isProgress, isDark]);
+  }, [status, isProgress, isDark, isMusicDrop]);
 
   return (
     <Button

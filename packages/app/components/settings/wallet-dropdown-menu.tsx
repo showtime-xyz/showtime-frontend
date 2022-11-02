@@ -37,7 +37,9 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
       <DropdownMenuContent loop>
         <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
           <MenuItemIcon Icon={Edit} />
-          <DropdownMenuItemTitle>Edit nickname</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Edit nickname
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
         {props.isMagicWallet ? (
           <DropdownMenuItem
@@ -48,7 +50,9 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           >
             <MenuItemIcon Icon={Wallet} />
 
-            <DropdownMenuItemTitle>Export Private Key</DropdownMenuItemTitle>
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Export Private Key
+            </DropdownMenuItemTitle>
           </DropdownMenuItem>
         ) : null}
 
@@ -60,7 +64,9 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           destructive
         >
           <MenuItemIcon Icon={Trash} />
-          <DropdownMenuItemTitle>Delete Wallet</DropdownMenuItemTitle>
+          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            Delete Wallet
+          </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>

@@ -17,6 +17,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
+import {
+  WEB_HEADER_HEIGHT,
+  MOBILE_WEB_HEADER_HEIGHT,
+} from "app/constants/layout";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
@@ -220,7 +224,12 @@ export const Header = withColorScheme(
     if (isMdWidth) {
       return (
         <View tw="fixed top-0 right-0 left-0 z-50 w-screen items-center bg-white/60 stroke-inherit shadow-sm backdrop-blur-md dark:bg-black/60">
-          <View tw="h-16 w-full max-w-screen-2xl flex-row justify-between px-4 py-2">
+          <View
+            style={{
+              height: WEB_HEADER_HEIGHT,
+            }}
+            tw="w-full max-w-screen-2xl flex-row justify-between px-4 py-2"
+          >
             <View tw="items-start">
               <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
             </View>
@@ -237,15 +246,16 @@ export const Header = withColorScheme(
     }
 
     return (
-      <View tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2 shadow-sm backdrop-blur-md">
+      <View
+        style={{ height: MOBILE_WEB_HEADER_HEIGHT }}
+        tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2"
+      >
         <View tw="w-20 items-start">
-          <HeaderLeft canGoBack={canGoBack} />
+          <HeaderLeft withBackground={!isMdWidth} canGoBack={canGoBack} />
         </View>
-        <View tw="w-20 items-center">
-          <HeaderCenter />
-        </View>
+
         <View tw="w-20 items-end">
-          <HeaderRight />
+          <HeaderRight withBackground={!isMdWidth} />
         </View>
       </View>
     );

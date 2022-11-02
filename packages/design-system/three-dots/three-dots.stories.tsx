@@ -13,7 +13,7 @@ export default {
 export const Basic: React.VFC<{}> = () => (
   <View tw="flex-1 items-center justify-center">
     <Text tw="text-lg text-white dark:text-white">
-      Claiming in progress
+      Collecting
       <ThreeDotsAnimation color="#000" />
     </Text>
   </View>

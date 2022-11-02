@@ -12,17 +12,18 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimedBy } from "app/components//feed-item/claimed-by";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -118,10 +119,7 @@ function Card({
             <ErrorBoundary renderFallback={() => null}>
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
-                  btnProps={{
-                    tw: "dark:bg-gray-900 bg-gray-100 px-1",
-                    size: "small",
-                  }}
+                  tw="rounded-full bg-gray-100 p-1 dark:bg-gray-900"
                   nft={detailData?.data.item ?? nft}
                 />
               </Suspense>
@@ -133,6 +131,11 @@ function Card({
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
                 <MuteButton />
+              </View>
+            ) : null}
+            {numColumns === 1 && edition?.spotify_track_url ? (
+              <View tw="z-9 absolute bottom-4 left-4">
+                <PlayOnSpotify url={edition?.spotify_track_url} />
               </View>
             ) : null}
           </RouteComponent>

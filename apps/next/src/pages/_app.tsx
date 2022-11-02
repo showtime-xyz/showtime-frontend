@@ -14,13 +14,14 @@ import { View } from "@showtime-xyz/universal.view";
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useLogRocket } from "app/hooks/use-logrocket";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
-import { ClaimersScreen } from "app/screens/claimers";
+import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
@@ -127,7 +128,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
         <meta name="application-name" content="Showtime" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <meta name="apple-mobile-web-app-title" content="Showtime" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -150,7 +154,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center" style={{ minHeight: "calc(100vh - 64px)" }}>
+          <View
+            tw="items-center"
+            style={{ minHeight: `calc(100vh - ${MOBILE_WEB_TABS_HEIGHT}px)` }}
+          >
             <Component {...pageProps} />
           </View>
           <Footer />
@@ -163,7 +170,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <FollowingScreen />
         <DropScreen />
         <ClaimScreen />
-        <ClaimersScreen />
+        <CollectorsScreen />
         <ClaimLimitExplanationScreen />
         <LikersScreen />
 

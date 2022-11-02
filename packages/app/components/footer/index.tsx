@@ -1,13 +1,12 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
-import {
-  useBlurredBackgroundStyles,
-  useIsDarkMode,
-} from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
+import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
+import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -25,27 +24,26 @@ const Footer = () => {
   const color = isDark ? "white" : "black";
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser();
-  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const { isTabBarHidden } = useNavigationElements();
 
   if (width >= 768) {
     return <WebFooter />;
   }
 
-  if (!isAuthenticated || isTabBarHidden) {
+  if (
+    !isAuthenticated ||
+    isTabBarHidden ||
+    HIDE_LINK_FOOTER_ROUTER_LIST.includes(router.pathname)
+  ) {
     return null;
   }
 
   return (
     <View
-      // @ts-expect-error
       style={{
-        position: "fixed",
-        ...blurredBackgroundStyles,
-        paddingBottom:
-          Platform.OS === "web" ? "env(safe-area-inset-bottom)" : 0,
+        height: MOBILE_WEB_TABS_HEIGHT,
       }}
-      tw="bottom-0 right-0 left-0 z-50 h-16 flex-row items-center justify-between px-4"
+      tw="safe-bottom fixed bottom-0 right-0 left-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
     >
       <HomeTabBarIcon
         color={color}

@@ -10,6 +10,8 @@ import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
+import { LoginWithApple } from "./login-with-apple";
+import { LoginWithGoogle } from "./login-with-google";
 import { useLogin } from "./use-login";
 
 interface LoginProps {
@@ -75,6 +77,10 @@ export function Login({ onLogin }: LoginProps) {
               signInButtonLabel="Sign in"
               onSubmit={handleSubmitContactDetails}
             />
+            <View tw="mt-4">
+              <LoginWithApple />
+              <LoginWithGoogle />
+            </View>
           </View>
           <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
             <View tw="h-2" />

@@ -9,7 +9,7 @@ const ModalListScreenQueryParamList = [
   "followersModal",
   "followingModal",
   "commentsModal",
-  "claimersModal",
+  "collectorsModal",
 ];
 
 export const useModalListProps = () => {

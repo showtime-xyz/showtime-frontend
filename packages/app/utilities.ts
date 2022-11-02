@@ -496,6 +496,13 @@ export function isLargeIOS(): boolean {
 export function isIOS(): boolean {
   return isSmallIOS() || isLargeIOS();
 }
+export function isSafari(): boolean {
+  return (
+    typeof navigator !== "undefined" &&
+    /Safari/.test(navigator.userAgent) &&
+    !/Chrome/.test(navigator.userAgent)
+  );
+}
 
 export function isMobileWeb(): boolean {
   return Platform.OS === "web" && (isAndroid() || isIOS());
@@ -605,3 +612,10 @@ export function formatClaimNumber(number: number) {
     return number;
   }
 }
+
+export const OAUTH_REDIRECT_URI = Platform.select({
+  web: __DEV__
+    ? "http://localhost:3000/magic-oauth-redirect"
+    : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/magic-oauth-redirect`,
+  default: `io.showtime${__DEV__ ? ".development" : ""}://magic-oauth-redirect`,
+});

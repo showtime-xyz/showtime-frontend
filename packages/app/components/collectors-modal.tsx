@@ -22,8 +22,8 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-export const ClaimersModal = () => {
-  useTrackPageViewed({ name: "Claimers" });
+export const CollectorsModal = () => {
+  useTrackPageViewed({ name: "Collectors" });
   const router = useRouter();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");

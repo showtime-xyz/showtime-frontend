@@ -38,7 +38,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
           );
         })}
         <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
-          {`Claimed by `}
+          {`Collected by `}
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"
@@ -50,7 +50,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
               {` & `}
               <Text
                 onPress={() => {
-                  const as = `/claimers/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
+                  const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
                   router.push(
                     Platform.select({
                       native: as,
@@ -61,7 +61,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
                           contractAddress: nft?.contract_address,
                           tokenId: nft?.token_id,
                           chainName: nft?.chain_name,
-                          claimersModal: true,
+                          collectorsModal: true,
                         },
                       } as any,
                     }),
