@@ -1,6 +1,5 @@
 import React from "react";
-
-import Animated from "react-native-reanimated";
+import { View } from "react-native";
 
 import { LightBoxProps } from "./light-box";
 import { useLightBox } from "./provider.web";
@@ -19,7 +18,7 @@ export const LightBox: React.FC<LightBoxProps> = ({
     });
   };
   return (
-    <Animated.View style={containerStyle}>
+    <View style={containerStyle}>
       <div
         onClick={onPress}
         style={{
@@ -29,6 +28,6 @@ export const LightBox: React.FC<LightBoxProps> = ({
       >
         {children}
       </div>
-    </Animated.View>
+    </View>
   );
 };
