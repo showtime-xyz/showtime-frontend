@@ -1,7 +1,5 @@
 import { Platform } from "react-native";
 
-import { MyInfo, NFT } from "app/types";
-
 export const redirectUri = Platform.select({
   web: `${
     __DEV__
@@ -15,8 +13,8 @@ export const scope = "user-library-modify";
 
 export const clientID = "e12f7eea542947ff843cfc68d762235a";
 
-export const getQueryString = (nft: NFT, user?: MyInfo) => {
-  const state = `chainName=${nft.chain_name}&tokenId=${nft.token_id}&contractAddress=${nft.contract_address}&userId=${user?.data.profile.profile_id}`;
+export const getQueryString = (_redirectUri?: string) => {
+  const state = _redirectUri ? `redirectUri=${_redirectUri}` : "";
 
   const params = {
     client_id: clientID,
