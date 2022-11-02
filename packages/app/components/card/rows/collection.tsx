@@ -31,6 +31,7 @@ function Collection({ nft }: Props) {
               tw="rounded-full"
               width={20}
               height={20}
+              alt={nft.collection_name}
             />
           </View>
         )}

@@ -122,6 +122,7 @@ const FollowingListUser = memo(
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
+                  alt={item.username ?? item.wallet_address}
                   tw="rounded-full"
                   width={32}
                   height={32}

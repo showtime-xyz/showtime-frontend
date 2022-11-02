@@ -51,6 +51,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
               height={previewHeight}
               tw="rounded-xl"
               resizeMode="contain"
+              alt="Preview"
             />
           </View>
         </View>

@@ -29,6 +29,7 @@ export const CompleteProfileModalContent = ({
         width={100}
         height={100}
         resizeMode="contain"
+        alt="Complete Profile"
       />
       <Text tw="py-4 text-center text-base text-gray-900 dark:text-gray-100">
         {description}

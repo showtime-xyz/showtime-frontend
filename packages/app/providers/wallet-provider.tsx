@@ -86,6 +86,7 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
               tw="rounded-md"
               width={40}
               height={40}
+              alt="Coinbase Wallet"
             />
             <View tw="w-4" />
             <Text tw="text-lg text-black dark:text-white">Coinbase Wallet</Text>
@@ -114,6 +115,7 @@ function WalletConnectQRCodeModalComponent(props: RenderQrcodeModalProps) {
                   tw="rounded-md"
                   width={40}
                   height={40}
+                  alt={walletService.name}
                 />
                 <View tw="w-4" />
                 <Text tw="text-lg text-black dark:text-white">

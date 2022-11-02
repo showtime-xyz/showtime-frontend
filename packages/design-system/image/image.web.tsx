@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, CSSProperties } from "react";
 import { ImageURISource, ImageResizeMode } from "react-native";
 
 // @ts-ignore
@@ -41,8 +41,9 @@ type Props = Pick<ImgProps, "source" | "resizeMode" | "onLoad"> & {
   height: number;
   borderRadius?: number;
   layout?: "fixed" | "intrinsic" | "responsive" | "fill";
-  alt?: string;
+  alt: string; // Required from Next.js 13
   blurhash?: string;
+  style?: CSSProperties;
 };
 
 function Img({
@@ -52,6 +53,7 @@ function Img({
   height,
   resizeMode,
   onLoad,
+  style,
   ...props
 }: Props) {
   const actualHeight =
@@ -65,6 +67,15 @@ function Img({
     return (
       <Image
         src={source.uri}
+        style={{
+          objectFit: resizeModeToObjectFit(
+            resizeMode ??
+              // When using intrinsic size use contain to avoid
+              // rounding errors causing some pixel lost.
+              (width != null ? "contain" : "cover")
+          ),
+          ...style,
+        }}
         loading={loading}
         width={width}
         height={height}
@@ -76,13 +87,6 @@ function Img({
             },
           });
         }}
-        // @ts-ignore
-        objectFit={resizeModeToObjectFit(
-          resizeMode ??
-            // When using intrinsic size use contain to avoid
-            // rounding errors causing some pixel lost.
-            (width != null ? "contain" : "cover")
-        )}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
         blurDataURL={
           width > 40 && props.blurhash
@@ -98,7 +102,6 @@ function Img({
 
   if (source) {
     return (
-      // @ts-ignore
       <Image
         src={source as string}
         loading={loading}
