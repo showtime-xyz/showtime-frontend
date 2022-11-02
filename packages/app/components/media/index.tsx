@@ -117,7 +117,7 @@ function Media({
             isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode as ResizeMode}
             //@ts-ignore
-            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
+            dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />
         </PinchToZoom>
       ) : null}

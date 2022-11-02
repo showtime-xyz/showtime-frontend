@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback } from "react";
+import { Suspense, useMemo, useCallback, ReactNode } from "react";
 import {
   Platform,
   StyleProp,
@@ -6,9 +6,12 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { Link } from "solito/link";
+import { Link, LinkProps } from "solito/link";
 
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import {
+  PressableScale,
+  Props as PressableScaleProps,
+} from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -31,11 +34,28 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
 
 const isWeb = Platform.OS === "web";
-const RouteComponent = isWeb ? Link : PressableScale;
+
+const RouteComponent = ({
+  children,
+  onPress,
+  ...rest
+}: (LinkProps | PressableScaleProps) & {
+  onPress: () => void;
+  children: ReactNode;
+}) => {
+  if (isWeb) {
+    return <Link {...(rest as LinkProps)}>{children}</Link>;
+  }
+  return (
+    <PressableScale onPress={onPress} {...(rest as PressableScaleProps)}>
+      {children}
+    </PressableScale>
+  );
+};
 
 type Props = {
   nft: NFT & { loading?: boolean };
-  numColumns: number;
+  numColumns?: number;
   onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
@@ -102,7 +122,7 @@ function Card({
         // @ts-ignore
         // TODO: add accessibility types for RNW
         accessibilityRole="article"
-        dataSet={Platform.select({ web: { testId: "nft-card" } })}
+        dataset={Platform.select({ web: { testId: "nft-card" } })}
         style={[sizeStyle]}
         tw={[
           numColumns > 1 ? "my-4" : "",
@@ -151,7 +171,7 @@ function Card({
             href={href}
             onPress={handleOnPress}
             // @ts-ignore
-            dataSet={{ testId: "nft-card-title-link" }}
+            dataset={{ testId: "nft-card-title-link" }}
           >
             <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
           </RouteComponent>
