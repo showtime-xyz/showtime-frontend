@@ -39,16 +39,10 @@ const SpotifyAuthRedirect = () => {
         try {
           setFetching(true);
           setError(false);
-          //@ts-ignore
-          if (typeof window.ReactNativeWebView !== "undefined") {
-            //@ts-ignore
-            window.ReactNativeWebView.postMessage(JSON.stringify({ code }));
-          } else {
-            await saveSpotifyToken({ code, redirectUri: redirectUri });
-            router.replace(
-              `/nft/${chainName}/${contractAddress}/${tokenId}?showClaim=true`
-            );
-          }
+          await saveSpotifyToken({ code, redirectUri: redirectUri });
+          router.replace(
+            `/nft/${chainName}/${contractAddress}/${tokenId}?showClaim=true`
+          );
         } catch (e) {
           setError(e);
           Logger.error("Save spotify token error", e);
