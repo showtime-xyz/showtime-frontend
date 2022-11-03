@@ -240,6 +240,8 @@ export const useClaimNFT = (edition: IEdition) => {
               },
             ]
           );
+        } else if (e?.response?.status === 440) {
+          Alert.alert("Wrong password", "Please try again!");
         } else {
           Alert.alert(
             "Wow, you love collecting drops!",
