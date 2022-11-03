@@ -16,14 +16,14 @@ import { setupSWRCache } from "./swr-cache";
 
 function mmkvProvider() {
   const storage = new MMKV();
-  const { mmkvCacheMap, onAppBackgroundCallback } = setupSWRCache({
+  const { mmkvCacheMap, persistCache } = setupSWRCache({
     set: storage.set.bind(storage),
     get: storage.getString.bind(storage),
   });
 
   AppState.addEventListener("change", function persistCacheOnAppBackground(s) {
     if (s === "background") {
-      onAppBackgroundCallback();
+      persistCache();
     }
   });
 

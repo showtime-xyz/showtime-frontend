@@ -11,7 +11,7 @@ export const setupSWRCache = ({ set, get }: SWRCacheType) => {
     appCache ? JSON.parse(appCache) : []
   );
 
-  const onAppBackgroundCallback = () => {
+  const persistCache = () => {
     const prevCache = get("app-cache");
     const prevMap = new Map(prevCache ? JSON.parse(prevCache) : []);
 
@@ -27,7 +27,7 @@ export const setupSWRCache = ({ set, get }: SWRCacheType) => {
   };
 
   return {
-    onAppBackgroundCallback,
+    persistCache,
     mmkvCacheMap,
   };
 };
