@@ -61,6 +61,7 @@ const defaultValues = {
   royalty: 10,
   editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
+  password: "",
   hasAcceptedTerms: false,
   notSafeForWork: false,
 };
@@ -206,7 +207,7 @@ export const DropForm = () => {
           </Text>
           <View tw="mt-8 mb-10">
             <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share your free drop to the world!
+              Now share your drop with the world!
             </Text>
           </View>
 
@@ -216,7 +217,7 @@ export const DropForm = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just created a free drop "${
+                  message: `I just created a drop "${
                     state.edition?.name
                   }" by ${getTwitterIntentUsername(
                     user?.user?.data?.profile
@@ -525,23 +526,36 @@ export const DropForm = () => {
                       <Accordion.Label>Drop Details</Accordion.Label>
                       <Accordion.Chevron />
                     </View>
-                    <View tw="flex-row justify-between">
+                    <ScrollView tw="flex-row justify-between" horizontal={true}>
                       <DataPill
-                        tw="md:flex-1"
                         label={`Royalties ${watch("royalty")}%`}
                         type="text"
                       />
                       <DataPill
-                        tw="md:mx-4 md:flex-1"
+                        tw={
+                          gatingType !== "spotify_save"
+                            ? "ml-1 md:ml-4"
+                            : "mx-1 md:mx-4"
+                        }
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw="md:flex-1"
+                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
-                    </View>
+                      {gatingType !== "spotify_save" ? (
+                        <DataPill
+                          label={`Password ${
+                            watch("password") === ""
+                              ? "None"
+                              : watch("password")
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
+                    </ScrollView>
                   </View>
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
@@ -610,6 +624,28 @@ export const DropForm = () => {
                       }}
                     />
                   </View>
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="password"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Password (optional)"
+                              onBlur={onBlur}
+                              helperText="The password required to collect the drop"
+                              errorText={errors.password?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="Enter a password"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
                   <View tw="mt-4 flex-row justify-between">
                     <Controller
                       control={control}

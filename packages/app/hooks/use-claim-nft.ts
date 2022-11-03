@@ -180,13 +180,13 @@ export const useClaimNFT = (edition: IEdition) => {
     };
   }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
-  const claimNFT = async (): Promise<boolean | undefined> => {
+  const claimNFT = async (password?: string): Promise<boolean | undefined> => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
 
         if (edition?.is_gated) {
-          await gatedClaimFlow();
+          await gatedClaimFlow(password);
         } else {
           await oldSignatureClaimFlow();
         }
@@ -261,13 +261,15 @@ export const useClaimNFT = (edition: IEdition) => {
     }
   };
 
-  const gatedClaimFlow = async () => {
+  const gatedClaimFlow = async (password?: string) => {
     if (edition?.minter_address) {
       const relayerResponse = await axios({
         url:
           "/v1/creator-airdrops/mint-gated-edition/" + edition.contract_address,
         method: "POST",
-        data: {},
+        data: {
+          password: password !== "" ? password : undefined,
+        },
       });
 
       await pollTransaction(

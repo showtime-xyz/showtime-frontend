@@ -200,6 +200,7 @@ export type IEdition = {
   symbol: string;
   is_gated?: boolean;
   is_spotify_gated?: boolean;
+  is_password_gated?: boolean;
 };
 
 export type MyInfo = {

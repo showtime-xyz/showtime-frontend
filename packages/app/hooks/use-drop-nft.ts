@@ -7,7 +7,6 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { delay, getFileMeta } from "app/utilities";
 
@@ -98,10 +97,10 @@ export type UseDropNFT = {
   imageHash?: string;
   spotifyUrl?: string;
   gatingType?: string;
+  password?: string;
 };
 
 export const useDropNFT = () => {
-  const { rudder } = useRudder();
   const uploadMedia = useUploadMediaToPinata();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -195,7 +194,8 @@ export const useDropNFT = () => {
           claim_window_duration_seconds: params.duration,
           nsfw: params.notSafeForWork,
           spotify_url: params.spotifyUrl,
-          gating_type: params.gatingType,
+          gating_type: params.password !== "" ? "password" : params.gatingType,
+          password: params.password !== "" ? params.password : undefined,
         },
       });
 
@@ -228,7 +228,7 @@ export const useDropNFT = () => {
   const onReconnectWallet = useCallback(() => {
     dispatch({
       type: "error",
-      error: "Please retry creating a drop",
+      error: "Please try again...",
     });
   }, []);
 
