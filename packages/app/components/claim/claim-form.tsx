@@ -1,4 +1,4 @@
-import { useRef, useContext, useMemo, useEffect } from "react";
+import { useRef, useContext, useMemo } from "react";
 import {
   Linking,
   Platform,
@@ -314,13 +314,14 @@ export const ClaimForm = ({
                 <Fieldset
                   tw="mt-4 flex-1"
                   label="Password"
-                  placeholder="Enter the password"
+                  placeholder={
+                    password.current ? password.current : "Enter the password"
+                  }
                   onChangeText={(v) => (password.current = v)}
                   returnKeyLabel="Enter"
                   returnKeyType="done"
                   onSubmitEditing={handleClaimNFT}
                   secureTextEntry
-                  value={password.current}
                 />
               </View>
             </>
