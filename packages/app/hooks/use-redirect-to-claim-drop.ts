@@ -8,7 +8,10 @@ export const useRedirectToClaimDrop = () => {
   const { isAuthenticated } = useUser();
   const router = useRouter();
 
-  const redirectToClaimDrop = (editionContractAddress: string) => {
+  const redirectToClaimDrop = (
+    editionContractAddress: string,
+    password?: string
+  ) => {
     if (!isAuthenticated) {
       router.push("/login");
     } else {
@@ -22,6 +25,7 @@ export const useRedirectToClaimDrop = () => {
             query: {
               ...router.query,
               contractAddress: editionContractAddress,
+              password,
               claimModal: true,
             },
           } as any,

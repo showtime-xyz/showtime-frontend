@@ -36,6 +36,7 @@ type Query = {
   chainName: string;
   tabType?: string;
   showClaim?: boolean;
+  password?: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -48,6 +49,7 @@ function NftScreen({ fallback = {} }: { fallback?: object }) {
     initial: false,
     parse: (v) => Boolean(v),
   });
+  const [password] = useParam("password", { initial: "" });
   const [contractAddress] = useParam("contractAddress");
   const initialRef = useRef(false);
   const videoConfig = useMemo(
@@ -67,9 +69,9 @@ function NftScreen({ fallback = {} }: { fallback?: object }) {
   useEffect(() => {
     if (showClaim && contractAddress && !initialRef.current) {
       initialRef.current = true;
-      redirectToClaimDrop(contractAddress);
+      redirectToClaimDrop(contractAddress, password);
     }
-  }, [showClaim, redirectToClaimDrop, contractAddress]);
+  }, [showClaim, redirectToClaimDrop, contractAddress, password]);
 
   return (
     <ErrorBoundary>

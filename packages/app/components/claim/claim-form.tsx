@@ -1,4 +1,4 @@
-import { useRef, useContext, useMemo } from "react";
+import { useRef, useContext, useMemo, useEffect } from "react";
 import {
   Linking,
   Platform,
@@ -49,7 +49,13 @@ import {
   userHasIncompleteExternalLinks,
 } from "app/utilities";
 
-export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
+export const ClaimForm = ({
+  edition,
+  password: passwordFromQueryParam = "",
+}: {
+  edition: CreatorEditionResponse;
+  password?: string;
+}) => {
   const { rudder } = useRudder();
   const { state } = useContext(ClaimContext);
 
@@ -67,7 +73,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
-  const password = useRef("");
+  const password = useRef(passwordFromQueryParam);
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
@@ -313,6 +319,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                   returnKeyLabel="Enter"
                   returnKeyType="done"
                   onSubmitEditing={handleClaimNFT}
+                  secureTextEntry
+                  value={password.current}
                 />
               </View>
             </>
