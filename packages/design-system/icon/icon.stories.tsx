@@ -104,6 +104,7 @@ export const Default = () => {
       <IconItem icon={Icon.Trending} title="Trending" />
       <IconItem icon={Icon.TrendingFilled} title="TrendingFilled" />
       <IconItem icon={Icon.Twitter} title="Twitter" />
+      <IconItem icon={Icon.Facebook} title="Facebook" />
       <IconItem icon={Icon.Upload} title="Upload" />
       <IconItem icon={Icon.UserPlus} title="UserPlus" />
       <IconItem icon={Icon.Video} title="Video" />
@@ -123,6 +124,7 @@ export const Default = () => {
       <IconItem icon={Icon.RotateCw} title="RotateCw" />
       <IconItem icon={Icon.OpenSea} title="OpenSea" />
       <IconItem icon={Icon.InformationCircle} title="InformationCircle" />
+      <IconItem icon={Icon.UserCircle} title="UserCircle" />
     </View>
   );
 };

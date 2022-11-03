@@ -7,8 +7,10 @@ import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { ClaimScreen } from "app/screens/claim";
+import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
+import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -20,13 +22,13 @@ import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
+import { ProfileScialExplanationScreen } from "app/screens/profile-social-explanation";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { SwipeListScreen } from "app/screens/swipe-list";
 
-import { ClaimLimitExplanationScreen } from "../screens/claim-limit-explanation";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -98,6 +100,11 @@ export function RootStackNavigator() {
         <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
+        <Stack.Screen
+          name="completeProfile"
+          component={CompleteProfileScreen}
+        />
+
         <Stack.Screen name="followers" component={FollowersScreen} />
         <Stack.Screen name="following" component={FollowingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
@@ -120,6 +127,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
+        />
+        <Stack.Screen
+          name="profileScialExplanation"
+          component={ProfileScialExplanationScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

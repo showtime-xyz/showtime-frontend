@@ -42,7 +42,6 @@ import { useRudder } from "app/lib/rudderstack";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
-  getProfileName,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -139,11 +138,9 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   ) {
     return (
       <CompleteProfileModalContent
-        title={`Show ${getProfileName(
-          creatorProfile?.data?.profile
-        )} who you are!`}
-        description="Complete your profile first to collect this drop. It will take around 1 minute."
-        cta="Complete profile to collect"
+        title="Just one more step"
+        description="You need complete your profile to create/claim drops. It only takes about 1 min"
+        cta="Complete Profile"
       />
     );
   }
