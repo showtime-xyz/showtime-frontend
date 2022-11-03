@@ -101,7 +101,7 @@ export const ClaimForm = ({
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    (async () => {
+    const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setLocationErrorMsg("Permission to access location was denied");
@@ -110,8 +110,12 @@ export const ClaimForm = ({
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-    })();
-  }, []);
+    };
+
+    if (edition.gating_type === "location" || edition.gating_type === "multi") {
+      getLocation();
+    }
+  }, [edition.gating_type]);
 
   const handleClaimNFT = async () => {
     if (
@@ -331,7 +335,8 @@ export const ClaimForm = ({
             </>
           ) : null}
 
-          {edition.gating_type === "password" ? (
+          {edition.gating_type === "password" ||
+          edition.gating_type === "multi" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 <Fieldset
@@ -349,7 +354,8 @@ export const ClaimForm = ({
             </>
           ) : null}
 
-          {edition.gating_type === "location" ? (
+          {edition.gating_type === "location" ||
+          edition.gating_type === "multi" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 {locationErrorMsg ? (
@@ -409,11 +415,14 @@ export const ClaimForm = ({
               variant="primary"
               disabled={
                 state.status === "loading" ||
-                (edition.gating_type === "location" && !location)
+                ((edition.gating_type === "location" ||
+                  edition.gating_type === "multi") &&
+                  !location)
               }
               tw={
                 state.status === "loading" ||
-                (edition.gating_type === "location" && !location)
+                edition.gating_type === "location" ||
+                (edition.gating_type === "multi" && !location)
                   ? "opacity-[0.45]"
                   : ""
               }

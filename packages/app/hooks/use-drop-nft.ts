@@ -186,10 +186,17 @@ export const useDropNFT = () => {
         escapedDescription,
       });
 
+      const isPasswordGated = params.password;
+      const isLocationGated =
+        params.radius &&
+        ((params.latitude && params.longitude) || params.googleMapsUrl);
+
       const gatingType =
-        params.gatingType ?? params.password
+        params.gatingType ?? (isPasswordGated && isLocationGated)
+          ? "multi"
+          : isPasswordGated
           ? "password"
-          : params.radius
+          : isLocationGated
           ? "location"
           : undefined;
 
@@ -213,6 +220,10 @@ export const useDropNFT = () => {
             radius: params.radius,
             google_maps_url: params.googleMapsUrl,
           },
+          multi_gating_types:
+            isPasswordGated && isLocationGated
+              ? ["password", "location"]
+              : undefined,
         },
       });
 

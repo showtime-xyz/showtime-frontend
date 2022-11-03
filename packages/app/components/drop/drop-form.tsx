@@ -97,6 +97,8 @@ const dropValidationSchema = yup.object({
     .required()
     .isTrue("You must accept the terms and conditions."),
   notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+  googleMapsUrl: yup.string().url(),
+  radius: yup.number().min(0.01).max(10),
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
@@ -560,7 +562,7 @@ export const DropForm = () => {
                       {gatingType !== "spotify_save" ? (
                         <DataPill
                           label={`Location ${
-                            watch("location") === ""
+                            watch("location") === "" || !watch("location")
                               ? "None"
                               : watch("location")
                           }`}
