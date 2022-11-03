@@ -7,7 +7,7 @@ const persistCacheKeys = ["/v2/trending/nfts", "/v2/myinfo"];
 
 export const setupSWRCache = ({ set, get }: SWRCacheType) => {
   const appCache = get("app-cache");
-  const mmkvCacheMap = new Map<string, string>(
+  const swrCacheMap = new Map<string, string>(
     appCache ? JSON.parse(appCache) : []
   );
 
@@ -16,7 +16,7 @@ export const setupSWRCache = ({ set, get }: SWRCacheType) => {
     const prevMap = new Map(prevCache ? JSON.parse(prevCache) : []);
 
     persistCacheKeys.forEach((key) => {
-      for (const [k, val] of mmkvCacheMap.entries()) {
+      for (const [k, val] of swrCacheMap.entries()) {
         if (k.includes(key)) {
           prevMap.set(k, val);
         }
@@ -28,6 +28,6 @@ export const setupSWRCache = ({ set, get }: SWRCacheType) => {
 
   return {
     persistCache,
-    mmkvCacheMap,
+    swrCacheMap,
   };
 };

@@ -11,14 +11,14 @@ import { isUndefined } from "app/lib/swr/helper";
 import { setupSWRCache } from "./swr-cache";
 
 const localStorageProvider = () => {
-  const { mmkvCacheMap, persistCache } = setupSWRCache({
+  const { swrCacheMap, persistCache } = setupSWRCache({
     set: localStorage.setItem.bind(localStorage),
     get: localStorage.getItem.bind(localStorage),
   });
 
   window.addEventListener("beforeunload", persistCache);
 
-  return mmkvCacheMap;
+  return swrCacheMap;
 };
 
 export const SWRProvider = ({

@@ -16,7 +16,7 @@ import { setupSWRCache } from "./swr-cache";
 
 function mmkvProvider() {
   const storage = new MMKV();
-  const { mmkvCacheMap, persistCache } = setupSWRCache({
+  const { swrCacheMap, persistCache } = setupSWRCache({
     set: storage.set.bind(storage),
     get: storage.getString.bind(storage),
   });
@@ -27,7 +27,7 @@ function mmkvProvider() {
     }
   });
 
-  return mmkvCacheMap;
+  return swrCacheMap;
 }
 
 export const SWRProvider = ({
