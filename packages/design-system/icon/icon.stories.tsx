@@ -121,6 +121,7 @@ export const Default = () => {
         <IconItem icon={Icon.RotateCw} title="RotateCw" />
         <IconItem icon={Icon.InformationCircle} title="InformationCircle" />
         <IconItem icon={Icon.UserCircle} title="UserCircle" />
+        <IconItem icon={Icon.Hourglass} title="Hourglass" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>
