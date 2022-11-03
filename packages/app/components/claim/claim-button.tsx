@@ -11,6 +11,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { createParam } from "app/navigation/use-param";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 
@@ -43,6 +44,10 @@ export const getClaimStatus = (edition: CreatorEditionResponse) => {
     : ClaimStatus.Normal;
 };
 
+const { useParam } = createParam<{
+  password: string;
+}>();
+
 export const ClaimButton = ({
   edition,
   size = "small",
@@ -55,9 +60,14 @@ export const ClaimButton = ({
   const isProgress =
     claimStates.status === "loading" && claimStates.signaturePrompt === false;
 
+  const [password] = useParam("password");
+
   const onClaimPress = () => {
     dispatch({ type: "initial" });
-    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+    redirectToClaimDrop(
+      edition.creator_airdrop_edition.contract_address,
+      password
+    );
   };
 
   let isExpired = false;

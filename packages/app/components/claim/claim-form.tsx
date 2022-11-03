@@ -314,14 +314,13 @@ export const ClaimForm = ({
                 <Fieldset
                   tw="mt-4 flex-1"
                   label="Password"
-                  placeholder={
-                    password.current ? password.current : "Enter the password"
-                  }
+                  placeholder="Enter the password"
                   onChangeText={(v) => (password.current = v)}
                   returnKeyLabel="Enter"
                   returnKeyType="done"
                   onSubmitEditing={handleClaimNFT}
                   secureTextEntry
+                  defaultValue={password.current}
                 />
               </View>
             </>
