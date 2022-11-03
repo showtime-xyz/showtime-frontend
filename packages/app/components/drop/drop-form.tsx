@@ -62,6 +62,8 @@ const defaultValues = {
   editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
   password: "",
+  googleMapsUrl: "",
+  radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
 };
@@ -555,6 +557,16 @@ export const DropForm = () => {
                           type="text"
                         />
                       ) : null}
+                      {gatingType !== "spotify_save" ? (
+                        <DataPill
+                          label={`Location ${
+                            watch("location") === ""
+                              ? "None"
+                              : watch("location")
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
                     </ScrollView>
                   </View>
                 </Accordion.Trigger>
@@ -640,6 +652,50 @@ export const DropForm = () => {
                               value={value?.toString()}
                               onChangeText={onChange}
                               placeholder="Enter a password"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="googleMapsUrl"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Location (optional)"
+                              onBlur={onBlur}
+                              helperText="The location where people can collect the drop from"
+                              errorText={errors.googleMapsUrl?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="Enter the Google Maps link of the location"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="radius"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Radius (optional)"
+                              onBlur={onBlur}
+                              helperText="The location radius (in kilometers)"
+                              errorText={errors.radius?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="1"
                             />
                           );
                         }}
