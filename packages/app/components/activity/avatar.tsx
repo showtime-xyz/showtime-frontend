@@ -60,6 +60,7 @@ const Avatar = ({ url, icon = "none" }: Props) => {
         source={{
           uri: url,
         }}
+        alt="Avatar"
       />
       {icon !== "none" ? (
         <View tw="absolute -bottom-px -right-px items-center justify-center rounded-full border-2 border-white dark:border-black">

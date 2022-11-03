@@ -32,7 +32,8 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
 
   return (
     <ScrollComponent index={index}>
-      {Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
+      {pushNotificationsPreferences?.data &&
+        Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
         Object.entries(pushNotificationsPreferences?.data).map(
           (item, index) => {
             const [key, value] = item;

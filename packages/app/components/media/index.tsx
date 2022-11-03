@@ -86,6 +86,7 @@ function Media({
             width={width}
             height={height}
             resizeMode={resizeMode}
+            alt={item?.token_name}
           />
         </PinchToZoom>
       ) : null}
@@ -116,7 +117,7 @@ function Media({
             isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode as ResizeMode}
             //@ts-ignore
-            dataSet={Platform.select({ web: { testId: "nft-card-media" } })}
+            dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />
         </PinchToZoom>
       ) : null}

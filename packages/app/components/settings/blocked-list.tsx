@@ -26,6 +26,7 @@ export const UserItem = (props: UserItemProps) => {
           width={24}
           height={24}
           source={{ uri: props.image_url }}
+          alt={props.title}
         />
       </View>
       <View tw="flex flex-1 flex-col items-start justify-center">

@@ -26,9 +26,7 @@ const SpotifyAuthRedirect = () => {
   const [code] = useParam("code");
   const { saveSpotifyToken } = useSaveSpotifyToken();
   const urlParams = new URLSearchParams(state);
-  const chainName = urlParams.get("chainName");
-  const tokenId = urlParams.get("tokenId");
-  const contractAddress = urlParams.get("contractAddress");
+  const _redirectUri = urlParams.get("redirectUri");
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
@@ -39,16 +37,8 @@ const SpotifyAuthRedirect = () => {
         try {
           setFetching(true);
           setError(false);
-          //@ts-ignore
-          if (typeof window.ReactNativeWebView !== "undefined") {
-            //@ts-ignore
-            window.ReactNativeWebView.postMessage(JSON.stringify({ code }));
-          } else {
-            await saveSpotifyToken({ code, redirectUri: redirectUri });
-            router.replace(
-              `/nft/${chainName}/${contractAddress}/${tokenId}?showClaim=true`
-            );
-          }
+          await saveSpotifyToken({ code, redirectUri: redirectUri });
+          router.replace(_redirectUri);
         } catch (e) {
           setError(e);
           Logger.error("Save spotify token error", e);

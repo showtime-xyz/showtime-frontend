@@ -1,6 +1,5 @@
 import React from "react";
-
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { View } from "react-native";
 
 import { LightBoxProps } from "./light-box";
 import { useLightBox } from "./provider.web";
@@ -12,12 +11,6 @@ export const LightBox: React.FC<LightBoxProps> = ({
   children,
 }) => {
   const lightBox = useLightBox();
-  const styles = useAnimatedStyle(() => {
-    return {
-      width: imgWidth,
-      height: imgHeight,
-    };
-  });
 
   const onPress = () => {
     lightBox?.show({
@@ -25,10 +18,16 @@ export const LightBox: React.FC<LightBoxProps> = ({
     });
   };
   return (
-    <Animated.View style={containerStyle}>
-      <div onClick={onPress} style={styles}>
+    <View style={containerStyle}>
+      <div
+        onClick={onPress}
+        style={{
+          width: imgWidth,
+          height: imgHeight,
+        }}
+      >
         {children}
       </div>
-    </Animated.View>
+    </View>
   );
 };

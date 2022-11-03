@@ -188,7 +188,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               source={{
                 uri: getMediaUrl({ nft, stillPreview: true }),
               }}
-            ></Image>
+              alt={nft.token_name}
+            />
           )}
         </View>
 

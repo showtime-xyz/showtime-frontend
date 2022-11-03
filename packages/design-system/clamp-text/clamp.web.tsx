@@ -27,7 +27,7 @@ type MultiClampParams = {
   expandText?: string;
   expendTagClassName?: string;
   foldTagClassName?: string;
-  originText: string | Iterable<ReactNode>;
+  originText: string | Iterable<ReactNode> | null;
 };
 export class MultiClamp {
   ele: Element;

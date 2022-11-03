@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "design-system": "*",
-    "next": "12.2.5",
+    "next": "13.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native-web": "0.18.9"
@@ -33,7 +33,7 @@
     "babel-plugin-react-native-web": "^0.17.5",
     "chromatic": "^6.0.6",
     "eslint": "7",
-    "eslint-config-next": "^12.2.0",
+    "eslint-config-next": "13.0.0",
     "path-browserify": "^1.0.1",
     "postcss": "^8.4.16",
     "storybook-addon-next": "^1.6.7",

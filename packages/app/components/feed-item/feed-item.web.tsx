@@ -8,6 +8,7 @@ import {
 
 import { View } from "@showtime-xyz/universal.view";
 
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { PlayOnSpotify } from "app/components/play-on-spotify";
@@ -87,15 +88,17 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             paddingTop,
           }}
         >
-          <Media
-            item={nft}
-            numColumns={1}
-            sizeStyle={{
-              height: mediaHeight,
-              width: windowWidth,
-            }}
-            resizeMode="cover"
-          />
+          <FeedItemTapGesture>
+            <Media
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              resizeMode="cover"
+            />
+          </FeedItemTapGesture>
         </View>
         <View
           tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"

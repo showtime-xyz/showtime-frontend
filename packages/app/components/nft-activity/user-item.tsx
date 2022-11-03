@@ -34,6 +34,7 @@ const UserItem = ({
             height={24}
             tw="h-full w-full"
             source={{ uri: getProfileImageUrl(imageUrl) }}
+            alt={username ?? userAddress ?? "User"}
           />
         </View>
       ) : null}
