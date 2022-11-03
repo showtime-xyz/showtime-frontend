@@ -140,6 +140,8 @@ export const ClaimForm = ({
       success = await claimNFT({ password: password.current.trim() });
     } else if (edition.gating_type === "location") {
       success = await claimNFT({ location });
+    } else if (edition.gating_type === "multi") {
+      success = await claimNFT({ password: password.current.trim(), location });
     } else {
       success = await claimNFT({});
     }
