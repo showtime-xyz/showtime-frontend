@@ -14,7 +14,6 @@ type Props = {
   size: number;
 };
 
-console.log("efefifj ", MediaLibrary);
 export const QRCode = ({ text, size }: Props) => {
   const ref = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
