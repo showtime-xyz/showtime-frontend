@@ -31,6 +31,7 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
+import { QRCode } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
@@ -275,6 +276,12 @@ export const DropForm = () => {
           >
             Skip for now
           </Button>
+        </View>
+        <View tw="mt-4">
+          <QRCode
+            size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
+            text={claimUrl}
+          />
         </View>
       </View>
     );
