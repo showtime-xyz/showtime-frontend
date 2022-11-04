@@ -47,7 +47,13 @@ import {
   isMobileWeb,
 } from "app/utilities";
 
-export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
+export const ClaimForm = ({
+  edition,
+  password: passwordFromQueryParam = "",
+}: {
+  edition: CreatorEditionResponse;
+  password?: string;
+}) => {
   const { rudder } = useRudder();
   const { state } = useContext(ClaimContext);
 
@@ -66,6 +72,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
+  const password = useRef(passwordFromQueryParam);
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
@@ -103,6 +110,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     if (edition.gating_type === "spotify_save") {
       success = await claimSpotifyGatedDrop(nft?.data.item);
+    } else if (edition.gating_type === "password") {
+      success = await claimNFT(password.current.trim());
     } else {
       success = await claimNFT();
     }
@@ -286,6 +295,24 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
                   You will save "{edition.spotify_track_name}" to your Spotify
                   library
                 </Text>
+              </View>
+            </>
+          ) : null}
+
+          {edition.gating_type === "password" ? (
+            <>
+              <View tw="mt-4 flex-row items-center">
+                <Fieldset
+                  tw="mt-4 flex-1"
+                  label="Password"
+                  placeholder="Enter the password"
+                  onChangeText={(v) => (password.current = v)}
+                  returnKeyLabel="Enter"
+                  returnKeyType="done"
+                  onSubmitEditing={handleClaimNFT}
+                  secureTextEntry
+                  defaultValue={password.current}
+                />
               </View>
             </>
           ) : null}

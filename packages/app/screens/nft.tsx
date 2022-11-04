@@ -144,15 +144,19 @@ const NFTDetail = () => {
     );
   }
 
-  return (
-    <ProfileTabsNFTProvider tabType={tabType}>
-      <FeedItem
-        itemHeight={itemHeight}
-        bottomPadding={safeAreaBottom}
-        nft={nft as NFT}
-      />
-    </ProfileTabsNFTProvider>
-  );
+  if (nft) {
+    return (
+      <ProfileTabsNFTProvider tabType={tabType}>
+        <FeedItem
+          itemHeight={itemHeight}
+          bottomPadding={safeAreaBottom}
+          nft={nft as NFT}
+        />
+      </ProfileTabsNFTProvider>
+    );
+  }
+
+  return null;
 };
 
 export { NftScreen };

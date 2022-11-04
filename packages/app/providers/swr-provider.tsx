@@ -12,17 +12,22 @@ import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useIsOnline } from "app/hooks/use-is-online";
 import { isUndefined } from "app/lib/swr/helper";
 
+import { setupSWRCache } from "./swr-cache";
+
 function mmkvProvider() {
   const storage = new MMKV();
-  const appCache = storage.getString("app-cache");
-  const map = new Map(appCache ? JSON.parse(appCache) : []);
-
-  AppState.addEventListener("change", () => {
-    const appCache = JSON.stringify(Array.from(map.entries()));
-    storage.set("app-cache", appCache);
+  const { swrCacheMap, persistCache } = setupSWRCache({
+    set: storage.set.bind(storage),
+    get: storage.getString.bind(storage),
   });
 
-  return map;
+  AppState.addEventListener("change", function persistCacheOnAppBackground(s) {
+    if (s === "background") {
+      persistCache();
+    }
+  });
+
+  return swrCacheMap;
 }
 
 export const SWRProvider = ({

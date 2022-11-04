@@ -8,17 +8,17 @@ import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
 
-const localStorageProvider = () => {
-  const map = new Map<any, any>(
-    JSON.parse(localStorage.getItem("app-cache") as string) || []
-  );
+import { setupSWRCache } from "./swr-cache";
 
-  window.addEventListener("beforeunload", () => {
-    const appCache = JSON.stringify(Array.from(map.entries()));
-    localStorage?.setItem("app-cache", appCache);
+const localStorageProvider = () => {
+  const { swrCacheMap, persistCache } = setupSWRCache({
+    set: localStorage.setItem.bind(localStorage),
+    get: localStorage.getItem.bind(localStorage),
   });
 
-  return map;
+  window.addEventListener("beforeunload", persistCache);
+
+  return swrCacheMap;
 };
 
 export const SWRProvider = ({
