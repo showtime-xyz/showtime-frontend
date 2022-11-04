@@ -12,10 +12,9 @@ import ViewShot from "app/lib/view-shot";
 type Props = {
   text: string;
   size: number;
-  hideQRCode?: boolean;
 };
 
-export const QRCode = ({ text, size, hideQRCode }: Props) => {
+export const QRCode = ({ text, size }: Props) => {
   const ref = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const toast = useToast();
@@ -69,7 +68,6 @@ export const QRCode = ({ text, size, hideQRCode }: Props) => {
         <ReactQRCode
           size={size}
           ref={ref}
-          style={hideQRCode ? { display: "none" } : {}}
           value={text}
           viewBox={`0 0 ${size} ${size}`}
         />

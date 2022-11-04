@@ -275,7 +275,6 @@ export const DropForm = () => {
         </View>
         <View tw="mt-4">
           <QRCode
-            hideQRCode
             size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
             text={claimUrl}
           />
