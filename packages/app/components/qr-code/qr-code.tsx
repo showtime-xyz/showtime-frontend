@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 import ReactQRCode from "react-qr-code";
@@ -12,9 +12,10 @@ import ViewShot from "app/lib/view-shot";
 type Props = {
   text: string;
   size: number;
+  hideQRCode?: boolean;
 };
 
-export const QRCode = ({ text, size }: Props) => {
+export const QRCode = ({ text, size, hideQRCode }: Props) => {
   const ref = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const toast = useToast();
@@ -60,7 +61,7 @@ export const QRCode = ({ text, size }: Props) => {
   };
 
   return (
-    <>
+    <View style={{ alignItems: "center" }}>
       <ViewShot
         ref={ref}
         options={{ fileName: "QR Code", format: "png", quality: 0.9 }}
@@ -68,13 +69,14 @@ export const QRCode = ({ text, size }: Props) => {
         <ReactQRCode
           size={size}
           ref={ref}
+          style={hideQRCode ? { display: "none" } : {}}
           value={text}
           viewBox={`0 0 ${size} ${size}`}
         />
       </ViewShot>
       <Button tw="mt-4 self-center" onPress={onDownload}>
-        Download
+        Download QR Code
       </Button>
-    </>
+    </View>
   );
 };
