@@ -1,19 +1,25 @@
 import { useRef } from "react";
 import { Platform } from "react-native";
 
+import * as MediaLibrary from "expo-media-library";
 import ReactQRCode from "react-qr-code";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { useToast } from "@showtime-xyz/universal.toast";
+
+import ViewShot from "app/lib/view-shot";
 
 type Props = {
   text: string;
   size: number;
 };
 
+console.log("efefifj ", MediaLibrary);
 export const QRCode = ({ text, size }: Props) => {
   const ref = useRef<any>(null);
-  const onDownload = () => {
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+  const toast = useToast();
+  const onDownload = async () => {
     if (Platform.OS === "web") {
       const svg = ref.current;
       const svgData = new XMLSerializer().serializeToString(svg);
@@ -34,24 +40,42 @@ export const QRCode = ({ text, size }: Props) => {
 
       img.src = "data:image/svg+xml;base64," + btoa(svgData);
     } else {
-      // NoOP
+      let hasPermission = false;
+      ref.current.capture().then(async (uri: string) => {
+        if (status?.granted) {
+          hasPermission = status?.granted;
+        } else {
+          const res = await requestPermission();
+          hasPermission = res?.granted;
+        }
+
+        if (hasPermission) {
+          await MediaLibrary.saveToLibraryAsync(uri);
+          toast?.show({
+            message: "Saved to Photos",
+            hideAfter: 2000,
+          });
+        }
+      });
     }
   };
 
   return (
     <>
-      <ReactQRCode
-        bgColor={colors.purple[200]}
-        size={size}
+      <ViewShot
         ref={ref}
-        value={text}
-        viewBox={`0 0 ${size} ${size}`}
-      />
-      {Platform.OS === "web" && (
-        <Button tw="mt-4 self-center" onPress={onDownload}>
-          Download
-        </Button>
-      )}
+        options={{ fileName: "QR Code", format: "png", quality: 0.9 }}
+      >
+        <ReactQRCode
+          size={size}
+          ref={ref}
+          value={text}
+          viewBox={`0 0 ${size} ${size}`}
+        />
+      </ViewShot>
+      <Button tw="mt-4 self-center" onPress={onDownload}>
+        Download
+      </Button>
     </>
   );
 };
