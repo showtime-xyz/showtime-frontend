@@ -8,7 +8,14 @@ import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Chip } from "@showtime-xyz/universal.chip";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Upload,
+  CheckFilled,
+  InformationCircle,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -29,16 +36,7 @@ import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
-import { Chip } from "design-system/chip";
-import { ErrorText, Fieldset } from "design-system/fieldset";
 import { useFilePicker } from "design-system/file-picker";
-import {
-  Upload,
-  CheckFilled,
-  InformationCircle,
-  Twitter,
-  Facebook,
-} from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
@@ -465,7 +463,7 @@ export const EditProfile = () => {
                 ))}
               </View>
               {/* Social */}
-              <View tw="mt-6">
+              <View tw="mt-6 mb-10">
                 <Pressable
                   onPress={() =>
                     router.push(
@@ -499,7 +497,7 @@ export const EditProfile = () => {
                     color={isDark ? colors.gray[400] : colors.gray[600]}
                   />
                 </Pressable>
-                <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
+                {/*  <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
                   <View tw="flex-row items-center justify-between">
                     <View tw="flex-row items-center">
                       <Twitter width={20} height={20} color="#1DA1F2" />
@@ -543,13 +541,12 @@ export const EditProfile = () => {
                       />
                     </View>
                   }
-                  tw="mb-10"
                   label="Connect Twitter or Facebook"
                   variant="text"
-                />
-                {/* {hasNotSubmittedExternalLink ? (
+                /> */}
+                {hasNotSubmittedExternalLink ? (
                   <>
-                    <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+                    <Text tw="text-sm font-semibold text-red-500">
                       Please add atleast one link from below
                     </Text>
                     <View tw="h-4" />
@@ -614,7 +611,7 @@ export const EditProfile = () => {
                         )}
                       />
                     );
-                  })} */}
+                  })}
               </View>
             </View>
           </ScrollComponent>
@@ -625,7 +622,7 @@ export const EditProfile = () => {
               onPress={handleSubmit(handleSubmitForm)}
               size="regular"
             >
-              {isSubmitting ? "Submitting..." : "Done"}
+              {isSubmitting ? "Submitting..." : "Complete Profile"}
             </Button>
             <View tw="h-1" />
             <Text tw="text-center text-sm text-red-500">

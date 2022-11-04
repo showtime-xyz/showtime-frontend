@@ -10,6 +10,7 @@ type UserContextType = {
   isLoading: boolean;
   isAuthenticated: boolean;
   mutate: KeyedMutator<MyInfo>;
+  isIncompletedProfile: boolean | undefined;
 };
 
 export const UserContext = createContext<UserContextType | null>(null);

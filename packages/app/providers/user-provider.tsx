@@ -1,7 +1,9 @@
 import { useEffect, useMemo, ReactNode } from "react";
-import { Platform } from "react-native";
+import { Platform, InteractionManager } from "react-native";
 
 import useSWR from "swr";
+
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -9,6 +11,7 @@ import { axios } from "app/lib/axios";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { useRudder } from "app/lib/rudderstack";
 import { MyInfo } from "app/types";
+import { userHasIncompleteExternalLinks } from "app/utilities";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -20,6 +23,8 @@ export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
   const { rudder } = useRudder();
   const { authenticationStatus, accessToken } = useAuth();
+  const router = useRouter();
+
   const { data, error, mutate } = useSWR<MyInfo>(
     accessToken ? MY_INFO_ENDPOINT : null,
     (url) => axios({ url, method: "GET" })
@@ -31,6 +36,14 @@ export function UserProvider({ children }: UserProviderProps) {
     authenticationStatus === "IDLE" ||
     authenticationStatus === "REFRESHING" ||
     (authenticationStatus === "AUTHENTICATED" && !error && !data);
+
+  const isIncompletedProfile = data?.data
+    ? !data?.data.profile.username ||
+      userHasIncompleteExternalLinks(data?.data.profile) ||
+      !data?.data.profile.bio ||
+      !data?.data.profile.img_url
+    : undefined;
+
   const userContextValue = useMemo(
     () => ({
       user: data,
@@ -38,8 +51,9 @@ export function UserProvider({ children }: UserProviderProps) {
       error,
       isLoading,
       isAuthenticated: accessToken != undefined,
+      isIncompletedProfile,
     }),
-    [isLoading, data, accessToken, mutate, error]
+    [data, mutate, error, isLoading, accessToken, isIncompletedProfile]
   );
   //#endregion
 
@@ -51,7 +65,16 @@ export function UserProvider({ children }: UserProviderProps) {
     ) {
       mutate();
     }
-  }, [authenticationStatus, mutate]);
+    if (authenticationStatus === "AUTHENTICATED") {
+      setTimeout(() => {
+        InteractionManager.runAfterInteractions(() => {
+          if (isIncompletedProfile === true) {
+            router.push("/profile/complete");
+          }
+        });
+      }, 1000);
+    }
+  }, [authenticationStatus, isIncompletedProfile, mutate, router]);
 
   useEffect(() => {
     const identifyAndRegisterPushNotification = async () => {

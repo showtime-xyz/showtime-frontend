@@ -45,7 +45,6 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
-  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
@@ -62,7 +61,8 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
 
   const share = useShare();
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isIncompletedProfile } = useUser();
+
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
@@ -79,7 +79,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
     address: nft?.data.item.creator_address,
   });
 
-  const { follow, data: userProfile } = useMyInfo();
+  const { follow } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
@@ -129,13 +129,7 @@ export const ClaimForm = ({ edition }: { edition: CreatorEditionResponse }) => {
   //     });
   // }, [web3]);
 
-  if (
-    userProfile &&
-    (!userProfile.data.profile.username ||
-      userHasIncompleteExternalLinks(userProfile.data.profile) ||
-      !userProfile.data.profile.bio ||
-      !userProfile.data.profile.img_url)
-  ) {
+  if (isIncompletedProfile) {
     return (
       <CompleteProfileModalContent
         title="Just one more step"
