@@ -1,4 +1,4 @@
-import { useEffect, useMemo, ReactNode } from "react";
+import { useEffect, useMemo, ReactNode, useRef } from "react";
 import { Platform, InteractionManager } from "react-native";
 
 import useSWR from "swr";
@@ -30,7 +30,9 @@ export function UserProvider({ children }: UserProviderProps) {
     (url) => axios({ url, method: "GET" })
   );
   //#endregion
-
+  //#region refs
+  const isFirstLoad = useRef(true);
+  //#endregion
   //#region variables
   const isLoading =
     authenticationStatus === "IDLE" ||
@@ -65,29 +67,33 @@ export function UserProvider({ children }: UserProviderProps) {
     ) {
       mutate();
     }
-    if (authenticationStatus === "AUTHENTICATED") {
+    if (authenticationStatus === "AUTHENTICATED" && isFirstLoad.current) {
       setTimeout(() => {
         InteractionManager.runAfterInteractions(() => {
           if (isIncompletedProfile === true) {
-            // router.push(
-            //   Platform.select({
-            //     native: "/profile/complete",
-            //     web: {
-            //       pathname: router.pathname,
-            //       query: {
-            //         ...router.query,
-            //         completeProfileModal: true,
-            //       },
-            //     } as any,
-            //   }),
-            //   Platform.select({
-            //     native: "/profile/complete",
-            //     web: router.asPath,
-            //   })
-            // );
+            router.push(
+              Platform.select({
+                native: "/profile/complete",
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    completeProfileModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: "/profile/complete",
+                web: router.asPath,
+              })
+            );
+            isFirstLoad.current = false;
           }
         });
       }, 1000);
+    }
+    if (authenticationStatus === "UNAUTHENTICATED") {
+      isFirstLoad.current = true;
     }
   }, [authenticationStatus, isIncompletedProfile, mutate, router]);
 

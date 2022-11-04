@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions, Keyboard } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -468,7 +468,10 @@ export const EditProfile = () => {
               {/* Social */}
               <View tw="mt-6 mb-10">
                 <Pressable
-                  onPress={() => setShowScialExplanation(true)}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowScialExplanation(true);
+                  }}
                   tw="flex-row items-center pb-4"
                 >
                   <Text tw="mr-1 text-base font-bold text-gray-900 dark:text-gray-500">
