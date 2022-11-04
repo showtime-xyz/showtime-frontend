@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
 
-import { BottomSheetHandleProps } from "@gorhom/bottom-sheet";
+import { BottomSheetHandleProps, BottomSheetProps } from "@gorhom/bottom-sheet";
 
 import { BottomSheet } from "@showtime-xyz/universal.bottom-sheet";
 import { Modal, ModalHeader, ModalProps } from "@showtime-xyz/universal.modal";
 
-type Props = Pick<ModalProps, "web_height"> & {
+export type ModalSheetProps = Pick<ModalProps, "web_height"> & {
   children: React.ReactElement;
   title?: string;
   visible?: boolean;
   close?: () => void;
   onClose?: () => void;
-  snapPoints?: string[];
+  snapPoints?: BottomSheetProps["snapPoints"];
   bodyStyle?: StyleProp<ViewStyle>;
 };
 
@@ -24,7 +24,7 @@ export function ModalSheet({
   snapPoints,
   children,
   ...rest
-}: Props) {
+}: ModalSheetProps) {
   const { width } = useWindowDimensions();
 
   const renderHandleComponent: React.FC<BottomSheetHandleProps> = useCallback(

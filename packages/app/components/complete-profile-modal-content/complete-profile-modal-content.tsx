@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -37,7 +38,24 @@ export const CompleteProfileModalContent = ({
       <Button
         tw="mt-12"
         size="regular"
-        onPress={() => router.push("/profile/complete")}
+        onPress={() =>
+          router.push(
+            Platform.select({
+              native: "/profile/complete",
+              web: {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  completeProfileModal: true,
+                },
+              } as any,
+            }),
+            Platform.select({
+              native: "/profile/complete",
+              web: router.asPath,
+            })
+          )
+        }
       >
         {cta}
       </Button>

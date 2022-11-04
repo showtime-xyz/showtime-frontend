@@ -15,6 +15,7 @@ import {
   BottomSheetModal,
   BottomSheetTextInput as BottomSheetInput,
   BottomSheetBackdropProps,
+  BottomSheetProps as BSProps,
 } from "@gorhom/bottom-sheet";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -29,7 +30,7 @@ type BottomSheetProps = {
   handleComponent?: React.FC<BottomSheetHandleProps>;
   visible?: boolean;
   onDismiss?: () => void;
-  snapPoints?: string[];
+  snapPoints?: BSProps["snapPoints"];
   bodyStyle?: StyleProp<ViewStyle>;
 };
 

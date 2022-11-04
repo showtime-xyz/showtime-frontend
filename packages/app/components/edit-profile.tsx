@@ -16,6 +16,7 @@ import {
   CheckFilled,
   InformationCircle,
 } from "@showtime-xyz/universal.icon";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -40,6 +41,7 @@ import { useFilePicker } from "design-system/file-picker";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
+import { ProfileScialExplanation } from "./profile/profile-social-explanation";
 
 const ScrollComponent =
   Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
@@ -97,6 +99,7 @@ export const EditProfile = () => {
   const insets = useSafeAreaInsets();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
+  const [showScialExplanation, setShowScialExplanation] = useState(false);
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [index, setIndex] = useState(() =>
@@ -465,27 +468,7 @@ export const EditProfile = () => {
               {/* Social */}
               <View tw="mt-6 mb-10">
                 <Pressable
-                  onPress={() =>
-                    router.push(
-                      Platform.select({
-                        native: `/claim/claim-limit-explanation`,
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            profileScialExplanationModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({
-                        native: `/profile/edit-social-explanation`,
-                        web: router.asPath,
-                      }),
-                      {
-                        scroll: false,
-                      }
-                    )
-                  }
+                  onPress={() => setShowScialExplanation(true)}
                   tw="flex-row items-center pb-4"
                 >
                   <Text tw="mr-1 text-base font-bold text-gray-900 dark:text-gray-500">
@@ -630,6 +613,15 @@ export const EditProfile = () => {
             </Text>
           </View>
         </View>
+        <ModalSheet
+          snapPoints={[240]}
+          title="Profile Social"
+          visible={showScialExplanation}
+          close={() => setShowScialExplanation(false)}
+          onClose={() => setShowScialExplanation(false)}
+        >
+          <ProfileScialExplanation />
+        </ModalSheet>
       </BottomSheetModalProvider>
       <MediaCropper
         src={selectedImg}

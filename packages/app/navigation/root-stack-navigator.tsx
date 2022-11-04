@@ -22,7 +22,6 @@ import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
-import { ProfileScialExplanationScreen } from "app/screens/profile-social-explanation";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
@@ -127,10 +126,6 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
-        />
-        <Stack.Screen
-          name="profileScialExplanation"
-          component={ProfileScialExplanationScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

@@ -69,7 +69,22 @@ export function UserProvider({ children }: UserProviderProps) {
       setTimeout(() => {
         InteractionManager.runAfterInteractions(() => {
           if (isIncompletedProfile === true) {
-            router.push("/profile/complete");
+            // router.push(
+            //   Platform.select({
+            //     native: "/profile/complete",
+            //     web: {
+            //       pathname: router.pathname,
+            //       query: {
+            //         ...router.query,
+            //         completeProfileModal: true,
+            //       },
+            //     } as any,
+            //   }),
+            //   Platform.select({
+            //     native: "/profile/complete",
+            //     web: router.asPath,
+            //   })
+            // );
           }
         });
       }, 1000);
