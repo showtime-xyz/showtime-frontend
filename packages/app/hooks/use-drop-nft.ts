@@ -98,6 +98,10 @@ export type UseDropNFT = {
   spotifyUrl?: string;
   gatingType?: string;
   password?: string;
+  googleMapsUrl?: string;
+  latitude?: number;
+  longitude?: number;
+  radius?: number;
 };
 
 export const useDropNFT = () => {
@@ -182,6 +186,20 @@ export const useDropNFT = () => {
         escapedDescription,
       });
 
+      const isPasswordGated = params.password;
+      const isLocationGated =
+        params.radius &&
+        ((params.latitude && params.longitude) || params.googleMapsUrl);
+
+      const gatingType =
+        params.gatingType ?? (isPasswordGated && isLocationGated)
+          ? "multi"
+          : isPasswordGated
+          ? "password"
+          : isLocationGated
+          ? "location"
+          : undefined;
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",
@@ -194,8 +212,18 @@ export const useDropNFT = () => {
           claim_window_duration_seconds: params.duration,
           nsfw: params.notSafeForWork,
           spotify_url: params.spotifyUrl,
-          gating_type: params.password !== "" ? "password" : params.gatingType,
+          gating_type: gatingType,
           password: params.password !== "" ? params.password : undefined,
+          location_gating: {
+            latitude: params.latitude,
+            longitude: params.longitude,
+            radius: params.radius,
+            google_maps_url: params.googleMapsUrl,
+          },
+          multi_gating_types:
+            isPasswordGated && isLocationGated
+              ? ["password", "location"]
+              : undefined,
         },
       });
 

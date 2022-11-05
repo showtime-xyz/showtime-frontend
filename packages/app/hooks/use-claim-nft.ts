@@ -1,6 +1,8 @@
 import { useContext, useEffect, useRef, useCallback } from "react";
 import { Platform } from "react-native";
 
+import type { LocationObject } from "expo-location";
+
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
@@ -180,13 +182,19 @@ export const useClaimNFT = (edition: IEdition) => {
     };
   }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
-  const claimNFT = async (password?: string): Promise<boolean | undefined> => {
+  const claimNFT = async ({
+    password,
+    location,
+  }: {
+    password?: string;
+    location?: LocationObject;
+  }): Promise<boolean | undefined> => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
 
         if (edition?.is_gated) {
-          await gatedClaimFlow(password);
+          await gatedClaimFlow({ password, location });
         } else {
           await oldSignatureClaimFlow();
         }
@@ -241,7 +249,7 @@ export const useClaimNFT = (edition: IEdition) => {
             ]
           );
         } else if (e?.response?.status === 440) {
-          Alert.alert("Wrong password", "Please try again!");
+          Alert.alert("Wrong password or wrong location", "Please try again!");
         } else {
           Alert.alert(
             "Wow, you love collecting drops!",
@@ -263,7 +271,13 @@ export const useClaimNFT = (edition: IEdition) => {
     }
   };
 
-  const gatedClaimFlow = async (password?: string) => {
+  const gatedClaimFlow = async ({
+    password,
+    location,
+  }: {
+    password?: string;
+    location?: LocationObject;
+  }) => {
     if (edition?.minter_address) {
       const relayerResponse = await axios({
         url:
@@ -271,6 +285,10 @@ export const useClaimNFT = (edition: IEdition) => {
         method: "POST",
         data: {
           password: password !== "" ? password : undefined,
+          location: {
+            latitude: location?.coords?.latitude,
+            longitude: location?.coords?.longitude,
+          },
         },
       });
 

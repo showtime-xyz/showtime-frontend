@@ -1,4 +1,4 @@
-import { useRef, useContext, useMemo } from "react";
+import { useRef, useContext, useMemo, useState, useEffect } from "react";
 import {
   Linking,
   Platform,
@@ -6,12 +6,15 @@ import {
 } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import * as Location from "expo-location";
+import type { LocationObject } from "expo-location";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -92,6 +95,28 @@ export const ClaimForm = ({
     nft?.data.item.creator_airdrop_edition_address
   );
 
+  const [location, setLocation] = useState<LocationObject | undefined>(
+    undefined
+  );
+  const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setLocationErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    };
+
+    if (edition.gating_type === "location" || edition.gating_type === "multi") {
+      getLocation();
+    }
+  }, [edition.gating_type]);
+
   const handleClaimNFT = async () => {
     if (
       nft?.data.item.creator_id &&
@@ -112,9 +137,13 @@ export const ClaimForm = ({
     if (edition.gating_type === "spotify_save") {
       success = await claimSpotifyGatedDrop(nft?.data.item);
     } else if (edition.gating_type === "password") {
-      success = await claimNFT(password.current.trim());
+      success = await claimNFT({ password: password.current.trim() });
+    } else if (edition.gating_type === "location") {
+      success = await claimNFT({ location });
+    } else if (edition.gating_type === "multi") {
+      success = await claimNFT({ password: password.current.trim(), location });
     } else {
-      success = await claimNFT();
+      success = await claimNFT({});
     }
 
     if (comment.current.trim().length > 0 && success) {
@@ -308,7 +337,8 @@ export const ClaimForm = ({
             </>
           ) : null}
 
-          {edition.gating_type === "password" ? (
+          {edition.gating_type === "password" ||
+          edition.gating_type === "multi" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 <Fieldset
@@ -322,6 +352,42 @@ export const ClaimForm = ({
                   secureTextEntry
                   defaultValue={password.current}
                 />
+              </View>
+            </>
+          ) : null}
+
+          {edition.gating_type === "location" ||
+          edition.gating_type === "multi" ? (
+            <>
+              <View tw="mt-4 flex-row items-center">
+                {locationErrorMsg ? (
+                  <Pressable
+                    onPress={async () => {
+                      await Location.requestForegroundPermissionsAsync();
+                    }}
+                    tw="flex-row items-center"
+                  >
+                    <CheckIcon />
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      {locationErrorMsg}
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <>
+                    <CheckIcon />
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      {location?.coords.latitude &&
+                      location?.coords.longitude ? (
+                        <Text>
+                          Latitude: {location?.coords.latitude.toFixed(2)}{" "}
+                          Longitude: {location?.coords.longitude.toFixed(2)}
+                        </Text>
+                      ) : (
+                        "Fetching your location..."
+                      )}
+                    </Text>
+                  </>
+                )}
               </View>
             </>
           ) : null}
@@ -349,8 +415,19 @@ export const ClaimForm = ({
             <Button
               size="regular"
               variant="primary"
-              disabled={state.status === "loading"}
-              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+              disabled={
+                state.status === "loading" ||
+                ((edition.gating_type === "location" ||
+                  edition.gating_type === "multi") &&
+                  !location)
+              }
+              tw={
+                state.status === "loading" ||
+                edition.gating_type === "location" ||
+                (edition.gating_type === "multi" && !location)
+                  ? "opacity-[0.45]"
+                  : ""
+              }
               onPress={handleClaimNFT}
             >
               {state.status === "loading" ? (

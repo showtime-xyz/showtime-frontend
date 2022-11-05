@@ -9619,6 +9619,7 @@ __metadata:
     expo-linear-gradient: ~11.4.0
     expo-linking: ~3.2.2
     expo-localization: ~13.1.0
+    expo-location: ~14.3.0
     expo-media-library: ^14.2.0
     expo-modules-core: 0.11.3
     expo-navigation-bar: ~1.3.0
@@ -20844,6 +20845,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: f97bac33daf0ce187f1d505b916b8d73180b09869fcd0ec03f8cd9092c69b3af84788a24d0928775ee6378d5171b49595546734539d6a3c8f575246ee61cb76c
+  languageName: node
+  linkType: hard
+
+"expo-location@npm:~14.3.0":
+  version: 14.3.0
+  resolution: "expo-location@npm:14.3.0"
+  dependencies:
+    "@expo/config-plugins": ~5.0.0
+  peerDependencies:
+    expo: "*"
+  checksum: 0433f22aa3ef794997538c1d8d577858ae3e442a62f296c801c43cfe4f5909e6a3f27357b8a4de757cffe84968f5dca2be9e5dbe20e064e73a7206d6768ab6ea
   languageName: node
   linkType: hard
 
