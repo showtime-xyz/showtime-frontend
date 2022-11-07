@@ -4,6 +4,7 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
+import { Inter, Space_Grotesk } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -48,7 +49,7 @@ Sentry.init({
   environment: process.env.STAGE,
 });
 
-export default function App({ Component, pageProps, router }: AppProps) {
+function App({ Component, pageProps, router }: AppProps) {
   useLogRocket();
 
   const meta = pageProps.meta;
@@ -188,8 +189,20 @@ export default function App({ Component, pageProps, router }: AppProps) {
   );
 }
 
+const inter = Inter({
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
+    const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
+
     const onResize = useCallback(() => {
       if (isMobileWeb()) {
         document.body.classList.add("overflow-hidden", "overscroll-y-contain");
@@ -197,7 +210,15 @@ const Container = withColorScheme(
         document.body.classList.remove("overflow-hidden", "overscroll-y-none");
       }
     }, []);
+
     usePlatformResize(onResize, true);
-    return <View tw="bg-gray-100 dark:bg-black">{children}</View>;
+
+    return (
+      <View tw="bg-gray-100 dark:bg-black">
+        <div className={fonts}>{children}</div>
+      </View>
+    );
   }
 );
+
+export default App;
