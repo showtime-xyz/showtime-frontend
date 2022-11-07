@@ -15,6 +15,8 @@ import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
+const PlatformAnimateHeight = Platform.OS === "web" ? View : AnimateHeight;
+
 export type FieldsetProps = {
   errorText?: string;
   label?: string | JSX.Element;
@@ -117,12 +119,12 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         </View>
       ) : null}
 
-      <AnimateHeight>
+      <PlatformAnimateHeight>
         {errorText ? (
           <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
         ) : null}
-      </AnimateHeight>
-      <AnimateHeight>
+      </PlatformAnimateHeight>
+      <PlatformAnimateHeight>
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
@@ -135,7 +137,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             </Text>
           </>
         ) : null}
-      </AnimateHeight>
+      </PlatformAnimateHeight>
     </View>
   );
 }

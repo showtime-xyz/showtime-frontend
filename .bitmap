@@ -107,7 +107,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.98",
+        "version": "0.0.99",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
