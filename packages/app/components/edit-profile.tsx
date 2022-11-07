@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { Platform, useWindowDimensions, Keyboard } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -8,21 +8,19 @@ import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Chip } from "@showtime-xyz/universal.chip";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Upload } from "@showtime-xyz/universal.icon";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Upload,
+  CheckFilled,
+  InformationCircle,
+} from "@showtime-xyz/universal.icon";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import {
-  ScrollView,
-  ScrollViewProps,
-} from "@showtime-xyz/universal.scroll-view";
-import {
-  SceneRendererProps,
-  TabView,
-  Route,
-  ScollableAutoWidthTabBar,
-} from "@showtime-xyz/universal.tab-view";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -43,33 +41,11 @@ import { useFilePicker } from "design-system/file-picker";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
+import { ProfileScialExplanation } from "./profile/profile-social-explanation";
 
-const EDIT_PROFILE_ROUTES = [
-  {
-    title: "Profile",
-    key: "Profile",
-    index: 0,
-  },
-  {
-    title: "Links",
-    key: "Links",
-    index: 1,
-  },
-];
-type SceneViewProps = ScrollViewProps & {
-  focused?: boolean;
-  extraScrollHeight?: number;
-};
 const ScrollComponent =
   Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
-const SceneView = ({ focused, style, ...props }: SceneViewProps) => {
-  return (
-    <ScrollComponent
-      style={[style, { display: focused ? "flex" : "none" }]}
-      {...props}
-    />
-  );
-};
+
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
@@ -85,13 +61,35 @@ const editProfileValidationSchema = yup.object({
     .max(300)
     .required("About me is a required field")
     .typeError("Please enter a valid about me"),
-  name: yup.string().max(40).nullable(),
+  name: yup
+    .string()
+    .max(40)
+    .required("name is a required field")
+    .typeError("Please enter a valid name"),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
-
+const requiredFieldChips = [
+  {
+    value: "profilePicture",
+    lable: "Profile Picture",
+  },
+  {
+    value: "name",
+    lable: "Name",
+  },
+  {
+    value: "username",
+    lable: "Username",
+  },
+  {
+    value: "bio",
+    lable: "About Me",
+  },
+];
 export const EditProfile = () => {
   // hooks
   const { user } = useUser();
+  const isDark = useIsDarkMode();
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
@@ -101,6 +99,7 @@ export const EditProfile = () => {
   const insets = useSafeAreaInsets();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
+  const [showScialExplanation, setShowScialExplanation] = useState(false);
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [index, setIndex] = useState(() =>
@@ -155,9 +154,10 @@ export const EditProfile = () => {
     formState: { errors, isSubmitting },
     reset,
     setValue,
+    getValues,
   } = useForm<any>({
     resolver: yupResolver(editProfileValidationSchema),
-    mode: "onBlur",
+    mode: "all",
     reValidateMode: "onChange",
     defaultValues,
   });
@@ -272,122 +272,114 @@ export const EditProfile = () => {
     [insets.bottom]
   );
 
-  const renderScene = useCallback(
-    ({
-      route: { key, index: routeIndex },
-    }: SceneRendererProps & {
-      route: Route;
-    }) => {
-      const focused = index === routeIndex || Platform.OS !== "web";
-      switch (key) {
-        case "Profile":
-          return (
-            <SceneView focused={focused}>
+  return (
+    <>
+      <BottomSheetModalProvider>
+        <View tw={`w-full flex-1`}>
+          <ScrollComponent extraScrollHeight={extraScrollHeight as any}>
+            <Controller
+              control={control}
+              name="coverPicture"
+              render={({ field: { onChange, value } }) => (
+                <DropFileZone onChange={onChange}>
+                  <Pressable
+                    onPress={async () => {
+                      const file = await pickFile({
+                        mediaTypes: "image",
+                        option: Platform.select({
+                          // aspect option only support android.
+                          android: { allowsEditing: true, aspect: [3, 1] },
+                          default: {},
+                        }),
+                      });
+                      const uri = getLocalFileURI(file.file);
+
+                      onChange(file.file);
+                      setSelectedImg(uri);
+                      setCurrentCropField("coverPicture");
+                    }}
+                    style={{
+                      height: coverImageHeight,
+                    }}
+                    tw="mx-4 flex-row overflow-hidden rounded-2xl dark:border-gray-900 dark:bg-gray-800"
+                  >
+                    <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                      <View tw="rounded-full bg-gray-800/70 p-1">
+                        <Upload height={20} width={20} color={colors.white} />
+                      </View>
+                    </View>
+                    {value && (
+                      <Preview
+                        file={value}
+                        style={{ height: coverImageHeight }}
+                        tw="web:object-cover"
+                        resizeMode="cover"
+                        width={isMdWidth ? 480 : width}
+                        height={isMdWidth ? 480 : width}
+                      />
+                    )}
+                  </Pressable>
+                </DropFileZone>
+              )}
+            />
+
+            <View tw="-mt-12 px-4">
               <Controller
                 control={control}
-                name="coverPicture"
+                name="profilePicture"
                 render={({ field: { onChange, value } }) => (
                   <DropFileZone onChange={onChange}>
-                    <Pressable
-                      onPress={async () => {
-                        const file = await pickFile({
-                          mediaTypes: "image",
-                          option: Platform.select({
-                            // aspect option only support android.
-                            android: { allowsEditing: true, aspect: [3, 1] },
-                            default: {},
-                          }),
-                        });
-                        const uri = getLocalFileURI(file.file);
+                    <>
+                      <Pressable
+                        onPress={async () => {
+                          const file = await pickFile({
+                            mediaTypes: "image",
+                            option: { allowsEditing: true, aspect: [1, 1] },
+                          });
 
-                        onChange(file.file);
-                        setSelectedImg(uri);
-                        setCurrentCropField("coverPicture");
-                      }}
-                      style={{
-                        height: coverImageHeight,
-                      }}
-                      tw="w-full flex-row"
-                    >
-                      <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
-                        <View tw="rounded-full bg-gray-800/70 p-2">
-                          <Upload height={20} width={20} color={colors.white} />
+                          onChange(file.file);
+                          setSelectedImg(getLocalFileURI(file.file));
+                          setCurrentCropField("profilePicture");
+                        }}
+                        tw="mx-4 h-16 w-16 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-700"
+                      >
+                        {value && (
+                          <Preview
+                            file={value}
+                            tw="rounded-full"
+                            width={64}
+                            height={64}
+                          />
+                        )}
+                        <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
+                          <View tw="rounded-full bg-gray-800/70 p-1">
+                            <Upload
+                              height={20}
+                              width={20}
+                              color={colors.white}
+                            />
+                          </View>
                         </View>
-                      </View>
-                      {value && (
-                        <Preview
-                          file={value}
-                          style={{ height: coverImageHeight }}
-                          tw="web:object-cover"
-                          resizeMode="cover"
-                          width={isMdWidth ? 480 : width}
-                          height={isMdWidth ? 480 : width}
-                        />
-                      )}
-                    </Pressable>
+                      </Pressable>
+
+                      {errors.profilePicture?.message ? (
+                        <ErrorText>{errors.profilePicture.message}</ErrorText>
+                      ) : null}
+                    </>
                   </DropFileZone>
                 )}
               />
-
-              <View tw="-mt-12 px-4">
-                <Controller
-                  control={control}
-                  name="profilePicture"
-                  render={({ field: { onChange, value } }) => (
-                    <DropFileZone onChange={onChange}>
-                      <>
-                        <Pressable
-                          onPress={async () => {
-                            const file = await pickFile({
-                              mediaTypes: "image",
-                              option: { allowsEditing: true, aspect: [1, 1] },
-                            });
-
-                            onChange(file.file);
-                            setSelectedImg(getLocalFileURI(file.file));
-                            setCurrentCropField("profilePicture");
-                          }}
-                          tw="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white dark:border-gray-900 dark:bg-gray-800"
-                        >
-                          {value && (
-                            <Preview
-                              file={value}
-                              tw="rounded-full"
-                              width={94}
-                              height={94}
-                            />
-                          )}
-                          <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                            <View tw="rounded-full bg-gray-800/70 p-2">
-                              <Upload
-                                height={20}
-                                width={20}
-                                color={colors.white}
-                              />
-                            </View>
-                          </View>
-                        </Pressable>
-                        <View tw="ml-4 flex-row items-center pt-2">
-                          <Text tw="font-bold text-gray-900 dark:text-white">
-                            Profile picture
-                          </Text>
-                          <Text tw="ml-1 text-red-500">*</Text>
-                        </View>
-                        {errors.profilePicture?.message ? (
-                          <ErrorText>{errors.profilePicture.message}</ErrorText>
-                        ) : null}
-                      </>
-                    </DropFileZone>
-                  )}
-                />
-
+              <View tw="pt-6">
+                <Text tw="text-base font-bold text-gray-900 dark:text-gray-500">
+                  BIO
+                </Text>
                 <View tw="mt-4 flex-row">
                   <Controller
                     control={control}
                     name="name"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Fieldset
-                        tw="mr-4 flex-1"
+                        tw="mr-2 w-1/2 flex-1"
                         label="Name"
                         placeholder="Your display name"
                         value={value}
@@ -409,168 +401,214 @@ export const EditProfile = () => {
                     name="username"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Fieldset
-                        tw="flex-1"
-                        required
+                        tw="ml-2 w-1/2 flex-1"
                         label="Username"
-                        placeholder="Enter your username"
+                        placeholder="Your username"
                         value={value}
                         textContentType="username"
-                        errorText={errors.username?.message}
-                        onBlur={onBlur}
-                        helperText={
-                          !isValid ? "username not available" : undefined
+                        errorText={
+                          !isValid
+                            ? "username has been taken, please choose another"
+                            : errors.username?.message
                         }
+                        onBlur={onBlur}
                         onChangeText={onChange}
                       />
                     )}
                   />
                 </View>
-
-                <Controller
-                  control={control}
-                  name="bio"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Fieldset
-                      label="About me"
-                      placeholder="About me"
-                      tw="mt-4"
-                      required
-                      multiline
-                      value={value}
-                      textAlignVertical="top"
-                      numberOfLines={3}
-                      errorText={errors.bio?.message}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                    />
-                  )}
-                />
               </View>
-            </SceneView>
-          );
-        case "Links":
-          return (
-            <SceneView
-              extraScrollHeight={extraScrollHeight}
-              focused={focused}
-              style={{ padding: 16, marginTop: 16 }}
-            >
-              {hasNotSubmittedExternalLink ? (
-                <>
-                  <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
-                    Please add atleast one link from below
-                  </Text>
-                  <View tw="h-4" />
-                </>
-              ) : null}
+
               <Controller
                 control={control}
-                name="website_url"
+                name="bio"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Fieldset
-                    label="Website"
-                    keyboardType="url"
-                    textContentType="URL"
-                    placeholder="Your url"
+                    label="About me"
+                    placeholder="About me"
+                    tw="mt-4"
+                    multiline
                     value={value}
+                    textAlignVertical="top"
+                    numberOfLines={3}
+                    errorText={errors.bio?.message}
                     onBlur={onBlur}
                     onChangeText={onChange}
                   />
                 )}
               />
-
-              {socialLinks.data?.data
-                .filter(
-                  (link) =>
-                    link.prefix.includes("twitter") ||
-                    link.prefix.includes("instagram")
-                )
-                .map((v) => {
-                  return (
-                    <Controller
-                      control={control}
-                      key={v.id}
-                      name={`links[${v.id}]`}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          tw="mt-4"
-                          label={v.name}
-                          value={value}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          autoCapitalize="none"
-                          leftElement={
-                            <Text
-                              tw="text-base text-gray-600 dark:text-gray-400"
-                              style={{
-                                marginTop: Platform.select({
-                                  ios: 1,
-                                  android: 8,
-                                  default: 0,
-                                }),
-                                marginBottom: Platform.select({
-                                  default: 4,
-                                  android: 0,
-                                  web: 0,
-                                }),
-                              }}
-                            >
-                              {v.prefix}
-                            </Text>
-                          }
+              <View tw="mt-2 flex-row flex-wrap">
+                {requiredFieldChips.map((item) => (
+                  <Chip
+                    icon={
+                      <View
+                        style={{
+                          opacity:
+                            !errors[item.value] &&
+                            getValues(item.value) &&
+                            (item.value === "username" ? isValid : true)
+                              ? 1
+                              : 0.1,
+                        }}
+                      >
+                        <CheckFilled
+                          width={16}
+                          height={16}
+                          color={isDark ? colors.white : colors.gray[700]}
                         />
-                      )}
+                      </View>
+                    }
+                    tw="my-2 w-1/2"
+                    label={item.lable}
+                    variant="text"
+                    key={item.value}
+                  />
+                ))}
+              </View>
+              {/* Social */}
+              <View tw="mt-6 mb-10">
+                <Pressable
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowScialExplanation(true);
+                  }}
+                  tw="flex-row items-center pb-4"
+                >
+                  <Text tw="mr-1 text-base font-bold text-gray-900 dark:text-gray-500">
+                    SOCIAL
+                  </Text>
+                  <InformationCircle
+                    height={18}
+                    width={18}
+                    color={isDark ? colors.gray[400] : colors.gray[600]}
+                  />
+                </Pressable>
+                {/*  <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
+                  <View tw="flex-row items-center justify-between">
+                    <View tw="flex-row items-center">
+                      <Twitter width={20} height={20} color="#1DA1F2" />
+                      <Text tw="ml-2 text-sm font-bold text-gray-700 dark:text-white">
+                        Twitter
+                      </Text>
+                    </View>
+                    <Text
+                      onPress={() => console.log("Connect Twitter")}
+                      tw="text-sm font-bold text-violet-500"
+                    >
+                      Connect
+                    </Text>
+                  </View>
+                  <View tw="mt-4 flex-row items-center justify-between">
+                    <View tw="flex-row items-center">
+                      <Facebook width={20} height={20} color="#1877F2" />
+                      <Text tw="ml-2 text-sm font-bold text-gray-700 dark:text-white">
+                        Facebook
+                      </Text>
+                    </View>
+                    <Text
+                      onPress={() => console.log("Connect Facebook")}
+                      tw="text-sm font-bold text-violet-500"
+                    >
+                      Connect
+                    </Text>
+                  </View>
+                </View>
+                <Chip
+                  icon={
+                    <View
+                      style={{
+                        opacity: hasNotSubmittedExternalLink ? 1 : 0.1,
+                      }}
+                    >
+                      <CheckFilled
+                        width={16}
+                        height={16}
+                        color={isDark ? colors.white : colors.gray[700]}
+                      />
+                    </View>
+                  }
+                  label="Connect Twitter or Facebook"
+                  variant="text"
+                /> */}
+                {hasNotSubmittedExternalLink ? (
+                  <>
+                    <Text tw="text-sm font-semibold text-red-500">
+                      Please add atleast one link from below
+                    </Text>
+                    <View tw="h-4" />
+                  </>
+                ) : null}
+                <Controller
+                  control={control}
+                  name="website_url"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Fieldset
+                      label="Website"
+                      keyboardType="url"
+                      textContentType="URL"
+                      placeholder="Your url"
+                      value={value}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
                     />
-                  );
-                })}
-            </SceneView>
-          );
+                  )}
+                />
 
-        default:
-          return null;
-      }
-    },
-    [
-      control,
-      coverImageHeight,
-      errors.bio?.message,
-      errors.name?.message,
-      errors.profilePicture?.message,
-      errors.username?.message,
-      extraScrollHeight,
-      hasNotSubmittedExternalLink,
-      index,
-      isMdWidth,
-      isValid,
-      pickFile,
-      socialLinks.data?.data,
-      validate,
-      width,
-    ]
-  );
-
-  return (
-    <>
-      <BottomSheetModalProvider>
-        <View tw={`w-full flex-1`}>
-          <TabView
-            navigationState={{ index, routes: EDIT_PROFILE_ROUTES }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={(props) => <ScollableAutoWidthTabBar {...props} />}
-            initialLayout={{
-              width: width,
-            }}
-            swipeEnabled={Platform.OS !== "web"}
-          />
-
+                {socialLinks.data?.data
+                  .filter(
+                    (link) =>
+                      link.prefix.includes("twitter") ||
+                      link.prefix.includes("instagram")
+                  )
+                  .map((v) => {
+                    return (
+                      <Controller
+                        control={control}
+                        key={v.id}
+                        name={`links[${v.id}]`}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Fieldset
+                            tw="mt-4"
+                            label={v.name}
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            autoCapitalize="none"
+                            leftElement={
+                              <Text
+                                tw="text-base text-gray-600 dark:text-gray-400"
+                                style={{
+                                  marginTop: Platform.select({
+                                    ios: 1,
+                                    android: 8,
+                                    default: 0,
+                                  }),
+                                  marginBottom: Platform.select({
+                                    default: 4,
+                                    android: 0,
+                                    web: 0,
+                                  }),
+                                }}
+                              >
+                                {v.prefix}
+                              </Text>
+                            }
+                          />
+                        )}
+                      />
+                    );
+                  })}
+              </View>
+            </View>
+          </ScrollComponent>
           <View tw="my-2.5 mb-4 px-4">
             <Button
               disabled={isSubmitting}
               tw={isSubmitting ? "opacity-50" : ""}
               onPress={handleSubmit(handleSubmitForm)}
+              size="regular"
             >
-              {isSubmitting ? "Submitting..." : "Done"}
+              {isSubmitting ? "Submitting..." : "Complete Profile"}
             </Button>
             <View tw="h-1" />
             <Text tw="text-center text-sm text-red-500">
@@ -578,6 +616,15 @@ export const EditProfile = () => {
             </Text>
           </View>
         </View>
+        <ModalSheet
+          snapPoints={[240]}
+          title="Profile Social"
+          visible={showScialExplanation}
+          close={() => setShowScialExplanation(false)}
+          onClose={() => setShowScialExplanation(false)}
+        >
+          <ProfileScialExplanation />
+        </ModalSheet>
       </BottomSheetModalProvider>
       <MediaCropper
         src={selectedImg}

@@ -23,6 +23,7 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
+import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -176,6 +177,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
+        <CompleteProfileScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
 

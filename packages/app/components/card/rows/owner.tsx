@@ -3,7 +3,6 @@ import { View } from "@showtime-xyz/universal.view";
 import type { NFT } from "app/types";
 
 import { Ownership } from "./elements/ownership";
-import { Price } from "./elements/price";
 
 type Props = {
   nft?: NFT;
@@ -22,8 +21,6 @@ function Owner({ price, nft, tw = "" }: Props) {
       ]}
     >
       <Ownership nft={nft} />
-
-      {price ? <Price nft={nft} /> : null}
     </View>
   );
 }

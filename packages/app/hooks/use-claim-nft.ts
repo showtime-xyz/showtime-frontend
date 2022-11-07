@@ -1,6 +1,8 @@
 import { useContext, useEffect, useRef, useCallback } from "react";
 import { Platform } from "react-native";
 
+import type { LocationObject } from "expo-location";
+
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
@@ -180,13 +182,19 @@ export const useClaimNFT = (edition: IEdition) => {
     };
   }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
-  const claimNFT = async (): Promise<boolean | undefined> => {
+  const claimNFT = async ({
+    password,
+    location,
+  }: {
+    password?: string;
+    location?: LocationObject;
+  }): Promise<boolean | undefined> => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
 
         if (edition?.is_gated) {
-          await gatedClaimFlow();
+          await gatedClaimFlow({ password, location });
         } else {
           await oldSignatureClaimFlow();
         }
@@ -240,6 +248,8 @@ export const useClaimNFT = (edition: IEdition) => {
               },
             ]
           );
+        } else if (e?.response?.status === 440) {
+          Alert.alert("Wrong password or wrong location", "Please try again!");
         } else {
           Alert.alert(
             "Wow, you love collecting drops!",
@@ -261,13 +271,25 @@ export const useClaimNFT = (edition: IEdition) => {
     }
   };
 
-  const gatedClaimFlow = async () => {
+  const gatedClaimFlow = async ({
+    password,
+    location,
+  }: {
+    password?: string;
+    location?: LocationObject;
+  }) => {
     if (edition?.minter_address) {
       const relayerResponse = await axios({
         url:
           "/v1/creator-airdrops/mint-gated-edition/" + edition.contract_address,
         method: "POST",
-        data: {},
+        data: {
+          password: password !== "" ? password : undefined,
+          location: {
+            latitude: location?.coords?.latitude,
+            longitude: location?.coords?.longitude,
+          },
+        },
       });
 
       await pollTransaction(

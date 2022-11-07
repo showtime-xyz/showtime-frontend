@@ -4,7 +4,7 @@ import { StyleProp, ViewStyle } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check } from "@showtime-xyz/universal.icon";
+import { Check, Hourglass } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -87,12 +87,17 @@ export const ClaimButton = ({
     } else if (status === ClaimStatus.Soldout) {
       return (
         <>
-          <Check color="white" width={18} height={18} />
+          <Check color="white" width={20} height={20} />
           <Text tw="ml-1 font-semibold text-white">Sold out</Text>
         </>
       );
     } else if (status === ClaimStatus.Expired) {
-      return "Expired";
+      return (
+        <>
+          <Hourglass color="white" width={16} height={16} />
+          <Text tw="ml-1 font-semibold text-white">Time out</Text>
+        </>
+      );
     } else if (isProgress) {
       return (
         <Text tw="font-semibold">
@@ -105,13 +110,33 @@ export const ClaimButton = ({
     }
   }, [status, isProgress, isDark, isMusicDrop]);
 
+  const opacityTw = useMemo(() => {
+    if (isProgress) {
+      return "opacity-50";
+    }
+    if (isExpired && !bgIsGreen) {
+      return "opacity-100";
+    }
+    return "";
+  }, [bgIsGreen, isExpired, isProgress]);
+
+  const backgroundColor = useMemo(() => {
+    if (bgIsGreen) {
+      return { backgroundColor: "#0CB504" };
+    }
+    if (isExpired && !bgIsGreen) {
+      return { backgroundColor: colors.gray[500] };
+    }
+    return {};
+  }, [bgIsGreen, isExpired]);
+
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
-      style={[bgIsGreen ? { backgroundColor: "#0CB504" } : undefined, style]}
+      style={[backgroundColor, style]}
       size={size}
-      tw={[(isExpired && !bgIsGreen) || isProgress ? "opacity-50" : "", tw]}
+      tw={[opacityTw, tw]}
     >
       {content}
     </Button>

@@ -5,7 +5,7 @@ import NextLink from "next/link";
 type Props = {
   children: React.ReactNode;
   onPress?: (e: any) => void;
-  dataSet?: any;
+  dataset?: any;
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({

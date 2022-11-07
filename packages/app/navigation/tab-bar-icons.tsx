@@ -209,7 +209,7 @@ export const ProfileTabBarIcon = () => {
   return (
     <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
       <View tw="h-8 w-8 items-center justify-center rounded-full">
-        <Avatar url={user?.data?.profile?.img_url} />
+        <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
       </View>
     </TabBarIcon>
   );

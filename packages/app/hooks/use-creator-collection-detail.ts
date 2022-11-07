@@ -9,7 +9,7 @@ export type CreatorEditionResponse = {
   is_already_claimed: boolean;
   time_limit: string;
   total_claimed_count: number;
-  gating_type: "spotify_save";
+  gating_type: "spotify_save" | "password" | "location" | "multi";
   spotify_track_name: string | null;
   spotify_track_url: string | null;
 };

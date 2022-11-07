@@ -7,7 +7,6 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { delay, getFileMeta } from "app/utilities";
 
@@ -98,10 +97,14 @@ export type UseDropNFT = {
   imageHash?: string;
   spotifyUrl?: string;
   gatingType?: string;
+  password?: string;
+  googleMapsUrl?: string;
+  latitude?: number;
+  longitude?: number;
+  radius?: number;
 };
 
 export const useDropNFT = () => {
-  const { rudder } = useRudder();
   const uploadMedia = useUploadMediaToPinata();
   const [state, dispatch] = useReducer(reducer, initialState);
   const mutate = useMatchMutate();
@@ -183,6 +186,20 @@ export const useDropNFT = () => {
         escapedDescription,
       });
 
+      const isPasswordGated = params.password;
+      const isLocationGated =
+        params.radius &&
+        ((params.latitude && params.longitude) || params.googleMapsUrl);
+
+      const gatingType =
+        params.gatingType ?? (isPasswordGated && isLocationGated)
+          ? "multi"
+          : isPasswordGated
+          ? "password"
+          : isLocationGated
+          ? "location"
+          : undefined;
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",
@@ -195,7 +212,18 @@ export const useDropNFT = () => {
           claim_window_duration_seconds: params.duration,
           nsfw: params.notSafeForWork,
           spotify_url: params.spotifyUrl,
-          gating_type: params.gatingType,
+          gating_type: gatingType,
+          password: params.password !== "" ? params.password : undefined,
+          location_gating: {
+            latitude: params.latitude,
+            longitude: params.longitude,
+            radius: params.radius,
+            google_maps_url: params.googleMapsUrl,
+          },
+          multi_gating_types:
+            isPasswordGated && isLocationGated
+              ? ["password", "location"]
+              : undefined,
         },
       });
 
@@ -228,7 +256,7 @@ export const useDropNFT = () => {
   const onReconnectWallet = useCallback(() => {
     dispatch({
       type: "error",
-      error: "Please retry creating a drop",
+      error: "Please try again...",
     });
   }, []);
 

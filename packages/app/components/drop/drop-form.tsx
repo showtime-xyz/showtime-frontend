@@ -31,7 +31,7 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { useMyInfo } from "app/hooks/api-hooks";
+import { QRCode } from "app/components/qr-code";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -48,7 +48,6 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
-  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -61,6 +60,9 @@ const defaultValues = {
   royalty: 10,
   editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
+  password: "",
+  googleMapsUrl: "",
+  radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
 };
@@ -94,6 +96,8 @@ const dropValidationSchema = yup.object({
     .required()
     .isTrue("You must accept the terms and conditions."),
   notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+  googleMapsUrl: yup.string().url(),
+  radius: yup.number().min(0.01).max(10),
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
@@ -125,7 +129,7 @@ export const DropForm = () => {
 
   const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
-  const { data: userProfile } = useMyInfo();
+
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const { isMagic } = useWeb3();
@@ -167,17 +171,12 @@ export const DropForm = () => {
     [selectedDuration]
   );
 
-  if (
-    !userProfile?.data.profile.username ||
-    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
-    !userProfile?.data.profile.bio ||
-    !userProfile?.data.profile.img_url
-  ) {
+  if (user.isIncompletedProfile) {
     return (
       <CompleteProfileModalContent
-        title="Tell your collectors more about yourself"
-        description="Complete your profile first to create this drop. It will take around 1 minute."
-        cta="Complete profile to drop"
+        title="Just one more step"
+        description="You need complete your profile to create drops. It only takes about 1 min"
+        cta="Complete Profile"
       />
     );
   }
@@ -206,7 +205,7 @@ export const DropForm = () => {
           </Text>
           <View tw="mt-8 mb-10">
             <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share your free drop to the world!
+              Now share your drop with the world!
             </Text>
           </View>
 
@@ -216,7 +215,7 @@ export const DropForm = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: claimUrl,
-                  message: `I just created a free drop "${
+                  message: `I just created a drop "${
                     state.edition?.name
                   }" by ${getTwitterIntentUsername(
                     user?.user?.data?.profile
@@ -270,6 +269,12 @@ export const DropForm = () => {
           >
             Skip for now
           </Button>
+        </View>
+        <View tw="mt-4">
+          <QRCode
+            size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
+            text={claimUrl}
+          />
         </View>
       </View>
     );
@@ -525,23 +530,46 @@ export const DropForm = () => {
                       <Accordion.Label>Drop Details</Accordion.Label>
                       <Accordion.Chevron />
                     </View>
-                    <View tw="flex-row justify-between">
+                    <ScrollView tw="flex-row justify-between" horizontal={true}>
                       <DataPill
-                        tw="md:flex-1"
                         label={`Royalties ${watch("royalty")}%`}
                         type="text"
                       />
                       <DataPill
-                        tw="md:mx-4 md:flex-1"
+                        tw={
+                          gatingType !== "spotify_save"
+                            ? "ml-1 md:ml-4"
+                            : "mx-1 md:mx-4"
+                        }
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw="md:flex-1"
+                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
-                    </View>
+                      {gatingType !== "spotify_save" ? (
+                        <DataPill
+                          label={`Password ${
+                            watch("password") === ""
+                              ? "None"
+                              : watch("password")
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
+                      {gatingType !== "spotify_save" ? (
+                        <DataPill
+                          label={`Location ${
+                            watch("location") === "" || !watch("location")
+                              ? "None"
+                              : watch("location")
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
+                    </ScrollView>
                   </View>
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
@@ -610,6 +638,72 @@ export const DropForm = () => {
                       }}
                     />
                   </View>
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="password"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Password (optional)"
+                              onBlur={onBlur}
+                              helperText="The password required to collect the drop"
+                              errorText={errors.password?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="Enter a password"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="googleMapsUrl"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Location (optional)"
+                              onBlur={onBlur}
+                              helperText="The location where people can collect the drop from"
+                              errorText={errors.googleMapsUrl?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="Enter the Google Maps link of the location"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
+                  {gatingType !== "spotify_save" ? (
+                    <View tw="mt-4 flex-1 flex-row">
+                      <Controller
+                        control={control}
+                        name="radius"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Radius (optional)"
+                              onBlur={onBlur}
+                              helperText="The location radius (in kilometers)"
+                              errorText={errors.radius?.message}
+                              value={value?.toString()}
+                              onChangeText={onChange}
+                              placeholder="1"
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  ) : null}
                   <View tw="mt-4 flex-row justify-between">
                     <Controller
                       control={control}

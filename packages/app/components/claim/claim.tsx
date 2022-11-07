@@ -12,13 +12,17 @@ import { createParam } from "app/navigation/use-param";
 import { ClaimExplanation } from "./claim-explanation";
 import { ClaimForm } from "./claim-form";
 
-const { useParam } = createParam<{ contractAddress: string }>();
+const { useParam } = createParam<{
+  contractAddress: string;
+  password: string;
+}>();
 
 const store = new MMKV();
 const STORE_KEY = "showClaimExplanation";
 
 export const Claim = () => {
   const [contractAddress] = useParam("contractAddress");
+  const [password] = useParam("password");
   const [showExplanation, setShowExplanation] = useState(
     () => store.getBoolean(STORE_KEY) ?? true
   );
@@ -61,5 +65,5 @@ export const Claim = () => {
 
   if (!edition) return null;
 
-  return <ClaimForm edition={edition} />;
+  return <ClaimForm edition={edition} password={password} />;
 };

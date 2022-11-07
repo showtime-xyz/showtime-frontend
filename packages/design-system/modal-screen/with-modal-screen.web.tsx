@@ -5,7 +5,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import type { ModalScreenOptions } from "./types";
 
-function withModalScreen<P>(
+function withModalScreen<P extends object>(
   Screen: FC<P>,
   { title, matchingPathname, matchingQueryParam, ...rest }: ModalScreenOptions
 ) {

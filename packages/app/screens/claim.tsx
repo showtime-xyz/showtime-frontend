@@ -7,7 +7,7 @@ const ClaimModal = () => {
 };
 
 export const ClaimScreen = withModalScreen(ClaimModal, {
-  title: "Claim",
+  title: "Collect",
   matchingPathname: "/claim/[contractAddress]",
   matchingQueryParam: "claimModal",
   disableBackdropPress: true,

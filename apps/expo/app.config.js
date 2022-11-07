@@ -120,6 +120,14 @@ export default {
     },
   },
   plugins: [
+    [
+      "expo-media-library",
+      {
+        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+        isAccessMediaLocationEnabled: true,
+      },
+    ],
     // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
     process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [

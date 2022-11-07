@@ -25,6 +25,7 @@ export const useClampText = ({
       expendTagClassName: tw,
       expandText: expandText,
       foldText,
+      // @ts-ignore
       originText: text,
     });
   }, [element, ellipsis, expandText, foldText, rows, text]);

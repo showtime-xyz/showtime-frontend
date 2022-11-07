@@ -12,6 +12,7 @@ export type AvatarProps = {
   borderRadius?: number;
   tw?: TW;
   children?: ReactNode;
+  alt: string;
 };
 
 const getAvatarImageUrl = (imgUrl: string, size: number) => {
@@ -21,13 +22,13 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   return imgUrl;
 };
 
-// TODO: alt
 export const Avatar = ({
   url,
   borderRadius = 0,
   size = 32,
   tw = "",
   children,
+  alt = "",
 }: AvatarProps) => {
   const imageSource = useMemo(
     () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
@@ -47,6 +48,7 @@ export const Avatar = ({
         resizeMode="cover"
         tw={IMAGE_TW}
         style={{ height: size, width: size, borderRadius: borderRadius }}
+        alt={alt}
       />
       {children}
     </View>
