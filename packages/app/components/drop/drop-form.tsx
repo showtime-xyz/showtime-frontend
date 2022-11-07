@@ -32,7 +32,6 @@ import { MissingSignatureMessage } from "app/components/missing-signature-messag
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCode } from "app/components/qr-code";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -49,7 +48,6 @@ import {
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
-  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 import { useFilePicker } from "design-system/file-picker";
@@ -131,7 +129,7 @@ export const DropForm = () => {
 
   const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
-  const { data: userProfile } = useMyInfo();
+
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const { isMagic } = useWeb3();
@@ -173,17 +171,12 @@ export const DropForm = () => {
     [selectedDuration]
   );
 
-  if (
-    !userProfile?.data.profile.username ||
-    userHasIncompleteExternalLinks(userProfile?.data.profile) ||
-    !userProfile?.data.profile.bio ||
-    !userProfile?.data.profile.img_url
-  ) {
+  if (user.isIncompletedProfile) {
     return (
       <CompleteProfileModalContent
-        title="Tell your collectors more about yourself"
-        description="Complete your profile first to create this drop. It will take around 1 minute."
-        cta="Complete profile to drop"
+        title="Just one more step"
+        description="You need complete your profile to create drops. It only takes about 1 min"
+        cta="Complete Profile"
       />
     );
   }

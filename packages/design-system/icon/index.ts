@@ -40,7 +40,6 @@ export { default as HomeFilled } from "./HomeFilled";
 export { default as Hot } from "./Hot";
 export { default as HotFilled } from "./HotFilled";
 export { default as Image } from "./Image";
-export { default as Instagram } from "./Instagram";
 export { default as LogOut } from "./LogOut";
 export { default as Layers } from "./Layers";
 export { default as Liked } from "./Liked";
@@ -77,7 +76,6 @@ export { default as Transfer } from "./Transfer";
 export { default as Trash } from "./Trash";
 export { default as Trending } from "./Trending";
 export { default as TrendingFilled } from "./TrendingFilled";
-export { default as Twitter } from "./Twitter";
 export { default as Upload } from "./Upload";
 export { default as User } from "./User";
 export { default as UserPlus } from "./UserPlus";
@@ -106,4 +104,14 @@ export { default as RotateCcw } from "./RotateCcw";
 export { default as RotateCw } from "./RotateCw";
 export { default as OpenSea } from "./OpenSea";
 export { default as InformationCircle } from "./InformationCircle";
+export { default as UserCircle } from "./UserCircle";
+export { default as Hourglass } from "./Hourglass";
+
+//#region social icons
+export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
+export { default as Facebook } from "./Facebook";
+export { default as GoogleOriginal } from "./GoogleOriginal";
+export { default as Apple } from "./Apple";
+export { default as Instagram } from "./Instagram";
+//#endregion

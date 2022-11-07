@@ -1,6 +1,7 @@
 import { MutableRefObject, ComponentType, forwardRef } from "react";
 import { Platform } from "react-native";
 
+import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useId } from "@showtime-xyz/universal.input";
 import { Label } from "@showtime-xyz/universal.label";
@@ -13,6 +14,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
+
+const PlatformAnimateHeight = Platform.OS === "web" ? View : AnimateHeight;
 
 export type FieldsetProps = {
   errorText?: string;
@@ -115,21 +118,26 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
           ) : null}
         </View>
       ) : null}
-      {errorText ? (
-        <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
-      ) : null}
-      {helperText ? (
-        <>
-          <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
-          <View tw="h-4" />
-          <Text
-            nativeID={helperTextId}
-            tw="text-sm text-gray-700 dark:text-gray-300"
-          >
-            {helperText}
-          </Text>
-        </>
-      ) : null}
+
+      <PlatformAnimateHeight>
+        {errorText ? (
+          <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
+        ) : null}
+      </PlatformAnimateHeight>
+      <PlatformAnimateHeight>
+        {helperText ? (
+          <>
+            <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
+            <View tw="h-4" />
+            <Text
+              nativeID={helperTextId}
+              tw="text-sm text-gray-700 dark:text-gray-300"
+            >
+              {helperText}
+            </Text>
+          </>
+        ) : null}
+      </PlatformAnimateHeight>
     </View>
   );
 }

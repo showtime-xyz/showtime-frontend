@@ -45,11 +45,9 @@ import { useRudder } from "app/lib/rudderstack";
 import {
   formatAddressShort,
   getCreatorUsernameFromNFT,
-  getProfileName,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
-  userHasIncompleteExternalLinks,
 } from "app/utilities";
 
 export const ClaimForm = ({
@@ -72,7 +70,8 @@ export const ClaimForm = ({
 
   const share = useShare();
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isIncompletedProfile } = useUser();
+
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
@@ -90,7 +89,7 @@ export const ClaimForm = ({
     address: nft?.data.item.creator_address,
   });
 
-  const { follow, data: userProfile } = useMyInfo();
+  const { follow } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
@@ -168,20 +167,12 @@ export const ClaimForm = ({
   //     });
   // }, [web3]);
 
-  if (
-    userProfile &&
-    (!userProfile.data.profile.username ||
-      userHasIncompleteExternalLinks(userProfile.data.profile) ||
-      !userProfile.data.profile.bio ||
-      !userProfile.data.profile.img_url)
-  ) {
+  if (isIncompletedProfile) {
     return (
       <CompleteProfileModalContent
-        title={`Show ${getProfileName(
-          creatorProfile?.data?.profile
-        )} who you are!`}
-        description="Complete your profile first to collect this drop. It will take around 1 minute."
-        cta="Complete profile to collect"
+        title="Just one more step"
+        description="You need complete your profile to collect drops. It only takes about 1 min"
+        cta="Complete Profile"
       />
     );
   }
