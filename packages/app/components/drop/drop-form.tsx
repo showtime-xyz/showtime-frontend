@@ -171,7 +171,7 @@ export const DropForm = () => {
     return (
       <CompleteProfileModalContent
         title="Just one more step"
-        description="You need complete your profile to create/claim drops. It only takes about 1 min"
+        description="You need complete your profile to create drops. It only takes about 1 min"
         cta="Complete Profile"
       />
     );
