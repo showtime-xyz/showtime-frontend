@@ -9065,12 +9065,8 @@ __metadata:
     "@expo/xcpretty": ^4.2.2
     "@gorhom/bottom-sheet": 4.4.5
     "@hookform/resolvers": ^2.8.5
-<<<<<<< HEAD
-    "@logrocket/react-native": ^1.2.1
-    "@magic-ext/react-native-oauth": ^4.0.0
-=======
     "@logrocket/react-native": ^1.7.3
->>>>>>> staging
+    "@magic-ext/react-native-oauth": ^4.0.0
     "@magic-sdk/react-native": ^8.2.1
     "@radix-ui/react-accordion": ^0.1.5
     "@radix-ui/react-tabs": ^0.1.1
@@ -9315,12 +9311,8 @@ __metadata:
     ethers: ^5.7.0
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
-<<<<<<< HEAD
     magic-sdk: ^10.0.0
-    next: 12.2.5
-=======
     next: 13.0.0
->>>>>>> staging
     next-compose-plugins: ^2.2.1
     next-fonts: ^1.5.1
     next-images: ^1.8.2
