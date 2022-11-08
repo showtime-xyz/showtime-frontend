@@ -1,6 +1,6 @@
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
-import { Button } from "@showtime-xyz/universal.button";
+import { LoginButton } from "app/components/login/login-button";
 
 export type ConnectButtonProps = {
   handleSubmitWallet: ({
@@ -12,5 +12,5 @@ export type ConnectButtonProps = {
 
 export const ConnectButton: React.FC<ConnectButtonProps> = () => {
   const { connect } = useWalletConnect();
-  return <Button onPress={() => connect()}>I already have a wallet</Button>;
+  return <LoginButton onPress={() => connect()} type="wallet" />;
 };

@@ -1,14 +1,13 @@
-import { useMemo, useCallback, useState } from "react";
-import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { useMemo, useState } from "react";
+import { Platform, StyleSheet } from "react-native";
 
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { SceneRendererProps, Route } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ConnectButton } from "app/components/connect-button";
 import { yup } from "app/lib/yup";
 
 import { LoginButton } from "./login-button";
@@ -34,7 +33,6 @@ const CONTENT_HEIGHT = Platform.select({
 
 export function Login({ onLogin }: LoginProps) {
   //#region state
-  const [index, setIndex] = useState(0);
   const [showEmailLogin, setShowEmailLogin] = useState(false);
 
   //#endregion
@@ -48,7 +46,6 @@ export function Login({ onLogin }: LoginProps) {
     handleSubmitPhoneNumber,
     handleSubmitWallet,
   } = useLogin(onLogin);
-  const { width } = useWindowDimensions();
 
   //#endregion
 
@@ -64,18 +61,6 @@ export function Login({ onLogin }: LoginProps) {
       ].includes(walletStatus),
     [walletStatus]
   );
-  // const phoneNumberValidationSchema = useMemo(
-  //   () =>
-  //     yup
-  //       .object({
-  //         data: yup
-  //           .string()
-  //           .phone("US", false, "Please enter a valid phone number.")
-  //           .required("Please enter a valid phone number."),
-  //       })
-  //       .required(),
-  //   []
-  // );
 
   const emailValidationSchema = useMemo(
     () =>
@@ -90,66 +75,6 @@ export function Login({ onLogin }: LoginProps) {
     []
   );
 
-  const renderScene = useCallback(
-    ({
-      route: { key },
-    }: SceneRendererProps & {
-      route: Route;
-    }) => {
-      switch (key) {
-        case "phone":
-          return (
-            <View style={styles.tabListItemContainer}>
-              <View tw="mb-[16px]">
-                <PhoneNumberPicker
-                  handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-                />
-              </View>
-              <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
-                <View tw="h-2" />
-                <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-                  or
-                </Text>
-                <View tw="h-2" />
-              </View>
-              <Button
-                onPress={() => handleSubmitWallet()}
-                variant="primary"
-                size="regular"
-              >
-                I already have a wallet
-              </Button>
-              <LoginWithApple />
-              <LoginWithGoogle />
-            </View>
-          );
-        case "email":
-          return (
-            <View style={styles.tabListItemContainer}>
-              <LoginInputField
-                key="login-email-field"
-                validationSchema={emailValidationSchema}
-                label="Email address"
-                placeholder="Enter your email address"
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                signInButtonLabel="Send"
-                onSubmit={handleSubmitEmail}
-              />
-            </View>
-          );
-        default:
-          return null;
-      }
-    },
-    [
-      emailValidationSchema,
-      handleSubmitEmail,
-      handleSubmitPhoneNumber,
-      handleSubmitWallet,
-    ]
-  );
-
   //#endregion
   return (
     <ContainerView style={styles.container}>
@@ -162,7 +87,7 @@ export function Login({ onLogin }: LoginProps) {
           </Text>
         </View>
       ) : (
-        <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
+        <View>
           <View
             style={[
               styles.tabListItemContainer,
@@ -205,7 +130,7 @@ export function Login({ onLogin }: LoginProps) {
                 onPress={() => setShowEmailLogin(true)}
                 type="email"
               />
-              <LoginButton onPress={() => handleSubmitWallet()} type="wallet" />
+              <ConnectButton handleSubmitWallet={handleSubmitWallet} />
               <LoginFooter />
             </View>
           </View>
