@@ -75,6 +75,7 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
                 <Button
                   variant="primary"
                   size="regular"
+                  tw="my-4"
                   onPress={() => {
                     handleSubmitWallet({
                       onOpenConnectModal: openAccountModal,
