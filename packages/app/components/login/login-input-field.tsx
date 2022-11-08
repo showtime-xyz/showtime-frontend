@@ -90,7 +90,7 @@ export function LoginInputField({
         onPress={handleSubmit(handleSubmitData)}
         variant="primary"
         size="regular"
-        tw={`mt-6 ${!inputValue ? "opacity-50" : null}`}
+        tw={`mt-6 ${!inputValue ? "opacity-60" : null}`}
         disabled={!inputValue}
       >
         {signInButtonLabel}

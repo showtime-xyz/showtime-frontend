@@ -1,19 +1,18 @@
 import { useMemo, useCallback, useState } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  SceneRendererProps,
-  Route,
-  TabView,
-  ScollableTabBar,
-} from "@showtime-xyz/universal.tab-view";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { SceneRendererProps, Route } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { yup } from "app/lib/yup";
 
-import { LoginContainer } from "./login-container";
+import { LoginButton } from "./login-button";
+import { LoginFooter } from "./login-footer";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
@@ -22,21 +21,12 @@ import { LoginWithGoogle } from "./login-with-google";
 import { PhoneNumberPicker } from "./phone-number-picker";
 import { useLogin } from "./use-login";
 
+const ContainerView: any =
+  Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 interface LoginProps {
   onLogin?: () => void;
 }
-const LOGIN_ROUTES = [
-  {
-    title: "Wallet or phone",
-    key: "phone",
-    index: 0,
-  },
-  {
-    title: "Email",
-    key: "email",
-    index: 1,
-  },
-];
+
 const CONTENT_HEIGHT = Platform.select({
   android: [450, 397],
   default: [460, 460],
@@ -45,6 +35,8 @@ const CONTENT_HEIGHT = Platform.select({
 export function Login({ onLogin }: LoginProps) {
   //#region state
   const [index, setIndex] = useState(0);
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
+
   //#endregion
 
   //#region hooks
@@ -160,7 +152,7 @@ export function Login({ onLogin }: LoginProps) {
 
   //#endregion
   return (
-    <LoginContainer style={styles.container}>
+    <ContainerView style={styles.container}>
       {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -171,20 +163,56 @@ export function Login({ onLogin }: LoginProps) {
         </View>
       ) : (
         <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
-          <LoginHeader />
-          <TabView
-            navigationState={{ index, routes: LOGIN_ROUTES }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={(props) => <ScollableTabBar {...props} />}
-            initialLayout={{
-              width,
-            }}
-          />
+          <View
+            style={[
+              styles.tabListItemContainer,
+              { display: showEmailLogin ? "flex" : "none" },
+            ]}
+          >
+            <LoginInputField
+              key="login-email-field"
+              validationSchema={emailValidationSchema}
+              label="Email address"
+              placeholder="Enter your email address"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              signInButtonLabel="Send Email"
+              onSubmit={handleSubmitEmail}
+            />
+            <LoginButton
+              onPress={() => setShowEmailLogin(false)}
+              type="social"
+            />
+          </View>
+          <View style={{ display: showEmailLogin ? "none" : "flex" }}>
+            <LoginHeader />
+            <View style={styles.tabListItemContainer}>
+              <View tw="mb-[16px]">
+                <PhoneNumberPicker
+                  handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+                />
+              </View>
+              <View tw="mx-[-16px] mb-[16px] flex-row items-center">
+                <View tw="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
+                <Text tw="mx-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
+                  OR
+                </Text>
+                <View tw="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
+              </View>
+              <LoginWithApple />
+              <LoginWithGoogle />
+              <LoginButton
+                onPress={() => setShowEmailLogin(true)}
+                type="email"
+              />
+              <LoginButton onPress={() => handleSubmitWallet()} type="wallet" />
+              <LoginFooter />
+            </View>
+          </View>
         </View>
       )}
       <LoginOverlays loading={loading && !isConnectingToWallet} />
-    </LoginContainer>
+    </ContainerView>
   );
 }
 

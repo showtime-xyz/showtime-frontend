@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -9,14 +8,16 @@ import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { OAUTH_REDIRECT_URI } from "app/utilities";
 
+import { LoginButton } from "./login-button";
+
 export const LoginWithGoogle = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
   const { magic } = useMagic();
   const router = useRouter();
 
   return (
-    <Button
-      size="regular"
+    <LoginButton
+      type="google"
       onPress={async () => {
         if (Platform.OS === "web") {
           //@ts-ignore
@@ -47,8 +48,6 @@ export const LoginWithGoogle = () => {
           }
         }
       }}
-    >
-      Login with Google
-    </Button>
+    />
   );
 };
