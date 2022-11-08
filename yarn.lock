@@ -5593,16 +5593,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/commons@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "@magic-sdk/commons@npm:4.1.1"
-  peerDependencies:
-    "@magic-sdk/provider": ">=4.3.0"
-    "@magic-sdk/types": ">=3.1.1"
-  checksum: 82d9078014341d9672cdbbc240cd880786fdb021649246e49374790ca1104d11f2f48fdef3db5af6a45b82cdd1666d628a1bc4c107647fe970b22ec72d891e40
-  languageName: node
-  linkType: hard
-
 "@magic-sdk/commons@npm:^6.0.0":
   version: 6.0.0
   resolution: "@magic-sdk/commons@npm:6.0.0"
@@ -5626,30 +5616,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/provider@npm:^8.1.1":
-  version: 8.1.1
-  resolution: "@magic-sdk/provider@npm:8.1.1"
-  dependencies:
-    "@magic-sdk/types": ^7.1.1
-    eventemitter3: ^4.0.4
-    web3-core: 1.5.2
-  peerDependencies:
-    localforage: ^1.7.4
-  checksum: 1a1094b8d06da4d0114547d1591c2f3183852724d4ebbf18b7d76026c03e6ef744031f167da629155f987e1c79ee7d078a801020f343a9f790544d14a3397283
-  languageName: node
-  linkType: hard
-
-"@magic-sdk/react-native@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "@magic-sdk/react-native@npm:8.2.1"
+"@magic-sdk/react-native@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@magic-sdk/react-native@npm:11.0.0"
   dependencies:
     "@aveq-research/localforage-asyncstorage-driver": ^3.0.1
-    "@magic-sdk/commons": ^4.1.1
-    "@magic-sdk/provider": ^8.1.1
-    "@magic-sdk/types": ^7.1.1
+    "@magic-sdk/commons": ^6.0.0
+    "@magic-sdk/provider": ^10.0.0
+    "@magic-sdk/types": ^9.0.0
     "@react-native-async-storage/async-storage": ^1.15.5
     "@types/lodash": ^4.14.158
     buffer: ~5.6.0
+    expo-application: ^4.1.0
     localforage: ^1.7.4
     localforage-driver-memory: ^1.0.5
     lodash: ^4.17.19
@@ -5657,17 +5635,11 @@ __metadata:
     tslib: ^2.0.3
     whatwg-url: ~8.1.0
   peerDependencies:
+    expo: "*"
     react: ">=16"
     react-native: ">=0.60"
     react-native-webview: ">=8"
-  checksum: 5034a4424c5fbe617311b219ae57f4da2dc22087cc6c0a6f0ebe5d2c9db191e08adf67f9ad2d9dcc61d230df2dfb3de50973644137c37553f3bdf92670b0ad84
-  languageName: node
-  linkType: hard
-
-"@magic-sdk/types@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@magic-sdk/types@npm:7.1.1"
-  checksum: ea380b32fa35a0def1ccfcc19b441900640d6e49362311a24403c77c1fe2b55683b5412e7831e88597d270e86783cd141e3ec423f1ece489c498a3669e5a8632
+  checksum: 77ed9e55e42c709ff0db0b0bf98ed24d62025bdc69ac397a81cb4e81b779ec78cb49cff70b87edac89d384e4393a4fb98e128d8d8d202778641ce25ae56c2725
   languageName: node
   linkType: hard
 
@@ -9066,7 +9038,7 @@ __metadata:
     "@hookform/resolvers": ^2.8.5
     "@logrocket/react-native": ^1.7.3
     "@magic-ext/react-native-oauth": ^4.0.0
-    "@magic-sdk/react-native": ^8.2.1
+    "@magic-sdk/react-native": ^11.0.0
     "@radix-ui/react-accordion": ^0.1.5
     "@radix-ui/react-tabs": ^0.1.1
     "@react-native-async-storage/async-storage": ~1.17.0
@@ -20055,7 +20027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-application@npm:~4.2.0, expo-application@npm:~4.2.2":
+"expo-application@npm:^4.1.0, expo-application@npm:~4.2.0, expo-application@npm:~4.2.2":
   version: 4.2.2
   resolution: "expo-application@npm:4.2.2"
   peerDependencies:
