@@ -122,6 +122,8 @@ export const Default = () => {
         <IconItem icon={Icon.InformationCircle} title="InformationCircle" />
         <IconItem icon={Icon.UserCircle} title="UserCircle" />
         <IconItem icon={Icon.Hourglass} title="Hourglass" />
+        <IconItem icon={Icon.DarkMode} title="DarkMode" />
+        <IconItem icon={Icon.QrCode} title="QrCode" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>

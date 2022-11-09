@@ -15,7 +15,7 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
       // TODO: remove this after testing
       if (user?.user?.data.profile.has_spotify_token) {
         try {
-          const res = claimNFT();
+          const res = claimNFT({});
 
           return res;
         } catch (error: any) {

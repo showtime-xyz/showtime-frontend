@@ -191,14 +191,15 @@ export const useDropNFT = () => {
         params.radius &&
         ((params.latitude && params.longitude) || params.googleMapsUrl);
 
-      const gatingType =
-        params.gatingType ?? (isPasswordGated && isLocationGated)
-          ? "multi"
-          : isPasswordGated
-          ? "password"
-          : isLocationGated
-          ? "location"
-          : undefined;
+      const gatingType = params.gatingType
+        ? params.gatingType
+        : isPasswordGated && isLocationGated
+        ? "multi"
+        : isPasswordGated
+        ? "password"
+        : isLocationGated
+        ? "location"
+        : undefined;
 
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",

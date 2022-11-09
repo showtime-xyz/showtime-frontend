@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { Platform, useColorScheme as useDeviceColorScheme } from "react-native";
+import {
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+  Appearance,
+} from "react-native";
 import type { ColorSchemeName } from "react-native";
 
 import * as NavigationBar from "expo-navigation-bar";
@@ -20,12 +24,18 @@ export function ColorSchemeProvider({
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
   const nativewind = useTailwindColorScheme();
+  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
+    Appearance.addChangeListener((preferences) => {
+      if (isFollowDeviceSetting) {
+        handleColorSchemeChange(preferences.colorScheme);
+      }
+    });
     if (isDark) {
       if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#000");
@@ -45,12 +55,15 @@ export function ColorSchemeProvider({
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
     }
-  }, [isDark, nativewind]);
+  }, [isDark, nativewind, isFollowDeviceSetting]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       setColorScheme(newColorScheme);
       persistColorScheme(newColorScheme);
+      setIsFollowingDeviceSetting(false);
+    } else {
+      setIsFollowingDeviceSetting(true);
     }
   };
 

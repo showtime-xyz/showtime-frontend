@@ -19,6 +19,7 @@ import {
   Moon,
   Sun,
   LogOut,
+  DarkMode,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -51,7 +52,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
-            <Avatar url={user?.data?.profile?.img_url} />
+            <Avatar alt="Avatar" url={user?.data?.profile?.img_url} />
             {isWeb && isMdWidth && user?.data?.profile?.username ? (
               <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
                 {`@${user.data.profile.username}`}
@@ -150,6 +151,15 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               <MenuItemIcon Icon={Moon} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Dark
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => setColorScheme(null)}
+              key="nested-group-3"
+            >
+              <MenuItemIcon Icon={DarkMode} />
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                System
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
