@@ -10,4 +10,12 @@ export const captureException = (error: any) => {
   }
 };
 
+export const captureMessage = (message: any) => {
+  if (Platform.OS === "web") {
+    Sentry.Browser.captureMessage(message);
+  } else {
+    Sentry.Native.captureMessage(message);
+  }
+};
+
 export { Sentry };

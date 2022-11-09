@@ -2,6 +2,7 @@ import axios from "axios";
 import { v4 as uuid } from "uuid";
 
 import { Logger } from "app/lib/logger";
+import { captureException, captureMessage } from "app/lib/sentry";
 import { getFileFormData, getPinataToken } from "app/utilities";
 
 export const useUploadMediaToPinata = () => {
@@ -48,6 +49,8 @@ export const useUploadMediaToPinata = () => {
 
       return res.data.IpfsHash;
     } catch (error) {
+      captureMessage("ipfs upload failed");
+      captureException(error);
       Logger.error(error);
       return null;
     }
