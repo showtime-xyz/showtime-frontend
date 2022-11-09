@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useColorScheme as useDeviceColorScheme } from "react-native";
+import {
+  useColorScheme as useDeviceColorScheme,
+  Appearance,
+} from "react-native";
 import type { ColorSchemeName } from "react-native";
 
 import { ColorSchemeContext } from "./context";
@@ -14,12 +17,18 @@ export function ColorSchemeProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
+  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
+    Appearance.addChangeListener((preferences) => {
+      if (isFollowDeviceSetting) {
+        handleColorSchemeChange(preferences.colorScheme);
+      }
+    });
     document.documentElement.setAttribute(
       "data-color-scheme",
       isDark ? "dark" : "light"
@@ -29,12 +38,15 @@ export function ColorSchemeProvider({
     } else {
       document.body.classList.remove("dark");
     }
-  }, [isDark]);
+  }, [isDark, isFollowDeviceSetting]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       setColorScheme(newColorScheme);
       persistColorScheme(newColorScheme);
+      setIsFollowingDeviceSetting(false);
+    } else {
+      setIsFollowingDeviceSetting(true);
     }
   };
 

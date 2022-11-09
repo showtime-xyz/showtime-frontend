@@ -22,7 +22,7 @@ import {
   Refresh,
   Twitter,
   Showtime,
-  Tag,
+  QrCode,
 } from "@showtime-xyz/universal.icon";
 import { Close } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -222,9 +222,9 @@ function NFTDropdown({
             }}
             key="qr-code"
           >
-            <MenuItemIcon Icon={Tag} />
+            <MenuItemIcon Icon={QrCode} />
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-              QRCode
+              QR Code
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
 
