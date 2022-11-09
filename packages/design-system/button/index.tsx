@@ -116,7 +116,7 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
   );
 }
 
-export function OutlinedButton({ accentColor, ...props }: ButtonProps) {
+export function OutlinedButton({ ...props }: ButtonProps) {
   const isDark = useIsDarkMode();
 
   return (

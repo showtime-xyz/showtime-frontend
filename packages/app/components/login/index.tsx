@@ -27,11 +27,6 @@ interface LoginProps {
   onLogin?: () => void;
 }
 
-const CONTENT_HEIGHT = Platform.select({
-  android: [450, 397],
-  default: [460, 460],
-});
-
 export function Login({ onLogin }: LoginProps) {
   //#region state
   const [showEmailLogin, setShowEmailLogin] = useState(false);
@@ -149,7 +144,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   tabListItemContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     paddingBottom: 16,
     flex: 1,
     paddingTop: 16,

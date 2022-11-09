@@ -45,8 +45,8 @@ const CONTAINER_BACKGROUND_MAPPER = {
     pressed: "bg-red-700 dark:bg-red-700",
   },
   outlined: {
-    default: "bg-transparent border border-gray-900 dark:border-white",
-    pressed: "bg-transparent border border-gray-900 dark:border-white",
+    default: "bg-transparent border border-gray-700 dark:border-gray-400",
+    pressed: "bg-transparent border border-gray-700 dark:border-gray-400",
   },
 };
 const LABEL_SIZE_TW = {
