@@ -92,12 +92,14 @@ export const SettingAccountSlotFooter = () => {
               be undone
             </Text>
             <Text tw="py-4 text-base text-gray-900 dark:text-gray-100">
-              Type your <Text tw="font-bold">username</Text> to confirm.
+              Please type{" "}
+              <Text tw="font-bold">{user.user?.data.profile.username}</Text> to
+              confirm.
             </Text>
           </View>
           <Fieldset
             onChangeText={(t) => (username.current = t)}
-            placeholder="@username"
+            placeholder="Enter your username"
             label="Username"
             errorText={error}
           />
