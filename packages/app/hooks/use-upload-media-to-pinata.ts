@@ -4,6 +4,8 @@ import { v4 as uuid } from "uuid";
 import { Logger } from "app/lib/logger";
 import { getFileFormData, getPinataToken } from "app/utilities";
 
+import { captureException, captureMessage } from "../lib/sentry";
+
 export const useUploadMediaToPinata = () => {
   const uploadMedia = async ({
     file,
@@ -48,6 +50,8 @@ export const useUploadMediaToPinata = () => {
 
       return res.data.IpfsHash;
     } catch (error) {
+      captureMessage("ipfs upload error");
+      captureException(error);
       Logger.error(error);
       return null;
     }
