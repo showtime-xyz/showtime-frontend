@@ -17,7 +17,7 @@ export function ColorSchemeProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
-  const [openDeviceSetting, setOpenDeviceSetting] = useState(true);
+  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
@@ -25,7 +25,7 @@ export function ColorSchemeProvider({
 
   useEffect(() => {
     Appearance.addChangeListener((preferences) => {
-      if (openDeviceSetting) {
+      if (isFollowDeviceSetting) {
         handleColorSchemeChange(preferences.colorScheme);
       }
     });
@@ -38,15 +38,15 @@ export function ColorSchemeProvider({
     } else {
       document.body.classList.remove("dark");
     }
-  }, [isDark, openDeviceSetting]);
+  }, [isDark, isFollowDeviceSetting]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       setColorScheme(newColorScheme);
       persistColorScheme(newColorScheme);
-      setOpenDeviceSetting(false);
+      setIsFollowingDeviceSetting(false);
     } else {
-      setOpenDeviceSetting(true);
+      setIsFollowingDeviceSetting(true);
     }
   };
 

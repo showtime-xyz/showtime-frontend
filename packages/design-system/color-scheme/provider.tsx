@@ -24,7 +24,7 @@ export function ColorSchemeProvider({
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
   const nativewind = useTailwindColorScheme();
-  const [openDeviceSetting, setOpenDeviceSetting] = useState(true);
+  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
@@ -32,7 +32,7 @@ export function ColorSchemeProvider({
 
   useEffect(() => {
     Appearance.addChangeListener((preferences) => {
-      if (openDeviceSetting) {
+      if (isFollowDeviceSetting) {
         handleColorSchemeChange(preferences.colorScheme);
       }
     });
@@ -55,15 +55,15 @@ export function ColorSchemeProvider({
       SystemUI.setBackgroundColorAsync("white");
       setStatusBarStyle("dark");
     }
-  }, [isDark, nativewind, openDeviceSetting]);
+  }, [isDark, nativewind, isFollowDeviceSetting]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       setColorScheme(newColorScheme);
       persistColorScheme(newColorScheme);
-      setOpenDeviceSetting(false);
+      setIsFollowingDeviceSetting(false);
     } else {
-      setOpenDeviceSetting(true);
+      setIsFollowingDeviceSetting(true);
     }
   };
 
