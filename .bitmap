@@ -29,7 +29,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.56",
+        "version": "0.0.57",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -131,7 +131,7 @@
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.53",
+        "version": "0.0.54",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
@@ -155,7 +155,7 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.67",
+        "version": "0.0.68",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
@@ -185,7 +185,7 @@
     },
     "pinch-to-zoom": {
         "scope": "showtime.universal",
-        "version": "0.0.40",
+        "version": "0.0.41",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/pinch-to-zoom"
     },

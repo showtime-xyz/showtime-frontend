@@ -8136,11 +8136,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.56":
-  version: 0.0.56
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.56"
+"@showtime-xyz/universal.avatar@npm:^0.0.57":
+  version: 0.0.57
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.57"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.53
+    "@showtime-xyz/universal.image": 0.0.54
     "@showtime-xyz/universal.tailwind": 0.0.45
     "@showtime-xyz/universal.view": 0.0.46
     "@storybook/react": 6.5.9
@@ -8149,7 +8149,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: bcdc2f8d1b1e48f22f604d53695e85d090d6806c6732d9816f360505c73c7b6ddb05d80e278bdaacf69a1e2a06dd9ab5cae4bf37ed04ef5bbea16ac1ec91824b
+  checksum: d120786f0f141b18437ced72095087d951f74dffcdd325276402a6168f68cb30bfbad3fb52a4dda4cb0b7e14bd1c09c9f074c56acb167c64cdeaff9152c32dd3
   languageName: node
   linkType: hard
 
@@ -8440,9 +8440,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.image@npm:0.0.53, @showtime-xyz/universal.image@npm:^0.0.53":
-  version: 0.0.53
-  resolution: "@showtime-xyz/universal.image@npm:0.0.53"
+"@showtime-xyz/universal.image@npm:0.0.54, @showtime-xyz/universal.image@npm:^0.0.54":
+  version: 0.0.54
+  resolution: "@showtime-xyz/universal.image@npm:0.0.54"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.45
     "@showtime-xyz/universal.view": 0.0.46
@@ -8456,7 +8456,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 8522a25abfb38575e535f768c18dea33f59a51e4e1b59113396da4e25d71fad872e7a17510a2cdf4e08187886b44752f8f7bcc215934dd5ebdc84feaa4a183ec
+  checksum: 38002878279ebc14d4f5cbe5da657587503cff7085dc19e8e8fd3b5d5a0dbab0ab26c3f062d19967d901a2fefaa94a3f04d2be5571c3a2ffeade6765fb995cc4
   languageName: node
   linkType: hard
 
@@ -8511,13 +8511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.67":
-  version: 0.0.67
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.67"
+"@showtime-xyz/universal.light-box@npm:^0.0.68":
+  version: 0.0.68
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.68"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 0.1.0
     "@showtime-xyz/universal.icon": 0.0.65
-    "@showtime-xyz/universal.image": 0.0.53
+    "@showtime-xyz/universal.image": 0.0.54
     "@showtime-xyz/universal.pressable": 0.0.56
     "@showtime-xyz/universal.tailwind": 0.0.45
     "@showtime-xyz/universal.view": 0.0.46
@@ -8530,7 +8530,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: a632616082c9fd48fd56489b3aaa4ebe5fd844215f4f73edf8eefece417b0f438eeca2b270ed4bd588ee6fc302f2d02e4b1f4db718b590378d48f5f7d0da85a4
+  checksum: 63c50f1aa4fade905f82e70288a57f60f0f0e396e702222c1518183be9aa64c9103b9bcb365ad98607103b9cc4e315e685250bd415f9d5f07a72c28224d3a9c4
   languageName: node
   linkType: hard
 
@@ -8607,11 +8607,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.40":
-  version: 0.0.40
-  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.40"
-  dependencies:
-    "@showtime-xyz/universal.view": 0.0.46
+"@showtime-xyz/universal.pinch-to-zoom@npm:^0.0.41":
+  version: 0.0.41
+  resolution: "@showtime-xyz/universal.pinch-to-zoom@npm:0.0.41"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
@@ -8619,7 +8617,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 2cd4a70d32243efe6ef5913594d82b33a326acd59f9bb86e9e6460db33258c47fbd52aad72fdff4588f325fdf43d1a9f1cd15158afc03f273cc6b3c73eabbcea
+  checksum: b87dc3791d74f8be7b82f0a98f05c6c91c88ee61f27a68f1f070264584625106ba415b0eb9bbd69d955acd41f3efdbbaff611cd0b0bcd26835075655dd8cead0
   languageName: node
   linkType: hard
 
@@ -9050,7 +9048,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.64
     "@showtime-xyz/universal.activity-indicator": ^0.0.46
     "@showtime-xyz/universal.alert": ^0.0.84
-    "@showtime-xyz/universal.avatar": ^0.0.56
+    "@showtime-xyz/universal.avatar": ^0.0.57
     "@showtime-xyz/universal.bottom-sheet": ^0.0.74
     "@showtime-xyz/universal.button": ^0.0.70
     "@showtime-xyz/universal.checkbox": ^0.0.60
@@ -9067,16 +9065,16 @@ __metadata:
     "@showtime-xyz/universal.haptics": ^0.0.17
     "@showtime-xyz/universal.hooks": ^0.0.50
     "@showtime-xyz/universal.icon": ^0.0.65
-    "@showtime-xyz/universal.image": ^0.0.53
+    "@showtime-xyz/universal.image": ^0.0.54
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.41
     "@showtime-xyz/universal.input": ^0.0.63
     "@showtime-xyz/universal.label": ^0.0.50
-    "@showtime-xyz/universal.light-box": ^0.0.67
+    "@showtime-xyz/universal.light-box": ^0.0.68
     "@showtime-xyz/universal.modal": ^0.0.92
     "@showtime-xyz/universal.modal-screen": ^0.0.106
     "@showtime-xyz/universal.modal-sheet": ^0.0.95
     "@showtime-xyz/universal.pan-to-close": ^0.0.27
-    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.40
+    "@showtime-xyz/universal.pinch-to-zoom": ^0.0.41
     "@showtime-xyz/universal.pressable": ^0.0.56
     "@showtime-xyz/universal.pressable-hover": ^0.0.12
     "@showtime-xyz/universal.pressable-scale": ^0.0.52
