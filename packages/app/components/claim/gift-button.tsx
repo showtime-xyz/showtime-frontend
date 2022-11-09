@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { GiftSolid, Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { SocialButton } from "app/components/social-button";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -49,9 +50,26 @@ export function GiftButton({ nft }: { nft: NFT }) {
           { shallow: true }
         );
       }}
-      text={` ${formatClaimNumber(edition.total_claimed_count)}/${
-        edition.creator_airdrop_edition.edition_size
-      }`}
+      text={
+        <>
+          <Text
+            tw={[
+              "text-sm font-semibold",
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count <=
+                10 &&
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count >
+                0
+                ? "text-orange-500"
+                : "text-gray-900 dark:text-white dark:md:text-gray-400",
+            ]}
+          >
+            {formatClaimNumber(edition.total_claimed_count)}
+          </Text>
+          {`/${edition.creator_airdrop_edition.edition_size}`}
+        </>
+      }
     >
       <GiftIcon height={24} width={24} color={iconColor} />
     </SocialButton>
