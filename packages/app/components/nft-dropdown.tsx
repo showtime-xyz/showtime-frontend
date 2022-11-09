@@ -224,7 +224,7 @@ function NFTDropdown({
           >
             <MenuItemIcon Icon={QrCode} />
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-              QRCode
+              QR Code
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
 
