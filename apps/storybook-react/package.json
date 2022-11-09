@@ -27,7 +27,7 @@
     "@storybook/manager-webpack5": "~6.5.9",
     "@storybook/react": "~6.5.9",
     "@types/node": "16.11.9",
-    "@types/react": "^18.0.15",
+    "@types/react": "18.0.24",
     "autoprefixer": "^10.4.8",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-native-web": "^0.17.5",
