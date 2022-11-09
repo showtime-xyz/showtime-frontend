@@ -5,7 +5,7 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 
 type SocialButtonProps = PressableProps & {
-  text?: string;
+  text?: string | JSX.Element;
 };
 export function SocialButton({
   children,
