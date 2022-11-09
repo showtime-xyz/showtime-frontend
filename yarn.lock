@@ -5573,7 +5573,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@magic-ext/oauth@npm:^4.0.0":
   version: 4.0.0
   resolution: "@magic-ext/oauth@npm:4.0.0"
@@ -5583,8 +5582,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-=======
->>>>>>> feature/show2-1346-dark-mode-support-according-to-the
 "@magic-ext/react-native-oauth@npm:^4.0.0":
   version: 4.0.0
   resolution: "@magic-ext/react-native-oauth@npm:4.0.0"
