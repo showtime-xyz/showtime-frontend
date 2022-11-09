@@ -19,6 +19,7 @@ import {
   Moon,
   Sun,
   LogOut,
+  DarkMode,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -156,7 +157,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               onSelect={() => setColorScheme(null)}
               key="nested-group-3"
             >
-              <MenuItemIcon Icon={Moon} />
+              <MenuItemIcon Icon={DarkMode} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 System
               </DropdownMenuItemTitle>
