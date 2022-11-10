@@ -29,10 +29,8 @@ const MagicOauthRedirect = () => {
           //@ts-ignore
           const result = await magic.oauth.getRedirectResult();
           const idToken = result.magic.idToken;
-          const email = result.magic.userMetadata.email;
           await login(LOGIN_MAGIC_ENDPOINT, {
             did: idToken,
-            email,
           });
           setLoading(false);
           router.push("/");
