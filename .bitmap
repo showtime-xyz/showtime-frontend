@@ -8,7 +8,7 @@
  * See the docs (https://bit.dev/docs/components/removing-components) for more information, or use "bit remove --help".
  */
 
- {
+{
     "accordion": {
         "scope": "showtime.universal",
         "version": "0.0.64",

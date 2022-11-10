@@ -155,7 +155,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         placeholder="Enter your phone number"
         keyboardType="phone-pad"
         textInputRef={textInputRef}
-        signInButtonLabel="Send"
+        signInButtonLabel="Send Code"
         leftElement={leftElement}
         onSubmit={onSubmit}
       />

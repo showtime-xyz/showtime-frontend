@@ -5573,6 +5573,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@magic-ext/oauth@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@magic-ext/oauth@npm:4.0.0"
+  dependencies:
+    "@magic-sdk/types": ^9.0.0
+  checksum: c660c628c5fa26c121e27f13d0ce9f6191e8c668bca8817a13efc3857fd793f272481cca3ca5578c3ffdab89fe2ba9b98c49aa28ffa7c59cf8c43e7a3608d7c8
+  languageName: node
+  linkType: hard
+
 "@magic-ext/react-native-oauth@npm:^4.0.0":
   version: 4.0.0
   resolution: "@magic-ext/react-native-oauth@npm:4.0.0"
@@ -9243,6 +9252,7 @@ __metadata:
     "@expo/next-adapter": 4.0.8
     "@growthbook/growthbook-react": ^0.9.1
     "@headlessui/react": ^1.6.6
+    "@magic-ext/oauth": ^4.0.0
     "@next/bundle-analyzer": ^12.0.4
     "@radix-ui/react-popover": ^0.1.6
     "@radix-ui/react-select": ^1.0.0
@@ -9270,6 +9280,7 @@ __metadata:
     ethers: ^5.7.0
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
+    magic-sdk: ^10.0.0
     next: 13.0.0
     next-compose-plugins: ^2.2.1
     next-fonts: ^1.5.1
@@ -26286,6 +26297,18 @@ __metadata:
   version: 2.2.1
   resolution: "ltgt@npm:2.2.1"
   checksum: 7e3874296f7538bc8087b428ac4208008d7b76916354b34a08818ca7c83958c1df10ec427eeeaad895f6b81e41e24745b18d30f89abcc21d228b94f6961d50a2
+  languageName: node
+  linkType: hard
+
+"magic-sdk@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "magic-sdk@npm:10.0.0"
+  dependencies:
+    "@magic-sdk/commons": ^6.0.0
+    "@magic-sdk/provider": ^10.0.0
+    "@magic-sdk/types": ^9.0.0
+    localforage: ^1.7.4
+  checksum: ee78a9730c0699431631462d6667ed9b1830c5fd7460d36e355ebbfe303178c7b43cb6f1a4489688f48b6838197081962af3ddf375d58203a9605258a1c55167
   languageName: node
   linkType: hard
 

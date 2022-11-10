@@ -44,8 +44,11 @@ const CONTAINER_BACKGROUND_MAPPER = {
     // pressed: [colors.red[700], colors.red[700]],
     pressed: "bg-red-700 dark:bg-red-700",
   },
+  outlined: {
+    default: "bg-transparent border border-gray-700 dark:border-gray-400",
+    pressed: "bg-transparent border border-gray-700 dark:border-gray-400",
+  },
 };
-
 const LABEL_SIZE_TW = {
   small: "text-xs",
   regular: "text-sm",
@@ -73,10 +76,10 @@ const ICON_COLOR_MAPPER = {
   tertiary: [colors.gray[900], "#FFF"],
   danger: ["#FFF", "#FFF"],
   text: [colors.gray[900], "#FFF"],
+  outlined: ["#FFF", colors.gray[900]],
 };
 
 const ACCENT_COLOR = ["white", "black"];
-
 export {
   CONTAINER_TW,
   CONTAINER_PADDING_TW,
