@@ -11,8 +11,9 @@ import { useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { Virtual, Keyboard } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
-import "swiper/css";
-import "swiper/css/virtual";
+// TODO:
+// import "swiper/css";
+// import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
