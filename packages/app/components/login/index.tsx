@@ -1,5 +1,6 @@
 import { useMemo, useCallback, useState } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { ScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -168,15 +169,17 @@ export function Login({ onLogin }: LoginProps) {
       ) : (
         <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
           <LoginHeader />
-          <TabView
-            navigationState={{ index, routes: LOGIN_ROUTES }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={(props) => <ScollableTabBar {...props} />}
-            initialLayout={{
-              width,
-            }}
-          />
+          <ScrollView contentContainerStyle={{ flex: 1 }}>
+            <TabView
+              navigationState={{ index, routes: LOGIN_ROUTES }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              renderTabBar={(props) => <ScollableTabBar {...props} />}
+              initialLayout={{
+                width,
+              }}
+            />
+          </ScrollView>
         </View>
       )}
       <LoginOverlays loading={loading && !isConnectingToWallet} />
