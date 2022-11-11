@@ -19,7 +19,7 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuSub = DropdownMenu.Sub;
-
+// Todo: zeego issue on Android, have created a PR: https://github.com/nandorojo/zeego/pull/27, waiting for merge and release.
 const DropdownMenuSubContent =
   Platform.OS === "android" ? DropdownMenu.Content : DropdownMenu.SubContent;
 
