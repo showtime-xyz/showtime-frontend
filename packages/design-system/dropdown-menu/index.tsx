@@ -19,7 +19,9 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuSub = DropdownMenu.Sub;
-const DropdownMenuSubContent = DropdownMenu.SubContent;
+
+const DropdownMenuSubContent =
+  Platform.OS === "android" ? DropdownMenu.Content : DropdownMenu.SubContent;
 
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
@@ -267,19 +269,12 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
   "ItemIcon"
 );
 
-const DropdownMenuItemNativeIcon = DropdownMenu.menuify(
-  ({
-    ...props
-  }: { androidIconName: string; iosIconName: string } & ComponentProps<
-    typeof DropdownMenu.ItemIcon
-  >) => {
-    if (Platform.OS === "web") {
-      return <></>;
-    }
-    return DropdownMenu.ItemIcon;
-  },
-  "ItemIcon"
-);
+const DropdownMenuItemNativeIcon = DropdownMenu.menuify(() => {
+  if (Platform.OS === "web") {
+    return <></>;
+  }
+  return DropdownMenu.ItemIcon;
+}, "ItemIcon");
 
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 

@@ -135,10 +135,7 @@ function NFTDropdown({
               key="hide"
             >
               <MenuItemIcon Icon={EyeOff} />
-              <DropdownMenuItemNativeIcon
-                iosIconName="eye.slash"
-                androidIconName="btn_star"
-              />
+              <DropdownMenuItemNativeIcon iosIconName="eye.slash" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Hide
@@ -154,10 +151,7 @@ function NFTDropdown({
               key="unhide"
             >
               <MenuItemIcon Icon={EyeOff} />
-              <DropdownMenuItemNativeIcon
-                iosIconName="eye"
-                androidIconName="btn_star"
-              />
+              <DropdownMenuItemNativeIcon iosIconName="eye" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unhide
               </DropdownMenuItemTitle>
@@ -183,7 +177,6 @@ function NFTDropdown({
               <MenuItemIcon Icon={Showtime} />
               <DropdownMenuItemNativeIcon
                 iosIconName={isBlocked ? "circle" : "circle.slash"}
-                androidIconName="btn_star"
               />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
@@ -197,10 +190,7 @@ function NFTDropdown({
             nft.contract_address && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
                 <MenuItemIcon Icon={OpenSea} />
-                <DropdownMenuItemNativeIcon
-                  iosIconName="arrow.right"
-                  androidIconName="btn_star"
-                />
+                <DropdownMenuItemNativeIcon iosIconName="arrow.right" />
 
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   View on OpenSea
@@ -224,10 +214,7 @@ function NFTDropdown({
               )}
               <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
                 <MenuItemIcon Icon={Copy} />
-                <DropdownMenuItemNativeIcon
-                  iosIconName="square.and.arrow.up"
-                  androidIconName="btn_star"
-                />
+                <DropdownMenuItemNativeIcon iosIconName="square.and.arrow.up" />
 
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   {isShareAPIAvailable ? "Share" : "Copy Link"}
@@ -243,10 +230,7 @@ function NFTDropdown({
             key="qr-code"
           >
             <MenuItemIcon Icon={QrCode} />
-            <DropdownMenuItemNativeIcon
-              iosIconName="qrcode"
-              androidIconName="btn_star"
-            />
+            <DropdownMenuItemNativeIcon iosIconName="qrcode" />
 
             <DropdownMenu.ItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               QR Code
@@ -259,10 +243,7 @@ function NFTDropdown({
               key="refresh-metadata"
             >
               <MenuItemIcon Icon={Refresh} />
-              <DropdownMenuItemNativeIcon
-                iosIconName="arrow.triangle.2.circlepath"
-                androidIconName="btn_star"
-              />
+              <DropdownMenuItemNativeIcon iosIconName="arrow.triangle.2.circlepath" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Refresh Metadata
@@ -283,10 +264,7 @@ function NFTDropdown({
               key="unfollow"
             >
               <MenuItemIcon Icon={UserMinus} />
-              <DropdownMenuItemNativeIcon
-                iosIconName="person.fill.badge.plus"
-                androidIconName="btn_star"
-              />
+              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.plus" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unfollow User
@@ -309,7 +287,6 @@ function NFTDropdown({
               <MenuItemIcon Icon={Slash} />
               <DropdownMenuItemNativeIcon
                 iosIconName={isBlocked ? "circle" : "circle.slash"}
-                androidIconName="btn_star"
               />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
@@ -328,10 +305,7 @@ function NFTDropdown({
             >
               <MenuItemIcon Icon={Flag} />
 
-              <DropdownMenuItemNativeIcon
-                iosIconName="flag"
-                androidIconName="btn_star"
-              />
+              <DropdownMenuItemNativeIcon iosIconName="flag" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Report
               </DropdownMenuItemTitle>
