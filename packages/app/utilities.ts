@@ -619,3 +619,12 @@ export const OAUTH_REDIRECT_URI = Platform.select({
     : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/magic-oauth-redirect`,
   default: `io.showtime${__DEV__ ? ".development" : ""}://magic-oauth-redirect`,
 });
+
+export const isProfileIncomplete = (profile?: Profile) => {
+  return profile
+    ? !profile.username ||
+        userHasIncompleteExternalLinks(profile) ||
+        !profile.bio ||
+        !profile.img_url
+    : undefined;
+};

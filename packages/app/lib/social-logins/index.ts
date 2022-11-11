@@ -58,7 +58,7 @@ export const useMagicSocialAuth = () => {
   const performMagicAuthWithTwitter = async (redirectURI?: string) => {
     const scope = ["email"];
     const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirect_uri=" + redirectURI : "");
+      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
     if (Platform.OS === "web") {
       //@ts-ignore
       return magic.oauth.loginWithRedirect({
@@ -78,7 +78,7 @@ export const useMagicSocialAuth = () => {
   const performMagicAuthWithGoogle = async (redirectURI?: string) => {
     const scope = ["email"];
     const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirect_uri=" + redirectURI : "");
+      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
     if (Platform.OS === "web") {
       //@ts-ignore
       return magic.oauth.loginWithRedirect({
@@ -98,7 +98,7 @@ export const useMagicSocialAuth = () => {
   const performMagicAuthWithApple = async (redirectURI?: string) => {
     const scope = ["email"];
     const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirect_uri=" + redirectURI : "");
+      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
 
     if (Platform.OS === "web") {
       //@ts-ignore

@@ -115,7 +115,7 @@ export function Login({ onLogin }: LoginProps) {
                     handleSubmitPhoneNumber={handleSubmitPhoneNumber}
                   />
                 </View>
-                <View tw="mx-[-16px] mb-[16px] flex-row items-center">
+                <View tw="mx-[-16px] mb-[8px] flex-row items-center">
                   <View tw="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
                   <Text tw="mx-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
                     OR
