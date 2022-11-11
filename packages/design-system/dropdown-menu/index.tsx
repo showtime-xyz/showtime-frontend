@@ -1,4 +1,5 @@
 import { ComponentProps, useMemo, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { MotiView } from "moti";
 import Animated, {
@@ -266,6 +267,20 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
   "ItemIcon"
 );
 
+const DropdownMenuItemNativeIcon = DropdownMenu.menuify(
+  ({
+    ...props
+  }: { androidIconName: string; iosIconName: string } & ComponentProps<
+    typeof DropdownMenu.ItemIcon
+  >) => {
+    if (Platform.OS === "web") {
+      return <></>;
+    }
+    return DropdownMenu.ItemIcon;
+  },
+  "ItemIcon"
+);
+
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 
 const DropdownMenuItemImage = DropdownMenu.menuify(
@@ -313,4 +328,5 @@ export {
   DropdownMenuItemIcon,
   DropdownMenuItemImage,
   DropdownMenuLabel,
+  DropdownMenuItemNativeIcon,
 };

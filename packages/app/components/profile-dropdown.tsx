@@ -7,6 +7,7 @@ import {
   DropdownMenuItemTitle,
   DropdownMenuRoot,
   DropdownMenuTrigger,
+  DropdownMenuItemNativeIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -72,6 +73,10 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           key="share"
         >
           <MenuItemIcon Icon={Copy} />
+          <DropdownMenuItemNativeIcon
+            iosIconName="square.and.arrow.up"
+            androidIconName="btn_star"
+          />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Share
           </DropdownMenuItemTitle>
@@ -89,6 +94,11 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           }}
         >
           <MenuItemIcon Icon={Slash} />
+          <DropdownMenuItemNativeIcon
+            iosIconName={isBlocked ? "circle" : "circle.slash"}
+            androidIconName="btn_star"
+          />
+
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
@@ -102,6 +112,10 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           key="report"
         >
           <MenuItemIcon Icon={Flag} />
+          <DropdownMenuItemNativeIcon
+            iosIconName="flag"
+            androidIconName="btn_star"
+          />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Report
           </DropdownMenuItemTitle>
