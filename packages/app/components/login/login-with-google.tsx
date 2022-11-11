@@ -19,7 +19,7 @@ export const LoginWithGoogle = () => {
       type="google"
       onPress={async () => {
         if (Platform.OS === "web") {
-          performMagicAuthWithGoogle("/");
+          performMagicAuthWithGoogle({ redirectUri: "/", shouldLogin: "yes" });
         } else {
           try {
             setAuthenticationStatus("AUTHENTICATING");

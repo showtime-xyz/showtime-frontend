@@ -19,7 +19,7 @@ export const LoginWithTwitter = () => {
       type="twitter"
       onPress={async () => {
         if (Platform.OS === "web") {
-          performMagicAuthWithTwitter("/");
+          performMagicAuthWithTwitter({ redirectUri: "/", shouldLogin: "yes" });
         } else {
           try {
             setAuthenticationStatus("AUTHENTICATING");

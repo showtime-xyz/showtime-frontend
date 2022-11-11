@@ -5,14 +5,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { Logger } from "app/lib/logger";
-import { useMagic } from "app/lib/magic";
 
 import { useMagicSocialAuth } from "../../lib/social-logins";
 import { LoginButton } from "./login-button";
 
 export const LoginWithApple = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
-  const { magic } = useMagic();
   const router = useRouter();
   const { performMagicAuthWithApple } = useMagicSocialAuth();
   return (
@@ -20,8 +18,7 @@ export const LoginWithApple = () => {
       type="apple"
       onPress={async () => {
         if (Platform.OS === "web") {
-          //@ts-ignore
-          performMagicAuthWithApple("/");
+          performMagicAuthWithApple({ redirectUri: "/", shouldLogin: "yes" });
         } else {
           try {
             setAuthenticationStatus("AUTHENTICATING");

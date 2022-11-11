@@ -8,6 +8,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
+import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { createParam } from "app/navigation/use-param";
@@ -16,6 +17,7 @@ import { isProfileIncomplete } from "app/utilities";
 type Query = {
   redirectUri?: string;
   error?: string;
+  shouldLogin?: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -28,10 +30,14 @@ const MagicOauthRedirect = () => {
   const router = useRouter();
   const [redirectUri] = useParam("redirectUri");
   const [magicError] = useParam("error");
+  const [shouldLogin] = useParam("shouldLogin");
+
+  const decodedURI = useLatestValueRef(redirectUri);
+  const shouldLoginRef = useLatestValueRef(shouldLogin);
 
   useEffect(() => {
     (async function getMagicAuthData() {
-      if (magic && requestSent.current === false && redirectUri) {
+      if (magic && requestSent.current === false) {
         try {
           requestSent.current = true;
           setLoading(true);
@@ -39,23 +45,42 @@ const MagicOauthRedirect = () => {
           //@ts-ignore
           const result = await magic.oauth.getRedirectResult();
           const idToken = result.magic.idToken;
-          const user = await login(LOGIN_MAGIC_ENDPOINT, {
-            did: idToken,
-          });
-          setLoading(false);
-          // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to redirectUri
-          if (!isProfileIncomplete(user.data.profile)) {
-            router.replace(redirectUri);
+          if (shouldLoginRef.current) {
+            const user = await login(LOGIN_MAGIC_ENDPOINT, {
+              did: idToken,
+            });
+            // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to decodedURI
+            if (!isProfileIncomplete(user.data.profile)) {
+              router.replace(decodedURI.current);
+            }
+          } else {
+            let pathname = decodedURI.current;
+            if (decodedURI.current.includes("?")) {
+              pathname = decodedURI.current + "&did=" + idToken;
+            } else {
+              pathname = decodedURI.current + "?did=" + idToken;
+            }
+
+            router.replace(pathname);
           }
+          setLoading(false);
         } catch (e) {
           Logger.error(e);
           logout();
-          router.push(redirectUri);
+          router.push(decodedURI.current);
           setError(true);
         }
       }
     })();
-  }, [magic, login, logout, router, setAuthenticationStatus, redirectUri]);
+  }, [
+    magic,
+    login,
+    logout,
+    router,
+    setAuthenticationStatus,
+    decodedURI,
+    shouldLoginRef,
+  ]);
 
   return (
     <View tw="flex h-screen w-screen items-center justify-center">

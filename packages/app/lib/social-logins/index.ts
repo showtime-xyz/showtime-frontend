@@ -5,6 +5,11 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagic } from "app/lib/magic";
 import { OAUTH_REDIRECT_URI } from "app/utilities";
 
+type Config = {
+  shouldLogin?: string;
+  redirectUri?: string;
+};
+
 export const useMagicSocialAuth = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -55,10 +60,10 @@ export const useMagicSocialAuth = () => {
   //     }
   //   };
 
-  const performMagicAuthWithTwitter = async (redirectURI?: string) => {
+  const performMagicAuthWithTwitter = async (config?: Config) => {
     const scope = ["email"];
-    const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
+    const params = new URLSearchParams(config).toString();
+    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
     if (Platform.OS === "web") {
       //@ts-ignore
       return magic.oauth.loginWithRedirect({
@@ -75,10 +80,11 @@ export const useMagicSocialAuth = () => {
     }
   };
 
-  const performMagicAuthWithGoogle = async (redirectURI?: string) => {
+  const performMagicAuthWithGoogle = async (config?: Config) => {
     const scope = ["email"];
-    const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
+    const params = new URLSearchParams(config).toString();
+    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
+
     if (Platform.OS === "web") {
       //@ts-ignore
       return magic.oauth.loginWithRedirect({
@@ -95,10 +101,10 @@ export const useMagicSocialAuth = () => {
     }
   };
 
-  const performMagicAuthWithApple = async (redirectURI?: string) => {
+  const performMagicAuthWithApple = async (config?: Config) => {
     const scope = ["email"];
-    const redirectUri =
-      OAUTH_REDIRECT_URI + (redirectURI ? "?redirectUri=" + redirectURI : "");
+    const params = new URLSearchParams(config).toString();
+    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
 
     if (Platform.OS === "web") {
       //@ts-ignore

@@ -152,9 +152,7 @@ export function AuthProvider({
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
 
-      if (Platform.OS !== "web") {
-        router.push("/");
-      }
+      router.push("/");
     },
     [
       onWagmiDisconnect,
