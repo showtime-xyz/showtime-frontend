@@ -11,6 +11,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuItemNativeIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
@@ -95,6 +96,8 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           key="your-settings"
         >
           <MenuItemIcon Icon={Settings} />
+          <DropdownMenuItemNativeIcon iosIconName="gear" />
+
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Settings
           </DropdownMenuItemTitle>
@@ -122,6 +125,8 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           key="edit-profile"
         >
           <MenuItemIcon Icon={Edit} />
+          <DropdownMenuItemNativeIcon iosIconName="square.and.pencil" />
+
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Edit Profile
           </DropdownMenuItemTitle>
@@ -130,6 +135,10 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
             <MenuItemIcon Icon={isDark ? Moon : Sun} />
+            <DropdownMenuItemNativeIcon
+              iosIconName={isDark ? "moon" : "sun.max"}
+            />
+
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               Theme
             </DropdownMenuItemTitle>
@@ -140,6 +149,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               key="nested-group-1"
             >
               <MenuItemIcon Icon={Sun} />
+              <DropdownMenuItemNativeIcon iosIconName="sun.max" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Light
               </DropdownMenuItemTitle>
@@ -149,6 +159,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               key="nested-group-2"
             >
               <MenuItemIcon Icon={Moon} />
+              <DropdownMenuItemNativeIcon iosIconName="moon" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Dark
               </DropdownMenuItemTitle>
@@ -158,6 +169,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               key="nested-group-3"
             >
               <MenuItemIcon Icon={DarkMode} />
+              <DropdownMenuItemNativeIcon iosIconName="circle.righthalf.filled" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 System
               </DropdownMenuItemTitle>
@@ -167,6 +179,8 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
           <MenuItemIcon Icon={LogOut} />
+          <DropdownMenuItemNativeIcon iosIconName="rectangle.portrait.and.arrow.right" />
+
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Sign Out
           </DropdownMenuItemTitle>
