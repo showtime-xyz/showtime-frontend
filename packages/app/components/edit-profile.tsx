@@ -164,7 +164,7 @@ export const EditProfile = () => {
     formState: { errors, isSubmitting },
     reset,
     setValue,
-    getValues,
+    watch,
   } = useForm<any>({
     resolver: yupResolver(editProfileValidationSchema),
     mode: "all",
@@ -459,7 +459,7 @@ export const EditProfile = () => {
                         style={{
                           opacity:
                             !errors[item.value] &&
-                            getValues(item.value) &&
+                            watch(item.value) &&
                             (item.value === "username" ? isValid : true)
                               ? 1
                               : 0.1,

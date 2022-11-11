@@ -45,7 +45,7 @@ const MagicOauthRedirect = () => {
           setLoading(false);
           // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to redirectUri
           if (!isProfileIncomplete(user.data.profile)) {
-            router.push(redirectUri);
+            router.replace(redirectUri);
           }
         } catch (e) {
           Logger.error(e);
