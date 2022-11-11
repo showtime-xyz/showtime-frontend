@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -8,9 +10,13 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
+import { createParam } from "app/navigation/use-param";
 
-import { Button, Spinner } from "design-system";
+type Query = {
+  redirectUri?: string;
+};
 
+const { useParam } = createParam<Query>();
 const MagicOauthRedirect = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -18,10 +24,11 @@ const MagicOauthRedirect = () => {
   const { magic } = useMagic();
   const requestSent = useRef(false);
   const router = useRouter();
+  const [redirectUri] = useParam("redirectUri");
 
   useEffect(() => {
     (async function getMagicAuthData() {
-      if (magic && requestSent.current === false) {
+      if (magic && requestSent.current === false && redirectUri) {
         try {
           requestSent.current = true;
           setLoading(true);
@@ -29,22 +36,20 @@ const MagicOauthRedirect = () => {
           //@ts-ignore
           const result = await magic.oauth.getRedirectResult();
           const idToken = result.magic.idToken;
-          const email = result.magic.userMetadata.email;
           await login(LOGIN_MAGIC_ENDPOINT, {
             did: idToken,
-            email,
           });
           setLoading(false);
-          router.push("/");
+          router.push(redirectUri);
         } catch (e) {
           Logger.error(e);
           logout();
-          router.push("/");
+          router.push(redirectUri);
           setError(true);
         }
       }
     })();
-  }, [magic, login, logout, router, setAuthenticationStatus]);
+  }, [magic, login, logout, router, setAuthenticationStatus, redirectUri]);
 
   return (
     <View tw="flex h-screen w-screen items-center justify-center">

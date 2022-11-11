@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { captureException } from "@logrocket/react-native";
 import { useSWRConfig } from "swr";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -24,78 +25,90 @@ const useAddWallet = () => {
   const hasNoPrimaryWallet = user?.user?.data.profile.primary_wallet === null;
   const userWallets = user?.user?.data.profile.wallet_addresses_v2;
 
-  const addWallet = async () => {
+  const addWallet = async (isMagic?: boolean) => {
     try {
       setStatus("loading");
-      if (wallet.connected) {
-        await wallet.disconnect();
-      }
 
-      const res = await wallet.connect();
-
-      const getWalletDefalutNickname = () => {
-        const walletName = res?.walletName;
-        const index = userWallets?.findIndex(
-          (item) => item.nickname === walletName
-        );
-        if (!index || index === -1) {
-          return res?.walletName;
+      if (isMagic) {
+        try {
+          setStatus("idle");
+        } catch (e) {
+          Logger.error("magic add wallet failed", e);
+          captureException(e);
         }
-        return `${res?.walletName} ${(userWallets?.length ?? 0) + 1}`;
-      };
+      } else {
+        if (wallet.connected) {
+          await wallet.disconnect();
+        }
 
-      if (res) {
-        const nonce = await fetchNonce(res.address);
-        const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
-        if (isMobileWeb()) {
-          Alert.alert(
-            "Sign message",
-            "We need a signature in order to verify your identity. This won't cost any gas.",
-            [
-              {
-                text: "Cancel",
-              },
-              {
-                text: "Sign",
-                onPress: async () => {
-                  const signature = await wallet.signMessageAsync({ message });
-                  if (signature) {
-                    const addedWallet = await addWalletToBackend({
-                      address: res.address,
-                      signature,
-                    });
+        const res = await wallet.connect();
 
-                    mutate(MY_INFO_ENDPOINT);
-
-                    // automatically set the primary wallet on add wallet if user doesn't have one
-                    if (hasNoPrimaryWallet) {
-                      setPrimaryWallet(addedWallet);
-                    }
-                  }
-                },
-              },
-            ]
+        const getWalletDefalutNickname = () => {
+          const walletName = res?.walletName;
+          const index = userWallets?.findIndex(
+            (item) => item.nickname === walletName
           );
-        } else {
-          const signature = await wallet.signMessageAsync({ message });
-          if (signature) {
-            const addedWallet = await addWalletToBackend({
-              address: res.address,
-              signature,
-              nickname: getWalletDefalutNickname(),
-            });
+          if (!index || index === -1) {
+            return res?.walletName;
+          }
+          return `${res?.walletName} ${(userWallets?.length ?? 0) + 1}`;
+        };
 
-            mutate(MY_INFO_ENDPOINT);
+        if (res) {
+          const nonce = await fetchNonce(res.address);
+          const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
+          if (isMobileWeb()) {
+            Alert.alert(
+              "Sign message",
+              "We need a signature in order to verify your identity. This won't cost any gas.",
+              [
+                {
+                  text: "Cancel",
+                },
+                {
+                  text: "Sign",
+                  onPress: async () => {
+                    const signature = await wallet.signMessageAsync({
+                      message,
+                    });
+                    if (signature) {
+                      const addedWallet = await addWalletToBackend({
+                        address: res.address,
+                        signature,
+                      });
 
-            // automatically set the primary wallet on add wallet if user doesn't have one
-            if (hasNoPrimaryWallet) {
-              setPrimaryWallet(addedWallet);
+                      mutate(MY_INFO_ENDPOINT);
+
+                      // automatically set the primary wallet on add wallet if user doesn't have one
+                      if (hasNoPrimaryWallet) {
+                        setPrimaryWallet(addedWallet);
+                      }
+                    }
+                  },
+                },
+              ]
+            );
+          } else {
+            const signature = await wallet.signMessageAsync({ message });
+            if (signature) {
+              const addedWallet = await addWalletToBackend({
+                address: res.address,
+                signature,
+                nickname: getWalletDefalutNickname(),
+              });
+
+              mutate(MY_INFO_ENDPOINT);
+
+              // automatically set the primary wallet on add wallet if user doesn't have one
+              if (hasNoPrimaryWallet) {
+                setPrimaryWallet(addedWallet);
+              }
             }
           }
         }
-      }
 
-      setStatus("idle");
+        setStatus("idle");
+      }
     } catch (e: any) {
       setStatus("error");
       Alert.alert("Something went wrong", e.message);

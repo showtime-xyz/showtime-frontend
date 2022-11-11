@@ -3,44 +3,31 @@ import { Platform } from "react-native";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useAuth } from "app/hooks/auth/use-auth";
+import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { Logger } from "app/lib/logger";
-import { useMagic } from "app/lib/magic";
-import { OAUTH_REDIRECT_URI } from "app/utilities";
+import { useMagicSocialAuth } from "app/lib/social-logins";
 
 import { LoginButton } from "./login-button";
 
-const LoginWithTwitter = () => {
-  const { magic } = useMagic();
+export const LoginWithTwitter = () => {
   const { setAuthenticationStatus, login, logout } = useAuth();
   const router = useRouter();
+  const { performMagicAuthWithTwitter } = useMagicSocialAuth();
+
   return (
     <LoginButton
       type="twitter"
       onPress={async () => {
         if (Platform.OS === "web") {
-          //@ts-ignore
-          await magic.oauth.loginWithRedirect({
-            provider: "twitter",
-            redirectURI: OAUTH_REDIRECT_URI,
-            scope: ["email"],
-          });
+          performMagicAuthWithTwitter("/");
         } else {
           try {
             setAuthenticationStatus("AUTHENTICATING");
-            //@ts-ignore
-            const result = await magic.oauth.loginWithPopup({
-              provider: "twitter",
-              scope: ["email"],
-              redirectURI: OAUTH_REDIRECT_URI,
-            });
-
+            const result = await performMagicAuthWithTwitter();
             const idToken = result.magic.idToken;
-            const email = result.magic.userMetadata.email;
-            console.log("idtoken ", result, idToken, email);
-            // await login(LOGIN_MAGIC_ENDPOINT, {
-            //   did: idToken,
-            //   email,
-            // });
+            await login(LOGIN_MAGIC_ENDPOINT, {
+              did: idToken,
+            });
             router.pop();
           } catch (e) {
             Logger.error(e);
@@ -51,5 +38,3 @@ const LoginWithTwitter = () => {
     />
   );
 };
-
-export default LoginWithTwitter;
