@@ -1,3 +1,4 @@
+// Web only component. This component never gets rendered on native. It handles the redirect from magic.link
 import { useState, useRef, useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
