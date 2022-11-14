@@ -66,7 +66,6 @@ const MagicOauthRedirect = () => {
           setLoading(false);
         } catch (e) {
           Logger.error(e);
-          logout();
           router.push(decodedURI.current);
           setError(true);
         }
