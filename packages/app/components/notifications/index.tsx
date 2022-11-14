@@ -115,7 +115,7 @@ export const Notifications = ({
         style={{
           height: Platform.select({
             default: windowHeight - bottomBarHeight,
-            web: windowHeight - bottomBarHeight,
+            web: useWindowScroll ? windowHeight - bottomBarHeight : "100%",
             ios: windowHeight,
           }),
         }}
