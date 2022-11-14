@@ -3,12 +3,7 @@ import { Platform, ScrollView } from "react-native";
 
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Twitter,
-  Spotify,
-  Apple,
-  GoogleOriginal,
-} from "@showtime-xyz/universal.icon";
+import { Spotify, Apple, GoogleOriginal } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
@@ -100,11 +95,11 @@ const socialAccounts = [
     type: "google",
     name: "Google",
   },
-  {
-    Icon: Twitter,
-    type: "twitter",
-    name: "Twitter",
-  },
+  // {
+  //   Icon: Twitter,
+  //   type: "twitter",
+  //   name: "Twitter",
+  // },
   {
     Icon: Apple,
     type: "apple",

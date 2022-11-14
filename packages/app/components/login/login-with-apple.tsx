@@ -5,8 +5,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { Logger } from "app/lib/logger";
+import { useMagicSocialAuth } from "app/lib/social-logins";
 
-import { useMagicSocialAuth } from "../../lib/social-logins";
 import { LoginButton } from "./login-button";
 
 export const LoginWithApple = () => {
