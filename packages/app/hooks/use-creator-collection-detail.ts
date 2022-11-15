@@ -7,6 +7,7 @@ import { fetcher } from "./use-infinite-list-query";
 export type CreatorEditionResponse = {
   creator_airdrop_edition: IEdition;
   is_already_claimed: boolean;
+  password: string | null;
   time_limit: string;
   total_claimed_count: number;
   gating_type: "spotify_save" | "password" | "location" | "multi";
