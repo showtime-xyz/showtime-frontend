@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { AuthenticationStatus } from "../types";
+import type { AuthenticationStatus, MyInfo } from "app/types";
 
 type AuthContextType = {
   authenticationStatus: AuthenticationStatus;
@@ -8,7 +8,7 @@ type AuthContextType = {
 
   setAuthenticationStatus: (status: AuthenticationStatus) => void;
 
-  login: (endpoint: string, payload: object) => Promise<void>;
+  login: (endpoint: string, payload: object) => Promise<MyInfo>;
   logout: () => Promise<void>;
 };
 

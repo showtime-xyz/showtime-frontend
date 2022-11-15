@@ -16,6 +16,8 @@ import { LoginFooter } from "./login-footer";
 import { LoginHeader } from "./login-header";
 import { LoginInputField } from "./login-input-field";
 import { LoginOverlays } from "./login-overlays";
+import { LoginWithApple } from "./login-with-apple";
+import { LoginWithGoogle } from "./login-with-google";
 import { PhoneNumberPicker } from "./phone-number-picker";
 import { useLogin } from "./use-login";
 
@@ -112,16 +114,16 @@ export function Login({ onLogin }: LoginProps) {
                     handleSubmitPhoneNumber={handleSubmitPhoneNumber}
                   />
                 </View>
-                <View tw="mx-[-16px] mb-[16px] flex-row items-center">
+                <View tw="mx-[-16px] mb-[8px] flex-row items-center">
                   <View tw="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
                   <Text tw="mx-2 text-center text-sm font-bold text-gray-600 dark:text-gray-400">
                     OR
                   </Text>
                   <View tw="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
                 </View>
-                {/* <LoginWithApple />
-              <LoginWithGoogle />
-              <LoginWithTwitter /> */}
+                <LoginWithApple />
+                <LoginWithGoogle />
+                {/* <LoginWithTwitter /> */}
                 <LoginButton
                   onPress={() => setShowEmailLogin(true)}
                   type="email"

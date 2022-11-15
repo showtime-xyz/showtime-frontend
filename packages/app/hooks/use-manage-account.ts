@@ -16,6 +16,61 @@ export function useManageAccount() {
 
   const Alert = useAlert();
 
+  const addSocial = useCallback(
+    async (did: string, type?: "twitter" | "google" | "apple") => {
+      try {
+        await axios({
+          url: `/v1/magic/wallet`,
+          method: "POST",
+          // I am not proud of this
+          data: { did },
+          overrides: {
+            forceAccessTokenAuthorization: true,
+          },
+        });
+
+        mutate(MY_INFO_ENDPOINT);
+
+        toast?.show({
+          message: "Social account added",
+          hideAfter: 4000,
+        });
+      } catch (error: any) {
+        if (error?.response.status === 420) {
+          Alert.alert(
+            "This account is already linked to another Showtime account",
+            `Would you like to link it to this account? \n\n By doing so, you will lose your access to the previous account`,
+            [
+              { text: "Cancel" },
+              {
+                text: "Confirm",
+                onPress: async () => {
+                  await axios({
+                    url: `/v1/magic/wallet`,
+                    method: "POST",
+                    // I am not proud of this
+                    data: { did, ["reassign_" + type + "_email"]: true },
+                    overrides: {
+                      forceAccessTokenAuthorization: true,
+                    },
+                  });
+
+                  mutate(MY_INFO_ENDPOINT);
+
+                  toast?.show({
+                    message: "Social account added",
+                    hideAfter: 4000,
+                  });
+                },
+              },
+            ]
+          );
+        }
+      }
+    },
+    [toast, mutate, Alert]
+  );
+
   const addEmail = useCallback(
     async (email: string, did: string) => {
       try {
@@ -161,5 +216,11 @@ export function useManageAccount() {
     },
     [toast, mutate]
   );
-  return { addEmail, verifyPhoneNumber, removeAccount, removePhoneNumber };
+  return {
+    addEmail,
+    verifyPhoneNumber,
+    removeAccount,
+    removePhoneNumber,
+    addSocial,
+  };
 }

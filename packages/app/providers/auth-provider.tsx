@@ -18,6 +18,7 @@ import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
+import { axios } from "app/lib/axios";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
@@ -25,8 +26,10 @@ import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
+import type { AuthenticationStatus, MyInfo } from "app/types";
+import { isProfileIncomplete } from "app/utilities";
 
-import type { AuthenticationStatus } from "../types";
+import { MY_INFO_ENDPOINT } from "./user-provider";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -66,7 +69,7 @@ export function AuthProvider({
 
   //#region methods
   const login = useCallback(
-    async function login(endpoint: string, data: object) {
+    async function login(endpoint: string, data: object): Promise<MyInfo> {
       const response = await fetchOnAppForeground({
         url: `/v1/${endpoint}`,
         method: "POST",
@@ -76,18 +79,45 @@ export function AuthProvider({
       const accessToken = response?.access;
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
+      const res = await axios({
+        url: MY_INFO_ENDPOINT,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-      if (validResponse) {
+      if (validResponse && res) {
         setTokens(accessToken, refreshToken);
         loginStorage.setLogin(Date.now().toString());
         setAuthenticationStatus("AUTHENTICATED");
-        return;
+
+        const isIncomplete = isProfileIncomplete(res?.data?.profile);
+        if (isIncomplete) {
+          router.push(
+            Platform.select({
+              native: "/profile/complete",
+              web: {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  completeProfileModal: true,
+                },
+              } as any,
+            }),
+            Platform.select({
+              native: "/profile/complete",
+              web: router.asPath,
+            })
+          );
+        }
+        return res;
       }
 
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, fetchOnAppForeground]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground, router]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
@@ -122,9 +152,7 @@ export function AuthProvider({
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
 
-      if (Platform.OS !== "web") {
-        router.push("/");
-      }
+      router.push("/");
     },
     [
       onWagmiDisconnect,

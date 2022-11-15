@@ -90,7 +90,7 @@ export const LoginButton = ({ type, ...rest }: LoginButtonProps) => {
     <Button
       variant={variant}
       size="regular"
-      tw="my-2"
+      tw="my-1"
       labelTW={labelTW}
       {...rest}
     >
