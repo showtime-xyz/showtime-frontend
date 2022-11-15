@@ -537,7 +537,7 @@ export const DropForm = () => {
                       <Accordion.Label>Drop Details</Accordion.Label>
                       <Accordion.Chevron />
                     </View>
-                    <ScrollView tw="flex-row justify-between" horizontal={true}>
+                    <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
                         label={`Royalties ${watch("royalty")}%`}
                         type="text"
@@ -556,7 +556,7 @@ export const DropForm = () => {
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
-                      {gatingType !== "spotify_save" ? (
+                      {gatingType !== "spotify_save" && watch("password") ? (
                         <DataPill
                           label={`Password ${
                             watch("password") === ""
@@ -566,12 +566,14 @@ export const DropForm = () => {
                           type="text"
                         />
                       ) : null}
-                      {gatingType !== "spotify_save" ? (
+                      {gatingType !== "spotify_save" &&
+                      watch("googleMapsUrl") ? (
                         <DataPill
                           label={`Location ${
-                            watch("location") === "" || !watch("location")
+                            watch("googleMapsUrl") === "" ||
+                            !watch("googleMapsUrl")
                               ? "None"
-                              : watch("location")
+                              : watch("googleMapsUrl")
                           }`}
                           type="text"
                         />
@@ -689,7 +691,7 @@ export const DropForm = () => {
                       />
                     </View>
                   ) : null}
-                  {gatingType !== "spotify_save" ? (
+                  {gatingType !== "spotify_save" && watch("googleMapsUrl") ? (
                     <View tw="mt-4 flex-1 flex-row">
                       <Controller
                         control={control}
