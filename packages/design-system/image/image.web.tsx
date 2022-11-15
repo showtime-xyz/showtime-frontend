@@ -74,8 +74,6 @@ function Img({
               // rounding errors causing some pixel lost.
               (width != null ? "contain" : "cover")
           ),
-          height,
-          width,
           ...style,
         }}
         loading={loading}
