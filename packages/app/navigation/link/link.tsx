@@ -12,7 +12,9 @@ type LinkProps = Props & {
   viewProps?: ViewProps;
   tw?: TW;
   dataset?: any;
-  // react-native-web only types
+  /**
+   * **WEB ONLY**
+   */
   hrefAttrs?: {
     rel: "noreferrer";
     target?: "_blank";
@@ -27,6 +29,7 @@ function Link({ viewProps, tw, hrefAttrs, onPress, ...props }: LinkProps) {
         web: View,
         default: Pressable as any,
       })}
+      {...hrefAttrs}
       componentProps={{
         ...viewProps,
         tw,
