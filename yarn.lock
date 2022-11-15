@@ -8086,9 +8086,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.accordion@npm:0.0.64, @showtime-xyz/universal.accordion@npm:^0.0.64":
-  version: 0.0.64
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.64"
+"@showtime-xyz/universal.accordion@npm:0.0.65, @showtime-xyz/universal.accordion@npm:^0.0.65":
+  version: 0.0.65
+  resolution: "@showtime-xyz/universal.accordion@npm:0.0.65"
   dependencies:
     "@radix-ui/react-accordion": 0.1.6
     "@showtime-xyz/universal.hooks": 0.0.50
@@ -8103,7 +8103,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 8aedb70397ecda326f21742329234df65ecf56aba980932aad269fdadeb0b00917ae309e210e90b7c9ff2d6c6e68d5b70a44b29a5c396f88a62a3a1e40b4bbe6
+  checksum: 7485e968958c03e37c034cde589f80c97d6f7efbe7ba605b2c43dc89ea1a621f1a51cbec30b2623be79cd1a315a6c0616656aff50e4e817dc3723c77377e8369
   languageName: node
   linkType: hard
 
@@ -8378,11 +8378,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.105":
-  version: 0.0.105
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.105"
+"@showtime-xyz/universal.fieldset@npm:^0.0.106":
+  version: 0.0.106
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.106"
   dependencies:
-    "@showtime-xyz/universal.accordion": 0.0.64
+    "@showtime-xyz/universal.accordion": 0.0.65
     "@showtime-xyz/universal.hooks": 0.0.50
     "@showtime-xyz/universal.input": 0.0.63
     "@showtime-xyz/universal.label": 0.0.50
@@ -8398,7 +8398,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: a505346dedd4c4ceffaf21d9176e2b1fc37e37154f9df54c215d3058dd12ec2c03e86c7823d3b94253d3a0e3bf8ae2dda1a5ef743058dd15c7fd5080ca3670ae
+  checksum: ff9977caf34c12da91a78a51090df4b9c7fdc8b92cdfd31187912bd01f3eae6de0350438e4a50656a0128a511563cfb29f3ca4321203ea552b79a007d54a75e2
   languageName: node
   linkType: hard
 
@@ -9054,7 +9054,7 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": ^4.2.0
     "@shopify/flash-list": ^1.2.1
-    "@showtime-xyz/universal.accordion": ^0.0.64
+    "@showtime-xyz/universal.accordion": ^0.0.65
     "@showtime-xyz/universal.activity-indicator": ^0.0.46
     "@showtime-xyz/universal.alert": ^0.0.84
     "@showtime-xyz/universal.avatar": ^0.0.58
@@ -9070,7 +9070,7 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.50
     "@showtime-xyz/universal.dropdown-menu": ^0.0.53
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.14
-    "@showtime-xyz/universal.fieldset": ^0.0.105
+    "@showtime-xyz/universal.fieldset": ^0.0.106
     "@showtime-xyz/universal.haptics": ^0.0.17
     "@showtime-xyz/universal.hooks": ^0.0.50
     "@showtime-xyz/universal.icon": ^0.0.68
