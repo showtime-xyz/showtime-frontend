@@ -114,6 +114,7 @@ export const DropForm = () => {
     formState: { errors },
     watch,
     setValue,
+    getValues,
     reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
@@ -185,7 +186,13 @@ export const DropForm = () => {
     const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
       state.edition?.contract_address
     }/0`;
-    const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
+    let claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
+    const qrCodeUrl = new URL(claimUrl);
+
+    const password = getValues("password");
+    if (password) {
+      qrCodeUrl.searchParams.set("password", password);
+    }
 
     const isShareAPIAvailable = Platform.select({
       default: true,
@@ -273,7 +280,7 @@ export const DropForm = () => {
         <View tw="mt-4">
           <QRCode
             size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-            text={claimUrl}
+            text={qrCodeUrl.toString()}
           />
         </View>
       </View>

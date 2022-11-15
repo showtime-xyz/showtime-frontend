@@ -35,6 +35,7 @@ import { QRCode } from "app/components/qr-code";
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
@@ -333,15 +334,32 @@ function NFTDropdown({
                 width={32}
               />
             </Pressable>
-            <QRCode
-              text={getNFTURL(nft)}
-              size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-            />
+            <DropQRCode nft={nft} />
           </View>
         </View>
       </Modal>
     </>
   );
 }
+
+const DropQRCode = ({ nft }: { nft: NFT }) => {
+  const { data: edition } = useCreatorCollectionDetail(
+    nft?.creator_airdrop_edition_address
+  );
+  const qrCodeUrl = useMemo(() => {
+    const url = new URL(getNFTURL(nft));
+    if (edition && edition.password) {
+      url.searchParams.set("password", edition?.password);
+    }
+    return url;
+  }, [edition, nft]);
+
+  return (
+    <QRCode
+      text={qrCodeUrl.toString()}
+      size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
+    />
+  );
+};
 
 export { NFTDropdown };
