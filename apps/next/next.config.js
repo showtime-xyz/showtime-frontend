@@ -3,7 +3,7 @@
  */
 const isDev = process.env.NODE_ENV === "development";
 
-const { withExpo } = require("@expo/next-adapter");
+const withExpo = require("./expo-adapter");
 const withImages = require("next-images");
 const withPlugins = require("next-compose-plugins");
 const { withSentryConfig } = require("@sentry/nextjs");
@@ -16,7 +16,7 @@ const withPWA = require("next-pwa")({
   disable: isDev,
   runtimeCaching: cache,
 });
-const { DefinePlugin } = require("webpack");
+
 const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.typography",
   "@showtime-xyz/universal.tailwind",
@@ -72,8 +72,8 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.verification-badge",
 ]);
 
-const nextConfig = {
-  swcMinify: false,
+const nextConfig = withExpo({
+  swcMinify: true,
   reactStrictMode: true,
   experimental: {
     optimizeCss: true,
@@ -88,6 +88,7 @@ const nextConfig = {
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
     transpilePackages: [
+      "react-native-web",
       "app",
       "@gorhom/bottom-sheet",
       "@gorhom/portal",
@@ -99,47 +100,41 @@ const nextConfig = {
       "nativewind",
       "@shopify/flash-list",
       "recyclerlistview",
+      "expo",
+      "expo-app-loading",
+      "expo-application",
+      "expo-av",
+      "expo-blur",
+      "expo-build-properties",
+      "expo-camera",
+      "expo-community-flipper",
+      "expo-constants",
+      "expo-dev-client",
+      "expo-device",
+      "expo-font",
+      "expo-gl",
+      "expo-haptics",
+      "expo-image-picker",
+      "expo-linear-gradient",
+      "expo-linking",
+      "expo-localization",
+      "expo-location",
+      "expo-media-library",
+      "expo-modules-core",
+      "expo-navigation-bar",
+      "expo-next-react-navigation",
+      "expo-notifications",
+      "expo-splash-screen",
+      "expo-status-bar",
+      "expo-system-ui",
+      "expo-updates",
+      "expo-web-browser",
+      "expo-next-react-navigation",
+      "react-native-fast-image",
+      "@react-native-menu/menu",
+      "react-native",
+      "react-native-reanimated",
     ],
-  },
-  webpack: (config, options) => {
-    // Mix in aliases
-    if (!config.resolve) {
-      config.resolve = {};
-    }
-
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      // Alias direct react-native imports to react-native-web
-      "react-native$": "react-native-web",
-      // Alias internal react-native modules to react-native-web
-      "react-native/Libraries/EventEmitter/RCTDeviceEventEmitter$":
-        "react-native-web/dist/vendor/react-native/NativeEventEmitter/RCTDeviceEventEmitter",
-      "react-native/Libraries/vendor/emitter/EventEmitter$":
-        "react-native-web/dist/vendor/react-native/emitter/EventEmitter",
-      "react-native/Libraries/EventEmitter/NativeEventEmitter$":
-        "react-native-web/dist/vendor/react-native/NativeEventEmitter",
-    };
-
-    config.resolve.extensions = [
-      ".web.js",
-      ".web.jsx",
-      ".web.ts",
-      ".web.tsx",
-      ...(config.resolve?.extensions ?? []),
-    ];
-
-    if (!config.plugins) {
-      config.plugins = [];
-    }
-
-    // Expose __DEV__ from Metro.
-    config.plugins.push(
-      new DefinePlugin({
-        __DEV__: JSON.stringify(process.env.NODE_ENV !== "production"),
-      })
-    );
-
-    return config;
   },
   typescript: {
     ignoreDevErrors: true,
@@ -213,7 +208,7 @@ const nextConfig = {
       },
     ];
   },
-};
+});
 
 module.exports = withPlugins(
   [
@@ -222,7 +217,6 @@ module.exports = withPlugins(
     withBundleAnalyzer,
     !isDev ? withSentryConfig : null,
     withPWA,
-    [withExpo, { projectRoot: __dirname + "/../.." }],
   ].filter(Boolean),
   nextConfig
 );

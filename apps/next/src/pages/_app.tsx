@@ -189,15 +189,15 @@ function App({ Component, pageProps, router }: AppProps) {
   );
 }
 
-// const inter = Inter({
-//   variable: "--font-inter",
-//   display: "swap",
-// });
+const inter = Inter({
+  variable: "--font-inter",
+  display: "swap",
+});
 
-// const spaceGrotesk = Space_Grotesk({
-//   variable: "--font-space-grotesk",
-//   display: "swap",
-// });
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
 
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
