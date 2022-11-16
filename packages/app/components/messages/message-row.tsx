@@ -16,11 +16,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
-
-import { AvatarHoverCard } from "../card/avatar-hover-card";
 
 interface MessageRowProps {
   /**

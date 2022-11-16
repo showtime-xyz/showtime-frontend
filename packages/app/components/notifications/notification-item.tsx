@@ -11,11 +11,11 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 
-import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { NFTSDisplayName } from "./nfts-display-name";
 
 export type NotificationItemProp = {
