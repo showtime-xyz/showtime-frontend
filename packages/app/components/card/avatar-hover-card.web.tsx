@@ -91,16 +91,16 @@ export function AvatarHoverCard({
           </View>
           <View tw="px-4 pb-4">
             <View tw="flex-row justify-between">
-              <View tw="-m-2 -mt-16 rounded-full border-8 border-white dark:border-black">
+              <View tw="-m-2 -mt-10 rounded-full border-8 border-white dark:border-black">
                 <Avatar
                   alt="Avatar"
-                  size={144}
+                  size={112}
                   url={getProfileImage(profileData?.profile)}
                 />
               </View>
               {isBlocked ? (
                 <Button
-                  size={"regular"}
+                  size="regular"
                   onPress={() => {
                     unblock(profileId);
                   }}
@@ -143,7 +143,7 @@ export function AvatarHoverCard({
                       {Boolean(username) && (
                         <TextLink
                           href={`/@${username}`}
-                          tw="text-base text-gray-600 hover:underline dark:text-gray-400 md:text-lg"
+                          tw="text-sm font-semibold text-gray-600 hover:underline dark:text-gray-400"
                         >
                           {`@${username}`}
                         </TextLink>
