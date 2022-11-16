@@ -14,13 +14,12 @@ function withNewPodfile(config) {
       )
         ? contents
         : contents.replace(
-            "react_native_post_install(installer)",
-            `react_native_post_install(installer)
+            "__apply_Xcode_12_5_M1_post_install_workaround(installer)",
+            `__apply_Xcode_12_5_M1_post_install_workaround(installer)
 
     # Workaround simulator build error for hermes with react-native 0.64 on mac m1 devices
     arm_value = \`/usr/sbin/sysctl -n hw.optional.arm64 2>&1\`.to_i
-    has_hermes = has_pod(installer, 'hermes-engine')
-    if arm_value == 1 && has_hermes
+    if arm_value == 1
         projects = installer.aggregate_targets
         .map{ |t| t.user_project }
         .uniq{ |p| p.path }
