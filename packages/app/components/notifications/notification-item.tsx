@@ -1,6 +1,5 @@
 import { Link } from "solito/link";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   HeartFilled,
   MarketFilled,
@@ -16,6 +15,7 @@ import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 
+import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { NFTSDisplayName } from "./nfts-display-name";
 
 export type NotificationItemProp = {
@@ -67,7 +67,15 @@ export const NotificationItem = ({
       {icon}
       <View tw="mx-2">
         <Link href={avatarLink}>
-          <Avatar url={notification.img_url} size={24} />
+          <AvatarHoverCard
+            url={notification.img_url}
+            size={24}
+            username={
+              notification.actors[0]?.username ||
+              notification.actors[0]?.wallet_address
+            }
+            alt="Notification Avatar"
+          />
         </Link>
       </View>
       <NotificationDescription

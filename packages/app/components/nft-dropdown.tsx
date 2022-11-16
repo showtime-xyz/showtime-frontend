@@ -2,7 +2,6 @@ import { useMemo, ComponentType, useState } from "react";
 import { Dimensions, Linking, Modal, Platform, StyleSheet } from "react-native";
 
 import { SvgProps } from "react-native-svg";
-import * as DropdownMenu from "zeego/dropdown-menu";
 
 import {
   DropdownMenuContent,
@@ -224,7 +223,7 @@ function NFTDropdown({
             </>
           )}
 
-          <DropdownMenu.Item
+          <DropdownMenuItem
             onSelect={() => {
               setShowQRCodeModal(true);
             }}
@@ -232,11 +231,10 @@ function NFTDropdown({
           >
             <MenuItemIcon Icon={QrCode} />
             <DropdownMenuItemNativeIcon iosIconName="qrcode" />
-
-            <DropdownMenu.ItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               QR Code
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
 
           {!isCreatorDrop && (
             <DropdownMenuItem

@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button, TextButton } from "@showtime-xyz/universal.button";
 import {
   HeartFilled,
@@ -20,6 +19,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
+
+import { AvatarHoverCard } from "../card/avatar-hover-card";
 
 interface MessageRowProps {
   /**
@@ -221,7 +222,12 @@ export function MessageRow({
             onPress={handleOnPressUser}
             iconOnly
           >
-            <Avatar url={userAvatar} size={24} />
+            <AvatarHoverCard
+              url={userAvatar}
+              size={24}
+              username={username || address}
+              alt="MessageRow Avatar"
+            />
           </Button>
         </Link>
       </View>

@@ -1,16 +1,21 @@
-import type { NFT } from "app/types";
+import { Avatar, AvatarProps } from "@showtime-xyz/universal.avatar";
 
-import { Avatar } from "design-system/avatar";
+import { Link } from "app/navigation/link";
 
-type Props = {
-  nft?: NFT;
-  shouldShowCreatorIndicator?: boolean;
-  shouldShowDateCreated?: boolean;
-  label?: string;
+export type AvatarHoverCardProps = Omit<AvatarProps, "alt"> & {
+  username: string | undefined | null;
+  url: string | undefined | null;
+  alt?: string;
 };
 
-export function AvatarHoverCard({ nft }: Props) {
-  if (!nft) return null;
-
-  return <Avatar alt="Avatar" url={nft.creator_img_url} />;
+export function AvatarHoverCard({
+  url,
+  username,
+  ...rest
+}: AvatarHoverCardProps) {
+  return (
+    <Link href={`/@${username}`}>
+      <Avatar alt={"Avatar"} url={url} {...rest} />
+    </Link>
+  );
 }
