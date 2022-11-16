@@ -9391,11 +9391,12 @@ __metadata:
     react-native-pager-view: 6.0.1
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
+    react-native-quick-crypto: ^0.5.0
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.11.0
     react-native-safe-area-context: 4.4.1
-    react-native-screens: ~3.18.0
+    react-native-screens: 3.18.0
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.4.0
     react-native-tab-view-next: ^3.1.3
@@ -9557,7 +9558,7 @@ __metadata:
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.11.0
     react-native-safe-area-context: 4.4.1
-    react-native-screens: ~3.18.0
+    react-native-screens: 3.18.0
     react-native-svg: 13.4.0
     react-native-web: 0.18.9
     three: ^0.142.0
@@ -11970,6 +11971,13 @@ __metadata:
   version: 16.11.35
   resolution: "@types/node@npm:16.11.35"
   checksum: c06e8716f579ba41e65f27bfc8a90276f2b0c3324f33372dab75ca73a11971da12dbfb89fffd2289d890b3ec31136c55c2bf6afdf5ae06183d0f4590512ec3db
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^17.0.31":
+  version: 17.0.45
+  resolution: "@types/node@npm:17.0.45"
+  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
   languageName: node
   linkType: hard
 
@@ -17171,7 +17179,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.11.0":
+"crypto-browserify@npm:^3.11.0, crypto-browserify@npm:^3.12.0":
   version: 3.12.0
   resolution: "crypto-browserify@npm:3.12.0"
   dependencies:
@@ -31482,6 +31490,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-quick-crypto@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "react-native-quick-crypto@npm:0.5.0"
+  dependencies:
+    "@craftzdog/react-native-buffer": ^6.0.4
+    "@types/node": ^17.0.31
+    crypto-browserify: ^3.12.0
+    events: ^3.3.0
+    react-native-quick-base64: ^2.0.2
+    stream-browserify: ^3.0.0
+    string_decoder: ^1.3.0
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: b9ddb2f83b0190d2831dd912dd425a5a873a89744fe02248ac7125c5afee1945a67df61c343295ab22267a4ec1f4a8e9d380a7ad5deee415d22d7437d4c554e7
+  languageName: node
+  linkType: hard
+
 "react-native-random-values-jsi-helper@npm:^1.0.4":
   version: 1.0.4
   resolution: "react-native-random-values-jsi-helper@npm:1.0.4"
@@ -31531,29 +31557,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:3.15.0":
-  version: 3.15.0
-  resolution: "react-native-screens@npm:3.15.0"
+"react-native-screens@npm:3.18.0":
+  version: 3.18.0
+  resolution: "react-native-screens@npm:3.18.0"
   dependencies:
     react-freeze: ^1.0.0
     warn-once: ^0.1.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: ebc3cded19d594aafa748d5ab6e237533f68dc33e28a584c99b8a6cac993585919f01413b94e9801f01af4a138810575f55ee25f90d7a77cb13c49d3252edb2a
-  languageName: node
-  linkType: hard
-
-"react-native-screens@npm:~3.18.0":
-  version: 3.18.2
-  resolution: "react-native-screens@npm:3.18.2"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 8f7202baced736220710138469aea2c7b543662d820eb47170bfc98a0503f8c764d7509596ccbcc76cac6158e47a2c029444d6e1f78c20e98bcafeda15027ac1
+  checksum: 33dca1c6089e79f679eeb988d0a22672086a1ac4d33d33d482fa4b542e27d26928fb65c91abe6c13301aed367c76ac0d94a2da54173b1214dbd9997aa998c690
   languageName: node
   linkType: hard
 
@@ -34544,7 +34557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:~1.3.0":
+"string_decoder@npm:^1.0.0, string_decoder@npm:^1.0.3, string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0, string_decoder@npm:~1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:

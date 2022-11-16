@@ -87,7 +87,8 @@
     "next": "13.0.0",
     "@gorhom/bottom-sheet": "4.4.5",
     "zeego": "canary",
-    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz"
+    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
+    "react-native-screens": "3.18.0"
   },
   "react-native": {
     "zlib": "browserify-zlib",
