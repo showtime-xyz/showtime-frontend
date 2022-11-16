@@ -32,7 +32,7 @@ diff --git a/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m b/node_
 index 45543d8..a61716c 100644
 --- a/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m
 +++ b/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m
-@@ -20,4 +20,6 @@ @interface RCT_EXTERN_MODULE(RCTUIMenu, RCTViewManager)
+@@ -20,4 +20,6 @@ RCT_EXPORT_VIEW_PROPERTY(onPressAction, RCTDirectEventBlock);
   */
  RCT_EXPORT_VIEW_PROPERTY(shouldOpenOnLongPress, BOOL)
  

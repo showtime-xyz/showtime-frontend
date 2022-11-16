@@ -150,7 +150,6 @@ export default {
         ],
       },
     ],
-    "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
@@ -194,6 +193,9 @@ export default {
           minSdkVersion: 23,
           buildToolsVersion: "31.0.0",
           kotlinVersion: "1.6.10",
+        },
+        ios: {
+          deploymentTarget: "13.0",
         },
       },
     ],

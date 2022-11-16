@@ -71,7 +71,6 @@ export default {
         ],
       },
     ],
-    "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
     "./plugins/react-native-cronet.js",
@@ -86,6 +85,9 @@ export default {
           targetSdkVersion: 31,
           buildToolsVersion: "31.0.0",
           kotlinVersion: "1.6.10",
+        },
+        ios: {
+          deploymentTarget: "13.0",
         },
       },
     ],
