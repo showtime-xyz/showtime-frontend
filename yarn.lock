@@ -3428,9 +3428,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/wallet-mobile-sdk@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.3"
+"@coinbase/wallet-mobile-sdk@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.4"
   dependencies:
     "@coinbase/wallet-sdk": ^3.5.1
     "@metamask/safe-event-emitter": 2.0.0
@@ -3442,7 +3442,7 @@ __metadata:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: ed3f13f321a99b146725f4ecfd4cd91ebfafdd9e419b30f24a79682470d26397beeee43659a82075509098eca99df514c20f43f9b539aff51f0c501070a2565c
+  checksum: f265d5ce673848ea1c67c4fdcffdc37fe644780d616212cdb22774f472e874deaa97c4f2b8071cf1699674e74ac44a6cccf39e40ef97bde42382e810fc6be6a1
   languageName: node
   linkType: hard
 
@@ -4345,6 +4345,77 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/cli@npm:0.4.9":
+  version: 0.4.9
+  resolution: "@expo/cli@npm:0.4.9"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/code-signing-certificates": ^0.0.2
+    "@expo/config": ~7.0.2
+    "@expo/config-plugins": ~5.0.3
+    "@expo/dev-server": 0.1.123
+    "@expo/devcert": ^1.0.0
+    "@expo/json-file": ^8.2.35
+    "@expo/metro-config": ~0.5.0
+    "@expo/osascript": ^2.0.31
+    "@expo/package-manager": ~0.0.53
+    "@expo/plist": ^0.0.18
+    "@expo/prebuild-config": 5.0.7
+    "@expo/rudder-sdk-node": 1.1.1
+    "@expo/spawn-async": 1.5.0
+    "@expo/xcpretty": ^4.2.1
+    "@urql/core": 2.3.6
+    "@urql/exchange-retry": 0.3.0
+    accepts: ^1.3.8
+    arg: 4.1.0
+    better-opn: ~3.0.2
+    bplist-parser: ^0.3.1
+    cacache: ^15.3.0
+    chalk: ^4.0.0
+    ci-info: ^3.3.0
+    debug: ^4.3.4
+    env-editor: ^0.4.1
+    form-data: ^3.0.1
+    freeport-async: 2.0.0
+    fs-extra: ~8.1.0
+    getenv: ^1.0.0
+    graphql: 15.8.0
+    graphql-tag: ^2.10.1
+    https-proxy-agent: ^5.0.1
+    internal-ip: 4.3.0
+    is-root: ^2.1.0
+    js-yaml: ^3.13.1
+    json-schema-deref-sync: ^0.13.0
+    md5-file: ^3.2.3
+    md5hex: ^1.0.0
+    minipass: 3.1.6
+    node-fetch: ^2.6.7
+    node-forge: ^1.3.1
+    npm-package-arg: ^7.0.0
+    ora: 3.4.0
+    pretty-bytes: 5.6.0
+    progress: 2.0.3
+    prompts: ^2.3.2
+    qrcode-terminal: 0.11.0
+    requireg: ^0.2.2
+    resolve-from: ^5.0.0
+    semver: ^6.3.0
+    send: ^0.18.0
+    slugify: ^1.3.4
+    structured-headers: ^0.4.1
+    tar: ^6.0.5
+    tempy: ^0.7.1
+    terminal-link: ^2.1.1
+    text-table: ^0.2.0
+    url-join: 4.0.0
+    uuid: ^3.4.0
+    wrap-ansi: ^7.0.0
+  bin:
+    expo-internal: build/bin/cli
+  checksum: c1670bbb1799760f34d6b6934f100441d1a5a05997877ce5c4abe2cf56ed235a9ac758096c896e7feb73819c5ca45bc286de4aee455010107a976693f88d6bfc
+  languageName: node
+  linkType: hard
+
 "@expo/code-signing-certificates@npm:0.0.2, @expo/code-signing-certificates@npm:^0.0.2":
   version: 0.0.2
   resolution: "@expo/code-signing-certificates@npm:0.0.2"
@@ -4710,6 +4781,26 @@ __metadata:
   peerDependencies:
     expo-modules-autolinking: ">=0.8.1"
   checksum: a42f481f343fd9c50c6ab8dbbfdbd7013e226b547678b81d32a3998d0ba49c90702d352eddaf72febf68091ca2cc217b047b39d95994130488bb3167cfca0934
+  languageName: node
+  linkType: hard
+
+"@expo/prebuild-config@npm:5.0.7":
+  version: 5.0.7
+  resolution: "@expo/prebuild-config@npm:5.0.7"
+  dependencies:
+    "@expo/config": ~7.0.2
+    "@expo/config-plugins": ~5.0.3
+    "@expo/config-types": ^47.0.0
+    "@expo/image-utils": 0.3.22
+    "@expo/json-file": 8.2.36
+    debug: ^4.3.1
+    fs-extra: ^9.0.0
+    resolve-from: ^5.0.0
+    semver: 7.3.2
+    xml2js: 0.4.23
+  peerDependencies:
+    expo-modules-autolinking: ">=0.8.1"
+  checksum: f5c2d9c6983f5f40b785a947640fd1de76da04e0e998414958b5ec008bfd4afe73774498b92c1206de8a3b107863804226a0d968c65003c1aff9fd73aff1dc45
   languageName: node
   linkType: hard
 
@@ -9120,7 +9211,7 @@ __metadata:
     "@babel/runtime": ^7.18.9
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
-    "@coinbase/wallet-mobile-sdk": ^1.0.3
+    "@coinbase/wallet-mobile-sdk": ^1.0.4
     "@config-plugins/detox": ^1.1.0
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2
@@ -9232,7 +9323,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~47.0.3
+    expo: ~47.0.6
     expo-app-loading: ~2.1.1
     expo-application: ~5.0.1
     expo-av: ~13.0.1
@@ -9255,7 +9346,7 @@ __metadata:
     expo-navigation-bar: ~2.0.1
     expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.17.0
-    expo-splash-screen: ~0.17.4
+    expo-splash-screen: ~0.17.5
     expo-status-bar: ~1.4.2
     expo-system-ui: ~2.0.1
     expo-updates: ~0.15.4
@@ -9405,7 +9496,7 @@ __metadata:
   resolution: "@showtime/storybook-react-native@workspace:apps/storybook-react-native"
   dependencies:
     "@babel/core": ^7.19.3
-    "@coinbase/wallet-mobile-sdk": ^1.0.3
+    "@coinbase/wallet-mobile-sdk": ^1.0.4
     "@expo/vector-icons": ^13.0.0
     "@react-native-async-storage/async-storage": ~1.17.3
     "@react-native-community/datetimepicker": 6.5.2
@@ -20501,6 +20592,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-modules-core@npm:1.0.3":
+  version: 1.0.3
+  resolution: "expo-modules-core@npm:1.0.3"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: 252c85bac78cfe2c7986c0540a89bcb65a7d004316efd94734ecac54397dc0d1cab46e8406ee4cc2fe8bf1e271f8aa6f5c4d6097f49f55920797bcfba4bd9eab
+  languageName: node
+  linkType: hard
+
 "expo-navigation-bar@npm:1.3.0":
   version: 1.3.0
   resolution: "expo-navigation-bar@npm:1.3.0"
@@ -20588,6 +20689,18 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 28b6f5f16502ff8ab57c24fe49bea2ff5c6b2626dbd9b23b54b5c6b0359cdc7d1b03fa059e90df6de492cd99a604c8dbac1aab054d28860c7b026a197ccb189c
+  languageName: node
+  linkType: hard
+
+"expo-splash-screen@npm:~0.17.5":
+  version: 0.17.5
+  resolution: "expo-splash-screen@npm:0.17.5"
+  dependencies:
+    "@expo/configure-splash-screen": ^0.6.0
+    "@expo/prebuild-config": 5.0.7
+  peerDependencies:
+    expo: "*"
+  checksum: 20bee835725b52846be8ea9221fb51829f2d6080784d05fd77bcc68f51f15871bdcc5f845c7230317f044ca94d0b001e81a5e50082404be81b9d16466cd7880c
   languageName: node
   linkType: hard
 
@@ -20692,7 +20805,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:^47.0.0, expo@npm:~47.0.3":
+"expo@npm:^47.0.0":
   version: 47.0.3
   resolution: "expo@npm:47.0.3"
   dependencies:
@@ -20725,6 +20838,42 @@ __metadata:
   bin:
     expo: bin/cli.js
   checksum: 915986ae62d303965fd76b71980de0b4b8d1aeb70a800d405337de568003a82e2a48848b59aff58677087a9f18d2ff739752c28db546ab4ebfb19e64bb3d38bd
+  languageName: node
+  linkType: hard
+
+"expo@npm:~47.0.6":
+  version: 47.0.6
+  resolution: "expo@npm:47.0.6"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/cli": 0.4.9
+    "@expo/config": 7.0.3
+    "@expo/config-plugins": 5.0.4
+    "@expo/vector-icons": ^13.0.0
+    babel-preset-expo: ~9.2.2
+    cross-spawn: ^6.0.5
+    expo-application: ~5.0.1
+    expo-asset: ~8.6.2
+    expo-constants: ~14.0.2
+    expo-error-recovery: ~4.0.1
+    expo-file-system: ~15.1.1
+    expo-font: ~11.0.1
+    expo-keep-awake: ~11.0.1
+    expo-modules-autolinking: 1.0.0
+    expo-modules-core: 1.0.3
+    fbemitter: ^3.0.0
+    getenv: ^1.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    node-fetch: ^2.6.7
+    pretty-format: ^26.5.2
+    uuid: ^3.4.0
+  dependenciesMeta:
+    expo-error-recovery:
+      optional: true
+  bin:
+    expo: bin/cli.js
+  checksum: db29cc34781892748032e47ad23fe3d820c62a7b7c9ae4a92782f8a695ebe634b88eb1fda848fc24cb21457e6d8b836f367427f9e83b250859a7dc98b6c422a7
   languageName: node
   linkType: hard
 
