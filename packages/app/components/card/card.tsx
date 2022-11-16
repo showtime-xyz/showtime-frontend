@@ -65,27 +65,18 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-function Card({
-  nft,
-  numColumns = 1,
-  tw = "",
-  sizeStyle,
-  onPress,
-  href = "",
-  showClaimButton = false,
-  style,
-}: Props) {
+function Card(props: Props) {
+  const {
+    nft,
+    numColumns = 1,
+    tw = "",
+    sizeStyle,
+    onPress,
+    href = "",
+    style,
+  } = props;
   const { width } = useWindowDimensions();
   const contentWidth = useContentWidth();
-
-  const { data: edition } = useCreatorCollectionDetail(
-    nft.creator_airdrop_edition_address
-  );
-  const { data: detailData } = useNFTDetailByTokenId({
-    contractAddress: nft?.contract_address,
-    tokenId: nft?.token_id,
-    chainName: nft?.chain_name,
-  });
 
   const cardMaxWidth = useMemo(() => {
     switch (numColumns) {
@@ -124,6 +115,33 @@ function Card({
     );
   }
 
+  return (
+    <CardLargeScreen
+      {...props}
+      handleOnPress={handleOnPress}
+      cardMaxWidth={cardMaxWidth}
+    />
+  );
+}
+
+const CardLargeScreen = ({
+  nft,
+  numColumns = 1,
+  tw = "",
+  sizeStyle,
+  href = "",
+  showClaimButton,
+  handleOnPress,
+  cardMaxWidth,
+}: Props & { handleOnPress: any; cardMaxWidth: number }) => {
+  const { data: edition } = useCreatorCollectionDetail(
+    nft.creator_airdrop_edition_address
+  );
+  const { data: detailData } = useNFTDetailByTokenId({
+    contractAddress: nft?.contract_address,
+    tokenId: nft?.token_id,
+    chainName: nft?.chain_name,
+  });
   return (
     <LikeContextProvider nft={nft} key={nft.nft_id}>
       <View
@@ -203,7 +221,7 @@ function Card({
       </View>
     </LikeContextProvider>
   );
-}
+};
 
 const MemoizedCard = withMemoAndColorScheme<typeof Card, Props>(Card);
 
