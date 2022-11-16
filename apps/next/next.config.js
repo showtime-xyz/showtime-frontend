@@ -72,8 +72,8 @@ const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.verification-badge",
 ]);
 
-const nextConfig = withExpo({
-  swcMinify: true,
+const nextConfig = {
+  swcMinify: false,
   reactStrictMode: true,
   experimental: {
     optimizeCss: true,
@@ -208,11 +208,12 @@ const nextConfig = withExpo({
       },
     ];
   },
-});
+};
 
 module.exports = withPlugins(
   [
     withTM,
+    withExpo,
     withImages,
     withBundleAnalyzer,
     !isDev ? withSentryConfig : null,
