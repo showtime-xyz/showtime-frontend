@@ -22,7 +22,7 @@ index 0d4cee7..9e39534 100644
        if (part instanceof Blob) {
          return {
 diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
-index c58dfba..4fc64dd 100644
+index c0b7fea..f271e51 100644
 --- a/node_modules/react-native/Libraries/Blob/FileReader.js
 +++ b/node_modules/react-native/Libraries/Blob/FileReader.js
 @@ -10,6 +10,7 @@
@@ -33,7 +33,7 @@ index c58dfba..4fc64dd 100644
  
  import NativeFileReaderModule from './NativeFileReaderModule';
  
-@@ -80,7 +81,32 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+@@ -74,7 +75,32 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
    }
  
    readAsArrayBuffer() {
@@ -69,17 +69,17 @@ index c58dfba..4fc64dd 100644
    readAsDataURL(blob: ?Blob) {
 diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
 new file mode 100644
-index 0000000..361f5fb
+index 0000000..c02fc25
 --- /dev/null
 +++ b/node_modules/react-native/scripts/.packager.env
 @@ -0,0 +1 @@
-+export RCT_METRO_PORT=8081
++export RCT_METRO_PORT=8082
 diff --git a/node_modules/react-native/sdks/hermes/hermes-engine.podspec b/node_modules/react-native/sdks/hermes/hermes-engine.podspec
 new file mode 100644
-index 0000000..f21488b
+index 0000000..8d331e0
 --- /dev/null
 +++ b/node_modules/react-native/sdks/hermes/hermes-engine.podspec
-@@ -0,0 +1,81 @@
+@@ -0,0 +1,84 @@
 +# Copyright (c) Meta Platforms, Inc. and affiliates.
 +#
 +# This source code is licensed under the MIT license found in the
@@ -104,7 +104,10 @@ index 0000000..f21488b
 +source = {}
 +git = "https://github.com/facebook/hermes.git"
 +
-+if version == '1000.0.0'
++if ENV.has_key?('HERMES_ENGINE_TARBALL_PATH')
++  Pod::UI.puts '[Hermes] Using pre-built Hermes binaries from local path.' if Object.const_defined?("Pod::UI")
++  source[:http] = "file://#{ENV['HERMES_ENGINE_TARBALL_PATH']}"
++elsif version == '1000.0.0'
 +  Pod::UI.puts '[Hermes] Hermes needs to be compiled, installing hermes-engine may take a while...'.yellow if Object.const_defined?("Pod::UI")
 +  source[:git] = git
 +  source[:commit] = `git ls-remote https://github.com/facebook/hermes main | cut -f 1`.strip
@@ -132,7 +135,7 @@ index 0000000..f21488b
 +  spec.license     = package["license"]
 +  spec.author      = "Facebook"
 +  spec.source      = source
-+  spec.platforms   = { :osx => "10.13", :ios => "11.0" }
++  spec.platforms   = { :osx => "10.13", :ios => "12.4" }
 +
 +  spec.preserve_paths      = ["destroot/bin/*"].concat(HermesHelper::BUILD_TYPE == :debug ? ["**/*.{h,c,cpp}"] : [])
 +  spec.source_files        = "destroot/include/**/*.h"
