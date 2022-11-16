@@ -8230,9 +8230,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.58":
-  version: 0.0.58
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.58"
+"@showtime-xyz/universal.avatar@npm:^0.0.59":
+  version: 0.0.59
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.59"
   dependencies:
     "@showtime-xyz/universal.image": 0.0.55
     "@showtime-xyz/universal.tailwind": 0.0.45
@@ -8243,7 +8243,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: b73b3463232aedd803ec2d008bb3c8cee3b92cdf347178f0fc9903c888c04bda0aad037783e7c11dd282df58907486a7c72fd769aea7b24c3dbb5d2877eaa250
+  checksum: cbd114b422dc3f72e5f27696ddf6b7f7bb4cbfc8305137eb172923ab8646ae555d4808fdad12fe82d60a2241dcf819eff4d2c2f2d42a5b71ba05eb494eada2b8
   languageName: node
   linkType: hard
 
@@ -9142,7 +9142,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.65
     "@showtime-xyz/universal.activity-indicator": ^0.0.46
     "@showtime-xyz/universal.alert": ^0.0.84
-    "@showtime-xyz/universal.avatar": ^0.0.58
+    "@showtime-xyz/universal.avatar": ^0.0.59
     "@showtime-xyz/universal.bottom-sheet": ^0.0.74
     "@showtime-xyz/universal.button": ^0.0.70
     "@showtime-xyz/universal.checkbox": ^0.0.60
