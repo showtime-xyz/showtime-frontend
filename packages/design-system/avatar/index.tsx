@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, forwardRef } from "react";
 
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -22,35 +22,34 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   return imgUrl;
 };
 
-export const Avatar = ({
-  url,
-  borderRadius = 0,
-  size = 32,
-  tw = "",
-  children,
-  alt = "",
-}: AvatarProps) => {
-  const imageSource = useMemo(
-    () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
-    [url, size]
-  );
+export const Avatar = forwardRef<typeof View, AvatarProps>(
+  function AvatarComponent(
+    { url, borderRadius = 0, size = 32, tw = "", children, alt = "" },
+    ref
+  ) {
+    const imageSource = useMemo(
+      () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
+      [url, size]
+    );
 
-  return (
-    <View
-      tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
-      style={{ height: size, width: size }}
-    >
-      <Image
-        source={imageSource}
-        width={size}
-        height={size}
-        borderRadius={borderRadius}
-        resizeMode="cover"
-        tw={IMAGE_TW}
-        style={{ height: size, width: size, borderRadius: borderRadius }}
-        alt={alt}
-      />
-      {children}
-    </View>
-  );
-};
+    return (
+      <View
+        tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
+        style={{ height: size, width: size }}
+        ref={ref}
+      >
+        <Image
+          source={imageSource}
+          width={size}
+          height={size}
+          borderRadius={borderRadius}
+          resizeMode="cover"
+          tw={IMAGE_TW}
+          style={{ height: size, width: size, borderRadius: borderRadius }}
+          alt={alt}
+        />
+        {children}
+      </View>
+    );
+  }
+);

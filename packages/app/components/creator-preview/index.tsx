@@ -1,18 +1,15 @@
-import { useMemo } from "react";
 import { Pressable } from "react-native";
 
-import { Image } from "@showtime-xyz/universal.image";
-import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useFollow } from "app/hooks/use-follow";
-import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { Link } from "app/navigation/link";
+import { TextLink } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
@@ -26,46 +23,40 @@ export const CreatorPreview = withMemoAndColorScheme<any, Props>(
   ({ mediaSize, creator, onMediaPress }: Props) => {
     const { isFollowing } = useMyInfo();
     const creatorId = creator.profile_id;
-    const isFollowingCreator = useMemo(
-      () => isFollowing(creatorId),
-      [creatorId, isFollowing]
-    );
 
     const { onToggleFollow } = useFollow({ username: creator.username });
 
     return (
       <View tw="p-4">
-        <View tw="flex-row items-center justify-between">
-          <Link
-            href={`/@${creator.username ?? creator.address}`}
-            tw="flex-row items-center"
-          >
-            <View tw="mr-2 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-              <Image
-                source={{ uri: creator?.img_url ?? DEFAULT_PROFILE_PIC }}
-                width={64}
-                height={64}
-                alt={creator.username ?? creator.address ?? "User"}
-              />
-            </View>
-            <View>
-              <View tw="flex-row items-center">
-                <Text tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  {creator.username ? (
-                    <>@{creator.username}</>
-                  ) : (
-                    <>{formatAddressShort(creator.address)}</>
-                  )}
-                </Text>
-                {Boolean(creator.verified) && (
-                  <View>
-                    <VerificationBadge size={14} />
-                  </View>
+        <View tw="flex-row items-center">
+          <View tw="mr-2 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
+            <AvatarHoverCard
+              username={creator.username ?? creator.address}
+              url={creator?.img_url}
+              size={32}
+              alt="CreatorPreview Avatar"
+            />
+          </View>
+          <View>
+            <View tw="flex-row items-center">
+              <TextLink
+                href={`/@${creator.username ?? creator.address}`}
+                tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white"
+              >
+                {creator.username ? (
+                  <>@{creator.username}</>
+                ) : (
+                  <>{formatAddressShort(creator.address)}</>
                 )}
-              </View>
+              </TextLink>
+              {Boolean(creator.verified) && (
+                <View>
+                  <VerificationBadge size={14} />
+                </View>
+              )}
             </View>
-          </Link>
-          <View tw="flex-row items-center justify-center">
+          </View>
+          <View tw="ml-auto flex-row items-center justify-center">
             <FollowButton
               name={creator.name}
               profileId={creatorId}

@@ -6,7 +6,7 @@ import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 
-type ToggleFollowParams = Pick<ButtonProps, "size"> & {
+type ToggleFollowParams = ButtonProps & {
   name?: string;
   profileId: number;
   onToggleFollow?: () => void;

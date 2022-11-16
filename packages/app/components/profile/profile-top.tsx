@@ -18,7 +18,6 @@ import {
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -39,7 +38,7 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import {
-  formatToUSNumber,
+  getFullSizeCover,
   getNextRefillClaim,
   getProfileImage,
   getProfileName,
@@ -49,60 +48,24 @@ import { Hidden } from "design-system/hidden";
 import { breakpoints } from "design-system/theme";
 
 import { FollowButton } from "../follow-button";
+import { ProfileFollows } from "./profile-follows";
 import { ProfileSocial } from "./profile-social";
 
 const AVATAR_SIZE_SMALL = 86;
-const AVATAR_SIZE_LARGE = 128;
+const AVATAR_SIZE_LARGE = 144;
 
-const AVATAR_BORDER_SIZE = 4;
+const AVATAR_BORDER_SIZE_SMALL = 4;
+const AVATAR_BORDER_SIZE_LARGE = 8;
 
-function getFullSizeCover(url: string) {
-  if (
-    url &&
-    url.startsWith("https://lh3.googleusercontent.com") &&
-    !url.endsWith("=s0")
-  ) {
-    return url + "=s0";
-  }
-
-  return url;
-}
-
-type FollowProps = {
-  onPressFollowing: () => void;
-  onPressFollower: () => void;
-  followingCount?: number;
-  followersCount?: number;
-  tw?: string;
+type ProfileTopProps = {
+  address: string;
+  isBlocked: boolean;
+  animationHeaderPosition?: Animated.SharedValue<number>;
+  animationHeaderHeight?: Animated.SharedValue<number>;
+  profileData: UserProfile | undefined;
+  isError: boolean;
+  isLoading: boolean;
 };
-
-const Follow = ({
-  onPressFollowing,
-  onPressFollower,
-  followingCount,
-  followersCount,
-  tw = "",
-}: FollowProps) => {
-  return (
-    <View tw={["flex-row", tw]}>
-      <PressableScale onPress={onPressFollowing}>
-        <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-          {`${formatToUSNumber(followingCount ?? 0)} `}
-          <Text tw="font-medium">following</Text>
-        </Text>
-      </PressableScale>
-      <View tw="ml-8 md:ml-4">
-        <PressableScale onPress={onPressFollower}>
-          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-            {`${formatToUSNumber(followersCount ?? 0)} `}
-            <Text tw="font-medium">followers</Text>
-          </Text>
-        </PressableScale>
-      </View>
-    </View>
-  );
-};
-
 export const ProfileTop = ({
   address,
   isBlocked,
@@ -111,15 +74,7 @@ export const ProfileTop = ({
   profileData,
   isError,
   isLoading,
-}: {
-  address: string;
-  isBlocked: boolean;
-  animationHeaderPosition: Animated.SharedValue<number>;
-  animationHeaderHeight: Animated.SharedValue<number>;
-  profileData: UserProfile | undefined;
-  isError: boolean;
-  isLoading: boolean;
-}) => {
+}: ProfileTopProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -129,9 +84,7 @@ export const ProfileTop = ({
   const { colorScheme } = useColorScheme();
   const { user } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
-  const contentWidth = useContentWidth();
   const coverWidth = useContentWidth(ContentLayoutOffset.PROFILE_COVER);
-
   const isMdWidth = width >= breakpoints["md"];
   const profileId = profileData?.profile.profile_id;
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -144,54 +97,10 @@ export const ProfileTop = ({
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // banner ratio: w:h=3:1
   const coverHeight = coverWidth < 768 ? coverWidth / 3 : 180;
-
-  const onPressFollower = useCallback(
-    () =>
-      router.push(
-        Platform.select({
-          native: `/profile/followers?profileId=${profileId}`,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              profileId,
-              followersModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: `/profile/followers?profileId=${profileId}`,
-          web: router.asPath,
-        }),
-        { scroll: false }
-      ),
-    [profileId, router]
-  );
-  const onPressFollowing = useCallback(
-    () =>
-      router.push(
-        Platform.select({
-          native: `/profile/following?profileId=${profileId}`,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              profileId,
-              followingModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: `/profile/following?profileId=${profileId}`,
-          web: router.asPath,
-        }),
-        {
-          scroll: false,
-        }
-      ),
-    [profileId, router]
-  );
-
+  const avatarBorder = isMdWidth
+    ? AVATAR_BORDER_SIZE_LARGE
+    : AVATAR_BORDER_SIZE_SMALL;
+  const avatarSize = isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL;
   const onPressClaimLimit = useCallback(
     () =>
       router.push(
@@ -216,6 +125,9 @@ export const ProfileTop = ({
     [router]
   );
   const avatarStyle = useAnimatedStyle(() => {
+    if (!animationHeaderHeight || !animationHeaderPosition) {
+      return {};
+    }
     return {
       transform: [
         {
@@ -245,10 +157,10 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800 md:pt-16 xl:-mx-20 xl:rounded-b-[32px]">
+      <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
         <Skeleton
           height={coverHeight}
-          width={contentWidth}
+          width={coverWidth}
           show={isLoading}
           colorMode={colorScheme as any}
           radius={0}
@@ -285,46 +197,39 @@ export const ProfileTop = ({
       </View>
       <View tw="mx-2">
         <View tw="flex-row justify-between">
-          <View tw="flex-row items-end">
+          <View
+            tw="flex-row items-end"
+            style={{
+              marginTop: -avatarSize / 2,
+            }}
+          >
             <Animated.View
               style={[
                 {
-                  width: isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL,
-                  height: isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL,
+                  width: avatarSize + avatarBorder * 2,
+                  height: avatarSize + avatarBorder * 2,
                   borderRadius: 9999,
-                  marginTop: -36,
                   overflow: "hidden",
-                  borderWidth: AVATAR_BORDER_SIZE,
+                  borderWidth: avatarBorder,
                   borderColor: isDark ? "#000" : "#FFF",
                   backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
+                  margin: -avatarBorder,
                 },
                 avatarStyle,
               ]}
             >
               <Skeleton
-                height={
-                  (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
-                  AVATAR_BORDER_SIZE * 2
-                }
-                width={
-                  (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
-                  AVATAR_BORDER_SIZE * 2
-                }
+                height={avatarSize}
+                width={avatarSize}
                 show={isLoading}
                 colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
                   <LightBox
-                    width={
-                      (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
-                      AVATAR_BORDER_SIZE * 2
-                    }
-                    height={
-                      (isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL) -
-                      AVATAR_BORDER_SIZE * 2
-                    }
-                    imgLayout={{ width: contentWidth, height: width }}
+                    width={avatarSize}
+                    height={avatarSize}
+                    imgLayout={{ width: coverWidth, height: width }}
                     borderRadius={999}
                     tapToClose
                   >
@@ -366,11 +271,10 @@ export const ProfileTop = ({
               ) : (
                 <>
                   <Hidden until="md">
-                    <Follow
-                      onPressFollower={onPressFollower}
-                      onPressFollowing={onPressFollowing}
+                    <ProfileFollows
                       followersCount={profileData?.followers_count}
                       followingCount={profileData?.following_count}
+                      profileId={profileId}
                       tw="mr-8"
                     />
                   </Hidden>
@@ -486,9 +390,8 @@ export const ProfileTop = ({
             </Pressable>
           ) : null}
           <Hidden from="md">
-            <Follow
-              onPressFollower={onPressFollower}
-              onPressFollowing={onPressFollowing}
+            <ProfileFollows
+              profileId={profileId}
               followersCount={profileData?.followers_count}
               followingCount={profileData?.following_count}
               tw="mt-4"

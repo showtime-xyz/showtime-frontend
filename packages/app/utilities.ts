@@ -628,3 +628,15 @@ export const isProfileIncomplete = (profile?: Profile) => {
         !profile.img_url
     : undefined;
 };
+
+export function getFullSizeCover(url: string | undefined) {
+  if (
+    url &&
+    url.startsWith("https://lh3.googleusercontent.com") &&
+    !url.endsWith("=s0")
+  ) {
+    return url + "=s0";
+  }
+
+  return url;
+}

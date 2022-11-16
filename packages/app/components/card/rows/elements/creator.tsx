@@ -1,11 +1,11 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Link } from "app/navigation/link";
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
+import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 import {
   convertUTCDateToLocalDate,
@@ -28,11 +28,11 @@ export function Creator({
   if (!nft) return null;
 
   return (
-    <Link
-      href={`/@${nft.creator_username ?? nft.creator_address}`}
-      tw="flex flex-row py-4"
-    >
-      <Avatar url={nft.creator_img_url} />
+    <View tw="flex flex-row py-4">
+      <AvatarHoverCard
+        username={nft?.creator_username || nft?.creator_address_nonens}
+        url={nft.creator_img_url}
+      />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (
           <>
@@ -44,9 +44,13 @@ export function Creator({
         )}
         <View>
           <View tw="flex flex-row items-center">
-            <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
+            <TextLink
+              href={`/@${nft.creator_username ?? nft.creator_address}`}
+              tw="text-13 flex font-semibold text-gray-900 dark:text-white"
+            >
               {getCreatorUsernameFromNFT(nft)}
-            </Text>
+            </TextLink>
+
             {nft.creator_verified ? (
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
@@ -66,6 +70,6 @@ export function Creator({
           )}
         </View>
       </View>
-    </Link>
+    </View>
   );
 }
