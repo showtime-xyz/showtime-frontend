@@ -2,14 +2,15 @@ import { useMemo, ComponentType, useState } from "react";
 import { Dimensions, Linking, Modal, Platform, StyleSheet } from "react-native";
 
 import { SvgProps } from "react-native-svg";
+import * as DropdownMenu from "zeego/dropdown-menu";
 
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuItemTitle,
   DropdownMenuRoot,
-  DropdownMenuItemIcon,
   DropdownMenuTrigger,
+  DropdownMenuItemNativeIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -34,6 +35,7 @@ import { QRCode } from "app/components/qr-code";
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
@@ -51,11 +53,7 @@ import { OpenSea } from "design-system/icon";
 const { width: windowWidth } = Dimensions.get("window");
 
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
-  return (
-    <DropdownMenuItemIcon>
-      <Icon width="1em" height="1em" color={colors.gray[500]} {...rest} />
-    </DropdownMenuItemIcon>
-  );
+  return <Icon width="1em" height="1em" color={colors.gray[500]} {...rest} />;
 };
 
 type Props = {
@@ -138,6 +136,8 @@ function NFTDropdown({
               key="hide"
             >
               <MenuItemIcon Icon={EyeOff} />
+              <DropdownMenuItemNativeIcon iosIconName="eye.slash" />
+
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Hide
               </DropdownMenuItemTitle>
@@ -152,6 +152,7 @@ function NFTDropdown({
               key="unhide"
             >
               <MenuItemIcon Icon={EyeOff} />
+              <DropdownMenuItemNativeIcon iosIconName="eye" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unhide
               </DropdownMenuItemTitle>
@@ -175,6 +176,10 @@ function NFTDropdown({
               key="open-in-app"
             >
               <MenuItemIcon Icon={Showtime} />
+              <DropdownMenuItemNativeIcon
+                iosIconName={isBlocked ? "circle" : "circle.slash"}
+              />
+
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Open in app
               </DropdownMenuItemTitle>
@@ -186,6 +191,8 @@ function NFTDropdown({
             nft.contract_address && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
                 <MenuItemIcon Icon={OpenSea} />
+                <DropdownMenuItemNativeIcon iosIconName="arrow.right" />
+
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   View on OpenSea
                 </DropdownMenuItemTitle>
@@ -208,6 +215,7 @@ function NFTDropdown({
               )}
               <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
                 <MenuItemIcon Icon={Copy} />
+                <DropdownMenuItemNativeIcon iosIconName="square.and.arrow.up" />
 
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   {isShareAPIAvailable ? "Share" : "Copy Link"}
@@ -216,17 +224,19 @@ function NFTDropdown({
             </>
           )}
 
-          <DropdownMenuItem
+          <DropdownMenu.Item
             onSelect={() => {
               setShowQRCodeModal(true);
             }}
             key="qr-code"
           >
             <MenuItemIcon Icon={QrCode} />
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemNativeIcon iosIconName="qrcode" />
+
+            <DropdownMenu.ItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               QR Code
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
 
           {!isCreatorDrop && (
             <DropdownMenuItem
@@ -234,6 +244,7 @@ function NFTDropdown({
               key="refresh-metadata"
             >
               <MenuItemIcon Icon={Refresh} />
+              <DropdownMenuItemNativeIcon iosIconName="arrow.triangle.2.circlepath" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Refresh Metadata
@@ -254,6 +265,8 @@ function NFTDropdown({
               key="unfollow"
             >
               <MenuItemIcon Icon={UserMinus} />
+              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.plus" />
+
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unfollow User
               </DropdownMenuItemTitle>
@@ -273,6 +286,10 @@ function NFTDropdown({
               }
             >
               <MenuItemIcon Icon={Slash} />
+              <DropdownMenuItemNativeIcon
+                iosIconName={isBlocked ? "circle" : "circle.slash"}
+              />
+
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 {isBlocked ? "Unblock User" : "Block User"}
               </DropdownMenuItemTitle>
@@ -288,6 +305,8 @@ function NFTDropdown({
               key="report"
             >
               <MenuItemIcon Icon={Flag} />
+
+              <DropdownMenuItemNativeIcon iosIconName="flag" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Report
               </DropdownMenuItemTitle>
@@ -315,15 +334,32 @@ function NFTDropdown({
                 width={32}
               />
             </Pressable>
-            <QRCode
-              text={getNFTURL(nft)}
-              size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-            />
+            <DropQRCode nft={nft} />
           </View>
         </View>
       </Modal>
     </>
   );
 }
+
+const DropQRCode = ({ nft }: { nft: NFT }) => {
+  const { data: edition } = useCreatorCollectionDetail(
+    nft?.creator_airdrop_edition_address
+  );
+  const qrCodeUrl = useMemo(() => {
+    const url = new URL(getNFTURL(nft));
+    if (edition && edition.password) {
+      url.searchParams.set("password", edition?.password);
+    }
+    return url;
+  }, [edition, nft]);
+
+  return (
+    <QRCode
+      text={qrCodeUrl.toString()}
+      size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
+    />
+  );
+};
 
 export { NFTDropdown };

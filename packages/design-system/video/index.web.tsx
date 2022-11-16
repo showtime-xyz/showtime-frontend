@@ -1,7 +1,7 @@
 import { ComponentProps, useRef } from "react";
 import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
 
-import { Video as ExpoVideo } from "expo-av/src";
+import { Video as ExpoVideo } from "expo-av";
 import { BlurView, BlurTint } from "expo-blur";
 import { ImageStyle, Source } from "react-native-fast-image";
 

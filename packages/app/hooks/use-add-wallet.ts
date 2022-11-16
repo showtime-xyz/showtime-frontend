@@ -24,9 +24,10 @@ const useAddWallet = () => {
   const hasNoPrimaryWallet = user?.user?.data.profile.primary_wallet === null;
   const userWallets = user?.user?.data.profile.wallet_addresses_v2;
 
-  const addWallet = async () => {
+  const addWallet = async (isMagic?: boolean) => {
     try {
       setStatus("loading");
+
       if (wallet.connected) {
         await wallet.disconnect();
       }
@@ -58,7 +59,9 @@ const useAddWallet = () => {
               {
                 text: "Sign",
                 onPress: async () => {
-                  const signature = await wallet.signMessageAsync({ message });
+                  const signature = await wallet.signMessageAsync({
+                    message,
+                  });
                   if (signature) {
                     const addedWallet = await addWalletToBackend({
                       address: res.address,

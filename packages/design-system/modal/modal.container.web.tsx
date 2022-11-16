@@ -2,7 +2,6 @@ import { memo, useMemo, useEffect, useRef, useCallback } from "react";
 import { StyleSheet } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -57,8 +56,6 @@ function ModalContainerComponent({
   return (
     <FocusTrap aria-modal>
       <View tw={CONTAINER_TW} style={styles.container}>
-        {/* Prevent shaking when the modal is open */}
-        <RemoveScrollBar />
         <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
         <View tw={modalContainerTW} style={style}>
           <ModalHeader title={title} onClose={onClose} />

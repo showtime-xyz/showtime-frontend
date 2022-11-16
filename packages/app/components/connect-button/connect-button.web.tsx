@@ -7,6 +7,8 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Alert } from "@showtime-xyz/universal.icon";
 import { View } from "@showtime-xyz/universal.view";
 
+import { LoginButton } from "app/components/login/login-button";
+
 import { ConnectButtonProps } from "./connect-button";
 
 export const NetworkButton = () => {
@@ -58,17 +60,14 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
             {(() => {
               if (!mounted || !account || !chain) {
                 return (
-                  <Button
-                    variant="primary"
-                    size="regular"
+                  <LoginButton
                     onPress={() => {
                       handleSubmitWallet({
                         onOpenConnectModal: openConnectModal,
                       });
                     }}
-                  >
-                    I already have a wallet
-                  </Button>
+                    type="wallet"
+                  />
                 );
               }
 
@@ -76,6 +75,7 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
                 <Button
                   variant="primary"
                   size="regular"
+                  tw="my-4"
                   onPress={() => {
                     handleSubmitWallet({
                       onOpenConnectModal: openAccountModal,

@@ -111,7 +111,15 @@ function Card({
         style={style as any}
         onPress={handleOnPress}
       >
-        <Media item={nft} tw={tw} numColumns={numColumns} />
+        <Media
+          item={nft}
+          tw={tw}
+          numColumns={numColumns}
+          sizeStyle={{
+            width: sizeStyle?.width ?? cardMaxWidth,
+            height: sizeStyle?.height ?? cardMaxWidth,
+          }}
+        />
       </RouteComponent>
     );
   }

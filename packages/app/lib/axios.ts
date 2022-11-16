@@ -54,6 +54,8 @@ const axiosAPI = async ({
             ...headers,
           },
         }
+      : headers
+      ? { headers }
       : {}),
   };
 

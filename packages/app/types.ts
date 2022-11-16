@@ -70,6 +70,9 @@ export interface WalletAddressesV2 {
   minting_enabled: boolean;
   email: string;
   is_email: number;
+  is_twitter: number;
+  is_google: number;
+  is_apple: number;
   phone_number: string;
   is_phone: number;
   nickname?: string;

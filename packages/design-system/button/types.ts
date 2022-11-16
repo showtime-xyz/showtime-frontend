@@ -9,7 +9,8 @@ export type ButtonVariant =
   | "danger"
   | "tertiary"
   | "secondary"
-  | "text";
+  | "text"
+  | "outlined";
 
 export type ButtonSize = "small" | "regular";
 

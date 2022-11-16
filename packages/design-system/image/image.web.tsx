@@ -120,7 +120,12 @@ type ImageProps = { tw?: TW; style?: any } & ComponentProps<typeof Img>;
 
 function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
   return (
-    <View style={{ borderRadius, overflow: "hidden" }}>
+    <View
+      style={{
+        borderRadius,
+        overflow: "hidden",
+      }}
+    >
       <Img {...props} className={Array.isArray(tw) ? tw.join(" ") : tw} />
     </View>
   );
