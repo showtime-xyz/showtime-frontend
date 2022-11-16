@@ -1,10 +1,10 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Link } from "app/navigation/link";
 import type { NFT } from "app/types";
 import {
@@ -32,7 +32,7 @@ export function Creator({
       href={`/@${nft.creator_username ?? nft.creator_address}`}
       tw="flex flex-row py-4"
     >
-      <Avatar url={nft.creator_img_url} />
+      <AvatarHoverCard nft={nft} />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (
           <>
