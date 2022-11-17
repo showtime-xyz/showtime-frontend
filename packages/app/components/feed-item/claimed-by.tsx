@@ -28,8 +28,8 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
           return (
             <View tw="-ml-2" key={`${item.profile_id}-${index}`}>
               <AvatarHoverCard
-                username={nft?.creator_username || nft?.creator_address_nonens}
-                url={nft?.creator_img_url}
+                username={item?.username || item?.wallet_address}
+                url={item?.img_url}
                 tw="border border-gray-300 dark:border-gray-700"
                 size={20}
                 alt="Claimed by Avatar"
