@@ -8157,7 +8157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:1.4.0, @shopify/flash-list@npm:^1.4.0":
+"@shopify/flash-list@npm:^1.4.0":
   version: 1.4.0
   resolution: "@shopify/flash-list@npm:1.4.0"
   dependencies:
@@ -9413,7 +9413,7 @@ __metadata:
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native-stack": ^6.9.1
     "@react-three/fiber": ^8.2.1
-    "@shopify/flash-list": 1.4.0
+    "@shopify/flash-list": ^1.4.0
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next
