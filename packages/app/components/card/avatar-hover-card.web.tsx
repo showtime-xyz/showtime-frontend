@@ -25,7 +25,6 @@ import { getFullSizeCover, getProfileImage, isMobileWeb } from "app/utilities";
 import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "../profile/profile-follows";
 import { AvatarHoverCardProps } from "./avatar-hover-card";
-import { AvatarHoverCard as AvatarWhitoutHover } from "./avatar-hover-card";
 
 const CARD_WIDTH = 320;
 export function AvatarHoverCard({
@@ -49,7 +48,11 @@ export function AvatarHoverCard({
   });
 
   if (isMobileWeb()) {
-    return <AvatarWhitoutHover username={username} url={url} />;
+    return (
+      <Link href={`/@${username}`}>
+        <Avatar alt={"Avatar"} url={url} {...rest} />
+      </Link>
+    );
   }
   return (
     <HoverCard.Root>
