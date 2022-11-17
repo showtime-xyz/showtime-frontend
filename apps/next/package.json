@@ -22,7 +22,7 @@
     "@radix-ui/react-select": "^1.0.0",
     "@radix-ui/react-use-escape-keydown": "^0.1.0",
     "@rainbow-me/rainbowkit": "^0.4.5",
-    "@react-native-menu/menu": "^0.5.2",
+    "@react-native-menu/menu": "^0.7.2",
     "@react-three/drei": "^9.17.3",
     "@react-three/fiber": "^8.2.1",
     "@sentry/integrations": "7.7.0",
