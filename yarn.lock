@@ -8157,17 +8157,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@shopify/flash-list@npm:1.3.1"
+"@shopify/flash-list@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@shopify/flash-list@npm:1.4.0"
   dependencies:
-    recyclerlistview: 4.1.2
+    recyclerlistview: 4.2.0
     tslib: 2.4.0
   peerDependencies:
     "@babel/runtime": "*"
     react: "*"
     react-native: "*"
-  checksum: 49a82512bf2b3622e1d7f1a86dc2837f7ee8809131fde0ffe0ced41ede001f77bf81741ea5d65b803ad76d669f146f8cd53702daf3387c9f89402b32f9667110
+  checksum: c6510b0d6ae6404fe92ede0c918ba184bc2b27ed39c627eebad16a6542792cb34e750e2004e1a9ce165f9d729f1af0555cba1e4c224fd52bfd2a600fdc9e2a65
   languageName: node
   linkType: hard
 
@@ -9138,7 +9138,7 @@ __metadata:
     "@react-three/fiber": ^8.2.1
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": 4.2.2
-    "@shopify/flash-list": 1.3.1
+    "@shopify/flash-list": ^1.4.0
     "@showtime-xyz/universal.accordion": ^0.0.65
     "@showtime-xyz/universal.activity-indicator": ^0.0.46
     "@showtime-xyz/universal.alert": ^0.0.84
@@ -9302,6 +9302,7 @@ __metadata:
     react-string-replace: ^0.4.4
     react-test-renderer: 18.2.0
     readable-stream: 3.6.0
+    recyclerlistview: ^4.2.0
     remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
@@ -9412,7 +9413,7 @@ __metadata:
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native-stack": ^6.9.1
     "@react-three/fiber": ^8.2.1
-    "@shopify/flash-list": 1.3.1
+    "@shopify/flash-list": ^1.4.0
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
     "@storybook/addon-ondevice-actions": next
@@ -32099,9 +32100,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recyclerlistview@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "recyclerlistview@npm:4.1.3"
+"recyclerlistview@npm:4.1.2":
+  version: 4.1.2
+  resolution: "recyclerlistview@npm:4.1.2"
   dependencies:
     lodash.debounce: 4.0.8
     prop-types: 15.8.1
@@ -32109,7 +32110,21 @@ __metadata:
   peerDependencies:
     react: ">= 15.2.1"
     react-native: ">= 0.30.0"
-  checksum: db3954db2d1af9c8ec4235c2c2c56839214c4124dfbbdc3c7435b7cb1fdf2d47b1ec437df9f0d46e16dc30be0ca1f7b722774c06a7c934a688fffed1098d0e77
+  checksum: e18e36c0783b528b5244ed0b7eabf231c49ec7b0a97c947a6f596900165a4d7bbc3216b23084a8a2cb8d33b98fb38fc4a64254cf0b6431a0d0fa3ca2e7129fbc
+  languageName: node
+  linkType: hard
+
+"recyclerlistview@npm:4.2.0, recyclerlistview@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "recyclerlistview@npm:4.2.0"
+  dependencies:
+    lodash.debounce: 4.0.8
+    prop-types: 15.8.1
+    ts-object-utils: 0.0.5
+  peerDependencies:
+    react: ">= 15.2.1"
+    react-native: ">= 0.30.0"
+  checksum: 6cba6a99fb487067c509112b94e3d4d3905d782bbcb7af2cffbd57c601a4650d670e4eee5fec18d195d58ff6ec01a47288c5510379a2f37da3c5fc0a58860441
   languageName: node
   linkType: hard
 
