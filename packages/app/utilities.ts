@@ -70,7 +70,7 @@ export const getSortFields = () => {
 export const NFT_DETAIL_API = "/v2/nft_detail";
 
 export const removeTags = (text: string) => {
-  return removeMd(text.replace(/(<([^>]+)>)/gi, " "));
+  return removeMd(text.replace(/<(?:.|\n)*?>/gi, " "));
 };
 
 type ReactChildArray = ReturnType<typeof React.Children.toArray>;
