@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@react-native-menu/menu": "^0.5.2",
+    "@react-native-menu/menu": "^0.7.2",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/react-native": "0.69.3",
     "@typescript-eslint/eslint-plugin": "5.23.0",

@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 import * as FileSystem from "expo-file-system";
-import removeMd from "remove-markdown";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { SORT_FIELDS } from "app/lib/constants";
@@ -70,7 +69,7 @@ export const getSortFields = () => {
 export const NFT_DETAIL_API = "/v2/nft_detail";
 
 export const removeTags = (text: string) => {
-  return removeMd(text.replace(/(<([^>]+)>)/gi, " "));
+  return text.replace(/<(?:.|\n)*?>/gi, " ");
 };
 
 type ReactChildArray = ReturnType<typeof React.Children.toArray>;

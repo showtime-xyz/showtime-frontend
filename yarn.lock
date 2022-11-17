@@ -7503,13 +7503,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-menu/menu@npm:^0.5.2":
-  version: 0.5.3
-  resolution: "@react-native-menu/menu@npm:0.5.3"
+"@react-native-menu/menu@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "@react-native-menu/menu@npm:0.7.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 892d6858f6fa5df17e0cdf84343cc56163de95408bdfb4dbd0ee11099340311ec9f0507988f8f3a674cc2fd555106eba29d3f9e2760811fe8acf683035134ba0
+  checksum: b82402d183a58427cf0cc0dd617a81019e559d828b370f37d2df2690254dfa1e53f4da228e8c63e53d7c29423fd939f9a4b0c2b2930dc7d6cc5fdc5858b523f6
   languageName: node
   linkType: hard
 
@@ -9128,7 +9128,7 @@ __metadata:
     "@react-native-community/blur": ^4.2.0
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
-    "@react-native-menu/menu": ^0.5.2
+    "@react-native-menu/menu": ^0.7.2
     "@react-native-segmented-control/segmented-control": 2.4.0
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native": ^6.0.13
@@ -9343,7 +9343,7 @@ __metadata:
     "@radix-ui/react-select": ^1.0.0
     "@radix-ui/react-use-escape-keydown": ^0.1.0
     "@rainbow-me/rainbowkit": ^0.4.5
-    "@react-native-menu/menu": ^0.5.2
+    "@react-native-menu/menu": ^0.7.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
     "@sentry/integrations": 7.7.0
@@ -9408,7 +9408,7 @@ __metadata:
     "@react-native-async-storage/async-storage": ~1.17.3
     "@react-native-community/datetimepicker": 6.5.2
     "@react-native-community/slider": 4.2.4
-    "@react-native-menu/menu": ^0.5.2
+    "@react-native-menu/menu": ^0.7.2
     "@react-native-segmented-control/segmented-control": 2.4.0
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native-stack": ^6.9.1
@@ -33525,7 +33525,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "showtime@workspace:."
   dependencies:
-    "@react-native-menu/menu": ^0.5.2
+    "@react-native-menu/menu": ^0.7.2
     "@trivago/prettier-plugin-sort-imports": ^3.3.0
     "@types/react-dropzone": ^5.1.0
     "@types/react-native": 0.69.3
