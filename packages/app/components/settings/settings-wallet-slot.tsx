@@ -9,8 +9,8 @@ import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
-import { formatAddressShort } from "app/lib/utilities";
 import { WalletAddressesV2 } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { SettingSubTitle } from "./settings-subtitle";
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
