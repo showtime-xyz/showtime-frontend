@@ -16,13 +16,7 @@ type Props = ViewProps & {
 function Description({ descriptionText = "", maxLines = 3, ...rest }: Props) {
   const description = useMemo(
     () =>
-      descriptionText
-        ? linkifyDescription(
-            removeTags(
-              `I wasn’t even going to do an “after” version of this until someone gave me this wonderful idea :bulb: so here we are! Only 69 editions \n\nTell.ie/ghost_of_inari/about\nFollow me on Twitter`
-            )
-          )
-        : "",
+      descriptionText ? linkifyDescription(removeTags(descriptionText)) : "",
     [descriptionText]
   );
 
