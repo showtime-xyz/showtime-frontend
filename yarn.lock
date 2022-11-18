@@ -9203,7 +9203,6 @@ __metadata:
     "@tradle/react-native-http": ^2.0.1
     "@types/jest": ^27.4.1
     "@types/react": 18.0.24
-    "@types/remove-markdown": ^0.3.1
     "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.8.0
@@ -9303,7 +9302,6 @@ __metadata:
     react-test-renderer: 18.2.0
     readable-stream: 3.6.0
     recyclerlistview: ^4.2.0
-    remove-markdown: ^0.3.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
     solito: ~1.0.12
@@ -9386,7 +9384,6 @@ __metadata:
     react-stickynode: ^4.0.0
     react-string-replace: ^0.4.4
     react-virtuoso: ^2.16.6
-    remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
@@ -12028,13 +12025,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 7d06125bac61e1c6661e5dfbeeeb56d5b6d1d4c743292faebaa6b0f30f8414c7af3cadf674923fd86e4ca14e82566ff9156cd40c56786be024600c31b97d6c03
-  languageName: node
-  linkType: hard
-
-"@types/remove-markdown@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@types/remove-markdown@npm:0.3.1"
-  checksum: a673aafa3a3722d959b4ad1d4e95b33f04f037a8bb95a82e843d6005b12b51f9b1bfd5954cd5c8707fbbb2f1d8865f7e632f02f99389ab83d0dcfd2cb1920dbb
   languageName: node
   linkType: hard
 
@@ -32396,13 +32386,6 @@ __metadata:
   version: 0.4.2
   resolution: "remove-accents@npm:0.4.2"
   checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
-  languageName: node
-  linkType: hard
-
-"remove-markdown@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "remove-markdown@npm:0.3.0"
-  checksum: c3e40122e5057096c04881b8a0bccf41f913e352d106f4debded28bd824daab1d1cda64a67ed6a76064bc0a78d9b6c0feba3f933b44c6ffc50608249524ad2dd
   languageName: node
   linkType: hard
 

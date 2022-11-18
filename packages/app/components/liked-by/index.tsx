@@ -6,8 +6,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useLikes } from "app/hooks/api/use-likes";
-import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
+import { formatAddressShort } from "app/utilities";
 
 interface Props {
   nft?: any;

@@ -5,7 +5,9 @@ import { formatDistanceToNowStrict } from "date-fns";
 import * as FileSystem from "expo-file-system";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
+import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
 import { SORT_FIELDS } from "app/lib/constants";
+import { removeMd } from "app/lib/remove-markdown";
 
 import { ProfileTabsAPI } from "./hooks/api-hooks";
 import { NFT, Profile } from "./types";
@@ -69,7 +71,7 @@ export const getSortFields = () => {
 export const NFT_DETAIL_API = "/v2/nft_detail";
 
 export const removeTags = (text: string) => {
-  return text.replace(/<(?:.|\n)*?>/gi, " ");
+  return removeMd(text.replace(/<(?:.|\n)*?>/gm, ""));
 };
 
 type ReactChildArray = ReturnType<typeof React.Children.toArray>;
@@ -145,26 +147,6 @@ export const getPolygonScanLink = (transactionHash: string) => {
   return `https://${
     process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
   }polygonscan.com/tx/${transactionHash}`;
-};
-
-export const CONTRACTS = {
-  ZORA: "0xabefbc9fd2f806065b4f3c237d4b59d9a97bcac7",
-  RARIBLE_V2: "0x60f80121c31a0d46b5279700f9df786054aa5ee5",
-  RARIBLE_1155: "0xd07dc4262bcdbf85190c01c996b4c06a461d2430",
-  KNOWNORIGIN: "0xfbeef911dc5821886e1dda71586d90ed28174b7d",
-  KNOWNORIGIN_V2: "0xabb3738f04dc2ec20f4ae4462c3d069d02ae045b",
-  FOUNDATION: "0x3b3ee1931dc30c1957379fac9aba94d1c48a5405",
-  SUPERRARE_V1: "0x41a322b28d0ff354040e2cbc676f0320d8c8850d",
-  SUPERRARE_V2: "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0",
-  ASYNCART_V1: "0x6c424c25e9f1fff9642cb5b7750b0db7312c29ad",
-  ASYNCART_V2: "0xb6dae651468e9593e4581705a09c10a76ac1e0c8",
-  CRYPTOARTAI: "0x3ad503084f1bd8d15a7f5ebe7a038c064e1e3fa1",
-  PORTIONIO: "0xda98f59e1edecb2545d7b07b794e704ed6cf1f7a",
-  PORTIONIO_1155: "0x0adf0bc748296bcba9f394d783a5f5e9406d6874",
-  MINTABLE: "0x8c5acf6dbd24c66e6fd44d4a4c3d7a2d955aaad2", // Gasless store
-  EPHIMERA: "0xfe21b0a8df3308c61cb13df57ae5962c567a668a",
-  HICETNUNC: "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
-  KALAMINT: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse",
 };
 
 export const getContractName = (item: NFT) => {
@@ -639,3 +621,10 @@ export function getFullSizeCover(url: string | undefined) {
 
   return url;
 }
+export const findTokenChainName = (chainId?: string) => {
+  if (!chainId) return null;
+  return Object.keys(CHAIN_IDENTIFIERS).find(
+    (key: string) =>
+      CHAIN_IDENTIFIERS[key as keyof typeof CHAIN_IDENTIFIERS] == chainId
+  );
+};
