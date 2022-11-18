@@ -16,8 +16,16 @@ interface LoginProps {
 
 export function Login({ onLogin }: LoginProps) {
   //#region hooks
-  const { walletStatus, walletName, showSignMessage, verifySignature } =
-    useLogin(onLogin);
+  const {
+    walletStatus,
+    walletName,
+    showSignMessage,
+    verifySignature,
+    handleSubmitEmail,
+    handleSubmitPhoneNumber,
+    handleSubmitWallet,
+    loading,
+  } = useLogin(onLogin);
   //#endregion
 
   return (
@@ -42,7 +50,12 @@ export function Login({ onLogin }: LoginProps) {
             </Button>
           </View>
         ) : (
-          <LoginComponent onLogin={onLogin} />
+          <LoginComponent
+            handleSubmitEmail={handleSubmitEmail}
+            handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+            handleSubmitWallet={handleSubmitWallet}
+            loading={loading}
+          />
         )}
       </ScrollView>
     </PortalProvider>
