@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  Platform,
   useColorScheme as useDeviceColorScheme,
   Appearance,
+  Platform,
 } from "react-native";
 import type { ColorSchemeName } from "react-native";
 
@@ -24,46 +24,63 @@ export function ColorSchemeProvider({
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
   const nativewind = useTailwindColorScheme();
-  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
+  const isFollowDeviceSetting = useRef(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
-  const isDark = colorScheme === "dark";
+  const changeTheme = useCallback(
+    (newColorScheme: ColorSchemeName) => {
+      if (!newColorScheme) return;
+      persistColorScheme(newColorScheme);
+      setColorScheme(newColorScheme);
+      const isDark = newColorScheme === "dark";
+      if (isDark) {
+        if (Platform.OS === "android") {
+          NavigationBar.setBackgroundColorAsync("#000");
+          NavigationBar.setButtonStyleAsync("light");
+        }
+        nativewind.setColorScheme("dark");
+        SystemUI.setBackgroundColorAsync("black");
+        setStatusBarStyle("light");
+      } else {
+        if (Platform.OS === "android") {
+          NavigationBar.setBackgroundColorAsync("#FFF");
+          NavigationBar.setButtonStyleAsync("dark");
+        }
+        nativewind.setColorScheme("light");
+        SystemUI.setBackgroundColorAsync("white");
+        setStatusBarStyle("dark");
+      }
+    },
+    [nativewind]
+  );
+  const themeChangeListener = useCallback(() => {
+    const theme = Appearance.getColorScheme();
+
+    if (theme && isFollowDeviceSetting.current) {
+      changeTheme(theme);
+    }
+  }, [changeTheme]);
 
   useEffect(() => {
-    Appearance.addChangeListener((preferences) => {
-      if (isFollowDeviceSetting) {
-        handleColorSchemeChange(preferences.colorScheme);
-      }
-    });
-    if (isDark) {
-      if (Platform.OS === "android") {
-        NavigationBar.setBackgroundColorAsync("#000");
-        NavigationBar.setButtonStyleAsync("light");
-      }
+    const appearanceListener =
+      Appearance.addChangeListener(themeChangeListener);
 
-      nativewind.setColorScheme("dark");
-      SystemUI.setBackgroundColorAsync("black");
-      setStatusBarStyle("light");
-    } else {
-      if (Platform.OS === "android") {
-        NavigationBar.setBackgroundColorAsync("#FFF");
-        NavigationBar.setButtonStyleAsync("dark");
-      }
-
-      nativewind.setColorScheme("light");
-      SystemUI.setBackgroundColorAsync("white");
-      setStatusBarStyle("dark");
-    }
-  }, [isDark, nativewind, isFollowDeviceSetting]);
+    return () => {
+      appearanceListener.remove();
+    };
+  }, [themeChangeListener]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
-      setColorScheme(newColorScheme);
-      persistColorScheme(newColorScheme);
-      setIsFollowingDeviceSetting(false);
+      changeTheme(newColorScheme);
+      isFollowDeviceSetting.current = false;
     } else {
-      setIsFollowingDeviceSetting(true);
+      isFollowDeviceSetting.current = true;
+      const theme = Appearance.getColorScheme();
+      if (theme) {
+        changeTheme(theme);
+      }
     }
   };
 
