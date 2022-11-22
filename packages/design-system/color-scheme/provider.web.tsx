@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
@@ -17,18 +17,16 @@ export function ColorSchemeProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
-  const [isFollowDeviceSetting, setIsFollowingDeviceSetting] = useState(true);
+  const isFollowDeviceSetting = useRef(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
   const isDark = colorScheme === "dark";
-
-  useEffect(() => {
-    Appearance.addChangeListener((preferences) => {
-      if (isFollowDeviceSetting) {
-        handleColorSchemeChange(preferences.colorScheme);
-      }
-    });
+  const changeTheme = useCallback((newColorScheme: ColorSchemeName) => {
+    if (!newColorScheme) return;
+    persistColorScheme(newColorScheme);
+    setColorScheme(newColorScheme);
+    const isDark = newColorScheme === "dark";
     document.documentElement.setAttribute(
       "data-color-scheme",
       isDark ? "dark" : "light"
@@ -38,15 +36,33 @@ export function ColorSchemeProvider({
     } else {
       document.body.classList.remove("dark");
     }
-  }, [isDark, isFollowDeviceSetting]);
+  }, []);
+  const themeChangeListener = useCallback(() => {
+    const theme = Appearance.getColorScheme();
+    if (theme && isFollowDeviceSetting.current) {
+      changeTheme(theme);
+    }
+  }, [changeTheme]);
+  useEffect(() => {
+    themeChangeListener();
+    const appearanceListener =
+      Appearance.addChangeListener(themeChangeListener);
+    return () => {
+      // @ts-ignore
+      appearanceListener.remove();
+    };
+  }, [isDark, themeChangeListener]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
-      setColorScheme(newColorScheme);
-      persistColorScheme(newColorScheme);
-      setIsFollowingDeviceSetting(false);
+      changeTheme(newColorScheme);
+      isFollowDeviceSetting.current = false;
     } else {
-      setIsFollowingDeviceSetting(true);
+      isFollowDeviceSetting.current = true;
+      const theme = Appearance.getColorScheme();
+      if (theme) {
+        changeTheme(theme);
+      }
     }
   };
 
