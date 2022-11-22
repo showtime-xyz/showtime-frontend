@@ -44,9 +44,11 @@ export function ColorSchemeProvider({
     }
   }, [changeTheme]);
   useEffect(() => {
+    themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
     return () => {
+      // @ts-ignore
       appearanceListener.remove();
     };
   }, [isDark, themeChangeListener]);

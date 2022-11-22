@@ -155,6 +155,7 @@ export class ReactNativeWebMain {
           "@babel/core": "^7.18.9",
           "@babel/runtime": "^7.18.9",
           "babel-preset-expo": "^9.1.0",
+          "@storybook/react": "6.5.9",
         },
       }),
     ]);

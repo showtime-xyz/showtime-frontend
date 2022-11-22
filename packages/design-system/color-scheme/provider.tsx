@@ -56,20 +56,20 @@ export function ColorSchemeProvider({
   );
   const themeChangeListener = useCallback(() => {
     const theme = Appearance.getColorScheme();
-
     if (theme && isFollowDeviceSetting.current) {
       changeTheme(theme);
     }
   }, [changeTheme]);
 
   useEffect(() => {
+    themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
-
     return () => {
+      // @ts-ignore
       appearanceListener.remove();
     };
-  }, [themeChangeListener]);
+  }, [themeChangeListener, changeTheme]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
