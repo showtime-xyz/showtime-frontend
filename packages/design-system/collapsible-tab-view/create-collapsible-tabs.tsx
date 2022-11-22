@@ -20,20 +20,23 @@ import type {
   TabViewCustomRenders,
 } from "./types";
 
-export type HeaderTabViewRef = {};
-export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
+export type CollapsibleTabViewRef = {};
+export type CollapsibleTabViewProps<T extends Route> = Partial<
+  TabViewProps<T>
+> &
   Pick<TabViewProps<T>, "onIndexChange" | "navigationState" | "renderScene"> &
   CollapsibleHeaderProps<T>;
 
-export type ForwardTabViewProps<T extends Route> = HeaderTabViewProps<T> & {
-  forwardedRef: React.ForwardedRef<HeaderTabViewRef>;
-  Component: React.PropsWithRef<typeof TabView>;
-};
+export type ForwardTabViewProps<T extends Route> =
+  CollapsibleTabViewProps<T> & {
+    forwardedRef: React.ForwardedRef<CollapsibleTabViewRef>;
+    Component: React.PropsWithRef<typeof TabView>;
+  };
 
 export function createCollapsibleTabsComponent<T extends Route>(
   Component: React.PropsWithRef<typeof TabView>
 ) {
-  return React.forwardRef<HeaderTabViewRef, HeaderTabViewProps<T>>(
+  return React.forwardRef<CollapsibleTabViewRef, CollapsibleTabViewProps<T>>(
     function tabView(props, ref) {
       return (
         <CollapsibleHeaderTabView
