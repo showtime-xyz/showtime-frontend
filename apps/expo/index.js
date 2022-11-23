@@ -1,4 +1,6 @@
 import "./shim";
+// https://docs.ethers.io/v5/cookbook/react-native/#cookbook-reactnative-security
+import "@ethersproject/shims";
 
 import { registerRootComponent } from "expo";
 import "expo-dev-client";

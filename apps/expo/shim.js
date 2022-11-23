@@ -1,7 +1,27 @@
+import "react-native-random-values-jsi-helper";
+
 import { Platform } from "react-native";
 
+import "@azure/core-asynciterator-polyfill";
+import { Crypto as WebCrypto } from "@peculiar/webcrypto";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { btoa, atob, toByteArray } from "react-native-quick-base64";
-import "react-native-random-values-jsi-helper";
+import "text-encoding";
+import "web-streams-polyfill";
+
+if (!global.localStorage) {
+  global.localStorage = AsyncStorage;
+}
+
+if (!global.Buffer) {
+  global.Buffer = require("@craftzdog/react-native-buffer").Buffer;
+}
+
+if (!global.crypto.subtle) {
+  // Only polyfill SubtleCrypto, not getRandomValues
+  const webCrypto = new WebCrypto();
+  global.crypto.subtle = webCrypto.subtle;
+}
 
 if (typeof __dirname === "undefined") global.__dirname = "/";
 if (typeof __filename === "undefined") global.__filename = "";
@@ -15,9 +35,7 @@ if (typeof process === "undefined") {
     }
   }
 }
-
 process.browser = false;
-if (typeof Buffer === "undefined") global.Buffer = require("buffer").Buffer;
 
 // global.location = global.location || { port: 80 }
 const isDev = typeof __DEV__ === "boolean" && __DEV__;

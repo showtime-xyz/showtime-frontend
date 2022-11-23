@@ -1,6 +1,7 @@
 module.exports = {
   bracketSpacing: true,
   importOrder: [
+    "react-native-random-values-jsi-helper",
     "./shim",
     "raf/polyfill",
     "setimmediate",

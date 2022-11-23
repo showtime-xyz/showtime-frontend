@@ -38,7 +38,15 @@ module.exports = function (api) {
   }
 
   return {
-    presets: [["babel-preset-expo", { jsxRuntime: "automatic" }]],
+    presets: [
+      [
+        "babel-preset-expo",
+        {
+          jsxRuntime: "automatic",
+          native: { unstable_transformProfile: "hermes-stable" },
+        },
+      ],
+    ],
     plugins,
   };
 };

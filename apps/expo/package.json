@@ -47,6 +47,7 @@
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
+    "@azure/core-asynciterator-polyfill": "^1.0.2",
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
     "@coinbase/wallet-mobile-sdk": "^1.0.4",
@@ -56,6 +57,7 @@
     "@logrocket/react-native": "^1.7.3",
     "@magic-ext/react-native-oauth": "^4.0.0",
     "@magic-sdk/react-native": "^11.0.0",
+    "@peculiar/webcrypto": "^1.4.1",
     "@radix-ui/react-accordion": "^0.1.5",
     "@radix-ui/react-tabs": "^0.1.1",
     "@react-native-async-storage/async-storage": "~1.17.3",
@@ -129,6 +131,7 @@
     "@testing-library/react-native": "^9.1.0",
     "@tradle/react-native-http": "^2.0.1",
     "@walletconnect/react-native-dapp": "^1.8.0",
+    "@xmtp/xmtp-js": "^7.1.3",
     "app": "*",
     "array-to-image": "^1.0.0",
     "assert": "^2.0.0",
@@ -143,7 +146,7 @@
     "domain-browser": "^4.22.0",
     "dotenv": "^10.0.0",
     "events": "^3.3.0",
-    "expo": "~47.0.7",
+    "expo": "~47.0.8",
     "expo-app-loading": "~2.1.1",
     "expo-application": "~5.0.1",
     "expo-av": "~13.0.1",
@@ -219,6 +222,7 @@
     "solito": "~1.0.12",
     "stream-browserify": "^3.0.0",
     "string_decoder": "~1.3.0",
+    "text-encoding": "^0.7.0",
     "three": "^0.142.0",
     "timers-browserify": "^2.0.12",
     "tty-browserify": "0.0.1",
@@ -228,6 +232,7 @@
     "util": "~0.12.4",
     "uuid": "^8.3.2",
     "vm-browserify": "1.1.2",
+    "web-streams-polyfill": "^3.2.1",
     "yup": "^0.32.11",
     "zeego": "canary"
   },

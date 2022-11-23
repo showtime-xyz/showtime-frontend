@@ -8,6 +8,7 @@ import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeStackParams } from "app/navigation/types";
 import { HomeScreen } from "app/screens/home";
+import { InboxScreen } from "app/screens/inbox";
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 
@@ -44,7 +45,8 @@ function HomeNavigator() {
         headerRight: NativeHeaderRight,
       })}
     >
-      <HomeStack.Screen name="home" component={HomeScreen} />
+      {/* <HomeStack.Screen name="home" component={HomeScreen} /> */}
+      <HomeStack.Screen name="home" component={InboxScreen} />
     </HomeStack.Navigator>
   );
 }
