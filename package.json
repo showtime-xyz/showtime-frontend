@@ -84,7 +84,7 @@
     "@ethersproject/bignumber": "5.6.2",
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
-    "next": "13.0.2",
+    "next": "13.0.4",
     "@gorhom/bottom-sheet": "4.4.5",
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
