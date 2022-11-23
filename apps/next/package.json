@@ -35,6 +35,7 @@
     "array-to-image": "^1.0.0",
     "axios": "^0.24.0",
     "blurhash": "^1.1.4",
+    "core-js": "^3.26.1",
     "date-fns": "^2.26.0",
     "design-system": "*",
     "ethers": "^5.7.0",

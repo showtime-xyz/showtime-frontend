@@ -1,3 +1,5 @@
+import "core-js/stable";
+
 import "raf/polyfill";
 
 import "setimmediate";
@@ -189,19 +191,19 @@ function App({ Component, pageProps, router }: AppProps) {
   );
 }
 
-// const inter = Inter({
-//   variable: "--font-inter",
-//   display: "swap",
-// });
+const inter = Inter({
+  variable: "--font-inter",
+  display: "swap",
+});
 
-// const spaceGrotesk = Space_Grotesk({
-//   variable: "--font-space-grotesk",
-//   display: "swap",
-// });
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
 
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
-    // const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
+    const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
 
     const onResize = useCallback(() => {
       if (isMobileWeb()) {
@@ -215,9 +217,7 @@ const Container = withColorScheme(
 
     return (
       <View tw="bg-gray-100 dark:bg-black">
-        {/* <div className={fonts}> */}
-        {children}
-        {/* </div> */}
+        <div className={fonts}>{children}</div>
       </View>
     );
   }

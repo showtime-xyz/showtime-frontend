@@ -3,7 +3,7 @@
  */
 const isDev = process.env.NODE_ENV === "development";
 
-const { withExpo } = require("@expo/next-adapter");
+const path = require("path");
 const withImages = require("next-images");
 const withPlugins = require("next-compose-plugins");
 const { withSentryConfig } = require("@sentry/nextjs");
@@ -16,7 +16,6 @@ const withPWA = require("next-pwa")({
   disable: isDev,
   runtimeCaching: cache,
 });
-const { DefinePlugin } = require("webpack");
 const withTM = require("next-transpile-modules")([
   "@showtime-xyz/universal.typography",
   "@showtime-xyz/universal.tailwind",
@@ -88,6 +87,7 @@ const nextConfig = {
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
     transpilePackages: [
+      "react-native",
       "app",
       "@gorhom/bottom-sheet",
       "@gorhom/portal",
@@ -99,6 +99,39 @@ const nextConfig = {
       "nativewind",
       "@shopify/flash-list",
       "recyclerlistview",
+      "expo",
+      "expo-app-loading",
+      "expo-application",
+      "expo-av",
+      "expo-blur",
+      "expo-build-properties",
+      "expo-camera",
+      "expo-community-flipper",
+      "expo-constants",
+      "expo-dev-client",
+      "expo-device",
+      "expo-font",
+      "expo-gl",
+      "expo-haptics",
+      "expo-image-picker",
+      "expo-linear-gradient",
+      "expo-linking",
+      "expo-localization",
+      "expo-location",
+      "expo-media-library",
+      "expo-modules-core",
+      "expo-navigation-bar",
+      "expo-next-react-navigation",
+      "expo-notifications",
+      "expo-splash-screen",
+      "expo-status-bar",
+      "expo-system-ui",
+      "expo-updates",
+      "expo-web-browser",
+      "expo-next-react-navigation",
+      "react-native-fast-image",
+      "@react-native-menu/menu",
+      "react-native-reanimated",
     ],
   },
   webpack: (config, options) => {
@@ -134,10 +167,18 @@ const nextConfig = {
 
     // Expose __DEV__ from Metro.
     config.plugins.push(
-      new DefinePlugin({
+      new options.webpack.DefinePlugin({
         __DEV__: JSON.stringify(process.env.NODE_ENV !== "production"),
       })
     );
+
+    if (options.isServer) {
+      config.plugins.push(
+        new options.webpack.ProvidePlugin({
+          requestAnimationFrame: path.resolve(__dirname, "./raf.js"),
+        })
+      );
+    }
 
     return config;
   },
@@ -222,7 +263,6 @@ module.exports = withPlugins(
     withBundleAnalyzer,
     !isDev ? withSentryConfig : null,
     withPWA,
-    [withExpo, { projectRoot: __dirname + "/../.." }],
   ].filter(Boolean),
   nextConfig
 );
