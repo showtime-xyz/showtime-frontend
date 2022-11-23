@@ -5,7 +5,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowRight } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { SnackbarProvider, useSnackbar } from "./index";
@@ -16,7 +15,6 @@ export default {
 } as Meta;
 export const Basic: React.VFC<{}> = () => {
   const snackbar = useSnackbar();
-  const toast = useToast();
   const isDark = useIsDarkMode();
   const toggleSnackbar = (cb: () => void) => {
     if (snackbar?.isVisible) {
@@ -62,10 +60,7 @@ export const Basic: React.VFC<{}> = () => {
             action: {
               text: "View",
               onPress: () => {
-                toast?.show({
-                  message: "View",
-                  hideAfter: 1000,
-                });
+                console.log("View");
               },
               element: (
                 <View tw="flex-row items-center justify-center">
