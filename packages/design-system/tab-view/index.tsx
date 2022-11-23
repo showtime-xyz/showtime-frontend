@@ -9,7 +9,7 @@ import {
 import {
   Route,
   CollapsibleTabView,
-  HeaderTabViewProps,
+  CollapsibleTabViewProps,
 } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -29,7 +29,7 @@ export * from "./tab-bar-single";
 export * from "./tab-spinner";
 export * from "./scrollable-auto-width-tab-bar";
 export * from "./scrollable-tab-bar";
-type TabBarProps<T extends Route> = HeaderTabViewProps<T> & {
+type TabBarProps<T extends Route> = CollapsibleTabViewProps<T> & {
   autoWidthTabBar?: boolean;
   hideTabBar?: boolean;
 };

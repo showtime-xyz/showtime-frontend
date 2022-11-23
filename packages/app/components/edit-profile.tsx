@@ -34,6 +34,7 @@ import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { yup } from "app/lib/yup";
+import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
@@ -45,6 +46,13 @@ import { ProfileScialExplanation } from "./profile/profile-social-explanation";
 
 const ScrollComponent =
   Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
+
+type Query = {
+  redirectUri?: string;
+  error?: string;
+};
+
+const { useParam } = createParam<Query>();
 
 const editProfileValidationSchema = yup.object({
   username: yup
@@ -112,6 +120,8 @@ export const EditProfile = () => {
       : 0
   );
 
+  const [redirectUri] = useParam("redirectUri");
+
   const [currentCropField, setCurrentCropField] = useState<
     null | "coverPicture" | "profilePicture"
   >(null);
@@ -154,7 +164,7 @@ export const EditProfile = () => {
     formState: { errors, isSubmitting },
     reset,
     setValue,
-    getValues,
+    watch,
   } = useForm<any>({
     resolver: yupResolver(editProfileValidationSchema),
     mode: "all",
@@ -249,7 +259,11 @@ export const EditProfile = () => {
           data: newValues,
         });
 
-        router.pop();
+        if (redirectUri) {
+          router.replace(redirectUri);
+        } else {
+          router.pop();
+        }
 
         // TODO: optimise to make fewer API calls!
         mutate(MY_INFO_ENDPOINT);
@@ -445,7 +459,7 @@ export const EditProfile = () => {
                         style={{
                           opacity:
                             !errors[item.value] &&
-                            getValues(item.value) &&
+                            watch(item.value) &&
                             (item.value === "username" ? isValid : true)
                               ? 1
                               : 0.1,

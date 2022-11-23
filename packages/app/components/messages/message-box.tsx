@@ -96,7 +96,12 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             onFocus={onFocus}
             onBlur={onBlur}
           />
-          <Avatar tw="absolute top-1.5 left-3" size={24} url={userAvatar} />
+          <Avatar
+            alt="Avatar"
+            tw="absolute top-1.5 left-3"
+            size={24}
+            url={userAvatar}
+          />
         </View>
         <Button
           size="regular"

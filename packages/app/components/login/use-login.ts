@@ -10,7 +10,8 @@ import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
 import { useRudder } from "app/lib/rudderstack";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
-type SubmitWalletParams = {
+
+export type SubmitWalletParams = {
   onOpenConnectModal?: () => void;
 };
 export const useLogin = (onLogin?: () => void) => {
@@ -34,7 +35,9 @@ export const useLogin = (onLogin?: () => void) => {
   //#endregion
 
   //#region methods
-  const handleLoginFailure = useCallback(function handleLoginFailure(error) {
+  const handleLoginFailure = useCallback(function handleLoginFailure(
+    error: any
+  ) {
     loginSource.current = "undetermined";
 
     if (process.env.NODE_ENV === "development" || __DEV__) {
@@ -47,17 +50,21 @@ export const useLogin = (onLogin?: () => void) => {
         login_magic_link: "use-login.ts",
       },
     });
-  }, []);
+  },
+  []);
 
   const handleSubmitWallet = useCallback(
     async function handleSubmitWallet(params?: SubmitWalletParams) {
       try {
         loginSource.current = "wallet";
+
         rudder?.track("Button Clicked", {
           name: "Login with wallet",
         });
 
         if (isWeb) {
+          console.log(loginSource.current);
+
           params?.onOpenConnectModal?.();
         } else {
           await loginWithWallet();

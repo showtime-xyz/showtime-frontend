@@ -21,6 +21,8 @@ export function Button({ variant = "primary", ...props }: ButtonProps) {
       return <SecondaryButton {...props} />;
     case "text":
       return <TextButton {...props} />;
+    case "outlined":
+      return <OutlinedButton {...props} />;
     default:
       return <PrimaryButton {...props} />;
   }
@@ -110,6 +112,19 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
       labelStyle={labelStyle}
       iconColor={iconColor}
       backgroundColors={undefined}
+    />
+  );
+}
+
+export function OutlinedButton({ ...props }: ButtonProps) {
+  const isDark = useIsDarkMode();
+
+  return (
+    <BaseButton
+      {...props}
+      labelStyle={{ color: isDark ? "#FFF" : "#000" }}
+      iconColor={ICON_COLOR_MAPPER.outlined}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.outlined}
     />
   );
 }

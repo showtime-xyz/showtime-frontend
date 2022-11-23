@@ -1,7 +1,8 @@
 import * as React from "react";
 import { createContext, useState, useContext } from "react";
 
-import Script from "next/script";
+import { OAuthExtension } from "@magic-ext/oauth";
+import { Magic } from "magic-sdk";
 
 import { isServer } from "app/lib/is-server";
 
@@ -13,10 +14,8 @@ export const MagicContext = createContext({
 export const MagicProvider = ({ children }: any) => {
   const [magic, setMagic] = useState({});
 
-  const onMagicLoad = () => {
+  React.useEffect(() => {
     const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
-    const Magic = (window as Window & typeof globalThis & { Magic: any })
-      ?.Magic;
 
     if (Magic) {
       // Default to polygon chain
@@ -35,10 +34,11 @@ export const MagicProvider = ({ children }: any) => {
       setMagic(
         new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
           network: customNodeOptions,
+          extensions: [new OAuthExtension()],
         })
       );
     }
-  };
+  }, []);
 
   return (
     <MagicContext.Provider
@@ -49,11 +49,6 @@ export const MagicProvider = ({ children }: any) => {
           : (window as Window & typeof globalThis & { Magic: any })?.Magic,
       }}
     >
-      <Script
-        src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"
-        strategy="lazyOnload"
-        onLoad={onMagicLoad}
-      />
       {children}
     </MagicContext.Provider>
   );

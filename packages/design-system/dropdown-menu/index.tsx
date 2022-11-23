@@ -1,4 +1,5 @@
 import { ComponentProps, useMemo, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { MotiView } from "moti";
 import Animated, {
@@ -18,7 +19,9 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuSub = DropdownMenu.Sub;
-const DropdownMenuSubContent = DropdownMenu.SubContent;
+// Todo: zeego issue on Android, have created a PR: https://github.com/nandorojo/zeego/pull/27, waiting for merge and release.
+const DropdownMenuSubContent =
+  Platform.OS === "android" ? DropdownMenu.Content : DropdownMenu.SubContent;
 
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
@@ -266,6 +269,13 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
   "ItemIcon"
 );
 
+const DropdownMenuItemNativeIcon = DropdownMenu.menuify(() => {
+  if (Platform.OS === "web") {
+    return <></>;
+  }
+  return DropdownMenu.ItemIcon;
+}, "ItemIcon");
+
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 
 const DropdownMenuItemImage = DropdownMenu.menuify(
@@ -313,4 +323,5 @@ export {
   DropdownMenuItemIcon,
   DropdownMenuItemImage,
   DropdownMenuLabel,
+  DropdownMenuItemNativeIcon,
 };

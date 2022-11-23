@@ -106,6 +106,8 @@ export { default as OpenSea } from "./OpenSea";
 export { default as InformationCircle } from "./InformationCircle";
 export { default as UserCircle } from "./UserCircle";
 export { default as Hourglass } from "./Hourglass";
+export { default as QrCode } from "./QrCode";
+export { default as DarkMode } from "./DarkMode";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
@@ -114,4 +116,6 @@ export { default as Facebook } from "./Facebook";
 export { default as GoogleOriginal } from "./GoogleOriginal";
 export { default as Apple } from "./Apple";
 export { default as Instagram } from "./Instagram";
+export { default as Github } from "./Github";
+
 //#endregion

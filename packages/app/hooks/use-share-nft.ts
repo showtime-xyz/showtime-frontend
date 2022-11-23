@@ -2,8 +2,8 @@ import { Linking } from "react-native";
 
 import { useShare } from "app/hooks/use-share";
 import { useRudder } from "app/lib/rudderstack";
-import { findTokenChainName } from "app/lib/utilities";
 import { NFT } from "app/types";
+import { findTokenChainName } from "app/utilities";
 import { getTwitterIntent } from "app/utilities";
 
 export const getNFTSlug = (nft: NFT) =>

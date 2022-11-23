@@ -73,6 +73,7 @@ export function Ownership({ nft }: Props) {
               tw="h-[14px] w-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
               size={14}
               url={owner.img_url}
+              alt="Avatar"
             />
           ))}
         </OwnershipContainer>
@@ -96,7 +97,7 @@ export function Ownership({ nft }: Props) {
         href={`/@${nft.owner_username ?? nft.owner_address}`}
         tw="flex flex-row"
       >
-        <Avatar url={nft.owner_img_url} />
+        <Avatar url={nft.owner_img_url} alt="Avatar" />
         <View tw="ml-2 justify-center">
           <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
             Owner

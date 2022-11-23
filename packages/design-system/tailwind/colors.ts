@@ -1,6 +1,8 @@
 export const colors = {
   black: "#000",
   white: "#fff",
+  twitter: "#1DA1F2",
+  facebook: "#1877F2",
   rose: {
     50: "#fff1f2",
     100: "#ffe4e6",

@@ -11,26 +11,21 @@ export const useFetchOnAppForeground = () => {
       return axios(params);
     } else {
       return new Promise<any>((resolve, reject) => {
-        function fetchData(state: AppStateStatus) {
+        const fetchData = (state: AppStateStatus) => {
           if (state === "active") {
-            console.log("calling foreground fetch");
             axios(params).then(resolve).catch(reject);
-            AppState.removeEventListener("change", fetchData);
-            listener.current = null;
+            listener.current?.remove();
           }
-        }
+        };
 
-        AppState.addEventListener("change", fetchData);
-        listener.current = fetchData;
+        listener.current = AppState.addEventListener("change", fetchData);
       });
     }
   }
 
   useEffect(() => {
     return () => {
-      if (listener.current) {
-        AppState.removeEventListener("change", listener.current);
-      }
+      listener.current?.remove();
     };
   }, []);
 

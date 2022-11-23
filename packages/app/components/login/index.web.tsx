@@ -1,15 +1,13 @@
-import { useCallback } from "react";
 import { StyleSheet } from "react-native";
 
+import { PortalProvider } from "@gorhom/portal";
+
 import { Button } from "@showtime-xyz/universal.button";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ConnectButton } from "../connect-button";
-import { LoginContainer } from "./login-container";
-import { LoginHeader } from "./login-header";
-import { LoginInputField } from "./login-input-field";
-import { LoginOverlays } from "./login-overlays";
+import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
 
 interface LoginProps {
@@ -21,81 +19,57 @@ export function Login({ onLogin }: LoginProps) {
   const {
     walletStatus,
     walletName,
-    loading,
-    handleSubmitWallet,
-    handleSubmitEmail,
-    handleSubmitPhoneNumber,
     showSignMessage,
     verifySignature,
+    handleSubmitEmail,
+    handleSubmitPhoneNumber,
+    handleSubmitWallet,
+    loading,
   } = useLogin(onLogin);
   //#endregion
 
-  //#endregion
-
-  //#region callbacks
-  const handleSubmitContactDetails = useCallback(
-    (value: string) => {
-      if (value.includes("@")) {
-        handleSubmitEmail(value);
-      } else {
-        handleSubmitPhoneNumber(value);
-      }
-    },
-    [handleSubmitEmail, handleSubmitPhoneNumber]
-  );
-  //#endregion
   return (
-    <LoginContainer style={styles.container}>
-      {walletStatus === "FETCHING_SIGNATURE" ? (
-        <View tw="py-40">
-          <Text tw="text-center dark:text-gray-400">
-            {walletName !== ""
-              ? `Pushed a request to ${walletName}... Please check your wallet.`
-              : `Pushed a request to your wallet...`}
-          </Text>
-        </View>
-      ) : showSignMessage ? (
-        <View tw="py-20 px-10">
-          <Text tw="text-center text-lg dark:text-gray-400">
-            We need a signature in order to verify your identity. This won't
-            cost any gas.
-          </Text>
-          <Button tw="mt-8" onPress={verifySignature}>
-            Sign the message
-          </Button>
-        </View>
-      ) : (
-        <>
-          <LoginHeader />
-          <View tw="p-4">
-            <LoginInputField
-              key="login-contact-details-field"
-              label="Contact details"
-              placeholder="Enter your email or phone number"
-              signInButtonLabel="Sign in"
-              onSubmit={handleSubmitContactDetails}
-            />
-          </View>
-          <View tw="mb-4 bg-gray-100 dark:bg-gray-900">
-            <View tw="h-2" />
-            <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-              or
+    <PortalProvider>
+      <ScrollView style={styles.container}>
+        {walletStatus === "FETCHING_SIGNATURE" ? (
+          <View tw="py-40">
+            <Text tw="text-center dark:text-gray-400">
+              {walletName !== ""
+                ? `Pushed a request to ${walletName}... Please check your wallet.`
+                : `Pushed a request to your wallet...`}
             </Text>
-            <View tw="h-2" />
           </View>
-          <View tw="p-4">
-            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
+        ) : showSignMessage ? (
+          <View tw="py-20 px-10">
+            <Text tw="text-center text-lg dark:text-gray-400">
+              We need a signature in order to verify your identity. This won't
+              cost any gas.
+            </Text>
+            <Button tw="mt-8" onPress={verifySignature}>
+              Sign the message
+            </Button>
           </View>
-        </>
-      )}
-
-      <LoginOverlays loading={loading} />
-    </LoginContainer>
+        ) : (
+          <LoginComponent
+            handleSubmitEmail={handleSubmitEmail}
+            handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+            handleSubmitWallet={handleSubmitWallet}
+            loading={loading}
+          />
+        )}
+      </ScrollView>
+    </PortalProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    paddingTop: 16,
+  },
+  tabListItemContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 16,
     flex: 1,
     paddingTop: 16,
   },

@@ -1,60 +1,32 @@
-import { useMemo, useCallback, useState } from "react";
-import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { useMemo } from "react";
+import { Platform, StyleSheet } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import {
-  SceneRendererProps,
-  Route,
-  TabView,
-  ScollableTabBar,
-} from "@showtime-xyz/universal.tab-view";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { PortalProvider } from "@gorhom/portal";
+
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { yup } from "app/lib/yup";
-
-import { LoginContainer } from "./login-container";
-import { LoginHeader } from "./login-header";
-import { LoginInputField } from "./login-input-field";
-import { LoginOverlays } from "./login-overlays";
-import { PhoneNumberPicker } from "./phone-number-picker";
+import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
 
+const ContainerView: any =
+  Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 interface LoginProps {
   onLogin?: () => void;
 }
-const LOGIN_ROUTES = [
-  {
-    title: "Wallet or phone",
-    key: "phone",
-    index: 0,
-  },
-  {
-    title: "Email",
-    key: "email",
-    index: 1,
-  },
-];
-const CONTENT_HEIGHT = Platform.select({
-  android: [450, 397],
-  default: [460, 460],
-});
 
 export function Login({ onLogin }: LoginProps) {
-  //#region state
-  const [index, setIndex] = useState(0);
-  //#endregion
-
   //#region hooks
   const {
     walletStatus,
     walletName,
-    loading,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
     handleSubmitWallet,
+    loading,
   } = useLogin(onLogin);
-  const { width } = useWindowDimensions();
 
   //#endregion
 
@@ -70,117 +42,29 @@ export function Login({ onLogin }: LoginProps) {
       ].includes(walletStatus),
     [walletStatus]
   );
-  // const phoneNumberValidationSchema = useMemo(
-  //   () =>
-  //     yup
-  //       .object({
-  //         data: yup
-  //           .string()
-  //           .phone("US", false, "Please enter a valid phone number.")
-  //           .required("Please enter a valid phone number."),
-  //       })
-  //       .required(),
-  //   []
-  // );
-
-  const emailValidationSchema = useMemo(
-    () =>
-      yup
-        .object({
-          data: yup
-            .string()
-            .email("Please enter a valid email address.")
-            .required("Please enter a valid email address."),
-        })
-        .required(),
-    []
-  );
-
-  const renderScene = useCallback(
-    ({
-      route: { key },
-    }: SceneRendererProps & {
-      route: Route;
-    }) => {
-      switch (key) {
-        case "phone":
-          return (
-            <View style={styles.tabListItemContainer}>
-              <View tw="mb-[16px]">
-                <PhoneNumberPicker
-                  handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-                />
-              </View>
-              <View tw="mx-[-16px] mb-[16px] bg-gray-100 dark:bg-gray-900">
-                <View tw="h-2" />
-                <Text tw="text-center text-sm font-bold text-gray-600 dark:text-gray-400">
-                  or
-                </Text>
-                <View tw="h-2" />
-              </View>
-              <Button
-                onPress={() => handleSubmitWallet()}
-                variant="primary"
-                size="regular"
-              >
-                I already have a wallet
-              </Button>
-            </View>
-          );
-        case "email":
-          return (
-            <View style={styles.tabListItemContainer}>
-              <LoginInputField
-                key="login-email-field"
-                validationSchema={emailValidationSchema}
-                label="Email address"
-                placeholder="Enter your email address"
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                signInButtonLabel="Send"
-                onSubmit={handleSubmitEmail}
-              />
-            </View>
-          );
-        default:
-          return null;
-      }
-    },
-    [
-      emailValidationSchema,
-      handleSubmitEmail,
-      handleSubmitPhoneNumber,
-      handleSubmitWallet,
-    ]
-  );
 
   //#endregion
   return (
-    <LoginContainer style={styles.container}>
-      {isConnectingToWallet ? (
-        <View tw="py-40">
-          <Text tw="text-center dark:text-gray-400">
-            {walletName
-              ? `Pushed a request to ${walletName}... Please check your wallet.`
-              : `Pushed a request to your wallet...`}
-          </Text>
-        </View>
-      ) : (
-        <View style={{ minHeight: CONTENT_HEIGHT[index] }}>
-          <LoginHeader />
-          <TabView
-            navigationState={{ index, routes: LOGIN_ROUTES }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={(props) => <ScollableTabBar {...props} />}
-            initialLayout={{
-              width,
-            }}
+    <PortalProvider>
+      <ContainerView style={styles.container}>
+        {isConnectingToWallet ? (
+          <View tw="py-40">
+            <Text tw="text-center dark:text-gray-400">
+              {walletName
+                ? `Pushed a request to ${walletName}... Please check your wallet.`
+                : `Pushed a request to your wallet...`}
+            </Text>
+          </View>
+        ) : (
+          <LoginComponent
+            handleSubmitEmail={handleSubmitEmail}
+            handleSubmitPhoneNumber={handleSubmitPhoneNumber}
+            handleSubmitWallet={handleSubmitWallet}
+            loading={loading && !isConnectingToWallet}
           />
-        </View>
-      )}
-      <LoginOverlays loading={loading && !isConnectingToWallet} />
-    </LoginContainer>
+        )}
+      </ContainerView>
+    </PortalProvider>
   );
 }
 
@@ -188,9 +72,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 16,
+    minHeight: 400,
   },
   tabListItemContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     paddingBottom: 16,
     flex: 1,
     paddingTop: 16,

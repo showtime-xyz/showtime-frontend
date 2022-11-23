@@ -41,7 +41,7 @@ export const FeedItemTapGesture = ({ children }: FeedItemTapGestureProps) => {
 
   const doubleTapHandle = Gesture.Tap()
     .numberOfTaps(2)
-    .onFinalize(() => {
+    .onEnd(() => {
       heartAnimation.value = withSequence(
         withSpring(1),
         withDelay(200, withSpring(0))

@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Link, TextLink } from "app/navigation/link";
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
+import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 
 type NFTDetailsProps = {
@@ -27,13 +27,13 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
         {slicedClaimersList?.map((item, index) => {
           return (
             <View tw="-ml-2" key={`${item.profile_id}-${index}`}>
-              <Link href={`/@${item.username ?? item.wallet_address}`}>
-                <Avatar
-                  url={item.img_url}
-                  tw="border border-gray-300 dark:border-gray-700"
-                  size={20}
-                />
-              </Link>
+              <AvatarHoverCard
+                username={item?.username || item?.wallet_address}
+                url={item?.img_url}
+                tw="border border-gray-300 dark:border-gray-700"
+                size={20}
+                alt="Claimed by Avatar"
+              />
             </View>
           );
         })}
