@@ -145,7 +145,15 @@ export const DropForm = () => {
   const { clearStorage } = usePersistDropForm(FORM_DATA_KEY, {
     watch,
     setValue,
+    /**
+     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
+     */
+    exclude: Platform.select({
+      web: ["file"],
+      default: [],
+    }),
   });
+
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values, clearStorage);
   };
@@ -346,7 +354,7 @@ export const DropForm = () => {
                           });
                           handleFileChange(file.file);
                         }}
-                        tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64"
+                        tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64 overflow-hidden"
                       >
                         {value ? (
                           <View>
