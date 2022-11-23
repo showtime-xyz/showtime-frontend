@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -14,46 +13,61 @@ export type FilePickerResolveValue = {
 };
 
 export const useFilePicker = () => {
-  const inputRef = useRef<HTMLInputElement>();
+  // const inputRef = useRef<HTMLInputElement>();
 
-  useEffect(() => {
-    return () => {
-      if (inputRef.current) {
-        inputRef.current.remove();
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     if (inputRef.current) {
+  //       inputRef.current.remove();
+  //     }
+  //   };
+  // }, []);
 
   const pickFile = ({ mediaTypes = "all", option = {} }: Props) => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<FilePickerResolveValue>(async (resolve, reject) => {
       if (Platform.OS === "web") {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.hidden = true;
-        input.multiple = false;
-        let accepts = [];
-        if (mediaTypes === "all") {
-          accepts.push("image/*");
-          accepts.push("video/*");
-        } else if (mediaTypes === "image") {
-          accepts.push("image/*");
-        } else if (mediaTypes === "video") {
-          accepts.push("video/*");
-        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes:
+            mediaTypes === "image"
+              ? ImagePicker.MediaTypeOptions.Images
+              : mediaTypes === "video"
+              ? ImagePicker.MediaTypeOptions.Videos
+              : ImagePicker.MediaTypeOptions.All,
+          allowsMultipleSelection: false,
+          quality: 1,
+          ...option,
+        });
 
-        input.accept = accepts.join(",");
+        if (result.canceled) return;
+        const file = result.assets[0];
+        resolve({ file: file.uri, type: file.type });
+        // const input = document.createElement("input");
+        // input.type = "file";
+        // input.hidden = true;
+        // input.multiple = false;
+        // let accepts = [];
+        // if (mediaTypes === "all") {
+        //   accepts.push("image/*");
+        //   accepts.push("video/*");
+        // } else if (mediaTypes === "image") {
+        //   accepts.push("image/*");
+        // } else if (mediaTypes === "video") {
+        //   accepts.push("video/*");
+        // }
 
-        input.onchange = (e: InputEvent) => {
-          const file = (e.target as any).files[0];
-          const fileType = file["type"].split("/")[0] as "image" | "video";
-          resolve({ file: file, type: fileType });
-          input.remove();
-          inputRef.current = null;
-        };
-        document.body.appendChild(input);
-        inputRef.current = input;
-        input.click();
+        // input.accept = accepts.join(",");
+
+        // input.onchange = (e: InputEvent) => {
+        //   const file = (e.target as any).files[0];
+        //   const fileType = file["type"].split("/")[0] as "image" | "video";
+        //   resolve({ file: file, type: fileType });
+        //   input.remove();
+        //   inputRef.current = null;
+        // };
+        // document.body.appendChild(input);
+        // inputRef.current = input;
+        // input.click();
       } else {
         if (Platform.OS === "ios") {
           const { status } =
@@ -76,9 +90,9 @@ export const useFilePicker = () => {
             ...option,
           });
 
-          if (result.cancelled) return;
-
-          resolve({ file: result.uri, type: result.type });
+          if (result.canceled) return;
+          const file = result.assets[0];
+          resolve({ file: file.uri, type: file.type });
         } catch (error) {
           reject(error);
           console.error(error);

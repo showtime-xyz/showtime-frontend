@@ -143,7 +143,7 @@ export const useDropNFT = () => {
     dispatch({ type: "error", error: "polling timed out" });
   };
 
-  const dropNFT = async (params: UseDropNFT) => {
+  const dropNFT = async (params: UseDropNFT, callback?: () => void) => {
     try {
       const fileMetaData = await getFileMeta(params.file);
 
@@ -232,6 +232,7 @@ export const useDropNFT = () => {
       await pollTransaction({
         transactionId: relayerResponse.relayed_transaction_id,
       });
+      callback?.();
     } catch (e: any) {
       dispatch({ type: "error", error: e?.message });
       Logger.error("nft drop failed", e);

@@ -41,7 +41,8 @@ export const Preview = ({
       const fileExtension =
         typeof file === "string" ? file?.split(".").pop() : undefined;
       const isVideo =
-        fileExtension && supportedVideoExtensions.includes(fileExtension);
+        (fileExtension && supportedVideoExtensions.includes(fileExtension)) ||
+        file.includes("data:video/");
 
       return isVideo ? "video" : "image";
     } else if (typeof file === "object") {
@@ -64,6 +65,7 @@ export const Preview = ({
           onLoad={() => {
             revokeObjectURL(uri);
           }}
+          alt="Preview Image"
         />
       );
     }

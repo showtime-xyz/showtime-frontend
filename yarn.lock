@@ -9280,7 +9280,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~47.0.7
+    expo: ~47.0.8
     expo-app-loading: ~2.1.1
     expo-application: ~5.0.1
     expo-av: ~13.0.1
@@ -9315,7 +9315,7 @@ __metadata:
     jest-expo: ^47.0.0
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: canary
+    moti: ^0.21.0
     nativewind: ^2.0.11
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
@@ -9344,7 +9344,7 @@ __metadata:
     react-native-quick-crypto: ^0.5.0
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: 2.11.0
+    react-native-reanimated: 2.13.0
     react-native-safe-area-context: 4.4.1
     react-native-screens: 3.18.0
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
@@ -9508,7 +9508,7 @@ __metadata:
     react-native-quick-base64: ^2.0.2
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
-    react-native-reanimated: 2.11.0
+    react-native-reanimated: 2.13.0
     react-native-safe-area-context: 4.4.1
     react-native-screens: 3.18.0
     react-native-svg: 13.4.0
@@ -20803,9 +20803,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~47.0.7":
-  version: 47.0.7
-  resolution: "expo@npm:47.0.7"
+"expo@npm:~47.0.8":
+  version: 47.0.8
+  resolution: "expo@npm:47.0.8"
   dependencies:
     "@babel/runtime": ^7.14.0
     "@expo/cli": 0.4.10
@@ -20835,7 +20835,7 @@ __metadata:
       optional: true
   bin:
     expo: bin/cli.js
-  checksum: e42bb093d32dcc2cb19b5b783e75754a3d836893458aacc0acbd69f4cd4ab932b23ef6be14d59894f7f78dc6fb60e787cd042e5ee4671ced2c71a3bcb19ec8d3
+  checksum: fdcec9d135586669338bc95613cdafc783a734b20fe27c2969718aa7089b9a0ff69a6eccfecbb635814f18529f81b07b9d250efbbcae8cac4c5a4c2201a0bf73
   languageName: node
   linkType: hard
 
@@ -27562,14 +27562,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:canary":
-  version: 0.19.0-alpha.6
-  resolution: "moti@npm:0.19.0-alpha.6"
+"moti@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "moti@npm:0.21.0"
   dependencies:
     framer-motion: ^6.5.1
   peerDependencies:
     react-native-reanimated: "*"
-  checksum: f1e7bf5957442c56c3564f3e0a2125f4b9f07924b1bf9f2e690abcb3936a07c263abc1a7e2aec28d3b39e4a7511dbf1485457f955d690104a347af0a0d1ce286
+  checksum: 2fb4c16e46a7e2778f8680f28ec7c3f2003d6c739f55da1ffc239e1b4cdb04dcf3fc76e29870232ca6d9d2276cc7fc5791474d56dfaeb9a895f158a4a2acae78
   languageName: node
   linkType: hard
 
@@ -31474,9 +31474,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:2.11.0":
-  version: 2.11.0
-  resolution: "react-native-reanimated@npm:2.11.0"
+"react-native-reanimated@npm:2.13.0":
+  version: 2.13.0
+  resolution: "react-native-reanimated@npm:2.13.0"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -31489,7 +31489,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 0c75ecff3c69996ec952f742249305f296d3d1b785c7e26d346b0f9a09c73b9cb7c1ab8bcd443178423521da6d042974c067df7ec5fc0311e15a0d8ea3c32216
+  checksum: 260249012b2e9d19f700bf7817b349c2643f71717b2a50a9da6e37e44eeadbbeee2bc02403f32e6a31617555a8b3ad5aabcbbac72300962908b32e14babbe503
   languageName: node
   linkType: hard
 

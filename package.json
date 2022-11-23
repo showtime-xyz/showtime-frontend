@@ -73,7 +73,7 @@
     "@jest/create-cache-key-function": "28.0.2",
     "expo-linear-gradient": "12.0.1",
     "jest-runtime": "28.0.3",
-    "react-native-reanimated": "2.11.0",
+    "react-native-reanimated": "2.13.0",
     "@types/react": "18.0.24",
     "@storybook/react-native": "next",
     "@react-navigation/native": "6.0.13",
