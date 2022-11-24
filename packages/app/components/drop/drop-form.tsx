@@ -354,7 +354,7 @@ export const DropForm = () => {
                           });
                           handleFileChange(file.file);
                         }}
-                        tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64 overflow-hidden"
+                        tw="h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64"
                       >
                         {value ? (
                           <View>
@@ -467,7 +467,7 @@ export const DropForm = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="flex-1 mt-4"
+                    tw="mt-4 flex-1"
                     label="Description"
                     multiline
                     textAlignVertical="top"
