@@ -7,7 +7,8 @@ export const DropFileZone = ({ children, onChange }: DropFileZoneProps) => {
     <Dropzone
       onDrop={(acceptedFiles) => {
         const file = acceptedFiles[0];
-        onChange(file);
+        const fileType = file["type"].split("/")[0] as "image" | "video";
+        onChange({ file, size: file.size, type: fileType });
       }}
     >
       {({ getRootProps }) => <div {...getRootProps()}>{children}</div>}

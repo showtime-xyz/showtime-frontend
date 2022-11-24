@@ -262,7 +262,7 @@ export const useClaimNFT = (edition: IEdition) => {
         }
       } else if (e?.response?.status === 500) {
         Alert.alert(
-          "Oops. An error occured.",
+          "Oops. An error occurred.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
       }

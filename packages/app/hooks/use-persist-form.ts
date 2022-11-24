@@ -17,7 +17,7 @@ type FormPersistConfig = {
   timeout?: number;
 };
 
-export const usePersistDropForm = (
+export const usePersistForm = (
   name: string,
   {
     watch,

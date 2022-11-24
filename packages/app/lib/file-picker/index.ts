@@ -11,6 +11,7 @@ type Props = {
 export type FilePickerResolveValue = {
   file: File | string;
   type?: "video" | "image";
+  size?: number;
 };
 
 export const useFilePicker = () => {
@@ -45,9 +46,11 @@ export const useFilePicker = () => {
         input.accept = accepts.join(",");
 
         input.onchange = (e) => {
-          const file = (e.target as any).files[0];
+          const files = (e.target as HTMLInputElement)?.files;
+          const file = files ? files[0] : ({} as File);
           const fileType = file["type"].split("/")[0] as "image" | "video";
-          resolve({ file: file, type: fileType });
+
+          resolve({ file: file, type: fileType, size: file.size });
           input.remove();
           inputRef.current = null;
         };
@@ -78,8 +81,7 @@ export const useFilePicker = () => {
 
           if (result.canceled) return;
           const file = result.assets[0];
-
-          resolve({ file: file.uri, type: file.type });
+          resolve({ file: file.uri, type: file.type, size: file.fileSize });
         } catch (error) {
           reject(error);
           console.error(error);

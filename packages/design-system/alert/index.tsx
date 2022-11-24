@@ -4,6 +4,7 @@ import React, {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 import {
   Alert as RNAlert,
@@ -32,6 +33,10 @@ export const AlertContext = createContext<AlertContextType>({
   alert: () => undefined,
   isMounted: false,
 });
+export let Alert: AlertContextType = {
+  alert: (...params: Parameters<AlertStatic["alert"]>) => undefined,
+  isMounted: false,
+};
 
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   children,
@@ -64,7 +69,9 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
     }),
     []
   );
-
+  useEffect(() => {
+    Alert = value;
+  }, [value]);
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
       return <AlertOption hide={closeAlert} />;

@@ -34,12 +34,13 @@ import { Preview } from "app/components/preview";
 import { QRCode } from "app/components/qr-code";
 import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
-import { usePersistDropForm } from "app/hooks/use-persist-drop-form";
+import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
+import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
@@ -51,8 +52,10 @@ import {
   isMobileWeb,
 } from "app/utilities";
 
-import { useFilePicker } from "design-system/file-picker";
 import { Hidden } from "design-system/hidden";
+
+// File max size, in bytes.
+const FILE_MAX_SIZE = 100 * 1024 * 1024;
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -142,7 +145,7 @@ export const DropForm = () => {
   const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
-  const { clearStorage } = usePersistDropForm(FORM_DATA_KEY, {
+  const { clearStorage } = usePersistForm(FORM_DATA_KEY, {
     watch,
     setValue,
     /**
@@ -315,13 +318,22 @@ export const DropForm = () => {
     );
   }
 
-  const handleFileChange = (file: string | File) => {
+  const handleFileChange = (fileObj: FilePickerResolveValue) => {
+    const { file, size } = fileObj;
     let extension;
     // On Native file is a string uri
     if (typeof file === "string") {
       extension = file.split(".").pop();
     }
+    if (size && size > FILE_MAX_SIZE) {
+      setError("file", {
+        type: "custom",
+        message: "File size more than 100MB",
+      });
+      setValue("file", undefined);
 
+      return;
+    }
     if (
       extension === "mov" ||
       (typeof file === "object" && file.type === "video/quicktime")
@@ -352,7 +364,8 @@ export const DropForm = () => {
                           const file = await pickFile({
                             mediaTypes: "all",
                           });
-                          handleFileChange(file.file);
+
+                          handleFileChange(file);
                         }}
                         tw="h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64"
                       >
