@@ -33,12 +33,12 @@ import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
 import { DropFileZone } from "app/lib/drop-file-zone";
+import { useFilePicker } from "app/lib/file-picker";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
 
-import { useFilePicker } from "design-system/file-picker";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
@@ -295,7 +295,7 @@ export const EditProfile = () => {
               control={control}
               name="coverPicture"
               render={({ field: { onChange, value } }) => (
-                <DropFileZone onChange={onChange}>
+                <DropFileZone onChange={({ file }) => onChange(file)}>
                   <Pressable
                     onPress={async () => {
                       const file = await pickFile({
@@ -342,7 +342,7 @@ export const EditProfile = () => {
                 control={control}
                 name="profilePicture"
                 render={({ field: { onChange, value } }) => (
-                  <DropFileZone onChange={onChange}>
+                  <DropFileZone onChange={({ file }) => onChange(file)}>
                     <>
                       <Pressable
                         onPress={async () => {

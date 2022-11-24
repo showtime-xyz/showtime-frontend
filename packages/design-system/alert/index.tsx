@@ -4,6 +4,7 @@ import React, {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 import {
   Alert as RNAlert,
@@ -31,6 +32,12 @@ export const AlertContext = createContext<AlertContextType>({
    */
   alert: () => undefined,
   isMounted: false,
+});
+export let Alert: AlertContextType = Platform.select({
+  web: {
+    alert: (...params: Parameters<AlertStatic["alert"]>) => undefined,
+  } as RNAlert,
+  default: RNAlert,
 });
 
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
@@ -64,7 +71,11 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
     }),
     []
   );
-
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      Alert = value;
+    }
+  }, [value]);
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
       return <AlertOption hide={closeAlert} />;

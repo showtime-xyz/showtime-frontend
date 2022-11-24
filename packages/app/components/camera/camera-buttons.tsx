@@ -5,8 +5,8 @@ import { Flip, Close, Check } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { View } from "@showtime-xyz/universal.view";
 
-import { FilePickerResolveValue } from "design-system/file-picker";
-import { ImagePickerButton } from "design-system/image-picker";
+import { FilePickerResolveValue } from "app/lib/file-picker";
+import { ImagePickerButton } from "app/lib/image-picker";
 
 type Props = {
   photos: { uri: string }[];

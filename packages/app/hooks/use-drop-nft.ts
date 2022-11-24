@@ -10,7 +10,7 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay, getFileMeta } from "app/utilities";
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
+export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
 type IEdition = {
   contract_address: string;
@@ -246,7 +246,7 @@ export const useDropNFT = () => {
 
       if (e?.response?.status === 500) {
         Alert.alert(
-          "Oops. An error occured.",
+          "Oops. An error occurred.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
       }

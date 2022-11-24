@@ -88,7 +88,10 @@
     "@gorhom/bottom-sheet": "4.4.5",
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
-    "react-native-screens": "3.18.0"
+    "react-native-screens": "3.18.0",
+    "@radix-ui/react-accordion": "^1.0.1",
+    "@radix-ui/react-portal": "^1.0.1",
+    "@radix-ui/react-select": "^1.1.2"
   },
   "react-native": {
     "zlib": "browserify-zlib",
