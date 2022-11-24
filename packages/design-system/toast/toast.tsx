@@ -55,12 +55,7 @@ export const Toast = ({ render, message, hide }: ToastProps) => {
           {render ? (
             render
           ) : (
-            <Text
-              onPress={() => {
-                console.log(123);
-              }}
-              tw="p-4 text-center text-gray-900 dark:text-white"
-            >
+            <Text tw="p-4 text-center text-gray-900 dark:text-white">
               {message}
             </Text>
           )}

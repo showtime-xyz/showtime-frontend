@@ -14,7 +14,7 @@ export type FilePickerResolveValue = {
 };
 
 export const useFilePicker = () => {
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     return () => {
@@ -44,7 +44,7 @@ export const useFilePicker = () => {
 
         input.accept = accepts.join(",");
 
-        input.onchange = (e: InputEvent) => {
+        input.onchange = (e) => {
           const file = (e.target as any).files[0];
           const fileType = file["type"].split("/")[0] as "image" | "video";
           resolve({ file: file, type: fileType });
@@ -76,9 +76,10 @@ export const useFilePicker = () => {
             ...option,
           });
 
-          if (result.cancelled) return;
+          if (result.canceled) return;
+          const file = result.assets[0];
 
-          resolve({ file: result.uri, type: result.type });
+          resolve({ file: file.uri, type: file.type });
         } catch (error) {
           reject(error);
           console.error(error);

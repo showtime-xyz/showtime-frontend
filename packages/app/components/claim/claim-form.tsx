@@ -110,7 +110,6 @@ export const ClaimForm = ({
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     };
-
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
@@ -131,7 +130,7 @@ export const ClaimForm = ({
       router.pop();
     }
 
-    let success: boolean | undefined = false;
+    let success: boolean | undefined | void = false;
 
     if (edition.gating_type === "spotify_save") {
       success = await claimSpotifyGatedDrop(nft?.data.item);
@@ -408,13 +407,10 @@ export const ClaimForm = ({
               variant="primary"
               disabled={
                 state.status === "loading" ||
-                ((edition.gating_type === "location" ||
-                  edition.gating_type === "multi") &&
-                  !location)
+                (edition.gating_type === "multi" && !location)
               }
               tw={
                 state.status === "loading" ||
-                edition.gating_type === "location" ||
                 (edition.gating_type === "multi" && !location)
                   ? "opacity-[0.45]"
                   : ""
