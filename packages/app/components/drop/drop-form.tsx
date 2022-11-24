@@ -327,7 +327,7 @@ export const DropForm = () => {
     if (size && size > MAX_FILE_SIZE) {
       setError("file", {
         type: "custom",
-        message: "File size more than 100MB",
+        message: "File size more than 50MB",
       });
       setValue("file", undefined);
 
