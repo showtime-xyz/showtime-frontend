@@ -54,8 +54,6 @@ import {
 
 import { Hidden } from "design-system/hidden";
 
-// File max size, in bytes.
-
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
