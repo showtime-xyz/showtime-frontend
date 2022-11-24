@@ -58,7 +58,6 @@
     "expo-system-ui": "~2.0.1",
     "expo-updates": "~0.15.4",
     "expo-web-browser": "~12.0.0",
-    "moti": "^0.21.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.70.5",
