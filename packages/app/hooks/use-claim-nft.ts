@@ -248,8 +248,6 @@ export const useClaimNFT = (edition: IEdition) => {
               },
             ]
           );
-        } else if (e?.response?.status === 440) {
-          Alert.alert("Wrong password or wrong location", "Please try again!");
         } else {
           Alert.alert(
             "Wow, you love collecting drops!",
@@ -260,6 +258,8 @@ export const useClaimNFT = (edition: IEdition) => {
             )}!`
           );
         }
+      } else if (e?.response?.status === 440) {
+        Alert.alert("Wrong password or wrong location", "Please try again!");
       } else if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occurred.",
