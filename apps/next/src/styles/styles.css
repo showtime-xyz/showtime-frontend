@@ -157,8 +157,10 @@ body {
 }
 
 /* For Next.js <Image /> https://nextjs.org/docs/api-reference/next/image#known-browser-bugs */
-img[loading="lazy"] {
-  clip-path: inset(0.5px); /* Safari */
+@media not all and (min-resolution: 0.001dpcm) {
+  img[loading="lazy"] {
+    clip-path: inset(0.5px);
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
