@@ -32,7 +32,7 @@ import { MissingSignatureMessage } from "app/components/missing-signature-messag
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCode } from "app/components/qr-code";
-import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -55,7 +55,6 @@ import {
 import { Hidden } from "design-system/hidden";
 
 // File max size, in bytes.
-const FILE_MAX_SIZE = 100 * 1024 * 1024;
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -325,7 +324,7 @@ export const DropForm = () => {
     if (typeof file === "string") {
       extension = file.split(".").pop();
     }
-    if (size && size > FILE_MAX_SIZE) {
+    if (size && size > MAX_FILE_SIZE) {
       setError("file", {
         type: "custom",
         message: "File size more than 100MB",

@@ -10,7 +10,7 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { delay, getFileMeta } from "app/utilities";
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
+export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
 type IEdition = {
   contract_address: string;
