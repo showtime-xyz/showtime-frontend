@@ -13,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -105,7 +106,7 @@ const dropValidationSchema = yup.object({
 // const { useParam } = createParam<{ transactionId: string }>()
 const ScrollComponent =
   Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
-const FORM_DATA_KEY = "drop_form_local_data";
+const DROP_FORM_DATA_KEY = "drop_form_local_data";
 export const DropForm = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
@@ -142,7 +143,7 @@ export const DropForm = () => {
   const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
-  const { clearStorage } = usePersistForm(FORM_DATA_KEY, {
+  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     /**
@@ -323,9 +324,12 @@ export const DropForm = () => {
       extension = file.split(".").pop();
     }
     if (size && size > MAX_FILE_SIZE) {
+      Alert.alert(
+        "Oops, this file is too large (>50MB). Please upload a smaller file."
+      );
       setError("file", {
         type: "custom",
-        message: "File size more than 50MB",
+        message: "Please retry!",
       });
       setValue("file", undefined);
 

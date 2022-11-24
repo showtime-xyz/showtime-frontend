@@ -33,10 +33,12 @@ export const AlertContext = createContext<AlertContextType>({
   alert: () => undefined,
   isMounted: false,
 });
-export let Alert: AlertContextType = {
-  alert: (...params: Parameters<AlertStatic["alert"]>) => undefined,
-  isMounted: false,
-};
+export let Alert: AlertContextType = Platform.select({
+  web: {
+    alert: (...params: Parameters<AlertStatic["alert"]>) => undefined,
+  } as RNAlert,
+  default: RNAlert,
+});
 
 export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
   children,
@@ -70,7 +72,9 @@ export const AlertProvider: React.FC<{ children: JSX.Element }> = ({
     []
   );
   useEffect(() => {
-    Alert = value;
+    if (Platform.OS === "web") {
+      Alert = value;
+    }
   }, [value]);
   const renderBtns = useMemo(() => {
     if (buttons?.length === 0) {
