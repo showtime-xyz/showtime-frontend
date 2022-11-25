@@ -39,7 +39,7 @@ import { formatProfileRoutes, getProfileName } from "app/utilities";
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
-import { ProfileError } from "./profile-404";
+import { ProfileError } from "./profile-error";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 

@@ -44,7 +44,7 @@ import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
 import { FilterContext } from "./fillter-context";
-import { ProfileError } from "./profile-404";
+import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
 
 export type ProfileScreenProps = {
