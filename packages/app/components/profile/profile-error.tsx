@@ -3,22 +3,22 @@ import { Platform, Linking } from "react-native";
 import * as Clipboard from "expo-clipboard";
 
 import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
+
+import { Link, TextLink } from "app/navigation/link";
 
 import { View } from "design-system";
 
-import { Link, TextLink, LinkProps } from "../../navigation/link";
 import { EmptyPlaceholder } from "../empty-placeholder";
 
-const LinkComponent = (props: LinkProps) => {
-  if (Platform.OS === "web") {
-    return <Link {...props} />;
-  }
-  return <>{props.children}</>;
+const ContactBtn = (props: ButtonProps) => {
+  return (
+    <Button variant="tertiary" {...props}>
+      Contact support
+    </Button>
+  );
 };
-
 const Profile404 = () => {
   return (
     <View tw="items-center justify-center px-4 pt-8">
@@ -38,7 +38,6 @@ const Profile404 = () => {
   );
 };
 const Profile403 = () => {
-  const router = useRouter();
   return (
     <View tw="items-center justify-center px-4 pt-8">
       <View tw="max-w-sm text-center">
@@ -48,8 +47,8 @@ const Profile403 = () => {
             <Text tw="text-center">
               This profile has been suspended for violating our&nbsp;
               <TextLink
-                href="https://www.notion.so/showtime-xyz/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
                 tw="text-indigo-500"
+                href="https://www.notion.so/showtime-xyz/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
                 target="_blank"
               >
                 Terms of Service
@@ -61,46 +60,30 @@ const Profile403 = () => {
         />
       </View>
       <View tw="mt-6 w-full max-w-xs flex-row justify-between px-4">
-        <LinkComponent href="/">
-          <Button
-            {...Platform.select({
-              web: {},
-              default: {
-                onPress: () => {
-                  router.replace("/");
-                },
-              },
-            })}
-          >
-            Take me home
-          </Button>
-        </LinkComponent>
-        <LinkComponent href="mailto:help@showtime.xyz">
-          <Button
-            {...Platform.select({
-              web: {},
-              default: {
-                onPress: async () => {
-                  const isCanOpen = await Linking.canOpenURL(
-                    "mailto:help@showtime.xyz"
-                  );
-                  await Clipboard.setStringAsync("help@showtime.xyz");
-                  if (isCanOpen) {
-                    await Linking.openURL("mailto:help@showtime.xyz");
-                  } else {
-                    await Clipboard.setStringAsync("help@showtime.xyz");
-                    Alert.alert(
-                      "The email address has been copied to your clipboard!"
-                    );
-                  }
-                },
-              },
-            })}
-            variant="tertiary"
-          >
-            Contact support
-          </Button>
-        </LinkComponent>
+        <Link href="/">
+          <Button disabled={Platform.OS !== "web"}>Take me home</Button>
+        </Link>
+        {Platform.OS === "web" ? (
+          <Link href="mailto:help@showtime.xyz">
+            <ContactBtn />
+          </Link>
+        ) : (
+          <ContactBtn
+            onPress={async () => {
+              const isCanOpen = await Linking.canOpenURL(
+                "mailto:help@showtime.xyz"
+              );
+              if (isCanOpen) {
+                await Linking.openURL("mailto:help@showtime.xyz");
+              } else {
+                await Clipboard.setStringAsync("help@showtime.xyz");
+                Alert.alert(
+                  "The email address has been copied to your clipboard!"
+                );
+              }
+            }}
+          />
+        )}
       </View>
     </View>
   );
