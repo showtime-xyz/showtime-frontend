@@ -8956,6 +8956,7 @@ __metadata:
     expo-blur: ~12.0.1
     expo-build-properties: ~0.4.0
     expo-camera: ~13.0.0
+    expo-clipboard: ~4.0.1
     expo-constants: ~14.0.2
     expo-dev-client: ~2.0.0
     expo-device: ~5.0.0
@@ -19959,6 +19960,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 28618f61889a46e9c46af3571876e068dc8f88ca8ff59190984986f43b625797f199ac6f03e7a4801bbd2c78989f8f42d81aeeda04feb1674b140f24cf5b1aa8
+  languageName: node
+  linkType: hard
+
+"expo-clipboard@npm:~4.0.1":
+  version: 4.0.1
+  resolution: "expo-clipboard@npm:4.0.1"
+  peerDependencies:
+    expo: "*"
+  checksum: e49fe2448cd68a8b215f9e1ed8def76a3f2bf7d3eece9474371ec59d7f9f86c88959ae008e0b117a126748ee0fe5661c8ace0996517a7e15e52d4ccf023d610d
   languageName: node
   linkType: hard
 

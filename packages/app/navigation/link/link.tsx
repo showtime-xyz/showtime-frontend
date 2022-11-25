@@ -8,7 +8,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
 
-type LinkProps = Props & {
+export type LinkProps = Props & {
   viewProps?: ViewProps;
   tw?: TW;
   dataset?: any;
