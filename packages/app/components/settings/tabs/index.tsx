@@ -30,7 +30,7 @@ export const SETTINGS_ROUTES = [
     index: 2,
   },
   {
-    title: "Account",
+    title: "Accounts",
     key: "Account",
     index: 3,
   },

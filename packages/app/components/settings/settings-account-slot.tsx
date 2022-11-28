@@ -24,7 +24,7 @@ export const SettingAccountSlotHeader = () => {
     <View>
       <SettingSubTitle>
         <Text tw="text-xl font-bold text-gray-900 dark:text-white">
-          Account
+          Accounts
         </Text>
       </SettingSubTitle>
     </View>
