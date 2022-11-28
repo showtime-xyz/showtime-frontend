@@ -94,7 +94,7 @@ export function AuthProvider({
 
         const isIncomplete = isProfileIncomplete(res?.data?.profile);
         if (isIncomplete) {
-          if (Platform.OS === "ios") {
+          if (Platform.OS !== "web") {
             router.pop();
           }
 
