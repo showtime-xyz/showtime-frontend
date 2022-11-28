@@ -94,22 +94,28 @@ export function AuthProvider({
 
         const isIncomplete = isProfileIncomplete(res?.data?.profile);
         if (isIncomplete) {
-          router.push(
-            Platform.select({
-              native: "/profile/complete",
-              web: {
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  completeProfileModal: true,
-                },
-              } as any,
-            }),
-            Platform.select({
-              native: "/profile/complete",
-              web: router.asPath,
-            })
-          );
+          if (Platform.OS !== "web") {
+            router.pop();
+          }
+
+          setTimeout(() => {
+            router.push(
+              Platform.select({
+                native: "/profile/complete",
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    completeProfileModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: "/profile/complete",
+                web: router.asPath,
+              })
+            );
+          }, 100);
         }
         return res;
       }
