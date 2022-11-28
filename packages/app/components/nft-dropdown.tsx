@@ -73,7 +73,7 @@ function NFTDropdown({
 
   const isDark = useIsDarkMode();
   const tabType = useProfileTabType();
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, user } = useUser();
   const { report } = useReport();
   const { unfollow, isFollowing } = useMyInfo();
   const { hideNFT, unhideNFT } = useHideNFT();
@@ -88,6 +88,7 @@ function NFTDropdown({
 
   //#region variables
   const hasOwnership = nft.is_user_owner;
+  const isSelf = user?.data?.profile?.profile_id === nft?.creator_id;
 
   const isFollowingUser = useMemo(
     () => nft.owner_id && isFollowing(nft.creator_id),
@@ -250,7 +251,7 @@ function NFTDropdown({
             </DropdownMenuItem>
           )}
 
-          {!hasOwnership && isFollowingUser && (
+          {!hasOwnership && isFollowingUser && !isSelf && (
             <DropdownMenuItem
               onSelect={async () => {
                 if (isAuthenticated) {
@@ -263,7 +264,7 @@ function NFTDropdown({
               key="unfollow"
             >
               <MenuItemIcon Icon={UserMinus} />
-              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.plus" />
+              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.minus" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unfollow User
