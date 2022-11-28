@@ -8,8 +8,8 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { useMagicSocialAuth } from "app/lib/social-logins";
+import { isProfileIncomplete } from "app/utilities";
 
-import { isProfileIncomplete } from "../../utilities";
 import { LoginButton } from "./login-button";
 
 export const LoginWithGoogle = () => {
