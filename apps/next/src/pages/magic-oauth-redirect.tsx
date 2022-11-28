@@ -10,6 +10,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
+import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { createParam } from "app/navigation/use-param";
@@ -32,6 +33,7 @@ const MagicOauthRedirect = () => {
   const [redirectUri] = useParam("redirectUri");
   const [magicError] = useParam("error");
   const [shouldLogin] = useParam("shouldLogin");
+  const { setWeb3 } = useWeb3();
 
   const decodedURI = useLatestValueRef(redirectUri);
   const shouldLoginRef = useLatestValueRef(shouldLogin);
@@ -46,6 +48,13 @@ const MagicOauthRedirect = () => {
           //@ts-ignore
           const result = await magic.oauth.getRedirectResult();
           const idToken = result.magic.idToken;
+
+          const EthersWeb3Provider = (await import("@ethersproject/providers"))
+            .Web3Provider;
+          // @ts-ignore
+          const ethersProvider = new EthersWeb3Provider(magic.rpcProvider);
+          setWeb3(ethersProvider);
+
           if (shouldLoginRef.current) {
             const user = await login(LOGIN_MAGIC_ENDPOINT, {
               did: idToken,
@@ -80,6 +89,7 @@ const MagicOauthRedirect = () => {
     setAuthenticationStatus,
     decodedURI,
     shouldLoginRef,
+    setWeb3,
   ]);
 
   return (
