@@ -169,6 +169,7 @@ export default {
           ...config.modResults,
           // Enable 120 FPS animations
           CADisableMinimumFrameDurationOnPhone: true,
+          LSApplicationQueriesSchemes: ["mailto"],
         };
         return config;
       },

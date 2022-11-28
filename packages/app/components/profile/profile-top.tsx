@@ -19,6 +19,7 @@ import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -93,10 +94,14 @@ export const ProfileTop = ({
   const { onToggleFollow } = useFollow({
     username: profileData?.profile.username,
   });
+  const { top } = useSafeAreaInsets();
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
+  // for iPhone 14+
+  const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
-  const coverHeight = coverWidth < 768 ? coverWidth / 3 : 180;
+  const coverHeight =
+    (coverWidth < 768 ? coverWidth / 3 : 180) + additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;

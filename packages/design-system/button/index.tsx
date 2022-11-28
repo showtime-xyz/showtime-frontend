@@ -7,7 +7,7 @@ import { Button as BaseButton } from "./button";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
-export type { ButtonVariant } from "./types";
+export type { ButtonVariant, ButtonProps } from "./types";
 
 export function Button({ variant = "primary", ...props }: ButtonProps) {
   switch (variant) {

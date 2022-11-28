@@ -39,7 +39,7 @@ import { formatProfileRoutes, getProfileName } from "app/utilities";
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
-import { Profile404 } from "./profile-404";
+import { ProfileError } from "./profile-error";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
@@ -60,6 +60,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isError,
     isLoading,
     mutate,
+    error,
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
   const isDark = useIsDarkMode();
@@ -111,6 +112,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
       };
     }, [isDark])
   );
+
+  const emptyBodyComponent = useMemo(() => {
+    if (!isError) return null;
+    return (
+      <ProfileError error={error} isBlocked={isBlocked} username={username} />
+    );
+  }, [error, isBlocked, isError, username]);
 
   const onStartRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -212,6 +220,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       </View>
     );
   }, [profileData?.data?.profile]);
+
   return (
     <>
       <FilterContext.Provider value={{ filter, dispatch }}>
@@ -247,7 +256,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             initialLayout={{
               width: contentWidth,
             }}
-            emptyBodyComponent={isError ? <Profile404 /> : null}
+            emptyBodyComponent={emptyBodyComponent}
             animationHeaderPosition={animationHeaderPosition}
             animationHeaderHeight={animationHeaderHeight}
             renderTabBar={renderTabBar}

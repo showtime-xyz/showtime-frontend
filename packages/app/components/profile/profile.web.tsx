@@ -21,11 +21,9 @@ import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
-import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
   defaultFilters,
@@ -46,6 +44,7 @@ import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
 import { FilterContext } from "./fillter-context";
+import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
 
 export type ProfileScreenProps = {
@@ -152,6 +151,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     data: profileData,
     isError,
     isLoading: profileIsLoading,
+    error,
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
   const { getIsBlocked } = useBlock();
@@ -259,7 +259,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     ]
   );
   const ListFooterComponent = useCallback(() => {
-    if (isLoadingMore || profileIsLoading) {
+    if ((isLoadingMore || profileIsLoading) && !error) {
       return (
         <View
           tw="mx-auto h-20 flex-row items-center justify-center"
@@ -270,27 +270,16 @@ const Profile = ({ username }: ProfileScreenProps) => {
       );
     }
     return null;
-  }, [contentWidth, isDark, isLoadingMore, profileIsLoading]);
+  }, [contentWidth, isDark, isLoadingMore, profileIsLoading, error]);
+
   const ListEmptyComponent = useCallback(() => {
-    if (isLoading || profileIsLoading || !type) {
+    if ((isLoading || profileIsLoading || !type) && !error) {
       return null;
     }
     return (
-      <EmptyPlaceholder
-        title={
-          isBlocked ? (
-            <Text tw="text-gray-900 dark:text-white">
-              <Text tw="font-bold">@{username}</Text> is blocked
-            </Text>
-          ) : (
-            "No results found"
-          )
-        }
-        tw="h-[50vh]"
-        hideLoginBtn
-      />
+      <ProfileError error={error} isBlocked={isBlocked} username={username} />
     );
-  }, [isBlocked, isLoading, profileIsLoading, type, username]);
+  }, [isBlocked, isLoading, profileIsLoading, type, username, error]);
 
   return (
     <ProfileHeaderContext.Provider

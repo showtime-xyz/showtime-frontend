@@ -141,6 +141,7 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
     data: userProfile,
     isLoading,
     isError: Boolean(error),
+    error,
     mutate: () => mutate(queryKey, userProfile),
   };
 };
