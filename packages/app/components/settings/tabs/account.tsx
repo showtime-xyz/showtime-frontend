@@ -74,9 +74,9 @@ const ConnectSpotify = ({ redirectUri }: ConnectSocialProps) => {
         </Text>
       </View>
       <Button
-        variant={
-          user.user?.data.profile.has_spotify_token ? "danger" : "primary"
-        }
+        // variant={
+        //   user.user?.data.profile.has_spotify_token ? "danger" : "primary"
+        // }
         onPress={() => {
           if (user.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
@@ -174,7 +174,7 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
               </Text>
             </View>
             <Button
-              variant={connected[type.type].address ? "danger" : "primary"}
+              // variant={connected[type.type].address ? "danger" : "primary"}
               onPress={async () => {
                 if (connected[type.type].address) {
                   removeAccount(connected[type.type].address);
