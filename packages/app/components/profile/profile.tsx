@@ -151,7 +151,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 isBlocked={isBlocked}
                 list={data?.tabs[routeIndex]}
                 index={routeIndex}
-                ref={(ref) => (tabRefs.current[index] = ref)}
+                ref={(ref) => (tabRefs.current[routeIndex] = ref)}
               />
             )}
           </Suspense>
@@ -160,7 +160,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     [
       data?.tabs,
-      index,
       isBlocked,
       profileData?.data?.profile.profile_id,
       profileData?.data?.profile.username,
