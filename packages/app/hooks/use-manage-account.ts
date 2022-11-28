@@ -38,7 +38,7 @@ export function useManageAccount() {
       } catch (error: any) {
         if (error?.response.status === 420) {
           Alert.alert(
-            "This account is already linked to another Showtime account",
+            `This ${type} account is already linked to another Showtime account`,
             `Would you like to link it to this account? \n\n By doing so, you will lose your access to the previous account`,
             [
               { text: "Cancel" },
