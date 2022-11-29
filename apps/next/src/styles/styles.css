@@ -157,18 +157,10 @@ body {
 }
 
 /* For Next.js <Image /> https://nextjs.org/docs/api-reference/next/image#known-browser-bugs */
-/* For Safari v10~15+ */
-@media not all and (min-resolution: 0.001dpcm) {
+/* For Safari v15+ */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
   img[loading="lazy"] {
-    clip-path: inset(1px);
-  }
-}
-/* For Safari v16+ becuase Safari v16 is supported resolution media query */
-@media (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
-    img[loading="lazy"] {
-      clip-path: inset(1px);
-    }
+    clip-path: inset(0.6px);
   }
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
