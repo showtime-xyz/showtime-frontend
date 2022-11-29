@@ -4,14 +4,9 @@ import { Platform } from "react-native";
 
 import "@azure/core-asynciterator-polyfill";
 import { Crypto as WebCrypto } from "@peculiar/webcrypto";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { btoa, atob, toByteArray } from "react-native-quick-base64";
 import "text-encoding";
 import "web-streams-polyfill";
-
-if (!global.localStorage) {
-  global.localStorage = AsyncStorage;
-}
 
 if (!global.Buffer) {
   global.Buffer = require("@craftzdog/react-native-buffer").Buffer;
