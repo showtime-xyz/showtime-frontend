@@ -169,7 +169,14 @@ export default {
           ...config.modResults,
           // Enable 120 FPS animations
           CADisableMinimumFrameDurationOnPhone: true,
-          LSApplicationQueriesSchemes: ["mailto"],
+          LSApplicationQueriesSchemes: [
+            "mailto",
+            "instagram",
+            "instagram-stories",
+            "fb",
+            "facebook-stories",
+            "twitter",
+          ],
         };
         return config;
       },

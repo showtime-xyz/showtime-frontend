@@ -8927,6 +8927,7 @@ __metadata:
     "@testing-library/react-native": ^9.1.0
     "@tradle/react-native-http": ^2.0.1
     "@types/jest": ^27.4.1
+    "@types/qrcode": ^1.5.0
     "@types/react": 18.0.24
     "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
@@ -8991,6 +8992,7 @@ __metadata:
     path-browserify: 1.0.1
     process: ^0.11.0
     punycode: ^2.1.1
+    qrcode: ^1.5.1
     querystring-es3: ~0.2.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -9017,6 +9019,7 @@ __metadata:
     react-native-reanimated: 2.13.0
     react-native-safe-area-context: 4.4.1
     react-native-screens: 3.18.0
+    react-native-share: 8.0.0
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.4.0
     react-native-tab-view-next: ^3.1.3
@@ -11672,6 +11675,15 @@ __metadata:
   version: 1.5.5
   resolution: "@types/q@npm:1.5.5"
   checksum: 3bd386fb97a0e5f1ce1ed7a14e39b60e469b5ca9d920a7f69e0cdb58d22c0f5bdd16637d8c3a5bfeda76663c023564dd47a65389ee9aaabd65aee54803d5ba45
+  languageName: node
+  linkType: hard
+
+"@types/qrcode@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@types/qrcode@npm:1.5.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: b0ece3834ca5ba6171132928fd1ef764772dc619b45cb4123461ee05e377ad15553a330d234c69db0d0028c6639a99429e88d99192fbba9c5ee97c23f278c48b
   languageName: node
   linkType: hard
 
@@ -30377,6 +30389,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qrcode@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "qrcode@npm:1.5.1"
+  dependencies:
+    dijkstrajs: ^1.0.1
+    encode-utf8: ^1.0.3
+    pngjs: ^5.0.0
+    yargs: ^15.3.1
+  bin:
+    qrcode: bin/qrcode
+  checksum: 842f899d95caaad2ac507408b5498be3197e1df16bc6b537b20069d2cb1330e4588b50f672ce4a9ccf01338f7c97b5732ff9b5caaa6eb2338187d3c25a973e79
+  languageName: node
+  linkType: hard
+
 "qs@npm:6.10.3, qs@npm:^6.10.0, qs@npm:^6.9.1":
   version: 6.10.3
   resolution: "qs@npm:6.10.3"
@@ -31192,6 +31218,13 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 33dca1c6089e79f679eeb988d0a22672086a1ac4d33d33d482fa4b542e27d26928fb65c91abe6c13301aed367c76ac0d94a2da54173b1214dbd9997aa998c690
+  languageName: node
+  linkType: hard
+
+"react-native-share@npm:8.0.0":
+  version: 8.0.0
+  resolution: "react-native-share@npm:8.0.0"
+  checksum: f22e672bae9eb5da793b1a2296d45a4554440a537e479b21ecfcc61fc5619ba7e7d238a3b69f5276709bb47e2758705cf47763b7c9c80fee84241b04b410d86e
   languageName: node
   linkType: hard
 
