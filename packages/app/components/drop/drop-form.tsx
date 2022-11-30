@@ -8,7 +8,6 @@ import {
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
@@ -28,6 +27,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -104,8 +104,6 @@ const dropValidationSchema = yup.object({
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
-const ScrollComponent =
-  Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
 const DROP_FORM_DATA_KEY = "drop_form_local_data";
 export const DropForm = () => {
   const isDark = useIsDarkMode();
@@ -350,7 +348,7 @@ export const DropForm = () => {
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ScrollComponent ref={scrollViewRef} style={{ padding: 16 }}>
+      <BottomSheetScrollView ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
           <View tw="flex-row">
             <Controller
@@ -847,7 +845,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ScrollComponent>
+      </BottomSheetScrollView>
     </BottomSheetModalProvider>
   );
 };

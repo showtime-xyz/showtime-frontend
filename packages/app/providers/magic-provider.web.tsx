@@ -4,8 +4,6 @@ import { createContext, useState, useContext } from "react";
 import { OAuthExtension } from "@magic-ext/oauth";
 import { Magic } from "magic-sdk";
 
-import { isServer } from "app/lib/is-server";
-
 export const MagicContext = createContext({
   magic: {},
   Magic: null as any,
@@ -44,9 +42,7 @@ export const MagicProvider = ({ children }: any) => {
     <MagicContext.Provider
       value={{
         magic,
-        Magic: isServer
-          ? null
-          : (window as Window & typeof globalThis & { Magic: any })?.Magic,
+        Magic,
       }}
     >
       {children}

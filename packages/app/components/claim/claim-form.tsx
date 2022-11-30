@@ -5,7 +5,6 @@ import {
   ScrollView as ReactNativeScrollView,
 } from "react-native";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
@@ -16,12 +15,12 @@ import { Check } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
@@ -269,11 +268,8 @@ export const ClaimForm = ({
     );
   }
 
-  const ScrollComponent =
-    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
-
   return (
-    <ScrollComponent ref={scrollViewRef as any}>
+    <BottomSheetScrollView ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
           <Media
@@ -465,7 +461,7 @@ export const ClaimForm = ({
           ) : null}
         </View>
       </View>
-    </ScrollComponent>
+    </BottomSheetScrollView>
   );
 };
 
