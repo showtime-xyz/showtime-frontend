@@ -9077,6 +9077,7 @@ __metadata:
     "@react-three/fiber": ^8.2.1
     "@sentry/integrations": 7.7.0
     "@sentry/nextjs": 7.7.0
+    "@types/dom-to-image": ^2.6.4
     "@types/react-stickynode": ^4.0.0
     "@walletconnect/web3-provider": ^1.8.0
     app: "*"
@@ -9087,6 +9088,7 @@ __metadata:
     critters: ^0.0.16
     date-fns: ^2.26.0
     design-system: "*"
+    dom-to-image: ^2.6.0
     eslint: 7.32.0
     eslint-config-next: 13.0.0
     eslint-config-prettier: ^8.3.0
@@ -11340,6 +11342,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: fe81351470f2d3165e8b12ce33542eef89ea893e36dd62e8f7d72566dfb7e448376ae962f9f3ea888547ce8b55a40020ca0e01d637fab5d99567673084542641
+  languageName: node
+  linkType: hard
+
+"@types/dom-to-image@npm:^2.6.4":
+  version: 2.6.4
+  resolution: "@types/dom-to-image@npm:2.6.4"
+  checksum: ddc8d74b944909040a6e6d9ca2feb246b50dc8c3ad908a90634fb6e46e4c438b47aa0a5df4994bd19c1d6f110eb90a15146d1c1a7b8762ab9d050f70e6de4050
   languageName: node
   linkType: hard
 
@@ -17894,6 +17903,13 @@ __metadata:
     domhandler: ^5.0.2
     entities: ^4.2.0
   checksum: cd1810544fd8cdfbd51fa2c0c1128ec3a13ba92f14e61b7650b5de421b88205fd2e3f0cc6ace82f13334114addb90ed1c2f23074a51770a8e9c1273acbc7f3e6
+  languageName: node
+  linkType: hard
+
+"dom-to-image@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "dom-to-image@npm:2.6.0"
+  checksum: 0d1f450b776d36f3ec982783d2a3898baaa3697f135ed0a9c70085db6bc5ac6def02f5ed7affc6acb92ef4fb3248905fabec915fed541994383d317260f784a2
   languageName: node
   linkType: hard
 

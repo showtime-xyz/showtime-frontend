@@ -5,6 +5,8 @@ const Haptics = {
     Medium: "Medium",
     Heavy: "Heavy",
   },
+  notificationAsync: () => undefined,
+  selectionAsync: () => undefined,
 };
 
 export { Haptics };
