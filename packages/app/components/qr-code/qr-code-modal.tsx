@@ -21,6 +21,7 @@ import {
   ScanOutline,
   Download,
 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -31,7 +32,6 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
-import { Media } from "app/components/media";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTURL } from "app/hooks/use-share-nft";
@@ -41,7 +41,7 @@ import { ReactQRCode } from "app/lib/qr-code";
 import Share from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
-import { getCreatorUsernameFromNFT } from "app/utilities";
+import { getCreatorUsernameFromNFT, getMediaUrl } from "app/utilities";
 
 const { width: windowWidth } = Dimensions.get("window");
 
@@ -75,6 +75,50 @@ export const QRCodeModal = () => {
   const isDark = useIsDarkMode();
   const toast = useToast();
   const { bottom } = useSafeAreaInsets();
+
+  const iconColor = isDark ? colors.white : colors.gray[900];
+  const [isInstalledApps, setIsInstalledApps] = useState({
+    twitter: false,
+    instagram: false,
+  });
+  useEffect(() => {
+    // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
+    const checkInstalled = async () => {
+      let isInstalled = {
+        twitter: false,
+        instagram: false,
+      };
+
+      if (Platform.OS === "ios") {
+        isInstalled = {
+          twitter: await Linking.canOpenURL("instagram://"),
+          instagram: await Linking.canOpenURL("twitter://"),
+        };
+      } else if (Platform.OS === "android") {
+        const { isInstalled: twitter } = await Share.isPackageInstalled(
+          "com.instagram.android"
+        );
+        const { isInstalled: instagram } = await Share.isPackageInstalled(
+          "com.twitter.android"
+        );
+        isInstalled = {
+          twitter,
+          instagram,
+        };
+      }
+      setIsInstalledApps({
+        ...isInstalled,
+      });
+    };
+    checkInstalled();
+  }, []);
+
+  const size = windowWidth >= 768 ? 400 : windowWidth - 40;
+  const mediaUri = getMediaUrl({
+    nft,
+    stillPreview: !nft?.mime_type?.startsWith("image"),
+  });
+
   const getViewShot = async (result?: CaptureOptions["result"]) => {
     const date = new Date();
     try {
@@ -170,43 +214,6 @@ export const QRCodeModal = () => {
       Logger.error("shareOpenMore Error =>", error);
     }
   }, [nft]);
-
-  const iconColor = isDark ? colors.white : colors.gray[900];
-  const [isInstalledApps, setIsInstalledApps] = useState({
-    twitter: false,
-    instagram: false,
-  });
-  useEffect(() => {
-    const checkInstalled = async () => {
-      let isInstalled = {
-        twitter: false,
-        instagram: false,
-      };
-
-      if (Platform.OS === "ios") {
-        isInstalled = {
-          twitter: await Linking.canOpenURL("instagram://"),
-          instagram: await Linking.canOpenURL("twitter://"),
-        };
-      } else if (Platform.OS === "android") {
-        const { isInstalled: twitter } = await Share.isPackageInstalled(
-          "com.instagram.android"
-        );
-        const { isInstalled: instagram } = await Share.isPackageInstalled(
-          "com.twitter.android"
-        );
-        isInstalled = {
-          twitter,
-          instagram,
-        };
-      }
-      setIsInstalledApps({
-        ...isInstalled,
-      });
-    };
-    checkInstalled();
-  }, []);
-
   const shareButtons = useMemo(
     () => [
       {
@@ -236,7 +243,6 @@ export const QRCodeModal = () => {
     ],
     [isInstalledApps, onDownload, shareOpenMore, shareSingleImage]
   );
-  const size = windowWidth >= 768 ? 400 : windowWidth - 40;
   if (!nft) return null;
   return (
     <ErrorBoundary>
@@ -250,13 +256,19 @@ export const QRCodeModal = () => {
         <View tw="w-full flex-1">
           <RNView collapsable={false} ref={viewRef as any}>
             <View tw="w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
-              <Media
-                item={nft}
-                sizeStyle={{
+              <Image
+                source={{
+                  uri: mediaUri,
+                }}
+                style={{
                   height: size,
                   width: size,
                   borderRadius: 16,
                 }}
+                width={size}
+                height={size}
+                resizeMode="cover"
+                alt={nft?.token_name}
               />
               <View tw="w-full flex-row justify-between px-5 py-4">
                 <View tw="flex-1 py-4">
@@ -330,7 +342,6 @@ export const QRCodeModal = () => {
                   <Pressable
                     onPress={() => {
                       Haptics.impactAsync();
-
                       onPress();
                     }}
                     tw="flex-1 items-center justify-center py-4"
@@ -338,7 +349,7 @@ export const QRCodeModal = () => {
                   >
                     <Icon height={24} width={24} color={iconColor} />
                     <View tw="h-2" />
-                    <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
+                    <Text tw="text-xs text-gray-900 dark:text-white">
                       {title}
                     </Text>
                   </Pressable>
