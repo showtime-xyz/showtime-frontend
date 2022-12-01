@@ -1,1 +1,2 @@
-export { QRCode, QRCodeModal } from "./qr-code";
+export { QRCode } from "./qr-code";
+export { QRCodeModal } from "./qr-code-modal";
