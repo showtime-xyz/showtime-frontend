@@ -22,6 +22,7 @@ import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
+import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
@@ -127,6 +128,7 @@ export function RootStackNavigator() {
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
         />
+        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

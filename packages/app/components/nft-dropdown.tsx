@@ -1,5 +1,5 @@
-import { useMemo, ComponentType, useState } from "react";
-import { Dimensions, Linking, Modal, Platform, StyleSheet } from "react-native";
+import { useMemo, ComponentType } from "react";
+import { Linking, Platform } from "react-native";
 
 import { SvgProps } from "react-native-svg";
 
@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItemNativeIcon,
 } from "@showtime-xyz/universal.dropdown-menu";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   UserMinus,
@@ -24,21 +23,17 @@ import {
   Showtime,
   QrCode,
 } from "@showtime-xyz/universal.icon";
-import { Close } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors, TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
 
-import { QRCode } from "app/components/qr-code";
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
-import { getNFTURL, useShareNFT } from "app/hooks/use-share-nft";
+import { useShareNFT } from "app/hooks/use-share-nft";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { useUser } from "app/hooks/use-user";
@@ -48,8 +43,6 @@ import type { NFT } from "app/types";
 import { isMobileWeb, isAndroid } from "app/utilities";
 
 import { OpenSea } from "design-system/icon";
-
-const { width: windowWidth } = Dimensions.get("window");
 
 const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
   return <Icon width="1em" height="1em" color={colors.gray[500]} {...rest} />;
@@ -71,7 +64,6 @@ function NFTDropdown({
   //#region hooks
   const { iconColor } = useSocialColor();
 
-  const isDark = useIsDarkMode();
   const tabType = useProfileTabType();
   const { isAuthenticated, user } = useUser();
   const { report } = useReport();
@@ -111,8 +103,6 @@ function NFTDropdown({
     const link = `https://opensea.io/assets/matic/${nft.contract_address}/${token_id}`;
     Linking.openURL(link);
   };
-
-  const [showQRCodeModal, setShowQRCodeModal] = useState(false);
 
   return (
     <>
@@ -226,7 +216,26 @@ function NFTDropdown({
 
           <DropdownMenuItem
             onSelect={() => {
-              setShowQRCodeModal(true);
+              const as = `/qr-code-share/${nft?.contract_address}`;
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      contractAddress: nft?.contract_address,
+                      qrCodeShareModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: as,
+                  web: router.asPath,
+                }),
+                { shallow: true }
+              );
             }}
             key="qr-code"
           >
@@ -264,7 +273,7 @@ function NFTDropdown({
               key="unfollow"
             >
               <MenuItemIcon Icon={UserMinus} />
-              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.minus" />
+              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.plus" />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unfollow User
@@ -313,52 +322,8 @@ function NFTDropdown({
           )}
         </DropdownMenuContent>
       </DropdownMenuRoot>
-      <Modal
-        visible={showQRCodeModal}
-        transparent
-        onRequestClose={() => setShowQRCodeModal(false)}
-        animationType="fade"
-      >
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          tw="bg-gray-900 opacity-40"
-          onPress={() => setShowQRCodeModal(false)}
-        />
-        <View tw="my-auto items-center justify-center self-center">
-          <View tw="rounded-lg bg-white p-4 pb-8 dark:bg-gray-900">
-            <Pressable tw="mb-4" onPress={() => setShowQRCodeModal(false)}>
-              <Close
-                color={isDark ? "white" : "black"}
-                height={32}
-                width={32}
-              />
-            </Pressable>
-            <DropQRCode nft={nft} />
-          </View>
-        </View>
-      </Modal>
     </>
   );
 }
-
-const DropQRCode = ({ nft }: { nft: NFT }) => {
-  const { data: edition } = useCreatorCollectionDetail(
-    nft?.creator_airdrop_edition_address
-  );
-  const qrCodeUrl = useMemo(() => {
-    const url = new URL(getNFTURL(nft));
-    if (edition && edition.password) {
-      url.searchParams.set("password", edition?.password);
-    }
-    return url;
-  }, [edition, nft]);
-
-  return (
-    <QRCode
-      text={qrCodeUrl.toString()}
-      size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-    />
-  );
-};
 
 export { NFTDropdown };

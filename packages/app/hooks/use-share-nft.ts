@@ -11,8 +11,12 @@ export const getNFTSlug = (nft: NFT) =>
     nft?.token_id
   }`;
 
-export const getNFTURL = (nft: NFT) =>
-  `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + getNFTSlug(nft)}`;
+export const getNFTURL = (nft: NFT | undefined) => {
+  if (!nft) {
+    return "";
+  }
+  return `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + getNFTSlug(nft)}`;
+};
 
 export const useShareNFT = () => {
   const { rudder } = useRudder();

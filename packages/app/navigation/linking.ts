@@ -41,6 +41,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       login: "login",
       nft: "nft/:chainName/:contractAddress/:tokenId",
       drop: "drop",
+      qrCodeShare: "/qr-code-share/:contractAddress",
       claim: "claim/:contractAddress",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",
