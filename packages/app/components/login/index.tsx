@@ -1,18 +1,16 @@
 import { useMemo } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { PortalProvider } from "@gorhom/portal";
 
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
 
-const ContainerView: any =
-  Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 interface LoginProps {
   onLogin?: () => void;
 }
@@ -46,7 +44,7 @@ export function Login({ onLogin }: LoginProps) {
   //#endregion
   return (
     <PortalProvider>
-      <ContainerView style={styles.container}>
+      <BottomSheetScrollView style={styles.container}>
         {isConnectingToWallet ? (
           <View tw="py-40">
             <Text tw="text-center dark:text-gray-400">
@@ -63,7 +61,7 @@ export function Login({ onLogin }: LoginProps) {
             loading={loading && !isConnectingToWallet}
           />
         )}
-      </ContainerView>
+      </BottomSheetScrollView>
     </PortalProvider>
   );
 }

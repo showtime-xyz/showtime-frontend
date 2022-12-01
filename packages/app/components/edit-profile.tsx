@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Platform, useWindowDimensions, Keyboard } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
@@ -20,11 +19,11 @@ import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -43,9 +42,6 @@ import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
 import { ProfileScialExplanation } from "./profile/profile-social-explanation";
-
-const ScrollComponent =
-  Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
 
 type Query = {
   redirectUri?: string;
@@ -281,16 +277,12 @@ export const EditProfile = () => {
     () => (width < 768 ? width / 3 : 160),
     [width]
   );
-  const extraScrollHeight = useMemo(
-    () => insets.bottom + (Platform.OS === "ios" ? 120 : 200),
-    [insets.bottom]
-  );
 
   return (
     <>
       <BottomSheetModalProvider>
         <View tw={`w-full flex-1`}>
-          <ScrollComponent extraScrollHeight={extraScrollHeight as any}>
+          <BottomSheetScrollView>
             <Controller
               control={control}
               name="coverPicture"
@@ -614,7 +606,7 @@ export const EditProfile = () => {
                   })}
               </View>
             </View>
-          </ScrollComponent>
+          </BottomSheetScrollView>
           <View tw="my-2.5 mb-4 px-4">
             <Button
               disabled={isSubmitting}
