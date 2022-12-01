@@ -51,19 +51,19 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     Component = TextInput,
     ...textInputProps
   } = props;
-  let style = "bg-gray-100 dark:bg-gray-900";
-  if (disabled) {
-    style += " opacity-40";
-  }
   const isDark = useIsDarkMode();
   const inputId = useId();
   const helperTextId = useId();
   const errorTextId = useId();
-  const switchTw = switchOnly
-    ? "flex-1 flex-row items-center justify-between"
-    : "";
   return (
-    <View tw={`rounded-2xl p-4 ${style} ${twProp} ${switchTw}`}>
+    <View
+      tw={[
+        "rounded-2xl bg-gray-100 p-4 dark:bg-gray-900",
+        disabled ? "opacity-40" : "",
+        switchOnly ? "flex-1 flex-row items-center justify-between" : "",
+        twProp,
+      ]}
+    >
       <View tw="flex-row">
         <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
           {label}

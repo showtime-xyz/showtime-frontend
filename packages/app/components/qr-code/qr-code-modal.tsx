@@ -134,7 +134,7 @@ export const QRCodeModal = () => {
       });
       return uri;
     } catch (error) {
-      console.log(`captureRefError: ${error}`);
+      Logger.log(`captureRefError: ${error}`);
     }
   };
   const onDownload = useCallback(async () => {
