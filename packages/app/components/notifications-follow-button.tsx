@@ -7,8 +7,10 @@ import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { BellOff, BellPlus } from "@showtime-xyz/universal.icon";
 
-import { useUserProfile } from "../hooks/api-hooks";
-import { useNotificationsFollow } from "../hooks/use-notifications-follow";
+import { useUserProfile } from "app/hooks/api-hooks";
+import { useAuth } from "app/hooks/auth/use-auth";
+import { useNotificationsFollow } from "app/hooks/use-notifications-follow";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 type NotificationsFollowButtonProps = ButtonProps & {
   username?: string;
@@ -17,6 +19,9 @@ type NotificationsFollowButtonProps = ButtonProps & {
 
 export const NotificationsFollowButton = memo<NotificationsFollowButtonProps>(
   ({ profileId, username }) => {
+    const { accessToken } = useAuth();
+    const navigateToLogin = useNavigateToLogin();
+
     const { mutate, data } = useUserProfile({ address: username });
     const isFollowingCreatorDrops = data?.data?.following_creator_drops;
     const { width } = useWindowDimensions();
@@ -24,8 +29,12 @@ export const NotificationsFollowButton = memo<NotificationsFollowButtonProps>(
     const { notificationsFollow, notificationsUnfollow } =
       useNotificationsFollow();
     const onToggleNotifacationFollow = async () => {
+      if (!accessToken) {
+        navigateToLogin();
+        return;
+      }
       if (isFollowingCreatorDrops) {
-        Alert.alert(`Turn off Drops notifications?`, "", [
+        Alert.alert(`Turn off @${username} Drops notifications?`, "", [
           {
             text: "Cancel",
             style: "cancel",
@@ -35,13 +44,14 @@ export const NotificationsFollowButton = memo<NotificationsFollowButtonProps>(
             style: "destructive",
             onPress: async () => {
               await notificationsUnfollow(profileId);
+              await mutate();
             },
           },
         ]);
       } else {
         await notificationsFollow(profileId);
+        await mutate();
       }
-      await mutate();
     };
     return (
       <Button
