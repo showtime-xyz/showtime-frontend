@@ -45,11 +45,15 @@ function ProfileDropdown({ user, tw = "" }: Props) {
       <DropdownMenuTrigger>
         <Button
           variant="tertiary"
-          iconOnly={true}
+          iconOnly
           size={width < 768 ? "small" : "regular"}
           tw={tw}
         >
-          <MoreHorizontal color={isDark ? "#FFF" : "#000"} />
+          <MoreHorizontal
+            width={24}
+            height={24}
+            color={isDark ? "#FFF" : "#000"}
+          />
         </Button>
       </DropdownMenuTrigger>
 

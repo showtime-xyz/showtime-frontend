@@ -1,6 +1,6 @@
 import { useCallback, memo, useMemo } from "react";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import type { ButtonProps } from "@showtime-xyz/universal.button/types";
 
@@ -16,7 +16,6 @@ export const FollowButton = memo<ToggleFollowParams>(
   ({ profileId, name, onToggleFollow, ...rest }) => {
     const { unfollow, follow, data, isFollowing: isFollowingFn } = useMyInfo();
 
-    const Alert = useAlert();
     const isFollowing = useMemo(
       () => isFollowingFn(profileId),
       [profileId, isFollowingFn]
@@ -42,7 +41,7 @@ export const FollowButton = memo<ToggleFollowParams>(
         await follow(profileId);
         onToggleFollow?.();
       }
-    }, [Alert, follow, unfollow, isFollowing, profileId, name, onToggleFollow]);
+    }, [follow, unfollow, isFollowing, profileId, name, onToggleFollow]);
     if (data?.data?.profile?.profile_id === profileId) return null;
     return (
       <Button
