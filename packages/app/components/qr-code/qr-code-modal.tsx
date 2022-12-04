@@ -91,19 +91,19 @@ export const QRCodeModal = () => {
 
       if (Platform.OS === "ios") {
         isInstalled = {
-          twitter: await Linking.canOpenURL("instagram://"),
-          instagram: await Linking.canOpenURL("twitter://"),
+          instagram: await Linking.canOpenURL("instagram://"),
+          twitter: await Linking.canOpenURL("twitter://"),
         };
       } else if (Platform.OS === "android") {
-        const { isInstalled: twitter } = await Share.isPackageInstalled(
+        const { isInstalled: instagram } = await Share.isPackageInstalled(
           "com.instagram.android"
         );
-        const { isInstalled: instagram } = await Share.isPackageInstalled(
+        const { isInstalled: twitter } = await Share.isPackageInstalled(
           "com.twitter.android"
         );
         isInstalled = {
-          twitter,
           instagram,
+          twitter,
         };
       }
       setIsInstalledApps({
