@@ -37,11 +37,18 @@ const Header = () => {
     <View style={{ height: headerHeight }} />
   );
 };
-
+type NotificationsProps = {
+  hideHeader?: boolean;
+  /**
+   * **WEB ONLY**: Defines the list height.
+   * @default undefined
+   */
+  web_height?: string | number;
+};
 export const Notifications = ({
-  useWindowScroll = true,
   hideHeader = false,
-}) => {
+  web_height = undefined,
+}: NotificationsProps) => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
@@ -54,6 +61,7 @@ export const Notifications = ({
   );
   const listRef = useRef<any>();
   useScrollToTop(listRef);
+
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<NotificationType>) => {
       return <NotificationItem notification={item} setUsers={setUsers} />;
@@ -105,7 +113,7 @@ export const Notifications = ({
   return (
     <>
       <InfiniteScrollList
-        useWindowScroll={useWindowScroll}
+        useWindowScroll={false}
         data={data}
         ListHeaderComponent={Platform.select({
           web: hideHeader ? undefined : Header,
@@ -115,7 +123,7 @@ export const Notifications = ({
         style={{
           height: Platform.select({
             default: windowHeight - bottomBarHeight,
-            web: useWindowScroll ? windowHeight - bottomBarHeight : "100%",
+            web: web_height ? web_height : windowHeight - bottomBarHeight,
             ios: windowHeight,
           }),
         }}
@@ -160,13 +168,18 @@ export const Notifications = ({
       />
 
       <ModalSheet
-        snapPoints={["85%", "100%"]}
+        snapPoints={["90%"]}
         title="People"
         visible={users.length > 0}
         close={() => setUsers([])}
         onClose={() => setUsers([])}
       >
-        <UserList onClose={() => setUsers([])} users={users} loading={false} />
+        <UserList
+          onClose={() => setUsers([])}
+          users={users}
+          loading={false}
+          style={{ height: Platform.OS === "web" ? 200 : undefined }}
+        />
       </ModalSheet>
     </>
   );

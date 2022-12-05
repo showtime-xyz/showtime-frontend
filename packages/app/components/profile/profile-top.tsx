@@ -26,6 +26,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationsFollowButton } from "app/components/notifications-follow-button";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
@@ -92,8 +93,9 @@ export const ProfileTop = ({
   const isSelf = userId === profileId;
   const { unblock } = useBlock();
   const { onToggleFollow } = useFollow({
-    username: profileData?.profile.username,
+    username,
   });
+
   const { top } = useSafeAreaInsets();
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
@@ -285,15 +287,16 @@ export const ProfileTop = ({
                   </Hidden>
                   {profileId && !isSelf ? (
                     <>
-                      <ProfileDropdown
-                        user={profileData?.profile}
-                        // Todo: Zeego issue on iOS.
-                        tw="ios:mt-2"
+                      <ProfileDropdown user={profileData?.profile} />
+                      <View tw="w-2" />
+                      <NotificationsFollowButton
+                        username={username}
+                        profileId={profileId}
                       />
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}
-                        name={profileData?.profile.name}
+                        name={username}
                         profileId={profileId}
                         onToggleFollow={onToggleFollow}
                       />

@@ -25,7 +25,7 @@ function ModalHeaderComponent({
         <StartContentComponent />
       ) : (
         <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
-          <Close width={20} height={24} />
+          <Close width={24} height={24} />
         </Button>
       )}
 

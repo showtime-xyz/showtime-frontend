@@ -113,6 +113,10 @@ export { default as ScanOutline } from "./ScanOutline";
 export { default as Location } from "./Location";
 export { default as Lock } from "./Lock";
 export { default as Download } from "./Download";
+export { default as BellPlus } from "./BellPlus";
+export { default as BellRinging } from "./BellRinging";
+export { default as BellMinus } from "./BellMinus";
+export { default as BellOff } from "./BellOff";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
