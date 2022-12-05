@@ -8865,6 +8865,7 @@ __metadata:
     "@magic-sdk/react-native": ^11.0.0
     "@react-native-async-storage/async-storage": ~1.17.3
     "@react-native-community/blur": ^4.2.0
+    "@react-native-community/datetimepicker": 6.5.2
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
     "@react-native-menu/menu": ^0.7.2
