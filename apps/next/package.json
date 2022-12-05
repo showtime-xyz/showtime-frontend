@@ -51,6 +51,7 @@
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "raf": "^3.4.1",
+    "react-datepicker": "^4.8.0",
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.4.2",
     "react-native-fast-image": "^8.5.11",
