@@ -173,3 +173,12 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.react-datepicker__input-container {
+  display: flex;
+}
+.react-datepicker__input-container input {
+  flex: 1;
+  border-radius: 4px;
+  padding: 4px;
+}
