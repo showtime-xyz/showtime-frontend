@@ -152,6 +152,7 @@ export interface UserProfile {
   followers_count: number;
   featured_nft: NFT;
   follows_you: boolean;
+  following_creator_drops: boolean;
 }
 
 type UserProfileNFTs = {

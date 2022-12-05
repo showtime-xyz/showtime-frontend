@@ -1,13 +1,16 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import { Platform, View } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
-import ReactQRCode from "react-qr-code";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useToast } from "@showtime-xyz/universal.toast";
 
-import ViewShot from "app/lib/view-shot";
+import domtoimage from "app/lib/dom-to-image";
+import { ReactQRCode } from "app/lib/qr-code";
+import { captureRef } from "app/lib/view-shot";
 
 type Props = {
   text: string;
@@ -15,63 +18,52 @@ type Props = {
 };
 
 export const QRCode = ({ text, size }: Props) => {
-  const ref = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const toast = useToast();
-  const onDownload = async () => {
+  const viewRef = useRef<View | Node>(null);
+
+  const onDownload = useCallback(async () => {
     if (Platform.OS === "web") {
-      const svg = ref.current;
-      const svgData = new XMLSerializer().serializeToString(svg);
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-      img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx?.drawImage(img, 0, 0);
-        const pngFile = canvas.toDataURL("image/png");
-
-        const downloadLink = document.createElement("a");
-        downloadLink.download = "qrcode";
-        downloadLink.href = `${pngFile}`;
-        downloadLink.click();
-      };
-
-      img.src = "data:image/svg+xml;base64," + btoa(svgData);
+      const dataUrl = await domtoimage.toPng(viewRef.current as Node);
+      const link = document.createElement("a");
+      link.download = `QRCode-${new Date().valueOf()}`;
+      link.href = dataUrl;
+      link.click();
     } else {
       let hasPermission = false;
-      ref.current.capture().then(async (uri: string) => {
-        if (status?.granted) {
-          hasPermission = status?.granted;
-        } else {
-          const res = await requestPermission();
-          hasPermission = res?.granted;
-        }
-
-        if (hasPermission) {
-          await MediaLibrary.saveToLibraryAsync(uri);
-          toast?.show({
-            message: "Saved to Photos",
-            hideAfter: 2000,
-          });
-        }
+      const url = await captureRef(viewRef, {
+        format: "png",
+        quality: 0.8,
       });
+      if (!url) {
+        Alert.alert("Oops, An error occurred.");
+        return;
+      }
+      if (status?.granted) {
+        hasPermission = status?.granted;
+      } else {
+        const res = await requestPermission();
+        hasPermission = res?.granted;
+      }
+      if (hasPermission) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        await MediaLibrary.saveToLibraryAsync(url);
+        toast?.show({
+          message: "Saved to Photos",
+          hideAfter: 2000,
+        });
+      } else {
+        Alert.alert("Oops, No write permission.");
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      }
     }
-  };
+  }, [requestPermission, status?.granted, toast]);
 
   return (
     <View style={{ alignItems: "center" }}>
-      <ViewShot
-        ref={ref}
-        options={{ fileName: "QR Code", format: "png", quality: 0.9 }}
-      >
-        <ReactQRCode
-          size={size}
-          ref={ref}
-          value={text}
-          viewBox={`0 0 ${size} ${size}`}
-        />
-      </ViewShot>
+      <View ref={viewRef as any}>
+        <ReactQRCode size={size} value={text} />
+      </View>
       <Button tw="mt-4 self-center" onPress={onDownload}>
         Download QR Code
       </Button>

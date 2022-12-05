@@ -125,6 +125,15 @@ export const Default = () => {
         <IconItem icon={Icon.DarkMode} title="DarkMode" />
         <IconItem icon={Icon.QrCode} title="QrCode" />
         <IconItem icon={Icon.Refresh} title="Refresh" />
+        <IconItem icon={Icon.Eye} title="Eye" />
+        <IconItem icon={Icon.EyeOff} title="EyeOff" />
+        <IconItem icon={Icon.Location} title="Location" />
+        <IconItem icon={Icon.Lock} title="Lock" />
+        <IconItem icon={Icon.Download} title="Download" />
+        <IconItem icon={Icon.BellRinging} title="BellRinging" />
+        <IconItem icon={Icon.BellPlus} title="BellPlus" />
+        <IconItem icon={Icon.BellMinus} title="BellMinus" />
+        <IconItem icon={Icon.BellOff} title="BellOff" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>
