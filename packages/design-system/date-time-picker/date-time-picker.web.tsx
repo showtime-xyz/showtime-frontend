@@ -1,26 +1,24 @@
+import DatePicker from "react-datepicker";
+
 import { DateTimePickerProps } from "./types";
 
 export const DateTimePicker = (props: DateTimePickerProps) => {
   const { value, type, onChange, maximumDate, minimumDate } = props;
-  console.log("value ", value.toISOString());
-
   return (
-    <input
-      type={
+    <DatePicker
+      selected={value}
+      onChange={(date: any) => onChange(date)}
+      showTimeSelect={type === "datetime" || type === "time"}
+      showTimeSelectOnly={type === "time"}
+      maxDate={maximumDate}
+      minDate={minimumDate}
+      dateFormat={
         type === "datetime"
-          ? "datetime-local"
+          ? "MMMM d, yyyy h:mm aa"
           : type === "time"
-          ? "time"
-          : "date"
+          ? "h:mm aa"
+          : "MMMM d, yyyy"
       }
-      value={
-        type === "datetime"
-          ? value.toISOString().substring(0, 16)
-          : value.toISOString().split("T")[0]
-      }
-      onChange={(e) => onChange(new Date(e.target.value))}
-      min={minimumDate?.toString()}
-      max={maximumDate?.toString()}
     />
   );
 };
