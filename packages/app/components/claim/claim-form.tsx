@@ -357,14 +357,14 @@ export const ClaimForm = ({
                     }}
                     tw="flex-row items-center"
                   >
-                    <CheckIcon />
+                    <CheckIcon disabled />
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       {locationErrorMsg}
                     </Text>
                   </Pressable>
                 ) : (
                   <>
-                    <CheckIcon disable={!location?.coords} />
+                    <CheckIcon disabled={!location?.coords} />
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       {location?.coords.latitude &&
                       location?.coords.longitude ? (
@@ -461,10 +461,10 @@ export const ClaimForm = ({
   );
 };
 
-const CheckIcon = ({ disable = false }) => {
+const CheckIcon = ({ disabled = false }) => {
   const isDark = useIsDarkMode();
   return (
-    <View tw={["items-center justify-center", disable ? "opacity-60" : ""]}>
+    <View tw={["items-center justify-center", disabled ? "opacity-60" : ""]}>
       <CheckFilled
         height={20}
         width={20}
