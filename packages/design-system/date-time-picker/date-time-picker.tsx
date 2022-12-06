@@ -28,6 +28,8 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
       />
     );
   }
+
+  return null;
 };
 
 const AndroidDateTimePicker = (props: DateTimePickerProps) => {

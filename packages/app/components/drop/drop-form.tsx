@@ -53,6 +53,7 @@ import {
   isMobileWeb,
 } from "app/utilities";
 
+import { DateTimePicker } from "design-system/date-time-picker";
 import { Hidden } from "design-system/hidden";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -139,6 +140,7 @@ export const DropForm = () => {
   const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const [accordionValue, setAccordionValue] = useState("");
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
@@ -497,32 +499,93 @@ export const DropForm = () => {
           </Hidden>
           <View
             tw={[
-              `z-10 mt-4 flex-row`,
-              gatingType !== "spotify_save" ? "h-12" : "",
+              `z-10 my-4 flex-row`,
+              // gatingType !== "spotify_save" ? "h-12" : "",
             ]}
           >
-            <Controller
-              control={control}
-              name="spotifyUrl"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Make it a Music Drop?"
-                    onBlur={onBlur}
-                    ref={spotifyTextInputRef}
-                    onChangeText={onChange}
-                    style={{
-                      display:
-                        gatingType === "spotify_save" ? undefined : "none",
+            <View tw="flex-1">
+              <View>
+                <Text tw="text-base font-bold text-gray-900 dark:text-gray-100">
+                  Make it a Music Drop?
+                </Text>
+              </View>
+              <View
+                tw="mt-4 flex-1 flex-row"
+                style={{
+                  display: gatingType === "spotify_save" ? undefined : "none",
+                }}
+              >
+                <View tw="flex-1">
+                  {!isSaveDrop ? (
+                    <Controller
+                      key="releaseDate"
+                      control={control}
+                      name="releaseDate"
+                      render={({ field: { onChange, value } }) => {
+                        return (
+                          <View>
+                            <View
+                              tw={[
+                                "rounded-2xl bg-gray-100 p-4 dark:bg-gray-900",
+                              ]}
+                            >
+                              <Text tw="font-bold text-gray-900 dark:text-white">
+                                Enter a Release Date
+                              </Text>
+                              <View tw="mt-2 flex-row">
+                                <DateTimePicker
+                                  onChange={onChange}
+                                  value={value || new Date()}
+                                  type="datetime"
+                                  open={false}
+                                />
+                              </View>
+                            </View>
+                          </View>
+                        );
+                      }}
+                    />
+                  ) : (
+                    <Controller
+                      key="songlink"
+                      control={control}
+                      name="spotifyUrl"
+                      render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                          <Fieldset
+                            tw="flex-1"
+                            label="Enter Spotify URL"
+                            onBlur={onBlur}
+                            ref={spotifyTextInputRef}
+                            onChangeText={onChange}
+                            style={{
+                              display:
+                                gatingType === "spotify_save"
+                                  ? undefined
+                                  : "none",
+                            }}
+                            value={value}
+                            placeholder="Enter the Spotify song link"
+                            errorText={errors.spotifyUrl?.message}
+                          />
+                        );
+                      }}
+                    />
+                  )}
+                </View>
+                <View tw="ml-4 flex-1 flex-row items-center">
+                  <Checkbox
+                    checked={isSaveDrop}
+                    onChange={(v) => {
+                      setIsSaveDrop(v);
                     }}
-                    value={value}
-                    placeholder="Enter the Spotify song link"
-                    errorText={errors.spotifyUrl?.message}
+                    accesibilityLabel="Is Live?"
                   />
-                );
-              }}
-            />
+                  <Text tw="ml-1 text-black dark:text-white">Is Live?</Text>
+                </View>
+              </View>
+            </View>
+
             <View style={{ position: "absolute", right: 12, top: 8 }}>
               {user.user?.data.profile.spotify_artist_id ? (
                 <Switch
