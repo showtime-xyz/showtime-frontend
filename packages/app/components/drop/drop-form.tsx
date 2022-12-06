@@ -248,7 +248,7 @@ export const DropForm = () => {
             tw="bg-[#00ACEE]"
             variant="text"
           >
-            <Text tw="text-white">Share on Twitter</Text>
+            <Text tw="text-xs font-bold text-white">Share on Twitter</Text>
           </Button>
 
           <View tw="h-4" />

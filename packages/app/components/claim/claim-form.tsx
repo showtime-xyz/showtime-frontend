@@ -11,7 +11,7 @@ import type { LocationObject } from "expo-location";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check } from "@showtime-xyz/universal.icon";
+import { CheckFilled } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -74,7 +74,6 @@ export const ClaimForm = ({
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const { isMagic } = useWeb3();
   const comment = useRef("");
-  const password = useRef(passwordFromQueryParam);
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
@@ -92,6 +91,7 @@ export const ClaimForm = ({
   const { mutate } = useCreatorCollectionDetail(
     nft?.data.item.creator_airdrop_edition_address
   );
+  const [password, setPassword] = useState(passwordFromQueryParam);
 
   const [location, setLocation] = useState<LocationObject | undefined>(
     undefined
@@ -105,15 +105,17 @@ export const ClaimForm = ({
         setLocationErrorMsg("Permission to access location was denied");
         return;
       }
+      let location = await Location.getCurrentPositionAsync();
 
-      let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     };
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
   }, [edition.gating_type]);
-
+  const closeModal = () => {
+    router.pop();
+  };
   const handleClaimNFT = async () => {
     if (
       nft?.data.item.creator_id &&
@@ -122,25 +124,22 @@ export const ClaimForm = ({
       follow(nft?.data.item.creator_id);
     }
 
-    if (
-      edition.gating_type !== "spotify_save" ||
-      user?.data.profile.has_spotify_token
-    ) {
-      router.pop();
-    }
-
     let success: boolean | undefined | void = false;
 
     if (edition.gating_type === "spotify_save") {
       success = await claimSpotifyGatedDrop(nft?.data.item);
     } else if (edition.gating_type === "password") {
-      success = await claimNFT({ password: password.current.trim() });
+      success = await claimNFT({ password: password.trim(), closeModal });
     } else if (edition.gating_type === "location") {
-      success = await claimNFT({ location });
+      success = await claimNFT({ location, closeModal });
     } else if (edition.gating_type === "multi") {
-      success = await claimNFT({ password: password.current.trim(), location });
+      success = await claimNFT({
+        password: password.trim(),
+        location,
+        closeModal,
+      });
     } else {
-      success = await claimNFT({});
+      success = await claimNFT({ closeModal });
     }
 
     if (comment.current.trim().length > 0 && success) {
@@ -153,6 +152,11 @@ export const ClaimForm = ({
     () => linkifyDescription(edition.creator_airdrop_edition.description),
     [edition.creator_airdrop_edition.description]
   );
+  const isDisableButton =
+    state.status === "loading" ||
+    (edition.gating_type === "multi" && !location && !password) ||
+    (edition.gating_type === "password" && !password) ||
+    (edition.gating_type === "location" && !location?.coords);
   // const [ensName, setEnsName] = React.useState<string | null>(null);
   // React.useEffect(() => {
   //   web3
@@ -331,12 +335,12 @@ export const ClaimForm = ({
                   tw="mt-4 flex-1"
                   label="Password"
                   placeholder="Enter the password"
-                  onChangeText={(v) => (password.current = v)}
+                  onChangeText={setPassword}
                   returnKeyLabel="Enter"
                   returnKeyType="done"
                   onSubmitEditing={handleClaimNFT}
                   secureTextEntry
-                  defaultValue={password.current}
+                  defaultValue={password}
                 />
               </View>
             </>
@@ -353,14 +357,14 @@ export const ClaimForm = ({
                     }}
                     tw="flex-row items-center"
                   >
-                    <CheckIcon />
+                    <CheckIcon disabled />
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       {locationErrorMsg}
                     </Text>
                   </Pressable>
                 ) : (
                   <>
-                    <CheckIcon />
+                    <CheckIcon disabled={!location?.coords} />
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       {location?.coords.latitude &&
                       location?.coords.longitude ? (
@@ -401,16 +405,8 @@ export const ClaimForm = ({
             <Button
               size="regular"
               variant="primary"
-              disabled={
-                state.status === "loading" ||
-                (edition.gating_type === "multi" && !location)
-              }
-              tw={
-                state.status === "loading" ||
-                (edition.gating_type === "multi" && !location)
-                  ? "opacity-[0.45]"
-                  : ""
-              }
+              disabled={isDisableButton}
+              tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
               {state.status === "loading" ? (
@@ -465,19 +461,15 @@ export const ClaimForm = ({
   );
 };
 
-const CheckIcon = () => {
+const CheckIcon = ({ disabled = false }) => {
   const isDark = useIsDarkMode();
   return (
-    <View tw="items-center justify-center">
-      <View tw="rounded-full bg-gray-800 p-3 dark:bg-gray-100"></View>
-      <View tw="z-9 absolute">
-        <Check
-          height={20}
-          width={20}
-          //@ts-ignore
-          color={isDark ? colors.gray[900] : colors.gray[100]}
-        />
-      </View>
+    <View tw={["items-center justify-center", disabled ? "opacity-60" : ""]}>
+      <CheckFilled
+        height={20}
+        width={20}
+        color={isDark ? colors.white : colors.gray[700]}
+      />
     </View>
   );
 };
