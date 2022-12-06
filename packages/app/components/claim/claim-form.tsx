@@ -154,7 +154,7 @@ export const ClaimForm = ({
   );
   const isDisableButton =
     state.status === "loading" ||
-    (edition.gating_type === "multi" && !location) ||
+    (edition.gating_type === "multi" && !location && !password) ||
     (edition.gating_type === "password" && !password) ||
     (edition.gating_type === "location" && !location?.coords);
   // const [ensName, setEnsName] = React.useState<string | null>(null);
