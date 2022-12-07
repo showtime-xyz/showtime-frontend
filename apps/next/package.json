@@ -30,6 +30,7 @@
     "@sentry/integrations": "7.7.0",
     "@sentry/nextjs": "7.7.0",
     "@types/dom-to-image": "^2.6.4",
+    "@types/react-datepicker": "^4.8.0",
     "@types/react-stickynode": "^4.0.0",
     "@walletconnect/web3-provider": "^1.8.0",
     "app": "*",
