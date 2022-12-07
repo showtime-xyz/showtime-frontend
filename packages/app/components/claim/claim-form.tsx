@@ -147,7 +147,6 @@ export const ClaimForm = ({
   }, []);
 
   useEffect(() => {
-    getLocation();
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
