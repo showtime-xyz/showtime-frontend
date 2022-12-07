@@ -1,4 +1,11 @@
-import { useRef, useContext, useMemo, useState, useEffect } from "react";
+import {
+  useRef,
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   Linking,
   Platform,
@@ -8,6 +15,7 @@ import {
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -97,22 +105,53 @@ export const ClaimForm = ({
     undefined
   );
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
+  const getLocation = useCallback(async () => {
+    const { status, canAskAgain } =
+      await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      setLocationErrorMsg("Permission to access location was denied");
+      if (canAskAgain && Platform.OS !== "web") {
+        getLocation();
+      } else {
+        Alert.alert(
+          "Location",
+          "Needs your location services to continue. You can turn them on in your device’s settings.",
+          Platform.select({
+            native: [
+              {
+                text: "Not now",
+              },
+              {
+                text: "Settings",
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+            default: [
+              {
+                text: "Got it",
+              },
+            ],
+          })
+        );
+      }
+      return;
+    } else {
+      setLocationErrorMsg(null);
+    }
+
+    const location = await Location.getCurrentPositionAsync();
+    setLocation(location);
+  }, []);
 
   useEffect(() => {
-    const getLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setLocationErrorMsg("Permission to access location was denied");
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync();
-
-      setLocation(location);
-    };
+    getLocation();
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
-  }, [edition.gating_type]);
+  }, [edition.gating_type, getLocation]);
   const closeModal = () => {
     router.pop();
   };
@@ -351,12 +390,7 @@ export const ClaimForm = ({
             <>
               <View tw="mt-4 flex-row items-center">
                 {locationErrorMsg ? (
-                  <Pressable
-                    onPress={async () => {
-                      await Location.requestForegroundPermissionsAsync();
-                    }}
-                    tw="flex-row items-center"
-                  >
+                  <Pressable onPress={getLocation} tw="flex-row items-center">
                     <CheckIcon disabled />
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       {locationErrorMsg}
