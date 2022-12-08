@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
@@ -31,6 +32,7 @@ import { useToast } from "@showtime-xyz/universal.toast";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -254,76 +256,80 @@ export const QRCodeModal = () => {
         }
       >
         <View tw="w-full flex-1">
-          <RNView collapsable={false} ref={viewRef as any}>
-            <View tw="w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
-              <Image
-                source={{
-                  uri: mediaUri,
-                }}
-                style={{
-                  height: size,
-                  width: size,
-                  borderRadius: 16,
-                }}
-                width={size}
-                height={size}
-                resizeMode="cover"
-                alt={nft?.token_name}
-              />
-              <View tw="w-full flex-row justify-between px-5 py-4">
-                <View tw="flex-1 py-4">
-                  <View tw="flex-row pb-4">
-                    <Avatar
-                      alt={"QRCode Share Avatar"}
-                      size={38}
-                      tw="border border-gray-200 dark:border-gray-900"
-                      url={nft.creator_img_url}
-                    />
-                    <View tw="ml-2 justify-center">
-                      <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                        Creator
-                      </Text>
-                      <View tw="h-2" />
-                      <View>
-                        <View tw="flex flex-row items-center">
-                          <Text tw="text-13 flex font-semibold text-gray-900 dark:text-white">
-                            {getCreatorUsernameFromNFT(nft)}
+          <BottomSheetModalProvider>
+            <BottomSheetScrollView tw="web:pb-12">
+              <RNView collapsable={false} ref={viewRef as any}>
+                <View tw="w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
+                  <Image
+                    source={{
+                      uri: mediaUri,
+                    }}
+                    style={{
+                      height: size,
+                      width: size,
+                      borderRadius: 16,
+                    }}
+                    width={size}
+                    height={size}
+                    resizeMode="cover"
+                    alt={nft?.token_name}
+                  />
+                  <View tw="web:max-w-[440px] w-full flex-row justify-between px-5 py-4">
+                    <View tw="flex-1 py-4">
+                      <View tw="flex-row pb-4">
+                        <Avatar
+                          alt={"QRCode Share Avatar"}
+                          size={38}
+                          tw="border border-gray-200 dark:border-gray-900"
+                          url={nft.creator_img_url}
+                        />
+                        <View tw="ml-2 justify-center">
+                          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                            Creator
                           </Text>
-                          {nft.creator_verified ? (
-                            <VerificationBadge
-                              style={{ marginLeft: 4 }}
-                              size={12}
-                            />
-                          ) : null}
+                          <View tw="h-2" />
+                          <View>
+                            <View tw="flex flex-row items-center">
+                              <Text tw="text-13 flex font-semibold text-gray-900 dark:text-white">
+                                {getCreatorUsernameFromNFT(nft)}
+                              </Text>
+                              {nft.creator_verified ? (
+                                <VerificationBadge
+                                  style={{ marginLeft: 4 }}
+                                  size={12}
+                                />
+                              ) : null}
+                            </View>
+                          </View>
                         </View>
                       </View>
+
+                      <Text
+                        tw="font-space-bold text-lg text-black dark:text-white"
+                        numberOfLines={2}
+                      >
+                        {nft.token_name}
+                      </Text>
+                    </View>
+                    <View tw="ml-2 h-28 rounded-lg border border-gray-300 p-2 dark:border-gray-500">
+                      <ReactQRCode size={96} value={qrCodeUrl.toString()} />
                     </View>
                   </View>
-
-                  <Text
-                    tw="font-space-bold text-lg text-black dark:text-white"
-                    numberOfLines={2}
-                  >
-                    {nft.token_name}
-                  </Text>
+                  <View tw="flex-row items-center justify-center">
+                    <ScanOutline height={16} width={16} color={iconColor} />
+                    <View tw="w-1" />
+                    <Text tw="text-13 text-center font-medium text-black dark:text-white">
+                      Scan to Collect
+                    </Text>
+                  </View>
                 </View>
-                <View tw="ml-2 h-28 rounded-lg border border-gray-300 p-2 dark:border-gray-500">
-                  <ReactQRCode size={96} value={qrCodeUrl.toString()} />
-                </View>
-              </View>
-              <View tw="flex-row items-center justify-center">
-                <ScanOutline height={16} width={16} color={iconColor} />
-                <View tw="w-1" />
-                <Text tw="text-13 text-center font-medium text-black dark:text-white">
-                  Scan to Collect
-                </Text>
-              </View>
-            </View>
-          </RNView>
+              </RNView>
+            </BottomSheetScrollView>
+          </BottomSheetModalProvider>
           {Platform.OS === "web" ? (
             <Pressable
               onPress={onDownload}
-              tw="flex-1 items-center justify-center px-4 py-4"
+              tw="absolute bottom-0 w-full flex-1 items-center justify-center bg-white px-4 py-1 dark:bg-black"
             >
               <Download height={24} width={24} color={iconColor} />
               <View tw="h-2" />
@@ -333,7 +339,7 @@ export const QRCodeModal = () => {
             </Pressable>
           ) : (
             <View
-              tw="absolute bottom-0 w-full flex-row border-t border-gray-100 dark:border-gray-700"
+              tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
               style={{ paddingBottom: bottom }}
             >
               {shareButtons
