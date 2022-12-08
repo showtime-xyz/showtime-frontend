@@ -7149,6 +7149,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:^6.7.1":
+  version: 6.7.1
+  resolution: "@react-native-community/datetimepicker@npm:6.7.1"
+  dependencies:
+    invariant: ^2.2.4
+  checksum: b2eadbf7080ce6d131200e0189b260a6991cba7ce2ddc7a1f23bbb2e15a77288b847109bdad43b09eac11d376c8bea3e0934143c661ef350e3fe3f716111ac75
+  languageName: node
+  linkType: hard
+
 "@react-native-community/netinfo@npm:9.3.5":
   version: 9.3.5
   resolution: "@react-native-community/netinfo@npm:9.3.5"
@@ -8801,7 +8810,7 @@ __metadata:
     "@magic-sdk/react-native": ^11.0.0
     "@react-native-async-storage/async-storage": ~1.17.3
     "@react-native-community/blur": ^4.2.0
-    "@react-native-community/datetimepicker": 6.5.2
+    "@react-native-community/datetimepicker": ^6.7.1
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
     "@react-native-menu/menu": ^0.7.2
@@ -8894,6 +8903,7 @@ __metadata:
     buffer: ^6.0.3
     console-browserify: ^1.1.0
     constants-browserify: ^1.0.0
+    date-picker: "https://github.com/showtime-xyz/date-picker-ios.git"
     design-system: "*"
     detox: ^19.4.1
     dns.js: ^1.0.1
@@ -17189,6 +17199,17 @@ __metadata:
   version: 2.28.0
   resolution: "date-fns@npm:2.28.0"
   checksum: a0516b2e4f99b8bffc6cc5193349f185f195398385bdcaf07f17c2c4a24473c99d933eb0018be4142a86a6d46cb0b06be6440ad874f15e795acbedd6fd727a1f
+  languageName: node
+  linkType: hard
+
+"date-picker@https://github.com/showtime-xyz/date-picker-ios.git":
+  version: 0.1.0
+  resolution: "date-picker@https://github.com/showtime-xyz/date-picker-ios.git#commit=303908f72afe97b68683ccd15d0fd71b9cb30fd6"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: bdd8becce0e9139449151db15ced061534ae6b071026138e759387228ae06010fb3a0cf6b75d693b721554e92367fc0210570941eb3f5e502f4fc175d05f5324
   languageName: node
   linkType: hard
 

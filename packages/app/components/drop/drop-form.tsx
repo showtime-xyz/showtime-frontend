@@ -175,6 +175,7 @@ export const DropForm = () => {
   const share = useShare();
   const router = useRouter();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // if (state.transactionHash) {
   //   return <View>
@@ -529,15 +530,28 @@ export const DropForm = () => {
                                 "rounded-2xl bg-gray-100 p-4 dark:bg-gray-900",
                               ]}
                             >
-                              <Text tw="font-bold text-gray-900 dark:text-white">
-                                Enter a Release Date
-                              </Text>
-                              <View tw="mt-2 flex-row">
+                              <Pressable
+                                onPress={() => {
+                                  setShowDatePicker(!showDatePicker);
+                                }}
+                              >
+                                <Text tw="font-bold text-gray-900 dark:text-white">
+                                  Enter a Release Date
+                                </Text>
+                              </Pressable>
+                              <View tw="t-0 l-0 flex-row">
                                 <DateTimePicker
-                                  onChange={onChange}
-                                  value={value || new Date()}
+                                  onChange={(v) => {
+                                    onChange(v);
+                                    setShowDatePicker(false);
+                                  }}
+                                  value={
+                                    typeof value === "string"
+                                      ? new Date(value)
+                                      : value ?? new Date()
+                                  }
                                   type="datetime"
-                                  open={false}
+                                  open={showDatePicker}
                                 />
                               </View>
                             </View>
