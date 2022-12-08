@@ -185,7 +185,6 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.27.1",
     "react-native": "0.70.5",
-    "react-native-avoid-softinput": "^3.0.2",
     "react-native-bignumber": "^0.1.9",
     "react-native-blob-jsi-helper": "^0.2.3",
     "react-native-blurhash": "^1.1.10",

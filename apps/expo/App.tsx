@@ -6,7 +6,6 @@ import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableScreens } from "react-native-screens";
 
@@ -58,13 +57,7 @@ function App() {
       );
     };
 
-    AvoidSoftInput.setEnabled(true);
-
     initAnalytics();
-
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-    };
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,6 @@ import {
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
@@ -25,8 +24,10 @@ import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+
 const PlatformInputAccessoryView =
   Platform.OS === "ios" ? InputAccessoryView : Fragment;
+
 export function Comments({ nft }: { nft: NFT }) {
   //#region refs
   const Alert = useAlert();
@@ -59,7 +60,6 @@ export function Comments({ nft }: { nft: NFT }) {
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps();
   const { bottom } = useSafeAreaInsets();
-  const isDark = useIsDarkMode();
   //#endregion
   //#region variables
   const dataReversed = useMemo(
@@ -161,10 +161,6 @@ export function Comments({ nft }: { nft: NFT }) {
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets
             contentInsetAdjustmentBehavior="never"
-            maintainVisibleContentPosition={{
-              minIndexForVisible: 0,
-              autoscrollToTopThreshold: 0,
-            }}
             {...modalListProps}
           />
           {isAuthenticated && (

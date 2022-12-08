@@ -8949,7 +8949,6 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.70.5
-    react-native-avoid-softinput: ^3.0.2
     react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
@@ -30854,16 +30853,6 @@ __metadata:
   version: 1.1.0
   resolution: "react-merge-refs@npm:1.1.0"
   checksum: 90884352999002d868ab9f1bcfe3222fb0f2178ed629f1da7e98e5a9b02a2c96b4aa72800db92aabd69d2483211b4be57a2088e89a11a0b660e7ada744d4ddf7
-  languageName: node
-  linkType: hard
-
-"react-native-avoid-softinput@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "react-native-avoid-softinput@npm:3.0.2"
-  peerDependencies:
-    react: ">=17.0.0"
-    react-native: ">=0.65.0"
-  checksum: de135b7e40e5e64ea4a0cec90f7af1aaca6b3b7cc28130307f9ced4471e866366afd18c89d6e187a7dee482c7d7e9b044775cc894b8895f8720f8de4ffd81209
   languageName: node
   linkType: hard
 
