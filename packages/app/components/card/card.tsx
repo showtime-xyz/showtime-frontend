@@ -156,10 +156,11 @@ const CardLargeScreen = ({
           "overflow-hidden rounded-2xl",
           "dark:shadow-dark shadow-light",
           "flex-1",
+          "bg-white dark:bg-black",
           tw,
         ]}
       >
-        <View tw="bg-white pb-4 dark:bg-black" shouldRasterizeIOS={true}>
+        <View tw="pb-4" shouldRasterizeIOS={true}>
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>
