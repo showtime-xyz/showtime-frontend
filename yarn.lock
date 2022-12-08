@@ -8879,7 +8879,7 @@ __metadata:
     "@tradle/react-native-http": ^2.0.1
     "@types/jest": ^27.4.1
     "@types/qrcode": ^1.5.0
-    "@types/react": 18.0.24
+    "@types/react": ~18.0.24
     "@types/three": ^0.142.0
     "@types/uuid": ^8.3.4
     "@walletconnect/react-native-dapp": ^1.8.0
@@ -11684,12 +11684,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-native@npm:0.69.3":
-  version: 0.69.3
-  resolution: "@types/react-native@npm:0.69.3"
+"@types/react-native@npm:0.70.5":
+  version: 0.70.5
+  resolution: "@types/react-native@npm:0.70.5"
   dependencies:
     "@types/react": "*"
-  checksum: 7d5aa4b30385e232fed74bdebeba1c7ee73b4237ca5a310fee6f9b98432ed2f3a737f2755c528fd5b03485278e98bd0b152692df5e146cb2603827ab939841dc
+  checksum: 1a21cd62afcd23cbd2d8e27c3b7601819739bb822e77ce9a3995af14be88e4ae19e467bc4b9c133f6da82648e8a951f07d1e55997d1a7a50260b79c784c24535
   languageName: node
   linkType: hard
 
@@ -33243,7 +33243,7 @@ __metadata:
     "@react-native-menu/menu": ^0.7.2
     "@trivago/prettier-plugin-sort-imports": ^3.3.0
     "@types/react-dropzone": ^5.1.0
-    "@types/react-native": 0.69.3
+    "@types/react-native": 0.70.5
     "@typescript-eslint/eslint-plugin": 5.23.0
     "@typescript-eslint/parser": 5.23.0
     "@walletconnect/react-native-dapp": ^1.7.8
