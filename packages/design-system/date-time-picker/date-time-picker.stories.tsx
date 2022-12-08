@@ -20,10 +20,6 @@ export const Basic: React.FC<{}> = () => {
         flexDirection: "row",
         alignItems: "center",
       }}
-      // @ts-ignore
-      dataSet={{
-        "data-chromatic": "ignore",
-      }}
     >
       <Pressable
         style={{ marginTop: 100 }}
@@ -31,7 +27,13 @@ export const Basic: React.FC<{}> = () => {
           setOpen(!open);
         }}
       >
-        <Text>Date {date.toString()}</Text>
+        <Text
+          dataSet={{
+            "data-chromatic": "ignore",
+          }}
+        >
+          Date {date.toString()}
+        </Text>
       </Pressable>
 
       <DateTimePicker
@@ -39,6 +41,10 @@ export const Basic: React.FC<{}> = () => {
         onChange={(d) => {
           setOpen(false);
           setDate(d);
+        }}
+        // @ts-ignore
+        dataSet={{
+          "data-chromatic": "ignore",
         }}
         value={date}
         open={open}
