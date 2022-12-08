@@ -7,10 +7,13 @@ import {
 } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
@@ -39,11 +42,20 @@ export function Comments({ nft }: { nft: NFT }) {
 
   useEffect(() => {
     // auto focus on comment modal open on native
+    if (Platform.OS === "ios") {
+      AvoidSoftInput.setEnabled(false);
+    }
+
     if (Platform.OS !== "web") {
       setTimeout(() => {
         commentInputRef.current?.focus?.();
       }, 100);
     }
+    return () => {
+      if (Platform.OS === "ios") {
+        AvoidSoftInput.setEnabled(true);
+      }
+    };
   }, []);
 
   //#region hooks
@@ -60,6 +72,7 @@ export function Comments({ nft }: { nft: NFT }) {
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps();
   const { bottom } = useSafeAreaInsets();
+  const isDark = useIsDarkMode();
   //#endregion
   //#region variables
   const dataReversed = useMemo(
@@ -164,7 +177,14 @@ export function Comments({ nft }: { nft: NFT }) {
             {...modalListProps}
           />
           {isAuthenticated && (
-            <PlatformInputAccessoryView>
+            <PlatformInputAccessoryView
+              {...Platform.select({
+                ios: {
+                  backgroundColor: isDark ? colors.black : colors.white,
+                },
+                default: {},
+              })}
+            >
               <CommentInputBox
                 ref={inputRef}
                 commentInputRef={commentInputRef}
