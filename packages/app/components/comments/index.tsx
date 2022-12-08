@@ -1,11 +1,19 @@
-import { useCallback, useMemo, useRef, useEffect } from "react";
-import { Platform, StyleSheet, TextInput } from "react-native";
+import { useCallback, useMemo, useRef, useEffect, Fragment } from "react";
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  InputAccessoryView,
+} from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
@@ -16,10 +24,12 @@ import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
-import { CommentsContainer } from "./comments-container";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+
+const PlatformInputAccessoryView =
+  Platform.OS === "ios" ? InputAccessoryView : Fragment;
 
 export function Comments({ nft }: { nft: NFT }) {
   //#region refs
@@ -32,11 +42,20 @@ export function Comments({ nft }: { nft: NFT }) {
 
   useEffect(() => {
     // auto focus on comment modal open on native
+    if (Platform.OS === "ios") {
+      AvoidSoftInput.setEnabled(false);
+    }
+
     if (Platform.OS !== "web") {
       setTimeout(() => {
         commentInputRef.current?.focus?.();
       }, 100);
     }
+    return () => {
+      if (Platform.OS === "ios") {
+        AvoidSoftInput.setEnabled(true);
+      }
+    };
   }, []);
 
   //#region hooks
@@ -53,6 +72,7 @@ export function Comments({ nft }: { nft: NFT }) {
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps();
   const { bottom } = useSafeAreaInsets();
+  const isDark = useIsDarkMode();
   //#endregion
   //#region variables
   const dataReversed = useMemo(
@@ -137,7 +157,7 @@ export function Comments({ nft }: { nft: NFT }) {
     [bottom]
   );
   return (
-    <CommentsContainer style={styles.container}>
+    <View style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -149,22 +169,33 @@ export function Comments({ nft }: { nft: NFT }) {
             keyExtractor={keyExtractor}
             estimatedItemSize={98}
             overscan={98}
-            keyboardDismissMode="on-drag"
+            keyboardDismissMode="interactive"
             ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={listFooterComponent}
+            automaticallyAdjustKeyboardInsets
+            contentInsetAdjustmentBehavior="never"
             {...modalListProps}
           />
           {isAuthenticated && (
-            <CommentInputBox
-              ref={inputRef}
-              commentInputRef={commentInputRef}
-              submitting={isSubmitting}
-              submit={newComment}
-            />
+            <PlatformInputAccessoryView
+              {...Platform.select({
+                ios: {
+                  backgroundColor: isDark ? colors.black : colors.white,
+                },
+                default: {},
+              })}
+            >
+              <CommentInputBox
+                ref={inputRef}
+                commentInputRef={commentInputRef}
+                submitting={isSubmitting}
+                submit={newComment}
+              />
+            </PlatformInputAccessoryView>
           )}
         </>
       )}
-    </CommentsContainer>
+    </View>
   );
   //#endregion
 }
@@ -172,6 +203,8 @@ export function Comments({ nft }: { nft: NFT }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // Notes: for `FlashList's rendered size is not usable` warning on Android.
+    minHeight: 200,
   },
   contentContainer: {
     flex: 1,
