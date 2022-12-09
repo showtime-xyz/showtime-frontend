@@ -7138,16 +7138,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-segmented-control/segmented-control@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@react-native-segmented-control/segmented-control@npm:2.4.0"
-  peerDependencies:
-    react: ">=16.0"
-    react-native: ">=0.62"
-  checksum: a7d6b243116bf1aa8e98dc0514f83a169c2e3881ec5b435bf8eab2fc2c125b7b15a53d81c1d46ab5889950cb6f5c1351708b5a3f7c5759421c0fdb73839fce3a
-  languageName: node
-  linkType: hard
-
 "@react-native/assets@npm:1.0.0":
   version: 1.0.0
   resolution: "@react-native/assets@npm:1.0.0"
@@ -8446,23 +8436,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.segmented-control@npm:^0.0.65":
-  version: 0.0.65
-  resolution: "@showtime-xyz/universal.segmented-control@npm:0.0.65"
-  dependencies:
-    "@react-native-segmented-control/segmented-control": 2.4.0
-    "@showtime-xyz/universal.hooks": 0.0.58
-    "@showtime-xyz/universal.tailwind": 0.0.51
-    "@storybook/react": 6.5.9
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: 1f664bde56add6e39bb7125b5d2af619bfdeeb46ba585f3ff043c188e9e6032747cb0a1c415d1e1ae273226ee33462c8050592df9a9694620c7149c4bd46d1f2
-  languageName: node
-  linkType: hard
-
 "@showtime-xyz/universal.select@npm:0.0.109, @showtime-xyz/universal.select@npm:^0.0.109":
   version: 0.0.109
   resolution: "@showtime-xyz/universal.select@npm:0.0.109"
@@ -8765,7 +8738,6 @@ __metadata:
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
     "@react-native-menu/menu": ^0.7.2
-    "@react-native-segmented-control/segmented-control": 2.4.0
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native": ^6.0.13
     "@react-navigation/native-stack": ^6.9.1
@@ -8811,7 +8783,6 @@ __metadata:
     "@showtime-xyz/universal.router": ^0.0.48
     "@showtime-xyz/universal.safe-area": ^0.0.41
     "@showtime-xyz/universal.scroll-view": ^0.0.63
-    "@showtime-xyz/universal.segmented-control": ^0.0.65
     "@showtime-xyz/universal.select": ^0.0.109
     "@showtime-xyz/universal.skeleton": ^0.0.55
     "@showtime-xyz/universal.snackbar": ^0.0.113
@@ -9050,7 +9021,6 @@ __metadata:
     "@react-native-community/datetimepicker": 6.5.2
     "@react-native-community/slider": 4.2.4
     "@react-native-menu/menu": ^0.7.2
-    "@react-native-segmented-control/segmented-control": 2.4.0
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native-stack": ^6.9.1
     "@react-three/fiber": ^8.2.1

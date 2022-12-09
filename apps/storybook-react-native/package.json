@@ -27,7 +27,6 @@
     "@react-native-community/datetimepicker": "6.5.2",
     "@react-native-community/slider": "4.2.4",
     "@react-native-menu/menu": "^0.7.2",
-    "@react-native-segmented-control/segmented-control": "2.4.0",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native-stack": "^6.9.1",
     "@react-three/fiber": "^8.2.1",

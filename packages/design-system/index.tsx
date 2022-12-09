@@ -9,7 +9,6 @@ export { Modal } from "@showtime-xyz/universal.modal";
 export { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 export { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 export { ScrollView } from "@showtime-xyz/universal.scroll-view";
-export { SegmentedControl } from "@showtime-xyz/universal.segmented-control";
 export { Select } from "@showtime-xyz/universal.select";
 export { Skeleton } from "@showtime-xyz/universal.skeleton";
 export { Spinner } from "@showtime-xyz/universal.spinner";
