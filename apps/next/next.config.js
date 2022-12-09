@@ -53,6 +53,7 @@ const nextConfig = {
       "expo-blur",
       "expo-build-properties",
       "expo-camera",
+      "expo-clipboard",
       "expo-community-flipper",
       "expo-constants",
       "expo-dev-client",
