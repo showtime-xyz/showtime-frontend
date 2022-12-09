@@ -27,7 +27,10 @@ const nextConfig = {
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
     scrollRestoration: true,
-    // swcPlugins: [["react-native-reanimated-swc-plugin"]],
+    swcPlugins: [
+      // ["react-native-reanimated-swc-plugin"],
+      ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
+    ],
     fontLoaders: [
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
