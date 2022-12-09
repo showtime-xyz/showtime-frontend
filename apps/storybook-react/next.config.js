@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const nextConfig = withExpo({
+const nextConfig = {
   reactStrictMode: true,
   swcMinify: false,
   experimental: {
@@ -40,6 +40,6 @@ const nextConfig = withExpo({
 
     return config;
   },
-});
+};
 
 module.exports = nextConfig;
