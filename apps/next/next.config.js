@@ -27,7 +27,7 @@ const nextConfig = {
     // concurrentFeatures: true,
     // nextScriptWorkers: true,
     scrollRestoration: true,
-    // swcPlugins: [[require.resolve("./plugins/swc_plugin_reanimated.wasm")]],
+    // swcPlugins: [["react-native-reanimated-swc-plugin"]],
     fontLoaders: [
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
