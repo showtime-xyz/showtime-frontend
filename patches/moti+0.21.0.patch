@@ -1,0 +1,20 @@
+diff --git a/node_modules/moti/build/interactions/pressable/pressable.js b/node_modules/moti/build/interactions/pressable/pressable.js
+index 7a2457e..e75a33e 100644
+--- a/node_modules/moti/build/interactions/pressable/pressable.js
++++ b/node_modules/moti/build/interactions/pressable/pressable.js
+@@ -1,6 +1,5 @@
+ import React, { useMemo, forwardRef } from 'react';
+ import { Platform, Pressable } from 'react-native';
+-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+ import { useSharedValue, runOnJS, useDerivedValue, } from 'react-native-reanimated';
+ import { View as MotiView } from '../../components/view';
+ import { MotiPressableContext, useMotiPressableContext, INTERACTION_CONTAINER_ID, } from './context';
+@@ -65,7 +64,7 @@ export const MotiPressable = forwardRef(function MotiPressable(props, ref) {
+                 onKeyDown: onKeyDown, onKeyUp: onKeyUp, onFocus: onFocus, onBlur: onBlur, href: href }, child)));
+     }
+     else {
+-        node = (React.createElement(TouchableWithoutFeedback, { onPressIn: updateInteraction('pressed', true, onPressIn), onPressOut: updateInteraction('pressed', false, onPressOut), onLongPress: onLongPress, hitSlop: hitSlop, disabled: disabled, onPress: onPress, 
++        node = (React.createElement(Pressable, { onPressIn: updateInteraction('pressed', true, onPressIn), onPressOut: updateInteraction('pressed', false, onPressOut), onLongPress: onLongPress, hitSlop: hitSlop, disabled: disabled, onPress: onPress, 
+             // @ts-expect-error incorrect ref types, lol
+             ref: ref, onLayout: onContainerLayout, containerStyle: containerStyle, 
+             // Accessibility props

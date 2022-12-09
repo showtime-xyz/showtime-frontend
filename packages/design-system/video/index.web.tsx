@@ -49,6 +49,7 @@ export function Video({
           source={posterSource as Source}
           width={width}
           height={height}
+          alt={"Video Poster"}
         />
       ) : (
         <ImageBackground
@@ -64,6 +65,7 @@ export function Video({
             source={posterSource as Source}
             width={width}
             height={height}
+            alt={"Video Background"}
           />
           <BlurView
             style={StyleSheet.absoluteFill}

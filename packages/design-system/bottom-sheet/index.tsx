@@ -90,7 +90,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
       <View
-        tw="flex-1 px-4 pt-6"
+        tw="flex-1 px-4"
         style={[{ marginBottom: safeAreaBottom }, bodyStyle]}
       >
         {children}

@@ -3,7 +3,10 @@ import { memo, useCallback } from "react";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import {
+  InfiniteScrollList,
+  InfiniteScrollListProps,
+} from "@showtime-xyz/universal.infinite-scroll-list";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -13,6 +16,7 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { UserItemType } from "app/hooks/api/use-follow-list";
 import { useFollow } from "app/hooks/use-follow";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
@@ -24,7 +28,7 @@ type FollowingListProp = {
   unFollow: (profileId: number) => void;
   hideSheet: () => void;
 };
-type UserListProps = {
+type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: UserItemType[];
   onClose: () => void;
   loading: boolean;
@@ -35,10 +39,11 @@ export const UserList = ({
   loading,
   onClose,
   emptyTitle = "No results found",
+  ...rest
 }: UserListProps) => {
   const { isFollowing, follow, unfollow } = useMyInfo();
   const modalListProps = useModalListProps();
-
+  const bottom = usePlatformBottomHeight();
   const keyExtractor = useCallback(
     (item: UserItemType) => `${item.profile_id}`,
     []
@@ -49,14 +54,13 @@ export const UserList = ({
       return (
         <FollowingListUser
           item={item}
-          isFollowingUser={isFollowing(item.profile_id)}
           follow={follow}
           unFollow={unfollow}
           hideSheet={onClose}
         />
       );
     },
-    [isFollowing, unfollow, follow, onClose]
+    [unfollow, follow, onClose]
   );
   const listEmptyComponent = useCallback(
     () => (
@@ -71,6 +75,7 @@ export const UserList = ({
   if (loading) {
     return <FollowingUserItemLoadingIndicator />;
   }
+
   return (
     <InfiniteScrollList
       data={users}
@@ -80,7 +85,9 @@ export const UserList = ({
       overscan={64}
       ItemSeparatorComponent={Separator}
       ListEmptyComponent={listEmptyComponent}
+      contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}
+      {...rest}
     />
   );
 };
@@ -96,11 +103,7 @@ const Separator = () => (
 const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
 
 const FollowingListUser = memo(
-  ({
-    item,
-    isFollowingUser,
-    hideSheet,
-  }: { item: UserItemType; isFollowingUser: boolean } & FollowingListProp) => {
+  ({ item, hideSheet }: { item: UserItemType } & FollowingListProp) => {
     const { data } = useMyInfo();
 
     const { onToggleFollow } = useFollow({

@@ -24,7 +24,6 @@ export { default as Corner } from "./Corner";
 export { default as Discord } from "./Discord";
 export { default as Edit } from "./Edit";
 export { default as Ethereum } from "./Ethereum";
-export { default as EyeOff } from "./EyeOff";
 export { default as File } from "./File";
 export { default as Flag } from "./Flag";
 export { default as Filter } from "./Filter";
@@ -108,6 +107,16 @@ export { default as UserCircle } from "./UserCircle";
 export { default as Hourglass } from "./Hourglass";
 export { default as QrCode } from "./QrCode";
 export { default as DarkMode } from "./DarkMode";
+export { default as Eye } from "./Eye";
+export { default as EyeOff } from "./EyeOff";
+export { default as ScanOutline } from "./ScanOutline";
+export { default as Location } from "./Location";
+export { default as Lock } from "./Lock";
+export { default as Download } from "./Download";
+export { default as BellPlus } from "./BellPlus";
+export { default as BellRinging } from "./BellRinging";
+export { default as BellMinus } from "./BellMinus";
+export { default as BellOff } from "./BellOff";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

@@ -8,11 +8,11 @@ import {
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -27,18 +27,21 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCode } from "app/components/qr-code";
-import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
+import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
+import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
@@ -50,7 +53,7 @@ import {
   isMobileWeb,
 } from "app/utilities";
 
-import { useFilePicker } from "design-system/file-picker";
+import { Hidden } from "design-system/hidden";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -101,11 +104,11 @@ const dropValidationSchema = yup.object({
 });
 
 // const { useParam } = createParam<{ transactionId: string }>()
-const ScrollComponent =
-  Platform.OS === "android" ? (BottomSheetScrollView as any) : ScrollView;
+const DROP_FORM_DATA_KEY = "drop_form_local_data";
 export const DropForm = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
+
   const {
     control,
     handleSubmit,
@@ -120,7 +123,7 @@ export const DropForm = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues,
+    defaultValues: defaultValues,
   });
 
   const gatingType = watch("gatingType");
@@ -138,8 +141,20 @@ export const DropForm = () => {
   const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
+  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
+    watch,
+    setValue,
+    /**
+     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
+     */
+    exclude: Platform.select({
+      web: ["file"],
+      default: [],
+    }),
+  });
+
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values);
+    dropNFT(values, clearStorage);
   };
 
   // useEffect(() => {
@@ -233,7 +248,7 @@ export const DropForm = () => {
             tw="bg-[#00ACEE]"
             variant="text"
           >
-            <Text tw="text-white">Share on Twitter</Text>
+            <Text tw="text-xs font-bold text-white">Share on Twitter</Text>
           </Button>
 
           <View tw="h-4" />
@@ -299,13 +314,25 @@ export const DropForm = () => {
     );
   }
 
-  const handleFileChange = (file: string | File) => {
+  const handleFileChange = (fileObj: FilePickerResolveValue) => {
+    const { file, size } = fileObj;
     let extension;
     // On Native file is a string uri
     if (typeof file === "string") {
       extension = file.split(".").pop();
     }
+    if (size && size > MAX_FILE_SIZE) {
+      Alert.alert(
+        "Oops, this file is too large (>50MB). Please upload a smaller file."
+      );
+      setError("file", {
+        type: "custom",
+        message: "Please retry!",
+      });
+      setValue("file", undefined);
 
+      return;
+    }
     if (
       extension === "mov" ||
       (typeof file === "object" && file.type === "video/quicktime")
@@ -321,7 +348,7 @@ export const DropForm = () => {
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <ScrollComponent ref={scrollViewRef} style={{ padding: 16 }}>
+      <BottomSheetScrollView ref={scrollViewRef} style={{ padding: 16 }}>
         <View>
           <View tw="flex-row">
             <Controller
@@ -336,9 +363,10 @@ export const DropForm = () => {
                           const file = await pickFile({
                             mediaTypes: "all",
                           });
-                          handleFileChange(file.file);
+
+                          handleFileChange(file);
                         }}
-                        tw="h-[120px] w-[120px] items-center justify-center rounded-lg md:h-64 md:w-64"
+                        tw="h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64"
                       >
                         {value ? (
                           <View>
@@ -396,7 +424,6 @@ export const DropForm = () => {
             />
 
             <View tw="ml-4 flex-1">
-              {/* <Text>Import media</Text> */}
               <Controller
                 control={control}
                 name="title"
@@ -414,44 +441,45 @@ export const DropForm = () => {
                   );
                 }}
               />
-              <View tw="mt-4 hidden flex-1 flex-row md:flex">
-                <Controller
-                  control={control}
-                  name="description"
-                  render={({ field: { onChange, onBlur, value } }) => {
-                    return (
-                      <Fieldset
-                        tw="flex-1"
-                        label="Description"
-                        multiline
-                        textAlignVertical="top"
-                        placeholder="What is this drop about?"
-                        onBlur={onBlur}
-                        helperText="You cannot edit this after the drop is created"
-                        errorText={errors.description?.message}
-                        value={value}
-                        numberOfLines={3}
-                        onChangeText={onChange}
-                      />
-                    );
-                  }}
-                />
-              </View>
+              <Hidden until="md">
+                <View tw="mt-4 flex-1 flex-row">
+                  <Controller
+                    control={control}
+                    name="description"
+                    render={({ field: { onChange, onBlur, value } }) => {
+                      return (
+                        <Fieldset
+                          tw="flex-1"
+                          label="Description"
+                          multiline
+                          textAlignVertical="top"
+                          placeholder="What is this drop about?"
+                          onBlur={onBlur}
+                          helperText="You cannot edit this after the drop is created"
+                          errorText={errors.description?.message}
+                          value={value}
+                          numberOfLines={3}
+                          onChangeText={onChange}
+                        />
+                      );
+                    }}
+                  />
+                </View>
+              </Hidden>
             </View>
           </View>
 
           <Text tw="mt-4 text-gray-600 dark:text-gray-200 md:hidden">
             JPG, PNG, GIF, WebM or MP4 file
           </Text>
-
-          <View tw="mt-4 md:hidden">
+          <Hidden from="md">
             <Controller
               control={control}
               name="description"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="flex-1"
+                    tw="mt-4 flex-1"
                     label="Description"
                     multiline
                     textAlignVertical="top"
@@ -466,7 +494,7 @@ export const DropForm = () => {
                 );
               }}
             />
-          </View>
+          </Hidden>
           <View
             tw={[
               `z-10 mt-4 flex-row`,
@@ -582,167 +610,159 @@ export const DropForm = () => {
                   </View>
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
-                  <View tw="justify-between lg:flex-row">
-                    <View tw="flex-1 flex-row lg:mr-4">
-                      <Controller
-                        control={control}
-                        name="royalty"
-                        render={({ field: { onChange, onBlur, value } }) => {
-                          return (
-                            <Fieldset
-                              tw="flex-1"
-                              label="Your royalties (%)"
-                              onBlur={onBlur}
-                              helperText="How much you'll earn each time an edition of this drop is sold"
-                              errorText={errors.royalty?.message}
-                              value={value?.toString()}
-                              onChangeText={onChange}
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                    <View tw="mt-4 flex-1 flex-row md:mt-0">
-                      <Controller
-                        control={control}
-                        name="editionSize"
-                        render={({ field: { onChange, onBlur, value } }) => {
-                          return (
-                            <Fieldset
-                              tw="flex-1"
-                              label="Editions"
-                              onBlur={onBlur}
-                              helperText="How many editions will be available to collect"
-                              errorText={errors.editionSize?.message}
-                              value={value?.toString()}
-                              onChangeText={onChange}
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  </View>
-                  <View tw="z-10 mt-4 flex-row">
-                    <Controller
-                      control={control}
-                      name="duration"
-                      render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                          <Fieldset
-                            tw="flex-1"
-                            label="Duration"
-                            onBlur={onBlur}
-                            helperText="How long the drop will be available to claim"
-                            errorText={errors.duration?.message}
-                            selectOnly
-                            select={{
-                              options: durationOptions,
-                              placeholder: "Duration",
-                              value: value,
-                              onChange,
-                              tw: "flex-1",
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  </View>
-                  {gatingType !== "spotify_save" ? (
-                    <View tw="mt-4 flex-1 flex-row">
-                      <Controller
-                        control={control}
-                        name="password"
-                        render={({ field: { onChange, onBlur, value } }) => {
-                          return (
-                            <Fieldset
-                              tw="flex-1"
-                              label="Password (optional)"
-                              onBlur={onBlur}
-                              helperText="The password required to collect the drop"
-                              errorText={errors.password?.message}
-                              value={value?.toString()}
-                              onChangeText={onChange}
-                              placeholder="Enter a password"
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  ) : null}
-                  {gatingType !== "spotify_save" ? (
-                    <View tw="mt-4 flex-1 flex-row">
-                      <Controller
-                        control={control}
-                        name="googleMapsUrl"
-                        render={({ field: { onChange, onBlur, value } }) => {
-                          return (
-                            <Fieldset
-                              tw="flex-1"
-                              label="Location (optional)"
-                              onBlur={onBlur}
-                              helperText="The location where people can collect the drop from"
-                              errorText={errors.googleMapsUrl?.message}
-                              value={value?.toString()}
-                              onChangeText={onChange}
-                              placeholder="Enter the Google Maps link of the location"
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  ) : null}
-                  {gatingType !== "spotify_save" && watch("googleMapsUrl") ? (
-                    <View tw="mt-4 flex-1 flex-row">
-                      <Controller
-                        control={control}
-                        name="radius"
-                        render={({ field: { onChange, onBlur, value } }) => {
-                          return (
-                            <Fieldset
-                              tw="flex-1"
-                              label="Radius (optional)"
-                              onBlur={onBlur}
-                              helperText="The location radius (in kilometers)"
-                              errorText={errors.radius?.message}
-                              value={value?.toString()}
-                              onChangeText={onChange}
-                              placeholder="1"
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  ) : null}
-                  <View tw="mt-4 flex-row justify-between">
-                    <Controller
-                      control={control}
-                      name="notSafeForWork"
-                      render={({ field: { onChange, value } }) => (
-                        <Fieldset
-                          tw="flex-1"
-                          label="Explicit content (18+)"
-                          switchOnly
-                          switchProps={{
-                            checked: value,
-                            onChange,
+                  <>
+                    <View tw="justify-between lg:flex-row">
+                      <View tw="flex-1 flex-row lg:mr-4">
+                        <Controller
+                          control={control}
+                          name="royalty"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Your royalties (%)"
+                                onBlur={onBlur}
+                                helperText="How much you'll earn each time an edition of this drop is sold"
+                                errorText={errors.royalty?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                              />
+                            );
                           }}
                         />
-                      )}
-                    />
-                  </View>
+                      </View>
+                      <View tw="mt-4 flex-1 flex-row md:mt-0">
+                        <Controller
+                          control={control}
+                          name="editionSize"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Editions"
+                                onBlur={onBlur}
+                                helperText="How many editions will be available to collect"
+                                errorText={errors.editionSize?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                    </View>
+                    <View tw="z-10 mt-4 flex-row">
+                      <Controller
+                        control={control}
+                        name="duration"
+                        render={({ field: { onChange, onBlur, value } }) => {
+                          return (
+                            <Fieldset
+                              tw="flex-1"
+                              label="Duration"
+                              onBlur={onBlur}
+                              helperText="How long the drop will be available to claim"
+                              errorText={errors.duration?.message}
+                              selectOnly
+                              select={{
+                                options: durationOptions,
+                                placeholder: "Duration",
+                                value: value,
+                                onChange,
+                                tw: "flex-1",
+                              }}
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                    {gatingType !== "spotify_save" ? (
+                      <View tw="mt-4 flex-1 flex-row">
+                        <Controller
+                          control={control}
+                          name="password"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Password (optional)"
+                                onBlur={onBlur}
+                                helperText="The password required to collect the drop"
+                                errorText={errors.password?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                                placeholder="Enter a password"
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                    ) : null}
+                    {gatingType !== "spotify_save" ? (
+                      <View tw="mt-4 flex-1 flex-row">
+                        <Controller
+                          control={control}
+                          name="googleMapsUrl"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Location (optional)"
+                                onBlur={onBlur}
+                                helperText="The location where people can collect the drop from"
+                                errorText={errors.googleMapsUrl?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                                placeholder="Enter the Google Maps link of the location"
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                    ) : null}
+                    {gatingType !== "spotify_save" && watch("googleMapsUrl") ? (
+                      <View tw="mt-4 flex-1 flex-row">
+                        <Controller
+                          control={control}
+                          name="radius"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Radius (optional)"
+                                onBlur={onBlur}
+                                helperText="The location radius (in kilometers)"
+                                errorText={errors.radius?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                                placeholder="1"
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                    ) : null}
+                    <View tw="mt-4 flex-row justify-between">
+                      <Controller
+                        control={control}
+                        name="notSafeForWork"
+                        render={({ field: { onChange, value } }) => (
+                          <Fieldset
+                            tw="flex-1"
+                            label="Explicit content (18+)"
+                            switchOnly
+                            switchProps={{
+                              checked: value,
+                              onChange,
+                            }}
+                          />
+                        )}
+                      />
+                    </View>
+                  </>
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion.Root>
-            {/* <AnimateHeight hide={!accordionValue}>
-              <View tw="h-0 md:h-2" />
-            </AnimateHeight> */}
-            {/* <Text
-              onPress={() => setAccordionValue("open")}
-              tw="text-gray-600 dark:text-gray-400"
-            >
-              By default, you will drop 100 editions with 10% royalties for a
-              week.
-            </Text> */}
           </View>
 
           <View tw="mb-4 flex-row">
@@ -825,7 +845,7 @@ export const DropForm = () => {
 
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
-      </ScrollComponent>
+      </BottomSheetScrollView>
     </BottomSheetModalProvider>
   );
 };

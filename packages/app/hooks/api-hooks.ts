@@ -141,6 +141,7 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
     data: userProfile,
     isLoading,
     isError: Boolean(error),
+    error,
     mutate: () => mutate(queryKey, userProfile),
   };
 };
@@ -151,6 +152,7 @@ export interface UserProfile {
   followers_count: number;
   featured_nft: NFT;
   follows_you: boolean;
+  following_creator_drops: boolean;
 }
 
 type UserProfileNFTs = {

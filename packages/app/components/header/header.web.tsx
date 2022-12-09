@@ -149,7 +149,7 @@ export const SearchInHeader = () => {
     </Popover.Root>
   );
 };
-
+const NOTIFICATION_LIST_HEIGHT = "calc(50vh - 64px)";
 export const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -192,7 +192,7 @@ export const NotificationsInHeader = () => {
           tw="dark:shadow-dark shadow-light mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
-              height: "calc(50vh - 64px)",
+              height: NOTIFICATION_LIST_HEIGHT,
             },
             default: {},
           })}
@@ -205,7 +205,7 @@ export const NotificationsInHeader = () => {
                 </View>
               }
             >
-              <Notifications useWindowScroll={false} hideHeader />
+              <Notifications web_height={NOTIFICATION_LIST_HEIGHT} hideHeader />
             </Suspense>
           </ErrorBoundary>
         </View>

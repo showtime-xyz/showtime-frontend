@@ -182,20 +182,23 @@ export const useClaimNFT = (edition: IEdition) => {
     };
   }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
+  type ClaimNFTParams = {
+    password?: string;
+    location?: LocationObject;
+    closeModal?: () => void;
+  };
   const claimNFT = async ({
     password,
     location,
-  }: {
-    password?: string;
-    location?: LocationObject;
-  }): Promise<boolean | undefined> => {
+    closeModal,
+  }: ClaimNFTParams): Promise<boolean | undefined> => {
     try {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
-
         if (edition?.is_gated) {
-          await gatedClaimFlow({ password, location });
+          await gatedClaimFlow({ password, location, closeModal });
         } else {
+          closeModal?.();
           await oldSignatureClaimFlow();
         }
         return true;
@@ -248,8 +251,6 @@ export const useClaimNFT = (edition: IEdition) => {
               },
             ]
           );
-        } else if (e?.response?.status === 440) {
-          Alert.alert("Wrong password or wrong location", "Please try again!");
         } else {
           Alert.alert(
             "Wow, you love collecting drops!",
@@ -260,9 +261,11 @@ export const useClaimNFT = (edition: IEdition) => {
             )}!`
           );
         }
+      } else if (e?.response?.status === 440) {
+        Alert.alert("Wrong password or wrong location", "Please try again!");
       } else if (e?.response?.status === 500) {
         Alert.alert(
-          "Oops. An error occured.",
+          "Oops. An error occurred.",
           "We are currently experiencing a lot of usage. Please try again in one hour!"
         );
       }
@@ -270,14 +273,11 @@ export const useClaimNFT = (edition: IEdition) => {
       captureException(e);
     }
   };
-
   const gatedClaimFlow = async ({
     password,
     location,
-  }: {
-    password?: string;
-    location?: LocationObject;
-  }) => {
+    closeModal,
+  }: ClaimNFTParams) => {
     if (edition?.minter_address) {
       const relayerResponse = await axios({
         url:
@@ -285,13 +285,15 @@ export const useClaimNFT = (edition: IEdition) => {
         method: "POST",
         data: {
           password: password !== "" ? password : undefined,
-          location: {
-            latitude: location?.coords?.latitude,
-            longitude: location?.coords?.longitude,
-          },
+          location: location?.coords
+            ? {
+                latitude: location?.coords?.latitude,
+                longitude: location?.coords?.longitude,
+              }
+            : undefined,
         },
       });
-
+      closeModal?.();
       await pollTransaction(
         relayerResponse.relayed_transaction_id,
         edition.contract_address

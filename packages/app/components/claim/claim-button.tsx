@@ -100,7 +100,7 @@ export const ClaimButton = ({
       );
     } else if (isProgress) {
       return (
-        <Text tw="font-semibold">
+        <Text tw="text-xs font-bold">
           Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>

@@ -1,11 +1,11 @@
 import { useMemo, useEffect, useRef } from "react";
 import { Platform, ScrollView } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spotify, Apple, GoogleOriginal } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -70,19 +70,23 @@ const ConnectSpotify = ({ redirectUri }: ConnectSocialProps) => {
       <View tw="flex-row items-center">
         <Spotify height={32} width={32} color={isDark ? "#fff" : "#000"} />
         <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
-          Spotify Connected
+          Spotify
         </Text>
       </View>
-      <Switch
-        checked={user.user?.data.profile.has_spotify_token}
-        onChange={() => {
+      <Button
+        // variant={
+        //   user.user?.data.profile.has_spotify_token ? "danger" : "primary"
+        // }
+        onPress={() => {
           if (user.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
           } else {
             connectSpotify(redirectUri);
           }
         }}
-      />
+      >
+        {user.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
+      </Button>
     </View>
   );
 };
@@ -166,12 +170,12 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
             <View tw="flex-row items-center">
               <Icon height={32} width={32} color={isDark ? "#fff" : "#000"} />
               <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
-                {type.name} Connected
+                {type.name}
               </Text>
             </View>
-            <Switch
-              checked={!!connected[type.type].address}
-              onChange={async () => {
+            <Button
+              // variant={connected[type.type].address ? "danger" : "primary"}
+              onPress={async () => {
                 if (connected[type.type].address) {
                   removeAccount(connected[type.type].address);
                 } else {
@@ -181,6 +185,7 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
                     };
                     if (type.type === "google") {
                       performMagicAuthWithGoogle(_redirectUri);
+                      //@ts-ignore TODO: fix this when twitter is added
                     } else if (type.type === "twitter") {
                       performMagicAuthWithTwitter(_redirectUri);
                     } else if (type.type === "apple") {
@@ -190,6 +195,7 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
                     let res: any;
                     if (type.type === "google") {
                       res = await performMagicAuthWithGoogle();
+                      //@ts-ignore TODO: fix this when twitter is added
                     } else if (type.type === "twitter") {
                       res = await performMagicAuthWithTwitter();
                     } else if (type.type === "apple") {
@@ -199,7 +205,9 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
                   }
                 }
               }}
-            />
+            >
+              {connected[type.type].address ? "Disconnect" : "Connect"}
+            </Button>
           </View>
         );
       })}

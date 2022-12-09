@@ -3,21 +3,18 @@ import { Platform } from "react-native";
 import { Meta } from "@storybook/react";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AlertProvider, useAlert, useCustomAlert } from "./index";
+import { AlertProvider, useCustomAlert, Alert } from "./index";
 
 export default {
   component: AlertProvider,
   title: "Components/Alert",
 } as Meta;
 
-export const Basic: React.VFC<{}> = () => {
-  const Alert = useAlert();
+export const Basic: React.FC<{}> = () => {
   const customAlert = useCustomAlert();
 
-  const toast = useToast();
   return (
     <View tw="flex-1 items-center justify-center">
       <Button tw="mb-4" onPress={() => Alert.alert("Alert label")}>
@@ -32,11 +29,11 @@ export const Basic: React.VFC<{}> = () => {
       <Button
         tw="mb-4"
         onPress={() =>
-          Alert.alert("Alert", "Do you know?", [
+          Alert.alert("Alert", "Some copy goes here...", [
             {
-              text: "I know",
+              text: "OK",
               onPress: () => {
-                toast?.show({ message: "I know", hideAfter: 1000 });
+                console.log("OK");
               },
             },
           ])
@@ -51,14 +48,14 @@ export const Basic: React.VFC<{}> = () => {
             {
               text: "Cancel",
               onPress: () => {
-                toast?.show({ message: "Cancel", hideAfter: 1000 });
+                console.log("Cancel");
               },
               style: "cancel",
             },
             {
               text: "Confirm",
               onPress: () => {
-                toast?.show({ message: "Confirm", hideAfter: 1000 });
+                console.log("Confirm");
               },
             },
           ])
@@ -74,20 +71,20 @@ export const Basic: React.VFC<{}> = () => {
             {
               text: "Share",
               onPress: (text) => {
-                toast?.show({ message: text, hideAfter: 1000 });
+                console.log(text);
               },
               style: "cancel",
             },
             {
               text: "Details",
               onPress: (text) => {
-                toast?.show({ message: text, hideAfter: 1000 });
+                console.log(text);
               },
             },
             {
               text: "Delete",
               onPress: (text) => {
-                toast?.show({ message: text, hideAfter: 1000 });
+                console.log(text);
               },
               style: "destructive",
             },
@@ -106,14 +103,14 @@ export const Basic: React.VFC<{}> = () => {
               {
                 text: "Cancel",
                 onPress: () => {
-                  toast?.show({ message: "Cancel", hideAfter: 1000 });
+                  console.log("Cancel");
                 },
                 style: "cancel",
               },
               {
                 text: "Confirm",
                 onPress: () => {
-                  toast?.show({ message: "Confirm", hideAfter: 1000 });
+                  console.log("Confirm");
                 },
               },
             ])

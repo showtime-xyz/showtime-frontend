@@ -4,13 +4,11 @@ import { ViewStyle } from "react-native";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MessageBox } from "app/components/messages/message-box";
 import { CommentType } from "app/hooks/api/use-comments";
-import { useKeyboardVisible } from "app/hooks/use-keyboard-visible";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/utilities";
 
@@ -34,12 +32,9 @@ export const CommentInputBox = forwardRef<
 >(function CommentInputBox({ submitting, submit, commentInputRef }, ref) {
   //#region variables
   const Alert = useAlert();
-  const { visible } = useKeyboardVisible();
-
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
     null
   );
-  const { bottom } = useSafeAreaInsets();
   const { user } = useUser();
   //#endregion
 
@@ -97,7 +92,7 @@ export const CommentInputBox = forwardRef<
           <Button
             variant="text"
             size="small"
-            tw="mr--4"
+            tw="mr-4"
             onPress={handleOnClearPress}
           >
             <Close color={"black"} width={16} height={16} />
@@ -107,11 +102,6 @@ export const CommentInputBox = forwardRef<
       <MessageBox
         ref={commentInputRef}
         submitting={submitting}
-        style={{
-          paddingHorizontal: 16,
-          marginBottom: Math.max(0, bottom - (visible ? 8 : 0)),
-          paddingBottom: 0,
-        }}
         onSubmit={handleOnSubmitComment}
         userAvatar={user?.data.profile.img_url}
       />

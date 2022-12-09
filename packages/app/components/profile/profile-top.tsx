@@ -19,12 +19,14 @@ import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationsFollowButton } from "app/components/notifications-follow-button";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { UserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
@@ -91,12 +93,17 @@ export const ProfileTop = ({
   const isSelf = userId === profileId;
   const { unblock } = useBlock();
   const { onToggleFollow } = useFollow({
-    username: profileData?.profile.username,
+    username,
   });
 
+  const { top } = useSafeAreaInsets();
+
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
+  // for iPhone 14+
+  const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
-  const coverHeight = coverWidth < 768 ? coverWidth / 3 : 180;
+  const coverHeight =
+    (coverWidth < 768 ? coverWidth / 3 : 180) + additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;
@@ -280,15 +287,16 @@ export const ProfileTop = ({
                   </Hidden>
                   {profileId && !isSelf ? (
                     <>
-                      <ProfileDropdown
-                        user={profileData?.profile}
-                        // Todo: Zeego issue on iOS.
-                        tw="ios:mt-2"
+                      <ProfileDropdown user={profileData?.profile} />
+                      <View tw="w-2" />
+                      <NotificationsFollowButton
+                        username={username}
+                        profileId={profileId}
                       />
                       <View tw="w-2" />
                       <FollowButton
                         size={width < 768 ? "small" : "regular"}
-                        name={profileData?.profile.name}
+                        name={username}
                         profileId={profileId}
                         onToggleFollow={onToggleFollow}
                       />
