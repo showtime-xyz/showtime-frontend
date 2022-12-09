@@ -181,14 +181,6 @@ const nextConfig = {
       })
     );
 
-    if (options.isServer) {
-      config.plugins.push(
-        new options.webpack.ProvidePlugin({
-          requestAnimationFrame: path.resolve(__dirname, "./raf.js"),
-        })
-      );
-    }
-
     return config;
   },
   typescript: {

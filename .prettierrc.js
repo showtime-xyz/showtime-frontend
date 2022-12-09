@@ -2,7 +2,6 @@ module.exports = {
   bracketSpacing: true,
   importOrder: [
     "./shim",
-    "core-js/stable",
     "raf/polyfill",
     "setimmediate",
     "^(react|react-native)$",

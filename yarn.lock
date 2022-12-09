@@ -8997,7 +8997,6 @@ __metadata:
     autoprefixer: ^10.4.8
     axios: ^0.24.0
     blurhash: ^1.1.4
-    core-js: ^3.26.1
     critters: ^0.0.16
     date-fns: ^2.26.0
     design-system: "*"
@@ -16519,13 +16518,6 @@ __metadata:
   version: 3.22.5
   resolution: "core-js@npm:3.22.5"
   checksum: d3d7495d7cdde01cf9ac3debc5087afc3c8dd56baa4953d9ccbb46b1a80872c79d14c1e6343c664c9c0fade288ab44c70b54dd34f879a71e6eff6fffeab84e00
-  languageName: node
-  linkType: hard
-
-"core-js@npm:^3.26.1":
-  version: 3.26.1
-  resolution: "core-js@npm:3.26.1"
-  checksum: 0a01149f51ff1e9f41d1ea49cc4c9222047949ea597189ede7c4cf8cde3b097766b9c7615acc77c86fe65b4002f20b638a133dfba7b41dba830d707aeeed45ad
   languageName: node
   linkType: hard
 
