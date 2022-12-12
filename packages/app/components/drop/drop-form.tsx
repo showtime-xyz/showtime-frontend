@@ -215,90 +215,94 @@ export const DropForm = () => {
     });
 
     return (
-      <View
-        tw="items-center justify-center px-4 pt-8"
-        style={modalScreenViewStyle}
-      >
-        <Text tw="text-8xl">🎉</Text>
-        <View>
-          <View tw="h-8" />
-          <Text tw="text-center text-4xl text-black dark:text-white">
-            Congrats!
-          </Text>
-          <View tw="mt-8 mb-10">
-            <Text tw="text-center text-2xl text-black dark:text-white">
-              Now share your drop with the world!
+      <BottomSheetScrollView>
+        <View
+          tw="items-center justify-center px-4 pt-8"
+          style={modalScreenViewStyle}
+        >
+          <Text tw="text-8xl">🎉</Text>
+          <View>
+            <View tw="h-8" />
+            <Text tw="text-center text-4xl text-black dark:text-white">
+              Congrats!
             </Text>
-          </View>
+            <View tw="mt-8 mb-10">
+              <Text tw="text-center text-2xl text-black dark:text-white">
+                Now share your drop with the world!
+              </Text>
+            </View>
 
-          <Button
-            onPress={() => {
-              rudder?.track("Drop Shared", { type: "Twitter" });
-              Linking.openURL(
-                getTwitterIntent({
-                  url: claimUrl,
-                  message: `I just created a drop "${
-                    state.edition?.name
-                  }" by ${getTwitterIntentUsername(
-                    user?.user?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
-                })
-              );
-            }}
-            tw="bg-[#00ACEE]"
-            variant="text"
-          >
-            <Text tw="text-xs font-bold text-white">Share on Twitter</Text>
-          </Button>
-
-          <View tw="h-4" />
-
-          <Button
-            onPress={async () => {
-              const result = await share({
-                url: claimUrl,
-              });
-
-              if (result.action === "sharedAction") {
-                rudder?.track(
-                  "Drop Shared",
-                  result.activityType
-                    ? { type: result.activityType }
-                    : undefined
+            <Button
+              onPress={() => {
+                rudder?.track("Drop Shared", { type: "Twitter" });
+                Linking.openURL(
+                  getTwitterIntent({
+                    url: claimUrl,
+                    message: `I just created a drop "${
+                      state.edition?.name
+                    }" by ${getTwitterIntentUsername(
+                      user?.user?.data?.profile
+                    )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
+                  })
                 );
-              }
-            }}
-          >
-            {isShareAPIAvailable
-              ? "Share the drop with your friends"
-              : "Copy drop link 🔗"}
-          </Button>
-          <Button
-            variant="tertiary"
-            tw="mt-4"
-            onPress={Platform.select({
-              web: () => router.push(claimUrl),
-              default: () => {
-                if (router.pathname === "/") {
-                  router.push(claimPath);
-                  resetForm();
-                  reset();
-                } else {
-                  router.pop();
+              }}
+              tw="bg-[#00ACEE]"
+              variant="text"
+            >
+              <Text tw="text-xs font-bold " style={{ color: "#fff" }}>
+                Share on Twitter
+              </Text>
+            </Button>
+
+            <View tw="h-4" />
+
+            <Button
+              onPress={async () => {
+                const result = await share({
+                  url: claimUrl,
+                });
+
+                if (result.action === "sharedAction") {
+                  rudder?.track(
+                    "Drop Shared",
+                    result.activityType
+                      ? { type: result.activityType }
+                      : undefined
+                  );
                 }
-              },
-            })}
-          >
-            Skip for now
-          </Button>
+              }}
+            >
+              {isShareAPIAvailable
+                ? "Share the drop with your friends"
+                : "Copy drop link 🔗"}
+            </Button>
+            <Button
+              variant="tertiary"
+              tw="mt-4"
+              onPress={Platform.select({
+                web: () => router.push(claimUrl),
+                default: () => {
+                  if (router.pathname === "/") {
+                    router.push(claimPath);
+                    resetForm();
+                    reset();
+                  } else {
+                    router.pop();
+                  }
+                },
+              })}
+            >
+              Skip for now
+            </Button>
+          </View>
+          <View tw="mt-4">
+            <QRCode
+              size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
+              text={qrCodeUrl.toString()}
+            />
+          </View>
         </View>
-        <View tw="mt-4">
-          <QRCode
-            size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-            text={qrCodeUrl.toString()}
-          />
-        </View>
-      </View>
+      </BottomSheetScrollView>
     );
   }
 

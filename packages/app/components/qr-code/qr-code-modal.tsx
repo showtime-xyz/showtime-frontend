@@ -257,7 +257,7 @@ export const QRCodeModal = () => {
       >
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
-            <BottomSheetScrollView tw="web:pb-12">
+            <BottomSheetScrollView useNativeModal={false} tw="web:pb-12">
               <RNView collapsable={false} ref={viewRef as any}>
                 <View tw="w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
                   <Image

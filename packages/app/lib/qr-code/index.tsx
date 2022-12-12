@@ -57,8 +57,8 @@ export const ReactQRCode = ({
           <Rect
             fill={getFill(i % 2 !== 0)}
             height={cellSize * (7 - i * 2)}
-            rx={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
-            ry={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
+            rx={(i - 3) * -(size * 0.02) + (i === 0 ? size * 0.01 : 0)} // calculated border radius for corner squares
+            ry={(i - 3) * -(size * 0.02) + (i === 0 ? size * 0.01 : 0)} // calculated border radius for corner squares
             width={cellSize * (7 - i * 2)}
             x={x1 + cellSize * i}
             y={y1 + cellSize * i}
