@@ -225,12 +225,6 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/scroll-view"
     },
-    "segmented-control": {
-        "scope": "showtime.universal",
-        "version": "0.0.65",
-        "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/segmented-control"
-    },
     "select": {
         "scope": "showtime.universal",
         "version": "0.0.109",
