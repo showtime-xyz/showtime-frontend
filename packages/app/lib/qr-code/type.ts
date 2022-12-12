@@ -7,8 +7,6 @@ export interface QRCodeProps {
   value?: string;
   /* the whole component size */
   size: number;
-  /* the color of the cell */
-  color?: string;
   /* the color of the background */
   backgroundColor?: string;
   /* an image source object. example {uri: 'base64string'} or {require('pathToImage')} */
@@ -20,16 +18,6 @@ export interface QRCodeProps {
   logoBackgroundColor?: string;
   /* logo's distance to its wrapper */
   logoMargin?: number;
-  /* the border-radius of logo image */
-  logoBorderRadius?: number;
-  /* quiet zone in pixels */
-  quietZone?: number;
-  /* enable linear gradient effect */
-  enableLinearGradient?: boolean;
-  /* linear gradient direction */
-  gradientDirection?: string[];
-  /* linear gradient color */
-  linearGradient?: string[];
   /* get svg ref for further usage */
   getRef?: (c: any) => any;
   /* error correction level */

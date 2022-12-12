@@ -1,168 +1,159 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 
 import Svg, {
   Defs,
+  Rect,
+  ClipPath,
+  Circle,
   G,
   Path,
-  Rect,
   Image,
-  ClipPath,
-  LinearGradient,
-  Stop,
 } from "react-native-svg";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+
 import { QRCodeProps } from "./type";
-import { genMatrix, transformMatrixIntoPath } from "./utils";
-
-const renderLogo = ({
-  size,
-  logo,
-  logoSize = 0,
-  logoBackgroundColor,
-  logoMargin = 0,
-  logoBorderRadius = 0,
-}: Pick<
-  QRCodeProps,
-  | "size"
-  | "logo"
-  | "logoSize"
-  | "logoBackgroundColor"
-  | "logoBorderRadius"
-  | "logoMargin"
->) => {
-  const logoPosition = (size - logoSize - logoMargin * 2) / 2;
-  const logoBackgroundSize = logoSize + logoMargin * 2;
-  const logoBackgroundBorderRadius =
-    logoBorderRadius + (logoMargin / logoSize) * logoBorderRadius;
-
-  return (
-    <G x={logoPosition} y={logoPosition}>
-      <Defs>
-        <ClipPath id="clip-logo-background">
-          <Rect
-            width={logoBackgroundSize}
-            height={logoBackgroundSize}
-            rx={logoBackgroundBorderRadius}
-            ry={logoBackgroundBorderRadius}
-          />
-        </ClipPath>
-        <ClipPath id="clip-logo">
-          <Rect
-            width={logoSize}
-            height={logoSize}
-            rx={logoBorderRadius}
-            ry={logoBorderRadius}
-          />
-        </ClipPath>
-      </Defs>
-      <G>
-        <Rect
-          width={logoBackgroundSize}
-          height={logoBackgroundSize}
-          fill={logoBackgroundColor}
-          clipPath="url(#clip-logo-background)"
-        />
-      </G>
-      <G x={logoMargin} y={logoMargin}>
-        <Image
-          width={logoSize}
-          height={logoSize}
-          preserveAspectRatio="xMidYMid slice"
-          href={logo}
-          clipPath="url(#clip-logo)"
-        />
-      </G>
-    </G>
-  );
-};
+import { genMatrix } from "./utils";
 
 export const ReactQRCode = ({
   value = "this is a QR code",
   size = 100,
-  color = "black",
-  backgroundColor = "white",
+  backgroundColor,
   logo,
-  logoSize = size * 0.2,
+  logoSize = size * 0.3,
   logoBackgroundColor = "transparent",
   logoMargin = 2,
-  logoBorderRadius = 0,
-  quietZone = 0,
-  enableLinearGradient = false,
-  gradientDirection = ["0%", "0%", "100%", "100%"],
-  linearGradient = ["rgb(255,0,0)", "rgb(0,255,255)"],
   ecl = "L",
-  getRef,
-  onError,
 }: QRCodeProps) => {
-  const result = useMemo(() => {
-    try {
-      return transformMatrixIntoPath(genMatrix(value, ecl), size);
-    } catch (error) {
-      if (onError && typeof onError === "function") {
-        onError(error);
-      } else {
-        // Pass the error when no handler presented
-        throw error;
+  const isDark = useIsDarkMode();
+
+  const fillColors = useMemo(
+    () => (isDark ? ["black", "white"] : ["white", "black"]),
+    [isDark]
+  );
+  const fillColor = isDark ? fillColors[1] : fillColors[1];
+
+  const getFill = useCallback(
+    (isOdd: boolean) => {
+      return fillColors[isOdd ? 0 : 1];
+    },
+    [fillColors]
+  );
+  const dots = useMemo(() => {
+    const result: JSX.Element[] = [];
+    const matrix = genMatrix(value, ecl);
+    const cellSize = size / matrix.length;
+    let qrPositonList = [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+    ];
+
+    qrPositonList.forEach(({ x, y }) => {
+      const x1 = (matrix.length - 7) * cellSize * x;
+      const y1 = (matrix.length - 7) * cellSize * y;
+      for (let i = 0; i < 3; i++) {
+        result.push(
+          <Rect
+            fill={getFill(i % 2 !== 0)}
+            height={cellSize * (7 - i * 2)}
+            rx={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
+            ry={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
+            width={cellSize * (7 - i * 2)}
+            x={x1 + cellSize * i}
+            y={y1 + cellSize * i}
+          />
+        );
       }
-    }
-  }, [value, ecl, size, onError]);
+    });
 
-  if (!result) {
-    return null;
-  }
+    const clearArenaSize = Math.floor(logoSize / cellSize);
 
-  const { path, cellSize } = result;
+    const matrixMiddleStart = matrix.length / 2 - clearArenaSize / 2;
+    const matrixMiddleEnd = matrix.length / 2 + clearArenaSize / 2;
+
+    matrix.forEach((row: any, i: number) => {
+      row.forEach((column: any, j: number) => {
+        if (matrix[i][j]) {
+          if (
+            !(
+              (i < 7 && j < 7) ||
+              (i > matrix.length - 8 && j < 7) ||
+              (i < 7 && j > matrix.length - 8)
+            )
+          ) {
+            if (
+              !(
+                i > matrixMiddleStart &&
+                i < matrixMiddleEnd &&
+                j > matrixMiddleStart &&
+                j < matrixMiddleEnd
+              )
+            ) {
+              result.push(
+                <Circle
+                  cx={i * cellSize + cellSize / 2}
+                  cy={j * cellSize + cellSize / 2}
+                  fill={fillColor}
+                  r={cellSize / 3} // calculate size of single result
+                />
+              );
+            }
+          }
+        }
+      });
+    });
+
+    return result;
+  }, [ecl, fillColor, getFill, logoSize, size, value]);
+
+  const logoPosition = size / 2 - logoSize / 2 - logoMargin;
+  const logoWrapperSize = logoSize + logoMargin * 2;
 
   return (
-    <Svg
-      ref={getRef}
-      viewBox={[
-        -quietZone,
-        -quietZone,
-        size + quietZone * 2,
-        size + quietZone * 2,
-      ].join(" ")}
-      width={size}
-      height={size}
-    >
+    <Svg height={size} width={size}>
       <Defs>
-        <LinearGradient
-          id="grad"
-          x1={gradientDirection[0]}
-          y1={gradientDirection[1]}
-          x2={gradientDirection[2]}
-          y2={gradientDirection[3]}
-        >
-          <Stop offset="0" stopColor={linearGradient[0]} stopOpacity="1" />
-          <Stop offset="1" stopColor={linearGradient[1]} stopOpacity="1" />
-        </LinearGradient>
+        <ClipPath id="clip-wrapper">
+          <Rect height={logoWrapperSize} width={logoWrapperSize} />
+        </ClipPath>
+        <ClipPath id="clip-logo">
+          <Rect height={logoSize} width={logoSize} />
+        </ClipPath>
       </Defs>
-      <G>
+      {backgroundColor && (
+        <Rect fill={backgroundColor} height={size} width={size} />
+      )}
+      {dots as any}
+      <G x={logoPosition + 6} y={logoPosition + 6}>
         <Rect
-          x={-quietZone}
-          y={-quietZone}
-          width={size + quietZone * 2}
-          height={size + quietZone * 2}
-          fill={backgroundColor}
+          clipPath="url(#clip-wrapper)"
+          fill={logoBackgroundColor}
+          height={logoWrapperSize}
+          width={logoWrapperSize}
         />
+        <G x={logoMargin} y={logoMargin}>
+          {logo ? (
+            <Image
+              clipPath="url(#clip-logo)"
+              height={logoSize - 10}
+              href={logo}
+              preserveAspectRatio="xMidYMid slice"
+              width={logoSize - 10}
+            />
+          ) : (
+            <Svg
+              width={logoSize - 10}
+              height={logoSize - 10}
+              viewBox="0 0 80 80"
+            >
+              <Path
+                d="M75.71 41.838c1.617-.692 1.617-2.984 0-3.676l-10.842-4.647a35 35 0 0 1-18.383-18.383L41.838 4.289c-.692-1.616-2.984-1.616-3.676 0l-4.647 10.843a35 35 0 0 1-18.383 18.383L4.289 38.162c-1.616.692-1.616 2.984 0 3.676l10.843 4.647a35 35 0 0 1 18.383 18.383l4.647 10.843c.692 1.616 2.984 1.616 3.676 0l4.647-10.843a35 35 0 0 1 18.383-18.383l10.843-4.647Z"
+                fill={fillColor}
+              />
+            </Svg>
+          )}
+        </G>
       </G>
-      <G>
-        <Path
-          d={path}
-          strokeLinecap="butt"
-          stroke={enableLinearGradient ? "url(#grad)" : color}
-          strokeWidth={cellSize}
-        />
-      </G>
-      {logo &&
-        renderLogo({
-          size,
-          logo,
-          logoSize,
-          logoBackgroundColor,
-          logoMargin,
-          logoBorderRadius,
-        })}
     </Svg>
   );
 };
