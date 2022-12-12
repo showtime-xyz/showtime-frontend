@@ -257,9 +257,9 @@ export const QRCodeModal = () => {
       >
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
-            <BottomSheetScrollView useNativeModal={false} tw="web:pb-12">
+            <BottomSheetScrollView useNativeModal={false}>
               <RNView collapsable={false} ref={viewRef as any}>
-                <View tw="w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
+                <View tw="web:pb-16 w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
                   <Image
                     source={{
                       uri: mediaUri,
@@ -274,8 +274,8 @@ export const QRCodeModal = () => {
                     resizeMode="cover"
                     alt={nft?.token_name}
                   />
-                  <View tw="web:max-w-[440px] w-full flex-row justify-between px-5 py-4">
-                    <View tw="flex-1 py-4">
+                  <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
+                    <View tw="flex-1 justify-center">
                       <View tw="flex-row pb-4">
                         <Avatar
                           alt={"QRCode Share Avatar"}
@@ -311,7 +311,7 @@ export const QRCodeModal = () => {
                         {nft.token_name}
                       </Text>
                     </View>
-                    <View tw="ml-2 h-28 rounded-lg border border-gray-300 p-2 dark:border-gray-500">
+                    <View tw="ml-2 h-[114px] justify-center rounded-lg border border-gray-300 px-2 dark:border-gray-500">
                       <ReactQRCode size={96} value={qrCodeUrl.toString()} />
                     </View>
                   </View>
