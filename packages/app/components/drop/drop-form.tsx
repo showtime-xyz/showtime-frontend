@@ -500,13 +500,13 @@ export const DropForm = () => {
           </Hidden>
           <View
             tw={[
-              `z-10 my-4 flex-row`,
+              `z-10 mt-4 flex-row`,
               // gatingType !== "spotify_save" ? "h-12" : "",
             ]}
           >
             <View tw="flex-1">
-              <View>
-                <Text tw="text-base font-bold text-gray-900 dark:text-gray-100">
+              <View tw="rounded-lg bg-gray-100 p-4">
+                <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
                   Make it a Music Drop?
                 </Text>
               </View>
@@ -516,7 +516,7 @@ export const DropForm = () => {
                   display: gatingType === "spotify_save" ? undefined : "none",
                 }}
               >
-                <View tw="flex-1">
+                <View tw="h-20 flex-1 flex-row items-center justify-between rounded-2xl bg-gray-100 p-4 dark:bg-gray-900">
                   {!isSaveDrop ? (
                     <Controller
                       key="releaseDate"
@@ -524,12 +524,8 @@ export const DropForm = () => {
                       name="releaseDate"
                       render={({ field: { onChange, value } }) => {
                         return (
-                          <View>
-                            <View
-                              tw={[
-                                "rounded-2xl bg-gray-100 p-4 dark:bg-gray-900",
-                              ]}
-                            >
+                          <View tw={"flex-1"}>
+                            {Platform.OS !== "web" ? (
                               <Pressable
                                 onPress={() => {
                                   setShowDatePicker(!showDatePicker);
@@ -539,21 +535,26 @@ export const DropForm = () => {
                                   Enter a Release Date
                                 </Text>
                               </Pressable>
-                              <View tw="t-0 l-0 flex-row">
-                                <DateTimePicker
-                                  onChange={(v) => {
-                                    onChange(v);
-                                    setShowDatePicker(false);
-                                  }}
-                                  value={
-                                    typeof value === "string"
-                                      ? new Date(value)
-                                      : value ?? new Date()
-                                  }
-                                  type="datetime"
-                                  open={showDatePicker}
-                                />
-                              </View>
+                            ) : (
+                              <Text tw="font-bold text-gray-900 dark:text-white">
+                                Enter a Release Date
+                              </Text>
+                            )}
+
+                            <View tw="t-0 l-0 flex-row pt-2">
+                              <DateTimePicker
+                                onChange={(v) => {
+                                  onChange(v);
+                                  setShowDatePicker(false);
+                                }}
+                                value={
+                                  typeof value === "string"
+                                    ? new Date(value)
+                                    : value ?? new Date()
+                                }
+                                type="datetime"
+                                open={showDatePicker}
+                              />
                             </View>
                           </View>
                         );
@@ -567,7 +568,7 @@ export const DropForm = () => {
                       render={({ field: { onChange, onBlur, value } }) => {
                         return (
                           <Fieldset
-                            tw="flex-1"
+                            tw="flex-1 px-0 py-0"
                             label="Enter Spotify URL"
                             onBlur={onBlur}
                             ref={spotifyTextInputRef}
@@ -586,16 +587,18 @@ export const DropForm = () => {
                       }}
                     />
                   )}
-                </View>
-                <View tw="ml-4 flex-1 flex-row items-center">
-                  <Checkbox
-                    checked={isSaveDrop}
-                    onChange={(v) => {
-                      setIsSaveDrop(v);
-                    }}
-                    accesibilityLabel="Is Live?"
-                  />
-                  <Text tw="ml-1 text-black dark:text-white">Is Live?</Text>
+                  <View tw="ml-4 flex-row items-center">
+                    <Checkbox
+                      checked={isSaveDrop}
+                      onChange={(v) => {
+                        setIsSaveDrop(v);
+                      }}
+                      accesibilityLabel="Is Live?"
+                    />
+                    <Text tw="ml-2 font-bold text-black dark:text-white">
+                      Is Live?
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
