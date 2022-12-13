@@ -524,7 +524,7 @@ export const DropForm = () => {
                       name="releaseDate"
                       render={({ field: { onChange, value } }) => {
                         return (
-                          <View tw={"flex-1"}>
+                          <View tw={"flex-1 pt-1"}>
                             {Platform.OS !== "web" ? (
                               <Pressable
                                 onPress={() => {
@@ -595,7 +595,12 @@ export const DropForm = () => {
                       }}
                       accesibilityLabel="Is Live?"
                     />
-                    <Text tw="ml-2 font-bold text-black dark:text-white">
+                    <Text
+                      tw="ml-2 font-bold text-black dark:text-white"
+                      onPress={() => {
+                        setIsSaveDrop(!isSaveDrop);
+                      }}
+                    >
                       Is Live?
                     </Text>
                   </View>
