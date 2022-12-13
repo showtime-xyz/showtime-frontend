@@ -10,20 +10,25 @@ const keyboardDismissProp = Platform.select({
   android: { onScrollEndDrag: Keyboard.dismiss } as const,
 });
 
-export const BottomSheetScrollView = forwardRef<ScrollView, ScrollViewProps>(
-  function BottomSheetScrollView(props, ref) {
-    const ScrollComponent =
-      Platform.OS === "android"
-        ? (BottomSheetScrollViewComponent as any)
-        : ScrollView;
+type BottomSheetScrollViewProps = ScrollViewProps & {
+  useNativeModal?: boolean;
+};
+export const BottomSheetScrollView = forwardRef<
+  ScrollView,
+  BottomSheetScrollViewProps
+>(function BottomSheetScrollView({ useNativeModal = true, ...props }, ref) {
+  const ScrollComponent = Platform.select({
+    android: BottomSheetScrollViewComponent,
+    ios: useNativeModal ? ScrollView : BottomSheetScrollViewComponent,
+    default: ScrollView,
+  }) as any;
 
-    return (
-      <ScrollComponent
-        keyboardShouldPersistTaps="handled"
-        {...keyboardDismissProp}
-        {...props}
-        ref={ref}
-      />
-    );
-  }
-);
+  return (
+    <ScrollComponent
+      keyboardShouldPersistTaps="handled"
+      {...keyboardDismissProp}
+      {...props}
+      ref={ref}
+    />
+  );
+});
