@@ -523,6 +523,11 @@ export const DropForm = () => {
                       control={control}
                       name="releaseDate"
                       render={({ field: { onChange, value } }) => {
+                        let dateValue =
+                          typeof value === "string"
+                            ? new Date(value)
+                            : value ?? new Date();
+
                         return (
                           <View tw={"flex-1 pt-1"}>
                             {Platform.OS !== "web" ? (
@@ -532,7 +537,10 @@ export const DropForm = () => {
                                 }}
                               >
                                 <Text tw="font-bold text-gray-900 dark:text-white">
-                                  Enter a Release Date
+                                  Pick a Release Date
+                                </Text>
+                                <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                                  {(dateValue as Date).toDateString()}
                                 </Text>
                               </Pressable>
                             ) : (
@@ -547,11 +555,7 @@ export const DropForm = () => {
                                   onChange(v);
                                   setShowDatePicker(false);
                                 }}
-                                value={
-                                  typeof value === "string"
-                                    ? new Date(value)
-                                    : value ?? new Date()
-                                }
+                                value={dateValue}
                                 type="datetime"
                                 open={showDatePicker}
                               />

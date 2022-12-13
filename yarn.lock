@@ -17203,13 +17203,13 @@ __metadata:
   linkType: hard
 
 "date-picker@https://github.com/showtime-xyz/date-picker-ios.git":
-  version: 0.1.0
-  resolution: "date-picker@https://github.com/showtime-xyz/date-picker-ios.git#commit=303908f72afe97b68683ccd15d0fd71b9cb30fd6"
+  version: 0.2.0
+  resolution: "date-picker@https://github.com/showtime-xyz/date-picker-ios.git#commit=ba4309ea675c1cfb7dfe1b936d21916a19543af0"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: bdd8becce0e9139449151db15ced061534ae6b071026138e759387228ae06010fb3a0cf6b75d693b721554e92367fc0210570941eb3f5e502f4fc175d05f5324
+  checksum: 1030e29f3edfa8b0fc8357f6427e652c661fdec64af8355912b188d85cb4bbfd924c4ac0aca2db7d5956d0deba78c419330c9459929e1e4bb198459e9e563489
   languageName: node
   linkType: hard
 
