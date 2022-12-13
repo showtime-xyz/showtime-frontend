@@ -4,6 +4,8 @@ import { Platform } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -225,7 +227,7 @@ const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
   const { colorScheme } = useColorScheme();
   const router = useRouter();
-
+  const isDark = useIsDarkMode();
   return (
     <>
       <View tw="h-16 justify-center">
@@ -264,18 +266,38 @@ const SuggestedUsers = () => {
         <Text tw="font-space-bold p-4 text-lg dark:text-white">
           Get the app
         </Text>
-        <View tw="flex flex-row items-center justify-between p-4">
+        <View tw="flex flex-row items-center justify-between py-4 px-1">
           <TextLink
             tw="font-space-bold text-base dark:text-white"
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+            target="_blank"
           >
-            🍎 App Store
+            <Image
+              source={{
+                uri: isDark
+                  ? "/assets/AppStoreDark.png"
+                  : "/assets/AppStoreLight.png",
+              }}
+              width={144}
+              height={42}
+              tw="duration-150 hover:scale-105"
+            />
           </TextLink>
           <TextLink
             tw="font-space-bold text-base dark:text-white"
             href="https://play.google.com/store/apps/details?id=io.showtime"
+            target="_blank"
           >
-            🤖 Google Play
+            <Image
+              source={{
+                uri: isDark
+                  ? "/assets/GooglePlayDark.png"
+                  : "/assets/GooglePlayLight.png",
+              }}
+              width={144}
+              height={42}
+              tw="duration-150 hover:scale-105"
+            />
           </TextLink>
         </View>
       </View>
