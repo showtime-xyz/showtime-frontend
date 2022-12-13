@@ -8,6 +8,9 @@ import { DateTimePicker } from "./date-time-picker";
 export default {
   component: DateTimePicker,
   title: "Components/DateTimePicker",
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 } as Meta;
 
 export const Basic: React.FC<{}> = () => {
@@ -27,13 +30,7 @@ export const Basic: React.FC<{}> = () => {
           setOpen(!open);
         }}
       >
-        <Text
-          dataSet={{
-            "data-chromatic": "ignore",
-          }}
-        >
-          Date {date.toString()}
-        </Text>
+        <Text>Date {date.toString()}</Text>
       </Pressable>
 
       <DateTimePicker
@@ -41,10 +38,6 @@ export const Basic: React.FC<{}> = () => {
         onChange={(d) => {
           setOpen(false);
           setDate(d);
-        }}
-        // @ts-ignore
-        dataSet={{
-          "data-chromatic": "ignore",
         }}
         value={date}
         open={open}
