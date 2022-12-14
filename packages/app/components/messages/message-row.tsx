@@ -153,12 +153,8 @@ export function MessageRow({
     });
   }, [createdAt]);
   const contentWithTags = useMemo(() => {
-    return onTagPress
-      ? linkifyDescription(content, {
-          onUserMentionPress: router.pop,
-        })
-      : content;
-  }, [content, onTagPress, router.pop]);
+    return onTagPress ? linkifyDescription(content) : content;
+  }, [content, onTagPress]);
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);

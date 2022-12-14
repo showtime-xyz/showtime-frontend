@@ -26,22 +26,19 @@ import { FollowButton } from "./follow-button";
 type FollowingListProp = {
   follow: (profileId: number) => void;
   unFollow: (profileId: number) => void;
-  hideSheet: () => void;
 };
 type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: UserItemType[];
-  onClose: () => void;
   loading: boolean;
   emptyTitle?: string;
 };
 export const UserList = ({
   users,
   loading,
-  onClose,
   emptyTitle = "No results found",
   ...rest
 }: UserListProps) => {
-  const { isFollowing, follow, unfollow } = useMyInfo();
+  const { follow, unfollow } = useMyInfo();
   const modalListProps = useModalListProps();
   const bottom = usePlatformBottomHeight();
   const keyExtractor = useCallback(
@@ -52,15 +49,10 @@ export const UserList = ({
   const renderItem = useCallback(
     ({ item }: { item: UserItemType }) => {
       return (
-        <FollowingListUser
-          item={item}
-          follow={follow}
-          unFollow={unfollow}
-          hideSheet={onClose}
-        />
+        <FollowingListUser item={item} follow={follow} unFollow={unfollow} />
       );
     },
-    [unfollow, follow, onClose]
+    [unfollow, follow]
   );
   const listEmptyComponent = useCallback(
     () => (
@@ -103,7 +95,7 @@ const Separator = () => (
 const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
 
 const FollowingListUser = memo(
-  ({ item, hideSheet }: { item: UserItemType } & FollowingListProp) => {
+  ({ item }: { item: UserItemType } & FollowingListProp) => {
     const { data } = useMyInfo();
 
     const { onToggleFollow } = useFollow({
@@ -116,7 +108,6 @@ const FollowingListUser = memo(
       >
         <Link
           href={`/@${item.username ?? item.wallet_address}`}
-          onPress={hideSheet}
           tw="flex-1"
           viewProps={{ style: { flex: 1 } }}
         >

@@ -147,7 +147,7 @@ export function Comments({ nft }: { nft: NFT }) {
         text="Be the first to add a comment!"
         title="💬 No comments yet..."
         titleTw="pt-1"
-        tw="-mt-5 h-full flex-1 items-center justify-center"
+        tw="mt-5 h-full flex-1 items-center justify-center"
       />
     ),
     []
