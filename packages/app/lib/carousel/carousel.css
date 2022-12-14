@@ -1,0 +1,16 @@
+.showtime-pagination {
+  top: 0;
+  height: 24px;
+}
+.showtime-pagination-dark > .swiper-pagination-bullet {
+  background-color: #71717a;
+}
+.showtime-pagination-light > .swiper-pagination-bullet {
+  background-color: #e4e4e7;
+}
+.showtime-pagination-dark > .swiper-pagination-bullet-active {
+  background-color: #fff;
+}
+.showtime-pagination-light > .swiper-pagination-bullet-active {
+  background-color: #a1a1aa;
+}
