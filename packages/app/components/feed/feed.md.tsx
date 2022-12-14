@@ -266,7 +266,7 @@ const SuggestedUsers = () => {
         <Text tw="font-space-bold p-4 text-lg dark:text-white">
           Get the app
         </Text>
-        <View tw="flex flex-row items-center justify-between py-4 px-1">
+        <View tw="flex flex-row items-center justify-between py-4 px-2">
           <TextLink
             tw="font-space-bold text-base dark:text-white"
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"

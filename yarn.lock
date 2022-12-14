@@ -8908,6 +8908,7 @@ __metadata:
     react-native-random-values-jsi-helper: ^1.0.4
     react-native-randombytes: ^3.6.1
     react-native-reanimated: 2.13.0
+    react-native-reanimated-carousel: ^3.1.5
     react-native-safe-area-context: 4.4.1
     react-native-screens: 3.18.0
     react-native-share: 8.0.0
@@ -9013,8 +9014,8 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
-    swiper: ^8.4.2
-    swr: 2.0.0-beta.6
+    swiper: ^8.4.5
+    swr: ^2.0.0
     tailwindcss: ^3.1.8
     wagmi: ^0.6.0
     web3modal: ^1.9.8
@@ -31135,6 +31136,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-reanimated-carousel@npm:^3.1.5":
+  version: 3.1.5
+  resolution: "react-native-reanimated-carousel@npm:3.1.5"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-native: ">=0.6.0"
+    react-native-gesture-handler: "*"
+    react-native-reanimated: ">=2.7.0"
+  checksum: 6fc45fd745254ddd476c77b0fe7a1c45adcd2ad47f1a6cc4034b88d8f2c528effbdceca4617fa37432044e80e20c92594e2d50035ff08147205bc843e17b18e9
+  languageName: node
+  linkType: hard
+
 "react-native-reanimated-swc-plugin@npm:^0.2.0":
   version: 0.2.0
   resolution: "react-native-reanimated-swc-plugin@npm:0.2.0"
@@ -34600,24 +34613,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^8.4.2":
-  version: 8.4.2
-  resolution: "swiper@npm:8.4.2"
+"swiper@npm:^8.4.5":
+  version: 8.4.5
+  resolution: "swiper@npm:8.4.5"
   dependencies:
     dom7: ^4.0.4
     ssr-window: ^4.0.2
-  checksum: 84f987c8d399ed054002052d00937036d74705bf8177a9f6e7ffb035fbc9aa5b88c833503970df44f86330e632694af9d948baddc7ac32233c8d58756924cccf
+  checksum: 7b790b897c4aeb616cae02517a1137dc3f8d552bcc3ecb2942ddf8e4ae75f2efeb28816d3d4e648248c3a24eb3611f2700f555372c15f7163cc2434da3ef8317
   languageName: node
   linkType: hard
 
-"swr@npm:2.0.0-beta.6":
-  version: 2.0.0-beta.6
-  resolution: "swr@npm:2.0.0-beta.6"
+"swr@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "swr@npm:2.0.0"
   dependencies:
-    use-sync-external-store: ^1.1.0
+    use-sync-external-store: ^1.2.0
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
-  checksum: a2fa5b4600e84351970636e50dfa5209e65caf279a076a64fab8cbd4fb39407d4bee4c93577579ae95ea61161fb3ae176197a23d56770d1b85d6718d31877e05
+  checksum: 4852d8318ed022a681b40a384e675f65e211104d62075c1250b02f47cc8b739cb9138a954e2191c700e2de22b010b9bd05a113c71b193abe0c351d3c4f4646d8
   languageName: node
   linkType: hard
 
