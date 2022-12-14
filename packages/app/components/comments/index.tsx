@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useEffect, Fragment } from "react";
+import { useCallback, useMemo, useRef, Fragment, useEffect } from "react";
 import {
   Platform,
   StyleSheet,
@@ -49,7 +49,7 @@ export function Comments({ nft }: { nft: NFT }) {
     if (Platform.OS !== "web") {
       setTimeout(() => {
         commentInputRef.current?.focus?.();
-      }, 100);
+      }, 800);
     }
     return () => {
       if (Platform.OS === "ios") {
