@@ -20,7 +20,7 @@ export const screenOptions = ({
     headerTitle: HeaderCenter,
     headerTitleAlign: "center" as "center",
     headerRight: headerRight ?? null,
-    headerTintColor: "#000",
+    headerTintColor: isDark ? "#fff" : "#000",
     headerTransparent: Platform.OS === "android" ? false : true,
     headerBlurEffect: isDark ? "dark" : "light",
     headerBackVisible: false,
