@@ -84,6 +84,32 @@ export function RootStackNavigator() {
             return params?.profileId ?? params.type;
           }}
         />
+        <Stack.Screen
+          name="followers"
+          component={FollowersScreen}
+          options={{ headerTitle: "Followers" }}
+        />
+        <Stack.Screen
+          name="following"
+          options={{ headerTitle: "Following" }}
+          component={FollowingScreen}
+        />
+        <Stack.Screen
+          name="collectors"
+          options={{ headerTitle: "Collectors" }}
+          component={CollectorsScreen}
+        />
+        <Stack.Screen
+          name="likers"
+          options={{ headerTitle: "Likers" }}
+          component={LikersScreen}
+        />
+        <Stack.Screen
+          name="comments"
+          options={{ headerTitle: "Comments" }}
+          component={CommentsScreen}
+        />
+
         <Stack.Screen name="nft" component={NftScreen} />
       </Stack.Group>
 
@@ -97,7 +123,6 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen
@@ -105,8 +130,6 @@ export function RootStackNavigator() {
           component={CompleteProfileScreen}
         />
 
-        <Stack.Screen name="followers" component={FollowersScreen} />
-        <Stack.Screen name="following" component={FollowingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
           name="verifyPhoneNumber"
@@ -114,8 +137,6 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
-        <Stack.Screen name="collectors" component={CollectorsScreen} />
-        <Stack.Screen name="likers" component={LikersScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{

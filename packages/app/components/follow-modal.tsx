@@ -1,8 +1,4 @@
-import { Platform } from "react-native";
-
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-
-import { useRouter } from "@showtime-xyz/universal.router";
 
 import { createParam } from "app/navigation/use-param";
 
@@ -16,36 +12,18 @@ const { useParam } = createParam<Query>();
 
 export const FollowingModal = () => {
   const [profileId] = useParam("profileId");
-  const router = useRouter();
   if (!profileId) return null;
 
-  return (
-    <BottomSheetModalProvider>
-      <FollowingList
-        profileId={+profileId}
-        hideSheet={Platform.select({
-          ios: () => router.pop(),
-          default: () => false,
-        })}
-      />
-    </BottomSheetModalProvider>
-  );
+  return <FollowingList profileId={+profileId} />;
 };
 
 export const FollowerModal = () => {
   const [profileId] = useParam("profileId");
-  const router = useRouter();
 
   if (!profileId) return null;
   return (
     <BottomSheetModalProvider>
-      <FollowersList
-        profileId={+profileId}
-        hideSheet={Platform.select({
-          ios: () => router.pop(),
-          default: () => false,
-        })}
-      />
+      <FollowersList profileId={+profileId} />
     </BottomSheetModalProvider>
   );
 };

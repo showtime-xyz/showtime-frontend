@@ -1,11 +1,18 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { Platform } from "react-native";
+
+import { View } from "@showtime-xyz/universal.view";
 
 import { FollowingModal } from "app/components/follow-modal";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-export const FollowingScreen = withModalScreen(FollowingModal, {
-  title: "Following",
-  matchingPathname: "/profile/following",
-  matchingQueryParam: "followingModal",
-  enableContentPanningGesture: false,
-  snapPoints: ["90%"],
-});
+export const FollowingScreen = () => {
+  const headerHeight = useHeaderHeight();
+
+  return (
+    <>
+      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
+
+      <FollowingModal />
+    </>
+  );
+};

@@ -1,9 +1,7 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -22,7 +20,6 @@ const { useParam } = createParam<Query>();
 
 export const LikersModal = () => {
   useTrackPageViewed({ name: "Likers" });
-  const router = useRouter();
   const [nftId] = useParam("nftId");
   const { data, loading } = useLikes(Number(nftId));
 
@@ -36,14 +33,7 @@ export const LikersModal = () => {
             </View>
           }
         >
-          <UserList
-            loading={loading}
-            users={data?.likers}
-            onClose={Platform.select({
-              ios: () => router.pop(),
-              default: () => false,
-            })}
-          />
+          <UserList loading={loading} users={data?.likers} />
         </Suspense>
       </ErrorBoundary>
     </BottomSheetModalProvider>
