@@ -15,6 +15,7 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
+import { getFormatDistanceStrictToWeek } from "app/utilities";
 
 import { NFTSDisplayName } from "./nfts-display-name";
 
@@ -104,6 +105,11 @@ const NotificationDescription = ({
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
         <NFTSDisplayName nfts={notification.nfts} />
+        {Boolean(notification.to_timestamp) && (
+          <Text tw="text-13">{` · ${getFormatDistanceStrictToWeek(
+            notification.to_timestamp
+          )}`}</Text>
+        )}
       </Text>
     </View>
   );

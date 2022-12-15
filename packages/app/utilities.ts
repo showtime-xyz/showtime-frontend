@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, formatDistanceStrict } from "date-fns";
 import * as FileSystem from "expo-file-system";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
@@ -627,4 +627,20 @@ export const findTokenChainName = (chainId?: string) => {
     (key: string) =>
       CHAIN_IDENTIFIERS[key as keyof typeof CHAIN_IDENTIFIERS] == chainId
   );
+};
+
+export const getFormatDistanceStrictToWeek = (time?: string) => {
+  if (!time) return "";
+  const distance = formatDistanceStrict(new Date(time), new Date(), {
+    unit: "day",
+  });
+  const distances = distance.split(" ");
+  const day = Number(distances[0]);
+  if (!day) {
+    return "";
+  }
+  if (day > 7) {
+    return `${Math.ceil(day / 7)}w`;
+  }
+  return `${day}d`;
 };
