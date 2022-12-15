@@ -105,7 +105,7 @@ const NotificationDescription = ({
         <Actors actors={notification.actors} setUsers={setUsers} />
         {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
         <NFTSDisplayName nfts={notification.nfts} />
-        {Boolean(notification.to_timestamp) && (
+        {Boolean(getFormatDistanceStrictToWeek(notification.to_timestamp)) && (
           <Text tw="text-13">{` · ${getFormatDistanceStrictToWeek(
             notification.to_timestamp
           )}`}</Text>

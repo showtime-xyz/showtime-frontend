@@ -631,16 +631,22 @@ export const findTokenChainName = (chainId?: string) => {
 
 export const getFormatDistanceStrictToWeek = (time?: string) => {
   if (!time) return "";
-  const distance = formatDistanceStrict(new Date(time), new Date(), {
+  const distanceDays = formatDistanceStrict(new Date(time), new Date(), {
     unit: "day",
   });
-  const distances = distance.split(" ");
-  const day = Number(distances[0]);
-  if (!day) {
-    return "";
+  const days = Number(distanceDays.split(" ")[0]);
+  if (days === 0) {
+    const distanceHours = formatDistanceStrict(new Date(time), new Date(), {
+      unit: "hour",
+    });
+    const hours = Number(distanceHours.split(" ")[0]);
+    return `${hours}h`;
   }
-  if (day > 7) {
-    return `${Math.ceil(day / 7)}w`;
+  if (days >= 7) {
+    return `${Math.ceil(days / 7)}w`;
   }
-  return `${day}d`;
+  if (days < 7) {
+    return `${days}d`;
+  }
+  return "";
 };
