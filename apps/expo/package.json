@@ -202,6 +202,7 @@
     "react-native-random-values-jsi-helper": "^1.0.4",
     "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "2.13.0",
+    "react-native-reanimated-carousel": "^3.1.5",
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "3.18.0",
     "react-native-share": "8.0.0",
