@@ -33,6 +33,7 @@ import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
+import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
@@ -177,6 +178,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <ClaimLimitExplanationScreen />
         <LikersScreen />
         <QRCodeShareScreen />
+        <ReportScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />

@@ -23,6 +23,7 @@ import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
+import { ReportScreen } from "app/screens/report";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
@@ -150,6 +151,7 @@ export function RootStackNavigator() {
           component={ClaimLimitExplanationScreen}
         />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
+        <Stack.Screen name="report" component={ReportScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

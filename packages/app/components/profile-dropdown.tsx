@@ -1,4 +1,4 @@
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -106,8 +106,18 @@ function ProfileDropdown({ user, tw = "" }: Props) {
 
         <DropdownMenuItem
           onSelect={async () => {
-            await report({ userId: user.profile_id });
-            router.pop();
+            // await report({ userId: user.profile_id });
+            router.push(
+              {
+                pathname: Platform.OS === "web" ? router.pathname : "/report",
+                query: {
+                  ...router.query,
+                  reportModal: true,
+                  userId: user.profile_id,
+                },
+              },
+              Platform.OS === "web" ? router.asPath : undefined
+            );
           }}
           key="report"
         >

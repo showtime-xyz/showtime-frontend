@@ -97,6 +97,10 @@ type RootStackNavigatorParams = {
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   likers: undefined;
+  report: {
+    nftId?: string;
+    userId?: string;
+  };
 };
 
 export type {
