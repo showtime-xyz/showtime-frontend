@@ -1,6 +1,11 @@
+import { useState } from "react";
+
+import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -29,7 +34,7 @@ export const ReportModal = () => {
   const isDark = useIsDarkMode();
   const [nftId] = useParam("nftId");
   const [userId] = useParam("userId");
-  console.log(userId, nftId);
+  const [description, setDescription] = useState("");
   const reportOption = nftId ? NFT_REPORT_LIST : PROFILE_REPORT_LIST;
   return (
     <View>
@@ -38,15 +43,14 @@ export const ReportModal = () => {
           Why are you reporting this?
         </Text>
       </View>
-      <View tw="h-px bg-gray-200 dark:bg-gray-800 md:bg-transparent" />
+      <View tw="h-px bg-gray-100 dark:bg-gray-800" />
       {reportOption.map((item, i) => (
-        <>
-          <PressableScale
+        <View key={i.toString()}>
+          <Pressable
             onPress={async () => {
               await report({ nftId, userId, description: item });
               router.pop();
             }}
-            key={i.toString()}
           >
             <View tw="flex-row items-center justify-between p-4">
               <Text tw="flex-1 text-sm font-medium text-gray-900 dark:text-white">
@@ -59,23 +63,47 @@ export const ReportModal = () => {
                 color={isDark ? colors.gray[200] : colors.gray[700]}
               />
             </View>
-          </PressableScale>
-          <View tw="h-px bg-gray-200 dark:bg-gray-800 md:bg-transparent" />
-        </>
-      ))}
-      <PressableScale>
-        <View tw="flex-row items-center justify-between p-4">
-          <Text tw="flex-1 text-sm font-medium text-gray-900 dark:text-white">
-            Something else
-          </Text>
-          <View tw="w-2" />
-          <ChevronRight
-            width={24}
-            height={24}
-            color={isDark ? colors.gray[200] : colors.gray[700]}
-          />
+          </Pressable>
+          <View tw="h-px bg-gray-100 dark:bg-gray-800" />
         </View>
-      </PressableScale>
+      ))}
+      <Accordion.Root>
+        <Accordion.Item value="open">
+          <Accordion.Trigger>
+            <View tw="w-full flex-row items-center justify-between pr-1">
+              <Text tw="flex-1 text-sm font-medium text-gray-900 dark:text-white">
+                Something else
+              </Text>
+              <Accordion.Chevron rotazeZ={["right", "bottom"]} />
+            </View>
+          </Accordion.Trigger>
+          <Accordion.Content tw="pt-0">
+            <Fieldset
+              tw="flex-1"
+              label="Description"
+              multiline
+              textAlignVertical="top"
+              placeholder="What are you trying to report?"
+              value={description}
+              numberOfLines={3}
+              onChangeText={(e) => {
+                setDescription(e);
+              }}
+            />
+            <Button
+              variant="primary"
+              size="regular"
+              tw="mt-4"
+              onPress={async () => {
+                await report({ nftId, userId, description });
+                router.pop();
+              }}
+            >
+              Submit
+            </Button>
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
     </View>
   );
 };

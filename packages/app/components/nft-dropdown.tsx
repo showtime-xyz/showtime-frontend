@@ -307,7 +307,6 @@ function NFTDropdown({
           {!hasOwnership && (
             <DropdownMenuItem
               onSelect={async () => {
-                // await report({ nftId: nft.nft_id });
                 router.push(
                   {
                     pathname:

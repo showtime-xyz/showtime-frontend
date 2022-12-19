@@ -106,7 +106,6 @@ function ProfileDropdown({ user, tw = "" }: Props) {
 
         <DropdownMenuItem
           onSelect={async () => {
-            // await report({ userId: user.profile_id });
             router.push(
               {
                 pathname: Platform.OS === "web" ? router.pathname : "/report",
