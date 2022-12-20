@@ -1,5 +1,5 @@
 import { MutableRefObject, ComponentType, forwardRef } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -31,6 +31,7 @@ export type FieldsetProps = {
   Component?: ComponentType;
   required?: boolean;
   componentRef?: MutableRefObject<ComponentType | undefined>;
+  containerStyle?: StyleProp<ViewStyle>;
 } & TextInputProps;
 
 function FieldsetImpl(props: FieldsetProps, ref: any) {
@@ -49,6 +50,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     required,
     componentRef,
     Component = TextInput,
+    containerStyle,
     ...textInputProps
   } = props;
   const isDark = useIsDarkMode();
@@ -63,6 +65,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         switchOnly ? "flex-1 flex-row items-center justify-between" : "",
         twProp,
       ]}
+      style={containerStyle}
     >
       <View tw="flex-row">
         <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">

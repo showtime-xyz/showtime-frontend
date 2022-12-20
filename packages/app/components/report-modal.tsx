@@ -25,6 +25,7 @@ const NFT_REPORT_LIST = [
   "It's spam",
   "Not safe for work",
   "Scam or fraud",
+  "It's not original content",
 ];
 const PROFILE_REPORT_LIST = ["They are pretending to be someone else"];
 
@@ -80,15 +81,14 @@ export const ReportModal = () => {
           <Accordion.Content tw="pt-0">
             <Fieldset
               tw="flex-1"
+              containerStyle={{ padding: 20 }}
               label="Description"
               multiline
               textAlignVertical="top"
               placeholder="What are you trying to report?"
               value={description}
               numberOfLines={3}
-              onChangeText={(e) => {
-                setDescription(e);
-              }}
+              onChangeText={setDescription}
             />
             <Button
               variant="primary"
