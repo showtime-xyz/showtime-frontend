@@ -57,9 +57,9 @@ export function useExpoUpdate() {
   );
 
   useEffect(() => {
-    const now = new Date();
-    const currentHours = now.getHours();
-    checkUpdate(currentHours > 3 && currentHours < 5);
+    // const now = new Date();
+    // const currentHours = now.getHours();
+    checkUpdate(true);
     // if (isForeground) {
     //   if (__DEV__) return;
     //   if (Platform.OS !== "ios") return;

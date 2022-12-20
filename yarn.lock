@@ -4300,16 +4300,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/code-signing-certificates@npm:0.0.2":
-  version: 0.0.2
-  resolution: "@expo/code-signing-certificates@npm:0.0.2"
-  dependencies:
-    node-forge: ^1.2.1
-    nullthrows: ^1.1.1
-  checksum: 4ccbdab505e32ce70c01ead08541d651f5585ada55f579f56abaa241445a9571e14198bdc60cc0f6b78814da69b10802a73384e99193385f742762d8541f1ad3
-  languageName: node
-  linkType: hard
-
 "@expo/code-signing-certificates@npm:0.0.5":
   version: 0.0.5
   resolution: "@expo/code-signing-certificates@npm:0.0.5"
@@ -8868,7 +8858,7 @@ __metadata:
     expo-splash-screen: ~0.17.5
     expo-status-bar: ~1.4.2
     expo-system-ui: ~2.0.1
-    expo-updates: ~0.15.4
+    expo-updates: ~0.15.6
     expo-web-browser: ~12.0.0
     https-browserify: ~1.0.0
     inherits: ^2.0.1
@@ -9062,7 +9052,7 @@ __metadata:
     expo-splash-screen: ~0.17.5
     expo-status-bar: ~1.4.2
     expo-system-ui: ~2.0.1
-    expo-updates: ~0.15.4
+    expo-updates: ~0.15.6
     expo-web-browser: ~12.0.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -20349,11 +20339,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.15.4":
-  version: 0.15.4
-  resolution: "expo-updates@npm:0.15.4"
+"expo-updates@npm:~0.15.6":
+  version: 0.15.6
+  resolution: "expo-updates@npm:0.15.6"
   dependencies:
-    "@expo/code-signing-certificates": 0.0.2
+    "@expo/code-signing-certificates": 0.0.5
     "@expo/config": ~7.0.2
     "@expo/config-plugins": ~5.0.3
     "@expo/metro-config": ~0.5.0
@@ -20369,7 +20359,7 @@ __metadata:
     expo: "*"
   bin:
     expo-updates: bin/cli.js
-  checksum: eee386232d7739883bd116ee3491c30d784b8591d3ef87d840ff61b8f360092911137dc45caf9f14db5b556fb79624784e184e327c121f0daec55f24d41911a1
+  checksum: 8f9dcdc0b1f096cd20d43242af6df96239a4617c33951ea1453a6b160fc11ce5153c667bcecf89151aae90332bbf8fc93e4d2dbae5a194bf124ecc4f04251541
   languageName: node
   linkType: hard
 
