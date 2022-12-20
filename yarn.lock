@@ -7795,9 +7795,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.accordion@npm:0.0.74, @showtime-xyz/universal.accordion@npm:^0.0.74":
-  version: 0.0.74
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.74"
+"@showtime-xyz/universal.accordion@npm:0.0.75, @showtime-xyz/universal.accordion@npm:^0.0.75":
+  version: 0.0.75
+  resolution: "@showtime-xyz/universal.accordion@npm:0.0.75"
   dependencies:
     "@radix-ui/react-accordion": 0.1.6
     "@showtime-xyz/universal.hooks": 0.0.58
@@ -7812,7 +7812,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 289404c3827f26be22ea673354d9bf65203e6413227e194b8a18668187e5b28d58d0b25087b48c80c683155d1e52f5905fff5f47c05779ce9466d66d544ecdca
+  checksum: 514b374f9c67d3f44998c0dd68b38448640645dfd092a7b52fe54972278866ec21b16313cb6acff5bc98498f925c2c80b9008f7281542a3978b40397e4ab28aa
   languageName: node
   linkType: hard
 
@@ -8086,11 +8086,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.121":
-  version: 0.0.121
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.121"
+"@showtime-xyz/universal.fieldset@npm:^0.0.123":
+  version: 0.0.123
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.123"
   dependencies:
-    "@showtime-xyz/universal.accordion": 0.0.74
+    "@showtime-xyz/universal.accordion": 0.0.75
     "@showtime-xyz/universal.hooks": 0.0.58
     "@showtime-xyz/universal.input": 0.0.71
     "@showtime-xyz/universal.label": 0.0.56
@@ -8106,7 +8106,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 71557a08de270cae167ca3051075e3dc037ce08d3859faf8ac0410f7e3784e6b7589b3088ec94a57f67fb956490126a66674e8d074c977140014e31351702594
+  checksum: e962790e8f1ddc51c5e3cc9a495d19a5a1410c88343422c91893976302f4b262ee3f9c8eb535f49972ddb4ce0c856ee02b06218841f6873cbe6b65b5389d79f3
   languageName: node
   linkType: hard
 
@@ -8756,7 +8756,7 @@ __metadata:
     "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": 4.2.2
     "@shopify/flash-list": ^1.4.0
-    "@showtime-xyz/universal.accordion": ^0.0.74
+    "@showtime-xyz/universal.accordion": ^0.0.75
     "@showtime-xyz/universal.activity-indicator": ^0.0.53
     "@showtime-xyz/universal.alert": ^0.0.97
     "@showtime-xyz/universal.avatar": ^0.0.65
@@ -8772,7 +8772,7 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.56
     "@showtime-xyz/universal.dropdown-menu": ^0.0.59
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.19
-    "@showtime-xyz/universal.fieldset": ^0.0.121
+    "@showtime-xyz/universal.fieldset": ^0.0.123
     "@showtime-xyz/universal.haptics": ^0.0.22
     "@showtime-xyz/universal.hooks": ^0.0.58
     "@showtime-xyz/universal.icon": ^0.0.77
@@ -8924,7 +8924,7 @@ __metadata:
     recyclerlistview: ^4.2.0
     semver: ^7.3.5
     sentry-expo: ^5.0.2
-    solito: ~1.0.12
+    solito: ^2.1.2
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     three: ^0.142.0
@@ -33560,10 +33560,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solito@npm:1.0.12, solito@npm:~1.0.12":
+"solito@npm:1.0.12":
   version: 1.0.12
   resolution: "solito@npm:1.0.12"
   checksum: 7fa9e4666cd12e21b7e647ac5abbd5e517045936e9ef996c89895d8561b938451940115ea3b38d060ba6fc1251f8593cfe2dcd8668fc59f6a77d7a7c3e11ac23
+  languageName: node
+  linkType: hard
+
+"solito@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "solito@npm:2.1.2"
+  checksum: 8ef8b030b41ba489de50b6500f2261e87c01ddfc79771ba27bfb6ba6eb9d2dab6977d70edb9835ef867575dac5604201a6ef7b2d2aff719abcf24d1d864641a7
   languageName: node
   linkType: hard
 

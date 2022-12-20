@@ -7,8 +7,8 @@ import { useToast } from "@showtime-xyz/universal.toast";
 import { axios } from "app/lib/axios";
 
 type Report = {
-  userId?: number;
-  nftId?: number;
+  userId?: number | string;
+  nftId?: number | string;
   activityId?: number;
   description?: string;
 };
