@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, Fragment, useEffect } from "react";
+import { useCallback, useMemo, useRef, Fragment } from "react";
 import {
   Platform,
   StyleSheet,
@@ -7,7 +7,6 @@ import {
 } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -19,7 +18,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
+import { useStableFocusEffect } from "app/hooks/use-stable-focus-effect";
 import { useUser } from "app/hooks/use-user";
+import { useIsFocused } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
@@ -39,25 +40,14 @@ export function Comments({ nft }: { nft: NFT }) {
   //#endregion
 
   //#region effects
-
-  useEffect(() => {
-    // auto focus on comment modal open on native
-    if (Platform.OS === "ios") {
-      AvoidSoftInput.setEnabled(false);
-    }
-
+  const isFocused = useIsFocused();
+  useStableFocusEffect(() => {
     if (Platform.OS !== "web") {
       setTimeout(() => {
-        commentInputRef.current?.focus?.();
-      }, 800);
+        isFocused && commentInputRef.current?.focus?.();
+      }, 600);
     }
-    return () => {
-      if (Platform.OS === "ios") {
-        AvoidSoftInput.setEnabled(true);
-      }
-    };
-  }, []);
-
+  });
   //#region hooks
   const { isAuthenticated } = useUser();
   const {
@@ -173,6 +163,7 @@ export function Comments({ nft }: { nft: NFT }) {
             ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets
+            automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
             {...modalListProps}
           />

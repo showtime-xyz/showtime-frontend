@@ -8863,7 +8863,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~47.0.8
+    expo: ~47.0.9
     expo-app-loading: ~2.1.1
     expo-application: ~5.0.1
     expo-av: ~13.0.1
@@ -8911,7 +8911,7 @@ __metadata:
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
     react-native: 0.70.5
-    react-native-avoid-softinput: ^3.0.2
+    react-native-avoid-softinput: ^3.0.4
     react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
@@ -20030,6 +20030,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-asset@npm:~8.7.0":
+  version: 8.7.0
+  resolution: "expo-asset@npm:8.7.0"
+  dependencies:
+    blueimp-md5: ^2.10.0
+    expo-constants: ~14.0.0
+    expo-file-system: ~15.1.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    path-browserify: ^1.0.0
+    url-parse: ^1.5.9
+  checksum: 49ca5e85ebdb6145f8032ee186643a7d17202db89965dc3f36eb56155c31220c7da49ab87b2d050a9e8c3d1a6af35046263c12a0159e857f768aa21ea847879c
+  languageName: node
+  linkType: hard
+
 "expo-av@npm:~13.0.1":
   version: 13.0.1
   resolution: "expo-av@npm:13.0.1"
@@ -20342,6 +20357,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-modules-core@npm:1.0.4":
+  version: 1.0.4
+  resolution: "expo-modules-core@npm:1.0.4"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: 9a5a8b6b1208ced6ce3e9b55ec7c53cdd7ea393907cdd3ece4d1d8e2a21f044147d627d43e199665237ed1e95b14f99d57b742e4af7a1467daff581406dc76ff
+  languageName: node
+  linkType: hard
+
 "expo-modules-core@npm:~1.0.2":
   version: 1.0.2
   resolution: "expo-modules-core@npm:1.0.2"
@@ -20589,6 +20614,42 @@ __metadata:
   bin:
     expo: bin/cli.js
   checksum: fdcec9d135586669338bc95613cdafc783a734b20fe27c2969718aa7089b9a0ff69a6eccfecbb635814f18529f81b07b9d250efbbcae8cac4c5a4c2201a0bf73
+  languageName: node
+  linkType: hard
+
+"expo@npm:~47.0.9":
+  version: 47.0.9
+  resolution: "expo@npm:47.0.9"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/cli": 0.4.10
+    "@expo/config": 7.0.3
+    "@expo/config-plugins": 5.0.4
+    "@expo/vector-icons": ^13.0.0
+    babel-preset-expo: ~9.2.2
+    cross-spawn: ^6.0.5
+    expo-application: ~5.0.1
+    expo-asset: ~8.7.0
+    expo-constants: ~14.0.2
+    expo-error-recovery: ~4.0.1
+    expo-file-system: ~15.1.1
+    expo-font: ~11.0.1
+    expo-keep-awake: ~11.0.1
+    expo-modules-autolinking: 1.0.0
+    expo-modules-core: 1.0.4
+    fbemitter: ^3.0.0
+    getenv: ^1.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    node-fetch: ^2.6.7
+    pretty-format: ^26.5.2
+    uuid: ^3.4.0
+  dependenciesMeta:
+    expo-error-recovery:
+      optional: true
+  bin:
+    expo: bin/cli.js
+  checksum: 315e86cfb9f64643c78d5bb2ac659575b0ffcd20d0a924417d080802f01fd7542d3d27cf18fcc9a94e865ba77dafc57a992e715e8a7ab3584be7ca6d505071e1
   languageName: node
   linkType: hard
 
@@ -30965,13 +31026,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-avoid-softinput@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "react-native-avoid-softinput@npm:3.0.2"
+"react-native-avoid-softinput@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "react-native-avoid-softinput@npm:3.0.4"
   peerDependencies:
     react: ">=17.0.0"
     react-native: ">=0.65.0"
-  checksum: de135b7e40e5e64ea4a0cec90f7af1aaca6b3b7cc28130307f9ced4471e866366afd18c89d6e187a7dee482c7d7e9b044775cc894b8895f8720f8de4ffd81209
+  checksum: 678cd210f5bf01d994130cede1fb632541cb52b5641057fa3e7ca9fb6e8c560b519c81372dd611584ef2c88056f3d352346b82d13cf98f529fc92efec03a0184
   languageName: node
   linkType: hard
 
