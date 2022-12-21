@@ -199,6 +199,7 @@ const inter = Inter({
 });
 
 const spaceGrotesk = Space_Grotesk({
+  weight: "700",
   variable: "--font-space-grotesk",
   display: "swap",
 });
