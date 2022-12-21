@@ -10,7 +10,6 @@ import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableScreens } from "react-native-screens";
 
-import { useLogRocket } from "app/hooks/use-logrocket";
 import { growthbook } from "app/lib/growthbook";
 import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";
@@ -47,7 +46,6 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
-  useLogRocket();
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
