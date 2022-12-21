@@ -29,7 +29,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
-import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCode } from "app/components/qr-code";
@@ -835,15 +834,6 @@ export const DropForm = () => {
               <View tw="mt-4">
                 <Text tw="text-red-500">{state.error}</Text>
               </View>
-            ) : null}
-
-            {state.signaturePrompt && !isMagic ? (
-              <MissingSignatureMessage
-                onReconnectWallet={onReconnectWallet}
-                onMount={() => {
-                  scrollViewRef.current?.scrollToEnd();
-                }}
-              />
             ) : null}
           </View>
 

@@ -31,7 +31,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
-import { MissingSignatureMessage } from "app/components/missing-signature-message";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
@@ -479,15 +478,6 @@ export const ClaimForm = ({
             <View tw="mt-4">
               <Text tw="text-red-500">{state.error}</Text>
             </View>
-          ) : null}
-
-          {state.signaturePrompt && !isMagic ? (
-            <MissingSignatureMessage
-              onReconnectWallet={onReconnectWallet}
-              onMount={() => {
-                scrollViewRef.current?.scrollToEnd();
-              }}
-            />
           ) : null}
         </View>
       </View>
