@@ -8981,9 +8981,8 @@ __metadata:
     fortmatic: ^2.2.1
     logrocket: ^2.2.1
     magic-sdk: ^10.0.0
-    next: 13.0.5
+    next: ^13.0.7
     next-compose-plugins: ^2.2.1
-    next-fonts: ^1.5.1
     next-images: ^1.8.2
     next-pwa: ^5.6.0
     patch-package: ^6.4.7
@@ -20770,7 +20769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-loader@npm:^6.0.0, file-loader@npm:^6.2.0":
+"file-loader@npm:^6.2.0":
   version: 6.2.0
   resolution: "file-loader@npm:6.2.0"
   dependencies:
@@ -27435,18 +27434,6 @@ __metadata:
   version: 2.2.1
   resolution: "next-compose-plugins@npm:2.2.1"
   checksum: 771762fda2b12b81daf10431cbb494816cff96be02b44009692c6c0eefbacd62cbf51ddb93af8d3380ec00254c6a95d64d10f744d4b9ddadefc21efee7dc69fc
-  languageName: node
-  linkType: hard
-
-"next-fonts@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "next-fonts@npm:1.5.1"
-  dependencies:
-    file-loader: ^6.0.0
-    url-loader: ^4.0.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 7ad03b4ef5b6951de4152558209943481c1698d22d8ffa9bf0b089c9c804457deeb9276cf6a0f5f2a62c3ef79714fcb4e5c990268c9a5220cd73e9f8bad7a159
   languageName: node
   linkType: hard
 
@@ -36262,7 +36249,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-loader@npm:^4.0.0, url-loader@npm:^4.1.0, url-loader@npm:^4.1.1, url-loader@npm:~4.1.0":
+"url-loader@npm:^4.1.0, url-loader@npm:^4.1.1, url-loader@npm:~4.1.0":
   version: 4.1.1
   resolution: "url-loader@npm:4.1.1"
   dependencies:
