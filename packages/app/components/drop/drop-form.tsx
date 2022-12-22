@@ -218,9 +218,11 @@ const CreateCard = ({
   onPress: () => void;
 }) => {
   return (
-    <View tw="min-h-[180px] justify-between rounded-lg bg-gray-100 p-4">
-      <Text tw="text-lg font-bold">{title}</Text>
-      <Text tw="text-base">{description}</Text>
+    <View tw="min-h-[180px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
+      <Text tw="text-lg font-bold text-gray-900 dark:text-gray-100">
+        {title}
+      </Text>
+      <Text tw="text-base text-gray-900 dark:text-gray-100">{description}</Text>
       <Button onPress={onPress}>{ctaLabel}</Button>
     </View>
   );
