@@ -162,7 +162,7 @@ export const DropForm = () => {
 
   return (
     <View tw="p-4">
-      <View tw="flex-row">
+      {/* <View tw="flex-row">
         <View tw="flex-1">
           <CreateCard
             title="Post"
@@ -181,9 +181,18 @@ export const DropForm = () => {
             onPress={() => {}}
           />
         </View>
-      </View>
+      </View> */}
       <View tw="h-4" />
       <View tw="flex-row">
+        <View tw="flex-1">
+          <CreateCard
+            title="Music drop"
+            description="Promote your latest music: give your fans a free collectible for saving your song to their library."
+            ctaLabel="Create Music Drop"
+            onPress={() => {}}
+          />
+        </View>
+        <View tw="w-4" />
         <View tw="flex-1">
           <CreateCard
             title="Event drop"
@@ -218,7 +227,7 @@ const CreateCard = ({
   onPress: () => void;
 }) => {
   return (
-    <View tw="min-h-[180px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
+    <View tw="min-h-[216px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
       <Text tw="text-lg font-bold text-gray-900 dark:text-gray-100">
         {title}
       </Text>
