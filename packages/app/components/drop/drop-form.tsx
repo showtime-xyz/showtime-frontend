@@ -183,7 +183,7 @@ export const DropForm = () => {
         </View>
       </View> */}
       <View tw="h-4" />
-      <View tw="flex-row">
+      <View tw="lg:flex-row">
         <View tw="flex-1">
           <CreateCard
             title="Music drop"
@@ -192,7 +192,7 @@ export const DropForm = () => {
             onPress={() => {}}
           />
         </View>
-        <View tw="w-4" />
+        <View tw="h-4 w-4" />
         <View tw="flex-1">
           <CreateCard
             title="Event drop"
@@ -201,7 +201,7 @@ export const DropForm = () => {
             onPress={() => {}}
           />
         </View>
-        <View tw="w-4" />
+        <View tw="h-4 w-4" />
         <View tw="flex-1">
           <CreateCard
             title="VIP drop"
