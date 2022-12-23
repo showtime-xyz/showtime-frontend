@@ -8,59 +8,9 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { yup } from "app/lib/yup";
-
 import { EventDrop } from "./event-drop";
 import { MusicDrop } from "./music-drop";
 import { PasswordDrop } from "./password-drop";
-
-const SECONDS_IN_A_DAY = 24 * 60 * 60;
-const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
-const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-
-const defaultValues = {
-  royalty: 10,
-  editionSize: 100,
-  duration: SECONDS_IN_A_WEEK,
-  password: "",
-  googleMapsUrl: "",
-  radius: 1, // In kilometers
-  hasAcceptedTerms: false,
-  notSafeForWork: false,
-};
-
-const durationOptions = [
-  { label: "1 day", value: SECONDS_IN_A_DAY },
-  { label: "1 week", value: SECONDS_IN_A_WEEK },
-  { label: "1 month", value: SECONDS_IN_A_MONTH },
-];
-
-const dropValidationSchema = yup.object({
-  file: yup.mixed().required("Media is required"),
-  title: yup.string().required(),
-  description: yup.string().max(280).required(),
-  editionSize: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .min(1)
-    .max(100000)
-    .default(defaultValues.editionSize),
-  royalty: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .max(69)
-    .default(defaultValues.royalty),
-  hasAcceptedTerms: yup
-    .boolean()
-    .default(defaultValues.hasAcceptedTerms)
-    .required()
-    .isTrue("You must accept the terms and conditions."),
-  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-  googleMapsUrl: yup.string().url(),
-  radius: yup.number().min(0.01).max(10),
-});
 
 type DropTypes = "music" | "vip" | "event";
 
@@ -113,7 +63,7 @@ export const DropForm = () => {
   return (
     <View tw="p-4">
       {dropType && (
-        <Pressable onPress={() => setDropType(null)}>
+        <Pressable tw="ml-2" onPress={() => setDropType(null)}>
           <ArrowLeft
             color={isDark ? colors.gray[100] : colors.gray[900]}
             width={24}

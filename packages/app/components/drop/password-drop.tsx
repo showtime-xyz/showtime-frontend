@@ -22,7 +22,6 @@ import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -125,7 +124,6 @@ export const PasswordDrop = () => {
     defaultValues: defaultValues,
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
@@ -153,7 +151,7 @@ export const PasswordDrop = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
+    dropNFT({ ...values, gatingType: "password" }, clearStorage);
   };
 
   // useEffect(() => {
@@ -482,7 +480,7 @@ export const PasswordDrop = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="mt-4 flex-1"
+                    tw="mt-4"
                     label="Description"
                     multiline
                     textAlignVertical="top"
@@ -498,62 +496,26 @@ export const PasswordDrop = () => {
               }}
             />
           </Hidden>
-          <View
-            tw={[
-              `z-10 mt-4 flex-row`,
-              gatingType !== "spotify_save" ? "h-12" : "",
-            ]}
-          >
+
+          <View tw="mt-4 flex-row">
             <Controller
               control={control}
-              name="spotifyUrl"
+              name="password"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Make it a Music Drop?"
+                    label="Password"
                     onBlur={onBlur}
-                    ref={spotifyTextInputRef}
+                    helperText="The password required to collect the drop"
+                    errorText={errors.password?.message}
+                    value={value?.toString()}
                     onChangeText={onChange}
-                    style={{
-                      display:
-                        gatingType === "spotify_save" ? undefined : "none",
-                    }}
-                    value={value}
-                    placeholder="Enter the Spotify song link"
-                    errorText={errors.spotifyUrl?.message}
+                    placeholder="Enter a password"
                   />
                 );
               }}
             />
-            <View style={{ position: "absolute", right: 12, top: 8 }}>
-              {user.user?.data.profile.spotify_artist_id ? (
-                <Switch
-                  checked={gatingType === "spotify_save"}
-                  onChange={(v) => {
-                    setValue("gatingType", v ? "spotify_save" : undefined);
-                    if (!v) {
-                      setValue("spotifyUrl", undefined);
-                      spotifyTextInputRef.current?.clear();
-                    } else {
-                      setTimeout(() => {
-                        spotifyTextInputRef.current?.focus();
-                      }, 100);
-                    }
-                  }}
-                />
-              ) : (
-                <Button
-                  onPress={() => {
-                    Linking.openURL(
-                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                    );
-                  }}
-                >
-                  Request
-                </Button>
-              )}
-            </View>
           </View>
 
           <View>
@@ -574,41 +536,15 @@ export const PasswordDrop = () => {
                         type="text"
                       />
                       <DataPill
-                        tw={
-                          gatingType !== "spotify_save"
-                            ? "ml-1 md:ml-4"
-                            : "mx-1 md:mx-4"
-                        }
+                        tw={"ml-1 md:ml-4"}
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
+                        tw={"mx-1 md:mx-4"}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
-                      {gatingType !== "spotify_save" && watch("password") ? (
-                        <DataPill
-                          label={`Password ${
-                            watch("password") === ""
-                              ? "None"
-                              : watch("password")
-                          }`}
-                          type="text"
-                        />
-                      ) : null}
-                      {gatingType !== "spotify_save" &&
-                      watch("googleMapsUrl") ? (
-                        <DataPill
-                          label={`Location ${
-                            watch("googleMapsUrl") === "" ||
-                            !watch("googleMapsUrl")
-                              ? "None"
-                              : watch("googleMapsUrl")
-                          }`}
-                          type="text"
-                        />
-                      ) : null}
                     </ScrollView>
                   </View>
                 </Accordion.Trigger>
@@ -679,72 +615,7 @@ export const PasswordDrop = () => {
                         }}
                       />
                     </View>
-                    {gatingType !== "spotify_save" ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="password"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Password (optional)"
-                                onBlur={onBlur}
-                                helperText="The password required to collect the drop"
-                                errorText={errors.password?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="Enter a password"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
-                    {gatingType !== "spotify_save" ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="googleMapsUrl"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Location (optional)"
-                                onBlur={onBlur}
-                                helperText="The location where people can collect the drop from"
-                                errorText={errors.googleMapsUrl?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="Enter the Google Maps link of the location"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
-                    {gatingType !== "spotify_save" && watch("googleMapsUrl") ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="radius"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Radius (optional)"
-                                onBlur={onBlur}
-                                helperText="The location radius (in kilometers)"
-                                errorText={errors.radius?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="1"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
+
                     <View tw="mt-4 flex-row justify-between">
                       <Controller
                         control={control}
