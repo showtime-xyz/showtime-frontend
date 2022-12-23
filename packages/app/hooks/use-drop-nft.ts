@@ -96,7 +96,7 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
-  gatingType?: string;
+  gatingType?: "spotify_save" | "password" | "location" | "multi";
   password?: string;
   googleMapsUrl?: string;
   latitude?: number;

@@ -123,7 +123,6 @@ export const MusicDrop = () => {
     defaultValues: defaultValues,
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
@@ -150,7 +149,7 @@ export const MusicDrop = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
+    dropNFT({ ...values, gatingType: "spotify_save" }, clearStorage);
   };
 
   // useEffect(() => {
@@ -495,12 +494,7 @@ export const MusicDrop = () => {
               }}
             />
           </Hidden>
-          <View
-            tw={[
-              `z-10 mt-4 flex-row`,
-              gatingType !== "spotify_save" ? "h-12" : "",
-            ]}
-          >
+          <View tw="z-10 mt-4 flex-row">
             <Controller
               control={control}
               name="spotifyUrl"
@@ -552,41 +546,14 @@ export const MusicDrop = () => {
                         type="text"
                       />
                       <DataPill
-                        tw={
-                          gatingType !== "spotify_save"
-                            ? "ml-1 md:ml-4"
-                            : "mx-1 md:mx-4"
-                        }
+                        tw="mx-1 md:mx-4"
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
-                      {gatingType !== "spotify_save" && watch("password") ? (
-                        <DataPill
-                          label={`Password ${
-                            watch("password") === ""
-                              ? "None"
-                              : watch("password")
-                          }`}
-                          type="text"
-                        />
-                      ) : null}
-                      {gatingType !== "spotify_save" &&
-                      watch("googleMapsUrl") ? (
-                        <DataPill
-                          label={`Location ${
-                            watch("googleMapsUrl") === "" ||
-                            !watch("googleMapsUrl")
-                              ? "None"
-                              : watch("googleMapsUrl")
-                          }`}
-                          type="text"
-                        />
-                      ) : null}
                     </ScrollView>
                   </View>
                 </Accordion.Trigger>
@@ -657,72 +624,7 @@ export const MusicDrop = () => {
                         }}
                       />
                     </View>
-                    {gatingType !== "spotify_save" ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="password"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Password (optional)"
-                                onBlur={onBlur}
-                                helperText="The password required to collect the drop"
-                                errorText={errors.password?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="Enter a password"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
-                    {gatingType !== "spotify_save" ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="googleMapsUrl"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Location (optional)"
-                                onBlur={onBlur}
-                                helperText="The location where people can collect the drop from"
-                                errorText={errors.googleMapsUrl?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="Enter the Google Maps link of the location"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
-                    {gatingType !== "spotify_save" && watch("googleMapsUrl") ? (
-                      <View tw="mt-4 flex-1 flex-row">
-                        <Controller
-                          control={control}
-                          name="radius"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Radius (optional)"
-                                onBlur={onBlur}
-                                helperText="The location radius (in kilometers)"
-                                errorText={errors.radius?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                                placeholder="1"
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                    ) : null}
+
                     <View tw="mt-4 flex-row justify-between">
                       <Controller
                         control={control}
