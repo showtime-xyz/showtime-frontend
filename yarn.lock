@@ -6576,6 +6576,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-tooltip@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@radix-ui/react-tooltip@npm:1.0.2"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/primitive": 1.0.0
+    "@radix-ui/react-compose-refs": 1.0.0
+    "@radix-ui/react-context": 1.0.0
+    "@radix-ui/react-dismissable-layer": 1.0.2
+    "@radix-ui/react-id": 1.0.0
+    "@radix-ui/react-popper": 1.0.1
+    "@radix-ui/react-portal": 1.0.1
+    "@radix-ui/react-presence": 1.0.0
+    "@radix-ui/react-primitive": 1.0.1
+    "@radix-ui/react-slot": 1.0.1
+    "@radix-ui/react-use-controllable-state": 1.0.0
+    "@radix-ui/react-visually-hidden": 1.0.1
+  peerDependencies:
+    react: ^16.8 || ^17.0 || ^18.0
+    react-dom: ^16.8 || ^17.0 || ^18.0
+  checksum: b6d5201c88fc1f842da0af93da9aa0ab0a1b7a538c0d8a2bd59862a1b8f30a08ccce7ca8502012568b1f3c5f1663a7ff9eb307ed583d666d78a7544127e4e5d2
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-use-callback-ref@npm:0.1.0":
   version: 0.1.0
   resolution: "@radix-ui/react-use-callback-ref@npm:0.1.0"
@@ -8985,6 +9009,7 @@ __metadata:
     "@radix-ui/react-popover": ^1.0.2
     "@radix-ui/react-portal": ^1.0.1
     "@radix-ui/react-select": ^1.1.2
+    "@radix-ui/react-tooltip": ^1.0.2
     "@radix-ui/react-use-escape-keydown": ^1.0.2
     "@rainbow-me/rainbowkit": ^0.8.1
     "@react-native-menu/menu": ^0.7.2

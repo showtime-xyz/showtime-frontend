@@ -26,6 +26,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
+import { Globe, Lock } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -166,6 +167,27 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     }
   }, [hideHeader, showHeader, opacity]);
 
+  const renderContentTypeIcon = () => {
+    if (edition?.spotify_track_url) {
+      return <PlayOnSpotify url={edition?.spotify_track_url} />;
+    }
+    if (edition?.gating_type === "location") {
+      return (
+        <View tw="flex-row rounded bg-gray-800/80 px-1 py-1">
+          <Globe color="white" width={20} height={20} />
+        </View>
+      );
+    }
+    if (edition?.gating_type === "password") {
+      return (
+        <View tw="flex-row rounded bg-gray-800/80 px-1 py-1">
+          <Lock color="white" width={20} height={20} />
+        </View>
+      );
+    }
+    return null;
+  };
+
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
@@ -247,11 +269,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </View>
           ) : null}
 
-          {edition?.spotify_track_url ? (
-            <View tw="z-9 absolute top-[-40px] left-4">
-              <PlayOnSpotify url={edition?.spotify_track_url} />
-            </View>
-          ) : null}
+          <View tw="z-9 absolute -top-[40px] left-2.5">
+            {/* <PlayOnSpotify url={edition?.spotify_track_url} /> */}
+            {renderContentTypeIcon()}
+          </View>
 
           <View
             style={{
