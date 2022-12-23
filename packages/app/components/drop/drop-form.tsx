@@ -1,32 +1,18 @@
-import React, { useRef, useState } from "react";
-import {
-  Platform,
-  ScrollView as RNScrollView,
-  TextInput,
-  useWindowDimensions,
-} from "react-native";
-
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import React from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { ArrowLeft } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
-import { usePersistForm } from "app/hooks/use-persist-form";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
-import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
-import { useFilePicker } from "app/lib/file-picker";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
+
+import { EventDrop } from "./event-drop";
+import { MusicDrop } from "./music-drop";
+import { PasswordDrop } from "./password-drop";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -76,141 +62,66 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-// const { useParam } = createParam<{ transactionId: string }>()
-const DROP_FORM_DATA_KEY = "drop_form_local_data";
+type DropTypes = "music" | "vip" | "event";
+
 export const DropForm = () => {
+  const [dropType, setDropType] = React.useState<DropTypes | null>(null);
   const isDark = useIsDarkMode();
-  const { rudder } = useRudder();
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    clearErrors,
-    formState: { errors },
-    watch,
-    setValue,
-    getValues,
-    reset: resetForm,
-  } = useForm<any>({
-    resolver: yupResolver(dropValidationSchema),
-    mode: "onBlur",
-    reValidateMode: "onChange",
-    defaultValues: defaultValues,
-  });
-
-  const gatingType = watch("gatingType");
-  const bottomBarHeight = useBottomTabBarHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
-
-  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
-  const user = useUser();
-
-  const headerHeight = useHeaderHeight();
-  const redirectToCreateDrop = useRedirectToCreateDrop();
-  const { isMagic } = useWeb3();
-  const scrollViewRef = useRef<RNScrollView>(null);
-  const windowWidth = useWindowDimensions().width;
-
-  const [accordionValue, setAccordionValue] = useState("");
-  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
-    watch,
-    setValue,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
-  });
-
-  const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
+  const getDropTypeComponent = (type: DropTypes | null) => {
+    switch (type) {
+      case "music":
+        return <MusicDrop />;
+      case "vip":
+        return <PasswordDrop />;
+      case "event":
+        return <EventDrop />;
+      default:
+        return (
+          <View tw="lg:flex-row">
+            <View tw="flex-1">
+              <CreateCard
+                title="Music drop"
+                description="Promote your latest music: give your fans a free collectible for saving your song to their library."
+                ctaLabel="Create Music Drop"
+                onPress={() => setDropType("music")}
+              />
+            </View>
+            <View tw="h-4 w-4" />
+            <View tw="flex-1">
+              <CreateCard
+                title="Event drop"
+                description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
+                ctaLabel="Create Event Drop"
+                onPress={() => setDropType("event")}
+              />
+            </View>
+            <View tw="h-4 w-4" />
+            <View tw="flex-1">
+              <CreateCard
+                title="VIP drop"
+                description="A collectible for your biggest fans of your choice. Don't give up your VIP password so easily!"
+                ctaLabel="Create VIP Drop"
+                onPress={() => setDropType("vip")}
+              />
+            </View>
+          </View>
+        );
+    }
   };
-
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
-  const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
-
-  const selectedDuration = watch("duration");
-
-  const selectedDurationLabel = React.useMemo(
-    () => durationOptions.find((d) => d.value === selectedDuration)?.label,
-    [selectedDuration]
-  );
 
   return (
     <View tw="p-4">
-      {/* <View tw="flex-row">
-        <View tw="flex-1">
-          <CreateCard
-            title="Post"
-            description="Share photos and videos every day for you community to add to their
-        collection."
-            ctaLabel="Create Post"
-            onPress={() => {}}
+      {dropType && (
+        <Pressable onPress={() => setDropType(null)}>
+          <ArrowLeft
+            color={isDark ? colors.gray[100] : colors.gray[900]}
+            width={24}
+            height={24}
           />
-        </View>
-        <View tw="w-4" />
-        <View tw="flex-1">
-          <CreateCard
-            title="Music drop"
-            description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-            ctaLabel="Create Music Drop"
-            onPress={() => {}}
-          />
-        </View>
-      </View> */}
-      <View tw="h-4" />
-      <View tw="lg:flex-row">
-        <View tw="flex-1">
-          <CreateCard
-            title="Music drop"
-            description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-            ctaLabel="Create Music Drop"
-            onPress={() => {}}
-          />
-        </View>
-        <View tw="h-4 w-4" />
-        <View tw="flex-1">
-          <CreateCard
-            title="Event drop"
-            description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
-            ctaLabel="Create Event Drop"
-            onPress={() => {}}
-          />
-        </View>
-        <View tw="h-4 w-4" />
-        <View tw="flex-1">
-          <CreateCard
-            title="VIP drop"
-            description="A collectible for your biggest fans of your choice. Don't give up your VIP password so easily!"
-            ctaLabel="Create VIP Drop"
-            onPress={() => {}}
-          />
-        </View>
-      </View>
+        </Pressable>
+      )}
+      {getDropTypeComponent(dropType)}
     </View>
   );
 };
@@ -227,7 +138,7 @@ const CreateCard = ({
   onPress: () => void;
 }) => {
   return (
-    <View tw="min-h-[216px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
+    <View tw="min-h-[180px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900 lg:min-h-[216px]">
       <Text tw="text-lg font-bold text-gray-900 dark:text-gray-100">
         {title}
       </Text>
