@@ -3,7 +3,6 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -55,7 +54,7 @@ import { Hidden } from "design-system/hidden";
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-// user.user?.data.profile.spotify_artist_id
+
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
@@ -100,9 +99,9 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-// const { useParam } = createParam<{ transactionId: string }>()
 const DROP_FORM_DATA_KEY = "drop_form_local_data";
-export const MusicDrop = () => {
+
+export const DropPrivate = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
 
@@ -124,8 +123,6 @@ export const MusicDrop = () => {
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT, reset } = useDropNFT();
   const user = useUser();
@@ -149,7 +146,7 @@ export const MusicDrop = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT({ ...values, gatingType: "spotify_save" }, clearStorage);
+    dropNFT({ ...values, gatingType: "password" }, clearStorage);
   };
 
   // useEffect(() => {
@@ -478,7 +475,7 @@ export const MusicDrop = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="mt-4 flex-1"
+                    tw="mt-4"
                     label="Description"
                     multiline
                     textAlignVertical="top"
@@ -494,38 +491,26 @@ export const MusicDrop = () => {
               }}
             />
           </Hidden>
-          <View tw="z-10 mt-4 flex-row">
+
+          <View tw="mt-4 flex-row">
             <Controller
               control={control}
-              name="spotifyUrl"
+              name="password"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Spotify URL"
+                    label="Password"
                     onBlur={onBlur}
-                    ref={spotifyTextInputRef}
+                    helperText="The password required to collect the drop"
+                    errorText={errors.password?.message}
+                    value={value?.toString()}
                     onChangeText={onChange}
-                    value={value}
-                    placeholder="Enter the Spotify song link"
-                    errorText={errors.spotifyUrl?.message}
+                    placeholder="Enter a password"
                   />
                 );
               }}
             />
-            <View style={{ position: "absolute", right: 12, top: 8 }}>
-              {user.user?.data.profile.spotify_artist_id ? null : (
-                <Button
-                  onPress={() => {
-                    Linking.openURL(
-                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                    );
-                  }}
-                >
-                  Request
-                </Button>
-              )}
-            </View>
           </View>
 
           <View>
@@ -546,11 +531,12 @@ export const MusicDrop = () => {
                         type="text"
                       />
                       <DataPill
-                        tw="mx-1 md:mx-4"
+                        tw={"ml-1 md:ml-4"}
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
+                        tw={"mx-1 md:mx-4"}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />

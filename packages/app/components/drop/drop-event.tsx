@@ -3,6 +3,7 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
+  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -36,6 +37,7 @@ import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
@@ -99,9 +101,9 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-// const { useParam } = createParam<{ transactionId: string }>()
 const DROP_FORM_DATA_KEY = "drop_form_local_data";
-export const PasswordDrop = () => {
+
+export const DropEvent = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
 
@@ -122,13 +124,17 @@ export const PasswordDrop = () => {
     defaultValues: defaultValues,
   });
 
+  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
+  // const [transactionId, setTransactionId] = useParam('transactionId')
+  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
+  const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
 
@@ -146,7 +152,7 @@ export const PasswordDrop = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT({ ...values, gatingType: "password" }, clearStorage);
+    dropNFT(values, clearStorage);
   };
 
   // useEffect(() => {
@@ -475,7 +481,7 @@ export const PasswordDrop = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="mt-4"
+                    tw="mt-4 flex-1"
                     label="Description"
                     multiline
                     textAlignVertical="top"
@@ -495,12 +501,33 @@ export const PasswordDrop = () => {
           <View tw="mt-4 flex-row">
             <Controller
               control={control}
+              name="googleMapsUrl"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Location"
+                    onBlur={onBlur}
+                    helperText="The location where people can collect the drop from"
+                    errorText={errors.googleMapsUrl?.message}
+                    value={value?.toString()}
+                    onChangeText={onChange}
+                    placeholder="Enter the Google Maps link of the location"
+                  />
+                );
+              }}
+            />
+          </View>
+
+          <View tw="mt-4 flex-row">
+            <Controller
+              control={control}
               name="password"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Password"
+                    label="Password (Optional)"
                     onBlur={onBlur}
                     helperText="The password required to collect the drop"
                     errorText={errors.password?.message}
@@ -531,12 +558,16 @@ export const PasswordDrop = () => {
                         type="text"
                       />
                       <DataPill
-                        tw={"ml-1 md:ml-4"}
+                        tw={
+                          gatingType !== "spotify_save"
+                            ? "ml-1 md:ml-4"
+                            : "mx-1 md:mx-4"
+                        }
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw={"mx-1 md:mx-4"}
+                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />

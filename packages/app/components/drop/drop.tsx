@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MMKV } from "react-native-mmkv";
 
 import { DropExplanation } from "./drop-explanation";
-import { DropForm } from "./drop-form";
+import { DropSelect } from "./drop-select";
 
 const store = new MMKV();
 const STORE_KEY = "showExplanation";
@@ -21,6 +21,6 @@ export const Drop = () => {
   return showExplanation ? (
     <DropExplanation onDone={hideExplanation} />
   ) : (
-    <DropForm />
+    <DropSelect />
   );
 };

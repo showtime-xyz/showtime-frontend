@@ -37,7 +37,6 @@ import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
@@ -56,7 +55,7 @@ import { Hidden } from "design-system/hidden";
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-
+// user.user?.data.profile.spotify_artist_id
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
@@ -101,9 +100,9 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-// const { useParam } = createParam<{ transactionId: string }>()
 const DROP_FORM_DATA_KEY = "drop_form_local_data";
-export const EventDrop = () => {
+
+export const DropMusic = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
 
@@ -124,17 +123,15 @@ export const EventDrop = () => {
     defaultValues: defaultValues,
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
+  const { state, dropNFT, reset } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
 
@@ -152,7 +149,7 @@ export const EventDrop = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
+    dropNFT({ ...values, gatingType: "spotify_save" }, clearStorage);
   };
 
   // useEffect(() => {
@@ -497,47 +494,38 @@ export const EventDrop = () => {
               }}
             />
           </Hidden>
-
-          <View tw="mt-4 flex-row">
+          <View tw="z-10 mt-4 flex-row">
             <Controller
               control={control}
-              name="googleMapsUrl"
+              name="spotifyUrl"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Location"
+                    label="Spotify URL"
                     onBlur={onBlur}
-                    helperText="The location where people can collect the drop from"
-                    errorText={errors.googleMapsUrl?.message}
-                    value={value?.toString()}
+                    ref={spotifyTextInputRef}
                     onChangeText={onChange}
-                    placeholder="Enter the Google Maps link of the location"
+                    value={value}
+                    placeholder="Enter the Spotify song link"
+                    errorText={errors.spotifyUrl?.message}
                   />
                 );
               }}
             />
-          </View>
-
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="password"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Password (Optional)"
-                    onBlur={onBlur}
-                    helperText="The password required to collect the drop"
-                    errorText={errors.password?.message}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                    placeholder="Enter a password"
-                  />
-                );
-              }}
-            />
+            <View style={{ position: "absolute", right: 12, top: 8 }}>
+              {user.user?.data.profile.spotify_artist_id ? null : (
+                <Button
+                  onPress={() => {
+                    Linking.openURL(
+                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
+                    );
+                  }}
+                >
+                  Request
+                </Button>
+              )}
+            </View>
           </View>
 
           <View>
@@ -558,16 +546,11 @@ export const EventDrop = () => {
                         type="text"
                       />
                       <DataPill
-                        tw={
-                          gatingType !== "spotify_save"
-                            ? "ml-1 md:ml-4"
-                            : "mx-1 md:mx-4"
-                        }
+                        tw="mx-1 md:mx-4"
                         label={`Editions ${watch("editionSize")}`}
                         type="text"
                       />
                       <DataPill
-                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
                         label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
