@@ -505,6 +505,16 @@ export const DropFree = () => {
                         label={`Royalties ${watch("royalty")}%`}
                         type="text"
                       />
+                      <DataPill
+                        tw="mx-1 md:mx-4"
+                        label={`Editions ${watch("editionSize")}`}
+                        type="text"
+                      />
+                      <DataPill
+                        tw="mx-1 md:mx-4"
+                        label={`Duration ${selectedDurationLabel}`}
+                        type="text"
+                      />
                     </ScrollView>
                   </View>
                 </Accordion.Trigger>
