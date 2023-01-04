@@ -3,7 +3,6 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -37,7 +36,6 @@ import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
@@ -125,15 +123,12 @@ export const PasswordDrop = () => {
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
+  const { state, dropNFT, reset } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
 

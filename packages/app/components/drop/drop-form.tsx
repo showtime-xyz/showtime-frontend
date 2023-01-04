@@ -1,4 +1,5 @@
 import React from "react";
+import { ScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -28,34 +29,36 @@ export const DropForm = () => {
         return <EventDrop />;
       default:
         return (
-          <View tw="lg:flex-row">
-            <View tw="flex-1">
-              <CreateCard
-                title="Music drop"
-                description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-                ctaLabel="Create Music Drop"
-                onPress={() => setDropType("music")}
-              />
+          <ScrollView>
+            <View tw="h-full lg:flex-row">
+              <View tw="flex-1">
+                <CreateCard
+                  title="Music drop"
+                  description="Promote your latest music: give your fans a free collectible for saving your song to their library."
+                  ctaLabel="Create Music Drop"
+                  onPress={() => setDropType("music")}
+                />
+              </View>
+              <View tw="h-4 w-4" />
+              <View tw="flex-1">
+                <CreateCard
+                  title="Event drop"
+                  description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
+                  ctaLabel="Create Event Drop"
+                  onPress={() => setDropType("event")}
+                />
+              </View>
+              <View tw="h-4 w-4" />
+              <View tw="flex-1">
+                <CreateCard
+                  title="VIP drop"
+                  description="A collectible for your biggest fans of your choice. Don't give up your VIP password so easily!"
+                  ctaLabel="Create VIP Drop"
+                  onPress={() => setDropType("vip")}
+                />
+              </View>
             </View>
-            <View tw="h-4 w-4" />
-            <View tw="flex-1">
-              <CreateCard
-                title="Event drop"
-                description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
-                ctaLabel="Create Event Drop"
-                onPress={() => setDropType("event")}
-              />
-            </View>
-            <View tw="h-4 w-4" />
-            <View tw="flex-1">
-              <CreateCard
-                title="VIP drop"
-                description="A collectible for your biggest fans of your choice. Don't give up your VIP password so easily!"
-                ctaLabel="Create VIP Drop"
-                onPress={() => setDropType("vip")}
-              />
-            </View>
-          </View>
+          </ScrollView>
         );
     }
   };
