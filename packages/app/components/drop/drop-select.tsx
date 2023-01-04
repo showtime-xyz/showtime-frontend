@@ -1,47 +1,52 @@
 import React from "react";
-import { ScrollView } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+
 export const DropSelect = () => {
   const router = useRouter();
 
   return (
-    <View tw="p-4">
-      <ScrollView>
-        <View tw="h-full lg:flex-row">
-          <View tw="flex-1">
-            <CreateCard
-              title="Music drop"
-              description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-              ctaLabel="Create Music Drop"
-              onPress={() => router.push("/drop/music")}
-            />
-          </View>
-          <View tw="h-4 w-4" />
-          <View tw="flex-1">
-            <CreateCard
-              title="Event drop"
-              description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
-              ctaLabel="Create Event Drop"
-              onPress={() => router.push("/drop/event")}
-            />
-          </View>
-          <View tw="h-4 w-4" />
-          <View tw="flex-1">
-            <CreateCard
-              title="Private drop"
-              description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
-              ctaLabel="Create Private Drop"
-              onPress={() => router.push("/drop/private")}
-            />
-          </View>
+    <BottomSheetScrollView>
+      <View tw="flex-row flex-wrap items-center justify-center">
+        <View tw="m-4 w-[320px]">
+          <CreateCard
+            title="Free drop"
+            description="Give your fans a free collectible."
+            ctaLabel="Create Free Drop"
+            onPress={() => router.push("/drop/free")}
+          />
         </View>
-      </ScrollView>
-    </View>
+        <View tw="m-4 w-[320px]">
+          <CreateCard
+            title="Music drop"
+            description="Promote your latest music: give your fans a free collectible for saving your song to their library."
+            ctaLabel="Create Music Drop"
+            onPress={() => router.push("/drop/music")}
+          />
+        </View>
+        <View tw="m-4 w-[320px]">
+          <CreateCard
+            title="Event drop"
+            description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
+            ctaLabel="Create Event Drop"
+            onPress={() => router.push("/drop/event")}
+          />
+        </View>
+        <View tw="m-4 w-[320px]">
+          <CreateCard
+            title="Private drop"
+            description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
+            ctaLabel="Create Private Drop"
+            onPress={() => router.push("/drop/private")}
+          />
+        </View>
+      </View>
+    </BottomSheetScrollView>
   );
 };
 

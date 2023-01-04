@@ -42,6 +42,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       nft: "nft/:chainName/:contractAddress/:tokenId",
       drop: "drop",
       dropMusic: "drop/music",
+      dropFree: "drop/free",
       dropEvent: "drop/event",
       dropPrivate: "drop/private",
       qrCodeShare: "/qr-code-share/:contractAddress",

@@ -101,7 +101,7 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-const DROP_FORM_DATA_KEY = "drop_form_local_data";
+const DROP_FORM_DATA_KEY = "drop_form_local_data_event";
 
 export const DropEvent = () => {
   const isDark = useIsDarkMode();

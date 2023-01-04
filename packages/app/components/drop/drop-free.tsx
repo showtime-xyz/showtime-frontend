@@ -3,7 +3,6 @@ import {
   Linking,
   Platform,
   ScrollView as RNScrollView,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -55,13 +54,11 @@ import { Hidden } from "design-system/hidden";
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-// user.user?.data.profile.spotify_artist_id
+
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
   duration: SECONDS_IN_A_WEEK,
-  password: "",
-  googleMapsUrl: "",
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
@@ -100,9 +97,10 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
 });
 
-const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
+// const { useParam } = createParam<{ transactionId: string }>()
+const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 
-export const DropMusic = () => {
+export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
 
@@ -123,9 +121,9 @@ export const DropMusic = () => {
     defaultValues: defaultValues,
   });
 
+  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT, reset } = useDropNFT();
   const user = useUser();
@@ -149,7 +147,7 @@ export const DropMusic = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT({ ...values, gatingType: "spotify_save" }, clearStorage);
+    dropNFT(values, clearStorage);
   };
 
   // useEffect(() => {
@@ -198,11 +196,6 @@ export const DropMusic = () => {
     }/0`;
     let claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
     const qrCodeUrl = new URL(claimUrl);
-
-    const password = getValues("password");
-    if (password) {
-      qrCodeUrl.searchParams.set("password", password);
-    }
 
     const isShareAPIAvailable = Platform.select({
       default: true,
@@ -494,39 +487,6 @@ export const DropMusic = () => {
               }}
             />
           </Hidden>
-          <View tw="z-10 mt-4 flex-row">
-            <Controller
-              control={control}
-              name="spotifyUrl"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Spotify URL"
-                    onBlur={onBlur}
-                    ref={spotifyTextInputRef}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Enter the Spotify song link"
-                    errorText={errors.spotifyUrl?.message}
-                  />
-                );
-              }}
-            />
-            <View style={{ position: "absolute", right: 12, top: 8 }}>
-              {user.user?.data.profile.spotify_artist_id ? null : (
-                <Button
-                  onPress={() => {
-                    Linking.openURL(
-                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                    );
-                  }}
-                >
-                  Request
-                </Button>
-              )}
-            </View>
-          </View>
 
           <View>
             <Accordion.Root
@@ -543,15 +503,6 @@ export const DropMusic = () => {
                     <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
                         label={`Royalties ${watch("royalty")}%`}
-                        type="text"
-                      />
-                      <DataPill
-                        tw="mx-1 md:mx-4"
-                        label={`Editions ${watch("editionSize")}`}
-                        type="text"
-                      />
-                      <DataPill
-                        label={`Duration ${selectedDurationLabel}`}
                         type="text"
                       />
                     </ScrollView>
@@ -624,7 +575,6 @@ export const DropMusic = () => {
                         }}
                       />
                     </View>
-
                     <View tw="mt-4 flex-row justify-between">
                       <Controller
                         control={control}

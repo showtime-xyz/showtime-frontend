@@ -71,6 +71,7 @@ type RootStackNavigatorParams = {
   notificationSettings: undefined;
   blockedList: undefined;
   dropMusic: undefined;
+  dropFree: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
   search: undefined;

@@ -31,6 +31,7 @@ import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-numbe
 import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { DropEventScreen } from "../screens/drop-event";
+import { DropFreeScreen } from "../screens/drop-free";
 import { DropMusicScreen } from "../screens/drop-music";
 import { DropPrivateScreen } from "../screens/drop-private";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
@@ -141,6 +142,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen name="dropMusic" component={DropMusicScreen} />
+        <Stack.Screen name="dropFree" component={DropFreeScreen} />
         <Stack.Screen name="dropEvent" component={DropEventScreen} />
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
