@@ -34,7 +34,7 @@ export const DropSelect = () => {
           <View tw="flex-1">
             <CreateCard
               title="Private drop"
-              description="A collectible for your biggest fans of your choice. Don't give up your VIP password so easily!"
+              description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
               ctaLabel="Create Private Drop"
               onPress={() => router.push("/drop/private")}
             />
