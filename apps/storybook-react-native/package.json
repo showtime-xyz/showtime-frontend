@@ -39,7 +39,7 @@
     "@storybook/addon-ondevice-notes": "next",
     "@storybook/react-native": "next",
     "design-system": "*",
-    "expo": "~47.0.8",
+    "expo": "~47.0.9",
     "expo-asset": "~8.6.2",
     "expo-av": "~13.0.1",
     "expo-blur": "~12.0.1",

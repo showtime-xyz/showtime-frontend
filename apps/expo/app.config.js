@@ -195,10 +195,10 @@ export default {
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 31,
-          targetSdkVersion: 31,
+          compileSdkVersion: 32,
+          targetSdkVersion: 32,
           minSdkVersion: 23,
-          buildToolsVersion: "31.0.0",
+          buildToolsVersion: "32.0.0",
           kotlinVersion: "1.6.10",
         },
         ios: {

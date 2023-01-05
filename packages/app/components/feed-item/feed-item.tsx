@@ -26,14 +26,12 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
-import { Globe, Lock } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -45,6 +43,7 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
 
 export type FeedItemProps = {
@@ -167,27 +166,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     }
   }, [hideHeader, showHeader, opacity]);
 
-  const renderContentTypeIcon = () => {
-    if (edition?.spotify_track_url) {
-      return <PlayOnSpotify url={edition?.spotify_track_url} />;
-    }
-    if (edition?.gating_type === "location") {
-      return (
-        <View tw="flex-row rounded bg-gray-800/80 px-1 py-1">
-          <Globe color="white" width={20} height={20} />
-        </View>
-      );
-    }
-    if (edition?.gating_type === "password") {
-      return (
-        <View tw="flex-row rounded bg-gray-800/80 px-1 py-1">
-          <Lock color="white" width={20} height={20} />
-        </View>
-      );
-    }
-    return null;
-  };
-
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
@@ -270,8 +248,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           ) : null}
 
           <View tw="z-9 absolute -top-[40px] left-2.5">
-            {/* <PlayOnSpotify url={edition?.spotify_track_url} /> */}
-            {renderContentTypeIcon()}
+            <ContentTypeTooltip edition={edition} />
           </View>
 
           <View
