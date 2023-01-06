@@ -1,12 +1,17 @@
+import { useState } from "react";
+import { Platform } from "react-native";
+
 import * as Tooltip from "universal-tooltip/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
 import { Globe, Spotify, Lock } from "design-system/icon";
 
+import { isMobileWeb } from "../utilities";
 import { PlayOnSpotify } from "./play-on-spotify";
 
 type ContentTypeTooltipProps = {
@@ -30,22 +35,48 @@ const contentGatingType = {
     text: "Enter password & location to collect",
   },
 };
+const TriggerView = isMobileWeb() ? View : PressableHover;
 
 export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
   const isDark = useIsDarkMode();
-
+  const [open, setOpen] = useState(false);
   if (edition?.spotify_track_url) {
     return <PlayOnSpotify url={edition?.spotify_track_url} />;
   }
-
   if (edition?.gating_type && contentGatingType[edition?.gating_type]) {
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
-      <Tooltip.Root delayDuration={100}>
+      <Tooltip.Root
+        onDismiss={() => {
+          setOpen(false);
+        }}
+        // on web: I want to be triggered automatically with the mouse.
+        {...Platform.select({
+          web: {},
+          default: {
+            open,
+            onDismiss: () => {
+              setOpen(false);
+            },
+          },
+        })}
+        delayDuration={100}
+      >
         <Tooltip.Trigger>
-          <View tw="flex-row rounded bg-black/60">
+          <TriggerView
+            {...Platform.select({
+              web: {},
+              default: {
+                open,
+                onPress: () => {
+                  setOpen(true);
+                },
+              },
+            })}
+            tw="flex-row rounded bg-black/60"
+          >
             <Icon color="white" width={20} height={20} />
-          </View>
+          </TriggerView>
         </Tooltip.Trigger>
         <Tooltip.Content
           sideOffset={3}
