@@ -4,12 +4,11 @@ import { Platform, StyleSheet } from "react-native";
 import * as Tooltip from "universal-tooltip/src";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-
-import { Globe, Spotify, Lock } from "design-system/icon";
 
 import { isMobileWeb } from "../utilities";
 import { PlayOnSpotify } from "./play-on-spotify";
@@ -78,7 +77,7 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
               tw="rounded bg-black/60"
               style={StyleSheet.absoluteFillObject}
             />
-            <Icon color="white" width={20} height={20} />
+            <Icon color="white" width={20} height={20} className="z-10" />
           </TriggerView>
         </Tooltip.Trigger>
         <Tooltip.Content
