@@ -31,7 +31,7 @@ export const DropSelect = () => {
   return (
     <BottomSheetScrollView>
       <View tw="flex-row flex-wrap items-center justify-center">
-        <View tw="m-4 w-full md:w-[320px]">
+        <View tw="m-4 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Free drop"
             description="Give your fans a free collectible."
@@ -40,7 +40,7 @@ export const DropSelect = () => {
             onPress={() => router.push("/drop/free")}
           />
         </View>
-        <View tw="m-4 w-full md:w-[320px]">
+        <View tw="m-4 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Music drop"
             icon={<Spotify color="white" height={16} width={16} />}
@@ -57,7 +57,7 @@ export const DropSelect = () => {
             }
           />
         </View>
-        <View tw="m-4 w-full md:w-[320px]">
+        <View tw="m-4 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Event drop"
             icon={<Globe color="white" height={16} width={16} />}
@@ -66,7 +66,7 @@ export const DropSelect = () => {
             onPress={() => router.push("/drop/event")}
           />
         </View>
-        <View tw="m-4 w-full md:w-[320px]">
+        <View tw="m-4 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Private drop"
             icon={<SvgLock color="white" height={16} width={16} />}
@@ -99,9 +99,8 @@ const CreateCard = ({
         {title}
       </Text>
       <Text tw="text-base text-gray-900 dark:text-gray-100">{description}</Text>
-
       <Button onPress={onPress}>
-        <View tw="flex-row">
+        <View tw="w-full flex-row justify-center">
           {icon}
           <Text tw="ml-2 text-gray-50 dark:text-gray-900">{ctaLabel}</Text>
         </View>
