@@ -1,4 +1,5 @@
 import React from "react";
+import { Linking } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -6,9 +7,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { useUser } from "app/hooks/use-user";
 
 export const DropSelect = () => {
   const router = useRouter();
+  const user = useUser();
+  const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
 
   return (
     <BottomSheetScrollView>
@@ -25,8 +29,16 @@ export const DropSelect = () => {
           <CreateCard
             title="Music drop"
             description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-            ctaLabel="Create Music Drop"
-            onPress={() => router.push("/drop/music")}
+            ctaLabel={
+              canCreateMusicDrop ? "Create Music Drop" : "Request Access"
+            }
+            onPress={() =>
+              canCreateMusicDrop
+                ? router.push("/drop/music")
+                : Linking.openURL(
+                    "https://showtimexyz.typeform.com/to/pXQVhkZo"
+                  )
+            }
           />
         </View>
         <View tw="m-4 w-[320px]">
