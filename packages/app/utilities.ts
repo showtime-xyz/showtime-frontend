@@ -488,6 +488,9 @@ export function isSafari(): boolean {
 export function isMobileWeb(): boolean {
   return Platform.OS === "web" && (isAndroid() || isIOS());
 }
+export function isDesktopWeb(): boolean {
+  return Platform.OS === "web" && !isAndroid() && !isIOS();
+}
 
 // TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
 export const ledgerWalletHack = (signature?: string) => {

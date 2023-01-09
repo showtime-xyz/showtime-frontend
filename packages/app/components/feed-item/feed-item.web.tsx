@@ -11,13 +11,13 @@ import { View } from "@showtime-xyz/universal.view";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { BlurView } from "app/lib/blurview";
 import type { NFT } from "app/types";
 
+import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 
@@ -124,12 +124,9 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </View>
           ) : null}
 
-          {edition?.spotify_track_url ? (
-            <View tw="z-9 absolute top-[-40px] left-4">
-              <PlayOnSpotify url={edition?.spotify_track_url} />
-            </View>
-          ) : null}
-
+          <View tw="z-9 absolute -top-[40px] left-2.5">
+            <ContentTypeTooltip edition={edition} />
+          </View>
           <NFTDetails edition={edition} nft={nft} />
         </View>
       </View>
