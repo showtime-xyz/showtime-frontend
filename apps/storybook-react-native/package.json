@@ -51,7 +51,7 @@
     "expo-image-picker": "~14.0.1",
     "expo-linear-gradient": "~12.0.1",
     "expo-linking": "~3.2.3",
-    "expo-modules-core": "~1.0.2",
+    "expo-modules-core": "~1.0.4",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "expo-system-ui": "~2.0.1",

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import * as Tooltip from "universal-tooltip/src";
 
@@ -73,8 +73,11 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
                 },
               },
             })}
-            tw="flex-row rounded bg-black/60"
           >
+            <View
+              tw="rounded bg-black/60"
+              style={StyleSheet.absoluteFillObject}
+            />
             <Icon color="white" width={20} height={20} />
           </TriggerView>
         </Tooltip.Trigger>
@@ -89,13 +92,16 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
           className="web:outline-none"
           side="right"
           presetAnimation="fadeIn"
-          textSize={16}
           backgroundColor={isDark ? "#fff" : "#000"}
-          fontWeight="bold"
-          borderRadius={12}
-          textColor={isDark ? "#000" : "#fff"}
-          text={contentGatingType[edition?.gating_type].text}
-        />
+          borderRadius={16}
+        >
+          <Tooltip.Text
+            textSize={16}
+            fontWeight="bold"
+            textColor={isDark ? "#000" : "#fff"}
+            text={contentGatingType[edition?.gating_type].text}
+          />
+        </Tooltip.Content>
       </Tooltip.Root>
     );
   }
@@ -107,7 +113,8 @@ export const ContentTypeIcon = ({ edition }: ContentTypeTooltipProps) => {
   if (edition?.gating_type && contentGatingType[edition?.gating_type]) {
     const Icon = contentGatingType[edition?.gating_type]?.icon;
     return (
-      <View tw="flex-row rounded bg-black/60">
+      <View>
+        <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
         <Icon color="white" width={20} height={20} />
       </View>
     );

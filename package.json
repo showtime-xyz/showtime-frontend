@@ -146,8 +146,5 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0",
-  "dependencies": {
-    "@types/react-dropzone": "^5.1.0"
-  }
+  "packageManager": "yarn@3.2.0"
 }
