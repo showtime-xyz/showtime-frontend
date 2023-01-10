@@ -12,7 +12,6 @@ import {
   ResizeMode as AVResizeMode,
 } from "expo-av";
 import { BlurView, BlurTint } from "expo-blur";
-import { Source } from "react-native-fast-image";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
@@ -66,7 +65,7 @@ export function Video({
           style={style as ImageStyle}
           resizeMode={resizeMode}
           blurhash={blurhash}
-          source={posterSource as Source}
+          source={posterSource}
           width={width}
           height={height}
           alt={"Video Poster"}
@@ -82,7 +81,7 @@ export function Video({
             style={style as ImageStyle}
             resizeMode={resizeMode}
             blurhash={blurhash}
-            source={posterSource as Source}
+            source={posterSource}
             width={width}
             height={height}
             alt={"Video Background"}
