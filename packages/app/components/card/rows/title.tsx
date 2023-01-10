@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-// Todo: now Tooltip component seems to no working on dist floder,it need to check it.
 import * as Tooltip from "design-system/tooltip";
 
 type Props = {
@@ -46,8 +45,8 @@ export function Title({ title, disableTooltip = false }: Props) {
               {title}
             </Text>
           </Tooltip.Trigger>
-          <Tooltip.Content>
-            <Tooltip.Text text="title" />
+          <Tooltip.Content side="bottom">
+            <Tooltip.Text text={title} />
           </Tooltip.Content>
         </Tooltip.Root>
       ) : (
