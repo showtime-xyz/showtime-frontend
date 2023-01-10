@@ -1,6 +1,7 @@
 import { ComponentProps, CSSProperties, useCallback } from "react";
 import { ImageURISource } from "react-native";
 
+// @ts-ignore
 import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image, { ImageProps as NextImageProps } from "next/image";

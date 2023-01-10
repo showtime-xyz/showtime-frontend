@@ -139,22 +139,24 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     };
   }, []);
   const hideHeader = useCallback(() => {
-    if (Platform.OS !== "ios") return;
-    navigation.setOptions({
-      headerShown: false,
-      headerStyle: {
-        opacity: 0,
-      },
-    });
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: false,
+        headerStyle: {
+          opacity: 0,
+        },
+      });
+    }
+
     opacity.value = withTiming(0);
   }, [navigation, opacity]);
 
   const showHeader = useCallback(() => {
-    if (Platform.OS !== "ios") return;
-
-    navigation.setOptions({
-      headerShown: true,
-    });
+    if (Platform.OS === "ios") {
+      navigation.setOptions({
+        headerShown: true,
+      });
+    }
     opacity.value = withTiming(1);
   }, [navigation, opacity]);
 

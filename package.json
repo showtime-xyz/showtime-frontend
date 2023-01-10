@@ -91,7 +91,8 @@
     "@radix-ui/react-accordion": "^1.0.1",
     "@radix-ui/react-portal": "^1.0.1",
     "@radix-ui/react-select": "^1.1.2",
-    "react-remove-scroll-bar": "^2.3.4"
+    "react-remove-scroll-bar": "^2.3.4",
+    "universal-tooltip": "^0.1.11"
   },
   "react-native": {
     "zlib": "browserify-zlib",
