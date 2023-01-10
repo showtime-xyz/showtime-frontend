@@ -32,7 +32,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -44,6 +43,7 @@ import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
 
 export type FeedItemProps = {
@@ -242,16 +242,14 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             overlayColor="transparent"
           />
           {nft?.mime_type?.startsWith("video") ? (
-            <View tw="z-9 absolute top-[-40px] right-4">
+            <View tw="z-9 absolute top-[-30px] right-4">
               <MuteButton />
             </View>
           ) : null}
 
-          {edition?.spotify_track_url ? (
-            <View tw="z-9 absolute top-[-40px] left-4">
-              <PlayOnSpotify url={edition?.spotify_track_url} />
-            </View>
-          ) : null}
+          <View tw="z-9 absolute -top-[30px] left-2.5">
+            <ContentTypeTooltip edition={edition} />
+          </View>
 
           <View
             style={{

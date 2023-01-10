@@ -26,12 +26,13 @@ import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
+
+import { ContentTypeTooltip } from "../content-type-tooltip";
 
 const isWeb = Platform.OS === "web";
 
@@ -77,6 +78,9 @@ function Card(props: Props) {
   } = props;
   const { width } = useWindowDimensions();
   const contentWidth = useContentWidth();
+  const { data: edition } = useCreatorCollectionDetail(
+    nft.creator_airdrop_edition_address
+  );
 
   const cardMaxWidth = useMemo(() => {
     switch (numColumns) {
@@ -110,6 +114,7 @@ function Card(props: Props) {
             width: sizeStyle?.width ?? cardMaxWidth,
             height: sizeStyle?.height ?? cardMaxWidth,
           }}
+          edition={edition}
         />
       </RouteComponent>
     );
@@ -188,11 +193,9 @@ const CardLargeScreen = ({
                 <MuteButton />
               </View>
             ) : null}
-            {numColumns === 1 && edition?.spotify_track_url ? (
-              <View tw="z-9 absolute bottom-4 left-4">
-                <PlayOnSpotify url={edition?.spotify_track_url} />
-              </View>
-            ) : null}
+            <View tw="z-9 absolute bottom-2.5 left-2.5">
+              <ContentTypeTooltip edition={edition} />
+            </View>
           </RouteComponent>
           <RouteComponent
             href={href}

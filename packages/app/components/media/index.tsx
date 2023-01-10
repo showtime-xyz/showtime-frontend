@@ -14,11 +14,14 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
+
+import { ContentTypeIcon } from "../content-type-tooltip";
 
 const Dynamic3dModel = dynamic<ModelProps>(
   () => import("design-system/model").then((mod) => mod.Model),
@@ -36,6 +39,7 @@ type Props = {
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;
+  edition?: CreatorEditionResponse;
 };
 
 function Media({
@@ -46,6 +50,7 @@ function Media({
   onPinchStart,
   onPinchEnd,
   isMuted,
+  edition,
 }: Props) {
   const resizeMode = propResizeMode ?? ResizeMode.COVER;
 
@@ -76,6 +81,11 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
+          {Boolean(edition) && (
+            <View tw="absolute bottom-0.5 left-0.5 z-10">
+              <ContentTypeIcon edition={edition} />
+            </View>
+          )}
           <Image
             source={{
               uri: mediaUri,
@@ -99,7 +109,7 @@ function Media({
           disabled={numColumns > 1}
         >
           {numColumns > 1 && (
-            <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
+            <View tw="absolute bottom-1 right-1 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}

@@ -142,6 +142,7 @@ const nextConfig = {
       "@showtime-xyz/universal.tooltip",
       "@showtime-xyz/universal.utils",
       "@showtime-xyz/universal.verification-badge",
+      "universal-tooltip",
     ],
   },
   webpack: (config, options) => {

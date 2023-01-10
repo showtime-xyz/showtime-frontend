@@ -1,6 +1,8 @@
 export enum Placement {
   top,
   bottom,
+  left,
+  right,
 }
 export type PlatformRect = Pick<
   DOMRect,
@@ -31,6 +33,14 @@ export const getPosition = (
 
       case Placement.bottom:
         position.left += triggerRect.left + dWidth / 2;
+        position.top += triggerRect.top + triggerRect.height;
+        break;
+      case Placement.left:
+        position.left += 0;
+        position.top += triggerRect.top + triggerRect.height;
+        break;
+      case Placement.right:
+        position.left += triggerRect.left + dWidth;
         position.top += triggerRect.top + triggerRect.height;
         break;
     }
