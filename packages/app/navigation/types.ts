@@ -70,6 +70,10 @@ type RootStackNavigatorParams = {
   privacySecuritySettings: undefined;
   notificationSettings: undefined;
   blockedList: undefined;
+  dropMusic: undefined;
+  dropFree: undefined;
+  dropEvent: undefined;
+  dropPrivate: undefined;
   search: undefined;
   swipeList: {
     profileId?: string;

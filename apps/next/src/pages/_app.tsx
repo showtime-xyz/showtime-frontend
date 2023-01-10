@@ -26,6 +26,10 @@ import { CommentsScreen } from "app/screens/comments";
 import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEventScreen } from "app/screens/drop-event";
+import { DropFreeScreen } from "app/screens/drop-free";
+import { DropMusicScreen } from "app/screens/drop-music";
+import { DropPrivateScreen } from "app/screens/drop-private";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -176,6 +180,10 @@ function App({ Component, pageProps, router }: AppProps) {
         <LikersScreen />
         <QRCodeShareScreen />
         <ReportScreen />
+        <DropPrivateScreen />
+        <DropEventScreen />
+        <DropMusicScreen />
+        <DropFreeScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
