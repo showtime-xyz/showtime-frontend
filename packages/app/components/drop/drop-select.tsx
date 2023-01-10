@@ -1,10 +1,8 @@
 import React from "react";
 import { Linking } from "react-native";
 
-import Svg, { SvgProps, Path } from "react-native-svg";
-
 import { Button } from "@showtime-xyz/universal.button";
-import { Globe } from "@showtime-xyz/universal.icon";
+import { Globe, Lock } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -15,15 +13,6 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useUser } from "app/hooks/use-user";
 
 import { useIsDarkMode } from "design-system/hooks";
-
-const SvgLock = (props: SvgProps) => (
-  <Svg viewBox="0 0 24 24" width={24} height={24} {...props}>
-    <Path
-      fill={props.color}
-      d="M17 9V7c0-2.8-2.2-5-5-5S7 4.2 7 7v2c-1.7 0-3 1.3-3 3v7c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3v-7c0-1.7-1.3-3-3-3zM9 7c0-1.7 1.3-3 3-3s3 1.3 3 3v2H9V7zm4.1 8.5-.1.1V17c0 .6-.4 1-1 1s-1-.4-1-1v-1.4c-.6-.6-.7-1.5-.1-2.1.6-.6 1.5-.7 2.1-.1.6.5.7 1.5.1 2.1z"
-    />
-  </Svg>
-);
 
 export const DropSelect = () => {
   const router = useRouter();
@@ -87,11 +76,7 @@ export const DropSelect = () => {
           <CreateCard
             title="Private drop"
             icon={
-              <SvgLock
-                color={isDark ? "black" : "white"}
-                height={16}
-                width={16}
-              />
+              <Lock color={isDark ? "black" : "white"} height={16} width={16} />
             }
             description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
             ctaLabel="Create Private Drop"
