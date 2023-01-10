@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { Video, ResizeMode } from "expo-av";
-import type { ResizeMode as ImgResizeMode } from "react-native-fast-image";
+import { Video } from "expo-av";
+import { ImageProps } from "expo-image";
 
 import { Image } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
+
+import { contentFitToresizeMode } from "app/utilities";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -15,7 +17,7 @@ type PreviewProps = {
   type?: "image" | "video";
   tw?: string;
   style?: any;
-  resizeMode?: ImgResizeMode | ResizeMode;
+  resizeMode?: ImageProps["contentFit"];
   width: number;
   height: number;
 };
@@ -56,7 +58,7 @@ export const Preview = ({
         <Image
           tw={tw}
           style={style}
-          resizeMode={resizeMode as ImgResizeMode}
+          resizeMode={resizeMode}
           source={{
             uri: uri as string,
           }}
@@ -75,7 +77,7 @@ export const Preview = ({
         <StyledVideo
           tw={tw}
           style={[{ width, height }, style]}
-          resizeMode={resizeMode as ResizeMode}
+          resizeMode={contentFitToresizeMode(resizeMode)}
           source={{ uri: uri as string }}
           isMuted
           shouldPlay

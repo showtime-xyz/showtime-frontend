@@ -288,7 +288,7 @@
     "tooltip": {
         "scope": "showtime.universal",
         "version": "0.0.87",
-        "mainFile": "index.ts",
+        "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tooltip"
     },
     "typography": {

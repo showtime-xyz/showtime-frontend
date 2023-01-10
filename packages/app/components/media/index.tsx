@@ -2,9 +2,8 @@ import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import type { ImageSource, ImageNativeProps } from "expo-image";
 import dynamic from "next/dynamic";
-import { ImageStyle } from "react-native-fast-image";
-import type { ResizeMode as ResizeModeType } from "react-native-fast-image";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -34,8 +33,8 @@ type Props = {
   item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
-  sizeStyle?: ImageStyle;
-  resizeMode?: ResizeModeType;
+  sizeStyle?: Pick<ImageSource, "width" | "height">;
+  resizeMode?: ImageNativeProps["contentFit"];
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;
@@ -90,11 +89,11 @@ function Media({
             source={{
               uri: mediaUri,
             }}
-            style={sizeStyle}
-            data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
+            data-test-id={Platform.select({ web: "nft-card-media" })}
             width={width}
             height={height}
+            style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
           />
@@ -142,7 +141,7 @@ function Media({
               numColumns={numColumns}
               style={sizeStyle}
               blurhash={item?.blurhash}
-              resizeMode={resizeMode as ResizeMode}
+              resizeMode={resizeMode}
               width={width}
               height={height}
             />

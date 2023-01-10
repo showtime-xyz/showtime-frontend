@@ -2,7 +2,9 @@ import * as React from "react";
 import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, formatDistanceStrict } from "date-fns";
+import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import type { ImageProps } from "expo-image";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
@@ -652,4 +654,17 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
     return `${days}d`;
   }
   return "";
+};
+
+export const contentFitToresizeMode = (
+  resizeMode: ImageProps["contentFit"]
+) => {
+  switch (resizeMode) {
+    case "cover":
+      return ResizeMode.COVER;
+    case "contain":
+      return ResizeMode.CONTAIN;
+    default:
+      return ResizeMode.STRETCH;
+  }
 };

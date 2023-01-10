@@ -81,7 +81,6 @@ const nextConfig = {
       "expo-web-browser",
       "expo-next-react-navigation",
       "expo-file-system",
-      "react-native-fast-image",
       "@react-native-menu/menu",
       "react-native-reanimated",
       "react-native-gesture-handler",

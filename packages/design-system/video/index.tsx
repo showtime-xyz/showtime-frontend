@@ -2,7 +2,6 @@ import { ComponentProps, useRef } from "react";
 import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
-import { Source } from "react-native-fast-image";
 
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -51,7 +50,7 @@ function Video({
             width={width}
             height={height}
             blurhash={blurhash}
-            source={posterSource as Source}
+            source={posterSource as any}
           />
         ) : (
           <>
@@ -62,7 +61,7 @@ function Video({
               // @ts-ignore
               style={[StyleSheet.absoluteFill, style]}
               blurhash={blurhash}
-              source={posterSource as Source}
+              source={posterSource as any}
             />
 
             <ExpoVideo

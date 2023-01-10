@@ -5,8 +5,8 @@ import {
   useRef,
   useCallback,
   forwardRef,
+  useImperativeHandle,
 } from "react";
-import { StyleSheet } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 
@@ -19,7 +19,7 @@ import { ModalHeader } from "./modal.header";
 import type { ModalContainerProps, ModalMethods } from "./types";
 
 const CONTAINER_TW = [
-  "top-0 right-0 bottom-0 left-0",
+  "top-0 right-0 bottom-0 left-0 fixed z-[999]",
   "flex items-center justify-end sm:justify-center",
 ];
 
@@ -36,19 +36,29 @@ const MODAL_BODY_TW = "flex-1 overflow-auto";
 
 const noop = () => {};
 const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
-  function ModalContainerComponent({
-    title,
-    web_height = WEB_HEIGHT,
-    onClose,
-    children,
-    bodyStyle,
-    style,
-    disableBackdropPress,
-    tw: propTw = "",
-  }: ModalContainerProps) {
+  function ModalContainerComponent(
+    {
+      title,
+      web_height = WEB_HEIGHT,
+      onClose,
+      children,
+      bodyStyle,
+      style,
+      disableBackdropPress,
+      tw: propTw = "",
+    }: ModalContainerProps,
+    ref
+  ) {
     const modalContainerTW = useMemo(
       () => [...MODAL_CONTAINER_TW, web_height, propTw],
       [web_height, propTw]
+    );
+    useImperativeHandle(
+      ref,
+      () => ({
+        close: () => {},
+      }),
+      []
     );
 
     useEscapeKeydown((event) => {
@@ -62,7 +72,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
 
     return (
       <FocusTrap aria-modal>
-        <View tw={CONTAINER_TW} style={styles.container}>
+        <View tw={CONTAINER_TW}>
           <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
           <View tw={modalContainerTW} style={style}>
             <ModalHeader title={title} onClose={onClose} />
@@ -75,13 +85,6 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    position: "fixed" as any,
-    zIndex: 999,
-  },
-});
 
 export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
   const contentRef = useRef<HTMLDivElement>(null);
