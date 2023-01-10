@@ -32,7 +32,9 @@ export const DropSelect = () => {
               <Gift color={isDark ? "black" : "white"} height={16} width={16} />
             }
             onPress={() => {
-              router.pop();
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
               router.push("/drop/free");
             }}
           />
