@@ -1,5 +1,5 @@
 import React from "react";
-import { Linking } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Globe, Lock } from "@showtime-xyz/universal.icon";
@@ -31,7 +31,12 @@ export const DropSelect = () => {
             icon={
               <Gift color={isDark ? "black" : "white"} height={16} width={16} />
             }
-            onPress={() => router.push("/drop/free")}
+            onPress={() => {
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
+              router.push("/drop/free");
+            }}
           />
         </View>
         <View tw="m-4 w-full px-4 lg:w-[360px]">
@@ -48,13 +53,16 @@ export const DropSelect = () => {
             ctaLabel={
               canCreateMusicDrop ? "Create Music Drop" : "Request Access"
             }
-            onPress={() =>
-              canCreateMusicDrop
-                ? router.push("/drop/music")
-                : Linking.openURL(
-                    "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                  )
-            }
+            onPress={() => {
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
+              if (canCreateMusicDrop) {
+                router.push("/drop/music");
+              } else {
+                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+              }
+            }}
           />
         </View>
         <View tw="m-4 w-full px-4 lg:w-[360px]">
@@ -69,7 +77,12 @@ export const DropSelect = () => {
             }
             description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
             ctaLabel="Create Event Drop"
-            onPress={() => router.push("/drop/event")}
+            onPress={() => {
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
+              router.push("/drop/event");
+            }}
           />
         </View>
         <View tw="m-4 w-full px-4 lg:w-[360px]">
@@ -80,7 +93,12 @@ export const DropSelect = () => {
             }
             description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
             ctaLabel="Create Private Drop"
-            onPress={() => router.push("/drop/private")}
+            onPress={() => {
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
+              router.push("/drop/private");
+            }}
           />
         </View>
       </View>
