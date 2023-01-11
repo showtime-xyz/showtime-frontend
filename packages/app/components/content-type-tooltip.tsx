@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import * as Tooltip from "universal-tooltip/src";
+import * as Tooltip from "universal-tooltip";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";

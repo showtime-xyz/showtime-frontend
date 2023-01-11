@@ -60,7 +60,6 @@ export { useFeed };
 //       const imagesUrl = newData
 //         .map((nft) =>
 //           // Note that we don't preload still previews for videos or gifs
-//           // because videos are not using `react-native-fast-image`
 //           nft.mime_type?.startsWith("image") && nft.mime_type !== "image/gif"
 //             ? getMediaUrl({ nft, stillPreview: false })
 //             : null

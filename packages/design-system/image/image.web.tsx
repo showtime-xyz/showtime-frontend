@@ -1,30 +1,16 @@
-import { ComponentProps, CSSProperties } from "react";
-import { ImageURISource, ImageResizeMode } from "react-native";
+import { ComponentProps, CSSProperties, useCallback } from "react";
+import { ImageURISource } from "react-native";
 
 // @ts-ignore
 import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
-import Image from "next/image";
+import Image, { ImageProps as NextImageProps } from "next/image";
 
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ImgProps } from "./image";
-
-const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
-  switch (resizeMode) {
-    case "cover":
-      return "cover";
-    case "contain":
-      return "contain";
-    case "stretch":
-      return "fill";
-    case "center":
-      return "none";
-    default:
-      throw new Error("Unsupported resize mode: " + resizeMode);
-  }
-};
+import { ResizeMode } from "./types";
 
 const getBase64Blurhash = (blurhash: string): string => {
   const pixels = decode(blurhash, 16, 16); // Uint8ClampedArray
@@ -33,27 +19,31 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
-type Props = Pick<ImgProps, "source" | "resizeMode" | "onLoad"> & {
-  className: string;
-  source: ImageURISource;
-  loading: "lazy" | "eager";
-  width: number;
-  height: number;
-  borderRadius?: number;
-  layout?: "fixed" | "intrinsic" | "responsive" | "fill";
-  alt: string; // Required from Next.js 13
-  blurhash?: string;
-  style?: CSSProperties;
-};
+type Props = Pick<ImgProps, "source" | "onLoad" | "contentFit"> &
+  Omit<NextImageProps, "src"> & {
+    className: string;
+    source: ImageURISource;
+    loading: "lazy" | "eager";
+    width: number;
+    height: number;
+    borderRadius?: number;
+    layout?: "fixed" | "intrinsic" | "responsive" | "fill";
+    alt: string; // Required from Next.js 13
+    blurhash?: string;
+    style?: CSSProperties;
+    resizeMode?: ResizeMode;
+  };
 
 function Img({
   source,
   loading = "lazy",
   width,
   height,
-  resizeMode,
+  resizeMode = "cover",
+  contentFit,
   onLoad,
   style,
+  onLoadingComplete: onLoadingCompleteProps,
   ...props
 }: Props) {
   const actualHeight =
@@ -63,51 +53,54 @@ function Img({
 
   const hasHeightOrWidth = actualHeight || actualWidth;
 
+  const onLoadingComplete = useCallback(
+    (e: HTMLImageElement) => {
+      onLoad?.({
+        cacheType: "none",
+        source: {
+          url: e.currentSrc,
+          width: e.naturalWidth,
+          height: e.naturalHeight,
+          mediaType: null,
+        },
+      });
+      onLoadingCompleteProps?.(e);
+    },
+    [onLoad, onLoadingCompleteProps]
+  );
   if (source?.uri && typeof source?.uri === "string") {
     return (
       <Image
         src={source.uri}
         style={{
-          objectFit: resizeModeToObjectFit(
-            resizeMode ??
-              // When using intrinsic size use contain to avoid
-              // rounding errors causing some pixel lost.
-              (width != null ? "contain" : "cover")
-          ),
+          objectFit: contentFit ?? resizeMode,
           ...style,
         }}
         loading={loading}
         width={width}
         height={height}
-        onLoadingComplete={(e) => {
-          onLoad?.({
-            nativeEvent: {
-              width: e.naturalWidth,
-              height: e.naturalHeight,
-            },
-          });
-        }}
+        onLoadingComplete={onLoadingComplete}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
         blurDataURL={
           width > 40 && props.blurhash
             ? getBase64Blurhash(props.blurhash)
             : undefined
         }
-        layout={!hasHeightOrWidth ? "fill" : undefined}
+        fill={!hasHeightOrWidth}
         unoptimized // We already optimize the images with our CDN
         {...props}
       />
     );
   }
 
-  if (source) {
+  if (typeof source === "string") {
     return (
       <Image
-        src={source as string}
+        src={source}
         loading={loading}
         width={width}
         height={height}
-        layout={!hasHeightOrWidth ? "fill" : undefined}
+        fill={!hasHeightOrWidth}
         {...props}
       />
     );
@@ -131,6 +124,4 @@ function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
   );
 }
 
-const preload = () => {};
-
-export { StyledImage as Image, preload };
+export { StyledImage as Image };

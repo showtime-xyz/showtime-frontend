@@ -1,24 +1,43 @@
-import { ComponentProps, useRef } from "react";
-import { StyleSheet, ImageBackground, ImageSourcePropType } from "react-native";
+import { useRef } from "react";
+import {
+  StyleSheet,
+  ImageBackground,
+  ImageSourcePropType,
+  ImageStyle,
+} from "react-native";
 
-import { Video as ExpoVideo } from "expo-av";
+import {
+  Video as ExpoVideo,
+  VideoProps as AVVideoProps,
+  ResizeMode as AVResizeMode,
+} from "expo-av";
 import { BlurView, BlurTint } from "expo-blur";
-import { ImageStyle, Source } from "react-native-fast-image";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { Image } from "@showtime-xyz/universal.image";
+import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
 import { useMuted } from "app/providers/mute-provider";
 
-type VideoProps = {
+type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   tw?: TW;
   blurhash?: string;
   width: number;
   height: number;
-} & ComponentProps<typeof ExpoVideo>;
+  resizeMode: ResizeMode;
+};
+const contentFitToresizeMode = (resizeMode: ResizeMode) => {
+  switch (resizeMode) {
+    case "cover":
+      return AVResizeMode.COVER;
+    case "contain":
+      return AVResizeMode.CONTAIN;
+    default:
+      return AVResizeMode.STRETCH;
+  }
+};
 
 export function Video({
   tw,
@@ -46,7 +65,7 @@ export function Video({
           style={style as ImageStyle}
           resizeMode={resizeMode}
           blurhash={blurhash}
-          source={posterSource as Source}
+          source={posterSource}
           width={width}
           height={height}
           alt={"Video Poster"}
@@ -62,7 +81,7 @@ export function Video({
             style={style as ImageStyle}
             resizeMode={resizeMode}
             blurhash={blurhash}
-            source={posterSource as Source}
+            source={posterSource}
             width={width}
             height={height}
             alt={"Video Background"}
@@ -75,7 +94,7 @@ export function Video({
           <ExpoVideo
             style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}
-            resizeMode={resizeMode}
+            resizeMode={contentFitToresizeMode(resizeMode)}
             posterSource={posterSource}
             source={props.source}
             ref={videoRef}

@@ -71,7 +71,7 @@ export const FeedItemTapGesture = ({
     .minDuration(300)
     .maxDistance(9999)
     .onStart(() => {
-      "worklet";
+      ("worklet");
       if (toggleHeader) {
         runOnJS(toggleHeader)();
       }

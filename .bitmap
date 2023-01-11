@@ -29,7 +29,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.65",
+        "version": "0.0.67",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -131,7 +131,7 @@
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.61",
+        "version": "0.0.63",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
@@ -155,25 +155,25 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.83",
+        "version": "0.0.85",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.113",
+        "version": "0.0.114",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.127",
+        "version": "0.0.128",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.116",
+        "version": "0.0.117",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -287,8 +287,8 @@
     },
     "tooltip": {
         "scope": "showtime.universal",
-        "version": "0.0.87",
-        "mainFile": "index.ts",
+        "version": "0.0.88",
+        "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tooltip"
     },
     "typography": {
