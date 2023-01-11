@@ -67,7 +67,9 @@ export function GiftButton({ nft }: { nft: NFT }) {
           >
             {formatClaimNumber(edition.total_claimed_count)}
           </Text>
-          {`/${edition.creator_airdrop_edition.edition_size}`}
+          {edition.creator_airdrop_edition.edition_size > 0
+            ? `/${edition.creator_airdrop_edition.edition_size}`
+            : ""}
         </>
       }
     >
