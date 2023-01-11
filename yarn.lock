@@ -8228,9 +8228,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.126":
-  version: 0.0.126
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.126"
+"@showtime-xyz/universal.fieldset@npm:^0.0.127":
+  version: 0.0.127
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.127"
   dependencies:
     "@showtime-xyz/universal.accordion": 0.0.75
     "@showtime-xyz/universal.hooks": 0.0.58
@@ -8248,7 +8248,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: cca78978c63be0ad580a581e63d715619c57e552cfadaf5a73c95a21f77626a45bdcf88697b3300f6f388ac41c0b1edd6785ece8be894ef0063b4950a162a9e6
+  checksum: d959d3e8dac9326b9b0bd46e6430d90c1c6afd2dd69c46e2db58c4454c0dce64e474c10ca28c1b758a554580b179a34faeb3adff1eca0f8d4d5c9898eeea06d7
   languageName: node
   linkType: hard
 
@@ -8907,7 +8907,7 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.56
     "@showtime-xyz/universal.dropdown-menu": ^0.0.59
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.19
-    "@showtime-xyz/universal.fieldset": ^0.0.126
+    "@showtime-xyz/universal.fieldset": ^0.0.127
     "@showtime-xyz/universal.haptics": ^0.0.22
     "@showtime-xyz/universal.hooks": ^0.0.58
     "@showtime-xyz/universal.icon": ^0.0.80

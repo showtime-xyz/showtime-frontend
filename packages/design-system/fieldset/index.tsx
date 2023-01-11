@@ -1,4 +1,4 @@
-import { MutableRefObject, ComponentType, forwardRef } from "react";
+import { MutableRefObject, ComponentType, forwardRef, Fragment } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
@@ -15,7 +15,7 @@ import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? View : AnimateHeight;
+const PlatformAnimateHeight = Platform.OS === "web" ? Fragment : AnimateHeight;
 
 export type FieldsetProps = {
   errorText?: string;
@@ -28,6 +28,7 @@ export type FieldsetProps = {
   selectOnly?: boolean;
   switchOnly?: boolean;
   leftElement?: React.ReactNode;
+  rightElement?: React.ReactNode;
   Component?: ComponentType;
   required?: boolean;
   componentRef?: MutableRefObject<ComponentType | undefined>;
@@ -45,6 +46,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     switchProps,
     tw: twProp = "",
     leftElement,
+    rightElement,
     selectOnly,
     switchOnly,
     required,
@@ -57,6 +59,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   const inputId = useId();
   const helperTextId = useId();
   const errorTextId = useId();
+
   return (
     <View
       tw={[
@@ -74,7 +77,9 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
       </View>
 
-      {switchProps ? <Switch {...switchProps} /> : null}
+      <View tw="ml-auto">
+        {switchProps ? <Switch {...switchProps} /> : null}
+      </View>
       {!switchProps ? (
         <View tw="mt-4 flex-row items-center">
           {leftElement}
@@ -87,7 +92,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
                 default: undefined,
               })}
               ref={ref}
-              editable={disabled}
+              editable={!disabled}
               nativeID={inputId}
               accessibilityLabel={accessibilityLabel}
               multiline={textInputProps.multiline}
@@ -119,6 +124,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
           {select ? (
             <Select disabled={disabled} size="small" {...select} />
           ) : null}
+          {rightElement}
         </View>
       ) : null}
 

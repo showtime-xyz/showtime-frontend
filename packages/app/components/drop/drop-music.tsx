@@ -136,6 +136,8 @@ export const DropMusic = () => {
   const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
+  const [isUnlimited, setIsUnlimited] = useState(false);
+
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
@@ -149,7 +151,14 @@ export const DropMusic = () => {
   });
 
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT({ ...values, gatingType: "spotify_save" }, clearStorage);
+    dropNFT(
+      {
+        ...values,
+        gatingType: "spotify_save",
+        editionSize: isUnlimited ? 0 : values.editionSize,
+      },
+      clearStorage
+    );
   };
 
   // useEffect(() => {
@@ -547,7 +556,9 @@ export const DropMusic = () => {
                       />
                       <DataPill
                         tw="mx-1 md:mx-4"
-                        label={`Editions ${watch("editionSize")}`}
+                        label={`Editions ${
+                          isUnlimited ? "unlimted" : watch("editionSize")
+                        }`}
                         type="text"
                       />
                       <DataPill
@@ -592,7 +603,31 @@ export const DropMusic = () => {
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
                                 value={value?.toString()}
+                                disabled={isUnlimited}
                                 onChangeText={onChange}
+                                rightElement={
+                                  <Pressable
+                                    onPress={() =>
+                                      setIsUnlimited(
+                                        (isUnlimited) => !isUnlimited
+                                      )
+                                    }
+                                    tw="flex-row items-center"
+                                  >
+                                    <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
+                                      Unlimited
+                                    </Text>
+                                    <Checkbox
+                                      onChange={() =>
+                                        setIsUnlimited(
+                                          (isUnlimited) => !isUnlimited
+                                        )
+                                      }
+                                      checked={isUnlimited}
+                                      accesibilityLabel="unlimited editions for drop"
+                                    />
+                                  </Pressable>
+                                }
                               />
                             );
                           }}
