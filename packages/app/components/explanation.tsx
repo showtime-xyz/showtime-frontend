@@ -48,7 +48,7 @@ export const Explanation = ({
             scrollAnimationDuration={1000}
             renderItem={({ item }) => (
               <View
-                tw="mt-10 h-16 bg-white dark:bg-black"
+                tw="h-16 bg-white pt-10 dark:bg-black"
                 style={{ height: 150 }}
               >
                 {item.title && (
