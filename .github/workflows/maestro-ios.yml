@@ -12,7 +12,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v2
@@ -25,10 +27,9 @@ jobs:
       - name: Expo prebuild
         run: yarn waldo:build
 
-      - uses: actions/setup-xcode@v2
-        with:
-          xcode-version: 12
+      - name: Build with Xcode
       - run: cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace -scheme Showtime -configuration Release -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 11'
+
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
