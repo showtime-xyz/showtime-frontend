@@ -55,7 +55,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
             size={isMdWidth ? "regular" : "small"}
             labelTW="font-semibold"
           >
-            Sign&nbsp;In
+            Sign In
           </Button>
         </>
       )}

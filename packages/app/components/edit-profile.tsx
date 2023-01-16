@@ -289,6 +289,7 @@ export const EditProfile = () => {
               render={({ field: { onChange, value } }) => (
                 <DropFileZone onChange={({ file }) => onChange(file)}>
                   <Pressable
+                    testID="profile_photo_picker"
                     onPress={async () => {
                       const file = await pickFile({
                         mediaTypes: "image",
