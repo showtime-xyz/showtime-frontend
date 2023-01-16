@@ -28,10 +28,21 @@ jobs:
       - name: Expo prebuild
         run: yarn waldo:build
 
-      - name: Build iOS app
-        run: cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace -scheme Showtime -configuration Release -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 11'
+      - name: Build with Xcode
+        run: |
+          DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
+
+          cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
+                    -scheme Showtime                              \
+                    -configuration Release                        \
+                    -sdk iphonesimulator                          \
+                    ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO              \
+                    -derivedDataPath "$DERIVED_DATA_PATH"         \
+                    clean build
+
+          echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: Showtime.app
+          app-file: ${{ env.APP_DIR_PATH }}
