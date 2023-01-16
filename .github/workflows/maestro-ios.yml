@@ -1,5 +1,8 @@
 name: Mobile Dev Action iOS
 
+defaults:
+  run:
+    working-directory: apps/expo
 on:
   push:
     branches: ["staging"]
