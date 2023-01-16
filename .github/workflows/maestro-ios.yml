@@ -25,7 +25,7 @@ jobs:
       - name: Expo prebuild
         run: yarn waldo:build
 
-      - uses: actions/setup-xcode@v2
+      - name: Build iOS app
       - run: cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace -scheme Showtime -configuration Release -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 11'
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
