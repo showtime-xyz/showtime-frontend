@@ -1,0 +1,36 @@
+# sign-up-with-wallet.yaml
+
+appId: io.showtime.development
+---
+- launchApp
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- tapOn: "I already have a wallet"
+- assertNotVisible: "Sign In"
+- tapOn:
+    text: "Pick profile photo"
+    index: 1
+- tapOn: "Select Photos…"
+- tapOn:
+    # Selects photo from picker
+    point: "16%,22%"
+- tapOn: "Choose"
+- tapOn: "Keep current Selection"
+- tapOn: "Your display name"
+- inputRandomPersonName
+- tapOn: "Your username"
+- inputRandomText
+- tapOn:
+    id: "about_me"
+- inputRandomText
+- pressKey: Enter
+- tapOn:
+    id: "website_url"
+- inputText: "www.google.com"
+- pressKey: Enter
+- tapOn:
+    text: "Complete Profile"
+    index: 1
+- assertVisible: "Submitting..."
+- assertNotVisible: "Complete Profile"
