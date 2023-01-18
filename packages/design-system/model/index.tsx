@@ -1,8 +1,6 @@
 import { Suspense } from "react";
 
-import { ResizeMode } from "expo-av";
-
-import { Image } from "@showtime-xyz/universal.image";
+import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";

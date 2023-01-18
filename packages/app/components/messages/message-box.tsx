@@ -77,10 +77,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       [handleReset, handleFocus]
     );
     return (
-      <View
-        tw="flex-row items-center bg-white py-4 dark:bg-black"
-        style={style}
-      >
+      <View tw="flex-row items-center bg-white p-4 dark:bg-black" style={style}>
         <View tw="mr-2 flex-1">
           <TextInput
             //@ts-ignore
@@ -110,7 +107,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           onPress={handleSubmit}
           style={{ opacity: disable ? 0.4 : 1 }}
         >
-          {submitting ? <Spinner size="small" /> : <Send />}
+          {submitting ? (
+            <Spinner size="small" />
+          ) : (
+            <Send width={24} height={24} />
+          )}
         </Button>
       </View>
     );

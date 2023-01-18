@@ -1,13 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
 const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
-// const { colors } = require("@showtime-xyz/universal.tailwind");
-// const {
-//   MAX_CONTENT_WIDTH,
-//   MAX_HEADER_WIDTH,
-// } = require("@showtime-xyz/universal.tailwind");
 
 const colors = {
   black: "#000",
@@ -333,12 +329,12 @@ module.exports = {
         copy: "copy",
       },
       fontFamily: {
-        space: fontFamily("SpaceGrotesk-Regular"),
-        "space-bold": fontFamily("SpaceGrotesk-Bold"),
-        inter: fontFamily("Inter-Regular"),
-        "inter-semibold": fontFamily("Inter-SemiBold"),
-        "inter-bold": fontFamily("Inter-Bold"),
-        sans: [fontFamily("Inter-Regular"), ...defaultTheme.fontFamily.sans],
+        space: "var(--font-space-grotesk)",
+        "space-bold": "var(--font-space-grotesk)",
+        inter: "var(--font-inter)",
+        "inter-semibold": "var(--font-inter)",
+        "inter-bold": "var(--font-inter)",
+        sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
       },
       whitespace: {
         "break-spaces": "break-spaces",
@@ -378,12 +374,12 @@ module.exports = {
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: "var(--font-space-grotesk)",
         },
         ".text-xl": textSizes["text-xl"],
         ".text-2xl": {
           ...textSizes["text-2xl"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: "var(--font-space-grotesk)",
         },
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],

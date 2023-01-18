@@ -44,7 +44,9 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
               <View key={index.toString()}>
                 <View tw="flex-row items-center justify-between p-4">
                   <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
-                    {key.toUpperCase().replace(/_/g, " ")}
+                    {key
+                      .replace(/_/g, " ")
+                      .replace(/^\S/, (s) => s.toUpperCase())}
                   </Text>
                   <View tw="w-2" />
                   <Switch

@@ -1,9 +1,7 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,7 +22,6 @@ const { useParam } = createParam<Query>();
 
 export const CollectorsModal = () => {
   useTrackPageViewed({ name: "Collectors" });
-  const router = useRouter();
   const [tokenId] = useParam("tokenId");
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
@@ -48,10 +45,6 @@ export const CollectorsModal = () => {
           <UserList
             loading={isLoading}
             users={data?.data?.item?.multiple_owners_list}
-            onClose={Platform.select({
-              ios: () => router.pop(),
-              default: () => false,
-            })}
           />
         </Suspense>
       </ErrorBoundary>

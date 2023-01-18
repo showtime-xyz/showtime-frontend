@@ -1,12 +1,12 @@
 {
   "name": "showtime",
-  "version": "82.0.0",
+  "version": "89.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
     "@react-native-menu/menu": "^0.7.2",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
-    "@types/react-native": "0.69.3",
+    "@types/react-native": "0.70.5",
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
     "@walletconnect/react-native-dapp": "^1.7.8",
@@ -24,7 +24,6 @@
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "0.1.10",
-    "react-native-fast-image": "^8.5.11",
     "react-native-os": "^1.2.6",
     "sentry-expo": "^5.0.2",
     "turbo": "^1.2.8"
@@ -84,14 +83,16 @@
     "@ethersproject/bignumber": "5.6.2",
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
-    "next": "13.0.0",
+    "next": "^13.1.1",
     "@gorhom/bottom-sheet": "4.4.5",
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
     "react-native-screens": "3.18.0",
     "@radix-ui/react-accordion": "^1.0.1",
     "@radix-ui/react-portal": "^1.0.1",
-    "@radix-ui/react-select": "^1.1.2"
+    "@radix-ui/react-select": "^1.1.2",
+    "react-remove-scroll-bar": "^2.3.4",
+    "universal-tooltip": "^0.1.11"
   },
   "react-native": {
     "zlib": "browserify-zlib",
@@ -145,8 +146,5 @@
     "vm": "vm-browserify",
     "zlib": "browserify-zlib"
   },
-  "packageManager": "yarn@3.2.0",
-  "dependencies": {
-    "@types/react-dropzone": "^5.1.0"
-  }
+  "packageManager": "yarn@3.2.0"
 }

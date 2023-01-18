@@ -1,47 +1,17 @@
-import { Suspense } from "react";
+import { Platform } from "react-native";
 
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { View } from "@showtime-xyz/universal.view";
 
-import { Comments } from "app/components/comments";
-import { CommentsStatus } from "app/components/comments/comments-status";
-import { ErrorBoundary } from "app/components/error-boundary";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { useTrackPageViewed } from "app/lib/analytics";
-import { createParam } from "app/navigation/use-param";
+import { CommentsModal } from "app/components/comments-modal";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-type Query = {
-  tokenId: string;
-  contractAddress: string;
-  chainName: string;
-};
-
-const { useParam } = createParam<Query>();
-
-function CommentsModal() {
-  useTrackPageViewed({ name: "Comments" });
-  const [tokenId] = useParam("tokenId");
-  const [contractAddress] = useParam("contractAddress");
-  const [chainName] = useParam("chainName");
-  const { data } = useNFTDetailByTokenId({
-    chainName: chainName as string,
-    tokenId: tokenId as string,
-    contractAddress: contractAddress as string,
-  });
-
+export const CommentsScreen = () => {
+  const headerHeight = useHeaderHeight();
   return (
-    <ErrorBoundary>
-      <Suspense
-        fallback={<CommentsStatus isLoading={true} error={undefined} />}
-      >
-        {data?.data?.item && <Comments nft={data?.data.item} />}
-      </Suspense>
-    </ErrorBoundary>
-  );
-}
+    <>
+      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
 
-export const CommentsScreen = withModalScreen(CommentsModal, {
-  title: "Comments",
-  matchingPathname: "/nft/[chainName]/[contractAddress]/[tokenId]/comments",
-  matchingQueryParam: "commentsModal",
-  snapPoints: ["98%"],
-});
+      <CommentsModal />
+    </>
+  );
+};

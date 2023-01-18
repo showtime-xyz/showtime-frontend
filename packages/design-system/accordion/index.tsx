@@ -12,7 +12,31 @@ import { ViewProps } from "@showtime-xyz/universal.view";
 import { Accordion as RNAccordion } from "./lib";
 import { ItemProps } from "./lib/types";
 
-const Chevron = ({ children }: { children?: any }) => {
+type ChevronRotazeZ = "top" | "right" | "bottom" | "left";
+type ChevronProps = {
+  children?: any;
+  /**
+   * Define Chevron icon arrow points in the direction.
+   * @type An array of two lengths
+   * e.g. rotazeZ={["right", "bottom"]}
+   */
+  rotazeZ?: ChevronRotazeZ[];
+};
+const formatRotazeZ = (rotazeZ: ChevronRotazeZ) => {
+  switch (rotazeZ) {
+    case "top":
+      return "0deg";
+    case "bottom":
+      return "180deg";
+    case "right":
+      return "90deg";
+    case "left":
+      return "270deg";
+    default:
+      return "0deg";
+  }
+};
+const Chevron = ({ children, rotazeZ = ["bottom", "top"] }: ChevronProps) => {
   const { value: selectedValue } = useContext(RNAccordion.RootContext);
   const { value: itemValue } = useContext(RNAccordion.ItemContext);
   const isExpanded = itemValue === selectedValue;
@@ -21,7 +45,9 @@ const Chevron = ({ children }: { children?: any }) => {
   return (
     <MotiView
       animate={{
-        rotateZ: isExpanded ? "0deg" : "180deg",
+        rotateZ: isExpanded
+          ? formatRotazeZ(rotazeZ[1])
+          : formatRotazeZ(rotazeZ[0]),
       }}
       transition={{
         type: "timing",

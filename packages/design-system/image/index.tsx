@@ -1,1 +1,2 @@
-export { Image, preload } from "./image";
+export { Image } from "./image";
+export * from "./types";

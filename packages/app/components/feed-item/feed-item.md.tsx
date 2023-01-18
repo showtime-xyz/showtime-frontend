@@ -34,7 +34,6 @@ import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { PlayOnSpotify } from "app/components/play-on-spotify";
 import { UserList } from "app/components/user-list";
 import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
@@ -49,26 +48,20 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
 
+import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
 
 const Collectors = ({ nft }: { nft: NFT }) => {
-  return (
-    <UserList
-      loading={false}
-      users={nft?.multiple_owners_list || []}
-      onClose={() => false}
-    />
-  );
+  return <UserList loading={false} users={nft?.multiple_owners_list || []} />;
 };
 
 const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
   itemHeight,
@@ -275,11 +268,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Button>
             </View>
           ) : null}
-          {edition?.spotify_track_url ? (
-            <View tw="absolute bottom-10 left-4">
-              <PlayOnSpotify url={edition?.spotify_track_url} />
-            </View>
-          ) : null}
+
+          <View tw="absolute bottom-10 left-4">
+            <ContentTypeTooltip edition={edition} />
+          </View>
         </View>
 
         <View

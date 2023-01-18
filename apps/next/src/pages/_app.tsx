@@ -4,6 +4,7 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
+import { Inter, Space_Grotesk } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -16,7 +17,6 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { useLogRocket } from "app/hooks/use-logrocket";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
@@ -27,12 +27,17 @@ import { CommentsScreen } from "app/screens/comments";
 import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEventScreen } from "app/screens/drop-event";
+import { DropFreeScreen } from "app/screens/drop-free";
+import { DropMusicScreen } from "app/screens/drop-music";
+import { DropPrivateScreen } from "app/screens/drop-private";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
+import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
@@ -50,9 +55,7 @@ Sentry.init({
   environment: process.env.STAGE,
 });
 
-export default function App({ Component, pageProps, router }: AppProps) {
-  useLogRocket();
-
+function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
   const metaTags = meta ? (
     <>
@@ -177,6 +180,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <ClaimLimitExplanationScreen />
         <LikersScreen />
         <QRCodeShareScreen />
+        <ReportScreen />
+        <DropPrivateScreen />
+        <DropEventScreen />
+        <DropMusicScreen />
+        <DropFreeScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
@@ -191,8 +199,21 @@ export default function App({ Component, pageProps, router }: AppProps) {
   );
 }
 
+const inter = Inter({
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  weight: "700",
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
+    const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
+
     const onResize = useCallback(() => {
       if (isMobileWeb()) {
         document.body.classList.add("overflow-hidden", "overscroll-y-contain");
@@ -200,7 +221,15 @@ const Container = withColorScheme(
         document.body.classList.remove("overflow-hidden", "overscroll-y-none");
       }
     }, []);
+
     usePlatformResize(onResize, true);
-    return <View tw="bg-gray-100 dark:bg-black">{children}</View>;
+
+    return (
+      <View tw="bg-gray-100 dark:bg-black">
+        <div className={fonts}>{children}</div>
+      </View>
+    );
   }
 );
+
+export default App;

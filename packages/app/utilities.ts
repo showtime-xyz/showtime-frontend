@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Platform } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, formatDistanceStrict } from "date-fns";
+import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import type { ImageProps } from "expo-image";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
@@ -488,6 +490,9 @@ export function isSafari(): boolean {
 export function isMobileWeb(): boolean {
   return Platform.OS === "web" && (isAndroid() || isIOS());
 }
+export function isDesktopWeb(): boolean {
+  return Platform.OS === "web" && !isAndroid() && !isIOS();
+}
 
 // TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
 export const ledgerWalletHack = (signature?: string) => {
@@ -627,4 +632,39 @@ export const findTokenChainName = (chainId?: string) => {
     (key: string) =>
       CHAIN_IDENTIFIERS[key as keyof typeof CHAIN_IDENTIFIERS] == chainId
   );
+};
+
+export const getFormatDistanceStrictToWeek = (time?: string) => {
+  if (!time) return "";
+  const distanceDays = formatDistanceStrict(new Date(time), new Date(), {
+    unit: "day",
+  });
+  const days = Number(distanceDays.split(" ")[0]);
+  if (days === 0) {
+    const distanceHours = formatDistanceStrict(new Date(time), new Date(), {
+      unit: "hour",
+    });
+    const hours = Number(distanceHours.split(" ")[0]);
+    return `${hours}h`;
+  }
+  if (days >= 7) {
+    return `${Math.ceil(days / 7)}w`;
+  }
+  if (days < 7) {
+    return `${days}d`;
+  }
+  return "";
+};
+
+export const contentFitToresizeMode = (
+  resizeMode: ImageProps["contentFit"]
+) => {
+  switch (resizeMode) {
+    case "cover":
+      return ResizeMode.COVER;
+    case "contain":
+      return ResizeMode.CONTAIN;
+    default:
+      return ResizeMode.STRETCH;
+  }
 };

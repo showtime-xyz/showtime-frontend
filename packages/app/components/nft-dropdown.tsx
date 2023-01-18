@@ -307,8 +307,18 @@ function NFTDropdown({
           {!hasOwnership && (
             <DropdownMenuItem
               onSelect={async () => {
-                await report({ nftId: nft.nft_id });
-                router.pop();
+                router.push(
+                  {
+                    pathname:
+                      Platform.OS === "web" ? router.pathname : "/report",
+                    query: {
+                      ...router.query,
+                      reportModal: true,
+                      nftId: nft.nft_id,
+                    },
+                  },
+                  Platform.OS === "web" ? router.asPath : undefined
+                );
               }}
               key="report"
             >

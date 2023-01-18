@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-
 import { useRouter } from "@showtime-xyz/universal.router";
 
 const ModalListScreenQueryParamList = [
@@ -29,9 +27,5 @@ export const useModalListProps = () => {
       default: null,
     }),
     useWindowScroll: false,
-    ...Platform.select({
-      android: { renderScrollComponent: BottomSheetScrollView as any },
-      default: {},
-    }),
   };
 };

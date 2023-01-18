@@ -1,10 +1,4 @@
-import {
-  Discord,
-  Instagram,
-  Twitter,
-  Mail,
-  Github,
-} from "@showtime-xyz/universal.icon";
+import { Instagram, Twitter, Mail, Github } from "@showtime-xyz/universal.icon";
 
 const links = [
   {
@@ -37,11 +31,7 @@ const social = [
     link: "https://www.instagram.com/Showtime_xyz",
     title: "Instagram",
   },
-  {
-    icon: Discord,
-    link: "/discord",
-    title: "Discord",
-  },
+
   {
     icon: Mail,
     link: "mailto:help@showtime.xyz",

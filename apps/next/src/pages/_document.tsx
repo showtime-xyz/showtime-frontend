@@ -21,10 +21,6 @@ class Document extends NextDocument {
         <Head>
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
-            rel="stylesheet"
-          />
         </Head>
         <body className="!max-w-screen">
           <Main />

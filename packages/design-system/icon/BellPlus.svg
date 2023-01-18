@@ -1,9 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-  <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-  <line x1="10" y1="11" x2="14" y2="11" />
-  <line x1="12" y1="9" x2="12" y2="13" />
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_204_37)">
+    <path
+      d="M13.4142 3.58579C13.0391 3.21071 12.5304 3 12 3C11.4696 3 10.9609 3.21071 10.5858 3.58579C10.2107 3.96086 10 4.46957 10 5C8.85159 5.54303 7.8726 6.38833 7.16795 7.4453C6.4633 8.50227 6.05956 9.73107 6 11V14C5.92474 14.6217 5.70457 15.2171 5.35719 15.7381C5.00981 16.2592 4.54494 16.6914 4 17H20C19.4551 16.6914 18.9902 16.2592 18.6428 15.7381C18.2954 15.2171 18.0753 14.6217 18 14V12.5"
+      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path
+      d="M9 17V18C9 18.7956 9.31607 19.5587 9.87868 20.1213C10.4413 20.6839 11.2044 21 12 21C12.7956 21 13.5587 20.6839 14.1213 20.1213C14.6839 19.5587 15 18.7956 15 18V17"
+      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M15 6H21" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M18 3V9" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <defs>
+    <clipPath id="clip0_204_37">
+      <rect width="24" height="24" fill="white" />
+    </clipPath>
+  </defs>
 </svg>
-
-

@@ -34,14 +34,18 @@ You can get started pretty easily if you follow the same monorepo structure as t
 
 `yarn add @showtime-xyz/universal.view @showtime-xyz/universal.text`
 
-In `next.config.js`, please use `next-transpile-modules` to transpile the design system:
+In `next.config.js`, please use `transpilePackages` to transpile the design system:
 
 ```js
-const withTM = require("next-transpile-modules")([
-  "@showtime-xyz/universal.tailwind",
-  "@showtime-xyz/universal.view",
-  "@showtime-xyz/universal.text",
-]);
+const nextConfig = {
+  experimental: {
+    transpilePackages: [
+      "@showtime-xyz/universal.tailwind",
+      "@showtime-xyz/universal.view",
+      "@showtime-xyz/universal.text",
+    ],
+  },
+};
 ```
 
 > Don't forget to add the Universal packages to this list. Keep this in mind when you install new packages.

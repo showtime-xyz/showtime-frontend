@@ -1,6 +1,7 @@
 import { Platform, ViewStyle } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -15,6 +16,7 @@ export const useModalScreenViewStyle = (
   const router = useRouter();
   const headerHeight = useHeaderHeight();
   const bottomHeight = useBottomTabBarHeight();
+  const { bottom: safeInsetBottom } = useSafeAreaInsets();
 
   const mode = options?.mode ?? "padding";
   const offset = options?.offset ?? 0;
@@ -27,7 +29,8 @@ export const useModalScreenViewStyle = (
       }) +
       16 +
       offset;
-  const bottom = isModalScreen ? 0 : bottomHeight + offset;
+
+  const bottom = isModalScreen ? safeInsetBottom : bottomHeight + offset;
 
   if (mode === "margin") {
     return {

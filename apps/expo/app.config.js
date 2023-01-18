@@ -157,7 +157,6 @@ export default {
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
-    "@logrocket/react-native",
     "./plugins/with-spotify-sdk.js",
     [
       withInfoPlist,
@@ -196,10 +195,10 @@ export default {
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 31,
-          targetSdkVersion: 31,
+          compileSdkVersion: 32,
+          targetSdkVersion: 32,
           minSdkVersion: 23,
-          buildToolsVersion: "31.0.0",
+          buildToolsVersion: "32.0.0",
           kotlinVersion: "1.6.10",
         },
         ios: {

@@ -2,9 +2,8 @@ import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import type { ImageSource, ImageNativeProps } from "expo-image";
 import dynamic from "next/dynamic";
-import { ImageStyle } from "react-native-fast-image";
-import type { ResizeMode as ResizeModeType } from "react-native-fast-image";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -14,11 +13,14 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
+
+import { ContentTypeIcon } from "../content-type-tooltip";
 
 const Dynamic3dModel = dynamic<ModelProps>(
   () => import("design-system/model").then((mod) => mod.Model),
@@ -31,11 +33,12 @@ type Props = {
   item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
-  sizeStyle?: ImageStyle;
-  resizeMode?: ResizeModeType;
+  sizeStyle?: Pick<ImageSource, "width" | "height">;
+  resizeMode?: ImageNativeProps["contentFit"];
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;
+  edition?: CreatorEditionResponse;
 };
 
 function Media({
@@ -46,6 +49,7 @@ function Media({
   onPinchStart,
   onPinchEnd,
   isMuted,
+  edition,
 }: Props) {
   const resizeMode = propResizeMode ?? ResizeMode.COVER;
 
@@ -76,15 +80,20 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
+          {Boolean(edition) && (
+            <View tw="absolute bottom-0.5 left-0.5 z-10">
+              <ContentTypeIcon edition={edition} />
+            </View>
+          )}
           <Image
             source={{
               uri: mediaUri,
             }}
-            style={sizeStyle}
-            data-test-id={Platform.select({ web: "nft-card-media" })}
             blurhash={item?.blurhash}
+            data-test-id={Platform.select({ web: "nft-card-media" })}
             width={width}
             height={height}
+            style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
           />
@@ -99,7 +108,7 @@ function Media({
           disabled={numColumns > 1}
         >
           {numColumns > 1 && (
-            <View tw="z-1 absolute bottom-1 right-1 bg-transparent">
+            <View tw="absolute bottom-1 right-1 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}
@@ -132,7 +141,7 @@ function Media({
               numColumns={numColumns}
               style={sizeStyle}
               blurhash={item?.blurhash}
-              resizeMode={resizeMode as ResizeMode}
+              resizeMode={resizeMode}
               width={width}
               height={height}
             />

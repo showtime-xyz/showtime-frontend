@@ -2,9 +2,9 @@ import { useState, useLayoutEffect, useRef } from "react";
 import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
-// Todo: now Tooltip component seems to no working on dist floder,it need to check it.
-import { Tooltip } from "@showtime-xyz/universal.tooltip";
 import { View } from "@showtime-xyz/universal.view";
+
+import * as Tooltip from "design-system/tooltip";
 
 type Props = {
   title?: string;
@@ -12,7 +12,7 @@ type Props = {
   disableTooltip?: boolean;
 };
 
-export function Title({ title, cardMaxWidth, disableTooltip = false }: Props) {
+export function Title({ title, disableTooltip = false }: Props) {
   const [isUseTooltip, setIsOverflow] = useState(
     Platform.OS === "web" && !disableTooltip
   );
@@ -31,26 +31,24 @@ export function Title({ title, cardMaxWidth, disableTooltip = false }: Props) {
       );
     }
   }, [title]);
-
   if (!title) return null;
 
   return (
     <View ref={textRef} tw="px-4 pt-4">
       {isUseTooltip ? (
-        <Tooltip
-          delay={300}
-          text={title}
-          contentStyle={{
-            maxWidth: cardMaxWidth,
-          }}
-        >
-          <Text
-            tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
-            numberOfLines={1}
-          >
-            {title}
-          </Text>
-        </Tooltip>
+        <Tooltip.Root>
+          <Tooltip.Trigger>
+            <Text
+              tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
+              numberOfLines={1}
+            >
+              {title}
+            </Text>
+          </Tooltip.Trigger>
+          <Tooltip.Content side="bottom">
+            <Tooltip.Text text={title} />
+          </Tooltip.Content>
+        </Tooltip.Root>
       ) : (
         <Text
           tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
