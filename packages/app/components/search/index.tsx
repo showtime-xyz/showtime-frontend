@@ -65,8 +65,8 @@ export const Search = () => {
             android: Math.max(top, PT_2_UNIT * 4),
           }),
           paddingHorizontal: Platform.select({
-            default: 16,
-            android: 12,
+            default: 12,
+            ios: 16,
           }),
         }}
       >
