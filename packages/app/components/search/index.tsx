@@ -18,6 +18,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { HeaderCancel } from "app/components/header";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
@@ -25,8 +26,6 @@ import { formatAddressShort } from "app/utilities";
 
 import { Input } from "design-system/input";
 import { useSafeAreaInsets } from "design-system/safe-area";
-
-import { HeaderCancel } from "../header";
 
 const PT_2_UNIT = 8;
 
