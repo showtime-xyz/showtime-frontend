@@ -18,7 +18,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { HeaderCancel } from "app/components/header";
+import { HeaderLeft } from "app/components/header";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
@@ -58,19 +58,18 @@ export const Search = () => {
   return (
     <>
       <View
-        tw="flex-row pb-2"
+        tw="flex-row px-4 pb-2"
         style={{
           paddingTop: Platform.select({
             default: Math.max(top, PT_2_UNIT),
             android: Math.max(top, PT_2_UNIT * 4),
           }),
-          paddingHorizontal: Platform.select({
-            default: 12,
-            ios: 16,
-          }),
         }}
       >
         <View tw="flex-1 flex-row items-center">
+          <View tw="mr-4">
+            <HeaderLeft canGoBack />
+          </View>
           <View tw="flex-1">
             <Input
               placeholder="Search for @name or name.eth"
@@ -87,7 +86,6 @@ export const Search = () => {
                   default: 8,
                   android: 6,
                 }),
-                minHeight: 33,
               }}
               leftElement={
                 <View tw="px-2">
@@ -117,9 +115,6 @@ export const Search = () => {
                 ) : undefined
               }
             />
-          </View>
-          <View tw="ml-4">
-            <HeaderCancel />
           </View>
         </View>
       </View>

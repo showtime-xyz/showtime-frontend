@@ -4,7 +4,6 @@ import { Text } from "@showtime-xyz/universal.text";
 
 type HeaderCancelProps = {
   canGoBack?: boolean;
-  withBackground?: boolean;
 };
 export const HeaderCancel = ({ canGoBack = true }: HeaderCancelProps) => {
   const router = useRouter();
