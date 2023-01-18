@@ -557,7 +557,7 @@ export const DropMusic = () => {
                       <DataPill
                         tw="mx-1 md:mx-4"
                         label={`Editions ${
-                          isUnlimited ? "unlimted" : watch("editionSize")
+                          isUnlimited ? "Unlimited" : watch("editionSize")
                         }`}
                         type="text"
                       />
