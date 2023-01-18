@@ -58,8 +58,17 @@ export const Search = () => {
   return (
     <>
       <View
-        tw="flex-row px-4 pb-2"
-        style={{ paddingTop: Math.max(top, PT_2_UNIT) }}
+        tw="flex-row pb-2"
+        style={{
+          paddingTop: Platform.select({
+            default: Math.max(top, PT_2_UNIT),
+            android: Math.max(top, PT_2_UNIT * 4),
+          }),
+          paddingHorizontal: Platform.select({
+            default: 16,
+            android: 12,
+          }),
+        }}
       >
         <View tw="flex-1 flex-row items-center">
           <View tw="flex-1">
@@ -69,7 +78,17 @@ export const Search = () => {
               ref={inputRef}
               autoFocus
               onChangeText={setTerm}
-              inputStyle={{ paddingTop: 8, paddingBottom: 8, minHeight: 33 }}
+              inputStyle={{
+                paddingTop: Platform.select({
+                  default: 8,
+                  android: 6,
+                }),
+                paddingBottom: Platform.select({
+                  default: 8,
+                  android: 6,
+                }),
+                minHeight: 33,
+              }}
               leftElement={
                 <View tw="px-2">
                   <SearchIcon
