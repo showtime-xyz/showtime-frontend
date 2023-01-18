@@ -36,6 +36,7 @@ import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
+import { useUpdatePresaveReleaseDate } from "app/hooks/use-update-presave-release-date";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -139,6 +140,10 @@ export const DropMusic = () => {
 
   const [accordionValue, setAccordionValue] = useState("");
   const [isUnlimited, setIsUnlimited] = useState(false);
+  const mutatePresaveReleaseDate = useUpdatePresaveReleaseDate({
+    editionAddress: state.edition?.contract_address,
+    releaseDate: getValues("releaseDate"),
+  });
 
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
@@ -152,15 +157,18 @@ export const DropMusic = () => {
     }),
   });
 
-  const onSubmit = (values: UseDropNFT) => {
-    dropNFT(
+  const onSubmit = async (values: UseDropNFT) => {
+    await dropNFT(
       {
         ...values,
-        gatingType: "spotify_save",
+        gatingType: isSaveDrop ? "spotify_save" : "music_presave",
         editionSize: isUnlimited ? 0 : values.editionSize,
       },
       clearStorage
     );
+    if (!isSaveDrop) {
+      await mutatePresaveReleaseDate.trigger();
+    }
   };
 
   // useEffect(() => {
@@ -802,7 +810,7 @@ export const DropMusic = () => {
               disabled={state.status === "loading"}
               onPress={handleSubmit(onSubmit)}
             >
-              {state.status === "loading"
+              {state.status === "loading" || mutatePresaveReleaseDate.isMutating
                 ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Please retry!"
@@ -815,9 +823,11 @@ export const DropMusic = () => {
               </View>
             ) : null}
 
-            {state.error ? (
+            {state.error || mutatePresaveReleaseDate.error ? (
               <View tw="mt-4">
-                <Text tw="text-red-500">{state.error}</Text>
+                <Text tw="text-red-500">
+                  {state.error ?? mutatePresaveReleaseDate.error}
+                </Text>
               </View>
             ) : null}
           </View>

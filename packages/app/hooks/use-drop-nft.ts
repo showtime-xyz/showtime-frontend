@@ -96,12 +96,18 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
-  gatingType?: "spotify_save" | "password" | "location" | "multi";
+  gatingType?:
+    | "spotify_save"
+    | "password"
+    | "location"
+    | "multi"
+    | "music_presave";
   password?: string;
   googleMapsUrl?: string;
   latitude?: number;
   longitude?: number;
   radius?: number;
+  releaseDate?: string;
 };
 
 export const useDropNFT = () => {
