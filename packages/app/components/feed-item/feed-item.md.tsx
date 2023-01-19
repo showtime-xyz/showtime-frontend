@@ -184,6 +184,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   ]}
                   iconColor={isDark ? colors.white : colors.gray[900]}
                   nft={detailData?.data.item ?? nft}
+                  edition={edition}
                 />
               </Suspense>
             </View>

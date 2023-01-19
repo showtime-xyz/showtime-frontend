@@ -8,6 +8,7 @@ import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+import { GatingType } from "app/types";
 import { delay, getFileMeta } from "app/utilities";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
@@ -43,13 +44,6 @@ const initialState: State = {
   status: "idle",
   signaturePrompt: false,
 };
-
-type GatingType =
-  | "spotify_save"
-  | "password"
-  | "location"
-  | "multi"
-  | "music_presave";
 
 type DropRequestData = {
   name: string;

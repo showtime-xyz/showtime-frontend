@@ -227,3 +227,10 @@ export type MyInfo = {
     };
   };
 };
+
+export type GatingType =
+  | "spotify_save"
+  | "password"
+  | "location"
+  | "multi"
+  | "music_presave";

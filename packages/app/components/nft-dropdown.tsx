@@ -21,6 +21,7 @@ import {
   Refresh,
   Twitter,
   Showtime,
+  Edit,
   QrCode,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -30,6 +31,7 @@ import { colors, TW } from "@showtime-xyz/universal.tailwind";
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useReport } from "app/hooks/use-report";
@@ -53,6 +55,7 @@ type Props = {
   shouldEnableSharing?: boolean;
   tw?: TW;
   iconColor?: string;
+  edition?: CreatorEditionResponse;
 };
 
 function NFTDropdown({
@@ -60,6 +63,7 @@ function NFTDropdown({
   shouldEnableSharing = true,
   tw = "",
   iconColor: iconColorProp,
+  edition,
 }: Props) {
   //#region hooks
   const { iconColor } = useSocialColor();
@@ -145,6 +149,24 @@ function NFTDropdown({
               <DropdownMenuItemNativeIcon iosIconName="eye" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unhide
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          ) : null}
+
+          {edition?.gating_type === "music_presave" &&
+          edition.presave_release_date &&
+          new Date(edition.presave_release_date).getTime() >
+            new Date().getTime() ? (
+            <DropdownMenuItem
+              onSelect={() => {
+                // unhideNFT(nft.nft_id);
+              }}
+              key="update"
+            >
+              <MenuItemIcon Icon={Edit} />
+              <DropdownMenuItemNativeIcon iosIconName="pen" />
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Update
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
