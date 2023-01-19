@@ -8228,13 +8228,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.127":
-  version: 0.0.127
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.127"
+"@showtime-xyz/universal.fieldset@npm:^0.0.128":
+  version: 0.0.128
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.128"
   dependencies:
     "@showtime-xyz/universal.accordion": 0.0.75
     "@showtime-xyz/universal.hooks": 0.0.58
-    "@showtime-xyz/universal.input": 0.0.71
+    "@showtime-xyz/universal.input": 0.0.72
     "@showtime-xyz/universal.label": 0.0.56
     "@showtime-xyz/universal.select": 0.0.112
     "@showtime-xyz/universal.switch": 0.0.69
@@ -8248,7 +8248,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: d959d3e8dac9326b9b0bd46e6430d90c1c6afd2dd69c46e2db58c4454c0dce64e474c10ca28c1b758a554580b179a34faeb3adff1eca0f8d4d5c9898eeea06d7
+  checksum: 526a7ae75db2f14598af3c41c5c81b199484e25c21ba81ce56e23692f1fd53945908a1c9ad7079bf0ba5b76903761da3994c3ccfa299aa51464562d717a78d9e
   languageName: node
   linkType: hard
 
@@ -8347,9 +8347,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.input@npm:0.0.71, @showtime-xyz/universal.input@npm:^0.0.71":
-  version: 0.0.71
-  resolution: "@showtime-xyz/universal.input@npm:0.0.71"
+"@showtime-xyz/universal.input@npm:0.0.72, @showtime-xyz/universal.input@npm:^0.0.72":
+  version: 0.0.72
+  resolution: "@showtime-xyz/universal.input@npm:0.0.72"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.58
     "@showtime-xyz/universal.label": 0.0.56
@@ -8365,7 +8365,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 114f10a0d40c9eea55d53d49a58eaa9e2d3c23b7efd0261d10e5349929a4825327f5c9c6849554bcf6f994e69979e675b6e7797d52a84418bfe3ebbe23a1f1a8
+  checksum: d7d3e0a8a44764a6e7f6b29d8d12cbf28c9f14d26a882b3469d580dc978e5eae1321fa13dfc60be496aa22ae7456b2e05284dca123ff8af42e17a0bfd03f594e
   languageName: node
   linkType: hard
 
@@ -8907,13 +8907,13 @@ __metadata:
     "@showtime-xyz/universal.divider": ^0.0.56
     "@showtime-xyz/universal.dropdown-menu": ^0.0.59
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.19
-    "@showtime-xyz/universal.fieldset": ^0.0.127
+    "@showtime-xyz/universal.fieldset": ^0.0.128
     "@showtime-xyz/universal.haptics": ^0.0.22
     "@showtime-xyz/universal.hooks": ^0.0.58
     "@showtime-xyz/universal.icon": ^0.0.80
     "@showtime-xyz/universal.image": ^0.0.63
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.46
-    "@showtime-xyz/universal.input": ^0.0.71
+    "@showtime-xyz/universal.input": ^0.0.72
     "@showtime-xyz/universal.label": ^0.0.56
     "@showtime-xyz/universal.light-box": ^0.0.85
     "@showtime-xyz/universal.modal": ^0.0.114
