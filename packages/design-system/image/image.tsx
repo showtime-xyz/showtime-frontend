@@ -39,6 +39,7 @@ function Img({
       style={[{ height, width, borderRadius }, style as RNImageStyle]}
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
+      cachePolicy="memory-disk"
       {...rest}
     />
   );
