@@ -44,6 +44,34 @@ const initialState: State = {
   signaturePrompt: false,
 };
 
+type GatingType =
+  | "spotify_save"
+  | "password"
+  | "location"
+  | "multi"
+  | "music_presave";
+
+type DropRequestData = {
+  name: string;
+  description: string;
+  image_url: string;
+  edition_size: number;
+  royalty_bps: number;
+  claim_window_duration_seconds: number;
+  nsfw: boolean;
+  spotify_url?: string;
+  gating_type?: GatingType;
+  release_date?: string;
+  password?: string;
+  location_gating?: {
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
+    google_maps_url?: string;
+  };
+  multi_gating_types?: ["password", "location"];
+};
+
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "loading":
@@ -96,12 +124,7 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
-  gatingType?:
-    | "spotify_save"
-    | "password"
-    | "location"
-    | "multi"
-    | "music_presave";
+  gatingType?: GatingType;
   password?: string;
   googleMapsUrl?: string;
   latitude?: number;
@@ -218,26 +241,32 @@ export const useDropNFT = () => {
           }
         : {};
 
+      let requestData: DropRequestData = {
+        name: escapedTitle,
+        description: escapedDescription,
+        image_url: "ipfs://" + ipfsHash,
+        edition_size: params.editionSize,
+        royalty_bps: params.royalty * 100,
+        claim_window_duration_seconds: params.duration,
+        nsfw: params.notSafeForWork,
+        spotify_url: params.spotifyUrl,
+        gating_type: gatingType,
+        password: params.password !== "" ? params.password : undefined,
+        ...locationGating,
+        multi_gating_types:
+          isPasswordGated && isLocationGated
+            ? ["password", "location"]
+            : undefined,
+      };
+
+      if (params.releaseDate) {
+        requestData.release_date = params.releaseDate;
+      }
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",
-        data: {
-          name: escapedTitle,
-          description: escapedDescription,
-          image_url: "ipfs://" + ipfsHash,
-          edition_size: params.editionSize,
-          royalty_bps: params.royalty * 100,
-          claim_window_duration_seconds: params.duration,
-          nsfw: params.notSafeForWork,
-          spotify_url: params.spotifyUrl,
-          gating_type: gatingType,
-          password: params.password !== "" ? params.password : undefined,
-          ...locationGating,
-          multi_gating_types:
-            isPasswordGated && isLocationGated
-              ? ["password", "location"]
-              : undefined,
-        },
+        data: requestData,
       });
 
       console.log("relayer response :: ", relayerResponse);

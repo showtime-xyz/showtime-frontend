@@ -163,12 +163,10 @@ export const DropMusic = () => {
         ...values,
         gatingType: isSaveDrop ? "spotify_save" : "music_presave",
         editionSize: isUnlimited ? 0 : values.editionSize,
+        releaseDate: isSaveDrop ? undefined : values.releaseDate,
       },
       clearStorage
     );
-    if (!isSaveDrop) {
-      await mutatePresaveReleaseDate.trigger();
-    }
   };
 
   // useEffect(() => {
