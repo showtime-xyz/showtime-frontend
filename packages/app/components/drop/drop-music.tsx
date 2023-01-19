@@ -583,7 +583,11 @@ export const DropMusic = () => {
                         label={
                           isUnlimited
                             ? `Open Edition`
-                            : `${watch("editionSize")} Editions`
+                            : `${watch("editionSize")} ${
+                                watch("editionSize") == 1
+                                  ? "Edition"
+                                  : "Editions"
+                              }`
                         }
                         type="text"
                       />
