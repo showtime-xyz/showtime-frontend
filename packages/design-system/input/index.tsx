@@ -114,7 +114,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               },
               default: undefined,
             }),
-            props.inputStyle,
             {
               flexGrow: 1,
               paddingTop: Platform.select({
@@ -129,6 +128,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
               paddingRight: rightElement ? 0 : 16,
               fontWeight: "500",
             },
+            props.inputStyle,
           ]}
           placeholderTextColor={
             isDark ? colors.gray["400"] : colors.gray["500"]
