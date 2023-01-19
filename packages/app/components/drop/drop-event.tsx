@@ -76,7 +76,7 @@ const durationOptions = [
 
 const dropValidationSchema = yup.object({
   file: yup.mixed().required("Media is required"),
-  title: yup.string().required(),
+  title: yup.string().required().max(255),
   description: yup.string().max(280).required(),
   editionSize: yup
     .number()
