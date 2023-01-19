@@ -502,7 +502,9 @@ export const DropFree = () => {
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
-                        label={`${watch("editionSize")} Editions`}
+                        label={`${watch("editionSize")} ${
+                          watch("editionSize") == 1 ? "Edition" : "Editions"
+                        }`}
                         type="text"
                       />
                       <DataPill
