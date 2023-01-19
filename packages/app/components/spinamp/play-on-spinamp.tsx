@@ -31,54 +31,65 @@ export const PlayOnSpinamp = () => {
   // unload sound when component unmounts
   useEffect(() => {
     const currentRef = sound.current;
+    currentRef?.setOnPlaybackStatusUpdate(async (status) => {
+      if (!status.isLoaded) {
+        setIsPlaying(false);
 
-    // this is only for dev purposes (Fast Refresh)
-    setIsPlaying(false);
+        if (status.error) {
+          // should we handle this?
+        }
+      } else {
+        if (status.isPlaying) {
+          setIsPlaying(true);
+          setIsLoading(false);
+        } else {
+          setIsPlaying(false);
+        }
+
+        if (status.didJustFinish && !status.isLooping) {
+          // The player has just finished playing and will stop.
+          setIsPlaying(false);
+        }
+      }
+    });
 
     return () => {
       currentRef?.unloadAsync();
     };
   }, []);
 
-  const loadAndPlay = useCallback(async () => {
-    if (isLoading) {
-      return;
-    }
-
-    const status = await sound.current?.getStatusAsync();
-
-    if (isPlaying && status?.isLoaded) {
-      sound.current?.stopAsync();
+  const togglePlay = useCallback(async () => {
+    if (isLoading) return;
+    if (isPlaying) {
+      await sound.current?.stopAsync();
       setIsPlaying(false);
       return;
     }
+
+    // get status to see if sound is loaded
+    const status = await sound.current?.getStatusAsync();
+
     if (!status?.isLoaded) {
       try {
+        setIsLoading(true);
         await sound.current?.loadAsync({
           uri: "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit",
         });
-
-        await sound.current?.playAsync();
-        setIsPlaying(true);
-      } catch (e) {
-        // TODO: handle error?
+      } catch (error) {
+        // handle error?
+        setIsPlaying(false);
       } finally {
         setIsLoading(false);
       }
-    } else {
-      try {
-        await sound.current?.playAsync();
-        setIsPlaying(true);
-      } catch (e) {
-        //
-      }
     }
-  }, [isLoading, isPlaying]);
+
+    await sound.current?.playAsync();
+    setIsPlaying(false);
+  }, [isPlaying, isLoading]);
 
   const pause = useCallback(() => {
-    setIsPlaying(false);
-    sound.current?.unloadAsync();
-  }, []);
+    isPlaying && sound.current?.pauseAsync();
+  }, [isPlaying]);
 
   useAnimatedReaction(
     () => context.value,
@@ -95,7 +106,7 @@ export const PlayOnSpinamp = () => {
   );
 
   return (
-    <Pressable tw="-mt-2 h-8 px-2" onPress={loadAndPlay}>
+    <Pressable tw="-mt-2 h-8 px-2" onPress={togglePlay}>
       <View
         tw="rounded-xl bg-gray-800/80"
         style={StyleSheet.absoluteFillObject}
