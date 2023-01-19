@@ -107,7 +107,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.127",
+        "version": "0.0.128",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -143,7 +143,7 @@
     },
     "input": {
         "scope": "showtime.universal",
-        "version": "0.0.71",
+        "version": "0.0.72",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/input"
     },

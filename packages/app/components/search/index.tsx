@@ -11,6 +11,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -24,7 +25,6 @@ import { Link } from "app/navigation/link";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { formatAddressShort } from "app/utilities";
 
-import { Input } from "design-system/input";
 import { useSafeAreaInsets } from "design-system/safe-area";
 
 const PT_2_UNIT = 8;

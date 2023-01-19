@@ -18,10 +18,18 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import {
+  FlipIcon,
+  Image as ImageIcon,
+  InformationCircle,
+} from "@showtime-xyz/universal.icon";
+import { Label } from "@showtime-xyz/universal.label";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -51,6 +59,8 @@ import {
 } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
+
+import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -137,6 +147,8 @@ export const DropMusic = () => {
 
   const [accordionValue, setAccordionValue] = useState("");
   const [isUnlimited, setIsUnlimited] = useState(false);
+  const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
+    useState(false);
 
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
@@ -511,12 +523,29 @@ export const DropMusic = () => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Spotify URL"
+                    label={
+                      <View tw="flex-row">
+                        <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                          Spotify Song Link
+                        </Label>
+                        <PressableHover
+                          onPress={() => {
+                            setShowCopySpotifyLinkTutorial(true);
+                          }}
+                        >
+                          <InformationCircle
+                            height={18}
+                            width={18}
+                            color={isDark ? colors.gray[400] : colors.gray[600]}
+                          />
+                        </PressableHover>
+                      </View>
+                    }
                     onBlur={onBlur}
                     ref={spotifyTextInputRef}
                     onChangeText={onChange}
                     value={value}
-                    placeholder="Enter the Spotify song link"
+                    placeholder="Copy Song Link or URI here"
                     errorText={errors.spotifyUrl?.message}
                   />
                 );
@@ -551,18 +580,20 @@ export const DropMusic = () => {
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
-                        label={`Royalties ${watch("royalty")}%`}
+                        label={
+                          isUnlimited
+                            ? `Open Edition`
+                            : `${watch("editionSize")} Editions`
+                        }
                         type="text"
                       />
                       <DataPill
+                        label={`${watch("royalty")}% Royalties`}
+                        type="text"
                         tw="mx-1 md:mx-4"
-                        label={`Editions ${
-                          isUnlimited ? "Unlimited" : watch("editionSize")
-                        }`}
-                        type="text"
                       />
                       <DataPill
-                        label={`Duration ${selectedDurationLabel}`}
+                        label={`Duration: ${selectedDurationLabel}`}
                         type="text"
                       />
                     </ScrollView>
@@ -570,27 +601,8 @@ export const DropMusic = () => {
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
                   <>
-                    <View tw="justify-between lg:flex-row">
-                      <View tw="flex-1 flex-row lg:mr-4">
-                        <Controller
-                          control={control}
-                          name="royalty"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Your royalties (%)"
-                                onBlur={onBlur}
-                                helperText="How much you'll earn each time an edition of this drop is sold"
-                                errorText={errors.royalty?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0">
+                    <View tw="justify-between md:mt-0 lg:flex-row">
+                      <View tw="flex-1 flex-row">
                         <Controller
                           control={control}
                           name="editionSize"
@@ -598,7 +610,7 @@ export const DropMusic = () => {
                             return (
                               <Fieldset
                                 tw="flex-1"
-                                label="Editions"
+                                label="Edition size"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
@@ -628,6 +640,25 @@ export const DropMusic = () => {
                                     />
                                   </Pressable>
                                 }
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
+                        <Controller
+                          control={control}
+                          name="royalty"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Your royalties (%)"
+                                onBlur={onBlur}
+                                helperText="How much you'll earn each time an edition of this drop is sold"
+                                errorText={errors.royalty?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
                               />
                             );
                           }}
@@ -755,6 +786,15 @@ export const DropMusic = () => {
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </BottomSheetScrollView>
+      <ModalSheet
+        snapPoints={["100%"]}
+        title="Spotify Song Link"
+        visible={showCopySpotifyLinkTutorial}
+        close={() => setShowCopySpotifyLinkTutorial(false)}
+        onClose={() => setShowCopySpotifyLinkTutorial(false)}
+      >
+        <CopySpotifyLinkTutorial />
+      </ModalSheet>
     </BottomSheetModalProvider>
   );
 };
