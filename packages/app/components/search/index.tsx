@@ -11,7 +11,6 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -19,14 +18,21 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { HeaderLeft } from "app/components/header";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { formatAddressShort } from "app/utilities";
 
+import { Input } from "design-system/input";
+import { useSafeAreaInsets } from "design-system/safe-area";
+
+const PT_2_UNIT = 8;
+
 export const Search = () => {
+  useHideHeader();
   const isDark = useIsDarkMode();
-  const headerHeight = useHeaderHeight();
+  const { top } = useSafeAreaInsets();
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
   const inputRef = useRef<TextInput>();
@@ -51,42 +57,66 @@ export const Search = () => {
 
   return (
     <>
-      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
-      <View tw="px-4 py-2">
-        <Input
-          placeholder="Search for @name or name.eth"
-          value={term}
-          ref={inputRef}
-          autoFocus
-          onChangeText={setTerm}
-          leftElement={
-            <View tw="p-2">
-              <SearchIcon
-                color={isDark ? colors.gray[400] : colors.gray[600]}
-                width={24}
-                height={24}
-              />
-            </View>
-          }
-          rightElement={
-            term.length > 0 ? (
-              <PressableScale
-                style={{ padding: 8 }}
-                onPress={() => {
-                  setTerm("");
-                  inputRef.current?.focus();
-                }}
-                hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
-              >
-                <CloseIcon
-                  color={isDark ? colors.gray[400] : colors.gray[600]}
-                  width={24}
-                  height={24}
-                />
-              </PressableScale>
-            ) : undefined
-          }
-        />
+      <View
+        tw="flex-row px-4 pb-2"
+        style={{
+          paddingTop: Platform.select({
+            default: Math.max(top, PT_2_UNIT),
+            android: Math.max(top, PT_2_UNIT * 4),
+          }),
+        }}
+      >
+        <View tw="flex-1 flex-row items-center">
+          <View tw="mr-4">
+            <HeaderLeft canGoBack />
+          </View>
+          <View tw="flex-1">
+            <Input
+              placeholder="Search for @name or name.eth"
+              value={term}
+              ref={inputRef}
+              autoFocus
+              onChangeText={setTerm}
+              inputStyle={{
+                paddingTop: Platform.select({
+                  default: 8,
+                  android: 6,
+                }),
+                paddingBottom: Platform.select({
+                  default: 8,
+                  android: 6,
+                }),
+              }}
+              leftElement={
+                <View tw="px-2">
+                  <SearchIcon
+                    color={isDark ? colors.gray[400] : colors.gray[600]}
+                    width={24}
+                    height={24}
+                  />
+                </View>
+              }
+              rightElement={
+                term.length > 0 ? (
+                  <PressableScale
+                    style={{ paddingVertical: 4, paddingHorizontal: 8 }}
+                    onPress={() => {
+                      setTerm("");
+                      inputRef.current?.focus();
+                    }}
+                    hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+                  >
+                    <CloseIcon
+                      color={isDark ? colors.gray[400] : colors.gray[600]}
+                      width={24}
+                      height={24}
+                    />
+                  </PressableScale>
+                ) : undefined
+              }
+            />
+          </View>
+        </View>
       </View>
       {data ? (
         <InfiniteScrollList
