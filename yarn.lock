@@ -8383,9 +8383,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.86":
-  version: 0.0.86
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.86"
+"@showtime-xyz/universal.light-box@npm:^0.0.88":
+  version: 0.0.88
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.88"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 0.1.0
     "@showtime-xyz/universal.icon": 0.0.80
@@ -8402,7 +8402,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 216df3995d6f85d2bbe118fbfc54dbbe2c240a5ef1fd4cdb4484a803e55618ee6ccdefd5cf32f26d44eede8137f69a3728bf5910abb00bd437f35abd674769ea
+  checksum: 53f7dddcf6f0b7c84defa357221e0eb8b8d164cd3d71a61294c538970cea77692334f7f9dd05cd33c9742a99ee74be815d166df77c6e395395220651ead3a622
   languageName: node
   linkType: hard
 
@@ -8915,7 +8915,7 @@ __metadata:
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.46
     "@showtime-xyz/universal.input": ^0.0.72
     "@showtime-xyz/universal.label": ^0.0.56
-    "@showtime-xyz/universal.light-box": ^0.0.86
+    "@showtime-xyz/universal.light-box": ^0.0.88
     "@showtime-xyz/universal.modal": ^0.0.114
     "@showtime-xyz/universal.modal-screen": ^0.0.128
     "@showtime-xyz/universal.modal-sheet": ^0.0.117
@@ -8997,7 +8997,7 @@ __metadata:
     expo-localization: ~14.0.0
     expo-location: ~15.0.1
     expo-media-library: ~15.0.0
-    expo-modules-core: ~1.0.4
+    expo-modules-core: ~1.1.1
     expo-navigation-bar: ~2.0.1
     expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.17.0
@@ -9194,7 +9194,7 @@ __metadata:
     expo-image-picker: ~14.0.1
     expo-linear-gradient: ~12.0.1
     expo-linking: ~3.2.3
-    expo-modules-core: ~1.0.4
+    expo-modules-core: ~1.1.1
     expo-splash-screen: ~0.17.5
     expo-status-bar: ~1.4.2
     expo-system-ui: ~2.0.1
@@ -20506,7 +20506,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:1.0.4, expo-modules-core@npm:~1.0.4":
+"expo-modules-core@npm:1.0.4":
   version: 1.0.4
   resolution: "expo-modules-core@npm:1.0.4"
   dependencies:
@@ -20516,7 +20516,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:1.1.1":
+"expo-modules-core@npm:1.1.1, expo-modules-core@npm:~1.1.1":
   version: 1.1.1
   resolution: "expo-modules-core@npm:1.1.1"
   dependencies:

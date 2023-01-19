@@ -155,7 +155,7 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.86",
+        "version": "0.0.88",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
