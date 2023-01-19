@@ -84,7 +84,6 @@ export const PlayOnSpinamp = () => {
     }
 
     await sound.current?.playAsync();
-    setIsPlaying(false);
   }, [isPlaying, isLoading]);
 
   const pause = useCallback(() => {
@@ -117,9 +116,7 @@ export const PlayOnSpinamp = () => {
             <ThreeDotsAnimation color="white" />
           </View>
         )}
-        <View tw="w-4">
-          {isLoading ? "" : isPlaying ? <Stop /> : <Play color={"white"} />}
-        </View>
+        <View tw="w-4">{isPlaying ? <Stop /> : <Play color={"white"} />}</View>
 
         <Image
           tw={"ml-3 self-center"}
