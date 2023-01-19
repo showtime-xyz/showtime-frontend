@@ -8,6 +8,7 @@ import { runOnJS } from "react-native-reanimated";
 
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import {
@@ -16,7 +17,6 @@ import {
 } from "app/components/viewability-tracker-flatlist";
 
 import { Play } from "design-system/icon";
-import { ThreeDotsAnimation } from "design-system/three-dots";
 
 const Stop = () => <View tw="mx-1 h-3 w-3 bg-white" />;
 
@@ -39,9 +39,13 @@ export const PlayOnSpinamp = () => {
           // should we handle this?
         }
       } else {
+        if (status.isBuffering) {
+          setIsLoading(true);
+        }
+
         if (status.isPlaying) {
-          setIsPlaying(true);
           setIsLoading(false);
+          setIsPlaying(true);
         } else {
           setIsPlaying(false);
         }
@@ -62,7 +66,6 @@ export const PlayOnSpinamp = () => {
     if (isLoading) return;
     if (isPlaying) {
       await sound.current?.stopAsync();
-      setIsPlaying(false);
       return;
     }
 
@@ -71,19 +74,15 @@ export const PlayOnSpinamp = () => {
 
     if (!status?.isLoaded) {
       try {
-        setIsLoading(true);
         await sound.current?.loadAsync({
           uri: "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit",
         });
       } catch (error) {
-        // handle error?
-        setIsPlaying(false);
-      } finally {
-        setIsLoading(false);
+        // should we handle this?
       }
     }
 
-    await sound.current?.playAsync();
+    sound.current?.playAsync();
   }, [isPlaying, isLoading]);
 
   const pause = useCallback(() => {
@@ -111,12 +110,15 @@ export const PlayOnSpinamp = () => {
         style={StyleSheet.absoluteFillObject}
       />
       <View tw="flex-1 flex-row items-center">
-        {isLoading && (
-          <View tw="w-0">
-            <ThreeDotsAnimation color="white" />
+        {isLoading ? (
+          <View tw="w-4 scale-75 transform">
+            <Spinner size="small" />
+          </View>
+        ) : (
+          <View tw="w-4">
+            {isPlaying ? <Stop /> : <Play color={"white"} />}
           </View>
         )}
-        <View tw="w-4">{isPlaying ? <Stop /> : <Play color={"white"} />}</View>
 
         <Image
           tw={"ml-3 self-center"}
