@@ -12,6 +12,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 
 import { isMobileWeb } from "../utilities";
 import { PlayOnSpotify } from "./play-on-spotify";
+import { PlayOnSpinamp } from "./spinamp/play-on-spinamp";
 
 type ContentTypeTooltipProps = {
   edition: CreatorEditionResponse | undefined;
@@ -39,6 +40,11 @@ const TriggerView = isMobileWeb() ? View : PressableHover;
 export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
   const isDark = useIsDarkMode();
   const [open, setOpen] = useState(false);
+  // TODO: determine how to handle this
+  const isSpinamp = true;
+  if (isSpinamp) {
+    return <PlayOnSpinamp />;
+  }
   if (edition?.spotify_track_url) {
     return <PlayOnSpotify url={edition?.spotify_track_url} />;
   }
