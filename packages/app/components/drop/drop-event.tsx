@@ -554,21 +554,17 @@ export const DropEvent = () => {
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
-                        label={`Royalties ${watch("royalty")}%`}
+                        label={`${watch("editionSize")} Editions`}
                         type="text"
                       />
                       <DataPill
-                        tw={
-                          gatingType !== "spotify_save"
-                            ? "ml-1 md:ml-4"
-                            : "mx-1 md:mx-4"
-                        }
-                        label={`Editions ${watch("editionSize")}`}
+                        label={`${watch("royalty")}% Royalties`}
                         type="text"
+                        tw="ml-1 md:ml-4"
                       />
                       <DataPill
-                        tw={gatingType !== "spotify_save" ? "mx-1 md:mx-4" : ""}
-                        label={`Duration ${selectedDurationLabel}`}
+                        tw="mx-1 md:mx-4"
+                        label={`Duration: ${selectedDurationLabel}`}
                         type="text"
                       />
                     </ScrollView>
@@ -577,7 +573,26 @@ export const DropEvent = () => {
                 <Accordion.Content tw="pt-0">
                   <>
                     <View tw="justify-between lg:flex-row">
-                      <View tw="flex-1 flex-row lg:mr-4">
+                      <View tw="flex-1 flex-row">
+                        <Controller
+                          control={control}
+                          name="editionSize"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Edition size"
+                                onBlur={onBlur}
+                                helperText="How many editions will be available to collect"
+                                errorText={errors.editionSize?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
                         <Controller
                           control={control}
                           name="royalty"
@@ -589,25 +604,6 @@ export const DropEvent = () => {
                                 onBlur={onBlur}
                                 helperText="How much you'll earn each time an edition of this drop is sold"
                                 errorText={errors.royalty?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0">
-                        <Controller
-                          control={control}
-                          name="editionSize"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Editions"
-                                onBlur={onBlur}
-                                helperText="How many editions will be available to collect"
-                                errorText={errors.editionSize?.message}
                                 value={value?.toString()}
                                 onChangeText={onChange}
                               />

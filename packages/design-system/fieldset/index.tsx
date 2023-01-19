@@ -1,4 +1,10 @@
-import { MutableRefObject, ComponentType, forwardRef, Fragment } from "react";
+import {
+  MutableRefObject,
+  ComponentType,
+  forwardRef,
+  Fragment,
+  isValidElement,
+} from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
@@ -71,9 +77,14 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       style={containerStyle}
     >
       <View tw="flex-row">
-        <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
-          {label}
-        </Label>
+        {isValidElement(label) ? (
+          label
+        ) : (
+          <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
+            {label}
+          </Label>
+        )}
+
         {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
       </View>
 
