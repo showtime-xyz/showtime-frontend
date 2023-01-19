@@ -7995,11 +7995,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.67":
-  version: 0.0.67
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.67"
+"@showtime-xyz/universal.avatar@npm:^0.0.68":
+  version: 0.0.68
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.68"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.63
+    "@showtime-xyz/universal.image": 0.0.64
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
     "@storybook/react": 6.5.9
@@ -8008,7 +8008,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 7f443e7acc50219f9e4e77b9f87cd466e737796d57e9d14813770159ee73ee28df5ef1df93e6e88d68ca02ecbfb46d1931e369b49cd821d9751dcef07c79b223
+  checksum: e236b26d654e0270b2f6437b709512f07d3d7d4a4dbe90813cdccb6e99a5f4c9c3e255ebf6f86737eed0026dca83ad94e8af816544aed7aa8a4ad62b7be6a8c1
   languageName: node
   linkType: hard
 
@@ -8313,9 +8313,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.image@npm:0.0.63, @showtime-xyz/universal.image@npm:^0.0.63":
-  version: 0.0.63
-  resolution: "@showtime-xyz/universal.image@npm:0.0.63"
+"@showtime-xyz/universal.image@npm:0.0.64, @showtime-xyz/universal.image@npm:^0.0.64":
+  version: 0.0.64
+  resolution: "@showtime-xyz/universal.image@npm:0.0.64"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
@@ -8328,7 +8328,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 1b21486b328f59525307f2634b590516fed908d135ae383862034fde276a0ed64f64a3d0e5a735e445d09e19b8e5284f01b36792a536ccc8d750961e4e24b8b2
+  checksum: 2a201c9b0d43ff8ca1a7038c1935a7a19b963d7c50bdfd25e14a3e5254683d0c7d734082e9980a120823639b53146a0bf406265237325dca8f0223a2fc392543
   languageName: node
   linkType: hard
 
@@ -8383,13 +8383,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.85":
-  version: 0.0.85
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.85"
+"@showtime-xyz/universal.light-box@npm:^0.0.86":
+  version: 0.0.86
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.86"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 0.1.0
     "@showtime-xyz/universal.icon": 0.0.80
-    "@showtime-xyz/universal.image": 0.0.63
+    "@showtime-xyz/universal.image": 0.0.64
     "@showtime-xyz/universal.pressable": 0.0.62
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
@@ -8402,7 +8402,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 6d79484f8a843ab30c930fcaeab27623df90287029f5f952172bceeec89f4c0bc5f58ed7ee952f9160370e0f20c4396addd4ca4c17922b4ea14d6a16e3fdbb3c
+  checksum: 216df3995d6f85d2bbe118fbfc54dbbe2c240a5ef1fd4cdb4484a803e55618ee6ccdefd5cf32f26d44eede8137f69a3728bf5910abb00bd437f35abd674769ea
   languageName: node
   linkType: hard
 
@@ -8894,7 +8894,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.75
     "@showtime-xyz/universal.activity-indicator": ^0.0.53
     "@showtime-xyz/universal.alert": ^0.0.97
-    "@showtime-xyz/universal.avatar": ^0.0.67
+    "@showtime-xyz/universal.avatar": ^0.0.68
     "@showtime-xyz/universal.bottom-sheet": ^0.0.85
     "@showtime-xyz/universal.button": ^0.0.80
     "@showtime-xyz/universal.checkbox": ^0.0.68
@@ -8911,11 +8911,11 @@ __metadata:
     "@showtime-xyz/universal.haptics": ^0.0.22
     "@showtime-xyz/universal.hooks": ^0.0.58
     "@showtime-xyz/universal.icon": ^0.0.80
-    "@showtime-xyz/universal.image": ^0.0.63
+    "@showtime-xyz/universal.image": ^0.0.64
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.46
     "@showtime-xyz/universal.input": ^0.0.72
     "@showtime-xyz/universal.label": ^0.0.56
-    "@showtime-xyz/universal.light-box": ^0.0.85
+    "@showtime-xyz/universal.light-box": ^0.0.86
     "@showtime-xyz/universal.modal": ^0.0.114
     "@showtime-xyz/universal.modal-screen": ^0.0.128
     "@showtime-xyz/universal.modal-sheet": ^0.0.117
