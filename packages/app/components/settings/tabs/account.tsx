@@ -18,6 +18,7 @@ import { createParam } from "app/navigation/use-param";
 
 import {
   AccountSettingItem,
+  SettingAccountSlotFooter,
   SettingAccountSlotHeader,
 } from "../settings-account-slot";
 
@@ -50,6 +51,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         ))}
       <ConnectSpotify redirectUri={"/settings?tab=" + index} />
       <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
+      <SettingAccountSlotFooter />
     </SettingScrollComponent>
   );
 };
