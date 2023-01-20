@@ -111,7 +111,6 @@ function App() {
       () => {
         async function clearFastImageMemory() {
           try {
-            await FastImage.clearDiskCache();
             await FastImage.clearMemoryCache();
             Logger.log("did receive memory warning and cleared");
           } catch {}

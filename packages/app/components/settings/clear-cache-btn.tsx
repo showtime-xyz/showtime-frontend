@@ -1,12 +1,10 @@
 import { useCallback } from "react";
 
-import FastImage from "react-native-fast-image";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
+import { deleteAppCache } from "app/lib/delete-cache";
 
 export const ClearCacheBtn = () => {
   const Alert = useAlert();
@@ -15,13 +13,11 @@ export const ClearCacheBtn = () => {
       {
         text: "Confirm",
         onPress: async () => {
-          deleteMMKVCache();
           // expo-image
           // await Image.clearDiskCache();
           // await Image.clearMemoryCache();
           // fast-image
-          FastImage.clearDiskCache();
-          FastImage.clearMemoryCache();
+          deleteAppCache();
         },
         style: "destructive",
       },
