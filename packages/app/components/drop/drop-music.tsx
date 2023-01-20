@@ -857,7 +857,7 @@ export const DropMusic = () => {
               disabled={state.status === "loading"}
               onPress={handleSubmit(onSubmit)}
             >
-              {state.status === "loading" || mutatePresaveReleaseDate.isMutating
+              {state.status === "loading"
                 ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Please retry!"
@@ -870,11 +870,9 @@ export const DropMusic = () => {
               </View>
             ) : null}
 
-            {state.error || mutatePresaveReleaseDate.error ? (
+            {state.error ? (
               <View tw="mt-4">
-                <Text tw="text-red-500">
-                  {state.error ?? mutatePresaveReleaseDate.error}
-                </Text>
+                <Text tw="text-red-500">{state.error}</Text>
               </View>
             ) : null}
           </View>
