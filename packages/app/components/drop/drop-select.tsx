@@ -23,7 +23,7 @@ export const DropSelect = () => {
   return (
     <BottomSheetScrollView>
       <View tw="flex-row flex-wrap items-center justify-center">
-        <View tw="m-4 w-full px-4 lg:w-[360px]">
+        <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Free drop"
             description="Give your fans a free collectible."
@@ -39,7 +39,7 @@ export const DropSelect = () => {
             }}
           />
         </View>
-        <View tw="m-4 w-full px-4 lg:w-[360px]">
+        <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Music drop"
             icon={
@@ -65,7 +65,7 @@ export const DropSelect = () => {
             }}
           />
         </View>
-        <View tw="m-4 w-full px-4 lg:w-[360px]">
+        <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Event drop"
             icon={
@@ -85,7 +85,7 @@ export const DropSelect = () => {
             }}
           />
         </View>
-        <View tw="m-4 w-full px-4 lg:w-[360px]">
+        <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Private drop"
             icon={
@@ -120,11 +120,13 @@ const CreateCard = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <View tw="min-h-[180px] justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900 lg:min-h-[216px]">
-      <Text tw="text-lg font-bold text-gray-900 dark:text-gray-100">
+    <View tw="justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-900 lg:min-h-[216px]">
+      <Text tw="text-lg font-bold text-gray-900 dark:text-gray-100 ">
         {title}
       </Text>
+      <View tw="h-4" />
       <Text tw="text-base text-gray-900 dark:text-gray-100">{description}</Text>
+      <View tw="h-4" />
       <Button onPress={onPress}>
         <View tw="w-full flex-row justify-center">
           {icon}

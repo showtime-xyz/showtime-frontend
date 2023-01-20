@@ -539,7 +539,7 @@ export const EditProfile = () => {
                 {hasNotSubmittedExternalLink ? (
                   <>
                     <Text tw="text-sm font-semibold text-red-500">
-                      Please add atleast one link from below
+                      Please add at least one website below:
                     </Text>
                     <View tw="h-4" />
                   </>

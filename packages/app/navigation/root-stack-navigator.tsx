@@ -62,6 +62,13 @@ export function RootStackNavigator() {
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
+        <Stack.Screen
+          name="search"
+          component={SearchScreen}
+          options={{
+            animation: "none",
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -76,13 +83,6 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-        <Stack.Screen
-          name="search"
-          component={SearchScreen}
-          options={{
-            animation: "none",
-          }}
-        />
         <Stack.Screen
           name="swipeList"
           component={SwipeListScreen}

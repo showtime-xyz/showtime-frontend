@@ -2,10 +2,10 @@ import { Dimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Carousel } from "app/lib/carousel";
 
 const width = Dimensions.get("window").width;
@@ -16,6 +16,7 @@ type ExplanationProps = {
   coverElement?: JSX.Element | null;
   onDone: () => void;
   ctaCopy?: string;
+  enabled?: boolean;
 };
 
 export const Explanation = ({
@@ -24,12 +25,13 @@ export const Explanation = ({
   coverElement,
   onDone,
   ctaCopy,
+  enabled,
 }: ExplanationProps) => {
   const insets = useSafeAreaInsets();
 
   return (
     <>
-      <ScrollView>
+      <BottomSheetScrollView useNativeModal={false}>
         {coverElement}
         <View tw="flex-1 items-center justify-center py-4">
           <Text tw="px-8 text-center text-3xl text-gray-900 dark:text-white">
@@ -68,9 +70,10 @@ export const Explanation = ({
                 )}
               </View>
             )}
+            enabled={enabled}
           />
         </View>
-      </ScrollView>
+      </BottomSheetScrollView>
       <View tw="mt-auto w-full px-8" style={{ paddingBottom: insets.bottom }}>
         <Button size="regular" onPress={onDone}>
           {ctaCopy}
