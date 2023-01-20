@@ -154,6 +154,7 @@ function NFTDropdown({
           ) : null}
 
           {edition?.gating_type === "music_presave" &&
+          nft.creator_username === user?.data.profile.username &&
           edition.presave_release_date &&
           new Date(edition.presave_release_date).getTime() >
             new Date().getTime() ? (
