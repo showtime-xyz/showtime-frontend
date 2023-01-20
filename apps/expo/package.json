@@ -134,7 +134,7 @@
     "buffer": "^6.0.3",
     "console-browserify": "^1.1.0",
     "constants-browserify": "^1.0.0",
-    "date-picker": "https://github.com/showtime-xyz/date-picker-ios.git",
+    "date-picker": "https://github.com/showtime-xyz/date-picker-ios.git#master",
     "design-system": "*",
     "dns.js": "^1.0.1",
     "domain-browser": "^4.22.0",

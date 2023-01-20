@@ -8981,7 +8981,7 @@ __metadata:
     buffer: ^6.0.3
     console-browserify: ^1.1.0
     constants-browserify: ^1.0.0
-    date-picker: "https://github.com/showtime-xyz/date-picker-ios.git"
+    date-picker: "https://github.com/showtime-xyz/date-picker-ios.git#master"
     design-system: "*"
     detox: ^19.4.1
     dns.js: ^1.0.1
@@ -17436,7 +17436,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-picker@https://github.com/showtime-xyz/date-picker-ios.git":
+"date-picker@https://github.com/showtime-xyz/date-picker-ios.git#master":
   version: 0.2.0
   resolution: "date-picker@https://github.com/showtime-xyz/date-picker-ios.git#commit=ba4309ea675c1cfb7dfe1b936d21916a19543af0"
   peerDependencies:
