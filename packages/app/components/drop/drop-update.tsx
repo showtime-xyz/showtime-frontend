@@ -12,6 +12,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Screen } from "app/components/screen";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useUpdatePresaveReleaseDate } from "app/hooks/use-update-presave-release-date";
 import { yup } from "app/lib/yup";
@@ -83,87 +84,100 @@ export const DropUpdate = ({
   };
 
   return (
-    <View tw="mt-20 mb-4 w-full max-w-[600px] flex-1 items-center rounded-lg bg-white p-16">
-      <View tw="w-full">
-        <Text tw="text-lg font-bold text-gray-900 dark:text-white">
-          Update drop details
-        </Text>
+    <Screen>
+      <View tw="mb-4 w-full max-w-[600px] flex-1 items-center rounded-lg bg-gray-50 p-4 dark:bg-black">
+        <View tw="w-full">
+          {Platform.OS === "web" ? (
+            <>
+              <Text tw="text-lg font-bold text-gray-900 dark:text-white">
+                Update drop
+              </Text>
+              <View tw="h-8" />
+            </>
+          ) : null}
 
-        <View tw="h-8" />
+          <Controller
+            control={control}
+            name="spotifyUrl"
+            render={({ field: { onChange, onBlur, value } }) => {
+              return (
+                <Fieldset
+                  label="Spotify URL"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Enter the Spotify song link"
+                  errorText={errors.spotifyUrl?.message}
+                />
+              );
+            }}
+          />
 
-        <Controller
-          control={control}
-          name="spotifyUrl"
-          render={({ field: { onChange, onBlur, value } }) => {
-            return (
-              <Fieldset
-                label="Spotify URL"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Enter the Spotify song link"
-                errorText={errors.spotifyUrl?.message}
-              />
-            );
-          }}
-        />
+          <View tw="h-4" />
 
-        <View tw="h-4" />
+          <Controller
+            key="releaseDate"
+            control={control}
+            name="releaseDate"
+            render={({ field: { onChange, value } }) => {
+              let dateValue =
+                typeof value === "string"
+                  ? new Date(value)
+                  : value ?? new Date();
 
-        <Controller
-          key="releaseDate"
-          control={control}
-          name="releaseDate"
-          render={({ field: { onChange, value } }) => {
-            let dateValue =
-              typeof value === "string" ? new Date(value) : value ?? new Date();
-
-            return (
-              <View tw="rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800">
-                {Platform.OS !== "web" ? (
-                  <Pressable
-                    onPress={() => {
-                      setShowDatePicker(!showDatePicker);
-                    }}
-                  >
+              return (
+                <View tw="rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900">
+                  {Platform.OS !== "web" ? (
+                    <Pressable
+                      onPress={() => {
+                        setShowDatePicker(!showDatePicker);
+                      }}
+                    >
+                      <Text tw="font-bold text-gray-900 dark:text-white">
+                        Pick a Release Date
+                      </Text>
+                      <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                        {(dateValue as Date).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </Text>
+                    </Pressable>
+                  ) : (
                     <Text tw="font-bold text-gray-900 dark:text-white">
-                      Pick a Release Date
+                      Enter a Release Date
                     </Text>
-                    <Text tw="pt-4 text-base text-gray-900 dark:text-white">
-                      {(dateValue as Date).toDateString()}
-                    </Text>
-                  </Pressable>
-                ) : (
-                  <Text tw="font-bold text-gray-900 dark:text-white">
-                    Enter a Release Date
-                  </Text>
-                )}
+                  )}
 
-                <View tw="t-0 l-0 flex-row pt-2">
-                  <DateTimePicker
-                    onChange={(v) => {
-                      onChange(v);
-                      setShowDatePicker(false);
-                    }}
-                    value={dateValue}
-                    type="datetime"
-                    open={showDatePicker}
-                  />
+                  <View tw="t-0 l-0 flex-row pt-2">
+                    <DateTimePicker
+                      onChange={(v) => {
+                        onChange(v);
+                        setShowDatePicker(false);
+                      }}
+                      value={dateValue}
+                      type="datetime"
+                      open={showDatePicker}
+                    />
+                  </View>
+                  {errors.releaseDate?.message ? (
+                    <ErrorText>{errors.releaseDate?.message}</ErrorText>
+                  ) : null}
                 </View>
-                {errors.releaseDate?.message ? (
-                  <ErrorText>{errors.releaseDate?.message}</ErrorText>
-                ) : null}
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
 
-        <View tw="h-4" />
+          <View tw="h-4" />
 
-        <Button tw="z-[-1]" onPress={handleSubmit(onSubmit)}>
-          {mutatePresaveReleaseDate.isMutating ? "Submitting..." : "Submit"}
-        </Button>
+          <Button tw="z-[-1]" onPress={handleSubmit(onSubmit)}>
+            {mutatePresaveReleaseDate.isMutating ? "Submitting..." : "Submit"}
+          </Button>
+        </View>
       </View>
-    </View>
+    </Screen>
   );
 };

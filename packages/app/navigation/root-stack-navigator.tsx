@@ -117,7 +117,11 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="dropUpdate" component={DropUpdateScreen} />
+        <Stack.Screen
+          name="dropUpdate"
+          options={{ headerTitle: "Update drop" }}
+          component={DropUpdateScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
