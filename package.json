@@ -93,7 +93,7 @@
     "@radix-ui/react-select": "^1.1.2",
     "react-remove-scroll-bar": "^2.3.4",
     "universal-tooltip": "^0.1.11",
-    "expo-image": "^1.0.0-alpha.6"
+    "expo-image": "^1.0.0-beta.1"
   },
   "react-native": {
     "zlib": "browserify-zlib",
