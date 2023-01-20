@@ -31,7 +31,7 @@ export const Explanation = ({
 
   return (
     <>
-      <BottomSheetScrollView useNativeModal>
+      <BottomSheetScrollView>
         {coverElement}
         <View tw="flex-1 items-center justify-center py-4">
           <Text tw="px-8 text-center text-3xl text-gray-900 dark:text-white">
