@@ -15,6 +15,7 @@ import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
+import { Logger } from "app/lib/logger";
 
 import { Play } from "design-system/icon";
 
@@ -36,7 +37,7 @@ export const PlayOnSpinamp = () => {
         setIsPlaying(false);
 
         if (status.error) {
-          // should we handle this?
+          Logger.error("Spinamp Playback Error", status.error);
         }
       } else {
         if (status.isBuffering) {
@@ -78,7 +79,7 @@ export const PlayOnSpinamp = () => {
           uri: "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit",
         });
       } catch (error) {
-        // should we handle this?
+        Logger.error("Failed to load Spinamp audio", error);
       }
     }
 
