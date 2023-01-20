@@ -4,22 +4,24 @@ import { axios } from "app/lib/axios";
 
 type IParams = {
   editionAddress?: string;
-  releaseDate: string;
+  releaseDate: Date;
+  spotifyUrl: string;
 };
 
-export const useUpdatePresaveReleaseDate = (params: IParams) => {
+export const useUpdatePresaveReleaseDate = () => {
   const state = useSWRMutation(
-    "/api/v1/music-presave/update-music-release-track",
-    () =>
-      params.editionAddress
-        ? axios({
-            method: "post",
-            url: `/api/v1/music-presave/update-music-release-track/${params.editionAddress}`,
-            data: {
-              release_date: params.releaseDate,
-            },
-          })
-        : null
+    "/v1/music-presave/update-music-release-track",
+    (key: string, values: { arg: IParams }) => {
+      const { editionAddress, spotifyUrl, releaseDate } = values.arg;
+      return axios({
+        method: "post",
+        url: `/v1/music-presave/update-music-release-track/${editionAddress}`,
+        data: {
+          release_date: releaseDate,
+          spotify_url: spotifyUrl,
+        },
+      });
+    }
   );
 
   return state;

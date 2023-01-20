@@ -159,6 +159,10 @@ function NFTDropdown({
             new Date().getTime() ? (
             <DropdownMenuItem
               onSelect={() => {
+                router.push(
+                  "/drop/update/" +
+                    edition.creator_airdrop_edition.contract_address
+                );
                 // unhideNFT(nft.nft_id);
               }}
               key="update"

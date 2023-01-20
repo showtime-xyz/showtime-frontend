@@ -100,6 +100,7 @@ const dropValidationSchema = yup.object({
   notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
   googleMapsUrl: yup.string().url(),
   radius: yup.number().min(0.01).max(10),
+  releaseDate: yup.date().min(new Date(), "Release date must be in the future"),
 });
 
 const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
