@@ -61,7 +61,9 @@ export const DropUpdate = ({
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const mutatePresaveReleaseDate = useUpdatePresaveReleaseDate();
+  const mutatePresaveReleaseDate = useUpdatePresaveReleaseDate(
+    edition?.creator_airdrop_edition.contract_address
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -73,14 +75,15 @@ export const DropUpdate = ({
       edition?.creator_airdrop_edition.contract_address &&
       values.releaseDate &&
       values.spotifyUrl
-    )
+    ) {
       await mutatePresaveReleaseDate.trigger({
         editionAddress: edition?.creator_airdrop_edition.contract_address,
         releaseDate: values.releaseDate,
         spotifyUrl: values.spotifyUrl,
       });
 
-    router.pop();
+      router.pop();
+    }
   };
 
   return (
@@ -173,7 +176,15 @@ export const DropUpdate = ({
 
           <View tw="h-4" />
 
-          <Button tw="z-[-1]" onPress={handleSubmit(onSubmit)}>
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            disabled={mutatePresaveReleaseDate.isMutating}
+            tw={
+              mutatePresaveReleaseDate.isMutating
+                ? "z-[-1] opacity-50"
+                : "z-[-1]"
+            }
+          >
             {mutatePresaveReleaseDate.isMutating ? "Submitting..." : "Submit"}
           </Button>
         </View>
