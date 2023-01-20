@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import * as DatePickerIOS from "date-picker";
+import * as DatePickerIOS from "@showtime-xyz/date-picker";
 
 import { DateTimePickerProps } from "./types";
 
