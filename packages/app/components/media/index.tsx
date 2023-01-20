@@ -2,7 +2,6 @@ import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
-import type { ImageSource, ImageNativeProps } from "expo-image";
 import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
@@ -33,8 +32,11 @@ type Props = {
   item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
-  sizeStyle?: Pick<ImageSource, "width" | "height">;
-  resizeMode?: ImageNativeProps["contentFit"];
+  sizeStyle?: {
+    width?: number;
+    height?: number;
+  };
+  resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;

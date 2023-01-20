@@ -2,9 +2,8 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Video } from "expo-av";
-import { ImageProps } from "expo-image";
 
-import { Image } from "@showtime-xyz/universal.image";
+import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
 
 import { contentFitToresizeMode } from "app/utilities";
@@ -17,7 +16,7 @@ type PreviewProps = {
   type?: "image" | "video";
   tw?: string;
   style?: any;
-  resizeMode?: ImageProps["contentFit"];
+  resizeMode?: ResizeMode;
   width: number;
   height: number;
 };

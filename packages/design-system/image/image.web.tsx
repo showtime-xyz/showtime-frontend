@@ -9,8 +9,7 @@ import Image, { ImageProps as NextImageProps } from "next/image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ImgProps } from "./image";
-import { ResizeMode } from "./types";
+import { ResizeMode, ImageNativeProps, ContentFit } from "./types";
 
 const getBase64Blurhash = (blurhash: string): string => {
   const pixels = decode(blurhash, 16, 16); // Uint8ClampedArray
@@ -19,7 +18,7 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
-type Props = Pick<ImgProps, "source" | "onLoad" | "contentFit"> &
+type Props = Pick<ImageNativeProps, "source" | "onLoad"> &
   Omit<NextImageProps, "src"> & {
     className: string;
     source: ImageURISource;
@@ -32,6 +31,7 @@ type Props = Pick<ImgProps, "source" | "onLoad" | "contentFit"> &
     blurhash?: string;
     style?: CSSProperties;
     resizeMode?: ResizeMode;
+    contentFit?: ContentFit;
   };
 
 function Img({
@@ -55,13 +55,20 @@ function Img({
 
   const onLoadingComplete = useCallback(
     (e: HTMLImageElement) => {
+      // this is for using expo-image
+      // onLoad?.({
+      //   cacheType: "none",
+      //   source: {
+      //     url: e.currentSrc,
+      //     width: e.naturalWidth,
+      //     height: e.naturalHeight,
+      //     mediaType: null,
+      //   },
+      // });
       onLoad?.({
-        cacheType: "none",
-        source: {
-          url: e.currentSrc,
+        nativeEvent: {
           width: e.naturalWidth,
           height: e.naturalHeight,
-          mediaType: null,
         },
       });
       onLoadingCompleteProps?.(e);
@@ -73,7 +80,7 @@ function Img({
       <Image
         src={source.uri}
         style={{
-          objectFit: contentFit ?? resizeMode,
+          objectFit: (contentFit ?? resizeMode) as any,
           ...style,
         }}
         loading={loading}
