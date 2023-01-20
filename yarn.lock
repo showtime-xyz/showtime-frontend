@@ -7995,11 +7995,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.68":
-  version: 0.0.68
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.68"
+"@showtime-xyz/universal.avatar@npm:^0.0.69":
+  version: 0.0.69
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.69"
   dependencies:
-    "@showtime-xyz/universal.image": 0.0.64
+    "@showtime-xyz/universal.image": 0.0.65
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
     "@storybook/react": 6.5.9
@@ -8008,7 +8008,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: e236b26d654e0270b2f6437b709512f07d3d7d4a4dbe90813cdccb6e99a5f4c9c3e255ebf6f86737eed0026dca83ad94e8af816544aed7aa8a4ad62b7be6a8c1
+  checksum: a1c8146348ae9880fba2cdf6b240506e3d7add92e0e1e8e68d7f15ba18d2c801fd1b1ff0c72bd61c6f5057f680e74e852bbe006a5c6ffa1724ac4e1128a40a37
   languageName: node
   linkType: hard
 
@@ -8313,22 +8313,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.image@npm:0.0.64, @showtime-xyz/universal.image@npm:^0.0.64":
-  version: 0.0.64
-  resolution: "@showtime-xyz/universal.image@npm:0.0.64"
+"@showtime-xyz/universal.image@npm:0.0.65, @showtime-xyz/universal.image@npm:^0.0.65":
+  version: 0.0.65
+  resolution: "@showtime-xyz/universal.image@npm:0.0.65"
   dependencies:
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
     array-to-image: 1.0.0
     blurhash: 1.1.5
-    expo-image: 1.0.0-alpha.5
+    react-native-blurhash: 1.1.10
+    react-native-fast-image: 8.5.11
   peerDependencies:
     next: "*"
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 2a201c9b0d43ff8ca1a7038c1935a7a19b963d7c50bdfd25e14a3e5254683d0c7d734082e9980a120823639b53146a0bf406265237325dca8f0223a2fc392543
+  checksum: 8186b8a45592dbaea4ea7d3c7253e742a5f3df68adec31a3894b8de88892d0ee25a1ce6e86c16cf19fabeb49ad31864d0fa18603c157fac6b8e36d7a675cc031
   languageName: node
   linkType: hard
 
@@ -8383,13 +8384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.88":
-  version: 0.0.88
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.88"
+"@showtime-xyz/universal.light-box@npm:^0.0.89":
+  version: 0.0.89
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.89"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 0.1.0
     "@showtime-xyz/universal.icon": 0.0.80
-    "@showtime-xyz/universal.image": 0.0.64
+    "@showtime-xyz/universal.image": 0.0.65
     "@showtime-xyz/universal.pressable": 0.0.62
     "@showtime-xyz/universal.tailwind": 0.0.51
     "@showtime-xyz/universal.view": 0.0.52
@@ -8402,7 +8403,7 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 53f7dddcf6f0b7c84defa357221e0eb8b8d164cd3d71a61294c538970cea77692334f7f9dd05cd33c9742a99ee74be815d166df77c6e395395220651ead3a622
+  checksum: 80985ed0abf6b50b87705430b8804a8c19426e30da006b17b77f785843f93e4eb7f301d366f566f9f40f90be30d04613cb1340158fb8dd7b15329cfd6ce1ead5
   languageName: node
   linkType: hard
 
@@ -8894,7 +8895,7 @@ __metadata:
     "@showtime-xyz/universal.accordion": ^0.0.75
     "@showtime-xyz/universal.activity-indicator": ^0.0.53
     "@showtime-xyz/universal.alert": ^0.0.97
-    "@showtime-xyz/universal.avatar": ^0.0.68
+    "@showtime-xyz/universal.avatar": ^0.0.69
     "@showtime-xyz/universal.bottom-sheet": ^0.0.85
     "@showtime-xyz/universal.button": ^0.0.80
     "@showtime-xyz/universal.checkbox": ^0.0.68
@@ -8911,11 +8912,11 @@ __metadata:
     "@showtime-xyz/universal.haptics": ^0.0.22
     "@showtime-xyz/universal.hooks": ^0.0.58
     "@showtime-xyz/universal.icon": ^0.0.80
-    "@showtime-xyz/universal.image": ^0.0.64
+    "@showtime-xyz/universal.image": ^0.0.65
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.46
     "@showtime-xyz/universal.input": ^0.0.72
     "@showtime-xyz/universal.label": ^0.0.56
-    "@showtime-xyz/universal.light-box": ^0.0.88
+    "@showtime-xyz/universal.light-box": ^0.0.89
     "@showtime-xyz/universal.modal": ^0.0.114
     "@showtime-xyz/universal.modal-screen": ^0.0.128
     "@showtime-xyz/universal.modal-sheet": ^0.0.117
@@ -8990,7 +8991,6 @@ __metadata:
     expo-font: ~11.0.1
     expo-gl: ~12.0.0
     expo-haptics: ~12.0.1
-    expo-image: ^1.0.0-alpha.6
     expo-image-picker: ~14.0.1
     expo-linear-gradient: ~12.0.1
     expo-linking: ~3.2.3
@@ -9030,6 +9030,7 @@ __metadata:
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
+    react-native-fast-image: 8.5.11
     react-native-gesture-handler: 2.8.0
     react-native-ios-context-menu: ^1.15.1
     react-native-level-fs: ^3.0.0
@@ -9190,7 +9191,6 @@ __metadata:
     expo-font: ~11.0.1
     expo-gl: ~12.0.0
     expo-haptics: ~12.0.1
-    expo-image: ^1.0.0-alpha.6
     expo-image-picker: ~14.0.1
     expo-linear-gradient: ~12.0.1
     expo-linking: ~3.2.3
@@ -9204,6 +9204,7 @@ __metadata:
     react-dom: 18.2.0
     react-native: 0.70.5
     react-native-blob-jsi-helper: ^0.2.2
+    react-native-fast-image: 8.5.11
     react-native-gesture-handler: 2.8.0
     react-native-ios-context-menu: ^1.15.1
     react-native-mmkv: ^2.4.3
@@ -20391,15 +20392,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image@npm:^1.0.0-alpha.6":
-  version: 1.0.0-alpha.6
-  resolution: "expo-image@npm:1.0.0-alpha.6"
-  peerDependencies:
-    expo: "*"
-  checksum: 4a13aa4679c7001d46ce035fe9044746e80739f01739a8e157fb7f6cd6663bd0cce3063e6da498730f806fce58aa0387a70d8823d98dacce66bff04362ac0724
-  languageName: node
-  linkType: hard
-
 "expo-json-utils@npm:~0.4.0":
   version: 0.4.0
   resolution: "expo-json-utils@npm:0.4.0"
@@ -31207,7 +31199,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-blurhash@npm:^1.1.10":
+"react-native-blurhash@npm:1.1.10, react-native-blurhash@npm:^1.1.10":
   version: 1.1.10
   resolution: "react-native-blurhash@npm:1.1.10"
   peerDependencies:
@@ -31256,6 +31248,16 @@ __metadata:
   peerDependencies:
     react-native-randombytes: ">=2.0.0 <4.0.0"
   checksum: 52631bf32e5d3e0aad9329e3271808a30b91f8a072d4a0c2791105cd3c3aac5d1a63a4016a570790342baa7fc4b10f15024e4d6df47e57906197d7587af450e1
+  languageName: node
+  linkType: hard
+
+"react-native-fast-image@npm:8.5.11":
+  version: 8.5.11
+  resolution: "react-native-fast-image@npm:8.5.11"
+  peerDependencies:
+    react: ^16.8.6 || ^17.0.0
+    react-native: ">=0.60.0"
+  checksum: 20629fd3c4889383d2bf76b13560f1a15f043dc136efffc731a06bc779908df9037012c9db31eedbce945bc6e0e625539d592c3cc0d147626b5daa2e48054ba3
   languageName: node
   linkType: hard
 
