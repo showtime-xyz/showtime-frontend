@@ -8,6 +8,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -60,6 +61,7 @@ export const DropUpdate = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const mutatePresaveReleaseDate = useUpdatePresaveReleaseDate();
+  const router = useRouter();
 
   useEffect(() => {
     resetForm(defaultValues);
@@ -76,6 +78,8 @@ export const DropUpdate = ({
         releaseDate: values.releaseDate,
         spotifyUrl: values.spotifyUrl,
       });
+
+    router.pop();
   };
 
   return (
@@ -93,7 +97,6 @@ export const DropUpdate = ({
           render={({ field: { onChange, onBlur, value } }) => {
             return (
               <Fieldset
-                tw="flex-1"
                 label="Spotify URL"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -116,7 +119,7 @@ export const DropUpdate = ({
               typeof value === "string" ? new Date(value) : value ?? new Date();
 
             return (
-              <View tw="flex-1 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800">
+              <View tw="rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800">
                 {Platform.OS !== "web" ? (
                   <Pressable
                     onPress={() => {

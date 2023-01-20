@@ -169,7 +169,7 @@ function NFTDropdown({
               key="update"
             >
               <MenuItemIcon Icon={Edit} />
-              <DropdownMenuItemNativeIcon iosIconName="pen" />
+              <DropdownMenuItemNativeIcon iosIconName="square.and.pencil" />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Update
               </DropdownMenuItemTitle>
