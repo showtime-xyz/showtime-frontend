@@ -75,6 +75,7 @@ export const PlayOnSpinamp = () => {
 
     if (!status?.isLoaded) {
       try {
+        setIsLoading(true);
         await sound.current?.loadAsync({
           uri: "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit",
         });
