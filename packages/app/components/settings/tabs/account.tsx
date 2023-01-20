@@ -18,6 +18,7 @@ import { createParam } from "app/navigation/use-param";
 
 import {
   AccountSettingItem,
+  SettingAccountSlotFooter,
   SettingAccountSlotHeader,
 } from "../settings-account-slot";
 
@@ -50,6 +51,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         ))}
       <ConnectSpotify redirectUri={"/settings?tab=" + index} />
       <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
+      <SettingAccountSlotFooter />
     </SettingScrollComponent>
   );
 };
@@ -127,7 +129,6 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
   const router = useRouter();
   // Web will redirect back here with a did param
   useEffect(() => {
-    console.log("didid ", did);
     if (did && type && !requestSent.current) {
       addSocial(did, type as any);
       setDid(undefined);
