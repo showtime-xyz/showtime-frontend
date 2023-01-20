@@ -576,12 +576,31 @@ export const DropMusic = () => {
                   return (
                     <Fieldset
                       tw="flex-1"
-                      label="Spotify URL"
+                      label={
+                        <View tw="flex-row">
+                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                            Spotify Song Link
+                          </Label>
+                          <PressableHover
+                            onPress={() => {
+                              setShowCopySpotifyLinkTutorial(true);
+                            }}
+                          >
+                            <InformationCircle
+                              height={18}
+                              width={18}
+                              color={
+                                isDark ? colors.gray[400] : colors.gray[600]
+                              }
+                            />
+                          </PressableHover>
+                        </View>
+                      }
                       onBlur={onBlur}
                       ref={spotifyTextInputRef}
                       onChangeText={onChange}
                       value={value}
-                      placeholder="Enter the Spotify song link"
+                      placeholder="Copy Song Link or URI here"
                       errorText={errors.spotifyUrl?.message}
                     />
                   );
@@ -606,41 +625,6 @@ export const DropMusic = () => {
                 Is Live?
               </Text>
             </View>
-            <Controller
-              control={control}
-              name="spotifyUrl"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label={
-                      <View tw="flex-row">
-                        <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                          Spotify Song Link
-                        </Label>
-                        <PressableHover
-                          onPress={() => {
-                            setShowCopySpotifyLinkTutorial(true);
-                          }}
-                        >
-                          <InformationCircle
-                            height={18}
-                            width={18}
-                            color={isDark ? colors.gray[400] : colors.gray[600]}
-                          />
-                        </PressableHover>
-                      </View>
-                    }
-                    onBlur={onBlur}
-                    ref={spotifyTextInputRef}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Copy Song Link or URI here"
-                    errorText={errors.spotifyUrl?.message}
-                  />
-                );
-              }}
-            />
             <View style={{ position: "absolute", right: 12, top: 8 }}>
               {user.user?.data.profile.spotify_artist_id ? null : (
                 <Button
