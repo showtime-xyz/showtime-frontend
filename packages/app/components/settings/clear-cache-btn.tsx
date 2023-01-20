@@ -1,12 +1,10 @@
 import { useCallback } from "react";
 
-import { Image } from "expo-image";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
+import { deleteAppCache } from "app/lib/delete-cache";
 
 export const ClearCacheBtn = () => {
   const Alert = useAlert();
@@ -15,9 +13,11 @@ export const ClearCacheBtn = () => {
       {
         text: "Confirm",
         onPress: async () => {
-          deleteMMKVCache();
-          await Image.clearDiskCache();
-          await Image.clearMemoryCache();
+          // expo-image
+          // await Image.clearDiskCache();
+          // await Image.clearMemoryCache();
+          // fast-image
+          deleteAppCache();
         },
         style: "destructive",
       },
@@ -26,8 +26,6 @@ export const ClearCacheBtn = () => {
       },
     ]);
   }, [Alert]);
-
-  if (!__DEV__) return null;
 
   return (
     <Button size="small" onPress={clearAppCache}>
