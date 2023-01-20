@@ -161,6 +161,7 @@ export const DropUpdate = ({
                         onChange(v);
                         setShowDatePicker(false);
                       }}
+                      minimumDate={new Date()}
                       value={dateValue}
                       type="datetime"
                       open={showDatePicker}
