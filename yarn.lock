@@ -7026,13 +7026,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/blur@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "@react-native-community/blur@npm:4.2.0"
+"@react-native-community/blur@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "@react-native-community/blur@npm:4.3.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: adfc7e423555bcf6581f68c2d836f73f2c5e562359ab189ceb723ef3019d72460432b67e86c258d596658b827efb3277f321ef46b29841dc380d1e4fc839abc6
+  checksum: 1fb168a88d5901f0c86cf537a51e272ddd63b057cec4fb102f2e3a4b50f16d04fc0575567de7440dfab01d090fb3863cec74055538141f96e7d7bc8835101ac0
   languageName: node
   linkType: hard
 
@@ -8877,7 +8877,7 @@ __metadata:
     "@magic-ext/react-native-oauth": ^4.0.0
     "@magic-sdk/react-native": ^11.0.0
     "@react-native-async-storage/async-storage": ~1.17.3
-    "@react-native-community/blur": ^4.2.0
+    "@react-native-community/blur": ^4.3.0
     "@react-native-community/datetimepicker": 6.5.2
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
