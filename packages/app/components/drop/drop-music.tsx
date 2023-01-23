@@ -580,12 +580,14 @@ export const DropMusic = () => {
               }}
             />
             <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
+              {console.log("mkefkfekefkfkek ", isSaveDrop)}
               <Checkbox
-                checked={isSaveDrop}
+                checked={!isSaveDrop}
                 onChange={(v) => {
-                  setIsSaveDrop(v);
+                  console.log("Efe ", v);
+                  setIsSaveDrop(!v);
                 }}
-                accesibilityLabel="Is Live?"
+                accesibilityLabel="Live Now"
               />
               <Text
                 tw="ml-2 font-bold text-black dark:text-white"
@@ -593,7 +595,7 @@ export const DropMusic = () => {
                   setIsSaveDrop(!isSaveDrop);
                 }}
               >
-                Is Live?
+                Live Now
               </Text>
             </View>
           </View>
