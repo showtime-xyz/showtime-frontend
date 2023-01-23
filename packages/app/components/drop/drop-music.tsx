@@ -166,6 +166,13 @@ export const DropMusic = () => {
   });
 
   const onSubmit = async (values: UseDropNFT) => {
+    if (isSaveDrop && !values.spotifyUrl) {
+      setError("spotifyUrl", {
+        type: "required",
+        message: "Spotify link is required",
+      });
+      return;
+    }
     await dropNFT(
       {
         ...values,
@@ -521,95 +528,58 @@ export const DropMusic = () => {
             />
           </Hidden>
           <View tw="z-10 mt-4 flex-row">
-            {!isSaveDrop ? (
-              <Controller
-                key="releaseDate"
-                control={control}
-                name="releaseDate"
-                render={({ field: { onChange, value } }) => {
-                  let dateValue =
-                    typeof value === "string"
-                      ? new Date(value)
-                      : value ?? new Date();
+            <Controller
+              key="releaseDate"
+              control={control}
+              name="releaseDate"
+              render={({ field: { onChange, value } }) => {
+                let dateValue =
+                  typeof value === "string"
+                    ? new Date(value)
+                    : value ?? new Date();
 
-                  return (
-                    <View tw="flex-1 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800">
-                      {Platform.OS !== "web" ? (
-                        <Pressable
-                          onPress={() => {
-                            setShowDatePicker(!showDatePicker);
-                          }}
-                        >
-                          <Text tw="font-bold text-gray-900 dark:text-white">
-                            Pick a Release Date
-                          </Text>
-                          <Text tw="pt-4 text-base text-gray-900 dark:text-white">
-                            {(dateValue as Date).toDateString()}
-                          </Text>
-                        </Pressable>
-                      ) : (
+                return (
+                  <View
+                    tw={`flex-1 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800 ${
+                      isSaveDrop ? "opacity-40" : ""
+                    }`}
+                  >
+                    {Platform.OS !== "web" ? (
+                      <Pressable
+                        onPress={() => {
+                          setShowDatePicker(!showDatePicker);
+                        }}
+                      >
                         <Text tw="font-bold text-gray-900 dark:text-white">
-                          Enter a Release Date
+                          Release Date
                         </Text>
-                      )}
+                        <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                          {(dateValue as Date).toDateString()}
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Text tw="font-bold text-gray-900 dark:text-white">
+                        Release Date
+                      </Text>
+                    )}
 
-                      <View tw="t-0 l-0 flex-row pt-2">
-                        <DateTimePicker
-                          onChange={(v) => {
-                            onChange(v);
-                            setShowDatePicker(false);
-                          }}
-                          minimumDate={new Date()}
-                          value={dateValue}
-                          type="datetime"
-                          open={showDatePicker}
-                        />
-                      </View>
+                    <View tw="t-0 l-0 w-full flex-row pt-2">
+                      <DateTimePicker
+                        onChange={(v) => {
+                          onChange(v);
+                          setShowDatePicker(false);
+                        }}
+                        minimumDate={new Date()}
+                        value={dateValue}
+                        type="datetime"
+                        open={showDatePicker}
+                      />
                     </View>
-                  );
-                }}
-              />
-            ) : (
-              <Controller
-                control={control}
-                name="spotifyUrl"
-                render={({ field: { onChange, onBlur, value } }) => {
-                  return (
-                    <Fieldset
-                      tw="flex-1"
-                      label={
-                        <View tw="flex-row">
-                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                            Spotify Song Link
-                          </Label>
-                          <PressableHover
-                            onPress={() => {
-                              setShowCopySpotifyLinkTutorial(true);
-                            }}
-                          >
-                            <InformationCircle
-                              height={18}
-                              width={18}
-                              color={
-                                isDark ? colors.gray[400] : colors.gray[600]
-                              }
-                            />
-                          </PressableHover>
-                        </View>
-                      }
-                      onBlur={onBlur}
-                      ref={spotifyTextInputRef}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder="Copy Song Link or URI here"
-                      errorText={errors.spotifyUrl?.message}
-                    />
-                  );
-                }}
-              />
-            )}
-
-            <View tw="ml-4 flex-row items-center">
+                  </View>
+                );
+              }}
+            />
+            <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
               <Checkbox
                 checked={isSaveDrop}
                 onChange={(v) => {
@@ -626,21 +596,50 @@ export const DropMusic = () => {
                 Is Live?
               </Text>
             </View>
-            <View style={{ position: "absolute", right: 12, top: 8 }}>
-              {user.user?.data.profile.spotify_artist_id ? null : (
-                <Button
-                  onPress={() => {
-                    Linking.openURL(
-                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                    );
-                  }}
-                >
-                  Request
-                </Button>
-              )}
-            </View>
           </View>
 
+          <View tw="mt-4">
+            <Controller
+              control={control}
+              name="spotifyUrl"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <Fieldset
+                    tw="flex-1"
+                    label={
+                      <View tw="flex-row">
+                        <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                          Spotify Song Link{" "}
+                          {isSaveDrop ? (
+                            <Text tw="text-red-600">*</Text>
+                          ) : (
+                            "(Optional)"
+                          )}
+                        </Label>
+                        <PressableHover
+                          onPress={() => {
+                            setShowCopySpotifyLinkTutorial(true);
+                          }}
+                        >
+                          <InformationCircle
+                            height={18}
+                            width={18}
+                            color={isDark ? colors.gray[400] : colors.gray[600]}
+                          />
+                        </PressableHover>
+                      </View>
+                    }
+                    onBlur={onBlur}
+                    ref={spotifyTextInputRef}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Copy Song Link or URI here"
+                    errorText={errors.spotifyUrl?.message}
+                  />
+                );
+              }}
+            />
+          </View>
           <View>
             <Accordion.Root
               value={accordionValue}
