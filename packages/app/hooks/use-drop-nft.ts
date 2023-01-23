@@ -253,7 +253,7 @@ export const useDropNFT = () => {
             : undefined,
       };
 
-      if (params.releaseDate) {
+      if (params.releaseDate && params.gatingType === "music_presave") {
         requestData.release_date = params.releaseDate;
       }
 
