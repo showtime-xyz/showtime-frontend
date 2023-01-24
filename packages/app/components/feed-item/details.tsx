@@ -65,7 +65,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
           </SocialButton>
           <View tw="w-8" />
           <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={detail ?? nft} tw="" />
+            <NFTDropdown nft={detail ?? nft} tw="" edition={edition} />
           </Suspense>
         </View>
       </View>

@@ -95,7 +95,7 @@ export function LoginComponent({
           {/* <LoginWithTwitter /> */}
           <LoginButton onPress={() => setShowEmailLogin(true)} type="email" />
           <ConnectButton handleSubmitWallet={handleSubmitWallet} />
-          <LoginFooter />
+          <LoginFooter tw="mt-4" />
         </View>
       </View>
       <LoginOverlays loading={loading} />

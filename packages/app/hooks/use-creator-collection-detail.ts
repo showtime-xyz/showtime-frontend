@@ -1,6 +1,6 @@
 import useSWR from "swr";
 
-import { IEdition } from "app/types";
+import { GatingType, IEdition } from "app/types";
 
 import { fetcher } from "./use-infinite-list-query";
 
@@ -10,9 +10,10 @@ export type CreatorEditionResponse = {
   password: string | null;
   time_limit: string;
   total_claimed_count: number;
-  gating_type: "spotify_save" | "password" | "location" | "multi";
+  gating_type: GatingType;
   spotify_track_name: string | null;
   spotify_track_url: string | null;
+  presave_release_date: string | null;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {

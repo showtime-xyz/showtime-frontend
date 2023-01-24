@@ -2,7 +2,6 @@ import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
-import type { ImageSource, ImageNativeProps } from "expo-image";
 import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
@@ -33,8 +32,11 @@ type Props = {
   item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
-  sizeStyle?: Pick<ImageSource, "width" | "height">;
-  resizeMode?: ImageNativeProps["contentFit"];
+  sizeStyle?: {
+    width?: number;
+    height?: number;
+  };
+  resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
   isMuted?: boolean;
@@ -73,6 +75,11 @@ function Media({
         opacity: item?.loading ? 0.5 : 1,
       }}
     >
+      {Boolean(edition) && (
+        <View tw="absolute bottom-0.5 left-0.5 z-10">
+          <ContentTypeIcon edition={edition} />
+        </View>
+      )}
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
         <PinchToZoom
@@ -80,11 +87,6 @@ function Media({
           onPinchEnd={onPinchEnd}
           disabled={numColumns > 1}
         >
-          {Boolean(edition) && (
-            <View tw="absolute bottom-0.5 left-0.5 z-10">
-              <ContentTypeIcon edition={edition} />
-            </View>
-          )}
           <Image
             source={{
               uri: mediaUri,
@@ -108,7 +110,7 @@ function Media({
           disabled={numColumns > 1}
         >
           {numColumns > 1 && (
-            <View tw="absolute bottom-1 right-1 z-10 bg-transparent">
+            <View tw="absolute bottom-0.5 right-0.5 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}

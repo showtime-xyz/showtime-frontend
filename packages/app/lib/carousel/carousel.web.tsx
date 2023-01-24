@@ -71,7 +71,7 @@ function Carousel({
         ))}
       </Swiper>
 
-      {controller && (
+      {controller && data.length > 0 && (
         <Controller
           prev={() => (swiperRef.current as any)?.swiper.slidePrev()}
           next={() => (swiperRef.current as any)?.swiper.slideNext()}

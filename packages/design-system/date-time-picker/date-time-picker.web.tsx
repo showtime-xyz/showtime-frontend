@@ -4,10 +4,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import { DateTimePickerProps } from "./types";
 
 export const DateTimePicker = (props: DateTimePickerProps) => {
-  const { value, type, onChange, maximumDate, minimumDate } = props;
+  const { value, type, onChange, maximumDate, minimumDate, disabled } = props;
   return (
     <DatePicker
       selected={value}
+      disabled={disabled}
       onChange={(date: any) => onChange(date)}
       showTimeSelect={type === "datetime" || type === "time"}
       showTimeSelectOnly={type === "time"}

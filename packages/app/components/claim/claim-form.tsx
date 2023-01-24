@@ -163,7 +163,10 @@ export const ClaimForm = ({
 
     let success: boolean | undefined | void = false;
 
-    if (edition.gating_type === "spotify_save") {
+    if (
+      edition.gating_type === "spotify_save" ||
+      edition.gating_type === "music_presave"
+    ) {
       closeModal();
       success = await claimSpotifyGatedDrop(nft?.data.item);
     } else if (edition.gating_type === "password") {

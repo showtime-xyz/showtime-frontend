@@ -8,6 +8,7 @@ import {
   Twitter,
   Facebook,
   Mail,
+  Ethereum,
 } from "@showtime-xyz/universal.icon";
 import { Props as PressableProps } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -31,7 +32,7 @@ const BUTTON_TEXT = {
   facebook: "Continue with Facebook",
   twitter: "Continue with Twitter",
   email: "Continue with Email",
-  wallet: "I already have a wallet",
+  wallet: "Connect Wallet",
   social: "Back to social login",
 };
 const BUTTON_ICON = {
@@ -40,7 +41,7 @@ const BUTTON_ICON = {
   facebook: Facebook,
   twitter: Twitter,
   email: Mail,
-  wallet: () => <></>,
+  wallet: Ethereum,
   social: () => <></>,
 };
 
@@ -69,8 +70,6 @@ export const LoginButton = ({ type, ...rest }: LoginButtonProps) => {
     switch (type) {
       case "social":
         return "text";
-      case "wallet":
-        return "text";
       default:
         return "outlined";
     }
@@ -79,8 +78,6 @@ export const LoginButton = ({ type, ...rest }: LoginButtonProps) => {
   const labelTW = useMemo(() => {
     switch (type) {
       case "social":
-        return "underline";
-      case "wallet":
         return "underline";
       default:
         return "";
