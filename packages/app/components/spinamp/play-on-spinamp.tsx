@@ -21,7 +21,7 @@ import { Play } from "design-system/icon";
 
 const Stop = () => <View tw="mx-1 h-3 w-3 bg-white" />;
 
-export const PlayOnSpinamp = () => {
+export const PlayOnSpinamp = ({ url }: { url: string }) => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
@@ -77,7 +77,7 @@ export const PlayOnSpinamp = () => {
       try {
         setIsLoading(true);
         await sound.current?.loadAsync({
-          uri: "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit",
+          uri: url,
         });
       } catch (error) {
         Logger.error("Failed to load Spinamp audio", error);
@@ -85,7 +85,7 @@ export const PlayOnSpinamp = () => {
     }
 
     sound.current?.playAsync();
-  }, [isPlaying, isLoading]);
+  }, [isPlaying, isLoading, url]);
 
   const pause = useCallback(() => {
     isPlaying && sound.current?.pauseAsync();
