@@ -74,7 +74,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   return null;
 };
 
-export const useLatestValueRef = (v: any) => {
+export const useLatestValueRef = <V extends any>(v: V) => {
   const ref = useRef(v);
   useEffect(() => {
     ref.current = v;
