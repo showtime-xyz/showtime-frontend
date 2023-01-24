@@ -22,8 +22,6 @@ export const PlayOnSpinamp = ({ url }: { url: string }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const sound = useRef<HTMLAudioElement | undefined>(new Audio(url));
 
-  console.log(`Render Section Spinamp`, { isVisible });
-
   // unload sound when component unmounts
   useEffect(() => {
     const currentRef = sound.current;
