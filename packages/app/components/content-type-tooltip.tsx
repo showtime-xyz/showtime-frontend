@@ -34,6 +34,10 @@ const contentGatingType = {
     icon: Lock,
     text: "Enter password & location to collect",
   },
+  music_presave: {
+    icon: Spotify,
+    text: "Presave to collect",
+  },
 };
 const TriggerView = isMobileWeb() ? View : PressableHover;
 
