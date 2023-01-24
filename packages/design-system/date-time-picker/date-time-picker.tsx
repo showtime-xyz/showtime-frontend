@@ -9,7 +9,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   const propValues = useLatestValueRef(props);
   useEffect(() => {
     async function getDate() {
-      if (props.open && !opened.current) {
+      if (props.open && !opened.current && !props.disabled) {
         const { value, onChange, type, maximumDate, minimumDate } =
           propValues.current;
         opened.current = true;
@@ -35,7 +35,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
     }
 
     getDate();
-  }, [propValues, props.open]);
+  }, [propValues, props.open, props.disabled]);
 
   useEffect(() => {
     return () => {

@@ -146,7 +146,7 @@ export const DropMusic = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
-  const [isSaveDrop, setIsSaveDrop] = useState(true);
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const [accordionValue, setAccordionValue] = useState("");
   const [isUnlimited, setIsUnlimited] = useState(false);
@@ -565,6 +565,7 @@ export const DropMusic = () => {
 
                     <View tw="t-0 l-0 w-full flex-row pt-2">
                       <DateTimePicker
+                        disabled={isSaveDrop}
                         onChange={(v) => {
                           onChange(v);
                           setShowDatePicker(false);
@@ -580,12 +581,10 @@ export const DropMusic = () => {
               }}
             />
             <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
-              {console.log("mkefkfekefkfkek ", isSaveDrop)}
               <Checkbox
-                checked={!isSaveDrop}
+                checked={isSaveDrop}
                 onChange={(v) => {
-                  console.log("Efe ", v);
-                  setIsSaveDrop(!v);
+                  setIsSaveDrop(!isSaveDrop);
                 }}
                 accesibilityLabel="Live Now"
               />
