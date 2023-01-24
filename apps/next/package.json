@@ -74,6 +74,8 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
+    "@expo/next-adapter": "4.0.8",
+    "@types/react-datepicker": "^4.8.0",
     "autoprefixer": "^10.4.8",
     "critters": "^0.0.16",
     "eslint": "7.32.0",

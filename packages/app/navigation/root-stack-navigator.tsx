@@ -13,6 +13,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropUpdateScreen } from "app/screens/drop-update";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -116,6 +117,11 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen
+          name="dropUpdate"
+          options={{ headerTitle: "Update drop" }}
+          component={DropUpdateScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
