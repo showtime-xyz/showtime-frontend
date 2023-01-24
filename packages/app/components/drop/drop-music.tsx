@@ -149,7 +149,7 @@ export const DropMusic = () => {
   const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const [accordionValue, setAccordionValue] = useState("");
-  const [isUnlimited, setIsUnlimited] = useState(false);
+  const [isUnlimited, setIsUnlimited] = useState(true);
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
 
