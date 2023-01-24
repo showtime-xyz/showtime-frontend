@@ -16,6 +16,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -212,7 +213,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
               onPinchStart={hideHeader}
               onPinchEnd={showHeader}
             />
