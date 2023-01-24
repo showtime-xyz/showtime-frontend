@@ -41,17 +41,8 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
   const isDark = useIsDarkMode();
   const [open, setOpen] = useState(false);
   // This will be removed after the airdrop
-  if (
-    edition?.creator_airdrop_edition.contract_address ===
-    "0xf7a84D5Eb968b2BF80014c4179CdEd9207177882"
-  ) {
-    return (
-      <PlayOnSpinamp
-        url={
-          "https://media.spinamp.xyz/v1/QmTYS6nJyTpte48Red2c97eM2bjs5bxU6tjo12H8LWbbdA?resource_type=video&cld-content-marker=jit"
-        }
-      />
-    );
+  if (edition?.spinamp_track_url) {
+    return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
   }
   if (edition?.spotify_track_url) {
     return <PlayOnSpotify url={edition?.spotify_track_url} />;
