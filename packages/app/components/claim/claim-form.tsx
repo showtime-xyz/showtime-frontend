@@ -345,7 +345,8 @@ export const ClaimForm = ({
               {linkifiedDescription}
             </Text>
           </View>
-          {edition.gating_type === "spotify_save" ? (
+          {edition.gating_type === "spotify_save" ||
+          edition.gating_type === "music_presave" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 {user.data.profile.has_spotify_token ? (
@@ -361,8 +362,9 @@ export const ClaimForm = ({
               <View tw="mt-4 flex-row items-center">
                 <CheckIcon />
                 <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                  You will save "{edition.spotify_track_name}" to your Spotify
-                  library
+                  {edition.gating_type === "spotify_save"
+                    ? `You will save "${edition.spotify_track_name}" to your Spotify library`
+                    : `You will save "${edition.spotify_track_name}" to your Spotify library when it's released`}
                 </Text>
               </View>
             </>
@@ -449,8 +451,8 @@ export const ClaimForm = ({
                 "Collecting... it should take about 10 seconds"
               ) : state.status === "error" ? (
                 "Failed. Retry!"
-              ) : edition.gating_type === "spotify_save" &&
-                !user.data.profile.has_spotify_token ? (
+              ) : edition.gating_type === "spotify_save" ||
+                edition.gating_type === "music_presave" ? (
                 <View tw="w-full flex-row items-center justify-center">
                   <Spotify color={isDark ? "#000" : "#fff"} />
                   <Text tw="ml-2 font-semibold text-white dark:text-black">
