@@ -363,8 +363,16 @@ export const ClaimForm = ({
                 <CheckIcon />
                 <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                   {edition.gating_type === "spotify_save"
-                    ? `You will save "${edition.spotify_track_name}" to your Spotify library`
-                    : `You will save "${edition.spotify_track_name}" to your Spotify library when it's released`}
+                    ? `You will save ${
+                        edition.spotify_track_name
+                          ? '"' + edition.spotify_track_name + '"'
+                          : "this song"
+                      } to your Spotify library`
+                    : `You will pre-save ${
+                        edition.spotify_track_name
+                          ? '"' + edition.spotify_track_name + '"'
+                          : "this song"
+                      } to your Spotify library`}
                 </Text>
               </View>
             </>
