@@ -111,16 +111,11 @@ export const PlayOnSpinamp = ({ url }: { url: string }) => {
             {isPlaying ? <Stop /> : <Play color={"white"} />}
           </View>
         )}
-
         <Image
-          tw={"ml-3 self-center"}
+          tw={"ml-2 self-center p-2"}
           source={require("./powered-by.png")}
-          width={100}
-          height={12}
-          style={{
-            height: 12,
-            width: 100,
-          }}
+          width={140}
+          height={20}
           resizeMode="contain"
         />
       </View>
