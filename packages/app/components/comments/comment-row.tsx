@@ -67,9 +67,7 @@ function CommentRowComponent({
   const repliesCount = comment.replies?.length ?? 0;
   const replies = useMemo(
     () =>
-      repliesCount > 0
-        ? comment.replies!.slice(0, displayedRepliesCount).reverse()
-        : [],
+      repliesCount > 0 ? comment.replies!.slice(0, displayedRepliesCount) : [],
     [comment.replies, repliesCount, displayedRepliesCount]
   );
   const isMyComment = useMemo(
