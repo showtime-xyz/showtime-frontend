@@ -120,7 +120,6 @@ export function Comments({ nft }: { nft: NFT }) {
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<CommentType>) => (
       <CommentRow
-        key={`comment-row-${item.comment_id}`}
         comment={item}
         likeComment={likeComment}
         unlikeComment={unlikeComment}
