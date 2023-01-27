@@ -36,7 +36,7 @@ const contentGatingType = {
   },
   music_presave: {
     icon: Spotify,
-    text: "Presave to collect",
+    text: "Pre-Save to collect",
   },
 };
 const TriggerView = isMobileWeb() ? View : PressableHover;
@@ -48,9 +48,20 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
   if (edition?.spinamp_track_url) {
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
   }
-  if (edition?.spotify_track_url) {
+
+  if (
+    edition?.gating_type === "music_presave" &&
+    edition?.spotify_track_url &&
+    edition?.presave_release_date &&
+    new Date() >= new Date(edition?.presave_release_date)
+  ) {
     return <PlayOnSpotify url={edition?.spotify_track_url} />;
   }
+
+  if (edition?.gating_type === "spotify_save" && edition?.spotify_track_url) {
+    return <PlayOnSpotify url={edition?.spotify_track_url} />;
+  }
+
   if (edition?.gating_type && contentGatingType[edition?.gating_type]) {
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
