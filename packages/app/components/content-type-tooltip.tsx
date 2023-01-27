@@ -6,6 +6,7 @@ import * as Tooltip from "universal-tooltip";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
@@ -97,7 +98,20 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
               tw="rounded bg-black/60"
               style={StyleSheet.absoluteFillObject}
             />
-            <Icon color="white" width={20} height={20} className="z-10" />
+            <View tw="flex-row items-center">
+              <Icon color="white" width={20} height={20} className="z-10" />
+              {edition.presave_release_date ? (
+                <Text tw="px-1 text-xs font-semibold text-white">
+                  Available on{" "}
+                  {new Date(edition.presave_release_date).toLocaleString(
+                    "default",
+                    { month: "long" }
+                  ) +
+                    " " +
+                    new Date(edition.presave_release_date).getDate()}
+                </Text>
+              ) : null}
+            </View>
           </TriggerView>
         </Tooltip.Trigger>
         <Tooltip.Content
