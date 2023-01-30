@@ -9,6 +9,7 @@ import {
 import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import * as Clipboard from "expo-clipboard";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
@@ -18,9 +19,10 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   Instagram,
-  Twitter,
+  TwitterOutline,
   ScanOutline,
   Download,
+  Link,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -34,6 +36,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTURL } from "app/hooks/use-share-nft";
@@ -43,20 +46,28 @@ import { ReactQRCode } from "app/lib/qr-code";
 import Share from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
-import { getCreatorUsernameFromNFT, getMediaUrl } from "app/utilities";
+import {
+  getCreatorUsernameFromNFT,
+  getMediaUrl,
+  getTwitterIntent,
+  getTwitterIntentUsername,
+} from "app/utilities";
 
 const { width: windowWidth } = Dimensions.get("window");
+type QRCodeModalParams = {
+  contractAddress?: string | undefined;
+};
+const { useParam } = createParam<QRCodeModalParams>();
 
-const { useParam } = createParam<{
-  contractAddress: string;
-  password: string;
-}>();
-
-export const QRCodeModal = () => {
+type QRCodeModalProps = QRCodeModalParams;
+export const QRCodeModal = (props?: QRCodeModalProps) => {
+  const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
-  const { data: edition } = useCreatorCollectionDetail(contractAddress);
 
-  const { data } = useNFTDetailByTokenId({
+  const { data: edition, loading: isLoadingCollection } =
+    useCreatorCollectionDetail(contractAddress || contractAddressProp);
+
+  const { data, isLoading: isLoadingNFT } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
@@ -77,6 +88,9 @@ export const QRCodeModal = () => {
   const isDark = useIsDarkMode();
   const toast = useToast();
   const { bottom } = useSafeAreaInsets();
+  const { data: creatorProfile } = useUserProfile({
+    address: nft?.creator_address,
+  });
 
   const iconColor = isDark ? colors.white : colors.gray[900];
   const [isInstalledApps, setIsInstalledApps] = useState({
@@ -203,6 +217,20 @@ export const QRCodeModal = () => {
     },
     [nft]
   );
+
+  const shareWithTwitterIntent = useCallback(() => {
+    Linking.openURL(
+      getTwitterIntent({
+        url: qrCodeUrl.toString(),
+        message: `I just collected a free drop "${
+          nft?.token_name
+        }" by ${getTwitterIntentUsername(
+          creatorProfile?.data?.profile
+        )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
+      })
+    );
+  }, [creatorProfile?.data?.profile, nft?.token_name, qrCodeUrl]);
+
   const shareOpenMore = useCallback(async () => {
     const url = await getViewShot();
     try {
@@ -216,12 +244,32 @@ export const QRCodeModal = () => {
       Logger.error("shareOpenMore Error =>", error);
     }
   }, [nft]);
-  const shareButtons = useMemo(
-    () => [
+
+  const onCopyLink = useCallback(async () => {
+    await Clipboard.setStringAsync(qrCodeUrl.toString());
+    toast?.show({ message: "Copied!", hideAfter: 5000 });
+  }, [qrCodeUrl, toast]);
+
+  const shareButtons = Platform.select({
+    web: [
       {
         title: "Twitter",
-        Icon: Twitter,
-        onPress: () => shareSingleImage(Share.Social.TWITTER),
+        Icon: TwitterOutline,
+        onPress: shareWithTwitterIntent,
+        visable: true,
+      },
+      {
+        title: "Download",
+        Icon: Download,
+        onPress: onDownload,
+        visable: true,
+      },
+    ],
+    default: [
+      {
+        title: "Twitter",
+        Icon: TwitterOutline,
+        onPress: shareWithTwitterIntent,
         visable: isInstalledApps.twitter,
       },
       {
@@ -231,7 +279,13 @@ export const QRCodeModal = () => {
         visable: isInstalledApps.instagram,
       },
       {
-        title: "Save",
+        title: "Link",
+        Icon: Link,
+        onPress: onCopyLink,
+        visable: true,
+      },
+      {
+        title: "Save QR",
         Icon: Download,
         onPress: onDownload,
         visable: true,
@@ -243,9 +297,15 @@ export const QRCodeModal = () => {
         visable: true,
       },
     ],
-    [isInstalledApps, onDownload, shareOpenMore, shareSingleImage]
-  );
+  });
   if (!nft) return null;
+  if (isLoadingCollection || isLoadingNFT) {
+    return (
+      <View tw="p-4">
+        <Spinner />
+      </View>
+    );
+  }
   return (
     <ErrorBoundary>
       <Suspense
@@ -257,9 +317,9 @@ export const QRCodeModal = () => {
       >
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
-            <BottomSheetScrollView useNativeModal={false}>
+            <BottomSheetScrollView>
               <RNView collapsable={false} ref={viewRef as any}>
-                <View tw="web:pb-16 w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
+                <View tw="web:mb-[74px] w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
                   <Image
                     source={{
                       uri: mediaUri,
@@ -273,6 +333,7 @@ export const QRCodeModal = () => {
                     height={size}
                     resizeMode="cover"
                     alt={nft?.token_name}
+                    blurhash={nft?.blurhash}
                   />
                   <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
                     <View tw="flex-1 justify-center">
@@ -326,42 +387,29 @@ export const QRCodeModal = () => {
               </RNView>
             </BottomSheetScrollView>
           </BottomSheetModalProvider>
-          {Platform.OS === "web" ? (
-            <Pressable
-              onPress={onDownload}
-              tw="absolute bottom-0 w-full flex-1 items-center justify-center bg-white px-4 py-1 dark:bg-black"
-            >
-              <Download height={24} width={24} color={iconColor} />
-              <View tw="h-2" />
-              <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                Download
-              </Text>
-            </Pressable>
-          ) : (
-            <View
-              tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
-              style={{ paddingBottom: bottom }}
-            >
-              {shareButtons
-                .filter((item) => item.visable)
-                .map(({ onPress, Icon, title }, index) => (
-                  <Pressable
-                    onPress={() => {
-                      Haptics.impactAsync();
-                      onPress();
-                    }}
-                    tw="flex-1 items-center justify-center py-4"
-                    key={index.toString()}
-                  >
-                    <Icon height={24} width={24} color={iconColor} />
-                    <View tw="h-2" />
-                    <Text tw="text-xs text-gray-900 dark:text-white">
-                      {title}
-                    </Text>
-                  </Pressable>
-                ))}
-            </View>
-          )}
+          <View
+            tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
+            style={{ paddingBottom: bottom }}
+          >
+            {shareButtons
+              .filter((item) => item.visable)
+              .map(({ onPress, Icon, title }) => (
+                <Pressable
+                  onPress={() => {
+                    Haptics.impactAsync();
+                    onPress();
+                  }}
+                  tw="flex-1 items-center justify-center py-4"
+                  key={title}
+                >
+                  <Icon height={24} width={24} color={iconColor} />
+                  <View tw="h-2" />
+                  <Text tw="text-xs text-gray-900 dark:text-white">
+                    {title}
+                  </Text>
+                </Pressable>
+              ))}
+          </View>
         </View>
       </Suspense>
     </ErrorBoundary>

@@ -152,6 +152,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropEvent" component={DropEventScreen} />
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
+        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -164,7 +165,6 @@ export function RootStackNavigator() {
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
         />
-        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
         <Stack.Screen name="report" component={ReportScreen} />
       </Stack.Group>
     </Stack.Navigator>
