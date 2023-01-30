@@ -18,8 +18,7 @@ export const useRedirectToClaimDrop = () => {
     if (!isAuthenticated) {
       router.push("/login");
     } else {
-      const as = `/claim/${editionContractAddress}`;
-
+      const as = `/qr-code-share/${editionContractAddress}`;
       router.push(
         Platform.select({
           native: as,
@@ -29,7 +28,7 @@ export const useRedirectToClaimDrop = () => {
               ...router.query,
               contractAddress: editionContractAddress,
               password,
-              claimModal: true,
+              qrCodeShareModal: true,
             },
           } as any,
         }),
@@ -39,6 +38,26 @@ export const useRedirectToClaimDrop = () => {
         }),
         { shallow: true }
       );
+      // const as = `/claim/${editionContractAddress}`;
+      // router.push(
+      //   Platform.select({
+      //     native: as,
+      //     web: {
+      //       pathname: router.pathname,
+      //       query: {
+      //         ...router.query,
+      //         contractAddress: editionContractAddress,
+      //         password,
+      //         claimModal: true,
+      //       },
+      //     } as any,
+      //   }),
+      //   Platform.select({
+      //     native: as,
+      //     web: router.asPath,
+      //   }),
+      //   { shallow: true }
+      // );
     }
   };
 

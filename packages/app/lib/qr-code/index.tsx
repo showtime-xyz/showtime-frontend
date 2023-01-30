@@ -49,7 +49,7 @@ export const ReactQRCode = ({
       { x: 0, y: 1 },
     ];
 
-    qrPositonList.forEach(({ x, y }) => {
+    qrPositonList.forEach(({ x, y }, index) => {
       const x1 = (matrix.length - 7) * cellSize * x;
       const y1 = (matrix.length - 7) * cellSize * y;
       for (let i = 0; i < 3; i++) {
@@ -62,6 +62,7 @@ export const ReactQRCode = ({
             width={cellSize * (7 - i * 2)}
             x={x1 + cellSize * i}
             y={y1 + cellSize * i}
+            key={`Rect-${index}-${i}`}
           />
         );
       }
@@ -96,6 +97,7 @@ export const ReactQRCode = ({
                   cy={j * cellSize + cellSize / 2}
                   fill={fillColor}
                   r={cellSize / 3} // calculate size of single result
+                  key={`Circle-${i}-${j}`}
                 />
               );
             }

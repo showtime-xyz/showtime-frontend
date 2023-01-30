@@ -126,5 +126,6 @@ export { default as GoogleOriginal } from "./GoogleOriginal";
 export { default as Apple } from "./Apple";
 export { default as Instagram } from "./Instagram";
 export { default as Github } from "./Github";
+export { default as TwitterOutline } from "./TwitterOutline";
 
 //#endregion
