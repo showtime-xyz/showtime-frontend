@@ -122,6 +122,7 @@
     "@showtime-xyz/universal.utils": "^0.0.17",
     "@showtime-xyz/universal.verification-badge": "^0.0.52",
     "@showtime-xyz/universal.view": "^0.0.52",
+    "@stripe/stripe-react-native": "^0.23.1",
     "@testing-library/jest-native": "^4.0.4",
     "@testing-library/react-native": "^9.1.0",
     "@tradle/react-native-http": "^2.0.1",

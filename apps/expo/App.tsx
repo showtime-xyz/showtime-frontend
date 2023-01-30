@@ -3,6 +3,7 @@ import { AppState, LogBox } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
@@ -26,13 +27,15 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
-const scheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
+const coinbaseRedirectScheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
 
 configureWalletMobileSDK({
-  callbackURL: new URL(scheme),
+  callbackURL: new URL(coinbaseRedirectScheme),
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });
+
+const stripeRedirectScheme = `io.showtime.${process.env.STAGE}`;
 
 LogBox.ignoreLogs([
   "Constants.deviceYearClass",
@@ -147,8 +150,14 @@ function App() {
 
   return (
     <AppProviders>
-      <StatusBar style="auto" />
-      <RootStackNavigator />
+      <StripeProvider
+        publishableKey="pk_test_51JXI0ySFtbKmLT7omLbWFDeOBVsxqFEfMjFmSSAhDrxwWfZoQZEA8kVjjEZw5WaBHvUEF7agT0OvVqfqeFKgVU8J00UxRdmTpj"
+        urlScheme={stripeRedirectScheme} // required for 3D Secure and bank redirects
+        merchantIdentifier="merchant.com.showtime" // required for Apple Pay
+      >
+        <StatusBar style="auto" />
+        <RootStackNavigator />
+      </StripeProvider>
     </AppProviders>
   );
 }
