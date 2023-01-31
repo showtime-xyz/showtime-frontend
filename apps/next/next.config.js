@@ -226,8 +226,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/.well-known/:file",
-        destination: "/api/.well-known/:file",
+        source: "/.well-known/apple-app-site-association",
+        destination: "/api/.well-known/apple-app-site-association",
         permanent: false,
       },
       {
