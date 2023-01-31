@@ -32,6 +32,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
+import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
@@ -48,13 +49,7 @@ import { useUser } from "app/hooks/use-user";
 import { useWeb3 } from "app/hooks/use-web3";
 import { linkifyDescription } from "app/lib/linkify";
 import { useRudder } from "app/lib/rudderstack";
-import {
-  formatAddressShort,
-  getCreatorUsernameFromNFT,
-  getTwitterIntent,
-  getTwitterIntentUsername,
-  isMobileWeb,
-} from "app/utilities";
+import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
 
 export const ClaimForm = ({
   edition,
@@ -221,81 +216,10 @@ export const ClaimForm = ({
   }
 
   if (state.status === "share") {
-    const claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/t/${[
-      process.env.NEXT_PUBLIC_CHAIN_ID,
-    ]}/${edition?.creator_airdrop_edition.contract_address}/0`;
-
-    const isShareAPIAvailable = Platform.select({
-      default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
-    });
-
     return (
-      <View tw="items-center justify-center">
-        <Media
-          item={nft?.data.item}
-          sizeStyle={{ height: 200, width: 200, borderRadius: 16 }}
-        />
-        <View>
-          <View tw="h-8" />
-          <Text tw="text-center text-4xl text-black dark:text-white">
-            Congrats!
-          </Text>
-          <View tw="mt-4">
-            <Text tw="text-center text-2xl text-black dark:text-white">
-              Share it with the world!
-            </Text>
-          </View>
-          <View tw="mt-4 mb-8">
-            <Text tw="text-center text-sm text-gray-900 dark:text-gray-100">
-              {user?.data.claim_tank.available_claims
-                ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                : `Your next claim will be available in ${user?.data.claim_tank.next_refill_at} min`}
-            </Text>
-          </View>
-          <Button
-            onPress={() => {
-              rudder?.track("Drop Shared", { type: "Twitter" });
-              Linking.openURL(
-                getTwitterIntent({
-                  url: claimUrl,
-                  message: `I just collected a free drop "${
-                    nft?.data.item.token_name
-                  }" by ${getTwitterIntentUsername(
-                    creatorProfile?.data?.profile
-                  )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
-                })
-              );
-            }}
-            tw="bg-[#00ACEE]"
-            variant="text"
-            accentColor="#fff"
-          >
-            Share on Twitter
-          </Button>
-          <View tw="h-4" />
-          <Button
-            onPress={async () => {
-              const result = await share({
-                url: claimUrl,
-              });
-
-              if (result.action === "sharedAction") {
-                rudder?.track(
-                  "Drop Shared",
-                  result.activityType
-                    ? { type: result.activityType }
-                    : undefined
-                );
-              }
-            }}
-          >
-            {isShareAPIAvailable
-              ? "Share with your friends"
-              : "Copy drop link 🔗"}
-          </Button>
-        </View>
-      </View>
+      <QRCodeModal
+        contractAddress={edition?.creator_airdrop_edition.contract_address}
+      />
     );
   }
 
