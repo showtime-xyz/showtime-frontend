@@ -3,13 +3,7 @@ import * as React from "react";
 import Svg, { SvgProps, Rect, Path } from "react-native-svg";
 
 const SvgPhonePortraitOutline = (props: SvgProps) => (
-  <Svg
-    className="PhonePortraitOutline_svg__ionicon"
-    viewBox="0 0 512 512"
-    width={24}
-    height={24}
-    {...props}
-  >
+  <Svg viewBox="0 0 512 512" width={24} height={24} {...props}>
     <Rect
       x={128}
       y={16}
