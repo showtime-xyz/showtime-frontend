@@ -36,13 +36,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
     () => profile?.links?.find((item) => item.type__name === "Instagram"),
     [profile?.links]
   );
-  const spotify = useMemo(
-    () =>
-      profile?.spotify_artist_id
-        ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
-        : null,
-    [profile?.spotify_artist_id]
-  );
+  const spotifyUrl = profile?.spotify_artist_id
+    ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
+    : null;
   const websiteLink = useMemo(
     () => getDomainName(profile?.website_url),
     [profile?.website_url]
@@ -83,9 +79,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       </Hidden>
 
       <View tw="mt-2 flex-row items-center justify-end sm:mt-0">
-        {spotify && (
+        {spotifyUrl && (
           <PressableScale
-            onPress={() => onPressLink(spotify)}
+            onPress={() => onPressLink(spotifyUrl)}
             accessibilityLabel="Spotify"
             accessibilityRole="link"
           >
