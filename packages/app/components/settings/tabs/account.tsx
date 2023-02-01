@@ -15,7 +15,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { SlotSeparator } from "app/components/settings/slot-separator";
+import { SettingItemSeparator } from "app/components/settings/setting-item-separator";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
 import { useManageAccount } from "app/hooks/use-manage-account";
@@ -47,14 +47,14 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify redirectUri={"/settings?tab=" + index} />
         <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
-        <SlotSeparator tw="my-8" />
+        <SettingItemSeparator tw="my-4 md:my-8" />
         <AccountSettingItem
           title="Privacy & Security"
           onPress={() => router.push(`/settings/privacy-and-security`)}
           buttonText="View"
           Icon={Showtime}
         />
-        <SlotSeparator tw="my-8" />
+        <SettingItemSeparator tw="my-4 md:my-8" />
         <SettingClearAppCache />
         <SettingDeleteAccount />
       </View>
@@ -73,7 +73,7 @@ const ConnectSpotify = ({ redirectUri }: ConnectSocialProps) => {
   const { connectSpotify } = useConnectSpotify();
 
   return (
-    <View tw="space-between flex-row items-center justify-between py-3.5">
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
       <View tw="flex-row items-center">
         <Spotify height={25} width={25} color={colors.spotify} />
         <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
@@ -171,7 +171,7 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
         return (
           <View
             key={type.type}
-            tw="space-between flex-row items-center justify-between py-3.5"
+            tw="space-between flex-row items-center justify-between py-2 md:py-3.5"
           >
             <View tw="flex-row items-center">
               <Icon height={20} width={20} color={isDark ? "#fff" : "#000"} />

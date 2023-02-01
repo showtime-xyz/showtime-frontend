@@ -36,7 +36,7 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
         title="Push Notifications"
         desc="Manage your app notifications."
       />
-      <View tw="mt-4 px-4 md:px-0">
+      <View tw="mt-0 px-4 md:mt-4 md:px-0">
         {pushNotificationsPreferences?.data &&
           Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
           Object.entries(pushNotificationsPreferences?.data).map(
@@ -60,8 +60,8 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
                       pushNotificationsPreferences?.refresh();
                     }}
                   />
-                  <View tw="ml-4">
-                    <Text tw="flex-1 text-base font-medium text-gray-900 dark:text-white">
+                  <View tw="ml-2 md:ml-4">
+                    <Text tw="break-words text-base font-medium text-gray-900 dark:text-white">
                       {key
                         .replace(/_/g, " ")
                         .replace(/^\S/, (s) => s.toUpperCase())}

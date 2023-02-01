@@ -13,9 +13,9 @@ import { WalletAddressesV2 } from "app/types";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../../empty-placeholder";
+import { SettingItemSeparator } from "../setting-item-separator";
 import { SettingsTitle } from "../settings-title";
 import { SettingsWalletItem } from "../settings-wallet-item";
-import { SlotSeparator } from "../slot-separator";
 
 export type WalletsTabProps = {
   index?: number;
@@ -61,17 +61,15 @@ export const WalletsTab = ({
           tw="h-full min-h-[60px]"
         />
       ) : (
-        <View>
-          {wallets?.map((item) => (
-            <View key={item.address}>
-              <SettingsWalletItem
-                onEditNickname={() => setEditingWallet(item)}
-                wallet={item}
-              />
-              {isMdWidth ? <View tw="mt-2" /> : <SlotSeparator />}
-            </View>
-          ))}
-        </View>
+        wallets?.map((item) => (
+          <View key={item.address}>
+            <SettingsWalletItem
+              onEditNickname={() => setEditingWallet(item)}
+              wallet={item}
+            />
+            {isMdWidth ? <View tw="mt-2" /> : <SettingItemSeparator />}
+          </View>
+        ))
       )}
     </SettingScrollComponent>
   );

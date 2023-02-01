@@ -112,7 +112,7 @@ export const AccountSettingItem = ({
   buttonProps = {},
 }: AccountSettingItemProps) => {
   return (
-    <View tw="flex-row items-center justify-between py-2.5">
+    <View tw="flex-row items-center justify-between py-2.5 ">
       {Icon && (
         <View
           tw={[
