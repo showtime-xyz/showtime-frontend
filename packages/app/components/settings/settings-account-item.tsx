@@ -116,7 +116,7 @@ export const AccountSettingItem = ({
       {Icon && (
         <View
           tw={[
-            "h-5 w-5 items-center justify-center rounded-full bg-gray-200",
+            "mr-2.5 h-5 w-5 items-center justify-center rounded-full bg-gray-200",
             subTitle ? "self-start" : "",
           ]}
         >
@@ -125,7 +125,7 @@ export const AccountSettingItem = ({
       )}
       <View tw="flex-1 flex-row items-center justify-between">
         <View>
-          <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-white">
+          <Text tw="text-base font-medium text-gray-900 dark:text-white">
             {title}
           </Text>
           {Boolean(subTitle) && (
