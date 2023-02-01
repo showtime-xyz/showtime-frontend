@@ -38,12 +38,12 @@ import { breakpoints } from "design-system/theme";
 type HeaderDropdownProps = {
   type: "profile" | "settings";
   withBackground?: boolean;
-  data?: UserProfile;
+  user?: UserProfile;
 };
 function HeaderDropdown({
   type,
   withBackground = false,
-  data: user,
+  user,
 }: HeaderDropdownProps) {
   const { logout } = useAuth();
   const router = useRouter();
@@ -54,13 +54,13 @@ function HeaderDropdown({
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
   const isDark = colorScheme === "dark";
-  const walletAddresses = useMemo(
-    () => user?.profile?.wallet_addresses_v2,
-    [user?.profile?.wallet_addresses_v2]
-  );
+
   const walletAddressMatch = useMemo(
-    () => walletAddresses?.some((w) => w.address === userAddress),
-    [walletAddresses, userAddress]
+    () =>
+      user?.profile?.wallet_addresses_v2?.some(
+        (wallet) => wallet.address === userAddress
+      ),
+    [user?.profile?.wallet_addresses_v2, userAddress]
   );
 
   // If the user is not authenticated, don't show the dropdown

@@ -236,7 +236,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               <HeaderDropdown
                 type="settings"
                 withBackground
-                data={profileData?.data}
+                user={profileData?.data}
               />
             }
             headerCenter={headerCenter}
