@@ -1,9 +1,5 @@
 import { useState } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -12,6 +8,8 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useTabState } from "app/hooks/use-tab-state";
 import { Sticky } from "app/lib/stickynode";
 import { WalletAddressesV2 } from "app/types";
+
+import { TabBarVertical } from "design-system/tab-view";
 
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
@@ -24,7 +22,6 @@ export const SettingsMd = () => {
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);
-  const isDark = useIsDarkMode();
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
 
   return (
@@ -41,36 +38,13 @@ export const SettingsMd = () => {
               <Text tw="font-space-bold text-2xl text-black dark:text-white">
                 Settings
               </Text>
-              <View tw="dark:shadow-dark mt-8 rounded-2xl bg-white dark:bg-black">
-                {routes.map((item, tabbarIndex) => (
-                  <Pressable
-                    tw="flex-row items-center justify-between rounded-2xl px-4 py-4 duration-300 hover:bg-gray-50 hover:dark:bg-gray-900"
-                    key={item.key}
-                    onPress={() => setIndex(tabbarIndex)}
-                  >
-                    <Text
-                      tw={[
-                        "text-lg font-medium leading-6 text-black duration-300 dark:text-white",
-                        tabbarIndex === index ? "font-bold" : "",
-                      ]}
-                    >
-                      {item.title}
-                    </Text>
-                    <View
-                      tw={[
-                        "duration-200",
-                        tabbarIndex === index ? "opacity-100" : "opacity-0",
-                      ]}
-                    >
-                      <ChevronRight
-                        width={24}
-                        height={24}
-                        color={isDark ? colors.white : colors.black}
-                      />
-                    </View>
-                  </Pressable>
-                ))}
-              </View>
+              <TabBarVertical
+                onPress={(i) => {
+                  setIndex(i);
+                }}
+                routes={routes}
+                index={index}
+              />
             </View>
           </Sticky>
         </View>

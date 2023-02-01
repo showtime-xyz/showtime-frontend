@@ -55,9 +55,8 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
           Icon={Showtime}
         />
         <SlotSeparator tw="my-8" />
-
-        <SettingDeleteAccount />
         <SettingClearAppCache />
+        <SettingDeleteAccount />
       </View>
     </SettingScrollComponent>
   );

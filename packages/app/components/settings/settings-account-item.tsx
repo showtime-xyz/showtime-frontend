@@ -77,7 +77,7 @@ export const SettingDeleteAccount = () => {
             label="Username"
             errorText={error}
           />
-          <View tw="mt-8 flex-row">
+          <View tw="mt-8 flex-row justify-between">
             <Button
               tw="mb-4 mr-2"
               onPress={() => setShowDeleteConfirmation(false)}
