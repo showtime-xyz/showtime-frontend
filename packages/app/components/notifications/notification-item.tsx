@@ -1,3 +1,5 @@
+import { memo, useMemo } from "react";
+
 import { Link } from "solito/link";
 
 import {
@@ -39,83 +41,90 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
 ]);
 
-export const NotificationItem = ({
-  notification,
-  setUsers,
-}: NotificationItemProp) => {
-  const myProfile = useUser();
-  const icon = useNotificationIcon(notification.type_name);
-  const actor =
-    notification.actors?.length > 0 ? notification?.actors[0] : null;
-  const avatarLink =
-    "/@" +
-    (actor?.wallet_address
-      ? `${actor?.username || actor?.wallet_address}`
-      : `${
-          myProfile?.user?.data.profile.username ||
-          myProfile?.user?.data.profile.wallet_addresses[0]
-        }`);
+export const NotificationItem = memo(
+  ({ notification, setUsers }: NotificationItemProp) => {
+    const myProfile = useUser();
+    const icon = useMemo(
+      () => getNotificationIcon(notification.type_name),
+      [notification.type_name]
+    );
+    const actor =
+      notification.actors?.length > 0 ? notification?.actors[0] : null;
+    const avatarLink =
+      "/@" +
+      (actor?.wallet_address
+        ? `${actor?.username || actor?.wallet_address}`
+        : `${
+            myProfile?.user?.data.profile.username ||
+            myProfile?.user?.data.profile.wallet_addresses[0]
+          }`);
 
-  if (
-    NOTIFICATION_TYPE_COPY.get(notification.type_name) === undefined ||
-    icon === undefined
-  ) {
-    return null;
-  }
+    if (
+      NOTIFICATION_TYPE_COPY.get(notification.type_name) === undefined ||
+      icon === undefined
+    ) {
+      return null;
+    }
 
-  return (
-    <View tw="flex-row items-center p-4">
-      {icon}
-      <View tw="mx-2">
-        <Link href={avatarLink}>
-          <AvatarHoverCard
-            url={notification.img_url}
-            size={24}
-            username={
-              notification.actors[0]?.username ||
-              notification.actors[0]?.wallet_address
-            }
-            alt="Notification Avatar"
-          />
-        </Link>
+    return (
+      <View tw="flex-row items-center p-4">
+        {icon}
+        <View tw="mx-2">
+          <Link href={avatarLink}>
+            <AvatarHoverCard
+              url={notification.img_url}
+              size={24}
+              username={
+                notification.actors[0]?.username ||
+                notification.actors[0]?.wallet_address
+              }
+              alt="Notification Avatar"
+            />
+          </Link>
+        </View>
+        <NotificationDescription
+          notification={notification}
+          setUsers={setUsers}
+        />
       </View>
-      <NotificationDescription
-        notification={notification}
-        setUsers={setUsers}
-      />
-    </View>
-  );
-};
+    );
+  }
+);
+
+NotificationItem.displayName = "NotificationItem";
 
 type NotificationDescriptionProps = {
   notification: NotificationType;
   setUsers: NotificationItemProp["setUsers"];
 };
 
-const NotificationDescription = ({
-  notification,
-  setUsers,
-}: NotificationDescriptionProps) => {
-  return (
-    <View tw="flex-1">
-      <Text
-        tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
-        ellipsizeMode="tail"
-      >
-        <Actors actors={notification.actors} setUsers={setUsers} />
-        {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-        <NFTSDisplayName nfts={notification.nfts} />
-        {Boolean(getFormatDistanceStrictToWeek(notification.to_timestamp)) && (
-          <Text tw="text-13">{` · ${getFormatDistanceStrictToWeek(
-            notification.to_timestamp
-          )}`}</Text>
-        )}
-      </Text>
-    </View>
-  );
-};
+const NotificationDescription = memo(
+  ({ notification, setUsers }: NotificationDescriptionProps) => {
+    const formatDistance = getFormatDistanceStrictToWeek(
+      notification.to_timestamp
+    );
 
-export const useNotificationIcon = (type_name: string) => {
+    return (
+      <View tw="flex-1">
+        <Text
+          tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
+          ellipsizeMode="tail"
+        >
+          <Actors actors={notification.actors} setUsers={setUsers} />
+          {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
+          <NFTSDisplayName nfts={notification.nfts} />
+          {Boolean(formatDistance) && (
+            <Text tw="text-13">{` · ${formatDistance}`}</Text>
+          )}
+        </Text>
+      </View>
+    );
+  }
+);
+
+NotificationDescription.displayName = "NotificationDescription";
+
+export const getNotificationIcon = (type_name: string) => {
   switch (type_name) {
     case "FOLLOW":
       return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
