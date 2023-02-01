@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import Animated, { FadeIn } from "react-native-reanimated";
-
-import { Button } from "@showtime-xyz/universal.button";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { CheckFilled1 } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,9 +13,8 @@ import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
 import { DropdownMenu } from "./dropdown-menu";
-import { SettingSubTitle } from "./settings-subtitle";
 
-export type EmailSlotProps = {
+export type EmailItemProps = {
   email: WalletAddressesV2["email"];
   address: WalletAddressesV2["address"];
 };
@@ -28,74 +24,13 @@ export type EmailHeaderProps = {
   onAddEmail: () => void;
 };
 
-export const SettingEmailSlotHeader = ({
-  hasEmail,
-  onAddEmail,
-}: EmailHeaderProps) => {
-  return (
-    <View>
-      <SettingSubTitle>
-        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
-          Manage your email
-        </Text>
-        {!hasEmail ? (
-          <Button variant="primary" size="small" onPress={onAddEmail}>
-            Add Email
-          </Button>
-        ) : null}
-      </SettingSubTitle>
-    </View>
-  );
-};
-
-export const SettingsEmailSkeletonSlot = () => {
-  const { colorScheme } = useColorScheme();
-  return (
-    <View tw="p-4">
-      <View tw="pb-3">
-        <Skeleton
-          height={16}
-          width={128}
-          show={true}
-          colorMode={colorScheme as any}
-        >
-          <Animated.View entering={FadeIn}></Animated.View>
-        </Skeleton>
-      </View>
-      <View tw="pb-3">
-        <Skeleton
-          height={32}
-          width={300}
-          show={true}
-          colorMode={colorScheme as any}
-        >
-          <Animated.View entering={FadeIn}></Animated.View>
-        </Skeleton>
-      </View>
-    </View>
-  );
-};
-
-export const SettingsEmailSlotPlaceholder = () => {
-  return (
-    <>
-      <Text tw="p-4 text-base font-bold text-gray-900 dark:text-white">
-        No email connected to your profile.
-      </Text>
-      <View tw="h-2" />
-    </>
-  );
-};
-
-export const SettingsEmailSlot = (props: EmailSlotProps) => {
+export const SettingsEmailItem = (props: EmailItemProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
   const { removeAccount } = useManageAccount();
   const { magic } = useMagic();
   const { isMagic } = useWeb3();
   const { userAddress } = useCurrentUserAddress();
-
   const email = props.email;
-
   const backendAddress = props.address;
 
   const getCurrentMagicUser = useCallback(async () => {
@@ -118,9 +53,12 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
   }, [getCurrentMagicUser]);
 
   return (
-    <View tw="w-full flex-1 flex-row items-center justify-between p-4">
-      <View tw="flex-1">
-        <Text tw="pb-3 font-bold text-gray-900 dark:text-white">{email}</Text>
+    <View tw="w-full flex-1 flex-row items-center justify-between py-5 px-4 md:px-0">
+      <View tw="flex-1 flex-row items-center">
+        <CheckFilled1 color={colors.black} width={20} height={20} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-white">
+          {email}
+        </Text>
         {isCurrentEmail ? (
           <View tw="flex flex-row">
             <DataPill label="Current" type="secondary" />

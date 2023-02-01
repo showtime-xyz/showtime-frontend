@@ -10,6 +10,7 @@ export { default as Boost } from "./Boost";
 export { default as Check1 } from "./Check1";
 export { default as Check } from "./Check";
 export { default as CheckFilled } from "./CheckFilled";
+export { default as CheckFilled1 } from "./CheckFilled1";
 export { default as ChevronDown } from "./ChevronDown";
 export { default as ChevronLeft } from "./ChevronLeft";
 export { default as ChevronRight } from "./ChevronRight";
@@ -117,6 +118,7 @@ export { default as BellPlus } from "./BellPlus";
 export { default as BellRinging } from "./BellRinging";
 export { default as BellMinus } from "./BellMinus";
 export { default as BellOff } from "./BellOff";
+export { default as PhonePortraitOutline } from "./PhonePortraitOutline";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

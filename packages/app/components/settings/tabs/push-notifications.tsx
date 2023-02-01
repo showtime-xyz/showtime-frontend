@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Platform, ScrollView } from "react-native";
+import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
@@ -11,9 +11,9 @@ import { usePushNotificationsPreferences } from "app/hooks/use-push-notification
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 
-import { SlotSeparator } from "../slot-separator";
+import { SettingsTitle } from "../settings-title";
 
-const ScrollComponent = Platform.OS === "web" ? ScrollView : TabScrollView;
+const ScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
 export type PushNotificationTabProp = {
   index?: number;
@@ -32,23 +32,21 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
 
   return (
     <ScrollComponent index={index}>
-      {pushNotificationsPreferences?.data &&
-        Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
-        Object.entries(pushNotificationsPreferences?.data).map(
-          (item, index) => {
-            const [key, value] = item;
-            if (key === "created_at" || key === "updated_at") {
-              return null;
-            }
-            return (
-              <View key={index.toString()}>
-                <View tw="flex-row items-center justify-between p-4">
-                  <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
-                    {key
-                      .replace(/_/g, " ")
-                      .replace(/^\S/, (s) => s.toUpperCase())}
-                  </Text>
-                  <View tw="w-2" />
+      <SettingsTitle
+        title="Push Notifications"
+        desc="Manage your app notifications."
+      />
+      <View tw="mt-4 px-4 md:px-0">
+        {pushNotificationsPreferences?.data &&
+          Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
+          Object.entries(pushNotificationsPreferences?.data).map(
+            (item, index) => {
+              const [key, value] = item;
+              if (key === "created_at" || key === "updated_at") {
+                return null;
+              }
+              return (
+                <View tw="flex-row items-center py-4" key={index.toString()}>
                   <Switch
                     checked={value as boolean}
                     onChange={async () => {
@@ -62,14 +60,18 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
                       pushNotificationsPreferences?.refresh();
                     }}
                   />
+                  <View tw="ml-4">
+                    <Text tw="flex-1 text-base font-medium text-gray-900 dark:text-white">
+                      {key
+                        .replace(/_/g, " ")
+                        .replace(/^\S/, (s) => s.toUpperCase())}
+                    </Text>
+                  </View>
                 </View>
-                {index <
-                  Object.entries(pushNotificationsPreferences?.data)?.length -
-                    1 && <SlotSeparator />}
-              </View>
-            );
-          }
-        )}
+              );
+            }
+          )}
+      </View>
     </ScrollComponent>
   );
 };

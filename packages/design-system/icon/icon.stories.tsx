@@ -134,6 +134,12 @@ export const Default = () => {
         <IconItem icon={Icon.BellPlus} title="BellPlus" />
         <IconItem icon={Icon.BellMinus} title="BellMinus" />
         <IconItem icon={Icon.BellOff} title="BellOff" />
+        <IconItem icon={Icon.Trash} title="Trash" />
+
+        <IconItem
+          icon={Icon.PhonePortraitOutline}
+          title="PhonePortraitOutline"
+        />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>

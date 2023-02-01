@@ -1,21 +1,17 @@
-import { useMemo, useCallback } from "react";
-import { Platform, ScrollView } from "react-native";
+import { useMemo } from "react";
+import { Platform } from "react-native";
 
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
-import {
-  SettingPhoneNumberSlotHeader,
-  SettingsPhoneNumberSkeletonSlot,
-  SettingsPhoneNumberSlot,
-  SettingsPhoneNumberSlotPlaceholder,
-} from "app/components/settings/settings-phone-number-slot";
-import { SlotSeparator } from "app/components/settings/slot-separator";
+import { EmptyPlaceholder } from "app/components/empty-placeholder";
+import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item";
 import { useUser } from "app/hooks/use-user";
 
-const SettingScrollComponent =
-  Platform.OS === "web" ? ScrollView : TabScrollView;
+import { SettingsTitle } from "../settings-title";
+
+const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
 export type PhoneTabProps = {
   index?: number;
@@ -32,19 +28,13 @@ export const PhoneTab = ({ index = 0 }: PhoneTabProps) => {
     [user?.data.profile.wallet_addresses_v2]
   );
 
-  const ListEmptyComponent = useCallback(() => {
-    const hasNoPhoneNumbers = Boolean(phoneNumberWallets);
-    if (hasNoPhoneNumbers) {
-      return <SettingsPhoneNumberSlotPlaceholder />;
-    }
-    return <SettingsPhoneNumberSkeletonSlot />;
-  }, [phoneNumberWallets]);
-
   return (
-    <SettingScrollComponent style={{ height: "100%" }} index={index}>
-      <SettingPhoneNumberSlotHeader
-        hasPhoneNumber={Boolean(phoneNumberWallets?.length)}
-        onVerifyPhoneNumber={() =>
+    <SettingScrollComponent index={index}>
+      <SettingsTitle
+        title="Phone Number"
+        desc="Manage your phone number by connecting a phone number to your profile."
+        buttonText={phoneNumberWallets?.length ? "" : "Verify phone number"}
+        onPress={() =>
           router.push(
             Platform.select({
               native: `/settings/verify-phone-number`,
@@ -65,19 +55,18 @@ export const PhoneTab = ({ index = 0 }: PhoneTabProps) => {
         }
       />
       {phoneNumberWallets?.length === 0 ? (
-        ListEmptyComponent()
+        <EmptyPlaceholder
+          tw="h-full min-h-[60px] px-4"
+          title="No phone number connected to your profile."
+        />
       ) : (
-        <View>
-          {phoneNumberWallets?.map((item) => (
-            <View key={item.address}>
-              <SettingsPhoneNumberSlot
-                phoneNumber={item.phone_number}
-                address={item.address}
-              />
-              <SlotSeparator />
-            </View>
-          ))}
-        </View>
+        phoneNumberWallets?.map((item) => (
+          <SettingsPhoneNumberItem
+            phoneNumber={item.phone_number}
+            address={item.address}
+            key={item.address}
+          />
+        ))
       )}
     </SettingScrollComponent>
   );

@@ -10,7 +10,7 @@ import { SettingHeaderSection } from "./setting-header";
 import {
   AccountSettingItem,
   AccountSettingItemProps,
-} from "./settings-account-slot";
+} from "./settings-account-item";
 
 const list = [
   {
