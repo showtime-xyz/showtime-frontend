@@ -232,7 +232,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 <HeaderLeft canGoBack={true} withBackground />
               )
             }
-            headerRight={<HeaderDropdown type="settings" withBackground />}
+            headerRight={
+              <HeaderDropdown
+                type="settings"
+                withBackground
+                user={profileData?.data}
+              />
+            }
             headerCenter={headerCenter}
             translateYValue={animationHeaderPosition}
           />
