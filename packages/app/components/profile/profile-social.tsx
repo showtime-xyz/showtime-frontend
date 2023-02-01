@@ -81,6 +81,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       <View tw="mt-2 flex-row items-center justify-end sm:mt-0">
         {spotifyUrl && (
           <PressableScale
+            style={{ marginRight: 16 }}
             onPress={() => onPressLink(spotifyUrl)}
             accessibilityLabel="Spotify"
             accessibilityRole="link"
@@ -94,7 +95,6 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
         {twitter?.user_input && (
           <PressableScale
-            style={{ marginLeft: 16 }}
             onPress={() =>
               onPressLink(
                 `https://${twitter?.type__prefix}${twitter?.user_input}`
