@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -27,6 +28,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { UserProfile } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
@@ -36,27 +38,51 @@ import { breakpoints } from "design-system/theme";
 type HeaderDropdownProps = {
   type: "profile" | "settings";
   withBackground?: boolean;
+  data?: UserProfile;
 };
-function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
+function HeaderDropdown({
+  type,
+  withBackground = false,
+  data: user,
+}: HeaderDropdownProps) {
   const { logout } = useAuth();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useColorScheme();
-  const { user } = useUser();
+  const { user: currentUser, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
   const isDark = colorScheme === "dark";
+  const walletAddresses = useMemo(
+    () => user?.profile?.wallet_addresses_v2,
+    [user?.profile?.wallet_addresses_v2]
+  );
+  const walletAddressMatch = useMemo(
+    () => walletAddresses?.some((w) => w.address === userAddress),
+    [walletAddresses, userAddress]
+  );
+
+  // If the user is not authenticated, don't show the dropdown
+  if (!isAuthenticated) return null;
+
+  // If the user is on a profile page, and the currentUser is not the same as the passed user,
+  // don't show the dropdown menu (only show it on your own profile page)
+  if (
+    currentUser?.data.profile.username !== user?.profile.username &&
+    !walletAddressMatch
+  )
+    return null;
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
-            <Avatar alt="Avatar" url={user?.data?.profile?.img_url} />
-            {isWeb && isMdWidth && user?.data?.profile?.username ? (
+            <Avatar alt="Avatar" url={user?.profile?.img_url} />
+            {isWeb && isMdWidth && user?.profile?.username ? (
               <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
-                {`@${user.data.profile.username}`}
+                {`@${user.profile.username}`}
               </Text>
             ) : null}
           </View>
@@ -80,7 +106,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
         {type === "profile" && (
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/@${user?.data?.profile?.username ?? userAddress}`);
+              router.push(`/@${user?.profile?.username ?? userAddress}`);
             }}
             key="your-profile"
           >
