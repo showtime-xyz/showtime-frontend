@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,6 +24,12 @@ export const SettingsMd = () => {
     WalletAddressesV2 | undefined
   >(undefined);
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
+
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      window.scrollTo(0, 0);
+    }
+  }, [index]);
 
   return (
     <View tw="w-full max-w-screen-xl flex-1 px-4 pb-8 pt-28">
