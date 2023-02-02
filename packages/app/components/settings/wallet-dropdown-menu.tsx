@@ -49,7 +49,6 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
             key="export_key"
           >
             <MenuItemIcon Icon={Wallet} />
-
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               Export Private Key
             </DropdownMenuItemTitle>

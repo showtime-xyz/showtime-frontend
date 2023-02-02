@@ -3,6 +3,7 @@ export const colors = {
   white: "#fff",
   twitter: "#1DA1F2",
   facebook: "#1877F2",
+  spotify: "#1ED760",
   rose: {
     50: "#fff1f2",
     100: "#ffe4e6",

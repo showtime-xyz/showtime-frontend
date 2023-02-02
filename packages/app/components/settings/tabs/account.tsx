@@ -1,14 +1,21 @@
 import { useMemo, useEffect, useRef } from "react";
-import { Platform, ScrollView } from "react-native";
+import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Spotify, Apple, GoogleOriginal } from "@showtime-xyz/universal.icon";
+import {
+  Spotify,
+  Apple,
+  GoogleOriginal,
+  Showtime,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { SettingItemSeparator } from "app/components/settings/setting-item-separator";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
 import { useManageAccount } from "app/hooks/use-manage-account";
@@ -16,42 +23,41 @@ import { useUser } from "app/hooks/use-user";
 import { useMagicSocialAuth } from "app/lib/social-logins";
 import { createParam } from "app/navigation/use-param";
 
+import { SettingClearAppCache } from "../clear-cache-btn";
 import {
   AccountSettingItem,
-  SettingAccountSlotFooter,
-  SettingAccountSlotHeader,
-} from "../settings-account-slot";
+  SettingDeleteAccount,
+} from "../settings-account-item";
+import { SettingsTitle } from "../settings-title";
 
-const SettingScrollComponent =
-  Platform.OS === "web" ? ScrollView : TabScrollView;
+const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
 export type AccountTabProps = {
   index?: number;
 };
 
 export const AccountTab = ({ index = 0 }: AccountTabProps) => {
-  const accountSettings = useMemo(
-    () => [
-      {
-        id: 1,
-        title: "Privacy & Security",
-        icon: "lock",
-        subRoute: "privacy-and-security",
-      },
-    ],
-    []
-  );
-
+  const router = useRouter();
   return (
     <SettingScrollComponent index={index}>
-      <SettingAccountSlotHeader />
-      {accountSettings?.length > 0 &&
-        accountSettings.map((item) => (
-          <AccountSettingItem {...item} key={item.id} />
-        ))}
-      <ConnectSpotify redirectUri={"/settings?tab=" + index} />
-      <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
-      <SettingAccountSlotFooter />
+      <SettingsTitle
+        title="Accounts"
+        desc="Manage the accounts connected to your profile."
+      />
+      <View tw="mt-6 px-4 md:px-0">
+        <ConnectSpotify redirectUri={"/settings?tab=" + index} />
+        <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
+        <SettingItemSeparator tw="my-4 md:my-8" />
+        <AccountSettingItem
+          title="Privacy & Security"
+          onPress={() => router.push(`/settings/privacy-and-security`)}
+          buttonText="View"
+          Icon={Showtime}
+        />
+        <SettingItemSeparator tw="my-4 md:my-8" />
+        <SettingClearAppCache />
+        <SettingDeleteAccount />
+      </View>
     </SettingScrollComponent>
   );
 };
@@ -65,20 +71,19 @@ const ConnectSpotify = ({ redirectUri }: ConnectSocialProps) => {
 
   const { disconnectSpotify } = useDisconnectSpotify();
   const { connectSpotify } = useConnectSpotify();
-  const isDark = useIsDarkMode();
 
   return (
-    <View tw="space-between mb-4 flex-row items-center justify-between px-4">
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
       <View tw="flex-row items-center">
-        <Spotify height={32} width={32} color={isDark ? "#fff" : "#000"} />
-        <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
+        <Spotify height={25} width={25} color={colors.spotify} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
           Spotify
         </Text>
       </View>
       <Button
-        // variant={
-        //   user.user?.data.profile.has_spotify_token ? "danger" : "primary"
-        // }
+        variant={
+          user.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
+        }
         onPress={() => {
           if (user.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
@@ -97,6 +102,11 @@ const { useParam } = createParam<{ did: string; type: string }>();
 
 const socialAccounts = [
   {
+    Icon: Apple,
+    type: "apple",
+    name: "Apple",
+  },
+  {
     Icon: GoogleOriginal,
     type: "google",
     name: "Google",
@@ -106,11 +116,6 @@ const socialAccounts = [
   //   type: "twitter",
   //   name: "Twitter",
   // },
-  {
-    Icon: Apple,
-    type: "apple",
-    name: "Apple",
-  },
 ] as const;
 
 const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
@@ -166,16 +171,16 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
         return (
           <View
             key={type.type}
-            tw="space-between mb-4 flex-row items-center justify-between px-4"
+            tw="space-between flex-row items-center justify-between py-2 md:py-3.5"
           >
             <View tw="flex-row items-center">
-              <Icon height={32} width={32} color={isDark ? "#fff" : "#000"} />
-              <Text tw="text-md mx-2 font-bold text-gray-900 dark:text-gray-100">
+              <Icon height={20} width={20} color={isDark ? "#fff" : "#000"} />
+              <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
                 {type.name}
               </Text>
             </View>
             <Button
-              // variant={connected[type.type].address ? "danger" : "primary"}
+              variant={connected[type.type].address ? "danger" : "tertiary"}
               onPress={async () => {
                 if (connected[type.type].address) {
                   removeAccount(connected[type.type].address);

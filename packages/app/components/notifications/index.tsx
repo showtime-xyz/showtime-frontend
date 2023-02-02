@@ -175,7 +175,6 @@ export const Notifications = ({
         onClose={() => setUsers([])}
       >
         <UserList
-          onClose={() => setUsers([])}
           users={users}
           loading={false}
           style={{ height: Platform.OS === "web" ? 200 : undefined }}

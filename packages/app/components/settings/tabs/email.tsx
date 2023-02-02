@@ -1,22 +1,17 @@
-import { useMemo, useCallback } from "react";
-import { Platform, ScrollView } from "react-native";
+import { useMemo } from "react";
+import { Platform } from "react-native";
 
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
+import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { useUser } from "app/hooks/use-user";
 
-import {
-  SettingEmailSlotHeader,
-  SettingsEmailSkeletonSlot,
-  SettingsEmailSlot,
-  SettingsEmailSlotPlaceholder,
-} from "../settings-email-slot";
-import { SlotSeparator } from "../slot-separator";
+import { SettingsEmailItem } from "../settings-email-item";
+import { SettingsTitle } from "../settings-title";
 
-const SettingScrollComponent =
-  Platform.OS === "web" ? ScrollView : TabScrollView;
+const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 export type EmailTabProps = {
   index?: number;
 };
@@ -32,19 +27,13 @@ export const EmailTab = ({ index = 0 }: EmailTabProps) => {
     [user?.data.profile.wallet_addresses_v2]
   );
 
-  const ListEmptyComponent = useCallback(() => {
-    const hasNoEmails = Boolean(emailWallets);
-    if (hasNoEmails) {
-      return <SettingsEmailSlotPlaceholder />;
-    }
-    return <SettingsEmailSkeletonSlot />;
-  }, [emailWallets]);
-
   return (
     <SettingScrollComponent index={index}>
-      <SettingEmailSlotHeader
-        hasEmail={Boolean(emailWallets?.length)}
-        onAddEmail={() =>
+      <SettingsTitle
+        title="Email"
+        desc="Manage your email by connecting an email address to your profile."
+        buttonText={emailWallets?.length ? "" : "Connect email address"}
+        onPress={() =>
           router.push(
             Platform.select({
               native: `/settings/add-email`,
@@ -64,17 +53,20 @@ export const EmailTab = ({ index = 0 }: EmailTabProps) => {
           )
         }
       />
-      {emailWallets?.length === 0
-        ? ListEmptyComponent()
-        : emailWallets?.map((item) => (
-            <View key={item.address}>
-              <SettingsEmailSlot
-                email={item.email}
-                address={item.backendAddress}
-              />
-              <SlotSeparator />
-            </View>
-          ))}
+      {emailWallets?.length === 0 ? (
+        <EmptyPlaceholder
+          tw="h-full min-h-[60px] px-4"
+          title="No email connected to your profile."
+        />
+      ) : (
+        emailWallets?.map((item) => (
+          <SettingsEmailItem
+            email={item.email}
+            address={item.backendAddress}
+            key={item.address}
+          />
+        ))
+      )}
     </SettingScrollComponent>
   );
 };
