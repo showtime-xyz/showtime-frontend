@@ -9,6 +9,8 @@ import {
   useDisconnect,
 } from "wagmi";
 
+import { Alert } from "@showtime-xyz/universal.alert";
+
 import { useWeb3 } from "app/hooks/use-web3";
 
 import { useLatestValueRef } from "../use-latest-value-ref";
@@ -67,7 +69,13 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        openConnectModalRef.current?.();
+        if (openConnectModalRef.current) {
+          openConnectModalRef.current();
+        } else {
+          Alert.alert(
+            "Oops, connect wallet failed, please refresh the page and then try again."
+          );
+        }
         return new Promise<ConnectResult>((resolve) => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });

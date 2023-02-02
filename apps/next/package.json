@@ -45,7 +45,7 @@
     "date-fns": "^2.26.0",
     "design-system": "*",
     "dom-to-image": "^2.6.0",
-    "ethers": "^5.7.0",
+    "ethers": "^5.7.2",
     "fortmatic": "^2.2.1",
     "magic-sdk": "^10.0.0",
     "next": "^13.1.1",
@@ -69,7 +69,7 @@
     "setimmediate": "^1.0.5",
     "swiper": "^8.4.5",
     "swr": "^2.0.0",
-    "wagmi": "^0.9.5",
+    "wagmi": "^0.11.3",
     "web3modal": "^1.9.8"
   },
   "devDependencies": {
