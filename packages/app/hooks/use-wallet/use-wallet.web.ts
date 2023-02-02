@@ -73,7 +73,7 @@ const useWallet = (): UseWalletReturnType => {
           openConnectModalRef.current();
         } else {
           Alert.alert(
-            "Oops, connect wallet failed, please refresh the page and then try again."
+            "Oops, connection to wallet failed. Please refresh the page and try again."
           );
         }
         return new Promise<ConnectResult>((resolve) => {
