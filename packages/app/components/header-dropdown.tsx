@@ -28,17 +28,17 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
-import { UserProfile } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
+import { Profile } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
 type HeaderDropdownProps = {
   type: "profile" | "settings";
   withBackground?: boolean;
-  user?: UserProfile;
+  user?: Profile;
 };
 function HeaderDropdown({
   type,
@@ -57,10 +57,10 @@ function HeaderDropdown({
 
   const walletAddressMatch = useMemo(
     () =>
-      user?.profile?.wallet_addresses_v2?.some(
+      user?.wallet_addresses_v2?.some(
         (wallet) => wallet.address === userAddress
       ),
-    [user?.profile?.wallet_addresses_v2, userAddress]
+    [user?.wallet_addresses_v2, userAddress]
   );
 
   // If the user is not authenticated, don't show the dropdown
@@ -69,7 +69,7 @@ function HeaderDropdown({
   // If the user is on a profile page, and the currentUser is not the same as the passed user,
   // don't show the dropdown menu (only show it on your own profile page)
   if (
-    currentUser?.data.profile.username !== user?.profile.username &&
+    currentUser?.data.profile.username !== user?.username &&
     !walletAddressMatch
   )
     return null;
@@ -79,10 +79,10 @@ function HeaderDropdown({
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
-            <Avatar alt="Avatar" url={user?.profile?.img_url} />
-            {isWeb && isMdWidth && user?.profile?.username ? (
+            <Avatar alt="Avatar" url={user?.img_url} />
+            {isWeb && isMdWidth && user?.username ? (
               <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
-                {`@${user.profile.username}`}
+                {`@${user.username}`}
               </Text>
             ) : null}
           </View>
@@ -106,7 +106,7 @@ function HeaderDropdown({
         {type === "profile" && (
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/@${user?.profile?.username ?? userAddress}`);
+              router.push(`/@${user?.username ?? userAddress}`);
             }}
             key="your-profile"
           >
