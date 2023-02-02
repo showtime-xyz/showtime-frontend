@@ -1,6 +1,5 @@
 import { Linking, Platform } from "react-native";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -21,13 +20,13 @@ export const PrivacyAndSecuritySettings = () => {
         </Text>
         <View tw="h-8" />
         <View tw="rounded-2xl bg-white px-0 dark:bg-black md:px-4">
-          <AccountSettingItem
+          {/* <AccountSettingItem
             title="Blocked Accounts"
             buttonText="View"
             onPress={() => {
               Alert.alert("🚧 Coming soon");
             }}
-          />
+          /> */}
           <AccountSettingItem
             title="Code of Conduct"
             buttonText="View"
