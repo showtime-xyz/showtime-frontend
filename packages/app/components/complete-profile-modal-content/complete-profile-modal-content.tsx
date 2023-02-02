@@ -10,15 +10,15 @@ import { View } from "@showtime-xyz/universal.view";
 import { UserCircle } from "design-system/icon";
 
 type CompleteProfileModalContentProps = {
-  title: string;
-  description: string;
-  cta: string;
+  title?: string;
+  description?: string;
+  cta?: string;
   allowSkip?: boolean;
 };
 export const CompleteProfileModalContent = ({
-  title,
-  description,
-  cta,
+  title = "Tell creators and collectors who you are!",
+  description = "Completing your profile will take around 1 minute.",
+  cta = "Complete Profile",
   allowSkip = false,
 }: CompleteProfileModalContentProps) => {
   const router = useRouter();
