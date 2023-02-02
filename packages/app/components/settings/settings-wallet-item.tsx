@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { SvgProps } from "react-native-svg";
 
@@ -54,7 +54,31 @@ const LoginWithPlatformTitle = ({ Icon, text }: WalletLoginWithProps) => {
     </View>
   );
 };
-
+const Title = ({ wallet }: { wallet: WalletAddressesV2 }) => {
+  if (wallet.email && wallet.is_email) {
+    return <LoginWithPlatformTitle text={wallet.email} Icon={Mail} />;
+  }
+  if (wallet.phone_number && wallet.is_phone) {
+    return (
+      <LoginWithPlatformTitle
+        text={wallet.phone_number}
+        Icon={PhonePortraitOutline}
+      />
+    );
+  }
+  if (wallet.is_google) {
+    return (
+      <LoginWithPlatformTitle
+        text={"Login from Google"}
+        Icon={GoogleOriginal}
+      />
+    );
+  }
+  if (wallet.is_apple) {
+    return <LoginWithPlatformTitle text={"Login from Apple"} Icon={Apple} />;
+  }
+  return null;
+};
 const LoginWithTitle = ({
   wallet,
   nickname,
@@ -62,39 +86,6 @@ const LoginWithTitle = ({
   wallet: WalletAddressesV2;
   nickname?: string;
 }) => {
-  const Title = useMemo(() => {
-    if (wallet.email && wallet.is_email) {
-      return <LoginWithPlatformTitle text={wallet.email} Icon={Mail} />;
-    }
-    if (wallet.phone_number && wallet.is_phone) {
-      return (
-        <LoginWithPlatformTitle
-          text={wallet.phone_number}
-          Icon={PhonePortraitOutline}
-        />
-      );
-    }
-    if (wallet.is_google) {
-      return (
-        <LoginWithPlatformTitle
-          text={"Login from Google"}
-          Icon={GoogleOriginal}
-        />
-      );
-    }
-    if (wallet.is_apple) {
-      return <LoginWithPlatformTitle text={"Login from Apple"} Icon={Apple} />;
-    }
-    return null;
-  }, [
-    wallet.email,
-    wallet.is_apple,
-    wallet.is_email,
-    wallet.is_google,
-    wallet.is_phone,
-    wallet.phone_number,
-  ]);
-
   const isHasSubTitle =
     wallet.email || wallet.phone_number || wallet.is_google || wallet.is_apple;
 
@@ -111,16 +102,40 @@ const LoginWithTitle = ({
       {Boolean(nickname) && isHasSubTitle ? (
         <View tw="flex-row items-center justify-center">
           <Text tw="text-sm text-gray-900 dark:text-white">(</Text>
-          {Title}
+          <Title wallet={wallet} />
           <Text tw="text-sm text-gray-900 dark:text-white">)</Text>
         </View>
       ) : (
-        Title
+        <Title wallet={wallet} />
       )}
     </View>
   );
 };
-
+const MakePrimaryBtn = ({
+  isPrimary,
+  onPress,
+}: {
+  isPrimary: boolean;
+  onPress?: () => void;
+}) => {
+  return (
+    <View tw="mb-2 md:mb-0">
+      {!isPrimary ? (
+        <PressableHover
+          tw="mr-4 h-6 flex-row items-center justify-center self-start rounded-3xl border bg-black px-2 dark:bg-white md:h-8"
+          onPress={onPress}
+        >
+          <Text tw="text-xs text-white dark:text-gray-900">Make Primary</Text>
+        </PressableHover>
+      ) : (
+        <PressableHover tw="mr-4 h-6 flex-row items-center justify-center self-start rounded-3xl border border-green-500 bg-green-500/20 px-2 md:h-8">
+          <Check color={colors.green[700]} width={16} height={16} />
+          <Text tw="text-xs text-green-600"> Primary</Text>
+        </PressableHover>
+      )}
+    </View>
+  );
+};
 export const SettingsWalletItem = (props: Props) => {
   const address = props.wallet.address;
   const ensDomain = props.wallet.ens_domain;
@@ -137,25 +152,7 @@ export const SettingsWalletItem = (props: Props) => {
 
   const isPrimary = user.user?.data.profile.primary_wallet?.address === address;
   const { setPrimaryWallet } = useSetPrimaryWallet();
-  const MakePrimaryBtn = useMemo(() => {
-    return (
-      <View tw="mb-2 md:mb-0">
-        {!isPrimary ? (
-          <PressableHover
-            tw="mr-4 h-6 flex-row items-center justify-center self-start rounded-3xl border bg-black px-2 dark:bg-white md:h-8"
-            onPress={() => setPrimaryWallet(props.wallet)}
-          >
-            <Text tw="text-xs text-white dark:text-gray-900">Make Primary</Text>
-          </PressableHover>
-        ) : (
-          <PressableHover tw="mr-4 h-6 flex-row items-center justify-center self-start rounded-3xl border border-green-500 bg-green-500/20 px-2 md:h-8">
-            <Check color={colors.green[700]} width={16} height={16} />
-            <Text tw="text-xs text-green-600"> Primary</Text>
-          </PressableHover>
-        )}
-      </View>
-    );
-  }, [isPrimary, props.wallet, setPrimaryWallet]);
+
   return (
     <>
       <View tw="mt-6 px-4 md:px-0">
@@ -184,12 +181,22 @@ export const SettingsWalletItem = (props: Props) => {
                 </Text>
               </View>
             </View>
-            <Hidden from="md">{MakePrimaryBtn}</Hidden>
+            <Hidden from="md">
+              <MakePrimaryBtn
+                isPrimary={isPrimary}
+                onPress={() => setPrimaryWallet(wallet)}
+              />
+            </Hidden>
             <Text tw="text-sm text-gray-900 dark:text-white">{address}</Text>
             <View tw="h-2" />
           </View>
           <View tw="flex flex-row items-center justify-center">
-            <Hidden until="md">{MakePrimaryBtn}</Hidden>
+            <Hidden until="md">
+              <MakePrimaryBtn
+                isPrimary={isPrimary}
+                onPress={() => setPrimaryWallet(wallet)}
+              />
+            </Hidden>
             <WalletDropdownMenu
               address={address}
               isCurrent={isConnectedAddress}
