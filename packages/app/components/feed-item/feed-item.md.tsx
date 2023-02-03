@@ -68,12 +68,9 @@ const Collectors = ({ nft }: TabProps) => {
     />
   );
 };
-const CommentsTab = (props: TabProps) => {
-  return <Comments {...props} />;
-};
 
 const TAB_SCENES_MAP = new Map([
-  [0, CommentsTab],
+  [0, Comments],
   [1, Collectors],
 ]);
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
