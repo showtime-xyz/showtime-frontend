@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { BlockedListScreen } from "app/screens/blocked-list";
+import { CheckoutScreen } from "app/screens/checkout";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -122,6 +123,11 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Update drop" }}
           component={DropUpdateScreen}
         />
+        <Stack.Screen
+          name="checkout"
+          options={{ headerTitle: "Checkout" }}
+          component={CheckoutScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -153,6 +159,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
+        <Stack.Screen name="checkout" component={CheckoutScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{

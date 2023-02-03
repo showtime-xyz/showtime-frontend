@@ -20,6 +20,7 @@ import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
+import { CheckoutScreen } from "app/screens/checkout";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -185,6 +186,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropEventScreen />
         <DropMusicScreen />
         <DropFreeScreen />
+        <CheckoutScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />

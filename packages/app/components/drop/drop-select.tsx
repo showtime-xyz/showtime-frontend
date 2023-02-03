@@ -19,6 +19,7 @@ export const DropSelect = () => {
   const user = useUser();
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
+  const isUserSubscribed = false;
 
   return (
     <BottomSheetScrollView>
@@ -32,6 +33,10 @@ export const DropSelect = () => {
               <Gift color={isDark ? "black" : "white"} height={16} width={16} />
             }
             onPress={() => {
+              if (!isUserSubscribed) {
+                router.push("/checkout");
+                return;
+              }
               if (Platform.OS !== "web") {
                 router.pop();
               }
@@ -54,6 +59,10 @@ export const DropSelect = () => {
               canCreateMusicDrop ? "Create Music Drop" : "Request Access"
             }
             onPress={() => {
+              if (!isUserSubscribed) {
+                router.push("/checkout");
+                return;
+              }
               if (Platform.OS !== "web") {
                 router.pop();
               }
@@ -78,6 +87,10 @@ export const DropSelect = () => {
             description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
             ctaLabel="Create Event Drop"
             onPress={() => {
+              if (!isUserSubscribed) {
+                router.push("/checkout");
+                return;
+              }
               if (Platform.OS !== "web") {
                 router.pop();
               }
@@ -94,6 +107,10 @@ export const DropSelect = () => {
             description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
             ctaLabel="Create Private Drop"
             onPress={() => {
+              if (!isUserSubscribed) {
+                router.push("/checkout");
+                return;
+              }
               if (Platform.OS !== "web") {
                 router.pop();
               }

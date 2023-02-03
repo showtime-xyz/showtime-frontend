@@ -1,66 +1,132 @@
-import { useState, useEffect, useCallback } from "react";
-import { Alert, Button } from "react-native";
+import { useEffect, useState } from "react";
 
-import { useStripe } from "@stripe/stripe-react-native";
+import {
+  useStripe,
+  useElements,
+  Elements,
+  PaymentElement,
+  LinkAuthenticationElement,
+} from "@stripe/react-stripe-js";
+import * as stripeJs from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
-const fetchPaymentSheetParams = async () => {
-  // const response = await fetch(`${API_URL}/payment-sheet`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const { paymentIntent, ephemeralKey, customer } = await response.json();
+import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
-  return {
-    paymentIntent: "12",
-    ephemeralKey: "12",
-    customer: "12",
-    publishableKey: "123",
-  };
-};
+// @ts-ignore
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
-export default function CheckoutScreen() {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const [loading, setLoading] = useState(false);
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const initializePaymentSheet = useCallback(async () => {
-    const { paymentIntent, ephemeralKey, customer, publishableKey } =
-      await fetchPaymentSheetParams();
-
-    const { error } = await initPaymentSheet({
-      merchantDisplayName: "Example, Inc.",
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
-      //methods that complete payment after a delay, like SEPA Debit and Sofort.
-      allowsDelayedPaymentMethods: true,
-      defaultBillingDetails: {
-        name: "Jane Doe",
-      },
-    });
-    if (!error) {
-      setLoading(true);
-    }
-  }, [initPaymentSheet]);
-
-  const openPaymentSheet = async () => {
-    // see below
-    const { error } = await presentPaymentSheet();
-
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
-      Alert.alert("Success", "Your order is confirmed!");
-    }
-  };
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    initializePaymentSheet();
-  }, [initializePaymentSheet]);
+    if (!stripe) {
+      return;
+    }
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+
+    if (!clientSecret) {
+      return;
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent?.status) {
+        case "succeeded":
+          setMessage("Payment succeeded!");
+          break;
+        case "processing":
+          setMessage("Your payment is processing.");
+          break;
+        case "requires_payment_method":
+          setMessage("Your payment was not successful, please try again.");
+          break;
+        default:
+          setMessage("Something went wrong.");
+          break;
+      }
+    });
+  }, [stripe]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.href,
+      },
+    });
+
+    console.log("errorr ", error);
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+    if (error.type === "card_error" || error.type === "validation_error") {
+      setMessage(error.message ?? "An unexpected error occurred.");
+    } else {
+      setMessage("An unexpected error occurred.");
+    }
+
+    setIsLoading(false);
+  };
 
   return (
-    <Button disabled={!loading} title="Checkout" onPress={openPaymentSheet} />
+    <View tw="p-4" nativeID="payment-form">
+      <LinkAuthenticationElement onChange={(e) => setEmail(e.value.email)} />
+      <View tw="h-3" />
+      <PaymentElement
+        options={{
+          layout: "tabs",
+        }}
+      />
+      <View tw="h-4" />
+      <Button
+        disabled={isLoading || !stripe || !elements}
+        onPress={handleSubmit}
+      >
+        Submit
+      </Button>
+      {message && <Text>{message}</Text>}
+    </View>
   );
+};
+
+export function Checkout() {
+  const [options, setOptions] = useState<stripeJs.StripeElementsOptions>();
+  useEffect(() => {
+    async function fetchClientSecret() {
+      // const res = await axios({
+      //   url: "/v1/stripe/secret",
+      //   method: "GET",
+      // });
+      setOptions({
+        clientSecret:
+          "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
+      });
+    }
+    fetchClientSecret();
+  }, []);
+
+  return options ? (
+    <Elements stripe={stripePromise} options={options}>
+      <CheckoutForm />
+    </Elements>
+  ) : null;
 }

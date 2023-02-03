@@ -1,13 +1,18 @@
 const fs = require("fs");
 const path = require("path");
 
+function pascalToHyphen(str) {
+  return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+}
+
 const createScreen = (name) => {
-  const packageScreenDir = path.resolve("packages", "app", "screens");
+  const fileName = pascalToHyphen(name);
+  const screenDir = path.resolve("packages", "app", "screens");
   const nextPageDir = path.resolve("apps", "next", "src", "pages");
   const componentDir = path.resolve("packages", "app", "components");
 
   fs.writeFileSync(
-    `${packageScreenDir}/${name}.tsx`,
+    `${screenDir}/${fileName}Screen.tsx`,
     `import React from "react";
     export  function ${name}() {
         return <div>${name}</div>;
@@ -15,10 +20,10 @@ const createScreen = (name) => {
     `
   );
 
-  fs.mkdirSync(`${nextPageDir}/${name}`);
+  fs.mkdirSync(`${nextPageDir}/${fileName}`);
 
   fs.writeFileSync(
-    `${nextPageDir}/${name}/index.tsx`,
+    `${nextPageDir}/${fileName}/index.tsx`,
     `import React from "react";
     export default function ${name}() {
         return <div>${name}</div>;
@@ -27,7 +32,7 @@ const createScreen = (name) => {
   );
 
   fs.writeFileSync(
-    `${componentDir}/${name}.tsx`,
+    `${componentDir}/${fileName}.tsx`,
     `import React from "react";
     export function ${name}() {
         return <div>${name}</div>;
