@@ -85,8 +85,7 @@ const fontMetricsSpaceGrotesk = {
 const textSizes = {
   "text-xs": createTextSize({
     fontSize: 12,
-    letterSpacing: 0.6,
-    lineHeight: 15,
+    lineHeight: 16,
     marginCorrection: {
       android: -0.1,
       ios: -0.3,
@@ -95,7 +94,6 @@ const textSizes = {
   }),
   "text-13": createTextSize({
     fontSize: 13,
-    letterSpacing: 0.6,
     lineHeight: 16,
     marginCorrection: {
       android: -0.1,
@@ -105,7 +103,6 @@ const textSizes = {
   }),
   "text-sm": createTextSize({
     fontSize: 14,
-    letterSpacing: 0.6,
     lineHeight: 17,
     marginCorrection: {
       android: -0.1,
@@ -115,7 +112,6 @@ const textSizes = {
   }),
   "text-base": createTextSize({
     fontSize: 16,
-    letterSpacing: 0.5,
     lineHeight: 19,
     marginCorrection: {
       android: -0.1,
@@ -125,7 +121,6 @@ const textSizes = {
   }),
   "text-lg": createTextSize({
     fontSize: 18,
-    letterSpacing: 0.5,
     lineHeight: 21,
     marginCorrection: {
       android: 0.2,
@@ -135,7 +130,6 @@ const textSizes = {
   }),
   "text-xl": createTextSize({
     fontSize: 20,
-    letterSpacing: 0.6,
     lineHeight: 23,
     marginCorrection: {
       android: 0,
@@ -145,7 +139,6 @@ const textSizes = {
   }),
   "text-2xl": createTextSize({
     fontSize: 24,
-    letterSpacing: 0.6,
     lineHeight: 27,
     marginCorrection: {
       android: -0.3,
@@ -155,7 +148,6 @@ const textSizes = {
   }),
   "text-3xl": createTextSize({
     fontSize: 30,
-    letterSpacing: 0.6,
     lineHeight: 33,
     marginCorrection: {
       android: -0.3,
@@ -165,7 +157,6 @@ const textSizes = {
   }),
   "text-4xl": createTextSize({
     fontSize: 36,
-    letterSpacing: 0.6,
     lineHeight: 41,
     marginCorrection: {
       android: -0.3,
