@@ -2,6 +2,7 @@ import { memo, useMemo, Suspense, useRef, useState, useContext } from "react";
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -54,12 +55,25 @@ import { FeedItemProps } from "./index";
 
 const NFT_DETAIL_WIDTH = 380;
 
-const Collectors = ({ nft }: { nft: NFT }) => {
-  return <UserList loading={false} users={nft?.multiple_owners_list || []} />;
+type TabProps = {
+  nft: NFT;
+};
+
+const Collectors = ({ nft }: TabProps) => {
+  return (
+    <UserList
+      style={{ minHeight: "50vh" }}
+      loading={false}
+      users={nft?.multiple_owners_list || []}
+    />
+  );
+};
+const CommentsTab = (props: TabProps) => {
+  return <Comments {...props} />;
 };
 
 const TAB_SCENES_MAP = new Map([
-  [0, Comments],
+  [0, CommentsTab],
   [1, Collectors],
 ]);
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
@@ -203,7 +217,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   height: mediaHeight,
                   width: mediaWidth,
                 }}
-                resizeMode="contain"
+                resizeMode={ResizeMode.CONTAIN}
               />
             </View>
           </View>

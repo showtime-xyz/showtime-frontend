@@ -63,7 +63,7 @@
     "react-remove-scroll-bar": "^2.3.4",
     "react-stickynode": "^4.0.0",
     "react-string-replace": "^0.4.4",
-    "react-virtuoso": "^2.16.6",
+    "react-virtuoso": "^4.0.8",
     "resize-observer-polyfill": "^1.5.1",
     "screenfull": "^6.0.2",
     "setimmediate": "^1.0.5",

@@ -28,11 +28,15 @@ import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
-
 const PlatformInputAccessoryView =
   Platform.OS === "ios" ? InputAccessoryView : Fragment;
 
-export function Comments({ nft }: { nft: NFT }) {
+type CommentsProps = {
+  nft: NFT;
+  webListHeight?: number | string;
+};
+
+export function Comments({ nft, webListHeight }: CommentsProps) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -60,7 +64,7 @@ export function Comments({ nft }: { nft: NFT }) {
     deleteComment,
     newComment,
   } = useComments(nft.nft_id);
-  const modalListProps = useModalListProps();
+  const modalListProps = useModalListProps(webListHeight);
   const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   //#endregion
@@ -132,12 +136,12 @@ export function Comments({ nft }: { nft: NFT }) {
 
   const listEmptyComponent = useCallback(
     () => (
-      <EmptyPlaceholder
-        text="Be the first to add a comment!"
-        title="💬 No comments yet..."
-        titleTw="pt-1"
-        tw="mt-5 h-full flex-1 items-center justify-center"
-      />
+      <View tw="absolute h-full w-full items-center justify-center">
+        <EmptyPlaceholder
+          text="Be the first to add a comment!"
+          title="💬 No comments yet..."
+        />
+      </View>
     ),
     []
   );
