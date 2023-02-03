@@ -33,7 +33,7 @@ export const CheckoutModal = () => {
           <Pressable
             key={plan.name}
             onPress={() => setSelectedPlan(plan)}
-            tw="mb-4 flex-row items-center justify-between rounded-full bg-gray-900 p-4"
+            tw="mb-4 flex-row items-center justify-between rounded-full bg-gray-100 p-4 dark:bg-gray-900"
             style={{
               // @ts-ignore
               background:

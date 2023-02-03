@@ -97,7 +97,7 @@ const CheckoutForm = () => {
           layout: "tabs",
         }}
       />
-      <View tw="h-4" />
+      <View tw="h-8" />
       <Button
         disabled={isLoading || !stripe || !elements}
         onPress={handleSubmit}
