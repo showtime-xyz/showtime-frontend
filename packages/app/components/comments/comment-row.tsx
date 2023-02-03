@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
 
 import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
@@ -149,7 +148,7 @@ function CommentRowComponent({
   }, []);
   //#endregion
   return (
-    <View tw="px-4">
+    <>
       <MessageRow
         address={comment.address}
         username={comment.username}
@@ -157,9 +156,7 @@ function CommentRowComponent({
         userVerified={comment.verified as any}
         content={comment.text}
         likeCount={formatNumber(Math.max(0, likeCount))}
-        replayCount={
-          isReply ? undefined : formatNumber(comment.replies?.length ?? 0)
-        }
+        replyCount={isReply ? undefined : comment.replies?.length ?? 0}
         hasReplies={
           isReply ? false : comment.replies && comment.replies.length > 0
         }
@@ -173,6 +170,7 @@ function CommentRowComponent({
         onReplyPress={handleOnReplyPress}
         onTagPress={handleOnUserPress}
         onUserPress={handleOnUserPress}
+        isLastReply={isLastReply}
       />
       {!isReply
         ? replies.map((reply, index) => (
@@ -196,7 +194,7 @@ function CommentRowComponent({
           onPress={handelOnLoadMoreRepliesPress}
         />
       ) : null}
-    </View>
+    </>
   );
 }
 

@@ -146,7 +146,7 @@ export function Comments({ nft }: { nft: NFT }) {
     [bottom]
   );
   return (
-    <View style={styles.container}>
+    <View tw="pt-5" style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -156,7 +156,7 @@ export function Comments({ nft }: { nft: NFT }) {
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            estimatedItemSize={98}
+            estimatedItemSize={70}
             overscan={98}
             keyboardDismissMode="interactive"
             ListEmptyComponent={listEmptyComponent}
