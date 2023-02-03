@@ -48,7 +48,6 @@ import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
@@ -110,8 +109,6 @@ const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
 
 export const DropMusic = () => {
   const isDark = useIsDarkMode();
-  const { rudder } = useRudder();
-
   const {
     control,
     handleSubmit,
@@ -120,8 +117,6 @@ export const DropMusic = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
@@ -133,7 +128,7 @@ export const DropMusic = () => {
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
