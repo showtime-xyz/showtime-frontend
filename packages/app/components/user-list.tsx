@@ -23,6 +23,15 @@ import { formatAddressShort } from "app/utilities";
 import { EmptyPlaceholder } from "./empty-placeholder";
 import { FollowButton } from "./follow-button";
 
+const SEPARATOR_HEIGHT = 1;
+const ITEM_HEIGHT = 64;
+const Separator = () => (
+  <View
+    tw={`bg-gray-200 dark:bg-gray-800`}
+    style={{ height: SEPARATOR_HEIGHT }}
+  />
+);
+
 type FollowingListProp = {
   follow: (profileId: number) => void;
   unFollow: (profileId: number) => void;
@@ -39,7 +48,13 @@ export const UserList = ({
   ...rest
 }: UserListProps) => {
   const { follow, unfollow } = useMyInfo();
-  const modalListProps = useModalListProps();
+
+  const webListHeight =
+    users && users?.length > 8
+      ? "60vh"
+      : (ITEM_HEIGHT + SEPARATOR_HEIGHT) * (users?.length ?? 3);
+
+  const modalListProps = useModalListProps(webListHeight);
   const bottom = usePlatformBottomHeight();
   const keyExtractor = useCallback(
     (item: UserItemType) => `${item.profile_id}`,
@@ -84,16 +99,6 @@ export const UserList = ({
   );
 };
 
-const SEPARATOR_HEIGHT = 1;
-const Separator = () => (
-  <View
-    tw={`bg-gray-200 dark:bg-gray-800`}
-    style={{ height: SEPARATOR_HEIGHT }}
-  />
-);
-
-const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
-
 const FollowingListUser = memo(
   ({ item }: { item: UserItemType } & FollowingListProp) => {
     const { data } = useMyInfo();
@@ -112,12 +117,11 @@ const FollowingListUser = memo(
           viewProps={{ style: { flex: 1 } }}
         >
           <View tw="flex-row">
-            <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
+            <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
                   alt={item.username ?? item.wallet_address}
-                  tw="rounded-full"
                   width={32}
                   height={32}
                 />

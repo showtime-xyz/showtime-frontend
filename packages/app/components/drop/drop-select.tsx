@@ -10,6 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { useUser } from "app/hooks/use-user";
 
 import { useIsDarkMode } from "design-system/hooks";
@@ -19,6 +20,10 @@ export const DropSelect = () => {
   const user = useUser();
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
+
+  if (user.isIncompletedProfile) {
+    return <CompleteProfileModalContent />;
+  }
 
   return (
     <BottomSheetScrollView>

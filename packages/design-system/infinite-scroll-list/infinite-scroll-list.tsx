@@ -9,7 +9,7 @@ import {
 import type { VirtuosoGridProps } from "react-virtuoso";
 
 export type InfiniteScrollListProps<T> = FlashListProps<T> &
-  Pick<VirtuosoGridProps, "overscan" | "useWindowScroll"> & {
+  Pick<VirtuosoGridProps<T>, "overscan" | "useWindowScroll"> & {
     index?: number;
     /**
      * Grid layout item view props, only valid when numColumns > 1
