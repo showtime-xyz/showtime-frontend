@@ -69,6 +69,7 @@ const CheckoutForm = () => {
       elements,
       confirmParams: {
         return_url: window.location.href,
+        receipt_email: email,
       },
     });
 
