@@ -19,7 +19,7 @@ import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { axios } from "app/lib/axios";
-import { deleteCache } from "app/lib/delete-cache";
+import { deleteAppCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
@@ -140,7 +140,7 @@ export function AuthProvider({
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
 
-      deleteCache();
+      deleteAppCache();
       deleteRefreshToken();
       deleteAccessToken();
 

@@ -7,6 +7,7 @@ import {
   Twitter,
   Link as LinkIcon,
   Instagram,
+  Spotify,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -35,6 +36,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
     () => profile?.links?.find((item) => item.type__name === "Instagram"),
     [profile?.links]
   );
+  const spotifyUrl = profile?.spotify_artist_id
+    ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
+    : null;
   const websiteLink = useMemo(
     () => getDomainName(profile?.website_url),
     [profile?.website_url]
@@ -45,7 +49,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   }, []);
 
   return (
-    <View tw="justify-center sm:flex-row">
+    <View tw="items-center justify-center sm:flex-row">
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
@@ -75,6 +79,20 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       </Hidden>
 
       <View tw="mt-2 flex-row items-center justify-end sm:mt-0">
+        {spotifyUrl && (
+          <PressableScale
+            style={{ marginRight: 16 }}
+            onPress={() => onPressLink(spotifyUrl)}
+            accessibilityLabel="Spotify"
+            accessibilityRole="link"
+          >
+            <Spotify
+              width={20}
+              height={20}
+              color={isDark ? "#FFF" : colors.gray[900]}
+            />
+          </PressableScale>
+        )}
         {twitter?.user_input && (
           <PressableScale
             onPress={() =>

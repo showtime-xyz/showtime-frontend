@@ -29,6 +29,8 @@ export * from "./tab-bar-single";
 export * from "./tab-spinner";
 export * from "./scrollable-auto-width-tab-bar";
 export * from "./scrollable-tab-bar";
+export * from "./tab-bar-vertical";
+
 type TabBarProps<T extends Route> = CollapsibleTabViewProps<T> & {
   autoWidthTabBar?: boolean;
   hideTabBar?: boolean;

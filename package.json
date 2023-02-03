@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "92.0.2",
+  "version": "92.0.4",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -36,6 +36,7 @@
     "packages/*"
   ],
   "scripts": {
+    "create-screen": "node scripts/showtime-cli",
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
