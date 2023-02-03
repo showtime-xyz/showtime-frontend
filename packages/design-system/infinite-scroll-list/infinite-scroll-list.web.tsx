@@ -136,13 +136,18 @@ export function VirtuosoListComponent<T>(
   const viewableItems = useRef<ViewToken[]>([]);
   const [listItemHeight, setListItemHeight] = useState(0);
 
-  let minHeight = 0;
-  if (listItemHeight) {
-    minHeight = listItemHeight;
-  } else if (estimatedItemSize && data) {
-    minHeight =
-      estimatedItemSize * (numColumns ? data.length / numColumns : data.length);
-  }
+  const minHeight = useMemo(() => {
+    if (listItemHeight) {
+      return listItemHeight;
+    }
+    if (estimatedItemSize && data) {
+      return (
+        estimatedItemSize *
+        (numColumns ? data.length / numColumns : data.length)
+      );
+    }
+    return 0;
+  }, [data, estimatedItemSize, listItemHeight, numColumns]);
 
   const renderItemContent = React.useCallback(
     (index: number) => {
