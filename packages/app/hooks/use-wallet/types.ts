@@ -1,5 +1,4 @@
-import type { Bytes } from "@ethersproject/bytes";
-import type { GetAccountResult } from "@wagmi/core";
+import type { GetAccountResult, SignMessageArgs } from "@wagmi/core";
 
 export type ConnectResult = Promise<
   | {
@@ -20,7 +19,5 @@ export type UseWalletReturnType = {
   networkChanged?: boolean;
   connect: () => ConnectResult;
   name?: string;
-  signMessageAsync: (args: {
-    message: string | Bytes;
-  }) => Promise<string | undefined>;
+  signMessageAsync: (args: SignMessageArgs) => Promise<string | undefined>;
 };

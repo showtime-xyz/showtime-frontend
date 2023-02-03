@@ -173,6 +173,7 @@ const CardLargeScreen = ({
                 <NFTDropdown
                   tw="rounded-full bg-gray-100 p-1 dark:bg-gray-900"
                   nft={detailData?.data.item ?? nft}
+                  edition={edition}
                 />
               </Suspense>
             </ErrorBoundary>

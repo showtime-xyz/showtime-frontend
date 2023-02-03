@@ -33,8 +33,7 @@ export function Button({
       [
         CONTAINER_TW,
         CONTAINER_HEIGHT_TW[size],
-        CONTAINER_PADDING_TW[size],
-        iconOnly ? CONTAINER_ICON_PADDING_TW[size] : "",
+        iconOnly ? CONTAINER_ICON_PADDING_TW[size] : CONTAINER_PADDING_TW[size],
         Array.isArray(tw) ? tw.join(" ") : tw,
       ].join(" "),
     [tw, size, iconOnly]

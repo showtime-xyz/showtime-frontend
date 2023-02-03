@@ -115,6 +115,7 @@ export interface Profile {
   links: Link[];
   primary_wallet?: WalletAddressesV2;
   has_verified_phone_number: boolean;
+  spotify_artist_id?: string;
 }
 
 type FollowType = {
@@ -227,3 +228,10 @@ export type MyInfo = {
     };
   };
 };
+
+export type GatingType =
+  | "spotify_save"
+  | "password"
+  | "location"
+  | "multi"
+  | "music_presave";

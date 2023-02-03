@@ -19,7 +19,6 @@ export const useRedirectToClaimDrop = () => {
       router.push("/login");
     } else {
       const as = `/claim/${editionContractAddress}`;
-
       router.push(
         Platform.select({
           native: as,

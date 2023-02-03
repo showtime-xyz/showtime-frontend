@@ -8,8 +8,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { Hidden } from "design-system/hidden";
-
 import packageJson from "../../../../package.json";
 
 export const SettingHeaderSection = ({ title = "" }) => {
@@ -38,9 +36,9 @@ export const SettingsHeader = ({
   return (
     <>
       {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
-      <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black md:mb-4">
+      <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
         <View tw="w-full max-w-screen-2xl">
-          <View tw="w-full flex-row justify-between self-center px-4 py-4 md:py-0">
+          <View tw="w-full flex-row justify-between self-center px-4 py-4">
             <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
               Settings
             </Text>
@@ -48,28 +46,16 @@ export const SettingsHeader = ({
               <Text tw="font-space-bold text-2xl font-extrabold text-gray-100 dark:text-gray-900">
                 v{Constants?.manifest?.version ?? packageJson?.version}
               </Text>
-            ) : (
-              <Hidden until="md">
-                <TabBarSingle
-                  onPress={(i) => {
-                    setIndex(i);
-                  }}
-                  routes={routers}
-                  index={index}
-                />
-              </Hidden>
-            )}
+            ) : null}
           </View>
           {isWeb && (
-            <Hidden from="md">
-              <TabBarSingle
-                onPress={(i) => {
-                  setIndex(i);
-                }}
-                routes={routers}
-                index={index}
-              />
-            </Hidden>
+            <TabBarSingle
+              onPress={(i) => {
+                setIndex(i);
+              }}
+              routes={routers}
+              index={index}
+            />
           )}
         </View>
       </View>

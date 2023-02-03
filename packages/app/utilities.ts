@@ -1,10 +1,11 @@
-import * as React from "react";
+import React from "react";
 import { Platform } from "react-native";
 
-import { formatDistanceToNowStrict, formatDistanceStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
-import type { ImageProps } from "expo-image";
+
+import { ResizeMode as ImageResizeMode } from "@showtime-xyz/universal.image";
 
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
@@ -636,29 +637,20 @@ export const findTokenChainName = (chainId?: string) => {
 
 export const getFormatDistanceStrictToWeek = (time?: string) => {
   if (!time) return "";
-  const distanceDays = formatDistanceStrict(new Date(time), new Date(), {
-    unit: "day",
-  });
-  const days = Number(distanceDays.split(" ")[0]);
-  if (days === 0) {
-    const distanceHours = formatDistanceStrict(new Date(time), new Date(), {
-      unit: "hour",
-    });
-    const hours = Number(distanceHours.split(" ")[0]);
-    return `${hours}h`;
+  const currentDate = new Date();
+  const givenDate = new Date(time);
+  const diffTime = currentDate.getTime() - givenDate.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+  const diffHours = diffTime / (1000 * 60 * 60);
+
+  if (diffDays < 1) {
+    return `${Math.round(diffHours)}h`;
   }
-  if (days >= 7) {
-    return `${Math.ceil(days / 7)}w`;
-  }
-  if (days < 7) {
-    return `${days}d`;
-  }
-  return "";
+
+  return `${Math.ceil(diffDays / 7)}w`;
 };
 
-export const contentFitToresizeMode = (
-  resizeMode: ImageProps["contentFit"]
-) => {
+export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
   switch (resizeMode) {
     case "cover":
       return ResizeMode.COVER;

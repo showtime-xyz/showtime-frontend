@@ -21,10 +21,10 @@ export type LinkProps = Props & {
   };
 };
 
-function Link({ viewProps, tw, hrefAttrs, onPress, ...props }: LinkProps) {
+function Link({ viewProps, tw, hrefAttrs, onPress, ...rest }: LinkProps) {
   return (
     <LinkCore
-      {...props}
+      {...rest}
       Component={Platform.select({
         web: View,
         default: Pressable as any,
@@ -54,11 +54,11 @@ function TextLink({
   tw,
   hitSlop,
   onPress,
-  ...props
+  ...rest
 }: TextLinkProps) {
   return (
     <LinkCore
-      {...props}
+      {...rest}
       Component={Text}
       componentProps={useMemo(
         () => ({

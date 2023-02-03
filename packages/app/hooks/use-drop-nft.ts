@@ -8,6 +8,7 @@ import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+import { GatingType } from "app/types";
 import { delay, getFileMeta } from "app/utilities";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
@@ -42,6 +43,27 @@ type Action = {
 const initialState: State = {
   status: "idle",
   signaturePrompt: false,
+};
+
+type DropRequestData = {
+  name: string;
+  description: string;
+  image_url: string;
+  edition_size: number;
+  royalty_bps: number;
+  claim_window_duration_seconds: number;
+  nsfw: boolean;
+  spotify_url?: string;
+  gating_type?: GatingType;
+  release_date?: string;
+  password?: string;
+  location_gating?: {
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
+    google_maps_url?: string;
+  };
+  multi_gating_types?: ["password", "location"];
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -96,12 +118,13 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
-  gatingType?: "spotify_save" | "password" | "location" | "multi";
+  gatingType?: GatingType;
   password?: string;
   googleMapsUrl?: string;
   latitude?: number;
   longitude?: number;
   radius?: number;
+  releaseDate?: string;
 };
 
 export const useDropNFT = () => {
@@ -212,26 +235,32 @@ export const useDropNFT = () => {
           }
         : {};
 
+      let requestData: DropRequestData = {
+        name: escapedTitle,
+        description: escapedDescription,
+        image_url: "ipfs://" + ipfsHash,
+        edition_size: params.editionSize,
+        royalty_bps: params.royalty * 100,
+        claim_window_duration_seconds: params.duration,
+        nsfw: params.notSafeForWork,
+        spotify_url: params.spotifyUrl,
+        gating_type: gatingType,
+        password: params.password !== "" ? params.password : undefined,
+        ...locationGating,
+        multi_gating_types:
+          isPasswordGated && isLocationGated
+            ? ["password", "location"]
+            : undefined,
+      };
+
+      if (params.releaseDate && params.gatingType === "music_presave") {
+        requestData.release_date = params.releaseDate;
+      }
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",
-        data: {
-          name: escapedTitle,
-          description: escapedDescription,
-          image_url: "ipfs://" + ipfsHash,
-          edition_size: params.editionSize,
-          royalty_bps: params.royalty * 100,
-          claim_window_duration_seconds: params.duration,
-          nsfw: params.notSafeForWork,
-          spotify_url: params.spotifyUrl,
-          gating_type: gatingType,
-          password: params.password !== "" ? params.password : undefined,
-          ...locationGating,
-          multi_gating_types:
-            isPasswordGated && isLocationGated
-              ? ["password", "location"]
-              : undefined,
-        },
+        data: requestData,
       });
 
       console.log("relayer response :: ", relayerResponse);

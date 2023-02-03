@@ -1,23 +1,20 @@
 import { useCallback } from "react";
 
-import { Image } from "expo-image";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Text } from "@showtime-xyz/universal.text";
+import { Zap } from "@showtime-xyz/universal.icon";
 
-import { deleteCache as deleteMMKVCache } from "app/lib/delete-cache";
+import { deleteAppCache } from "app/lib/delete-cache";
 
-export const ClearCacheBtn = () => {
+import { AccountSettingItem } from "./settings-account-item";
+
+export const SettingClearAppCache = () => {
   const Alert = useAlert();
   const clearAppCache = useCallback(() => {
     Alert.alert("Clear app cache?", "", [
       {
         text: "Confirm",
         onPress: async () => {
-          deleteMMKVCache();
-          await Image.clearDiskCache();
-          await Image.clearMemoryCache();
+          deleteAppCache();
         },
         style: "destructive",
       },
@@ -26,12 +23,12 @@ export const ClearCacheBtn = () => {
       },
     ]);
   }, [Alert]);
-
-  if (!__DEV__) return null;
-
   return (
-    <Button size="small" onPress={clearAppCache}>
-      <Text>Clear Cache</Text>
-    </Button>
+    <AccountSettingItem
+      title="Clear App cache"
+      onPress={clearAppCache}
+      buttonText="Clear Up"
+      Icon={Zap}
+    />
   );
 };

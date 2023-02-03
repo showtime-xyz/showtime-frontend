@@ -1,51 +1,41 @@
-import { ImageStyle as RNImageStyle } from "react-native";
-
 import { Image, ImageProps as ExpoImageProps } from "expo-image";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
 
-import { ResizeMode } from "./types";
-
-export type ImgProps = Omit<ExpoImageProps, "resizeMode"> & {
+export type ImgProps = ExpoImageProps & {
   height?: number;
   width?: number;
   borderRadius?: number;
-  blurhash?: string;
-  resizeMode?: ResizeMode;
 };
 
 const StyledExpoImage = styled(Image);
 
-type ImageProps = {
-  tw?: TW;
+type ImageProps = Omit<ExpoImageProps, "resizeMode"> & {
+  tw?: string;
   alt?: string;
+  blurhash?: string;
+  resizeMode?: any;
 } & ImgProps;
 
-function Img({
+function StyledImage({
+  borderRadius,
   source,
   height,
   width,
-  borderRadius,
   style,
-  blurhash,
-  resizeMode = "cover",
   contentFit,
+  resizeMode,
+  blurhash,
   ...rest
-}: ImgProps) {
+}: ImageProps) {
   return (
     <StyledExpoImage
       source={source}
-      style={[{ height, width, borderRadius }, style as RNImageStyle]}
+      style={[{ height, width, borderRadius }, style as any]}
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
       {...rest}
     />
-  );
-}
-function StyledImage({ width, height, borderRadius, ...rest }: ImageProps) {
-  return (
-    <Img width={width} height={height} borderRadius={borderRadius} {...rest} />
   );
 }
 

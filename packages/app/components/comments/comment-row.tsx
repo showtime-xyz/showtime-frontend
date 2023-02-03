@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, useRef } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -39,9 +39,21 @@ function CommentRowComponent({
    */
   useIsDarkMode();
   //#region state
+  const lastItemId = useRef<number>(comment.comment_id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
+
+  // This part here is important for FlashList, since state gets recycled
+  // we need to reset the state when the comment changes
+  // I had to remove `key` from CommentRow (Parent) and here, on View,
+  // because it was breaking recycling
+  // https://shopify.github.io/flash-list/docs/recycling/
+  if (comment.comment_id !== lastItemId.current) {
+    lastItemId.current = comment.comment_id;
+    setLikeCount(comment.like_count);
+    setDisplayedRepliesCount(REPLIES_PER_BATCH);
+  }
   //#endregion
 
   //#region hooks
@@ -137,7 +149,7 @@ function CommentRowComponent({
   }, []);
   //#endregion
   return (
-    <View tw="px-4" key={comment.comment_id}>
+    <View tw="px-4">
       <MessageRow
         address={comment.address}
         username={comment.username}
@@ -164,8 +176,10 @@ function CommentRowComponent({
       />
       {!isReply
         ? replies.map((reply, index) => (
+            // only index as key when using map with FlashList
+            // https://shopify.github.io/flash-list/docs/fundamentals/performant-components#remove-key-prop
             <CommentRowComponent
-              key={`comment-reply-${reply.comment_id}`}
+              key={index}
               comment={reply}
               isLastReply={index === (replies.length ?? 0) - 1}
               likeComment={likeComment}

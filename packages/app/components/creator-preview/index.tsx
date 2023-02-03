@@ -41,7 +41,7 @@ export const CreatorPreview = withMemoAndColorScheme<any, Props>(
             <View tw="flex-row items-center">
               <TextLink
                 href={`/@${creator.username ?? creator.address}`}
-                tw="mr-1 text-sm font-semibold text-gray-900 dark:text-white"
+                tw="mr-1 inline-block max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white"
               >
                 {creator.username ? (
                   <>@{creator.username}</>

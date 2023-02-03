@@ -74,6 +74,7 @@ type RootStackNavigatorParams = {
   dropFree: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
+  dropUpdate: undefined;
   search: undefined;
   swipeList: {
     profileId?: string;
