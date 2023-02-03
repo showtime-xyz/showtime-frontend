@@ -194,7 +194,7 @@ export function VirtuosoListComponent<T>(
   );
   const gridComponents = useMemo<GridComponents<any>>(
     () => ({
-      Item: (props: ItemContainerProps) => (
+      Item: (props: GridItemProps) => (
         <ItemContainer
           {...props}
           numColumns={numColumns}
