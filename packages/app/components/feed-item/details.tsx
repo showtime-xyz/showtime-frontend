@@ -50,7 +50,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         <View tw="flex-row">
           <Like nft={nft} />
           <View tw="w-6" />
-          <CommentButton nft={nft} count={detail?.comment_count} />
+          <CommentButton nft={nft} />
           <View tw="w-6" />
           <GiftButton nft={nft} />
         </View>

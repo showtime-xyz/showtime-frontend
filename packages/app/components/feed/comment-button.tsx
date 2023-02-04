@@ -11,10 +11,9 @@ import { formatNumber } from "app/utilities";
 
 interface CommentButtonProps {
   nft?: NFT;
-  count?: number;
 }
 
-export function CommentButton({ nft, count }: CommentButtonProps) {
+export function CommentButton({ nft }: CommentButtonProps) {
   const router = useRouter();
   const { iconColor } = useSocialColor();
   //const { commentsCount } = useComments(nft?.nft_id ?? -Infinity);
@@ -51,7 +50,9 @@ export function CommentButton({ nft, count }: CommentButtonProps) {
   return (
     <SocialButton
       onPress={handleOnPress}
-      text={count && count > 0 ? ` ${formatNumber(count)}` : ""}
+      text={
+        nft?.comment_count > 0 ? ` ${formatNumber(nft?.comment_count)}` : ""
+      }
     >
       <Message height={24} width={24} color={iconColor} />
     </SocialButton>
