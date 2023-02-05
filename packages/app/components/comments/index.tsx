@@ -150,7 +150,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
     [bottom]
   );
   return (
-    <View tw="pt-5" style={styles.container}>
+    <View style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -168,6 +168,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             automaticallyAdjustKeyboardInsets
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            contentContainerStyle={styles.contentContainer}
             {...modalListProps}
           />
           {isAuthenticated && (
@@ -201,6 +202,6 @@ const styles = StyleSheet.create({
     minHeight: 200,
   },
   contentContainer: {
-    flex: 1,
+    paddingTop: 20,
   },
 });
