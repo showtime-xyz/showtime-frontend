@@ -158,7 +158,7 @@ export function MessageRow({
     return onTagPress
       ? linkifyDescription(
           content,
-          "font-space-bold text-xs text-gray-900 dark:text-gray-100"
+          "font-bold text-xs text-gray-900 dark:text-gray-100"
         )
       : content;
   }, [content, onTagPress]);
@@ -196,40 +196,39 @@ export function MessageRow({
         </Link>
       </View>
       <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
-        <Text tw="font-space text-xs text-gray-900 dark:text-gray-100">
+        <Text tw="text-xs text-gray-900 dark:text-gray-100">
           <Link href={`/@${username || address}`}>
             <View tw="mr-3 flex-row items-center">
               <Text
-                tw="font-space-bold text-xs text-gray-900 dark:text-white"
-                style={{ lineHeight: 18 }}
+                tw="text-xs font-bold text-gray-900 dark:text-white"
                 onPress={handleOnPressUser}
               >
                 @{userNameText}
               </Text>
               {userVerified ? (
                 <VerificationBadge
-                  style={{ marginLeft: 4, marginTop: 1 }}
-                  size={10}
+                  style={{
+                    marginLeft: 4,
+                    position: "absolute",
+                    left: "100%",
+                  }}
+                  size={11}
                 />
               ) : null}
             </View>
           </Link>
+          {userVerified ? <View tw="w-3" /> : null}
           {contentWithTags}
         </Text>
 
         <View tw={"flex-row space-x-3"}>
           <View tw="justify-center py-0">
             {createdAtText && (
-              <Text tw="font-space text-[10px] text-gray-500">
-                {`${createdAtText}`}
-              </Text>
+              <Text tw="text-[10px] text-gray-500">{`${createdAtText}`}</Text>
             )}
           </View>
           <View tw="justify-center py-0">
-            <Text
-              tw="font-space px-0 text-[10px] text-gray-500"
-              onPress={onReplyPress}
-            >
+            <Text tw="px-0 text-[10px] text-gray-500" onPress={onReplyPress}>
               Reply
             </Text>
           </View>
