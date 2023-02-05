@@ -5,7 +5,6 @@ import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -121,11 +120,11 @@ export function MessageRow({
   userVerified = false,
   content = "",
   likeCount = 0,
-  replyCount,
+  //replyCount,
   createdAt,
-  position,
+  //position,
   hasParent,
-  hasReplies,
+  //hasReplies,
   isLastReply,
   likedByMe,
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -136,8 +135,6 @@ export function MessageRow({
   onTagPress,
   onUserPress,
 }: MessageRowProps) {
-  const router = useRouter();
-
   //#region variables
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
