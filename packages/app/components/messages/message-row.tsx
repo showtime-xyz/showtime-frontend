@@ -200,7 +200,7 @@ export function MessageRow({
                 tw="text-xs font-bold text-gray-900 dark:text-white"
                 onPress={handleOnPressUser}
               >
-                @{userNameText}
+                {userNameText}
               </Text>
               {userVerified ? (
                 <VerificationBadge
