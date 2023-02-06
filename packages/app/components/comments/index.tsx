@@ -160,7 +160,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            estimatedItemSize={98}
+            estimatedItemSize={70}
             overscan={98}
             keyboardDismissMode="interactive"
             ListEmptyComponent={listEmptyComponent}
@@ -168,6 +168,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             automaticallyAdjustKeyboardInsets
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            contentContainerStyle={styles.contentContainer}
             {...modalListProps}
           />
           {isAuthenticated && (
@@ -201,6 +202,6 @@ const styles = StyleSheet.create({
     minHeight: 200,
   },
   contentContainer: {
-    flex: 1,
+    paddingTop: 20,
   },
 });
