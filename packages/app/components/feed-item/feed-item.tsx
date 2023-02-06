@@ -86,7 +86,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const opacity = useSharedValue(1);
 
   // This part here is important for FlashList, since state gets recycled
-  // we need to reset the state when the comment changes
+  // we need to reset the state when the nft-id changes
   // I had to remove `key` from LikeContextProvider
   // because it was breaking recycling
   // https://shopify.github.io/flash-list/docs/recycling/

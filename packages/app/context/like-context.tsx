@@ -40,9 +40,7 @@ export const LikeContextProvider = ({
   );
 
   // This part here is important for FlashList, since state gets recycled
-  // we need to reset the state when the comment changes
-  // I had to remove `key` from CommentRow (Parent) and here, on View,
-  // because it was breaking recycling
+  // we need to reset the state when the nft-id changes
   // https://shopify.github.io/flash-list/docs/recycling/
   if (nft.nft_id !== lastItemId.current) {
     lastItemId.current = nft.nft_id;
