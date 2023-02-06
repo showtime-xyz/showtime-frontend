@@ -154,7 +154,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <>
+        <View tw="web:pt-4 flex-1">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
@@ -188,7 +188,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
               />
             </PlatformInputAccessoryView>
           )}
-        </>
+        </View>
       )}
     </View>
   );
