@@ -129,8 +129,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           animation: Platform.OS === "ios" ? "default" : "none",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
+          presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
