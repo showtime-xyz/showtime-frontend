@@ -298,7 +298,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
             <LikedBy nft={nft} tw="mt-4" />
             <View tw="my-4 mr-4 flex-row justify-between">
-              <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
+              <Text tw="text-lg text-black dark:text-white md:text-2xl">
                 {nft.token_name}
               </Text>
             </View>

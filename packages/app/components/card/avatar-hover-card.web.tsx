@@ -137,7 +137,7 @@ export function AvatarHoverCard({
                 ) : (
                   <View tw="mt-4">
                     <Text
-                      tw="font-space-bold text-xl font-extrabold text-gray-900 dark:text-white"
+                      tw="text-xl font-extrabold text-gray-900 dark:text-white"
                       numberOfLines={2}
                     >
                       {profileData?.profile.name}
