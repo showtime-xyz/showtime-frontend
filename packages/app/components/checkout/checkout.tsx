@@ -11,6 +11,7 @@ import * as stripeJs from "@stripe/stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -90,7 +91,10 @@ const CheckoutForm = () => {
 
   return (
     <View tw="p-4" nativeID="payment-form">
-      <LinkAuthenticationElement onChange={(e) => setEmail(e.value.email)} />
+      <LinkAuthenticationElement
+        className="PaymentElement"
+        onChange={(e) => setEmail(e.value.email)}
+      />
       <View tw="h-3" />
       <PaymentElement
         options={{
@@ -104,28 +108,40 @@ const CheckoutForm = () => {
       >
         Submit
       </Button>
-      {message && <Text>{message}</Text>}
+      {message ? <Text tw="pt-4 text-red-500">{message}</Text> : null}
     </View>
   );
 };
 
 export function Checkout() {
   const [options, setOptions] = useState<stripeJs.StripeElementsOptions>();
+  const isDark = useIsDarkMode();
+
   useEffect(() => {
     async function fetchClientSecret() {
       // const res = await axios({
       //   url: "/v1/stripe/secret",
       //   method: "GET",
       // });
-      setOptions({
+      setOptions((p) => ({
+        ...p,
         clientSecret:
           "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
-      });
+      }));
     }
     fetchClientSecret();
   }, []);
 
-  return options ? (
+  useEffect(() => {
+    setOptions((p) => ({
+      ...p,
+      appearance: {
+        theme: isDark ? "night" : "stripe",
+      },
+    }));
+  }, [isDark]);
+
+  return options?.clientSecret ? (
     <Elements stripe={stripePromise} options={options}>
       <CheckoutForm />
     </Elements>
