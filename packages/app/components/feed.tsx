@@ -102,7 +102,7 @@ const FeedList = () => {
 //         }}
 //       >
 //         <Animated.View style={animatedStyleFirstTab}>
-//           <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
+//           <Text tw="text-lg font-bold text-black dark:text-white">
 //             Following
 //           </Text>
 //         </Animated.View>
@@ -121,7 +121,7 @@ const FeedList = () => {
 //         }}
 //       >
 //         <Animated.View style={animatedStyleSecondTab}>
-//           <Text tw="font-space-bold text-lg font-bold text-black dark:text-white">
+//           <Text tw="text-lg font-bold text-black dark:text-white">
 //             For You
 //           </Text>
 //         </Animated.View>

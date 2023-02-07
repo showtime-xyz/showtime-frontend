@@ -72,16 +72,6 @@ const fontMetricsInter = {
   xHeight: 1536,
 };
 
-const fontMetricsSpaceGrotesk = {
-  familyName: "Space Grotesk",
-  capHeight: 700,
-  ascent: 984,
-  descent: -292,
-  lineGap: 0,
-  unitsPerEm: 1000,
-  xHeight: 486,
-};
-
 const textSizes = {
   "text-xs": createTextSize({
     fontSize: 12,
@@ -126,7 +116,7 @@ const textSizes = {
       android: 0.2,
       ios: 0,
     },
-    fontMetrics: fontMetricsSpaceGrotesk,
+    fontMetrics: fontMetricsInter,
   }),
   "text-xl": createTextSize({
     fontSize: 20,
@@ -144,7 +134,7 @@ const textSizes = {
       android: -0.3,
       ios: -0.3,
     },
-    fontMetrics: fontMetricsSpaceGrotesk,
+    fontMetrics: fontMetricsInter,
   }),
   "text-3xl": createTextSize({
     fontSize: 30,

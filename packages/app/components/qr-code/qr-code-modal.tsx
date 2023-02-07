@@ -366,7 +366,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       </View>
 
                       <Text
-                        tw="font-space-bold text-lg text-black dark:text-white"
+                        tw="text-lg text-black dark:text-white"
                         numberOfLines={2}
                       >
                         {nft.token_name}

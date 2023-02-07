@@ -15,7 +15,7 @@ export const PrivacyAndSecuritySettings = () => {
     <ScrollView tw="w-full bg-white dark:bg-black md:bg-transparent">
       {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
       <View tw="mx-auto mt-4 w-full max-w-screen-lg px-4 md:mt-8">
-        <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
+        <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
           Privacy & Security
         </Text>
         <View tw="h-8" />

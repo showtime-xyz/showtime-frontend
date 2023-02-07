@@ -39,7 +39,7 @@ export const Trending = () => {
       <>
         {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
         <View tw="flex-row justify-between bg-white py-2 px-4 dark:bg-black">
-          <Text tw="font-space-bold text-2xl font-extrabold text-gray-900 dark:text-white">
+          <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
             Trending
           </Text>
         </View>

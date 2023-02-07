@@ -187,8 +187,6 @@ export default {
         "./assets/fonts/Inter-Medium.otf",
         "./assets/fonts/Inter-Regular.otf",
         "./assets/fonts/Inter-SemiBold.otf",
-        "./assets/fonts/SpaceGrotesk-Bold.otf",
-        "./assets/fonts/SpaceGrotesk-Regular.otf",
       ],
     ],
     [
