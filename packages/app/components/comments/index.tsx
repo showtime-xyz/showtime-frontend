@@ -97,24 +97,33 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         }
       };
 
-      Alert.alert(
-        "Delete Comment",
-        "Are you sure you want to delete this comment?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: _deleteComment,
-          },
-        ]
-      );
+      return new Promise<void>((resolve) => {
+        Alert.alert(
+          "Delete Comment",
+          "Are you sure you want to delete this comment?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                resolve();
+              },
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => {
+                resolve();
+                _deleteComment();
+              },
+            },
+          ]
+        );
+      });
     },
     [Alert, deleteComment]
   );
+
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
