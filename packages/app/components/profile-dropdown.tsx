@@ -1,14 +1,6 @@
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuItemNativeIcon,
-} from "@showtime-xyz/universal.dropdown-menu";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
@@ -24,6 +16,14 @@ import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { useRudder } from "app/lib/rudderstack";
 import type { Profile } from "app/types";
+
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from "design-system/dropdown-menu";
 
 type Props = {
   user: Profile;
@@ -76,8 +76,12 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           }}
           key="share"
         >
-          <MenuItemIcon Icon={Copy} />
-          <DropdownMenuItemNativeIcon iosIconName="square.and.arrow.up" />
+          <MenuItemIcon
+            Icon={Copy}
+            ios={{
+              name: "square.and.arrow.up",
+            }}
+          />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Share
           </DropdownMenuItemTitle>
@@ -94,11 +98,12 @@ function ProfileDropdown({ user, tw = "" }: Props) {
             });
           }}
         >
-          <MenuItemIcon Icon={Slash} />
-          <DropdownMenuItemNativeIcon
-            iosIconName={isBlocked ? "circle" : "circle.slash"}
+          <MenuItemIcon
+            Icon={Slash}
+            ios={{
+              name: isBlocked ? "circle" : "circle.slash",
+            }}
           />
-
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
@@ -120,8 +125,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           }}
           key="report"
         >
-          <MenuItemIcon Icon={Flag} />
-          <DropdownMenuItemNativeIcon iosIconName="flag" />
+          <MenuItemIcon Icon={Flag} ios={{ name: "flag" }} />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Report
           </DropdownMenuItemTitle>

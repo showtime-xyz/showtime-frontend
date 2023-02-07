@@ -4,17 +4,6 @@ import { Platform, useWindowDimensions } from "react-native";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuItemNativeIcon,
-} from "@showtime-xyz/universal.dropdown-menu";
-import {
   User,
   Settings,
   Edit,
@@ -33,6 +22,16 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Profile } from "app/types";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "design-system/dropdown-menu";
 import { breakpoints } from "design-system/theme";
 
 type HeaderDropdownProps = {
@@ -121,8 +120,12 @@ function HeaderDropdown({
           onSelect={() => router.push("/settings")}
           key="your-settings"
         >
-          <MenuItemIcon Icon={Settings} />
-          <DropdownMenuItemNativeIcon iosIconName="gear" />
+          <MenuItemIcon
+            Icon={Settings}
+            ios={{
+              name: "gear",
+            }}
+          />
 
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Settings
@@ -150,8 +153,12 @@ function HeaderDropdown({
           }}
           key="edit-profile"
         >
-          <MenuItemIcon Icon={Edit} />
-          <DropdownMenuItemNativeIcon iosIconName="square.and.pencil" />
+          <MenuItemIcon
+            Icon={Edit}
+            ios={{
+              name: "square.and.pencil",
+            }}
+          />
 
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Edit Profile
@@ -160,22 +167,23 @@ function HeaderDropdown({
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
-            <MenuItemIcon Icon={isDark ? Moon : Sun} />
-            <DropdownMenuItemNativeIcon
-              iosIconName={isDark ? "moon" : "sun.max"}
+            <MenuItemIcon
+              Icon={isDark ? Moon : Sun}
+              ios={{
+                name: isDark ? "moon" : "sun.max",
+              }}
             />
 
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent tw="w-30">
+          <DropdownMenuSubContent>
             <DropdownMenuItem
               onSelect={() => setColorScheme("light")}
               key="nested-group-1"
             >
-              <MenuItemIcon Icon={Sun} />
-              <DropdownMenuItemNativeIcon iosIconName="sun.max" />
+              <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Light
               </DropdownMenuItemTitle>
@@ -184,8 +192,7 @@ function HeaderDropdown({
               onSelect={() => setColorScheme("dark")}
               key="nested-group-2"
             >
-              <MenuItemIcon Icon={Moon} />
-              <DropdownMenuItemNativeIcon iosIconName="moon" />
+              <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Dark
               </DropdownMenuItemTitle>
@@ -194,8 +201,12 @@ function HeaderDropdown({
               onSelect={() => setColorScheme(null)}
               key="nested-group-3"
             >
-              <MenuItemIcon Icon={DarkMode} />
-              <DropdownMenuItemNativeIcon iosIconName="circle.righthalf.filled" />
+              <MenuItemIcon
+                Icon={DarkMode}
+                ios={{
+                  name: "circle.righthalf.filled",
+                }}
+              />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 System
               </DropdownMenuItemTitle>
@@ -204,9 +215,10 @@ function HeaderDropdown({
         </DropdownMenuSub>
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
-          <MenuItemIcon Icon={LogOut} />
-          <DropdownMenuItemNativeIcon iosIconName="rectangle.portrait.and.arrow.right" />
-
+          <MenuItemIcon
+            Icon={LogOut}
+            ios={{ name: "rectangle.portrait.and.arrow.right" }}
+          />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Sign Out
           </DropdownMenuItemTitle>

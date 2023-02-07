@@ -39,7 +39,7 @@ function Img({
 
 type ImageProps = {
   tw?: TW;
-  alt?: string;
+  alt: string;
   blurhash?: string;
 } & ComponentProps<typeof Img>;
 

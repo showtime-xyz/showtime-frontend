@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
@@ -7,9 +7,12 @@ import type { ColorSchemeName } from "react-native";
 
 import { ColorSchemeContext } from "./context";
 import {
+  deleteDisabledSystemTheme,
   getColorScheme as getPersistedColorScheme,
   setColorScheme as persistColorScheme,
+  setDisabledSystemTheme,
 } from "./store";
+import { getDisabledSystemTheme } from "./store";
 
 export function ColorSchemeProvider({
   children,
@@ -17,11 +20,10 @@ export function ColorSchemeProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
-  const isFollowDeviceSetting = useRef(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
-  const isDark = colorScheme === "dark";
+
   const changeTheme = useCallback((newColorScheme: ColorSchemeName) => {
     if (!newColorScheme) return;
     persistColorScheme(newColorScheme);
@@ -37,13 +39,12 @@ export function ColorSchemeProvider({
       document.body.classList.remove("dark");
     }
   }, []);
-  const themeChangeListener = useCallback(() => {
-    const theme = Appearance.getColorScheme();
-    if (theme && isFollowDeviceSetting.current) {
-      changeTheme(theme);
-    }
-  }, [changeTheme]);
+
   useEffect(() => {
+    const themeChangeListener = () => {
+      const theme = Appearance.getColorScheme();
+      changeTheme(theme && !getDisabledSystemTheme() ? theme : colorScheme);
+    };
     themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
@@ -51,14 +52,14 @@ export function ColorSchemeProvider({
       // @ts-ignore
       appearanceListener.remove();
     };
-  }, [isDark, themeChangeListener]);
+  }, [changeTheme, colorScheme]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       changeTheme(newColorScheme);
-      isFollowDeviceSetting.current = false;
+      setDisabledSystemTheme();
     } else {
-      isFollowDeviceSetting.current = true;
+      deleteDisabledSystemTheme();
       const theme = Appearance.getColorScheme();
       if (theme) {
         changeTheme(theme);
