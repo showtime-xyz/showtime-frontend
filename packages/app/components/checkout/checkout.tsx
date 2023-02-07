@@ -90,7 +90,7 @@ const CheckoutForm = () => {
   };
 
   return (
-    <View tw="p-4" nativeID="payment-form">
+    <View tw="min-h-[380px] justify-end p-4" nativeID="payment-form">
       <LinkAuthenticationElement
         className="PaymentElement"
         onChange={(e) => setEmail(e.value.email)}
@@ -126,7 +126,6 @@ export function Checkout({ paymentIntent }: { paymentIntent: string }) {
       setOptions((p) => ({
         ...p,
         clientSecret:
-          paymentIntent ??
           "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
       }));
     }
