@@ -3320,15 +3320,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capsizecss/core@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@capsizecss/core@npm:3.1.0"
-  dependencies:
-    csstype: ^3.1.1
-  checksum: 5f80c0a67e57fc59e6fec9d316945a5eca3b5dfa812210e2e94a6afdfb22271b726471ca6d5116cc2f66459f257290fdeccadd5f0045faaf357489d153493e06
-  languageName: node
-  linkType: hard
-
 "@capsizecss/core@npm:^3.0.0":
   version: 3.0.0
   resolution: "@capsizecss/core@npm:3.0.0"
@@ -7462,13 +7453,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-menu/menu@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "@react-native-menu/menu@npm:0.7.2"
+"@react-native-menu/menu@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "@react-native-menu/menu@npm:0.7.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: b82402d183a58427cf0cc0dd617a81019e559d828b370f37d2df2690254dfa1e53f4da228e8c63e53d7c29423fd939f9a4b0c2b2930dc7d6cc5fdc5858b523f6
+  checksum: 419b2e500c49248b3cc2202ceda7cdb35008dfc3a4d67becb5a1276a9d306c654eccfa041a1d040b97ebb188478e565c658fa5dee1d7db834a786d67e32461e1
   languageName: node
   linkType: hard
 
@@ -8135,20 +8126,6 @@ __metadata:
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
   checksum: 92cd442805444293d2c8ae21037bdcfaeb2d20656fc7145c7b1bed2a6f65c96ab20cbe6d98505105e89824f3292e3e6ba2b0ad8825cc0bbfad8da5476cdcc90a
-  languageName: node
-  linkType: hard
-
-"@showtime-xyz/universal.activity-indicator@npm:^0.0.54":
-  version: 0.0.54
-  resolution: "@showtime-xyz/universal.activity-indicator@npm:0.0.54"
-  dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.52
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: 34b2f97febe47a7665ffb2beea7687d6fbe9965531680e5afe10eebc2930a56a4d8c06fecd21fbff897337ac0eb8841b4e56bfb1e6f1b5e0c660aa72b78a8b82
   languageName: node
   linkType: hard
 
@@ -8972,20 +8949,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.typography@npm:^0.0.44":
-  version: 0.0.44
-  resolution: "@showtime-xyz/universal.typography@npm:0.0.44"
-  dependencies:
-    "@capsizecss/core": 3.1.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: 0f437f097ad6580393d6d36d483525d309e8b9d4f8207ab7909fd215d8a29024b8a0291e5ed364612da3ead61a63d4c34945553de2609a4345dd92ce1c5591c8
-  languageName: node
-  linkType: hard
-
 "@showtime-xyz/universal.utils@npm:0.0.17, @showtime-xyz/universal.utils@npm:^0.0.17":
   version: 0.0.17
   resolution: "@showtime-xyz/universal.utils@npm:0.0.17"
@@ -9049,7 +9012,7 @@ __metadata:
     "@react-native-community/datetimepicker": ^6.7.1
     "@react-native-community/netinfo": 9.3.5
     "@react-native-community/slider": 4.2.4
-    "@react-native-menu/menu": ^0.7.2
+    "@react-native-menu/menu": ^0.7.3
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native": ^6.1.3
     "@react-navigation/native-stack": ^6.9.1
@@ -9061,7 +9024,6 @@ __metadata:
     "@shopify/flash-list": ^1.4.1
     "@showtime-xyz/date-picker": 0.2.0
     "@showtime-xyz/universal.accordion": ^0.0.80
-    "@showtime-xyz/universal.activity-indicator": ^0.0.54
     "@showtime-xyz/universal.alert": ^0.0.102
     "@showtime-xyz/universal.avatar": ^0.0.73
     "@showtime-xyz/universal.bottom-sheet": ^0.0.90
@@ -9107,7 +9069,6 @@ __metadata:
     "@showtime-xyz/universal.text-input": ^0.0.54
     "@showtime-xyz/universal.toast": ^0.0.97
     "@showtime-xyz/universal.tooltip": ^0.0.93
-    "@showtime-xyz/universal.typography": ^0.0.44
     "@showtime-xyz/universal.utils": ^0.0.17
     "@showtime-xyz/universal.verification-badge": ^0.0.56
     "@showtime-xyz/universal.view": ^0.0.53
@@ -9200,7 +9161,7 @@ __metadata:
     react-native-cronet: ^0.5.0
     react-native-fast-image: 8.6.3
     react-native-gesture-handler: ~2.9.0
-    react-native-ios-context-menu: ^1.15.1
+    react-native-ios-context-menu: ^1.15.3
     react-native-level-fs: ^3.0.0
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.5.1
@@ -9244,7 +9205,7 @@ __metadata:
     uuid: ^8.3.2
     vm-browserify: 1.1.2
     yup: ^0.32.11
-    zeego: canary
+    zeego: ^1.0.2
     zx: 4.3.0
   languageName: unknown
   linkType: soft
@@ -9271,7 +9232,7 @@ __metadata:
     "@radix-ui/react-tooltip": ^1.0.2
     "@radix-ui/react-use-escape-keydown": ^1.0.2
     "@rainbow-me/rainbowkit": ^0.8.1
-    "@react-native-menu/menu": ^0.7.2
+    "@react-native-menu/menu": ^0.7.3
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
     "@sentry/integrations": 7.7.0
@@ -9336,7 +9297,7 @@ __metadata:
     "@react-native-async-storage/async-storage": ~1.17.3
     "@react-native-community/datetimepicker": 6.5.2
     "@react-native-community/slider": 4.2.4
-    "@react-native-menu/menu": ^0.7.2
+    "@react-native-menu/menu": ^0.7.3
     "@react-navigation/bottom-tabs": ^6.4.0
     "@react-navigation/native-stack": ^6.9.1
     "@react-three/fiber": ^8.2.1
@@ -18716,13 +18677,6 @@ __metadata:
   version: 3.1.0
   resolution: "csstype@npm:3.1.0"
   checksum: 644e986cefab86525f0b674a06889cfdbb1f117e5b7d1ce0fc55b0423ecc58807a1ea42ecc75c4f18999d14fc42d1d255f84662a45003a52bb5840e977eb2ffd
-  languageName: node
-  linkType: hard
-
-"csstype@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "csstype@npm:3.1.1"
-  checksum: 1f7b4f5fdd955b7444b18ebdddf3f5c699159f13e9cf8ac9027ae4a60ae226aef9bbb14a6e12ca7dba3358b007cee6354b116e720262867c398de6c955ea451d
   languageName: node
   linkType: hard
 
@@ -32876,6 +32830,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-ios-context-menu@npm:^1.15.3":
+  version: 1.15.3
+  resolution: "react-native-ios-context-menu@npm:1.15.3"
+  dependencies:
+    "@dominicstop/ts-event-emitter": ^1.1.0
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 5c587fe95296b8ae5d93caa98a9816c56425755ba3a113230a8eba70b1eb1e117aa793a1b043e7970eca8d51a32a52695947ffca7555349688bd8723a72df4c6
+  languageName: node
+  linkType: hard
+
 "react-native-level-fs@npm:^3.0.0":
   version: 3.0.1
   resolution: "react-native-level-fs@npm:3.0.1"
@@ -35157,7 +35123,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "showtime@workspace:."
   dependencies:
-    "@react-native-menu/menu": ^0.7.2
     "@trivago/prettier-plugin-sort-imports": ^3.3.0
     "@types/react-native": 0.70.5
     "@typescript-eslint/eslint-plugin": 5.23.0
@@ -40328,9 +40293,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zeego@npm:canary":
-  version: 1.0.0-alpha.20
-  resolution: "zeego@npm:1.0.0-alpha.20"
+"zeego@npm:1.0.2, zeego@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "zeego@npm:1.0.2"
   dependencies:
     "@radix-ui/react-context-menu": ^2.0.1
     "@radix-ui/react-dropdown-menu": ^2.0.1
@@ -40339,7 +40304,7 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-ios-context-menu: ^1.14.0
-  checksum: 9183d77e2a99799f6ae2b86632a18049bd11c9c77e12c3296cc1e302d5a8af30ba66410ec59a1baa4720ec878fb1d5e9dc7499bb3076bd53d872c8e376852ed1
+  checksum: e5a35c25e60df99505a550a2542f8d164a76af743cfbd80c16a4a2f5f68343751c32ad07a376fa60eeedd3a2d0d9ce579063daad1e9dd74e577d6bbca9eecae9
   languageName: node
   linkType: hard
 

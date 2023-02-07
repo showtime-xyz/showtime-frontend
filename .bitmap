@@ -15,12 +15,6 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },
-    "activity-indicator": {
-        "scope": "showtime.universal",
-        "version": "0.0.54",
-        "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/activity-indicator"
-    },
     "alert": {
         "scope": "showtime.universal",
         "version": "0.0.102",
@@ -92,12 +86,6 @@
         "version": "0.0.59",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/divider"
-    },
-    "dropdown-menu": {
-        "scope": "showtime.universal",
-        "version": "0.0.63",
-        "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/dropdown-menu"
     },
     "extensions/react-native-web": {
         "scope": "showtime.universal",
@@ -290,12 +278,6 @@
         "version": "0.0.93",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tooltip"
-    },
-    "typography": {
-        "scope": "showtime.universal",
-        "version": "0.0.44",
-        "mainFile": "index.js",
-        "rootDir": "packages/design-system/typography"
     },
     "utils": {
         "scope": "showtime.universal",

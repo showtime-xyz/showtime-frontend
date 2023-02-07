@@ -1,16 +1,6 @@
-import { useMemo, ComponentType } from "react";
+import { useMemo } from "react";
 import { Linking, Platform } from "react-native";
 
-import { SvgProps } from "react-native-svg";
-
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuItemNativeIcon,
-} from "@showtime-xyz/universal.dropdown-menu";
 import {
   MoreHorizontal,
   UserMinus,
@@ -26,7 +16,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { colors, TW } from "@showtime-xyz/universal.tailwind";
+import { TW } from "@showtime-xyz/universal.tailwind";
 
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -44,11 +34,16 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
 import { isMobileWeb, isAndroid } from "app/utilities";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from "design-system/dropdown-menu";
 import { OpenSea } from "design-system/icon";
 
-const MenuItemIcon = ({ Icon, ...rest }: { Icon: ComponentType<SvgProps> }) => {
-  return <Icon width="1em" height="1em" color={colors.gray[500]} {...rest} />;
-};
+import { MenuItemIcon } from "./dropdown/menu-item-icon";
 
 type Props = {
   nft: NFT;
@@ -129,8 +124,12 @@ function NFTDropdown({
               }}
               key="hide"
             >
-              <MenuItemIcon Icon={EyeOff} />
-              <DropdownMenuItemNativeIcon iosIconName="eye.slash" />
+              <MenuItemIcon
+                Icon={EyeOff}
+                ios={{
+                  name: "eye.slash",
+                }}
+              />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Hide
@@ -145,8 +144,7 @@ function NFTDropdown({
               }}
               key="unhide"
             >
-              <MenuItemIcon Icon={EyeOff} />
-              <DropdownMenuItemNativeIcon iosIconName="eye" />
+              <MenuItemIcon Icon={EyeOff} ios={{ name: "eye" }} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unhide
               </DropdownMenuItemTitle>
@@ -168,8 +166,12 @@ function NFTDropdown({
               }}
               key="update"
             >
-              <MenuItemIcon Icon={Edit} />
-              <DropdownMenuItemNativeIcon iosIconName="square.and.pencil" />
+              <MenuItemIcon
+                Icon={Edit}
+                ios={{
+                  name: "square.and.pencil",
+                }}
+              />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Update
               </DropdownMenuItemTitle>
@@ -192,9 +194,11 @@ function NFTDropdown({
               }}
               key="open-in-app"
             >
-              <MenuItemIcon Icon={Showtime} />
-              <DropdownMenuItemNativeIcon
-                iosIconName={isBlocked ? "circle" : "circle.slash"}
+              <MenuItemIcon
+                Icon={Showtime}
+                ios={{
+                  name: isBlocked ? "circle" : "circle.slash",
+                }}
               />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
@@ -207,9 +211,12 @@ function NFTDropdown({
             nft.multiple_owners_list.length > 0 &&
             nft.contract_address && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
-                <MenuItemIcon Icon={OpenSea} />
-                <DropdownMenuItemNativeIcon iosIconName="arrow.right" />
-
+                <MenuItemIcon
+                  Icon={OpenSea}
+                  ios={{
+                    name: "arrow.right",
+                  }}
+                />
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   View on OpenSea
                 </DropdownMenuItemTitle>
@@ -231,9 +238,12 @@ function NFTDropdown({
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-                <MenuItemIcon Icon={Copy} />
-                <DropdownMenuItemNativeIcon iosIconName="square.and.arrow.up" />
-
+                <MenuItemIcon
+                  Icon={Copy}
+                  ios={{
+                    name: "square.and.arrow.up",
+                  }}
+                />
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                   {isShareAPIAvailable ? "Share" : "Copy Link"}
                 </DropdownMenuItemTitle>
@@ -266,8 +276,12 @@ function NFTDropdown({
             }}
             key="qr-code"
           >
-            <MenuItemIcon Icon={QrCode} />
-            <DropdownMenuItemNativeIcon iosIconName="qrcode" />
+            <MenuItemIcon
+              Icon={QrCode}
+              ios={{
+                name: "qrcode",
+              }}
+            />
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               QR Code
             </DropdownMenuItemTitle>
@@ -278,8 +292,12 @@ function NFTDropdown({
               onSelect={() => refreshMetadata(nft)}
               key="refresh-metadata"
             >
-              <MenuItemIcon Icon={Refresh} />
-              <DropdownMenuItemNativeIcon iosIconName="arrow.triangle.2.circlepath" />
+              <MenuItemIcon
+                Icon={Refresh}
+                ios={{
+                  name: "arrow.triangle.2.circlepath",
+                }}
+              />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Refresh Metadata
@@ -299,8 +317,12 @@ function NFTDropdown({
               }}
               key="unfollow"
             >
-              <MenuItemIcon Icon={UserMinus} />
-              <DropdownMenuItemNativeIcon iosIconName="person.fill.badge.plus" />
+              <MenuItemIcon
+                Icon={UserMinus}
+                ios={{
+                  name: "person.fill.badge.plus",
+                }}
+              />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Unfollow User
@@ -320,11 +342,12 @@ function NFTDropdown({
                 })
               }
             >
-              <MenuItemIcon Icon={Slash} />
-              <DropdownMenuItemNativeIcon
-                iosIconName={isBlocked ? "circle" : "circle.slash"}
+              <MenuItemIcon
+                Icon={Slash}
+                ios={{
+                  name: isBlocked ? "circle" : "circle.slash",
+                }}
               />
-
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 {isBlocked ? "Unblock User" : "Block User"}
               </DropdownMenuItemTitle>
@@ -349,9 +372,12 @@ function NFTDropdown({
               }}
               key="report"
             >
-              <MenuItemIcon Icon={Flag} />
-
-              <DropdownMenuItemNativeIcon iosIconName="flag" />
+              <MenuItemIcon
+                Icon={Flag}
+                ios={{
+                  name: "flag",
+                }}
+              />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Report
               </DropdownMenuItemTitle>
