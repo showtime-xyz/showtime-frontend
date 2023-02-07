@@ -86,7 +86,6 @@
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
     "react-native-screens": "3.19.0",
-    "@showtime-xyz/universal.color-scheme": "^0.0.43",
     "react-native-mmkv": "2.5.1"
   },
   "react-native": {
