@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -69,6 +71,17 @@ const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
 
   return (
     <View tw="p-4">
+      {paidDropPlansQuery.isLoading ? (
+        <View>
+          <Skeleton width="100%" height={46} />
+          <View tw="h-4" />
+          <Skeleton width="100%" height={46} />
+          <View tw="h-4" />
+          <Skeleton width="100%" height={46} />
+        </View>
+      ) : paidDropPlansQuery.error ? (
+        <ErrorText>Something went wrong. Please try again</ErrorText>
+      ) : null}
       {paidDropPlansQuery.data?.map((plan) => {
         return (
           <Pressable
