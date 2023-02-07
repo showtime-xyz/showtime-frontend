@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo, useState, useRef } from "react";
-import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -8,7 +7,6 @@ import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
-import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { formatNumber } from "app/utilities";
 
@@ -56,7 +54,6 @@ function CommentRowComponent({
   //#endregion
 
   //#region hooks
-  const { dispatch } = useNavigation();
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
@@ -134,18 +131,9 @@ function CommentRowComponent({
     },
     [reply, comment]
   );
-  const handleOnUserPress = useCallback((username: string) => {
-    if (Platform.OS === "web") {
-      router.replace(`/@${username}`);
-    } else {
-      dispatch(
-        StackActions.replace("profile", {
-          username: username,
-        })
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleOnUserPress = (username: string) => {
+    router.push(`/@${username}`);
+  };
   //#endregion
   return (
     <>
