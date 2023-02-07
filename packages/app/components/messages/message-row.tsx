@@ -189,15 +189,14 @@ export function MessageRow({
   }, [onUserPress, username]);
 
   const renderLeftActions = useCallback(() => {
-    if (!onDeletePress) return null;
     return (
       <View tw="h-[96%] flex-1 items-end justify-center bg-red-500 px-3">
-        <Button variant="text" tw="px-0 font-thin">
+        <Button variant="text" tw="px-0 font-thin" style={{ padding: 0 }}>
           <Trash color="white" stroke="white" />
         </Button>
       </View>
     );
-  }, [onDeletePress]);
+  }, []);
 
   return (
     <Swipeable
@@ -206,6 +205,7 @@ export function MessageRow({
       onSwipeableOpen={deleteComment}
       friction={2}
       rightThreshold={80}
+      enabled={onDeletePress && Platform.OS !== "web"}
     >
       <View tw="flex flex-row items-start bg-white px-4 py-1 dark:bg-black">
         {hasParent && <View tw="ml-4" collapsable={true} />}
@@ -228,7 +228,7 @@ export function MessageRow({
           </Link>
         </View>
         <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
-          <Text tw="pr-7 text-xs text-gray-900 dark:text-gray-100">
+          <Text tw="web:pr-12 pr-7 text-xs text-gray-900 dark:text-gray-100">
             <Link href={`/@${username || address}`}>
               <View tw="mr-3 flex-row items-center">
                 <Text
@@ -265,7 +265,9 @@ export function MessageRow({
               </Text>
             </View>
 
-            <View tw={"flex-1 flex-row items-center justify-end  px-0"}>
+            <View
+              tw={"flex-1 flex-row items-center justify-end space-x-3 px-0"}
+            >
               <Button
                 variant="text"
                 tw="items-center justify-center px-0 py-0"
@@ -275,10 +277,21 @@ export function MessageRow({
                     : [colors.gray[500], colors.gray[500]]
                 }
                 onPress={onLikePress}
+                style={{ padding: 0 }}
               >
                 {likedByMe ? <HeartFilled /> : <Heart />}
                 <Text tw="text-sm text-[12px]">{` ${likeCount}`}</Text>
               </Button>
+              {Platform.OS === "web" && onDeletePress ? (
+                <Button
+                  variant="text"
+                  tw="px-0 font-thin"
+                  onPress={onDeletePress}
+                  style={{ padding: 0 }}
+                >
+                  <Trash />
+                </Button>
+              ) : null}
             </View>
           </View>
         </View>
