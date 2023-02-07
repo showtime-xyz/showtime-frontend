@@ -329,8 +329,6 @@ module.exports = {
         copy: "copy",
       },
       fontFamily: {
-        space: "var(--font-space-grotesk)",
-        "space-bold": "var(--font-space-grotesk)",
         inter: "var(--font-inter)",
         "inter-semibold": "var(--font-inter)",
         "inter-bold": "var(--font-inter)",
@@ -374,12 +372,12 @@ module.exports = {
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],
-          fontFamily: "var(--font-space-grotesk)",
+          fontWeight: "bold",
         },
         ".text-xl": textSizes["text-xl"],
         ".text-2xl": {
           ...textSizes["text-2xl"],
-          fontFamily: "var(--font-space-grotesk)",
+          fontWeight: "bold",
         },
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],

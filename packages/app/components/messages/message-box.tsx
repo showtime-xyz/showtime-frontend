@@ -88,7 +88,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             placeholderTextColor={isDark ? colors.gray[400] : colors.gray[500]}
             multiline={true}
             keyboardType="twitter"
-            tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-base text-black dark:bg-gray-900 dark:text-white"
+            tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-sm text-black dark:bg-gray-900 dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
@@ -105,12 +105,21 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           iconOnly={true}
           disabled={disable}
           onPress={handleSubmit}
-          style={{ opacity: disable ? 0.4 : 1 }}
+          style={{
+            opacity: 1,
+            width: 42,
+            height: 42,
+            backgroundColor: colors.gray[100],
+          }}
         >
           {submitting ? (
-            <Spinner size="small" />
+            <Spinner size="small" color={colors.gray[500]} />
           ) : (
-            <Send width={24} height={24} />
+            <Send
+              width={20}
+              height={20}
+              color={disable ? colors.gray[300] : colors.gray[800]}
+            />
           )}
         </Button>
       </View>

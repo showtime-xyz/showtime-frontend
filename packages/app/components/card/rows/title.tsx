@@ -39,7 +39,7 @@ export function Title({ title, disableTooltip = false }: Props) {
         <Tooltip.Root>
           <Tooltip.Trigger>
             <Text
-              tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
+              tw="text-lg !leading-8 text-black dark:text-white"
               numberOfLines={1}
             >
               {title}
@@ -51,7 +51,7 @@ export function Title({ title, disableTooltip = false }: Props) {
         </Tooltip.Root>
       ) : (
         <Text
-          tw="font-space-bold text-lg !leading-8 text-black dark:text-white"
+          tw="text-lg !leading-8 text-black dark:text-white"
           numberOfLines={1}
         >
           {title}

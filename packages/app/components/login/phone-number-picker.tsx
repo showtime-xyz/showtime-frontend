@@ -223,7 +223,7 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         ) : (
           <Text
             onPress={onPressTitle}
-            tw="font-space-bold px-4 py-3.5 text-lg font-bold dark:text-white"
+            tw="px-4 py-3.5 text-lg font-bold dark:text-white"
           >
             {title}
           </Text>

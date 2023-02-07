@@ -1,4 +1,4 @@
-import { Button } from "@showtime-xyz/universal.button";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 interface MessageMoreProps {
@@ -10,12 +10,12 @@ export function MessageMore({ count = 0, onPress }: MessageMoreProps) {
   if (count === 0) {
     return null;
   }
-  const replayText = count > 1 ? "replies" : "reply";
+  const replyText = count > 1 ? "Show more replies" : "Show reply";
   return (
-    <View tw="flex bg-white pl-12 dark:bg-black">
-      <Button variant="text" tw="justify-start self-start" onPress={onPress}>
-        {`Load more ${replayText} (${count})`}
-      </Button>
+    <View tw="-mt-2 mb-5 ml-1 flex bg-white pl-14 dark:bg-black">
+      <Text tw="text-xs font-bold dark:text-white" onPress={onPress}>
+        {`${replyText} (${count})`}
+      </Text>
     </View>
   );
 }

@@ -34,7 +34,7 @@ import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
-import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
@@ -43,12 +43,9 @@ import {
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
-import { useShare } from "app/hooks/use-share";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { linkifyDescription } from "app/lib/linkify";
-import { useRudder } from "app/lib/rudderstack";
 import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
 
 export const ClaimForm = ({
@@ -58,23 +55,18 @@ export const ClaimForm = ({
   edition: CreatorEditionResponse;
   password?: string;
 }) => {
-  const { rudder } = useRudder();
   const { state } = useContext(ClaimContext);
 
   const isDark = useIsDarkMode();
-  const { claimNFT, onReconnectWallet } = useClaimNFT(
-    edition.creator_airdrop_edition
-  );
+  const { claimNFT } = useClaimNFT(edition.creator_airdrop_edition);
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
     edition.creator_airdrop_edition
   );
 
-  const share = useShare();
   const router = useRouter();
   const { user, isIncompletedProfile } = useUser();
 
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
-  const { isMagic } = useWeb3();
   const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -84,10 +76,6 @@ export const ClaimForm = ({
   const redirectToClaimDrop = useRedirectToClaimDrop();
 
   const { newComment } = useComments(nft?.data?.item?.nft_id);
-
-  const { data: creatorProfile } = useUserProfile({
-    address: nft?.data.item.creator_address,
-  });
 
   const { follow } = useMyInfo();
   const { mutate } = useCreatorCollectionDetail(
@@ -206,13 +194,7 @@ export const ClaimForm = ({
   // }, [web3]);
 
   if (isIncompletedProfile) {
-    return (
-      <CompleteProfileModalContent
-        title="Just one more step"
-        description="You need complete your profile to collect drops. It only takes about 1 min"
-        cta="Complete Profile"
-      />
-    );
+    return <CompleteProfileModalContent />;
   }
 
   if (state.status === "share") {
@@ -241,15 +223,16 @@ export const ClaimForm = ({
     <BottomSheetScrollView ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
-          <Media
-            isMuted
-            item={nft?.data.item}
-            sizeStyle={{
-              width: 80,
-              height: 80,
-              borderRadius: 16,
-            }}
-          />
+          <View tw="overflow-hidden rounded-2xl">
+            <Media
+              isMuted
+              item={nft?.data.item}
+              sizeStyle={{
+                width: 80,
+                height: 80,
+              }}
+            />
+          </View>
           <View tw="ml-4 flex-1">
             <Text
               tw="text-xl font-bold text-black dark:text-white"

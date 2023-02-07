@@ -174,13 +174,7 @@ export const DropPrivate = () => {
   );
 
   if (user.isIncompletedProfile) {
-    return (
-      <CompleteProfileModalContent
-        title="Just one more step"
-        description="You need complete your profile to create drops. It only takes about 1 min"
-        cta="Complete Profile"
-      />
-    );
+    return <CompleteProfileModalContent />;
   }
 
   if (state.status === "success") {

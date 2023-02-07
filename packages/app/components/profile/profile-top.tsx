@@ -335,7 +335,7 @@ export const ProfileTop = ({
             <View tw="flex-row items-start justify-between">
               <View tw="flex-1">
                 <Text
-                  tw="font-space-bold max-w-45 text-2xl font-extrabold text-gray-900 dark:text-white"
+                  tw="max-w-45 text-2xl font-extrabold text-gray-900 dark:text-white"
                   numberOfLines={2}
                 >
                   {name}

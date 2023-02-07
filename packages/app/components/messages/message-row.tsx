@@ -3,14 +3,8 @@ import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 
-import { Button, TextButton } from "@showtime-xyz/universal.button";
-import {
-  HeartFilled,
-  Heart,
-  MessageFilled,
-  Message,
-} from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { Button } from "@showtime-xyz/universal.button";
+import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -58,6 +52,11 @@ interface MessageRowProps {
    */
   likedByMe?: boolean;
   /**
+   * Defines whether the reply is the last or not.
+   * @default undefined
+   */
+  isLastReply?: boolean;
+  /**
    * Defines whether the message replied by the customer or not.
    * @default undefined
    */
@@ -81,7 +80,7 @@ interface MessageRowProps {
    * Defines the message replies count.
    * @default undefined
    */
-  replayCount?: number | string;
+  replyCount?: number;
   /**
    * Defines the message creation date.
    * @default undefined
@@ -121,11 +120,12 @@ export function MessageRow({
   userVerified = false,
   content = "",
   likeCount = 0,
-  replayCount,
+  //replyCount,
   createdAt,
-  position,
+  //position,
   hasParent,
-  hasReplies,
+  //hasReplies,
+  isLastReply,
   likedByMe,
   // eslint-disable-next-line unused-imports/no-unused-vars
   repliedByMe,
@@ -135,8 +135,6 @@ export function MessageRow({
   onTagPress,
   onUserPress,
 }: MessageRowProps) {
-  const router = useRouter();
-
   //#region variables
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
@@ -152,45 +150,19 @@ export function MessageRow({
       addSuffix: true,
     });
   }, [createdAt]);
+
   const contentWithTags = useMemo(() => {
-    return onTagPress ? linkifyDescription(content) : content;
+    return onTagPress
+      ? linkifyDescription(
+          content,
+          "font-bold text-xs text-gray-900 dark:text-gray-100"
+        )
+      : content;
   }, [content, onTagPress]);
+
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);
-  //#endregion
-
-  //#region styles
-  const replyVerticalLineTW = useMemo(
-    () => [
-      "absolute",
-      "w-[1px]",
-      "bg-[#27272A]",
-      hasReplies
-        ? "top-4 bottom-[-16px]"
-        : position !== "last"
-        ? "top-[-16px] bottom-[-16px]"
-        : "top-[-16px] h-4",
-      hasReplies ? "left-1/2" : "left--5",
-    ],
-    [hasReplies, position]
-  );
-  const replyHorizontalLineTW = useMemo(
-    () => ["absolute", "left--5 right-0"],
-    []
-  );
-  const replyHorizontalLineStyle = useMemo(
-    () => ({
-      borderBottomLeftRadius: 12,
-      borderBottomWidth: position === "last" ? 1 : 0,
-      borderLeftWidth: position === "last" ? 1 : 0,
-      top: position !== "last" ? 12 : 0,
-      height: position === "last" ? 12 : hasParent ? 1 : 0,
-      backgroundColor: position !== "last" ? "#27272A" : undefined,
-      borderColor: "#27272A",
-    }),
-    [position, hasParent]
-  );
   //#endregion
 
   const handleOnPressUser = useCallback(() => {
@@ -200,55 +172,67 @@ export function MessageRow({
   }, [onUserPress, username]);
 
   return (
-    <View tw="flex flex-row bg-white py-4 dark:bg-black">
+    <View tw="flex flex-row items-start bg-white px-4 py-1 dark:bg-black">
       {hasParent && <View tw="ml-4" collapsable={true} />}
-      <View tw="items-center">
-        {(hasReplies || hasParent) && (
-          <>
-            <View tw={replyHorizontalLineTW} style={replyHorizontalLineStyle} />
-            <View tw={replyVerticalLineTW} />
-          </>
-        )}
-        <Link href={`/@${username || address}`}>
+      <View tw="justify-start">
+        <Link href={`/@${username || address}`} tw="-mt-1 -mb-1">
           <Button
             variant="secondary"
             size="small"
-            tw="h-[24px] w-[24px]"
+            tw="h-[20px] w-[20px]"
             onPress={handleOnPressUser}
             iconOnly
           >
             <AvatarHoverCard
               url={userAvatar}
-              size={24}
+              size={20}
               username={username || address}
               alt="MessageRow Avatar"
             />
           </Button>
         </Link>
       </View>
-      <View tw="ml-2 flex-1">
-        <Link href={`/@${username || address}`}>
-          <View tw="mb-3 h-[12px] flex-row items-center">
-            <Text
-              tw="text-13 font-semibold text-gray-900 dark:text-white"
-              onPress={handleOnPressUser}
-            >
-              @{userNameText}
-            </Text>
-            {userVerified ? (
-              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-            ) : null}
-          </View>
-        </Link>
-
-        <Text tw="text-13 text-gray-900 dark:text-gray-100">
+      <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
+        <Text tw="text-xs text-gray-900 dark:text-gray-100">
+          <Link href={`/@${username || address}`}>
+            <View tw="mr-3 flex-row items-center">
+              <Text
+                tw="text-xs font-bold text-gray-900 dark:text-white"
+                onPress={handleOnPressUser}
+              >
+                {userNameText}
+              </Text>
+              {userVerified ? (
+                <VerificationBadge
+                  style={{
+                    marginLeft: 4,
+                    position: "absolute",
+                    left: "100%",
+                  }}
+                  size={11}
+                />
+              ) : null}
+            </View>
+          </Link>
+          {userVerified ? <View tw="w-3" /> : null}
           {contentWithTags}
         </Text>
 
-        <View tw="ml--2 mt-2 mb--2 flex-row">
+        <View tw={"flex-row space-x-3"}>
+          <View tw="justify-center py-0">
+            {createdAtText && (
+              <Text tw="text-[10px] text-gray-500">{`${createdAtText}`}</Text>
+            )}
+          </View>
+          <View tw="justify-center py-0">
+            <Text tw="px-0 text-[10px] text-gray-500" onPress={onReplyPress}>
+              Reply
+            </Text>
+          </View>
+
           <Button
             variant="text"
-            tw="px-2"
+            tw="px-0 py-0"
             accentColor={
               likedByMe
                 ? [colors.black, colors.white]
@@ -259,52 +243,15 @@ export function MessageRow({
             {likedByMe ? <HeartFilled /> : <Heart />}
             {` ${likeCount}`}
           </Button>
-          {replayCount != undefined ? (
-            <TextButton
-              tw="px-2"
-              accentColor={
-                // TODO: use `repliedByMe` when this is available.
-                replayCount > 0
-                  ? [colors.black, colors.white]
-                  : [colors.gray[500], colors.gray[500]]
-              }
-              onPress={onReplyPress}
-            >
-              {
-                // TODO: use `repliedByMe` when this is available.
-                replayCount > 0 ? <MessageFilled /> : <Message />
-              }
-              {` ${replayCount}`}
-            </TextButton>
-          ) : (
-            <TextButton
-              tw="px-2"
-              accentColor={
-                // TODO: use `repliedByMe` when this is available.
-                [colors.gray[500], colors.gray[500]]
-              }
-              onPress={onReplyPress}
-            >
-              {
-                // TODO: use `repliedByMe` when this is available.
-                <Message />
-              }
-            </TextButton>
-          )}
-          <View
-            tw={[
-              "flex-1 flex-row items-center justify-end",
-              onDeletePress ? "mr--3" : "",
-            ]}
-          >
-            {createdAtText && (
-              <Text tw="text-xs font-bold text-gray-500">
-                {`${createdAtText}${onDeletePress ? "  •" : ""}`}
-              </Text>
-            )}
+
+          <View tw={"flex-1 flex-row items-center justify-end px-0"}>
             {onDeletePress && (
-              <Button variant="text" tw="ml--1.5" onPress={onDeletePress}>
-                Delete
+              <Button
+                variant="text"
+                onPress={onDeletePress}
+                tw="px-0 font-thin"
+              >
+                <Trash />
               </Button>
             )}
           </View>

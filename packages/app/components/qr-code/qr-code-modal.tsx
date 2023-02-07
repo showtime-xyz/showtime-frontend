@@ -129,7 +129,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     checkInstalled();
   }, []);
 
-  const size = windowWidth >= 768 ? 400 : windowWidth - 40;
+  const size = windowWidth >= 768 ? 300 : windowWidth - 40;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -222,11 +222,11 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     Linking.openURL(
       getTwitterIntent({
         url: qrCodeUrl.toString(),
-        message: `I just collected a free drop "${
+        message: `Just collected "${
           nft?.token_name
         }" by ${getTwitterIntentUsername(
           creatorProfile?.data?.profile
-        )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
+        )} on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
       })
     );
   }, [creatorProfile?.data?.profile, nft?.token_name, qrCodeUrl]);
@@ -366,7 +366,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       </View>
 
                       <Text
-                        tw="font-space-bold text-lg text-black dark:text-white"
+                        tw="text-lg text-black dark:text-white"
                         numberOfLines={2}
                       >
                         {nft.token_name}

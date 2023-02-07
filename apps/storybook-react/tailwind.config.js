@@ -331,8 +331,6 @@ module.exports = {
         copy: "copy",
       },
       fontFamily: {
-        space: fontFamily("SpaceGrotesk-Regular"),
-        "space-bold": fontFamily("SpaceGrotesk-Bold"),
         inter: fontFamily("Inter-Regular"),
         "inter-semibold": fontFamily("Inter-SemiBold"),
         "inter-bold": fontFamily("Inter-Bold"),
@@ -376,12 +374,12 @@ module.exports = {
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: fontFamily("Inter-Bold"),
         },
         ".text-xl": textSizes["text-xl"],
         ".text-2xl": {
           ...textSizes["text-2xl"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: fontFamily("Inter-Bold"),
         },
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],

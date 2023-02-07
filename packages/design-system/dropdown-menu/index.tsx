@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo, useCallback } from "react";
+import { ComponentProps, useMemo, useCallback, Fragment } from "react";
 import { Platform } from "react-native";
 
 import { MotiView } from "moti";
@@ -269,12 +269,8 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
   "ItemIcon"
 );
 
-const DropdownMenuItemNativeIcon = DropdownMenu.menuify(() => {
-  if (Platform.OS === "web") {
-    return <></>;
-  }
-  return DropdownMenu.ItemIcon;
-}, "ItemIcon");
+const DropdownMenuItemNativeIcon =
+  Platform.OS === "web" ? Fragment : DropdownMenu.ItemIcon;
 
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 
