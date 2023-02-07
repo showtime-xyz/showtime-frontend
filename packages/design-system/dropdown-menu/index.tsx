@@ -270,7 +270,7 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemNativeIcon =
-  Platform.OS === "web" ? Fragment : DropdownMenu.ItemIcon;
+  Platform.OS === "web" ? () => <Fragment /> : DropdownMenu.ItemIcon;
 
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 

@@ -281,6 +281,7 @@ const SuggestedUsers = () => {
               width={144}
               height={42}
               tw="duration-150 hover:scale-105"
+              alt="App Store"
             />
           </TextLink>
           <TextLink
@@ -297,6 +298,7 @@ const SuggestedUsers = () => {
               width={144}
               height={42}
               tw="duration-150 hover:scale-105"
+              alt="Google Play"
             />
           </TextLink>
         </View>

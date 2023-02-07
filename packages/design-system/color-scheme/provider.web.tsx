@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
@@ -17,11 +17,11 @@ export function ColorSchemeProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
-  const isFollowDeviceSetting = useRef(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
   const isDark = colorScheme === "dark";
+
   const changeTheme = useCallback((newColorScheme: ColorSchemeName) => {
     if (!newColorScheme) return;
     persistColorScheme(newColorScheme);
@@ -37,28 +37,33 @@ export function ColorSchemeProvider({
       document.body.classList.remove("dark");
     }
   }, []);
+
   const themeChangeListener = useCallback(() => {
     const theme = Appearance.getColorScheme();
-    if (theme && isFollowDeviceSetting.current) {
+    const disabledSystemTheme = localStorage.getItem("disabledSystemTheme");
+
+    if (theme && !disabledSystemTheme) {
       changeTheme(theme);
+    } else {
+      changeTheme(colorScheme);
     }
-  }, [changeTheme]);
+  }, [changeTheme, colorScheme]);
+
   useEffect(() => {
     themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
     return () => {
-      // @ts-ignore
       appearanceListener.remove();
     };
-  }, [isDark, themeChangeListener]);
+  }, [changeTheme, colorScheme, isDark, themeChangeListener]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       changeTheme(newColorScheme);
-      isFollowDeviceSetting.current = false;
+      localStorage.setItem("disabledSystemTheme", "true");
     } else {
-      isFollowDeviceSetting.current = true;
+      localStorage.removeItem("disabledSystemTheme");
       const theme = Appearance.getColorScheme();
       if (theme) {
         changeTheme(theme);
