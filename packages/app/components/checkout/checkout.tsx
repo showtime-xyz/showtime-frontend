@@ -113,7 +113,7 @@ const CheckoutForm = () => {
   );
 };
 
-export function Checkout() {
+export function Checkout({ paymentIntent }: { paymentIntent: string }) {
   const [options, setOptions] = useState<stripeJs.StripeElementsOptions>();
   const isDark = useIsDarkMode();
 
@@ -126,11 +126,12 @@ export function Checkout() {
       setOptions((p) => ({
         ...p,
         clientSecret:
+          paymentIntent ??
           "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
       }));
     }
     fetchClientSecret();
-  }, []);
+  }, [paymentIntent]);
 
   useEffect(() => {
     setOptions((p) => ({

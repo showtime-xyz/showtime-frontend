@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -6,29 +6,70 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Checkout } from "app/components/checkout";
-
-const plans = [
-  {
-    name: "50 edition drop",
-    price: "$3.99",
-  },
-  {
-    label: "Most Popular",
-    name: "100 edition drop",
-    price: "$5.99",
-  },
-  {
-    name: "1000 edition drop",
-    price: "$9.99",
-  },
-];
+import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
+import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 
 export const CheckoutModal = () => {
-  const [selectedPlan, setSelectedPlan] = useState<any>(plans[1]);
-  const [nextStep, setNextStep] = useState<"plan" | "checkout">("plan");
-  return nextStep === "plan" ? (
+  const [paymentIntent, setPaymentIntent] = useState(null);
+
+  return paymentIntent ? (
+    <Checkout paymentIntent={paymentIntent} />
+  ) : (
+    <SelectPlan setPaymentIntent={setPaymentIntent} />
+  );
+};
+
+const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
+  const paidDropPlansQuery = usePaidDropPlans();
+  const [selectedPlan, setSelectedPlan] = useState<DropPlan | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const onSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      try {
+        const res = await axios({
+          method: "POST",
+          url: "/v1/payments/start",
+          data: {
+            payment_plan: selectedPlan?.name,
+          },
+        });
+        setPaymentIntent(res.payment_intent_id);
+      } catch (e) {
+        // There is an existing payment intent for this user
+        if (e?.response?.data?.error.code === 400) {
+          const res = await axios({
+            method: "POST",
+            url: "/v1/payments/resume",
+          });
+
+          setPaymentIntent(res.payment_intent_id);
+        } else {
+          throw e;
+        }
+      }
+    } catch (e) {
+      setError(e?.response?.data?.error.message ?? "Something went wrong");
+      Logger.error("Payment intent fetch failed ", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Sets initial selected plan
+    if (paidDropPlansQuery.data && selectedPlan === null) {
+      setSelectedPlan(paidDropPlansQuery.data[1]);
+    }
+  }, [paidDropPlansQuery?.data, selectedPlan]);
+
+  return (
     <View tw="p-4">
-      {plans.map((plan) => {
+      {paidDropPlansQuery.data?.map((plan) => {
         return (
           <Pressable
             key={plan.name}
@@ -48,7 +89,7 @@ export const CheckoutModal = () => {
                   selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
                 } text-gray-900`}
               >
-                {plan.name}
+                {plan.edition_size} edition drop
               </Text>
             </View>
             <Text
@@ -56,7 +97,7 @@ export const CheckoutModal = () => {
                 selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
               } text-gray-900`}
             >
-              {plan.price}
+              ${plan.pricing}
             </Text>
           </Pressable>
         );
@@ -73,15 +114,12 @@ export const CheckoutModal = () => {
           collectibles to people who are new to web3!
         </Text>
       </View>
-      <Button
-        onPress={() => {
-          setNextStep("checkout");
-        }}
-      >
-        Let's go
+      <Button onPress={onSubmit} disabled={loading}>
+        <Text tw="font-semibold text-gray-50 dark:text-gray-900">
+          {loading ? "Loading..." : "Let's go"}
+        </Text>
       </Button>
+      {error ? <Text tw="text-red-500">{error}. Please retry</Text> : null}
     </View>
-  ) : (
-    <Checkout />
   );
 };
