@@ -138,9 +138,16 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         unlikeComment={unlikeComment}
         deleteComment={handleOnDeleteComment}
         reply={handleOnReply}
+        creatorId={nft.creator_id}
       />
     ),
-    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
+    [
+      likeComment,
+      unlikeComment,
+      handleOnDeleteComment,
+      handleOnReply,
+      nft.creator_id,
+    ]
   );
 
   const listEmptyComponent = useCallback(

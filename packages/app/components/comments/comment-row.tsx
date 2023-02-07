@@ -18,6 +18,7 @@ interface CommentRowProps {
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
   reply?: (comment: CommentType) => void;
+  creatorId?: number;
 }
 
 const REPLIES_PER_BATCH = 2;
@@ -29,6 +30,7 @@ function CommentRowComponent({
   unlikeComment,
   deleteComment,
   reply,
+  creatorId,
 }: CommentRowProps) {
   /**
    * we used memo, so needs to add this hooks to here,
@@ -60,24 +62,34 @@ function CommentRowComponent({
   //#endregion
 
   //#region variables
+  const isDropCreator = useMemo(
+    () => creatorId === user?.data.profile.profile_id,
+    [creatorId, user?.data.profile.profile_id]
+  );
+
   const repliesCount = comment.replies?.length ?? 0;
+
   const replies = useMemo(
     () =>
       repliesCount > 0 ? comment.replies!.slice(0, displayedRepliesCount) : [],
     [comment.replies, repliesCount, displayedRepliesCount]
   );
+
   const isMyComment = useMemo(
     () => user?.data.profile.profile_id === comment.commenter_profile_id,
     [user, comment.commenter_profile_id]
   );
+
   const isRepliedByMe = useMemo(
     () => user?.data.comments.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+
   const isLikedByMe = useMemo(
     () => user?.data.likes_comment.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+
   const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
@@ -158,7 +170,9 @@ function CommentRowComponent({
         createdAt={comment.added}
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
-        onDeletePress={isMyComment ? handleOnDeletePress : undefined}
+        onDeletePress={
+          isMyComment || isDropCreator ? handleOnDeletePress : undefined
+        }
         onReplyPress={handleOnReplyPress}
         onTagPress={handleOnUserPress}
         onUserPress={handleOnUserPress}
