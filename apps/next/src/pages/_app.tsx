@@ -4,7 +4,7 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
-import { Inter, Space_Grotesk } from "@next/font/google";
+import { Inter } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -204,15 +204,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  weight: "700",
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
-    const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
+    const fonts = [inter.variable].join(" ");
 
     const onResize = useCallback(() => {
       if (isMobileWeb()) {

@@ -85,7 +85,8 @@
     "next": "^13.1.1",
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
-    "react-native-screens": "3.19.0"
+    "react-native-screens": "3.19.0",
+    "react-native-mmkv": "2.5.1"
   },
   "react-native": {
     "zlib": "browserify-zlib",

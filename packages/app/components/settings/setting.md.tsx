@@ -42,9 +42,7 @@ export const SettingsMd = () => {
         >
           <Sticky top={112} enabled>
             <View>
-              <Text tw="font-space-bold text-2xl text-black dark:text-white">
-                Settings
-              </Text>
+              <Text tw="text-2xl text-black dark:text-white">Settings</Text>
               <TabBarVertical
                 onPress={(i) => {
                   setIndex(i);

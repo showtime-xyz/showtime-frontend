@@ -29,9 +29,7 @@ function ModalHeaderComponent({
         </Button>
       )}
 
-      <Text tw={[MODAL_HEADER_TITLE_TW, "font-space-bold text-lg"]}>
-        {title}
-      </Text>
+      <Text tw={[MODAL_HEADER_TITLE_TW, "text-lg"]}>{title}</Text>
 
       {EndContentComponent ? (
         <EndContentComponent />

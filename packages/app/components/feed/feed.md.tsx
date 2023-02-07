@@ -231,13 +231,11 @@ const SuggestedUsers = () => {
   return (
     <>
       <View tw="h-16 justify-center">
-        <Text tw="font-space-bold text-2xl text-black dark:text-white">
-          Home
-        </Text>
+        <Text tw="text-2xl text-black dark:text-white">Home</Text>
       </View>
 
       <View tw="dark:shadow-dark shadow-light mt-8 rounded-2xl bg-white dark:bg-black">
-        <Text tw="font-space-bold p-4 text-lg dark:text-white">Suggested</Text>
+        <Text tw="p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
             <Skeleton colorMode={colorScheme as any} width={100} height={20} />
@@ -263,12 +261,10 @@ const SuggestedUsers = () => {
       </View>
 
       <View tw="dark:shadow-dark shadow-light mt-8 rounded-2xl bg-white dark:bg-black">
-        <Text tw="font-space-bold p-4 text-lg dark:text-white">
-          Get the app
-        </Text>
+        <Text tw="p-4 text-lg dark:text-white">Get the app</Text>
         <View tw="flex flex-row items-center justify-between py-4 px-2">
           <TextLink
-            tw="font-space-bold text-base dark:text-white"
+            tw="text-base font-bold dark:text-white"
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
             target="_blank"
           >
@@ -285,7 +281,7 @@ const SuggestedUsers = () => {
             />
           </TextLink>
           <TextLink
-            tw="font-space-bold text-base dark:text-white"
+            tw="text-base font-bold dark:text-white"
             href="https://play.google.com/store/apps/details?id=io.showtime"
             target="_blank"
           >
