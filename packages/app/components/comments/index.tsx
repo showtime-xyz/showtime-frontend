@@ -97,24 +97,33 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         }
       };
 
-      Alert.alert(
-        "Delete Comment",
-        "Are you sure you want to delete this comment?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: _deleteComment,
-          },
-        ]
-      );
+      return new Promise<void>((resolve) => {
+        Alert.alert(
+          "Delete Comment",
+          "Are you sure you want to delete this comment?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                resolve();
+              },
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => {
+                resolve();
+                _deleteComment();
+              },
+            },
+          ]
+        );
+      });
     },
     [Alert, deleteComment]
   );
+
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
@@ -135,15 +144,16 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   );
 
   const listEmptyComponent = useCallback(
-    () => (
-      <View tw="absolute h-full w-full items-center justify-center">
-        <EmptyPlaceholder
-          text="Be the first to add a comment!"
-          title="💬 No comments yet..."
-        />
-      </View>
-    ),
-    []
+    () =>
+      !isLoading && !error && !dataReversed.length ? (
+        <View tw="absolute -mt-10 h-full w-full flex-1 items-center justify-center">
+          <EmptyPlaceholder
+            text="Be the first to add a comment!"
+            title="💬 No comments yet..."
+          />
+        </View>
+      ) : null,
+    [isLoading, dataReversed.length, error]
   );
   const listFooterComponent = useCallback(
     () => <View style={{ height: Math.max(bottom, 20) }} />,
@@ -155,6 +165,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <View tw="web:pt-4 flex-1">
+          {listEmptyComponent()}
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
@@ -163,7 +174,6 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             estimatedItemSize={70}
             overscan={98}
             keyboardDismissMode="interactive"
-            ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets
             automaticallyAdjustContentInsets={false}
