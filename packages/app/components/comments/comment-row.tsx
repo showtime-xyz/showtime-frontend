@@ -182,7 +182,7 @@ function CommentRowComponent({
         ? replies.map((reply, index) => (
             // only index as key when using map with FlashList
             // https://shopify.github.io/flash-list/docs/fundamentals/performant-components#remove-key-prop
-            <CommentRowComponent
+            <CommentRow
               key={index}
               comment={reply}
               isLastReply={index === (replies.length ?? 0) - 1}
@@ -190,6 +190,7 @@ function CommentRowComponent({
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}
               reply={handleOnReplyOnAReply}
+              creatorId={creatorId}
             />
           ))
         : null}

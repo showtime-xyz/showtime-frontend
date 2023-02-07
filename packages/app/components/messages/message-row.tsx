@@ -190,7 +190,7 @@ export function MessageRow({
 
   const renderLeftActions = useCallback(() => {
     return (
-      <View tw="h-[96%] flex-1 items-end justify-center bg-red-500 px-3">
+      <View tw="h-[94%] flex-1 items-end justify-center bg-red-500 px-3">
         <Button variant="text" tw="px-0 font-thin" style={{ padding: 0 }}>
           <Trash color="white" stroke="white" />
         </Button>
