@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
@@ -13,8 +13,11 @@ import { useColorScheme as useTailwindColorScheme } from "nativewind";
 
 import { ColorSchemeContext } from "./context";
 import {
+  deleteDisabledSystemTheme,
   getColorScheme as getPersistedColorScheme,
+  getDisabledSystemTheme,
   setColorScheme as persistColorScheme,
+  setDisabledSystemTheme,
 } from "./store";
 
 export function ColorSchemeProvider({
@@ -24,7 +27,6 @@ export function ColorSchemeProvider({
 }): JSX.Element {
   const deviceColorScheme = useDeviceColorScheme();
   const nativewind = useTailwindColorScheme();
-  const isFollowDeviceSetting = useRef(true);
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
@@ -54,14 +56,12 @@ export function ColorSchemeProvider({
     },
     [nativewind]
   );
-  const themeChangeListener = useCallback(() => {
-    const theme = Appearance.getColorScheme();
-    if (theme && isFollowDeviceSetting.current) {
-      changeTheme(theme);
-    }
-  }, [changeTheme]);
 
   useEffect(() => {
+    const themeChangeListener = () => {
+      const theme = Appearance.getColorScheme();
+      changeTheme(theme && !getDisabledSystemTheme() ? theme : colorScheme);
+    };
     themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
@@ -69,14 +69,14 @@ export function ColorSchemeProvider({
       // @ts-ignore
       appearanceListener.remove();
     };
-  }, [themeChangeListener, changeTheme]);
+  }, [changeTheme, colorScheme]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       changeTheme(newColorScheme);
-      isFollowDeviceSetting.current = false;
+      setDisabledSystemTheme();
     } else {
-      isFollowDeviceSetting.current = true;
+      deleteDisabledSystemTheme();
       const theme = Appearance.getColorScheme();
       if (theme) {
         changeTheme(theme);

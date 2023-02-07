@@ -7,9 +7,12 @@ import type { ColorSchemeName } from "react-native";
 
 import { ColorSchemeContext } from "./context";
 import {
+  deleteDisabledSystemTheme,
   getColorScheme as getPersistedColorScheme,
   setColorScheme as persistColorScheme,
+  setDisabledSystemTheme,
 } from "./store";
+import { getDisabledSystemTheme } from "./store";
 
 export function ColorSchemeProvider({
   children,
@@ -20,7 +23,6 @@ export function ColorSchemeProvider({
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
-  const isDark = colorScheme === "dark";
 
   const changeTheme = useCallback((newColorScheme: ColorSchemeName) => {
     if (!newColorScheme) return;
@@ -38,18 +40,11 @@ export function ColorSchemeProvider({
     }
   }, []);
 
-  const themeChangeListener = useCallback(() => {
-    const theme = Appearance.getColorScheme();
-    const disabledSystemTheme = localStorage.getItem("disabledSystemTheme");
-
-    if (theme && !disabledSystemTheme) {
-      changeTheme(theme);
-    } else {
-      changeTheme(colorScheme);
-    }
-  }, [changeTheme, colorScheme]);
-
   useEffect(() => {
+    const themeChangeListener = () => {
+      const theme = Appearance.getColorScheme();
+      changeTheme(theme && !getDisabledSystemTheme() ? theme : colorScheme);
+    };
     themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
@@ -57,14 +52,14 @@ export function ColorSchemeProvider({
       // @ts-ignore
       appearanceListener.remove();
     };
-  }, [changeTheme, colorScheme, isDark, themeChangeListener]);
+  }, [changeTheme, colorScheme]);
 
   const handleColorSchemeChange = (newColorScheme: ColorSchemeName) => {
     if (newColorScheme) {
       changeTheme(newColorScheme);
-      localStorage.setItem("disabledSystemTheme", "true");
+      setDisabledSystemTheme();
     } else {
-      localStorage.removeItem("disabledSystemTheme");
+      deleteDisabledSystemTheme();
       const theme = Appearance.getColorScheme();
       if (theme) {
         changeTheme(theme);
