@@ -8353,24 +8353,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.dropdown-menu@npm:^0.0.63":
-  version: 0.0.63
-  resolution: "@showtime-xyz/universal.dropdown-menu@npm:0.0.63"
-  dependencies:
-    "@showtime-xyz/universal.tailwind": 0.0.52
-    "@showtime-xyz/universal.text": 0.0.57
-    zeego: 1.0.2
-  peerDependencies:
-    moti: "*"
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-reanimated: ">=2.0.0"
-    react-native-web: ^0.16.0
-  checksum: 4cde651e9a9fb1606866962164a846067f976858459d743dbbf162383bb4258364a5d26a226c96736f832a1371b7508cd428cda040d13b7e155b11555782f727
-  languageName: node
-  linkType: hard
-
 "@showtime-xyz/universal.extensions.react-native-web@npm:^0.0.19":
   version: 0.0.19
   resolution: "@showtime-xyz/universal.extensions.react-native-web@npm:0.0.19"
@@ -9036,7 +9018,6 @@ __metadata:
     "@showtime-xyz/universal.country-code-picker": ^0.0.97
     "@showtime-xyz/universal.data-pill": ^0.0.67
     "@showtime-xyz/universal.divider": ^0.0.59
-    "@showtime-xyz/universal.dropdown-menu": ^0.0.63
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.19
     "@showtime-xyz/universal.fieldset": ^0.0.135
     "@showtime-xyz/universal.haptics": ^0.0.24
@@ -40293,7 +40274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zeego@npm:1.0.2, zeego@npm:^1.0.2":
+"zeego@npm:^1.0.2":
   version: 1.0.2
   resolution: "zeego@npm:1.0.2"
   dependencies:
