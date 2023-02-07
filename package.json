@@ -85,8 +85,7 @@
     "next": "^13.1.1",
     "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
-    "react-native-screens": "3.19.0",
-    "@showtime-xyz/universal.color-scheme": "^0.0.43"
+    "react-native-screens": "3.19.0"
   },
   "react-native": {
     "zlib": "browserify-zlib",

@@ -54,6 +54,7 @@ export function ColorSchemeProvider({
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
     return () => {
+      // @ts-ignore
       appearanceListener.remove();
     };
   }, [changeTheme, colorScheme, isDark, themeChangeListener]);
