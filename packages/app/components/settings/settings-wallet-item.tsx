@@ -29,7 +29,7 @@ import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 
 type Props = {
   wallet: WalletAddressesV2;
-  onEditNickname: (item: WalletAddressesV2) => void;
+  onEditNickname: () => void;
 };
 
 type WalletLoginWithProps = {

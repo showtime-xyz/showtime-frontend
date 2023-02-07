@@ -78,7 +78,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
       </Hidden>
 
-      <View tw="mt-2 flex-row items-center justify-end sm:mt-0">
+      <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end sm:mt-0 sm:w-auto">
         {spotifyUrl && (
           <PressableScale
             style={{ marginRight: 16 }}

@@ -1,17 +1,19 @@
-import { ComponentProps, useMemo, useCallback, Fragment } from "react";
-import { Platform } from "react-native";
+import { ComponentProps } from "react";
+import { Platform, ViewStyle } from "react-native";
 
-import { MotiView } from "moti";
-import Animated, {
-  useDerivedValue,
-  useSharedValue,
-} from "react-native-reanimated";
-import * as DropdownMenu from "zeego/dropdown-menu";
+import * as DropdownMenu from "zeego/src/dropdown-menu";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
+const reversalWebIconStyle: ViewStyle = Platform.select({
+  web: {
+    flexDirection: "row-reverse",
+    justifyContent: "flex-end",
+  },
+  default: {},
+});
 const DropdownMenuRoot = DropdownMenu.Root;
 
 const DropdownMenuGroup = DropdownMenu.Group;
@@ -38,123 +40,29 @@ const DropdownMenuContent = DropdownMenu.menuify(
   "Content"
 );
 
-const DropdownItemFocusRing = ({
-  isFocused,
-}: {
-  isFocused: Animated.SharedValue<boolean>;
-}) => {
-  // TODO moti should provide this
-  const state = useDerivedValue(() => {
-    return {
-      opacity: isFocused.value ? 1 : 0,
-    };
-  }, [isFocused]);
-
-  return (
-    <MotiView
-      animate={state}
-      transition={useMemo(
-        () => ({
-          type: "timing",
-          duration: 150,
-        }),
-        []
-      )}
-      pointerEvents="none"
-    />
-  );
-};
-
-const useFocusedItem = ({
-  onFocus,
-  onBlur,
-}: {
-  onFocus?: () => void;
-  onBlur?: () => void;
-}) => {
-  const isFocused = useSharedValue(false);
-
-  const handleFocus = useCallback(() => {
-    isFocused.value = true;
-    onFocus?.();
-  }, [isFocused, onFocus]);
-
-  const handleBlur = useCallback(() => {
-    isFocused.value = false;
-    onBlur?.();
-  }, [isFocused, onBlur]);
-
-  return {
-    isFocused,
-    handleFocus,
-    handleBlur,
-  };
-};
-
 const StyledDropdownMenuItem = styled(DropdownMenu.Item);
 
 const DropdownMenuItem = DropdownMenu.menuify(
   ({
     tw,
     children,
-    onBlur,
-    onFocus,
+    style,
     ...props
   }: { tw?: TW; className?: string } & ComponentProps<
     typeof DropdownMenu.Item
   >) => {
-    const { isFocused, handleBlur, handleFocus } = useFocusedItem({
-      onFocus,
-      onBlur,
-    });
-
     return (
       <StyledDropdownMenuItem
         {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        style={[reversalWebIconStyle, style]}
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
       >
-        <DropdownItemFocusRing isFocused={isFocused} />
         {children}
       </StyledDropdownMenuItem>
     );
   },
   "Item"
 );
-
-// const StyledDropdownMenuCheckboxItem = styled(DropdownMenu.CheckboxItem);
-
-// const DropdownMenuCheckboxItem = DropdownMenu.menuify(
-//   ({
-//     tw,
-//     children,
-//     onBlur,
-//     onFocus,
-//     ...props
-//   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
-//     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
-//       onFocus,
-//       onBlur,
-//     });
-
-//     return (
-//       <StyledDropdownMenuCheckboxItem
-//         {...props}
-//         onFocus={handleFocus}
-//         onBlur={handleBlur}
-//         tw={Array.isArray(tw) ? tw.join(" ") : tw}
-//       >
-//         <DropdownItemFocusRing isFocused={isFocused} />
-//         <DropdownMenu.ItemIndicator>
-//           {/* <Icon name="checkmark" color="textContrast" /> */}
-//         </DropdownMenu.ItemIndicator>
-//         {children}
-//       </StyledDropdownMenuCheckboxItem>
-//     );
-//   },
-//   "CheckboxItem"
-// );
 
 const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle);
 
@@ -168,7 +76,6 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
       {...props}
       tw={Array.isArray(tw) ? tw.join(" ") : tw}
     >
-      {/* <Text {...props} /> */}
       {props.children}
     </StyledDropdownMenuItemTitle>
   ),
@@ -230,23 +137,15 @@ const DropdownMenuSubTrigger = DropdownMenu.menuify(
   ({
     tw,
     children,
-    onBlur,
-    onFocus,
+    style,
     ...props
   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.SubTrigger>) => {
-    const { isFocused, handleBlur, handleFocus } = useFocusedItem({
-      onFocus,
-      onBlur,
-    });
-
     return (
       <StyledDropdownMenuSubTrigger
         {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        style={[reversalWebIconStyle, style]}
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
       >
-        <DropdownItemFocusRing isFocused={isFocused} />
         {children}
       </StyledDropdownMenuSubTrigger>
     );
@@ -268,9 +167,6 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
   ),
   "ItemIcon"
 );
-
-const DropdownMenuItemNativeIcon =
-  Platform.OS === "web" ? () => <Fragment /> : DropdownMenu.ItemIcon;
 
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 
@@ -308,7 +204,6 @@ export {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  // DropdownMenuCheckboxItem,
   DropdownMenuItemTitle,
   DropdownMenuItemSubtitle,
   DropdownMenuItemIndicator,
@@ -319,5 +214,4 @@ export {
   DropdownMenuItemIcon,
   DropdownMenuItemImage,
   DropdownMenuLabel,
-  DropdownMenuItemNativeIcon,
 };

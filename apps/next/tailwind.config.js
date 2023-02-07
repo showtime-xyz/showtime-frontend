@@ -3,7 +3,7 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
-const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
+const { textSizes } = require("design-system/typography");
 
 const colors = {
   black: "#000",
