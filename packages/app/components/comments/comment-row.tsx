@@ -109,15 +109,15 @@ function CommentRowComponent({
       unlikeComment,
     ]
   );
-  const handleOnDeletePress = useCallback(
-    async function handleOnDeletePress() {
-      await deleteComment(comment.comment_id);
-    },
-    [comment.comment_id, deleteComment]
-  );
+
+  const handleOnDeletePress = useCallback(async () => {
+    return await deleteComment(comment.comment_id);
+  }, [comment.comment_id, deleteComment]);
+
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
   }, []);
+
   const handleOnReplyPress = useCallback(() => {
     if (!isAuthenticated) {
       navigateToLogin();
@@ -128,12 +128,14 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment, isAuthenticated, navigateToLogin]);
+
   const handleOnReplyOnAReply = useCallback(
     (replyComment: CommentType) => {
       reply?.({ ...comment, username: replyComment.username });
     },
     [reply, comment]
   );
+
   const handleOnUserPress = useCallback((username: string) => {
     if (Platform.OS === "web") {
       router.replace(`/@${username}`);
@@ -146,6 +148,7 @@ function CommentRowComponent({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   //#endregion
   return (
     <>
