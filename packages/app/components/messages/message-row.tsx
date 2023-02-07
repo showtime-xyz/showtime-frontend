@@ -205,7 +205,7 @@ export function MessageRow({
       onSwipeableOpen={deleteComment}
       friction={2}
       rightThreshold={80}
-      enabled={onDeletePress && Platform.OS !== "web"}
+      enabled={!!onDeletePress && Platform.OS !== "web"}
     >
       <View tw="flex flex-row items-start bg-white px-4 py-1 dark:bg-black">
         {hasParent && <View tw="ml-4" collapsable={true} />}
