@@ -131,9 +131,10 @@ function CommentRowComponent({
     },
     [reply, comment]
   );
-  const handleOnUserPress = (username: string) => {
+  const handleOnUserPress = useCallback((username: string) => {
     router.push(`/@${username}`);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   //#endregion
   return (
     <>
