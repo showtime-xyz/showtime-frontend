@@ -144,7 +144,7 @@ export function MessageRow({
       try {
         await onDeletePress();
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       } finally {
         if (swipeRef.current) {
           swipeRef.current.close();
