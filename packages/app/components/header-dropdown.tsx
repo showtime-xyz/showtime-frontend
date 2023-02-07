@@ -184,7 +184,6 @@ function HeaderDropdown({
               key="nested-group-1"
             >
               <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
-
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Light
               </DropdownMenuItemTitle>
