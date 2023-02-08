@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -29,6 +29,7 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
@@ -49,6 +50,14 @@ const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
+const durationOptions = [
+  { label: "1 day", value: SECONDS_IN_A_DAY },
+  { label: "1 week", value: SECONDS_IN_A_WEEK },
+  { label: "1 month", value: SECONDS_IN_A_MONTH },
+];
+
+// const { useParam } = createParam<{ transactionId: string }>()
+const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
@@ -57,46 +66,43 @@ const defaultValues = {
   hasAcceptedTerms: false,
   notSafeForWork: false,
 };
-
-const durationOptions = [
-  { label: "1 day", value: SECONDS_IN_A_DAY },
-  { label: "1 week", value: SECONDS_IN_A_WEEK },
-  { label: "1 month", value: SECONDS_IN_A_MONTH },
-];
-
-const dropValidationSchema = yup.object({
-  file: yup.mixed().required("Media is required"),
-  title: yup.string().required().max(255),
-  description: yup.string().max(280).required(),
-  editionSize: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .min(1)
-    .max(100000)
-    .default(defaultValues.editionSize),
-  royalty: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .max(69)
-    .default(defaultValues.royalty),
-  hasAcceptedTerms: yup
-    .boolean()
-    .default(defaultValues.hasAcceptedTerms)
-    .required()
-    .isTrue("You must accept the terms and conditions."),
-  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-  googleMapsUrl: yup.string().url(),
-  radius: yup.number().min(0.01).max(10),
-});
-
-// const { useParam } = createParam<{ transactionId: string }>()
-const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
-
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
+  const { data: userProfile } = useMyInfo();
+
+  const dropValidationSchema = useMemo(
+    () =>
+      yup.object({
+        file: yup.mixed().required("Media is required"),
+        title: yup.string().required().max(255),
+        description: yup.string().max(280).required(),
+        editionSize: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .min(1)
+          .max(userProfile?.data?.profile.verified ? 100000 : 50)
+          .default(
+            userProfile?.data?.profile.verified ? defaultValues.editionSize : 50
+          ),
+        royalty: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .max(69)
+          .default(defaultValues.royalty),
+        hasAcceptedTerms: yup
+          .boolean()
+          .default(defaultValues.hasAcceptedTerms)
+          .required()
+          .isTrue("You must accept the terms and conditions."),
+        notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+        googleMapsUrl: yup.string().url(),
+        radius: yup.number().min(0.01).max(10),
+      }),
+    [userProfile?.data?.profile.verified]
+  );
 
   const {
     control,
@@ -112,7 +118,12 @@ export const DropFree = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      editionSize: userProfile?.data?.profile.verified
+        ? defaultValues.editionSize
+        : 50,
+    },
   });
 
   const gatingType = watch("gatingType");
@@ -430,7 +441,7 @@ export const DropFree = () => {
                           }}
                         />
                       </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:ml-4">
                         <Controller
                           control={control}
                           name="royalty"
