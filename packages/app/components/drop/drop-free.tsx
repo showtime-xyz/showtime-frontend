@@ -120,7 +120,10 @@ export const DropFree = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      editionSize: isVrified ? defaultValues.editionSize : 50,
+    },
   });
 
   const gatingType = watch("gatingType");
