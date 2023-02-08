@@ -14,6 +14,9 @@ const association = {
       },
     ],
   },
+  webcredentials: {
+    apps: [`${TEAM_ID}.${BUNDLE_ID}`],
+  },
 };
 
 export default (_: NextApiRequest, response: NextApiResponse) => {
