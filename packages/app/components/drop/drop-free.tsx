@@ -71,10 +71,6 @@ export const DropFree = () => {
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
 
-  const isVerified =
-    userProfile?.data?.profile.has_verified_phone_number ||
-    userProfile?.data?.profile.verified;
-
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -86,8 +82,10 @@ export const DropFree = () => {
           .required()
           .typeError("Please enter a valid number")
           .min(1)
-          .max(isVerified ? 100000 : 50)
-          .default(isVerified ? defaultValues.editionSize : 50),
+          .max(userProfile?.data?.profile.verified ? 100000 : 50)
+          .default(
+            userProfile?.data?.profile.verified ? defaultValues.editionSize : 50
+          ),
         royalty: yup
           .number()
           .required()
@@ -103,7 +101,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [isVerified]
+    [userProfile?.data?.profile.verified]
   );
 
   const {
@@ -122,7 +120,9 @@ export const DropFree = () => {
     reValidateMode: "onChange",
     defaultValues: {
       ...defaultValues,
-      editionSize: isVerified ? defaultValues.editionSize : 50,
+      editionSize: userProfile?.data?.profile.verified
+        ? defaultValues.editionSize
+        : 50,
     },
   });
 
