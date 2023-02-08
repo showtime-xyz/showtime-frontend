@@ -71,8 +71,8 @@ export const DropFree = () => {
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
 
-  const isVerified = false;
-  userProfile?.data?.profile.has_verified_phone_number &&
+  const isVerified =
+    userProfile?.data?.profile.has_verified_phone_number ||
     userProfile?.data?.profile.verified;
 
   const dropValidationSchema = useMemo(
@@ -122,7 +122,7 @@ export const DropFree = () => {
     reValidateMode: "onChange",
     defaultValues: {
       ...defaultValues,
-      editionSize: isVrified ? defaultValues.editionSize : 50,
+      editionSize: isVerified ? defaultValues.editionSize : 50,
     },
   });
 
