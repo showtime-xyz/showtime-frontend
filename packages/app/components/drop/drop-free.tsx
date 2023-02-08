@@ -103,7 +103,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [isVrified]
+    [isVerified]
   );
 
   const {
