@@ -289,6 +289,8 @@ export const EditProfile = () => {
               render={({ field: { onChange, value } }) => (
                 <DropFileZone onChange={({ file }) => onChange(file)}>
                   <Pressable
+                    accessibilityLabel="Pick profile photo"
+                    testID="profile_photo_picker"
                     onPress={async () => {
                       const file = await pickFile({
                         mediaTypes: "image",
@@ -337,6 +339,8 @@ export const EditProfile = () => {
                   <DropFileZone onChange={({ file }) => onChange(file)}>
                     <>
                       <Pressable
+                        accessibilityLabel="Pick profile photo"
+                        testID="profile_photo_picker"
                         onPress={async () => {
                           const file = await pickFile({
                             mediaTypes: "image",
@@ -433,6 +437,7 @@ export const EditProfile = () => {
                     label="About me"
                     placeholder="About me"
                     tw="mt-4"
+                    testID="about_me"
                     multiline
                     value={value}
                     textAlignVertical="top"
@@ -553,6 +558,7 @@ export const EditProfile = () => {
                       keyboardType="url"
                       textContentType="URL"
                       placeholder="Your url"
+                      testID="website_url"
                       value={value}
                       onBlur={onBlur}
                       onChangeText={onChange}

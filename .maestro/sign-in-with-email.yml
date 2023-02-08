@@ -1,0 +1,13 @@
+# sign-in-with-email.yaml
+
+appId: io.showtime.development
+---
+- launchApp
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- tapOn: "Continue with Email"
+- tapOn: "Enter your email address"
+- inputText: "test+success@magic.link"
+- tapOn: "Send Email"
+- assertNotVisible: "Sign In"
