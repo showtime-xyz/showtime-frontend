@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-  Linking,
   Platform,
   ScrollView as RNScrollView,
   TextInput,
@@ -18,10 +17,18 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import {
+  FlipIcon,
+  Image as ImageIcon,
+  InformationCircle,
+} from "@showtime-xyz/universal.icon";
+import { Label } from "@showtime-xyz/universal.label";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -30,7 +37,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCode } from "app/components/qr-code";
+import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
@@ -43,14 +50,12 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
-import {
-  formatAddressShort,
-  getTwitterIntent,
-  getTwitterIntentUsername,
-  isMobileWeb,
-} from "app/utilities";
+import { formatAddressShort } from "app/utilities";
 
+import { DateTimePicker } from "design-system/date-time-picker";
 import { Hidden } from "design-system/hidden";
+
+import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -75,7 +80,7 @@ const durationOptions = [
 
 const dropValidationSchema = yup.object({
   file: yup.mixed().required("Media is required"),
-  title: yup.string().required(),
+  title: yup.string().required().max(255),
   description: yup.string().max(280).required(),
   editionSize: yup
     .number()
@@ -98,6 +103,7 @@ const dropValidationSchema = yup.object({
   notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
   googleMapsUrl: yup.string().url(),
   radius: yup.number().min(0.01).max(10),
+  releaseDate: yup.date().min(new Date(), "Release date must be in the future"),
 });
 
 const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
@@ -134,9 +140,12 @@ export const DropMusic = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const [accordionValue, setAccordionValue] = useState("");
-  const [isUnlimited, setIsUnlimited] = useState(false);
+  const [isUnlimited, setIsUnlimited] = useState(true);
+  const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
+    useState(false);
 
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
@@ -150,12 +159,20 @@ export const DropMusic = () => {
     }),
   });
 
-  const onSubmit = (values: UseDropNFT) => {
-    dropNFT(
+  const onSubmit = async (values: UseDropNFT) => {
+    if (isSaveDrop && !values.spotifyUrl) {
+      setError("spotifyUrl", {
+        type: "required",
+        message: "Spotify link is required",
+      });
+      return;
+    }
+    await dropNFT(
       {
         ...values,
-        gatingType: "spotify_save",
+        gatingType: isSaveDrop ? "spotify_save" : "music_presave",
         editionSize: isUnlimited ? 0 : values.editionSize,
+        releaseDate: isSaveDrop ? undefined : values.releaseDate,
       },
       clearStorage
     );
@@ -177,6 +194,7 @@ export const DropMusic = () => {
   const share = useShare();
   const router = useRouter();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // if (state.transactionHash) {
   //   return <View>
@@ -192,122 +210,11 @@ export const DropMusic = () => {
   );
 
   if (user.isIncompletedProfile) {
-    return (
-      <CompleteProfileModalContent
-        title="Just one more step"
-        description="You need complete your profile to create drops. It only takes about 1 min"
-        cta="Complete Profile"
-      />
-    );
+    return <CompleteProfileModalContent />;
   }
 
   if (state.status === "success") {
-    const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
-      state.edition?.contract_address
-    }/0`;
-    let claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
-    const qrCodeUrl = new URL(claimUrl);
-
-    const password = getValues("password");
-    if (password) {
-      qrCodeUrl.searchParams.set("password", password);
-    }
-
-    const isShareAPIAvailable = Platform.select({
-      default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
-    });
-
-    return (
-      <BottomSheetScrollView>
-        <View
-          tw="items-center justify-center px-4 pt-8"
-          style={modalScreenViewStyle}
-        >
-          <Text tw="text-8xl">🎉</Text>
-          <View>
-            <View tw="h-8" />
-            <Text tw="text-center text-4xl text-black dark:text-white">
-              Congrats!
-            </Text>
-            <View tw="mt-8 mb-10">
-              <Text tw="text-center text-2xl text-black dark:text-white">
-                Now share your drop with the world!
-              </Text>
-            </View>
-
-            <Button
-              onPress={() => {
-                rudder?.track("Drop Shared", { type: "Twitter" });
-                Linking.openURL(
-                  getTwitterIntent({
-                    url: claimUrl,
-                    message: `I just created a drop "${
-                      state.edition?.name
-                    }" by ${getTwitterIntentUsername(
-                      user?.user?.data?.profile
-                    )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
-                  })
-                );
-              }}
-              tw="bg-[#00ACEE]"
-              variant="text"
-            >
-              <Text tw="text-xs font-bold " style={{ color: "#fff" }}>
-                Share on Twitter
-              </Text>
-            </Button>
-
-            <View tw="h-4" />
-
-            <Button
-              onPress={async () => {
-                const result = await share({
-                  url: claimUrl,
-                });
-
-                if (result.action === "sharedAction") {
-                  rudder?.track(
-                    "Drop Shared",
-                    result.activityType
-                      ? { type: result.activityType }
-                      : undefined
-                  );
-                }
-              }}
-            >
-              {isShareAPIAvailable
-                ? "Share the drop with your friends"
-                : "Copy drop link 🔗"}
-            </Button>
-            <Button
-              variant="tertiary"
-              tw="mt-4"
-              onPress={Platform.select({
-                web: () => router.push(claimUrl),
-                default: () => {
-                  if (router.pathname === "/") {
-                    router.push(claimPath);
-                    resetForm();
-                    reset();
-                  } else {
-                    router.pop();
-                  }
-                },
-              })}
-            >
-              Skip for now
-            </Button>
-          </View>
-          <View tw="mt-4">
-            <QRCode
-              size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-              text={qrCodeUrl.toString()}
-            />
-          </View>
-        </View>
-      </BottomSheetScrollView>
-    );
+    return <QRCodeModal contractAddress={state.edition?.contract_address} />;
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;
@@ -487,7 +394,7 @@ export const DropMusic = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="mt-4 flex-1"
+                    tw="mt-4"
                     label="Description"
                     multiline
                     textAlignVertical="top"
@@ -505,38 +412,118 @@ export const DropMusic = () => {
           </Hidden>
           <View tw="z-10 mt-4 flex-row">
             <Controller
+              key="releaseDate"
+              control={control}
+              name="releaseDate"
+              render={({ field: { onChange, value } }) => {
+                let dateValue =
+                  typeof value === "string"
+                    ? new Date(value)
+                    : value ?? new Date();
+
+                return (
+                  <View
+                    tw={`flex-1 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800 ${
+                      isSaveDrop ? "opacity-40" : ""
+                    }`}
+                  >
+                    {Platform.OS !== "web" ? (
+                      <Pressable
+                        onPress={() => {
+                          setShowDatePicker(!showDatePicker);
+                        }}
+                      >
+                        <Text tw="font-bold text-gray-900 dark:text-white">
+                          Release Date
+                        </Text>
+                        <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                          {(dateValue as Date).toDateString()}
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Text tw="font-bold text-gray-900 dark:text-white">
+                        Release Date
+                      </Text>
+                    )}
+
+                    <View tw="t-0 l-0 w-full flex-row pt-2">
+                      <DateTimePicker
+                        disabled={isSaveDrop}
+                        onChange={(v) => {
+                          onChange(v);
+                          setShowDatePicker(false);
+                        }}
+                        minimumDate={new Date()}
+                        value={dateValue}
+                        type="datetime"
+                        open={showDatePicker}
+                      />
+                    </View>
+                  </View>
+                );
+              }}
+            />
+            <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
+              <Checkbox
+                checked={isSaveDrop}
+                onChange={(v) => {
+                  setIsSaveDrop(!isSaveDrop);
+                }}
+                accesibilityLabel="Live Now"
+              />
+              <Text
+                tw="ml-2 font-bold text-black dark:text-white"
+                onPress={() => {
+                  setIsSaveDrop(!isSaveDrop);
+                }}
+              >
+                Live Now
+              </Text>
+            </View>
+          </View>
+
+          <View tw="mt-4">
+            <Controller
               control={control}
               name="spotifyUrl"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
                     tw="flex-1"
-                    label="Spotify URL"
+                    label={
+                      <View tw="flex-row">
+                        <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                          Spotify Song Link{" "}
+                          {isSaveDrop ? (
+                            <Text tw="text-red-600">*</Text>
+                          ) : (
+                            "(Optional)"
+                          )}
+                        </Label>
+                        <PressableHover
+                          onPress={() => {
+                            setShowCopySpotifyLinkTutorial(true);
+                          }}
+                        >
+                          <InformationCircle
+                            height={18}
+                            width={18}
+                            color={isDark ? colors.gray[400] : colors.gray[600]}
+                          />
+                        </PressableHover>
+                      </View>
+                    }
                     onBlur={onBlur}
                     ref={spotifyTextInputRef}
                     onChangeText={onChange}
                     value={value}
-                    placeholder="Enter the Spotify song link"
+                    placeholder="Copy Song Link or URI here"
                     errorText={errors.spotifyUrl?.message}
                   />
                 );
               }}
             />
-            <View style={{ position: "absolute", right: 12, top: 8 }}>
-              {user.user?.data.profile.spotify_artist_id ? null : (
-                <Button
-                  onPress={() => {
-                    Linking.openURL(
-                      "https://showtimexyz.typeform.com/to/pXQVhkZo"
-                    );
-                  }}
-                >
-                  Request
-                </Button>
-              )}
-            </View>
           </View>
-
           <View>
             <Accordion.Root
               value={accordionValue}
@@ -551,18 +538,24 @@ export const DropMusic = () => {
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
                       <DataPill
-                        label={`Royalties ${watch("royalty")}%`}
+                        label={
+                          isUnlimited
+                            ? `Open Edition`
+                            : `${watch("editionSize")} ${
+                                watch("editionSize") == 1
+                                  ? "Edition"
+                                  : "Editions"
+                              }`
+                        }
                         type="text"
                       />
                       <DataPill
+                        label={`${watch("royalty")}% Royalties`}
+                        type="text"
                         tw="mx-1 md:mx-4"
-                        label={`Editions ${
-                          isUnlimited ? "unlimted" : watch("editionSize")
-                        }`}
-                        type="text"
                       />
                       <DataPill
-                        label={`Duration ${selectedDurationLabel}`}
+                        label={`Duration: ${selectedDurationLabel}`}
                         type="text"
                       />
                     </ScrollView>
@@ -570,27 +563,8 @@ export const DropMusic = () => {
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
                   <>
-                    <View tw="justify-between lg:flex-row">
-                      <View tw="flex-1 flex-row lg:mr-4">
-                        <Controller
-                          control={control}
-                          name="royalty"
-                          render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                              <Fieldset
-                                tw="flex-1"
-                                label="Your royalties (%)"
-                                onBlur={onBlur}
-                                helperText="How much you'll earn each time an edition of this drop is sold"
-                                errorText={errors.royalty?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0">
+                    <View tw="justify-between md:mt-0 lg:flex-row">
+                      <View tw="flex-1 flex-row">
                         <Controller
                           control={control}
                           name="editionSize"
@@ -598,7 +572,7 @@ export const DropMusic = () => {
                             return (
                               <Fieldset
                                 tw="flex-1"
-                                label="Editions"
+                                label="Edition size"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
@@ -628,6 +602,25 @@ export const DropMusic = () => {
                                     />
                                   </Pressable>
                                 }
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
+                        <Controller
+                          control={control}
+                          name="royalty"
+                          render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                              <Fieldset
+                                tw="flex-1"
+                                label="Your royalties (%)"
+                                onBlur={onBlur}
+                                helperText="How much you'll earn each time an edition of this drop is sold"
+                                errorText={errors.royalty?.message}
+                                value={value?.toString()}
+                                onChangeText={onChange}
                               />
                             );
                           }}
@@ -755,6 +748,15 @@ export const DropMusic = () => {
           <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </BottomSheetScrollView>
+      <ModalSheet
+        snapPoints={["100%"]}
+        title="Spotify Song Link"
+        visible={showCopySpotifyLinkTutorial}
+        close={() => setShowCopySpotifyLinkTutorial(false)}
+        onClose={() => setShowCopySpotifyLinkTutorial(false)}
+      >
+        <CopySpotifyLinkTutorial />
+      </ModalSheet>
     </BottomSheetModalProvider>
   );
 };

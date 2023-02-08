@@ -1,95 +1,48 @@
 import { useEffect, useRef } from "react";
-import { Platform } from "react-native";
 
-import DateTimePickerImpl, {
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import * as DatePickerIOS from "@showtime-xyz/date-picker";
 
 import { DateTimePickerProps } from "./types";
 
 export const DateTimePicker = (props: DateTimePickerProps) => {
-  const { value, type, onChange, maximumDate, minimumDate, open } = props;
-
-  // android is a dialog like picker, iOS is more like html input.
-  if (Platform.OS === "android" && open) {
-    return <AndroidDateTimePicker {...props} />;
-
-    // iOS picker always remain open
-  } else if (Platform.OS === "ios") {
-    return (
-      <DateTimePickerImpl
-        value={value}
-        mode={type}
-        onChange={(event, date) => {
-          date ? onChange(date) : null;
-        }}
-        maximumDate={maximumDate}
-        minimumDate={minimumDate}
-      />
-    );
-  }
-  return null;
-};
-
-const AndroidDateTimePicker = (props: DateTimePickerProps) => {
   const opened = useRef(false);
   const propValues = useLatestValueRef(props);
-
   useEffect(() => {
-    if (!opened.current) {
-      opened.current = true;
-
-      const { value, onChange, type, maximumDate, minimumDate } =
-        propValues.current;
-
-      if (type === "date" || type === "time") {
-        DateTimePickerAndroid.open({
-          value,
-          mode: type,
-          maximumDate,
-          minimumDate,
-          onChange: (event, d) => {
-            if (d) {
-              onChange(d);
-            }
-          },
-        });
-      } else if (type === "datetime") {
-        DateTimePickerAndroid.open({
-          value,
-          mode: "date",
-          maximumDate,
-          minimumDate,
-          onChange: async (event, d) => {
-            if (d) {
-              if (event.type === "dismissed") {
-                onChange(d);
-                return;
-              }
-
-              await DateTimePickerAndroid.dismiss("date");
-              DateTimePickerAndroid.open({
-                value: d,
-                mode: "time",
-                maximumDate,
-                minimumDate,
-                onChange: async (event, v) => {
-                  await DateTimePickerAndroid.dismiss("time");
-                  if (v) onChange(v);
-                },
-              });
-            }
-          },
-        });
+    async function getDate() {
+      if (props.open && !opened.current && !props.disabled) {
+        const { value, onChange, type, maximumDate, minimumDate } =
+          propValues.current;
+        opened.current = true;
+        try {
+          const v = await DatePickerIOS.open({
+            mode: type,
+            value,
+            maximumDate,
+            minimumDate,
+          });
+          opened.current = true;
+          onChange(v);
+        } catch (e) {
+          opened.current = false;
+          onChange(value);
+        }
+      } else {
+        if (opened.current) {
+          await DatePickerIOS.dismiss();
+          opened.current = false;
+        }
       }
     }
 
+    getDate();
+  }, [propValues, props.open, props.disabled]);
+
+  useEffect(() => {
     return () => {
       opened.current = false;
-      DateTimePickerAndroid.dismiss("date");
-      DateTimePickerAndroid.dismiss("time");
+      DatePickerIOS.dismiss();
     };
-  }, [propValues]);
+  });
 
   return null;
 };

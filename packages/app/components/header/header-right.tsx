@@ -24,7 +24,7 @@ type HeaderRightProps = {
 };
 export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const router = useRouter();
-  const { isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated, user } = useUser();
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
@@ -70,6 +70,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <HeaderDropdown
                 type={isMdWidth ? "profile" : "settings"}
                 withBackground={withBackground}
+                user={user?.data.profile}
               />
             ) : (
               <>

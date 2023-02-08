@@ -26,7 +26,7 @@ export const PlayOnSpotify = ({ url }: { url: string }) => {
         <Spotify color="white" width={20} height={20} />
         <Text
           style={{ lineHeight: 18 }}
-          tw="ml-1 text-[12px] font-semibold text-white"
+          tw="ml-1 text-xs font-semibold text-white"
         >
           Play on Spotify
         </Text>

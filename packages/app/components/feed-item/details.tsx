@@ -38,7 +38,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
       <View tw="flex-row items-center justify-between">
         <Creator nft={nft} shouldShowCreatorIndicator={false} />
       </View>
-      <Text tw="font-space-bold text-lg dark:text-white" numberOfLines={3}>
+      <Text tw="text-lg dark:text-white" numberOfLines={3}>
         {nft.token_name}
       </Text>
       <Description
@@ -65,7 +65,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
           </SocialButton>
           <View tw="w-8" />
           <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={detail ?? nft} tw="" />
+            <NFTDropdown nft={detail ?? nft} tw="" edition={edition} />
           </Suspense>
         </View>
       </View>

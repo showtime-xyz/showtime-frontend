@@ -1,12 +1,10 @@
-import { useContext } from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
+import { useRouter } from "@showtime-xyz/universal.router";
 
-import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
 type ClaimedShareButtonProps = {
   edition: CreatorEditionResponse;
@@ -21,14 +19,28 @@ export const ClaimedShareButton = ({
   tw = "",
   style,
 }: ClaimedShareButtonProps) => {
-  const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { dispatch } = useContext(ClaimContext);
-
+  const router = useRouter();
   const onClaimPress = () => {
-    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
-    dispatch({
-      type: "share",
-    });
+    const contractAddress = edition.creator_airdrop_edition.contract_address;
+    const as = `/qr-code-share/${contractAddress}`;
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            contractAddress,
+            qrCodeShareModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
+      { shallow: true }
+    );
   };
 
   if (!edition.is_already_claimed) return null;

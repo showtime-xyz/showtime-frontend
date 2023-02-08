@@ -13,6 +13,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropUpdateScreen } from "app/screens/drop-update";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -61,6 +62,13 @@ export function RootStackNavigator() {
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
+        <Stack.Screen
+          name="search"
+          component={SearchScreen}
+          options={{
+            animation: "none",
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -75,13 +83,6 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-        <Stack.Screen
-          name="search"
-          component={SearchScreen}
-          options={{
-            animation: "none",
-          }}
-        />
         <Stack.Screen
           name="swipeList"
           component={SwipeListScreen}
@@ -116,6 +117,11 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen
+          name="dropUpdate"
+          options={{ headerTitle: "Update drop" }}
+          component={DropUpdateScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -123,8 +129,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           animation: Platform.OS === "ios" ? "default" : "none",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
+          presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
@@ -146,6 +151,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropEvent" component={DropEventScreen} />
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
+        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -158,7 +164,6 @@ export function RootStackNavigator() {
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
         />
-        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
         <Stack.Screen name="report" component={ReportScreen} />
       </Stack.Group>
     </Stack.Navigator>

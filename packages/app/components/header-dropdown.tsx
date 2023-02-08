@@ -1,18 +1,8 @@
+import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemTitle,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuItemNativeIcon,
-} from "@showtime-xyz/universal.dropdown-menu";
 import {
   User,
   Settings,
@@ -30,33 +20,68 @@ import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
+import { Profile } from "app/types";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "design-system/dropdown-menu";
 import { breakpoints } from "design-system/theme";
 
 type HeaderDropdownProps = {
   type: "profile" | "settings";
   withBackground?: boolean;
+  user?: Profile;
 };
-function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
+function HeaderDropdown({
+  type,
+  withBackground = false,
+  user,
+}: HeaderDropdownProps) {
   const { logout } = useAuth();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useColorScheme();
-  const { user } = useUser();
+  const { user: currentUser, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
   const isDark = colorScheme === "dark";
 
+  const walletAddressMatch = useMemo(
+    () =>
+      user?.wallet_addresses_v2?.some(
+        (wallet) => wallet.address === userAddress
+      ),
+    [user?.wallet_addresses_v2, userAddress]
+  );
+
+  // If the user is not authenticated, don't show the dropdown
+  if (!isAuthenticated) return null;
+
+  // If the user is on a profile page, and the currentUser is not the same as the passed user,
+  // don't show the dropdown menu (only show it on your own profile page)
+  if (
+    currentUser?.data.profile.username !== user?.username &&
+    !walletAddressMatch
+  )
+    return null;
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         {type === "profile" ? (
           <View tw="flex h-12 cursor-pointer flex-row items-center justify-center rounded-full bg-gray-100 px-2 dark:bg-gray-900">
-            <Avatar alt="Avatar" url={user?.data?.profile?.img_url} />
-            {isWeb && isMdWidth && user?.data?.profile?.username ? (
+            <Avatar alt="Avatar" url={user?.img_url} />
+            {isWeb && isMdWidth && user?.username ? (
               <Text tw="ml-2 mr-1 font-semibold dark:text-white ">
-                {`@${user.data.profile.username}`}
+                {`@${user.username}`}
               </Text>
             ) : null}
           </View>
@@ -80,7 +105,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
         {type === "profile" && (
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/@${user?.data?.profile?.username ?? userAddress}`);
+              router.push(`/@${user?.username ?? userAddress}`);
             }}
             key="your-profile"
           >
@@ -95,8 +120,12 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           onSelect={() => router.push("/settings")}
           key="your-settings"
         >
-          <MenuItemIcon Icon={Settings} />
-          <DropdownMenuItemNativeIcon iosIconName="gear" />
+          <MenuItemIcon
+            Icon={Settings}
+            ios={{
+              name: "gear",
+            }}
+          />
 
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Settings
@@ -124,8 +153,12 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
           }}
           key="edit-profile"
         >
-          <MenuItemIcon Icon={Edit} />
-          <DropdownMenuItemNativeIcon iosIconName="square.and.pencil" />
+          <MenuItemIcon
+            Icon={Edit}
+            ios={{
+              name: "square.and.pencil",
+            }}
+          />
 
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Edit Profile
@@ -134,22 +167,23 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
-            <MenuItemIcon Icon={isDark ? Moon : Sun} />
-            <DropdownMenuItemNativeIcon
-              iosIconName={isDark ? "moon" : "sun.max"}
+            <MenuItemIcon
+              Icon={isDark ? Moon : Sun}
+              ios={{
+                name: isDark ? "moon" : "sun.max",
+              }}
             />
 
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent tw="w-30">
+          <DropdownMenuSubContent>
             <DropdownMenuItem
               onSelect={() => setColorScheme("light")}
               key="nested-group-1"
             >
-              <MenuItemIcon Icon={Sun} />
-              <DropdownMenuItemNativeIcon iosIconName="sun.max" />
+              <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Light
               </DropdownMenuItemTitle>
@@ -158,8 +192,7 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               onSelect={() => setColorScheme("dark")}
               key="nested-group-2"
             >
-              <MenuItemIcon Icon={Moon} />
-              <DropdownMenuItemNativeIcon iosIconName="moon" />
+              <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Dark
               </DropdownMenuItemTitle>
@@ -168,8 +201,12 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
               onSelect={() => setColorScheme(null)}
               key="nested-group-3"
             >
-              <MenuItemIcon Icon={DarkMode} />
-              <DropdownMenuItemNativeIcon iosIconName="circle.righthalf.filled" />
+              <MenuItemIcon
+                Icon={DarkMode}
+                ios={{
+                  name: "circle.righthalf.filled",
+                }}
+              />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 System
               </DropdownMenuItemTitle>
@@ -178,9 +215,10 @@ function HeaderDropdown({ type, withBackground = false }: HeaderDropdownProps) {
         </DropdownMenuSub>
 
         <DropdownMenuItem destructive onSelect={logout} key="sign-out">
-          <MenuItemIcon Icon={LogOut} />
-          <DropdownMenuItemNativeIcon iosIconName="rectangle.portrait.and.arrow.right" />
-
+          <MenuItemIcon
+            Icon={LogOut}
+            ios={{ name: "rectangle.portrait.and.arrow.right" }}
+          />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Sign Out
           </DropdownMenuItemTitle>

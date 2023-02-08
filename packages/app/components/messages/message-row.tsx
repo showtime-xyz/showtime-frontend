@@ -1,16 +1,11 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useRef } from "react";
 import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { Button, TextButton } from "@showtime-xyz/universal.button";
-import {
-  HeartFilled,
-  Heart,
-  MessageFilled,
-  Message,
-} from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { Button } from "@showtime-xyz/universal.button";
+import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -58,6 +53,11 @@ interface MessageRowProps {
    */
   likedByMe?: boolean;
   /**
+   * Defines whether the reply is the last or not.
+   * @default undefined
+   */
+  isLastReply?: boolean;
+  /**
    * Defines whether the message replied by the customer or not.
    * @default undefined
    */
@@ -81,7 +81,7 @@ interface MessageRowProps {
    * Defines the message replies count.
    * @default undefined
    */
-  replayCount?: number | string;
+  replyCount?: number;
   /**
    * Defines the message creation date.
    * @default undefined
@@ -121,11 +121,12 @@ export function MessageRow({
   userVerified = false,
   content = "",
   likeCount = 0,
-  replayCount,
+  //replyCount,
   createdAt,
-  position,
+  //position,
   hasParent,
-  hasReplies,
+  //hasReplies,
+  isLastReply,
   likedByMe,
   // eslint-disable-next-line unused-imports/no-unused-vars
   repliedByMe,
@@ -135,9 +136,23 @@ export function MessageRow({
   onTagPress,
   onUserPress,
 }: MessageRowProps) {
-  const router = useRouter();
-
   //#region variables
+  const swipeRef = useRef<Swipeable>(null);
+
+  const deleteComment = useCallback(async () => {
+    if (onDeletePress) {
+      try {
+        await onDeletePress();
+      } catch (error) {
+        //console.log(error);
+      } finally {
+        if (swipeRef.current) {
+          swipeRef.current.close();
+        }
+      }
+    }
+  }, [onDeletePress]);
+
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
 
@@ -152,45 +167,19 @@ export function MessageRow({
       addSuffix: true,
     });
   }, [createdAt]);
+
   const contentWithTags = useMemo(() => {
-    return onTagPress ? linkifyDescription(content) : content;
+    return onTagPress
+      ? linkifyDescription(
+          content,
+          "font-bold text-xs text-gray-900 dark:text-gray-100"
+        )
+      : content;
   }, [content, onTagPress]);
+
   const userNameText = useMemo(() => {
     return username || formatAddressShort(address);
   }, [address, username]);
-  //#endregion
-
-  //#region styles
-  const replyVerticalLineTW = useMemo(
-    () => [
-      "absolute",
-      "w-[1px]",
-      "bg-[#27272A]",
-      hasReplies
-        ? "top-4 bottom-[-16px]"
-        : position !== "last"
-        ? "top-[-16px] bottom-[-16px]"
-        : "top-[-16px] h-4",
-      hasReplies ? "left-1/2" : "left--5",
-    ],
-    [hasReplies, position]
-  );
-  const replyHorizontalLineTW = useMemo(
-    () => ["absolute", "left--5 right-0"],
-    []
-  );
-  const replyHorizontalLineStyle = useMemo(
-    () => ({
-      borderBottomLeftRadius: 12,
-      borderBottomWidth: position === "last" ? 1 : 0,
-      borderLeftWidth: position === "last" ? 1 : 0,
-      top: position !== "last" ? 12 : 0,
-      height: position === "last" ? 12 : hasParent ? 1 : 0,
-      backgroundColor: position !== "last" ? "#27272A" : undefined,
-      borderColor: "#27272A",
-    }),
-    [position, hasParent]
-  );
   //#endregion
 
   const handleOnPressUser = useCallback(() => {
@@ -199,117 +188,114 @@ export function MessageRow({
     }
   }, [onUserPress, username]);
 
-  return (
-    <View tw="flex flex-row bg-white py-4 dark:bg-black">
-      {hasParent && <View tw="ml-4" collapsable={true} />}
-      <View tw="items-center">
-        {(hasReplies || hasParent) && (
-          <>
-            <View tw={replyHorizontalLineTW} style={replyHorizontalLineStyle} />
-            <View tw={replyVerticalLineTW} />
-          </>
-        )}
-        <Link href={`/@${username || address}`}>
-          <Button
-            variant="secondary"
-            size="small"
-            tw="h-[24px] w-[24px]"
-            onPress={handleOnPressUser}
-            iconOnly
-          >
-            <AvatarHoverCard
-              url={userAvatar}
-              size={24}
-              username={username || address}
-              alt="MessageRow Avatar"
-            />
-          </Button>
-        </Link>
+  const renderLeftActions = useCallback(() => {
+    return (
+      <View tw="h-[94%] flex-1 items-end justify-center bg-red-500 px-3">
+        <Button variant="text" tw="px-0 font-thin" style={{ padding: 0 }}>
+          <Trash color="white" stroke="white" />
+        </Button>
       </View>
-      <View tw="ml-2 flex-1">
-        <Link href={`/@${username || address}`}>
-          <View tw="mb-3 h-[12px] flex-row items-center">
-            <Text
-              tw="text-13 font-semibold text-gray-900 dark:text-white"
+    );
+  }, []);
+
+  return (
+    <Swipeable
+      ref={swipeRef}
+      renderRightActions={renderLeftActions}
+      onSwipeableOpen={deleteComment}
+      friction={2}
+      rightThreshold={80}
+      enabled={!!onDeletePress && Platform.OS !== "web"}
+    >
+      <View tw="flex flex-row items-start bg-white px-4 py-1 dark:bg-black">
+        {hasParent && <View tw="ml-4" collapsable={true} />}
+        <View tw="justify-start">
+          <Link href={`/@${username || address}`} tw="-mt-1 -mb-1">
+            <Button
+              variant="secondary"
+              size="small"
+              tw="h-[20px] w-[20px]"
               onPress={handleOnPressUser}
+              iconOnly
             >
-              @{userNameText}
-            </Text>
-            {userVerified ? (
-              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-            ) : null}
-          </View>
-        </Link>
+              <AvatarHoverCard
+                url={userAvatar}
+                size={20}
+                username={username || address}
+                alt="MessageRow Avatar"
+              />
+            </Button>
+          </Link>
+        </View>
+        <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
+          <Text tw="web:pr-12 pr-7 text-xs text-gray-900 dark:text-gray-100">
+            <Link href={`/@${username || address}`}>
+              <View tw="mr-3 flex-row items-center">
+                <Text
+                  tw="text-xs font-bold text-gray-900 dark:text-white"
+                  onPress={handleOnPressUser}
+                >
+                  {userNameText}
+                </Text>
+                {userVerified ? (
+                  <VerificationBadge
+                    style={{
+                      marginLeft: 4,
+                      position: "absolute",
+                      left: "100%",
+                    }}
+                    size={11}
+                  />
+                ) : null}
+              </View>
+            </Link>
+            {userVerified ? <View tw="w-3" /> : null}
+            {contentWithTags}
+          </Text>
 
-        <Text tw="text-13 text-gray-900 dark:text-gray-100">
-          {contentWithTags}
-        </Text>
-
-        <View tw="ml--2 mt-2 mb--2 flex-row">
-          <Button
-            variant="text"
-            tw="px-2"
-            accentColor={
-              likedByMe
-                ? [colors.black, colors.white]
-                : [colors.gray[500], colors.gray[500]]
-            }
-            onPress={onLikePress}
-          >
-            {likedByMe ? <HeartFilled /> : <Heart />}
-            {` ${likeCount}`}
-          </Button>
-          {replayCount != undefined ? (
-            <TextButton
-              tw="px-2"
-              accentColor={
-                // TODO: use `repliedByMe` when this is available.
-                replayCount > 0
-                  ? [colors.black, colors.white]
-                  : [colors.gray[500], colors.gray[500]]
-              }
-              onPress={onReplyPress}
-            >
-              {
-                // TODO: use `repliedByMe` when this is available.
-                replayCount > 0 ? <MessageFilled /> : <Message />
-              }
-              {` ${replayCount}`}
-            </TextButton>
-          ) : (
-            <TextButton
-              tw="px-2"
-              accentColor={
-                // TODO: use `repliedByMe` when this is available.
-                [colors.gray[500], colors.gray[500]]
-              }
-              onPress={onReplyPress}
-            >
-              {
-                // TODO: use `repliedByMe` when this is available.
-                <Message />
-              }
-            </TextButton>
-          )}
-          <View
-            tw={[
-              "flex-1 flex-row items-center justify-end",
-              onDeletePress ? "mr--3" : "",
-            ]}
-          >
-            {createdAtText && (
-              <Text tw="text-xs font-bold text-gray-500">
-                {`${createdAtText}${onDeletePress ? "  •" : ""}`}
+          <View tw={"flex-row space-x-3"}>
+            <View tw="justify-center py-0">
+              {createdAtText && (
+                <Text tw="text-[10px] text-gray-500">{`${createdAtText}`}</Text>
+              )}
+            </View>
+            <View tw="justify-center py-0">
+              <Text tw="px-0 text-[10px] text-gray-500" onPress={onReplyPress}>
+                Reply
               </Text>
-            )}
-            {onDeletePress && (
-              <Button variant="text" tw="ml--1.5" onPress={onDeletePress}>
-                Delete
+            </View>
+
+            <View
+              tw={"flex-1 flex-row items-center justify-end space-x-3 px-0"}
+            >
+              <Button
+                variant="text"
+                tw="items-center justify-center px-0 py-0"
+                accentColor={
+                  likedByMe
+                    ? [colors.black, colors.white]
+                    : [colors.gray[500], colors.gray[500]]
+                }
+                onPress={onLikePress}
+                style={{ padding: 0 }}
+              >
+                {likedByMe ? <HeartFilled /> : <Heart />}
+                <Text tw="text-sm text-[12px]">{` ${likeCount}`}</Text>
               </Button>
-            )}
+              {Platform.OS === "web" && onDeletePress ? (
+                <Button
+                  variant="text"
+                  tw="px-0 font-thin"
+                  onPress={onDeletePress}
+                  style={{ padding: 0 }}
+                >
+                  <Trash />
+                </Button>
+              ) : null}
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </Swipeable>
   );
 }

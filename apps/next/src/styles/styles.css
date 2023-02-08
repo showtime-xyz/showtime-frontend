@@ -153,3 +153,21 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.react-datepicker__input-container {
+  display: flex;
+}
+.react-datepicker__input-container input {
+  flex: 1;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input:focus-visible {
+  outline: none;
+  box-shadow: none !important;
+}
+textarea:focus-visible {
+  outline: none;
+  box-shadow: none !important;
+}

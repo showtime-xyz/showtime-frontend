@@ -29,7 +29,7 @@ const Header = () => {
 
   return Platform.OS === "web" ? (
     <View tw="w-full flex-row justify-center px-4 py-4">
-      <Text tw="font-space-bold text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
         Notifications
       </Text>
     </View>
@@ -175,7 +175,6 @@ export const Notifications = ({
         onClose={() => setUsers([])}
       >
         <UserList
-          onClose={() => setUsers([])}
           users={users}
           loading={false}
           style={{ height: Platform.OS === "web" ? 200 : undefined }}

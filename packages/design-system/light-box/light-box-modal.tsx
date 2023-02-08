@@ -47,7 +47,6 @@ export const LightImageModal = ({
 
   const targetHeight = layout.height / scaleFactor;
 
-  // const headerHeight = useHeaderHeight();
   const headerHeight = 0;
 
   const animationProgress = useSharedValue(0);

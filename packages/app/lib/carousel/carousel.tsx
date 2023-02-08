@@ -64,7 +64,7 @@ export function Carousel({
         customAnimation={animationStyle}
         {...rest}
       />
-      {controller && (
+      {controller && data.length > 0 && (
         <Controller
           prev={() => carouselRef.current?.prev()}
           next={() => carouselRef.current?.next()}

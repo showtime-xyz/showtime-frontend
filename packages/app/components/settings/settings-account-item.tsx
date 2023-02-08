@@ -1,12 +1,11 @@
 import { useState, useRef } from "react";
 
-import { Button } from "@showtime-xyz/universal.button";
+import { SvgProps } from "react-native-svg";
+
+import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
+import { Trash } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -16,22 +15,7 @@ import { useDeleteUser } from "app/hooks/use-delete-user";
 import { useUser } from "app/hooks/use-user";
 import { Logger } from "app/lib/logger";
 
-import { ClearCacheBtn } from "./clear-cache-btn";
-import { SettingSubTitle } from "./settings-subtitle";
-
-export const SettingAccountSlotHeader = () => {
-  return (
-    <View>
-      <SettingSubTitle>
-        <Text tw="text-xl font-bold text-gray-900 dark:text-white">
-          Accounts
-        </Text>
-      </SettingSubTitle>
-    </View>
-  );
-};
-
-export const SettingAccountSlotFooter = () => {
+export const SettingDeleteAccount = () => {
   const { deleteUser } = useDeleteUser();
   const user = useUser();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -54,38 +38,28 @@ export const SettingAccountSlotFooter = () => {
     }
   };
   return (
-    <View tw="mt-4 px-4">
-      <View tw="flex flex-col items-start">
-        <Text tw="text-base font-bold text-gray-900 dark:text-white">
-          Delete Account
-        </Text>
-        <View tw="h-4" />
-        <Text tw="text-xs text-gray-500 dark:text-white md:text-sm">
-          This action cannot be undone.
-        </Text>
-        <View tw="h-4" />
-        <View tw="flex flex-row">
-          <Button
-            variant="danger"
-            size="small"
-            onPress={() => {
-              setShowDeleteConfirmation(true);
-              setError("");
-            }}
-          >
-            <Text>Delete Account</Text>
-          </Button>
-        </View>
-        <View tw="h-4" />
-        <ClearCacheBtn />
-      </View>
+    <View>
+      <AccountSettingItem
+        title="Delete account"
+        subTitle="This action cannot be undone."
+        onPress={() => {
+          setShowDeleteConfirmation(true);
+          setError("");
+        }}
+        buttonText="Delete Account"
+        Icon={Trash}
+        buttonProps={{
+          variant: "danger",
+        }}
+      />
+
       <ModalSheet
         title="Delete Account?"
         visible={showDeleteConfirmation}
         close={() => setShowDeleteConfirmation(false)}
         onClose={() => setShowDeleteConfirmation(false)}
       >
-        <View>
+        <View tw="p-4">
           <View tw="mb-4">
             <Text tw="text-base text-gray-900 dark:text-gray-100">
               Are you sure you want to delete your account? This action cannot
@@ -103,7 +77,7 @@ export const SettingAccountSlotFooter = () => {
             label="Username"
             errorText={error}
           />
-          <View tw="mt-8 flex-row">
+          <View tw="mt-8 flex-row justify-between">
             <Button
               tw="mb-4 mr-2"
               onPress={() => setShowDeleteConfirmation(false)}
@@ -121,33 +95,52 @@ export const SettingAccountSlotFooter = () => {
 };
 
 export type AccountSettingItemProps = {
-  id: number | string;
   title: string;
-  subRoute: string;
+  subTitle?: string;
+  Icon?: (props: SvgProps) => JSX.Element;
+  onPress?: () => void;
+  buttonText: string;
+  buttonProps?: ButtonProps;
 };
 
-export const AccountSettingItem = (props: AccountSettingItemProps) => {
-  const isDark = useIsDarkMode();
-  const router = useRouter();
-  const handleOnPressItem = (route: string) => {
-    router.push(`/settings/${route}`);
-  };
-
+export const AccountSettingItem = ({
+  title,
+  subTitle,
+  onPress,
+  Icon,
+  buttonText,
+  buttonProps = {},
+}: AccountSettingItemProps) => {
   return (
-    <Pressable
-      onPress={() => handleOnPressItem(props.subRoute)}
-      tw="mb-2 w-full flex-row items-center justify-between rounded-md px-4 py-2"
-    >
-      <View tw="flex flex-col">
-        <Text tw="text-sm text-gray-900 dark:text-white">{props.title}</Text>
+    <View tw="flex-row items-center justify-between py-2.5 ">
+      {Icon && (
+        <View
+          tw={[
+            "mr-2.5 h-5 w-5 items-center justify-center rounded-full bg-gray-200",
+            subTitle ? "self-start" : "",
+          ]}
+        >
+          <Icon color={colors.black} width={14} height={14} />
+        </View>
+      )}
+      <View tw="flex-1 flex-row items-center justify-between">
+        <View>
+          <Text tw="text-base font-medium text-gray-900 dark:text-white">
+            {title}
+          </Text>
+          {Boolean(subTitle) && (
+            <>
+              <View tw="h-2" />
+              <Text tw="ml-2.5 text-xs italic text-gray-900 dark:text-white">
+                {subTitle}
+              </Text>
+            </>
+          )}
+        </View>
+        <Button variant="tertiary" onPress={onPress} {...buttonProps}>
+          {buttonText}
+        </Button>
       </View>
-      <View tw="h-8 w-8 items-center justify-center">
-        <ChevronRight
-          width={24}
-          height={24}
-          color={isDark ? colors.gray[200] : colors.gray[700]}
-        />
-      </View>
-    </Pressable>
+    </View>
   );
 };

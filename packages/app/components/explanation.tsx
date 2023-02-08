@@ -2,10 +2,10 @@ import { Dimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Carousel } from "app/lib/carousel";
 
 const width = Dimensions.get("window").width;
@@ -16,6 +16,7 @@ type ExplanationProps = {
   coverElement?: JSX.Element | null;
   onDone: () => void;
   ctaCopy?: string;
+  enabled?: boolean;
 };
 
 export const Explanation = ({
@@ -24,15 +25,16 @@ export const Explanation = ({
   coverElement,
   onDone,
   ctaCopy,
+  enabled,
 }: ExplanationProps) => {
   const insets = useSafeAreaInsets();
 
   return (
     <>
-      <ScrollView>
+      <BottomSheetScrollView>
         {coverElement}
         <View tw="flex-1 items-center justify-center py-4">
-          <Text tw="px-8 text-center text-3xl text-gray-900 dark:text-white">
+          <Text tw="px-8 text-center text-3xl font-bold text-gray-900 dark:text-white">
             {title}
           </Text>
           <Carousel
@@ -44,11 +46,11 @@ export const Explanation = ({
             autoPlayInterval={2000}
             pagination
             controller
-            controllerTw="-top-8 web:-top-20"
+            controllerTw="top-14 web:-top-20"
             scrollAnimationDuration={1000}
             renderItem={({ item }) => (
               <View
-                tw="mt-10 h-16 bg-white dark:bg-black"
+                tw="web:bg-white web:dark:bg-black h-16 pt-10"
                 style={{ height: 150 }}
               >
                 {item.title && (
@@ -61,16 +63,17 @@ export const Explanation = ({
                 )}
                 {item.description && (
                   <>
-                    <Text tw="text-center text-lg text-gray-600 dark:text-gray-400">
+                    <Text tw="text-center text-base  text-gray-600 dark:text-gray-400">
                       {item.description}
                     </Text>
                   </>
                 )}
               </View>
             )}
+            enabled={enabled}
           />
         </View>
-      </ScrollView>
+      </BottomSheetScrollView>
       <View tw="mt-auto w-full px-8" style={{ paddingBottom: insets.bottom }}>
         <Button size="regular" onPress={onDone}>
           {ctaCopy}
