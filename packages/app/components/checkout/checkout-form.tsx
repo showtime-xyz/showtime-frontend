@@ -9,7 +9,6 @@ import {
   LinkAuthenticationElement,
 } from "@stripe/react-stripe-js";
 import * as stripeJs from "@stripe/stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -18,8 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Logger } from "app/lib/logger";
 
-// @ts-ignore
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
+import { stripePromise } from "./stripe";
 
 const CheckoutFormStripe = () => {
   const stripe = useStripe();
@@ -29,38 +27,7 @@ const CheckoutFormStripe = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent?.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
-      }
-    });
-  }, [stripe]);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -72,7 +39,7 @@ const CheckoutFormStripe = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: window.location.href,
+        return_url: window.location.origin + "/checkout-return",
         receipt_email: email,
       },
     });
@@ -129,7 +96,7 @@ export function CheckoutForm({ paymentIntent }: { paymentIntent: string }) {
       setOptions((p) => ({
         ...p,
         clientSecret:
-          "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
+          "pi_3MZ6SsAgQah8GEw204rsiRD2_secret_5upYTsdYmcXE7E5ihfeKDyMLN",
       }));
     }
     fetchClientSecret();
