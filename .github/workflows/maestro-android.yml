@@ -4,8 +4,6 @@ defaults:
   run:
     working-directory: apps/expo
 on:
-  push:
-    branches: ["staging"]
   pull_request:
     branches: ["staging"]
 
