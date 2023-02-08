@@ -86,7 +86,7 @@ export const DropFree = () => {
           .required()
           .typeError("Please enter a valid number")
           .min(1)
-          .max(isVrified ? 100000 : 50)
+          .max(isVerified ? 100000 : 50)
           .default(isVerified ? defaultValues.editionSize : 50),
         royalty: yup
           .number()
