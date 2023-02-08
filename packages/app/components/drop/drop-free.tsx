@@ -71,7 +71,7 @@ export const DropFree = () => {
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
 
-  const isVrified = false;
+  const isVerified = false;
   userProfile?.data?.profile.has_verified_phone_number &&
     userProfile?.data?.profile.verified;
 
