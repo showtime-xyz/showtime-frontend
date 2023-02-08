@@ -1,1 +1,0 @@
-export { Checkout } from "./checkout";

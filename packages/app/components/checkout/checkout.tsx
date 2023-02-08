@@ -1,149 +1,140 @@
-import { useEffect, useState } from "react";
-
-import {
-  useStripe,
-  useElements,
-  Elements,
-  PaymentElement,
-  LinkAuthenticationElement,
-} from "@stripe/react-stripe-js";
-import * as stripeJs from "@stripe/stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import * as React from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-// @ts-ignore
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
+import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
+import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 
-const CheckoutForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
+import { CheckoutForm } from "./checkout-form";
 
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+export const Checkout = () => {
+  const [paymentIntent, setPaymentIntent] = useState(null);
 
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent?.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
-      }
-    });
-  }, [stripe]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.href,
-        receipt_email: email,
-      },
-    });
-
-    console.log("errorr ", error);
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message ?? "An unexpected error occurred.");
-    } else {
-      setMessage("An unexpected error occurred.");
-    }
-
-    setIsLoading(false);
-  };
-
-  return (
-    <View tw="min-h-[380px] justify-end p-4" nativeID="payment-form">
-      <LinkAuthenticationElement
-        className="PaymentElement"
-        onChange={(e) => setEmail(e.value.email)}
-      />
-      <View tw="h-3" />
-      <PaymentElement
-        options={{
-          layout: "tabs",
-        }}
-      />
-      <View tw="h-8" />
-      <Button
-        disabled={isLoading || !stripe || !elements}
-        onPress={handleSubmit}
-      >
-        Submit
-      </Button>
-      {message ? <Text tw="pt-4 text-red-500">{message}</Text> : null}
-    </View>
+  return paymentIntent ? (
+    <CheckoutForm paymentIntent={paymentIntent} />
+  ) : (
+    <SelectPlan setPaymentIntent={setPaymentIntent} />
   );
 };
 
-export function Checkout({ paymentIntent }: { paymentIntent: string }) {
-  const [options, setOptions] = useState<stripeJs.StripeElementsOptions>();
-  const isDark = useIsDarkMode();
+const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
+  const paidDropPlansQuery = usePaidDropPlans();
+  const [selectedPlan, setSelectedPlan] = useState<DropPlan | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchClientSecret() {
-      // const res = await axios({
-      //   url: "/v1/stripe/secret",
-      //   method: "GET",
-      // });
-      setOptions((p) => ({
-        ...p,
-        clientSecret:
-          "pi_3MXOdRAgQah8GEw21whPCZLr_secret_1Zrrj0lfsjY6z8ESbJl84XXY8",
-      }));
+  const onSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      try {
+        const res = await axios({
+          method: "POST",
+          url: "/v1/payments/start",
+          data: {
+            payment_plan: selectedPlan?.name,
+          },
+        });
+        setPaymentIntent(res.payment_intent_id);
+      } catch (e) {
+        // There is an existing payment intent for this user
+        if (e?.response?.data?.error.code === 400) {
+          const res = await axios({
+            method: "POST",
+            url: "/v1/payments/resume",
+          });
+
+          setPaymentIntent(res.payment_intent_id);
+        } else {
+          throw e;
+        }
+      }
+    } catch (e: any) {
+      setError(e?.response?.data?.error.message ?? "Something went wrong");
+      Logger.error("Payment intent fetch failed ", e);
+    } finally {
+      setLoading(false);
     }
-    fetchClientSecret();
-  }, [paymentIntent]);
+  };
 
   useEffect(() => {
-    setOptions((p) => ({
-      ...p,
-      appearance: {
-        theme: isDark ? "night" : "stripe",
-      },
-    }));
-  }, [isDark]);
+    // Sets initial selected plan
+    if (paidDropPlansQuery.data && selectedPlan === null) {
+      setSelectedPlan(paidDropPlansQuery.data[1]);
+    }
+  }, [paidDropPlansQuery?.data, selectedPlan]);
 
-  return options?.clientSecret ? (
-    <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm />
-    </Elements>
-  ) : null;
-}
+  return (
+    <View tw="p-4">
+      {paidDropPlansQuery.isLoading ? (
+        <View>
+          <Skeleton width="100%" height={46} />
+          <View tw="h-4" />
+          <Skeleton width="100%" height={46} />
+          <View tw="h-4" />
+          <Skeleton width="100%" height={46} />
+        </View>
+      ) : paidDropPlansQuery.error ? (
+        <ErrorText>Something went wrong. Please try again</ErrorText>
+      ) : null}
+      {paidDropPlansQuery.data?.map((plan) => {
+        return (
+          <Pressable
+            key={plan.name}
+            onPress={() => setSelectedPlan(plan)}
+            tw="mb-4 flex-row items-center justify-between rounded-full bg-gray-100 p-4 dark:bg-gray-900"
+            style={{
+              // @ts-ignore
+              background:
+                selectedPlan?.name === plan.name
+                  ? `linear-gradient(225deg, #FFFBEB 0%, #FDE68A 23.44%, #F59E0B 69.27%)`
+                  : undefined,
+            }}
+          >
+            <View tw="flex-row items-center">
+              <Text
+                tw={`font-space font-semibold ${
+                  selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
+                } text-gray-900`}
+              >
+                {plan.edition_size} edition drop
+              </Text>
+            </View>
+            <Text
+              tw={`font-space font-semibold ${
+                selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
+              } text-gray-900`}
+            >
+              ${plan.pricing}
+            </Text>
+          </Pressable>
+        );
+      })}
+      <View tw="mb-4 mt-8 items-center p-4">
+        <Text tw="text-lg font-semibold text-gray-900 dark:text-gray-50">
+          Why is it paid?
+        </Text>
+        <Text tw="pt-4 text-gray-900 dark:text-gray-50">
+          Polygon NFTs cost money to mint, so we made it as affordable as
+          possible.
+          {`\n\n`}
+          This way, your fans don’t need a wallet: you can give away free
+          collectibles to people who are new to web3!
+        </Text>
+      </View>
+      <Button onPress={onSubmit} disabled={loading}>
+        <Text tw="font-semibold text-gray-50 dark:text-gray-900">
+          {loading ? "Loading..." : "Let's go"}
+        </Text>
+      </Button>
+      {error ? <Text tw="text-red-500">{error}. Please retry</Text> : null}
+    </View>
+  );
+};

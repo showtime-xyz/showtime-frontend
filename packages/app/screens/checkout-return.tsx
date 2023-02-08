@@ -1,11 +1,11 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Checkout } from "app/components/checkout/checkout";
+import { CheckoutReturn } from "app/components/checkout/checkout-return";
 
-export const CheckoutScreen = withModalScreen(Checkout, {
+export const CheckoutReturnScreen = withModalScreen(CheckoutReturn, {
   title: "Checkout",
-  matchingPathname: "/checkout",
-  matchingQueryParam: "checkoutModal",
+  matchingPathname: "/checkout-return",
+  matchingQueryParam: "checkoutReturnModal",
   tw: "w-full lg:w-[500px]",
   disableBackdropPress: true,
   web_height: `max-h-[100vh] md:max-h-[82vh]`,

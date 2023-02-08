@@ -7,6 +7,7 @@ import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { CheckoutScreen } from "app/screens/checkout";
+import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -127,6 +128,11 @@ export function RootStackNavigator() {
           name="checkout"
           options={{ headerTitle: "Checkout" }}
           component={CheckoutScreen}
+        />
+        <Stack.Screen
+          name="checkoutReturn"
+          options={{ headerTitle: "Checkout" }}
+          component={CheckoutReturnScreen}
         />
       </Stack.Group>
 
