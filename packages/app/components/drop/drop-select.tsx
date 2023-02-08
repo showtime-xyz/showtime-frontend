@@ -26,6 +26,19 @@ export const DropSelect = () => {
     return <CompleteProfileModalContent />;
   }
 
+  const navigateToCheckout = () => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          checkoutModal: true,
+        },
+      },
+      router.asPath
+    );
+  };
+
   return (
     <BottomSheetScrollView>
       <View tw="flex-row flex-wrap items-center justify-center">
@@ -39,7 +52,7 @@ export const DropSelect = () => {
             }
             onPress={() => {
               if (!isUserSubscribed) {
-                router.push("/checkout");
+                navigateToCheckout();
                 return;
               }
               if (Platform.OS !== "web") {
@@ -65,7 +78,7 @@ export const DropSelect = () => {
             }
             onPress={() => {
               if (!isUserSubscribed) {
-                router.push("/checkout");
+                navigateToCheckout();
                 return;
               }
               if (Platform.OS !== "web") {
@@ -93,7 +106,7 @@ export const DropSelect = () => {
             ctaLabel="Create Event Drop"
             onPress={() => {
               if (!isUserSubscribed) {
-                router.push("/checkout");
+                navigateToCheckout();
                 return;
               }
               if (Platform.OS !== "web") {
@@ -113,7 +126,7 @@ export const DropSelect = () => {
             ctaLabel="Create Private Drop"
             onPress={() => {
               if (!isUserSubscribed) {
-                router.push("/checkout");
+                navigateToCheckout();
                 return;
               }
               if (Platform.OS !== "web") {

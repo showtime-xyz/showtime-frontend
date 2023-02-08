@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 
 import {
   useStripe,
@@ -8,7 +8,6 @@ import {
   PaymentElement,
   LinkAuthenticationElement,
 } from "@stripe/react-stripe-js";
-import * as stripeJs from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -18,6 +17,26 @@ import { View } from "@showtime-xyz/universal.view";
 import { Logger } from "app/lib/logger";
 
 import { stripePromise } from "./stripe";
+
+export function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+  const isDark = useIsDarkMode();
+  const stripeOptions = useMemo(
+    () =>
+      ({
+        clientSecret,
+        appearance: {
+          theme: isDark ? "night" : "stripe",
+        },
+      } as const),
+    [clientSecret, isDark]
+  );
+
+  return stripeOptions?.clientSecret ? (
+    <Elements stripe={stripePromise} options={stripeOptions}>
+      <CheckoutFormStripe />
+    </Elements>
+  ) : null;
+}
 
 const CheckoutFormStripe = () => {
   const stripe = useStripe();
@@ -82,38 +101,3 @@ const CheckoutFormStripe = () => {
     </View>
   );
 };
-
-export function CheckoutForm({ paymentIntent }: { paymentIntent: string }) {
-  const [options, setOptions] = useState<stripeJs.StripeElementsOptions>();
-  const isDark = useIsDarkMode();
-
-  useEffect(() => {
-    async function fetchClientSecret() {
-      // const res = await axios({
-      //   url: "/v1/stripe/secret",
-      //   method: "GET",
-      // });
-      setOptions((p) => ({
-        ...p,
-        clientSecret:
-          "pi_3MZ6SsAgQah8GEw204rsiRD2_secret_5upYTsdYmcXE7E5ihfeKDyMLN",
-      }));
-    }
-    fetchClientSecret();
-  }, [paymentIntent]);
-
-  useEffect(() => {
-    setOptions((p) => ({
-      ...p,
-      appearance: {
-        theme: isDark ? "night" : "stripe",
-      },
-    }));
-  }, [isDark]);
-
-  return options?.clientSecret ? (
-    <Elements stripe={stripePromise} options={options}>
-      <CheckoutFormStripe />
-    </Elements>
-  ) : null;
-}

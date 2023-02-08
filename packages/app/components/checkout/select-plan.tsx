@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState, useEffect } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -12,7 +13,7 @@ import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 
-export const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
+export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();
   const [selectedPlan, setSelectedPlan] = useState<DropPlan | null>(null);
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ export const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
             payment_plan: selectedPlan?.name,
           },
         });
-        setPaymentIntent(res.payment_intent_id);
+        setClientSecret(res.client_secret);
       } catch (e) {
         // There is an existing payment intent for this user
         if (e?.response?.data?.error.code === 400) {
@@ -40,7 +41,7 @@ export const SelectPlan = ({ setPaymentIntent }: { setPaymentIntent: any }) => {
             url: "/v1/payments/resume",
           });
 
-          setPaymentIntent(res.payment_intent_id);
+          setClientSecret(res.client_secret);
         } else {
           throw e;
         }

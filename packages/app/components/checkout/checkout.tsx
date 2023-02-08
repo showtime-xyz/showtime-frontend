@@ -5,11 +5,11 @@ import { CheckoutForm } from "./checkout-form";
 import { SelectPlan } from "./select-plan";
 
 export const Checkout = () => {
-  const [paymentIntent, setPaymentIntent] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
 
-  return paymentIntent ? (
-    <CheckoutForm paymentIntent={paymentIntent} />
+  return clientSecret ? (
+    <CheckoutForm clientSecret={clientSecret} />
   ) : (
-    <SelectPlan setPaymentIntent={setPaymentIntent} />
+    <SelectPlan setClientSecret={setClientSecret} />
   );
 };
