@@ -136,7 +136,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           {loading ? "Loading..." : "Let's go"}
         </Text>
       </Button>
-      {error ? <Text tw="text-red-500">{error}. Please retry</Text> : null}
+      {error ? <Text tw="pt-2 text-red-500">{error}. Please retry</Text> : null}
     </View>
   );
 };
