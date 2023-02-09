@@ -571,7 +571,7 @@ export const DropMusic = () => {
                           render={({ field: { onChange, onBlur, value } }) => {
                             return (
                               <Fieldset
-                                tw="flex-1"
+                                tw="flex-1 opacity-100"
                                 label="Edition size"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
@@ -579,6 +579,7 @@ export const DropMusic = () => {
                                 value={value?.toString()}
                                 disabled={isUnlimited}
                                 onChangeText={onChange}
+                                style={{ opacity: isUnlimited ? 0.4 : 1 }}
                                 rightElement={
                                   <Pressable
                                     onPress={() =>
@@ -607,7 +608,7 @@ export const DropMusic = () => {
                           }}
                         />
                       </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:ml-4">
                         <Controller
                           control={control}
                           name="royalty"
