@@ -130,3 +130,6 @@ apps/expo/service-account-key.json
 
 # ESLint
 lint-results/
+
+# History plugins for VSCode
+.history/
