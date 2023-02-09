@@ -70,7 +70,10 @@ export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
-
+  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const defaultEditionSize = userProfile?.data?.profile.verified
+    ? defaultValues.editionSize
+    : 50;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -82,10 +85,11 @@ export const DropFree = () => {
           .required()
           .typeError("Please enter a valid number")
           .min(1)
-          .max(userProfile?.data?.profile.verified ? 100000 : 50)
-          .default(
-            userProfile?.data?.profile.verified ? defaultValues.editionSize : 50
-          ),
+          .max(
+            maxEditionSize,
+            `You can drop ${maxEditionSize} editions at most.`
+          )
+          .default(defaultEditionSize),
         royalty: yup
           .number()
           .required()
@@ -101,7 +105,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [userProfile?.data?.profile.verified]
+    [maxEditionSize, defaultEditionSize]
   );
 
   const {
@@ -112,21 +116,16 @@ export const DropFree = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
     defaultValues: {
       ...defaultValues,
-      editionSize: userProfile?.data?.profile.verified
-        ? defaultValues.editionSize
-        : 50,
+      editionSize: defaultEditionSize,
     },
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 

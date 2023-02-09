@@ -1,8 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -30,13 +29,13 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
@@ -68,39 +67,49 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-const dropValidationSchema = yup.object({
-  file: yup.mixed().required("Media is required"),
-  title: yup.string().required().max(255),
-  description: yup.string().max(280).required(),
-  editionSize: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .min(1)
-    .max(100000)
-    .default(defaultValues.editionSize),
-  royalty: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .max(69)
-    .default(defaultValues.royalty),
-  hasAcceptedTerms: yup
-    .boolean()
-    .default(defaultValues.hasAcceptedTerms)
-    .required()
-    .isTrue("You must accept the terms and conditions."),
-  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-  googleMapsUrl: yup.string().url(),
-  radius: yup.number().min(0.01).max(10),
-});
-
 const DROP_FORM_DATA_KEY = "drop_form_local_data_event";
 
 export const DropEvent = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
-
+  const { data: userProfile } = useMyInfo();
+  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const defaultEditionSize = userProfile?.data?.profile.verified
+    ? defaultValues.editionSize
+    : 50;
+  const dropValidationSchema = useMemo(
+    () =>
+      yup.object({
+        file: yup.mixed().required("Media is required"),
+        title: yup.string().required().max(255),
+        description: yup.string().max(280).required(),
+        editionSize: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .min(1)
+          .max(
+            maxEditionSize,
+            `You can drop ${maxEditionSize} editions at most.`
+          )
+          .default(defaultEditionSize),
+        royalty: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .max(69)
+          .default(defaultValues.royalty),
+        hasAcceptedTerms: yup
+          .boolean()
+          .default(defaultValues.hasAcceptedTerms)
+          .required()
+          .isTrue("You must accept the terms and conditions."),
+        notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+        googleMapsUrl: yup.string().url(),
+        radius: yup.number().min(0.01).max(10),
+      }),
+    [defaultEditionSize, maxEditionSize]
+  );
   const {
     control,
     handleSubmit,
@@ -109,26 +118,23 @@ export const DropEvent = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      editionSize: defaultEditionSize,
+    },
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
 
