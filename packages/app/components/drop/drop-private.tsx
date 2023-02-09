@@ -52,7 +52,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
 const defaultValues = {
   royalty: 10,
-  editionSize: 100,
+  editionSize: 15,
   duration: SECONDS_IN_A_WEEK,
   password: "",
   googleMapsUrl: "",
@@ -74,9 +74,7 @@ export const DropPrivate = () => {
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
   const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
-  const defaultEditionSize = userProfile?.data?.profile.verified
-    ? defaultValues.editionSize
-    : 50;
+  const defaultEditionSize = defaultValues.editionSize;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
