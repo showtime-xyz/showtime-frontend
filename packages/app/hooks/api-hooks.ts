@@ -116,7 +116,18 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
   const { data, error, isLoading } = useSWR<{
     data?: UserProfile;
-  }>(queryKey, fetcher);
+  }>(queryKey, fetcher, {
+    onErrorRetry: (error, key, _config, revalidate, { retryCount }) => {
+      // Never retry on 404 or 404.
+      if (error.status === 404 || error.status === 403) return;
+
+      // Only retry up to 5 times.
+      if (retryCount >= 5) return;
+
+      // Retry after 5 seconds.
+      setTimeout(() => revalidate({ retryCount }), 5000);
+    },
+  });
   const { mutate } = useSWRConfig();
 
   const { data: myInfoData } = useMyInfo();
