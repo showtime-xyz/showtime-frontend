@@ -120,8 +120,6 @@ export const DropMusic = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
@@ -133,7 +131,7 @@ export const DropMusic = () => {
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
@@ -466,7 +464,7 @@ export const DropMusic = () => {
             <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
               <Checkbox
                 checked={isSaveDrop}
-                onChange={(v) => {
+                onChange={() => {
                   setIsSaveDrop(!isSaveDrop);
                 }}
                 accesibilityLabel="Live Now"
