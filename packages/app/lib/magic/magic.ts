@@ -1,5 +1,5 @@
-import { OAuthExtension } from "@magic-ext/react-native-oauth";
-import { Magic } from "@magic-sdk/react-native";
+import { OAuthExtension } from "@magic-ext/react-native-expo-oauth";
+import { Magic } from "@magic-sdk/react-native-expo";
 
 const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
 
