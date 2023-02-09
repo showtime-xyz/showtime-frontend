@@ -22,7 +22,9 @@ export const DropSelect = () => {
   const isDark = useIsDarkMode();
   const editionSize = user.user?.data.paid_drop_credits?.[0]?.edition_size;
   const canUserCreateEditions =
-    typeof editionSize === "number" && editionSize > 0;
+    (typeof editionSize === "number" && editionSize > 0) ||
+    user.user?.data.profile.verified;
+  console.log("canUserCreateEditions", canUserCreateEditions);
 
   if (user.isIncompletedProfile) {
     return <CompleteProfileModalContent />;
