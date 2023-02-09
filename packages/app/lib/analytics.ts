@@ -15,9 +15,9 @@ export function useTrackPageViewed({ name, properties }: PageViewedProps) {
   useEffect(() => {
     if (Platform.OS === "web") {
       // @ts-expect-error rudderstack-native-sdk does not have a page method but its there in our rudderstack-provider.web.tsx
-      rudder?.page(name, { ...properties });
+      rudder?.page(name, properties);
     } else {
-      rudder?.screen(name, { ...properties });
+      rudder?.screen(name, properties);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rudder]);
