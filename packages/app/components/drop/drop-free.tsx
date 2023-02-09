@@ -60,7 +60,7 @@ const durationOptions = [
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
-  editionSize: 100,
+  editionSize: 15,
   duration: SECONDS_IN_A_WEEK,
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
@@ -71,9 +71,7 @@ export const DropFree = () => {
   const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
   const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
-  const defaultEditionSize = userProfile?.data?.profile.verified
-    ? defaultValues.editionSize
-    : 50;
+  const defaultEditionSize = defaultValues.editionSize;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -87,7 +85,7 @@ export const DropFree = () => {
           .min(1)
           .max(
             maxEditionSize,
-            `You can drop ${maxEditionSize} editions at most.`
+            `You can drop ${maxEditionSize} editions at most`
           )
           .default(defaultEditionSize),
         royalty: yup
