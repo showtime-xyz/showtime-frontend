@@ -6,7 +6,7 @@ export type DropPlan = {
   id: number;
   name: string;
   pricing: number;
-  edition_size: string;
+  edition_size: number;
 };
 
 export const usePaidDropPlans = () => {

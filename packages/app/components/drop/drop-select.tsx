@@ -20,7 +20,9 @@ export const DropSelect = () => {
   const user = useUser();
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
-  const isUserSubscribed = false;
+  const editionSize = user.user?.data.paid_drop_credits?.[0]?.edition_size;
+  const canUserCreateEditions =
+    typeof editionSize === "number" && editionSize > 0;
 
   if (user.isIncompletedProfile) {
     return <CompleteProfileModalContent />;
@@ -51,7 +53,7 @@ export const DropSelect = () => {
               <Gift color={isDark ? "black" : "white"} height={16} width={16} />
             }
             onPress={() => {
-              if (!isUserSubscribed) {
+              if (!canUserCreateEditions) {
                 navigateToCheckout();
                 return;
               }
@@ -77,7 +79,7 @@ export const DropSelect = () => {
               canCreateMusicDrop ? "Create Music Drop" : "Request Access"
             }
             onPress={() => {
-              if (!isUserSubscribed) {
+              if (!canUserCreateEditions) {
                 navigateToCheckout();
                 return;
               }
@@ -105,7 +107,7 @@ export const DropSelect = () => {
             description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
             ctaLabel="Create Event Drop"
             onPress={() => {
-              if (!isUserSubscribed) {
+              if (!canUserCreateEditions) {
                 navigateToCheckout();
                 return;
               }
@@ -125,7 +127,7 @@ export const DropSelect = () => {
             description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
             ctaLabel="Create Private Drop"
             onPress={() => {
-              if (!isUserSubscribed) {
+              if (!canUserCreateEditions) {
                 navigateToCheckout();
                 return;
               }
