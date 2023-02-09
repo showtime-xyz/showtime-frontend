@@ -120,8 +120,6 @@ export const DropMusic = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
@@ -133,7 +131,7 @@ export const DropMusic = () => {
   // const [transactionId, setTransactionId] = useParam('transactionId')
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
@@ -466,7 +464,7 @@ export const DropMusic = () => {
             <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
               <Checkbox
                 checked={isSaveDrop}
-                onChange={(v) => {
+                onChange={() => {
                   setIsSaveDrop(!isSaveDrop);
                 }}
                 accesibilityLabel="Live Now"
@@ -489,7 +487,6 @@ export const DropMusic = () => {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="flex-1"
                     label={
                       <View tw="flex-row">
                         <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
@@ -563,7 +560,7 @@ export const DropMusic = () => {
                 </Accordion.Trigger>
                 <Accordion.Content tw="pt-0">
                   <>
-                    <View tw="justify-between md:mt-0 lg:flex-row">
+                    <View tw="justify-between lg:flex-row">
                       <View tw="flex-1 flex-row">
                         <Controller
                           control={control}
@@ -571,7 +568,7 @@ export const DropMusic = () => {
                           render={({ field: { onChange, onBlur, value } }) => {
                             return (
                               <Fieldset
-                                tw="flex-1"
+                                tw="flex-1 opacity-100"
                                 label="Edition size"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
@@ -579,35 +576,30 @@ export const DropMusic = () => {
                                 value={value?.toString()}
                                 disabled={isUnlimited}
                                 onChangeText={onChange}
-                                rightElement={
-                                  <Pressable
-                                    onPress={() =>
-                                      setIsUnlimited(
-                                        (isUnlimited) => !isUnlimited
-                                      )
-                                    }
-                                    tw="flex-row items-center"
-                                  >
-                                    <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
-                                      Unlimited
-                                    </Text>
-                                    <Checkbox
-                                      onChange={() =>
-                                        setIsUnlimited(
-                                          (isUnlimited) => !isUnlimited
-                                        )
-                                      }
-                                      checked={isUnlimited}
-                                      accesibilityLabel="unlimited editions for drop"
-                                    />
-                                  </Pressable>
-                                }
                               />
                             );
                           }}
                         />
+                        <Pressable
+                          onPress={() =>
+                            setIsUnlimited((isUnlimited) => !isUnlimited)
+                          }
+                          tw="absolute right-4 top-10 flex-row items-center"
+                          style={{ opacity: 1 }}
+                        >
+                          <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
+                            Unlimited
+                          </Text>
+                          <Checkbox
+                            onChange={() =>
+                              setIsUnlimited((isUnlimited) => !isUnlimited)
+                            }
+                            checked={isUnlimited}
+                            accesibilityLabel="unlimited editions for drop"
+                          />
+                        </Pressable>
                       </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:mr-4">
+                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:ml-4">
                         <Controller
                           control={control}
                           name="royalty"
