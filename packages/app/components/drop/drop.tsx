@@ -10,7 +10,7 @@ const STORE_KEY = "showExplanation";
 
 export const Drop = () => {
   const [showExplanation, setShowExplanation] = useState(
-    () => store.getBoolean(STORE_KEY) ?? true
+    () => store.getBoolean(STORE_KEY + "v2") ?? true
   );
 
   const hideExplanation = () => {
