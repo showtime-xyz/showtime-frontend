@@ -88,7 +88,7 @@ export const DropEvent = () => {
           .min(1)
           .max(
             maxEditionSize,
-            `You can drop ${maxEditionSize} editions at most.`
+            `You can drop ${maxEditionSize} editions at most`
           )
           .default(defaultEditionSize),
         royalty: yup
