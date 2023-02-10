@@ -1,6 +1,7 @@
 export { default as Alert } from "./Alert";
 export { default as ArrowLeft } from "./ArrowLeft";
 export { default as ArrowRight } from "./ArrowRight";
+
 export { default as Badge } from "./Badge";
 export { default as Basket } from "./Basket";
 export { default as Bell } from "./Bell";
@@ -119,6 +120,7 @@ export { default as BellRinging } from "./BellRinging";
 export { default as BellMinus } from "./BellMinus";
 export { default as BellOff } from "./BellOff";
 export { default as PhonePortraitOutline } from "./PhonePortraitOutline";
+export { default as CreditCard } from "./CreditCard";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
