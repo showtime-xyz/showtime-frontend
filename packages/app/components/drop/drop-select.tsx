@@ -23,7 +23,6 @@ export const DropSelect = () => {
   const canUserCreateEditions =
     (typeof editionSize === "number" && editionSize > 0) ||
     user.user?.data.profile.verified;
-  console.log("canUserCreateEditions", canUserCreateEditions);
 
   if (user.isIncompletedProfile) {
     return <CompleteProfileModalContent />;

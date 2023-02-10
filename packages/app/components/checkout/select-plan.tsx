@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 
+import useSWRMutation from "swr/mutation";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -11,48 +13,22 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
 import { axios } from "app/lib/axios";
-import { Logger } from "app/lib/logger";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();
   const [selectedPlan, setSelectedPlan] = useState<DropPlan | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const isDark = useIsDarkMode();
+  const { trigger, data, isMutating, error } = useSWRMutation<{
+    payment_intent_id: string;
+    client_secret: string;
+  }>(MY_INFO_ENDPOINT, fetchPaymentIntent);
 
-  const onSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      try {
-        const res = await axios({
-          method: "POST",
-          url: "/v1/payments/start",
-          data: {
-            payment_plan: selectedPlan?.name,
-          },
-        });
-        setClientSecret(res.client_secret);
-      } catch (e) {
-        // There is an existing payment intent for this user
-        if (e?.response?.data?.error.code === 400) {
-          const res = await axios({
-            method: "POST",
-            url: "/v1/payments/resume",
-          });
-
-          setClientSecret(res.client_secret);
-        } else {
-          throw e;
-        }
-      }
-    } catch (e: any) {
-      setError(e?.response?.data?.error.message ?? "Something went wrong");
-      Logger.error("Payment intent fetch failed ", e);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (data) {
+      setClientSecret(data.client_secret);
     }
-  };
+  }, [data, setClientSecret]);
 
   useEffect(() => {
     // Sets initial selected plan
@@ -131,12 +107,43 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           collectibles to people who are new to web3!
         </Text>
       </View>
-      <Button onPress={onSubmit} disabled={loading}>
+      <Button onPress={() => trigger(selectedPlan)} disabled={isMutating}>
         <Text tw="font-semibold text-gray-50 dark:text-gray-900">
-          {loading ? "Loading..." : "Let's go"}
+          {isMutating ? "Loading..." : "Let's go"}
         </Text>
       </Button>
-      {error ? <Text tw="pt-2 text-red-500">{error}. Please retry</Text> : null}
+      {error ? (
+        <Text tw="pt-2 text-red-500">{error?.message}. Please retry</Text>
+      ) : null}
     </View>
   );
 };
+
+async function fetchPaymentIntent(
+  _url: string,
+  { arg }: { arg: DropPlan | null }
+) {
+  if (arg) {
+    try {
+      const res = await axios({
+        method: "POST",
+        url: "/v1/payments/start",
+        data: {
+          payment_plan: arg.name,
+        },
+      });
+
+      return res;
+    } catch (e: any) {
+      if (e?.response?.data?.error?.code === 400) {
+        const res = await axios({
+          method: "POST",
+          url: "/v1/payments/resume",
+        });
+        return res;
+      } else {
+        throw e;
+      }
+    }
+  }
+}

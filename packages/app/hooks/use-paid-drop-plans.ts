@@ -3,7 +3,6 @@ import useSWR from "swr";
 import { axios } from "app/lib/axios";
 
 export type DropPlan = {
-  id: number;
   name: string;
   pricing: number;
   edition_size: number;
