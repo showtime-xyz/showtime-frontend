@@ -128,7 +128,7 @@ async function fetchPaymentIntent(
   _url: string,
   { arg }: { arg: DropPlan | null }
 ) {
-  if (!arg) {
+  if (arg) {
     try {
       const res = await axios({
         method: "POST",
