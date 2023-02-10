@@ -38,8 +38,6 @@
     "@storybook/addon-ondevice-controls": "next",
     "@storybook/addon-ondevice-notes": "next",
     "@storybook/react-native": "next",
-    "@stripe/react-stripe-js": "^1.16.4",
-    "@stripe/stripe-js": "^1.46.0",
     "design-system": "*",
     "expo": "~47.0.9",
     "expo-asset": "~8.6.2",
