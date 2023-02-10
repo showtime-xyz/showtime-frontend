@@ -15,7 +15,7 @@ export const Drop = () => {
 
   const hideExplanation = () => {
     setShowExplanation(false);
-    store.set(STORE_KEY, false);
+    store.set(STORE_KEY + "v2", false);
   };
 
   return showExplanation ? (
