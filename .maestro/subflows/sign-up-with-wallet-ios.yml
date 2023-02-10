@@ -1,19 +1,26 @@
 appId: io.showtime.development
 ---
 - launchApp
+# - tapOn: "Showtime http://192.168.0.241:8081"
 - assertVisible: "Sign In"
 - tapOn: "Sign In"
-- tapOn: "I already have a wallet"
+- tapOn: "Connect Wallet"
 - assertNotVisible: "Sign In"
 - tapOn:
     text: "Pick profile photo"
     index: 1
-- tapOn: "Select Photos…"
+- tapOn:
+    text: "Select Photos…"
+    optional: true
 - tapOn:
     # Selects photo from picker
     point: "16%,22%"
-- tapOn: "Choose"
-- tapOn: "Keep current Selection"
+- tapOn:
+    text: "Choose"
+    optional: true
+- tapOn:
+    text: "Keep current Selection"
+    optional: true
 - tapOn: "Your display name"
 - inputRandomPersonName
 - tapOn: "Your username"
