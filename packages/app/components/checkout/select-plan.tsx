@@ -91,7 +91,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
                 selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
               } text-gray-900`}
             >
-              ${plan.pricing}
+              ${plan.pricing / 100}
             </Text>
           </Pressable>
         );
