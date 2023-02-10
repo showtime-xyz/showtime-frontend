@@ -86,10 +86,6 @@ export const DropSelect = () => {
               canCreateMusicDrop ? "Create a Music Drop" : "Request Access"
             }
             onPress={() => {
-              if (!canUserCreateEditions) {
-                navigateToCheckout();
-                return;
-              }
               if (Platform.OS !== "web") {
                 router.pop();
               }
