@@ -119,7 +119,8 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
   }>(queryKey, fetcher, {
     onErrorRetry: (error, key, _config, revalidate, { retryCount }) => {
       // Never retry on 403 or 404.
-      if (error.status === 404 || error.status === 403) return;
+      if (error.response.status === 404 || error.response.status === 403)
+        return;
 
       // Only retry up to 5 times.
       if (retryCount >= 5) return;
