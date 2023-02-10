@@ -1,10 +1,11 @@
 import { AppState, AppStateStatus } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
+import type { AxiosError } from "axios";
 import { MMKV } from "react-native-mmkv";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
-import type { PublicConfiguration } from "swr/dist/types";
+import type { PublicConfiguration } from "swr/_internal";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
@@ -53,16 +54,18 @@ export const SWRProvider = ({
           }
         },
         onErrorRetry: async (
-          error: {
-            status: number;
-          },
+          error: AxiosError,
           key: string,
           config: Readonly<PublicConfiguration>,
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
           // bail out immediately if the error is unrecoverable
-          if (error.status === 403 || error.status === 404) {
+          if (
+            error.response?.status === 400 ||
+            error.response?.status === 403 ||
+            error.response?.status === 404
+          ) {
             return;
           }
 

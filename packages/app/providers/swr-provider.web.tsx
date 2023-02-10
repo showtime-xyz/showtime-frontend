@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { SWRConfiguration } from "swr";
@@ -42,16 +43,18 @@ export const SWRProvider = ({
           }
         },
         onErrorRetry: async (
-          error: {
-            status: number;
-          },
+          error: AxiosError,
           key: string,
           config: Readonly<SWRConfiguration>,
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
           // bail out immediately if the error is unrecoverable
-          if (error.status === 403 || error.status === 404) {
+          if (
+            error.response?.status === 400 ||
+            error.response?.status === 403 ||
+            error.response?.status === 404
+          ) {
             return;
           }
 
