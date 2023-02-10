@@ -154,7 +154,8 @@ function NFTDropdown({
           {edition?.gating_type === "music_presave" &&
           nft.creator_username === user?.data.profile.username &&
           edition.presave_release_date &&
-          new Date(edition.presave_release_date).getTime() >
+          new Date(edition.presave_release_date).getTime() +
+            24 * 60 * 60 * 1000 >
             new Date().getTime() ? (
             <DropdownMenuItem
               onSelect={() => {
