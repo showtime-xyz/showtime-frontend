@@ -28,11 +28,15 @@ import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
-
 const PlatformInputAccessoryView =
   Platform.OS === "ios" ? InputAccessoryView : Fragment;
 
-export function Comments({ nft }: { nft: NFT }) {
+type CommentsProps = {
+  nft: NFT;
+  webListHeight?: number | string;
+};
+
+export function Comments({ nft, webListHeight }: CommentsProps) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -60,7 +64,7 @@ export function Comments({ nft }: { nft: NFT }) {
     deleteComment,
     newComment,
   } = useComments(nft.nft_id);
-  const modalListProps = useModalListProps();
+  const modalListProps = useModalListProps(webListHeight);
   const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   //#endregion
@@ -93,24 +97,33 @@ export function Comments({ nft }: { nft: NFT }) {
         }
       };
 
-      Alert.alert(
-        "Delete Comment",
-        "Are you sure you want to delete this comment?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: _deleteComment,
-          },
-        ]
-      );
+      return new Promise<void>((resolve) => {
+        Alert.alert(
+          "Delete Comment",
+          "Are you sure you want to delete this comment?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                resolve();
+              },
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => {
+                resolve();
+                _deleteComment();
+              },
+            },
+          ]
+        );
+      });
     },
     [Alert, deleteComment]
   );
+
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
@@ -120,27 +133,34 @@ export function Comments({ nft }: { nft: NFT }) {
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<CommentType>) => (
       <CommentRow
-        key={`comment-row-${item.comment_id}`}
         comment={item}
         likeComment={likeComment}
         unlikeComment={unlikeComment}
         deleteComment={handleOnDeleteComment}
         reply={handleOnReply}
+        creatorId={nft.creator_id}
       />
     ),
-    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
+    [
+      likeComment,
+      unlikeComment,
+      handleOnDeleteComment,
+      handleOnReply,
+      nft.creator_id,
+    ]
   );
 
   const listEmptyComponent = useCallback(
-    () => (
-      <EmptyPlaceholder
-        text="Be the first to add a comment!"
-        title="💬 No comments yet..."
-        titleTw="pt-1"
-        tw="mt-5 h-full flex-1 items-center justify-center"
-      />
-    ),
-    []
+    () =>
+      !isLoading && !error && !dataReversed.length ? (
+        <View tw="absolute -mt-10 h-full w-full flex-1 items-center justify-center">
+          <EmptyPlaceholder
+            text="Be the first to add a comment!"
+            title="💬 No comments yet..."
+          />
+        </View>
+      ) : null,
+    [isLoading, dataReversed.length, error]
   );
   const listFooterComponent = useCallback(
     () => <View style={{ height: Math.max(bottom, 20) }} />,
@@ -151,20 +171,21 @@ export function Comments({ nft }: { nft: NFT }) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <>
+        <View tw="web:pt-4 flex-1">
+          {listEmptyComponent()}
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            estimatedItemSize={98}
+            estimatedItemSize={70}
             overscan={98}
             keyboardDismissMode="interactive"
-            ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            contentContainerStyle={styles.contentContainer}
             {...modalListProps}
           />
           {isAuthenticated && (
@@ -184,7 +205,7 @@ export function Comments({ nft }: { nft: NFT }) {
               />
             </PlatformInputAccessoryView>
           )}
-        </>
+        </View>
       )}
     </View>
   );
@@ -198,6 +219,6 @@ const styles = StyleSheet.create({
     minHeight: 200,
   },
   contentContainer: {
-    flex: 1,
+    paddingTop: 20,
   },
 });

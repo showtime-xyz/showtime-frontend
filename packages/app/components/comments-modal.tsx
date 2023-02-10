@@ -31,7 +31,9 @@ export function CommentsModal() {
       <Suspense
         fallback={<CommentsStatus isLoading={true} error={undefined} />}
       >
-        {data?.data?.item && <Comments nft={data?.data.item} />}
+        {data?.data?.item && (
+          <Comments nft={data?.data.item} webListHeight={"50vh"} />
+        )}
       </Suspense>
     </ErrorBoundary>
   );

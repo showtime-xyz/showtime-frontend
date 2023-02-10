@@ -3,7 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 // const nativewind = require("nativewind/tailwind/css");
 
-const { textSizes, fontFamily } = require("@showtime-xyz/universal.typography");
+const { textSizes, fontFamily } = require("design-system/typography");
 // const { colors } = require("@showtime-xyz/universal.tailwind");
 // const {
 //   MAX_CONTENT_WIDTH,
@@ -331,8 +331,6 @@ module.exports = {
         copy: "copy",
       },
       fontFamily: {
-        space: fontFamily("SpaceGrotesk-Regular"),
-        "space-bold": fontFamily("SpaceGrotesk-Bold"),
         inter: fontFamily("Inter-Regular"),
         "inter-semibold": fontFamily("Inter-SemiBold"),
         "inter-bold": fontFamily("Inter-Bold"),
@@ -376,12 +374,12 @@ module.exports = {
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: fontFamily("Inter-Bold"),
         },
         ".text-xl": textSizes["text-xl"],
         ".text-2xl": {
           ...textSizes["text-2xl"],
-          fontFamily: fontFamily("SpaceGrotesk-Bold"),
+          fontFamily: fontFamily("Inter-Bold"),
         },
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],

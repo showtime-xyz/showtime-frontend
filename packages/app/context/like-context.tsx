@@ -4,6 +4,7 @@ import React, {
   useContext,
   useMemo,
   useState,
+  useRef,
 } from "react";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
@@ -28,6 +29,7 @@ export const LikeContextProvider = ({
   nft: NFT;
   children: any;
 }) => {
+  const lastItemId = useRef(nft.nft_id);
   const { isLiked, like, unlike } = useMyInfo();
   const { isAuthenticated } = useUser();
 
@@ -36,6 +38,14 @@ export const LikeContextProvider = ({
   const [likeCount, setLikeCount] = useState(
     typeof nft.like_count === "number" ? nft.like_count : 0
   );
+
+  // This part here is important for FlashList, since state gets recycled
+  // we need to reset the state when the nft-id changes
+  // https://shopify.github.io/flash-list/docs/recycling/
+  if (nft.nft_id !== lastItemId.current) {
+    lastItemId.current = nft.nft_id;
+    setLikeCount(typeof nft.like_count === "number" ? nft.like_count : 0);
+  }
 
   const likeImpl = useCallback(async () => {
     Haptics.impactAsync();

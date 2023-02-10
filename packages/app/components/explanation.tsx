@@ -34,7 +34,7 @@ export const Explanation = ({
       <BottomSheetScrollView>
         {coverElement}
         <View tw="flex-1 items-center justify-center py-4">
-          <Text tw="px-8 text-center text-3xl text-gray-900 dark:text-white">
+          <Text tw="px-8 text-center text-3xl font-bold text-gray-900 dark:text-white">
             {title}
           </Text>
           <Carousel
@@ -46,11 +46,11 @@ export const Explanation = ({
             autoPlayInterval={2000}
             pagination
             controller
-            controllerTw="-top-8 web:-top-20"
+            controllerTw="top-14 web:-top-20"
             scrollAnimationDuration={1000}
             renderItem={({ item }) => (
               <View
-                tw="h-16 bg-white pt-10 dark:bg-black"
+                tw="web:bg-white web:dark:bg-black h-16 pt-10"
                 style={{ height: 150 }}
               >
                 {item.title && (
@@ -63,7 +63,7 @@ export const Explanation = ({
                 )}
                 {item.description && (
                   <>
-                    <Text tw="text-center text-lg text-gray-600 dark:text-gray-400">
+                    <Text tw="text-center text-base  text-gray-600 dark:text-gray-400">
                       {item.description}
                     </Text>
                   </>

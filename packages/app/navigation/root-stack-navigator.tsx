@@ -129,8 +129,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           animation: Platform.OS === "ios" ? "default" : "none",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
+          presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
@@ -152,6 +151,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropEvent" component={DropEventScreen} />
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
+        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -164,7 +164,6 @@ export function RootStackNavigator() {
           name="claimLimitExplanation"
           component={ClaimLimitExplanationScreen}
         />
-        <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
         <Stack.Screen name="report" component={ReportScreen} />
       </Stack.Group>
     </Stack.Navigator>

@@ -10,6 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { useUser } from "app/hooks/use-user";
 
 import { useIsDarkMode } from "design-system/hooks";
@@ -19,6 +20,10 @@ export const DropSelect = () => {
   const user = useUser();
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
+
+  if (user.isIncompletedProfile) {
+    return <CompleteProfileModalContent />;
+  }
 
   return (
     <BottomSheetScrollView>
@@ -41,7 +46,7 @@ export const DropSelect = () => {
         </View>
         <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
-            title="Music drop"
+            title="Music Drop: Pre-Save on Spotify"
             icon={
               <Spotify
                 color={isDark ? "black" : "white"}
@@ -60,7 +65,7 @@ export const DropSelect = () => {
               if (canCreateMusicDrop) {
                 router.push("/drop/music");
               } else {
-                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+                Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
               }
             }}
           />

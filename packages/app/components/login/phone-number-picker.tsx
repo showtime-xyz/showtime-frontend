@@ -81,13 +81,18 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
             marginTop: Platform.select({
               android: -4,
               default: 0,
+              web: 4,
             }),
-            marginRight: 1,
+            fontSize: Platform.select({
+              default: 18,
+              android: 14,
+              web: 20,
+            }),
           }}
         >
           {selectedCountry?.emoji}
         </Text>
-        <Text tw="text-base font-semibold text-gray-600 dark:text-gray-400">
+        <Text tw="web:pl-2 pl-1 pr-1 text-base font-semibold text-gray-600 dark:text-gray-400">
           {selectedCountry?.dial_code}{" "}
         </Text>
       </PressableScale>
@@ -223,7 +228,7 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         ) : (
           <Text
             onPress={onPressTitle}
-            tw="font-space-bold px-4 py-3.5 text-lg font-bold dark:text-white"
+            tw="px-4 py-3.5 text-lg font-bold dark:text-white"
           >
             {title}
           </Text>

@@ -148,7 +148,7 @@ function Transfer({ nft }: { nft?: NFT }) {
         <Text tw="text-4xl">🎉</Text>
         <View>
           <View tw="my-8">
-            <Text tw="font-space-bold text-center text-lg text-black dark:text-white">
+            <Text tw="text-center text-lg font-bold text-black dark:text-white">
               Your NFT has been transferred
             </Text>
           </View>
@@ -165,7 +165,7 @@ function Transfer({ nft }: { nft?: NFT }) {
           <View tw="flex-row items-center pb-4">
             <Media item={nft} tw="h-[80px] w-[80px] rounded-2xl" />
             <View tw="flex-1 px-[16px]">
-              <Text tw="font-space-bold pb-4 text-lg font-bold text-black dark:text-white">
+              <Text tw="pb-4 text-lg font-bold text-black dark:text-white">
                 {nft?.token_name}
               </Text>
               <View tw="flex-row items-center">

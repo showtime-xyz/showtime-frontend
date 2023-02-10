@@ -1,9 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import {
-  Linking,
   Platform,
   ScrollView as RNScrollView,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 
@@ -30,26 +28,21 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCode } from "app/components/qr-code";
+import { QRCodeModal } from "app/components/qr-code";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { useWeb3 } from "app/hooks/use-web3";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
-import {
-  formatAddressShort,
-  getTwitterIntent,
-  getTwitterIntentUsername,
-  isMobileWeb,
-} from "app/utilities";
+import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
@@ -59,7 +52,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
 const defaultValues = {
   royalty: 10,
-  editionSize: 100,
+  editionSize: 15,
   duration: SECONDS_IN_A_WEEK,
   password: "",
   googleMapsUrl: "",
@@ -74,39 +67,47 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-const dropValidationSchema = yup.object({
-  file: yup.mixed().required("Media is required"),
-  title: yup.string().required().max(255),
-  description: yup.string().max(280).required(),
-  editionSize: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .min(1)
-    .max(100000)
-    .default(defaultValues.editionSize),
-  royalty: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .max(69)
-    .default(defaultValues.royalty),
-  hasAcceptedTerms: yup
-    .boolean()
-    .default(defaultValues.hasAcceptedTerms)
-    .required()
-    .isTrue("You must accept the terms and conditions."),
-  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-  googleMapsUrl: yup.string().url(),
-  radius: yup.number().min(0.01).max(10),
-});
-
 const DROP_FORM_DATA_KEY = "drop_form_local_data_event";
 
 export const DropEvent = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
-
+  const { data: userProfile } = useMyInfo();
+  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const defaultEditionSize = defaultValues.editionSize;
+  const dropValidationSchema = useMemo(
+    () =>
+      yup.object({
+        file: yup.mixed().required("Media is required"),
+        title: yup.string().required().max(255),
+        description: yup.string().max(280).required(),
+        editionSize: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .min(1)
+          .max(
+            maxEditionSize,
+            `You can drop ${maxEditionSize} editions at most`
+          )
+          .default(defaultEditionSize),
+        royalty: yup
+          .number()
+          .required()
+          .typeError("Please enter a valid number")
+          .max(69)
+          .default(defaultValues.royalty),
+        hasAcceptedTerms: yup
+          .boolean()
+          .default(defaultValues.hasAcceptedTerms)
+          .required()
+          .isTrue("You must accept the terms and conditions."),
+        notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+        googleMapsUrl: yup.string().url(),
+        radius: yup.number().min(0.01).max(10),
+      }),
+    [defaultEditionSize, maxEditionSize]
+  );
   const {
     control,
     handleSubmit,
@@ -115,26 +116,23 @@ export const DropEvent = () => {
     formState: { errors },
     watch,
     setValue,
-    getValues,
-    reset: resetForm,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      editionSize: defaultEditionSize,
+    },
   });
 
-  const gatingType = watch("gatingType");
   const bottomBarHeight = useBottomTabBarHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
-  const { state, dropNFT, onReconnectWallet, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const { isMagic } = useWeb3();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
 
@@ -186,122 +184,11 @@ export const DropEvent = () => {
   );
 
   if (user.isIncompletedProfile) {
-    return (
-      <CompleteProfileModalContent
-        title="Just one more step"
-        description="You need complete your profile to create drops. It only takes about 1 min"
-        cta="Complete Profile"
-      />
-    );
+    return <CompleteProfileModalContent />;
   }
 
   if (state.status === "success") {
-    const claimPath = `/t/${[process.env.NEXT_PUBLIC_CHAIN_ID]}/${
-      state.edition?.contract_address
-    }/0`;
-    let claimUrl = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}${claimPath}`;
-    const qrCodeUrl = new URL(claimUrl);
-
-    const password = getValues("password");
-    if (password) {
-      qrCodeUrl.searchParams.set("password", password);
-    }
-
-    const isShareAPIAvailable = Platform.select({
-      default: true,
-      web: typeof window !== "undefined" && !!navigator.share && isMobileWeb(),
-    });
-
-    return (
-      <BottomSheetScrollView>
-        <View
-          tw="items-center justify-center px-4 pt-8"
-          style={modalScreenViewStyle}
-        >
-          <Text tw="text-8xl">🎉</Text>
-          <View>
-            <View tw="h-8" />
-            <Text tw="text-center text-4xl text-black dark:text-white">
-              Congrats!
-            </Text>
-            <View tw="mt-8 mb-10">
-              <Text tw="text-center text-2xl text-black dark:text-white">
-                Now share your drop with the world!
-              </Text>
-            </View>
-
-            <Button
-              onPress={() => {
-                rudder?.track("Drop Shared", { type: "Twitter" });
-                Linking.openURL(
-                  getTwitterIntent({
-                    url: claimUrl,
-                    message: `I just created a drop "${
-                      state.edition?.name
-                    }" by ${getTwitterIntentUsername(
-                      user?.user?.data?.profile
-                    )} on @Showtime_xyz! 🎁🔗\n\nCollect it for free here:`,
-                  })
-                );
-              }}
-              tw="bg-[#00ACEE]"
-              variant="text"
-            >
-              <Text tw="text-xs font-bold " style={{ color: "#fff" }}>
-                Share on Twitter
-              </Text>
-            </Button>
-
-            <View tw="h-4" />
-
-            <Button
-              onPress={async () => {
-                const result = await share({
-                  url: claimUrl,
-                });
-
-                if (result.action === "sharedAction") {
-                  rudder?.track(
-                    "Drop Shared",
-                    result.activityType
-                      ? { type: result.activityType }
-                      : undefined
-                  );
-                }
-              }}
-            >
-              {isShareAPIAvailable
-                ? "Share the drop with your friends"
-                : "Copy drop link 🔗"}
-            </Button>
-            <Button
-              variant="tertiary"
-              tw="mt-4"
-              onPress={Platform.select({
-                web: () => router.push(claimUrl),
-                default: () => {
-                  if (router.pathname === "/") {
-                    router.push(claimPath);
-                    resetForm();
-                    reset();
-                  } else {
-                    router.pop();
-                  }
-                },
-              })}
-            >
-              Skip for now
-            </Button>
-          </View>
-          <View tw="mt-4">
-            <QRCode
-              size={windowWidth >= 768 ? 400 : windowWidth >= 400 ? 250 : 300}
-              text={qrCodeUrl.toString()}
-            />
-          </View>
-        </View>
-      </BottomSheetScrollView>
-    );
+    return <QRCodeModal contractAddress={state.edition?.contract_address} />;
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;

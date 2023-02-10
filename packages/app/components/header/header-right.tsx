@@ -24,7 +24,7 @@ type HeaderRightProps = {
 };
 export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const router = useRouter();
-  const { isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated, user } = useUser();
   const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
   const isMdWidth = width >= breakpoints["md"];
@@ -70,6 +70,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <HeaderDropdown
                 type={isMdWidth ? "profile" : "settings"}
                 withBackground={withBackground}
+                user={user?.data.profile}
               />
             ) : (
               <>
@@ -88,9 +89,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                     }}
                     tw="h-8 items-center justify-center rounded-full bg-black/30 px-4"
                   >
-                    <Text tw="text-sm font-semibold text-white">
-                      Sign&nbsp;In
-                    </Text>
+                    <Text tw="text-sm font-semibold text-white">Sign In</Text>
                   </Pressable>
                 ) : (
                   <Button
@@ -101,7 +100,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                     size="regular"
                     labelTW="font-semibold"
                   >
-                    Sign&nbsp;In
+                    Sign In
                   </Button>
                 )}
               </>

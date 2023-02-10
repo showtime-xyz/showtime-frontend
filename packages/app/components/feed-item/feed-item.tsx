@@ -16,6 +16,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -64,6 +65,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   itemHeight,
   setMomentumScrollCallback,
 }) {
+  const lastItemId = useRef(nft.nft_id);
+  const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
@@ -78,6 +81,22 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+
+  const isLayouted = useSharedValue(0);
+  const opacity = useSharedValue(1);
+
+  // This part here is important for FlashList, since state gets recycled
+  // we need to reset the state when the nft-id changes
+  // I had to remove `key` from LikeContextProvider
+  // because it was breaking recycling
+  // https://shopify.github.io/flash-list/docs/recycling/
+  if (nft.nft_id !== lastItemId.current) {
+    lastItemId.current = nft.nft_id;
+    // since we are recycling, onLayout will not be called again, therefore we need to measure the height manually
+    detailViewRef.current?.measure((a, b, width, height, px, py) => {
+      setDetailHeight(height);
+    });
+  }
 
   const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const maxContentHeight = windowHeight - bottomHeight;
@@ -117,8 +136,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       return 0;
     }
   });
-  const isLayouted = useSharedValue(0);
-  const opacity = useSharedValue(1);
 
   const detailStyle = useAnimatedStyle(() => {
     return {
@@ -173,7 +190,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }, [setMomentumScrollCallback, showHeader]);
 
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <LikeContextProvider nft={nft}>
       <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
         <View>
           {nft.blurhash ? (
@@ -212,13 +229,14 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
               onPinchStart={hideHeader}
               onPinchEnd={showHeader}
             />
           </Animated.View>
         </FeedItemTapGesture>
         <Reanimated.View
+          ref={detailViewRef}
           style={[
             detailStyle,
             {

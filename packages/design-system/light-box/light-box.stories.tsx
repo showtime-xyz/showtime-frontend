@@ -29,6 +29,7 @@ const LightBoxBasic = () => {
           width={120}
           height={120}
           style={StyleSheet.absoluteFillObject}
+          alt="Image"
         />
       </LightBox>
     </View>
