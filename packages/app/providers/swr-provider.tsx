@@ -61,6 +61,11 @@ export const SWRProvider = ({
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
+          // bail out immediately if the error is unrecoverable
+          if (error.status === 403 || error.status === 404) {
+            return;
+          }
+
           const maxRetryCount = config.errorRetryCount;
           const currentRetryCount = opts.retryCount;
 
@@ -75,10 +80,6 @@ export const SWRProvider = ({
             !isUndefined(maxRetryCount) &&
             currentRetryCount > maxRetryCount
           ) {
-            return;
-          }
-
-          if (error.status === 404) {
             return;
           }
 
