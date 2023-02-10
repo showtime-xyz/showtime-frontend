@@ -13,6 +13,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
@@ -142,6 +143,7 @@ async function fetchPaymentIntent(
         });
         return res;
       } else {
+        Logger.error("Payment intent fetch failed ", e);
         throw e;
       }
     }
