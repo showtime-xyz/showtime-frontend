@@ -9,17 +9,19 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   const previewAspectRatio = 382 / 256;
 
   const windowDimensions = useWindowDimensions();
-  const previewWidth =
-    windowDimensions.width > 768 ? windowDimensions.width * 0.2 : 170;
+  const previewWidth = Math.min(
+    windowDimensions.width > 768 ? windowDimensions.width * 0.2 : 170,
+    350
+  );
   const previewHeight = previewWidth * previewAspectRatio;
 
   return (
     <View tw="flex-1 px-8">
-      <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 md:text-4xl">
+      <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 lg:text-4xl">
         Your jaw will drop, too.
       </Text>
-      <View tw="mt-4 md:mt-8 md:flex-row">
-        <View tw="items-center md:items-stretch">
+      <View tw="mt-4 lg:mt-8 lg:flex-row">
+        <View tw="items-center lg:items-stretch">
           <Image
             source={Platform.select({
               web: { uri: require("./drop-preview.png") },
@@ -27,27 +29,28 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
             })}
             height={previewHeight}
             width={previewWidth}
+            alt="Drop Preview"
           />
         </View>
-        <View tw="mt-4 justify-center md:mt-0 md:flex-1 md:px-8">
+        <View tw="mt-4 justify-center lg:mt-0 lg:flex-1 lg:px-8">
           <View>
-            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 md:text-xl">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
               The easiest way to collect.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
               So easy people have collected drops over 1.5 million times
             </Text>
           </View>
-          <View tw="mt-4 md:mt-8">
-            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 md:text-xl">
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
               Promote songs, chats, NFTs.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
               Over 2,500 superfans have pre-saved music drops on Spotify
             </Text>
           </View>
-          <View tw="mt-4 md:mt-8">
-            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 md:text-xl">
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
               Instant collector (allow) list.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
@@ -55,8 +58,8 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
               perks
             </Text>
           </View>
-          <View tw="mt-4 md:mt-8">
-            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 md:text-xl">
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
               One link to blast everywhere.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
@@ -65,7 +68,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
           </View>
         </View>
       </View>
-      <Button onPress={onDone} tw="mt-4 md:mt-8">
+      <Button onPress={onDone} size="regular" tw="mt-4 lg:mt-8">
         Let's go
       </Button>
     </View>
