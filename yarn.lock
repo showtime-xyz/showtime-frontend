@@ -8116,27 +8116,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.accordion@npm:0.0.75, @showtime-xyz/universal.accordion@npm:^0.0.75":
-  version: 0.0.75
-  resolution: "@showtime-xyz/universal.accordion@npm:0.0.75"
-  dependencies:
-    "@radix-ui/react-accordion": 1.1.0
-    "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.text": 0.0.57
-    "@showtime-xyz/universal.view": 0.0.53
-    "@storybook/react": 6.5.16
-    react-native-svg: 13.8.0
-  peerDependencies:
-    moti: "*"
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-reanimated: ">=2.0.0"
-    react-native-web: ^0.16.0
-  checksum: 92cd442805444293d2c8ae21037bdcfaeb2d20656fc7145c7b1bed2a6f65c96ab20cbe6d98505105e89824f3292e3e6ba2b0ad8825cc0bbfad8da5476cdcc90a
-  languageName: node
-  linkType: hard
-
 "@showtime-xyz/universal.accordion@npm:0.0.80, @showtime-xyz/universal.accordion@npm:^0.0.80":
   version: 0.0.80
   resolution: "@showtime-xyz/universal.accordion@npm:0.0.80"
