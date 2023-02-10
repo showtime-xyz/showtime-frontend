@@ -94,6 +94,7 @@ const CheckoutFormStripe = () => {
       <Button
         disabled={isLoading || !stripe || !elements}
         onPress={handleSubmit}
+        size="regular"
       >
         Submit
       </Button>

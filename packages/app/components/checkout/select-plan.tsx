@@ -108,7 +108,11 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           collectibles to people who are new to web3!
         </Text>
       </View>
-      <Button onPress={() => trigger(selectedPlan)} disabled={isMutating}>
+      <Button
+        size="regular"
+        onPress={() => trigger(selectedPlan)}
+        disabled={isMutating}
+      >
         <Text tw="font-semibold text-gray-50 dark:text-gray-900">
           {isMutating ? "Loading..." : "Let's go"}
         </Text>
