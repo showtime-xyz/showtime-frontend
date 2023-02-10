@@ -1,4 +1,4 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import dynamic from "next/dynamic";
@@ -51,7 +51,7 @@ export function BottomTabNavigator() {
           tabBarIcon: TrendingTabBarIcon,
         }}
       />
-      {width < 768 && Platform.OS === "web" && (
+      {width < 768 && (
         <BottomTab.Screen
           name="createTab"
           component={CreateNavigator}

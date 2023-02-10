@@ -14,12 +14,12 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   const previewHeight = previewWidth * previewAspectRatio;
 
   return (
-    <View tw="px-8">
+    <View tw="flex-1 px-8">
       <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 md:text-4xl">
         Your jaw will drop, too.
       </Text>
       <View tw="mt-4 md:mt-8 md:flex-row">
-        <View tw="flex-1 items-center md:items-stretch">
+        <View tw="items-center md:items-stretch">
           <Image
             source={Platform.select({
               web: { uri: require("./drop-preview.png") },
