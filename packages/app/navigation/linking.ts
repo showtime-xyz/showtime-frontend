@@ -49,8 +49,6 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       qrCodeShare: "/qr-code-share/:contractAddress",
       claim: "claim/:contractAddress",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
-      checkout: "checkout",
-      checkoutReturn: "checkoutReturn",
       claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",

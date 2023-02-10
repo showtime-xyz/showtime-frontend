@@ -70,8 +70,6 @@ type RootStackNavigatorParams = {
   privacySecuritySettings: undefined;
   notificationSettings: undefined;
   blockedList: undefined;
-  checkout: undefined;
-  checkoutReturn: undefined;
   dropMusic: undefined;
   dropFree: undefined;
   dropEvent: undefined;
