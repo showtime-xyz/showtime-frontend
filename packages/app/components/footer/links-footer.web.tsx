@@ -67,6 +67,8 @@ export const WebFooter = () => {
                 <View tw="mr-2 text-base">
                   {item?.icon({
                     color: isDark ? "#FFF" : colors.gray[900],
+                    width: 20,
+                    height: 20,
                   })}
                 </View>
                 <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
