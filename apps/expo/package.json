@@ -71,7 +71,7 @@
     "@sentry/react-native": "4.2.2",
     "@shopify/flash-list": "^1.4.1",
     "@showtime-xyz/date-picker": "0.2.0",
-    "@showtime-xyz/universal.accordion": "^0.0.76",
+    "@showtime-xyz/universal.accordion": "^0.0.80",
     "@showtime-xyz/universal.activity-indicator": "^0.0.54",
     "@showtime-xyz/universal.alert": "^0.0.98",
     "@showtime-xyz/universal.avatar": "^0.0.72",
