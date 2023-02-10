@@ -1,0 +1,10 @@
+appId: io.showtime.development
+---
+- runFlow:
+    when:
+      true: ${PLATFORM == 'ios'}
+    file: subflows/sign-up-with-wallet-ios.yml
+- runFlow:
+    when:
+      true: ${PLATFORM == 'android'}
+    file: subflows/sign-up-with-wallet-android.yml
