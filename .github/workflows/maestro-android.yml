@@ -1,0 +1,47 @@
+name: Mobile Dev Action Android
+
+defaults:
+  run:
+    working-directory: apps/expo
+on:
+  pull_request:
+    branches: ["staging"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Expo prebuild
+        run: yarn waldo:build
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Build apk
+        run: |
+          cd android/ && chmod +x ./gradlew && FLIPPER_DISABLE=1 E2E=true STAGE=development ./gradlew assembleRelease \
+
+          echo "APK_PATH=$(pwd)/app/build/outputs/apk/release/app-release.apk" >>$GITHUB_ENV
+
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: ${{ env.APK_PATH }}

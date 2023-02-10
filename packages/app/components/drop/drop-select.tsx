@@ -91,7 +91,7 @@ export const DropSelect = () => {
               if (canCreateMusicDrop) {
                 router.push("/drop/music");
               } else {
-                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+                Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
               }
             }}
           />

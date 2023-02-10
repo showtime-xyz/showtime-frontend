@@ -259,6 +259,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         visable: true,
       },
       {
+        title: "Link",
+        Icon: Link,
+        onPress: onCopyLink,
+        visable: true,
+      },
+      {
         title: "Download",
         Icon: Download,
         onPress: onDownload,
@@ -376,13 +382,15 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       <ReactQRCode size={96} value={qrCodeUrl.toString()} />
                     </View>
                   </View>
-                  <View tw="flex-row items-center justify-center">
-                    <ScanOutline height={16} width={16} color={iconColor} />
-                    <View tw="w-1" />
-                    <Text tw="text-13 text-center font-medium text-black dark:text-white">
-                      Scan to Collect
-                    </Text>
-                  </View>
+                  {Platform.OS !== "web" && (
+                    <View tw="flex-row items-center justify-center">
+                      <ScanOutline height={16} width={16} color={iconColor} />
+                      <View tw="w-1" />
+                      <Text tw="text-13 text-center font-medium text-black dark:text-white">
+                        Scan to Collect
+                      </Text>
+                    </View>
+                  )}
                 </View>
               </RNView>
             </BottomSheetScrollView>

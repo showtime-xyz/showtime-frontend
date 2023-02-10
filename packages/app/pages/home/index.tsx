@@ -28,7 +28,7 @@ const NativeHeaderRight = () => {
       size="small"
       labelTW="font-semibold"
     >
-      Sign&nbsp;In
+      Sign In
     </Button>
   );
 };

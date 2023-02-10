@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo, useState, useRef } from "react";
-import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -8,7 +7,6 @@ import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
-import { useNavigation, StackActions } from "app/lib/react-navigation/native";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { formatNumber } from "app/utilities";
 
@@ -20,6 +18,7 @@ interface CommentRowProps {
   unlikeComment: (id: number) => Promise<boolean>;
   deleteComment: (id: number) => Promise<void>;
   reply?: (comment: CommentType) => void;
+  creatorId?: number;
 }
 
 const REPLIES_PER_BATCH = 2;
@@ -31,6 +30,7 @@ function CommentRowComponent({
   unlikeComment,
   deleteComment,
   reply,
+  creatorId,
 }: CommentRowProps) {
   /**
    * we used memo, so needs to add this hooks to here,
@@ -56,31 +56,40 @@ function CommentRowComponent({
   //#endregion
 
   //#region hooks
-  const { dispatch } = useNavigation();
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
   //#endregion
 
   //#region variables
+  const isDropCreator = useMemo(
+    () => creatorId === user?.data.profile.profile_id,
+    [creatorId, user?.data.profile.profile_id]
+  );
+
   const repliesCount = comment.replies?.length ?? 0;
+
   const replies = useMemo(
     () =>
       repliesCount > 0 ? comment.replies!.slice(0, displayedRepliesCount) : [],
     [comment.replies, repliesCount, displayedRepliesCount]
   );
+
   const isMyComment = useMemo(
     () => user?.data.profile.profile_id === comment.commenter_profile_id,
     [user, comment.commenter_profile_id]
   );
+
   const isRepliedByMe = useMemo(
     () => user?.data.comments.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+
   const isLikedByMe = useMemo(
     () => user?.data.likes_comment.includes(comment.comment_id),
     [user, comment.comment_id]
   );
+
   const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
@@ -109,15 +118,15 @@ function CommentRowComponent({
       unlikeComment,
     ]
   );
-  const handleOnDeletePress = useCallback(
-    async function handleOnDeletePress() {
-      await deleteComment(comment.comment_id);
-    },
-    [comment.comment_id, deleteComment]
-  );
+
+  const handleOnDeletePress = useCallback(async () => {
+    return await deleteComment(comment.comment_id);
+  }, [comment.comment_id, deleteComment]);
+
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
   }, []);
+
   const handleOnReplyPress = useCallback(() => {
     if (!isAuthenticated) {
       navigateToLogin();
@@ -128,24 +137,19 @@ function CommentRowComponent({
       reply(comment);
     }
   }, [reply, comment, isAuthenticated, navigateToLogin]);
+
   const handleOnReplyOnAReply = useCallback(
     (replyComment: CommentType) => {
       reply?.({ ...comment, username: replyComment.username });
     },
     [reply, comment]
   );
+
   const handleOnUserPress = useCallback((username: string) => {
-    if (Platform.OS === "web") {
-      router.replace(`/@${username}`);
-    } else {
-      dispatch(
-        StackActions.replace("profile", {
-          username: username,
-        })
-      );
-    }
+    router.push(`/@${username}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   //#endregion
   return (
     <>
@@ -166,7 +170,9 @@ function CommentRowComponent({
         createdAt={comment.added}
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
-        onDeletePress={isMyComment ? handleOnDeletePress : undefined}
+        onDeletePress={
+          isMyComment || isDropCreator ? handleOnDeletePress : undefined
+        }
         onReplyPress={handleOnReplyPress}
         onTagPress={handleOnUserPress}
         onUserPress={handleOnUserPress}
@@ -176,7 +182,7 @@ function CommentRowComponent({
         ? replies.map((reply, index) => (
             // only index as key when using map with FlashList
             // https://shopify.github.io/flash-list/docs/fundamentals/performant-components#remove-key-prop
-            <CommentRowComponent
+            <CommentRow
               key={index}
               comment={reply}
               isLastReply={index === (replies.length ?? 0) - 1}
@@ -184,6 +190,7 @@ function CommentRowComponent({
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}
               reply={handleOnReplyOnAReply}
+              creatorId={creatorId}
             />
           ))
         : null}
