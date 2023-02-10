@@ -35,6 +35,7 @@
     "packages/*"
   ],
   "scripts": {
+    "create-screen": "node scripts/showtime-cli",
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",

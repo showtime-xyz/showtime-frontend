@@ -9089,6 +9089,8 @@ __metadata:
     "@storybook/addon-ondevice-controls": next
     "@storybook/addon-ondevice-notes": next
     "@storybook/react-native": next
+    "@stripe/react-stripe-js": ^1.16.4
+    "@stripe/stripe-js": ^1.46.0
     "@testing-library/jest-native": ^4.0.4
     "@testing-library/react-native": ^9.1.0
     "@tradle/react-native-http": ^2.0.1
@@ -9247,6 +9249,8 @@ __metadata:
     "@react-three/fiber": ^8.2.1
     "@sentry/integrations": 7.7.0
     "@sentry/nextjs": 7.7.0
+    "@stripe/react-stripe-js": ^1.16.4
+    "@stripe/stripe-js": ^1.46.0
     "@types/dom-to-image": ^2.6.4
     "@types/react-datepicker": ^4.8.0
     "@types/react-dropzone": ^5.1.0
@@ -12218,6 +12222,26 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: f0cd17c6e3ff859156bae875722fc877dcd4f6236fc70108b6c0d103ef0e456491b2ea184b68fd29bdbb77466ee1278a52faf6f769745ad31b714e83741e1167
+  languageName: node
+  linkType: hard
+
+"@stripe/react-stripe-js@npm:^1.16.4":
+  version: 1.16.4
+  resolution: "@stripe/react-stripe-js@npm:1.16.4"
+  dependencies:
+    prop-types: ^15.7.2
+  peerDependencies:
+    "@stripe/stripe-js": ^1.44.1
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: e411ce91503398677eaf38016fb7e93315517407b81115b2e359fcd44610a786f1cd37b4c959c9fda8c6f35b1b4fe7dc2af29965168041fceff251cb5f40e74e
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^1.46.0":
+  version: 1.46.0
+  resolution: "@stripe/stripe-js@npm:1.46.0"
+  checksum: e9f1a6c1abc1e9eb5cfe7d604066230078958d3ada61089912829b57d090e768d6310149f054c8da0a8c49d7a313c44418705f91174909c2d2313c9ded781be1
   languageName: node
   linkType: hard
 
