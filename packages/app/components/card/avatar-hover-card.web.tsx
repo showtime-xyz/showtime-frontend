@@ -166,7 +166,7 @@ export function AvatarHoverCard({
                       <View tw="mt-4 items-baseline">
                         <ClampText
                           text={bioWithMentions}
-                          maxLines={2}
+                          maxLines={3}
                           tw="max-w-full break-all text-sm text-gray-900 dark:text-white"
                         />
                       </View>
