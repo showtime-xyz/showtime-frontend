@@ -6,6 +6,8 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
+
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
@@ -96,7 +98,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
             />
           </FeedItemTapGesture>
         </View>
