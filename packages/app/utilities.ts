@@ -667,8 +667,21 @@ export const cleanUserTextInput = (text: string) => {
       // normalize line breaks
       .replace(/\r\n|\r|\n/g, "\n")
       // remove extra line breaks (more than 1)
-      .replace(/(\n){2,}/g, "\n")
+      .replace(/(\n){3,}/g, "\n")
       // remove leading and trailing line breaks and whitespace
       .trim()
   );
+};
+
+export const limitLineBreaks = (
+  text: string,
+  maxLineBreaks: number = 5,
+  separator: string = " "
+) => {
+  return text
+    .split("\n")
+    .slice(0, maxLineBreaks)
+    .concat(text.split("\n").slice(maxLineBreaks).join(separator).trim())
+    .join("\n")
+    .trim();
 };
