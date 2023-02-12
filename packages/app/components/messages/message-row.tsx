@@ -18,6 +18,7 @@ import {
   cleanUserTextInput,
   convertUTCDateToLocalDate,
   formatAddressShort,
+  limitLineBreaks,
 } from "app/utilities";
 
 interface MessageRowProps {
@@ -175,10 +176,10 @@ export function MessageRow({
   const contentWithTags = useMemo(() => {
     return onTagPress
       ? linkifyDescription(
-          cleanUserTextInput(content),
+          limitLineBreaks(cleanUserTextInput(content)),
           "font-bold text-xs text-gray-900 dark:text-gray-100"
         )
-      : cleanUserTextInput(content);
+      : limitLineBreaks(cleanUserTextInput(content));
   }, [content, onTagPress]);
 
   const userNameText = useMemo(() => {
