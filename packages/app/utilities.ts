@@ -660,3 +660,15 @@ export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
       return ResizeMode.STRETCH;
   }
 };
+
+export const cleanUserTextInput = (text: string) => {
+  return (
+    text
+      // normalize line breaks
+      .replace(/\r\n|\r|\n/g, "\n")
+      // remove extra line breaks (more than 1)
+      .replace(/(\n){2,}/g, "\n")
+      // remove leading and trailing line breaks and whitespace
+      .trim()
+  );
+};
