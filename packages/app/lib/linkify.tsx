@@ -27,7 +27,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
     replacedText,
     /(https?:\/\/\S+|www\.\S+)\b/g,
     (match, i) => {
-      if (match.startsWith("www")) {
+      if (match.startsWith("www.")) {
         match = "https://" + match;
       }
 
