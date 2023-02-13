@@ -61,6 +61,19 @@ export const SWRProvider = ({
           const maxRetryCount = config.errorRetryCount;
           const currentRetryCount = opts.retryCount;
 
+          if (error.response?.status === 401) {
+            // we only want to refresh tokens once and then bail out if it fails on 401
+            // this is to prevent infinite loops. Actually, we should logout the user but AuthProvider is not available here
+            if (currentRetryCount > 1) {
+              return;
+            }
+            try {
+              await refreshTokens();
+            } catch (err) {
+              return;
+            }
+          }
+
           // Exponential backoff
           const timeout =
             ~~(
@@ -73,10 +86,6 @@ export const SWRProvider = ({
             currentRetryCount > maxRetryCount
           ) {
             return;
-          }
-
-          if (error.status === 401) {
-            await refreshTokens();
           }
 
           setTimeout(revalidate, timeout, opts);
