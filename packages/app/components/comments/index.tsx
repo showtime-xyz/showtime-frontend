@@ -153,7 +153,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const listEmptyComponent = useCallback(
     () =>
       !isLoading && !error && !dataReversed.length ? (
-        <View tw="pointer-events-none absolute -mt-10 h-full w-full flex-1 items-center justify-center">
+        <View tw="absolute -mt-10 h-full w-full flex-1 items-center justify-center">
           <EmptyPlaceholder
             text="Be the first to add a comment!"
             title="💬 No comments yet..."
