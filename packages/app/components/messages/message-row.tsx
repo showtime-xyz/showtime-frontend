@@ -14,7 +14,12 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
-import { convertUTCDateToLocalDate, formatAddressShort } from "app/utilities";
+import {
+  cleanUserTextInput,
+  convertUTCDateToLocalDate,
+  formatAddressShort,
+  limitLineBreaks,
+} from "app/utilities";
 
 interface MessageRowProps {
   /**
@@ -171,10 +176,10 @@ export function MessageRow({
   const contentWithTags = useMemo(() => {
     return onTagPress
       ? linkifyDescription(
-          content,
+          limitLineBreaks(cleanUserTextInput(content)),
           "font-bold text-xs text-gray-900 dark:text-gray-100"
         )
-      : content;
+      : limitLineBreaks(cleanUserTextInput(content));
   }, [content, onTagPress]);
 
   const userNameText = useMemo(() => {
