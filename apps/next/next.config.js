@@ -180,6 +180,15 @@ const nextConfig = {
       })
     );
 
+    // this little neat function will allow us to use `bit watch` in dev and change the code from design system without
+    // restarting next or clearing the next cache
+    config.snapshot = {
+      ...(config.snapshot ?? {}),
+      // Add all node_modules but @showtime-xyz module to managedPaths
+      // Allows for hot refresh of changes to @showtime-xyz module
+      managedPaths: [/^(.+?[\\/]node_modules[\\/])(?!@showtime-xyz)/],
+    };
+
     return config;
   },
   typescript: {
