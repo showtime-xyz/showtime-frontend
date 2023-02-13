@@ -53,19 +53,21 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
-          style={{ flexDirection: "row" }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
           accessibilityLabel="Profile website"
           accessibilityRole="link"
         >
           <LinkIcon
             color={isDark ? "#FFF" : colors.gray[900]}
-            width={16}
-            height={16}
-            style={{ marginRight: 4, marginTop: -2 }}
+            width={20}
+            height={20}
           />
           <Text
             numberOfLines={1}
-            tw="max-w-[150px] text-sm font-bold text-gray-900 dark:text-white"
+            tw="ml-1 max-w-[150px] text-sm font-bold text-gray-900 dark:text-white"
           >
             {websiteLink}
           </Text>
@@ -73,15 +75,15 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       )}
 
       <Hidden until="sm">
-        {websiteLink && (twitter?.user_input || instagram?.user_input) && (
-          <Divider orientation="vertical" height={16} tw="mx-4" />
-        )}
+        {websiteLink &&
+          (twitter?.user_input || instagram?.user_input || spotifyUrl) && (
+            <Divider orientation="vertical" height={16} tw="mx-4" />
+          )}
       </Hidden>
 
       <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end sm:mt-0 sm:w-auto">
         {spotifyUrl && (
           <PressableScale
-            style={{ marginRight: 16 }}
             onPress={() => onPressLink(spotifyUrl)}
             accessibilityLabel="Spotify"
             accessibilityRole="link"
@@ -102,17 +104,18 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             }
             accessibilityLabel="Twitter"
             accessibilityRole="link"
+            style={{ marginLeft: spotifyUrl ? 16 : 0 }}
           >
             <Twitter
-              width={16}
-              height={16}
+              width={20}
+              height={20}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
         )}
         {instagram?.user_input && (
           <PressableScale
-            style={{ marginLeft: 16 }}
+            style={{ marginLeft: twitter?.user_input ? 16 : 0 }}
             onPress={() =>
               onPressLink(
                 `https://${instagram?.type__prefix}${instagram?.user_input}`
@@ -122,8 +125,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             accessibilityRole="link"
           >
             <Instagram
-              width={16}
-              height={16}
+              width={20}
+              height={20}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>

@@ -71,7 +71,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.97",
+        "version": "0.0.98",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -95,7 +95,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.135",
+        "version": "0.0.136",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -113,7 +113,7 @@
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.85",
+        "version": "0.0.86",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
@@ -143,25 +143,25 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.95",
+        "version": "0.0.96",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.121",
+        "version": "0.0.122",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.135",
+        "version": "0.0.136",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.124",
+        "version": "0.0.125",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -215,7 +215,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.119",
+        "version": "0.0.120",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -227,7 +227,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.123",
+        "version": "0.0.124",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -245,7 +245,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.70",
+        "version": "0.0.71",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
