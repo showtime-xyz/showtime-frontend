@@ -49,7 +49,7 @@ export const Notifications = ({
   hideHeader = false,
   web_height = undefined,
 }: NotificationsProps) => {
-  const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
+  const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const isDark = useIsDarkMode();
@@ -88,17 +88,6 @@ export const Notifications = ({
     []
   );
 
-  const ListEmptyComponent = useCallback(
-    () => (
-      <View tw="items-center justify-center">
-        <Text tw="p-20 text-gray-900 dark:text-gray-100">
-          No new notifications
-        </Text>
-      </View>
-    ),
-    []
-  );
-
   useEffect(() => {
     (async function resetNotificationLastOpenedTime() {
       await axios({
@@ -109,6 +98,16 @@ export const Notifications = ({
       refetchMyInfo();
     })();
   }, [refetchMyInfo]);
+
+  if (!isLoading && data.length === 0) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="font-medium text-gray-900 dark:text-gray-100">
+          You have no notifications yet
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <>
@@ -162,7 +161,6 @@ export const Notifications = ({
         refreshing={isRefreshing}
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
-        ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
         estimatedItemSize={56}
       />

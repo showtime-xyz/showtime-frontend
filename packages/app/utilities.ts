@@ -640,8 +640,17 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
   const currentDate = new Date();
   const givenDate = new Date(time);
   const diffTime = currentDate.getTime() - givenDate.getTime();
+  const diffMinutes = diffTime / (1000 * 60);
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
   const diffHours = diffTime / (1000 * 60 * 60);
+
+  if (diffMinutes < 1) {
+    return `now`;
+  }
+
+  if (diffMinutes >= 1 && diffMinutes < 60) {
+    return `${Math.round(diffMinutes)}m`;
+  }
 
   if (diffDays < 1) {
     return `${Math.round(diffHours)}h`;

@@ -105,18 +105,18 @@ const NotificationDescription = memo(
     );
 
     return (
-      <View tw="flex-1">
+      <View tw="flex-1 flex-row justify-between">
         <Text
-          tw="text-13 max-w-[69vw] text-gray-600 dark:text-gray-400"
+          tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
         >
           <Actors actors={notification.actors} setUsers={setUsers} />
           {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           <NFTSDisplayName nfts={notification.nfts} />
-          {Boolean(formatDistance) && (
-            <Text tw="text-13">{` · ${formatDistance}`}</Text>
-          )}
         </Text>
+        {Boolean(formatDistance) && (
+          <Text tw="text-13">{`${formatDistance}`}</Text>
+        )}
       </View>
     );
   }
