@@ -8257,9 +8257,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.clamp-text@npm:^0.0.40":
-  version: 0.0.40
-  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.40"
+"@showtime-xyz/universal.clamp-text@npm:^0.0.41":
+  version: 0.0.41
+  resolution: "@showtime-xyz/universal.clamp-text@npm:0.0.41"
   dependencies:
     "@showtime-xyz/universal.text": 0.0.57
     "@storybook/react": 6.5.16
@@ -8268,7 +8268,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: e36a1b1e2bd196bc4ee00358c711c6d0eb11c0842239eee43cebe53863522feb0f6321aa07a4e9d6fc313b6c5d981fed6f9c73c5369eacbd224775779310908c
+  checksum: d2dade2a5fda1596c45cfbfc849dd61b09b21dafeb3fd9eeaef9e3ac86188d1d4b2e5f3a9254480d87dbc0ef405fbc69473bccc9891039545492af1173540ce9
   languageName: node
   linkType: hard
 
@@ -9023,7 +9023,7 @@ __metadata:
     "@showtime-xyz/universal.button": ^0.0.85
     "@showtime-xyz/universal.checkbox": ^0.0.73
     "@showtime-xyz/universal.chip": ^0.0.16
-    "@showtime-xyz/universal.clamp-text": ^0.0.40
+    "@showtime-xyz/universal.clamp-text": ^0.0.41
     "@showtime-xyz/universal.collapsible-tab-view": ^0.0.56
     "@showtime-xyz/universal.color-scheme": ^0.0.46
     "@showtime-xyz/universal.country-code-picker": ^0.0.98
