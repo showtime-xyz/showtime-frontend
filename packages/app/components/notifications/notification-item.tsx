@@ -115,7 +115,7 @@ const NotificationDescription = memo(
           <NFTSDisplayName nfts={notification.nfts} />
         </Text>
         {Boolean(formatDistance) && (
-          <Text tw="text-13">{`${formatDistance}`}</Text>
+          <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
         )}
       </View>
     );
