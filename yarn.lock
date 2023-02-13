@@ -9167,7 +9167,7 @@ __metadata:
     react-native-reanimated: ~2.14.4
     react-native-reanimated-carousel: ^3.1.5
     react-native-safe-area-context: 4.5.0
-    react-native-screens: 3.18.0
+    react-native-screens: ^3.20.0
     react-native-share: 8.0.0
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.8.0
@@ -9335,7 +9335,7 @@ __metadata:
     react-native-randombytes: ^3.6.1
     react-native-reanimated: ~2.14.4
     react-native-safe-area-context: 4.5.0
-    react-native-screens: 3.19.0
+    react-native-screens: 3.20.0
     react-native-svg: 13.8.0
     react-native-web: 0.18.9
     three: ^0.142.0
@@ -33042,16 +33042,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:3.19.0":
-  version: 3.19.0
-  resolution: "react-native-screens@npm:3.19.0"
+"react-native-screens@npm:3.20.0":
+  version: 3.20.0
+  resolution: "react-native-screens@npm:3.20.0"
   dependencies:
     react-freeze: ^1.0.0
     warn-once: ^0.1.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 3a0116bf0628a735bdb87d7e4648f4bbac278152599a2bdd973e4dec92f87cb2c805dd7adb844d01236c7c92bab017ea8de59bea44d9f58397fddb6f9f3077c5
+  checksum: 94ab21378ee82765d329ccb8c92f5ca7cb15df916496fac7ce9a03c45e22579715000dae9c16f0a7d734a8fc1c2d0569fd82ecb71119a0b56046b5ea7533e7c2
   languageName: node
   linkType: hard
 
