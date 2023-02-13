@@ -6,6 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
 import {
@@ -187,7 +188,7 @@ const CardLargeScreen = ({
                 width: sizeStyle?.width ?? cardMaxWidth,
                 height: sizeStyle?.height ?? cardMaxWidth,
               }}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
             />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
