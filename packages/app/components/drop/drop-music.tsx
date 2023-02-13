@@ -453,7 +453,7 @@ export const DropMusic = () => {
                         }}
                         minimumDate={new Date()}
                         value={dateValue}
-                        type="datetime"
+                        type="date"
                         open={showDatePicker}
                       />
                     </View>

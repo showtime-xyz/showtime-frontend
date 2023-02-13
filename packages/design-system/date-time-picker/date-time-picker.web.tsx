@@ -1,6 +1,7 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import "./date-picker.css";
 import { DateTimePickerProps } from "./types";
 
 export const DateTimePicker = (props: DateTimePickerProps) => {
