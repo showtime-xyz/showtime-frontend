@@ -15,8 +15,6 @@ type Props = {
 
 export function Title({ title, disableTooltip = false }: Props) {
   const isDark = useIsDarkMode();
-  title =
-    "wpeowekpfokwefpowkefpowkefpo weifuhweifu hweifuwhefiuwehfiweufhwieufhweifuwekf";
   const [isUseTooltip, setIsOverflow] = useState(
     Platform.OS === "web" && !disableTooltip
   );
