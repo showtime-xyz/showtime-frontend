@@ -97,8 +97,14 @@ jobs:
 
             This pull request preview deployment is now available.
 
-            ✅ Preview: <a href="${{ steps.publish-url.outputs.url }}">${{ steps.publish-url.outputs.url }}</a>
+            <details>
+              <summary>Open Details</summary>
 
-            <a href="${{ steps.publish-url.outputs.url }}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${{ steps.publish-url.outputs.url }}" height="512px" width="512px" /></a>
 
-            Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
+              ✅ Preview: <a href="${{ steps.publish-url.outputs.url }}">${{ steps.publish-url.outputs.url }}</a>
+
+              <a href="${{ steps.publish-url.outputs.url }}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${{ steps.publish-url.outputs.url }}" height="256px" width="256px" /></a>
+
+              Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
+            </details>
+
