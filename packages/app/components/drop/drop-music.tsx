@@ -109,7 +109,7 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
   releaseDate: yup
     .date()
-    .min(getDefaultDate(), "Release date must be in the future"),
+    .min(getDefaultDate(), "Spotify Release date must be in the future"),
 });
 
 const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
@@ -438,7 +438,7 @@ export const DropMusic = () => {
                         }}
                       >
                         <Text tw="font-bold text-gray-900 dark:text-white">
-                          Release Date
+                          Spotify Release Date
                         </Text>
                         <Text tw="pt-4 text-base text-gray-900 dark:text-white">
                           {(dateValue as Date).toDateString()}
@@ -446,7 +446,7 @@ export const DropMusic = () => {
                       </Pressable>
                     ) : (
                       <Text tw="font-bold text-gray-900 dark:text-white">
-                        Release Date
+                        Spotify Release Date
                       </Text>
                     )}
 

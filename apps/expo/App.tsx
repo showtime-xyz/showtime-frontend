@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import FastImage from "react-native-fast-image";
 import { enableLayoutAnimations } from "react-native-reanimated";
-import { enableScreens } from "react-native-screens";
+import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { growthbook } from "app/lib/growthbook";
 import { Logger } from "app/lib/logger";
@@ -19,6 +19,7 @@ import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
+enableFreeze(true);
 enableLayoutAnimations(false);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
