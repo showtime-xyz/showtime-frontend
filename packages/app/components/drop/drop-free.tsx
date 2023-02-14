@@ -446,7 +446,11 @@ export const DropFree = () => {
                         />
                       </View>
 
-                      <View tw="mt-4 flex-1 flex-row md:mt-0">
+                      <View
+                        tw={`mt-4 flex-1 flex-row md:mt-0 ${
+                          shouldProceedToCheckout ? "" : "lg:ml-4"
+                        }`}
+                      >
                         <Controller
                           control={control}
                           name="royalty"
