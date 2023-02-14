@@ -454,7 +454,6 @@ export const DropMusic = () => {
                       <DateTimePicker
                         disabled={isSaveDrop}
                         onChange={(v) => {
-                          console.log(v);
                           onChange(v);
                           setShowDatePicker(false);
                         }}
