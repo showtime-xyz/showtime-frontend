@@ -115,7 +115,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
         {instagram?.user_input && (
           <PressableScale
-            style={{ marginLeft: twitter?.user_input ? 16 : 0 }}
+            style={{ marginLeft: twitter?.user_input || spotifyUrl ? 16 : 0 }}
             onPress={() =>
               onPressLink(
                 `https://${instagram?.type__prefix}${instagram?.user_input}`
