@@ -8,6 +8,7 @@ import {
   MessageFilled,
   PlusFilled,
   GiftSolid,
+  Spotify,
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -19,7 +20,8 @@ import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { getFormatDistanceStrictToWeek } from "app/utilities";
 
-import { NFTSDisplayName } from "./nfts-display-name";
+import { NFTSDisplayName, NFTSDisplayNameText } from "./nfts-display-name";
+import { UpdateSpotifyDetails } from "./update-spotify-details";
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -39,6 +41,11 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
   ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
+  [
+    "MISSING_MUSIC_RELEASE_METADATA",
+    "Spotify song link to notify your fans the song is out. ",
+  ],
+  ["RELEASE_SAVED_TO_SPOTIFY", "is out! Check it out now."],
 ]);
 
 export const NotificationItem = memo(
@@ -104,6 +111,42 @@ const NotificationDescription = memo(
       notification.to_timestamp
     );
 
+    if (notification.type_name === "MISSING_MUSIC_RELEASE_METADATA") {
+      return (
+        <UpdateSpotifyDetails nfts={notification.nfts}>
+          <View tw="flex-1 flex-row justify-between">
+            <Text
+              tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+              ellipsizeMode="tail"
+            >
+              Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
+              {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
+            </Text>
+            {Boolean(formatDistance) && (
+              <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+            )}
+          </View>
+        </UpdateSpotifyDetails>
+      );
+    }
+
+    if (notification.type_name === "RELEASE_SAVED_TO_SPOTIFY") {
+      return (
+        <View tw="flex-1 flex-row justify-between">
+          <Text
+            tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+            ellipsizeMode="tail"
+          >
+            <NFTSDisplayName nfts={notification.nfts} />{" "}
+            {NOTIFICATION_TYPE_COPY.get("RELEASE_SAVED_TO_SPOTIFY")}
+          </Text>
+          {Boolean(formatDistance) && (
+            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+          )}
+        </View>
+      );
+    }
+
     return (
       <View tw="flex-1 flex-row justify-between">
         <Text
@@ -115,7 +158,7 @@ const NotificationDescription = memo(
           <NFTSDisplayName nfts={notification.nfts} />
         </Text>
         {Boolean(formatDistance) && (
-          <Text tw="text-13">{`${formatDistance}`}</Text>
+          <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
         )}
       </View>
     );
@@ -156,6 +199,10 @@ export const getNotificationIcon = (type_name: string) => {
       return <GiftSolid width={20} height={20} color={colors.rose[500]} />;
     case "CREATED_EDITION_EXPIRED":
       return <GiftSolid width={20} height={20} color={colors.gray[500]} />;
+    case "MISSING_MUSIC_RELEASE_METADATA":
+    case "RELEASE_SAVED_TO_SPOTIFY":
+      return <Spotify width={20} height={20} color={"#1DB954"} />;
+
     default:
       return undefined;
   }
