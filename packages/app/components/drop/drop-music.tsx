@@ -77,7 +77,11 @@ const durationOptions = [
   { label: "1 week", value: SECONDS_IN_A_WEEK },
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
-
+const getDefaultDate = () => {
+  const tomorrow = new Date();
+  tomorrow.setHours(24, 0, 0, 0);
+  return tomorrow;
+};
 const dropValidationSchema = yup.object({
   file: yup.mixed().required("Media is required"),
   title: yup.string().required().max(255),
@@ -105,7 +109,7 @@ const dropValidationSchema = yup.object({
   radius: yup.number().min(0.01).max(10),
   releaseDate: yup
     .date()
-    .min(new Date(), "Spotify Release date must be in the future"),
+    .min(getDefaultDate(), "Spotify Release date must be in the future"),
 });
 
 const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
@@ -416,10 +420,10 @@ export const DropMusic = () => {
               control={control}
               name="releaseDate"
               render={({ field: { onChange, value } }) => {
-                let dateValue =
+                const dateValue =
                   typeof value === "string"
                     ? new Date(value)
-                    : value ?? new Date();
+                    : value ?? getDefaultDate();
 
                 return (
                   <View
