@@ -152,7 +152,12 @@ function NFTDropdown({
           ) : null}
 
           {edition?.gating_type === "music_presave" &&
-          nft.creator_username === user?.data.profile.username ? (
+          nft.creator_username === user?.data.profile.username &&
+          (!edition.spotify_track_url ||
+            (edition.presave_release_date &&
+              new Date(edition.presave_release_date).getTime() +
+                24 * 60 * 60 * 1000 >
+                new Date().getTime())) ? (
             <DropdownMenuItem
               onSelect={() => {
                 router.push(
