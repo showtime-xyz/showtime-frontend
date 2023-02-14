@@ -15,6 +15,7 @@ type FormPersistConfig = {
   touch?: boolean;
   onTimeout?: () => void;
   timeout?: number;
+  defaultValues?: { [key: string]: any };
 };
 
 export const usePersistForm = (
@@ -24,6 +25,7 @@ export const usePersistForm = (
     setValue,
     exclude = [],
     onDataRestored,
+    defaultValues,
     validate = false,
     dirty = false,
     touch = false,
@@ -52,7 +54,7 @@ export const usePersistForm = (
       Object.keys(values).forEach((key) => {
         const shouldSet = !exclude.includes(key);
         if (shouldSet) {
-          dataRestored[key] = values[key];
+          dataRestored[key] = values[key] || defaultValues?.[key];
           setValue(key, values[key], {
             shouldValidate: validate,
             shouldDirty: dirty,
@@ -64,6 +66,17 @@ export const usePersistForm = (
       if (onDataRestored) {
         onDataRestored(dataRestored);
       }
+    } else if (defaultValues) {
+      Object.keys(defaultValues).forEach((key) => {
+        const shouldSet = !exclude.includes(key);
+        if (shouldSet) {
+          setValue(key, defaultValues[key], {
+            shouldValidate: validate,
+            shouldDirty: dirty,
+            shouldTouch: touch,
+          });
+        }
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);

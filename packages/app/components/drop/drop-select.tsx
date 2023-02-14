@@ -19,27 +19,10 @@ export const DropSelect = () => {
   const user = useUser();
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
-  const editionSize = user.user?.data.paid_drop_credits?.[0]?.edition_size;
-  const canUserCreateEditions =
-    (typeof editionSize === "number" && editionSize > 0) ||
-    user.user?.data.profile.verified;
 
   if (user.isIncompletedProfile) {
     return <CompleteProfileModalContent />;
   }
-
-  const navigateToCheckout = () => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          checkoutModal: true,
-        },
-      },
-      router.asPath
-    );
-  };
 
   return (
     <BottomSheetScrollView>
@@ -58,10 +41,6 @@ export const DropSelect = () => {
                 />
               }
               onPress={() => {
-                if (!canUserCreateEditions) {
-                  navigateToCheckout();
-                  return;
-                }
                 if (Platform.OS !== "web") {
                   router.pop();
                 }

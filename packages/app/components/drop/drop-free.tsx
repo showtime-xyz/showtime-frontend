@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -29,18 +29,14 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
@@ -68,10 +64,16 @@ const defaultValues = {
 };
 export const DropFree = () => {
   const isDark = useIsDarkMode();
-  const { rudder } = useRudder();
-  const { data: userProfile } = useMyInfo();
-  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
-  const defaultEditionSize = defaultValues.editionSize;
+  const { user: userProfile } = useUser();
+  const editionSizeCredit =
+    userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
+  const maxEditionSize = userProfile?.data?.profile.verified
+    ? 100000
+    : editionSizeCredit;
+
+  const shouldProceedToCheckout =
+    editionSizeCredit === 0 && !userProfile?.data?.profile.verified;
+
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -82,12 +84,12 @@ export const DropFree = () => {
           .number()
           .required()
           .typeError("Please enter a valid number")
-          .min(1)
+          .min(editionSizeCredit > 0 ? 1 : 0)
           .max(
             maxEditionSize,
             `You can drop ${maxEditionSize} editions at most`
           )
-          .default(defaultEditionSize),
+          .default(defaultValues.editionSize),
         royalty: yup
           .number()
           .required()
@@ -103,7 +105,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [maxEditionSize, defaultEditionSize]
+    [maxEditionSize, editionSizeCredit]
   );
 
   const {
@@ -118,16 +120,12 @@ export const DropFree = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: {
-      ...defaultValues,
-      editionSize: defaultEditionSize,
-    },
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
@@ -139,6 +137,7 @@ export const DropFree = () => {
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
+    defaultValues,
     /**
      * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
      */
@@ -148,32 +147,31 @@ export const DropFree = () => {
     }),
   });
 
+  useEffect(() => {
+    if (!userProfile?.data.profile.verified) {
+      setValue("editionSize", editionSizeCredit);
+    }
+  }, [editionSizeCredit, setValue, userProfile?.data.profile.verified]);
+
   const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
+    if (shouldProceedToCheckout) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            checkoutModal: true,
+          },
+        },
+        router.asPath
+      );
+    } else {
+      dropNFT(values, clearStorage);
+    }
   };
 
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
   const pickFile = useFilePicker();
-  const share = useShare();
   const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
 
   const selectedDuration = watch("duration");
 
@@ -397,12 +395,15 @@ export const DropFree = () => {
                       <Accordion.Chevron />
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
-                      <DataPill
-                        label={`${watch("editionSize")} ${
-                          watch("editionSize") == 1 ? "Edition" : "Editions"
-                        }`}
-                        type="text"
-                      />
+                      {!shouldProceedToCheckout ? (
+                        <DataPill
+                          label={`${watch("editionSize")} ${
+                            watch("editionSize") == 1 ? "Edition" : "Editions"
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
+
                       <DataPill
                         tw="mx-1 md:mx-4"
                         label={`${watch("royalty")}% Royalties`}
@@ -419,7 +420,12 @@ export const DropFree = () => {
                 <Accordion.Content tw="pt-0">
                   <>
                     <View tw="justify-between lg:flex-row">
-                      <View tw="flex-1 flex-row">
+                      <View
+                        tw="flex-1 flex-row"
+                        style={{
+                          display: shouldProceedToCheckout ? "none" : "flex",
+                        }}
+                      >
                         <Controller
                           control={control}
                           name="editionSize"
@@ -429,6 +435,7 @@ export const DropFree = () => {
                                 tw="flex-1"
                                 label="Edition size"
                                 onBlur={onBlur}
+                                disabled={!user?.user?.data.profile.verified}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
                                 value={value?.toString()}
@@ -438,7 +445,8 @@ export const DropFree = () => {
                           }}
                         />
                       </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:ml-4">
+
+                      <View tw="mt-4 flex-1 flex-row md:mt-0">
                         <Controller
                           control={control}
                           name="royalty"
