@@ -1,5 +1,3 @@
-# sign-in-with-email.yaml
-
 appId: io.showtime.development
 ---
 - launchApp

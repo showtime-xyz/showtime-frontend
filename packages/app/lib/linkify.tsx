@@ -25,17 +25,25 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   // Match URLs
   replacedText = reactStringReplace(
     replacedText,
-    /(https?:\/\/\S+)/g,
-    (match, i) => (
-      <TextLink
-        href={match}
-        key={match + i}
-        target="_blank"
-        tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
-      >
-        {match}
-      </TextLink>
-    )
+    /(https?:\/\/\S+|www\.\S+)\b/g,
+    (match, i) => {
+      if (match.startsWith("www.")) {
+        match = "https://" + match;
+      }
+
+      const urlText = match.replace("https://", "").replace("http://", "");
+
+      return (
+        <TextLink
+          href={match}
+          key={match + i}
+          target="_blank"
+          tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
+        >
+          {urlText}
+        </TextLink>
+      );
+    }
   );
 
   return replacedText;

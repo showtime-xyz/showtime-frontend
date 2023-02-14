@@ -1,10 +1,11 @@
 import { AppState, AppStateStatus } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
+import type { AxiosError } from "axios";
 import { MMKV } from "react-native-mmkv";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
-import type { PublicConfiguration } from "swr/dist/types";
+import type { PublicConfiguration } from "swr/_internal";
 
 import { useToast } from "@showtime-xyz/universal.toast";
 
@@ -53,16 +54,36 @@ export const SWRProvider = ({
           }
         },
         onErrorRetry: async (
-          error: {
-            status: number;
-          },
+          error: AxiosError,
           key: string,
           config: Readonly<PublicConfiguration>,
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
+          // bail out immediately if the error is unrecoverable
+          if (
+            error.response?.status === 400 ||
+            error.response?.status === 403 ||
+            error.response?.status === 404
+          ) {
+            return;
+          }
+
           const maxRetryCount = config.errorRetryCount;
           const currentRetryCount = opts.retryCount;
+
+          if (error.response?.status === 401) {
+            // we only want to refresh tokens once and then bail out if it fails on 401
+            // this is to prevent infinite loops. Actually, we should logout the user but AuthProvider is not available here
+            if (currentRetryCount > 1) {
+              return;
+            }
+            try {
+              await refreshTokens();
+            } catch (err) {
+              return;
+            }
+          }
 
           // Exponential backoff
           const timeout =
@@ -76,14 +97,6 @@ export const SWRProvider = ({
             currentRetryCount > maxRetryCount
           ) {
             return;
-          }
-
-          if (error.status === 404) {
-            return;
-          }
-
-          if (error.status === 401) {
-            await refreshTokens();
           }
 
           setTimeout(revalidate, timeout, opts);

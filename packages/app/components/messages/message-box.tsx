@@ -88,10 +88,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             placeholderTextColor={isDark ? colors.gray[400] : colors.gray[500]}
             multiline={true}
             keyboardType="twitter"
-            tw="web:max-h-40 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-sm text-black dark:bg-gray-900 dark:text-white"
+            tw="web:max-h-40 max-h-32 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-sm text-black dark:bg-gray-900 dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
+            maxLength={500}
           />
           <Avatar
             alt="Avatar"

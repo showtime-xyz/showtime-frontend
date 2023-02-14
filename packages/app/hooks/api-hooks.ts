@@ -290,12 +290,13 @@ export const useComments = ({ nftId }: { nftId: number }) => {
 
 export const useMyInfo = () => {
   const { accessToken } = useAuth();
-  const queryKey = "/v2/myinfo";
-  const { mutate } = useSWRConfig();
   const navigateToLogin = useNavigateToLogin();
-  const { data, error } = useSWR<MyInfo>(
-    accessToken ? queryKey : null,
-    fetcher
+  const { data, error, mutate } = useSWR<MyInfo>(
+    accessToken ? "/v2/myinfo" : null,
+    fetcher,
+    {
+      revalidateOnMount: false,
+    }
   );
 
   const follow = useCallback(
@@ -307,7 +308,6 @@ export const useMyInfo = () => {
 
       if (data) {
         mutate(
-          queryKey,
           {
             data: {
               ...data.data,
@@ -327,7 +327,7 @@ export const useMyInfo = () => {
           console.error(err);
         }
 
-        mutate(queryKey);
+        mutate();
       }
     },
     [accessToken, data, mutate, navigateToLogin]
@@ -337,7 +337,6 @@ export const useMyInfo = () => {
     async (profileId?: number) => {
       if (data) {
         mutate(
-          queryKey,
           {
             data: {
               ...data.data,
@@ -359,7 +358,7 @@ export const useMyInfo = () => {
           console.error(err);
         }
 
-        mutate(queryKey);
+        mutate();
       }
     },
     [data, mutate]
@@ -385,7 +384,6 @@ export const useMyInfo = () => {
       if (data) {
         try {
           mutate(
-            queryKey,
             {
               data: {
                 ...data.data,
@@ -401,11 +399,11 @@ export const useMyInfo = () => {
             data: {},
           });
 
-          mutate(queryKey);
+          mutate();
 
           return true;
         } catch (error) {
-          mutate(queryKey);
+          mutate();
           return false;
         }
       }
@@ -418,7 +416,6 @@ export const useMyInfo = () => {
       if (data) {
         try {
           mutate(
-            queryKey,
             {
               data: {
                 ...data.data,
@@ -434,10 +431,10 @@ export const useMyInfo = () => {
             data: {},
           });
 
-          mutate(queryKey);
+          mutate();
           return true;
         } catch (error) {
-          mutate(queryKey);
+          mutate();
           return false;
         }
       }
@@ -453,7 +450,7 @@ export const useMyInfo = () => {
   );
 
   const refetchMyInfo = useCallback(() => {
-    mutate(queryKey);
+    mutate();
   }, [mutate]);
 
   return {
@@ -467,5 +464,6 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
+    mutate,
   };
 };

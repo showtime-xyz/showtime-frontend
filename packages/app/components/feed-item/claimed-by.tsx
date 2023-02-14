@@ -16,7 +16,7 @@ type NFTDetailsProps = {
 export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
   const router = useRouter();
   if (!claimersList || claimersList?.length <= 1) {
-    return null;
+    return <View tw="native:mb-4 web:h-5 ml-2 h-9" collapsable />;
   }
   const slicedClaimersList = claimersList?.slice(1, 4);
   const firstClaimer = claimersList[1];
