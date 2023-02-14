@@ -133,3 +133,21 @@
   padding-top: 10px;
   overflow: auto hidden;
 }
+
+/* Custom Time */
+
+.react-datepicker-time__caption {
+  font-weight: 500;
+}
+
+[data-color-scheme="dark"] .react-datepicker-time__caption {
+  color: #fff;
+}
+[data-color-scheme="dark"]
+  .react-datepicker__input-time-container
+  .react-datepicker-time__input-container
+  .react-datepicker-time__input
+  input[type="time"] {
+  background-color: #000;
+  color: #fff;
+}
