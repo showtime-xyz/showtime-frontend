@@ -33,7 +33,7 @@ export const usePersistForm = (
     dirty = false,
     touch = false,
     onTimeout,
-    timeout,
+    timeout = 86400000,
   }: FormPersistConfig
 ) => {
   const watchedValues = watch();
@@ -54,7 +54,7 @@ export const usePersistForm = (
       const currTimestamp = Date.now();
 
       if (timeout && currTimestamp - _timestamp > timeout) {
-        onTimeout && onTimeout();
+        onTimeout?.();
         clearStorage();
         return;
       }
