@@ -84,8 +84,7 @@
     "next": "^13.1.1",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
     "react-native-screens": "3.20.0",
-    "react-native-mmkv": "2.5.1",
-    "expo-av@13.0.1": "patch:expo-av@npm:13.0.1#.yarn/patches/expo-av-npm-13.0.1-350db62290.patch"
+    "react-native-mmkv": "2.5.1"
   },
   "react-native": {
     "zlib": "browserify-zlib",

@@ -250,7 +250,7 @@ export const DropEvent = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              tw="rounded-2xl"
+                              style={previewBorderStyle}
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">
@@ -614,3 +614,4 @@ export const DropEvent = () => {
     </BottomSheetModalProvider>
   );
 };
+const previewBorderStyle = { borderRadius: 16 };
