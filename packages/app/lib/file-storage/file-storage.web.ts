@@ -46,15 +46,8 @@ export class FileStorage {
   public async clearStorage() {
     return new Promise<void>((resolve) => {
       if (this.db) {
-        const transaction = this.db.transaction([this.dbName], "readwrite");
-        const objectStore = transaction.objectStore(this.dbName);
-        const clearRequest = objectStore.clear();
-
-        clearRequest.onerror = (e) => {
-          Logger.error(e);
-        };
-
-        clearRequest.onsuccess = () => {
+        const req = indexedDB.deleteDatabase(this.dbName);
+        req.onsuccess = () => {
           resolve();
         };
       }

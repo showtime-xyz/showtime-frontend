@@ -136,25 +136,7 @@ export const DropFree = () => {
     dropNFT(values, clearStorage);
   };
 
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
   const pickFile = useFilePicker();
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
 
   const selectedDuration = watch("duration");
 
