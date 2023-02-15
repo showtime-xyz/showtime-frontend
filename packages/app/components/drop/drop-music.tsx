@@ -130,7 +130,6 @@ export const DropMusic = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
@@ -154,13 +153,7 @@ export const DropMusic = () => {
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
+    defaultValues,
   });
 
   const onSubmit = async (values: UseDropNFT) => {
@@ -293,7 +286,7 @@ export const DropMusic = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              style={{ borderRadius: 16 }}
+                              tw="rounded-2xl"
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">
@@ -356,6 +349,8 @@ export const DropMusic = () => {
                       errorText={errors.title?.message}
                       value={value}
                       onChangeText={onChange}
+                      numberOfLines={2}
+                      multiline
                     />
                   );
                 }}

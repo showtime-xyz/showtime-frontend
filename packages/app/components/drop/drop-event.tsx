@@ -40,7 +40,6 @@ import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
@@ -71,10 +70,8 @@ const DROP_FORM_DATA_KEY = "drop_form_local_data_event";
 
 export const DropEvent = () => {
   const isDark = useIsDarkMode();
-  const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
   const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
-  const defaultEditionSize = defaultValues.editionSize;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -90,7 +87,7 @@ export const DropEvent = () => {
             maxEditionSize,
             `You can drop ${maxEditionSize} editions at most`
           )
-          .default(defaultEditionSize),
+          .default(defaultValues.editionSize),
         royalty: yup
           .number()
           .required()
@@ -106,7 +103,7 @@ export const DropEvent = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [defaultEditionSize, maxEditionSize]
+    [maxEditionSize]
   );
   const {
     control,
@@ -120,10 +117,6 @@ export const DropEvent = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: {
-      ...defaultValues,
-      editionSize: defaultEditionSize,
-    },
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
@@ -140,13 +133,7 @@ export const DropEvent = () => {
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
+    defaultValues,
   });
 
   const onSubmit = (values: UseDropNFT) => {
@@ -263,7 +250,7 @@ export const DropEvent = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              style={{ borderRadius: 16 }}
+                              tw="rounded-2xl"
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">
@@ -326,6 +313,8 @@ export const DropEvent = () => {
                       errorText={errors.title?.message}
                       value={value}
                       onChangeText={onChange}
+                      numberOfLines={2}
+                      multiline
                     />
                   );
                 }}

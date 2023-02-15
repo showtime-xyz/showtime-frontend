@@ -18,7 +18,6 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -31,16 +30,13 @@ import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useRudder } from "app/lib/rudderstack";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
@@ -68,10 +64,8 @@ const defaultValues = {
 };
 export const DropFree = () => {
   const isDark = useIsDarkMode();
-  const { rudder } = useRudder();
   const { data: userProfile } = useMyInfo();
   const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
-  const defaultEditionSize = defaultValues.editionSize;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -87,7 +81,7 @@ export const DropFree = () => {
             maxEditionSize,
             `You can drop ${maxEditionSize} editions at most`
           )
-          .default(defaultEditionSize),
+          .default(defaultValues.editionSize),
         royalty: yup
           .number()
           .required()
@@ -103,7 +97,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [maxEditionSize, defaultEditionSize]
+    [maxEditionSize]
   );
 
   const {
@@ -118,10 +112,6 @@ export const DropFree = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: {
-      ...defaultValues,
-      editionSize: defaultEditionSize,
-    },
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
@@ -139,41 +129,14 @@ export const DropFree = () => {
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
+    defaultValues,
   });
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values, clearStorage);
   };
 
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
   const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
 
   const selectedDuration = watch("duration");
 
@@ -262,7 +225,7 @@ export const DropFree = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              style={{ borderRadius: 16 }}
+                              tw="rounded-2xl"
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">
@@ -325,6 +288,8 @@ export const DropFree = () => {
                       errorText={errors.title?.message}
                       value={value}
                       onChangeText={onChange}
+                      numberOfLines={2}
+                      multiline
                     />
                   );
                 }}

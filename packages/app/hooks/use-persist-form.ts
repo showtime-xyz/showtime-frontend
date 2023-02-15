@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
+
+import { FileStorage } from "app/lib/file-storage/file-storage";
+import { Logger } from "app/lib/logger";
 
 const store = new MMKV();
 
@@ -15,6 +18,7 @@ type FormPersistConfig = {
   touch?: boolean;
   onTimeout?: () => void;
   timeout?: number;
+  defaultValues?: { [key: string]: any };
 };
 
 export const usePersistForm = (
@@ -24,19 +28,25 @@ export const usePersistForm = (
     setValue,
     exclude = [],
     onDataRestored,
+    defaultValues,
     validate = false,
     dirty = false,
     touch = false,
     onTimeout,
-    // expire data after 24 hours by default
     timeout = 86400000,
   }: FormPersistConfig
 ) => {
   const watchedValues = watch();
-  const clearStorage = () => store.delete(name);
+  const fileStorage = useMemo(() => new FileStorage(name), [name]);
+
+  const clearStorage = () => {
+    store.delete(name);
+    fileStorage.clearStorage();
+  };
 
   useEffect(() => {
     const str = store.getString(name);
+
     if (str) {
       const { _timestamp = null, ...values } = JSON.parse(str);
       const dataRestored: { [key: string]: any } = {};
@@ -48,39 +58,65 @@ export const usePersistForm = (
         return;
       }
 
-      Object.keys(values).forEach((key) => {
+      Object.keys(values).forEach(async (key) => {
         const shouldSet = !exclude.includes(key);
         if (shouldSet) {
-          dataRestored[key] = values[key];
-          setValue(key, values[key], {
-            shouldValidate: validate,
-            shouldDirty: dirty,
-            shouldTouch: touch,
-          });
+          if (values[key] === "instanceof File") {
+            try {
+              const file = await fileStorage.getFile(key);
+              setValue(key, file);
+            } catch (e) {
+              Logger.error(e);
+            }
+          } else {
+            dataRestored[key] = values[key] || defaultValues?.[key];
+            setValue(key, values[key], {
+              shouldValidate: validate,
+              shouldDirty: dirty,
+              shouldTouch: touch,
+            });
+          }
         }
       });
 
       if (onDataRestored) {
         onDataRestored(dataRestored);
       }
+    } else if (defaultValues) {
+      Object.keys(defaultValues).forEach((key) => {
+        const shouldSet = !exclude.includes(key);
+        if (shouldSet) {
+          setValue(key, defaultValues[key], {
+            shouldValidate: validate,
+            shouldDirty: dirty,
+            shouldTouch: touch,
+          });
+        }
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);
 
   useEffect(() => {
-    const values = exclude.length
-      ? Object.entries(watchedValues)
-          .filter(([key]) => !exclude.includes(key))
-          .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {})
-      : Object.assign({}, watchedValues);
-
-    if (Object.entries(values).length) {
-      if (timeout !== undefined) {
-        values._timestamp = Date.now();
+    let stringValues: any = {};
+    for (let key in watchedValues) {
+      if (!exclude.includes(key)) {
+        if (watchedValues[key] instanceof File) {
+          fileStorage.saveFile(watchedValues[key], key);
+          stringValues[key] = "instanceof File";
+        } else {
+          stringValues[key] = watchedValues[key];
+        }
       }
-      store.set(name, JSON.stringify(values));
     }
-  }, [watchedValues, timeout, exclude, name]);
+
+    if (Object.keys(stringValues).length) {
+      if (timeout !== undefined) {
+        stringValues._timestamp = Date.now();
+      }
+      store.set(name, JSON.stringify(stringValues));
+    }
+  }, [watchedValues, timeout, exclude, fileStorage, name]);
 
   return {
     clearStorage,
