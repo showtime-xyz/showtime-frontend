@@ -10,9 +10,6 @@
     "start": "next start",
     "postinstall": "cd ../.. && yarn patch-package"
   },
-  "resolutions": {
-    "expo-av@13.0.1": "patch:expo-av@npm:13.0.1#.yarn/patches/expo-av-npm-13.0.1-350db62290.patch"
-  },
   "dependencies": {
     "@builder.io/partytown": "^0.6.4",
     "@coinbase/wallet-sdk": "^3.3.0",

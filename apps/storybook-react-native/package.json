@@ -20,9 +20,6 @@
     "prestart": "sb-rn-get-stories",
     "storybook-watcher": "sb-rn-watcher"
   },
-  "resolutions": {
-    "expo-av@13.0.1": "patch:expo-av@npm:13.0.1#.yarn/patches/expo-av-npm-13.0.1-350db62290.patch"
-  },
   "dependencies": {
     "@coinbase/wallet-mobile-sdk": "^1.0.4",
     "@expo/vector-icons": "^13.0.0",
