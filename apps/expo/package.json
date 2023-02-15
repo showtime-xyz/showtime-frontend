@@ -46,6 +46,9 @@
     "test": "jest ./component-tests",
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
+  "resolutions": {
+    "expo-av@13.0.1": "patch:expo-av@npm:13.0.1#.yarn/patches/expo-av-npm-13.0.1-350db62290.patch"
+  },
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
