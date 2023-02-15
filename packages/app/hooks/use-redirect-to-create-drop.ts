@@ -4,15 +4,17 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 export const useRedirectToCreateDrop = () => {
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
+  const navigateToLogin = useNavigateToLogin();
   const Alert = useAlert();
 
   const redirectToCreateDrop = () => {
     if (!isAuthenticated) {
-      router.push("/login");
+      navigateToLogin();
     } else if (user?.data.can_create_drop === false) {
       const timeRemaining = 24 - new Date().getUTCHours();
       Alert.alert(

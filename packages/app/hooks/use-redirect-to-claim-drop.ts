@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { createParam } from "app/navigation/use-param";
 
 const { useParam } = createParam<{
@@ -12,11 +13,12 @@ const { useParam } = createParam<{
 export const useRedirectToClaimDrop = () => {
   const { isAuthenticated } = useUser();
   const router = useRouter();
+  const navigateToLogin = useNavigateToLogin();
   const [password] = useParam("password");
 
   const redirectToClaimDrop = (editionContractAddress: string) => {
     if (!isAuthenticated) {
-      router.push("/login");
+      navigateToLogin();
     } else {
       const as = `/claim/${editionContractAddress}`;
       router.push(
