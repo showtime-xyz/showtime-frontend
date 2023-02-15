@@ -1,0 +1,15 @@
+diff --git a/node_modules/expo-av/build/Video.js b/node_modules/expo-av/build/Video.js
+index f4fa076..21a553a 100644
+--- a/node_modules/expo-av/build/Video.js
++++ b/node_modules/expo-av/build/Video.js
+@@ -249,8 +249,8 @@ class Video extends React.Component {
+                 'posterStyle',
+                 ...Object.keys(status),
+             ]),
+-            style: StyleSheet.flatten([_STYLES.base, this.props.style]),
+-            videoStyle: StyleSheet.flatten([_STYLES.video, this.props.videoStyle]),
++            style: [_STYLES.base, this.props.style],
++            videoStyle: [_STYLES.video, this.props.videoStyle],
+             source,
+             resizeMode: nativeResizeMode,
+             status,
