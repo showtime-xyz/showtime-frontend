@@ -1,5 +1,5 @@
 import { useMemo, memo } from "react";
-import { Platform } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { Video } from "expo-av";
 
@@ -22,7 +22,7 @@ type PreviewProps = {
 };
 
 const StyledVideo = styled(Video);
-
+const videoStyle: ViewStyle = { position: "relative" };
 export const Preview = memo(function Preview({
   tw = "",
   style,
@@ -50,7 +50,6 @@ export const Preview = memo(function Preview({
       return file?.type.includes("video") ? "video" : "image";
     }
   }, [file, type]);
-
   if (uri) {
     if (fileType === "image") {
       return (
@@ -75,11 +74,15 @@ export const Preview = memo(function Preview({
       return (
         <StyledVideo
           tw={tw}
-          style={[{ width, height }, style]}
+          style={[
+            { width, height, justifyContent: "center", alignItems: "center" },
+            style,
+          ]}
           resizeMode={contentFitToresizeMode(resizeMode)}
           source={{ uri: uri as string }}
           isMuted
           shouldPlay
+          videoStyle={videoStyle}
           onLoad={() => {
             revokeObjectURL(uri);
           }}
