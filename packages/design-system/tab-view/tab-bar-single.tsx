@@ -41,10 +41,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
 
     return (
       <View
-        tw={[
-          "no-scrollbar z-[1] flex-row overflow-x-auto overflow-y-hidden",
-          tw,
-        ]}
+        tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
       >
         {routes.map((item, index) => (
           <PressableHover
