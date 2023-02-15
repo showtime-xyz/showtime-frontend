@@ -250,7 +250,7 @@ export const DropPrivate = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              style={{ borderRadius: 16 }}
+                              tw="rounded-2xl"
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">

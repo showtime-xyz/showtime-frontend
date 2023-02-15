@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { Platform } from "react-native";
 
 import { Video } from "expo-av";
@@ -23,7 +23,7 @@ type PreviewProps = {
 
 const StyledVideo = styled(Video);
 
-export const Preview = ({
+export const Preview = memo(function Preview({
   tw = "",
   style,
   type,
@@ -31,7 +31,7 @@ export const Preview = ({
   resizeMode = "cover",
   width,
   height,
-}: PreviewProps) => {
+}: PreviewProps) {
   const uri = getLocalFileURI(file);
 
   const fileType = useMemo(() => {
@@ -89,7 +89,7 @@ export const Preview = ({
   }
 
   return null;
-};
+});
 
 export const getLocalFileURI = (file?: string | File) => {
   if (!file) return null;
