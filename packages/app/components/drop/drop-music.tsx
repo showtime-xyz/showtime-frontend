@@ -130,7 +130,6 @@ export const DropMusic = () => {
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
@@ -154,13 +153,7 @@ export const DropMusic = () => {
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
+    defaultValues,
   });
 
   const onSubmit = async (values: UseDropNFT) => {
