@@ -4,6 +4,7 @@ import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
 
 import { FileStorage } from "app/lib/file-storage/file-storage";
+import { Logger } from "app/lib/logger";
 
 const store = new MMKV();
 
@@ -66,7 +67,7 @@ export const usePersistForm = (
               const file = await fileStorage.getFile(key);
               setValue(key, file);
             } catch (e) {
-              console.error(e);
+              Logger.error(e);
             }
           } else {
             dataRestored[key] = values[key] || defaultValues?.[key];
