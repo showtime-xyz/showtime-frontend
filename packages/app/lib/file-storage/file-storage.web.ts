@@ -56,13 +56,14 @@ export class FileStorage {
   }
 
   public async clearStorage() {
-    return new Promise<void>((resolve) => {
-      if (this.db) {
-        const req = indexedDB.deleteDatabase(this.dbName);
-        req.onsuccess = () => {
-          resolve();
-        };
+    return new Promise<void>(async (resolve) => {
+      if (!this.db) {
+        this.db = await this.getOrInitialiseDB();
       }
+      const req = indexedDB.deleteDatabase(this.dbName);
+      req.onsuccess = () => {
+        resolve();
+      };
     });
   }
 
