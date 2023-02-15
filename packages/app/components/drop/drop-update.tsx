@@ -29,10 +29,11 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 
 const dropValidationSchema = yup.object({
-  releaseDate: yup.date().required().typeError("Please enter a release date"),
   spotifyUrl: yup
     .string()
-    .url()
+    .url(
+      "Please enter a valid URI. e.g.https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV"
+    )
     .required()
     .typeError("Please enter a Spotify URL"),
 });
