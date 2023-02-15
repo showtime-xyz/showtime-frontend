@@ -37,7 +37,6 @@ export class FileStorage {
         };
 
         addRequest.onsuccess = () => {
-          console.log("saved boi ", addRequest.result);
           resolve(object.id);
         };
       }
