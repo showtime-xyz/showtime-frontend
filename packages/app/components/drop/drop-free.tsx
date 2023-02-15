@@ -571,6 +571,8 @@ export const DropFree = () => {
                 ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Please retry!"
+                : shouldProceedToCheckout
+                ? "Continue"
                 : "Drop now"}
             </Button>
 
