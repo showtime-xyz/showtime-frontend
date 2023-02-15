@@ -153,7 +153,7 @@ export const DropUpdate = ({
 
                 return (
                   <View
-                    tw="rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900"
+                    tw="mb-4 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900"
                     style={{
                       opacity: isLive ? 0.3 : 1,
                     }}
@@ -185,11 +185,11 @@ export const DropUpdate = ({
 
                     <View tw="t-0 l-0 flex-row pt-2">
                       <DateTimePicker
+                        disabled={isLive}
                         onChange={(v) => {
                           onChange(v);
                           setShowDatePicker(false);
                         }}
-                        minimumDate={new Date()}
                         value={dateValue}
                         type="datetime"
                         open={showDatePicker}
@@ -221,8 +221,6 @@ export const DropUpdate = ({
               </Text>
             </View>
           </View>
-
-          <View tw="h-4" />
 
           <Button
             onPress={handleSubmit(onSubmit)}
