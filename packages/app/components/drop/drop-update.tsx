@@ -32,7 +32,7 @@ const dropValidationSchema = yup.object({
   spotifyUrl: yup
     .string()
     .url(
-      "Please enter a valid URI. e.g.https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV"
+      "Please enter a valid URI. e.g. https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV"
     )
     .required()
     .typeError("Please enter a Spotify URL"),
