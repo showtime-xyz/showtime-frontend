@@ -37,10 +37,7 @@ export const usePersistForm = (
   }: FormPersistConfig
 ) => {
   const watchedValues = watch();
-  const fileStorage = useMemo(
-    () => new FileStorage("persist_db", name),
-    [name]
-  );
+  const fileStorage = useMemo(() => new FileStorage(name), [name]);
 
   const clearStorage = () => {
     store.delete(name);

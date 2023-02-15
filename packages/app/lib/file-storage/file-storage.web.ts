@@ -2,17 +2,15 @@ import { Logger } from "app/lib/logger";
 
 export class FileStorage {
   private readonly dbName: string;
-  private readonly storeName: string;
   private db?: IDBDatabase;
 
   constructor(dbName: string, storeName: string) {
     this.dbName = dbName;
-    this.storeName = storeName;
     const request = window.indexedDB.open(this.dbName, 1);
     request.onupgradeneeded = () => {
       const db = request.result;
-      if (!db.objectStoreNames.contains(this.storeName)) {
-        db.createObjectStore(this.storeName, { keyPath: "id" });
+      if (!db.objectStoreNames.contains(this.dbName)) {
+        db.createObjectStore(this.dbName, { keyPath: "id" });
       }
     };
 
@@ -28,8 +26,8 @@ export class FileStorage {
   public async saveFile(file: File, id: string) {
     return new Promise<any>((resolve) => {
       if (this.db) {
-        const transaction = this.db.transaction([this.storeName], "readwrite");
-        const objectStore = transaction.objectStore(this.storeName);
+        const transaction = this.db.transaction([this.dbName], "readwrite");
+        const objectStore = transaction.objectStore(this.dbName);
         const object = { id: id, data: file };
         objectStore.delete(object.id);
         const addRequest = objectStore.add(object);
@@ -48,8 +46,8 @@ export class FileStorage {
   public async clearStorage() {
     return new Promise<void>((resolve) => {
       if (this.db) {
-        const transaction = this.db.transaction([this.storeName], "readwrite");
-        const objectStore = transaction.objectStore(this.storeName);
+        const transaction = this.db.transaction([this.dbName], "readwrite");
+        const objectStore = transaction.objectStore(this.dbName);
         const clearRequest = objectStore.clear();
 
         clearRequest.onerror = (e) => {
@@ -66,8 +64,8 @@ export class FileStorage {
   public async getFile(id: any) {
     return new Promise<File>((resolve) => {
       if (this.db) {
-        const transaction = this.db.transaction([this.storeName], "readonly");
-        const objectStore = transaction.objectStore(this.storeName);
+        const transaction = this.db.transaction([this.dbName], "readonly");
+        const objectStore = transaction.objectStore(this.dbName);
         const getRequest = objectStore.get(id);
 
         getRequest.onerror = (e) => {

@@ -1,11 +1,9 @@
 export class FileStorage {
   private readonly dbName: string;
-  private readonly storeName: string;
   private db?: IDBDatabase;
 
-  constructor(dbName: string, storeName: string) {
+  constructor(dbName: string) {
     this.dbName = dbName;
-    this.storeName = storeName;
   }
 
   public async saveFile(file: File, id: string) {}
