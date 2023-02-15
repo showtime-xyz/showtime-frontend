@@ -28,23 +28,22 @@ export const usePersistForm = (
     dirty = false,
     touch = false,
     onTimeout,
-    timeout,
+    // expire data after 24 hours by default
+    timeout = 86400000,
   }: FormPersistConfig
 ) => {
   const watchedValues = watch();
-
   const clearStorage = () => store.delete(name);
 
   useEffect(() => {
     const str = store.getString(name);
-
     if (str) {
       const { _timestamp = null, ...values } = JSON.parse(str);
       const dataRestored: { [key: string]: any } = {};
       const currTimestamp = Date.now();
 
       if (timeout && currTimestamp - _timestamp > timeout) {
-        onTimeout && onTimeout();
+        onTimeout?.();
         clearStorage();
         return;
       }
