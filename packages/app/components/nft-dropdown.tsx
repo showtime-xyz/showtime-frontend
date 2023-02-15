@@ -170,7 +170,7 @@ function NFTDropdown({
                 }}
               />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Update
+                Update Spotify Link
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
