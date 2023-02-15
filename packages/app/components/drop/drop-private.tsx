@@ -313,6 +313,8 @@ export const DropPrivate = () => {
                       errorText={errors.title?.message}
                       value={value}
                       onChangeText={onChange}
+                      numberOfLines={2}
+                      multiline
                     />
                   );
                 }}
