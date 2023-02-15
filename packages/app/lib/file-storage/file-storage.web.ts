@@ -1,4 +1,4 @@
-import { Logger } from "app/logger";
+import { Logger } from "app/lib/logger";
 
 export class FileStorage {
   private readonly dbName: string;
