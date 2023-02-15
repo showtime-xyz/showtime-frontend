@@ -11,4 +11,6 @@ export class FileStorage {
   public async saveFile(file: File, id: string) {}
 
   public async getFile(id: any) {}
+
+  public async clearStorage() {}
 }

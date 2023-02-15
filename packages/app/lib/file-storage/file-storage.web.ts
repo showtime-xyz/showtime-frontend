@@ -1,3 +1,5 @@
+import { Logger } from "app/logger";
+
 export class FileStorage {
   private readonly dbName: string;
   private readonly storeName: string;
@@ -15,7 +17,7 @@ export class FileStorage {
     };
 
     request.onerror = (error) => {
-      console.error(error);
+      Logger.error(error);
     };
 
     request.onsuccess = () => {
@@ -33,11 +35,29 @@ export class FileStorage {
         const addRequest = objectStore.add(object);
 
         addRequest.onerror = (e) => {
-          console.error(e);
+          Logger.error(e);
         };
 
         addRequest.onsuccess = () => {
           resolve(object.id);
+        };
+      }
+    });
+  }
+
+  public async clearStorage() {
+    return new Promise<void>((resolve) => {
+      if (this.db) {
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const objectStore = transaction.objectStore(this.storeName);
+        const clearRequest = objectStore.clear();
+
+        clearRequest.onerror = (e) => {
+          Logger.error(e);
+        };
+
+        clearRequest.onsuccess = () => {
+          resolve();
         };
       }
     });
@@ -51,7 +71,7 @@ export class FileStorage {
         const getRequest = objectStore.get(id);
 
         getRequest.onerror = (e) => {
-          console.error(e);
+          Logger.error(e);
         };
 
         getRequest.onsuccess = () => {
