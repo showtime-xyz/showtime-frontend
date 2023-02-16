@@ -47,6 +47,18 @@ export const usePersistForm = (
   useEffect(() => {
     async function restoreForm() {
       const dataRestored: { [key: string]: any } = {};
+      if (defaultValues) {
+        for (let key in defaultValues) {
+          const value = defaultValues?.[key];
+          dataRestored[key] = value;
+          setValue(key, value, {
+            shouldValidate: validate,
+            shouldDirty: dirty,
+            shouldTouch: touch,
+          });
+        }
+      }
+
       const str = store.getString(name);
       if (str) {
         const { _timestamp = null, ...values } = JSON.parse(str);
@@ -77,20 +89,6 @@ export const usePersistForm = (
                 shouldTouch: touch,
               });
             }
-          }
-        }
-      }
-
-      if (defaultValues) {
-        for (let key in defaultValues) {
-          if (!dataRestored[key]) {
-            const value = defaultValues?.[key];
-            dataRestored[key] = value;
-            setValue(key, value, {
-              shouldValidate: validate,
-              shouldDirty: dirty,
-              shouldTouch: touch,
-            });
           }
         }
       }

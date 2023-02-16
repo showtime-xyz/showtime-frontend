@@ -158,6 +158,7 @@ export const DropFree = () => {
     watch,
     setValue,
     defaultValues,
+    exclude: ["editionSize"],
     onDataRestored: useStableCallback(() => {
       if (!userProfile?.data.profile.verified) {
         setValue("editionSize", editionSizeCredit);
