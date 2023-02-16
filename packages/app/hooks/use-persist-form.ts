@@ -45,55 +45,59 @@ export const usePersistForm = (
   }, [name, fileStorage]);
 
   useEffect(() => {
-    const str = store.getString(name);
-
-    if (str) {
-      const { _timestamp = null, ...values } = JSON.parse(str);
+    async function restoreForm() {
       const dataRestored: { [key: string]: any } = {};
-      const currTimestamp = Date.now();
+      const str = store.getString(name);
+      if (str) {
+        const { _timestamp = null, ...values } = JSON.parse(str);
+        const currTimestamp = Date.now();
 
-      if (timeout && currTimestamp - _timestamp > timeout) {
-        onTimeout?.();
-        clearStorage();
-        return;
+        if (timeout && currTimestamp - _timestamp > timeout) {
+          onTimeout?.();
+          clearStorage();
+          return;
+        }
+
+        for (let key in values) {
+          const shouldSet = !exclude.includes(key);
+          if (shouldSet) {
+            if (values[key] === "instanceof File") {
+              try {
+                const file = await fileStorage.getFile(key);
+                setValue(key, file);
+              } catch (e) {
+                Logger.error(e);
+              }
+            } else {
+              const value = values[key];
+              dataRestored[key] = value;
+              setValue(key, value, {
+                shouldValidate: validate,
+                shouldDirty: dirty,
+                shouldTouch: touch,
+              });
+            }
+          }
+        }
       }
 
-      Object.keys(values).forEach(async (key) => {
-        const shouldSet = !exclude.includes(key);
-        if (shouldSet) {
-          if (values[key] === "instanceof File") {
-            try {
-              const file = await fileStorage.getFile(key);
-              setValue(key, file);
-            } catch (e) {
-              Logger.error(e);
-            }
-          } else {
-            dataRestored[key] = values[key] || defaultValues?.[key];
-            setValue(key, values[key], {
+      if (defaultValues) {
+        for (let key in defaultValues) {
+          if (!dataRestored[key]) {
+            const value = defaultValues?.[key];
+            dataRestored[key] = value;
+            setValue(key, value, {
               shouldValidate: validate,
               shouldDirty: dirty,
               shouldTouch: touch,
             });
           }
         }
-      });
-
-      if (onDataRestored) {
-        onDataRestored(dataRestored);
       }
-    } else if (defaultValues) {
-      Object.keys(defaultValues).forEach((key) => {
-        const shouldSet = !exclude.includes(key);
-        if (shouldSet) {
-          setValue(key, defaultValues[key], {
-            shouldValidate: validate,
-            shouldDirty: dirty,
-            shouldTouch: touch,
-          });
-        }
-      });
+
+      onDataRestored?.(dataRestored);
     }
+    restoreForm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);
 

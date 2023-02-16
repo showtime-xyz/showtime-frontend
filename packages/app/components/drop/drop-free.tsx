@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -71,7 +71,7 @@ export const DropFree = () => {
     initial: false,
     parse: (value) => value === "true",
   });
-  const autoSubmittedRef = useRef(false);
+  let disableAutoSubmitRef = useRef(false);
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
   const maxEditionSize = userProfile?.data?.profile.verified
@@ -142,19 +142,8 @@ export const DropFree = () => {
   const router = useRouter();
 
   const [accordionValue, setAccordionValue] = useState("");
-  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
-    watch,
-    setValue,
-    defaultValues,
-  });
 
-  useEffect(() => {
-    if (!userProfile?.data.profile.verified) {
-      setValue("editionSize", editionSizeCredit);
-    }
-  }, [editionSizeCredit, setValue, userProfile?.data.profile.verified]);
-
-  const onSubmit = useStableCallback((values: UseDropNFT) => {
+  const onSubmit = (values: UseDropNFT) => {
     if (shouldProceedToCheckout) {
       router.push(
         {
@@ -169,20 +158,31 @@ export const DropFree = () => {
     } else {
       dropNFT(values, clearStorage);
     }
-  });
+  };
+  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
+    watch,
+    setValue,
+    defaultValues,
+    onDataRestored: useStableCallback(() => {
+      if (!userProfile?.data.profile.verified) {
+        setValue("editionSize", editionSizeCredit);
+      } else {
+        setValue("editionSize", defaultValues.editionSize);
+      }
+      if (disableAutoSubmitRef.current) return;
+      disableAutoSubmitRef.current = true;
 
-  useEffect(() => {
-    if (!autoSubmittedRef.current && autoSubmit) {
-      autoSubmittedRef.current = true;
-      handleSubmit(onSubmit)();
-    }
-  }, [autoSubmit, handleSubmit, onSubmit]);
+      setTimeout(() => {
+        if (autoSubmit) handleSubmit(onSubmit)();
+      }, 100);
+    }),
+  });
 
   const pickFile = useFilePicker();
 
   const selectedDuration = watch("duration");
 
-  const selectedDurationLabel = React.useMemo(
+  const selectedDurationLabel = useMemo(
     () => durationOptions.find((d) => d.value === selectedDuration)?.label,
     [selectedDuration]
   );
