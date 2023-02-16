@@ -17,7 +17,7 @@ import { useIsDarkMode } from "design-system/hooks";
 
 export const DropSelect = () => {
   const router = useRouter();
-  const user = useUser();
+  const user = useUser({ redirectTo: "/login" });
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
 

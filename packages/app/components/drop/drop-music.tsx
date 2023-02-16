@@ -137,7 +137,7 @@ export const DropMusic = () => {
   const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT } = useDropNFT();
-  const user = useUser();
+  const user = useUser({ redirectTo: "/login" });
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();

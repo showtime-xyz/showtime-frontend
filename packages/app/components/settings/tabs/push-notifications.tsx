@@ -1,14 +1,11 @@
-import { useEffect } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
-import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 
 import { SettingsTitle } from "../settings-title";
@@ -19,17 +16,7 @@ export type PushNotificationTabProp = {
   index?: number;
 };
 export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
-  const { isAuthenticated } = useUser();
-  const router = useRouter();
   const pushNotificationsPreferences = usePushNotificationsPreferences();
-
-  useEffect(() => {
-    const isUnauthenticated = !isAuthenticated;
-    if (isUnauthenticated) {
-      router.pop();
-    }
-  }, [isAuthenticated, router]);
-
   return (
     <ScrollComponent index={index}>
       <SettingsTitle

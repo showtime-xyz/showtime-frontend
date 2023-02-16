@@ -118,7 +118,7 @@ export const DropFree = () => {
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const { state, dropNFT, reset } = useDropNFT();
-  const user = useUser();
+  const user = useUser({ redirectTo: "/login" });
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
