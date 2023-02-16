@@ -232,7 +232,6 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
-  console.log("status ", state);
 
   return (
     <BottomSheetModalProvider>
