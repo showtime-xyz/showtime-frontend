@@ -49,13 +49,16 @@ export const usePersistForm = (
       const dataRestored: { [key: string]: any } = {};
       if (defaultValues) {
         for (let key in defaultValues) {
-          const value = defaultValues?.[key];
-          dataRestored[key] = value;
-          setValue(key, value, {
-            shouldValidate: validate,
-            shouldDirty: dirty,
-            shouldTouch: touch,
-          });
+          const shouldSet = !exclude.includes(key);
+          if (shouldSet) {
+            const value = defaultValues?.[key];
+            dataRestored[key] = value;
+            setValue(key, value, {
+              shouldValidate: validate,
+              shouldDirty: dirty,
+              shouldTouch: touch,
+            });
+          }
         }
       }
 

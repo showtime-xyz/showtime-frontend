@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -73,9 +73,6 @@ export const DropFree = () => {
     ? 100000
     : editionSizeCredit;
 
-  const shouldProceedToCheckout =
-    editionSizeCredit === 0 && !userProfile?.data?.profile.verified;
-
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -90,8 +87,7 @@ export const DropFree = () => {
           .max(
             maxEditionSize,
             `You can drop ${maxEditionSize} editions at most`
-          )
-          .default(defaultValues.editionSize),
+          ),
         royalty: yup
           .number()
           .required()
@@ -123,6 +119,8 @@ export const DropFree = () => {
     mode: "onBlur",
     reValidateMode: "onChange",
   });
+
+  const shouldProceedToCheckout = watch("editionSize") === 0;
 
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
@@ -160,18 +158,20 @@ export const DropFree = () => {
     defaultValues,
     exclude: ["editionSize"],
     onDataRestored: useStableCallback(() => {
-      if (!userProfile?.data.profile.verified) {
-        setValue("editionSize", editionSizeCredit);
-      } else {
-        setValue("editionSize", defaultValues.editionSize);
-      }
-
       if (dropAutoSubmitConfig.shouldAutoSubmit && !shouldProceedToCheckout) {
         dropAutoSubmitConfig.shouldAutoSubmit = false;
         handleSubmit(onSubmit)();
       }
     }),
   });
+
+  useEffect(() => {
+    if (!userProfile?.data.profile.verified) {
+      setValue("editionSize", editionSizeCredit);
+    } else {
+      setValue("editionSize", defaultValues.editionSize);
+    }
+  }, [userProfile?.data.profile.verified, editionSizeCredit, setValue]);
 
   const pickFile = useFilePicker();
 
