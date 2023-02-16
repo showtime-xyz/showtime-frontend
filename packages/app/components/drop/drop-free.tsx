@@ -39,7 +39,6 @@ import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
-import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
@@ -54,7 +53,7 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-const { useParam } = createParam<{ autoSubmit: boolean }>();
+// const { useParam } = createParam<{ autoSubmit: boolean }>();
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
@@ -67,11 +66,11 @@ const defaultValues = {
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
-  const [autoSubmit] = useParam("autoSubmit", {
-    initial: false,
-    parse: (value) => value === "true",
-  });
-  let disableAutoSubmitRef = useRef(false);
+  // const [autoSubmit] = useParam("autoSubmit", {
+  //   initial: false,
+  //   parse: (value) => value === "true",
+  // });
+  // let disableAutoSubmitRef = useRef(false);
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
   const maxEditionSize = userProfile?.data?.profile.verified
@@ -169,12 +168,12 @@ export const DropFree = () => {
       } else {
         setValue("editionSize", defaultValues.editionSize);
       }
-      if (disableAutoSubmitRef.current) return;
-      disableAutoSubmitRef.current = true;
+      // if (disableAutoSubmitRef.current) return;
+      // disableAutoSubmitRef.current = true;
 
-      setTimeout(() => {
-        if (autoSubmit) handleSubmit(onSubmit)();
-      }, 100);
+      // setTimeout(() => {
+      //   if (autoSubmit) handleSubmit(onSubmit)();
+      // }, 100);
     }),
   });
 

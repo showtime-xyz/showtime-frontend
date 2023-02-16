@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo } from "react";
 
 import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
@@ -39,10 +39,10 @@ export const usePersistForm = (
   const watchedValues = watch();
   const fileStorage = useMemo(() => new FileStorage(name), [name]);
 
-  const clearStorage = useCallback(() => {
+  const clearStorage = () => {
     store.delete(name);
     fileStorage.clearStorage();
-  }, [name, fileStorage]);
+  };
 
   useEffect(() => {
     async function restoreForm() {
