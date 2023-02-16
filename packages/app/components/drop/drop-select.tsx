@@ -32,7 +32,7 @@ export const DropSelect = () => {
             <CreateCard
               title="Drops: Free digital collectibles"
               description="Share a link to instantly, create a collector list, and connect with your fans."
-              ctaLabel="Create Free Drop"
+              ctaLabel="Create Drop"
               icon={
                 <Gift
                   color={isDark ? "black" : "white"}

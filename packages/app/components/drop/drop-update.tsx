@@ -5,10 +5,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { InformationCircle } from "@showtime-xyz/universal.icon";
+import { Label } from "@showtime-xyz/universal.label";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -19,15 +26,14 @@ import { yup } from "app/lib/yup";
 
 import { DateTimePicker } from "design-system/date-time-picker";
 
+import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
+
 const dropValidationSchema = yup.object({
-  releaseDate: yup
-    .date()
-    .required()
-    .typeError("Please enter a release date")
-    .min(new Date(), "Release date must be in the future"),
   spotifyUrl: yup
     .string()
-    .url()
+    .url(
+      "Please enter a valid URI. e.g. https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV"
+    )
     .required()
     .typeError("Please enter a Spotify URL"),
 });
@@ -36,6 +42,8 @@ export const DropUpdate = ({
 }: {
   edition?: CreatorEditionResponse;
 }) => {
+  const isDark = useIsDarkMode();
+
   const defaultValues = useMemo(() => {
     if (edition?.presave_release_date || edition?.spotify_track_url) {
       return {
@@ -47,6 +55,9 @@ export const DropUpdate = ({
     }
     return {};
   }, [edition?.presave_release_date, edition?.spotify_track_url]);
+  const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
+    useState(false);
+  const [isLive, setIsLive] = useState(true);
 
   const {
     control,
@@ -77,8 +88,7 @@ export const DropUpdate = ({
       values.spotifyUrl
     ) {
       await mutatePresaveReleaseDate.trigger({
-        editionAddress: edition?.creator_airdrop_edition.contract_address,
-        releaseDate: values.releaseDate,
+        releaseDate: isLive ? new Date() : values.releaseDate,
         spotifyUrl: values.spotifyUrl,
       });
 
@@ -91,21 +101,34 @@ export const DropUpdate = ({
       <View tw="mb-4 w-full max-w-[600px] flex-1 items-center rounded-lg bg-gray-50 p-4 dark:bg-black">
         <View tw="w-full">
           {Platform.OS === "web" ? (
-            <>
-              <Text tw="text-lg font-bold text-gray-900 dark:text-white">
-                Update drop
-              </Text>
-              <View tw="h-8" />
-            </>
+            <Text tw="py-8 text-3xl font-bold text-gray-900 dark:text-white">
+              Update Spotify Link
+            </Text>
           ) : null}
-
           <Controller
             control={control}
             name="spotifyUrl"
             render={({ field: { onChange, onBlur, value } }) => {
               return (
                 <Fieldset
-                  label="Spotify URL"
+                  label={
+                    <View tw="flex-row">
+                      <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                        Spotify Song Link{" "}
+                      </Label>
+                      <PressableHover
+                        onPress={() => {
+                          setShowCopySpotifyLinkTutorial(true);
+                        }}
+                      >
+                        <InformationCircle
+                          height={18}
+                          width={18}
+                          color={isDark ? colors.gray[400] : colors.gray[600]}
+                        />
+                      </PressableHover>
+                    </View>
+                  }
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -117,65 +140,87 @@ export const DropUpdate = ({
           />
 
           <View tw="h-4" />
+          <View>
+            <Controller
+              key="releaseDate"
+              control={control}
+              name="releaseDate"
+              render={({ field: { onChange, value } }) => {
+                let dateValue =
+                  typeof value === "string"
+                    ? new Date(value)
+                    : value ?? new Date();
 
-          <Controller
-            key="releaseDate"
-            control={control}
-            name="releaseDate"
-            render={({ field: { onChange, value } }) => {
-              let dateValue =
-                typeof value === "string"
-                  ? new Date(value)
-                  : value ?? new Date();
-
-              return (
-                <View tw="rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900">
-                  {Platform.OS !== "web" ? (
-                    <Pressable
-                      onPress={() => {
-                        setShowDatePicker(!showDatePicker);
-                      }}
-                    >
+                return (
+                  <View
+                    tw="mb-4 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900"
+                    style={{
+                      opacity: isLive ? 0.3 : 1,
+                    }}
+                  >
+                    {Platform.OS !== "web" ? (
+                      <Pressable
+                        onPress={() => {
+                          setShowDatePicker(!showDatePicker);
+                        }}
+                      >
+                        <Text tw="font-bold text-gray-900 dark:text-white">
+                          Spotify Release Date
+                        </Text>
+                        <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                          {(dateValue as Date).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                          })}
+                        </Text>
+                      </Pressable>
+                    ) : (
                       <Text tw="font-bold text-gray-900 dark:text-white">
-                        Pick a Release Date
+                        Enter a Release Date
                       </Text>
-                      <Text tw="pt-4 text-base text-gray-900 dark:text-white">
-                        {(dateValue as Date).toLocaleString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                        })}
-                      </Text>
-                    </Pressable>
-                  ) : (
-                    <Text tw="font-bold text-gray-900 dark:text-white">
-                      Enter a Release Date
-                    </Text>
-                  )}
+                    )}
 
-                  <View tw="t-0 l-0 flex-row pt-2">
-                    <DateTimePicker
-                      onChange={(v) => {
-                        onChange(v);
-                        setShowDatePicker(false);
-                      }}
-                      minimumDate={new Date()}
-                      value={dateValue}
-                      type="datetime"
-                      open={showDatePicker}
-                    />
+                    <View tw="t-0 l-0 flex-row pt-2">
+                      <DateTimePicker
+                        disabled={isLive}
+                        onChange={(v) => {
+                          onChange(v);
+                          setShowDatePicker(false);
+                        }}
+                        value={dateValue}
+                        type="datetime"
+                        open={showDatePicker}
+                      />
+                    </View>
+                    {errors.releaseDate?.message ? (
+                      <ErrorText>{errors.releaseDate?.message}</ErrorText>
+                    ) : null}
                   </View>
-                  {errors.releaseDate?.message ? (
-                    <ErrorText>{errors.releaseDate?.message}</ErrorText>
-                  ) : null}
-                </View>
-              );
-            }}
-          />
+                );
+              }}
+            />
 
-          <View tw="h-4" />
+            <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
+              <Checkbox
+                checked={isLive}
+                onChange={() => {
+                  setIsLive(!isLive);
+                }}
+                accesibilityLabel="Live Now"
+              />
+              <Text
+                tw="ml-2 font-bold text-black dark:text-white"
+                onPress={() => {
+                  setIsLive(!isLive);
+                }}
+              >
+                Live Now
+              </Text>
+            </View>
+          </View>
 
           <Button
             onPress={handleSubmit(onSubmit)}
@@ -189,6 +234,15 @@ export const DropUpdate = ({
             {mutatePresaveReleaseDate.isMutating ? "Submitting..." : "Submit"}
           </Button>
         </View>
+        <ModalSheet
+          snapPoints={["100%"]}
+          title="Spotify Song Link"
+          visible={showCopySpotifyLinkTutorial}
+          close={() => setShowCopySpotifyLinkTutorial(false)}
+          onClose={() => setShowCopySpotifyLinkTutorial(false)}
+        >
+          <CopySpotifyLinkTutorial />
+        </ModalSheet>
       </View>
     </Screen>
   );

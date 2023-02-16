@@ -32,8 +32,9 @@ export function LikedBy({ nft, max = 2, tw = "" }: Props) {
         tw,
       ]}
     >
-      <Text tw="text-sm text-gray-900 dark:text-white">Liked by&nbsp;</Text>
       <Text tw="text-sm text-gray-900 dark:text-white">
+        <Text tw="text-sm text-gray-900 dark:text-white">Liked by&nbsp;</Text>
+
         {data?.likers.slice(0, max).map((like, index) => (
           <Fragment key={`liked-by-user-${like.profile_id}`}>
             <TextLink

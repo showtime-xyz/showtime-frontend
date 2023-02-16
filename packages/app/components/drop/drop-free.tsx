@@ -32,12 +32,14 @@ import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
+import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
@@ -52,7 +54,7 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-// const { useParam } = createParam<{ transactionId: string }>()
+const { useParam } = createParam<{ autoSubmit: boolean }>();
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
@@ -65,6 +67,11 @@ const defaultValues = {
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
+  const [autoSubmit] = useParam("autoSubmit", {
+    initial: false,
+    parse: (value) => value === "true",
+  });
+  const autoSubmittedRef = useRef(false);
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
   const maxEditionSize = userProfile?.data?.profile.verified
@@ -132,19 +139,13 @@ export const DropFree = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
+  const router = useRouter();
 
   const [accordionValue, setAccordionValue] = useState("");
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
-    /**
-     * Todo: use Context to draft file data, because use localStoge max size generally <= 5mb, so exclude `file` field first
-     */
-    exclude: Platform.select({
-      web: ["file"],
-      default: [],
-    }),
   });
 
   useEffect(() => {
@@ -153,7 +154,7 @@ export const DropFree = () => {
     }
   }, [editionSizeCredit, setValue, userProfile?.data.profile.verified]);
 
-  const onSubmit = (values: UseDropNFT) => {
+  const onSubmit = useStableCallback((values: UseDropNFT) => {
     if (shouldProceedToCheckout) {
       router.push(
         {
@@ -168,10 +169,16 @@ export const DropFree = () => {
     } else {
       dropNFT(values, clearStorage);
     }
-  };
+  });
+
+  useEffect(() => {
+    if (!autoSubmittedRef.current && autoSubmit) {
+      autoSubmittedRef.current = true;
+      handleSubmit(onSubmit)();
+    }
+  }, [autoSubmit, handleSubmit, onSubmit]);
 
   const pickFile = useFilePicker();
-  const router = useRouter();
 
   const selectedDuration = watch("duration");
 
@@ -260,7 +267,7 @@ export const DropFree = () => {
                               file={value}
                               width={windowWidth >= 768 ? 256 : 120}
                               height={windowWidth >= 768 ? 256 : 120}
-                              style={{ borderRadius: 16 }}
+                              style={previewBorderStyle}
                             />
                             <View tw="absolute h-full w-full items-center justify-center">
                               <View tw="flex-row items-center shadow-lg">
@@ -323,6 +330,8 @@ export const DropFree = () => {
                       errorText={errors.title?.message}
                       value={value}
                       onChangeText={onChange}
+                      numberOfLines={2}
+                      multiline
                     />
                   );
                 }}
@@ -595,3 +604,5 @@ export const DropFree = () => {
     </BottomSheetModalProvider>
   );
 };
+
+const previewBorderStyle = { borderRadius: 16 };

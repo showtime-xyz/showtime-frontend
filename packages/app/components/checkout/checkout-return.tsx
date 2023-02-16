@@ -27,7 +27,7 @@ export const CheckoutReturn = () => {
     setMessage("Payment succeeded!");
     setPaymentStatus("success");
     setTimeout(() => {
-      router.replace("/drop/free");
+      router.replace("/drop/free?autoSubmit=true");
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));

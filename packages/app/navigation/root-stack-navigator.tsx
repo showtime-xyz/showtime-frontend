@@ -119,7 +119,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
-          options={{ headerTitle: "Update drop" }}
+          options={{ headerTitle: "Update Spotify Link" }}
           component={DropUpdateScreen}
         />
       </Stack.Group>
@@ -129,8 +129,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           animation: Platform.OS === "ios" ? "default" : "none",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
+          presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
