@@ -125,7 +125,7 @@ export const DropFree = () => {
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT } = useDropNFT();
+  const { state, dropNFT, reset } = useDropNFT();
   const user = useUser();
 
   const headerHeight = useHeaderHeight();
@@ -164,6 +164,10 @@ export const DropFree = () => {
       }
     }),
   });
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   useEffect(() => {
     if (!userProfile?.data.profile.verified) {
