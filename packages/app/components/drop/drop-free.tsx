@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -18,6 +18,7 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -28,10 +29,10 @@ import { CompleteProfileModalContent } from "app/components/complete-profile-mod
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -41,6 +42,8 @@ import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
+
+import { dropAutoSubmitConfig } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -52,7 +55,6 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-// const { useParam } = createParam<{ transactionId: string }>()
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
@@ -64,8 +66,13 @@ const defaultValues = {
 };
 export const DropFree = () => {
   const isDark = useIsDarkMode();
-  const { data: userProfile } = useMyInfo();
-  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const { user: userProfile } = useUser();
+  const editionSizeCredit =
+    userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
+  const maxEditionSize = userProfile?.data?.profile.verified
+    ? 100000
+    : editionSizeCredit;
+
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -76,12 +83,11 @@ export const DropFree = () => {
           .number()
           .required()
           .typeError("Please enter a valid number")
-          .min(1)
+          .min(editionSizeCredit > 0 ? 1 : 0)
           .max(
             maxEditionSize,
             `You can drop ${maxEditionSize} editions at most`
-          )
-          .default(defaultValues.editionSize),
+          ),
         royalty: yup
           .number()
           .required()
@@ -97,7 +103,7 @@ export const DropFree = () => {
         googleMapsUrl: yup.string().url(),
         radius: yup.number().min(0.01).max(10),
       }),
-    [maxEditionSize]
+    [maxEditionSize, editionSizeCredit]
   );
 
   const {
@@ -114,6 +120,8 @@ export const DropFree = () => {
     reValidateMode: "onChange",
   });
 
+  const shouldProceedToCheckout = watch("editionSize") === 0;
+
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
@@ -124,23 +132,56 @@ export const DropFree = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
+  const router = useRouter();
 
   const [accordionValue, setAccordionValue] = useState("");
+
+  const onSubmit = (values: UseDropNFT) => {
+    if (shouldProceedToCheckout) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            checkoutModal: true,
+          },
+        },
+        router.asPath
+      );
+    } else {
+      dropNFT(values, clearStorage);
+    }
+  };
   const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
+    exclude: ["editionSize"],
+    onDataRestored: useStableCallback(() => {
+      if (dropAutoSubmitConfig.shouldAutoSubmit && !shouldProceedToCheckout) {
+        dropAutoSubmitConfig.shouldAutoSubmit = false;
+        handleSubmit(onSubmit)();
+      }
+    }),
   });
 
-  const onSubmit = (values: UseDropNFT) => {
-    dropNFT(values, clearStorage);
-  };
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
+  useEffect(() => {
+    if (!userProfile?.data.profile.verified) {
+      setValue("editionSize", editionSizeCredit);
+    } else {
+      setValue("editionSize", defaultValues.editionSize);
+    }
+  }, [userProfile?.data.profile.verified, editionSizeCredit, setValue]);
 
   const pickFile = useFilePicker();
 
   const selectedDuration = watch("duration");
 
-  const selectedDurationLabel = React.useMemo(
+  const selectedDurationLabel = useMemo(
     () => durationOptions.find((d) => d.value === selectedDuration)?.label,
     [selectedDuration]
   );
@@ -362,12 +403,15 @@ export const DropFree = () => {
                       <Accordion.Chevron />
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
-                      <DataPill
-                        label={`${watch("editionSize")} ${
-                          watch("editionSize") == 1 ? "Edition" : "Editions"
-                        }`}
-                        type="text"
-                      />
+                      {!shouldProceedToCheckout ? (
+                        <DataPill
+                          label={`${watch("editionSize")} ${
+                            watch("editionSize") == 1 ? "Edition" : "Editions"
+                          }`}
+                          type="text"
+                        />
+                      ) : null}
+
                       <DataPill
                         tw="mx-1 md:mx-4"
                         label={`${watch("royalty")}% Royalties`}
@@ -384,7 +428,12 @@ export const DropFree = () => {
                 <Accordion.Content tw="pt-0">
                   <>
                     <View tw="justify-between lg:flex-row">
-                      <View tw="flex-1 flex-row">
+                      <View
+                        tw="flex-1 flex-row"
+                        style={{
+                          display: shouldProceedToCheckout ? "none" : "flex",
+                        }}
+                      >
                         <Controller
                           control={control}
                           name="editionSize"
@@ -394,6 +443,7 @@ export const DropFree = () => {
                                 tw="flex-1"
                                 label="Edition size"
                                 onBlur={onBlur}
+                                disabled={!user?.user?.data.profile.verified}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
                                 value={value?.toString()}
@@ -403,7 +453,12 @@ export const DropFree = () => {
                           }}
                         />
                       </View>
-                      <View tw="mt-4 flex-1 flex-row md:mt-0 lg:ml-4">
+
+                      <View
+                        tw={`mt-4 flex-1 flex-row md:mt-0 ${
+                          shouldProceedToCheckout ? "" : "lg:ml-4"
+                        }`}
+                      >
                         <Controller
                           control={control}
                           name="royalty"
@@ -524,6 +579,8 @@ export const DropFree = () => {
                 ? "Creating... it should take about 10 seconds"
                 : state.status === "error"
                 ? "Failed. Please retry!"
+                : shouldProceedToCheckout
+                ? "Continue"
                 : "Drop now"}
             </Button>
 
