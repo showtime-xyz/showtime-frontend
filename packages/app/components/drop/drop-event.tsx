@@ -122,7 +122,7 @@ export const DropEvent = () => {
   const bottomBarHeight = useBottomTabBarHeight();
 
   const { state, dropNFT } = useDropNFT();
-  const user = useUser();
+  const user = useUser({ redirectTo: "/login" });
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
