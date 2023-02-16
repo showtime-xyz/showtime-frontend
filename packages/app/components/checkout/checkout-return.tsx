@@ -6,10 +6,12 @@ import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { delay } from "app/utilities";
 
+import { dropAutoSubmitConfig } from "../drop/utils";
 import { stripePromise } from "./stripe";
 
 const REDIRECT_SECONDS = 5;
@@ -17,22 +19,25 @@ const REDIRECT_SECONDS = 5;
 export const CheckoutReturn = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useUser();
   const [paymentStatus, setPaymentStatus] = useState<
     "failed" | "success" | "processing" | null | "notSure"
   >(null);
   const router = useRouter();
   const [time, setTime] = useState(REDIRECT_SECONDS);
 
-  const handlePaymentSuccess = useCallback(() => {
+  const handlePaymentSuccess = useCallback(async () => {
     setMessage("Payment succeeded!");
     setPaymentStatus("success");
+    mutate();
     setTimeout(() => {
-      router.replace("/drop/free?autoSubmit=true");
+      router.replace("/drop/free");
+      dropAutoSubmitConfig.shouldAutoSubmit = true;
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));
     }, 1000);
-  }, [router]);
+  }, [router, mutate]);
 
   useEffect(() => {
     async function confirmPaymentStatus() {

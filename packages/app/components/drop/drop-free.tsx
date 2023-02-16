@@ -43,6 +43,8 @@ import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
+import { dropAutoSubmitConfig } from "./utils";
+
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
@@ -53,7 +55,6 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-// const { useParam } = createParam<{ autoSubmit: boolean }>();
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
@@ -66,11 +67,6 @@ const defaultValues = {
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
-  // const [autoSubmit] = useParam("autoSubmit", {
-  //   initial: false,
-  //   parse: (value) => value === "true",
-  // });
-  // let disableAutoSubmitRef = useRef(false);
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
   const maxEditionSize = userProfile?.data?.profile.verified
@@ -168,12 +164,11 @@ export const DropFree = () => {
       } else {
         setValue("editionSize", defaultValues.editionSize);
       }
-      // if (disableAutoSubmitRef.current) return;
-      // disableAutoSubmitRef.current = true;
 
-      // setTimeout(() => {
-      //   if (autoSubmit) handleSubmit(onSubmit)();
-      // }, 100);
+      if (dropAutoSubmitConfig.shouldAutoSubmit && !shouldProceedToCheckout) {
+        dropAutoSubmitConfig.shouldAutoSubmit = false;
+        handleSubmit(onSubmit)();
+      }
     }),
   });
 
@@ -236,6 +231,7 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
+  console.log("status ", state);
 
   return (
     <BottomSheetModalProvider>

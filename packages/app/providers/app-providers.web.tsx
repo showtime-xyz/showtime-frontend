@@ -13,6 +13,7 @@ import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
+import { DropProvider } from "app/providers/drop-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MagicProvider } from "app/providers/magic-provider.web";
 import { MuteProvider } from "app/providers/mute-provider";
@@ -44,7 +45,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                       <BiconomyProvider>
                                         <MuteProvider>
                                           <ClaimProvider>
-                                            {children}
+                                            <DropProvider>
+                                              {children}
+                                            </DropProvider>
                                           </ClaimProvider>
                                         </MuteProvider>
                                       </BiconomyProvider>
