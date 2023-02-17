@@ -1,9 +1,7 @@
-import { useEffect } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddWallet } from "app/hooks/use-add-wallet";
@@ -29,19 +27,12 @@ export const WalletsTab = ({
 }: WalletsTabProps) => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { user, isAuthenticated } = useUser();
-  const router = useRouter();
+  const { user } = useUser();
   const { state, addWallet } = useAddWallet();
 
   const wallets = user?.data.profile.wallet_addresses_v2;
   const walletCTA =
     state.status === "error" ? "Connect Lost, Retry" : "Add Wallet";
-  useEffect(() => {
-    const isUnauthenticated = !isAuthenticated;
-    if (isUnauthenticated) {
-      router.pop();
-    }
-  }, [isAuthenticated, router]);
 
   return (
     <SettingScrollComponent index={index}>

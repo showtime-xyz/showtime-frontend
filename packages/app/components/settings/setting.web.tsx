@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -10,6 +11,7 @@ import { WalletAddressesV2 } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
+import { useUser } from "../../hooks/use-user";
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingsHeader } from "./setting-header";
 import { SettingsMd } from "./setting.md";
@@ -21,10 +23,17 @@ const SettingsTabs = () => {
     WalletAddressesV2 | undefined
   >(undefined);
   const { width } = useWindowDimensions();
+  const { isAuthenticated } = useUser({ redirectTo: "/login" });
   const isMdWidth = width >= breakpoints["md"];
-
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
 
+  if (!isAuthenticated) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+  }
   return isMdWidth ? (
     <SettingsMd />
   ) : (
