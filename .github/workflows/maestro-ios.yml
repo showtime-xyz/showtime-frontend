@@ -44,3 +44,5 @@ jobs:
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           app-file: ${{ env.APP_DIR_PATH }}
+          env: |
+            PLATFORM=ios

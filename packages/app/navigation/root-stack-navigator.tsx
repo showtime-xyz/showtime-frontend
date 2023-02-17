@@ -119,7 +119,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
-          options={{ headerTitle: "Update drop" }}
+          options={{ headerTitle: "Update Spotify Link" }}
           component={DropUpdateScreen}
         />
       </Stack.Group>

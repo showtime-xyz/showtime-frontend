@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function Title({ title, disableTooltip = false }: Props) {
+  const isDark = useIsDarkMode();
   const [isUseTooltip, setIsOverflow] = useState(
     Platform.OS === "web" && !disableTooltip
   );
@@ -39,14 +41,14 @@ export function Title({ title, disableTooltip = false }: Props) {
         <Tooltip.Root>
           <Tooltip.Trigger>
             <Text
-              tw="text-lg !leading-8 text-black dark:text-white"
+              tw="inline-block overflow-ellipsis whitespace-nowrap text-lg !leading-8 text-black dark:text-white"
               numberOfLines={1}
             >
               {title}
             </Text>
           </Tooltip.Trigger>
           <Tooltip.Content side="bottom">
-            <Tooltip.Text text={title} />
+            <Tooltip.Text text={title} textColor={isDark ? "#000" : "#fff"} />
           </Tooltip.Content>
         </Tooltip.Root>
       ) : (

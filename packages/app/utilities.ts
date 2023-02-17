@@ -640,8 +640,17 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
   const currentDate = new Date();
   const givenDate = new Date(time);
   const diffTime = currentDate.getTime() - givenDate.getTime();
+  const diffMinutes = diffTime / (1000 * 60);
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
   const diffHours = diffTime / (1000 * 60 * 60);
+
+  if (diffMinutes < 1) {
+    return `now`;
+  }
+
+  if (diffMinutes >= 1 && diffMinutes < 60) {
+    return `${Math.round(diffMinutes)}m`;
+  }
 
   if (diffDays < 1) {
     return `${Math.round(diffHours)}h`;
@@ -659,4 +668,29 @@ export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
     default:
       return ResizeMode.STRETCH;
   }
+};
+
+export const cleanUserTextInput = (text: string) => {
+  return (
+    text
+      // normalize line breaks
+      .replace(/\r\n|\r|\n/g, "\n")
+      // remove extra line breaks (more than 1)
+      .replace(/(\n){3,}/g, "\n")
+      // remove leading and trailing line breaks and whitespace
+      .trim()
+  );
+};
+
+export const limitLineBreaks = (
+  text: string,
+  maxLineBreaks: number = 5,
+  separator: string = " "
+) => {
+  return text
+    .split("\n")
+    .slice(0, maxLineBreaks)
+    .concat(text.split("\n").slice(maxLineBreaks).join(separator).trim())
+    .join("\n")
+    .trim();
 };

@@ -1,16 +1,13 @@
 import { useEffect, useMemo, ReactNode, useRef } from "react";
 import { Platform } from "react-native";
 
-import useSWR from "swr";
-
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { UserContext } from "app/context/user-context";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
-import { axios } from "app/lib/axios";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { useRudder } from "app/lib/rudderstack";
-import { MyInfo } from "app/types";
 import { isProfileIncomplete } from "app/utilities";
 
 interface UserProviderProps {
@@ -25,10 +22,7 @@ export function UserProvider({ children }: UserProviderProps) {
   const { authenticationStatus, accessToken } = useAuth();
   const router = useRouter();
 
-  const { data, error, mutate } = useSWR<MyInfo>(
-    accessToken ? MY_INFO_ENDPOINT : null,
-    (url) => axios({ url, method: "GET" })
-  );
+  const { data, error, mutate } = useMyInfo();
   //#endregion
   //#region refs
   const isFirstLoad = useRef(true);

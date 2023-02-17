@@ -93,7 +93,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   if (nft.nft_id !== lastItemId.current) {
     lastItemId.current = nft.nft_id;
     // since we are recycling, onLayout will not be called again, therefore we need to measure the height manually
-    detailViewRef.current?.measure((a, b, width, height, px, py) => {
+    detailViewRef.current?.measure((a, b, width, height) => {
       setDetailHeight(height);
     });
   }
