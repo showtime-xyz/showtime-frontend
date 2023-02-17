@@ -32,7 +32,6 @@ import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -42,8 +41,6 @@ import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
-
-import { dropAutoSubmitConfig } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -157,12 +154,6 @@ export const DropFree = () => {
     setValue,
     defaultValues,
     exclude: ["editionSize"],
-    onDataRestored: useStableCallback(() => {
-      if (dropAutoSubmitConfig.shouldAutoSubmit && !shouldProceedToCheckout) {
-        dropAutoSubmitConfig.shouldAutoSubmit = false;
-        handleSubmit(onSubmit)();
-      }
-    }),
   });
 
   useEffect(() => {

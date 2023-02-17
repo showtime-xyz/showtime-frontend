@@ -11,7 +11,6 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { delay } from "app/utilities";
 
-import { dropAutoSubmitConfig } from "../drop/utils";
 import { stripePromise } from "./stripe";
 
 const REDIRECT_SECONDS = 5;
@@ -32,7 +31,6 @@ export const CheckoutReturn = () => {
     mutate();
     setTimeout(() => {
       router.replace("/drop/free");
-      dropAutoSubmitConfig.shouldAutoSubmit = true;
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));

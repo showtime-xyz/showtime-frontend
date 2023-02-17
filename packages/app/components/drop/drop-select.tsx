@@ -43,8 +43,10 @@ export const DropSelect = () => {
               onPress={() => {
                 if (Platform.OS !== "web") {
                   router.pop();
+                  router.push("/drop/free");
+                } else {
+                  router.replace("/drop/free");
                 }
-                router.push("/drop/free");
               }}
             />
           </View>
@@ -69,7 +71,12 @@ export const DropSelect = () => {
                 router.pop();
               }
               if (canCreateMusicDrop) {
-                router.push("/drop/music");
+                if (Platform.OS !== "web") {
+                  router.pop();
+                  router.push("/drop/music");
+                } else {
+                  router.replace("/drop/music");
+                }
               } else {
                 Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
               }
