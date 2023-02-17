@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -21,7 +22,7 @@ export type PushNotificationTabProp = {
 export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
   const { isAuthenticated } = useUser();
   const router = useRouter();
-  const pushNotificationsPreferences = usePushNotificationsPreferences();
+  const { data, isLoading, refresh } = usePushNotificationsPreferences();
 
   useEffect(() => {
     const isUnauthenticated = !isAuthenticated;
@@ -37,40 +38,44 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
         desc="Manage your app notifications."
       />
       <View tw="mt-0 px-4 md:mt-4 md:px-0">
-        {pushNotificationsPreferences?.data &&
-          Object.entries(pushNotificationsPreferences?.data)?.length > 0 &&
-          Object.entries(pushNotificationsPreferences?.data).map(
-            (item, index) => {
-              const [key, value] = item;
-              if (key === "created_at" || key === "updated_at") {
-                return null;
-              }
-              return (
-                <View tw="flex-row items-center py-4" key={index.toString()}>
-                  <Switch
-                    checked={value as boolean}
-                    onChange={async () => {
-                      await axios({
-                        url: "/v1/notifications/preferences/push",
-                        method: "PATCH",
-                        data: {
-                          [key]: !value,
-                        },
-                      });
-                      pushNotificationsPreferences?.refresh();
-                    }}
-                  />
-                  <View tw="ml-2 md:ml-4">
-                    <Text tw="break-words text-base font-medium text-gray-900 dark:text-white">
-                      {key
-                        .replace(/_/g, " ")
-                        .replace(/^\S/, (s) => s.toUpperCase())}
-                    </Text>
-                  </View>
-                </View>
-              );
+        {isLoading ? (
+          <View tw="animate-fade-in-250 h-28 items-center justify-center">
+            <Spinner />
+          </View>
+        ) : (
+          data &&
+          Object.entries(data)?.length > 0 &&
+          Object.entries(data).map((item, index) => {
+            const [key, value] = item;
+            if (key === "created_at" || key === "updated_at") {
+              return null;
             }
-          )}
+            return (
+              <View tw="flex-row items-center py-4" key={index.toString()}>
+                <Switch
+                  checked={value as boolean}
+                  onChange={async () => {
+                    await axios({
+                      url: "/v1/notifications/preferences/push",
+                      method: "PATCH",
+                      data: {
+                        [key]: !value,
+                      },
+                    });
+                    refresh();
+                  }}
+                />
+                <View tw="ml-2 md:ml-4">
+                  <Text tw="break-words text-base font-medium text-gray-900 dark:text-white">
+                    {key
+                      .replace(/_/g, " ")
+                      .replace(/^\S/, (s) => s.toUpperCase())}
+                  </Text>
+                </View>
+              </View>
+            );
+          })
+        )}
       </View>
     </ScrollComponent>
   );

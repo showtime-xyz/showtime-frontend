@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { Route } from "@showtime-xyz/universal.tab-view";
 
 import { WalletAddressesV2 } from "app/types";
@@ -18,34 +20,32 @@ export const SETTINGS_ROUTES = [
   {
     title: "Wallets",
     key: "Wallets",
-    index: 0,
   },
   {
     title: "Email",
     key: "Email",
-    index: 1,
   },
   {
     title: "Phone Number",
     key: "Phone",
-    index: 2,
   },
   {
     title: "Accounts",
     key: "Account",
-    index: 3,
   },
   {
     title: "Billing",
     key: "Billing",
-    index: 4,
+    hidden: Platform.OS !== "web",
   },
   {
     title: "Push Notifications",
     key: "Push Notifications",
-    index: 5,
   },
-];
+]
+  .filter((item) => !item.hidden)
+  .map((item, index) => ({ ...item, index }));
+
 export const SettingTabsScene = ({
   route: { index, key },
   setEditingWallet,

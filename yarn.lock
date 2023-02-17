@@ -9252,6 +9252,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-diff: ^1.0.12
     ethers: ^5.7.2
+    export-from-json: ^1.7.2
     fortmatic: ^2.2.1
     magic-sdk: ^13.1.0
     next: ^13.1.1
@@ -22118,6 +22119,13 @@ __metadata:
   bin:
     expo: bin/cli.js
   checksum: 315e86cfb9f64643c78d5bb2ac659575b0ffcd20d0a924417d080802f01fd7542d3d27cf18fcc9a94e865ba77dafc57a992e715e8a7ab3584be7ca6d505071e1
+  languageName: node
+  linkType: hard
+
+"export-from-json@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "export-from-json@npm:1.7.2"
+  checksum: 0c6841e50a3de40026d1e8de99f46d72d4a93cfb3a5427f1cac734fef9fd1c2a7757b272eb074a3bff4b70066b100643551bd8a41e4f5684843596472cdc6126
   languageName: node
   linkType: hard
 
