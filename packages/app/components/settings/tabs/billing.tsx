@@ -68,11 +68,7 @@ const CreditCardItem = ({
           <View tw="mx-2 h-2 w-0 rounded-full bg-black dark:bg-white md:h-[2px] md:w-[2px]" />
           <Text tw="text-sm font-medium text-gray-500 dark:text-gray-200 md:text-base">
             Expiry
-            {` ${data.details.exp_year
-              .toString()
-              .substring(data.details.exp_year.toString().length - 2)}/${
-              data.details.exp_month
-            }`}
+            {` ${data.details.exp_year}/${data.details.exp_month}`}
           </Text>
         </View>
       </View>
@@ -81,6 +77,7 @@ const CreditCardItem = ({
           size="small"
           variant="tertiary"
           style={data.is_default ? { backgroundColor: colors.lime[200] } : {}}
+          disabled={data.is_default}
           onPress={setPaymentByDefault}
         >
           {data.is_default ? (
