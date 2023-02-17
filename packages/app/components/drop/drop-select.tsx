@@ -19,27 +19,10 @@ export const DropSelect = () => {
   const user = useUser({ redirectTo: "/login" });
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
-  const editionSize = user.user?.data.paid_drop_credits?.[0]?.edition_size;
-  const canUserCreateEditions =
-    (typeof editionSize === "number" && editionSize > 0) ||
-    user.user?.data.profile.verified;
 
   if (user.isIncompletedProfile) {
     return <CompleteProfileModalContent />;
   }
-
-  const navigateToCheckout = () => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          checkoutModal: true,
-        },
-      },
-      router.asPath
-    );
-  };
 
   return (
     <BottomSheetScrollView>
@@ -49,7 +32,7 @@ export const DropSelect = () => {
             <CreateCard
               title="Drops: Free digital collectibles"
               description="Share a link to instantly, create a collector list, and connect with your fans."
-              ctaLabel="Create Free Drop"
+              ctaLabel="Create Drop"
               icon={
                 <Gift
                   color={isDark ? "black" : "white"}
@@ -58,14 +41,12 @@ export const DropSelect = () => {
                 />
               }
               onPress={() => {
-                if (!canUserCreateEditions) {
-                  navigateToCheckout();
-                  return;
-                }
                 if (Platform.OS !== "web") {
                   router.pop();
+                  router.push("/drop/free");
+                } else {
+                  router.replace("/drop/free");
                 }
-                router.push("/drop/free");
               }}
             />
           </View>
@@ -90,7 +71,12 @@ export const DropSelect = () => {
                 router.pop();
               }
               if (canCreateMusicDrop) {
-                router.push("/drop/music");
+                if (Platform.OS !== "web") {
+                  router.pop();
+                  router.push("/drop/music");
+                } else {
+                  router.replace("/drop/music");
+                }
               } else {
                 Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
               }

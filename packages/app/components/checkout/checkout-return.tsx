@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { delay } from "app/utilities";
@@ -16,22 +18,24 @@ const REDIRECT_SECONDS = 5;
 export const CheckoutReturn = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useUser();
   const [paymentStatus, setPaymentStatus] = useState<
     "failed" | "success" | "processing" | null | "notSure"
   >(null);
   const router = useRouter();
   const [time, setTime] = useState(REDIRECT_SECONDS);
 
-  const handlePaymentSuccess = useCallback(() => {
+  const handlePaymentSuccess = useCallback(async () => {
     setMessage("Payment succeeded!");
     setPaymentStatus("success");
+    mutate();
     setTimeout(() => {
-      router.replace("/drop");
+      router.replace("/drop/free");
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));
     }, 1000);
-  }, [router]);
+  }, [router, mutate]);
 
   useEffect(() => {
     async function confirmPaymentStatus() {
@@ -55,6 +59,7 @@ export const CheckoutReturn = () => {
 
         setIsLoading(false);
 
+        // https://stripe.com/docs/payments/intents
         switch (paymentIntent?.status) {
           case "succeeded":
             handlePaymentSuccess();
@@ -72,7 +77,7 @@ export const CheckoutReturn = () => {
                 if (res.current_status === "succeeded") {
                   handlePaymentSuccess();
                   return;
-                } else if (res.current_status === "payment_failed") {
+                } else if (res.current_status === "requires_payment_method") {
                   setPaymentStatus("failed");
                   setMessage(
                     "Your payment was not successful, please try again."
@@ -81,6 +86,11 @@ export const CheckoutReturn = () => {
                 }
                 await delay(3000);
               }
+
+              setPaymentStatus("notSure");
+              setMessage(
+                "Please check back later to see if your payment went through."
+              );
             }
             break;
           case "requires_payment_method":
@@ -95,7 +105,9 @@ export const CheckoutReturn = () => {
       } catch (error) {
         Logger.error("Error confirming payment status", error);
         setPaymentStatus("notSure");
-        setMessage("Something went wrong.");
+        setMessage(
+          "Please check back later to see if your payment went through."
+        );
       }
     }
 
@@ -108,8 +120,10 @@ export const CheckoutReturn = () => {
 
       {paymentStatus === "success" ? (
         <>
-          <Text tw="text-4xl font-bold">Success 🎉</Text>
-          <Text tw="p-8 text-center text-base">
+          <Text tw="text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Payment Succeeded 🎉
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
             Redirecting back in {time} second
             {time > 1 ? "s" : ""}.
           </Text>
@@ -118,23 +132,41 @@ export const CheckoutReturn = () => {
 
       {paymentStatus === "processing" ? (
         <>
-          <Text tw="text-4xl font-bold">Processing Payment</Text>
-          <Text tw="p-8 text-center text-base">{message}</Text>
+          <Text tw="text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Processing Payment
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
         </>
       ) : null}
 
       {paymentStatus === "failed" ? (
-        <>
-          <Text tw="text-4xl font-bold">Payment Failed</Text>
-          <Text tw="p-8 text-center text-base">{message}</Text>
-        </>
+        <View>
+          <Text tw="text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Payment Failed
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
+          <Button
+            onPress={() => {
+              router.replace("/checkout");
+            }}
+            size="regular"
+          >
+            Restart Payment
+          </Button>
+        </View>
       ) : null}
 
       {paymentStatus === "notSure" ? (
         <>
-          <Text tw="text-4xl font-bold">Something went wrong</Text>
-          <Text tw="p-8 text-center text-base">
-            Please check back later to see if your payment went through.
+          <Text tw=" text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Something went wrong
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
           </Text>
         </>
       ) : null}

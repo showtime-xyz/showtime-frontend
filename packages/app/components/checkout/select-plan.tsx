@@ -83,7 +83,10 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
                   selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
                 } text-gray-900`}
               >
-                {plan.edition_size} edition drop
+                {plan.edition_size.toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                edition drop
               </Text>
             </View>
             <Text
@@ -91,7 +94,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
                 selectedPlan?.name === plan.name ? "" : "dark:text-gray-50"
               } text-gray-900`}
             >
-              ${plan.pricing}
+              ${plan.pricing / 100}
             </Text>
           </Pressable>
         );
@@ -114,7 +117,11 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
         disabled={isMutating}
       >
         <Text tw="font-semibold text-gray-50 dark:text-gray-900">
-          {isMutating ? "Loading..." : "Let's go"}
+          {isMutating
+            ? "Loading..."
+            : `Drop ${selectedPlan?.edition_size.toLocaleString("en-US", {
+                maximumFractionDigits: 2,
+              })} editions`}
         </Text>
       </Button>
       {error ? (
