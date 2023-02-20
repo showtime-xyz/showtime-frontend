@@ -17,14 +17,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
-import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-
-import { stripePromise } from "./stripe";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();
@@ -37,7 +35,6 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const [selectDefault, setSelectDefault] = useState(true);
   const paymentMethods = usePaymentsManage();
   const toast = useToast();
-  const user = useUser();
   const colorMode = useColorScheme();
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
@@ -45,6 +42,11 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   );
 
   const router = useRouter();
+  const {
+    paymentStatus,
+    confirmCardPaymentStatus,
+    message: paymentStatusMessage,
+  } = useConfirmPayment();
 
   useEffect(() => {
     // Sets initial selected plan
@@ -57,32 +59,24 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
 
     try {
       if (selectDefault && defaultPaymentMethod) {
-        const stripe = await stripePromise;
         const res = await trigger({
           dropPlan: selectedPlan,
           useDefaultPaymentMethod: true,
         });
 
         if (res?.client_secret) {
-          const paymentResponse = await stripe?.confirmCardPayment(
-            res?.client_secret,
-            {
-              payment_method: defaultPaymentMethod?.id,
-              return_url: window.location.origin + "/checkout-return",
-            }
-          );
-          if (paymentResponse?.error) {
-            toast?.show({
-              message:
-                "Something went wrong, please try again with a different payment method",
-            });
-          } else if (paymentResponse?.paymentIntent?.status === "succeeded") {
-            await user.mutate();
+          try {
+            await confirmCardPaymentStatus(
+              res?.client_secret,
+              defaultPaymentMethod.id
+            );
             toast?.show({
               message: "Payment Succeeded",
               hideAfter: 3000,
             });
             router.replace("/drop/free");
+          } catch (e) {
+            // Error handled in hook
           }
         }
       } else {
@@ -203,9 +197,16 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           collectibles to people who are new to web3!
         </Text>
       </View>
-      <Button size="regular" onPress={handleSelectPlan} disabled={isMutating}>
+      <Button
+        size="regular"
+        onPress={handleSelectPlan}
+        disabled={isMutating || paymentStatus === "processing"}
+        tw={
+          isMutating || paymentStatus === "processing" ? "opacity-[0.45]" : ""
+        }
+      >
         <Text tw="font-semibold text-gray-50 dark:text-gray-900">
-          {isMutating
+          {isMutating || paymentStatus === "processing"
             ? "Loading..."
             : `Drop ${selectedPlan?.edition_size.toLocaleString("en-US", {
                 maximumFractionDigits: 2,
@@ -214,6 +215,9 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
       </Button>
       {error ? (
         <Text tw="pt-2 text-red-500">{error?.message}. Please retry</Text>
+      ) : null}
+      {paymentStatus === "failed" || paymentStatus === "notSure" ? (
+        <Text tw="pt-2 text-red-500">{paymentStatusMessage}</Text>
       ) : null}
     </View>
   );

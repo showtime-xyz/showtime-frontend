@@ -98,7 +98,7 @@ const CheckoutFormStripe = () => {
           layout: "tabs",
         }}
       />
-      <View tw="h-3" />
+      <View tw="h-4" />
       <View tw="flex-row items-center">
         <Checkbox
           checked={setAsDefaultPaymentMethod}
@@ -117,7 +117,7 @@ const CheckoutFormStripe = () => {
         </Text>
       </View>
 
-      <View tw="h-8" />
+      <View tw="h-6" />
       <Button
         disabled={isLoading || !stripe || !elements}
         onPress={handleSubmit}
