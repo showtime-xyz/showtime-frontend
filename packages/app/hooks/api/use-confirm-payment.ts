@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 
+import { stripePromise } from "app/components/checkout/stripe";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -55,9 +56,51 @@ export const useConfirmPayment = () => {
     [mutate]
   );
 
+  const confirmCardPaymentStatus = useCallback(
+    async function confirmCardPaymentStatus(
+      clientSecret: string,
+      paymentMethodId: string
+    ) {
+      return new Promise<void>(async (resolve, reject) => {
+        try {
+          setMessage("Your payment is processing.");
+          setPaymentStatus("processing");
+          const stripe = await stripePromise;
+
+          const paymentResponse = await stripe?.confirmCardPayment(
+            clientSecret,
+            {
+              payment_method: paymentMethodId,
+              return_url: window.location.origin + "/checkout-return",
+            }
+          );
+          if (paymentResponse?.error) {
+            reject();
+            Logger.error(
+              "Error confirming card payment status",
+              paymentResponse.error
+            );
+            setPaymentStatus("failed");
+            setMessage(paymentResponse.error.message ?? "Something went wrong");
+          }
+
+          if (paymentResponse?.paymentIntent) {
+            await confirmPaymentStatus(paymentResponse?.paymentIntent.id);
+            resolve();
+          }
+        } catch (e) {
+          reject(e);
+          Logger.error(e);
+        }
+      });
+    },
+    [confirmPaymentStatus]
+  );
+
   return {
     paymentStatus,
     message,
     confirmPaymentStatus,
+    confirmCardPaymentStatus,
   };
 };
