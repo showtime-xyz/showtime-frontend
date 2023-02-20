@@ -55,7 +55,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const handleSelectPlan = async () => {
     if (!selectedPlan) return;
 
-    if (selectDefault) {
+    if (selectDefault && defaultPaymentMethod) {
       const stripe = await stripePromise;
       const res = await trigger({
         dropPlan: selectedPlan,
