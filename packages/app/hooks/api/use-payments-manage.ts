@@ -41,7 +41,10 @@ export const usePaymentsManage = () => {
   const { mutate } = useSWRConfig();
   const { data, isLoading } = useSWR<PaymentsMethods[]>(
     PAYMENTS_METHODS_ENDPOINT,
-    fetcher
+    fetcher,
+    {
+      keepPreviousData: false,
+    }
   );
 
   const removePayment = async (paymentMethodId: string) => {
