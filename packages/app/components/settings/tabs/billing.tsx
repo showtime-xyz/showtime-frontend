@@ -1,17 +1,12 @@
 import { useCallback, memo } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions, Linking } from "react-native";
 
 import { format } from "date-fns";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  CreditCard,
-  Check,
-  ArrowBottom,
-  Trash,
-} from "@showtime-xyz/universal.icon";
+import { CreditCard, Check, Trash } from "@showtime-xyz/universal.icon";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -107,15 +102,6 @@ const HistoryItem = memo(function HistoryItem({
 }: {
   data: PaymentsHistory;
 }) {
-  const isDark = useIsDarkMode();
-  const onDowloadHistory = useCallback(() => {
-    // Todo: waiting for backend to confirm whether exporting from the frontend is possible and also for the final data format.
-    exportFromJSON({
-      data: [data],
-      fileName: `${data.payment_intent_id}-${new Date().getTime()}`,
-      exportType: "csv",
-    });
-  }, [data]);
   return (
     <View tw="flex-row justify-between py-3.5">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
@@ -133,12 +119,14 @@ const HistoryItem = memo(function HistoryItem({
       </View>
       <View tw="flex-row">
         <Button
-          size="small"
           variant="tertiary"
-          iconOnly
-          onPress={onDowloadHistory}
+          onPress={() => {
+            if (data?.receipts[0]) {
+              Linking.openURL(data?.receipts[0]);
+            }
+          }}
         >
-          <ArrowBottom color={isDark ? colors.white : colors.black} />
+          View
         </Button>
       </View>
     </View>

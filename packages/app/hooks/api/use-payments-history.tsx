@@ -36,6 +36,7 @@ export type PaymentsHistory = {
   };
   created_at: string;
   receipt_email: string;
+  receipts: Array<string>;
 };
 export const usePaymentsHistory = () => {
   const { data, isLoading } = useSWR<PaymentsHistory[]>(
