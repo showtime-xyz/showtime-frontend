@@ -55,15 +55,15 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const handleSelectPlan = async () => {
     if (!selectedPlan) return;
 
-    if (selectDefault && defaultPaymentMethod) {
-      const stripe = await stripePromise;
-      const res = await trigger({
-        dropPlan: selectedPlan,
-        useDefaultPaymentMethod: selectDefault,
-      });
+    try {
+      if (selectDefault && defaultPaymentMethod) {
+        const stripe = await stripePromise;
+        const res = await trigger({
+          dropPlan: selectedPlan,
+          useDefaultPaymentMethod: selectDefault,
+        });
 
-      if (res?.client_secret) {
-        try {
+        if (res?.client_secret) {
           const paymentResponse = await stripe?.confirmCardPayment(
             res?.client_secret,
             {
@@ -84,17 +84,17 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
             });
             router.replace("/drop/free");
           }
-        } catch (e) {
-          Logger.error(e);
         }
-      }
-    } else {
-      const res = await trigger({
-        dropPlan: selectedPlan,
-        useDefaultPaymentMethod: selectDefault,
-      });
+      } else {
+        const res = await trigger({
+          dropPlan: selectedPlan,
+          useDefaultPaymentMethod: selectDefault,
+        });
 
-      setClientSecret(res?.client_secret);
+        setClientSecret(res?.client_secret);
+      }
+    } catch (e) {
+      Logger.error(e);
     }
   };
 
