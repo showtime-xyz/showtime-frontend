@@ -20,6 +20,7 @@ export const useConfirmPayment = () => {
           setMessage("Your payment is processing.");
           setPaymentStatus("processing");
           for (let i = 0; i < 20; i++) {
+            await delay(3000);
             const res = await axios({
               method: "GET",
               url: "/v1/payments/status?payment_intent_id=" + paymentIntentId,
@@ -36,7 +37,6 @@ export const useConfirmPayment = () => {
               setMessage("Your payment was not successful, please try again.");
               return;
             }
-            await delay(3000);
           }
           reject();
           setPaymentStatus("notSure");

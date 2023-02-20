@@ -33,7 +33,7 @@ export const CheckoutReturn = () => {
     const stripe = await stripePromise;
 
     const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent"
+      "payment_intent_client_secret"
     );
 
     if (stripe && clientSecret) {
