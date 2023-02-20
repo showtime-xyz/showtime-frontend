@@ -196,17 +196,11 @@ export const useDropNFT = () => {
         return;
       }
 
-      const escapedTitle = JSON.stringify(params.title).slice(1, -1);
-      const escapedDescription = JSON.stringify(params.description).slice(
-        1,
-        -1
-      );
-
       Logger.log("ipfs hash ", {
         ipfsHash,
         params,
-        escapedTitle,
-        escapedDescription,
+        title: params.title,
+        description: params.description,
       });
 
       const isPasswordGated = params.password;
@@ -236,8 +230,8 @@ export const useDropNFT = () => {
         : {};
 
       let requestData: DropRequestData = {
-        name: escapedTitle,
-        description: escapedDescription,
+        name: params.title,
+        description: params.description,
         image_url: "ipfs://" + ipfsHash,
         edition_size: params.editionSize,
         royalty_bps: params.royalty * 100,
