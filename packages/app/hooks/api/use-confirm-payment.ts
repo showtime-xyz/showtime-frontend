@@ -44,12 +44,12 @@ export const useConfirmPayment = () => {
             "Please check back later to see if your payment went through."
           );
         } catch (error) {
-          reject();
           Logger.error("Error confirming payment status", error);
           setPaymentStatus("notSure");
           setMessage(
             "Please check back later to see if your payment went through."
           );
+          reject();
         }
       });
     },
@@ -75,13 +75,13 @@ export const useConfirmPayment = () => {
             }
           );
           if (paymentResponse?.error) {
-            reject();
             Logger.error(
               "Error confirming card payment status",
               paymentResponse.error
             );
             setPaymentStatus("failed");
             setMessage(paymentResponse.error.message ?? "Something went wrong");
+            reject();
           }
 
           if (paymentResponse?.paymentIntent) {
