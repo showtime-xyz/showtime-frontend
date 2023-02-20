@@ -8,6 +8,7 @@ import { useWeb3 } from "app/hooks/use-web3";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useRudder } from "app/lib/rudderstack";
 
+import { Logger } from "../../lib/logger";
 import { EmailInput } from "./email-input";
 
 export const AddEmailModal = () => {
@@ -40,7 +41,7 @@ export const AddEmailModal = () => {
           router.pop();
         }
       } catch (error) {
-        console.error(error);
+        Logger.error(error);
       } finally {
         // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to weird bugs.
         magic?.user?.logout();
