@@ -1,35 +1,48 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import useSWRMutation from "swr/mutation";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
+import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
+import { usePaymentMethods } from "app/hooks/api/use-payment-methods";
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
+import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+
+import { stripePromise } from "./stripe";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();
   const [selectedPlan, setSelectedPlan] = useState<DropPlan | null>(null);
   const isDark = useIsDarkMode();
-  const { trigger, data, isMutating, error } = useSWRMutation<{
+  const { trigger, isMutating, error } = useSWRMutation<{
     payment_intent_id: string;
     client_secret: string;
   }>(MY_INFO_ENDPOINT, fetchPaymentIntent);
+  const [selectDefault, setSelectDefault] = useState(true);
+  const paymentMethods = usePaymentMethods();
+  const toast = useToast();
+  const user = useUser();
+  const colorMode = useColorScheme();
+  const defaultPaymentMethod = useMemo(
+    () => paymentMethods.data?.find((method) => method.is_default),
+    [paymentMethods.data]
+  );
 
-  useEffect(() => {
-    if (data) {
-      setClientSecret(data.client_secret);
-    }
-  }, [data, setClientSecret]);
+  const router = useRouter();
 
   useEffect(() => {
     // Sets initial selected plan
@@ -37,6 +50,51 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
       setSelectedPlan(paidDropPlansQuery.data[1]);
     }
   }, [paidDropPlansQuery?.data, selectedPlan]);
+  const handleSelectPlan = async () => {
+    if (!selectedPlan) return;
+
+    if (selectDefault) {
+      const stripe = await stripePromise;
+      const res = await trigger({
+        dropPlan: selectedPlan,
+        useDefaultPaymentMethod: selectDefault,
+      });
+
+      if (res?.client_secret) {
+        try {
+          const paymentResponse = await stripe?.confirmCardPayment(
+            res?.client_secret,
+            {
+              payment_method: defaultPaymentMethod?.id,
+              return_url: window.location.origin + "/checkout-return",
+            }
+          );
+          if (paymentResponse?.error) {
+            toast?.show({
+              message:
+                "Something went wrong, please try again with a different payment method",
+            });
+          } else if (paymentResponse?.paymentIntent?.status === "succeeded") {
+            await user.mutate();
+            toast?.show({
+              message: "Payment Succeeded",
+              hideAfter: 3000,
+            });
+            router.replace("/drop/free");
+          }
+        } catch (e) {
+          Logger.error(e);
+        }
+      }
+    } else {
+      const res = await trigger({
+        dropPlan: selectedPlan,
+        useDefaultPaymentMethod: selectDefault,
+      });
+
+      setClientSecret(res?.client_secret);
+    }
+  };
 
   return (
     <View tw="p-4">
@@ -99,6 +157,25 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           </Pressable>
         );
       })}
+      <View tw="mt-4">
+        {paymentMethods.isLoading ? (
+          <Skeleton height={16} width={200} colorMode={colorMode as any} />
+        ) : defaultPaymentMethod ? (
+          <View tw="flex-row items-center">
+            <Checkbox
+              checked={selectDefault}
+              onChange={() => setSelectDefault(!selectDefault)}
+              accesibilityLabel="Select default payment method"
+            />
+            <Text
+              tw="ml-2 text-gray-900 dark:text-gray-50"
+              onPress={() => setSelectDefault(!selectDefault)}
+            >
+              Use my default payment method
+            </Text>
+          </View>
+        ) : null}
+      </View>
       <View tw="mb-4 mt-8 items-center p-4">
         <Text tw="text-lg font-semibold text-gray-900 dark:text-gray-50">
           Why is it paid?
@@ -111,11 +188,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
           collectibles to people who are new to web3!
         </Text>
       </View>
-      <Button
-        size="regular"
-        onPress={() => trigger(selectedPlan)}
-        disabled={isMutating}
-      >
+      <Button size="regular" onPress={handleSelectPlan} disabled={isMutating}>
         <Text tw="font-semibold text-gray-50 dark:text-gray-900">
           {isMutating
             ? "Loading..."
@@ -133,7 +206,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
 
 async function fetchPaymentIntent(
   _url: string,
-  { arg }: { arg: DropPlan | null }
+  { arg }: { arg: { useDefaultPaymentMethod: boolean; dropPlan: DropPlan } }
 ) {
   if (arg) {
     try {
@@ -141,7 +214,8 @@ async function fetchPaymentIntent(
         method: "POST",
         url: "/v1/payments/start",
         data: {
-          payment_plan: arg.name,
+          payment_plan: arg.dropPlan.name,
+          use_default_payment_method: arg.useDefaultPaymentMethod,
         },
       });
 
