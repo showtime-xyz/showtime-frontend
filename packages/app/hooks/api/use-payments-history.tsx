@@ -1,6 +1,6 @@
-import useSWR from "swr";
+import { useCallback, useMemo } from "react";
 
-import { fetcher } from "../use-infinite-list-query";
+import { useInfiniteListQuerySWR } from "../use-infinite-list-query";
 
 export type PaymentsHistory = {
   payment_intent_id: string;
@@ -36,14 +36,37 @@ export type PaymentsHistory = {
   };
   created_at: string;
   receipt_email: string;
+  receipts: Array<string>;
 };
+const PAGE_SIZE = 5;
 export const usePaymentsHistory = () => {
-  const { data, isLoading } = useSWR<PaymentsHistory[]>(
-    `/v1/payments`,
-    fetcher
+  const notificationsFetcher = useCallback(
+    (index: number, previousPageData: []) => {
+      if (previousPageData && !previousPageData.length) return null;
+      return `/v1/payments?page=${index + 1}&limit=${PAGE_SIZE}`;
+    },
+    []
   );
+  const queryState = useInfiniteListQuerySWR<PaymentsHistory[]>(
+    notificationsFetcher,
+    {
+      pageSize: PAGE_SIZE,
+    }
+  );
+  const newData = useMemo(() => {
+    let newData: PaymentsHistory[] = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
   return {
-    data,
-    isLoading,
+    ...queryState,
+    data: newData,
   };
 };

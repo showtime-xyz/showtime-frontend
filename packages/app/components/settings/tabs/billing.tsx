@@ -1,18 +1,15 @@
 import { useCallback, memo } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform, Linking } from "react-native";
 
+import { ListRenderItemInfo } from "@shopify/flash-list";
 import { format } from "date-fns";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  CreditCard,
-  Check,
-  ArrowBottom,
-  Trash,
-} from "@showtime-xyz/universal.icon";
+import { CreditCard, Check, Trash } from "@showtime-xyz/universal.icon";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -33,7 +30,8 @@ import { breakpoints } from "design-system/theme";
 import { SettingItemSeparator } from "../setting-item-separator";
 import { SettingsTitle } from "../settings-title";
 
-const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
+const ListComponent =
+  Platform.OS === "web" ? InfiniteScrollList : TabInfiniteScrollList;
 
 export type BillingTabProps = {
   index?: number;
@@ -103,50 +101,46 @@ const CreditCardItem = ({
   );
 };
 const HistoryItem = memo(function HistoryItem({
-  data,
+  item,
 }: {
-  data: PaymentsHistory;
+  item: PaymentsHistory;
 }) {
-  const isDark = useIsDarkMode();
-  const onDowloadHistory = useCallback(() => {
-    // Todo: waiting for backend to confirm whether exporting from the frontend is possible and also for the final data format.
-    exportFromJSON({
-      data: [data],
-      fileName: `${data.payment_intent_id}-${new Date().getTime()}`,
-      exportType: "csv",
-    });
-  }, [data]);
   return (
-    <View tw="flex-row justify-between py-3.5">
+    <View tw="flex-row justify-between py-3.5 px-4 md:px-0">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
         <Text tw="text-sm font-medium text-gray-900 dark:text-white md:text-base">
-          {data.amount}
+          {item.amount}
         </Text>
         <View tw="h-2 w-0 md:w-6" />
         <Text tw="text-sm font-medium text-gray-900 dark:text-white md:text-base">
-          {data.receipt_email}
+          {item.receipt_email}
         </Text>
         <View tw="h-2 w-0 md:w-6" />
         <Text tw="text-sm font-medium text-gray-900 dark:text-white md:text-base">
-          {format(new Date(data.created_at), "MMM dd, Y")}
+          {format(new Date(item.created_at), "MMM dd, Y")}
         </Text>
       </View>
-      <View tw="flex-row">
-        <Button
-          size="small"
-          variant="tertiary"
-          iconOnly
-          onPress={onDowloadHistory}
-        >
-          <ArrowBottom color={isDark ? colors.white : colors.black} />
-        </Button>
+      <View tw="h-8 flex-row">
+        {item?.receipts?.length > 0 && (
+          <Button
+            variant="tertiary"
+            onPress={() => {
+              for (let link of item.receipts) {
+                Linking.openURL(link);
+              }
+            }}
+          >
+            View
+          </Button>
+        )}
       </View>
     </View>
   );
 });
-export const History = memo(function History() {
-  const { data, isLoading } = usePaymentsHistory();
 
+const Header = memo(function Header() {
+  const { data, isLoading, removePayment, setPaymentByDefault } =
+    usePaymentsManage();
   const onDowloadAllHistory = useCallback(() => {
     if (!data) return;
     // Todo: waiting for backend to confirm whether exporting from the frontend is possible and also for the final data format.
@@ -156,18 +150,14 @@ export const History = memo(function History() {
       exportType: "csv",
     });
   }, [data]);
-
   return (
-    <View>
+    <>
       <SettingsTitle
-        title="History"
-        titleTw="text-lg font-bold text-gray-900 dark:text-white"
-        buttonText={data?.length ? "Download full history" : undefined}
-        buttonProps={{
-          variant: "tertiary",
-        }}
-        tw="-mx-4 md:mx-0"
-        onPress={onDowloadAllHistory}
+        title="Billing"
+        desc="Manage the payment methods connected to your profile."
+        // Todo: this is waiting for backend support.
+        // buttonText="Add payment method"
+        // onPress={() => {}}
       />
       {isLoading ? (
         <View tw="animate-fade-in-250 h-28 items-center justify-center">
@@ -176,55 +166,92 @@ export const History = memo(function History() {
       ) : data?.length === 0 ? (
         <EmptyPlaceholder
           tw="animate-fade-in-250 min-h-[60px] px-4"
-          title="No payment history here."
+          title="No payment connected to your profile."
         />
       ) : (
         <View tw="animate-fade-in-250">
           {data?.map((item) => (
-            <HistoryItem key={item.payment_intent_id} data={item} />
+            <CreditCardItem
+              key={item.id}
+              data={item}
+              removePayment={() => removePayment(item.id)}
+              setPaymentByDefault={() => setPaymentByDefault(item.id)}
+            />
           ))}
         </View>
       )}
-    </View>
+      <SettingItemSeparator tw="my-2 md:my-8" />
+      <SettingsTitle
+        title="History"
+        titleTw="text-lg font-bold text-gray-900 dark:text-white"
+        // buttonText={listData?.length ? "Download full history" : undefined}
+        buttonProps={{
+          variant: "tertiary",
+        }}
+        onPress={onDowloadAllHistory}
+      />
+      <View tw="h-2" />
+    </>
   );
 });
+
 export const BillingTab = ({ index = 0 }: BillingTabProps) => {
-  const { data, isLoading, removePayment, setPaymentByDefault } =
-    usePaymentsManage();
+  const {
+    data: listData,
+    isLoading: isLoadingList,
+    fetchMore,
+    isLoadingMore,
+  } = usePaymentsHistory();
+  const { height: screenHeight, width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+
+  const keyExtractor = useCallback(
+    (item: PaymentsHistory) => `${item.payment_intent_id}`,
+    []
+  );
+
+  const renderItem = useCallback(
+    (props: ListRenderItemInfo<PaymentsHistory>) => <HistoryItem {...props} />,
+    []
+  );
+  const ListFooterComponent = useCallback(() => {
+    if (isLoadingMore)
+      return (
+        <View tw="items-center pb-4">
+          <Spinner size="small" />
+        </View>
+      );
+    return null;
+  }, [isLoadingMore]);
+
   return (
-    <SettingScrollComponent index={index}>
-      <SettingsTitle
-        title="Billing"
-        desc="Manage the payment methods connected to your profile."
-        // Todo: this is waiting for backend support.
-        // buttonText="Add payment method"
-        // onPress={() => {}}
-      />
-      <View tw="mt-6 px-4 md:px-0">
-        {isLoading ? (
-          <View tw="animate-fade-in-250 h-28 items-center justify-center">
-            <Spinner />
-          </View>
-        ) : data?.length === 0 ? (
-          <EmptyPlaceholder
-            tw="animate-fade-in-250 min-h-[60px] px-4"
-            title="No payment connected to your profile."
-          />
-        ) : (
-          <View tw="animate-fade-in-250">
-            {data?.map((item) => (
-              <CreditCardItem
-                key={item.id}
-                data={item}
-                removePayment={() => removePayment(item.id)}
-                setPaymentByDefault={() => setPaymentByDefault(item.id)}
-              />
-            ))}
-          </View>
-        )}
-        <SettingItemSeparator tw="my-2 md:my-8" />
-        <History />
-      </View>
-    </SettingScrollComponent>
+    <>
+      {isLoadingList ? (
+        <View tw="animate-fade-in-250 h-28 items-center justify-center">
+          <Spinner />
+        </View>
+      ) : listData?.length === 0 ? (
+        <EmptyPlaceholder
+          tw="animate-fade-in-250 min-h-[60px] px-4"
+          title="No payment history here."
+        />
+      ) : (
+        <ListComponent
+          data={listData}
+          keyExtractor={keyExtractor}
+          useWindowScroll={isMdWidth}
+          estimatedItemSize={60}
+          ListHeaderComponent={Header}
+          overscan={60}
+          style={{
+            height: isMdWidth ? undefined : screenHeight - 200,
+          }}
+          ListFooterComponent={ListFooterComponent}
+          onEndReached={fetchMore}
+          renderItem={renderItem}
+          index={index}
+        />
+      )}
+    </>
   );
 };
