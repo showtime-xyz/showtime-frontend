@@ -165,11 +165,11 @@ const Header = memo(function Header() {
         </View>
       ) : data?.length === 0 ? (
         <EmptyPlaceholder
-          tw="animate-fade-in-250 min-h-[60px] px-4"
+          tw="animate-fade-in-250 min-h-[100px]"
           title="No payment connected to your profile."
         />
       ) : (
-        <View tw="animate-fade-in-250">
+        <View tw="animate-fade-in-250 mt-4 px-4 md:mt-8 md:px-0">
           {data?.map((item) => (
             <CreditCardItem
               key={item.id}
@@ -224,17 +224,24 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
     return null;
   }, [isLoadingMore]);
 
+  const ListEmptyComponent = useCallback(() => {
+    if (isLoadingList) {
+      return null;
+    }
+    return (
+      <EmptyPlaceholder
+        tw="animate-fade-in-250 min-h-[100px] px-4"
+        title="No payment history here."
+      />
+    );
+  }, [isLoadingList]);
+
   return (
     <>
       {isLoadingList ? (
         <View tw="animate-fade-in-250 h-28 items-center justify-center">
           <Spinner />
         </View>
-      ) : listData?.length === 0 ? (
-        <EmptyPlaceholder
-          tw="animate-fade-in-250 min-h-[60px] px-4"
-          title="No payment history here."
-        />
       ) : (
         <ListComponent
           data={listData}
@@ -245,8 +252,10 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
           overscan={60}
           style={{
             height: isMdWidth ? undefined : screenHeight - 200,
+            minHeight: isMdWidth ? 400 : undefined,
           }}
           ListFooterComponent={ListFooterComponent}
+          ListEmptyComponent={ListEmptyComponent}
           onEndReached={fetchMore}
           renderItem={renderItem}
           index={index}
