@@ -5,10 +5,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
+import { Logger } from "app/lib/logger";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useRudder } from "app/lib/rudderstack";
 
-import { Logger } from "../../lib/logger";
 import { EmailInput } from "./email-input";
 
 export const AddEmailModal = () => {

@@ -164,9 +164,10 @@ export function useManageAccount() {
                       message: "Phone number successfully verified!",
                       hideAfter: 4000,
                     });
-                  } catch (e) {
+                  } catch (e: any) {
                     toast?.show({
                       message:
+                        e?.response?.data?.error?.message ??
                         "Unable to verify your phone number at this time, please try again!",
                       hideAfter: 4000,
                     });
@@ -178,6 +179,7 @@ export function useManageAccount() {
         } else {
           toast?.show({
             message:
+              error?.response?.data?.error?.message ??
               "Unable to verify your phone number at this time, please try again!",
             hideAfter: 4000,
           });
@@ -224,10 +226,11 @@ export function useManageAccount() {
           message: "Phone number has removed",
           hideAfter: 4000,
         });
-      } catch (error) {
+      } catch (error: any) {
         Logger.error("Remove Phone error", error);
         toast?.show({
           message:
+            e?.response?.data?.error?.message ??
             "Unable to remove the phone number at this time, please try again",
           hideAfter: 4000,
         });
