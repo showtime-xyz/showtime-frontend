@@ -60,7 +60,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
         const stripe = await stripePromise;
         const res = await trigger({
           dropPlan: selectedPlan,
-          useDefaultPaymentMethod: selectDefault,
+          useDefaultPaymentMethod: true,
         });
 
         if (res?.client_secret) {
@@ -88,7 +88,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
       } else {
         const res = await trigger({
           dropPlan: selectedPlan,
-          useDefaultPaymentMethod: selectDefault,
+          useDefaultPaymentMethod: false,
         });
 
         setClientSecret(res?.client_secret);
