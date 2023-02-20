@@ -64,7 +64,6 @@ export type Creator = {
 };
 
 export interface WalletAddressesV2 {
-  backendAddress: string;
   address: string;
   ens_domain?: string;
   minting_enabled: boolean;

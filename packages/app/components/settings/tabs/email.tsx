@@ -59,13 +59,15 @@ export const EmailTab = ({ index = 0 }: EmailTabProps) => {
           title="No email connected to your profile."
         />
       ) : (
-        emailWallets?.map((item) => (
-          <SettingsEmailItem
-            email={item.email}
-            address={item.backendAddress}
-            key={item.address}
-          />
-        ))
+        emailWallets?.map((item) => {
+          return (
+            <SettingsEmailItem
+              email={item.email}
+              address={item.address}
+              key={item.address}
+            />
+          );
+        })
       )}
     </SettingScrollComponent>
   );

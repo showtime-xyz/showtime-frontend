@@ -60,7 +60,7 @@ export const SettingsEmailItem = (props: EmailItemProps) => {
           {email}
         </Text>
         {isCurrentEmail ? (
-          <View tw="flex flex-row">
+          <View tw="ml-2 flex flex-row">
             <DataPill label="Current" type="secondary" />
           </View>
         ) : null}
