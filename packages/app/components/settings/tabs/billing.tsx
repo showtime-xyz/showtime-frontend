@@ -24,7 +24,7 @@ import {
 } from "app/hooks/api/use-payments-history";
 import {
   PaymentsMethods,
-  usePaymentsManege,
+  usePaymentsManage,
 } from "app/hooks/api/use-payments-manage";
 import { exportFromJSON } from "app/lib/export-from-json";
 
@@ -190,7 +190,7 @@ export const History = memo(function History() {
 });
 export const BillingTab = ({ index = 0 }: BillingTabProps) => {
   const { data, isLoading, removePayment, setPaymentByDefault } =
-    usePaymentsManege();
+    usePaymentsManage();
   return (
     <SettingScrollComponent index={index}>
       <SettingsTitle

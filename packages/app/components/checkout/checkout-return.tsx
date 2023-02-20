@@ -1,11 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 
+import { PaymentIntent } from "@stripe/stripe-js";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -24,18 +27,30 @@ export const CheckoutReturn = () => {
   >(null);
   const router = useRouter();
   const [time, setTime] = useState(REDIRECT_SECONDS);
-
-  const handlePaymentSuccess = useCallback(async () => {
-    setMessage("Payment succeeded!");
-    setPaymentStatus("success");
-    mutate();
-    setTimeout(() => {
-      router.replace("/drop/free");
-    }, REDIRECT_SECONDS * 1000);
-    setInterval(() => {
-      setTime((time) => (time > 0 ? time - 1 : 0));
-    }, 1000);
-  }, [router, mutate]);
+  const { setPaymentByDefault } = usePaymentsManage();
+  const handlePaymentSuccess = useCallback(
+    async (paymentIntent: PaymentIntent) => {
+      setMessage("Payment succeeded!");
+      setPaymentStatus("success");
+      mutate();
+      const setAsDefaultPaymentMethod = new URLSearchParams(
+        window.location.search
+      ).get("setAsDefaultPaymentMethod");
+      if (
+        setAsDefaultPaymentMethod === "true" &&
+        typeof paymentIntent.payment_method === "string"
+      ) {
+        setPaymentByDefault(paymentIntent.payment_method);
+      }
+      setTimeout(() => {
+        router.replace("/drop/free");
+      }, REDIRECT_SECONDS * 1000);
+      setInterval(() => {
+        setTime((time) => (time > 0 ? time - 1 : 0));
+      }, 1000);
+    },
+    [router, mutate, setPaymentByDefault]
+  );
 
   useEffect(() => {
     async function confirmPaymentStatus() {
@@ -62,7 +77,7 @@ export const CheckoutReturn = () => {
         // https://stripe.com/docs/payments/intents
         switch (paymentIntent?.status) {
           case "succeeded":
-            handlePaymentSuccess();
+            handlePaymentSuccess(paymentIntent);
             break;
           case "processing":
             {
@@ -75,7 +90,7 @@ export const CheckoutReturn = () => {
                     "/v1/payments/status?payment_intent_id=" + paymentIntent.id,
                 });
                 if (res.current_status === "succeeded") {
-                  handlePaymentSuccess();
+                  handlePaymentSuccess(paymentIntent);
                   return;
                 } else if (res.current_status === "requires_payment_method") {
                   setPaymentStatus("failed");

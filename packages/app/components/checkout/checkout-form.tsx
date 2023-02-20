@@ -10,6 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -41,6 +42,8 @@ export function CheckoutForm({ clientSecret }: { clientSecret: string }) {
 const CheckoutFormStripe = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
+    useState(true);
 
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -58,7 +61,10 @@ const CheckoutFormStripe = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: window.location.origin + "/checkout-return",
+        return_url:
+          window.location.origin +
+          "/checkout-return?setAsDefaultPaymentMethod=" +
+          setAsDefaultPaymentMethod,
         receipt_email: email,
       },
     });
@@ -92,6 +98,25 @@ const CheckoutFormStripe = () => {
           layout: "tabs",
         }}
       />
+      <View tw="h-3" />
+      <View tw="flex-row items-center">
+        <Checkbox
+          checked={setAsDefaultPaymentMethod}
+          onChange={() =>
+            setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+          }
+          accesibilityLabel="Set as default payment method"
+        />
+        <Text
+          tw="ml-2 text-gray-900 dark:text-gray-50"
+          onPress={() =>
+            setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+          }
+        >
+          Set as default payment method
+        </Text>
+      </View>
+
       <View tw="h-8" />
       <Button
         disabled={isLoading || !stripe || !elements}

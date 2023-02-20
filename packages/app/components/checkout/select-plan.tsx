@@ -8,14 +8,16 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { CreditCard } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
-import { usePaymentMethods } from "app/hooks/api/use-payment-methods";
+import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
@@ -33,7 +35,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
     client_secret: string;
   }>(MY_INFO_ENDPOINT, fetchPaymentIntent);
   const [selectDefault, setSelectDefault] = useState(true);
-  const paymentMethods = usePaymentMethods();
+  const paymentMethods = usePaymentsManage();
   const toast = useToast();
   const user = useUser();
   const colorMode = useColorScheme();
@@ -171,8 +173,21 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
               tw="ml-2 text-gray-900 dark:text-gray-50"
               onPress={() => setSelectDefault(!selectDefault)}
             >
-              Use my default payment method
+              Use my default payment method.
             </Text>
+            <Pressable
+              tw="flex-row items-center pl-2"
+              onPress={() => setSelectDefault(!selectDefault)}
+            >
+              <CreditCard
+                width={20}
+                height={20}
+                color={isDark ? colors.white : colors.black}
+              />
+              <Text tw="ml-1 text-gray-900 dark:text-gray-50">
+                Ending in {defaultPaymentMethod.details.last4}
+              </Text>
+            </Pressable>
           </View>
         ) : null}
       </View>

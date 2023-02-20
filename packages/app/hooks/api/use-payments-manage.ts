@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import useSWR from "swr";
 import { useSWRConfig } from "swr";
 
@@ -35,7 +37,7 @@ export type PaymentsMethods = {
 };
 const PAYMENTS_METHODS_ENDPOINT = "/v1/payments/methods";
 
-export const usePaymentsManege = () => {
+export const usePaymentsManage = () => {
   const { mutate } = useSWRConfig();
   const { data, isLoading } = useSWR<PaymentsMethods[]>(
     PAYMENTS_METHODS_ENDPOINT,
@@ -52,14 +54,17 @@ export const usePaymentsManege = () => {
     });
   };
 
-  const setPaymentByDefault = async (paymentMethodId: string) => {
-    mutate(PAYMENTS_METHODS_ENDPOINT, async () => {
-      await axios({
-        url: "/v1/payments/methods/default",
-        method: "POST",
-        data: { payment_method_id: paymentMethodId },
+  const setPaymentByDefault = useCallback(
+    async (paymentMethodId: string) => {
+      mutate(PAYMENTS_METHODS_ENDPOINT, async () => {
+        await axios({
+          url: "/v1/payments/methods/default",
+          method: "POST",
+          data: { payment_method_id: paymentMethodId },
+        });
       });
-    });
-  };
+    },
+    [mutate]
+  );
   return { removePayment, setPaymentByDefault, data, isLoading };
 };
