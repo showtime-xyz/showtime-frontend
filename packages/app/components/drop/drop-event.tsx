@@ -333,7 +333,7 @@ export const DropEvent = () => {
                           textAlignVertical="top"
                           placeholder="What is this drop about?"
                           onBlur={onBlur}
-                          helperText="You cannot edit this after the drop is created"
+                          helperText="You cannot edit this after the drop is created."
                           errorText={errors.description?.message}
                           value={value}
                           numberOfLines={3}
@@ -363,7 +363,7 @@ export const DropEvent = () => {
                     textAlignVertical="top"
                     placeholder="What is this drop about?"
                     onBlur={onBlur}
-                    helperText="You cannot edit this after the drop is created"
+                    helperText="You cannot edit this after the drop is created."
                     errorText={errors.description?.message}
                     value={value}
                     numberOfLines={3}
