@@ -68,6 +68,7 @@ export const DropUpdate = ({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
+    shouldFocusError: true,
     defaultValues,
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -108,9 +109,10 @@ export const DropUpdate = ({
           <Controller
             control={control}
             name="spotifyUrl"
-            render={({ field: { onChange, onBlur, value } }) => {
+            render={({ field: { onChange, onBlur, value, ref } }) => {
               return (
                 <Fieldset
+                  ref={ref}
                   label={
                     <View tw="flex-row">
                       <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
