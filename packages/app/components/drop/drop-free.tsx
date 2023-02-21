@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -18,6 +24,7 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -70,8 +77,11 @@ export const DropFree = () => {
     () =>
       yup.object({
         file: yup.mixed().required("Media is required"),
-        title: yup.string().required().max(255),
-        description: yup.string().max(280).required(),
+        title: yup.string().required("Title is a required field").max(255),
+        description: yup
+          .string()
+          .max(280)
+          .required("Description is a required field"),
         editionSize: yup
           .number()
           .required()
@@ -111,13 +121,15 @@ export const DropFree = () => {
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
+    shouldFocusError: true,
     reValidateMode: "onChange",
   });
 
+  const insets = useSafeAreaInsets();
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT } = useDropNFT();
   const user = useUser({ redirectTo: "/login" });
 
   const headerHeight = useHeaderHeight();
@@ -131,6 +143,37 @@ export const DropFree = () => {
     setValue,
     defaultValues,
   });
+
+  const scrollToErrorField = useCallback(() => {
+    if (errors.file) {
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+      return;
+    }
+    if (errors.hasAcceptedTerms) {
+      // just some high number, it will scroll to the bottom and we dont need to measure the offset
+      scrollViewRef.current?.scrollTo({ x: 0, y: 10000, animated: true });
+      return;
+    }
+  }, [errors]);
+
+  // this scrolls to the first error field when the form is submitted
+  useEffect(() => {
+    if (errors) {
+      scrollToErrorField();
+
+      if (
+        (errors.editionSize?.message ||
+          errors.royalty?.message ||
+          errors.duration?.message) &&
+        accordionValue !== "open"
+      ) {
+        setAccordionValue("open");
+        requestAnimationFrame(() => {
+          scrollToErrorField();
+        });
+      }
+    }
+  }, [errors, scrollToErrorField, accordionValue]);
 
   const onSubmit = (values: UseDropNFT) => {
     dropNFT(values, clearStorage);
@@ -204,7 +247,11 @@ export const DropFree = () => {
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <BottomSheetScrollView ref={scrollViewRef} style={{ padding: 16 }}>
+      <BottomSheetScrollView
+        ref={scrollViewRef}
+        style={{ padding: 16 }}
+        contentContainerStyle={{ paddingBottom: bottomBarHeight }}
+      >
         <View>
           <View tw="flex-row">
             <Controller
@@ -283,9 +330,10 @@ export const DropFree = () => {
               <Controller
                 control={control}
                 name="title"
-                render={({ field: { onChange, onBlur, value } }) => {
+                render={({ field: { onChange, onBlur, value, ref } }) => {
                   return (
                     <Fieldset
+                      ref={ref}
                       tw={windowWidth <= 768 ? "flex-1" : ""}
                       label="Title"
                       placeholder="Sweet"
@@ -304,9 +352,10 @@ export const DropFree = () => {
                   <Controller
                     control={control}
                     name="description"
-                    render={({ field: { onChange, onBlur, value } }) => {
+                    render={({ field: { onChange, onBlur, value, ref } }) => {
                       return (
                         <Fieldset
+                          ref={ref}
                           tw="flex-1"
                           label="Description"
                           multiline
@@ -334,9 +383,10 @@ export const DropFree = () => {
             <Controller
               control={control}
               name="description"
-              render={({ field: { onChange, onBlur, value } }) => {
+              render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <Fieldset
+                    ref={ref}
                     tw="mt-4 flex-1"
                     label="Description"
                     multiline
@@ -363,7 +413,17 @@ export const DropFree = () => {
                 <Accordion.Trigger>
                   <View tw="flex-1">
                     <View tw="mb-4 flex-1 flex-row justify-between">
-                      <Accordion.Label>Drop Details</Accordion.Label>
+                      <Accordion.Label
+                        tw={
+                          errors.editionSize?.message ||
+                          errors.royalty?.message ||
+                          errors.duration?.message
+                            ? "text-red-500"
+                            : ""
+                        }
+                      >
+                        Drop Details
+                      </Accordion.Label>
                       <Accordion.Chevron />
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
@@ -393,11 +453,15 @@ export const DropFree = () => {
                         <Controller
                           control={control}
                           name="editionSize"
-                          render={({ field: { onChange, onBlur, value } }) => {
+                          render={({
+                            field: { onChange, onBlur, value, ref },
+                          }) => {
                             return (
                               <Fieldset
+                                ref={ref}
                                 tw="flex-1"
                                 label="Edition size"
+                                placeholder="Enter a number"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
@@ -412,11 +476,15 @@ export const DropFree = () => {
                         <Controller
                           control={control}
                           name="royalty"
-                          render={({ field: { onChange, onBlur, value } }) => {
+                          render={({
+                            field: { onChange, onBlur, value, ref },
+                          }) => {
                             return (
                               <Fieldset
+                                ref={ref}
                                 tw="flex-1"
                                 label="Your royalties (%)"
+                                placeholder="Enter a number"
                                 onBlur={onBlur}
                                 helperText="How much you'll earn each time an edition of this drop is sold"
                                 errorText={errors.royalty?.message}
@@ -432,9 +500,12 @@ export const DropFree = () => {
                       <Controller
                         control={control}
                         name="duration"
-                        render={({ field: { onChange, onBlur, value } }) => {
+                        render={({
+                          field: { onChange, onBlur, value, ref },
+                        }) => {
                           return (
                             <Fieldset
+                              ref={ref}
                               tw="flex-1"
                               label="Duration"
                               onBlur={onBlur}
@@ -457,8 +528,9 @@ export const DropFree = () => {
                       <Controller
                         control={control}
                         name="notSafeForWork"
-                        render={({ field: { onChange, value } }) => (
+                        render={({ field: { onChange, value, ref } }) => (
                           <Fieldset
+                            ref={ref}
                             tw="flex-1"
                             label="Explicit content (18+)"
                             switchOnly
@@ -516,38 +588,38 @@ export const DropFree = () => {
               <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
             ) : null}
           </View>
-
-          <View tw="mt-8">
-            <Button
-              variant="primary"
-              size="regular"
-              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              disabled={state.status === "loading"}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading"
-                ? "Creating... it should take about 10 seconds"
-                : state.status === "error"
-                ? "Failed. Please retry!"
-                : "Drop now"}
-            </Button>
-
-            {state.transactionHash ? (
-              <View tw="mt-4">
-                <PolygonScanButton transactionHash={state.transactionHash} />
-              </View>
-            ) : null}
-
-            {state.error ? (
-              <View tw="mt-4">
-                <Text tw="text-red-500">{state.error}</Text>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </BottomSheetScrollView>
+
+      <View tw="px-4">
+        <Button
+          variant="primary"
+          size="regular"
+          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+          disabled={state.status === "loading"}
+          onPress={handleSubmit(onSubmit)}
+        >
+          {state.status === "loading"
+            ? "Creating... it should take about 10 seconds"
+            : state.status === "error"
+            ? "Failed. Please retry!"
+            : "Drop now"}
+        </Button>
+
+        {state.transactionHash ? (
+          <View tw="mt-4">
+            <PolygonScanButton transactionHash={state.transactionHash} />
+          </View>
+        ) : null}
+
+        {state.error ? (
+          <View tw="mb-1 mt-4 items-center justify-center">
+            <Text tw="text-red-500">{state.error}</Text>
+          </View>
+        ) : null}
+      </View>
+
+      <View style={{ height: insets.bottom }} />
     </BottomSheetModalProvider>
   );
 };
