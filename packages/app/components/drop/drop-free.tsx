@@ -42,6 +42,8 @@ import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
+import { DROP_FORM_DATA_KEY } from "./utils";
+
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
 const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
@@ -52,7 +54,6 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
   editionSize: 15,
