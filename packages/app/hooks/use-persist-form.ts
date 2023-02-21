@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
@@ -37,9 +37,10 @@ export const usePersistForm = (
 ) => {
   const watchedValues = watch();
   const fileStorage = useMemo(() => new FileStorage(name), [name]);
-  let shouldEnablePersist = useRef(false);
   let persistDebounceTimeout = useRef<any>(null);
-
+  const [restoringFiles, setRestoringFiles] = useState<{
+    [key: string]: boolean;
+  }>({});
   const clearStorage = () => {
     store.delete(name);
     fileStorage.clearStorage();
@@ -79,11 +80,38 @@ export const usePersistForm = (
 
         for (let key in fileValues) {
           console.log("restoring file", key);
-          fileStorage.getFile(key).then((file) => {
-            console.log("restored file", key);
-            setValue(key, file);
-            dataRestored[key] = file;
-          });
+          setRestoringFiles((prev) => ({ ...prev, [key]: true }));
+          fileStorage
+            .getFile(key)
+            .then((file) => {
+              console.log("restored file", key);
+              setRestoringFiles((prev) => {
+                let newPrev = { ...prev };
+                delete newPrev[key];
+                return newPrev;
+              });
+              setValue(key, file);
+              dataRestored[key] = file;
+            })
+            .catch(() => {
+              console.log("error restoring file", key);
+              setRestoringFiles((prev) => {
+                let newPrev = { ...prev };
+                delete newPrev[key];
+                return newPrev;
+              });
+            });
+
+          setTimeout(() => {
+            if (restoringFiles[key]) {
+              console.log("restoring file timeout", key);
+              setRestoringFiles((prev) => {
+                let newPrev = { ...prev };
+                delete newPrev[key];
+                return newPrev;
+              });
+            }
+          }, 2000);
         }
       } else if (defaultValues) {
         for (let key in defaultValues) {
@@ -104,11 +132,6 @@ export const usePersistForm = (
     }
     restoreForm();
 
-    // We enable persisting after 3 seconds to avoid persisting the default values.
-    // File retrieval from IndexedDB can take some time so we make a guess it'll take max 5 seconds
-    setTimeout(() => {
-      shouldEnablePersist.current = true;
-    }, 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);
 
@@ -135,22 +158,21 @@ export const usePersistForm = (
       }
     }
 
-    if (shouldEnablePersist.current) {
-      if (persistDebounceTimeout.current) {
-        clearTimeout(persistDebounceTimeout.current);
-      }
-      persistDebounceTimeout.current = setTimeout(() => {
-        persistFormValues();
-      }, 300);
+    if (persistDebounceTimeout.current) {
+      clearTimeout(persistDebounceTimeout.current);
     }
+    persistDebounceTimeout.current = setTimeout(() => {
+      if (Object.keys(restoringFiles).length === 0) persistFormValues();
+    }, 300);
     return () => {
       if (persistDebounceTimeout.current) {
         clearTimeout(persistDebounceTimeout.current);
       }
     };
-  }, [watchedValues, timeout, exclude, fileStorage, name]);
+  }, [watchedValues, restoringFiles, timeout, exclude, fileStorage, name]);
 
   return {
     clearStorage,
+    restoringFiles,
   };
 };

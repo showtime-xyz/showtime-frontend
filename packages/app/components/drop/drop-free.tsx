@@ -150,7 +150,7 @@ export const DropFree = () => {
       dropNFT(values, clearStorage);
     }
   };
-  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
+  const { clearStorage, restoringFiles } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
@@ -229,6 +229,8 @@ export const DropFree = () => {
     }
   };
 
+  console.log("restoring files ", restoringFiles);
+
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
@@ -240,9 +242,16 @@ export const DropFree = () => {
               name="file"
               render={({ field: { value } }) => {
                 return (
-                  <DropFileZone onChange={handleFileChange}>
-                    <View tw="z-1">
+                  <DropFileZone
+                    onChange={handleFileChange}
+                    disabled={restoringFiles["file"]}
+                  >
+                    <View tw={`z-1`}>
                       <Pressable
+                        tw={`h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
+                          restoringFiles["file"] ? "opacity-40" : ""
+                        }`}
+                        disabled={restoringFiles["file"]}
                         onPress={async () => {
                           const file = await pickFile({
                             mediaTypes: "all",
@@ -250,7 +259,6 @@ export const DropFree = () => {
 
                           handleFileChange(file);
                         }}
-                        tw="h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64"
                       >
                         {value ? (
                           <View>
