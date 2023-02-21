@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Platform, useWindowDimensions, Keyboard } from "react-native";
+import React, { useEffect, useMemo, useState, useRef } from "react";
+import {
+  Platform,
+  useWindowDimensions,
+  Keyboard,
+  ScrollView as RNScrollView,
+  View as RNView,
+  TextInput,
+} from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,7 +25,6 @@ import {
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -53,6 +59,7 @@ const { useParam } = createParam<Query>();
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
+    .label("Username")
     .typeError("Please enter a valid username")
     .min(2)
     .max(30)
@@ -62,13 +69,16 @@ const editProfileValidationSchema = yup.object({
     ),
   bio: yup
     .string()
+    .label("About me")
+    .min(2)
     .max(300)
-    .required("About me is a required field")
+    .required("A short bio is required")
     .typeError("Please enter a valid about me"),
   name: yup
     .string()
+    .label("Name")
     .max(40)
-    .required("name is a required field")
+    .required("Name is required")
     .typeError("Please enter a valid name"),
   profilePicture: yup.mixed().required("Please add a profile picture"),
 });
@@ -100,10 +110,12 @@ export const EditProfile = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { isValid, validate } = useValidateUsername();
-  const insets = useSafeAreaInsets();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
   const [showScialExplanation, setShowScialExplanation] = useState(false);
+  const scrollViewRef = useRef<RNScrollView>(null);
+  const socialRef = useRef<RNView>(null);
+  const socialLinksRefs = useRef<TextInput[]>([]);
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [index, setIndex] = useState(() =>
@@ -165,12 +177,21 @@ export const EditProfile = () => {
     resolver: yupResolver(editProfileValidationSchema),
     mode: "all",
     reValidateMode: "onChange",
+    shouldFocusError: true,
     defaultValues,
   });
 
   useEffect(() => {
     reset(defaultValues);
   }, [reset, defaultValues]);
+
+  // this scrolls to the first error field when the form is submitted
+  useEffect(() => {
+    if (errors.profilePicture) {
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+      return;
+    }
+  }, [errors.profilePicture]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
     if (!isValid) return;
@@ -198,6 +219,10 @@ export const EditProfile = () => {
     //@ts-ignore
     if (userHasIncompleteExternalLinks(newValues)) {
       setHasNotSubmittedExternalLink(true);
+      // scroll to social links if case of an error.
+      socialRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+        scrollViewRef.current?.scrollTo({ x: 0, y: pageY, animated: true });
+      });
       setIndex(1);
     } else {
       setHasNotSubmittedExternalLink(false);
@@ -282,7 +307,7 @@ export const EditProfile = () => {
     <>
       <BottomSheetModalProvider>
         <View tw={`w-full flex-1`}>
-          <BottomSheetScrollView>
+          <BottomSheetScrollView ref={scrollViewRef}>
             <Controller
               control={control}
               name="coverPicture"
@@ -387,8 +412,9 @@ export const EditProfile = () => {
                   <Controller
                     control={control}
                     name="name"
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({ field: { onChange, onBlur, value, ref } }) => (
                       <Fieldset
+                        ref={ref}
                         tw="mr-2 w-1/2 flex-1"
                         label="Name"
                         placeholder="Your display name"
@@ -409,8 +435,9 @@ export const EditProfile = () => {
                       },
                     }}
                     name="username"
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({ field: { onChange, onBlur, value, ref } }) => (
                       <Fieldset
+                        ref={ref}
                         tw="ml-2 w-1/2 flex-1"
                         label="Username"
                         placeholder="Your username"
@@ -432,10 +459,11 @@ export const EditProfile = () => {
               <Controller
                 control={control}
                 name="bio"
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Fieldset
+                    ref={ref}
                     label="About me"
-                    placeholder="About me"
+                    placeholder="Tell us about yourself"
                     tw="mt-4"
                     testID="about_me"
                     multiline
@@ -477,7 +505,7 @@ export const EditProfile = () => {
                 ))}
               </View>
               {/* Social */}
-              <View tw="mt-6 mb-10">
+              <View tw="mt-6 mb-10" ref={socialRef}>
                 <Pressable
                   onPress={() => {
                     Keyboard.dismiss();
@@ -552,12 +580,13 @@ export const EditProfile = () => {
                 <Controller
                   control={control}
                   name="website_url"
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { onChange, onBlur, value, ref } }) => (
                     <Fieldset
+                      ref={ref}
                       label="Website"
                       keyboardType="url"
                       textContentType="URL"
-                      placeholder="Your url"
+                      placeholder="Your URL"
                       testID="website_url"
                       value={value}
                       onBlur={onBlur}
@@ -578,8 +607,14 @@ export const EditProfile = () => {
                         control={control}
                         key={v.id}
                         name={`links[${v.id}]`}
-                        render={({ field: { onChange, onBlur, value } }) => (
+                        render={({
+                          field: { onChange, onBlur, value, ref },
+                        }) => (
                           <Fieldset
+                            ref={(fieldRef: TextInput) => {
+                              ref(fieldRef);
+                              socialLinksRefs.current[v.id] = fieldRef;
+                            }}
                             tw="mt-4"
                             label={v.name}
                             value={value}
@@ -588,6 +623,9 @@ export const EditProfile = () => {
                             autoCapitalize="none"
                             leftElement={
                               <Text
+                                onPress={() =>
+                                  socialLinksRefs.current[v.id]?.focus()
+                                }
                                 tw="text-base text-gray-600 dark:text-gray-400"
                                 style={{
                                   marginTop: Platform.select({
