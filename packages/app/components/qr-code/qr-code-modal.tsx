@@ -25,6 +25,7 @@ import {
   Link,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -65,6 +66,7 @@ export const QRCodeModal = (
 ) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
+  const modalScreenContext = useModalScreenContext();
 
   const { data: edition, loading: isLoadingCollection } =
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
@@ -130,6 +132,10 @@ export const QRCodeModal = (
     };
     checkInstalled();
   }, []);
+
+  useEffect(() => {
+    modalScreenContext?.setTitle("Congrats! Now share it ✦");
+  }, [modalScreenContext]);
 
   const size = windowWidth >= 768 ? 300 : windowWidth - 40;
   const mediaUri = getMediaUrl({
