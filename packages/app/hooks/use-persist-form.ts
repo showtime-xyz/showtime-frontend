@@ -4,7 +4,6 @@ import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
 
 import { FileStorage } from "app/lib/file-storage/file-storage";
-import { Logger } from "app/lib/logger";
 
 const store = new MMKV();
 
@@ -47,20 +46,6 @@ export const usePersistForm = (
   useEffect(() => {
     async function restoreForm() {
       const dataRestored: { [key: string]: any } = {};
-      if (defaultValues) {
-        for (let key in defaultValues) {
-          const shouldSet = !exclude.includes(key);
-          if (shouldSet) {
-            const value = defaultValues?.[key];
-            dataRestored[key] = value;
-            setValue(key, value, {
-              shouldValidate: validate,
-              shouldDirty: dirty,
-              shouldTouch: touch,
-            });
-          }
-        }
-      }
 
       const str = store.getString(name);
       if (str) {
@@ -72,17 +57,12 @@ export const usePersistForm = (
           clearStorage();
           return;
         }
-
+        let fileValues: any = {};
         for (let key in values) {
           const shouldSet = !exclude.includes(key);
           if (shouldSet) {
             if (values[key] === "instanceof File") {
-              try {
-                const file = await fileStorage.getFile(key);
-                setValue(key, file);
-              } catch (e) {
-                Logger.error(e);
-              }
+              fileValues[key] = values[key];
             } else {
               const value = values[key];
               dataRestored[key] = value;
@@ -92,6 +72,26 @@ export const usePersistForm = (
                 shouldTouch: touch,
               });
             }
+          }
+        }
+
+        for (let key in fileValues) {
+          fileStorage.getFile(key).then((file) => {
+            setValue(key, file);
+            dataRestored[key] = file;
+          });
+        }
+      } else if (defaultValues) {
+        for (let key in defaultValues) {
+          const shouldSet = !exclude.includes(key);
+          if (shouldSet) {
+            const value = defaultValues?.[key];
+            dataRestored[key] = value;
+            setValue(key, value, {
+              shouldValidate: validate,
+              shouldDirty: dirty,
+              shouldTouch: touch,
+            });
           }
         }
       }
