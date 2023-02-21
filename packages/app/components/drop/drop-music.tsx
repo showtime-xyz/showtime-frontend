@@ -288,7 +288,12 @@ export const DropMusic = () => {
   }
 
   if (state.status === "success") {
-    return <QRCodeModal contractAddress={state.edition?.contract_address} />;
+    return (
+      <QRCodeModal
+        dropCreated
+        contractAddress={state.edition?.contract_address}
+      />
+    );
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;
