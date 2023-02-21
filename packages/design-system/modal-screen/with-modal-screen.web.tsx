@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useMemo, useState } from "react";
+import { FC, useCallback, useRef, useMemo, useState, useEffect } from "react";
 
 import { ModalMethods, Modal } from "@showtime-xyz/universal.modal";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -34,6 +34,10 @@ function withModalScreen<P extends object>(
       }
     }, [router]);
 
+    useEffect(() => {
+      setTitle(titleProp);
+    }, []);
+
     const shouldShowModal =
       router.pathname === matchingPathname ||
       Boolean(router.query[matchingQueryParam as any]);
@@ -43,7 +47,6 @@ function withModalScreen<P extends object>(
     if (!shouldShowModal) {
       return null;
     }
-    console.log("EFeff ", 123);
 
     return (
       <ModalScreenContext.Provider value={contextValues}>
