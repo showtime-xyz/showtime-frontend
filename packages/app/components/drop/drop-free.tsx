@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo } from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -52,7 +52,6 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 
-// const { useParam } = createParam<{ transactionId: string }>()
 const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
 const defaultValues = {
   royalty: 10,
@@ -126,7 +125,8 @@ export const DropFree = () => {
   const windowWidth = useWindowDimensions().width;
 
   const [accordionValue, setAccordionValue] = useState("");
-  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
+
+  const { clearStorage, restoringFiles } = usePersistForm(DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
@@ -140,7 +140,7 @@ export const DropFree = () => {
 
   const selectedDuration = watch("duration");
 
-  const selectedDurationLabel = React.useMemo(
+  const selectedDurationLabel = useMemo(
     () => durationOptions.find((d) => d.value === selectedDuration)?.label,
     [selectedDuration]
   );
@@ -207,9 +207,16 @@ export const DropFree = () => {
               name="file"
               render={({ field: { value } }) => {
                 return (
-                  <DropFileZone onChange={handleFileChange}>
+                  <DropFileZone
+                    onChange={handleFileChange}
+                    disabled={restoringFiles["file"]}
+                  >
                     <View tw="z-1">
                       <Pressable
+                        tw={`h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
+                          restoringFiles["file"] ? "opacity-40" : ""
+                        }`}
+                        disabled={restoringFiles["file"]}
                         onPress={async () => {
                           const file = await pickFile({
                             mediaTypes: "all",
@@ -217,7 +224,6 @@ export const DropFree = () => {
 
                           handleFileChange(file);
                         }}
-                        tw="h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64"
                       >
                         {value ? (
                           <View>
