@@ -95,7 +95,7 @@
     "@showtime-xyz/universal.label": "^0.0.59",
     "@showtime-xyz/universal.light-box": "^0.0.97",
     "@showtime-xyz/universal.modal": "^0.0.123",
-    "@showtime-xyz/universal.modal-screen": "^0.0.137",
+    "@showtime-xyz/universal.modal-screen": "^0.0.138",
     "@showtime-xyz/universal.modal-sheet": "^0.0.126",
     "@showtime-xyz/universal.pan-to-close": "^0.0.32",
     "@showtime-xyz/universal.pinch-to-zoom": "^0.0.46",
