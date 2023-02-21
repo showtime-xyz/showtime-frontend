@@ -25,6 +25,7 @@ import {
   Link,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -60,9 +61,12 @@ type QRCodeModalParams = {
 const { useParam } = createParam<QRCodeModalParams>();
 
 type QRCodeModalProps = QRCodeModalParams;
-export const QRCodeModal = (props?: QRCodeModalProps) => {
+export const QRCodeModal = (
+  props?: QRCodeModalProps & { dropCreated?: boolean }
+) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
+  const modalScreenContext = useModalScreenContext();
 
   const { data: edition, loading: isLoadingCollection } =
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
@@ -128,6 +132,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     };
     checkInstalled();
   }, []);
+
+  useEffect(() => {
+    modalScreenContext?.setTitle("Congrats! Now share it ✦");
+  }, [modalScreenContext]);
 
   const size = windowWidth >= 768 ? 300 : windowWidth - 40;
   const mediaUri = getMediaUrl({
@@ -222,14 +230,21 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     Linking.openURL(
       getTwitterIntent({
         url: qrCodeUrl.toString(),
-        message: `Just collected "${
+        message: `Just ${props?.dropCreated ? "dropped" : "collected"} "${
           nft?.token_name
-        }" by ${getTwitterIntentUsername(
-          creatorProfile?.data?.profile
-        )} on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+        }" ${
+          props?.dropCreated
+            ? ""
+            : `by ${getTwitterIntentUsername(creatorProfile?.data?.profile)}`
+        } on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
       })
     );
-  }, [creatorProfile?.data?.profile, nft?.token_name, qrCodeUrl]);
+  }, [
+    creatorProfile?.data?.profile,
+    nft?.token_name,
+    qrCodeUrl,
+    props?.dropCreated,
+  ]);
 
   const shareOpenMore = useCallback(async () => {
     const url = await getViewShot();
@@ -259,7 +274,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         visable: true,
       },
       {
-        title: "Link",
+        title: "Copy Link",
         Icon: Link,
         onPress: onCopyLink,
         visable: true,

@@ -223,7 +223,12 @@ export const DropPrivate = () => {
   }
 
   if (state.status === "success") {
-    return <QRCodeModal contractAddress={state.edition?.contract_address} />;
+    return (
+      <QRCodeModal
+        dropCreated
+        contractAddress={state.edition?.contract_address}
+      />
+    );
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;
@@ -387,7 +392,7 @@ export const DropPrivate = () => {
                           textAlignVertical="top"
                           placeholder="What is this drop about?"
                           onBlur={onBlur}
-                          helperText="You cannot edit this after the drop is created"
+                          helperText="You cannot edit this after the drop is created."
                           errorText={errors.description?.message}
                           value={value}
                           numberOfLines={3}
@@ -418,7 +423,7 @@ export const DropPrivate = () => {
                     textAlignVertical="top"
                     placeholder="What is this drop about?"
                     onBlur={onBlur}
-                    helperText="You cannot edit this after the drop is created"
+                    helperText="You cannot edit this after the drop is created."
                     errorText={errors.description?.message}
                     value={value}
                     numberOfLines={3}
