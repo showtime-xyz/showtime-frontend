@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { SetFieldValue } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
@@ -37,6 +37,8 @@ export const usePersistForm = (
 ) => {
   const watchedValues = watch();
   const fileStorage = useMemo(() => new FileStorage(name), [name]);
+  let shouldEnablePersist = useRef(false);
+  let persistDebounceTimeout = useRef<any>(null);
 
   const clearStorage = () => {
     store.delete(name);
@@ -76,7 +78,9 @@ export const usePersistForm = (
         }
 
         for (let key in fileValues) {
+          console.log("restoring file", key);
           fileStorage.getFile(key).then((file) => {
+            console.log("restored file", key);
             setValue(key, file);
             dataRestored[key] = file;
           });
@@ -99,28 +103,51 @@ export const usePersistForm = (
       onDataRestored?.(dataRestored);
     }
     restoreForm();
+
+    // We enable persisting after 3 seconds to avoid persisting the default values.
+    // File retrieval from IndexedDB can take some time so we make a guess it'll take max 5 seconds
+    setTimeout(() => {
+      shouldEnablePersist.current = true;
+    }, 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);
 
   useEffect(() => {
-    let stringValues: any = {};
-    for (let key in watchedValues) {
-      if (!exclude.includes(key)) {
-        if (watchedValues[key] instanceof File) {
-          fileStorage.saveFile(watchedValues[key], key);
-          stringValues[key] = "instanceof File";
-        } else {
-          stringValues[key] = watchedValues[key];
+    function persistFormValues() {
+      let stringValues: any = {};
+      for (let key in watchedValues) {
+        if (!exclude.includes(key)) {
+          if (watchedValues[key] instanceof File) {
+            fileStorage.saveFile(watchedValues[key], key);
+            stringValues[key] = "instanceof File";
+          } else {
+            stringValues[key] = watchedValues[key];
+          }
         }
+      }
+
+      if (Object.keys(stringValues).length) {
+        if (timeout !== undefined) {
+          stringValues._timestamp = Date.now();
+        }
+        console.log("persisting value", stringValues);
+        store.set(name, JSON.stringify(stringValues));
       }
     }
 
-    if (Object.keys(stringValues).length) {
-      if (timeout !== undefined) {
-        stringValues._timestamp = Date.now();
+    if (shouldEnablePersist.current) {
+      if (persistDebounceTimeout.current) {
+        clearTimeout(persistDebounceTimeout.current);
       }
-      store.set(name, JSON.stringify(stringValues));
+      persistDebounceTimeout.current = setTimeout(() => {
+        persistFormValues();
+      }, 300);
     }
+    return () => {
+      if (persistDebounceTimeout.current) {
+        clearTimeout(persistDebounceTimeout.current);
+      }
+    };
   }, [watchedValues, timeout, exclude, fileStorage, name]);
 
   return {
