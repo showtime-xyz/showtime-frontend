@@ -33,6 +33,7 @@ import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -104,7 +105,6 @@ const getDefaultDate = () => {
 export const DropMusic = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
-
   const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const dropValidationSchema = useMemo(
@@ -180,7 +180,6 @@ export const DropMusic = () => {
     handleSubmit,
     setError,
     clearErrors,
-    register,
     formState: { errors },
     watch,
     setValue,
@@ -192,6 +191,7 @@ export const DropMusic = () => {
     reValidateMode: "onChange",
   });
 
+  const insets = useSafeAreaInsets();
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
@@ -216,13 +216,21 @@ export const DropMusic = () => {
 
   // this effect should be triggered when the user changes the drop type
   // it will revalidate the form and show the errors if any
+  const previousIsSaveDrop = useRef(isSaveDrop);
   useEffect(() => {
-    trigger();
+    if (isSaveDrop !== previousIsSaveDrop.current) trigger();
+    previousIsSaveDrop.current = isSaveDrop;
   }, [isSaveDrop, trigger]);
 
   const scrollToErrorField = useCallback(() => {
     if (errors.file) {
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+      return;
+    }
+    if (errors.hasAcceptedTerms) {
+      // just some high number, it will scroll to the bottom and we dont need to measure the offset
+      scrollViewRef.current?.scrollTo({ x: 0, y: 10000, animated: true });
+      return;
     }
   }, [errors]);
 
@@ -230,8 +238,20 @@ export const DropMusic = () => {
   useEffect(() => {
     if (errors) {
       scrollToErrorField();
+
+      if (
+        (errors.editionSize?.message ||
+          errors.royalty?.message ||
+          errors.duration?.message) &&
+        accordionValue !== "open"
+      ) {
+        setAccordionValue("open");
+        requestAnimationFrame(() => {
+          scrollToErrorField();
+        });
+      }
     }
-  }, [errors, scrollToErrorField]);
+  }, [errors, scrollToErrorField, accordionValue]);
 
   const onSubmit = async (values: UseDropNFT) => {
     if (Platform.OS !== "web") {
@@ -287,7 +307,12 @@ export const DropMusic = () => {
   }
 
   if (state.status === "success") {
-    return <QRCodeModal contractAddress={state.edition?.contract_address} />;
+    return (
+      <QRCodeModal
+        dropCreated
+        contractAddress={state.edition?.contract_address}
+      />
+    );
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;
@@ -336,7 +361,11 @@ export const DropMusic = () => {
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
-      <BottomSheetScrollView ref={scrollViewRef} style={{ padding: 16 }}>
+      <BottomSheetScrollView
+        ref={scrollViewRef}
+        style={{ padding: 16 }}
+        contentContainerStyle={{ paddingBottom: bottomBarHeight }}
+      >
         <View>
           <View tw="flex-row">
             <Controller
@@ -365,8 +394,10 @@ export const DropMusic = () => {
                               style={previewBorderStyle}
                             />
                             <View
-                              tw="absolute h-full w-full items-center justify-center"
-                              style={{ backgroundColor: "rgba(0,0,0,.35)" }}
+                              tw="absolute h-full w-full items-center justify-center rounded-lg"
+                              style={{
+                                backgroundColor: "rgba(0,0,0,.35)",
+                              }}
                             >
                               <View tw="flex-row items-center shadow-lg">
                                 <FlipIcon
@@ -383,7 +414,13 @@ export const DropMusic = () => {
                         ) : (
                           <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
                             <ImageIcon
-                              color={isDark ? "#FFF" : "#000"}
+                              color={
+                                errors.file?.message
+                                  ? "red"
+                                  : isDark
+                                  ? "#FFF"
+                                  : "#000"
+                              }
                               width={40}
                               height={40}
                             />
@@ -450,7 +487,7 @@ export const DropMusic = () => {
                           textAlignVertical="top"
                           placeholder="What is this drop about?"
                           onBlur={onBlur}
-                          helperText="You cannot edit this after the drop is created"
+                          helperText="You cannot edit this after the drop is created."
                           errorText={errors.description?.message}
                           value={value}
                           numberOfLines={3}
@@ -481,7 +518,7 @@ export const DropMusic = () => {
                     textAlignVertical="top"
                     placeholder="What is this drop about?"
                     onBlur={onBlur}
-                    helperText="You cannot edit this after the drop is created"
+                    helperText="You cannot edit this after the drop is created."
                     errorText={errors.description?.message}
                     value={value}
                     numberOfLines={3}
@@ -639,7 +676,17 @@ export const DropMusic = () => {
                 <Accordion.Trigger>
                   <View tw="flex-1">
                     <View tw="mb-4 flex-1 flex-row justify-between">
-                      <Accordion.Label>Drop Details</Accordion.Label>
+                      <Accordion.Label
+                        tw={
+                          errors.editionSize?.message ||
+                          errors.royalty?.message ||
+                          errors.duration?.message
+                            ? "text-red-500"
+                            : ""
+                        }
+                      >
+                        Drop Details
+                      </Accordion.Label>
                       <Accordion.Chevron />
                     </View>
                     <ScrollView tw="flex-row" horizontal={true}>
@@ -680,8 +727,13 @@ export const DropMusic = () => {
                             return (
                               <Fieldset
                                 ref={ref}
-                                tw="flex-1 opacity-100"
+                                tw={
+                                  isUnlimited
+                                    ? "flex-1 opacity-40"
+                                    : "flex-1 opacity-100"
+                                }
                                 label="Edition size"
+                                placeholder="Enter number"
                                 onBlur={onBlur}
                                 helperText="How many editions will be available to collect"
                                 errorText={errors.editionSize?.message}
@@ -724,6 +776,7 @@ export const DropMusic = () => {
                                 tw="flex-1"
                                 label="Your royalties (%)"
                                 onBlur={onBlur}
+                                placeholder="Enter number"
                                 helperText="How much you'll earn each time an edition of this drop is sold"
                                 errorText={errors.royalty?.message}
                                 value={value?.toString()}
@@ -827,38 +880,37 @@ export const DropMusic = () => {
               <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
             ) : null}
           </View>
-
-          <View tw="mt-8">
-            <Button
-              variant="primary"
-              size="regular"
-              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              disabled={state.status === "loading"}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading"
-                ? "Creating... it should take about 10 seconds"
-                : state.status === "error"
-                ? "Failed. Please retry!"
-                : "Drop now"}
-            </Button>
-
-            {state.transactionHash ? (
-              <View tw="mt-4">
-                <PolygonScanButton transactionHash={state.transactionHash} />
-              </View>
-            ) : null}
-
-            {state.error ? (
-              <View tw="mt-4">
-                <Text tw="text-red-500">{state.error}</Text>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={{ height: bottomBarHeight + 60 }} />
         </View>
       </BottomSheetScrollView>
+      <View tw="px-4">
+        <Button
+          variant="primary"
+          size="regular"
+          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+          disabled={state.status === "loading"}
+          onPress={handleSubmit(onSubmit)}
+        >
+          {state.status === "loading"
+            ? "Creating... it should take about 10 seconds"
+            : state.status === "error"
+            ? "Failed. Please retry!"
+            : "Drop now"}
+        </Button>
+
+        {state.transactionHash ? (
+          <View tw="mt-4">
+            <PolygonScanButton transactionHash={state.transactionHash} />
+          </View>
+        ) : null}
+
+        {state.error ? (
+          <View tw="mb-1 mt-4 items-center justify-center">
+            <Text tw="text-red-500">{state.error}</Text>
+          </View>
+        ) : null}
+      </View>
+
+      <View style={{ height: insets.bottom }} />
       <ModalSheet
         snapPoints={["100%"]}
         title="Spotify Song Link"
