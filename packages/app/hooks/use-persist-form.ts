@@ -60,6 +60,22 @@ export const usePersistForm = (
           clearStorage();
           return;
         }
+
+        if (defaultValues) {
+          for (let key in defaultValues) {
+            const shouldSet = !exclude.includes(key);
+            if (shouldSet) {
+              const value = defaultValues?.[key];
+              dataRestored[key] = value;
+              setValue(key, value, {
+                shouldValidate: validate,
+                shouldDirty: dirty,
+                shouldTouch: touch,
+              });
+            }
+          }
+        }
+
         for (let key in values) {
           const shouldSet = !exclude.includes(key);
           if (shouldSet) {
@@ -103,19 +119,6 @@ export const usePersistForm = (
                 shouldTouch: touch,
               });
             }
-          }
-        }
-      } else if (defaultValues) {
-        for (let key in defaultValues) {
-          const shouldSet = !exclude.includes(key);
-          if (shouldSet) {
-            const value = defaultValues?.[key];
-            dataRestored[key] = value;
-            setValue(key, value, {
-              shouldValidate: validate,
-              shouldDirty: dirty,
-              shouldTouch: touch,
-            });
           }
         }
       }
