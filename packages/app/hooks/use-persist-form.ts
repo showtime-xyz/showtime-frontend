@@ -111,7 +111,7 @@ export const usePersistForm = (
                 }
               }, 2000);
             } else {
-              const value = values[key];
+              const value = values[key] ?? defaultValues?.[key];
               dataRestored[key] = value;
               setValue(key, value, {
                 shouldValidate: validate,
