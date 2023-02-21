@@ -151,7 +151,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="h-4" />
             <Text
               nativeID={helperTextId}
-              tw="text-sm text-gray-700 dark:text-gray-300"
+              tw="text-sm leading-5 text-gray-700 dark:text-gray-300"
             >
               {helperText}
             </Text>
@@ -172,7 +172,10 @@ export const ErrorText = ({
   return (
     <>
       <View tw="h-4" />
-      <Text nativeID={nativeID} tw="text-sm font-semibold text-red-500">
+      <Text
+        nativeID={nativeID}
+        tw="text-sm font-semibold leading-5 text-red-500"
+      >
         {children}
       </Text>
     </>

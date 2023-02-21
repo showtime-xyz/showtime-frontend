@@ -5,6 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
+import { Logger } from "app/lib/logger";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useRudder } from "app/lib/rudderstack";
 
@@ -40,7 +41,7 @@ export const AddEmailModal = () => {
           router.pop();
         }
       } catch (error) {
-        console.error(error);
+        Logger.error(error);
       } finally {
         // logout user after magic login or else on next app mount wallet and magic both will be connected that can lead to weird bugs.
         magic?.user?.logout();

@@ -60,14 +60,12 @@ export const usePersistForm = (
           clearStorage();
           return;
         }
-        let fileValues: any = {};
-        for (let key in values) {
-          const shouldSet = !exclude.includes(key);
-          if (shouldSet) {
-            if (values[key] === "instanceof File") {
-              fileValues[key] = values[key];
-            } else {
-              const value = values[key];
+
+        if (defaultValues) {
+          for (let key in defaultValues) {
+            const shouldSet = !exclude.includes(key);
+            if (shouldSet) {
+              const value = defaultValues?.[key];
               dataRestored[key] = value;
               setValue(key, value, {
                 shouldValidate: validate,
@@ -78,48 +76,49 @@ export const usePersistForm = (
           }
         }
 
-        for (let key in fileValues) {
-          setRestoringFiles((prev) => ({ ...prev, [key]: true }));
-          fileStorage
-            .getFile(key)
-            .then((file) => {
-              setRestoringFiles((prev) => {
-                let newPrev = { ...prev };
-                delete newPrev[key];
-                return newPrev;
-              });
-              setValue(key, file);
-              dataRestored[key] = file;
-            })
-            .catch(() => {
-              setRestoringFiles((prev) => {
-                let newPrev = { ...prev };
-                delete newPrev[key];
-                return newPrev;
-              });
-            });
-
-          setTimeout(() => {
-            if (restoringFiles[key]) {
-              setRestoringFiles((prev) => {
-                let newPrev = { ...prev };
-                delete newPrev[key];
-                return newPrev;
-              });
-            }
-          }, 2000);
-        }
-      } else if (defaultValues) {
-        for (let key in defaultValues) {
+        for (let key in values) {
           const shouldSet = !exclude.includes(key);
           if (shouldSet) {
-            const value = defaultValues?.[key];
-            dataRestored[key] = value;
-            setValue(key, value, {
-              shouldValidate: validate,
-              shouldDirty: dirty,
-              shouldTouch: touch,
-            });
+            if (values[key] === "instanceof File") {
+              setRestoringFiles((prev) => ({ ...prev, [key]: true }));
+              fileStorage
+                .getFile(key)
+                .then((file) => {
+                  setRestoringFiles((prev) => {
+                    let newPrev = { ...prev };
+                    delete newPrev[key];
+                    return newPrev;
+                  });
+                  setValue(key, file);
+                  dataRestored[key] = file;
+                })
+                .catch(() => {
+                  setRestoringFiles((prev) => {
+                    let newPrev = { ...prev };
+                    delete newPrev[key];
+                    return newPrev;
+                  });
+                });
+
+              // IndexedDB can halt sometimes if it's writing file in more than one tab, so we add this timeout as a fail safe
+              setTimeout(() => {
+                if (restoringFiles[key]) {
+                  setRestoringFiles((prev) => {
+                    let newPrev = { ...prev };
+                    delete newPrev[key];
+                    return newPrev;
+                  });
+                }
+              }, 2000);
+            } else {
+              const value = values[key] ?? defaultValues?.[key];
+              dataRestored[key] = value;
+              setValue(key, value, {
+                shouldValidate: validate,
+                shouldDirty: dirty,
+                shouldTouch: touch,
+              });
+            }
           }
         }
       }

@@ -158,7 +158,9 @@ export function AuthProvider({
       setWeb3(undefined);
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
+
       clearPersistedForms();
+
       router.push("/");
     },
     [

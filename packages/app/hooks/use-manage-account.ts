@@ -10,6 +10,8 @@ import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { obfuscatePhoneNumber } from "app/utilities";
 
+import { Logger } from "../lib/logger";
+
 export function useManageAccount() {
   const toast = useToast();
   const { mutate } = useSWRConfig();
@@ -36,6 +38,8 @@ export function useManageAccount() {
           hideAfter: 4000,
         });
       } catch (error: any) {
+        Logger.error("Add social error", error);
+
         if (error?.response.status === 420) {
           Alert.alert(
             `This ${type} account is already linked to another Showtime account`,
@@ -89,15 +93,26 @@ export function useManageAccount() {
           message: "Email added and will soon appear on your profile!",
           hideAfter: 4000,
         });
-      } catch (error) {
-        toast?.show({
-          message:
-            "Unable to add the email to your profile at this time, please try again!",
-          hideAfter: 4000,
-        });
+      } catch (error: any) {
+        Logger.error("Add email error", error);
+
+        if (error?.response?.status === 420) {
+          Alert.alert(
+            `This email account is already linked to another Showtime account`,
+            `Please disconnect your email from another account or reach out to our support.`,
+            [{ text: "Ok" }]
+          );
+        } else {
+          toast?.show({
+            message:
+              error?.response?.data?.error?.message ??
+              "Unable to add the email to your profile at this time, please try again!",
+            hideAfter: 4000,
+          });
+        }
       }
     },
-    [toast, mutate]
+    [toast, mutate, Alert]
   );
 
   const verifyPhoneNumber = useCallback(
@@ -118,6 +133,7 @@ export function useManageAccount() {
           hideAfter: 4000,
         });
       } catch (error: any) {
+        Logger.error("Add Phone error", error);
         // User has already linked this phone to another account so we ask whether we should reassign to this account.
         if (error?.response?.data?.error?.code === 420) {
           Alert.alert(
@@ -148,9 +164,10 @@ export function useManageAccount() {
                       message: "Phone number successfully verified!",
                       hideAfter: 4000,
                     });
-                  } catch (e) {
+                  } catch (e: any) {
                     toast?.show({
                       message:
+                        e?.response?.data?.error?.message ??
                         "Unable to verify your phone number at this time, please try again!",
                       hideAfter: 4000,
                     });
@@ -162,6 +179,7 @@ export function useManageAccount() {
         } else {
           toast?.show({
             message:
+              error?.response?.data?.error?.message ??
               "Unable to verify your phone number at this time, please try again!",
             hideAfter: 4000,
           });
@@ -182,9 +200,11 @@ export function useManageAccount() {
           message: "Account removed and will disappear from your profile soon",
           hideAfter: 4000,
         });
-      } catch (error) {
+      } catch (error: any) {
+        Logger.error("Remove account error", error);
         toast?.show({
           message:
+            error?.response?.data?.error?.message ??
             "Unable to remove the selected account at this time, please try again",
           hideAfter: 4000,
         });
@@ -206,9 +226,11 @@ export function useManageAccount() {
           message: "Phone number has removed",
           hideAfter: 4000,
         });
-      } catch (error) {
+      } catch (error: any) {
+        Logger.error("Remove Phone error", error);
         toast?.show({
           message:
+            e?.response?.data?.error?.message ??
             "Unable to remove the phone number at this time, please try again",
           hideAfter: 4000,
         });
