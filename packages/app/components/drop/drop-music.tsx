@@ -63,6 +63,7 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { Hidden } from "design-system/hidden";
 
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
+import { MUSIC_DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -100,8 +101,6 @@ const getDefaultDate = () => {
   );
   return targetDate;
 };
-
-const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
 
 export const DropMusic = () => {
   const isDark = useIsDarkMode();
@@ -209,7 +208,7 @@ export const DropMusic = () => {
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
 
-  const { clearStorage } = usePersistForm(DROP_FORM_DATA_KEY, {
+  const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
