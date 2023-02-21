@@ -1,4 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   Platform,
   ScrollView as RNScrollView,
@@ -78,39 +84,21 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 const getDefaultDate = () => {
-  const tomorrow = new Date();
-  tomorrow.setHours(24, 0, 0, 0);
-  return tomorrow;
+  // Get a JavaScript date that represents the next occurrence of 12:00 AM (midnight)
+  // that is at least 24 hours from the current time.
+  const now = new Date();
+  const targetDate = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 2,
+      0,
+      0,
+      0
+    )
+  );
+  return targetDate;
 };
-const dropValidationSchema = yup.object({
-  file: yup.mixed().required("Media is required"),
-  title: yup.string().required().max(255),
-  description: yup.string().max(280).required(),
-  editionSize: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .min(1)
-    .max(100000)
-    .default(defaultValues.editionSize),
-  royalty: yup
-    .number()
-    .required()
-    .typeError("Please enter a valid number")
-    .max(69)
-    .default(defaultValues.royalty),
-  hasAcceptedTerms: yup
-    .boolean()
-    .default(defaultValues.hasAcceptedTerms)
-    .required()
-    .isTrue("You must accept the terms and conditions."),
-  notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-  googleMapsUrl: yup.string().url(),
-  radius: yup.number().min(0.01).max(10),
-  releaseDate: yup
-    .date()
-    .min(getDefaultDate(), "Spotify Release date must be in the future"),
-});
 
 const DROP_FORM_DATA_KEY = "drop_form_local_data_music";
 
@@ -118,23 +106,95 @@ export const DropMusic = () => {
   const isDark = useIsDarkMode();
   const { rudder } = useRudder();
 
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
+
+  const dropValidationSchema = useMemo(
+    () =>
+      yup.lazy((values) => {
+        const baseSchema = yup.object({
+          file: yup.mixed().required("Media is required"),
+          title: yup.string().required("Title is a required field").max(255),
+          description: yup
+            .string()
+            .max(280)
+            .required("Description is a required field"),
+          editionSize: yup
+            .number()
+            .required()
+            .typeError("Please enter a valid number")
+            .min(1)
+            .max(100000)
+            .default(defaultValues.editionSize),
+          royalty: yup
+            .number()
+            .required()
+            .typeError("Please enter a valid number")
+            .max(69)
+            .default(defaultValues.royalty),
+          hasAcceptedTerms: yup
+            .boolean()
+            .default(defaultValues.hasAcceptedTerms)
+            .required()
+            .isTrue("You must accept the terms and conditions."),
+          notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+          googleMapsUrl: yup.string().url(),
+          radius: yup.number().min(0.01).max(10),
+          ...(isSaveDrop
+            ? {}
+            : {
+                releaseDate: yup
+                  .date()
+                  .min(
+                    getDefaultDate(),
+                    "The date you entered is invalid. Please enter a date that is at least 24 hours from now and after the next occurrence of 12:00 AM (midnight)"
+                  ),
+              }),
+          spotifyUrl: yup
+            .string()
+            .test(
+              "no-album-or-playlist",
+              "Spotify Album and Playlist URLs are not allowed.",
+              (value) => {
+                if (!value) return true;
+                return !/(album|playlist)/i.test(value);
+              }
+            ),
+        });
+
+        if (isSaveDrop) {
+          return baseSchema.concat(
+            yup.object({
+              spotifyUrl: yup
+                .string()
+                .required("Spotify Song URL is required for saved drops."),
+            })
+          );
+        } else {
+          return baseSchema;
+        }
+      }),
+    [isSaveDrop]
+  );
+
   const {
     control,
     handleSubmit,
     setError,
     clearErrors,
+    register,
     formState: { errors },
     watch,
     setValue,
+    trigger,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
+    shouldFocusError: true,
     reValidateMode: "onChange",
   });
 
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
-  const spotifyTextInputRef = React.useRef<TextInput | null>(null);
 
   const { state, dropNFT } = useDropNFT();
   const user = useUser({ redirectTo: "/login" });
@@ -143,7 +203,6 @@ export const DropMusic = () => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
-  const [isSaveDrop, setIsSaveDrop] = useState(false);
 
   const [accordionValue, setAccordionValue] = useState("");
   const [isUnlimited, setIsUnlimited] = useState(true);
@@ -156,20 +215,38 @@ export const DropMusic = () => {
     defaultValues,
   });
 
-  const onSubmit = async (values: UseDropNFT) => {
-    if (isSaveDrop && !values.spotifyUrl) {
-      setError("spotifyUrl", {
-        type: "required",
-        message: "Spotify link is required",
-      });
-      return;
+  // this effect should be triggered when the user changes the drop type
+  // it will revalidate the form and show the errors if any
+  useEffect(() => {
+    trigger();
+  }, [isSaveDrop, trigger]);
+
+  const scrollToErrorField = useCallback(() => {
+    if (errors.file) {
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
+  }, [errors]);
+
+  // this scrolls to the first error field when the form is submitted
+  useEffect(() => {
+    if (errors) {
+      scrollToErrorField();
+    }
+  }, [errors, scrollToErrorField]);
+
+  const onSubmit = async (values: UseDropNFT) => {
+    if (Platform.OS !== "web") {
+      TextInput.State.blurTextInput(TextInput.State.currentlyFocusedInput());
+    }
+
     await dropNFT(
       {
         ...values,
         gatingType: isSaveDrop ? "spotify_save" : "music_presave",
         editionSize: isUnlimited ? 0 : values.editionSize,
-        releaseDate: isSaveDrop ? undefined : values.releaseDate,
+        releaseDate: isSaveDrop
+          ? undefined
+          : values.releaseDate ?? getDefaultDate().toISOString(),
       },
       clearStorage
     );
@@ -288,7 +365,10 @@ export const DropMusic = () => {
                               height={windowWidth >= 768 ? 256 : 120}
                               style={previewBorderStyle}
                             />
-                            <View tw="absolute h-full w-full items-center justify-center">
+                            <View
+                              tw="absolute h-full w-full items-center justify-center"
+                              style={{ backgroundColor: "rgba(0,0,0,.35)" }}
+                            >
                               <View tw="flex-row items-center shadow-lg">
                                 <FlipIcon
                                   width={20}
@@ -339,9 +419,10 @@ export const DropMusic = () => {
               <Controller
                 control={control}
                 name="title"
-                render={({ field: { onChange, onBlur, value } }) => {
+                render={({ field: { onChange, onBlur, value, ref } }) => {
                   return (
                     <Fieldset
+                      ref={ref}
                       tw={windowWidth <= 768 ? "flex-1" : ""}
                       label="Title"
                       placeholder="Sweet"
@@ -360,9 +441,10 @@ export const DropMusic = () => {
                   <Controller
                     control={control}
                     name="description"
-                    render={({ field: { onChange, onBlur, value } }) => {
+                    render={({ field: { onChange, onBlur, value, ref } }) => {
                       return (
                         <Fieldset
+                          ref={ref}
                           tw="flex-1"
                           label="Description"
                           multiline
@@ -390,9 +472,10 @@ export const DropMusic = () => {
             <Controller
               control={control}
               name="description"
-              render={({ field: { onChange, onBlur, value } }) => {
+              render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <Fieldset
+                    ref={ref}
                     tw="mt-4"
                     label="Description"
                     multiline
@@ -414,7 +497,10 @@ export const DropMusic = () => {
               key="releaseDate"
               control={control}
               name="releaseDate"
-              render={({ field: { onChange, value } }) => {
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => {
                 const dateValue =
                   typeof value === "string"
                     ? new Date(value)
@@ -452,12 +538,17 @@ export const DropMusic = () => {
                           onChange(v);
                           setShowDatePicker(false);
                         }}
-                        minimumDate={new Date()}
+                        minimumDate={getDefaultDate()}
                         value={dateValue}
                         type="datetime"
                         open={showDatePicker}
                       />
                     </View>
+                    {error && !isSaveDrop ? (
+                      <Text tw="pt-3 font-bold leading-5 text-red-500">
+                        {error.message}
+                      </Text>
+                    ) : null}
                   </View>
                 );
               }}
@@ -485,37 +576,55 @@ export const DropMusic = () => {
             <Controller
               control={control}
               name="spotifyUrl"
-              render={({ field: { onChange, onBlur, value } }) => {
+              render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <Fieldset
+                    ref={ref}
+                    helperText={
+                      isSaveDrop
+                        ? "Press the ⓘ button to learn how to get that link. Please note that providing an Album or Playlist link is not allowed."
+                        : "Please note that Album or Playlist URI is not allowed. Track URI is optional: you can drop now and enter the song link once it's out on Spotify instead. To obtain your track URI, you may need to contact your distributor for assistance."
+                    }
                     label={
                       <View tw="flex-row">
                         <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                          Spotify Song Link{" "}
+                          {isSaveDrop
+                            ? "Spotify Song Link"
+                            : "Spotify Track URI "}
                           {isSaveDrop ? (
                             <Text tw="text-red-600">*</Text>
                           ) : (
-                            "(Optional)"
+                            <Text tw="text-xs font-normal">
+                              {"\n"}(Optional, you can drop without and fill it
+                              later)
+                            </Text>
                           )}
                         </Label>
-                        <PressableHover
-                          onPress={() => {
-                            setShowCopySpotifyLinkTutorial(true);
-                          }}
-                        >
-                          <InformationCircle
-                            height={18}
-                            width={18}
-                            color={isDark ? colors.gray[400] : colors.gray[600]}
-                          />
-                        </PressableHover>
+                        {isSaveDrop ? (
+                          <PressableHover
+                            onPress={() => {
+                              setShowCopySpotifyLinkTutorial(true);
+                            }}
+                          >
+                            <InformationCircle
+                              height={18}
+                              width={18}
+                              color={
+                                isDark ? colors.gray[400] : colors.gray[600]
+                              }
+                            />
+                          </PressableHover>
+                        ) : null}
                       </View>
                     }
                     onBlur={onBlur}
-                    ref={spotifyTextInputRef}
                     onChangeText={onChange}
                     value={value}
-                    placeholder="Copy Song Link or URI here"
+                    placeholder={
+                      isSaveDrop
+                        ? "Enter your Spotify Song Link"
+                        : "Enter your Spotify Track URI"
+                    }
                     errorText={errors.spotifyUrl?.message}
                   />
                 );
@@ -566,9 +675,12 @@ export const DropMusic = () => {
                         <Controller
                           control={control}
                           name="editionSize"
-                          render={({ field: { onChange, onBlur, value } }) => {
+                          render={({
+                            field: { onChange, onBlur, value, ref },
+                          }) => {
                             return (
                               <Fieldset
+                                ref={ref}
                                 tw="flex-1 opacity-100"
                                 label="Edition size"
                                 onBlur={onBlur}
@@ -604,9 +716,12 @@ export const DropMusic = () => {
                         <Controller
                           control={control}
                           name="royalty"
-                          render={({ field: { onChange, onBlur, value } }) => {
+                          render={({
+                            field: { onChange, onBlur, value, ref },
+                          }) => {
                             return (
                               <Fieldset
+                                ref={ref}
                                 tw="flex-1"
                                 label="Your royalties (%)"
                                 onBlur={onBlur}
@@ -624,9 +739,12 @@ export const DropMusic = () => {
                       <Controller
                         control={control}
                         name="duration"
-                        render={({ field: { onChange, onBlur, value } }) => {
+                        render={({
+                          field: { onChange, onBlur, value, ref },
+                        }) => {
                           return (
                             <Fieldset
+                              ref={ref}
                               tw="flex-1"
                               label="Duration"
                               onBlur={onBlur}
@@ -650,8 +768,9 @@ export const DropMusic = () => {
                       <Controller
                         control={control}
                         name="notSafeForWork"
-                        render={({ field: { onChange, value } }) => (
+                        render={({ field: { onChange, value, ref } }) => (
                           <Fieldset
+                            ref={ref}
                             tw="flex-1"
                             label="Explicit content (18+)"
                             switchOnly
