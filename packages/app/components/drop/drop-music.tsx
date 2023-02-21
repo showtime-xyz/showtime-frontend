@@ -29,6 +29,7 @@ import {
   InformationCircle,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
@@ -104,6 +105,7 @@ export const DropMusic = () => {
   const isDark = useIsDarkMode();
 
   const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const modalScreenContext = useModalScreenContext();
 
   const dropValidationSchema = useMemo(
     () =>
@@ -193,7 +195,7 @@ export const DropMusic = () => {
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT } = useDropNFT();
+  const { state, dropNFT, reset: resetDropState } = useDropNFT();
   const user = useUser({ redirectTo: "/login" });
 
   const headerHeight = useHeaderHeight();
@@ -217,6 +219,17 @@ export const DropMusic = () => {
   useEffect(() => {
     trigger();
   }, [isSaveDrop, trigger]);
+
+  useEffect(() => {
+    resetDropState();
+  }, [resetDropState]);
+
+  // We change the title when user returns from checkout flow and they have credits
+  useEffect(() => {
+    return () => {
+      modalScreenContext?.setTitle("Music Drop: Pre-Save on Spotify");
+    };
+  }, [modalScreenContext]);
 
   const scrollToErrorField = useCallback(() => {
     if (errors.file) {

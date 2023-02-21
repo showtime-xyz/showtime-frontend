@@ -102,13 +102,13 @@ export const usePersistForm = (
 
               // IndexedDB can halt sometimes if it's writing file in more than one tab, so we add this timeout as a fail safe
               setTimeout(() => {
-                if (restoringFiles[key]) {
-                  setRestoringFiles((prev) => {
-                    let newPrev = { ...prev };
+                setRestoringFiles((prev) => {
+                  let newPrev = { ...prev };
+                  if (newPrev[key]) {
                     delete newPrev[key];
-                    return newPrev;
-                  });
-                }
+                  }
+                  return newPrev;
+                });
               }, 2000);
             } else {
               const value = values[key] ?? defaultValues?.[key];

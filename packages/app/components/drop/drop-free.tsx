@@ -17,6 +17,7 @@ import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
@@ -42,7 +43,7 @@ import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
-import { DROP_FORM_DATA_KEY } from "./utils";
+import { dropFlags, DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -123,8 +124,9 @@ export const DropFree = () => {
   const bottomBarHeight = useBottomTabBarHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const { state, dropNFT, reset } = useDropNFT();
+  const { state, dropNFT, reset: resetDropState } = useDropNFT();
   const user = useUser({ redirectTo: "/login" });
+  const modalScreenContext = useModalScreenContext();
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -158,8 +160,19 @@ export const DropFree = () => {
   });
 
   useEffect(() => {
-    reset();
-  }, [reset]);
+    resetDropState();
+  }, [resetDropState]);
+
+  // We change the title when user returns from checkout flow and they have credits
+  useEffect(() => {
+    if (dropFlags.isReturningFromCheckout) {
+      modalScreenContext?.setTitle("All set! Review your drop one last time");
+    }
+    return () => {
+      dropFlags.isReturningFromCheckout = false;
+      modalScreenContext?.setTitle("Create drop");
+    };
+  }, [modalScreenContext]);
 
   useEffect(() => {
     if (!userProfile?.data.profile.verified) {

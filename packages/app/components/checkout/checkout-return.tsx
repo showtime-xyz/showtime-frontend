@@ -9,6 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 
+import { dropFlags } from "../drop/utils";
 import { stripePromise } from "./stripe";
 
 const REDIRECT_SECONDS = 5;
@@ -22,6 +23,7 @@ export const CheckoutReturn = () => {
     setTimeout(() => {
       router.replace("/drop/free");
     }, REDIRECT_SECONDS * 1000);
+    dropFlags.isReturningFromCheckout = true;
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));
     }, 1000);
