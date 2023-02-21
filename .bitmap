@@ -155,7 +155,7 @@
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.136",
+        "version": "0.0.138",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
