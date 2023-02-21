@@ -21,7 +21,8 @@ import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? Fragment : AnimateHeight;
+const PlatformAnimateHeight =
+  Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;
 
 export type FieldsetProps = {
   errorText?: string;
@@ -109,7 +110,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
               blurOnSubmit={textInputProps.blurOnSubmit}
-              textAlignVertical="bottom"
+              textAlignVertical="top"
               placeholderTextColor={
                 isDark ? colors.gray[400] : colors.gray[600]
               }
@@ -151,7 +152,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="h-4" />
             <Text
               nativeID={helperTextId}
-              tw="text-sm leading-5 text-gray-700 dark:text-gray-300"
+              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
             >
               {helperText}
             </Text>
@@ -174,7 +175,7 @@ export const ErrorText = ({
       <View tw="h-4" />
       <Text
         nativeID={nativeID}
-        tw="text-sm font-semibold leading-5 text-red-500"
+        tw="text-sm font-semibold leading-6 text-red-500"
       >
         {children}
       </Text>
