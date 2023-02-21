@@ -217,8 +217,10 @@ export const DropMusic = () => {
 
   // this effect should be triggered when the user changes the drop type
   // it will revalidate the form and show the errors if any
+  const previousIsSaveDrop = useRef(isSaveDrop);
   useEffect(() => {
-    trigger();
+    if (isSaveDrop !== previousIsSaveDrop.current) trigger();
+    previousIsSaveDrop.current = isSaveDrop;
   }, [isSaveDrop, trigger]);
 
   const scrollToErrorField = useCallback(() => {
