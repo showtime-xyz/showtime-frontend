@@ -229,8 +229,6 @@ export const DropFree = () => {
     }
   };
 
-  console.log("restoring files ", restoringFiles);
-
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}

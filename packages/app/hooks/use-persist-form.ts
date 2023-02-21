@@ -79,12 +79,10 @@ export const usePersistForm = (
         }
 
         for (let key in fileValues) {
-          console.log("restoring file", key);
           setRestoringFiles((prev) => ({ ...prev, [key]: true }));
           fileStorage
             .getFile(key)
             .then((file) => {
-              console.log("restored file", key);
               setRestoringFiles((prev) => {
                 let newPrev = { ...prev };
                 delete newPrev[key];
@@ -94,7 +92,6 @@ export const usePersistForm = (
               dataRestored[key] = file;
             })
             .catch(() => {
-              console.log("error restoring file", key);
               setRestoringFiles((prev) => {
                 let newPrev = { ...prev };
                 delete newPrev[key];
@@ -104,7 +101,6 @@ export const usePersistForm = (
 
           setTimeout(() => {
             if (restoringFiles[key]) {
-              console.log("restoring file timeout", key);
               setRestoringFiles((prev) => {
                 let newPrev = { ...prev };
                 delete newPrev[key];
@@ -153,7 +149,6 @@ export const usePersistForm = (
         if (timeout !== undefined) {
           stringValues._timestamp = Date.now();
         }
-        console.log("persisting value", stringValues);
         store.set(name, JSON.stringify(stringValues));
       }
     }
