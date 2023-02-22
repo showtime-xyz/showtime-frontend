@@ -60,10 +60,16 @@ type QRCodeModalParams = {
 };
 const { useParam } = createParam<QRCodeModalParams>();
 
-type QRCodeModalProps = QRCodeModalParams;
-export const QRCodeModal = (
-  props?: QRCodeModalProps & { dropCreated?: boolean }
-) => {
+type PreviewStyle = {
+  height: number;
+  width: number;
+  borderRadius: number;
+};
+type QRCodeModalProps = QRCodeModalParams & {
+  dropCreated?: boolean;
+  renderPreviewComponent?: (props: PreviewStyle) => JSX.Element;
+};
+export const QRCodeModal = (props?: QRCodeModalProps) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
   const modalScreenContext = useModalScreenContext();
@@ -264,7 +270,11 @@ export const QRCodeModal = (
     await Clipboard.setStringAsync(qrCodeUrl.toString());
     toast?.show({ message: "Copied!", hideAfter: 5000 });
   }, [qrCodeUrl, toast]);
-
+  const imageStyle = {
+    height: size,
+    width: size,
+    borderRadius: 16,
+  };
   const shareButtons = Platform.select({
     web: [
       {
@@ -341,21 +351,22 @@ export const QRCodeModal = (
             <BottomSheetScrollView>
               <RNView collapsable={false} ref={viewRef as any}>
                 <View tw="web:mb-[74px] w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
-                  <Image
-                    source={{
-                      uri: mediaUri,
-                    }}
-                    style={{
-                      height: size,
-                      width: size,
-                      borderRadius: 16,
-                    }}
-                    width={size}
-                    height={size}
-                    resizeMode="cover"
-                    alt={nft?.token_name}
-                    blurhash={nft?.blurhash}
-                  />
+                  {props?.renderPreviewComponent ? (
+                    props?.renderPreviewComponent(imageStyle)
+                  ) : (
+                    <Image
+                      source={{
+                        uri: mediaUri,
+                      }}
+                      style={imageStyle}
+                      width={size}
+                      height={size}
+                      resizeMode="cover"
+                      alt={nft?.token_name}
+                      blurhash={nft?.blurhash}
+                    />
+                  )}
+
                   <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
                     <View tw="flex-1 justify-center">
                       <View tw="flex-row pb-4">

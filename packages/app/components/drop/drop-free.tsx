@@ -290,6 +290,14 @@ export const DropFree = () => {
       <QRCodeModal
         dropCreated
         contractAddress={state.edition?.contract_address}
+        renderPreviewComponent={({ width, height, borderRadius }) => (
+          <Preview
+            file={getValues("file")}
+            width={width}
+            height={height}
+            style={{ borderRadius }}
+          />
+        )}
       />
     );
   }
