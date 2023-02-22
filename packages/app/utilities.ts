@@ -406,9 +406,12 @@ export async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const getCreatorUsernameFromNFT = (nft?: NFT) => {
+export const getCreatorUsernameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
   if (!nft) return "";
-
   return nft.creator_username
     ? `@${nft.creator_username}`
     : nft.creator_name
