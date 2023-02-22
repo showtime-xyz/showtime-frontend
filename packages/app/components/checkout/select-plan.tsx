@@ -74,7 +74,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
               message: "Payment Succeeded",
               hideAfter: 3000,
             });
-            router.replace("/drop/free");
+            router.replace("/drop/free?checkoutSuccess=true");
           } catch (e) {
             // Error handled in hook
           }
