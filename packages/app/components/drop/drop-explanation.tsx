@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -14,6 +16,13 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
     350
   );
   const previewHeight = previewWidth * previewAspectRatio;
+  const modalScreenContext = useModalScreenContext();
+  useEffect(() => {
+    modalScreenContext?.setTitle("");
+    return () => {
+      modalScreenContext?.setTitle("Choose your drop type");
+    };
+  }, [modalScreenContext]);
 
   return (
     <View tw="flex-1 px-8">
