@@ -2,8 +2,8 @@ import { MMKV } from "react-native-mmkv";
 
 import { FileStorage } from "app/lib/file-storage/file-storage";
 
-export const DROP_FORM_DATA_KEY = "drop_form_local_data_free_v2";
-export const MUSIC_DROP_FORM_DATA_KEY = "drop_form_local_data_music_v2";
+export const DROP_FORM_DATA_KEY = "drop_form_local_data_free";
+export const MUSIC_DROP_FORM_DATA_KEY = "drop_form_local_data_music";
 
 export const clearPersistedForms = () => {
   const store = new MMKV();
