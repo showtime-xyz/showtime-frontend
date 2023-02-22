@@ -1,3 +1,3 @@
-import { DropEventScreen } from "app/screens/drop-event";
+import { Fragment } from "react";
 
-export default DropEventScreen;
+export default Fragment;
