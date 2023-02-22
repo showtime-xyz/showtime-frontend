@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
@@ -8,9 +8,12 @@ import { View } from "@showtime-xyz/universal.view";
 import { Description } from "app/components/card/rows";
 import { Preview } from "app/components/preview";
 import { useUser } from "app/hooks/use-user";
+import { useMuted } from "app/providers/mute-provider";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { VerificationBadge } from "design-system";
+
+import { MuteButton } from "../mute-button";
 
 type DropPreviewProps = {
   file: any;
@@ -18,18 +21,24 @@ type DropPreviewProps = {
   description: string;
   onEdit: () => void;
 };
-export const DropPreview = ({
+export const DropPreview = memo(function DropPreview({
   file,
   title,
   description,
   onEdit,
-}: DropPreviewProps) => {
+}: DropPreviewProps) {
   const { user: userProfile } = useUser();
+  const [muted] = useMuted();
 
   return (
     <View tw="items-center">
       <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 md:w-[375px]">
-        <Preview file={file} width={375} height={375} />
+        <View>
+          <Preview file={file} width={375} height={375} isMuted={muted} />
+          <View tw="z-9 absolute bottom-0 right-4">
+            <MuteButton />
+          </View>
+        </View>
         <View tw="px-4">
           <View tw="flex-row py-4">
             <View tw="rounded-full border border-gray-200 dark:border-gray-700">
@@ -53,7 +62,7 @@ export const DropPreview = ({
                 </View>
                 <View tw="h-2" />
                 <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                  just now
+                  now
                 </Text>
               </View>
             </View>
@@ -68,10 +77,10 @@ export const DropPreview = ({
           />
           <View tw="h-4" />
           <Button variant="tertiary" size="regular" onPress={onEdit}>
-            Edit
+            Edit Drop
           </Button>
         </View>
       </View>
     </View>
   );
-};
+});

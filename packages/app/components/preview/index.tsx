@@ -19,6 +19,7 @@ type PreviewProps = {
   resizeMode?: ResizeMode;
   width: number;
   height: number;
+  isMuted?: boolean;
 };
 
 const StyledVideo = styled(Video);
@@ -31,6 +32,7 @@ export const Preview = memo(function Preview({
   resizeMode = "cover",
   width,
   height,
+  isMuted = true,
 }: PreviewProps) {
   const uri = getLocalFileURI(file);
 
@@ -80,7 +82,7 @@ export const Preview = memo(function Preview({
           ]}
           resizeMode={contentFitToresizeMode(resizeMode)}
           source={{ uri: uri as string }}
-          isMuted
+          isMuted={isMuted}
           shouldPlay
           videoStyle={videoStyle}
           onLoad={() => {
