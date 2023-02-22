@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useMemo } from "react";
+import { Platform } from "react-native";
 
 import {
   useStripe,
@@ -62,7 +63,10 @@ const CheckoutFormStripe = () => {
       elements,
       confirmParams: {
         return_url:
-          window.location.origin +
+          Platform.select({
+            web: window.location.origin,
+            default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
+          }) +
           "/checkout-return?setAsDefaultPaymentMethod=" +
           setAsDefaultPaymentMethod,
         receipt_email: email,
