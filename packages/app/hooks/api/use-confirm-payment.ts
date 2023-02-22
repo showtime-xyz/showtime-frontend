@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Platform } from "react-native";
 
 import { stripePromise } from "app/components/checkout/stripe";
 import { useUser } from "app/hooks/use-user";
@@ -71,7 +72,11 @@ export const useConfirmPayment = () => {
             clientSecret,
             {
               payment_method: paymentMethodId,
-              return_url: window.location.origin + "/checkout-return",
+              return_url:
+                Platform.select({
+                  web: window.location.origin,
+                  default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
+                }) + "/checkout-return",
             }
           );
           if (paymentResponse?.error) {
