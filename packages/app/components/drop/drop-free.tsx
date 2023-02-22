@@ -46,12 +46,13 @@ import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
+import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
 import { DropPreview } from "./drop-preview";
-import { dropFlags, DROP_FORM_DATA_KEY } from "./utils";
+import { DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -71,9 +72,18 @@ const defaultValues = {
   hasAcceptedTerms: false,
   notSafeForWork: false,
 };
+
+const { useParam } = createParam<{
+  checkoutSuccess?: boolean;
+}>();
+
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
+  const [checkoutSuccess] = useParam("checkoutSuccess", {
+    parse: (value) => value === "true",
+    initial: false,
+  });
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
   const maxEditionSize = userProfile?.data?.profile.verified
@@ -186,14 +196,13 @@ export const DropFree = () => {
   useEffect(() => {
     if (showPreview) {
       modalScreenContext?.setTitle("Drop Preview");
-    } else if (dropFlags.isReturningFromCheckout) {
+    } else if (checkoutSuccess) {
       modalScreenContext?.setTitle("All set! Review your drop one last time");
     }
     return () => {
-      dropFlags.isReturningFromCheckout = false;
       modalScreenContext?.setTitle("Create drop");
     };
-  }, [modalScreenContext, showPreview]);
+  }, [modalScreenContext, showPreview, checkoutSuccess]);
 
   useEffect(() => {
     if (!userProfile?.data.profile.verified) {

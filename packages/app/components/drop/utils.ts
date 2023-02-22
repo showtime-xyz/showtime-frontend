@@ -13,7 +13,3 @@ export const clearPersistedForms = () => {
   store.delete(MUSIC_DROP_FORM_DATA_KEY);
   new FileStorage(MUSIC_DROP_FORM_DATA_KEY).clearStorage();
 };
-
-export const dropFlags = {
-  isReturningFromCheckout: false,
-};
