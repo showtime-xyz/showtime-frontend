@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { SetFieldValue } from "react-hook-form";
+import { SetFieldValue, UseFormWatch } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
 
 import { FileStorage } from "app/lib/file-storage/file-storage";
@@ -8,7 +8,7 @@ import { FileStorage } from "app/lib/file-storage/file-storage";
 const store = new MMKV();
 
 type FormPersistConfig = {
-  watch: (names?: string | string[]) => any;
+  watch: UseFormWatch<any>;
   setValue: SetFieldValue<any>;
   exclude?: string[];
   onDataRestored?: (data: any) => void;
@@ -25,7 +25,7 @@ export const usePersistForm = (
   {
     watch,
     setValue,
-    exclude = [],
+    exclude,
     onDataRestored,
     defaultValues,
     validate = false,
@@ -35,7 +35,6 @@ export const usePersistForm = (
     timeout = 86400000,
   }: FormPersistConfig
 ) => {
-  const watchedValues = watch();
   const fileStorage = useMemo(() => new FileStorage(name), [name]);
   let persistDebounceTimeout = useRef<any>(null);
   const [restoringFiles, setRestoringFiles] = useState<{
@@ -52,7 +51,7 @@ export const usePersistForm = (
 
       if (defaultValues) {
         for (let key in defaultValues) {
-          const shouldSet = !exclude.includes(key);
+          const shouldSet = !exclude?.includes(key);
           if (shouldSet) {
             const value = defaultValues?.[key];
             dataRestored[key] = value;
@@ -78,7 +77,7 @@ export const usePersistForm = (
         }
 
         for (let key in values) {
-          const shouldSet = !exclude.includes(key);
+          const shouldSet = !exclude?.includes(key);
           if (shouldSet) {
             if (values[key] === "instanceof File") {
               setRestoringFiles((prev) => ({ ...prev, [key]: true }));
@@ -132,10 +131,10 @@ export const usePersistForm = (
   }, [name, onDataRestored, setValue]);
 
   useEffect(() => {
-    function persistFormValues() {
+    function persistFormValues(watchedValues: any) {
       let stringValues: any = {};
       for (let key in watchedValues) {
-        if (!exclude.includes(key)) {
+        if (!exclude?.includes(key)) {
           if (watchedValues[key] instanceof File) {
             fileStorage.saveFile(watchedValues[key], key);
             stringValues[key] = "instanceof File";
@@ -153,18 +152,23 @@ export const usePersistForm = (
       }
     }
 
-    if (persistDebounceTimeout.current) {
-      clearTimeout(persistDebounceTimeout.current);
-    }
-    persistDebounceTimeout.current = setTimeout(() => {
-      if (Object.keys(restoringFiles).length === 0) persistFormValues();
-    }, 300);
+    const subscription = watch((watchedValues) => {
+      if (persistDebounceTimeout.current) {
+        clearTimeout(persistDebounceTimeout.current);
+      }
+      persistDebounceTimeout.current = setTimeout(() => {
+        if (Object.keys(restoringFiles).length === 0)
+          persistFormValues(watchedValues);
+      }, 300);
+    });
+
     return () => {
       if (persistDebounceTimeout.current) {
         clearTimeout(persistDebounceTimeout.current);
       }
+      subscription.unsubscribe();
     };
-  }, [watchedValues, restoringFiles, timeout, exclude, fileStorage, name]);
+  }, [watch, restoringFiles, timeout, exclude, fileStorage, name]);
 
   return {
     clearStorage,
