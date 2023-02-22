@@ -47,7 +47,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
               The easiest way to collect.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
-              So easy people have collected drops over 1.5 million times
+              So easy people have collected drops over 1.5 million times.
             </Text>
           </View>
           <View tw="mt-4 lg:mt-8">
@@ -55,7 +55,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
               Promote songs, chats, NFTs.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
-              Over 2,500 superfans have pre-saved music drops on Spotify
+              Over 2,500 superfans have pre-saved music drops on Spotify.
             </Text>
           </View>
           <View tw="mt-4 lg:mt-8">
@@ -64,7 +64,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
               Directly connect with your fans to offer raffles, presale, & other
-              perks
+              perks.
             </Text>
           </View>
           <View tw="mt-4 lg:mt-8">
@@ -72,7 +72,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
               One link to blast everywhere.
             </Text>
             <Text tw="pt-2 text-gray-900 dark:text-gray-50">
-              Share digital collectibles with your whole fanbase or privately
+              Share digital collectibles with your whole fanbase or privately.
             </Text>
           </View>
         </View>
