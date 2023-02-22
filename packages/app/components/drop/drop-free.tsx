@@ -51,6 +51,7 @@ import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
+import { DropPreview } from "./drop-preview";
 import { DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -133,6 +134,7 @@ export const DropFree = () => {
     formState: { errors },
     watch,
     setValue,
+    getValues,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
     mode: "onBlur",
@@ -159,6 +161,7 @@ export const DropFree = () => {
   const router = useRouter();
 
   const [accordionValue, setAccordionValue] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
   const onSubmit = (values: UseDropNFT) => {
     if (shouldProceedToCheckout) {
@@ -172,6 +175,8 @@ export const DropFree = () => {
         },
         router.asPath
       );
+    } else if (!showPreview) {
+      setShowPreview(!showPreview);
     } else {
       dropNFT(values, clearStorage);
     }
@@ -189,13 +194,15 @@ export const DropFree = () => {
 
   // We change the title when user returns from checkout flow and they have credits
   useEffect(() => {
-    if (checkoutSuccess) {
+    if (showPreview) {
+      modalScreenContext?.setTitle("Drop Preview");
+    } else if (checkoutSuccess) {
       modalScreenContext?.setTitle("All set! Review your drop one last time");
     }
     return () => {
       modalScreenContext?.setTitle("Create drop");
     };
-  }, [checkoutSuccess, modalScreenContext]);
+  }, [modalScreenContext, showPreview, checkoutSuccess]);
 
   useEffect(() => {
     if (!userProfile?.data.profile.verified) {
@@ -243,32 +250,6 @@ export const DropFree = () => {
     () => durationOptions.find((d) => d.value === selectedDuration)?.label,
     [selectedDuration]
   );
-
-  if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
-  }
-
-  if (state.status === "success") {
-    return (
-      <QRCodeModal
-        dropCreated
-        contractAddress={state.edition?.contract_address}
-      />
-    );
-  }
-
-  const primaryWallet = user.user?.data.profile.primary_wallet;
-
-  if (!primaryWallet) {
-    return (
-      <AddWalletOrSetPrimary
-        onPrimaryWalletSetCallback={redirectToCreateDrop}
-        title="Choose a primary wallet to create your drop"
-        description="Please choose which wallet will receive your drop. You only have to do this once!"
-      />
-    );
-  }
-
   const handleFileChange = (fileObj: FilePickerResolveValue) => {
     const { file, size } = fileObj;
     let extension;
@@ -300,6 +281,31 @@ export const DropFree = () => {
     }
   };
 
+  if (user.isIncompletedProfile) {
+    return <CompleteProfileModalContent />;
+  }
+
+  if (state.status === "success") {
+    return (
+      <QRCodeModal
+        dropCreated
+        contractAddress={state.edition?.contract_address}
+      />
+    );
+  }
+
+  const primaryWallet = user.user?.data.profile.primary_wallet;
+
+  if (!primaryWallet) {
+    return (
+      <AddWalletOrSetPrimary
+        onPrimaryWalletSetCallback={redirectToCreateDrop}
+        title="Choose a primary wallet to create your drop"
+        description="Please choose which wallet will receive your drop. You only have to do this once!"
+      />
+    );
+  }
+
   return (
     <BottomSheetModalProvider>
       {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
@@ -308,365 +314,374 @@ export const DropFree = () => {
         style={{ padding: 16 }}
         contentContainerStyle={{ paddingBottom: bottomBarHeight }}
       >
-        <View>
-          <View tw="flex-row">
-            <Controller
-              control={control}
-              name="file"
-              render={({ field: { value } }) => {
-                return (
-                  <DropFileZone
-                    onChange={handleFileChange}
-                    disabled={restoringFiles["file"]}
-                  >
-                    <View tw="z-1">
-                      <Pressable
-                        tw={`h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
-                          restoringFiles["file"] ? "opacity-40" : ""
-                        }`}
-                        disabled={restoringFiles["file"]}
-                        onPress={async () => {
-                          const file = await pickFile({
-                            mediaTypes: "all",
-                          });
-
-                          handleFileChange(file);
-                        }}
-                      >
-                        {value ? (
-                          <View>
-                            <Preview
-                              file={value}
-                              width={windowWidth >= 768 ? 256 : 120}
-                              height={windowWidth >= 768 ? 256 : 120}
-                              style={previewBorderStyle}
-                            />
-                            <View tw="absolute h-full w-full items-center justify-center">
-                              <View tw="flex-row items-center shadow-lg">
-                                <FlipIcon
-                                  width={20}
-                                  height={20}
-                                  color="white"
-                                />
-                                <Text tw="ml-2 text-sm text-white">
-                                  Replace
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                        ) : (
-                          <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
-                            <ImageIcon
-                              color={isDark ? "#FFF" : "#000"}
-                              width={40}
-                              height={40}
-                            />
-                            <View tw="mt-2">
-                              <Text tw="font-bold text-gray-600 dark:text-gray-200">
-                                Upload
-                              </Text>
-                            </View>
-                            {errors.file?.message ? (
-                              <View tw="mt-2">
-                                <Text tw="text-center text-sm text-red-500">
-                                  {errors?.file?.message}
-                                </Text>
-                              </View>
-                            ) : null}
-
-                            <View tw="mt-2 hidden md:flex">
-                              <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                Tap to upload a JPG, PNG, GIF, WebM or MP4 file.
-                              </Text>
-                            </View>
-                          </View>
-                        )}
-                      </Pressable>
-                    </View>
-                  </DropFileZone>
-                );
-              }}
-            />
-
-            <View tw="ml-4 flex-1">
+        {!showPreview ? (
+          <View>
+            <View tw="flex-row">
               <Controller
                 control={control}
-                name="title"
+                name="file"
+                render={({ field: { value } }) => {
+                  return (
+                    <DropFileZone
+                      onChange={handleFileChange}
+                      disabled={restoringFiles["file"]}
+                    >
+                      <View tw="z-1">
+                        <Pressable
+                          tw={`h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
+                            restoringFiles["file"] ? "opacity-40" : ""
+                          }`}
+                          disabled={restoringFiles["file"]}
+                          onPress={async () => {
+                            const file = await pickFile({
+                              mediaTypes: "all",
+                            });
+
+                            handleFileChange(file);
+                          }}
+                        >
+                          {value ? (
+                            <View>
+                              <Preview
+                                file={value}
+                                width={windowWidth >= 768 ? 256 : 120}
+                                height={windowWidth >= 768 ? 256 : 120}
+                                style={previewBorderStyle}
+                              />
+                              <View tw="absolute h-full w-full items-center justify-center">
+                                <View tw="flex-row items-center shadow-lg">
+                                  <FlipIcon
+                                    width={20}
+                                    height={20}
+                                    color="white"
+                                  />
+                                  <Text tw="ml-2 text-sm text-white">
+                                    Replace
+                                  </Text>
+                                </View>
+                              </View>
+                            </View>
+                          ) : (
+                            <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
+                              <ImageIcon
+                                color={isDark ? "#FFF" : "#000"}
+                                width={40}
+                                height={40}
+                              />
+                              <View tw="mt-2">
+                                <Text tw="font-bold text-gray-600 dark:text-gray-200">
+                                  Upload
+                                </Text>
+                              </View>
+                              {errors.file?.message ? (
+                                <View tw="mt-2">
+                                  <Text tw="text-center text-sm text-red-500">
+                                    {errors?.file?.message}
+                                  </Text>
+                                </View>
+                              ) : null}
+
+                              <View tw="mt-2 hidden md:flex">
+                                <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
+                                  Tap to upload a JPG, PNG, GIF, WebM or MP4
+                                  file.
+                                </Text>
+                              </View>
+                            </View>
+                          )}
+                        </Pressable>
+                      </View>
+                    </DropFileZone>
+                  );
+                }}
+              />
+
+              <View tw="ml-4 flex-1">
+                <Controller
+                  control={control}
+                  name="title"
+                  render={({ field: { onChange, onBlur, value, ref } }) => {
+                    return (
+                      <Fieldset
+                        ref={ref}
+                        tw={windowWidth <= 768 ? "flex-1" : ""}
+                        label="Title"
+                        placeholder="Sweet"
+                        onBlur={onBlur}
+                        errorText={errors.title?.message}
+                        value={value}
+                        onChangeText={onChange}
+                        numberOfLines={2}
+                        multiline
+                      />
+                    );
+                  }}
+                />
+                <Hidden until="md">
+                  <View tw="mt-4 flex-1 flex-row">
+                    <Controller
+                      control={control}
+                      name="description"
+                      render={({ field: { onChange, onBlur, value, ref } }) => {
+                        return (
+                          <Fieldset
+                            ref={ref}
+                            tw="flex-1"
+                            label="Description"
+                            multiline
+                            textAlignVertical="top"
+                            placeholder="What is this drop about?"
+                            onBlur={onBlur}
+                            helperText="You cannot edit this after the drop is created."
+                            errorText={errors.description?.message}
+                            value={value}
+                            numberOfLines={3}
+                            onChangeText={onChange}
+                          />
+                        );
+                      }}
+                    />
+                  </View>
+                </Hidden>
+              </View>
+            </View>
+
+            <Text tw="mt-4 text-gray-600 dark:text-gray-200 md:hidden">
+              JPG, PNG, GIF, WebM or MP4 file
+            </Text>
+            <Hidden from="md">
+              <Controller
+                control={control}
+                name="description"
                 render={({ field: { onChange, onBlur, value, ref } }) => {
                   return (
                     <Fieldset
                       ref={ref}
-                      tw={windowWidth <= 768 ? "flex-1" : ""}
-                      label="Title"
-                      placeholder="Sweet"
-                      onBlur={onBlur}
-                      errorText={errors.title?.message}
-                      value={value}
-                      onChangeText={onChange}
-                      numberOfLines={2}
+                      tw="mt-4 flex-1"
+                      label="Description"
                       multiline
+                      textAlignVertical="top"
+                      placeholder="What is this drop about?"
+                      onBlur={onBlur}
+                      helperText="You cannot edit this after the drop is created."
+                      errorText={errors.description?.message}
+                      value={value}
+                      numberOfLines={3}
+                      onChangeText={onChange}
                     />
                   );
                 }}
               />
-              <Hidden until="md">
-                <View tw="mt-4 flex-1 flex-row">
-                  <Controller
-                    control={control}
-                    name="description"
-                    render={({ field: { onChange, onBlur, value, ref } }) => {
-                      return (
-                        <Fieldset
-                          ref={ref}
-                          tw="flex-1"
-                          label="Description"
-                          multiline
-                          textAlignVertical="top"
-                          placeholder="What is this drop about?"
-                          onBlur={onBlur}
-                          helperText="You cannot edit this after the drop is created."
-                          errorText={errors.description?.message}
-                          value={value}
-                          numberOfLines={3}
-                          onChangeText={onChange}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              </Hidden>
-            </View>
-          </View>
+            </Hidden>
 
-          <Text tw="mt-4 text-gray-600 dark:text-gray-200 md:hidden">
-            JPG, PNG, GIF, WebM or MP4 file
-          </Text>
-          <Hidden from="md">
-            <Controller
-              control={control}
-              name="description"
-              render={({ field: { onChange, onBlur, value, ref } }) => {
-                return (
-                  <Fieldset
-                    ref={ref}
-                    tw="mt-4 flex-1"
-                    label="Description"
-                    multiline
-                    textAlignVertical="top"
-                    placeholder="What is this drop about?"
-                    onBlur={onBlur}
-                    helperText="You cannot edit this after the drop is created."
-                    errorText={errors.description?.message}
-                    value={value}
-                    numberOfLines={3}
-                    onChangeText={onChange}
-                  />
-                );
-              }}
-            />
-          </Hidden>
+            <View>
+              <Accordion.Root
+                value={accordionValue}
+                onValueChange={setAccordionValue}
+              >
+                <Accordion.Item tw="-mx-4" value="open">
+                  <Accordion.Trigger>
+                    <View tw="flex-1">
+                      <View tw="mb-4 flex-1 flex-row justify-between">
+                        <Accordion.Label
+                          tw={
+                            errors.editionSize?.message ||
+                            errors.royalty?.message ||
+                            errors.duration?.message
+                              ? "text-red-500"
+                              : ""
+                          }
+                        >
+                          Drop Details
+                        </Accordion.Label>
+                        <Accordion.Chevron />
+                      </View>
+                      <ScrollView tw="flex-row" horizontal={true}>
+                        {!shouldProceedToCheckout ? (
+                          <DataPill
+                            label={`${watch("editionSize")} ${
+                              watch("editionSize") == 1 ? "Edition" : "Editions"
+                            }`}
+                            type="text"
+                          />
+                        ) : null}
 
-          <View>
-            <Accordion.Root
-              value={accordionValue}
-              onValueChange={setAccordionValue}
-            >
-              <Accordion.Item tw="-mx-4" value="open">
-                <Accordion.Trigger>
-                  <View tw="flex-1">
-                    <View tw="mb-4 flex-1 flex-row justify-between">
-                      <Accordion.Label
-                        tw={
-                          errors.editionSize?.message ||
-                          errors.royalty?.message ||
-                          errors.duration?.message
-                            ? "text-red-500"
-                            : ""
-                        }
-                      >
-                        Drop Details
-                      </Accordion.Label>
-                      <Accordion.Chevron />
-                    </View>
-                    <ScrollView tw="flex-row" horizontal={true}>
-                      {!shouldProceedToCheckout ? (
                         <DataPill
-                          label={`${watch("editionSize")} ${
-                            watch("editionSize") == 1 ? "Edition" : "Editions"
-                          }`}
+                          tw="mx-1 md:mx-4"
+                          label={`${watch("royalty")}% Royalties`}
                           type="text"
                         />
-                      ) : null}
-
-                      <DataPill
-                        tw="mx-1 md:mx-4"
-                        label={`${watch("royalty")}% Royalties`}
-                        type="text"
-                      />
-                      <DataPill
-                        tw="mx-1 md:mx-4"
-                        label={`Duration: ${selectedDurationLabel}`}
-                        type="text"
-                      />
-                    </ScrollView>
-                  </View>
-                </Accordion.Trigger>
-                <Accordion.Content tw="pt-0">
-                  <>
-                    <View tw="justify-between lg:flex-row">
-                      <View
-                        tw="flex-1 flex-row"
-                        style={{
-                          display: shouldProceedToCheckout ? "none" : "flex",
-                        }}
-                      >
-                        <Controller
-                          control={control}
-                          name="editionSize"
-                          render={({
-                            field: { onChange, onBlur, value, ref },
-                          }) => {
-                            return (
-                              <Fieldset
-                                ref={ref}
-                                tw="flex-1"
-                                label="Edition size"
-                                placeholder="Enter a number"
-                                onBlur={onBlur}
-                                disabled={!user?.user?.data.profile.verified}
-                                helperText="How many editions will be available to collect"
-                                errorText={errors.editionSize?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                              />
-                            );
-                          }}
+                        <DataPill
+                          tw="mx-1 md:mx-4"
+                          label={`Duration: ${selectedDurationLabel}`}
+                          type="text"
                         />
-                      </View>
-
-                      <View
-                        tw={`mt-4 flex-1 flex-row md:mt-0 ${
-                          shouldProceedToCheckout ? "" : "lg:ml-4"
-                        }`}
-                      >
-                        <Controller
-                          control={control}
-                          name="royalty"
-                          render={({
-                            field: { onChange, onBlur, value, ref },
-                          }) => {
-                            return (
-                              <Fieldset
-                                ref={ref}
-                                tw="flex-1"
-                                label="Your royalties (%)"
-                                placeholder="Enter a number"
-                                onBlur={onBlur}
-                                helperText="How much you'll earn each time an edition of this drop is sold"
-                                errorText={errors.royalty?.message}
-                                value={value?.toString()}
-                                onChangeText={onChange}
-                              />
-                            );
-                          }}
-                        />
-                      </View>
+                      </ScrollView>
                     </View>
-                    <View tw="z-10 mt-4 flex-row">
-                      <Controller
-                        control={control}
-                        name="duration"
-                        render={({
-                          field: { onChange, onBlur, value, ref },
-                        }) => {
-                          return (
+                  </Accordion.Trigger>
+                  <Accordion.Content tw="pt-0">
+                    <>
+                      <View tw="justify-between lg:flex-row">
+                        <View
+                          tw="flex-1 flex-row"
+                          style={{
+                            display: shouldProceedToCheckout ? "none" : "flex",
+                          }}
+                        >
+                          <Controller
+                            control={control}
+                            name="editionSize"
+                            render={({
+                              field: { onChange, onBlur, value, ref },
+                            }) => {
+                              return (
+                                <Fieldset
+                                  ref={ref}
+                                  tw="flex-1"
+                                  label="Edition size"
+                                  placeholder="Enter a number"
+                                  onBlur={onBlur}
+                                  disabled={!user?.user?.data.profile.verified}
+                                  helperText="How many editions will be available to collect"
+                                  errorText={errors.editionSize?.message}
+                                  value={value?.toString()}
+                                  onChangeText={onChange}
+                                />
+                              );
+                            }}
+                          />
+                        </View>
+
+                        <View
+                          tw={`mt-4 flex-1 flex-row md:mt-0 ${
+                            shouldProceedToCheckout ? "" : "lg:ml-4"
+                          }`}
+                        >
+                          <Controller
+                            control={control}
+                            name="royalty"
+                            render={({
+                              field: { onChange, onBlur, value, ref },
+                            }) => {
+                              return (
+                                <Fieldset
+                                  ref={ref}
+                                  tw="flex-1"
+                                  label="Your royalties (%)"
+                                  placeholder="Enter a number"
+                                  onBlur={onBlur}
+                                  helperText="How much you'll earn each time an edition of this drop is sold"
+                                  errorText={errors.royalty?.message}
+                                  value={value?.toString()}
+                                  onChangeText={onChange}
+                                />
+                              );
+                            }}
+                          />
+                        </View>
+                      </View>
+                      <View tw="z-10 mt-4 flex-row">
+                        <Controller
+                          control={control}
+                          name="duration"
+                          render={({
+                            field: { onChange, onBlur, value, ref },
+                          }) => {
+                            return (
+                              <Fieldset
+                                ref={ref}
+                                tw="flex-1"
+                                label="Duration"
+                                onBlur={onBlur}
+                                helperText="How long the drop will be available to claim"
+                                errorText={errors.duration?.message}
+                                selectOnly
+                                select={{
+                                  options: durationOptions,
+                                  placeholder: "Duration",
+                                  value: value,
+                                  onChange,
+                                  tw: "flex-1",
+                                }}
+                              />
+                            );
+                          }}
+                        />
+                      </View>
+                      <View tw="mt-4 flex-row justify-between">
+                        <Controller
+                          control={control}
+                          name="notSafeForWork"
+                          render={({ field: { onChange, value, ref } }) => (
                             <Fieldset
                               ref={ref}
                               tw="flex-1"
-                              label="Duration"
-                              onBlur={onBlur}
-                              helperText="How long the drop will be available to claim"
-                              errorText={errors.duration?.message}
-                              selectOnly
-                              select={{
-                                options: durationOptions,
-                                placeholder: "Duration",
-                                value: value,
+                              label="Explicit content (18+)"
+                              switchOnly
+                              switchProps={{
+                                checked: value,
                                 onChange,
-                                tw: "flex-1",
                               }}
                             />
-                          );
-                        }}
-                      />
-                    </View>
-                    <View tw="mt-4 flex-row justify-between">
-                      <Controller
-                        control={control}
-                        name="notSafeForWork"
-                        render={({ field: { onChange, value, ref } }) => (
-                          <Fieldset
-                            ref={ref}
-                            tw="flex-1"
-                            label="Explicit content (18+)"
-                            switchOnly
-                            switchProps={{
-                              checked: value,
-                              onChange,
-                            }}
-                          />
-                        )}
-                      />
-                    </View>
-                  </>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
-          </View>
-
-          <View tw="mb-4 flex-row">
-            <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
-              This drop will be owned by you{" "}
-              {primaryWallet.nickname ? (
-                <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
-              ) : null}
-              {"(" + formatAddressShort(primaryWallet.address) + ")"}
-            </Text>
-          </View>
-
-          <View tw="mt-4 flex-1">
-            <View tw="flex-1 flex-row">
-              <Controller
-                control={control}
-                name="hasAcceptedTerms"
-                render={({ field: { onChange, value } }) => (
-                  <>
-                    <Pressable
-                      onPress={() => onChange(!value)}
-                      tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
-                    >
-                      <Checkbox
-                        onChange={(v) => onChange(v)}
-                        checked={value}
-                        accesibilityLabel="I agree to the terms and conditions"
-                      />
-
-                      <Text tw="px-4 text-gray-600 dark:text-gray-400">
-                        I have the rights to publish this content, and
-                        understand it will be minted on the Polygon network.
-                      </Text>
-                    </Pressable>
-                  </>
-                )}
-              />
+                          )}
+                        />
+                      </View>
+                    </>
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion.Root>
             </View>
-            {errors.hasAcceptedTerms?.message ? (
-              <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
-            ) : null}
-          </View>
-        </View>
-      </BottomSheetScrollView>
 
+            <View tw="mb-4 flex-row">
+              <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+                This drop will be owned by you{" "}
+                {primaryWallet.nickname ? (
+                  <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
+                ) : null}
+                {"(" + formatAddressShort(primaryWallet.address) + ")"}
+              </Text>
+            </View>
+
+            <View tw="mt-4 flex-1">
+              <View tw="flex-1 flex-row">
+                <Controller
+                  control={control}
+                  name="hasAcceptedTerms"
+                  render={({ field: { onChange, value } }) => (
+                    <>
+                      <Pressable
+                        onPress={() => onChange(!value)}
+                        tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                      >
+                        <Checkbox
+                          onChange={(v) => onChange(v)}
+                          checked={value}
+                          accesibilityLabel="I agree to the terms and conditions"
+                        />
+
+                        <Text tw="px-4 text-gray-600 dark:text-gray-400">
+                          I have the rights to publish this content, and
+                          understand it will be minted on the Polygon network.
+                        </Text>
+                      </Pressable>
+                    </>
+                  )}
+                />
+              </View>
+              {errors.hasAcceptedTerms?.message ? (
+                <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+              ) : null}
+            </View>
+          </View>
+        ) : (
+          <DropPreview
+            title={getValues("title")}
+            description={getValues("description")}
+            onEdit={() => setShowPreview(false)}
+            file={getValues("file")}
+          />
+        )}
+      </BottomSheetScrollView>
       <View tw="px-4">
         <Button
           variant="primary"
