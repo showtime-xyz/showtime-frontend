@@ -8560,29 +8560,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-screen@npm:^0.0.138":
-  version: 0.0.138
-  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.138"
+"@showtime-xyz/universal.modal-screen@npm:^0.0.139":
+  version: 0.0.139
+  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.139"
   dependencies:
     "@react-navigation/native": 6.1.3
-    "@showtime-xyz/universal.modal": 0.0.123
+    "@showtime-xyz/universal.modal": 0.0.124
     "@showtime-xyz/universal.router": 0.0.49
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 637433cac6ac4bddbfa0c0fca96d296a9d8f84de1f1744d5d752c6d164e0e95b2c6bd6e324233df59bc66efa53f256f5f2f59768688b181b711e0e33f6de4036
+  checksum: f4227f5f6cc302429a07aaf421c25d518588e5328118eb86ab9e855db2aa864f15fb9df72bc4503f31cc6d01283a2fb10db591d78a8582b928f5ce0b69bd6a4d
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-sheet@npm:^0.0.125":
-  version: 0.0.125
-  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.125"
+"@showtime-xyz/universal.modal-sheet@npm:^0.0.127":
+  version: 0.0.127
+  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.127"
   dependencies:
     "@showtime-xyz/universal.bottom-sheet": 0.0.90
     "@showtime-xyz/universal.button": 0.0.85
-    "@showtime-xyz/universal.modal": 0.0.122
+    "@showtime-xyz/universal.modal": 0.0.124
     "@showtime-xyz/universal.text": 0.0.57
     "@showtime-xyz/universal.view": 0.0.53
     "@storybook/react": 6.5.16
@@ -8592,36 +8592,13 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 38b00e209dfedfbf849b980b3e862cf9481546ffc584f89f63ae4f165c8c9947783f348d0f44c211fdb20d9ecea97ce46323abbc7badebcd7d045b6db3b836f3
+  checksum: a528d9b9000be5cb3ea842201bd92d0476a3c2355fdd55c5607223cbaa323f89bef20d2403ba3bec64c8ac058320d3f2468adc9c0fe3d6d5f02a184ee2e76a7b
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal@npm:0.0.122, @showtime-xyz/universal.modal@npm:^0.0.122":
-  version: 0.0.122
-  resolution: "@showtime-xyz/universal.modal@npm:0.0.122"
-  dependencies:
-    "@radix-ui/react-use-escape-keydown": 1.0.2
-    "@showtime-xyz/universal.button": 0.0.85
-    "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.86
-    "@showtime-xyz/universal.safe-area": 0.0.42
-    "@showtime-xyz/universal.tailwind": 0.0.52
-    "@showtime-xyz/universal.text": 0.0.57
-    "@showtime-xyz/universal.view": 0.0.53
-    "@storybook/react": 6.5.16
-  peerDependencies:
-    "@gorhom/bottom-sheet": "*"
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: 29d24ba5e87f97d1e60421fba0874de685110763a2cb8ec0c297064d543ec6e3a1657590aa64ca950fd17f771276b5c6f005f4caa1bd39cee5baeb0dc2d7c6ca
-  languageName: node
-  linkType: hard
-
-"@showtime-xyz/universal.modal@npm:0.0.123":
-  version: 0.0.123
-  resolution: "@showtime-xyz/universal.modal@npm:0.0.123"
+"@showtime-xyz/universal.modal@npm:0.0.124, @showtime-xyz/universal.modal@npm:^0.0.124":
+  version: 0.0.124
+  resolution: "@showtime-xyz/universal.modal@npm:0.0.124"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 1.0.2
     "@showtime-xyz/universal.button": 0.0.85
@@ -8638,7 +8615,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: db841e0b8eee4ff81cb81d28943f81876c5cbf78bc63baa854bc30c03ae45fb369c7e271a41ec39888fc524d4ff3ee05ec02dcc4ec1649b7301913b740256d5c
+  checksum: d2b45bbeaedb0e2e31ea899d4ea095bd8b1433a42ec0f563f400b8803a327e6d2e09d89aa916b3dcdc080d2a612b3ca13f4c7f08b98799aeb8527cde1f5b45ec
   languageName: node
   linkType: hard
 
@@ -9103,9 +9080,9 @@ __metadata:
     "@showtime-xyz/universal.input": ^0.0.77
     "@showtime-xyz/universal.label": ^0.0.59
     "@showtime-xyz/universal.light-box": ^0.0.96
-    "@showtime-xyz/universal.modal": ^0.0.122
-    "@showtime-xyz/universal.modal-screen": ^0.0.138
-    "@showtime-xyz/universal.modal-sheet": ^0.0.125
+    "@showtime-xyz/universal.modal": ^0.0.124
+    "@showtime-xyz/universal.modal-screen": ^0.0.139
+    "@showtime-xyz/universal.modal-sheet": ^0.0.127
     "@showtime-xyz/universal.pan-to-close": ^0.0.32
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.46
     "@showtime-xyz/universal.pressable": ^0.0.65
