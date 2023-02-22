@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
@@ -12,6 +13,7 @@ import { useMuted } from "app/providers/mute-provider";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { VerificationBadge } from "design-system";
+import { breakpoints } from "design-system/theme";
 
 import { MuteButton } from "../mute-button";
 
@@ -29,12 +31,19 @@ export const DropPreview = memo(function DropPreview({
 }: DropPreviewProps) {
   const { user: userProfile } = useUser();
   const [muted] = useMuted();
+  const { width } = useWindowDimensions();
+  const isSmWidth = width >= breakpoints["sm"];
 
   return (
     <View tw="items-center">
-      <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 md:w-[375px]">
+      <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 sm:w-[375px]">
         <View>
-          <Preview file={file} width={375} height={375} isMuted={muted} />
+          <Preview
+            file={file}
+            width={isSmWidth ? 375 : width - 32}
+            height={isSmWidth ? 375 : width - 32}
+            isMuted={muted}
+          />
           <View tw="z-9 absolute bottom-0 right-4">
             <MuteButton />
           </View>
