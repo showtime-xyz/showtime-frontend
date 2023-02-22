@@ -77,6 +77,7 @@ const { useParam } = createParam<{
   checkoutSuccess?: boolean;
 }>();
 
+const excludedPersistFields = ["editionSize"];
 export const DropFree = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
@@ -84,47 +85,51 @@ export const DropFree = () => {
     parse: (value) => value === "true",
     initial: false,
   });
+  // we initialize form's edition size to user's available edition size credits or 0 if user has no credits
   const editionSizeCredit =
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
+
   const maxEditionSize = userProfile?.data?.profile.verified
     ? 100000
     : editionSizeCredit;
 
-  const dropValidationSchema = useMemo(
-    () =>
-      yup.object({
-        file: yup.mixed().required("Media is required"),
-        title: yup.string().required("Title is a required field").max(255),
-        description: yup
-          .string()
-          .max(280)
-          .required("Description is a required field"),
-        editionSize: yup
-          .number()
-          .required()
-          .typeError("Please enter a valid number")
-          .min(editionSizeCredit > 0 ? 1 : 0)
-          .max(
-            maxEditionSize,
-            `You can drop ${maxEditionSize} editions at most`
-          ),
-        royalty: yup
-          .number()
-          .required()
-          .typeError("Please enter a valid number")
-          .max(69)
-          .default(defaultValues.royalty),
-        hasAcceptedTerms: yup
-          .boolean()
-          .default(defaultValues.hasAcceptedTerms)
-          .required()
-          .isTrue("You must accept the terms and conditions."),
-        notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-        googleMapsUrl: yup.string().url(),
-        radius: yup.number().min(0.01).max(10),
-      }),
-    [maxEditionSize, editionSizeCredit]
-  );
+  const dropValidationSchema = useMemo(() => {
+    const validationObject = {
+      file: yup.mixed().required("Media is required"),
+      title: yup.string().required("Title is a required field").max(255),
+      description: yup
+        .string()
+        .max(280)
+        .required("Description is a required field"),
+      editionSize: yup.number(),
+      royalty: yup
+        .number()
+        .required()
+        .typeError("Please enter a valid number")
+        .max(69)
+        .default(defaultValues.royalty),
+      hasAcceptedTerms: yup
+        .boolean()
+        .default(defaultValues.hasAcceptedTerms)
+        .required()
+        .isTrue("You must accept the terms and conditions."),
+      notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+      googleMapsUrl: yup.string().url(),
+      radius: yup.number().min(0.01).max(10),
+    };
+
+    // for non verified users we don't let users edit editionSize, so it doesn't make much sense to put validation for them
+    if (userProfile?.data.profile.verified) {
+      validationObject.editionSize = yup
+        .number()
+        .required()
+        .typeError("Please enter a valid number")
+        .min(1)
+        .max(maxEditionSize, `You can drop ${maxEditionSize} editions at most`);
+    }
+
+    return yup.object(validationObject);
+  }, [userProfile?.data.profile.verified, maxEditionSize]);
 
   const {
     control,
@@ -185,7 +190,7 @@ export const DropFree = () => {
     watch,
     setValue,
     defaultValues,
-    exclude: ["editionSize"],
+    exclude: excludedPersistFields,
   });
 
   useEffect(() => {

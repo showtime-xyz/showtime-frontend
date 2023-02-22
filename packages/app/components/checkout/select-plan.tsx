@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from "react";
 
+import { AxiosError } from "axios";
 import useSWRMutation from "swr/mutation";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -239,8 +240,9 @@ async function fetchPaymentIntent(
       });
 
       return res;
-    } catch (e: any) {
-      if (e?.response?.data?.error?.code === 400) {
+    } catch (e) {
+      const axiosError = e as AxiosError;
+      if (axiosError?.response?.data?.error?.code === 400) {
         const res = await axios({
           method: "POST",
           url: "/v1/payments/resume",

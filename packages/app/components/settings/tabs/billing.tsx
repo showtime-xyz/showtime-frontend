@@ -105,6 +105,12 @@ const HistoryItem = memo(function HistoryItem({
 }: {
   item: PaymentsHistory;
 }) {
+  const handleViewPress = useCallback(() => {
+    for (let link of item.receipts) {
+      Linking.openURL(link);
+    }
+  }, [item]);
+
   return (
     <View tw="flex-row justify-between py-3.5 px-4 md:px-0">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
@@ -122,14 +128,7 @@ const HistoryItem = memo(function HistoryItem({
       </View>
       <View tw="h-8 flex-row">
         {item?.receipts?.length > 0 && (
-          <Button
-            variant="tertiary"
-            onPress={() => {
-              for (let link of item.receipts) {
-                Linking.openURL(link);
-              }
-            }}
-          >
+          <Button variant="tertiary" onPress={handleViewPress}>
             View
           </Button>
         )}
