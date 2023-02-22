@@ -50,7 +50,23 @@ export const usePersistForm = (
     async function restoreForm() {
       const dataRestored: { [key: string]: any } = {};
 
+      if (defaultValues) {
+        for (let key in defaultValues) {
+          const shouldSet = !exclude.includes(key);
+          if (shouldSet) {
+            const value = defaultValues?.[key];
+            dataRestored[key] = value;
+            setValue(key, value, {
+              shouldValidate: validate,
+              shouldDirty: dirty,
+              shouldTouch: touch,
+            });
+          }
+        }
+      }
+
       const str = store.getString(name);
+
       if (str) {
         const { _timestamp = null, ...values } = JSON.parse(str);
         const currTimestamp = Date.now();
@@ -59,21 +75,6 @@ export const usePersistForm = (
           onTimeout?.();
           clearStorage();
           return;
-        }
-
-        if (defaultValues) {
-          for (let key in defaultValues) {
-            const shouldSet = !exclude.includes(key);
-            if (shouldSet) {
-              const value = defaultValues?.[key];
-              dataRestored[key] = value;
-              setValue(key, value, {
-                shouldValidate: validate,
-                shouldDirty: dirty,
-                shouldTouch: touch,
-              });
-            }
-          }
         }
 
         for (let key in values) {
