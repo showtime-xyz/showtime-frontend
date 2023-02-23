@@ -41,6 +41,7 @@ export function AnimateHeight({
   ...motiViewProps
 }: Props) {
   const measuredHeight = useSharedValue(initialHeight);
+
   const state = useDynamicAnimation(() => {
     return {
       height: initialHeight,
