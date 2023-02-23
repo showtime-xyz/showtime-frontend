@@ -116,13 +116,13 @@ index 46e3e88..9867696 100644
  Mapper.MAPPER_ID = 1;
 +
 +
-+function isWebDomElement(value: any) {
++function isWebDomElement(value) {
 +    if (!shouldBeUseWeb()) {
 +      return false;
 +    }
 +  
 +    // https://stackoverflow.com/a/384380/7869175
-+    function isWebNode(o: any) {
++    function isWebNode(o) {
 +      return typeof Node === 'object'
 +        ? o instanceof Node
 +        : o &&
@@ -131,7 +131,7 @@ index 46e3e88..9867696 100644
 +            typeof o.nodeName === 'string';
 +    }
 +  
-+    function isWebElement(o: any) {
++    function isWebElement(o) {
 +      return typeof HTMLElement === 'object'
 +        ? o instanceof HTMLElement // DOM2
 +        : o &&
