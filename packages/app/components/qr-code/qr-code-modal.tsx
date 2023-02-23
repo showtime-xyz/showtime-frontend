@@ -143,7 +143,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = windowWidth >= 768 ? 300 : windowWidth - 40;
+  const size = windowWidth >= 768 ? 375 : windowWidth - 40;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -293,7 +293,11 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         title: "Download",
         Icon: Download,
         onPress: onDownload,
-        visable: true,
+        /**
+         *  if not contractAddress here, it may use a local blob address file on web
+         *  but we can't convert it to an image, so we need to disable it.
+         */
+        visable: !!contractAddress,
       },
     ],
     default: [
@@ -349,8 +353,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <RNView collapsable={false} ref={viewRef as any}>
-                <View tw="web:mb-[74px] w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
+              <RNView
+                collapsable={false}
+                style={{ alignItems: "center" }}
+                ref={viewRef as any}
+              >
+                <View tw="web:mb-[74px] w-full max-w-[420px] items-center bg-gray-100 py-4 dark:bg-gray-900">
                   {props?.renderPreviewComponent ? (
                     props?.renderPreviewComponent(imageStyle)
                   ) : (
@@ -366,7 +374,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       blurhash={nft?.blurhash}
                     />
                   )}
-
                   <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
                     <View tw="flex-1 justify-center">
                       <View tw="flex-row pb-4">

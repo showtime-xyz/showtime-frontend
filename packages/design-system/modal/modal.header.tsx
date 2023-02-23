@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
@@ -17,6 +18,7 @@ function ModalHeaderComponent({
   tw = "",
   onClose,
 }: ModalHeaderProps) {
+  const iconSize = Platform.OS === "web" ? 24 : 20;
   return (
     <View
       tw={[MODAL_HEADER_CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
@@ -24,12 +26,27 @@ function ModalHeaderComponent({
       {StartContentComponent ? (
         <StartContentComponent />
       ) : (
-        <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
-          <Close width={24} height={24} />
+        <Button
+          variant="tertiary"
+          size="regular"
+          onPress={onClose}
+          iconOnly
+          hitSlop={10}
+          tw="ios:h-8 ios:w-8 android:h-8 android:w-8"
+        >
+          <Close width={iconSize} height={iconSize} />
         </Button>
       )}
 
-      <Text tw={[MODAL_HEADER_TITLE_TW, "text-lg"]}>{title}</Text>
+      <Text
+        tw={[
+          MODAL_HEADER_TITLE_TW,
+          "ios:pl-8 android:pl-8 max-w-[90%] text-base font-bold",
+        ]}
+        numberOfLines={1}
+      >
+        {title}
+      </Text>
 
       {EndContentComponent ? (
         <EndContentComponent />
