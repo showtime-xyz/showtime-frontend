@@ -85,7 +85,8 @@
     "next": "^13.1.1",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
     "react-native-screens": "3.20.0",
-    "react-native-mmkv": "2.5.1"
+    "react-native-mmkv": "2.5.1",
+    "react-native-reanimated@2.14.4": "patch:react-native-reanimated@npm:2.14.4#.yarn/patches/react-native-reanimated-npm-2.14.4-c3e122ecd9.patch"
   },
   "react-native": {
     "zlib": "browserify-zlib",
