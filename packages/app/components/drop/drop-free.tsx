@@ -214,12 +214,19 @@ export const DropFree = () => {
   }, [modalScreenContext, showPreview]);
 
   useEffect(() => {
-    if (!userProfile?.data.profile.verified) {
-      setValue("editionSize", editionSizeCredit);
-    } else {
-      setValue("editionSize", defaultValues.editionSize);
+    if (state.status === "idle") {
+      if (!userProfile?.data.profile.verified) {
+        setValue("editionSize", editionSizeCredit);
+      } else {
+        setValue("editionSize", defaultValues.editionSize);
+      }
     }
-  }, [userProfile?.data.profile.verified, editionSizeCredit, setValue]);
+  }, [
+    userProfile?.data.profile.verified,
+    editionSizeCredit,
+    setValue,
+    state.status,
+  ]);
   const scrollToErrorField = useCallback(() => {
     if (errors.file) {
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
