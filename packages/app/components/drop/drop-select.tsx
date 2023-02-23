@@ -31,7 +31,7 @@ export const DropSelect = () => {
           <View tw="mt-6 w-full px-4 lg:w-[360px]">
             <CreateCard
               title="Drops: Free digital collectibles"
-              description="Share a link to instantly, create a collector list, and connect with your fans."
+              description="Share a link to instantly create a collector list and connect with your fans."
               ctaLabel="Create Drop"
               icon={
                 <Gift
