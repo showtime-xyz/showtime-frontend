@@ -5,8 +5,11 @@ import { Video } from "expo-av";
 
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { contentFitToresizeMode } from "app/utilities";
+
+import { MuteButton } from "../mute-button";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -20,6 +23,8 @@ type PreviewProps = {
   width: number;
   height: number;
   isMuted?: boolean;
+  showMuteButton?: boolean;
+  isLooping?: boolean;
 };
 
 const StyledVideo = styled(Video);
@@ -33,6 +38,8 @@ export const Preview = memo(function Preview({
   width,
   height,
   isMuted = true,
+  isLooping = false,
+  showMuteButton = false,
 }: PreviewProps) {
   const uri = getLocalFileURI(file);
 
@@ -74,21 +81,29 @@ export const Preview = memo(function Preview({
 
     if (fileType === "video") {
       return (
-        <StyledVideo
-          tw={tw}
-          style={[
-            { width, height, justifyContent: "center", alignItems: "center" },
-            style,
-          ]}
-          resizeMode={contentFitToresizeMode(resizeMode)}
-          source={{ uri: uri as string }}
-          isMuted={isMuted}
-          shouldPlay
-          videoStyle={videoStyle}
-          onLoad={() => {
-            revokeObjectURL(uri);
-          }}
-        />
+        <>
+          <StyledVideo
+            tw={tw}
+            style={[
+              { width, height, justifyContent: "center", alignItems: "center" },
+              style,
+            ]}
+            resizeMode={contentFitToresizeMode(resizeMode)}
+            source={{ uri: uri as string }}
+            isMuted={isMuted}
+            shouldPlay
+            isLooping={isLooping}
+            videoStyle={videoStyle}
+            onLoad={() => {
+              revokeObjectURL(uri);
+            }}
+          />
+          {showMuteButton && (
+            <View tw="z-9 absolute bottom-2.5 right-2.5">
+              <MuteButton />
+            </View>
+          )}
+        </>
       );
     }
   }
