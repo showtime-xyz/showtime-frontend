@@ -15,7 +15,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import { Accordion } from "@showtime-xyz/universal.accordion";
+import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
@@ -199,15 +199,19 @@ export const DropFree = () => {
 
   // We change the title when user returns from checkout flow and they have credits
   useEffect(() => {
+    if (checkoutSuccess) {
+      setShowPreview(true);
+    }
+  }, [checkoutSuccess]);
+
+  useEffect(() => {
     if (showPreview) {
       modalScreenContext?.setTitle("Drop Preview");
-    } else if (checkoutSuccess) {
-      modalScreenContext?.setTitle("All set! Review your drop one last time");
     }
     return () => {
       modalScreenContext?.setTitle("Create drop");
     };
-  }, [modalScreenContext, showPreview, checkoutSuccess]);
+  }, [modalScreenContext, showPreview]);
 
   useEffect(() => {
     if (!userProfile?.data.profile.verified) {
@@ -695,35 +699,39 @@ export const DropFree = () => {
           />
         )}
       </BottomSheetScrollView>
-      <View tw="px-4">
-        <Button
-          variant="primary"
-          size="regular"
-          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-          disabled={state.status === "loading"}
-          onPress={handleSubmit(onSubmit)}
-        >
-          {state.status === "loading"
-            ? "Creating... it should take about 10 seconds"
-            : state.status === "error"
-            ? "Failed. Please retry!"
-            : shouldProceedToCheckout
-            ? "Continue"
-            : "Drop now"}
-        </Button>
+      <AnimateHeight delay={0}>
+        <View tw="px-4">
+          {state.transactionHash ? null : (
+            <Button
+              variant="primary"
+              size="regular"
+              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+              disabled={state.status === "loading"}
+              onPress={handleSubmit(onSubmit)}
+            >
+              {state.status === "loading"
+                ? "Creating... it should take about 10 seconds"
+                : state.status === "error"
+                ? "Failed. Please retry!"
+                : !showPreview
+                ? "Continue"
+                : "Drop now"}
+            </Button>
+          )}
 
-        {state.transactionHash ? (
-          <View tw="mt-4">
-            <PolygonScanButton transactionHash={state.transactionHash} />
-          </View>
-        ) : null}
+          {state.transactionHash && !showPreview ? (
+            <View tw="mt-4">
+              <PolygonScanButton transactionHash={state.transactionHash} />
+            </View>
+          ) : null}
 
-        {state.error ? (
-          <View tw="mb-1 mt-4 items-center justify-center">
-            <Text tw="text-red-500">{state.error}</Text>
-          </View>
-        ) : null}
-      </View>
+          {state.error ? (
+            <View tw="mb-1 mt-4 items-center justify-center">
+              <Text tw="text-red-500">{state.error}</Text>
+            </View>
+          ) : null}
+        </View>
+      </AnimateHeight>
 
       <View style={{ height: insets.bottom }} />
     </BottomSheetModalProvider>
