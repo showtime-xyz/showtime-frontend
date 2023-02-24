@@ -114,10 +114,6 @@ const HistoryItem = memo(function HistoryItem({
 }: {
   item: PaymentsHistory;
 }) {
-  const handleViewPress = useCallback((link: string) => {
-    Linking.openURL(link);
-  }, []);
-
   return (
     <View tw="flex-row justify-between py-3.5 px-4 md:px-0">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
@@ -146,7 +142,7 @@ const HistoryItem = memo(function HistoryItem({
               {item.receipts.map((link, index) => {
                 return (
                   <DropdownMenuItem
-                    onSelect={() => handleViewPress(link)}
+                    onSelect={() => Linking.openURL(link)}
                     key={link}
                   >
                     <MenuItemIcon Icon={Receipt} />
