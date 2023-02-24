@@ -151,7 +151,7 @@ const HistoryItem = memo(function HistoryItem({
                   >
                     <MenuItemIcon Icon={Receipt} />
                     <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                      {`Check Receipt ${
+                      {`View Receipt ${
                         item.receipts.length > 1 ? `#${index + 1}` : ``
                       }`}
                     </DropdownMenuItemTitle>
