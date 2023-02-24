@@ -25,8 +25,17 @@ import {
 } from "app/hooks/api/use-payments-manage";
 import { exportFromJSON } from "app/lib/export-from-json";
 
+import {
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "design-system/dropdown-menu";
+import { MoreHorizontal, Receipt } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
+import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { SettingItemSeparator } from "../setting-item-separator";
 import { SettingsTitle } from "../settings-title";
 
@@ -105,11 +114,9 @@ const HistoryItem = memo(function HistoryItem({
 }: {
   item: PaymentsHistory;
 }) {
-  const handleViewPress = useCallback(() => {
-    for (let link of item.receipts) {
-      Linking.openURL(link);
-    }
-  }, [item]);
+  const handleViewPress = useCallback((link: string) => {
+    Linking.openURL(link);
+  }, []);
 
   return (
     <View tw="flex-row justify-between py-3.5 px-4 md:px-0">
@@ -128,9 +135,31 @@ const HistoryItem = memo(function HistoryItem({
       </View>
       <View tw="h-8 flex-row">
         {item?.receipts?.length > 0 && (
-          <Button variant="tertiary" onPress={handleViewPress}>
-            View
-          </Button>
+          <DropdownMenuRoot>
+            <DropdownMenuTrigger>
+              <Button variant="tertiary" iconOnly>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent loop>
+              {item.receipts.map((link, index) => {
+                return (
+                  <DropdownMenuItem
+                    onSelect={() => handleViewPress(link)}
+                    key={link}
+                  >
+                    <MenuItemIcon Icon={Receipt} />
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                      {`Check Receipt ${
+                        item.receipts.length > 1 ? `#${index + 1}` : ``
+                      }`}
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenuRoot>
         )}
       </View>
     </View>
