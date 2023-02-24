@@ -102,6 +102,10 @@ export default {
     barStyle: "dark-content",
     backgroundColor: "#FFFFFF",
   },
+  androidStatusBar: {
+    backgroundColor: "#00000000",
+    barStyle: "light-content",
+  },
   assetBundlePatterns: ["**/*"],
   orientation: "portrait",
   updates: {
@@ -158,6 +162,7 @@ export default {
     "./plugins/with-fast-image-webp-support-android.js",
     "./plugins/with-fast-image-webp-support-ios.js",
     "./plugins/with-spotify-sdk.js",
+    "./plugins/with-android-splash-screen.js",
     [
       withInfoPlist,
       (config) => {
