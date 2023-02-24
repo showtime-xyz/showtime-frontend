@@ -14,6 +14,7 @@ import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -54,6 +55,8 @@ import {
   getTwitterIntentUsername,
 } from "app/utilities";
 
+import { Skeleton } from "design-system";
+
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
@@ -69,6 +72,66 @@ type QRCodeModalProps = QRCodeModalParams & {
   dropCreated?: boolean;
   renderPreviewComponent?: (props: PreviewStyle) => JSX.Element;
 };
+
+const QRCodeSkeleton = ({ size = 375 }) => {
+  const { colorScheme } = useColorScheme();
+  return (
+    <View tw="items-center p-4">
+      <View tw="shadow-light dark:shadow-dark w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
+        <Skeleton
+          width={size}
+          height={size}
+          show
+          radius={24}
+          colorMode={colorScheme as any}
+        />
+
+        <View tw="w-full flex-row justify-between p-4">
+          <View tw="py-4">
+            <View tw="flex-row pb-4">
+              <Skeleton
+                width={38}
+                height={38}
+                show
+                radius={999}
+                colorMode={colorScheme as any}
+              />
+              <View tw="ml-2">
+                <Skeleton
+                  width={120}
+                  height={16}
+                  show
+                  colorMode={colorScheme as any}
+                />
+                <View tw="h-1" />
+                <Skeleton
+                  width={60}
+                  height={16}
+                  show
+                  colorMode={colorScheme as any}
+                />
+              </View>
+            </View>
+            <Skeleton
+              width={200}
+              height={38}
+              show
+              colorMode={colorScheme as any}
+            />
+          </View>
+          <Skeleton
+            width={114}
+            height={114}
+            show
+            radius={24}
+            colorMode={colorScheme as any}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+
 export const QRCodeModal = (props?: QRCodeModalProps) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
@@ -143,7 +206,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = windowWidth >= 768 ? 375 : windowWidth - 40;
+  const size = windowWidth >= 768 ? 375 : windowWidth - 60;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -333,14 +396,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       },
     ],
   });
-  if (!nft) return null;
   if (isLoadingCollection || isLoadingNFT) {
-    return (
-      <View tw="p-4">
-        <Spinner />
-      </View>
-    );
+    return <QRCodeSkeleton size={size} />;
   }
+  if (!nft) return null;
   return (
     <ErrorBoundary>
       <Suspense
@@ -374,7 +433,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       blurhash={nft?.blurhash}
                     />
                   )}
-                  <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
+                  <View tw="w-full flex-row justify-between px-6 py-4">
                     <View tw="flex-1 justify-center">
                       <View tw="flex-row pb-4">
                         <Avatar
