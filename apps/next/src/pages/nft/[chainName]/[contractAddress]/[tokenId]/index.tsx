@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
         props: {
           fallback,
           meta: {
-            title: nft.token_name + " | Showtime",
+            title: `${nft.token_name} by ${nft.creator_name} | Showtime`,
             description: nft.token_description,
             image: imageUrl,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
