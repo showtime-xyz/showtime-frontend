@@ -58,7 +58,7 @@
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.4.2",
     "react-native-reanimated-swc-plugin": "^0.2.0",
-    "react-native-web": "0.18.9",
+    "react-native-web": "~0.18.10",
     "react-remove-scroll": "^2.5.5",
     "react-remove-scroll-bar": "^2.3.4",
     "react-stickynode": "^4.0.0",
@@ -68,7 +68,7 @@
     "screenfull": "^6.0.2",
     "setimmediate": "^1.0.5",
     "swiper": "^8.4.5",
-    "swr": "^2.0.0",
+    "swr": "^2.0.4",
     "wagmi": "^0.11.3",
     "web3modal": "^1.9.8"
   },
