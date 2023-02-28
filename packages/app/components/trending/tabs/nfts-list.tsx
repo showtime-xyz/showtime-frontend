@@ -31,17 +31,14 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       () => <ListFooter isLoading={false} />,
       []
     );
-    const onItemPress = useCallback(
-      (currentIndex: number) => {
-        router.push(
-          `/list?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
-        );
-      },
-      [router, days]
-    );
 
     const renderItem = useCallback(
       ({ item, index }: ListRenderItemInfo<NFT>) => {
+        const onItemPress = (currentIndex: number) => {
+          router.push(
+            `/list?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
+          );
+        };
         return (
           <Card
             nft={item}
@@ -50,7 +47,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
           />
         );
       },
-      [onItemPress]
+      [days, router]
     );
     const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
 
