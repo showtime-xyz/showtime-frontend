@@ -63,6 +63,14 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     useImperativeHandle(ref, () => ({
       refresh,
     }));
+    const onItemPress = useCallback(
+      (currentIndex: number) => {
+        router.push(
+          `/list?initialScrollIndex=${currentIndex}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
+        );
+      },
+      [list.type, profileId, filter.collectionId, filter.sortType, router]
+    );
 
     const ListFooterComponent = useCallback(
       () => <ProfileFooter isLoading={isLoadingMore} />,
@@ -76,11 +84,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         item,
         index: itemIndex,
       }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-        const onItemPress = (currentIndex: number) => {
-          router.push(
-            `/list?initialScrollIndex=${currentIndex}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
-          );
-        };
         return (
           <Card
             nft={item}
@@ -89,7 +92,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           />
         );
       },
-      [filter.collectionId, filter.sortType, list.type, profileId, router]
+      [onItemPress]
     );
 
     if (isBlocked) {
