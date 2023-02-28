@@ -4,6 +4,7 @@ import {
   StyleProp,
   useWindowDimensions,
   ViewStyle,
+  StyleSheet,
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -67,6 +68,8 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+export const GAP = StyleSheet.hairlineWidth;
+
 function Card(props: Props) {
   const {
     nft,
@@ -84,13 +87,13 @@ function Card(props: Props) {
   );
 
   const cardMaxWidth = useMemo(() => {
+    const availableSpace = contentWidth - (numColumns - 1) * GAP;
+    const itemSize = availableSpace / numColumns;
     switch (numColumns) {
-      case 3:
-        return contentWidth / 3;
-      case 2:
-        return contentWidth / 2;
-      default:
+      case 1:
         return 596;
+      default:
+        return Platform.OS === "web" ? contentWidth / numColumns : itemSize;
     }
   }, [numColumns, contentWidth]);
 
@@ -104,7 +107,7 @@ function Card(props: Props) {
       <RouteComponent
         href={href}
         viewProps={{ style: [{ flex: 1 }, style] }}
-        style={style as any}
+        style={[style as any, { marginBottom: GAP }]}
         onPress={handleOnPress}
       >
         <Media
