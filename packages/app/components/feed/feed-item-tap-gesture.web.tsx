@@ -37,7 +37,7 @@ export const FeedItemTapGesture = ({ children }: FeedItemTapGestureProps) => {
       opacity: heartAnimation.value,
       transform: [{ scale: heartAnimation.value }],
     };
-  });
+  }, [heartAnimation.value]);
 
   const doubleTapHandle = Gesture.Tap()
     .numberOfTaps(2)

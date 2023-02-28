@@ -4,12 +4,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
-  useMemo,
 } from "react";
-import { StyleSheet } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import chunk from "lodash/chunk";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -18,9 +15,8 @@ import {
   TabSpinner,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
-import { Card } from "app/components/card";
+import { Card, GAP } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
@@ -52,7 +48,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
   ) {
     const router = useRouter();
     const { filter } = useContext(FilterContext);
-
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
       useProfileNFTs({
         tabType: list.type,
@@ -68,10 +63,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     useImperativeHandle(ref, () => ({
       refresh,
     }));
-    const chuckList = useMemo(() => {
-      return chunk(data, 3);
-    }, [data]);
-
     const onItemPress = useCallback(
       (currentIndex: number) => {
         router.push(
@@ -86,33 +77,19 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const keyExtractor = useCallback(
-      (_item: NFT[], index: number) => `${index}`,
-      []
-    );
+    const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
     const renderItem = useCallback(
       ({
-        item: chuckItem,
+        item,
         index: itemIndex,
-      }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
+      }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         return (
-          <View tw="flex-row">
-            {chuckItem.map((item, chuckItemIndex) => (
-              <Card
-                key={item.nft_id}
-                nft={item}
-                onPress={() =>
-                  onItemPress(itemIndex * NUM_COLUMNS + chuckItemIndex)
-                }
-                numColumns={NUM_COLUMNS}
-                style={{
-                  marginRight: StyleSheet.hairlineWidth,
-                  marginBottom: StyleSheet.hairlineWidth,
-                }}
-              />
-            ))}
-          </View>
+          <Card
+            nft={item}
+            onPress={() => onItemPress(itemIndex)}
+            numColumns={NUM_COLUMNS}
+          />
         );
       },
       [onItemPress]
@@ -162,8 +139,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           }
         >
           <TabInfiniteScrollList
-            numColumns={1}
-            data={chuckList}
+            numColumns={NUM_COLUMNS}
+            data={data}
             ref={listRef}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
@@ -172,6 +149,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
               main: contentWidth / NUM_COLUMNS,
               reverse: contentWidth / NUM_COLUMNS,
             }}
+            style={{ margin: -GAP }}
             ListFooterComponent={ListFooterComponent}
             onEndReached={fetchMore}
             index={index}
