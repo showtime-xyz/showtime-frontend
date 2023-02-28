@@ -14,6 +14,7 @@ import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -54,16 +55,84 @@ import {
   getTwitterIntentUsername,
 } from "app/utilities";
 
+import { Skeleton } from "design-system";
+
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
 };
 const { useParam } = createParam<QRCodeModalParams>();
 
-type QRCodeModalProps = QRCodeModalParams;
-export const QRCodeModal = (
-  props?: QRCodeModalProps & { dropCreated?: boolean }
-) => {
+type PreviewStyle = {
+  height: number;
+  width: number;
+  borderRadius: number;
+};
+type QRCodeModalProps = QRCodeModalParams & {
+  dropCreated?: boolean;
+  renderPreviewComponent?: (props: PreviewStyle) => JSX.Element;
+};
+
+const QRCodeSkeleton = ({ size = 375 }) => {
+  const { colorScheme } = useColorScheme();
+  return (
+    <View tw="items-center p-4">
+      <View tw="shadow-light dark:shadow-dark w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
+        <Skeleton
+          width={size}
+          height={size}
+          show
+          radius={24}
+          colorMode={colorScheme as any}
+        />
+
+        <View tw="w-full flex-row justify-between p-4">
+          <View tw="py-4">
+            <View tw="flex-row pb-4">
+              <Skeleton
+                width={38}
+                height={38}
+                show
+                radius={999}
+                colorMode={colorScheme as any}
+              />
+              <View tw="ml-2">
+                <Skeleton
+                  width={120}
+                  height={16}
+                  show
+                  colorMode={colorScheme as any}
+                />
+                <View tw="h-1" />
+                <Skeleton
+                  width={60}
+                  height={16}
+                  show
+                  colorMode={colorScheme as any}
+                />
+              </View>
+            </View>
+            <Skeleton
+              width={200}
+              height={38}
+              show
+              colorMode={colorScheme as any}
+            />
+          </View>
+          <Skeleton
+            width={114}
+            height={114}
+            show
+            radius={24}
+            colorMode={colorScheme as any}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export const QRCodeModal = (props?: QRCodeModalProps) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
   const modalScreenContext = useModalScreenContext();
@@ -137,7 +206,7 @@ export const QRCodeModal = (
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = windowWidth >= 768 ? 300 : windowWidth - 40;
+  const size = windowWidth >= 768 ? 375 : windowWidth - 60;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -264,7 +333,11 @@ export const QRCodeModal = (
     await Clipboard.setStringAsync(qrCodeUrl.toString());
     toast?.show({ message: "Copied!", hideAfter: 5000 });
   }, [qrCodeUrl, toast]);
-
+  const imageStyle = {
+    height: size,
+    width: size,
+    borderRadius: 16,
+  };
   const shareButtons = Platform.select({
     web: [
       {
@@ -283,7 +356,11 @@ export const QRCodeModal = (
         title: "Download",
         Icon: Download,
         onPress: onDownload,
-        visable: true,
+        /**
+         *  if not contractAddress here, it may use a local blob address file on web
+         *  but we can't convert it to an image, so we need to disable it.
+         */
+        visable: !!contractAddress,
       },
     ],
     default: [
@@ -319,14 +396,10 @@ export const QRCodeModal = (
       },
     ],
   });
-  if (!nft) return null;
   if (isLoadingCollection || isLoadingNFT) {
-    return (
-      <View tw="p-4">
-        <Spinner />
-      </View>
-    );
+    return <QRCodeSkeleton size={size} />;
   }
+  if (!nft) return null;
   return (
     <ErrorBoundary>
       <Suspense
@@ -339,24 +412,28 @@ export const QRCodeModal = (
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <RNView collapsable={false} ref={viewRef as any}>
-                <View tw="web:mb-[74px] w-full items-center bg-gray-100 py-4 dark:bg-gray-900">
-                  <Image
-                    source={{
-                      uri: mediaUri,
-                    }}
-                    style={{
-                      height: size,
-                      width: size,
-                      borderRadius: 16,
-                    }}
-                    width={size}
-                    height={size}
-                    resizeMode="cover"
-                    alt={nft?.token_name}
-                    blurhash={nft?.blurhash}
-                  />
-                  <View tw="web:max-w-[440px]  w-full flex-row justify-between px-5 py-4">
+              <RNView
+                collapsable={false}
+                style={{ alignItems: "center" }}
+                ref={viewRef as any}
+              >
+                <View tw="web:mb-[74px] w-full max-w-[420px] items-center bg-gray-100 py-4 dark:bg-gray-900">
+                  {props?.renderPreviewComponent ? (
+                    props?.renderPreviewComponent(imageStyle)
+                  ) : (
+                    <Image
+                      source={{
+                        uri: mediaUri,
+                      }}
+                      style={imageStyle}
+                      width={size}
+                      height={size}
+                      resizeMode="cover"
+                      alt={nft?.token_name}
+                      blurhash={nft?.blurhash}
+                    />
+                  )}
+                  <View tw="w-full flex-row justify-between px-6 py-4">
                     <View tw="flex-1 justify-center">
                       <View tw="flex-row pb-4">
                         <Avatar

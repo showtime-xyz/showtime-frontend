@@ -1,4 +1,4 @@
-import { useReducer, useCallback } from "react";
+import { useCallback, useContext } from "react";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
@@ -10,6 +10,8 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, getFileMeta } from "app/utilities";
+
+import { DropContext } from "../context/drop-context";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -23,7 +25,7 @@ type IEdition = {
   symbol: string;
 };
 
-type State = {
+export type State = {
   status: "idle" | "loading" | "success" | "error";
   transactionHash?: string;
   edition?: IEdition;
@@ -32,7 +34,7 @@ type State = {
   signaturePrompt?: boolean;
 };
 
-type Action = {
+export type Action = {
   error?: string;
   type: string;
   transactionHash?: string;
@@ -40,7 +42,7 @@ type Action = {
   transactionId?: any;
 };
 
-const initialState: State = {
+export const initialState: State = {
   status: "idle",
   signaturePrompt: false,
 };
@@ -66,7 +68,7 @@ type DropRequestData = {
   multi_gating_types?: ["password", "location"];
 };
 
-const reducer = (state: State, action: Action): State => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "loading":
       return { ...initialState, status: "loading" };
@@ -129,7 +131,7 @@ export type UseDropNFT = {
 
 export const useDropNFT = () => {
   const uploadMedia = useUploadMediaToPinata();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(DropContext);
   const mutate = useMatchMutate();
   const Alert = useAlert();
 
@@ -167,6 +169,8 @@ export const useDropNFT = () => {
   };
 
   const dropNFT = async (params: UseDropNFT, callback?: () => void) => {
+    if (state.status === "loading") return;
+
     try {
       const fileMetaData = await getFileMeta(params.file);
 
@@ -284,22 +288,14 @@ export const useDropNFT = () => {
     }
   };
 
-  const onReconnectWallet = useCallback(() => {
-    dispatch({
-      type: "error",
-      error: "Please try again...",
-    });
-  }, []);
-
   const reset = useCallback(() => {
     dispatch({ type: "reset" });
-  }, []);
+  }, [dispatch]);
 
   return {
     dropNFT,
     state,
     pollTransaction,
-    onReconnectWallet,
     reset,
   };
 };

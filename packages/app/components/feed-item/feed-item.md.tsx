@@ -261,7 +261,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
           )}
           {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-4 right-4">
+            <View tw="absolute bottom-6 right-4">
               <Button
                 variant="text"
                 size="regular"

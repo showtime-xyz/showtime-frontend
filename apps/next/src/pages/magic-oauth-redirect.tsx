@@ -17,7 +17,7 @@ const MagicOauthRedirect = () => {
       {loading ? (
         <View tw="flex-row items-center">
           <Text tw="text-base font-bold text-gray-900 dark:text-gray-100">
-            Please wait
+            Please wait...
           </Text>
           <View tw="ml-2">
             <Spinner size="medium" />

@@ -39,6 +39,7 @@ export const Default = () => {
         <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />
         <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" />
         <IconItem icon={Icon.ArrowRight} title="ArrowRight" />
+
         <IconItem icon={Icon.Badge} title="Badge" />
         {/* <IconItem icon={Icon.Basket} title="Basket"  /> */}
         <IconItem icon={Icon.Bell} title="Bell" />
@@ -135,11 +136,12 @@ export const Default = () => {
         <IconItem icon={Icon.BellMinus} title="BellMinus" />
         <IconItem icon={Icon.BellOff} title="BellOff" />
         <IconItem icon={Icon.Trash} title="Trash" />
-
         <IconItem
           icon={Icon.PhonePortraitOutline}
           title="PhonePortraitOutline"
         />
+        <IconItem icon={Icon.CreditCard} title="CreditCard" />
+        <IconItem icon={Icon.Receipt} title="Receipt" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>

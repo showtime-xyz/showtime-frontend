@@ -56,7 +56,7 @@ export const PhoneTab = ({ index = 0 }: PhoneTabProps) => {
       />
       {phoneNumberWallets?.length === 0 ? (
         <EmptyPlaceholder
-          tw="h-full min-h-[60px] px-4"
+          tw="min-h-[60px] px-4"
           title="No phone number connected to your profile."
         />
       ) : (
