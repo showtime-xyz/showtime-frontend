@@ -9,7 +9,12 @@ export const redirectUri = Platform.select({
   default: `io.showtime${__DEV__ ? ".development" : ""}://spotify-success`,
 });
 
-export const scope = "user-library-modify";
+export const scope = [
+  "user-library-modify",
+  "user-library-read",
+  "user-follow-modify",
+  "user-follow-read",
+].join(" ");
 
 export const clientID = "e12f7eea542947ff843cfc68d762235a";
 
