@@ -86,7 +86,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
         return (
           <Card
-            key={item.nft_id}
             nft={item}
             onPress={() => onItemPress(itemIndex)}
             numColumns={NUM_COLUMNS}

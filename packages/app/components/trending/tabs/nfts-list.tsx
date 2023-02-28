@@ -44,7 +44,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       ({ item, index }: ListRenderItemInfo<NFT>) => {
         return (
           <Card
-            key={item.nft_id}
             nft={item}
             onPress={() => onItemPress(index)}
             numColumns={NUM_COLUMNS}
