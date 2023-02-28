@@ -1,63 +1,85 @@
-import { Dimensions, Platform } from "react-native";
+import { useEffect } from "react";
+import { Platform, useWindowDimensions } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Explanation } from "../explanation";
-
-const values = [
-  {
-    title: "A gift for your community",
-    description:
-      "A reward they can showcase. Bonus: engage them with unlockable features!",
-  },
-  {
-    title: "Grow your web3 presence",
-    description: "Collectors will follow you on Showtime.",
-  },
-  {
-    title: "Instantly tradable on OpenSea",
-    description: "And it will show up on wallets like Rainbow.",
-  },
-  {
-    title: "Earn royalties each trade",
-    description: "Every resale, you and your fans profit!",
-  },
-  {
-    title: "Share your drop link!",
-    description: "Your following & friends can collect it for free.",
-  },
-];
-
 export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
-  const previewAspectRatio = 375 / 620;
+  const previewAspectRatio = 382 / 256;
 
-  const previewHeight = Dimensions.get("window").height / 3.2;
-  const previewWidth = previewHeight * previewAspectRatio;
+  const windowDimensions = useWindowDimensions();
+  const previewWidth = Math.min(
+    windowDimensions.width > 768 ? windowDimensions.width * 0.2 : 170,
+    350
+  );
+  const previewHeight = previewWidth * previewAspectRatio;
+  const modalScreenContext = useModalScreenContext();
+  useEffect(() => {
+    modalScreenContext?.setTitle("");
+    return () => {
+      modalScreenContext?.setTitle("Choose your drop type");
+    };
+  }, [modalScreenContext]);
 
   return (
-    <Explanation
-      values={values}
-      title="Create a drop"
-      coverElement={
-        <View tw="mb-10 items-center">
-          <View tw="dark:shadow-dark shadow-light rounded-xl shadow-xl">
-            <Image
-              source={Platform.select({
-                web: { uri: require("./drop-preview.png") },
-                default: require("./drop-preview.png"),
-              })}
-              width={previewWidth}
-              height={previewHeight}
-              tw="rounded-xl"
-              resizeMode="contain"
-              alt="Preview"
-            />
+    <View tw="flex-1 px-8">
+      <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 lg:text-4xl">
+        Your jaw will drop, too.
+      </Text>
+      <View tw="mt-4 lg:mt-8 lg:flex-row">
+        <View tw="items-center lg:items-stretch">
+          <Image
+            source={Platform.select({
+              web: { uri: require("./drop-preview.png") },
+              default: require("./drop-preview.png"),
+            })}
+            height={previewHeight}
+            width={previewWidth}
+            alt="Drop Preview"
+          />
+        </View>
+        <View tw="mt-4 justify-center lg:mt-0 lg:flex-1 lg:px-8">
+          <View>
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
+              The easiest way to collect.
+            </Text>
+            <Text tw="pt-2 text-gray-900 dark:text-gray-50">
+              So easy people have collected drops over 1.5 million times.
+            </Text>
+          </View>
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
+              Promote songs, chats, NFTs.
+            </Text>
+            <Text tw="pt-2 text-gray-900 dark:text-gray-50">
+              Over 2,500 superfans have pre-saved music drops on Spotify.
+            </Text>
+          </View>
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
+              Instant collector (allow) list.
+            </Text>
+            <Text tw="pt-2 text-gray-900 dark:text-gray-50">
+              Directly connect with your fans to offer raffles, presale, & other
+              perks.
+            </Text>
+          </View>
+          <View tw="mt-4 lg:mt-8">
+            <Text tw="text-base font-bold text-gray-900 dark:text-gray-50 lg:text-xl">
+              One link to blast everywhere.
+            </Text>
+            <Text tw="pt-2 text-gray-900 dark:text-gray-50">
+              Share digital collectibles with your whole fanbase or privately.
+            </Text>
           </View>
         </View>
-      }
-      onDone={onDone}
-      ctaCopy={"Let's go"}
-    />
+      </View>
+      <Button onPress={onDone} size="regular" tw="mt-4 lg:mt-8">
+        Let's go
+      </Button>
+    </View>
   );
 };

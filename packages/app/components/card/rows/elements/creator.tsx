@@ -13,7 +13,17 @@ import {
 } from "app/utilities";
 
 type Props = {
-  nft?: NFT;
+  nft?: Pick<
+    NFT,
+    | "creator_username"
+    | "creator_img_url"
+    | "creator_address"
+    | "creator_name"
+    | "token_created"
+  > & {
+    creator_verified: boolean | number | undefined;
+    creator_address_nonens?: string;
+  };
   shouldShowCreatorIndicator?: boolean;
   shouldShowDateCreated?: boolean;
   label?: string;

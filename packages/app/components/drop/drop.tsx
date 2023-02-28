@@ -6,7 +6,7 @@ import { DropExplanation } from "./drop-explanation";
 import { DropSelect } from "./drop-select";
 
 const store = new MMKV();
-const STORE_KEY = "showExplanation";
+const STORE_KEY = "showExplanationv2";
 
 export const Drop = () => {
   const [showExplanation, setShowExplanation] = useState(

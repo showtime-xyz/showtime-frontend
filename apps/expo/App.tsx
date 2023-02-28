@@ -27,10 +27,10 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
-const scheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
+const coinbaseRedirectScheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
 
 configureWalletMobileSDK({
-  callbackURL: new URL(scheme),
+  callbackURL: new URL(coinbaseRedirectScheme),
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });

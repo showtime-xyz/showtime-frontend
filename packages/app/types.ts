@@ -1,3 +1,5 @@
+import { DropPlan } from "./hooks/use-paid-drop-plans";
+
 export type NFT = {
   nft_id: number;
   is_user_owner: boolean;
@@ -220,6 +222,7 @@ export type MyInfo = {
     notifications_last_opened: string | null;
     can_create_drop: boolean;
     daily_claim_limit: number;
+    paid_drop_credits?: DropPlan[];
     claim_tank: {
       available_claims: number;
       next_refill_at: string;

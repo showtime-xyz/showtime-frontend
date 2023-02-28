@@ -55,7 +55,7 @@ export const EmailTab = ({ index = 0 }: EmailTabProps) => {
       />
       {emailWallets?.length === 0 ? (
         <EmptyPlaceholder
-          tw="h-full min-h-[60px] px-4"
+          tw="min-h-[60px] px-4"
           title="No email connected to your profile."
         />
       ) : (
