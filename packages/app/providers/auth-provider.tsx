@@ -10,6 +10,7 @@ import { AppState, Platform } from "react-native";
 import { useSWRConfig } from "swr";
 
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useToast } from "@showtime-xyz/universal.toast";
 
 import { clearPersistedForms } from "app/components/drop/utils";
 import { AuthContext } from "app/context/auth-context";
@@ -66,6 +67,7 @@ export function AuthProvider({
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
+  const toast = useToast();
   //#endregion
 
   //#region methods
@@ -98,25 +100,9 @@ export function AuthProvider({
           if (Platform.OS !== "web") {
             router.pop();
           }
-
           setTimeout(() => {
-            router.push(
-              Platform.select({
-                native: "/profile/complete",
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    completeProfileModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: "/profile/complete",
-                web: router.asPath,
-              })
-            );
-          }, 100);
+            router.push("/profile/complete-prompt");
+          }, 1000);
         }
         return res;
       }

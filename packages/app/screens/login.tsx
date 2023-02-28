@@ -22,7 +22,7 @@ function LoginModal() {
 
   //#region callbacks
   const handleOnLogin = useCallback(() => {
-    if (redirect_url && redirect_url.length > 0) {
+    if (redirect_url) {
       /**
        * TODO: we need to get rid off this.
        */
@@ -31,7 +31,8 @@ function LoginModal() {
     } else {
       router.pop();
     }
-  }, [redirect_url, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redirect_url]);
   //#endregion
 
   return <Login onLogin={handleOnLogin} />;

@@ -90,7 +90,7 @@ type RootStackNavigatorParams = {
   details: undefined;
   activity: undefined;
   editProfile: undefined;
-  completeProfile: undefined;
+  completeProfilePrompt: undefined;
   followers: undefined;
   following: undefined;
   addEmail: undefined;
