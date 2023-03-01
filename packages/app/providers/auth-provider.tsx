@@ -98,25 +98,9 @@ export function AuthProvider({
           if (Platform.OS !== "web") {
             router.pop();
           }
-
           setTimeout(() => {
-            router.push(
-              Platform.select({
-                native: "/profile/complete",
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    completeProfileModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: "/profile/complete",
-                web: router.asPath,
-              })
-            );
-          }, 100);
+            router.push("/profile/complete-prompt");
+          }, 1000);
         }
         return res;
       }
