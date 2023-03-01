@@ -10,7 +10,7 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CompleteProfileScreen } from "app/screens/complete-profile";
+import { CompleteProfilePromptScreen } from "app/screens/complete-profile-prompt";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropUpdateScreen } from "app/screens/drop-update";
@@ -136,8 +136,8 @@ export function RootStackNavigator() {
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen
-          name="completeProfile"
-          component={CompleteProfileScreen}
+          name="completeProfilePrompt"
+          component={CompleteProfilePromptScreen}
         />
 
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
