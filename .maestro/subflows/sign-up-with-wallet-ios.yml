@@ -6,6 +6,7 @@ appId: io.showtime.development
 - tapOn: "Sign In"
 - tapOn: "Connect Wallet"
 - assertNotVisible: "Sign In"
+- tapOn: "Complete Profile"
 - tapOn:
     text: "Pick profile photo"
     index: 1
