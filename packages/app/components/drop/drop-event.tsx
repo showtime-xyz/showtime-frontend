@@ -78,7 +78,7 @@ const DROP_FORM_DATA_KEY = "drop_form_local_data_event";
 export const DropEvent = () => {
   const isDark = useIsDarkMode();
   const { data: userProfile } = useMyInfo();
-  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const maxEditionSize = userProfile?.data?.profile.verified ? 350 : 50;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({

@@ -90,7 +90,7 @@ export const DropFree = () => {
     userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
 
   const maxEditionSize = userProfile?.data?.profile.verified
-    ? 100000
+    ? 350
     : editionSizeCredit;
 
   const dropValidationSchema = useMemo(() => {
