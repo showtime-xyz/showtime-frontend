@@ -9,12 +9,7 @@ export const redirectUri = Platform.select({
   default: `io.showtime${__DEV__ ? ".development" : ""}://spotify-success`,
 });
 
-export const scope = [
-  "user-library-modify",
-  "user-library-read",
-  "user-follow-modify",
-  "user-follow-read",
-].join("%20");
+export const scope = "user-library-modify";
 
 export const clientID = "e12f7eea542947ff843cfc68d762235a";
 
@@ -23,6 +18,7 @@ export const getQueryString = (_redirectUri?: string) => {
 
   const params = {
     client_id: clientID,
+    scope,
     redirect_uri: redirectUri,
     state,
     response_type: "code",
@@ -31,11 +27,5 @@ export const getQueryString = (_redirectUri?: string) => {
   const queryString = Object.entries(params)
     .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
     .join("&");
-
-  // Something about using encodeURIComponent and setting in the href
-  // changes %20 back to a space.
-  // https://stackoverflow.com/a/16598501
-  // I couldn't get it to work otherwise
-
-  return `https://accounts.spotify.com/authorize?${queryString}&${scope}`;
+  return `https://accounts.spotify.com/authorize?${queryString}`;
 };
