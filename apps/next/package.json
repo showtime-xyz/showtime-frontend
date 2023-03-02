@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.0.2",
     "@radix-ui/react-use-escape-keydown": "^1.0.2",
     "@rainbow-me/rainbowkit": "^0.8.1",
+    "@react-native-community/slider": "^4.4.2",
     "@react-native-menu/menu": "^0.7.3",
     "@react-three/drei": "^9.17.3",
     "@react-three/fiber": "^8.2.1",

@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import { Modal } from "react-native";
 
 import Slider from "@react-native-community/slider";
-import { MotiView } from "moti";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 
@@ -30,6 +29,7 @@ export const MediaCropper = ({
   onClose,
   onApply,
   aspect = 1,
+  title = "Edit Media",
 }: MediaCropperProps) => {
   const isDark = useIsDarkMode();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -77,22 +77,11 @@ export const MediaCropper = ({
       }}
       statusBarTranslucent
     >
-      <MotiView
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-        }}
-        from={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ type: "timing", duration: 120 }}
-      />
+      <View tw="animate-fade-in-250 absolute inset-0 bg-black/30" />
       <View tw="h-full w-full items-center justify-end md:justify-center">
         <View tw="w-full rounded-[32px] bg-white dark:bg-black md:w-auto">
           <ModalHeader
-            title="Edit Media"
+            title={title}
             onClose={onClose}
             startContentComponent={() => (
               <Button
@@ -104,12 +93,9 @@ export const MediaCropper = ({
                 <ArrowLeft width={20} height={24} />
               </Button>
             )}
-            endContentComponent={() => (
-              <Button onPress={showCroppedImage}>Apply</Button>
-            )}
           />
-          <View tw={`max-h-[82vh] min-h-[560px]`}>
-            <View tw="h-[480px] w-full md:w-[480px]">
+          <View tw="max-h-[90vh] min-h-[560px]">
+            <View tw="h-[576px] w-full md:w-[480px]">
               {src && (
                 <Cropper
                   image={src}
@@ -124,7 +110,7 @@ export const MediaCropper = ({
                 />
               )}
             </View>
-            <View tw="mt-4 flex-row items-center justify-center px-6">
+            <View tw="mt-6 flex-row items-center justify-center px-6">
               <Pressable
                 onPress={() => setZoom((zoom) => Math.max(zoom - 1, 1))}
               >
@@ -134,6 +120,7 @@ export const MediaCropper = ({
                 style={{
                   width: "100%",
                   marginVertical: 8,
+                  marginHorizontal: 12,
                 }}
                 minimumValue={1}
                 maximumValue={3}
@@ -159,6 +146,11 @@ export const MediaCropper = ({
               >
                 <RotateCw width={20} height={20} color={colors.gray[500]} />
               </Pressable>
+            </View>
+            <View tw="mt-6 mb-4 px-4">
+              <Button size="regular" onPress={showCroppedImage}>
+                Looks Good
+              </Button>
             </View>
           </View>
         </View>

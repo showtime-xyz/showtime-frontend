@@ -59,7 +59,7 @@
     "@react-native-community/blur": "^4.2.0",
     "@react-native-community/datetimepicker": "^6.7.1",
     "@react-native-community/netinfo": "9.3.5",
-    "@react-native-community/slider": "4.2.4",
+    "@react-native-community/slider": "^4.4.2",
     "@react-native-menu/menu": "^0.7.3",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.1.3",

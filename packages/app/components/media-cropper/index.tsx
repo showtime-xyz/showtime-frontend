@@ -6,6 +6,7 @@ export type MediaCropperProps = {
   onClose: () => void;
   onApply?: (src: Blob) => void;
   aspect?: number;
+  title?: string;
 };
 export const MediaCropper: React.FC<MediaCropperProps> = () => {
   return null;
