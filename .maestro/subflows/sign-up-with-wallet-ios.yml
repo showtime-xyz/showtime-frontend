@@ -1,14 +1,13 @@
 appId: io.showtime.development
 ---
 - launchApp
-# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- tapOn: "Showtime on Nishans-MacBook-Pro.local"
 - assertVisible: "Sign In"
 - tapOn: "Sign In"
 - tapOn: "Connect Wallet"
 - assertNotVisible: "Sign In"
 - tapOn:
     text: "Complete Profile"
-    index: 1
 - tapOn:
     text: "Pick profile photo"
     index: 1
@@ -38,6 +37,5 @@ appId: io.showtime.development
 - pressKey: Enter
 - tapOn:
     text: "Complete Profile"
-    index: 1
 - assertVisible: "Submitting..."
 - assertNotVisible: "Complete Profile"

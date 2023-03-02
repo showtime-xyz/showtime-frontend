@@ -13,12 +13,14 @@ type CompleteProfileModalContentProps = {
   description?: string;
   cta?: string;
   allowSkip?: boolean;
+  onEditProfile?: () => void;
 };
 export const CompleteProfileModalContent = ({
   title = "Tell creators and collectors who you are!",
   description = "Completing your profile will take around 1 minute.",
   cta = "Complete Profile",
   allowSkip = false,
+  onEditProfile,
 }: CompleteProfileModalContentProps) => {
   const router = useRouter();
   return (
@@ -37,7 +39,13 @@ export const CompleteProfileModalContent = ({
       <Button
         tw="mt-12"
         size="regular"
-        onPress={() => router.push("/profile/edit")}
+        onPress={() => {
+          if (onEditProfile) {
+            onEditProfile();
+          } else {
+            router.push("/profile/edit");
+          }
+        }}
       >
         {cta}
       </Button>
