@@ -26,7 +26,6 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CompleteProfilePromptScreen } from "app/screens/complete-profile-prompt";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -38,6 +37,7 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
+import { OnboardingScreen } from "app/screens/onboarding";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
@@ -192,7 +192,7 @@ function App({ Component, pageProps, router }: AppProps) {
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
-        <CompleteProfilePromptScreen />
+        <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
 

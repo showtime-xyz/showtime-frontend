@@ -58,7 +58,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       profile: "profile/:username",
       report: "report",
       editProfile: "profile/edit",
-      completeProfilePrompt: "profile/complete-prompt",
+      onboarding: "profile/onboarding",
       followers: "profile/followers",
       following: "profile/following",
       settings: "settings",

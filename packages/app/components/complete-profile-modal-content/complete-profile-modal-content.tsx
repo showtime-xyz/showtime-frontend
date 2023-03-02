@@ -37,7 +37,7 @@ export const CompleteProfileModalContent = ({
       <Button
         tw="mt-12"
         size="regular"
-        onPress={() => router.push("/profile/edit")}
+        onPress={() => router.push("/profile/onboarding")}
       >
         {cta}
       </Button>
