@@ -78,7 +78,7 @@ export const DropSelect = () => {
                   router.replace("/drop/music");
                 }
               } else {
-                Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
+                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
               }
             }}
           />

@@ -249,6 +249,11 @@ const nextConfig = {
           "https://play.google.com/store/apps/details?id=io.showtime",
         permanent: true,
       },
+      {
+        source: "/apply",
+        destination: "https://showtimexyz.typeform.com/to/pXQVhkZo",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
