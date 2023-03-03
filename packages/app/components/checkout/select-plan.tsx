@@ -15,7 +15,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { useToast } from "@showtime-xyz/universal.toast";
+import { toast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
@@ -35,7 +35,6 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   }>(MY_INFO_ENDPOINT, fetchPaymentIntent);
   const [selectDefault, setSelectDefault] = useState(true);
   const paymentMethods = usePaymentsManage();
-  const toast = useToast();
   const colorMode = useColorScheme();
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
@@ -71,10 +70,8 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
               res?.client_secret,
               defaultPaymentMethod.id
             );
-            toast?.show({
-              message: "Payment Succeeded",
-              hideAfter: 3000,
-            });
+
+            toast.success("Payment Succeeded");
             router.replace("/drop/free?checkoutSuccess=true");
           } catch (e) {
             // Error handled in hook

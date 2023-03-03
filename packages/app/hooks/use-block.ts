@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useToast } from "@showtime-xyz/universal.toast";
+import { toast } from "@showtime-xyz/universal.toast";
 
 import { axios } from "app/lib/axios";
 
@@ -19,7 +19,6 @@ type ToggleBlockUserParams = {
 };
 function useBlock() {
   //#region hooks
-  const toast = useToast();
   // const { mutate } = useSWRConfig();
   const { user, mutate, isAuthenticated } = useUser();
   const navigateToLogin = useNavigateToLogin();
@@ -57,9 +56,9 @@ function useBlock() {
         }),
         true
       );
-      toast?.show({ message: "Blocked!", hideAfter: 4000 });
+      toast("Blocked!");
     },
-    [toast, mutate]
+    [mutate]
   );
   const unblock = useCallback(
     async function unblock(userId?: number) {
@@ -84,9 +83,9 @@ function useBlock() {
         }),
         false
       );
-      toast?.show({ message: "Unblocked!", hideAfter: 4000 });
+      toast("Blocked!");
     },
-    [toast, mutate]
+    [mutate]
   );
   const toggleBlock = useCallback(
     async function toggleBlock({

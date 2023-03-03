@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { useSWRConfig } from "swr";
 
-import { useToast } from "@showtime-xyz/universal.toast";
+import { toast } from "@showtime-xyz/universal.toast";
 
 import { axios } from "app/lib/axios";
 
@@ -14,7 +14,6 @@ type Report = {
 };
 
 function useReport() {
-  const toast = useToast();
   const { mutate } = useSWRConfig();
 
   const report = useCallback(
@@ -35,9 +34,9 @@ function useReport() {
         },
       });
       mutate(null);
-      toast?.show({ message: "Reported!", hideAfter: 4000 });
+      toast("Reported!");
     },
-    [toast, mutate]
+    [mutate]
   );
 
   return {

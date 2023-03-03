@@ -11,6 +11,7 @@ import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
+import { Toaster } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Footer } from "app/components/footer";
@@ -198,6 +199,7 @@ function App({ Component, pageProps, router }: AppProps) {
 
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
+        <Toaster />
       </AppProviders>
     </>
   );
