@@ -117,7 +117,7 @@ export const useItemVisible = ({ videoRef }: { videoRef: any }) => {
         }
       }
     },
-    [id, isItemInList]
+    [id, isItemInList, context]
   );
 
   return {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { NftScreen } from "app/screens/nft";
 import type { NFT } from "app/types";
-import { getMediaUrl } from "app/utilities";
+import { getCreatorUsernameFromNFT, getMediaUrl } from "app/utilities";
 
 export async function getServerSideProps(context) {
   const { chainName, contractAddress, tokenId } = context.params;
@@ -27,7 +27,9 @@ export async function getServerSideProps(context) {
         props: {
           fallback,
           meta: {
-            title: nft.token_name + " | Showtime",
+            title: `${nft.token_name} by ${
+              nft.creator_name ?? getCreatorUsernameFromNFT(nft)
+            } | Showtime`,
             description: nft.token_description,
             image: imageUrl,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,

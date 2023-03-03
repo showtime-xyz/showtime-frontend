@@ -53,7 +53,7 @@
     },
     "clamp-text": {
         "scope": "showtime.universal",
-        "version": "0.0.41",
+        "version": "0.0.42",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/clamp-text"
     },

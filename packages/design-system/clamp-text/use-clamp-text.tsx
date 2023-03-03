@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, ReactNode } from "react";
+import { useState, useRef, useCallback, ReactNode, useEffect } from "react";
 import { NativeSyntheticEvent, TextLayoutEventData } from "react-native";
 
 import { ClampTextProps } from "./clamp-text";
@@ -27,27 +27,30 @@ export const useClampText = ({
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);
   const collapseText = useRef("");
+  const isFirstLoad = useRef(true);
   const isLayouted = useRef(false);
   const currentText = useRef<string | Iterable<ReactNode> | null>(
     typeof text === "string" ? text.replace(/[\r\n]/g, " ") : text
   );
-
   // reset state when text changed so that the text can be re-clamped
   // this is useful when the text is updated by a parent component
   // and the text is not the same as the previous one
   // because it did not change once the profile was updated
-  if (currentText.current !== text) {
-    const newText =
-      typeof text === "string" ? text.replace(/[\r\n]/g, " ") : text;
-    setShowMore(false);
-    setShowLess(false);
-    setInnerText(newText);
-    currentText.current = newText;
-  }
-
+  useEffect(() => {
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+    } else {
+      const newText =
+        typeof text === "string" ? text.replace(/[\r\n]/g, " ") : text;
+      isLayouted.current = false;
+      setShowMore(false);
+      setShowLess(false);
+      setInnerText(newText);
+      currentText.current = newText;
+    }
+  }, [text]);
   const onTextLayout = (e: NativeSyntheticEvent<TextLayoutEventData>) => {
     if (e.nativeEvent.lines.length <= rows || isLayouted.current) return;
-
     const finalText = e.nativeEvent.lines
       .slice(0, rows)
       .map((item) => item.text)

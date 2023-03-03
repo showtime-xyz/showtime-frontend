@@ -1,11 +1,14 @@
 appId: io.showtime.development
 ---
 - launchApp
-# - tapOn: "Showtime http://192.168.0.241:8081"
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
 - assertVisible: "Sign In"
 - tapOn: "Sign In"
 - tapOn: "Connect Wallet"
 - assertNotVisible: "Sign In"
+- tapOn:
+    text: "Complete Profile"
+    index: 1
 - tapOn:
     text: "Pick profile photo"
     index: 1

@@ -45,8 +45,8 @@ function Carousel({
         }
         pagination={{
           horizontalClass: isDark
-            ? "showtime-pagination showtime-pagination-dark"
-            : "showtime-pagination showtime-pagination-light",
+            ? "showtime-pagination"
+            : "showtime-pagination",
           clickable: true,
         }}
         modules={[Pagination, EffectFade, Autoplay]}
