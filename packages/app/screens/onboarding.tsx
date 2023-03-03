@@ -12,6 +12,8 @@ export const OnboardingScreen = withModalScreen(OnboardingPage, {
   matchingPathname: "/profile/onboarding",
   matchingQueryParam: "onboardingModal",
   enableContentPanningGesture: false,
+  enableHandlePanningGesture: false,
+  headerShown: false,
   snapPoints: ["100%"],
   disableBackdropPress: true,
   web_height: `h-[90vh]`,
