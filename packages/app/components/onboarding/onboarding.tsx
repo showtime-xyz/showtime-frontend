@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from "react";
-import { Platform } from "react-native";
+import React, { useState, useMemo, useEffect } from "react";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { UNSTABLE_usePreventRemove as usePreventRemove } from "@react-navigation/native";
 import { AnimatePresence } from "moti";
+
+import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
@@ -17,27 +18,19 @@ import { SelectUsername } from "./select-username";
 const { useParam } = createParam<PageQuery>();
 
 export const Onboarding = () => {
-  // hooks
-  //const { dispatch } = useNavigation();
+  const { user, isIncompletedProfile } = useUser();
+  const router = useRouter();
 
-  const { user } = useUser();
+  const [redirectUri] = useParam("redirectUri");
 
-  usePreventRemove(Platform.OS === "ios", ({ data }) => {
-    /*
-    Alert.alert(
-      "Discard changes?",
-      "You have unsaved changes. Discard them and leave the screen?",
-      [
-        { text: "Don't leave", style: "cancel", onPress: () => {} },
-        {
-          text: "Discard",
-          style: "destructive",
-          onPress: () => dispatch(data.action),
-        },
-      ]
-    );
-    */
-  });
+  // redirect to home if user is not incompleted profile
+  // this should prevent user from going back to onboarding
+  // with the back button
+  useEffect(() => {
+    if (!isIncompletedProfile) {
+      router.replace("/");
+    }
+  }, [isIncompletedProfile, router]);
 
   // determine initial step
   const initialStep = useMemo(() => {
@@ -52,18 +45,25 @@ export const Onboarding = () => {
     return OnboardingStep.Username;
   }, [user]);
   const [step, setStep] = useState<OnboardingStep>(initialStep);
-  const value = useMemo(() => ({ step, setStep, user }), [step, user]);
+  const value = useMemo(
+    () => ({ step, setStep, user, redirectUri }),
+    [step, user, redirectUri]
+  );
+
+  if (!isIncompletedProfile) return null;
 
   return (
     <OnboardingStepContext.Provider value={value}>
       <BottomSheetModalProvider>
-        <AnimatePresence exitBeforeEnter>
-          {step === OnboardingStep.Username && (
-            <SelectUsername key="username" />
-          )}
-          {step === OnboardingStep.Picture && <SelectPicture key="picture" />}
-          {step === OnboardingStep.Social && <SelectSocial key="social" />}
-        </AnimatePresence>
+        <View tw="mt-8 flex-1">
+          <AnimatePresence exitBeforeEnter>
+            {step === OnboardingStep.Username && (
+              <SelectUsername key="username" />
+            )}
+            {step === OnboardingStep.Picture && <SelectPicture key="picture" />}
+            {step === OnboardingStep.Social && <SelectSocial key="social" />}
+          </AnimatePresence>
+        </View>
       </BottomSheetModalProvider>
     </OnboardingStepContext.Provider>
   );

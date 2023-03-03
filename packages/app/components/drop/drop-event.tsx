@@ -32,16 +32,13 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -138,7 +135,10 @@ export const DropEvent = () => {
   const bottomBarHeight = useBottomTabBarHeight();
 
   const { state, dropNFT } = useDropNFT();
-  const user = useUser({ redirectTo: "/login" });
+  const user = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -200,9 +200,12 @@ export const DropEvent = () => {
   // }, [state.transactionId])
 
   const pickFile = useFilePicker();
-  const share = useShare();
   const router = useRouter();
+
+  /*
+  const share = useShare();
   const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
+  */
 
   // if (state.transactionHash) {
   //   return <View>
@@ -218,7 +221,7 @@ export const DropEvent = () => {
   );
 
   if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   if (state.status === "success") {

@@ -49,7 +49,7 @@ export const SelectUsername = () => {
 
   const defaultValues = useMemo(() => {
     return {
-      username: user?.data?.profile.username,
+      username: user?.data?.profile.username ?? "",
     };
   }, [user?.data?.profile]);
 
