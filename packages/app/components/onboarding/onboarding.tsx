@@ -34,6 +34,10 @@ export const Onboarding = () => {
 
   // determine initial step
   const initialStep = useMemo(() => {
+    if (__DEV__) {
+      return OnboardingStep.Username;
+    }
+
     if (user?.data?.profile.img_url) {
       return OnboardingStep.Social;
     }
