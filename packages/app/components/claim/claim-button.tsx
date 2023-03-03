@@ -4,9 +4,10 @@ import { StyleProp, ViewStyle } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button/types";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Hourglass } from "@showtime-xyz/universal.icon";
+import { Check, Hourglass, Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
@@ -106,7 +107,14 @@ export const ClaimButton = ({
         </Text>
       );
     } else {
-      return isMusicDrop ? "Save to Collect" : "Collect";
+      return isMusicDrop ? (
+        <View tw="flex-row items-center">
+          <Spotify color="white" width={20} height={20} />
+          <Text tw="ml-1 font-semibold text-white">Save to Collect</Text>
+        </View>
+      ) : (
+        "Collect"
+      );
     }
   }, [status, isProgress, isDark, isMusicDrop]);
 
