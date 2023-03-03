@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { UNSTABLE_usePreventRemove as usePreventRemove } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { AnimatePresence } from "moti";
 
 import { useUser } from "app/hooks/use-user";
@@ -16,7 +18,26 @@ const { useParam } = createParam<PageQuery>();
 
 export const Onboarding = () => {
   // hooks
+  const { dispatch } = useNavigation();
+
   const { user } = useUser();
+
+  usePreventRemove(true, ({ data }) => {
+    /*
+    Alert.alert(
+      "Discard changes?",
+      "You have unsaved changes. Discard them and leave the screen?",
+      [
+        { text: "Don't leave", style: "cancel", onPress: () => {} },
+        {
+          text: "Discard",
+          style: "destructive",
+          onPress: () => dispatch(data.action),
+        },
+      ]
+    );
+    */
+  });
 
   // determine initial step
   const initialStep = useMemo(() => {
