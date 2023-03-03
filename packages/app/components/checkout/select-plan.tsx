@@ -15,7 +15,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { toast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
@@ -24,6 +23,8 @@ import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+
+import { toast } from "design-system/toast";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();

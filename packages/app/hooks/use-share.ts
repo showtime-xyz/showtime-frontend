@@ -1,6 +1,6 @@
 import { Platform, Share as RNShare, ShareAction } from "react-native";
 
-import { toast } from "@showtime-xyz/universal.toast";
+import { toast } from "design-system/toast";
 
 export const useShare = () => {
   const share = async ({ url }: { url: string }): Promise<ShareAction> => {

@@ -3,12 +3,13 @@ import { useCallback } from "react";
 import { useSWRConfig } from "swr";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { toast } from "@showtime-xyz/universal.toast";
 
 import { removeWalletFromBackend } from "app/lib/add-wallet";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { obfuscatePhoneNumber } from "app/utilities";
+
+import { toast } from "design-system/toast";
 
 import { Logger } from "../lib/logger";
 

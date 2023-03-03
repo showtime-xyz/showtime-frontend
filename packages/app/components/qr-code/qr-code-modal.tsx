@@ -32,7 +32,6 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { toast } from "@showtime-xyz/universal.toast";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -56,6 +55,7 @@ import {
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
+import { toast } from "design-system/toast";
 
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {

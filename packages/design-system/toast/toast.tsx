@@ -1,8 +1,8 @@
-import * as Burnt from "burnt/src";
+import * as Burnt from "burnt";
 import type {
   ToastOptions as BurntToastOptions,
   AlertOptions as BurntAlertOptions,
-} from "burnt/src/types";
+} from "burnt/build/types";
 import type { ToasterProps } from "react-hot-toast";
 
 import { CustomOption } from "./type";

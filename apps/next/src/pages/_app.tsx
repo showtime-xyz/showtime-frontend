@@ -11,7 +11,6 @@ import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
-import { Toaster } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Footer } from "app/components/footer";
@@ -44,6 +43,8 @@ import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
+
+import { Toaster } from "design-system/toast";
 
 import "../styles/styles.css";
 

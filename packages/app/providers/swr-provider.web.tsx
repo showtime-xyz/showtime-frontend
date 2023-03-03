@@ -3,11 +3,11 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { SWRConfiguration } from "swr";
 
-import { toast } from "@showtime-xyz/universal.toast";
-
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
+
+import { toast } from "design-system/toast";
 
 import { setupSWRCache } from "./swr-cache";
 

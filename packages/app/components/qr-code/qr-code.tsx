@@ -6,11 +6,12 @@ import * as MediaLibrary from "expo-media-library";
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Haptics } from "@showtime-xyz/universal.haptics";
-import { toast } from "@showtime-xyz/universal.toast";
 
 import domtoimage from "app/lib/dom-to-image";
 import { ReactQRCode } from "app/lib/qr-code";
 import { captureRef } from "app/lib/view-shot";
+
+import { toast } from "design-system/toast";
 
 type Props = {
   text: string;

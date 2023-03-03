@@ -134,7 +134,6 @@ const nextConfig = {
       "@showtime-xyz/universal.switch",
       "@showtime-xyz/universal.text-input",
       "@showtime-xyz/universal.tab-view",
-      "@showtime-xyz/universal.toast",
       "@showtime-xyz/universal.tooltip",
       "@showtime-xyz/universal.utils",
       "@showtime-xyz/universal.verification-badge",

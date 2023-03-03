@@ -2,9 +2,9 @@ import { useCallback } from "react";
 
 import { useSWRConfig } from "swr";
 
-import { toast } from "@showtime-xyz/universal.toast";
-
 import { axios } from "app/lib/axios";
+
+import { toast } from "design-system/toast";
 
 type Report = {
   userId?: number | string;
