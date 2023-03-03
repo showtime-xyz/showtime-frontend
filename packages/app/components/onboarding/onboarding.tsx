@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
+import { Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { UNSTABLE_usePreventRemove as usePreventRemove } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
 import { AnimatePresence } from "moti";
 
 import { useUser } from "app/hooks/use-user";
@@ -18,11 +18,11 @@ const { useParam } = createParam<PageQuery>();
 
 export const Onboarding = () => {
   // hooks
-  const { dispatch } = useNavigation();
+  //const { dispatch } = useNavigation();
 
   const { user } = useUser();
 
-  usePreventRemove(true, ({ data }) => {
+  usePreventRemove(Platform.OS === "ios", ({ data }) => {
     /*
     Alert.alert(
       "Discard changes?",
@@ -41,9 +41,6 @@ export const Onboarding = () => {
 
   // determine initial step
   const initialStep = useMemo(() => {
-    if (!__DEV__) {
-      return OnboardingStep.Username;
-    }
     if (user?.data?.profile.img_url) {
       return OnboardingStep.Social;
     }
