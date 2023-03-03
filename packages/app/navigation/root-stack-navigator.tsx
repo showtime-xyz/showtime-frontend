@@ -135,7 +135,11 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
-        <Stack.Screen name="onboarding" component={OnboardingScreen} />
+        <Stack.Screen
+          name="onboarding"
+          component={OnboardingScreen}
+          options={{ gestureEnabled: false }}
+        />
 
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
