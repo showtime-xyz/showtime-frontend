@@ -5,11 +5,16 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import type { ModalMethods } from "@showtime-xyz/universal.modal";
 
-export const useBackPressHandler = (ref: RefObject<ModalMethods>) => {
+export const useBackPressHandler = (
+  ref: RefObject<ModalMethods>,
+  backPressHandlerEnabled = true
+) => {
   return useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
-        ref.current?.close();
+        if (backPressHandlerEnabled) {
+          ref.current?.close();
+        }
         return true;
       };
 
