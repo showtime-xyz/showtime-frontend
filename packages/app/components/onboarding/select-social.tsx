@@ -6,8 +6,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Alert } from "design-system/alert";
-
+import { Challenge } from "./hcaptcha";
 import { OnboardingStepContext } from "./onboarding-context";
 
 export const SelectSocial = () => {
@@ -52,18 +51,7 @@ export const SelectSocial = () => {
           <Button size="regular" tw="mt-2">
             Instragram
           </Button>
-          <Button
-            size="regular"
-            variant="text"
-            onPress={() =>
-              Alert.alert(
-                "Skip",
-                "Captcha challenge will be implemented later."
-              )
-            }
-          >
-            Skip
-          </Button>
+          <Challenge />
         </View>
       </View>
     </MotiView>
