@@ -9,8 +9,7 @@ import { useToast } from "@showtime-xyz/universal.toast";
 
 import { useRudder } from "app/lib/rudderstack";
 
-// demo sitekey
-const siteKey = "00000000-0000-0000-0000-000000000000";
+import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
   const toast = useToast();
@@ -19,7 +18,7 @@ export const Challenge = () => {
   const isDark = useIsDarkMode();
   const captchaRef = useRef<ConfirmHcaptcha>(null);
 
-  const onMessage = (event: WebViewMessageEvent) => {
+  const onMessage = async (event: WebViewMessageEvent) => {
     if (event && event.nativeEvent.data) {
       if (["cancel", "error", "expired"].includes(event.nativeEvent.data)) {
         captchaRef.current?.hide();
@@ -28,14 +27,18 @@ export const Challenge = () => {
           error: event.nativeEvent.data,
         });
         toast?.show({
-          message: "Captcha challenge failed. Please try again.",
-          hideAfter: 3000,
+          message:
+            "Captcha challenge failed.\nPlease try again or connect a social account.",
+          hideAfter: 5000,
         });
 
         return;
       } else {
-        console.log("Verified code from hCaptcha", event.nativeEvent.data);
+        const token = event.nativeEvent.data;
+        console.log("Verified code from hCaptcha", token);
         captchaRef.current?.hide();
+
+        // todo: send the response to the server and validate it
 
         rudder?.track("hCaptcha challenge success");
       }
