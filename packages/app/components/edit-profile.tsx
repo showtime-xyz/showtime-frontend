@@ -5,7 +5,6 @@ import {
   Keyboard,
   ScrollView as RNScrollView,
   View as RNView,
-  TextInput,
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -14,13 +13,13 @@ import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Chip } from "@showtime-xyz/universal.chip";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Upload,
-  CheckFilled,
   InformationCircle,
+  Facebook,
+  Twitter,
 } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -42,7 +41,7 @@ import { useFilePicker } from "app/lib/file-picker";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-import { getFileFormData, userHasIncompleteExternalLinks } from "app/utilities";
+import { getFileFormData } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
@@ -56,6 +55,10 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
+// eslint-disable-next-line no-useless-escape
+const URL_REGEXP =
+  /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)|\/|\?)*)?$/i;
+
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
@@ -64,42 +67,37 @@ const editProfileValidationSchema = yup.object({
     .min(2)
     .max(30)
     .matches(
-      /([0-9a-zA-Z_]{2,30})+$/,
-      "Invalid username. Can only contain letters, numbers, and underscores (_)."
+      /^([0-9a-zA-Z_]{2,30})$/g,
+      "Invalid username. Use only letters, numbers, and underscores (_)."
     ),
   bio: yup
     .string()
+    .nullable()
     .label("About me")
     .min(2)
     .max(300)
-    .required("A short bio is required")
     .typeError("Please enter a valid about me"),
   name: yup
     .string()
+    .notRequired()
+    .nullable()
     .label("Name")
     .max(40)
-    .required("Name is required")
     .typeError("Please enter a valid name"),
   profilePicture: yup.mixed().required("Please add a profile picture"),
+  website_url: yup
+    .string()
+    .label("Website")
+    .notRequired()
+    .nullable()
+    .max(1000)
+    .when({
+      is: (value?: string) => value?.length,
+      then: (rule) =>
+        rule.min(3).matches(URL_REGEXP, "Please enter a valid URL"),
+    }),
 });
-const requiredFieldChips = [
-  {
-    value: "profilePicture",
-    lable: "Profile Picture",
-  },
-  {
-    value: "name",
-    lable: "Name",
-  },
-  {
-    value: "username",
-    lable: "Username",
-  },
-  {
-    value: "bio",
-    lable: "About Me",
-  },
-];
+
 export const EditProfile = () => {
   // hooks
   const { user } = useUser();
@@ -115,27 +113,14 @@ export const EditProfile = () => {
   const [showScialExplanation, setShowScialExplanation] = useState(false);
   const scrollViewRef = useRef<RNScrollView>(null);
   const socialRef = useRef<RNView>(null);
-  const socialLinksRefs = useRef<TextInput[]>([]);
   // edit media regin
-  const [selectedImg, setSelectedImg] = useState<any>(null);
-  const [index, setIndex] = useState(() =>
-    !user?.data?.profile.username ||
-    !user?.data?.profile.bio ||
-    !user?.data?.profile.img_url
-      ? 0
-      : userHasIncompleteExternalLinks(user?.data?.profile)
-      ? 1
-      : 0
-  );
+  const [selectedImg, setSelectedImg] = useState<string | File | null>(null);
 
   const [redirectUri] = useParam("redirectUri");
 
   const [currentCropField, setCurrentCropField] = useState<
     null | "coverPicture" | "profilePicture"
   >(null);
-
-  const [hasNotSubmittedExternalLink, setHasNotSubmittedExternalLink] =
-    useState(index === 1);
 
   const defaultValues = useMemo(() => {
     const links: any = {};
@@ -160,8 +145,9 @@ export const EditProfile = () => {
       default_created_sort_id: user?.data?.profile.default_created_sort_id,
       default_list_id: user?.data?.profile.default_list_id,
       default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
-      profilePicture: user?.data?.profile.img_url,
+      profilePicture: user?.data?.profile.img_url as File | string | undefined,
       coverPicture: user?.data?.profile.cover_url,
+      submitError: "",
     };
   }, [socialLinks?.data?.data, user?.data?.profile]);
 
@@ -169,11 +155,10 @@ export const EditProfile = () => {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid: formIsValid },
     reset,
     setValue,
-    watch,
-  } = useForm<any>({
+  } = useForm<typeof defaultValues>({
     resolver: yupResolver(editProfileValidationSchema),
     mode: "all",
     reValidateMode: "onChange",
@@ -194,7 +179,7 @@ export const EditProfile = () => {
   }, [errors.profilePicture]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
-    if (!isValid) return;
+    if (!isValid || !formIsValid) return;
     const links = Object.keys(values.links)
       .filter((key) => values.links[key]?.trim())
       .map((key) => {
@@ -216,85 +201,74 @@ export const EditProfile = () => {
       default_owned_sort_id: values.default_owned_sort_id,
     };
 
-    //@ts-ignore
-    if (userHasIncompleteExternalLinks(newValues)) {
-      setHasNotSubmittedExternalLink(true);
-      // scroll to social links if case of an error.
-      socialRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-        scrollViewRef.current?.scrollTo({ x: 0, y: pageY, animated: true });
-      });
-      setIndex(1);
-    } else {
-      setHasNotSubmittedExternalLink(false);
+    // check if user added a cover picture and upload it
+    try {
+      if (
+        values.coverPicture &&
+        values.coverPicture !== defaultValues.coverPicture
+      ) {
+        const coverPictureFormData = await getFileFormData(values.coverPicture);
+        const formData = new FormData();
+        if (coverPictureFormData) {
+          formData.append("image", coverPictureFormData);
 
-      try {
-        if (
-          values.coverPicture &&
-          values.coverPicture !== defaultValues.coverPicture
-        ) {
-          const coverPictureFormData = await getFileFormData(
-            values.coverPicture
-          );
-          const formData = new FormData();
-          if (coverPictureFormData) {
-            formData.append("image", coverPictureFormData);
-
-            await axios({
-              url: "/v1/profile/photo/cover",
-              method: "POST",
-              headers: {
-                "Content-Type": `multipart/form-data`,
-              },
-              data: formData,
-            });
-          }
+          await axios({
+            url: "/v1/profile/photo/cover",
+            method: "POST",
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+            data: formData,
+          });
         }
-
-        if (
-          values.profilePicture &&
-          values.profilePicture !== defaultValues.profilePicture
-        ) {
-          const formData = new FormData();
-
-          const profilePictureFormData = await getFileFormData(
-            values.profilePicture
-          );
-
-          if (profilePictureFormData) {
-            formData.append("image", profilePictureFormData);
-
-            await axios({
-              url: "/v1/profile/photo",
-              method: "POST",
-              headers: {
-                "Content-Type": `multipart/form-data`,
-              },
-              data: formData,
-            });
-          }
-        }
-
-        await axios({
-          url: "/v1/editname",
-          method: "POST",
-          data: newValues,
-        });
-
-        if (redirectUri) {
-          router.replace(redirectUri);
-        } else {
-          router.pop();
-        }
-
-        // TODO: optimise to make fewer API calls!
-        mutate(MY_INFO_ENDPOINT);
-        matchMutate(
-          (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
-        );
-      } catch (e) {
-        setError("submitError", { message: "Something went wrong" });
-        console.error("edit profile failed ", e);
       }
+
+      // check if user added a profile picture and upload it
+      if (
+        values.profilePicture &&
+        values.profilePicture !== defaultValues.profilePicture
+      ) {
+        const formData = new FormData();
+
+        const profilePictureFormData = await getFileFormData(
+          values.profilePicture
+        );
+
+        if (profilePictureFormData) {
+          formData.append("image", profilePictureFormData);
+
+          await axios({
+            url: "/v1/profile/photo",
+            method: "POST",
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+            data: formData,
+          });
+        }
+      }
+
+      // update profile fields
+      await axios({
+        url: "/v1/editname",
+        method: "POST",
+        data: newValues,
+      });
+
+      if (redirectUri) {
+        router.replace(redirectUri);
+      } else {
+        router.pop();
+      }
+
+      // TODO: optimise to make fewer API calls!
+      mutate(MY_INFO_ENDPOINT);
+      matchMutate(
+        (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
+      );
+    } catch (e) {
+      setError("submitError", { message: "Something went wrong" });
+      console.error("Edit profile failed ", e);
     }
   };
   // cover down to twitter banner ratio: w:h=3:1
@@ -445,7 +419,7 @@ export const EditProfile = () => {
                         textContentType="username"
                         errorText={
                           !isValid
-                            ? "username has been taken, please choose another"
+                            ? "Username has been taken"
                             : errors.username?.message
                         }
                         onBlur={onBlur}
@@ -476,34 +450,27 @@ export const EditProfile = () => {
                   />
                 )}
               />
-              <View tw="mt-2 flex-row flex-wrap">
-                {requiredFieldChips.map((item) => (
-                  <Chip
-                    icon={
-                      <View
-                        style={{
-                          opacity:
-                            !errors[item.value] &&
-                            watch(item.value) &&
-                            (item.value === "username" ? isValid : true)
-                              ? 1
-                              : 0.1,
-                        }}
-                      >
-                        <CheckFilled
-                          width={16}
-                          height={16}
-                          color={isDark ? colors.white : colors.gray[700]}
-                        />
-                      </View>
-                    }
-                    tw="my-2 w-1/2"
-                    label={item.lable}
-                    variant="text"
-                    key={item.value}
+
+              <Controller
+                control={control}
+                name="website_url"
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <Fieldset
+                    ref={ref}
+                    tw="mt-4"
+                    label="Website"
+                    keyboardType="url"
+                    textContentType="URL"
+                    placeholder="Your URL"
+                    testID="website_url"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    errorText={errors.website_url?.message}
                   />
-                ))}
-              </View>
+                )}
+              />
+
               {/* Social */}
               <View tw="mt-6 mb-10" ref={socialRef}>
                 <Pressable
@@ -522,7 +489,7 @@ export const EditProfile = () => {
                     color={isDark ? colors.gray[400] : colors.gray[600]}
                   />
                 </Pressable>
-                {/*  <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
+                <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
                   <View tw="flex-row items-center justify-between">
                     <View tw="flex-row items-center">
                       <Twitter width={20} height={20} color="#1DA1F2" />
@@ -552,23 +519,8 @@ export const EditProfile = () => {
                     </Text>
                   </View>
                 </View>
-                <Chip
-                  icon={
-                    <View
-                      style={{
-                        opacity: hasNotSubmittedExternalLink ? 1 : 0.1,
-                      }}
-                    >
-                      <CheckFilled
-                        width={16}
-                        height={16}
-                        color={isDark ? colors.white : colors.gray[700]}
-                      />
-                    </View>
-                  }
-                  label="Connect Twitter or Facebook"
-                  variant="text"
-                /> */}
+
+                {/*
                 {hasNotSubmittedExternalLink ? (
                   <>
                     <Text tw="text-sm font-semibold text-red-500">
@@ -577,23 +529,6 @@ export const EditProfile = () => {
                     <View tw="h-4" />
                   </>
                 ) : null}
-                <Controller
-                  control={control}
-                  name="website_url"
-                  render={({ field: { onChange, onBlur, value, ref } }) => (
-                    <Fieldset
-                      ref={ref}
-                      label="Website"
-                      keyboardType="url"
-                      textContentType="URL"
-                      placeholder="Your URL"
-                      testID="website_url"
-                      value={value}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                    />
-                  )}
-                />
 
                 {socialLinks.data?.data
                   .filter(
@@ -648,17 +583,18 @@ export const EditProfile = () => {
                       />
                     );
                   })}
+                  */}
               </View>
             </View>
           </BottomSheetScrollView>
           <View tw="my-2.5 mb-4 px-4">
             <Button
               disabled={isSubmitting}
-              tw={isSubmitting ? "opacity-50" : ""}
+              tw={isSubmitting || !formIsValid || !isValid ? "opacity-50" : ""}
               onPress={handleSubmit(handleSubmitForm)}
               size="regular"
             >
-              {isSubmitting ? "Submitting..." : "Complete Profile"}
+              {isSubmitting ? "Submitting..." : "Save"}
             </Button>
             <View tw="h-1" />
             <Text tw="text-center text-sm text-red-500">
