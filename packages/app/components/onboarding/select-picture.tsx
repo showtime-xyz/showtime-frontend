@@ -217,7 +217,13 @@ export const SelectPicture = () => {
                             }}
                             style={{ position: "absolute" }}
                           >
-                            <Preview file={value} width={128} height={128} />
+                            <Preview
+                              tw="h-full w-full"
+                              file={value}
+                              width={128}
+                              height={128}
+                              style={{ width: 128, height: 128 }}
+                            />
                           </MotiView>
                         ) : (
                           <>
