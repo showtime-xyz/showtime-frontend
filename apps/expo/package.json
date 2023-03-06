@@ -158,6 +158,7 @@
     "expo-linking": "~3.2.3",
     "expo-localization": "~14.0.0",
     "expo-location": "~15.0.1",
+    "expo-mail-composer": "~12.0.0",
     "expo-media-library": "~15.0.0",
     "expo-modules-core": "~1.1.1",
     "expo-navigation-bar": "~2.0.1",
