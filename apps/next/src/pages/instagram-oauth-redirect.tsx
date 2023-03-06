@@ -35,6 +35,7 @@ const MagicOauthRedirect = () => {
 
   return (
     <View tw="flex h-screen w-screen items-center justify-center">
+      {code}
       {isMutating ? (
         <View tw="flex-row items-center">
           <Text tw="text-base font-bold text-gray-900 dark:text-gray-100">
