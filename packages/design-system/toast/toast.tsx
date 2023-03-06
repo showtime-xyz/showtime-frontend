@@ -1,81 +1,94 @@
-import { useState } from "react";
-import { Platform, LayoutChangeEvent, StyleSheet, View } from "react-native";
+import * as Burnt from "burnt";
+import type {
+  ToastOptions as BurntToastOptions,
+  AlertOptions as BurntAlertOptions,
+} from "burnt/build/types";
+import type { ToasterProps } from "react-hot-toast";
 
-import { MotiView } from "moti";
+import { CustomOption } from "./type";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PanToClose } from "@showtime-xyz/universal.pan-to-close";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Text } from "@showtime-xyz/universal.text";
+type ToastOptions = Omit<BurntToastOptions, "title" | "preset"> & {};
 
-type ToastProps = {
-  render?: JSX.Element | null;
-  message?: string;
-  hide: () => void;
+type AlertOptions = Omit<BurntAlertOptions, "title"> & {};
+
+function getPreset<T = string>(title: string, preset: T) {
+  return title.length > 28 ? "none" : preset;
+}
+
+const toast = (title: string, options?: ToastOptions) => {
+  return Burnt.toast({
+    title: title,
+    preset: "none",
+    duration: 3000,
+    ...options,
+  });
 };
 
-export const SAFE_AREA_TOP = 20;
-
-export const Toast = ({ render, message, hide }: ToastProps) => {
-  const isDark = useIsDarkMode();
-  const safeAreaInsets = useSafeAreaInsets();
-  const [layout, setLayout] = useState<
-    LayoutChangeEvent["nativeEvent"]["layout"] | undefined
-  >();
-
-  const { top: safeAreaTop } =
-    Platform.OS === "web" ? { top: SAFE_AREA_TOP } : safeAreaInsets;
-  const toastHeight = layout?.height ?? 0;
-
-  return (
-    <MotiView
-      accessibilityLiveRegion="polite"
-      pointerEvents="box-none"
-      from={{ translateY: -toastHeight }}
-      animate={{
-        translateY: safeAreaTop === 0 ? SAFE_AREA_TOP : safeAreaTop,
-      }}
-      exit={{ translateY: -toastHeight }}
-      transition={{ type: "timing", duration: 350 }}
-      onLayout={(e) => {
-        setLayout(e.nativeEvent.layout);
-      }}
-    >
-      <PanToClose panCloseDirection="up" closeDuration={500} onClose={hide}>
-        <View
-          style={[
-            styles.toastContainer,
-            {
-              opacity: layout ? 1 : 0,
-              backgroundColor: isDark ? "#000" : "#FFF",
-            },
-          ]}
-          pointerEvents="box-none"
-        >
-          {render ? (
-            render
-          ) : (
-            <Text tw="p-4 text-center text-gray-900 dark:text-white">
-              {message}
-            </Text>
-          )}
-        </View>
-      </PanToClose>
-    </MotiView>
-  );
+toast.error = (title: string, options?: ToastOptions) => {
+  return Burnt.toast({
+    title: title,
+    preset: getPreset(title, "error"),
+    ...options,
+  });
+};
+toast.success = (title: string, options?: ToastOptions) => {
+  return Burnt.toast({
+    title: title,
+    preset: getPreset(title, "done"),
+    haptic: "success",
+    ...options,
+  });
 };
 
-const styles = StyleSheet.create({
-  toastContainer: {
-    alignSelf: "center",
-    borderRadius: 16,
-    shadowOffset: {
-      width: 0,
-      height: 8,
+toast.custom = (title: string, options: CustomOption) => {
+  return Burnt.toast({
+    title: title,
+    preset: "custom",
+    icon: {
+      ios: options.ios,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 5,
-    justifyContent: "center",
+  });
+};
+
+toast.dismiss = () => false;
+
+toast.promise = function <T>(
+  promise: Promise<T>,
+  msgs: {
+    loading: string;
+    success: string;
+    error: string;
   },
-});
+  options?: AlertOptions
+) {
+  Burnt.alert({
+    title: msgs.loading,
+    preset: "spinner",
+    ...(options as any),
+  });
+  promise
+    .then((p) => {
+      Burnt.dismissAllAlerts();
+      Burnt.alert({
+        title: msgs.success,
+        preset: "done",
+        ...(options as any),
+      });
+      return p;
+    })
+    .catch(() => {
+      Burnt.dismissAllAlerts();
+      Burnt.alert({
+        title: msgs.error,
+        preset: "error",
+        ...(options as any),
+      });
+    });
+
+  return promise;
+};
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+const Toaster = (_props: ToasterProps) => <></>;
+
+export { Toaster, toast };

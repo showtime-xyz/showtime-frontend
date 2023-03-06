@@ -48,7 +48,6 @@ export const ClampText = ({
   if (!text || text === "") {
     return null;
   }
-
   return (
     <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
       {innerText}

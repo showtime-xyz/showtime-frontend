@@ -1,48 +1,101 @@
 import { Meta } from "@storybook/react";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useToast, ToastProvider } from "./index";
+import { toast, Toaster } from "./index";
 
 export default {
-  component: ToastProvider,
+  component: View,
   title: "Components/Toast",
 } as Meta;
 
-export const Primary: React.VFC<{}> = () => {
-  const toast = useToast();
+export const Primary: React.FC<{}> = () => {
   return (
-    <View>
+    <View tw="flex-1 items-center justify-center">
+      <Button onPress={() => toast("Gm friends!")}>Toast</Button>
+      <View tw="h-2" />
+      <Button onPress={() => toast.success("Successed")}>Success toast</Button>
+      <View tw="h-2" />
       <Button
-        onPress={() => toast?.show({ message: "Gm friends!", hideAfter: 4000 })}
+        onPress={() =>
+          toast.success("Successed", { message: "you are verified!" })
+        }
       >
-        <Text tw="text-white dark:text-black">Text toast</Text>
+        Successed Message toast
       </Button>
-      <View tw="my-4"></View>
+      <View tw="h-2" />
       <Button
-        onPress={() => {
-          if (toast?.isVisible) {
-            toast.hide();
-          } else {
-            toast?.show({
-              element: (
-                <View tw="flex-row items-center p-5">
-                  <Spinner size="small" />
-                  <View tw="mx-1" />
-                  <Text tw="text-black dark:text-white">
-                    This toast will hide in 5 seconds.
-                  </Text>
-                </View>
-              ),
-            });
-          }
+        variant="danger"
+        onPress={() => toast.error("Something went wrong")}
+      >
+        Error Toast
+      </Button>
+      <View tw="h-2" />
+      <Button
+        variant="danger"
+        onPress={() =>
+          toast.error("Error", { message: "Something went wrong" })
+        }
+      >
+        Error Message Toast
+      </Button>
+      <View tw="h-2" />
+      <Button
+        variant="secondary"
+        onPress={() =>
+          toast.custom("It's Showtime!", {
+            ios: {
+              name: "sparkle",
+              color: "#F7A51D",
+            },
+            web: "✨",
+          })
+        }
+      >
+        Custom Icon Toast
+      </Button>
+      <View tw="h-2" />
+      <Button
+        variant="outlined"
+        onPress={async () => {
+          const fetch = new Promise((resolve) => setTimeout(resolve, 3000));
+          toast.promise(fetch, {
+            loading: "Processing Payment!",
+            success: "Payment Succeeded 🎉",
+            error: "Your payment was not successful, please try again.",
+          });
         }}
       >
-        <Text tw="text-white dark:text-black">Custom toast</Text>
+        Loading then Succeeded Toast
       </Button>
+      <View tw="h-2" />
+      <Button
+        variant="outlined"
+        onPress={async () => {
+          const fetch = new Promise((resolve, reject) =>
+            setTimeout(reject, 3000)
+          );
+          toast.promise(fetch, {
+            loading: "Processing Payment!",
+            success: "Payment Succeeded 🎉",
+            error: "Your payment was not successful, please try again.",
+          });
+        }}
+      >
+        Loading then Failed Toast
+      </Button>
+
+      <View tw="h-2" />
+      <Button
+        variant="text"
+        onPress={() => {
+          toast.dismiss();
+        }}
+      >
+        Dismiss Toast
+      </Button>
+      <Toaster />
     </View>
   );
 };

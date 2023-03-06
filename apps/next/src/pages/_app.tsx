@@ -44,6 +44,8 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
 
+import { Toaster } from "design-system/toast";
+
 import "../styles/styles.css";
 
 // TODO: remove this once Reanimated ship a fix
@@ -198,6 +200,7 @@ function App({ Component, pageProps, router }: AppProps) {
 
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
+        <Toaster />
       </AppProviders>
     </>
   );

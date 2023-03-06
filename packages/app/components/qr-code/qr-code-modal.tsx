@@ -32,7 +32,6 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -56,6 +55,7 @@ import {
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
+import { toast } from "design-system/toast";
 
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {
@@ -159,7 +159,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
   const viewRef = useRef<RNView | Node>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const isDark = useIsDarkMode();
-  const toast = useToast();
   const { bottom } = useSafeAreaInsets();
   const { data: creatorProfile } = useUserProfile({
     address: nft?.creator_address,
@@ -255,16 +254,13 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       if (hasPermission) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         await MediaLibrary.saveToLibraryAsync(url);
-        toast?.show({
-          message: "Saved to Photos",
-          hideAfter: 2000,
-        });
+        toast.success("Saved to Photos");
       } else {
         Alert.alert("No write permission");
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }
     }
-  }, [nft, requestPermission, status?.granted, toast]);
+  }, [nft, requestPermission, status?.granted]);
 
   const shareSingleImage = useCallback(
     async (
@@ -331,8 +327,8 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(qrCodeUrl.toString());
-    toast?.show({ message: "Copied!", hideAfter: 5000 });
-  }, [qrCodeUrl, toast]);
+    toast.success("Copied!");
+  }, [qrCodeUrl]);
   const imageStyle = {
     height: size,
     width: size,

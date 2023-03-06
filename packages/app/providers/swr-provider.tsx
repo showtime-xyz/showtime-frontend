@@ -7,11 +7,11 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { PublicConfiguration } from "swr/_internal";
 
-import { useToast } from "@showtime-xyz/universal.toast";
-
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useIsOnline } from "app/hooks/use-is-online";
 import { isUndefined } from "app/lib/swr/helper";
+
+import { toast } from "design-system/toast";
 
 import { setupSWRCache } from "./swr-cache";
 
@@ -36,7 +36,6 @@ export const SWRProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const toast = useToast();
   const { refreshTokens } = useAccessTokenManager();
   const { isOnline } = useIsOnline();
 
@@ -47,10 +46,7 @@ export const SWRProvider = ({
         onError: (err) => {
           if (err?.message && __DEV__) {
             console.error(err);
-            toast?.show({
-              message: err.message,
-              hideAfter: 4000,
-            });
+            toast.error(err.message);
           }
         },
         onErrorRetry: async (

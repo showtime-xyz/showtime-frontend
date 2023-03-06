@@ -1,0 +1,510 @@
+diff --git a/node_modules/burnt/build/index.js b/node_modules/burnt/build/index.js
+index 549cae9..7438cd0 100644
+--- a/node_modules/burnt/build/index.js
++++ b/node_modules/burnt/build/index.js
+@@ -1,11 +1,27 @@
+ // Import the native module. On web, it will be resolved to Burnt.web.ts
+ // and on native platforms to Burnt.ts
++import { Platform, processColor } from "react-native";
+ import BurntModule from "./BurntModule";
+-export function alert({ preset = "done", duration = 5, ...options }) {
+-    return BurntModule.alertAsync({ duration, preset, ...options });
++const getPlatfomIconProps = (params) => {
++    if (Platform.OS === "ios") {
++        const color = params.ios?.color ? processColor(params.ios?.color) : null;
++        return { ...params.ios, color };
++    }
++    return {};
++};
++export function alert({ duration = 5, ...options }) {
++    let icon;
++    if (options.preset === "custom") {
++        icon = getPlatfomIconProps(options.icon);
++    }
++    return BurntModule.alertAsync({ duration, ...options, icon });
+ }
+ export function toast({ duration = 5, ...options }) {
+-    return BurntModule.toastAsync({ duration, ...options });
++    let icon;
++    if (options.preset === "custom") {
++        icon = getPlatfomIconProps(options.icon);
++    }
++    return BurntModule.toastAsync({ duration, ...options, icon });
+ }
+ export function dismissAllAlerts() {
+     return BurntModule.dismissAllAlertsAsync();
+diff --git a/node_modules/burnt/build/types.d.ts b/node_modules/burnt/build/types.d.ts
+index 42cec28..9d0cc29 100644
+--- a/node_modules/burnt/build/types.d.ts
++++ b/node_modules/burnt/build/types.d.ts
+@@ -1,13 +1,30 @@
++export type IconParams = {
++    ios: {
++        /**
++         * The name of an iOS-only SF Symbol. For a full list, see https://developer.apple.com/sf-symbols/.
++         * @platform ios
++         */
++        name: string;
++        /**
++         * Change the custom icon color, default is system blue.
++         * @platform ios
++         */
++        color: string;
++    };
++};
+ export type AlertOptions = {
+     title: string;
+-    message: string;
++    message?: string;
+     /**
+      * Defaults to `true`.
+      */
+     shouldDismissByTap?: boolean;
+     layout?: Layout;
+ } & ({
+-    preset: "heart" | "done" | "error";
++    /**
++     * Defaults to `done`.
++     */
++    preset?: "heart" | "done" | "error" | "none";
+     /**
+      * Duration in seconds.
+      */
+@@ -36,6 +53,13 @@ export type AlertOptions = {
+      * ```
+      */
+     duration: number;
++} | {
++    preset: "custom";
++    icon: IconParams;
++    /**
++     * Duration in seconds.
++     */
++    duration?: number;
+ });
+ type Layout = {
+     iconSize?: {
+@@ -43,10 +67,13 @@ type Layout = {
+         height: number;
+     };
+ };
+-export type ToastOptions = {
++export type BaseToastOptions = {
+     title: string;
+-    message: string;
+-    preset: "done" | "error";
++    message?: string;
++    /**
++     * Defaults to `done`.
++     */
++    preset?: "done" | "error" | "none";
+     /**
+      * Duration in seconds.
+      */
+@@ -56,7 +83,20 @@ export type ToastOptions = {
+      * Defaults to `true`.
+      */
+     shouldDismissByDrag?: boolean;
++    /**
++     * Change the presentation side.
++     * @platform ios
++     */
++    from?: "top" | "bottom";
+     layout?: Layout;
+ };
++export type CustomToastOptions = Omit<BaseToastOptions, "preset"> & {
++    /**
++     * Defaults to `done`.
++     */
++    preset?: "custom";
++    icon: IconParams;
++};
++export type ToastOptions = BaseToastOptions | CustomToastOptions;
+ export {};
+ //# sourceMappingURL=types.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/burnt/ios/BurntModule.swift b/node_modules/burnt/ios/BurntModule.swift
+index 0ae88c6..f45cbaf 100644
+--- a/node_modules/burnt/ios/BurntModule.swift
++++ b/node_modules/burnt/ios/BurntModule.swift
+@@ -2,28 +2,35 @@ import ExpoModulesCore
+ import SPIndicator
+ import SPAlert
+ 
+-enum AlertPreset: String, EnumArgument {
++
++enum AlertPreset: String, Enumerable {
+   case done
+   case error
+   case heart
+   case spinner
++  case custom
+   
+-  func toSPAlertIconPreset() -> SPAlertIconPreset {
++  func toSPAlertIconPreset(_ options: AlertOptions?) throws -> SPAlertIconPreset {
+     switch self {
+-    case .done:
+-      return .done
+-    case .error:
+-      return .error
+-    case .heart:
+-      return .heart
+-    case .spinner:
+-      return .spinner
++      case .done:
++        return .done
++      case .error:
++        return .error
++      case .heart:
++        return .heart
++      case .spinner:
++        return .spinner
++      case .custom:
++        guard let image = UIImage.init( systemName: options?.icon?.name ?? "swift") else {
++          throw BurntError.invalidSystemName
++        }
++        return .custom((image.withTintColor(options?.icon?.color ?? .systemBlue, renderingMode: .alwaysOriginal)))
+     }
+   }
+ }
+ 
+ 
+-enum AlertHaptic: String, EnumArgument {
++enum AlertHaptic: String, Enumerable {
+   case success
+   case warning
+   case error
+@@ -31,14 +38,14 @@ enum AlertHaptic: String, EnumArgument {
+   
+   func toSPAlertHaptic() -> SPAlertHaptic {
+     switch self {
+-    case .success:
+-      return .success
+-    case .warning:
+-      return .warning
+-    case .error:
+-      return .error
+-    case .none:
+-      return .none
++      case .success:
++        return .success
++      case .warning:
++        return .warning
++      case .error:
++        return .error
++      case .none:
++        return .none
+     }
+   }
+ }
+@@ -69,6 +76,22 @@ struct AlertOptions: Record {
+   
+   @Field
+   var layout: AlertLayout?
++  
++  @Field
++  var icon: Icon? = nil
++}
++struct Icon: Record {
++  @Field
++  var width: Int?
++  
++  @Field
++  var height: Int?
++  
++  @Field
++  var name: String? = nil
++  
++  @Field
++  var color: UIColor = .systemGray
+ }
+ 
+ struct IconSize: Record {
+@@ -122,9 +145,15 @@ struct ToastOptions: Record {
+   
+   @Field
+   var haptic: ToastHaptic = .none
++  
++  @Field
++  var from: ToastPresentSide = .top
++  
++  @Field
++  var icon: Icon? = nil
+ }
+ 
+-enum ToastHaptic: String, EnumArgument {
++enum ToastHaptic: String, Enumerable {
+   case success
+   case warning
+   case error
+@@ -132,28 +161,53 @@ enum ToastHaptic: String, EnumArgument {
+   
+   func toSPIndicatorHaptic() -> SPIndicatorHaptic {
+     switch self {
+-    case .success:
+-      return .success
+-    case .warning:
+-      return .warning
+-    case .error:
+-      return .error
+-    case .none:
+-      return .none
++      case .success:
++        return .success
++      case .warning:
++        return .warning
++      case .error:
++        return .error
++      case .none:
++        return .none
+     }
+   }
+ }
+-
+-enum ToastPreset: String, EnumArgument {
++enum BurntError: Error {
++  case invalidSystemName
++}
++enum ToastPreset: String, Enumerable {
+   case done
+   case error
++  case none
++  case custom
+   
+-  func toSPIndicatorPreset() -> SPIndicatorIconPreset {
++  func toSPIndicatorPreset(_ options: ToastOptions?) throws -> SPIndicatorIconPreset? {
+     switch self {
+-    case .done:
+-      return .done
+-    case .error:
+-      return .error
++      case .done:
++        return .done
++      case .error:
++        return .error
++      case .none:
++        return .none
++      case .custom:
++        guard let image = UIImage.init( systemName: options?.icon?.name ?? "swift") else {
++          throw BurntError.invalidSystemName
++        }
++        return .custom(image.withTintColor(options?.icon?.color ?? .systemBlue, renderingMode: .alwaysOriginal))
++    }
++  }
++}
++
++enum ToastPresentSide: String, Enumerable {
++  case top
++  case bottom
++  
++  func toSPIndicatorPresentSide() -> SPIndicatorPresentSide {
++    switch self {
++      case .top:
++        return .top
++      case .bottom:
++        return .bottom
+     }
+   }
+ }
+@@ -163,7 +217,13 @@ public class BurntModule: Module {
+     Name("Burnt")
+     
+     AsyncFunction("toastAsync") { (options: ToastOptions) -> Void in
+-      let view = SPIndicatorView(title: options.title, message: options.message, preset: options.preset.toSPIndicatorPreset())
++      var preset: SPIndicatorIconPreset?
++      do {
++        preset = try options.preset.toSPIndicatorPreset(options)
++      } catch {
++        log.error("Burnt Toast error: \(error)")
++      }
++      let view = (preset != nil) ? SPIndicatorView(title: options.title, message: options.message, preset: preset ?? .done):  SPIndicatorView(title: options.title, message: options.message)
+       
+       if let duration = options.duration {
+         view.duration = duration
+@@ -175,28 +235,37 @@ public class BurntModule: Module {
+       
+       view.dismissByDrag = options.shouldDismissByDrag
+       
++      view.presentSide = options.from.toSPIndicatorPresentSide();
++      
+       view.present(haptic: options.haptic.toSPIndicatorHaptic())
+     }.runOnQueue(.main)
+     
+     AsyncFunction("alertAsync")  { (options: AlertOptions) -> Void in
++      var preset: SPAlertIconPreset?
++      do {
++        preset = try options.preset.toSPAlertIconPreset(options)
++      } catch {
++        log.error("Burnt Alert error: \(error)")
++      }
++      
+       let view = SPAlertView(
+         title: options.title,
+         message: options.message,
+-        preset: options.preset.toSPAlertIconPreset())
++        preset: preset ?? .done)
+       
+-        if let duration = options.duration {
+-          view.duration = duration
+-        }
++      if let duration = options.duration {
++        view.duration = duration
++      }
+       
+-        view.dismissByTap = options.shouldDismissByTap
++      view.dismissByTap = options.shouldDismissByTap
+       
+-        if let icon = options.layout?.iconSize {
+-          view.layout.iconSize = .init(width: icon.width, height: icon.height)
+-        }
++      if let icon = options.layout?.iconSize {
++        view.layout.iconSize = .init(width: icon.width, height: icon.height)
++      }
+       
+-        view.present(
+-          haptic: options.haptic.toSPAlertHaptic())
+-     }.runOnQueue(.main) 
++      view.present(
++        haptic: options.haptic.toSPAlertHaptic())
++    }.runOnQueue(.main)
+     
+     AsyncFunction("dismissAllAlertsAsync") {
+       return SPAlert.dismiss()
+diff --git a/node_modules/burnt/src/index.ts b/node_modules/burnt/src/index.ts
+index fb75b34..21cc49b 100644
+--- a/node_modules/burnt/src/index.ts
++++ b/node_modules/burnt/src/index.ts
+@@ -1,18 +1,33 @@
+ // Import the native module. On web, it will be resolved to Burnt.web.ts
+ // and on native platforms to Burnt.ts
++import { Platform, processColor } from "react-native";
+ import BurntModule from "./BurntModule";
+-import { AlertOptions, ToastOptions } from "./types";
++import { AlertOptions, IconParams, ToastOptions } from "./types";
+ 
+-export function alert({
+-  preset = "done",
+-  duration = 5,
+-  ...options
+-}: AlertOptions) {
+-  return BurntModule.alertAsync({ duration, preset, ...options });
++const getPlatfomIconProps = (params: IconParams) => {
++  if (Platform.OS === "ios") {
++    const color = params.ios?.color ? processColor(params.ios?.color) : null;
++    console.log(color);
++    
++    return { ...params.ios, color };
++  }
++  return {};
++};
++
++export function alert({ duration = 5, ...options }: AlertOptions) {
++  let icon;
++  if (options.preset === "custom") {
++    icon = getPlatfomIconProps(options.icon);
++  }
++  return BurntModule.alertAsync({ duration, ...options, icon });
+ }
+ 
+ export function toast({ duration = 5, ...options }: ToastOptions) {
+-  return BurntModule.toastAsync({ duration, ...options });
++  let icon;
++  if (options.preset === "custom") {
++    icon = getPlatfomIconProps(options.icon);
++  }
++  return BurntModule.toastAsync({ duration, ...options, icon });
+ }
+ 
+ export function dismissAllAlerts() {
+diff --git a/node_modules/burnt/src/types.ts b/node_modules/burnt/src/types.ts
+index 4aec7c4..aa100af 100644
+--- a/node_modules/burnt/src/types.ts
++++ b/node_modules/burnt/src/types.ts
+@@ -1,6 +1,20 @@
++export type IconParams = {
++  ios: {
++    /**
++     * The name of an iOS-only SF Symbol. For a full list, see https://developer.apple.com/sf-symbols/.
++     * @platform ios
++     */
++    name: string;
++    /**
++     * Change the custom icon color, default is system blue.
++     * @platform ios
++     */
++    color: string;
++  };
++};
+ export type AlertOptions = {
+   title: string;
+-  message: string;
++  message?: string;
+   /**
+    * Defaults to `true`.
+    */
+@@ -8,7 +22,10 @@ export type AlertOptions = {
+   layout?: Layout;
+ } & (
+   | {
+-      preset: "heart" | "done" | "error";
++      /**
++       * Defaults to `done`.
++       */
++      preset?: "heart" | "done" | "error" | "none";
+ 
+       /**
+        * Duration in seconds.
+@@ -40,6 +57,15 @@ export type AlertOptions = {
+        */
+       duration: number;
+     }
++  | {
++      preset: "custom";
++
++      icon: IconParams;
++      /**
++       * Duration in seconds.
++       */
++      duration?: number;
++    }
+ );
+ 
+ type Layout = {
+@@ -49,10 +75,13 @@ type Layout = {
+   };
+ };
+ 
+-export type ToastOptions = {
++export type BaseToastOptions = {
+   title: string;
+-  message: string;
+-  preset: "done" | "error"; // TODO custom option
++  message?: string;
++  /**
++   * Defaults to `done`.
++   */
++  preset?: "done" | "error" | "none"; // TODO custom option
+   /**
+    * Duration in seconds.
+    */
+@@ -62,5 +91,20 @@ export type ToastOptions = {
+    * Defaults to `true`.
+    */
+   shouldDismissByDrag?: boolean;
++  /**
++   * Change the presentation side.
++   * @platform ios
++   */
++  from?: "top" | "bottom";
+   layout?: Layout;
+ };
++
++export type CustomToastOptions = Omit<BaseToastOptions, "preset"> & {
++  /**
++   * Defaults to `done`.
++   */
++  preset?: "custom"; // TODO custom option
++  icon: IconParams;
++};
++
++export type ToastOptions = BaseToastOptions | CustomToastOptions;
