@@ -7,13 +7,13 @@ import * as Portal from "@radix-ui/react-portal";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { useToast } from "@showtime-xyz/universal.toast";
 import { View } from "@showtime-xyz/universal.view";
+
+import { toast } from "design-system/toast";
 
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
-  const toast = useToast();
   const [hCaptchaLoaded, setHCaptchaLoaded] = useState(false);
   const [challengeRunning, setChallengeIsRunning] = useState(false);
   const isDark = useIsDarkMode();
@@ -44,11 +44,9 @@ export const Challenge = () => {
       }
     } catch (err) {
       console.log("hCaptcha error", err);
-      toast?.show({
-        message:
-          "Captcha challenge failed.\nPlease try again or connect a social account.",
-        hideAfter: 5000,
-      });
+      toast.error(
+        "Captcha challenge failed.\nPlease try again or connect a social account."
+      );
     } finally {
       // this has to be called to reset the captcha once validated with the server
       // captchaRef.current?.resetCaptcha();

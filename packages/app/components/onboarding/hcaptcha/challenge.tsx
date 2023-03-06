@@ -5,14 +5,14 @@ import { WebViewMessageEvent } from "react-native-webview";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useToast } from "@showtime-xyz/universal.toast";
 
 import { useRudder } from "app/lib/rudderstack";
+
+import { toast } from "design-system/toast";
 
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
-  const toast = useToast();
   const { rudder } = useRudder();
 
   const isDark = useIsDarkMode();
@@ -26,10 +26,8 @@ export const Challenge = () => {
         rudder?.track("hCaptcha Error", {
           error: event.nativeEvent.data,
         });
-        toast?.show({
-          message:
-            "Captcha challenge failed.\nPlease try again or connect a social account.",
-          hideAfter: 5000,
+        toast("Captcha challenge failed.", {
+          message: "Please try again or connect a social account.",
         });
 
         return;
