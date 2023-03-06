@@ -4,10 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 
 const SpotifyAuthRedirect = () => {
   useEffect(() => {
-    (async () => {
-      const res = await WebBrowser.maybeCompleteAuthSession();
-      console.log("rkrokr ", res);
-    })();
+    WebBrowser.maybeCompleteAuthSession();
   }, []);
   return null;
 };
