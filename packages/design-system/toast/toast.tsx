@@ -19,7 +19,6 @@ const toast = (title: string, options?: ToastOptions) => {
   return Burnt.toast({
     title: title,
     preset: "none",
-    duration: 3000,
     ...options,
   });
 };
