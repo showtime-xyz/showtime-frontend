@@ -22,12 +22,10 @@ export const Challenge = () => {
     if (event && event.nativeEvent.data) {
       if (["cancel", "error", "expired"].includes(event.nativeEvent.data)) {
         captchaRef.current?.hide();
+        toast("Please try again or connect a social account.");
 
         rudder?.track("hCaptcha Error", {
           error: event.nativeEvent.data,
-        });
-        toast("Captcha challenge failed.", {
-          message: "Please try again or connect a social account.",
         });
 
         return;
