@@ -89,3 +89,13 @@ async function postInstagramAuthCode(
     }
   }
 }
+
+export async function getServerSideProps() {
+  return {
+    redirect: {
+      permanent: false,
+      destination:
+        "io.showtime.development://instagram-oauth-redirect?code=123",
+    },
+  };
+}
