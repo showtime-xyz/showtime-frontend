@@ -1,9 +1,11 @@
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Showtime, Mail } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useSendFeedback } from "app/hooks/use-send-feedback";
 
 import { SettingClearAppCache } from "../clear-cache-btn";
 import { SettingItemSeparator } from "../setting-item-separator";
@@ -21,6 +23,7 @@ export type AccountTabProps = {
 
 export const AdvancedTab = ({ index = 0 }: AccountTabProps) => {
   const router = useRouter();
+  const { onSendFeedback } = useSendFeedback();
   return (
     <SettingScrollComponent index={index}>
       <SettingsTitle
@@ -34,9 +37,10 @@ export const AdvancedTab = ({ index = 0 }: AccountTabProps) => {
           buttonText="View"
           Icon={Showtime}
         />
+
         <AccountSettingItem
           title="Feedback"
-          onPress={() => Linking.openURL("mailto:help@showtime.xyz")}
+          onPress={onSendFeedback}
           buttonText="Contact"
           Icon={Mail}
         />

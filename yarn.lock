@@ -8998,6 +8998,7 @@ __metadata:
     expo-linking: ~3.2.3
     expo-localization: ~14.0.0
     expo-location: ~15.0.1
+    expo-mail-composer: ~12.0.0
     expo-media-library: ~15.0.0
     expo-modules-core: ~1.1.1
     expo-navigation-bar: ~2.0.1
@@ -21681,6 +21682,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-mail-composer@npm:~12.0.0":
+  version: 12.0.0
+  resolution: "expo-mail-composer@npm:12.0.0"
+  dependencies:
+    query-string: ^6.2.0
+  peerDependencies:
+    expo: "*"
+  checksum: 4ddcf1987b3d459dc15a48f523815cc2acf3be77baf0d473d8b9cc0b4b586992bc94cbb3443bcab5892e0ac239178541f4c0d14e2c3eb8e339109a38644af1df
+  languageName: node
+  linkType: hard
+
 "expo-manifests@npm:~0.4.0":
   version: 0.4.0
   resolution: "expo-manifests@npm:0.4.0"
@@ -32062,6 +32074,18 @@ __metadata:
     object-assign: ^4.1.0
     strict-uri-encode: ^1.0.0
   checksum: 4ac760d9778d413ef5f94f030ed14b1a07a1708dd13fd3bc54f8b9ef7b425942c7577f30de0bf5a7d227ee65a9a0350dfa3a43d1d266880882fb7ce4c434a4dd
+  languageName: node
+  linkType: hard
+
+"query-string@npm:^6.2.0":
+  version: 6.14.1
+  resolution: "query-string@npm:6.14.1"
+  dependencies:
+    decode-uri-component: ^0.2.0
+    filter-obj: ^1.1.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: f2c7347578fa0f3fd4eaace506470cb4e9dc52d409a7ddbd613f614b9a594d750877e193b5d5e843c7477b3b295b857ec328903c943957adc41a3efb6c929449
   languageName: node
   linkType: hard
 
