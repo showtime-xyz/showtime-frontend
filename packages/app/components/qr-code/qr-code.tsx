@@ -6,11 +6,12 @@ import * as MediaLibrary from "expo-media-library";
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useToast } from "@showtime-xyz/universal.toast";
 
 import domtoimage from "app/lib/dom-to-image";
 import { ReactQRCode } from "app/lib/qr-code";
 import { captureRef } from "app/lib/view-shot";
+
+import { toast } from "design-system/toast";
 
 type Props = {
   text: string;
@@ -19,7 +20,6 @@ type Props = {
 
 export const QRCode = ({ text, size }: Props) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
-  const toast = useToast();
   const viewRef = useRef<View | Node>(null);
 
   const onDownload = useCallback(async () => {
@@ -48,16 +48,13 @@ export const QRCode = ({ text, size }: Props) => {
       if (hasPermission) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         await MediaLibrary.saveToLibraryAsync(url);
-        toast?.show({
-          message: "Saved to Photos",
-          hideAfter: 2000,
-        });
+        toast.success("Saved to Photos");
       } else {
         Alert.alert("Oops, No write permission.");
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }
     }
-  }, [requestPermission, status?.granted, toast]);
+  }, [requestPermission, status?.granted]);
 
   return (
     <View style={{ alignItems: "center" }}>

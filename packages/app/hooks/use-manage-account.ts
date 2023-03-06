@@ -3,17 +3,17 @@ import { useCallback } from "react";
 import { useSWRConfig } from "swr";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useToast } from "@showtime-xyz/universal.toast";
 
 import { removeWalletFromBackend } from "app/lib/add-wallet";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { obfuscatePhoneNumber } from "app/utilities";
 
+import { toast } from "design-system/toast";
+
 import { Logger } from "../lib/logger";
 
 export function useManageAccount() {
-  const toast = useToast();
   const { mutate } = useSWRConfig();
 
   const Alert = useAlert();
@@ -33,10 +33,7 @@ export function useManageAccount() {
 
         mutate(MY_INFO_ENDPOINT);
 
-        toast?.show({
-          message: "Social account added",
-          hideAfter: 4000,
-        });
+        toast.success("Social account added");
       } catch (error: any) {
         Logger.error("Add social error", error);
 
@@ -60,11 +57,7 @@ export function useManageAccount() {
                   });
 
                   mutate(MY_INFO_ENDPOINT);
-
-                  toast?.show({
-                    message: "Social account added",
-                    hideAfter: 4000,
-                  });
+                  toast.success("Social account added");
                 },
               },
             ]
@@ -72,7 +65,7 @@ export function useManageAccount() {
         }
       }
     },
-    [toast, mutate, Alert]
+    [mutate, Alert]
   );
 
   const addEmail = useCallback(
@@ -88,11 +81,7 @@ export function useManageAccount() {
         });
 
         mutate(MY_INFO_ENDPOINT);
-
-        toast?.show({
-          message: "Email added and will soon appear on your profile!",
-          hideAfter: 4000,
-        });
+        toast.success("Email added and will soon appear on your profile!");
       } catch (error: any) {
         Logger.error("Add email error", error);
 
@@ -103,16 +92,14 @@ export function useManageAccount() {
             [{ text: "Ok" }]
           );
         } else {
-          toast?.show({
-            message:
-              error?.response?.data?.error?.message ??
-              "Unable to add the email to your profile at this time, please try again!",
-            hideAfter: 4000,
-          });
+          toast.error(
+            error?.response?.data?.error?.message ??
+              "Unable to add the email to your profile at this time, please try again!"
+          );
         }
       }
     },
-    [toast, mutate, Alert]
+    [mutate, Alert]
   );
 
   const verifyPhoneNumber = useCallback(
@@ -128,10 +115,7 @@ export function useManageAccount() {
         });
 
         mutate(MY_INFO_ENDPOINT);
-        toast?.show({
-          message: "Phone number successfully verified!",
-          hideAfter: 4000,
-        });
+        toast.success("Phone number successfully verified!");
       } catch (error: any) {
         Logger.error("Add Phone error", error);
         // User has already linked this phone to another account so we ask whether we should reassign to this account.
@@ -160,57 +144,45 @@ export function useManageAccount() {
                       },
                     });
                     mutate(MY_INFO_ENDPOINT);
-                    toast?.show({
-                      message: "Phone number successfully verified!",
-                      hideAfter: 4000,
-                    });
+                    toast.success("Phone number successfully verified!");
                   } catch (e: any) {
-                    toast?.show({
-                      message:
-                        e?.response?.data?.error?.message ??
-                        "Unable to verify your phone number at this time, please try again!",
-                      hideAfter: 4000,
-                    });
+                    toast.error(
+                      e?.response?.data?.error?.message ??
+                        "Unable to verify your phone number at this time, please try again!"
+                    );
                   }
                 },
               },
             ]
           );
         } else {
-          toast?.show({
-            message:
-              error?.response?.data?.error?.message ??
-              "Unable to verify your phone number at this time, please try again!",
-            hideAfter: 4000,
-          });
+          toast.error(
+            error?.response?.data?.error?.message ??
+              "Unable to verify your phone number at this time, please try again!"
+          );
         }
       }
     },
-    [toast, mutate, Alert]
+    [mutate, Alert]
   );
 
   const removeAccount = useCallback(
     async (address: string) => {
       try {
         await removeWalletFromBackend(address);
-
         mutate(MY_INFO_ENDPOINT);
-
-        toast?.show({
-          message: "Account removed and will disappear from your profile soon",
-          hideAfter: 4000,
-        });
+        toast.success(
+          "Account removed and will disappear from your profile soon"
+        );
       } catch (error: any) {
         Logger.error("Remove account error", error);
-        toast?.show({
-          message:
-            error?.response?.data?.error?.message ??
-            "Unable to remove the selected account at this time, please try again",
-          hideAfter: 4000,
-        });
+        toast.error(
+          error?.response?.data?.error?.message ??
+            "Unable to remove the selected account at this time, please try again"
+        );
       }
     },
-    [toast, mutate]
+    [mutate]
   );
 
   const removePhoneNumber = useCallback(
@@ -222,21 +194,16 @@ export function useManageAccount() {
         });
 
         mutate(MY_INFO_ENDPOINT);
-        toast?.show({
-          message: "Phone number has removed",
-          hideAfter: 4000,
-        });
+        toast.success("Phone number has removed");
       } catch (error: any) {
         Logger.error("Remove Phone error", error);
-        toast?.show({
-          message:
-            e?.response?.data?.error?.message ??
-            "Unable to remove the phone number at this time, please try again",
-          hideAfter: 4000,
-        });
+        toast.error(
+          error?.response?.data?.error?.message ??
+            "Unable to remove the phone number at this time, please try again"
+        );
       }
     },
-    [toast, mutate]
+    [mutate]
   );
   return {
     addEmail,

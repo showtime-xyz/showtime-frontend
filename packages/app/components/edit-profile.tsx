@@ -681,6 +681,9 @@ export const EditProfile = () => {
         visible={!!selectedImg}
         onClose={() => setSelectedImg(null)}
         aspect={currentCropField === "coverPicture" ? 3 / 1 : 1}
+        title={`Crop your ${
+          currentCropField === "coverPicture" ? "cover" : "profile"
+        } picture`}
         onApply={async (e) => {
           if (!currentCropField) return;
           const timestamp = new Date().valueOf();

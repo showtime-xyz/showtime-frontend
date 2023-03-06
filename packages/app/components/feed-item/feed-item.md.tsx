@@ -190,7 +190,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   tw={[
-                    "rounded-full bg-gray-100 bg-white p-3 dark:bg-gray-900",
+                    "rounded-full bg-white p-3 dark:bg-gray-900",
                     showFullScreen ? "hidden" : "flex",
                   ]}
                   iconColor={isDark ? colors.white : colors.gray[900]}
