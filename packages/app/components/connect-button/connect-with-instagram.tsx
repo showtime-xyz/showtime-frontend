@@ -35,7 +35,7 @@ export const ConnectWithInstagram = () => {
       const code = urlObj.searchParams.get("code");
       if (code) {
         console.log("code ", code);
-        Alert.alert("Success", "Connected with Instagram");
+        Alert.alert("Success", code);
       } else {
         Alert.alert("Error", "Something went wrong");
       }
