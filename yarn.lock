@@ -8703,7 +8703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal@npm:0.0.125":
+"@showtime-xyz/universal.modal@npm:0.0.125, @showtime-xyz/universal.modal@npm:^0.0.125":
   version: 0.0.125
   resolution: "@showtime-xyz/universal.modal@npm:0.0.125"
   dependencies:
@@ -8723,29 +8723,6 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: dcc715fc75acf1b8e054488b22416a3206bdbfed08cdca60b172df3f6748613c4dbb9758828a6cf6cb3826501ef7b6ddbddcef32a29d6a0d8248f529125f735c
-  languageName: node
-  linkType: hard
-
-"@showtime-xyz/universal.modal@npm:^0.0.124":
-  version: 0.0.124
-  resolution: "@showtime-xyz/universal.modal@npm:0.0.124"
-  dependencies:
-    "@radix-ui/react-use-escape-keydown": 1.0.2
-    "@showtime-xyz/universal.button": 0.0.85
-    "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.87
-    "@showtime-xyz/universal.safe-area": 0.0.42
-    "@showtime-xyz/universal.tailwind": 0.0.52
-    "@showtime-xyz/universal.text": 0.0.57
-    "@showtime-xyz/universal.view": 0.0.53
-    "@storybook/react": 6.5.16
-  peerDependencies:
-    "@gorhom/bottom-sheet": "*"
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-    react-native: ^0.64.1
-    react-native-web: ^0.16.0
-  checksum: d2b45bbeaedb0e2e31ea899d4ea095bd8b1433a42ec0f563f400b8803a327e6d2e09d89aa916b3dcdc080d2a612b3ca13f4c7f08b98799aeb8527cde1f5b45ec
   languageName: node
   linkType: hard
 
@@ -9187,7 +9164,7 @@ __metadata:
     "@showtime-xyz/universal.input": ^0.0.77
     "@showtime-xyz/universal.label": ^0.0.59
     "@showtime-xyz/universal.light-box": ^0.0.98
-    "@showtime-xyz/universal.modal": ^0.0.124
+    "@showtime-xyz/universal.modal": ^0.0.125
     "@showtime-xyz/universal.modal-screen": ^0.0.140
     "@showtime-xyz/universal.modal-sheet": ^0.0.128
     "@showtime-xyz/universal.pan-to-close": ^0.0.33
