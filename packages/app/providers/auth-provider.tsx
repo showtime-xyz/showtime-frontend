@@ -99,7 +99,7 @@ export function AuthProvider({
             router.pop();
           }
           setTimeout(() => {
-            router.push("/profile/complete-prompt");
+            router.push("/profile/edit");
           }, 1000);
         }
         return res;
