@@ -30,6 +30,10 @@ const MagicOauthRedirect = () => {
     if (code) {
       console.log("instagram auth code ", code);
       trigger({ code });
+      window.open(
+        "io.showtime.development://instagram-oauth-redirect?code=" + code,
+        "_self"
+      );
     }
   }, [code, trigger]);
 
@@ -88,14 +92,4 @@ async function postInstagramAuthCode(
       throw e;
     }
   }
-}
-
-export async function getServerSideProps() {
-  return {
-    redirect: {
-      permanent: false,
-      destination:
-        "io.showtime.development://instagram-oauth-redirect?code=123",
-    },
-  };
 }
