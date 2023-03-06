@@ -8,7 +8,6 @@ import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
-import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";
 
 import "../styles/globals.css";
@@ -29,21 +28,15 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <View tw="flex-1 h-full justify-center dark:bg-gray-900">
+    <View tw="flex-1 h-full justify-center dark:bg-gray-900 bg-gray-50">
       <BottomSheetModalProvider>
         <SafeAreaProvider>
           <ColorSchemeProvider>
-            <ToastProvider>
-              <AlertProvider>
-                <SnackbarProvider>
-                  <NavigationContainer>
-                    <Stack.Navigator screenOptions={{ headerShown: false }}>
-                      <Stack.Screen name="Storybook" component={Story} />
-                    </Stack.Navigator>
-                  </NavigationContainer>
-                </SnackbarProvider>
-              </AlertProvider>
-            </ToastProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <Story />
+              </SnackbarProvider>
+            </AlertProvider>
           </ColorSchemeProvider>
         </SafeAreaProvider>
       </BottomSheetModalProvider>

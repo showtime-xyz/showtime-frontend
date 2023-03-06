@@ -3,11 +3,11 @@ import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { SWRConfiguration } from "swr";
 
-import { useToast } from "@showtime-xyz/universal.toast";
-
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
+
+import { toast } from "design-system/toast";
 
 import { setupSWRCache } from "./swr-cache";
 
@@ -27,7 +27,6 @@ export const SWRProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const toast = useToast();
   const { refreshTokens } = useAccessTokenManager();
   return (
     <SWRConfig
@@ -36,10 +35,7 @@ export const SWRProvider = ({
         onError: (err) => {
           if (__DEV__ && err?.message && err?.message !== "canceled") {
             console.error(err);
-            toast?.show({
-              message: err.message,
-              hideAfter: 4000,
-            });
+            toast.error(err.message);
           }
         },
         onErrorRetry: async (

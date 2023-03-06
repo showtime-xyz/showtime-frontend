@@ -37,8 +37,9 @@
     "@storybook/addon-ondevice-controls": "next",
     "@storybook/addon-ondevice-notes": "next",
     "@storybook/react-native": "next",
+    "burnt": "^0.9.0",
     "design-system": "*",
-    "expo": "~47.0.9",
+    "expo": "~47.0.12",
     "expo-asset": "~8.6.2",
     "expo-av": "~13.0.1",
     "expo-blur": "12.0.1",
@@ -73,7 +74,8 @@
     "react-native-screens": "3.20.0",
     "react-native-svg": "13.8.0",
     "react-native-web": "0.18.9",
-    "three": "^0.142.0"
+    "three": "^0.142.0",
+    "universal-tooltip": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

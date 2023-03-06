@@ -7,7 +7,6 @@ import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
-import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import { growthbook } from "app/lib/growthbook";
 import { NavigationProvider } from "app/navigation";
@@ -31,38 +30,36 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <WalletMobileSDKProvider>
             <WalletProvider>
               <Web3Provider>
-                <ToastProvider>
-                  <AlertProvider>
-                    <LightBoxProvider>
-                      <SnackbarProvider>
-                        <NavigationProvider>
-                          <SWRProvider>
-                            <AuthProvider>
-                              <UserProvider>
-                                <BottomSheetModalProvider>
-                                  {/* @ts-ignore */}
-                                  <GrowthBookProvider growthbook={growthbook}>
-                                    <FeedProvider>
-                                      <BiconomyProvider>
-                                        <MuteProvider>
-                                          <ClaimProvider>
-                                            <DropProvider>
-                                              {children}
-                                            </DropProvider>
-                                          </ClaimProvider>
-                                        </MuteProvider>
-                                      </BiconomyProvider>
-                                    </FeedProvider>
-                                  </GrowthBookProvider>
-                                </BottomSheetModalProvider>
-                              </UserProvider>
-                            </AuthProvider>
-                          </SWRProvider>
-                        </NavigationProvider>
-                      </SnackbarProvider>
-                    </LightBoxProvider>
-                  </AlertProvider>
-                </ToastProvider>
+                <AlertProvider>
+                  <LightBoxProvider>
+                    <SnackbarProvider>
+                      <NavigationProvider>
+                        <SWRProvider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <BottomSheetModalProvider>
+                                {/* @ts-ignore */}
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <BiconomyProvider>
+                                      <MuteProvider>
+                                        <ClaimProvider>
+                                          <DropProvider>
+                                            {children}
+                                          </DropProvider>
+                                        </ClaimProvider>
+                                      </MuteProvider>
+                                    </BiconomyProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </SWRProvider>
+                      </NavigationProvider>
+                    </SnackbarProvider>
+                  </LightBoxProvider>
+                </AlertProvider>
               </Web3Provider>
             </WalletProvider>
           </WalletMobileSDKProvider>
