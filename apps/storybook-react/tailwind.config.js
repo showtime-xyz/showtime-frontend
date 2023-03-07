@@ -321,6 +321,7 @@ module.exports = {
       },
       borderRadius: {
         inherit: "inherit",
+        "4xl": "32px",
       },
       colors: {
         black45: "rgba(0, 0, 0, 0.45)",

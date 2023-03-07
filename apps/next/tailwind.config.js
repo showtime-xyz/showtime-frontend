@@ -318,6 +318,7 @@ module.exports = {
       },
       borderRadius: {
         inherit: "inherit",
+        "4xl": "32px",
         4: "16px",
       },
       colors: {
