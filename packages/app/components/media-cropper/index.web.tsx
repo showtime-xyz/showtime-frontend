@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Modal } from "react-native";
 
-import Slider from "@react-native-community/slider";
+import * as Slider from "@radix-ui/react-slider";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 
@@ -79,7 +79,7 @@ export const MediaCropper = ({
     >
       <View tw="animate-fade-in-250 absolute inset-0 bg-black/30" />
       <View tw="h-full w-full items-center justify-end md:justify-center">
-        <View tw="w-full rounded-[32px] bg-white dark:bg-black md:w-auto">
+        <View tw="shadow-light dark:shadow-dark w-full rounded-[32px] bg-white dark:bg-black md:w-auto">
           <ModalHeader
             title={title}
             onClose={onClose}
@@ -95,7 +95,7 @@ export const MediaCropper = ({
             )}
           />
           <View tw="max-h-[90vh] min-h-[560px]">
-            <View tw="h-[576px] w-full md:w-[480px]">
+            <View tw="h-[60vh] min-h-[480px] w-full md:w-[480px]">
               {src && (
                 <Cropper
                   image={src}
@@ -110,30 +110,27 @@ export const MediaCropper = ({
                 />
               )}
             </View>
-            <View tw="mt-6 flex-row items-center justify-center px-6">
+            <View tw="mt-6 flex-row items-center justify-center px-4">
               <Pressable
                 onPress={() => setZoom((zoom) => Math.max(zoom - 1, 1))}
               >
                 <ZoomOut width={20} height={20} color={colors.gray[500]} />
               </Pressable>
-              <Slider
-                style={{
-                  width: "100%",
-                  marginVertical: 8,
-                  marginHorizontal: 12,
-                }}
-                minimumValue={1}
-                maximumValue={3}
-                value={zoom}
-                minimumTrackTintColor={colors.indigo[500]}
-                maximumTrackTintColor={
-                  isDark ? colors.gray[700] : colors.gray[200]
-                }
-                thumbTintColor={colors.indigo[500]}
-                onValueChange={setZoom}
-                // @ts-ignore
-                thumbSize={16}
-              />
+              <Slider.Root
+                className="relative mx-2 flex h-5 w-full touch-none select-none items-center"
+                defaultValue={[1]}
+                min={1}
+                max={3}
+                step={0.01}
+                value={[zoom]}
+                aria-label="Zoom Image"
+                onValueChange={(v) => setZoom(v[0])}
+              >
+                <Slider.Track className="bg-blackA10 relative h-1 grow rounded-full bg-gray-200 dark:bg-gray-700">
+                  <Slider.Range className="absolute h-full rounded-full bg-indigo-500" />
+                </Slider.Track>
+                <Slider.Thumb className="shadow-blackA7 hover:bg-violet3 focus:shadow-blackA8 block h-4 w-4 rounded-full bg-indigo-500 focus:outline-none" />
+              </Slider.Root>
               <Pressable
                 onPress={() => setZoom((zoom) => Math.min(zoom + 1, 3))}
               >
@@ -147,7 +144,7 @@ export const MediaCropper = ({
                 <RotateCw width={20} height={20} color={colors.gray[500]} />
               </Pressable>
             </View>
-            <View tw="mt-6 mb-4 px-4">
+            <View tw="mt-6 mb-8 px-4">
               <Button size="regular" onPress={showCroppedImage}>
                 Looks Good
               </Button>
