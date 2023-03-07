@@ -6,7 +6,6 @@ import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ArrowLeft,
   ZoomIn,
@@ -15,7 +14,6 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { ModalHeader } from "@showtime-xyz/universal.modal";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -32,7 +30,6 @@ export const MediaCropper = ({
   title = "Edit Media",
   cropViewHeight = 400,
 }: MediaCropperProps) => {
-  const isDark = useIsDarkMode();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
