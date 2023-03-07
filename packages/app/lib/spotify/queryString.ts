@@ -13,14 +13,11 @@ export const scope = "user-library-modify";
 
 export const clientID = "e12f7eea542947ff843cfc68d762235a";
 
-export const getQueryString = (_redirectUri?: string) => {
-  const state = _redirectUri ? `redirectUri=${_redirectUri}` : "";
-
+export const getQueryString = () => {
   const params = {
     client_id: clientID,
     scope,
     redirect_uri: redirectUri,
-    state,
     response_type: "code",
   };
 
