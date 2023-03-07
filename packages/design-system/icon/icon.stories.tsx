@@ -152,6 +152,7 @@ export const Default = () => {
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.OpenSea} title="OpenSea" />
         <IconItem icon={Icon.Instagram} title="Instagram" />
+        <IconItem icon={Icon.InstagramColorful} title="InstagramColorful" />
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.Apple} title="Apple" />
         <IconItem icon={Icon.GoogleOriginal} title="GoogleOriginal" />
