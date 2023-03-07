@@ -113,6 +113,7 @@ export const EditProfile = () => {
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
   const [showScialExplanation, setShowScialExplanation] = useState(false);
+  const [cropViewHeight, setCropViewHeight] = useState(400);
   const scrollViewRef = useRef<RNScrollView>(null);
   const socialRef = useRef<RNView>(null);
   const socialLinksRefs = useRef<TextInput[]>([]);
@@ -306,8 +307,17 @@ export const EditProfile = () => {
   return (
     <>
       <BottomSheetModalProvider>
-        <View tw={`w-full flex-1`}>
-          <BottomSheetScrollView ref={scrollViewRef}>
+        <View tw="w-full flex-1">
+          <BottomSheetScrollView
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              setCropViewHeight(height);
+            }}
+            ref={scrollViewRef}
+          >
             <Controller
               control={control}
               name="coverPicture"
@@ -684,6 +694,7 @@ export const EditProfile = () => {
         title={`Crop your ${
           currentCropField === "coverPicture" ? "cover" : "profile"
         } picture`}
+        cropViewHeight={cropViewHeight - 60}
         onApply={async (e) => {
           if (!currentCropField) return;
           const timestamp = new Date().valueOf();

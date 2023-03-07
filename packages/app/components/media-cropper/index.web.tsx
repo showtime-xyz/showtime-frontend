@@ -30,6 +30,7 @@ export const MediaCropper = ({
   onApply,
   aspect = 1,
   title = "Edit Media",
+  cropViewHeight = 400,
 }: MediaCropperProps) => {
   const isDark = useIsDarkMode();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -48,6 +49,15 @@ export const MediaCropper = ({
     setRotation(0);
     setCrop({ x: 0, y: 0 });
   };
+
+  const startContentComponent = useCallback(() => {
+    return (
+      <Button variant="tertiary" size="regular" onPress={onClose} iconOnly>
+        <ArrowLeft width={20} height={24} />
+      </Button>
+    );
+  }, [onClose]);
+
   const showCroppedImage = useCallback(async () => {
     try {
       if (!src || !croppedAreaPixels) return;
@@ -63,6 +73,7 @@ export const MediaCropper = ({
       console.error(e, "showCroppedImage");
     }
   }, [src, croppedAreaPixels, rotation, onApply]);
+
   return (
     /**
      * Modal instead of ModalSheet is used here because ModalSheet only supports open 1 sheet on mobile.
@@ -79,23 +90,14 @@ export const MediaCropper = ({
     >
       <View tw="animate-fade-in-250 absolute inset-0 bg-black/30" />
       <View tw="h-full w-full items-center justify-end md:justify-center">
-        <View tw="shadow-light dark:shadow-dark w-full rounded-[32px] bg-white dark:bg-black md:w-auto">
+        <View tw="shadow-light dark:shadow-dark rounded-t-4xl md:border-b-4xl w-full border-b-0 bg-white dark:bg-black md:w-auto">
           <ModalHeader
             title={title}
             onClose={onClose}
-            startContentComponent={() => (
-              <Button
-                variant="tertiary"
-                size="regular"
-                onPress={onClose}
-                iconOnly
-              >
-                <ArrowLeft width={20} height={24} />
-              </Button>
-            )}
+            startContentComponent={startContentComponent}
           />
-          <View tw="max-h-[90vh] min-h-[560px]">
-            <View tw="h-[60vh] min-h-[480px] w-full md:w-[480px]">
+          <View tw="max-h-[82vh]">
+            <View tw="w-full md:w-[480px]" style={{ height: cropViewHeight }}>
               {src && (
                 <Cropper
                   image={src}
