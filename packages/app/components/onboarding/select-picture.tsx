@@ -227,14 +227,12 @@ export const SelectPicture = () => {
                           </MotiView>
                         ) : (
                           <>
-                            <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
-                              <View tw="rounded-full bg-gray-800/70 p-1">
-                                <AddPhoto
-                                  height={20}
-                                  width={20}
-                                  color={colors.white}
-                                />
-                              </View>
+                            <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center">
+                              <AddPhoto
+                                height={20}
+                                width={20}
+                                color={colors.white}
+                              />
                             </View>
                           </>
                         )}
