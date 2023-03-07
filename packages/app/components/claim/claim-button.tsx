@@ -7,7 +7,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Hourglass, Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
@@ -108,7 +107,7 @@ export const ClaimButton = ({
       );
     } else {
       return isMusicDrop ? (
-        <View tw="flex-row items-center">
+        <>
           <Spotify
             color={isDark ? colors.black : colors.white}
             width={20}
@@ -117,7 +116,7 @@ export const ClaimButton = ({
           <Text tw="ml-1 font-semibold text-white dark:text-black">
             Save to Collect
           </Text>
-        </View>
+        </>
       ) : (
         "Collect"
       );
