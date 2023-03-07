@@ -95,7 +95,7 @@ export const MediaCropper = ({
             )}
           />
           <View tw="max-h-[90vh] min-h-[560px]">
-            <View tw="h-[60vh] w-full md:w-[480px]">
+            <View tw="h-[60vh] min-h-[480px] w-full md:w-[480px]">
               {src && (
                 <Cropper
                   image={src}
