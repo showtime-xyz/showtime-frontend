@@ -150,8 +150,7 @@ export const ClaimForm = ({
       edition.gating_type === "spotify_save" ||
       edition.gating_type === "music_presave"
     ) {
-      closeModal();
-      success = await claimSpotifyGatedDrop(nft?.data.item);
+      success = await claimSpotifyGatedDrop(nft?.data.item, closeModal);
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });
     } else if (edition.gating_type === "location") {
