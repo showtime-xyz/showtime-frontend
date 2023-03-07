@@ -87,7 +87,7 @@ export const MediaCropper = ({
     >
       <View tw="animate-fade-in-250 absolute inset-0 bg-black/30" />
       <View tw="h-full w-full items-center justify-end md:justify-center">
-        <View tw="shadow-light dark:shadow-dark rounded-t-4xl md:border-b-4xl w-full border-b-0 bg-white dark:bg-black md:w-auto">
+        <View tw="shadow-light dark:shadow-dark rounded-t-4xl md:rounded-b-4xl w-full border-b-0 bg-white dark:bg-black md:w-auto">
           <ModalHeader
             title={title}
             onClose={onClose}
