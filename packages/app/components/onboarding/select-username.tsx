@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useContext } from "react";
+import React, { useEffect, useMemo, useContext, useRef } from "react";
+import { Platform, TextInput } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MotiView } from "moti";
@@ -38,6 +39,7 @@ const editProfileValidationSchema = yup.object({
 });
 
 export const SelectUsername = () => {
+  const usernameRef = useRef<TextInput | null>(null);
   const { user, setStep } = useContext(OnboardingStepContext);
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
@@ -141,8 +143,10 @@ export const SelectUsername = () => {
               fieldState: { error },
             }) => (
               <Fieldset
-                ref={ref}
-                label="Username"
+                ref={(innerRef: TextInput) => {
+                  usernameRef.current = innerRef;
+                  ref(innerRef);
+                }}
                 placeholder="Your username"
                 value={value}
                 textContentType="username"
@@ -158,6 +162,27 @@ export const SelectUsername = () => {
                   onChange(v);
                   validate(v);
                 }}
+                leftElement={
+                  <Text
+                    onPress={() => usernameRef.current?.focus()}
+                    tw="text-base text-gray-600 dark:text-gray-400"
+                    style={{
+                      marginTop: Platform.select({
+                        ios: 3,
+                        android: 8,
+                        default: 0,
+                      }),
+                      marginBottom: Platform.select({
+                        default: 4,
+                        android: 0,
+                        web: 0,
+                      }),
+                    }}
+                  >
+                    showtime.xyz/
+                    <Text tw="font-bold text-black dark:text-white">@</Text>
+                  </Text>
+                }
               />
             )}
           />
