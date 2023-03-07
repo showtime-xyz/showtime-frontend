@@ -1,4 +1,5 @@
 import { useClaimNFT } from "app/hooks/use-claim-nft";
+import { Logger } from "app/lib/logger";
 
 import { IEdition, NFT } from "../types";
 import { useConnectSpotify } from "./use-connect-spotify";
@@ -11,18 +12,17 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
 
   const claimSpotifyGatedDrop = async (nft?: NFT, closeModal?: () => void) => {
     if (nft) {
-      // if (false) {
-      // TODO: remove this after testing
-      if (user?.user?.data.profile.has_spotify_token) {
-        try {
-          const res = claimNFT({ closeModal });
-
-          return res;
-        } catch (error: any) {
-          // TODO: handle error. Could be unauthorized, so we need to redirect to spotify auth flow
+      try {
+        let spotifyConnected = user?.user?.data.profile.has_spotify_token;
+        if (!spotifyConnected) {
+          spotifyConnected = await connectSpotify();
         }
-      } else {
-        return connectSpotify();
+        if (spotifyConnected) {
+          const res = claimNFT({ closeModal });
+          return res;
+        }
+      } catch (error: any) {
+        Logger.error("claimSpotifyGatedDrop failed", error);
       }
     }
   };

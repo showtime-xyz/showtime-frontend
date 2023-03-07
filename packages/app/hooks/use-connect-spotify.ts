@@ -25,6 +25,7 @@ export const useConnectSpotify = () => {
         const code = urlObj.searchParams.get("code");
         if (code) {
           await saveSpotifyToken({ code, redirectUri: redirectUri });
+          return true;
         }
       } else {
         Logger.error("Spotify auth failed", res);
