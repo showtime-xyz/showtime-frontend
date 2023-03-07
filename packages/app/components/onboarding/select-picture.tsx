@@ -10,7 +10,6 @@ import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { Upload } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -26,6 +25,7 @@ import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
 
+import { AddPhoto } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 
 import { MediaCropper } from "../media-cropper";
@@ -229,7 +229,7 @@ export const SelectPicture = () => {
                           <>
                             <View tw="absolute z-10 h-full w-full flex-1 items-center justify-center bg-black/10 dark:bg-black/60">
                               <View tw="rounded-full bg-gray-800/70 p-1">
-                                <Upload
+                                <AddPhoto
                                   height={20}
                                   width={20}
                                   color={colors.white}
