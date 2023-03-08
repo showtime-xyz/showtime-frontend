@@ -1,14 +1,17 @@
-export const useValidateCaptchaWithServer = async () => {
-  // use axios to send the token to the backend
-  // const response = await axios.post("/api/hcaptcha", {
+import { axios } from "app/lib/axios";
 
-  const validateCaptchaWithServer = async (token: string) => {
-    // use axios to send the token to the backend
-    // const response = await axios.post("/v1/hcaptcha", {
-    //   token,
-    // });
-    // return response.data;
-  };
+export const useValidateCaptchaWithServer = () => {
+  async function validate(token?: string) {
+    if (!token) return Promise.reject(new Error("No token provided"));
 
-  return validateCaptchaWithServer;
+    return await axios({
+      url: "/v1/profile/captcha/verify",
+      method: "POST",
+      data: {
+        hcaptcha_response_token: token,
+      },
+    });
+  }
+
+  return { validate };
 };
