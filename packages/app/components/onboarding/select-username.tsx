@@ -177,6 +177,7 @@ export const SelectUsername = () => {
                         android: 0,
                         web: 0,
                       }),
+                      marginRight: 1,
                     }}
                   >
                     showtime.xyz/
