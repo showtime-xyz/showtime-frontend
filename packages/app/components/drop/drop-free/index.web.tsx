@@ -54,10 +54,10 @@ export const DropFree = () => {
       setIsHasPaymentIntentId(true);
       setTimeout(() => {
         toast.promise(confirmPaymentStatus(paymentIntentId), {
-          loading: "Processing Payment!",
+          loading: "Processing Payment...",
           success: () => {
             handlePaymentSuccess();
-            return "Your payment was successful! 🎉";
+            return "Now preview your drop";
           },
           error: "Please check back later to see if your payment went through.",
         });
