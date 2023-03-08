@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 
 import ConfirmHcaptcha from "@hcaptcha/react-native-hcaptcha";
 import axios, { AxiosError } from "axios";
@@ -16,17 +16,39 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { toast } from "design-system/toast";
 
 import { Logger } from "../../../lib/logger";
-import { useValidateCaptchaWithServer } from "./hcaptcha-utils";
+import { OnboardingStepContext } from "../onboarding-context";
+import {
+  useFinishOnboarding,
+  useValidateCaptchaWithServer,
+} from "./hcaptcha-utils";
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
+  const { redirectUri, user } = useContext(OnboardingStepContext);
   const { validate } = useValidateCaptchaWithServer();
+  const finishOnboarding = useFinishOnboarding();
+
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const { rudder } = useRudder();
 
   const isDark = useIsDarkMode();
   const captchaRef = useRef<ConfirmHcaptcha>(null);
+
+  const showCaptcha = () => {
+    // skip directly to the next step if user has already a social account
+    // connected or if the user has already completed the captcha challenge
+    if (
+      user?.data.profile.captcha_completed_at ||
+      user?.data.profile.has_social_login
+    ) {
+      finishOnboarding(redirectUri);
+      return;
+    }
+
+    // open the captcha if the condition above is not met
+    captchaRef.current?.show();
+  };
 
   const onMessage = async (event: WebViewMessageEvent) => {
     if (event && event.nativeEvent.data) {
@@ -54,24 +76,23 @@ export const Challenge = () => {
           return "failed";
         });
 
+        // if the captcha was validated successfully, we can
+        // move on to the next step
         if (status !== "failed") {
-          // if the captcha was validated successfully, we can
-          // move on to the next step
-          mutate(MY_INFO_ENDPOINT);
-          matchMutate(
+          await mutate(MY_INFO_ENDPOINT);
+          await matchMutate(
             (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
           );
           rudder?.track("hCaptcha challenge success");
+
+          // finish onboarding
+          finishOnboarding(redirectUri);
         }
 
         // hide the captcha
         captchaRef.current?.hide();
       }
     }
-  };
-
-  const showCaptcha = () => {
-    captchaRef.current?.show();
   };
 
   return (
