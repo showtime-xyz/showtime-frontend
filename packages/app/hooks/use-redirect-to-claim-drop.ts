@@ -47,7 +47,13 @@ export const useRedirectToClaimDrop = () => {
         router.replace(
           route,
           Platform.select({ native: as, web: router.asPath }),
-          { shallow: true }
+          {
+            shallow: true,
+            experimental: {
+              nativeBehavior: "stack-replace",
+              isNestedNavigator: true,
+            },
+          }
         );
       } else {
         router.push(
