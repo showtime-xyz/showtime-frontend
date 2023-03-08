@@ -72,8 +72,6 @@ export const SelectPicture = () => {
     reset(defaultValues);
   }, [reset, defaultValues]);
 
-  console.log(isValid);
-
   const onFormSubmit = async (values: typeof defaultValues) => {
     if ((!selectedImg && !isValid) || isSubmitting || !isValid) return;
 
