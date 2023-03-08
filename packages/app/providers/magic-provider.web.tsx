@@ -1,8 +1,9 @@
 import * as React from "react";
 import { createContext, useState, useContext } from "react";
 
-import { OAuthExtension } from "@magic-ext/oauth";
 import { Magic } from "magic-sdk";
+
+import { OAuthExtension } from "app/lib/magic-oauth-ext";
 
 export const MagicContext = createContext({
   magic: {},
