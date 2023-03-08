@@ -2,6 +2,7 @@ import { useCallback } from "react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { axios } from "app/lib/axios";
 
 export const useValidateCaptchaWithServer = () => {
@@ -22,17 +23,27 @@ export const useValidateCaptchaWithServer = () => {
 
 export const useFinishOnboarding = () => {
   const router = useRouter();
+  const redirectToClaimDrop = useRedirectToClaimDrop();
 
   const finishOnboarding = useCallback(
     (redirectUri?: string) => {
       console.log(redirectUri);
       if (redirectUri) {
-        router.replace(redirectUri);
+        if (redirectUri.includes("/claim/")) {
+          router.pop();
+          // wait for the router to pop
+          setTimeout(() => {
+            const address = redirectUri.replace(/^\/claim\//, "");
+            redirectToClaimDrop(address);
+          }, 1000);
+        } else {
+          router.replace(redirectUri);
+        }
       } else {
         router.pop();
       }
     },
-    [router]
+    [redirectToClaimDrop, router]
   );
 
   return finishOnboarding;
