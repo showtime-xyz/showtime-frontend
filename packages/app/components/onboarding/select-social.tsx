@@ -16,7 +16,8 @@ import { OnboardingStepContext } from "./onboarding-context";
 
 export const SelectSocial = () => {
   const { user, redirectUri } = useContext(OnboardingStepContext);
-  const { performMagicAuthWithTwitter, loading } = useMagicSocialAuth();
+  const { performMagicAuthWithTwitter, connectInstagram, loading } =
+    useMagicSocialAuth();
 
   const handleConnectTwitter = async () => {
     const res = await performMagicAuthWithTwitter();
@@ -24,7 +25,8 @@ export const SelectSocial = () => {
   };
 
   const handleConnectInstagram = async () => {
-    console.log("ig tokens from ig! send it to server ");
+    const res = await connectInstagram();
+    console.log("ig code from ig! send it to server ", res);
   };
 
   return (
