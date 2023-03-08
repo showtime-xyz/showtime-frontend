@@ -16,8 +16,4 @@ const SpotifyAuthRedirect = () => {
   );
 };
 
-SpotifyAuthRedirect.getLayout = function getLayout(page) {
-  return page.children;
-};
-
 export default SpotifyAuthRedirect;
