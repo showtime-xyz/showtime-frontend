@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { AnimatePresence } from "moti";
@@ -26,17 +26,17 @@ export const Onboarding = () => {
   // redirect to home if user is not incompleted profile
   // this should prevent user from going back to onboarding
   // with the back button
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isIncompletedProfile) {
-      router.replace("/");
+      router.pop();
     }
   }, [isIncompletedProfile, router]);
 
   // determine initial step
   const initialStep = useMemo(() => {
-    if (__DEV__) {
-      return OnboardingStep.Username;
-    }
+    // if (__DEV__) {
+    //   return OnboardingStep.Username;
+    // }
 
     if (user?.data?.profile.img_url) {
       return OnboardingStep.Social;
