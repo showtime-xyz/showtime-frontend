@@ -12,7 +12,7 @@ import { Challenge } from "./hcaptcha";
 import { OnboardingStepContext } from "./onboarding-context";
 
 export const SelectSocial = () => {
-  const { user, setStep } = useContext(OnboardingStepContext);
+  const { user, redirectUri } = useContext(OnboardingStepContext);
 
   return (
     <MotiView
