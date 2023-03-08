@@ -1,18 +1,12 @@
 import { useMagic } from "app/lib/magic";
 import { OAUTH_REDIRECT_URI } from "app/utilities";
 
-type Config = {
-  shouldLogin?: string;
-  redirectUri?: string;
-};
-
 export const useMagicSocialAuth = () => {
   const { magic } = useMagic();
 
-  const performMagicAuthWithTwitter = async (config?: Config) => {
+  const performMagicAuthWithTwitter = async () => {
     const scope = ["email"];
-    const params = new URLSearchParams(config).toString();
-    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
+    const redirectUri = OAUTH_REDIRECT_URI;
     return magic.oauth.loginWithPopup({
       provider: "twitter",
       scope,
@@ -20,10 +14,9 @@ export const useMagicSocialAuth = () => {
     });
   };
 
-  const performMagicAuthWithGoogle = async (config?: Config) => {
+  const performMagicAuthWithGoogle = async () => {
     const scope = ["email"];
-    const params = new URLSearchParams(config).toString();
-    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
+    const redirectUri = OAUTH_REDIRECT_URI;
 
     return magic.oauth.loginWithPopup({
       provider: "google",
@@ -32,10 +25,9 @@ export const useMagicSocialAuth = () => {
     });
   };
 
-  const performMagicAuthWithApple = async (config?: Config) => {
+  const performMagicAuthWithApple = async () => {
     const scope = ["email"];
-    const params = new URLSearchParams(config).toString();
-    const redirectUri = OAUTH_REDIRECT_URI + "?" + params;
+    const redirectUri = OAUTH_REDIRECT_URI;
 
     return magic.oauth.loginWithPopup({
       provider: "apple",
