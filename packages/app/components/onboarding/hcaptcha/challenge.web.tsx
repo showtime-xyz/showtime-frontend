@@ -3,18 +3,33 @@ import { StyleSheet } from "react-native";
 
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import * as Portal from "@radix-ui/react-portal";
+import axios, { AxiosError } from "axios";
+import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
+import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
+import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { useRudder } from "app/lib/rudderstack";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+
 import { toast } from "design-system/toast";
 
+import { Logger } from "../../../lib/logger";
+import { useValidateCaptchaWithServer } from "./hcaptcha-utils";
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
-  const [hCaptchaLoaded, setHCaptchaLoaded] = useState(false);
+  const { validate } = useValidateCaptchaWithServer();
+  const { mutate } = useSWRConfig();
+  const matchMutate = useMatchMutate();
+  const { rudder } = useRudder();
+  const [hCaptchaLoaded, setHCaptchaLoaded] = useState(
+    typeof window.hcaptcha !== "undefined"
+  );
   const [challengeRunning, setChallengeIsRunning] = useState(false);
   const isDark = useIsDarkMode();
   const captchaRef = useRef<HCaptcha>(null);
@@ -34,23 +49,37 @@ export const Challenge = () => {
     setChallengeIsRunning(true);
 
     try {
-      const result = await captchaRef.current?.execute({ async: true });
-      console.log("hCaptcha response", result?.response);
-      // todo: send the response to the server and validate it
-      try {
-        //
-      } catch {
-        //
+      const token = await captchaRef.current?.execute({ async: true });
+
+      // send the response to the server and validate it
+      const status = await validate(token?.response).catch((err) => {
+        const error = err as AxiosError;
+        if (axios.isAxiosError(error)) {
+          Logger.log(error.response?.data.error.message);
+          toast.error(error.response?.data?.error?.message);
+        } else {
+          Logger.log(err?.message);
+        }
+
+        return "failed";
+      });
+
+      if (status !== "failed") {
+        // if the captcha was validated successfully, we can
+        // move on to the next step
+        mutate(MY_INFO_ENDPOINT);
+        matchMutate(
+          (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
+        );
+        rudder?.track("hCaptcha challenge success");
       }
     } catch (err) {
-      console.log("hCaptcha error", err);
       toast.error(
         "Captcha challenge failed.\nPlease try again or connect a social account."
       );
     } finally {
       // this has to be called to reset the captcha once validated with the server
-      // captchaRef.current?.resetCaptcha();
-
+      captchaRef.current?.resetCaptcha();
       setChallengeIsRunning(false);
     }
   };

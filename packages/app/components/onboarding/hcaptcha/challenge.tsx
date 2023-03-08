@@ -1,18 +1,28 @@
 import { useRef } from "react";
 
 import ConfirmHcaptcha from "@hcaptcha/react-native-hcaptcha";
+import axios, { AxiosError } from "axios";
 import { WebViewMessageEvent } from "react-native-webview";
+import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
+import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
+import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useRudder } from "app/lib/rudderstack";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { toast } from "design-system/toast";
 
+import { Logger } from "../../../lib/logger";
+import { useValidateCaptchaWithServer } from "./hcaptcha-utils";
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
+  const { validate } = useValidateCaptchaWithServer();
+  const { mutate } = useSWRConfig();
+  const matchMutate = useMatchMutate();
   const { rudder } = useRudder();
 
   const isDark = useIsDarkMode();
@@ -31,12 +41,31 @@ export const Challenge = () => {
         return;
       } else {
         const token = event.nativeEvent.data;
-        console.log("Verified code from hCaptcha", token);
+        // send the response to the server and validate it
+        const status = await validate(token).catch((err) => {
+          const error = err as AxiosError;
+          if (axios.isAxiosError(error)) {
+            Logger.log(error.response?.data.error.message);
+            toast.error(error.response?.data?.error?.message);
+          } else {
+            Logger.log(err?.message);
+          }
+
+          return "failed";
+        });
+
+        if (status !== "failed") {
+          // if the captcha was validated successfully, we can
+          // move on to the next step
+          mutate(MY_INFO_ENDPOINT);
+          matchMutate(
+            (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
+          );
+          rudder?.track("hCaptcha challenge success");
+        }
+
+        // hide the captcha
         captchaRef.current?.hide();
-
-        // todo: send the response to the server and validate it
-
-        rudder?.track("hCaptcha challenge success");
       }
     }
   };
