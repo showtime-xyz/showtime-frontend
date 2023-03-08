@@ -87,13 +87,13 @@ export const SelectUsername = () => {
         data: newValues,
       });
 
+      setStep(OnboardingStep.Picture);
+
       // TODO: optimise to make fewer API calls!
       mutate(MY_INFO_ENDPOINT);
       matchMutate(
         (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
       );
-
-      setStep(OnboardingStep.Picture);
     } catch (e) {
       setError("username", { message: "Something went wrong" });
       Logger.error("Profile Username Onboarding failed ", e);
