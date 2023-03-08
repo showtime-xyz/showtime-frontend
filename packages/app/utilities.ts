@@ -613,9 +613,7 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 export const isProfileIncomplete = (profile?: Profile) => {
   return profile
     ? !profile.username ||
-        userHasIncompleteExternalLinks(profile) ||
-        !profile.bio ||
-        !profile.img_url
+        (!profile.has_social_login && !profile.captcha_completed_at)
     : undefined;
 };
 
