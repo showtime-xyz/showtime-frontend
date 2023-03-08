@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -18,21 +16,17 @@ export const LoginWithTwitter = () => {
     <LoginButton
       type="twitter"
       onPress={async () => {
-        if (Platform.OS === "web") {
-          performMagicAuthWithTwitter({ redirectUri: "/", shouldLogin: "yes" });
-        } else {
-          try {
-            setAuthenticationStatus("AUTHENTICATING");
-            const result = await performMagicAuthWithTwitter();
-            const idToken = result.magic.idToken;
-            await login(LOGIN_MAGIC_ENDPOINT, {
-              did: idToken,
-            });
-            router.pop();
-          } catch (e) {
-            Logger.error(e);
-            logout();
-          }
+        try {
+          setAuthenticationStatus("AUTHENTICATING");
+          const result = await performMagicAuthWithTwitter();
+          const idToken = result.magic.idToken;
+          await login(LOGIN_MAGIC_ENDPOINT, {
+            did: idToken,
+          });
+          router.pop();
+        } catch (e) {
+          Logger.error(e);
+          logout();
         }
       }}
     />
