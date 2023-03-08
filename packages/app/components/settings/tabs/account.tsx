@@ -163,30 +163,16 @@ const WalletSocialAccounts = ({ redirectUri }: ConnectSocialProps) => {
                 if (connected[type.type].address) {
                   removeAccount(connected[type.type].address);
                 } else {
-                  if (Platform.OS === "web") {
-                    const _redirectUri = {
-                      redirectUri: redirectUri + "&type=" + type.type,
-                    };
-                    if (type.type === "google") {
-                      performMagicAuthWithGoogle(_redirectUri);
-                      //@ts-ignore TODO: fix this when twitter is added
-                    } else if (type.type === "twitter") {
-                      performMagicAuthWithTwitter(_redirectUri);
-                    } else if (type.type === "apple") {
-                      performMagicAuthWithApple(_redirectUri);
-                    }
-                  } else {
-                    let res: any;
-                    if (type.type === "google") {
-                      res = await performMagicAuthWithGoogle();
-                      //@ts-ignore TODO: fix this when twitter is added
-                    } else if (type.type === "twitter") {
-                      res = await performMagicAuthWithTwitter();
-                    } else if (type.type === "apple") {
-                      res = await performMagicAuthWithApple();
-                    }
-                    addSocial(res.magic.idToken, type.type);
+                  let res: any;
+                  if (type.type === "google") {
+                    res = await performMagicAuthWithGoogle();
+                    //@ts-ignore TODO: fix this when twitter is added
+                  } else if (type.type === "twitter") {
+                    res = await performMagicAuthWithTwitter();
+                  } else if (type.type === "apple") {
+                    res = await performMagicAuthWithApple();
                   }
+                  addSocial(res.magic.idToken, type.type);
                 }
               }}
             >
