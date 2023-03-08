@@ -1,3 +1,7 @@
+import { useCallback } from "react";
+
+import { useRouter } from "@showtime-xyz/universal.router";
+
 import { axios } from "app/lib/axios";
 
 export const useValidateCaptchaWithServer = () => {
@@ -14,4 +18,22 @@ export const useValidateCaptchaWithServer = () => {
   }
 
   return { validate };
+};
+
+export const useFinishOnboarding = () => {
+  const router = useRouter();
+
+  const finishOnboarding = useCallback(
+    (redirectUri?: string) => {
+      console.log(redirectUri);
+      if (redirectUri) {
+        router.replace(redirectUri);
+      } else {
+        router.pop();
+      }
+    },
+    [router]
+  );
+
+  return finishOnboarding;
 };
