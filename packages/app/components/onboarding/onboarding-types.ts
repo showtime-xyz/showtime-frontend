@@ -11,8 +11,9 @@ export enum OnboardingStep {
   Social = "social",
 }
 
-export type ThemeContextType = {
+export type OnboardingContextType = {
   step: OnboardingStep;
   setStep: (step: OnboardingStep) => void;
   user?: MyInfo;
+  redirectUri?: string;
 };
