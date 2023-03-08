@@ -23,7 +23,7 @@ export const ListHeader = memo<ListHeaderProps>(function ListHeader({
       {SelectionControl}
       {length === 0 && !isLoading ? (
         <View tw="mt-20 items-center justify-center">
-          <Text tw="text-gray-900 dark:text-white">No results found</Text>
+          <Text tw="text-gray-900 dark:text-white">No entries</Text>
         </View>
       ) : isLoading ? (
         <View tw="mt-20 items-center justify-center">
