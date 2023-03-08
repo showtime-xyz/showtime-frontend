@@ -15,12 +15,12 @@ import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { Spinner } from "design-system/spinner";
 
-import { Logger } from "../../lib/logger";
 import { OnboardingStepContext } from "./onboarding-context";
 import { OnboardingStep } from "./onboarding-types";
 

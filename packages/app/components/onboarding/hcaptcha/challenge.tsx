@@ -10,12 +10,12 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { toast } from "design-system/toast";
 
-import { Logger } from "../../../lib/logger";
 import { OnboardingStepContext } from "../onboarding-context";
 import {
   useFinishOnboarding,

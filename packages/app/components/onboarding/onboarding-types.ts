@@ -1,4 +1,4 @@
-import { MyInfo } from "../../types";
+import { MyInfo } from "app/types";
 
 export type PageQuery = {
   redirectUri?: string;
