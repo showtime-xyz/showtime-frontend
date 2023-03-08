@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -23,31 +21,27 @@ export const LoginWithGoogle = () => {
     <LoginButton
       type="google"
       onPress={async () => {
-        if (Platform.OS === "web") {
-          performMagicAuthWithGoogle({ redirectUri: "/", shouldLogin: "yes" });
-        } else {
-          try {
-            setAuthenticationStatus("AUTHENTICATING");
-            const result = await performMagicAuthWithGoogle();
-            const idToken = result.magic.idToken;
-            const user = await login(LOGIN_MAGIC_ENDPOINT, {
-              did: idToken,
-            });
+        try {
+          setAuthenticationStatus("AUTHENTICATING");
+          const result = await performMagicAuthWithGoogle();
+          const idToken = result.magic.idToken;
+          console.log("idtoken ", result);
+          const user = await login(LOGIN_MAGIC_ENDPOINT, {
+            did: idToken,
+          });
 
-            const EthersWeb3Provider = (
-              await import("@ethersproject/providers")
-            ).Web3Provider;
-            // @ts-ignore
-            const ethersProvider = new EthersWeb3Provider(magic.rpcProvider);
-            setWeb3(ethersProvider);
-            // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to decodedURI
-            if (!isProfileIncomplete(user.data.profile)) {
-              router.pop();
-            }
-          } catch (e) {
-            Logger.error(e);
-            logout();
+          const EthersWeb3Provider = (await import("@ethersproject/providers"))
+            .Web3Provider;
+          // @ts-ignore
+          const ethersProvider = new EthersWeb3Provider(magic.rpcProvider);
+          setWeb3(ethersProvider);
+          // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to decodedURI
+          if (!isProfileIncomplete(user.data.profile)) {
+            router.pop();
           }
+        } catch (e) {
+          Logger.error(e);
+          logout();
         }
       }}
     />
