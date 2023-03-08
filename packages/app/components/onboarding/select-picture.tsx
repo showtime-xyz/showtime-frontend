@@ -1,7 +1,6 @@
 import { useContext, useMemo, useEffect, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import axiosNative from "axios";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
@@ -111,9 +110,7 @@ export const SelectPicture = () => {
           setError("profilePicture", {
             message: "Failed to upload profile picture. Please try again",
           });
-          if (axiosNative.isAxiosError(e)) {
-            Logger.error(e?.response?.data?.message);
-          }
+          Logger.error("Failed to upload profile picture.", e);
         }
       }
     } else {
