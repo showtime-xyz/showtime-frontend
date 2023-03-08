@@ -39,7 +39,7 @@ export class OAuthExtension extends Extension.Internal<"oauth"> {
     return this.utils.createPromiEvent<OAuthRedirectResult>(
       async (resolve, reject) => {
         try {
-          const { provider, query, redirectURI } = await createURI.call(
+          const { provider, query, redirectURI } = createURI.call(
             this,
             configuration
           );
@@ -81,16 +81,16 @@ export class OAuthExtension extends Extension.Internal<"oauth"> {
 
 const OAUTH_REDIRECT_METADATA_KEY = "oauth_redirect_metadata";
 
-async function createURI(
+function createURI(
   this: OAuthExtension,
   configuration: OAuthRedirectConfiguration
 ) {
   // Bust any old, in-progress OAuth flows.
-  await this.utils.storage.removeItem(OAUTH_REDIRECT_METADATA_KEY);
+  this.utils.storage.removeItem(OAUTH_REDIRECT_METADATA_KEY);
 
   // Unpack configuration, generate crypto values, and persist to storage.
   const { provider, redirectURI, scope, loginHint } = configuration;
-  const { verifier, challenge, state } = await createCryptoChallenge();
+  const { verifier, challenge, state } = createCryptoChallenge();
 
   /* Stringify for RN Async storage */
   const storedData = JSON.stringify({
@@ -98,7 +98,7 @@ async function createURI(
     state,
   });
 
-  await this.utils.storage.setItem(OAUTH_REDIRECT_METADATA_KEY, storedData);
+  this.utils.storage.setItem(OAUTH_REDIRECT_METADATA_KEY, storedData);
 
   // Formulate the initial redirect query to Magic's OAuth hub.
   // Required fields:

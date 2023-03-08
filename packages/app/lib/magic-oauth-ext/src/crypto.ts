@@ -6,7 +6,6 @@ import sha256Fallback from "crypto-js/sha256";
 const CHARSET =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
 const HAS_CRYPTO = typeof window !== "undefined" && !!(window.crypto as any);
-const HAS_SUBTLE_CRYPTO = HAS_CRYPTO && !!(window.crypto.subtle as any);
 
 /**
  * Stringifies `bytes` using the OAuth 2.0 `code_verifier` character set.
@@ -44,14 +43,7 @@ function base64URLEncodeFromByteArray(arg: WordArray | ArrayBuffer): string {
  * to use the browser's built-in `SubtleCrypto` API, falling back to
  * CryptoJS if required.
  */
-async function sha256(message: string) {
-  if (HAS_SUBTLE_CRYPTO) {
-    const bytes = new TextEncoder().encode(message);
-    return crypto.subtle
-      .digest("SHA-256", bytes)
-      .then(base64URLEncodeFromByteArray);
-  }
-
+function sha256(message: string) {
   return base64URLEncodeFromByteArray(sha256Fallback(message));
 }
 
@@ -76,9 +68,9 @@ function createRandomString(size: number) {
  * Creates OAuth 2.0-compatible `code_verifier`, `code_challenge`, and `state`
  * parameters.
  */
-export async function createCryptoChallenge() {
+export function createCryptoChallenge() {
   const state = createRandomString(128);
   const verifier = createRandomString(128);
-  const challenge = await sha256(verifier);
+  const challenge = sha256(verifier);
   return { verifier, challenge, state };
 }
