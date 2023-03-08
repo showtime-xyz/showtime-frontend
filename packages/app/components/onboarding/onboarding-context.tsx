@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
-import { OnboardingStep, ThemeContextType } from "./onboarding-types";
+import { OnboardingStep, OnboardingContextType } from "./onboarding-types";
 
-export const OnboardingStepContext = createContext<ThemeContextType>({
+export const OnboardingStepContext = createContext<OnboardingContextType>({
   step: OnboardingStep.Username,
   setStep: () => {},
 });
