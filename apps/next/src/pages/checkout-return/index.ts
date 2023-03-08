@@ -1,3 +1,3 @@
-import { CheckoutReturnScreen } from "app/screens/checkout-return";
+import { Fragment } from "react";
 
-export default CheckoutReturnScreen;
+export default Fragment;
