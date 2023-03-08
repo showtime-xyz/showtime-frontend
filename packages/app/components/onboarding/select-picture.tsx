@@ -1,6 +1,7 @@
 import { useContext, useMemo, useEffect, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
+import axiosNative from "axios";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
@@ -21,6 +22,7 @@ import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { axios } from "app/lib/axios";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { useFilePicker } from "app/lib/file-picker";
+import { Logger } from "app/lib/logger";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
@@ -109,6 +111,9 @@ export const SelectPicture = () => {
           setError("profilePicture", {
             message: "Failed to upload profile picture. Please try again",
           });
+          if (axiosNative.isAxiosError(e)) {
+            Logger.error(e?.response?.data?.message);
+          }
         }
       }
     } else {

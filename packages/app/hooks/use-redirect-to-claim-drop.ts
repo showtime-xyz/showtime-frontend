@@ -21,32 +21,41 @@ export const useRedirectToClaimDrop = () => {
 
   const [password] = useParam("password");
 
-  const redirectToClaimDrop = (editionContractAddress: string) => {
+  const redirectToClaimDrop = (
+    editionContractAddress: string,
+    shouldUseReplace: boolean = false
+  ) => {
     if (!isAuthenticated) {
       navigateToLogin();
     } else if (isIncompletedProfile) {
       navigateToOnboarding(`/claim/${editionContractAddress}`);
     } else {
       const as = `/claim/${editionContractAddress}`;
-      router.push(
-        Platform.select({
-          native: as,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              contractAddress: editionContractAddress,
-              password,
-              claimModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: as,
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
+      const route = Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            contractAddress: editionContractAddress,
+            password,
+            claimModal: true,
+          },
+        } as any,
+      });
+      if (shouldUseReplace) {
+        router.replace(
+          route,
+          Platform.select({ native: as, web: router.asPath }),
+          { shallow: true }
+        );
+      } else {
+        router.push(
+          route,
+          Platform.select({ native: as, web: router.asPath }),
+          { shallow: true }
+        );
+      }
     }
   };
 

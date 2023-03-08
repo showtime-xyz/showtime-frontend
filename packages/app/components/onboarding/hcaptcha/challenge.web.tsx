@@ -27,6 +27,8 @@ import {
 } from "./hcaptcha-utils";
 import { siteKey } from "./sitekey";
 
+const noop = () => {};
+
 export const Challenge = () => {
   const { redirectUri, user } = useContext(OnboardingStepContext);
   const { validate } = useValidateCaptchaWithServer();
@@ -102,14 +104,6 @@ export const Challenge = () => {
     }
   };
 
-  const onExpire = () => {
-    console.log("hCaptcha Token Expired");
-  };
-
-  const onError = (err: string) => {
-    console.log(`hCaptcha Error: ${err}`);
-  };
-
   // hCaptcha injects a very ugly square on the page when the challenge is running
   // this function removes it even though its super hacky
   const fixUglySquare = () => {
@@ -137,9 +131,9 @@ export const Challenge = () => {
         ref={captchaRef}
         sitekey={siteKey}
         size="invisible"
-        onError={onError}
-        onExpire={onExpire}
-        onVerify={() => {}}
+        onError={noop}
+        onExpire={noop}
+        onVerify={noop}
         theme={isDark ? "dark" : "light"}
         languageOverride="en"
       />

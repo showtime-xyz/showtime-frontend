@@ -27,15 +27,10 @@ export const useFinishOnboarding = () => {
 
   const finishOnboarding = useCallback(
     (redirectUri?: string) => {
-      console.log(redirectUri);
       if (redirectUri) {
         if (redirectUri.includes("/claim/")) {
-          router.pop();
-          // wait for the router to pop
-          setTimeout(() => {
-            const address = redirectUri.replace(/^\/claim\//, "");
-            redirectToClaimDrop(address);
-          }, 1000);
+          const address = redirectUri.replace(/^\/claim\//, "");
+          redirectToClaimDrop(address, true);
         } else {
           router.replace(redirectUri);
         }
