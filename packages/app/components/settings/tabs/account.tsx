@@ -4,18 +4,12 @@ import { Platform } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Spotify,
-  Apple,
-  GoogleOriginal,
-  Showtime,
-} from "@showtime-xyz/universal.icon";
+import { Spotify, Apple, GoogleOriginal } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { SettingItemSeparator } from "app/components/settings/setting-item-separator";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
 import { useManageAccount } from "app/hooks/use-manage-account";
@@ -23,11 +17,6 @@ import { useUser } from "app/hooks/use-user";
 import { useMagicSocialAuth } from "app/lib/social-logins";
 import { createParam } from "app/navigation/use-param";
 
-import { SettingClearAppCache } from "../clear-cache-btn";
-import {
-  AccountSettingItem,
-  SettingDeleteAccount,
-} from "../settings-account-item";
 import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
@@ -37,26 +26,15 @@ export type AccountTabProps = {
 };
 
 export const AccountTab = ({ index = 0 }: AccountTabProps) => {
-  const router = useRouter();
   return (
     <SettingScrollComponent index={index}>
       <SettingsTitle
-        title="Accounts"
+        title="Connected Accounts"
         desc="Manage the accounts connected to your profile."
       />
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify redirectUri={"/settings?tab=" + index} />
         <WalletSocialAccounts redirectUri={"/settings?tab=" + index} />
-        <SettingItemSeparator tw="my-4 md:my-8" />
-        <AccountSettingItem
-          title="Privacy & Security"
-          onPress={() => router.push(`/settings/privacy-and-security`)}
-          buttonText="View"
-          Icon={Showtime}
-        />
-        <SettingItemSeparator tw="my-4 md:my-8" />
-        <SettingClearAppCache />
-        <SettingDeleteAccount />
       </View>
     </SettingScrollComponent>
   );

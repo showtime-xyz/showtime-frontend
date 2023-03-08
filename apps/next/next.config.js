@@ -69,6 +69,7 @@ const nextConfig = {
       "expo-linking",
       "expo-localization",
       "expo-location",
+      "expo-mail-composer",
       "expo-media-library",
       "expo-modules-core",
       "expo-navigation-bar",

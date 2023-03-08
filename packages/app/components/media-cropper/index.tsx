@@ -7,6 +7,7 @@ export type MediaCropperProps = {
   onApply?: (src: Blob) => void;
   aspect?: number;
   title?: string;
+  cropViewHeight?: number;
 };
 export const MediaCropper: React.FC<MediaCropperProps> = () => {
   return null;

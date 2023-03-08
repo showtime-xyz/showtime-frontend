@@ -5,6 +5,7 @@ import { Route } from "@showtime-xyz/universal.tab-view";
 import { WalletAddressesV2 } from "app/types";
 
 import { AccountTab } from "./account";
+import { AdvancedTab } from "./advanced";
 import { BillingTab } from "./billing";
 import { EmailTab } from "./email";
 import { PhoneTab } from "./phone";
@@ -30,7 +31,7 @@ export const SETTINGS_ROUTES = [
     key: "Phone",
   },
   {
-    title: "Accounts",
+    title: "Connected Accounts",
     key: "Account",
   },
   {
@@ -41,6 +42,10 @@ export const SETTINGS_ROUTES = [
   {
     title: "Push Notifications",
     key: "Push Notifications",
+  },
+  {
+    title: "Advanced",
+    key: "Advanced",
   },
 ]
   .filter((item) => !item.hidden)
@@ -63,6 +68,8 @@ export const SettingTabsScene = ({
       return <BillingTab index={index} />;
     case "Push Notifications":
       return <PushNotificationTab index={index} />;
+    case "Advanced":
+      return <AdvancedTab index={index} />;
     default:
       return null;
   }
