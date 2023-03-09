@@ -6,7 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { stripePromise } from "app/components/checkout//stripe";
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
-import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
+import { setPaymentByDefaultFetch } from "app/hooks/api/use-payments-manage";
 
 import { toast } from "design-system/toast";
 
@@ -15,7 +15,6 @@ import { DropFree as OriginDropFree } from "./drop-free";
 export const DropFree = () => {
   const [isHasPaymentIntentId, setIsHasPaymentIntentId] = useState(false);
   const router = useRouter();
-  const { setPaymentByDefault } = usePaymentsManage();
   const { paymentStatus, confirmPaymentStatus } = useConfirmPayment();
   const handlePaymentSuccess = useCallback(async () => {
     router.replace("/drop/free?checkoutSuccess=true");
@@ -39,17 +38,16 @@ export const DropFree = () => {
         setAsDefaultPaymentMethod === "true" &&
         typeof paymentIntent?.payment_method === "string"
       ) {
-        setPaymentByDefault(paymentIntent.payment_method);
+        setPaymentByDefaultFetch(paymentIntent.payment_method);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setPaymentByDefault]);
+  }, [setPaymentByDefaultFetch]);
 
   useLayoutEffect(() => {
     const paymentIntentId = new URLSearchParams(window.location.search).get(
       "payment_intent"
     );
-
     if (paymentIntentId) {
       setIsHasPaymentIntentId(true);
       setTimeout(() => {
