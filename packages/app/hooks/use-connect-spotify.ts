@@ -14,7 +14,7 @@ export const useConnectSpotify = () => {
   const { saveSpotifyToken } = useSaveSpotifyToken();
   const Alert = useAlert();
 
-  const connectSpotify = async () => {
+  const connectSpotify = async (editionAddress?: string) => {
     try {
       const queryString = getQueryString();
 
@@ -26,9 +26,13 @@ export const useConnectSpotify = () => {
         let urlObj = new URL(res.url);
         const code = urlObj.searchParams.get("code");
         if (code) {
-          await saveSpotifyToken({ code, redirectUri: redirectUri });
+          await saveSpotifyToken({
+            code,
+            redirectUri: redirectUri,
+            editionAddress,
+          });
           toast.success("Spotify connected");
-          return true;
+          return { code, redirectUri: redirectUri };
         }
       } else {
         Logger.error("Spotify auth failed", res);

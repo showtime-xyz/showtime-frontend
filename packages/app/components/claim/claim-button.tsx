@@ -11,6 +11,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useSpotifyPresaveUnauthenticated } from "app/hooks/use-spotify-presave-unauthenticated";
+import { useUser } from "app/hooks/use-user";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 
@@ -50,14 +52,27 @@ export const ClaimButton = ({
   style,
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
+  const { isAuthenticated } = useUser();
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
+  const { trigger: presaveSongUnauthenticatedUser, data } =
+    useSpotifyPresaveUnauthenticated();
   const isProgress =
     claimStates.status === "loading" && claimStates.signaturePrompt === false;
 
   const onClaimPress = () => {
     dispatch({ type: "initial" });
-    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+    if (
+      (edition.gating_type === "music_presave" ||
+        edition.gating_type === "spotify_save") &&
+      !isAuthenticated
+    ) {
+      presaveSongUnauthenticatedUser({
+        editionAddress: edition.creator_airdrop_edition.contract_address,
+      });
+    } else {
+      redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+    }
   };
 
   let isExpired = false;
@@ -75,7 +90,9 @@ export const ClaimButton = ({
     status === ClaimStatus.Soldout ||
     isExpired ||
     isProgress;
-  const isMusicDrop = edition?.gating_type === "spotify_save";
+  const isSpotifyGatedDrop =
+    edition?.gating_type === "spotify_save" ||
+    edition?.gating_type === "music_presave";
   const content = useMemo(() => {
     if (status === ClaimStatus.Claimed) {
       return (
@@ -106,7 +123,7 @@ export const ClaimButton = ({
         </Text>
       );
     } else {
-      return isMusicDrop ? (
+      return isSpotifyGatedDrop ? (
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -121,7 +138,7 @@ export const ClaimButton = ({
         "Collect"
       );
     }
-  }, [status, isProgress, isDark, isMusicDrop]);
+  }, [status, isProgress, isDark, isSpotifyGatedDrop]);
 
   const opacityTw = useMemo(() => {
     if (isProgress) {
