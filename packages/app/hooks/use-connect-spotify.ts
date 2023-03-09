@@ -6,8 +6,6 @@ import { Logger } from "app/lib/logger";
 import { getQueryString } from "app/lib/spotify";
 import { redirectUri } from "app/lib/spotify/queryString";
 
-import { toast } from "design-system/toast";
-
 import { useSaveSpotifyToken } from "./use-save-spotify-token";
 
 export const useConnectSpotify = () => {
@@ -31,7 +29,6 @@ export const useConnectSpotify = () => {
             redirectUri: redirectUri,
             editionAddress,
           });
-          toast.success("Spotify connected");
           return { code, redirectUri: redirectUri };
         }
       } else {
