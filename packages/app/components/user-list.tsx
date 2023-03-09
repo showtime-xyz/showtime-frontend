@@ -25,12 +25,6 @@ import { FollowButton } from "./follow-button";
 
 const SEPARATOR_HEIGHT = 1;
 const ITEM_HEIGHT = 64;
-const Separator = () => (
-  <View
-    tw={`bg-gray-200 dark:bg-gray-800`}
-    style={{ height: SEPARATOR_HEIGHT }}
-  />
-);
 
 type FollowingListProp = {
   follow: (profileId: number) => void;
@@ -90,7 +84,6 @@ export const UserList = ({
       renderItem={renderItem}
       estimatedItemSize={64}
       overscan={64}
-      ItemSeparatorComponent={Separator}
       ListEmptyComponent={listEmptyComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}

@@ -149,7 +149,7 @@ export const SearchItem = ({
     <Link
       href={`/@${item.username ?? item.address0}`}
       onPress={onPress}
-      tw="p-4"
+      tw="p-4 duration-150 hover:bg-gray-100 dark:hover:bg-gray-800"
     >
       <View tw="flex-row items-center justify-between">
         <View tw="flex-row">
