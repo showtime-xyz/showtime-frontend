@@ -5,26 +5,26 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { useLogInPromise } from "app/lib/login-promise";
 
 export const useRedirectToCreateDrop = () => {
   const { isAuthenticated, user } = useUser();
+  const { loginPromise } = useLogInPromise();
   const { onboardingPromise } = useOnboardingPromise();
 
   const router = useRouter();
-  const navigateToLogin = useNavigateToLogin();
   const Alert = useAlert();
 
   const redirectToCreateDrop = async () => {
-    if (!isAuthenticated) {
-      navigateToLogin();
-    } else if (user?.data.can_create_drop === false) {
+    if (isAuthenticated && user?.data.can_create_drop === false) {
       const timeRemaining = 24 - new Date().getUTCHours();
       Alert.alert(
         "Wow, you love drops!",
         `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
       );
     } else {
+      // check if user is logged in
+      await loginPromise();
       // check if user has completed onboarding
       await onboardingPromise();
 
