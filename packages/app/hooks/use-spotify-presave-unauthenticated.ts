@@ -1,20 +1,25 @@
+import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
-import { useStableCallback } from "app/hooks/use-stable-callback";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { axios } from "app/lib/axios";
+import { useLogInPromise } from "app/lib/login-promise";
 
 import { toast } from "design-system/toast";
 
+import { MY_INFO_ENDPOINT } from "../providers/user-provider";
 import { useConnectSpotify } from "./use-connect-spotify";
+import { useRedirectToClaimDrop } from "./use-redirect-to-claim-drop";
 
 type IParams = {
   editionAddress: string;
 };
 
-// const storedTokenKey = "spotify-unauthenticated-user-data";
 export const useSpotifyPresaveUnauthenticated = () => {
   const { connectSpotify } = useConnectSpotify();
-  const navigateToLogin = useNavigateToLogin();
+  const { loginPromise } = useLogInPromise();
+  const redirectToClaimDrop = useRedirectToClaimDrop();
+  const { mutate } = useSWRConfig();
+
   const state = useSWRMutation(
     "presave-spotify-unauthenticated",
     async (key: string, values: { arg: IParams }) => {
@@ -24,35 +29,25 @@ export const useSpotifyPresaveUnauthenticated = () => {
         toast.success("Success. Complete your profile to collect the drop", {
           duration: 5000,
         });
-        navigateToLogin();
-        // new MMKV().set(
-        //   storedTokenKey,
-        //   JSON.stringify({ code: res.code, redirectUri: res.redirectUri })
-        // );
+
+        await loginPromise();
+
+        if (res) {
+          await axios({
+            url: `/v1/spotify/get-and-save-token`,
+            method: "POST",
+            data: {
+              code: res.code,
+              redirect_uri: res.redirectUri,
+            },
+          });
+          mutate(MY_INFO_ENDPOINT);
+
+          redirectToClaimDrop(editionAddress);
+        }
       }
       return res;
     }
   );
   return state;
-};
-
-export const useSavePersistedSpotifyToken = () => {
-  const savePersistedSpotifyToken = useStableCallback(async () => {
-    // let data = new MMKV().getString(storedTokenKey);
-    // if (data) {
-    //   const parsedData = JSON.parse(data);
-    //   if (parsedData)
-    //     await axios({
-    //       url: `/v1/spotify/get-and-save-token`,
-    //       method: "POST",
-    //       data: {
-    //         code: parsedData.code,
-    //         redirect_uri: parsedData.redirectUri,
-    //       },
-    //     });
-    //   new MMKV().delete(storedTokenKey);
-    // }
-  });
-
-  return { savePersistedSpotifyToken };
 };
