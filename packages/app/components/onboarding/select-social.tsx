@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { MotiView } from "moti";
 
@@ -6,29 +6,14 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useMagicSocialAuth } from "app/lib/social-logins";
+import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 
-import { InstagramColorful, Twitter } from "design-system/icon";
+import { Instagram, Twitter } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 
 import { Challenge } from "./hcaptcha";
-import { OnboardingStepContext } from "./onboarding-context";
 
 export const SelectSocial = () => {
-  const { user, redirectUri } = useContext(OnboardingStepContext);
-  const { performMagicAuthWithTwitter, connectInstagram, loading } =
-    useMagicSocialAuth();
-
-  const handleConnectTwitter = async () => {
-    const res = await performMagicAuthWithTwitter();
-    console.log("twitter tokens! send it to server ", res);
-  };
-
-  const handleConnectInstagram = async () => {
-    const res = await connectInstagram();
-    console.log("ig code from ig! send it to server ", res);
-  };
-
   return (
     <MotiView
       from={{
@@ -64,35 +49,55 @@ export const SelectSocial = () => {
           </Text>
         </View>
         <View tw="mt-16 flex flex-grow-0">
-          <Button size="regular" onPress={handleConnectTwitter}>
-            <View tw="mr-1">
-              <Twitter color="#4A99E9" width={20} height={20} />
-            </View>
-            Connect Twitter{" "}
-            {loading === "twitter" ? (
-              <View tw="absolute right-4 scale-75 justify-center">
-                <Spinner size="small" color="darkgrey" />
-              </View>
-            ) : (
-              <></>
-            )}
-          </Button>
-          <Button size="regular" tw="mt-2" onPress={handleConnectInstagram}>
-            <View tw="mr-1.5">
-              <InstagramColorful width={20} height={20} />
-            </View>
-            Connect Instagram{" "}
-            {loading === "instagram" ? (
-              <View tw="absolute right-4 scale-75 justify-center">
-                <Spinner size="small" color="darkgrey" />
-              </View>
-            ) : (
-              <></>
-            )}
-          </Button>
+          <ConnectButton
+            title="Connect Twitter"
+            icon={<Twitter color="#4A99E9" width={20} height={20} />}
+            type="twitter"
+          />
+          <ConnectButton
+            title="Connect Instagram"
+            icon={<Instagram color="#4A99E9" width={20} height={20} />}
+            type="instagram"
+          />
+
           <Challenge />
         </View>
       </View>
     </MotiView>
+  );
+};
+
+const ConnectButton = ({
+  title,
+  icon,
+  type,
+}: {
+  title: string;
+  icon: any;
+  type: "apple" | "google" | "instagram" | "twitter";
+}) => {
+  const { trigger, isMutating } = useAddMagicSocialAccount();
+  return (
+    <Button
+      size="regular"
+      tw="mt-2"
+      onPress={() =>
+        trigger({
+          type,
+        })
+      }
+    >
+      <View tw="flex-row items-center">
+        <View tw="mr-1.5">{icon}</View>
+        <Text tw="font-semibold text-white dark:text-black">{title} </Text>
+        {isMutating ? (
+          <View tw="absolute right-4 scale-75 justify-center">
+            <Spinner size="small" color="darkgrey" />
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+    </Button>
   );
 };

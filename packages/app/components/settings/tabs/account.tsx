@@ -9,6 +9,7 @@ import {
   Apple,
   GoogleOriginal,
   Twitter,
+  Instagram,
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -91,6 +92,11 @@ const socialAccounts = [
     type: "twitter",
     name: "Twitter",
   },
+  {
+    Icon: Instagram,
+    type: "instagram",
+    name: "Instagram",
+  },
 ] as const;
 
 const WalletSocialAccounts = () => {
@@ -149,7 +155,7 @@ type SocialConnectButtonProps = {
     google: { address: string };
     apple: { address: string };
   };
-  type: "twitter" | "google" | "apple";
+  type: "twitter" | "google" | "apple" | "instagram";
 };
 
 const SocialConnectButton = ({ connected, type }: SocialConnectButtonProps) => {
