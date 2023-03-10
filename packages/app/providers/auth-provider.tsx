@@ -22,6 +22,7 @@ import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { axios } from "app/lib/axios";
 import { deleteAppCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
+import { loginPromiseCallbacks } from "app/lib/login-promise";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
@@ -216,6 +217,13 @@ export function AuthProvider({
       subscription.remove();
     };
   }, [doRefreshToken]);
+
+  useEffect(() => {
+    if (authenticationStatus === "AUTHENTICATED") {
+      loginPromiseCallbacks.resolve?.(true);
+      loginPromiseCallbacks.resolve = null;
+    }
+  }, [authenticationStatus]);
 
   //#endregion
 
