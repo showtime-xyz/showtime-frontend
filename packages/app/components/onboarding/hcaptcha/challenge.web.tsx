@@ -50,7 +50,7 @@ export const Challenge = () => {
   };
 
   const showCaptcha = async () => {
-    // Todo: skip directly to the next step if user has already a social account
+    // skip directly to the next step if user has already a social account
     // connected or if the user has already completed the captcha challenge
 
     if (
