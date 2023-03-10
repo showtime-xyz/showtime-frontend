@@ -25,7 +25,6 @@ export const LoginWithGoogle = () => {
           setAuthenticationStatus("AUTHENTICATING");
           const result = await performMagicAuthWithGoogle();
           const idToken = result.magic.idToken;
-          console.log("idtoken ", result);
           const user = await login(LOGIN_MAGIC_ENDPOINT, {
             did: idToken,
           });
