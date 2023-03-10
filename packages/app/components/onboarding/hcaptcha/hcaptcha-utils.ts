@@ -26,7 +26,7 @@ export const useFinishOnboarding = () => {
   const router = useRouter();
 
   const finishOnboarding = useCallback(() => {
-    router.replace("/");
+    router.pop();
     // let's wait a bit before resolving the promise
     // to make sure the user has time to see the animation
     setTimeout(() => {
