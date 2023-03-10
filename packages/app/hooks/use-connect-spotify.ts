@@ -6,15 +6,13 @@ import { Logger } from "app/lib/logger";
 import { getQueryString } from "app/lib/spotify";
 import { redirectUri } from "app/lib/spotify/queryString";
 
-import { toast } from "design-system/toast";
-
 import { useSaveSpotifyToken } from "./use-save-spotify-token";
 
 export const useConnectSpotify = () => {
   const { saveSpotifyToken } = useSaveSpotifyToken();
   const Alert = useAlert();
 
-  const connectSpotify = async () => {
+  const connectSpotify = async (editionAddress?: string) => {
     try {
       const queryString = getQueryString();
 
@@ -26,9 +24,12 @@ export const useConnectSpotify = () => {
         let urlObj = new URL(res.url);
         const code = urlObj.searchParams.get("code");
         if (code) {
-          await saveSpotifyToken({ code, redirectUri: redirectUri });
-          toast.success("Spotify connected");
-          return true;
+          await saveSpotifyToken({
+            code,
+            redirectUri: redirectUri,
+            editionAddress,
+          });
+          return { code, redirectUri: redirectUri };
         }
       } else {
         Logger.error("Spotify auth failed", res);
