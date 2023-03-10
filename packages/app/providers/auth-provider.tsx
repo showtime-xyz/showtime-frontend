@@ -15,7 +15,6 @@ import { clearPersistedForms } from "app/components/drop/utils";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
-import { useSavePersistedSpotifyToken } from "app/hooks/use-spotify-presave-unauthenticated";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
@@ -23,6 +22,7 @@ import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { axios } from "app/lib/axios";
 import { deleteAppCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
+import { loginPromiseCallbacks } from "app/lib/login-promise";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
@@ -67,7 +67,6 @@ export function AuthProvider({
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
-  const { savePersistedSpotifyToken } = useSavePersistedSpotifyToken();
   //#endregion
 
   //#region methods
@@ -220,8 +219,11 @@ export function AuthProvider({
   }, [doRefreshToken]);
 
   useEffect(() => {
-    if (authenticationStatus === "AUTHENTICATED") savePersistedSpotifyToken();
-  }, [authenticationStatus, savePersistedSpotifyToken]);
+    if (authenticationStatus === "AUTHENTICATED") {
+      loginPromiseCallbacks.resolve?.(true);
+      loginPromiseCallbacks.resolve = null;
+    }
+  }, [authenticationStatus]);
 
   //#endregion
 
