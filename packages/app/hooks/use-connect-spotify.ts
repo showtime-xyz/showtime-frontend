@@ -1,36 +1,24 @@
-import * as WebBrowser from "expo-web-browser";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { Logger } from "app/lib/logger";
-import { getQueryString } from "app/lib/spotify";
-import { redirectUri } from "app/lib/spotify/queryString";
 
+import { useGetSpotifyToken } from "./use-get-spotify-token";
 import { useSaveSpotifyToken } from "./use-save-spotify-token";
 
 export const useConnectSpotify = () => {
   const { saveSpotifyToken } = useSaveSpotifyToken();
   const Alert = useAlert();
+  const { getSpotifyToken } = useGetSpotifyToken();
 
-  const connectSpotify = async (editionAddress?: string) => {
+  const connectSpotify = async () => {
     try {
-      const queryString = getQueryString();
-
-      const res = await WebBrowser.openAuthSessionAsync(
-        queryString,
-        redirectUri
-      );
-      if (res.type === "success") {
-        let urlObj = new URL(res.url);
-        const code = urlObj.searchParams.get("code");
-        if (code) {
-          await saveSpotifyToken({
-            code,
-            redirectUri: redirectUri,
-            editionAddress,
-          });
-          return { code, redirectUri: redirectUri };
-        }
+      const res = await getSpotifyToken();
+      if (res?.code) {
+        await saveSpotifyToken({
+          code: res?.code,
+          redirectUri: res?.redirectUri,
+        });
+        return res;
       } else {
         Logger.error("Spotify auth failed", res);
         Alert.alert("Error", "Something went wrong");
