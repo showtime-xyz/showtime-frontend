@@ -1,7 +1,6 @@
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
-import { axios } from "app/lib/axios";
 import { useLogInPromise } from "app/lib/login-promise";
 
 import { toast } from "design-system/toast";
@@ -33,14 +32,14 @@ export const useSpotifyPresaveUnauthenticated = () => {
         await loginPromise();
 
         if (res) {
-          await axios({
-            url: `/v1/spotify/get-and-save-token`,
-            method: "POST",
-            data: {
-              code: res.code,
-              redirect_uri: res.redirectUri,
-            },
-          });
+          // await axios({
+          //   url: `/v1/spotify/get-and-save-token`,
+          //   method: "POST",
+          //   data: {
+          //     code: res.code,
+          //     redirect_uri: res.redirectUri,
+          //   },
+          // });
           mutate(MY_INFO_ENDPOINT);
 
           redirectToClaimDrop(editionAddress);
