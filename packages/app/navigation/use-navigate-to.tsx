@@ -31,8 +31,8 @@ export const useNavigateToLogin = () => {
 export const useNavigateToOnboarding = () => {
   const router = useRouter();
 
-  const navigateToOnboarding = (redirectUri?: string) => {
-    router.push("/profile/onboarding?redirectUri=" + redirectUri);
+  const navigateToOnboarding = () => {
+    router.push("/profile/onboarding");
   };
 
   return navigateToOnboarding;

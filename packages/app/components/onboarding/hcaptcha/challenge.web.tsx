@@ -57,7 +57,7 @@ export const Challenge = () => {
       user?.data.profile.captcha_completed_at ||
       user?.data.profile.has_social_login
     ) {
-      finishOnboarding(redirectUri);
+      finishOnboarding();
       return;
     }
 
@@ -91,7 +91,7 @@ export const Challenge = () => {
         rudder?.track("hCaptcha challenge success");
 
         // finish onboarding
-        finishOnboarding(redirectUri);
+        finishOnboarding();
       }
     } catch (err) {
       toast.error(

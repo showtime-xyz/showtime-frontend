@@ -2,8 +2,9 @@ import { useCallback } from "react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { axios } from "app/lib/axios";
+
+import { onboardingPromiseCallbacks } from "../onboarding-promise";
 
 export const useValidateCaptchaWithServer = () => {
   async function validate(token?: string) {
@@ -23,23 +24,15 @@ export const useValidateCaptchaWithServer = () => {
 
 export const useFinishOnboarding = () => {
   const router = useRouter();
-  const redirectToClaimDrop = useRedirectToClaimDrop();
 
-  const finishOnboarding = useCallback(
-    (redirectUri?: string) => {
-      if (redirectUri) {
-        if (redirectUri.includes("/claim/")) {
-          const address = redirectUri.replace(/^\/claim\//, "");
-          redirectToClaimDrop(address, true);
-        } else {
-          router.replace(redirectUri);
-        }
-      } else {
-        router.pop();
-      }
-    },
-    [redirectToClaimDrop, router]
-  );
+  const finishOnboarding = useCallback(() => {
+    router.replace("/");
+    // let's wait a bit before resolving the promise
+    // to make sure the user has time to see the animation
+    setTimeout(() => {
+      onboardingPromiseCallbacks.resolve?.(true);
+    }, 1000);
+  }, [router]);
 
   return finishOnboarding;
 };

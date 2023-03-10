@@ -3,24 +3,21 @@ import { Platform } from "react-native";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
-import {
-  useNavigateToLogin,
-  useNavigateToOnboarding,
-} from "app/navigation/use-navigate-to";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 export const useRedirectToCreateDrop = () => {
-  const { isAuthenticated, user, isIncompletedProfile } = useUser();
+  const { isAuthenticated, user } = useUser();
+  const { onboardingPromise } = useOnboardingPromise();
+
   const router = useRouter();
   const navigateToLogin = useNavigateToLogin();
-  const navigateToOnboarding = useNavigateToOnboarding();
   const Alert = useAlert();
 
-  const redirectToCreateDrop = () => {
+  const redirectToCreateDrop = async () => {
     if (!isAuthenticated) {
       navigateToLogin();
-    } else if (isIncompletedProfile) {
-      navigateToOnboarding("/drop");
     } else if (user?.data.can_create_drop === false) {
       const timeRemaining = 24 - new Date().getUTCHours();
       Alert.alert(
@@ -28,6 +25,10 @@ export const useRedirectToCreateDrop = () => {
         `Only one drop per day is allowed.\n\nCome back in ${timeRemaining} hours!`
       );
     } else {
+      // check if user has completed onboarding
+      await onboardingPromise();
+
+      // redirect to create drop
       router.push(
         Platform.select({
           native: "/drop",
