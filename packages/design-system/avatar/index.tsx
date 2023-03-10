@@ -1,4 +1,5 @@
 import { ReactNode, useMemo, forwardRef } from "react";
+import { ViewStyle } from "react-native";
 
 import { Image } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -13,6 +14,7 @@ export type AvatarProps = {
   tw?: TW;
   children?: ReactNode;
   alt: string;
+  style?: ViewStyle;
 };
 
 const getAvatarImageUrl = (imgUrl: string, size: number) => {
@@ -24,7 +26,7 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
 
 export const Avatar = forwardRef<typeof View, AvatarProps>(
   function AvatarComponent(
-    { url, borderRadius = 0, size = 32, tw = "", children, alt = "" },
+    { url, borderRadius = 0, size = 32, tw = "", children, alt = "", style },
     ref
   ) {
     const imageSource = useMemo(
@@ -35,7 +37,7 @@ export const Avatar = forwardRef<typeof View, AvatarProps>(
     return (
       <View
         tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
-        style={{ height: size, width: size }}
+        style={{ height: size, width: size, ...style }}
         ref={ref}
       >
         <Image

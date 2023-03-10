@@ -9,7 +9,9 @@ import {
 import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
+import { LinearGradient } from "expo-linear-gradient";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
@@ -21,16 +23,16 @@ import {
   MoreHorizontal,
   Instagram,
   TwitterOutline,
-  ScanOutline,
   Download,
   Link,
+  Showtime,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { colors, styled } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -48,16 +50,25 @@ import Share from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
 import {
+  formatClaimNumber,
+  getCreatorNameFromNFT,
   getCreatorUsernameFromNFT,
   getMediaUrl,
   getTwitterIntent,
   getTwitterIntentUsername,
+  isMobileWeb,
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
+import { ShowtimeBrand } from "design-system/icon";
 import { toast } from "design-system/toast";
 
+import { contentGatingType } from "../content-type-tooltip";
+
 const { width: windowWidth } = Dimensions.get("window");
+const StyledLinearGradient = styled(LinearGradient);
+const PlatformBlurView = Platform.OS === "web" ? View : styled(BlurView);
+const TEXT_COLOR = "#C8BACF";
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
 };
@@ -66,7 +77,7 @@ const { useParam } = createParam<QRCodeModalParams>();
 type PreviewStyle = {
   height: number;
   width: number;
-  borderRadius: number;
+  borderRadius?: number;
 };
 type QRCodeModalProps = QRCodeModalParams & {
   dropCreated?: boolean;
@@ -205,7 +216,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = windowWidth >= 768 ? 375 : windowWidth - 60;
+  const size = Platform.OS === "web" ? 265 : windowWidth - 48;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -231,7 +242,9 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
   };
   const onDownload = useCallback(async () => {
     if (Platform.OS === "web") {
-      const dataUrl = await domtoimage.toPng(viewRef.current as Node);
+      const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
+        quality: 1,
+      });
       const link = document.createElement("a");
       link.download = `${getCreatorUsernameFromNFT(
         nft
@@ -266,9 +279,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     async (
       social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
     ) => {
-      const url = await getViewShot(
-        social === Share.Social.INSTAGRAM ? "data-uri" : undefined
-      );
+      const url = await getViewShot();
       if (!url) {
         Alert.alert("Oops, An error occurred.");
         return;
@@ -355,8 +366,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         /**
          *  if not contractAddress here, it may use a local blob address file on web
          *  but we can't convert it to an image, so we need to disable it.
+         *
+         *  the download function is not working on the mobile web..
          */
-        visable: !!contractAddress,
+        visable: !!contractAddress && !isMobileWeb(),
       },
     ],
     default: [
@@ -392,6 +405,18 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       },
     ],
   });
+  const ContentType = useCallback(() => {
+    if (!edition?.gating_type) return null;
+    const Icon = contentGatingType[edition?.gating_type].icon;
+    return (
+      <View tw="flex-row items-center justify-center">
+        <Icon color={"#fff"} width={20} height={20} />
+        <Text tw="ml-1 text-sm font-medium text-white">
+          {`${contentGatingType[edition?.gating_type].typeName} Drop`}
+        </Text>
+      </View>
+    );
+  }, [edition?.gating_type]);
   if (isLoadingCollection || isLoadingNFT) {
     return <QRCodeSkeleton size={size} />;
   }
@@ -408,79 +433,146 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <RNView
-                collapsable={false}
-                style={{ alignItems: "center" }}
-                ref={viewRef as any}
-              >
-                <View tw="web:mb-[74px] w-full max-w-[420px] items-center bg-gray-100 py-4 dark:bg-gray-900">
-                  {props?.renderPreviewComponent ? (
-                    props?.renderPreviewComponent(imageStyle)
-                  ) : (
-                    <Image
-                      source={{
-                        uri: mediaUri,
-                      }}
-                      style={imageStyle}
-                      width={size}
-                      height={size}
-                      resizeMode="cover"
-                      alt={nft?.token_name}
-                      blurhash={nft?.blurhash}
-                    />
-                  )}
-                  <View tw="w-full flex-row justify-between px-6 py-4">
-                    <View tw="flex-1 justify-center">
-                      <View tw="flex-row pb-4">
-                        <Avatar
-                          alt={"QRCode Share Avatar"}
-                          size={38}
-                          tw="border border-gray-200 dark:border-gray-900"
-                          url={nft.creator_img_url}
-                        />
-                        <View tw="ml-2 justify-center">
-                          <Text tw="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                            Creator
-                          </Text>
+              <View tw="ios:scale-[0.82] android:scale-[0.82] web:py-4 ios:-mt-10 android:-mt-10 web:w-[340px] web:self-center select-none">
+                <View collapsable={false} ref={viewRef as any}>
+                  <StyledLinearGradient
+                    tw="web:mb-[74px] w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
+                    colors={["#4C4B4E", "#0C0A0D"]}
+                    locations={[0, 1]}
+                    start={[0.5, 0.25]}
+                    end={[0.5, 0.75]}
+                  >
+                    <View tw="mb-10 w-full flex-row justify-between">
+                      <View tw="flex-row">
+                        <Showtime color="#FFF" width={16} height={16} />
+                        <View tw="w-1" />
+                        <ShowtimeBrand color="#FFF" width={84} height={16} />
+                      </View>
+                      <View tw="flex-row">
+                        <ContentType />
+                      </View>
+                    </View>
+
+                    <View style={imageStyle} />
+
+                    <PlatformBlurView
+                      intensity={40}
+                      tint="dark"
+                      style={Platform.select({
+                        web: {
+                          background: "rgba(217, 217, 217, 0.03)",
+                          "backdrop-filter": "blur(43.5px)",
+                        } as any,
+                        default: {},
+                      })}
+                      tw="-mt-4 overflow-hidden rounded-xl pt-4"
+                    >
+                      <View
+                        tw="w-full flex-row justify-between px-2 py-6"
+                        style={{ backgroundColor: "rgba(217, 217, 217, 0.03)" }}
+                      >
+                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-black p-1">
+                          <ReactQRCode
+                            size={68}
+                            ecl="M"
+                            value={qrCodeUrl.toString()}
+                            fillColors={["#000", "#FFF"]}
+                          />
+                        </View>
+                        <View tw="flex-1 justify-center">
+                          {edition?.creator_airdrop_edition ? (
+                            <Text
+                              tw="flex flex-nowrap text-xs font-medium"
+                              style={{ color: TEXT_COLOR, fontSize: 10 }}
+                              numberOfLines={1}
+                            >
+                              {edition?.creator_airdrop_edition.edition_size > 0
+                                ? `${formatClaimNumber(
+                                    edition?.creator_airdrop_edition
+                                      .edition_size
+                                  )} EDITIONS`
+                                : "OPEN EDITION COLLECTION"}
+                            </Text>
+                          ) : null}
                           <View tw="h-2" />
-                          <View>
-                            <View tw="flex flex-row items-center">
-                              <Text tw="text-13 flex font-semibold text-gray-900 dark:text-white">
-                                {getCreatorUsernameFromNFT(nft)}
+                          <View tw="h-8">
+                            <Text
+                              tw="text-base font-bold text-white"
+                              numberOfLines={2}
+                            >
+                              {nft.token_name}
+                            </Text>
+                          </View>
+                          <View tw="mt-1 flex-row">
+                            <Avatar
+                              alt={"QRCode Share Avatar"}
+                              size={20}
+                              tw="border"
+                              style={{ borderColor: "#7C757F" }}
+                              url={nft.creator_img_url}
+                            />
+                            <View tw="ml-1 flex flex-row items-center">
+                              <Text
+                                tw="flex text-sm font-semibold"
+                                style={{ color: TEXT_COLOR, maxWidth: 140 }}
+                                numberOfLines={1}
+                              >
+                                {getCreatorNameFromNFT(nft)}
                               </Text>
-                              {nft.creator_verified ? (
+                              {!!nft.creator_verified && (
                                 <VerificationBadge
                                   style={{ marginLeft: 4 }}
                                   size={12}
+                                  bgColor={TEXT_COLOR}
+                                  fillColor={"#000"}
                                 />
-                              ) : null}
+                              )}
                             </View>
                           </View>
                         </View>
                       </View>
-
+                    </PlatformBlurView>
+                    <View
+                      tw="shadow-light absolute top-24 rounded-xl"
+                      style={{
+                        shadowColor: "rgba(0, 0, 0, 0.44)",
+                        shadowOffset: {
+                          width: 0,
+                          height: 14,
+                        },
+                        shadowOpacity: 1,
+                        shadowRadius: 16.0,
+                        elevation: 24,
+                      }}
+                    >
+                      {props?.renderPreviewComponent ? (
+                        props?.renderPreviewComponent(imageStyle)
+                      ) : (
+                        <Image
+                          source={{
+                            uri: mediaUri,
+                          }}
+                          style={imageStyle}
+                          width={size}
+                          height={size}
+                          alt={nft?.token_name}
+                          blurhash={nft?.blurhash}
+                        />
+                      )}
+                    </View>
+                    <View tw="mb-16 mt-12 items-center justify-center">
                       <Text
-                        tw="text-lg text-black dark:text-white"
-                        numberOfLines={2}
+                        tw="text-13 text-center font-medium"
+                        style={{ color: TEXT_COLOR }}
                       >
-                        {nft.token_name}
+                        {`SHOWTIME.XYZ/${getCreatorUsernameFromNFT(
+                          nft
+                        )?.toLocaleUpperCase()}`}
                       </Text>
                     </View>
-                    <View tw="ml-2 h-[114px] justify-center rounded-lg border border-gray-300 px-2 dark:border-gray-500">
-                      <ReactQRCode size={96} value={qrCodeUrl.toString()} />
-                    </View>
-                  </View>
-                  {Platform.OS !== "web" && (
-                    <View tw="flex-row items-center justify-center">
-                      <ScanOutline height={16} width={16} color={iconColor} />
-                      <View tw="w-1" />
-                      <Text tw="text-13 text-center font-medium text-black dark:text-white">
-                        Scan to Collect
-                      </Text>
-                    </View>
-                  )}
+                  </StyledLinearGradient>
                 </View>
-              </RNView>
+              </View>
             </BottomSheetScrollView>
           </BottomSheetModalProvider>
           <View
@@ -500,7 +592,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                 >
                   <Icon height={24} width={24} color={iconColor} />
                   <View tw="h-2" />
-                  <Text tw="text-xs text-gray-900 dark:text-white">
+                  <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
                     {title}
                   </Text>
                 </Pressable>
