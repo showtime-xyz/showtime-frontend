@@ -14,7 +14,7 @@ export const useDisconnectInstagram = () => {
     MY_INFO_ENDPOINT,
     async (key: string, values: { arg: AddSocialType }) => {
       await axios({
-        url: `/api/v1/profile/accounts/token/${values.arg.provider}/${values.arg.providerId}`,
+        url: `/v1/profile/accounts/token/${values.arg.provider}/${values.arg.providerId}`,
         method: "DELETE",
       });
     }

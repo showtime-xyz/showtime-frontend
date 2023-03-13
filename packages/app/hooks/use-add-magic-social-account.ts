@@ -142,6 +142,8 @@ const handleInstagramAccountAdd = async (
             scope: [scope],
           },
         });
+        mutate(MY_INFO_ENDPOINT);
+
         toast.success("Social account added");
         return apiRes;
       } catch (error: any) {
@@ -167,6 +169,7 @@ const handleInstagramAccountAdd = async (
                       reassign_wallet: true,
                     },
                   });
+                  mutate(MY_INFO_ENDPOINT);
 
                   toast.success("Social account added");
 
