@@ -33,7 +33,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
@@ -156,7 +155,10 @@ export const DropFree = () => {
   const insets = useSafeAreaInsets();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const user = useUser({ redirectTo: "/login" });
+  const user = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
   const modalScreenContext = useModalScreenContext();
 
   const headerHeight = useHeaderHeight();
@@ -298,7 +300,7 @@ export const DropFree = () => {
   };
 
   if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   if (state.status === "success") {

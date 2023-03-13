@@ -38,7 +38,7 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
 export const UserList = ({
   users,
   loading,
-  emptyTitle = "No results found",
+  emptyTitle = "No users, yet.",
   ...rest
 }: UserListProps) => {
   const { follow, unfollow } = useMyInfo();
@@ -114,7 +114,7 @@ const FollowingListUser = memo(
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
-                  alt={item.username ?? item.wallet_address}
+                  alt={item.username ?? item.wallet_address ?? ""}
                   width={32}
                   height={32}
                 />

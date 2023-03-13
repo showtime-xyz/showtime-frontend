@@ -74,7 +74,13 @@ export interface ModalProps {
    * @default true
    */
   enableContentPanningGesture?: boolean;
-
+  /**
+   * **ANDROID ONLY ** BottomSheet's props
+   * Enable handle panning gesture interaction.
+   * @type boolean
+   * @default true
+   */
+  enableHandlePanningGesture?: boolean;
   /**
    * **WEB ONLY ** prevents modal close on backdrop press
    * @type boolean
@@ -86,6 +92,11 @@ export interface ModalProps {
    * @default true
    */
   useNativeModal?: boolean;
+  /**
+   * Whether to show the header.
+   * @default true
+   */
+  headerShown?: boolean;
 }
 
 export interface ModalHeaderProps
@@ -123,6 +134,8 @@ export interface ModalContainerProps
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
   enableContentPanningGesture?: boolean;
+  enableHandlePanningGesture?: boolean;
+  headerShown?: boolean;
   disableBackdropPress?: boolean;
   tw?: string;
 }

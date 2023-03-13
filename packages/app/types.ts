@@ -95,6 +95,16 @@ export interface Link {
   type__icon_url: string;
 }
 
+export interface SocialLoginConnections {
+  email: boolean;
+  twitter: boolean;
+  google: boolean;
+  apple: boolean;
+  phone: boolean;
+  spotify: boolean;
+  instagram: boolean;
+}
+
 export interface Profile {
   profile_id: number;
   name: string;
@@ -112,11 +122,14 @@ export interface Profile {
   default_created_sort_id: number;
   default_owned_sort_id: number;
   notifications_last_opened: Date;
-  has_onboarded: boolean;
   links: Link[];
   primary_wallet?: WalletAddressesV2;
   has_verified_phone_number: boolean;
+  has_spotify_token: boolean;
   spotify_artist_id?: string;
+  captcha_completed_at: Date | null;
+  has_social_login: boolean;
+  social_login_connections: SocialLoginConnections;
 }
 
 type FollowType = {

@@ -1,7 +1,7 @@
 import React from "react";
 
 export type MediaCropperProps = {
-  src: string | null;
+  src: string | File | null;
   visible: boolean;
   onClose: () => void;
   onApply?: (src: Blob) => void;

@@ -77,23 +77,28 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       ]}
       style={containerStyle}
     >
-      <View tw="flex-row">
-        {isValidElement(label) ? (
-          label
-        ) : (
-          <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
-            {label}
-          </Label>
-        )}
+      {label ? (
+        <View tw="flex-row">
+          {isValidElement(label) ? (
+            label
+          ) : (
+            <Label
+              htmlFor={inputId}
+              tw="font-bold text-gray-900 dark:text-white"
+            >
+              {label}
+            </Label>
+          )}
 
-        {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
-      </View>
+          {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
+        </View>
+      ) : null}
 
       <View tw="ml-auto">
         {switchProps ? <Switch {...switchProps} /> : null}
       </View>
       {!switchProps ? (
-        <View tw="mt-4 flex-row items-center">
+        <View tw={["flex-row items-center", label ? "mt-4" : ""]}>
           {leftElement}
           {!selectOnly ? (
             <Component

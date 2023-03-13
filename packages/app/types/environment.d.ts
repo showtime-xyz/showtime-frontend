@@ -8,4 +8,7 @@ declare global {
       NEXT_PUBLIC_STRIPE_KEY: string;
     }
   }
+  interface Window {
+    hcaptcha?: string;
+  }
 }

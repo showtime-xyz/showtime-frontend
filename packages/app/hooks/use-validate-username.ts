@@ -1,16 +1,19 @@
 import { useRef, useState } from "react";
 
 import { axios } from "../lib/axios";
+import { Logger } from "../lib/logger";
 import { useUser } from "./use-user";
 
 export const useValidateUsername = () => {
   const [isValid, setIsValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const debounceTimeout = useRef<any>(null);
 
   async function validateUsername(value: string) {
     const username = value ? value.trim() : null;
     try {
+      setIsLoading(true);
       if (
         username === null ||
         username.toLowerCase() === user?.data?.profile?.username?.toLowerCase()
@@ -29,7 +32,9 @@ export const useValidateUsername = () => {
         }
       }
     } catch (e) {
-      console.error("username validate api failed ", e);
+      Logger.error("username validate api failed ", e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -45,6 +50,7 @@ export const useValidateUsername = () => {
 
   return {
     isValid,
+    isLoading,
     validate: debouncedValidate,
   };
 };

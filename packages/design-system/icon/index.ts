@@ -122,6 +122,7 @@ export { default as BellOff } from "./BellOff";
 export { default as PhonePortraitOutline } from "./PhonePortraitOutline";
 export { default as CreditCard } from "./CreditCard";
 export { default as Receipt } from "./Receipt";
+export { default as AddPhoto } from "./AddPhoto";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
@@ -130,6 +131,7 @@ export { default as Facebook } from "./Facebook";
 export { default as GoogleOriginal } from "./GoogleOriginal";
 export { default as Apple } from "./Apple";
 export { default as Instagram } from "./Instagram";
+export { default as InstagramColorful } from "./InstagramColorful";
 export { default as Github } from "./Github";
 export { default as TwitterOutline } from "./TwitterOutline";
 
