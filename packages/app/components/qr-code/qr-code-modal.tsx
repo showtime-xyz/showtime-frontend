@@ -216,7 +216,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = Platform.OS === "web" ? 265 : windowWidth - 48;
+  const size = Platform.OS === "web" ? 276 : windowWidth - 48;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
@@ -433,10 +433,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <View tw="ios:scale-[0.82] android:scale-[0.82] web:py-4 ios:-mt-10 android:-mt-10 web:w-[340px] web:self-center select-none">
+              <View tw="ios:scale-[0.82] android:scale-[0.82] web:pt-0 web:pb-2 ios:-mt-10 android:-mt-10 web:w-[340px] web:self-center select-none">
                 <View collapsable={false} ref={viewRef as any}>
                   <StyledLinearGradient
-                    tw="web:mb-[74px] w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
+                    tw="web:mb-[74px] web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
                     colors={["#4C4B4E", "#0C0A0D"]}
                     locations={[0, 1]}
                     start={[0.5, 0.25]}
@@ -465,7 +465,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                         } as any,
                         default: {},
                       })}
-                      tw="-mt-4 overflow-hidden rounded-xl pt-4"
+                      tw="-mt-4 w-full overflow-hidden rounded-xl pt-4"
                     >
                       <View
                         tw="w-full flex-row justify-between px-2 py-6"
@@ -474,7 +474,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                         <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-black p-1">
                           <ReactQRCode
                             size={68}
-                            ecl="M"
+                            // ecl="M"
                             value={qrCodeUrl.toString()}
                             fillColors={["#000", "#FFF"]}
                           />
@@ -498,6 +498,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                           <View tw="h-8">
                             <Text
                               tw="text-base font-bold text-white"
+                              style={{ fontSize: 18 }}
                               numberOfLines={2}
                             >
                               {nft.token_name}
