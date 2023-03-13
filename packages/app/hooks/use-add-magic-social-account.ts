@@ -168,13 +168,17 @@ const handleInstagramAccountAdd = async (
                     },
                   });
 
-                  mutate(MY_INFO_ENDPOINT);
                   toast.success("Social account added");
 
                   return apiRes;
                 },
               },
             ]
+          );
+        } else {
+          Alert.alert(
+            error.response?.data?.error?.message ??
+              "Something went wrong. Please try again"
           );
         }
       }

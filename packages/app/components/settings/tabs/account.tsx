@@ -17,6 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
+import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
@@ -39,6 +40,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
         <WalletSocialAccounts />
+        <ConnectInstagram />
       </View>
     </SettingScrollComponent>
   );
@@ -76,6 +78,43 @@ const ConnectSpotify = () => {
   );
 };
 
+const ConnectInstagram = () => {
+  const user = useUser();
+  const isDark = useIsDarkMode();
+
+  const { trigger: disconnectInstagram } = useDisconnectInstagram();
+  const { trigger: addSocial } = useAddMagicSocialAccount();
+
+  return (
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
+      <View tw="flex-row items-center">
+        <Instagram height={25} width={25} color={isDark ? "#fff" : "#000"} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
+          Instagram
+        </Text>
+      </View>
+      <Button
+        variant={
+          user.user?.data.profile.social_login_connections.instagram
+            ? "danger"
+            : "tertiary"
+        }
+        onPress={() => {
+          if (user.user?.data.profile.social_login_connections.instagram) {
+            disconnectInstagram();
+          } else {
+            addSocial({ type: "instagram" });
+          }
+        }}
+      >
+        {user.user?.data.profile.social_login_connections.instagram
+          ? "Disconnect"
+          : "Connect"}
+      </Button>
+    </View>
+  );
+};
+
 const socialAccounts = [
   {
     Icon: Apple,
@@ -91,11 +130,6 @@ const socialAccounts = [
     Icon: Twitter,
     type: "twitter",
     name: "Twitter",
-  },
-  {
-    Icon: Instagram,
-    type: "instagram",
-    name: "Instagram",
   },
 ] as const;
 
