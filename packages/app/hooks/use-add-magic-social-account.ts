@@ -43,6 +43,7 @@ export const useAddMagicSocialAccount = () => {
           }
         } catch (error: any) {
           Logger.error("Magic social auth failed ", error);
+          throw new Error("Connecting failed or aborted");
         }
 
         if (res) {
@@ -91,6 +92,9 @@ export const useAddMagicSocialAccount = () => {
               );
             }
           }
+        } else {
+          // this throw is important to catch all magic errors but instagram
+          throw new Error("Connecting failed or aborted");
         }
       }
     }
@@ -178,13 +182,19 @@ const handleInstagramAccountAdd = async (
               },
             ]
           );
+
+          throw new Error("Connecting failed or aborted");
         } else {
           Alert.alert(
             error.response?.data?.error?.message ??
               "Something went wrong. Please try again"
           );
+          // since we're awaiting the promise, we need to throw
+          throw new Error("Connecting failed or aborted");
         }
       }
+    } else {
+      throw new Error("Connecting failed or aborted");
     }
   }
 };
