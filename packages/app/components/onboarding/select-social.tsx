@@ -8,7 +8,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 
-import { Instagram, Twitter } from "design-system/icon";
+import { InstagramColorful, Twitter } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 
 import { Challenge } from "./hcaptcha";
@@ -57,7 +57,7 @@ export const SelectSocial = () => {
           />
           <ConnectButton
             title="Connect Instagram"
-            icon={<Instagram color="#4A99E9" width={20} height={20} />}
+            icon={<InstagramColorful color="#4A99E9" width={20} height={20} />}
             type="instagram"
           />
 
