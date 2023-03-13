@@ -94,15 +94,19 @@ export interface Link {
   type__prefix: string;
   type__icon_url: string;
 }
-
 export interface SocialLoginConnections {
   email: boolean;
-  twitter: boolean;
   google: boolean;
   apple: boolean;
   phone: boolean;
+  twitter: boolean;
   spotify: boolean;
   instagram: boolean;
+}
+
+export interface SocialLoginHandles {
+  twitter: string | null;
+  instagram: string | null;
 }
 
 export interface Profile {
@@ -130,6 +134,7 @@ export interface Profile {
   captcha_completed_at: Date | null;
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
+  social_login_handles: SocialLoginHandles;
 }
 
 type FollowType = {
