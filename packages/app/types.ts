@@ -102,6 +102,7 @@ export interface SocialLoginConnections {
   apple: boolean;
   phone: boolean;
   spotify: boolean;
+  instagram: boolean;
 }
 
 export interface Profile {

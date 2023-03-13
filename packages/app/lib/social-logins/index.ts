@@ -16,7 +16,7 @@ export const useMagicSocialAuth = () => {
   >(null);
   const [error, setError] = useState<string | null>(null);
 
-  const connectInstagram = async () => {
+  const getInstagramToken = async () => {
     setLoading("instagram");
     setError(null);
 
@@ -125,7 +125,7 @@ export const useMagicSocialAuth = () => {
     performMagicAuthWithApple,
     performMagicAuthWithGoogle,
     performMagicAuthWithTwitter,
-    connectInstagram,
+    getInstagramToken,
     loading,
     error,
   };
