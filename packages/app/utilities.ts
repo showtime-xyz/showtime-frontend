@@ -419,6 +419,19 @@ export const getCreatorUsernameFromNFT = (nft?: {
     : formatAddressShort(nft.creator_address);
 };
 
+export const getCreatorNameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
+  if (!nft) return "";
+  return nft.creator_name
+    ? nft.creator_name
+    : nft.creator_username
+    ? nft.creator_name?.toLocaleUpperCase()
+    : formatAddressShort(nft.creator_address);
+};
+
 export const getTwitterIntentUsername = (profile?: Profile) => {
   if (!profile) return "";
 
