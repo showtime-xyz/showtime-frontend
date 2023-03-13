@@ -147,7 +147,7 @@ export const SelectUsername = () => {
                   usernameRef.current = innerRef;
                   ref(innerRef);
                 }}
-                placeholder="Your username"
+                placeholder="your_username"
                 value={value}
                 textContentType="username"
                 errorText={
