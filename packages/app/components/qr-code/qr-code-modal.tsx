@@ -41,6 +41,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useGetImageColors } from "app/hooks/use-get-image-colors";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTURL } from "app/hooks/use-share-nft";
 import domtoimage from "app/lib/dom-to-image";
@@ -68,7 +69,6 @@ import { contentGatingType } from "../content-type-tooltip";
 const { width: windowWidth } = Dimensions.get("window");
 const StyledLinearGradient = styled(LinearGradient);
 const PlatformBlurView = Platform.OS === "web" ? View : styled(BlurView);
-const TEXT_COLOR = "#C8BACF";
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
 };
@@ -158,7 +158,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
   });
 
   const nft = data?.data.item;
-
   const qrCodeUrl = useMemo(() => {
     if (!nft) return "";
     const url = new URL(getNFTURL(nft));
@@ -221,6 +220,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
   });
+  const { imageColors } = useGetImageColors({ uri: mediaUri });
 
   const getViewShot = async (result?: CaptureOptions["result"]) => {
     const date = new Date();
@@ -405,19 +405,23 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       },
     ],
   });
+  const brandColor = imageColors?.isDark ? "#FFF" : "#000";
   const ContentType = useCallback(() => {
     if (!edition?.gating_type) return null;
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
       <View tw="flex-row items-center justify-center">
-        <Icon color={"#fff"} width={20} height={20} />
-        <Text tw="ml-1 text-sm font-medium text-white">
+        <Icon color={brandColor} width={20} height={20} />
+        <Text
+          tw="ml-1 text-sm font-medium text-white"
+          style={{ color: brandColor }}
+        >
           {`${contentGatingType[edition?.gating_type].typeName} Drop`}
         </Text>
       </View>
     );
-  }, [edition?.gating_type]);
-  if (isLoadingCollection || isLoadingNFT) {
+  }, [edition?.gating_type, brandColor]);
+  if (isLoadingCollection || isLoadingNFT || !imageColors) {
     return <QRCodeSkeleton size={size} />;
   }
   if (!nft) return null;
@@ -437,16 +441,20 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                 <View collapsable={false} ref={viewRef as any}>
                   <StyledLinearGradient
                     tw="web:mb-[74px] web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
-                    colors={["#4C4B4E", "#0C0A0D"]}
+                    colors={imageColors?.colors}
                     locations={[0, 1]}
                     start={[0.5, 0.25]}
                     end={[0.5, 0.75]}
                   >
                     <View tw="mb-10 w-full flex-row justify-between">
                       <View tw="flex-row">
-                        <Showtime color="#FFF" width={16} height={16} />
+                        <Showtime color={brandColor} width={16} height={16} />
                         <View tw="w-1" />
-                        <ShowtimeBrand color="#FFF" width={84} height={16} />
+                        <ShowtimeBrand
+                          color={brandColor}
+                          width={84}
+                          height={16}
+                        />
                       </View>
                       <View tw="flex-row">
                         <ContentType />
@@ -454,22 +462,20 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                     </View>
 
                     <View style={imageStyle} />
-
                     <PlatformBlurView
-                      intensity={40}
+                      intensity={100}
                       tint="dark"
-                      style={Platform.select({
-                        web: {
-                          background: "rgba(217, 217, 217, 0.03)",
-                          "backdrop-filter": "blur(43.5px)",
-                        } as any,
-                        default: {},
-                      })}
                       tw="-mt-4 w-full overflow-hidden rounded-xl pt-4"
                     >
                       <View
                         tw="w-full flex-row justify-between px-2 py-6"
-                        style={{ backgroundColor: "rgba(217, 217, 217, 0.03)" }}
+                        style={Platform.select({
+                          web: {
+                            background: "rgba(0, 0, 0, .7)",
+                            "backdrop-filter": "blur(43.5px)",
+                          } as any,
+                          default: {},
+                        })}
                       >
                         <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-black p-1">
                           <ReactQRCode
@@ -483,7 +489,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                           {edition?.creator_airdrop_edition ? (
                             <Text
                               tw="flex flex-nowrap text-xs font-medium"
-                              style={{ color: TEXT_COLOR, fontSize: 10 }}
+                              style={{
+                                color: imageColors.textColor,
+                                fontSize: 10,
+                              }}
                               numberOfLines={1}
                             >
                               {edition?.creator_airdrop_edition.edition_size > 0
@@ -515,7 +524,10 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                             <View tw="ml-1 flex flex-row items-center">
                               <Text
                                 tw="flex text-sm font-semibold"
-                                style={{ color: TEXT_COLOR, maxWidth: 140 }}
+                                style={{
+                                  color: imageColors.textColor,
+                                  maxWidth: 180,
+                                }}
                                 numberOfLines={1}
                               >
                                 {getCreatorNameFromNFT(nft)}
@@ -524,7 +536,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                                 <VerificationBadge
                                   style={{ marginLeft: 4 }}
                                   size={12}
-                                  bgColor={TEXT_COLOR}
+                                  bgColor={imageColors.textColor}
                                   fillColor={"#000"}
                                 />
                               )}
@@ -561,16 +573,16 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                         />
                       )}
                     </View>
-                    <View tw="mb-16 mt-12 items-center justify-center">
+                    <PlatformBlurView tw="mb-14 mt-12 items-center justify-center overflow-hidden rounded-full bg-black/40 py-2 px-4">
                       <Text
                         tw="text-13 text-center font-medium"
-                        style={{ color: TEXT_COLOR }}
+                        style={{ color: imageColors.textColor }}
                       >
                         {`SHOWTIME.XYZ/${getCreatorUsernameFromNFT(
                           nft
                         )?.toLocaleUpperCase()}`}
                       </Text>
-                    </View>
+                    </PlatformBlurView>
                   </StyledLinearGradient>
                 </View>
               </View>
