@@ -28,7 +28,7 @@ export const useAddMagicSocialAccount = () => {
 
   const state = useSWRMutation(
     MY_INFO_ENDPOINT,
-    async (key: string, values: { arg: AddSocialType }) => {
+    async (_key: string, values: { arg: AddSocialType }) => {
       if (values.arg.type === "instagram") {
         return handleInstagramAccountAdd(Alert, mutate, values);
       } else {
@@ -101,7 +101,7 @@ export const useAddMagicSocialAccount = () => {
 
 const handleInstagramAccountAdd = async (
   Alert: any,
-  mutate,
+  mutate: any,
   values: { arg: AddSocialType }
 ) => {
   if (values.arg.type === "instagram") {

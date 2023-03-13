@@ -12,6 +12,7 @@ import { Instagram, Twitter } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 
 import { Challenge } from "./hcaptcha";
+import { useFinishOnboarding } from "./hcaptcha/hcaptcha-utils";
 
 export const SelectSocial = () => {
   return (
@@ -77,19 +78,24 @@ const ConnectButton = ({
   type: "apple" | "google" | "instagram" | "twitter";
 }) => {
   const { trigger, isMutating } = useAddMagicSocialAccount();
+  const finishOnboarding = useFinishOnboarding();
   return (
     <Button
       size="regular"
-      tw="mt-2"
-      onPress={() =>
-        trigger({
+      onPress={async () => {
+        await trigger({
           type,
-        })
-      }
+        });
+        finishOnboarding();
+      }}
+      disabled={isMutating}
+      tw={`mt-2 ${isMutating ? "opacity-50" : ""}`}
     >
-      <View tw="flex-row items-center">
-        <View tw="mr-1.5">{icon}</View>
-        <Text tw="font-semibold text-white dark:text-black">{title} </Text>
+      <View tw="flex-1 flex-row items-center">
+        <View tw="flex-1 flex-row items-center justify-center">
+          <View tw="mr-1.5">{icon}</View>
+          <Text tw="font-semibold text-white dark:text-black">{title} </Text>
+        </View>
         {isMutating ? (
           <View tw="absolute right-4 scale-75 justify-center">
             <Spinner size="small" color="darkgrey" />
