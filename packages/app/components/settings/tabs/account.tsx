@@ -199,7 +199,7 @@ type SocialConnectButtonProps = {
     google: { address: string };
     apple: { address: string };
   };
-  type: "twitter" | "google" | "apple" | "instagram";
+  type: "twitter" | "google" | "apple";
 };
 
 const SocialConnectButton = ({ connected, type }: SocialConnectButtonProps) => {
