@@ -3440,15 +3440,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bacons/css-to-expo-linear-gradient@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@bacons/css-to-expo-linear-gradient@npm:1.0.0"
-  peerDependencies:
-    react-native: "*"
-  checksum: e1b0005b0af503391c948e0e116720f6e860e398dd3a43a1c148834919e1b4aa0a7567a81b3d09ba7bca4b54b4951b6593711fbb5125ea34530b3d35c21b3a53
-  languageName: node
-  linkType: hard
-
 "@bacons/link-assets@npm:^1.1.0":
   version: 1.1.0
   resolution: "@bacons/link-assets@npm:1.1.0"
@@ -8412,12 +8403,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.alert@npm:^0.0.102":
-  version: 0.0.102
-  resolution: "@showtime-xyz/universal.alert@npm:0.0.102"
+"@showtime-xyz/universal.alert@npm:^0.0.104":
+  version: 0.0.104
+  resolution: "@showtime-xyz/universal.alert@npm:0.0.104"
   dependencies:
     "@radix-ui/react-portal": 1.0.1
-    "@showtime-xyz/universal.button": 0.0.85
+    "@showtime-xyz/universal.button": 0.0.87
     "@showtime-xyz/universal.divider": 0.0.59
     "@showtime-xyz/universal.hooks": 0.0.62
     "@showtime-xyz/universal.tailwind": 0.0.52
@@ -8431,13 +8422,13 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 643a9528cfc75df0f71aca456f890e6f5138af33776d1e044604d4be35b494abba9ceb483710c09ae884218168e9316d52a44f3c7ca712a4e56dd2f7df7df497
+  checksum: b774e8dc1612d9b8c5cc8f52e385e90ec68cdf64df9441c2e504e0ee2be8185f5dd1efbc6113879f9fcf8dab0125382c527e0864cf72b13e5a7ac5bf70b26739
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.avatar@npm:^0.0.74":
-  version: 0.0.74
-  resolution: "@showtime-xyz/universal.avatar@npm:0.0.74"
+"@showtime-xyz/universal.avatar@npm:^0.0.75":
+  version: 0.0.75
+  resolution: "@showtime-xyz/universal.avatar@npm:0.0.75"
   dependencies:
     "@showtime-xyz/universal.image": 0.0.69
     "@showtime-xyz/universal.tailwind": 0.0.52
@@ -8448,15 +8439,15 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 0443cd35c220c8ab7dd86b751f512456dc2f0e346d231d5498ea6ec483a5c3b51d7104e5fd3672fa4c6e5dfc78585927636bdcf72ce06e5da0ad61b21ca0ef58
+  checksum: 68b7e26b13e204ac4b1ee9c7ac862ea2f259119831812683796b6f9fea3ea2be19879ce3052ae32381e611977144c62f73357477e3cc0c2fd8327e9ab2611f19
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.bottom-sheet@npm:0.0.90, @showtime-xyz/universal.bottom-sheet@npm:^0.0.90":
-  version: 0.0.90
-  resolution: "@showtime-xyz/universal.bottom-sheet@npm:0.0.90"
+"@showtime-xyz/universal.bottom-sheet@npm:0.0.92, @showtime-xyz/universal.bottom-sheet@npm:^0.0.92":
+  version: 0.0.92
+  resolution: "@showtime-xyz/universal.bottom-sheet@npm:0.0.92"
   dependencies:
-    "@showtime-xyz/universal.button": 0.0.85
+    "@showtime-xyz/universal.button": 0.0.87
     "@showtime-xyz/universal.hooks": 0.0.62
     "@showtime-xyz/universal.safe-area": 0.0.42
     "@showtime-xyz/universal.tailwind": 0.0.52
@@ -8469,25 +8460,27 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 08a15c85920e2abc11d2ff72a66e74154bea75cac31f1ad9881a6afc962c24363879a68424991367e12dbd160e1dcdaeb1d00115b7a62915233b971513f3da1b
+  checksum: aff391cfbc44a15ef0ee7141f940cd583cea920d0aacc14920ae4fac096a5502a7171298e60baea02bc736a2592f4a8a31580e85a9b305e166fa6812779d6325
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.button@npm:0.0.85, @showtime-xyz/universal.button@npm:^0.0.85":
-  version: 0.0.85
-  resolution: "@showtime-xyz/universal.button@npm:0.0.85"
+"@showtime-xyz/universal.button@npm:0.0.87, @showtime-xyz/universal.button@npm:^0.0.87":
+  version: 0.0.87
+  resolution: "@showtime-xyz/universal.button@npm:0.0.87"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.62
     "@showtime-xyz/universal.pressable": 0.0.65
     "@showtime-xyz/universal.pressable-hover": 0.0.21
     "@showtime-xyz/universal.tailwind": 0.0.52
     "@showtime-xyz/universal.text": 0.0.57
+    "@showtime-xyz/universal.view": 0.0.53
+    expo-linear-gradient: 12.0.1
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 2b156cbc615bdc79eff8276d8a710de49fbe4eee9e4cfa125a2f74f5e3de2ceebaa46c45ea3f6b968b02a789e771cb3455e83429a693b13bffa8abe9fd148e20
+  checksum: cc57f7a8d6e5128ef6a606a7b8c3d00f1372dc9412776bc1714732935c97c5adb2a0277b72a6168775fc71667619c32b0bac04dbef516751d6a86362771978cd
   languageName: node
   linkType: hard
 
@@ -8651,15 +8644,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.fieldset@npm:^0.0.140":
-  version: 0.0.140
-  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.140"
+"@showtime-xyz/universal.fieldset@npm:^0.0.142":
+  version: 0.0.142
+  resolution: "@showtime-xyz/universal.fieldset@npm:0.0.142"
   dependencies:
     "@showtime-xyz/universal.accordion": 0.0.80
     "@showtime-xyz/universal.hooks": 0.0.62
     "@showtime-xyz/universal.input": 0.0.77
     "@showtime-xyz/universal.label": 0.0.59
-    "@showtime-xyz/universal.select": 0.0.122
+    "@showtime-xyz/universal.select": 0.0.124
     "@showtime-xyz/universal.switch": 0.0.74
     "@showtime-xyz/universal.tailwind": 0.0.52
     "@showtime-xyz/universal.text": 0.0.57
@@ -8671,7 +8664,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 4b061c6eef85b659e1a026961cad66e62e1aa528bdb858ddff019ad66584692fa2a6891a8ad1030ace9450d9d0eb5147715c6e9e6447174b5b071492412f946c
+  checksum: 83f79e769a46116cd57798f92d38a8e777a50c2fe58320f1b363d48261433c48b9a3d96c956e8999186bb17b736414a6b0c1f0a435788a629eb5fa6893c474f2
   languageName: node
   linkType: hard
 
@@ -8719,6 +8712,23 @@ __metadata:
     react-native: ^0.64.1
     react-native-web: ^0.16.0
   checksum: fdad44554ec0b2d4eb474be3fa24d372b6d15614614af037d5996aaa46f77916ead1ee7dd6987a50c6a4cc77658a2fd0c0ba68472d16283f8944d923c486939d
+  languageName: node
+  linkType: hard
+
+"@showtime-xyz/universal.icon@npm:0.0.89":
+  version: 0.0.89
+  resolution: "@showtime-xyz/universal.icon@npm:0.0.89"
+  dependencies:
+    "@showtime-xyz/universal.text": 0.0.57
+    "@showtime-xyz/universal.view": 0.0.53
+    "@storybook/react": 6.5.16
+    react-native-svg: 13.8.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+    react-native: ^0.64.1
+    react-native-web: ^0.16.0
+  checksum: e98ef72e88163abe13c2a890e7aa8873f4aa3d46f60f7be05ac338ac01062984f6c35c8e40a57b897fa7460ebe758e9f37fa9840c75b4f7b7cfc1a818689dc6c
   languageName: node
   linkType: hard
 
@@ -8793,12 +8803,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.light-box@npm:^0.0.98":
-  version: 0.0.98
-  resolution: "@showtime-xyz/universal.light-box@npm:0.0.98"
+"@showtime-xyz/universal.light-box@npm:^0.0.99":
+  version: 0.0.99
+  resolution: "@showtime-xyz/universal.light-box@npm:0.0.99"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 1.0.2
-    "@showtime-xyz/universal.icon": 0.0.88
+    "@showtime-xyz/universal.icon": 0.0.89
     "@showtime-xyz/universal.image": 0.0.69
     "@showtime-xyz/universal.pressable": 0.0.65
     "@showtime-xyz/universal.tailwind": 0.0.52
@@ -8812,33 +8822,33 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 97577e7a89e817b6f0660d06198e5f6747b42b29b941d4885a689280097883653116bfd63de1b176887e328b406586653c71783e86a935d55f9443f4a5cf2541
+  checksum: e5d1d6270741a71fdeed5b9c27b3e929a3c900992e4c3d389c242674382f062b45142ed200ba2e2e63a9db9311ca25d71a63ff538f41936ef532ba4e87232856
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-screen@npm:^0.0.140":
-  version: 0.0.140
-  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.140"
+"@showtime-xyz/universal.modal-screen@npm:^0.0.142":
+  version: 0.0.142
+  resolution: "@showtime-xyz/universal.modal-screen@npm:0.0.142"
   dependencies:
     "@react-navigation/native": 6.1.3
-    "@showtime-xyz/universal.modal": 0.0.125
+    "@showtime-xyz/universal.modal": 0.0.127
     "@showtime-xyz/universal.router": 0.0.49
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 1fb408c888a48f1c95d70d91f17226653b6371cae34bcc863e8f5569c836739a1530c11532e29647695df469c17e5d9cf0d3daed93e461afdd11e98e1e69053e
+  checksum: 5c937953135eb3d3083ac98019bb666a207bb5f170a6f04eac501be82ab7199035d14ac0516360cb694853b3847c3bd2cc3786d981c7fb288469e618ef193232
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal-sheet@npm:^0.0.128":
-  version: 0.0.128
-  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.128"
+"@showtime-xyz/universal.modal-sheet@npm:^0.0.130":
+  version: 0.0.130
+  resolution: "@showtime-xyz/universal.modal-sheet@npm:0.0.130"
   dependencies:
-    "@showtime-xyz/universal.bottom-sheet": 0.0.90
-    "@showtime-xyz/universal.button": 0.0.85
-    "@showtime-xyz/universal.modal": 0.0.125
+    "@showtime-xyz/universal.bottom-sheet": 0.0.92
+    "@showtime-xyz/universal.button": 0.0.87
+    "@showtime-xyz/universal.modal": 0.0.127
     "@showtime-xyz/universal.text": 0.0.57
     "@showtime-xyz/universal.view": 0.0.53
     "@storybook/react": 6.5.16
@@ -8848,18 +8858,18 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: 3118b2d235ac17e074ed8b49590a4df87831d558fd957390f823fb70731c90d9ad2614c01f8f0ebc8d044bdc5a5a20779704a2a64da0f65321154073b8f37a60
+  checksum: 28f6ea59fa75b75b0a441694d86c06a1318a76cacf65e9c8ce7e32f8f1a2e685959e6b0ce2f4239d499015f519f376b14e9113d1d49875f13eadc379f8b6cb89
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.modal@npm:0.0.125, @showtime-xyz/universal.modal@npm:^0.0.125":
-  version: 0.0.125
-  resolution: "@showtime-xyz/universal.modal@npm:0.0.125"
+"@showtime-xyz/universal.modal@npm:0.0.127, @showtime-xyz/universal.modal@npm:^0.0.127":
+  version: 0.0.127
+  resolution: "@showtime-xyz/universal.modal@npm:0.0.127"
   dependencies:
     "@radix-ui/react-use-escape-keydown": 1.0.2
-    "@showtime-xyz/universal.button": 0.0.85
+    "@showtime-xyz/universal.button": 0.0.87
     "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.88
+    "@showtime-xyz/universal.icon": 0.0.89
     "@showtime-xyz/universal.safe-area": 0.0.42
     "@showtime-xyz/universal.tailwind": 0.0.52
     "@showtime-xyz/universal.text": 0.0.57
@@ -8871,7 +8881,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: dcc715fc75acf1b8e054488b22416a3206bdbfed08cdca60b172df3f6748613c4dbb9758828a6cf6cb3826501ef7b6ddbddcef32a29d6a0d8248f529125f735c
+  checksum: 41d8b237241670a5b5cd6dafc67b591373d09a1eed6111eea52c4323e334043074e69857453510e25a25803e81ebfa8cbca976e12cc21d5c79d1864c1c94a1d8
   languageName: node
   linkType: hard
 
@@ -8996,14 +9006,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.select@npm:0.0.122, @showtime-xyz/universal.select@npm:^0.0.122":
-  version: 0.0.122
-  resolution: "@showtime-xyz/universal.select@npm:0.0.122"
+"@showtime-xyz/universal.select@npm:0.0.124, @showtime-xyz/universal.select@npm:^0.0.124":
+  version: 0.0.124
+  resolution: "@showtime-xyz/universal.select@npm:0.0.124"
   dependencies:
     "@radix-ui/react-select": 1.2.0
-    "@showtime-xyz/universal.bottom-sheet": 0.0.90
+    "@showtime-xyz/universal.bottom-sheet": 0.0.92
     "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.88
+    "@showtime-xyz/universal.icon": 0.0.89
     "@showtime-xyz/universal.tailwind": 0.0.52
     "@showtime-xyz/universal.text": 0.0.57
     "@showtime-xyz/universal.view": 0.0.53
@@ -9016,7 +9026,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 69eb419c44f544a1be341ea12391ed3fe79d5445b378d4bad6b820937319988175fede1e8c2e1dc201abc5a40b88a692ae1e0d9649470c508f09c69e21a51908
+  checksum: 76af714fe82b46c2b221780b05c95e237be9edad30f50c721e427abe6e911fba66986cbfb7a79a1981e72da1fcecc252e8f143d701377f38ab97c3903a190c52
   languageName: node
   linkType: hard
 
@@ -9036,14 +9046,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.snackbar@npm:^0.0.126":
-  version: 0.0.126
-  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.126"
+"@showtime-xyz/universal.snackbar@npm:^0.0.128":
+  version: 0.0.128
+  resolution: "@showtime-xyz/universal.snackbar@npm:0.0.128"
   dependencies:
     "@radix-ui/react-portal": 1.0.1
-    "@showtime-xyz/universal.button": 0.0.85
+    "@showtime-xyz/universal.button": 0.0.87
     "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.88
+    "@showtime-xyz/universal.icon": 0.0.89
     "@showtime-xyz/universal.pan-to-close": 0.0.33
     "@showtime-xyz/universal.pressable-scale": 0.0.61
     "@showtime-xyz/universal.spinner": 0.0.71
@@ -9059,7 +9069,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: a6501cef09595bc2e0c7df025cb01f1f2573415347a2758e9d8b55d531fc622e9702e241a819568dac17d4a4646cc88ebdada3f2ab0f5c1eae10d73652e4b9f6
+  checksum: fdecf4c9538031ed9160bf26a33811d49044d17ec4b7bf0030fe0bbaeaffa269dd050a1f0b692e0a227fb2871d80e8f4959d164867cd0bfc50b8ed7c78437611
   languageName: node
   linkType: hard
 
@@ -9100,15 +9110,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.tab-view@npm:^0.0.73":
-  version: 0.0.73
-  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.73"
+"@showtime-xyz/universal.tab-view@npm:^0.0.74":
+  version: 0.0.74
+  resolution: "@showtime-xyz/universal.tab-view@npm:0.0.74"
   dependencies:
     "@shopify/flash-list": 1.4.1
     "@showtime-xyz/universal.collapsible-tab-view": 0.0.56
     "@showtime-xyz/universal.haptics": 0.0.24
     "@showtime-xyz/universal.hooks": 0.0.62
-    "@showtime-xyz/universal.icon": 0.0.88
+    "@showtime-xyz/universal.icon": 0.0.89
     "@showtime-xyz/universal.infinite-scroll-list": 0.0.49
     "@showtime-xyz/universal.pressable": 0.0.65
     "@showtime-xyz/universal.pressable-hover": 0.0.21
@@ -9125,7 +9135,7 @@ __metadata:
     react-native: ^0.64.1
     react-native-reanimated: ">=2.0.0"
     react-native-web: ^0.16.0
-  checksum: 9052efe3aca6689d641115fdc2e242a5ce2add445934f601da5783615d298a2c1637d7b951f1e2c76f0caf0838d66d4d5b2221d19ad71087ce4b1ebeeeb3ed3a
+  checksum: c309f14394d323c9f7acce1eca0fb6d8af99b73c3862c6c7706b9c19490d994faa046b9519ae057bb1f9752149929d5bfcf897647781381a2da0fc82cc0804f6
   languageName: node
   linkType: hard
 
@@ -9203,9 +9213,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@showtime-xyz/universal.verification-badge@npm:^0.0.56":
-  version: 0.0.56
-  resolution: "@showtime-xyz/universal.verification-badge@npm:0.0.56"
+"@showtime-xyz/universal.verification-badge@npm:^0.0.57":
+  version: 0.0.57
+  resolution: "@showtime-xyz/universal.verification-badge@npm:0.0.57"
   dependencies:
     "@showtime-xyz/universal.hooks": 0.0.62
     "@storybook/react": 6.5.16
@@ -9215,7 +9225,7 @@ __metadata:
     react-dom: ^16.8.0 || ^17.0.0
     react-native: ^0.64.1
     react-native-web: ^0.16.0
-  checksum: f3f8e2810d24bc5b333dd8cc6d5baa15793fbd470846f370d0d0ce940aca714124311d517b4fff41307bee1d7f32230a17d44c209e0ec4e0c697c95555713bfb
+  checksum: b0fc59436d0fa31d55881b551bcd54d504171b3f0de5295e83010bd902f32116788241465c6cc453631a534d670c92e3442261cf15014a9bbf4203dd6265da27
   languageName: node
   linkType: hard
 
@@ -9239,7 +9249,6 @@ __metadata:
   dependencies:
     "@babel/core": ^7.19.3
     "@babel/runtime": ^7.18.9
-    "@bacons/css-to-expo-linear-gradient": ^1.0.0
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
     "@coinbase/wallet-mobile-sdk": ^1.0.4
@@ -9268,10 +9277,10 @@ __metadata:
     "@shopify/flash-list": ^1.4.1
     "@showtime-xyz/date-picker": ^0.2.0
     "@showtime-xyz/universal.accordion": ^0.0.80
-    "@showtime-xyz/universal.alert": ^0.0.102
-    "@showtime-xyz/universal.avatar": ^0.0.74
-    "@showtime-xyz/universal.bottom-sheet": ^0.0.90
-    "@showtime-xyz/universal.button": ^0.0.85
+    "@showtime-xyz/universal.alert": ^0.0.104
+    "@showtime-xyz/universal.avatar": ^0.0.75
+    "@showtime-xyz/universal.bottom-sheet": ^0.0.92
+    "@showtime-xyz/universal.button": ^0.0.87
     "@showtime-xyz/universal.checkbox": ^0.0.73
     "@showtime-xyz/universal.chip": ^0.0.16
     "@showtime-xyz/universal.clamp-text": ^0.0.43
@@ -9281,7 +9290,7 @@ __metadata:
     "@showtime-xyz/universal.data-pill": ^0.0.67
     "@showtime-xyz/universal.divider": ^0.0.59
     "@showtime-xyz/universal.extensions.react-native-web": ^0.0.19
-    "@showtime-xyz/universal.fieldset": ^0.0.140
+    "@showtime-xyz/universal.fieldset": ^0.0.142
     "@showtime-xyz/universal.haptics": ^0.0.24
     "@showtime-xyz/universal.hooks": ^0.0.62
     "@showtime-xyz/universal.icon": ^0.0.88
@@ -9289,10 +9298,10 @@ __metadata:
     "@showtime-xyz/universal.infinite-scroll-list": ^0.0.49
     "@showtime-xyz/universal.input": ^0.0.77
     "@showtime-xyz/universal.label": ^0.0.59
-    "@showtime-xyz/universal.light-box": ^0.0.98
-    "@showtime-xyz/universal.modal": ^0.0.125
-    "@showtime-xyz/universal.modal-screen": ^0.0.140
-    "@showtime-xyz/universal.modal-sheet": ^0.0.128
+    "@showtime-xyz/universal.light-box": ^0.0.99
+    "@showtime-xyz/universal.modal": ^0.0.127
+    "@showtime-xyz/universal.modal-screen": ^0.0.142
+    "@showtime-xyz/universal.modal-sheet": ^0.0.130
     "@showtime-xyz/universal.pan-to-close": ^0.0.33
     "@showtime-xyz/universal.pinch-to-zoom": ^0.0.46
     "@showtime-xyz/universal.pressable": ^0.0.65
@@ -9301,18 +9310,18 @@ __metadata:
     "@showtime-xyz/universal.router": ^0.0.49
     "@showtime-xyz/universal.safe-area": ^0.0.42
     "@showtime-xyz/universal.scroll-view": ^0.0.68
-    "@showtime-xyz/universal.select": ^0.0.122
+    "@showtime-xyz/universal.select": ^0.0.124
     "@showtime-xyz/universal.skeleton": ^0.0.57
-    "@showtime-xyz/universal.snackbar": ^0.0.126
+    "@showtime-xyz/universal.snackbar": ^0.0.128
     "@showtime-xyz/universal.spinner": ^0.0.71
     "@showtime-xyz/universal.switch": ^0.0.74
-    "@showtime-xyz/universal.tab-view": ^0.0.73
+    "@showtime-xyz/universal.tab-view": ^0.0.74
     "@showtime-xyz/universal.tailwind": ^0.0.52
     "@showtime-xyz/universal.text": ^0.0.57
     "@showtime-xyz/universal.text-input": ^0.0.54
     "@showtime-xyz/universal.tooltip": ^0.0.93
     "@showtime-xyz/universal.utils": ^0.0.17
-    "@showtime-xyz/universal.verification-badge": ^0.0.56
+    "@showtime-xyz/universal.verification-badge": ^0.0.57
     "@showtime-xyz/universal.view": ^0.0.53
     "@storybook/addon-actions": ~6.3.12
     "@storybook/addon-controls": ~6.3.12
