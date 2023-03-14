@@ -105,8 +105,8 @@ export interface SocialLoginConnections {
 }
 
 export interface SocialLoginHandles {
-  twitter: string | null;
-  instagram: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
 }
 
 export interface Profile {

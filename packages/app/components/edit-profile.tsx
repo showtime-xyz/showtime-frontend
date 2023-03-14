@@ -490,7 +490,7 @@ export const EditProfile = () => {
                         user?.data?.profile?.social_login_connections?.twitter
                       }
                       handle={
-                        user?.data?.profile?.social_login_handles?.instagram
+                        user?.data?.profile?.social_login_handles?.twitter
                       }
                     />
                   </View>
@@ -608,7 +608,7 @@ const ConnectButton = ({
             {isMutating
               ? "Loading..."
               : isConnected
-              ? handle ?? "Connected"
+              ? `@${handle}` ?? "Connected"
               : "Connect"}
           </Text>
         </View>
