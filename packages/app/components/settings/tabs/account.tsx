@@ -140,8 +140,9 @@ const socialAccounts = [
     Icon: Twitter,
     type: "twitter",
     name: "Twitter",
+    color: colors.twitter,
   },
-] as const;
+];
 
 const WalletSocialAccounts = () => {
   const isDark = useIsDarkMode();
@@ -172,20 +173,27 @@ const WalletSocialAccounts = () => {
 
   return (
     <>
-      {socialAccounts.map((type) => {
-        const Icon = type.Icon;
+      {socialAccounts.map((item) => {
+        const Icon = item.Icon;
         return (
           <View
-            key={type.type}
+            key={item.type}
             tw="space-between flex-row items-center justify-between py-2 md:py-3.5"
           >
             <View tw="flex-row items-center">
-              <Icon height={20} width={20} color={isDark ? "#fff" : "#000"} />
+              <Icon
+                height={20}
+                width={20}
+                color={item.color ?? (isDark ? "#fff" : "#000")}
+              />
               <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
-                {type.name}
+                {item.name}
               </Text>
             </View>
-            <SocialConnectButton connected={connected} type={type.type} />
+            <SocialConnectButton
+              connected={connected}
+              type={item.type as SocialConnectButtonProps["type"]}
+            />
           </View>
         );
       })}
