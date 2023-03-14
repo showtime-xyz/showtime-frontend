@@ -1,7 +1,6 @@
 import { MyInfo } from "app/types";
 
 export type PageQuery = {
-  redirectUri?: string;
   error?: string;
 };
 
@@ -15,5 +14,4 @@ export type OnboardingContextType = {
   step: OnboardingStep;
   setStep: (step: OnboardingStep) => void;
   user?: MyInfo;
-  redirectUri?: string;
 };

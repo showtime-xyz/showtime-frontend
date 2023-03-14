@@ -24,7 +24,7 @@ import {
 import { siteKey } from "./sitekey";
 
 export const Challenge = () => {
-  const { redirectUri, user } = useContext(OnboardingStepContext);
+  const { user } = useContext(OnboardingStepContext);
   const { validate } = useValidateCaptchaWithServer();
   const finishOnboarding = useFinishOnboarding();
 
