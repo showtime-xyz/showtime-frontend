@@ -5,7 +5,7 @@ import React, {
   useState,
   useRef,
 } from "react";
-import { AppState, Platform } from "react-native";
+import { AppState } from "react-native";
 
 import { useSWRConfig } from "swr";
 
@@ -29,7 +29,6 @@ import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 import type { AuthenticationStatus, MyInfo } from "app/types";
-import { isProfileIncomplete } from "app/utilities";
 
 import { MY_INFO_ENDPOINT } from "./user-provider";
 
@@ -94,6 +93,7 @@ export function AuthProvider({
         loginStorage.setLogin(Date.now().toString());
         setAuthenticationStatus("AUTHENTICATED");
 
+        /*
         const isIncomplete = isProfileIncomplete(res?.data?.profile);
         if (isIncomplete) {
           if (Platform.OS !== "web") {
@@ -103,13 +103,14 @@ export function AuthProvider({
             router.push("/profile/onboarding");
           }, 1000);
         }
+        */
         return res;
       }
 
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, fetchOnAppForeground, router]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
