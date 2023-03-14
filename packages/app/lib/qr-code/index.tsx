@@ -24,14 +24,18 @@ export const ReactQRCode = ({
   logoBackgroundColor = "transparent",
   logoMargin = 2,
   ecl = "L",
+  fillColors: propsFillColors,
 }: QRCodeProps) => {
   const isDark = useIsDarkMode();
 
-  const fillColors = useMemo(
-    () => (isDark ? ["black", "white"] : ["white", "black"]),
-    [isDark]
-  );
-  const fillColor = isDark ? fillColors[1] : fillColors[1];
+  const fillColors = useMemo(() => {
+    if (propsFillColors) {
+      return propsFillColors;
+    }
+    return isDark ? ["black", "white"] : ["white", "black"];
+  }, [isDark, propsFillColors]);
+
+  const fillColor = fillColors[1];
 
   const getFill = useCallback(
     (isOdd: boolean) => {

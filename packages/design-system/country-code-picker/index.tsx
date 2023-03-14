@@ -97,7 +97,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
     return {
       opacity: sharedValue.value === item.code ? 1 : 0,
     };
-  });
+  }, [sharedValue.value]);
 
   return (
     <PressableScale onPress={handleChange}>
