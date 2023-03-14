@@ -140,6 +140,7 @@ const nextConfig = {
       "@showtime-xyz/universal.verification-badge",
       "universal-tooltip",
       "showtime-tab-view",
+      "react-native-image-colors",
     ],
   },
   webpack: (config, options) => {

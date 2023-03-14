@@ -24,4 +24,10 @@ export interface QRCodeProps {
   ecl?: QRCodeErrorCorrectionLevel;
   /* error handler called when matrix fails to generate */
   onError?: Function;
+  /* 
+   qrcode dot and background color, default is
+   dark: ["black", "white"] 
+   light: ["white", "black"]
+  */
+  fillColors?: string[];
 }

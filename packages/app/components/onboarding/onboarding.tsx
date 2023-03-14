@@ -6,20 +6,15 @@ import { AnimatePresence } from "moti";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
-import { createParam } from "app/navigation/use-param";
 
 import { OnboardingStepContext } from "./onboarding-context";
-import { OnboardingStep, PageQuery } from "./onboarding-types";
+import { OnboardingStep } from "./onboarding-types";
 import { SelectPicture } from "./select-picture";
 import { SelectSocial } from "./select-social";
 import { SelectUsername } from "./select-username";
 
-const { useParam } = createParam<PageQuery>();
-
 export const Onboarding = () => {
   const { user } = useUser();
-
-  const [redirectUri] = useParam("redirectUri");
 
   // determine initial step
   const initialStep = useMemo(() => {
@@ -38,10 +33,7 @@ export const Onboarding = () => {
     return OnboardingStep.Username;
   }, [user]);
   const [step, setStep] = useState<OnboardingStep>(initialStep);
-  const value = useMemo(
-    () => ({ step, setStep, user, redirectUri }),
-    [step, user, redirectUri]
-  );
+  const value = useMemo(() => ({ step, setStep, user }), [step, user]);
 
   return (
     <OnboardingStepContext.Provider value={value}>

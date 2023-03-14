@@ -47,6 +47,11 @@ const mockUserProfile: Profile = {
     apple: false,
     phone: false,
     spotify: false,
+    instagram: false,
+  },
+  social_login_handles: {
+    twitter: null,
+    instagram: null,
   },
   // create mock data for the following fields
   primary_wallet: undefined,

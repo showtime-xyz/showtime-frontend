@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   Platform,
   useWindowDimensions,
-  Keyboard,
   ScrollView as RNScrollView,
   View as RNView,
 } from "react-native";
@@ -15,14 +14,9 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Upload,
-  InformationCircle,
-  Facebook,
-  Twitter,
-} from "@showtime-xyz/universal.icon";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { Upload, Twitter } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -31,6 +25,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
+import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
@@ -43,10 +38,10 @@ import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
 
+import { Check, InstagramColorful } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
-import { ProfileScialExplanation } from "./profile/profile-social-explanation";
 
 type Query = {
   redirectUri?: string;
@@ -55,13 +50,13 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-// eslint-disable-next-line no-useless-escape
 const URL_REGEXP =
   /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!$&'()*+,;=]|:|@)|\/|\?)*)?$/i;
 
 const editProfileValidationSchema = yup.object({
   username: yup
     .string()
+    .required()
     .label("Username")
     .typeError("Please enter a valid username")
     .min(2)
@@ -72,19 +67,24 @@ const editProfileValidationSchema = yup.object({
     ),
   bio: yup
     .string()
+    .notRequired()
     .nullable()
     .label("About me")
-    .min(2)
-    .max(300)
+    .when({
+      is: (value?: string) => value?.length,
+      then: (rule) => rule.min(1).max(300),
+    })
     .typeError("Please enter a valid about me"),
   name: yup
     .string()
     .notRequired()
     .nullable()
     .label("Name")
-    .max(40)
+    .when({
+      is: (value?: string) => value?.length,
+      then: (rule) => rule.min(2).max(300),
+    })
     .typeError("Please enter a valid name"),
-  profilePicture: yup.mixed().required("Please add a profile picture"),
   website_url: yup
     .string()
     .label("Website")
@@ -101,7 +101,6 @@ const editProfileValidationSchema = yup.object({
 export const EditProfile = () => {
   // hooks
   const { user } = useUser();
-  const isDark = useIsDarkMode();
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
   const router = useRouter();
@@ -110,7 +109,6 @@ export const EditProfile = () => {
   const { isValid, validate } = useValidateUsername();
   const socialLinks = useLinkOptions();
   const pickFile = useFilePicker();
-  const [showScialExplanation, setShowScialExplanation] = useState(false);
   const [cropViewHeight, setCropViewHeight] = useState(400);
   const scrollViewRef = useRef<RNScrollView>(null);
   const socialRef = useRef<RNView>(null);
@@ -170,14 +168,6 @@ export const EditProfile = () => {
   useEffect(() => {
     reset(defaultValues);
   }, [reset, defaultValues]);
-
-  // this scrolls to the first error field when the form is submitted
-  useEffect(() => {
-    if (errors.profilePicture) {
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
-      return;
-    }
-  }, [errors.profilePicture]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
     if (!isValid || !formIsValid) return;
@@ -390,7 +380,7 @@ export const EditProfile = () => {
               />
               <View tw="pt-6">
                 <Text tw="text-base font-bold text-gray-900 dark:text-gray-500">
-                  BIO
+                  About me
                 </Text>
                 <View tw="mt-4 flex-row">
                   <Controller
@@ -432,6 +422,9 @@ export const EditProfile = () => {
                             ? "Username has been taken"
                             : errors.username?.message
                         }
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        autoComplete="off"
                         onBlur={onBlur}
                         onChangeText={onChange}
                       />
@@ -446,7 +439,7 @@ export const EditProfile = () => {
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Fieldset
                     ref={ref}
-                    label="About me"
+                    label="Bio"
                     placeholder="Tell us about yourself"
                     tw="mt-4"
                     testID="about_me"
@@ -483,22 +476,6 @@ export const EditProfile = () => {
 
               {/* Social */}
               <View tw="mt-6 mb-10" ref={socialRef}>
-                <Pressable
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    setShowScialExplanation(true);
-                  }}
-                  tw="flex-row items-center pb-4"
-                >
-                  <Text tw="mr-1 text-base font-bold text-gray-900 dark:text-gray-500">
-                    SOCIAL
-                  </Text>
-                  <InformationCircle
-                    height={18}
-                    width={18}
-                    color={isDark ? colors.gray[400] : colors.gray[600]}
-                  />
-                </Pressable>
                 <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
                   <View tw="flex-row items-center justify-between">
                     <View tw="flex-row items-center">
@@ -507,94 +484,36 @@ export const EditProfile = () => {
                         Twitter
                       </Text>
                     </View>
-                    <Text
-                      onPress={() => console.log("Connect Twitter")}
-                      tw="text-sm font-bold text-violet-500"
-                    >
-                      Connect
-                    </Text>
+                    <ConnectButton
+                      type="twitter"
+                      isConnected={
+                        user?.data?.profile?.social_login_connections?.twitter
+                      }
+                      handle={
+                        user?.data?.profile?.social_login_handles?.instagram
+                      }
+                    />
                   </View>
                   <View tw="mt-4 flex-row items-center justify-between">
                     <View tw="flex-row items-center">
-                      <Facebook width={20} height={20} color="#1877F2" />
+                      <InstagramColorful width={20} height={20} />
                       <Text tw="ml-2 text-sm font-bold text-gray-700 dark:text-white">
-                        Facebook
+                        Instagram
                       </Text>
                     </View>
-                    <Text
-                      onPress={() => console.log("Connect Facebook")}
-                      tw="text-sm font-bold text-violet-500"
-                    >
-                      Connect
-                    </Text>
+                    <ConnectButton
+                      type="instagram"
+                      isConnected={
+                        user?.data?.profile?.social_login_connections?.instagram
+                      }
+                      handle={
+                        user?.data?.profile?.social_login_handles?.instagram
+                      }
+                    />
                   </View>
                 </View>
-
-                {/*
-                {hasNotSubmittedExternalLink ? (
-                  <>
-                    <Text tw="text-sm font-semibold text-red-500">
-                      Please add at least one website below:
-                    </Text>
-                    <View tw="h-4" />
-                  </>
-                ) : null}
-
-                {socialLinks.data?.data
-                  .filter(
-                    (link) =>
-                      link.prefix.includes("twitter") ||
-                      link.prefix.includes("instagram")
-                  )
-                  .map((v) => {
-                    return (
-                      <Controller
-                        control={control}
-                        key={v.id}
-                        name={`links[${v.id}]`}
-                        render={({
-                          field: { onChange, onBlur, value, ref },
-                        }) => (
-                          <Fieldset
-                            ref={(fieldRef: TextInput) => {
-                              ref(fieldRef);
-                              socialLinksRefs.current[v.id] = fieldRef;
-                            }}
-                            tw="mt-4"
-                            label={v.name}
-                            value={value}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            autoCapitalize="none"
-                            leftElement={
-                              <Text
-                                onPress={() =>
-                                  socialLinksRefs.current[v.id]?.focus()
-                                }
-                                tw="text-base text-gray-600 dark:text-gray-400"
-                                style={{
-                                  marginTop: Platform.select({
-                                    ios: 1,
-                                    android: 8,
-                                    default: 0,
-                                  }),
-                                  marginBottom: Platform.select({
-                                    default: 4,
-                                    android: 0,
-                                    web: 0,
-                                  }),
-                                }}
-                              >
-                                {v.prefix}
-                              </Text>
-                            }
-                          />
-                        )}
-                      />
-                    );
-                  })}
-                  */}
               </View>
+              {/* End Social */}
             </View>
           </BottomSheetScrollView>
           <View tw="my-2.5 mb-4 px-4">
@@ -612,15 +531,6 @@ export const EditProfile = () => {
             </Text>
           </View>
         </View>
-        <ModalSheet
-          snapPoints={[240]}
-          title="Profile Social"
-          visible={showScialExplanation}
-          close={() => setShowScialExplanation(false)}
-          onClose={() => setShowScialExplanation(false)}
-        >
-          <ProfileScialExplanation />
-        </ModalSheet>
       </BottomSheetModalProvider>
       <MediaCropper
         src={selectedImg}
@@ -644,5 +554,65 @@ export const EditProfile = () => {
         }}
       />
     </>
+  );
+};
+
+const ConnectButton = ({
+  type,
+  isConnected,
+  handle,
+}: {
+  type: "apple" | "google" | "instagram" | "twitter";
+  isConnected?: boolean;
+  handle?: string | null;
+}) => {
+  const isDark = useIsDarkMode();
+  const { trigger, isMutating } = useAddMagicSocialAccount();
+  return (
+    <PressableHover
+      onPress={async () => {
+        try {
+          await trigger({
+            type,
+          });
+        } catch {
+          // do nothing
+        }
+      }}
+      disabled={isConnected || isMutating}
+      tw={"items-center justify-center"}
+    >
+      <View
+        tw={`min-h-4 flex flex-row items-center justify-center rounded-2xl border py-2 px-4 ${
+          !isConnected
+            ? isDark
+              ? "border-white"
+              : "border-black"
+            : "border-transparent bg-[#22C55E]"
+        }`}
+      >
+        {isConnected && (
+          <View tw="mr-1.5 scale-[2]">
+            <Check color="white" height={10} width={10} tw="m-0 p-0" />
+          </View>
+        )}
+        <View tw="flex-row items-center justify-start">
+          <Text
+            tw={`text-center text-xs font-medium
+            ${
+              isConnected
+                ? "text-white dark:text-white"
+                : "text-black dark:text-white"
+            }"}`}
+          >
+            {isMutating
+              ? "Loading..."
+              : isConnected
+              ? handle ?? "Connected"
+              : "Connect"}
+          </Text>
+        </View>
+      </View>
+    </PressableHover>
   );
 };

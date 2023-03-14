@@ -33,7 +33,9 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 export const Default = () => {
   return (
     <View tw="bg-white py-4 px-4">
-      <Text tw="text-xl font-bold">Showtime Icons</Text>
+      <View tw="mt-4 mb-6 flex-row items-center justify-center">
+        <Icon.ShowtimeBrand color="black" width={120} />
+      </View>
       <View tw="flex flex-row flex-wrap bg-white">
         <IconItem icon={Icon.ArrowTop} title="ArrowTop" />
         <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />

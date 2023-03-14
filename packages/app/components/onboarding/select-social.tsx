@@ -7,14 +7,16 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
+import { useUser } from "app/hooks/use-user";
 
-import { InstagramColorful, Twitter } from "design-system/icon";
+import { Check, InstagramColorful, Twitter } from "design-system/icon";
 import { Spinner } from "design-system/spinner";
 
-import { Challenge } from "./hcaptcha";
+import { Challenge as SkipButton } from "./hcaptcha";
 import { useFinishOnboarding } from "./hcaptcha/hcaptcha-utils";
 
 export const SelectSocial = () => {
+  const { user } = useUser();
   return (
     <MotiView
       from={{
@@ -52,16 +54,22 @@ export const SelectSocial = () => {
         <View tw="mt-16 flex flex-grow-0">
           <ConnectButton
             title="Connect Twitter"
+            titleConnected="Connected Twitter"
             icon={<Twitter color="#4A99E9" width={20} height={20} />}
             type="twitter"
+            isConnected={user?.data?.profile?.social_login_connections?.twitter}
           />
           <ConnectButton
             title="Connect Instagram"
+            titleConnected="Connected Instagram"
             icon={<InstagramColorful color="#4A99E9" width={20} height={20} />}
             type="instagram"
+            isConnected={
+              user?.data?.profile?.social_login_connections?.instagram
+            }
           />
 
-          <Challenge />
+          <SkipButton />
         </View>
       </View>
     </MotiView>
@@ -70,12 +78,16 @@ export const SelectSocial = () => {
 
 const ConnectButton = ({
   title,
+  titleConnected,
   icon,
   type,
+  isConnected,
 }: {
   title: string;
+  titleConnected: string;
   icon: any;
   type: "apple" | "google" | "instagram" | "twitter";
+  isConnected?: boolean;
 }) => {
   const { trigger, isMutating } = useAddMagicSocialAccount();
   const finishOnboarding = useFinishOnboarding();
@@ -83,18 +95,30 @@ const ConnectButton = ({
     <Button
       size="regular"
       onPress={async () => {
-        await trigger({
-          type,
-        });
-        finishOnboarding();
+        try {
+          await trigger({
+            type,
+          });
+          finishOnboarding();
+        } catch {
+          // do nothing
+        }
       }}
-      disabled={isMutating}
+      disabled={isMutating || isConnected}
       tw={`mt-2 ${isMutating ? "opacity-50" : ""}`}
     >
       <View tw="flex-1 flex-row items-center">
         <View tw="flex-1 flex-row items-center justify-center">
-          <View tw="mr-1.5">{icon}</View>
-          <Text tw="font-semibold text-white dark:text-black">{title} </Text>
+          <View tw="mr-1.5">
+            {isConnected ? (
+              <Check color="#22C55E" width={25} height={25} />
+            ) : (
+              icon
+            )}
+          </View>
+          <Text tw="font-semibold text-white dark:text-black">
+            {isConnected ? titleConnected : title}
+          </Text>
         </View>
         {isMutating ? (
           <View tw="absolute right-4 scale-75 justify-center">

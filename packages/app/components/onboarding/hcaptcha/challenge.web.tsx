@@ -30,7 +30,7 @@ import { siteKey } from "./sitekey";
 const noop = () => {};
 
 export const Challenge = () => {
-  const { redirectUri, user } = useContext(OnboardingStepContext);
+  const { user } = useContext(OnboardingStepContext);
   const { validate } = useValidateCaptchaWithServer();
   const finishOnboarding = useFinishOnboarding();
   const { mutate } = useSWRConfig();

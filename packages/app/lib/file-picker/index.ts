@@ -3,6 +3,10 @@ import { Platform } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 
+import { Alert } from "@showtime-xyz/universal.alert";
+
+import { getWebImageSize } from "app/utilities";
+
 type Props = {
   mediaTypes?: "image" | "video" | "all";
   option?: ImagePicker.ImagePickerOptions;
@@ -13,7 +17,10 @@ export type FilePickerResolveValue = {
   type?: "video" | "image";
   size?: number;
 };
+const MAX_WIDTH_PIXEL = 10000;
+const MAX_HEIGHT_PIXEL = 10000;
 
+const MAX_FILE_PIXEL = MAX_WIDTH_PIXEL * MAX_HEIGHT_PIXEL;
 export const useFilePicker = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -45,9 +52,16 @@ export const useFilePicker = () => {
 
         input.accept = accepts.join(",");
 
-        input.onchange = (e) => {
+        input.onchange = async (e) => {
           const files = (e.target as HTMLInputElement)?.files;
           const file = files ? files[0] : ({} as File);
+          const img = await getWebImageSize(file);
+          if (img && img.width * img.height > MAX_FILE_PIXEL) {
+            Alert.alert(
+              "Your image exceeds the maximum allowed size of 100 megapixels. Please choose a smaller image and try again."
+            );
+            return;
+          }
           const fileType = file["type"].split("/")[0] as "image" | "video";
 
           resolve({ file: file, type: fileType, size: file.size });
@@ -78,9 +92,15 @@ export const useFilePicker = () => {
             quality: 1,
             ...option,
           });
-
           if (result.canceled) return;
           const file = result.assets[0];
+          if (file.width * file.height > MAX_FILE_PIXEL) {
+            Alert.alert(
+              "Your image exceeds the maximum allowed size of 100 megapixels. Please choose a smaller image and try again."
+            );
+            return;
+          }
+
           resolve({ file: file.uri, type: file.type, size: file.fileSize });
         } catch (error) {
           reject(error);
