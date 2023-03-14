@@ -28,17 +28,13 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
 }) {
   const isDark = useIsDarkMode();
 
-  const twitter = useMemo(
-    () => profile?.links?.find((item) => item.type__name === "Twitter"),
-    [profile?.links]
-  );
-  const instagram = useMemo(
-    () => profile?.links?.find((item) => item.type__name === "Instagram"),
-    [profile?.links]
-  );
+  const twitter = profile?.social_login_handles?.twitter;
+  const instagram = profile?.social_login_handles?.instagram;
+
   const spotifyUrl = profile?.spotify_artist_id
     ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
     : null;
+
   const websiteLink = useMemo(
     () => getDomainName(profile?.website_url),
     [profile?.website_url]
@@ -75,10 +71,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
       )}
 
       <Hidden until="sm">
-        {websiteLink &&
-          (twitter?.user_input || instagram?.user_input || spotifyUrl) && (
-            <Divider orientation="vertical" height={16} tw="mx-4" />
-          )}
+        {websiteLink && (twitter || instagram || spotifyUrl) && (
+          <Divider orientation="vertical" height={16} tw="mx-4" />
+        )}
       </Hidden>
 
       <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end sm:mt-0 sm:w-auto">
@@ -95,13 +90,9 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             />
           </PressableScale>
         )}
-        {twitter?.user_input && (
+        {twitter && (
           <PressableScale
-            onPress={() =>
-              onPressLink(
-                `https://${twitter?.type__prefix}${twitter?.user_input}`
-              )
-            }
+            onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
             accessibilityLabel="Twitter"
             accessibilityRole="link"
             style={{ marginLeft: spotifyUrl ? 16 : 0 }}
@@ -113,14 +104,10 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             />
           </PressableScale>
         )}
-        {instagram?.user_input && (
+        {instagram && (
           <PressableScale
-            style={{ marginLeft: twitter?.user_input || spotifyUrl ? 16 : 0 }}
-            onPress={() =>
-              onPressLink(
-                `https://${instagram?.type__prefix}${instagram?.user_input}`
-              )
-            }
+            style={{ marginLeft: twitter || spotifyUrl ? 16 : 0 }}
+            onPress={() => onPressLink(`https://instagram.com/${instagram}`)}
             accessibilityLabel="Instagram"
             accessibilityRole="link"
           >
