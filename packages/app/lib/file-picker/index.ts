@@ -96,7 +96,7 @@ export const useFilePicker = () => {
           const file = result.assets[0];
           if (file.width * file.height > MAX_FILE_PIXEL) {
             Alert.alert(
-              "Oops, this file pixel is too big (>10k). Please upload a smaller file."
+              "Your image exceeds the maximum allowed size of 100 megapixels. Please choose a smaller image and try again."
             );
             return;
           }
