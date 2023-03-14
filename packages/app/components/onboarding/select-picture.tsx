@@ -1,5 +1,6 @@
 import { useContext, useMemo, useEffect, useState } from "react";
 
+import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
@@ -183,16 +184,9 @@ export const SelectPicture = () => {
                       <LinearGradient
                         key="linear-gradient"
                         style={{ width: 128, height: 128 }}
-                        colors={["#9E0303", "#770179"]}
-                        locations={[0.91, 0.12]}
-                        start={{
-                          x: 0.8806105443095305,
-                          y: 1.078543582672327,
-                        }}
-                        end={{
-                          x: 0.11938945569046955,
-                          y: -0.07854358267232708,
-                        }}
+                        {...fromCSS(
+                          `linear-gradient(-33.44deg, #9E0303 12.28%, #770179 91.22%)`
+                        )}
                       />
                       <AnimatePresence exitBeforeEnter>
                         {value ? (

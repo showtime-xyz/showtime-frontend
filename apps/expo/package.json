@@ -47,6 +47,7 @@
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
+    "@bacons/css-to-expo-linear-gradient": "^1.0.0",
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
     "@coinbase/wallet-mobile-sdk": "^1.0.4",
