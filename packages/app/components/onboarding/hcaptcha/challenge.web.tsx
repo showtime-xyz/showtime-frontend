@@ -140,10 +140,10 @@ export const Challenge = () => {
       {challengeRunning && (
         <Portal.Root>
           <View
-            tw="items-center justify-center bg-black opacity-[0.6] dark:bg-black dark:opacity-[0.6]"
+            tw="items-center justify-center bg-black/60 dark:bg-black/60"
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
-          ></View>
+          />
         </Portal.Root>
       )}
     </>

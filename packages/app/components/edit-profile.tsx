@@ -603,7 +603,7 @@ const ConnectButton = ({
               isConnected
                 ? "text-white dark:text-white"
                 : "text-black dark:text-white"
-            }"}`}
+            }`}
           >
             {isMutating
               ? "Loading..."
