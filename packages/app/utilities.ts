@@ -624,11 +624,16 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 });
 
 export const isProfileIncomplete = (profile?: Profile) => {
+  const hasConnectedSocialAccount =
+    profile?.social_login_connections &&
+    Object.keys(profile?.social_login_connections).some(
+      // @ts-ignore
+      (k) => profile?.social_login_connections[k]
+    );
+
   return profile
     ? !profile.username ||
-        userHasIncompleteExternalLinks(profile) ||
-        !profile.bio ||
-        !profile.img_url
+        (!hasConnectedSocialAccount && !profile.captcha_completed_at)
     : undefined;
 };
 

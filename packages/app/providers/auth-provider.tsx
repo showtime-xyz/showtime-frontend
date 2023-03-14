@@ -100,7 +100,7 @@ export function AuthProvider({
             router.pop();
           }
           setTimeout(() => {
-            router.push("/profile/edit");
+            router.push("/profile/onboarding");
           }, 1000);
         }
         return res;

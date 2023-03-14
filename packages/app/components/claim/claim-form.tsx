@@ -29,7 +29,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { QRCodeModal } from "app/components/qr-code";
@@ -64,7 +63,10 @@ export const ClaimForm = ({
   );
 
   const router = useRouter();
-  const { user, isIncompletedProfile } = useUser();
+  const { user, isIncompletedProfile } = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
 
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const comment = useRef("");
@@ -193,7 +195,7 @@ export const ClaimForm = ({
   // }, [web3]);
 
   if (isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   if (state.status === "share") {

@@ -64,7 +64,6 @@ export const Preview = memo(function Preview({
       return (
         <Image
           tw={tw}
-          style={style}
           resizeMode={resizeMode}
           source={{
             uri: uri as string,
@@ -74,6 +73,7 @@ export const Preview = memo(function Preview({
           onLoad={() => {
             revokeObjectURL(uri);
           }}
+          style={style}
           alt="Preview Image"
         />
       );

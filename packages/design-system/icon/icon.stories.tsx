@@ -144,6 +144,7 @@ export const Default = () => {
         />
         <IconItem icon={Icon.CreditCard} title="CreditCard" />
         <IconItem icon={Icon.Receipt} title="Receipt" />
+        <IconItem icon={Icon.AddPhoto} title="AddPhoto" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>
@@ -154,6 +155,7 @@ export const Default = () => {
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.OpenSea} title="OpenSea" />
         <IconItem icon={Icon.Instagram} title="Instagram" />
+        <IconItem icon={Icon.InstagramColorful} title="InstagramColorful" />
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.Apple} title="Apple" />
         <IconItem icon={Icon.GoogleOriginal} title="GoogleOriginal" />

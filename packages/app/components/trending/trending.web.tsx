@@ -119,7 +119,7 @@ export const Trending = () => {
       return null;
     }
     return (
-      <EmptyPlaceholder title={"No results found"} tw="h-[50vh]" hideLoginBtn />
+      <EmptyPlaceholder title={"No drops, yet."} tw="h-[50vh]" hideLoginBtn />
     );
   }, [isLoading]);
 

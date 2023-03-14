@@ -17,25 +17,25 @@
     },
     "alert": {
         "scope": "showtime.universal",
-        "version": "0.0.102",
+        "version": "0.0.104",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/alert"
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.74",
+        "version": "0.0.75",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
     "bottom-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.90",
+        "version": "0.0.92",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/bottom-sheet"
     },
     "button": {
         "scope": "showtime.universal",
-        "version": "0.0.85",
+        "version": "0.0.87",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/button"
     },
@@ -71,7 +71,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.100",
+        "version": "0.0.101",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -95,7 +95,7 @@
     },
     "fieldset": {
         "scope": "showtime.universal",
-        "version": "0.0.140",
+        "version": "0.0.142",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/fieldset"
     },
@@ -113,7 +113,7 @@
     },
     "icon": {
         "scope": "showtime.universal",
-        "version": "0.0.88",
+        "version": "0.0.89",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/icon"
     },
@@ -143,25 +143,25 @@
     },
     "light-box": {
         "scope": "showtime.universal",
-        "version": "0.0.98",
+        "version": "0.0.99",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/light-box"
     },
     "modal": {
         "scope": "showtime.universal",
-        "version": "0.0.125",
+        "version": "0.0.127",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/modal"
     },
     "modal-screen": {
         "scope": "showtime.universal",
-        "version": "0.0.140",
+        "version": "0.0.142",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-screen"
     },
     "modal-sheet": {
         "scope": "showtime.universal",
-        "version": "0.0.128",
+        "version": "0.0.130",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/modal-sheet"
     },
@@ -215,7 +215,7 @@
     },
     "select": {
         "scope": "showtime.universal",
-        "version": "0.0.122",
+        "version": "0.0.124",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/select"
     },
@@ -227,7 +227,7 @@
     },
     "snackbar": {
         "scope": "showtime.universal",
-        "version": "0.0.126",
+        "version": "0.0.128",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/snackbar"
     },
@@ -245,7 +245,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.73",
+        "version": "0.0.74",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
@@ -281,7 +281,7 @@
     },
     "verification-badge": {
         "scope": "showtime.universal",
-        "version": "0.0.56",
+        "version": "0.0.57",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/verification-badge"
     },
