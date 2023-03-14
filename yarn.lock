@@ -3440,6 +3440,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bacons/css-to-expo-linear-gradient@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@bacons/css-to-expo-linear-gradient@npm:1.0.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: e1b0005b0af503391c948e0e116720f6e860e398dd3a43a1c148834919e1b4aa0a7567a81b3d09ba7bca4b54b4951b6593711fbb5125ea34530b3d35c21b3a53
+  languageName: node
+  linkType: hard
+
 "@bacons/link-assets@npm:^1.1.0":
   version: 1.1.0
   resolution: "@bacons/link-assets@npm:1.1.0"
@@ -9230,6 +9239,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.19.3
     "@babel/runtime": ^7.18.9
+    "@bacons/css-to-expo-linear-gradient": ^1.0.0
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.0.0
     "@coinbase/wallet-mobile-sdk": ^1.0.4
