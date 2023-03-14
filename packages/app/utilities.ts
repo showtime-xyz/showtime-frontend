@@ -710,3 +710,19 @@ export const limitLineBreaks = (
     .join("\n")
     .trim();
 };
+
+export const getWebImageSize = (file: File) => {
+  const img = new Image();
+  img.src = window.URL.createObjectURL(file);
+  const promise = new Promise<
+    { width: number; height: number } | null | undefined
+  >((resolve, reject) => {
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      resolve({ width, height });
+    };
+    img.onerror = reject;
+  });
+  return promise;
+};
