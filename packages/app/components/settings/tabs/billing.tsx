@@ -182,19 +182,19 @@ const Header = memo(function Header() {
         title="Billing"
         desc="Manage the payment methods connected to your profile."
         // Todo: this is waiting for backend support.
-        buttonText="Add payment method"
-        onPress={() => {
-          router.push(
-            {
-              pathname: router.pathname,
-              query: {
-                ...router.query,
-                checkoutModal: true,
-              },
-            },
-            router.asPath
-          );
-        }}
+        // buttonText="Add payment method"
+        // onPress={() => {
+        //   router.push(
+        //     {
+        //       pathname: router.pathname,
+        //       query: {
+        //         ...router.query,
+        //         checkoutModal: true,
+        //       },
+        //     },
+        //     router.asPath
+        //   );
+        // }}
       />
       {isLoading ? (
         <View tw="animate-fade-in-250 h-28 items-center justify-center">
