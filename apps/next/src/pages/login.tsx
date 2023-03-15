@@ -1,1 +1,3 @@
-export { default } from "app/pages/login";
+import { Fragment } from "react";
+
+export default Fragment;

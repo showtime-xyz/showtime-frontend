@@ -91,6 +91,7 @@ export function AuthProvider({
       if (validResponse && res) {
         setTokens(accessToken, refreshToken);
         loginStorage.setLogin(Date.now().toString());
+        mutate(MY_INFO_ENDPOINT, res);
         setAuthenticationStatus("AUTHENTICATED");
 
         /*
@@ -110,7 +111,7 @@ export function AuthProvider({
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, fetchOnAppForeground]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground, mutate]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.

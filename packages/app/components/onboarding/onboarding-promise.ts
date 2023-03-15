@@ -1,5 +1,6 @@
 import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useUser } from "app/hooks/use-user";
+import { Logger } from "app/lib/logger/index";
 import { useNavigateToOnboarding } from "app/navigation/use-navigate-to";
 
 export let onboardingPromiseCallbacks = {
@@ -8,17 +9,21 @@ export let onboardingPromiseCallbacks = {
 };
 
 export const useOnboardingPromise = () => {
-  const { isIncompletedProfile } = useUser();
+  const { isIncompletedProfile, isAuthenticated } = useUser();
   const navigateToOnboarding = useNavigateToOnboarding();
   const onboardingPromise = useStableCallback(
     () =>
       new Promise((resolve, reject) => {
-        if (isIncompletedProfile) {
-          navigateToOnboarding();
-          onboardingPromiseCallbacks.resolve = resolve;
-          onboardingPromiseCallbacks.reject = reject;
+        if (isAuthenticated) {
+          if (isIncompletedProfile) {
+            navigateToOnboarding();
+            onboardingPromiseCallbacks.resolve = resolve;
+            onboardingPromiseCallbacks.reject = reject;
+          } else {
+            resolve(true);
+          }
         } else {
-          resolve(true);
+          Logger.log("onboarding promise: User is not authenticated");
         }
       })
   );
