@@ -16,6 +16,8 @@ import { useDeleteUser } from "app/hooks/use-delete-user";
 import { useUser } from "app/hooks/use-user";
 import { Logger } from "app/lib/logger";
 
+import { toast } from "design-system/toast";
+
 export const SettingDeleteAccount = () => {
   const { deleteUser } = useDeleteUser();
   const user = useUser();
@@ -40,8 +42,9 @@ export const SettingDeleteAccount = () => {
         onPress: async () => {
           await deleteUser().catch((e) => {
             Logger.error(e);
-            setError("Error deleting account");
+            toast.success("Error deleting account");
           });
+          toast.success("Your account has been deleted");
           logout();
         },
       },
