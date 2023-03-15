@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 
 import { SvgProps } from "react-native-svg";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Trash } from "@showtime-xyz/universal.icon";
@@ -28,14 +29,23 @@ export const SettingDeleteAccount = () => {
       setError("Username does not match");
       return;
     }
-
-    try {
-      await deleteUser();
-      logout();
-    } catch (e) {
-      Logger.error(e);
-      setError("Error deleting account");
-    }
+    Alert.alert("Delete Account", "This action cannot be undone.", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Confirm",
+        style: "destructive",
+        onPress: async () => {
+          await deleteUser().catch((e) => {
+            Logger.error(e);
+            setError("Error deleting account");
+          });
+          logout();
+        },
+      },
+    ]);
   };
   return (
     <View>
