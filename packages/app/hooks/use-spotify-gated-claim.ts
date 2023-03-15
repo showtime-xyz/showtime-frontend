@@ -49,7 +49,7 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
           });
 
           toast.success(
-            "Song will be saved in your Spotify library. Please log in to collect your drop!"
+            "You just saved this song to your library! Sign in now to collect this drop."
           );
           await loginPromise();
           await onboardingPromise();
