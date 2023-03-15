@@ -9,7 +9,7 @@ import {
   Apple,
   GoogleOriginal,
   Twitter,
-  Instagram,
+  InstagramColorful,
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -47,7 +47,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
         <WalletSocialAccounts />
-        {instagramProviderId ? (
+        {!instagramProviderId ? (
           <ConnectInstagram providerId={instagramProviderId} />
         ) : null}
       </View>
@@ -64,7 +64,7 @@ const ConnectSpotify = () => {
   return (
     <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
       <View tw="flex-row items-center">
-        <Spotify height={25} width={25} color={colors.spotify} />
+        <Spotify height={20} width={20} color={colors.spotify} />
         <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
           Spotify
         </Text>
@@ -100,7 +100,11 @@ const ConnectInstagram = ({ providerId }: { providerId: string }) => {
   return (
     <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
       <View tw="flex-row items-center">
-        <Instagram height={25} width={25} color={isDark ? "#fff" : "#000"} />
+        <InstagramColorful
+          height={25}
+          width={25}
+          color={isDark ? "#fff" : "#000"}
+        />
         <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
           Instagram
         </Text>
