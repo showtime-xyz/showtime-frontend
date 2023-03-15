@@ -11,11 +11,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
 
-interface LoginProps {
-  onLogin?: () => void;
-}
-
-export function Login({ onLogin }: LoginProps) {
+export function Login() {
   //#region hooks
   const {
     walletStatus,
@@ -24,7 +20,7 @@ export function Login({ onLogin }: LoginProps) {
     handleSubmitPhoneNumber,
     handleSubmitWallet,
     loading,
-  } = useLogin(onLogin);
+  } = useLogin();
 
   //#endregion
 
