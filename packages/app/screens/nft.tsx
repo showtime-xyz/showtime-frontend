@@ -132,7 +132,7 @@ const NFTDetail = () => {
   if (!nft && !isLoading) {
     return (
       <EmptyPlaceholder
-        title="No results found"
+        title="No drops, yet."
         text={
           <TextLink href={`/`} tw="text-indigo-500">
             Go Home

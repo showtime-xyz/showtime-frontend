@@ -12,6 +12,7 @@ function withModalScreen<P extends {}>(
   {
     title: titleProp,
     snapPoints = ["90%", "100%"],
+    backPressHandlerEnabled = true,
     ...rest
   }: ModalScreenOptions
 ) {
@@ -19,7 +20,7 @@ function withModalScreen<P extends {}>(
   return function (props: P) {
     const [title, setTitle] = useState(titleProp);
     const modalRef = useRef<ModalMethods>(null);
-    useBackPressHandler(modalRef);
+    useBackPressHandler(modalRef, backPressHandlerEnabled);
 
     const router = useRouter();
     const onClose = useCallback(() => {

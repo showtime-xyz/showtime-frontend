@@ -118,7 +118,7 @@ interface MessageRowProps {
    */
   onUserPress?: (username: string) => void;
 }
-
+const PlatformSwipeable = Platform.OS === "web" ? View : Swipeable;
 export function MessageRow({
   address,
   username = "",
@@ -204,7 +204,7 @@ export function MessageRow({
   }, []);
 
   return (
-    <Swipeable
+    <PlatformSwipeable
       ref={swipeRef}
       renderRightActions={renderLeftActions}
       onSwipeableOpen={deleteComment}
@@ -301,6 +301,6 @@ export function MessageRow({
           </View>
         </View>
       </View>
-    </Swipeable>
+    </PlatformSwipeable>
   );
 }

@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { useLogInPromise } from "app/lib/login-promise";
 import { MyInfo, NFT, Profile } from "app/types";
 
 import { useAuth } from "./auth/use-auth";
@@ -290,7 +290,7 @@ export const useComments = ({ nftId }: { nftId: number }) => {
 
 export const useMyInfo = () => {
   const { accessToken } = useAuth();
-  const navigateToLogin = useNavigateToLogin();
+  const { loginPromise } = useLogInPromise();
   const { data, error, mutate } = useSWR<MyInfo>(
     accessToken ? "/v2/myinfo" : null,
     fetcher,
@@ -301,10 +301,7 @@ export const useMyInfo = () => {
 
   const follow = useCallback(
     async (profileId: number) => {
-      if (!accessToken) {
-        navigateToLogin();
-        return;
-      }
+      await loginPromise();
 
       if (data) {
         mutate(
@@ -316,21 +313,21 @@ export const useMyInfo = () => {
           },
           false
         );
-
-        try {
-          await axios({
-            url: `/v2/follow/${profileId}`,
-            method: "POST",
-            data: {},
-          });
-        } catch (err) {
-          console.error(err);
-        }
-
-        mutate();
       }
+
+      try {
+        await axios({
+          url: `/v2/follow/${profileId}`,
+          method: "POST",
+          data: {},
+        });
+      } catch (err) {
+        console.error(err);
+      }
+
+      mutate();
     },
-    [accessToken, data, mutate, navigateToLogin]
+    [data, mutate, loginPromise]
   );
 
   const unfollow = useCallback(
@@ -375,40 +372,36 @@ export const useMyInfo = () => {
 
   const like = useCallback(
     async (nftId: number) => {
-      if (!accessToken) {
-        navigateToLogin();
-        // TODO: perform the action post login
-        return false;
-      }
+      await loginPromise();
 
       if (data) {
-        try {
-          mutate(
-            {
-              data: {
-                ...data.data,
-                likes_nft: [...data.data.likes_nft, nftId],
-              },
+        mutate(
+          {
+            data: {
+              ...data.data,
+              likes_nft: [...data.data.likes_nft, nftId],
             },
-            false
-          );
+          },
+          false
+        );
+      }
 
-          await axios({
-            url: `/v3/like/${nftId}`,
-            method: "POST",
-            data: {},
-          });
+      try {
+        await axios({
+          url: `/v3/like/${nftId}`,
+          method: "POST",
+          data: {},
+        });
 
-          mutate();
+        mutate();
 
-          return true;
-        } catch (error) {
-          mutate();
-          return false;
-        }
+        return true;
+      } catch (error) {
+        mutate();
+        return false;
       }
     },
-    [data, accessToken, mutate, navigateToLogin]
+    [data, mutate, loginPromise]
   );
 
   const unlike = useCallback(

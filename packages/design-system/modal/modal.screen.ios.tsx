@@ -7,14 +7,26 @@ import type { ModalProps } from "./types";
 
 const ModalScreenComponent = forwardRef<any, ModalProps>(
   function ModalScreenComponent(
-    { title, children, onClose, useNativeModal = true, ...rest },
+    {
+      title,
+      children,
+      onClose,
+      useNativeModal = true,
+      headerShown = true,
+      ...rest
+    },
     ref
   ) {
     if (useNativeModal) {
       return (
         <>
-          <ModalHeaderBar />
-          <ModalHeader title={title} onClose={onClose} />
+          {headerShown && (
+            <>
+              <ModalHeaderBar />
+              <ModalHeader title={title} onClose={onClose} />
+            </>
+          )}
+
           {children}
         </>
       );

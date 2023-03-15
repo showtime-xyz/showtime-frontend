@@ -47,11 +47,6 @@ export const SearchInHeader = () => {
     }
   }, [term]);
 
-  const Separator = useCallback(
-    () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
-    []
-  );
-
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
       return (
@@ -123,13 +118,12 @@ export const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="mt-2 w-[350px] rounded-3xl bg-white shadow-lg shadow-black dark:bg-black dark:shadow-white">
+        <View tw="shadow-light dark:shadow-dark mt-2 w-[350px] overflow-hidden rounded-3xl bg-white dark:bg-black">
           {data ? (
             <InfiniteScrollList
               useWindowScroll={false}
               data={data}
               renderItem={renderItem}
-              ItemSeparatorComponent={Separator}
               keyboardShouldPersistTaps="handled"
               estimatedItemSize={64}
               overscan={{

@@ -37,6 +37,7 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
+import { OnboardingScreen } from "app/screens/onboarding";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
@@ -193,6 +194,7 @@ function App({ Component, pageProps, router }: AppProps) {
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
+        <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
 

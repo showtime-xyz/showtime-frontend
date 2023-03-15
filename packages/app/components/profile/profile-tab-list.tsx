@@ -124,7 +124,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           index={index}
           ref={listRef}
         >
-          <EmptyPlaceholder title="No results found" hideLoginBtn />
+          <EmptyPlaceholder title="No drops, yet." hideLoginBtn />
         </TabScrollView>
       );
     }

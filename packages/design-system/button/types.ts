@@ -1,6 +1,8 @@
 import type React from "react";
 import { StyleProp, TextStyle } from "react-native";
 
+import { LinearGradientProps } from "expo-linear-gradient";
+
 import type { Props as PressableProps } from "@showtime-xyz/universal.pressable";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
@@ -10,6 +12,7 @@ export type ButtonVariant =
   | "tertiary"
   | "secondary"
   | "text"
+  | "gradient"
   | "outlined";
 
 export type ButtonSize = "small" | "regular";
@@ -23,7 +26,10 @@ export type ButtonProps = {
   children?: React.ReactNode | string;
 } & PressableProps &
   Partial<
-    Pick<BaseButtonProps, "labelTW" | "iconOnly" | "size" | "accentColor">
+    Pick<
+      BaseButtonProps,
+      "labelTW" | "iconOnly" | "size" | "accentColor" | "gradientProps"
+    >
   >;
 
 export type BaseButtonProps = {
@@ -52,6 +58,10 @@ export type BaseButtonProps = {
     default: string;
     pressed: string;
   };
+  /**
+   * Defines the background state colors.
+   */
+  gradientProps?: LinearGradientProps;
   /**
    * Defines the button icons colour.
    * @default white|black

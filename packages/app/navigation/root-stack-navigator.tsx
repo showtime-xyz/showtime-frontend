@@ -34,6 +34,7 @@ import { DropEventScreen } from "../screens/drop-event";
 import { DropFreeScreen } from "../screens/drop-free";
 import { DropMusicScreen } from "../screens/drop-music";
 import { DropPrivateScreen } from "../screens/drop-private";
+import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -134,6 +135,11 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
+        <Stack.Screen
+          name="onboarding"
+          component={OnboardingScreen}
+          options={{ gestureEnabled: false }}
+        />
 
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen

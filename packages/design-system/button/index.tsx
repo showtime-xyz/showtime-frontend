@@ -3,7 +3,10 @@ import { useMemo } from "react";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { Button as BaseButton } from "./button";
+import {
+  Button as BaseButton,
+  GradientButton as BaseGradientButton,
+} from "./button";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_MAPPER } from "./constants";
 import type { ButtonProps } from "./types";
 
@@ -23,6 +26,8 @@ export function Button({ variant = "primary", ...props }: ButtonProps) {
       return <TextButton {...props} />;
     case "outlined":
       return <OutlinedButton {...props} />;
+    case "gradient":
+      return <GradientButton {...props} />;
     default:
       return <PrimaryButton {...props} />;
   }
@@ -126,5 +131,11 @@ export function OutlinedButton({ ...props }: ButtonProps) {
       iconColor={ICON_COLOR_MAPPER.outlined}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.outlined}
     />
+  );
+}
+
+export function GradientButton(props: ButtonProps) {
+  return (
+    <BaseGradientButton {...props} iconColor={ICON_COLOR_MAPPER.secondary} />
   );
 }
