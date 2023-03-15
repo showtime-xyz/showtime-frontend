@@ -28,7 +28,10 @@ export const useConnectSpotify = () => {
         if (code) {
           await saveSpotifyToken({ code, redirectUri: redirectUri });
           toast.success("Spotify connected");
-          return true;
+          return {
+            code,
+            redirectUri,
+          };
         }
       } else {
         Logger.error("Spotify auth failed", res);
